@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-02 01:07+0000\n"
+"PO-Revision-Date: 2021-01-04 14:10+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -768,15 +768,15 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
-msgstr ""
+msgstr "Warna Latar Belakang, Bawah"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:339
 msgid "Background Color, Top"
-msgstr ""
+msgstr "Warna Latar Belakang, Atas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:831
 msgid "3D Image File Name"
-msgstr ""
+msgstr "Nama Berkas Gambar 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:852
 #, c-format
@@ -784,25 +784,27 @@ msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
+"Izin yang diperlukan tidak cukup untuk menyimpan berkas\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:853 common/confirm.cpp:125
 #: common/confirm.cpp:264 common/dialogs/panel_setup_severities.cpp:40
 #: kicad/import_project.cpp:118 kicad/tools/kicad_manager_control.cpp:174
 #: pcbnew/router/length_tuner_tool.cpp:166
 msgid "Error"
-msgstr ""
+msgstr "Kesalahan"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:884
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "Gagal menyalin gambar ke papan klip"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:895
 msgid "Can't save file"
-msgstr ""
+msgstr "Tidak dapat menyimpan berkas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:947
 msgid "Silkscreen Color"
-msgstr ""
+msgstr "Warna Silkscreen"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:983
 msgid "Solder Mask Color"
@@ -810,7 +812,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1006
 msgid "Copper Color"
-msgstr ""
+msgstr "Warna Tembaga"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1032
 msgid "Board Body Color"
@@ -902,47 +904,47 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:138
 msgid "View Left"
-msgstr ""
+msgstr "Lihat Kiri"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:144
 msgid "View Right"
-msgstr ""
+msgstr "Lihat Kanan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:150
 msgid "View Top"
-msgstr ""
+msgstr "Lihat Atas"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
 msgid "View Bottom"
-msgstr ""
+msgstr "Lihat Bawah"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr ""
+msgstr "Tidak Ada Kisi 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "Kisi 3D 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "Kisi 3D 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "Kisi 3D 2.5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "Kisi 3D 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
-msgstr ""
+msgstr "Gunakan Semua Properti"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "Gunakan semua properti material dari setiap berkas model 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
@@ -954,7 +956,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
-msgstr ""
+msgstr "Gaya Warna CAD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "Use a CAD color style based on the diffuse color of the material"
