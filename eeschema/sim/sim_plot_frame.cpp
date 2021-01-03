@@ -300,8 +300,8 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
     {
         // File menu:
         { wxID_NEW, simulator_xpm },
-        { wxID_OPEN,directory_browser_xpm },
-        { wxID_SAVE, directory_xpm},
+        { wxID_OPEN, directory_open_xpm },
+        { wxID_SAVE, save_xpm},
         { ID_SAVE_AS_IMAGE, export_xpm},
         { ID_SAVE_AS_CSV, export_xpm},
         { wxID_CLOSE, exit_xpm},
