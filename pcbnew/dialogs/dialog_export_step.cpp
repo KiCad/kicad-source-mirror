@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     if( fn.FileExists() && !GetOverwriteFile() )
     {
         msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
-                    fn.GetFullPath().GetData() );
+                    fn.GetFullPath() );
 
         if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
             return;
@@ -331,9 +331,24 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( m_tolerance->GetSelection() != 1 )
     {
+        double tolerance = 0.01;   // defautl value in mm
+
+        switch( m_tolerance->GetSelection() )
+        {
+        case 0:         // small
+            tolerance = 0.001;
+            break;
+
+        default:
+        case 1: break;  // Normal
+
+        case 2:         // large
+            tolerance = 0.1;
+            break;
+        }
+
         LOCALE_IO dummy;
-        double tolerance = 0.001 * std::pow<double>( 10.0, m_tolerance->GetSelection() - 1 );
-        cmdK2S.Append( wxString::Format( " --min-distance=\"%.4f mm\"", tolerance ) );
+        cmdK2S.Append( wxString::Format( " --min-distance=\"%.3f mm\"", tolerance ) );
     }
 
     cmdK2S.Append( " -f -o " );

@@ -131,6 +131,7 @@ public:
     // aThickness > THICKNESS_MIN == use aThickness
     void SetPCBThickness( double aThickness );
 
+    // Set the minimum distance (in mm) to consider 2 points have the same coordinates
     void SetMinDistance( double aDistance );
 
     // create the PCB model using the current outlines and drill holes

@@ -14,7 +14,6 @@
         <property name="file">dialog_export_step_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_export_step_base</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -1484,7 +1482,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Tight&quot; &quot;Standard&quot; &quot;Loose&quot; &quot;Very loose&quot;</property>
+                                                <property name="choices">&quot;Tight (0.001 mm)&quot; &quot;Standard (0.01 mm)&quot; &quot;Loose (0.1 mm)&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -1520,7 +1518,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; ; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Tolerance sets the distance between two points that are considered joined.  Standard is 0.001mm.</property>
+                                                <property name="tooltip">Tolerance sets the distance between two points that are considered joined.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
