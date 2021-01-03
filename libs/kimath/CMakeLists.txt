@@ -4,6 +4,7 @@ set( KIMATH_SRCS
     src/md5_hash.cpp
     src/trigo.cpp
 
+    src/geometry/circle.cpp
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp
     src/geometry/geometry_utils.cpp

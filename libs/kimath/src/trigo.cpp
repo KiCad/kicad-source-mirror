@@ -159,6 +159,26 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int
 }
 
 
+const VECTOR2I GetArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
+                          bool aMinArcAngle )
+{
+    VECTOR2I startVector = aStart - aCenter;
+    VECTOR2I endVector = aEnd - aCenter;
+
+    double startAngle = ArcTangente( startVector.y, startVector.x );
+    double endAngle = ArcTangente( endVector.y, endVector.x );
+    double midPointRotAngleDeciDeg = NormalizeAngle180( startAngle - endAngle ) / 2;
+
+    if( !aMinArcAngle )
+        midPointRotAngleDeciDeg += 1800.0;
+
+    VECTOR2I newMid = aStart;
+    RotatePoint( newMid, aCenter, midPointRotAngleDeciDeg );
+
+    return newMid;
+}
+
+
 double ArcTangente( int dy, int dx )
 {
 

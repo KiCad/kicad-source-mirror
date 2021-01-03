@@ -26,6 +26,7 @@
 #define __SHAPE_CIRCLE_H
 
 #include <geometry/shape.h>
+#include <geometry/circle.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 
@@ -36,19 +37,17 @@ class SHAPE_CIRCLE : public SHAPE
 public:
     SHAPE_CIRCLE() :
         SHAPE( SH_CIRCLE ),
-        m_radius( 0 )
+        m_circle()
     {}
 
     SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ) :
         SHAPE( SH_CIRCLE ),
-        m_radius( aRadius ),
-        m_center( aCenter )
+        m_circle( aCenter, aRadius )
     {}
 
     SHAPE_CIRCLE( const SHAPE_CIRCLE& aOther ) :
         SHAPE( SH_CIRCLE ),
-        m_radius( aOther.m_radius ),
-        m_center( aOther.m_center )
+        m_circle( aOther.m_circle )
     {};
 
     ~SHAPE_CIRCLE()
@@ -63,17 +62,17 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override
     {
-        const VECTOR2I rc( m_radius + aClearance, m_radius + aClearance );
+        const VECTOR2I rc( m_circle.Radius + aClearance, m_circle.Radius + aClearance );
 
-        return BOX2I( m_center - rc, rc * 2 );
+        return BOX2I( m_circle.Center - rc, rc * 2 );
     }
 
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override
     {
-        int minDist = aClearance + m_radius;
-        VECTOR2I pn = aSeg.NearestPoint( m_center );
-        ecoord dist_sq = ( pn - m_center ).SquaredEuclideanNorm();
+        int      minDist = aClearance + m_circle.Radius;
+        VECTOR2I pn = aSeg.NearestPoint( m_circle.Center );
+        ecoord   dist_sq = ( pn - m_circle.Center ).SquaredEuclideanNorm();
 
         if( dist_sq == 0 || dist_sq < SEG::Square( minDist ) )
         {
@@ -81,7 +80,7 @@ public:
                 *aLocation = pn;
 
             if( aActual )
-                *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_radius );
+                *aActual = std::max( 0, (int) sqrt( dist_sq ) - m_circle.Radius );
 
             return true;
         }
@@ -91,34 +90,39 @@ public:
 
     void SetRadius( int aRadius )
     {
-        m_radius = aRadius;
+        m_circle.Radius = aRadius;
     }
 
     void SetCenter( const VECTOR2I& aCenter )
     {
-        m_center = aCenter;
+        m_circle.Center = aCenter;
     }
 
     int GetRadius() const
     {
-        return m_radius;
+        return m_circle.Radius;
     }
 
     const VECTOR2I GetCenter() const
     {
-        return m_center;
+        return m_circle.Center;
+    }
+
+    const CIRCLE GetCircle() const
+    {
+        return m_circle;
     }
 
     void Move( const VECTOR2I& aVector ) override
     {
-        m_center += aVector;
+        m_circle.Center += aVector;
     }
 
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        m_center -= aCenter;
-        m_center = m_center.Rotate( aAngle );
-        m_center += aCenter;
+        m_circle.Center -= aCenter;
+        m_circle.Center = m_circle.Center.Rotate( aAngle );
+        m_circle.Center += aCenter;
     }
 
     bool IsSolid() const override
@@ -127,8 +131,7 @@ public:
     }
 
 private:
-    int      m_radius;
-    VECTOR2I m_center;
+    CIRCLE m_circle;
 };
 
 #endif

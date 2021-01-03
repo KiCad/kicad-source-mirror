@@ -61,6 +61,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
+#include <pcb_target.h>
 #include <zone_filler.h>
 
 
@@ -269,7 +270,294 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    invokeInlineRouter( mode );
+    if( selection.Size() == 1 && selection.Front()->Type() == PCB_ARC_T )
+    {
+        // TODO: This really should be done in PNS to ensure DRC is maintained, but for now
+        // it allows interactive editing of an arc track
+        return DragArcTrack( aEvent );
+    }
+    else
+    {
+        invokeInlineRouter( mode );
+    }
+
+    return 0;
+}
+
+
+int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Size() != 1 || selection.Front()->Type() != PCB_ARC_T )
+        return 0;
+
+    Activate();
+
+    ARC* theArc = static_cast<ARC*>( selection.Front() );
+    m_commit->Modify( theArc );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+
+    controls->ShowCursor( true );
+    controls->SetAutoPan( true );
+    bool restore_state = false;
+
+    VECTOR2I arcCenter = theArc->GetCenter();
+    SEG tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
+    SEG tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
+    
+    if( !tanStart.ApproxParallel( tanEnd ) )
+    {
+        //Ensure the tangent segments are in the correct orientation
+        OPT_VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd );
+        tanStart.A = tanIntersect.get();
+        tanStart.B = theArc->GetStart();
+        tanEnd.A = tanIntersect.get();
+        tanEnd.B = theArc->GetEnd();
+    }
+
+    KICAD_T  track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+
+    auto getUniqueConnectedTrack =
+        [&]( const VECTOR2I& aAnchor ) -> TRACK*
+        {
+            auto conn = board()->GetConnectivity();
+            auto itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types );
+            TRACK* retval = nullptr;
+
+            if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
+            {
+                retval = static_cast<TRACK*>( itemsOnAnchor.front() );
+                m_commit->Modify( retval );
+            }
+            else
+            {
+                retval = new TRACK( theArc->GetParent() );
+                retval->SetStart( (wxPoint) aAnchor );
+                retval->SetEnd( (wxPoint) aAnchor );
+                retval->SetNet( theArc->GetNet() );
+                retval->SetLayer( theArc->GetLayer() );
+                retval->SetWidth( theArc->GetWidth() );
+                retval->SetFlags( IS_NEW );
+                getView()->Add( retval );
+            }
+            
+            return retval;
+        };
+
+    TRACK* trackOnStart = getUniqueConnectedTrack( theArc->GetStart() );
+    TRACK* trackOnEnd = getUniqueConnectedTrack( theArc->GetEnd() );
+
+    if( !trackOnStart->IsNew() )
+    {
+        tanStart.A = trackOnStart->GetStart();
+        tanStart.B = trackOnStart->GetEnd();
+    }
+
+    if( !trackOnEnd->IsNew() )
+    {
+        tanEnd.A = trackOnEnd->GetStart();
+        tanEnd.B = trackOnEnd->GetEnd();
+    }
+
+    OPT_VECTOR2I optInterectTan = tanStart.IntersectLines( tanEnd );
+    int tanStartSide = tanStart.Side( theArc->GetMid() );
+    int tanEndSide = tanEnd.Side( theArc->GetMid() );
+
+    bool isStartTrackOnStartPt = ( VECTOR2I( theArc->GetStart() ) - tanStart.A ).EuclideanNorm()
+                                 < ( VECTOR2I( theArc->GetStart() ) - tanStart.B ).EuclideanNorm();
+
+    bool isEndTrackOnStartPt = ( VECTOR2I( theArc->GetStart() ) - tanEnd.A ).EuclideanNorm()
+                               < ( VECTOR2I( theArc->GetStart() ) - tanEnd.B ).EuclideanNorm();
+
+    // Calculate constraints
+    CIRCLE maxTangentCircle;
+    VECTOR2I startOther = ( isStartTrackOnStartPt ) ? tanStart.B : tanStart.A;
+    maxTangentCircle.ConstructFromTanTanPt( tanStart, tanEnd, startOther );
+ 
+    VECTOR2I maxTanPtStart = tanStart.LineProject( maxTangentCircle.Center );
+    VECTOR2I maxTanPtEnd = tanEnd.LineProject( maxTangentCircle.Center );
+
+    if( !tanEnd.Contains( maxTanPtEnd ) )
+    {
+        startOther = ( isEndTrackOnStartPt ) ? tanEnd.B : tanEnd.A;
+        maxTangentCircle.ConstructFromTanTanPt( tanStart, tanEnd, startOther );
+        maxTanPtStart = tanStart.LineProject( maxTangentCircle.Center );
+        maxTanPtEnd = tanEnd.LineProject( maxTangentCircle.Center );
+    }
+
+    SEG constraintSeg( maxTanPtStart, maxTanPtEnd );
+    int constraintSegSide = constraintSeg.Side( theArc->GetMid() );
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        m_cursor = controls->GetMousePosition();
+
+        // Constrain cursor
+        // Fix-me: this is a bit ugly but it works
+        if( tanStartSide != tanStart.Side( m_cursor ) )
+        {
+            VECTOR2I projected = tanStart.LineProject( m_cursor );
+
+            if( tanEndSide != tanEnd.Side( projected ) )
+            {
+                m_cursor = tanEnd.LineProject( m_cursor );
+
+                if( tanStartSide != tanStart.Side( m_cursor ) )
+                    m_cursor = optInterectTan.get();
+            }
+            else if( constraintSegSide != constraintSeg.Side( projected ) )
+            {
+                m_cursor = constraintSeg.LineProject( m_cursor );
+
+                if( tanStartSide != tanStart.Side( m_cursor ) )
+                    m_cursor = maxTanPtStart;
+            }
+            else
+            {
+                m_cursor = projected;
+            }
+        }
+        else if( tanEndSide != tanEnd.Side( m_cursor ) )
+        {
+            VECTOR2I projected = tanEnd.LineProject( m_cursor );
+
+            if( tanStartSide != tanStart.Side( projected ) )
+            {
+                m_cursor = tanStart.LineProject( m_cursor );
+
+                if( tanEndSide != tanEnd.Side( m_cursor ) )
+                    m_cursor = optInterectTan.get();
+            }
+            else if( constraintSegSide != constraintSeg.Side( projected ) )
+            {
+                m_cursor = constraintSeg.LineProject( m_cursor );
+
+                if( tanEndSide != tanEnd.Side( m_cursor ) )
+                    m_cursor = maxTanPtEnd;
+            }
+            else
+            {
+                m_cursor = projected;
+            }
+        }
+        else if( constraintSegSide != constraintSeg.Side( m_cursor ) )
+        {
+            VECTOR2I projected = constraintSeg.LineProject( m_cursor );
+
+            if( tanStartSide != tanStart.Side( projected ) )
+            {
+                m_cursor = tanStart.LineProject( m_cursor );
+
+                if( constraintSegSide != constraintSeg.Side( m_cursor ) )
+                    m_cursor = maxTanPtStart;
+            }
+            else if( tanEndSide != tanEnd.Side( projected ) )
+            {
+                m_cursor = tanEnd.LineProject( m_cursor );
+
+                if( constraintSegSide != constraintSeg.Side( m_cursor ) )
+                    m_cursor = maxTanPtEnd;
+            }
+            else
+            {
+                m_cursor = projected;
+            }
+        }
+
+        if( ( m_cursor - maxTangentCircle.Center ).EuclideanNorm() < maxTangentCircle.Radius )
+            m_cursor = maxTangentCircle.NearestPoint( m_cursor );
+
+        controls->ForceCursorPosition( true, m_cursor );
+
+        // Calculate resulting object coordinates
+        CIRCLE circlehelper;
+        circlehelper.ConstructFromTanTanPt( tanStart, tanEnd, m_cursor );
+
+        VECTOR2I newCenter = circlehelper.Center; 
+        VECTOR2I newStart = tanStart.LineProject( newCenter );
+        VECTOR2I newEnd = tanEnd.LineProject( newCenter );
+        VECTOR2I newMid = GetArcMid( newStart, newEnd, newCenter );
+
+        //Update objects
+        theArc->SetStart( (wxPoint) newStart );
+        theArc->SetEnd( (wxPoint) newEnd );
+        theArc->SetMid( (wxPoint) newMid );
+
+        if( isStartTrackOnStartPt )
+            trackOnStart->SetStart( (wxPoint) newStart );
+        else
+            trackOnStart->SetEnd( (wxPoint) newStart );
+
+        if( isEndTrackOnStartPt )
+            trackOnEnd->SetStart( (wxPoint) newEnd );
+        else
+            trackOnEnd->SetEnd( (wxPoint) newEnd );
+            
+        //Update view
+        getView()->Update( trackOnStart );
+        getView()->Update( trackOnEnd );
+        getView()->Update( theArc );
+
+        //Handle events
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            restore_state = true; // Canceling the tool means that items have to be restored
+            break;                // Finish
+        }
+        else if( evt->IsAction( &ACTIONS::undo ) )
+        {
+            restore_state = true; // Perform undo locally
+            break;                // Finish
+        }
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT )
+                 || evt->IsDblClick( BUT_LEFT ) )
+        {
+            break; // finish
+        }
+    }
+
+    // Remove zero length tracks
+    if( theArc->GetStart() == theArc->GetEnd() )
+        m_commit->Remove( theArc );
+
+    auto cleanupTrack =
+            [&]( TRACK* aTrack )
+            {
+                if( aTrack->IsNew() )
+                {
+                    getView()->Remove( aTrack );
+
+                    if( aTrack->GetStart() == aTrack->GetEnd() )
+                        delete aTrack;
+                    else
+                        m_commit->Add( aTrack );
+                }
+                else if( aTrack->GetStart() == aTrack->GetEnd() )
+                {
+                    m_commit->Remove( aTrack );
+                }
+            };
+
+    cleanupTrack( trackOnStart );
+    cleanupTrack( trackOnEnd );
+
+    // Should we commit?
+    if( restore_state )
+    {
+        m_commit->Revert();
+
+        if( trackOnStart->IsNew() )
+            delete trackOnStart;
+
+        if( trackOnEnd->IsNew() )
+            delete trackOnEnd;
+    }
+    else
+    {
+        m_commit->Push( _( "Drag Arc Track" ) );
+    }
 
     return 0;
 }

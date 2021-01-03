@@ -82,9 +82,16 @@ public:
 
     /**
      * Function Drag()
-     * Invoke the PNS router to drag tracks.
+     * Invoke the PNS router to drag tracks or do an offline resizing of an arc track
+     * if a single arc track is selected
      */
     int Drag( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function DragArcTrack()
+     * Drag-resize an arc (and change end points of connected straight segments)
+     */
+    int DragArcTrack( const TOOL_EVENT& aEvent );
 
     /**
      * Function Properties()

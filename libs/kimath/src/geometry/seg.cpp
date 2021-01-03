@@ -130,6 +130,24 @@ OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines
 }
 
 
+SEG SEG::PerpendicularSeg( const VECTOR2I& aP ) const
+{
+    VECTOR2I slope( B - A );
+    VECTOR2I endPoint = slope.Perpendicular() + aP;
+
+    return SEG( aP, endPoint );
+}
+
+
+SEG SEG::ParallelSeg( const VECTOR2I& aP ) const
+{
+    VECTOR2I slope( B - A );
+    VECTOR2I endPoint = slope + aP;
+
+    return SEG( aP, endPoint );
+}
+
+
 bool SEG::ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
 {
     return (ecoord) ( aC.y - aA.y ) * ( aB.x - aA.x ) > (ecoord) ( aB.y - aA.y ) * ( aC.x - aA.x );
