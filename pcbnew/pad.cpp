@@ -850,7 +850,8 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+    if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+        aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
@@ -1076,16 +1077,33 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( GetName().IsEmpty() )
     {
-        return wxString::Format( _( "Pad of %s on %s" ),
-                                 GetParent()->GetReference(),
-                                 layerMaskDescribe() );
+        if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+        {
+            return wxString::Format( _( "Pad of %s on %s" ),
+                                     GetParent()->GetReference(),
+                                     layerMaskDescribe() );
+        }
+        else
+        {
+            return wxString::Format( _( "Through hole pad of %s" ),
+                                     GetParent()->GetReference() );
+        }
     }
     else
     {
-        return wxString::Format( _( "Pad %s of %s on %s" ),
-                                 GetName(),
-                                 GetParent()->GetReference(),
-                                 layerMaskDescribe() );
+        if( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN )
+        {
+            return wxString::Format( _( "Pad %s of %s on %s" ),
+                                     GetName(),
+                                     GetParent()->GetReference(),
+                                     layerMaskDescribe() );
+        }
+        else
+        {
+            return wxString::Format( _( "Through hole pad %s of %s" ),
+                                     GetName(),
+                                     GetParent()->GetReference() );
+        }
     }
 }
 
