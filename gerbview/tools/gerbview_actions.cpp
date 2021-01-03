@@ -97,7 +97,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( "gerbview.Control.reloadAllLayers
         AS_GLOBAL, 0, "",
         _( "Reload All Layers" ),
         _( "Reload all layers. All data will be reloaded" ),
-        reload2_xpm );
+        reload_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0, "", "", "",

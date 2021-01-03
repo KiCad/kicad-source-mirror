@@ -113,7 +113,7 @@ TOOL_ACTION EDA_3D_ACTIONS::flipView( "3DViewer.Control.flipView",
         AS_ACTIVE,
         0, "",
         _( "Flip Board" ), _( "Flip the board view" ),
-        reload2_xpm, AF_NONE, (void*) ID_VIEW3D_FLIP );
+        flip_board_xpm, AF_NONE, (void*) ID_VIEW3D_FLIP );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( "3DViewer.Control.toggleOrtho",
         AS_GLOBAL, 0, "",

@@ -397,7 +397,6 @@ set( BMAPS_MID
     recent
     redo
     refresh
-    reload2
     reload
     render_mode
     rescue
