@@ -57,7 +57,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( "kicad.Control.closeProject",
         AS_GLOBAL,
         0, LEGACY_HK_NAME( "Close Project" ),
         _( "Close Project" ), _( "Close the current project" ),
-        directory_close_xpm );
+        project_close_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,

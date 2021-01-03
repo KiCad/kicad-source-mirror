@@ -202,7 +202,6 @@ set( BMAPS_MID
     delete
     directory
     directory_browser
-    directory_close
     directory_open
     distribute_horizontal
     distribute_vertical
@@ -386,6 +385,7 @@ set( BMAPS_MID
     preference
     print_button
     project
+    project_close
     project_kicad
     ps_diff_pair
     ps_diff_pair_gap
