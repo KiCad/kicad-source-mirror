@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-02 16:40+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-01-03 08:32+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -23645,7 +23645,7 @@ msgstr "警告：散热片属性不能被设置在\"非导通孔\"(NPTH) 焊盘�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1376
 msgid "Warning: Castellated property can be set only on PTH pads."
-msgstr "警告：雉堞状属性不能被设置在镀通孔 (PTH) 焊盘上。"
+msgstr "警告：雉堞状属性只能被设置在镀通孔 (PTH) 焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1382
 msgid "Warning: BGA property can be set only on SMD pads."
