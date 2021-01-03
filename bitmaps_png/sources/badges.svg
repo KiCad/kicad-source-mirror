@@ -13,7 +13,7 @@
    version="1.1"
    id="svg865"
    sodipodi:docname="badges.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <title
      id="title2181">Badges</title>
   <defs
@@ -25,18 +25,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="63.356768"
-     inkscape:cx="21.280014"
-     inkscape:cy="22.020666"
+     inkscape:zoom="26.595479"
+     inkscape:cx="11.434575"
+     inkscape:cy="15.23019"
      inkscape:document-units="px"
-     inkscape:current-layer="layer20"
+     inkscape:current-layer="layer15"
      inkscape:document-rotation="0"
      showgrid="true"
      units="px"
-     inkscape:window-width="3039"
-     inkscape:window-height="1751"
-     inkscape:window-x="4021"
-     inkscape:window-y="32"
+     inkscape:window-width="1920"
+     inkscape:window-height="1035"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -186,10 +186,12 @@
   <g
      inkscape:groupmode="layer"
      id="layer20"
-     inkscape:label="sparkle">
+     inkscape:label="sparkle"
+     style="display:none">
     <g
        id="g982"
-       transform="matrix(0.26458333,0,0,0.26458333,0.396875,0.39687505)">
+       transform="matrix(0.26458333,0,0,0.26458333,0.396875,0.39687505)"
+       style="display:none">
       <circle
          class="cls-3"
          cx="17.5"
@@ -297,18 +299,16 @@
      inkscape:groupmode="layer"
      id="layer15"
      inkscape:label="open"
-     style="display:none">
+     style="display:inline">
     <path
        class="cls-4"
        d="M 6.8791659,5.0253653 A 1.8520833,1.8520832 0 1 1 5.0270561,3.1750002 1.8512375,1.8512374 0 0 1 6.8791659,5.0253653 Z"
        id="path25635"
-       style="fill:#bf2641;stroke-width:0.264583" />
+       style="display:inline;fill:#bf2641;stroke-width:0.264583" />
     <path
-       class="cls-5"
-       d="m 4.3800363,6.0827168 c -0.1755754,0 -0.3996214,-0.2274099 -0.3997802,-0.4029852 l -0.00119,-1.315211 C 3.9790904,4.1889651 4.1974499,3.966961 4.3730054,3.9669726 H 4.70423 c 0.071697,1.9e-6 0.1441202,0.023947 0.1974512,0.068823 0.085551,0.07199 0.1070008,0.1963857 0.1629059,0.2932163 0.038859,0.067305 0.090018,0.1672466 0.1693584,0.1672466 0.1964115,0 0.5608599,0.0018 0.5608599,0.0018 0.1753757,5.551e-4 0.2965087,0.19172 0.2967626,0.3670965 l 0.00119,0.8210573 c 1.172e-4,0.1756583 -0.2225351,0.4050851 -0.3980627,0.3983149 -0.4649367,-0.00185 -0.8497189,-0.0018 -1.3146579,-0.0018 z"
-       id="path25639"
-       sodipodi:nodetypes="cscccassssccc"
-       style="fill:#ffffff;stroke-width:0.264583" />
+       id="path845"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264582"
+       d="m 4.2637247,4.1010253 a 0.30237446,0.30867322 0 0 0 -0.2949922,0.3086731 0.30237446,0.30867322 0 0 0 0,0.00753 v 1.2271568 a 0.30237446,0.30867322 0 0 0 0.3023744,0.3086732 0.30237446,0.30867322 0 0 0 0.00738,0 H 5.782977 a 0.30237446,0.30867322 0 0 0 0.3023745,-0.3086732 0.30237446,0.30867322 0 0 0 0,-0.00753 V 4.7183716 A 0.30237446,0.30867322 0 0 0 5.782979,4.4096984 H 5.7756012 5.1026407 L 4.8002619,4.1010253 H 4.2711065 a 0.30237446,0.30867322 0 0 0 -0.00738,0 z" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -324,25 +324,25 @@
        r="1.8520833" />
     <polygon
        class="cls-1"
-       points="20.203,8.208 20.203,17.792 24.995,13 "
+       points="24.995,13 20.203,8.208 20.203,17.792 "
        id="polygon8-3"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59658;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16564065,0,0,0.16579683,2.4881054,2.8726025)" />
     <polygon
        class="cls-1"
-       points="13,1.005 8.208,5.797 17.792,5.797 "
+       points="17.792,5.797 13,1.005 8.208,5.797 "
        id="polygon10"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
        transform="matrix(0.16548463,0,0,0.16564065,2.8757833,3.2732439)" />
     <polygon
        class="cls-1"
-       points="8.208,20.203 13,24.995 17.792,20.203 "
+       points="17.792,20.203 8.208,20.203 13,24.995 "
        id="polygon12"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16548463,0,0,0.16564065,2.8757833,2.4745247)" />
     <polygon
        class="cls-1"
-       points="5.797,8.208 1.005,13 5.797,17.792 "
+       points="5.797,17.792 5.797,8.208 1.005,13 "
        id="polygon14"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59658;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16564065,0,0,0.16579683,3.2731144,2.871854)" />

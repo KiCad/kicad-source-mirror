@@ -41,8 +41,8 @@
    guidetolerance="10"
    id="namedview9483"
    inkscape:current-layer="Слой_1"
-   inkscape:cx="12.464218"
-   inkscape:cy="17.522217"
+   inkscape:cx="15.430411"
+   inkscape:cy="10.531065"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
@@ -52,7 +52,7 @@
    inkscape:window-width="1280"
    inkscape:window-x="0"
    inkscape:window-y="23"
-   inkscape:zoom="21.28955"
+   inkscape:zoom="23.957338"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -68,21 +68,11 @@
 </sodipodi:namedview>
 <title
    id="title9474">folder</title>
+
+
+
 <path
-   id="path9476"
-   sodipodi:nodetypes="ssssscccccsss"
-   class="st0"
-   d="M15.5,20.9L5.5,21C1.9,21.1,0,21,0,19.9L0.1,6.6  c0-2.1,1.9-2.8,3-2.7L9,4c0.8,0,1.2,0.2,2,0.5L12,5c0.9,0.3,2,1,3,1h3.5c1.1,0,2.4-0.1,2.4,1l0.1,7C21,14.5,16.2,20.8,15.5,20.9z" />
-<path
-   id="path9480"
-   sodipodi:nodetypes="sssssssss"
-   class="st0"
-   d="M 7.6,9 H 22 c 1.1,0 1.9,1.066569 1.5,1.777615 l -4.3,8.888076 c -0.7,1.422092 -1.7,1.333212 -4,1.333212 H 4.6 c -2.2,0 -4.9,-0.177762 -4.1,-1.777616 L 5,10.244331 C 5.4,9.6221653 6.5,9 7.6,9 Z"
-   style="stroke-width:0.999997" />
-<path
-   class="st1"
-   d="M -0.5,20.779663 4.9,9.9735596 C 5.3,9.1876611 6.4,8.5 7.5,8.5 H 21"
-   id="path840"
-   sodipodi:nodetypes="ccsc"
-   style="stroke:#ffffff;stroke-width:0.999998;stroke-opacity:1" />
-</svg>
+   id="path843"
+   style="fill:#545454;fill-opacity:1;stroke-width:0.999996"
+   d="M 1.9511719,3 C 0.86571697,3.026508 -3.2363396e-4,3.914221 0,5 -1.9868853e-4,5.01628 -1.9868853e-4,5.0325481 0,5.0488281 -0.0019972,8.7621821 0,17.712191 0,19.5 L 3.5507812,11.484375 C 4.0884177,10.562723 5.0736222,9.996087 6.140625,9.996094 H 22 V 8 C 22,6.895431 21.104569,6 20,6 H 11.5 L 8.5,3 H 2 C 1.983725,2.999801 1.9674469,2.999801 1.9511719,3 Z m 4.4785156,8 c -0.9433012,-6e-6 -1.8157095,0.50302 -2.2910156,1.322266 l -3,7.173828 C 0.75191169,20.162764 1.2284911,21 1.9960938,21 H 18.572266 c 0.943293,1.7e-5 1.815734,-0.503014 2.291015,-1.322266 l 3,-7.173828 C 24.250091,11.837236 23.771518,11 23.003906,11 Z"
+   sodipodi:nodetypes="cccccccsccccccccscccsc" /></svg>

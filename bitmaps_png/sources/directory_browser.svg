@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="directory_browser.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="10.725507"
+     inkscape:cx="23.608464"
+     inkscape:cy="20.179538"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,26 +79,16 @@
   </defs>
   <title
      id="title116536">directory_browser</title>
-  <rect
-     class="cls-1"
-     x="0.48320007"
-     y="2.5"
-     width="21.0168"
-     height="19.0168"
-     rx="3.5028"
-     id="rect116538"
-     style="fill:none;stroke:#545454;stroke-opacity:1" />
   <path
-     class="cls-2"
-     d="M 17.514,21.0168 H 3.5028 C 1.5682799,21.016745 5.5225457e-5,19.44852 0,17.514 V 3.5028 C 5.5225457e-5,1.5682799 1.5682799,5.5225457e-5 3.5028,0 H 6.71 C 7.5000893,3.7407125e-6 8.2669343,0.26733157 8.8858,0.7585 L 12.5,4 c 0.530456,0.420935 0.822822,1.0000213 1.5,1 l 3.585758,-0.072785 c 1.932598,-0.039229 3.898699,1.1131412 3.901321,3.046136 L 21.5,17.5 c -5.5e-5,1.934715 -2.051285,3.517021 -3.986,3.5168 z"
-     id="path116540"
-     style="fill:#545454;fill-opacity:1"
-     sodipodi:nodetypes="cccccccccsscc" />
+     id="path845"
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:0.999995"
+     d="m 2.9511719,3.000149 c -1.085455,0.026508 -1.95149553,0.9142215 -1.9511719,2 -1.9869e-4,0.016275 -1.9869e-4,0.032553 0,0.048828 V 19.000149 c 0,1.104569 0.8954305,2 2,2 0.016275,1.99e-4 0.032553,1.99e-4 0.048828,0 H 21 c 1.104569,0 2,-0.895431 2,-2 1.99e-4,-0.01628 1.99e-4,-0.03255 0,-0.04883 V 8.000149 c 0,-1.1045695 -0.895431,-2 -2,-2 -2.833333,0 -8.5,0 -8.5,0 l -3,-3 H 3 c -0.016275,-1.987e-4 -0.032553,-1.987e-4 -0.048828,0 z"
+     sodipodi:nodetypes="cccsccsccsccccc" />
   <path
      class="cls-3"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
      id="path116542"
-     style="stroke:#ffffff;stroke-opacity:1;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="stroke:none;stroke-opacity:1;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-4"
      points="21.851 19.877 15.681 19.877 15.681 14.266"
