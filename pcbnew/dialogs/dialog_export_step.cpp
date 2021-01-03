@@ -315,11 +315,25 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             break;
     }
 
-    if( m_tolerance->GetSelection() != 1 )
+    double tolerance = 0.01;   // default value in mm
+
+    switch( m_tolerance->GetSelection() )
+    {
+    case 0:         // small
+        tolerance = 0.001;
+        break;
+
+    default:
+    case 1: break;  // Normal
+
+    case 2:         // large
+        tolerance = 0.1;
+        break;
+    }
+
     {
         LOCALE_IO dummy;
-        double tolerance = 0.001 * std::pow<double>( 10.0, m_tolerance->GetSelection() - 1 );
-        cmdK2S.Append( wxString::Format( " --min-distance=\"%.4f mm\"", tolerance ) );
+        cmdK2S.Append( wxString::Format( " --min-distance=\"%.3f mm\"", tolerance ) );
     }
 
     cmdK2S.Append( " -f -o " );

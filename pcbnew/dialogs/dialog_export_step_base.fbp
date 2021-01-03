@@ -1353,7 +1353,7 @@
                                                         <property name="caption"></property>
                                                         <property name="caption_visible">1</property>
                                                         <property name="center_pane">0</property>
-                                                        <property name="choices">&quot;Tight&quot; &quot;Standard&quot; &quot;Loose&quot; &quot;Very loose&quot;</property>
+                                                        <property name="choices">&quot;Tight (0.001 mm)&quot; &quot;Standard (0.01 mm)&quot; &quot;Loose (0.1 mm)&quot;</property>
                                                         <property name="close_button">1</property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -1389,7 +1389,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass">; ; forward_declare</property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Tolerance sets the distance between two points that are considered joined.  Standard is 0.001mm.</property>
+                                                        <property name="tooltip">Tolerance sets the distance between two points that are considered joined.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>

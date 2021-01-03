@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -163,11 +163,11 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_staticText8->Wrap( -1 );
 	fgSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_toleranceChoices[] = { _("Tight"), _("Standard"), _("Loose"), _("Very loose") };
+	wxString m_toleranceChoices[] = { _("Tight (0.001 mm)"), _("Standard (0.01 mm)"), _("Loose (0.1 mm)") };
 	int m_toleranceNChoices = sizeof( m_toleranceChoices ) / sizeof( wxString );
 	m_tolerance = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_toleranceNChoices, m_toleranceChoices, 0 );
 	m_tolerance->SetSelection( 1 );
-	m_tolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined.  Standard is 0.001mm.") );
+	m_tolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined.") );
 
 	fgSizer4->Add( m_tolerance, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
