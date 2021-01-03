@@ -133,6 +133,10 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
                 result = result && parseCurve( child, CURVE_LINE );
             else if( symname == "fp_circle" )
                 result = result && parseCurve( child, CURVE_CIRCLE );
+            else if( symname == "fp_rect" )
+                result = result && parseRect( child );
+            else if( symname == "fp_curve" )
+                result = result && parseCurve( child, CURVE_BEZIER );
             else if( symname == "pad" )
                 result = result && parsePad( child );
             else if( symname == "model" )
@@ -147,6 +151,38 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
     wxLogMessage( "%s\n", ostr.str().c_str() );
 
     return false;
+}
+
+
+bool KICADFOOTPRINT::parseRect( SEXPR::SEXPR* data )
+{
+    std::unique_ptr<KICADCURVE> rect;
+
+    if( !rect->Read( data, CURVE_LINE ) )
+        return false;
+
+    // reject any curves not on the Edge.Cuts layer
+    if( rect->GetLayer() != LAYER_EDGE )
+        return true;
+
+    KICADCURVE* top = new KICADCURVE( *rect );
+    KICADCURVE* right = new KICADCURVE( *rect );
+    KICADCURVE* bottom = new KICADCURVE( *rect );
+    KICADCURVE* left = new KICADCURVE( *rect );
+
+    top->m_end.y = right->m_start.y;
+    m_curves.push_back( top );
+
+    right->m_start.x = bottom->m_end.x;
+    m_curves.push_back( right );
+
+    bottom->m_start.y = left->m_end.y;
+    m_curves.push_back( bottom );
+
+    left->m_end.x = top->m_start.x;
+    m_curves.push_back( left );
+
+    return true;
 }
 
 

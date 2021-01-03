@@ -51,6 +51,7 @@ private:
     bool parseAttribute( SEXPR::SEXPR* data );
     bool parseText( SEXPR::SEXPR* data );
     bool parsePad( SEXPR::SEXPR* data );
+    bool parseRect( SEXPR::SEXPR* data );
 
     KICADPCB*   m_parent;     // The parent KICADPCB, to know layer names
 
