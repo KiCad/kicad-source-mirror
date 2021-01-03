@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-03 08:32+0000\n"
+"PO-Revision-Date: 2021-01-03 20:48+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -132,7 +132,7 @@ msgstr "Kartı ve 3B modelleri yeniden yükle"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:287
 msgid "Build board outline"
-msgstr "Kart dış hatlarını oluştur"
+msgstr "Kart ana hatlarını oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:449
 msgid "Create layers"
@@ -141,42 +141,44 @@ msgstr "Katmanları oluştur"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:471
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
 msgid "No footprint loaded."
-msgstr ""
+msgstr "İz düşümü yüklenmedi."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:487
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"İz düşümü ana hatları eksik veya bozuk. Tam analiz için Footprint Checker'ı "
+"çalıştırın."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "Kart ana hatları eksik veya bozuk. Tam analiz için DRC'yi çalıştırın."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Yollar ve geçişler oluştur"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:690
 msgid "Create zones"
-msgstr ""
+msgstr "Bölgeler oluştur"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Bakır katman çokgenleri basitleştiriliyor"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:839
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Deliklerin dış hatlarını basitleştir"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:868
 msgid "Build Tech layers"
-msgstr ""
+msgstr "Teknik katmanları oluştur"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1043
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "Delikler ve geçişler için BVH oluştur"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
@@ -190,25 +192,25 @@ msgstr "Oluşturma süresi %.0f ms ( %.1f fps)"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:748
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Ağ %s\tAğ Sınıfı %s\tDolgu Adı %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:773
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:786
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "Ağ %s\tAğ Sınıfı %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:466
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "OpenGL yükle: kart"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:499
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "OpenGL yükle: delikler ve geçişler"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:583
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "OpenGL yükle: katmanlar"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:686
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:923
@@ -232,14 +234,12 @@ msgid "Loading..."
 msgstr "Yükleniyor..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:474
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Işın İzleme"
+msgstr "Işın İzlemeyi Yükle: kart"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:676
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Işın İzleme"
+msgstr "Işın İzlemeyi Yükle: katmanlar"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:350
 #, c-format
@@ -253,7 +253,7 @@ msgstr "Oluşturuluyor: %% %.0f"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:859
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "Oluşturuluyor: İşlem sonrası gölgelendirici"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
@@ -306,39 +306,39 @@ msgstr "Renkleri Seç"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
-msgstr ""
+msgstr "Arka Plan Üst Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
 msgid "Background Bottom Color..."
-msgstr ""
+msgstr "Arka Plan Alt Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
-msgstr ""
+msgstr "İpek Baskı Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:168
 msgid "Solder Mask Color..."
-msgstr ""
+msgstr "Lehim Maskesi Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:172
 msgid "Solder Paste Color..."
-msgstr ""
+msgstr "Lehim Pastası Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:176
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "Bakır/Yüzey Kaplama Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
 msgid "Board Body Color..."
-msgstr ""
+msgstr "Kart Gövdesi Rengi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Renkleri fiziksel yığından al"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
-msgstr ""
+msgstr "3B Izgara"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
@@ -420,12 +420,12 @@ msgstr "Kart gövdesini göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "Bölgelerde dolu alanları göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:214
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "Lehim maskesini ipek baskıdan çıkar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
@@ -446,7 +446,7 @@ msgstr "3B Model Görünürlüğü"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
-msgstr ""
+msgstr "3B açık delik modellerini göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
 msgid "Show 3D SMD models"
@@ -454,7 +454,7 @@ msgstr "3B SMD modellerini göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:129
 msgid "Show 3D virtual models"
-msgstr ""
+msgstr "3B sanal modelleri göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board Layers"
@@ -462,31 +462,31 @@ msgstr "Kart Katmanları"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "İpek baskı katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:170
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "Lehim maskesi katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:179
 msgid "Show solder paste layers"
-msgstr ""
+msgstr "Lehim pastası katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:188
 msgid "Show adhesive layers"
-msgstr ""
+msgstr "Yapışkan katmanları göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "Kullanıcı Katmanları (gerçekçi modda gösterilmez)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "Yorumları ve çizim katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:220
 msgid "Show ECO layers"
-msgstr ""
+msgstr "ECO katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
 msgid "Camera Options"
@@ -494,7 +494,7 @@ msgstr "Kamera Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
 msgid "Rotation Increment:"
-msgstr ""
+msgstr "Döndürme Artışı:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:521 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -520,7 +520,7 @@ msgstr "OpenGL Oluşturma Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "Model sınırlama kutularını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
 msgid "Show copper thickness"
@@ -560,11 +560,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
-msgstr ""
+msgstr "Seçim rengi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Hareket Ederken"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
@@ -572,15 +572,15 @@ msgstr "Kenar yumuşatmayı devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 msgid "Disable thickness"
-msgstr ""
+msgstr "Kalınlığı devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr ""
+msgstr "Geçişleri devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
-msgstr ""
+msgstr "Delikleri devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
@@ -592,20 +592,20 @@ msgstr "Işın İzleme Oluşturma Seçenekleri"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 msgid "Procedural textures"
-msgstr ""
+msgstr "İşlemsel dokular"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
 msgid "Add floor"
-msgstr ""
+msgstr "Kat ekle"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
 msgid "Post-processing"
-msgstr ""
+msgstr "Son işlemler"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
 msgid "Number of Samples"
-msgstr ""
+msgstr "Numune Sayısı"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -770,11 +770,11 @@ msgstr "3B Görüntüleme Seçenekleri"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
-msgstr ""
+msgstr "Arka Plan Rengi, Alt"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:339
 msgid "Background Color, Top"
-msgstr ""
+msgstr "Arka Plan Rengi, Üst"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:831
 msgid "3D Image File Name"
@@ -806,23 +806,23 @@ msgstr "Dosya kaydedilemiyor"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:947
 msgid "Silkscreen Color"
-msgstr ""
+msgstr "İpek Baskı Rengi"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:983
 msgid "Solder Mask Color"
-msgstr ""
+msgstr "Lehim Maskesi Rengi"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1006
 msgid "Copper Color"
-msgstr ""
+msgstr "Bakır Rengi"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1032
 msgid "Board Body Color"
-msgstr ""
+msgstr "Kart Gövdesi Rengi"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1052
 msgid "Solder Paste Color"
-msgstr ""
+msgstr "Lehim Pastası Rengi"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation"
@@ -834,43 +834,43 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "X'i Saat Yönünde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "X'i Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "Y'yi Saat Yönünde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "Y'yi Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "Z'yi Saat Yönünde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "Z'yi Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
 msgid "Move board Left"
-msgstr ""
+msgstr "Kartı sola hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
-msgstr ""
+msgstr "Kartı sağa hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
 msgid "Move board Up"
-msgstr ""
+msgstr "Kartı yukarı hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
 msgid "Move board Down"
-msgstr ""
+msgstr "Kartı aşağı hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 msgid "Home view"
@@ -922,31 +922,31 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr ""
+msgstr "3B Izgara Yok"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "3B Izgara 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "3B Izgara 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "3B Izgara 2.5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "3B Izgara 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
-msgstr ""
+msgstr "Tüm Özellikleri Kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "Her 3B model dosyasındaki tüm malzeme özelliklerini kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
@@ -1223,9 +1223,8 @@ msgid "File \"%s\" could not be created."
 msgstr "\"%s\" dosyası oluşturulamadı."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:768
-#, fuzzy
 msgid "Create PostScript File"
-msgstr "Postscript Dosyası Oluştur"
+msgstr "PostScript Dosyası Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:808
 msgid "Create Symbol Library"
@@ -1233,7 +1232,7 @@ msgstr "Simge Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:847
 msgid "Create Footprint Library"
-msgstr ""
+msgstr "İz Düşümü Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:889
 msgid "Error allocating memory for potrace bitmap"
@@ -1297,74 +1296,72 @@ msgid "bits"
 msgstr "bit"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters"
-msgstr "Malzeme Özellikleri"
+msgstr "Çıktı Parametreleri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr ""
+msgstr "Yükseklik/genişlik oranını kilitle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28
 msgid "Size:"
-msgstr ""
+msgstr "Boyut:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:126
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 msgid "300"
-msgstr ""
+msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr ""
+msgstr "Bitmap Yükle"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr ""
+msgstr "Dosyaya Aktar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
 msgid "Export to Clipboard"
-msgstr ""
+msgstr "Panoya Aktar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Eeschema (.lib file)"
-msgstr ""
+msgstr "Eeschema (.lib dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Pcbnew (.kicad_mod file)"
-msgstr ""
+msgstr "Pcbnew (.kicad_mod dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
-msgstr "Postscript Dosyası Oluştur"
+msgstr "PostScript (.ps dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
-msgstr ""
+msgstr "Başlık bloğu için logo (.kicad_wks dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
-msgstr ""
+msgstr "Biçim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options"
-msgstr "Kamera Seçenekleri"
+msgstr "Görüntü Seçenekleri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
-msgstr ""
+msgstr "Siyah / Beyaz Eşiği:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
+"Gri tonlamalı resmi siyah beyaz bir resme dönüştürmek için seviyeyi ayarla."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -1390,9 +1387,8 @@ msgid "User layer Eco2"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "Kart Katmanları"
+msgstr "Ana Hatlar için Kart Katmanı"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1469,7 +1465,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:151
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: common/common.cpp:210
 #, c-format
@@ -1606,9 +1602,8 @@ msgid "The official KiCad website - "
 msgstr "Resmi KiCad web sitesi - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
-#, fuzzy
 msgid "Developer website - "
-msgstr "Launchpad üzerinde geliştirici web sitesi - "
+msgstr "Geliştirici web sitesi - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
@@ -1623,9 +1618,8 @@ msgid "Report or examine bugs - "
 msgstr "Hataları bildirin veya inceleyin - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
-#, fuzzy
 msgid "KiCad users group and community"
-msgstr "KiCad kullanıcı grupları ve topluluğu"
+msgstr "KiCad kullanıcı grubu ve topluluğu"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -4604,9 +4598,8 @@ msgid "Pin names"
 msgstr ""
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Symbol references"
-msgstr "&Tercihler"
+msgstr "Simge referansları"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
@@ -4617,9 +4610,8 @@ msgid "Symbol fields"
 msgstr ""
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
-msgstr "Kart gövdesini oluştur"
+msgstr "Simge gövdesi ana hatları"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
@@ -4671,9 +4663,8 @@ msgid "ERC warnings"
 msgstr ""
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "ERC errors"
-msgstr "Hatalar"
+msgstr "ERC hataları"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
 msgid "Helper items"
@@ -4808,9 +4799,8 @@ msgid "DRC warnings"
 msgstr ""
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "DRC errors"
-msgstr "Hatalar"
+msgstr "DRC hataları"
 
 #: common/layer_id.cpp:163
 msgid "DRC exclusions"
@@ -5149,9 +5139,9 @@ msgid "Quit"
 msgstr ""
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "%s Hakkında"
+msgstr "%s'ten çık"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -7338,9 +7328,8 @@ msgid "New library identifier:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy
 msgid "Update/reset Fields"
-msgstr "Öntanımlılara sıfırla"
+msgstr "Alanları güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
@@ -7377,9 +7366,8 @@ msgid "Update/reset field positions"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
-#, fuzzy
 msgid "Update Symbols from Library"
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "Simgeleri Kütüphaneden Güncelle"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:139
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
@@ -7861,9 +7849,8 @@ msgid "Click on items to highlight them on the board."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.cpp:57
-#, fuzzy
 msgid "Violations"
-msgstr "Döndürme"
+msgstr "İhlaller"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
@@ -11971,9 +11958,8 @@ msgid "Back"
 msgstr ""
 
 #: eeschema/sch_field.cpp:516
-#, fuzzy
 msgid "Intersheet References"
-msgstr "&Tercihler"
+msgstr "Sayfalar Arası Referanslar"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:41
 #, c-format
@@ -13330,9 +13316,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:729
-#, fuzzy
 msgid "Manage symbol libraries"
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "Simge kütüphanelerini yönet"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 msgid ""
@@ -13770,9 +13755,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:251
-#, fuzzy
 msgid "(failed to load)"
-msgstr "dosyayı açma başarısız oldu"
+msgstr "(yüklenemedi)"
 
 #: eeschema/symbol_viewer_frame.cpp:354 pcbnew/footprint.cpp:784
 msgid "<none>"
@@ -13788,9 +13772,8 @@ msgid "no library selected"
 msgstr ""
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
-#, fuzzy
 msgid "Choose symbol"
-msgstr "Renkleri Seç"
+msgstr "Simge seç"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
@@ -13801,9 +13784,8 @@ msgid "Display next symbol"
 msgstr ""
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "3B Görüntüleyici"
+msgstr "Simge Görüntüleyici"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
@@ -17405,9 +17387,8 @@ msgid "mu Rel C:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:820
-#, fuzzy
 msgid "Component Parameters"
-msgstr "Malzeme Özellikleri"
+msgstr "Bileşen Parametreleri"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:858
 msgid "Zdiff = Zodd * 2"
@@ -17430,9 +17411,8 @@ msgid "Synthesize"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
-#, fuzzy
 msgid "Electrical Parameters"
-msgstr "Malzeme Özellikleri"
+msgstr "Elektriksel Parametreler"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:985
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:997
@@ -18401,9 +18381,8 @@ msgid "all copper layers"
 msgstr ""
 
 #: pcbnew/board_item.cpp:93
-#, fuzzy
 msgid "and others"
-msgstr "Diğerleri"
+msgstr "ve diğerleri"
 
 #: pcbnew/board_item.cpp:101
 msgid "no layers"
@@ -18520,9 +18499,8 @@ msgid "Select dielectric layer to remove from board stack up."
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
-#, fuzzy
 msgid "Dielectric Layers"
-msgstr "Malzeme Özellikleri"
+msgstr "Dielektrik Katmanlar"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:619
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:168
@@ -19431,9 +19409,8 @@ msgid "Date"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:650
-#, fuzzy
 msgid "Board name"
-msgstr "Kart Katmanları"
+msgstr "Kart adı"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:653
 msgid "Board"
@@ -20056,9 +20033,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
-#, fuzzy
 msgid "Numbering Options"
-msgstr "Kamera Seçenekleri"
+msgstr "Numaralandırma Seçenekleri"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:283
 msgid "Initial Pad Number:"
@@ -20740,9 +20716,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:410
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
-#, fuzzy
 msgid "3D Models"
-msgstr "3B Model Seç"
+msgstr "3B Modeller"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:149
@@ -20802,9 +20777,8 @@ msgid "Update fabrication attributes"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Update 3D models"
-msgstr "3B modeller yükleniyor"
+msgstr "3B modelleri güncelle"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:84
 msgid ""
@@ -20869,9 +20843,8 @@ msgid "Update/reset fabrication attributes"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "3B modeller yükleniyor"
+msgstr "3B modelleri güncelle/sıfırla"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -25620,9 +25593,8 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:42
-#, fuzzy
 msgid "Electrical"
-msgstr "Malzeme Özellikleri"
+msgstr "Elektriksel"
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Design For Manufacturing"
@@ -26851,9 +26823,8 @@ msgid "Select PCB grid units"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
-#, fuzzy
 msgid "Import Parameters"
-msgstr "Malzeme Özellikleri"
+msgstr "Parametreleri İçe Aktar"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
@@ -26872,9 +26843,8 @@ msgid "Add all imported items into a new group"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "Malzeme Özellikleri"
+msgstr "DXF Parametreleri"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
 msgid "Default units:"
@@ -31542,9 +31512,8 @@ msgid "Select preset:"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2774
-#, fuzzy
 msgid "Open Preferences"
-msgstr "&Tercihler"
+msgstr "Tercihleri Aç"
 
 #: pcbnew/widgets/appearance_controls.cpp:2788
 msgid ""
@@ -31561,9 +31530,8 @@ msgid "Show the Net Inspector"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
-#, fuzzy
 msgid "Configure net classes"
-msgstr "Yolları Yapılandır"
+msgstr "Ağ sınıflarını yapılandır"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 msgid "Presets:"
@@ -31611,9 +31579,8 @@ msgid "Dimensions"
 msgstr ""
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "Diğerleri"
+msgstr "Diğer ögeler"
 
 #: pcbnew/zone.cpp:549
 msgid "Rule Area"
