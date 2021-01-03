@@ -229,7 +229,7 @@ PCBMODEL::PCBMODEL()
     m_minDistance2 = MIN_LENGTH2;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_mincurve = m_curves.end();
-    BRepBuilderAPI::Precision( 1.0e-6 );
+    BRepBuilderAPI::Precision( MIN_DISTANCE );
     return;
 }
 
@@ -652,6 +652,14 @@ void PCBMODEL::SetPCBThickness( double aThickness )
         m_thickness = aThickness;
 
     return;
+}
+
+
+void PCBMODEL::SetMinDistance( double aDistance )
+{
+    // m_minDistance2 keeps a squared distance value
+    m_minDistance2 = aDistance * aDistance;
+    BRepBuilderAPI::Precision( aDistance );
 }
 
 
