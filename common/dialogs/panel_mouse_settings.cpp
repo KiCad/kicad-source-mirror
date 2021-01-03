@@ -45,6 +45,8 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aPar
         if( child->GetWindow() == m_autoPanSpeed )
             child->SetBorder( 14 );
     }
+
+    m_lblCtrl->SetLabel( _( "Cmd" ) );
 #endif
 
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
@@ -84,32 +86,18 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
 
     switch( m_choiceMiddleButtonDrag->GetSelection() )
     {
-    case 0:
-        drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::PAN );
-        break;
-
-    case 1:
-        drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM );
-        break;
-
-    default:
-    case 2:
-        break;
+    case 0: drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
+    case 1: drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
+    case 2:                                                            break;
+    default:                                                           break;
     }
 
     switch( m_choiceRightButtonDrag->GetSelection() )
     {
-    case 0:
-        drag_right = static_cast<int>( MOUSE_DRAG_ACTION::PAN );
-        break;
-
-    case 1:
-        drag_right = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM );
-        break;
-
-    default:
-    case 2:
-        break;
+    case 0: drag_right = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
+    case 1: drag_right = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
+    case 2:                                                           break;
+    default:                                                          break;
     }
 
     cfg->m_Input.center_on_zoom        = m_checkZoomCenter->GetValue();
@@ -158,29 +146,19 @@ void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSetting
             {
                 switch( aVal )
                 {
-                case MOUSE_DRAG_ACTION::PAN:
-                    aChoice->SetSelection( 0 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::ZOOM:
-                    aChoice->SetSelection( 1 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::NONE:
-                    aChoice->SetSelection( 2 );
-                    break;
-
-                case MOUSE_DRAG_ACTION::SELECT:
-                default:
-                    break;
+                case MOUSE_DRAG_ACTION::PAN:    aChoice->SetSelection( 0 ); break;
+                case MOUSE_DRAG_ACTION::ZOOM:   aChoice->SetSelection( 1 ); break;
+                case MOUSE_DRAG_ACTION::NONE:   aChoice->SetSelection( 2 ); break;
+                case MOUSE_DRAG_ACTION::SELECT:                             break;
+                default:                                                    break;
                 }
             };
 
-    set_mouse_buttons(
-            static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_middle ), m_choiceMiddleButtonDrag );
+    set_mouse_buttons( static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_middle ),
+                       m_choiceMiddleButtonDrag );
 
-    set_mouse_buttons(
-            static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_right ), m_choiceRightButtonDrag );
+    set_mouse_buttons( static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_right ),
+                       m_choiceRightButtonDrag );
 
     m_currentScrollMod.zoom = aSettings.m_Input.scroll_modifier_zoom;
     m_currentScrollMod.panh = aSettings.m_Input.scroll_modifier_pan_h;
@@ -249,30 +227,19 @@ void PANEL_MOUSE_SETTINGS::updateScrollModButtons()
             {
                 switch( aModifier )
                 {
-                case 0:
-                    aNoneBtn->SetValue( true );
-                    break;
-
-                case WXK_CONTROL:
-                    aCtrlBtn->SetValue( true );
-                    break;
-
-                case WXK_SHIFT:
-                    aShiftBtn->SetValue( true );
-                    break;
-
-                case WXK_ALT:
-                    aAltBtn->SetValue( true );
-                    break;
+                case 0:           aNoneBtn->SetValue( true );  break;
+                case WXK_CONTROL: aCtrlBtn->SetValue( true );  break;
+                case WXK_SHIFT:   aShiftBtn->SetValue( true ); break;
+                case WXK_ALT:     aAltBtn->SetValue( true );   break;
                 }
             };
 
-    set_wheel_buttons(
-            m_currentScrollMod.zoom, m_rbZoomNone, m_rbZoomCtrl, m_rbZoomShift, m_rbZoomAlt );
+    set_wheel_buttons( m_currentScrollMod.zoom, m_rbZoomNone, m_rbZoomCtrl, m_rbZoomShift,
+                       m_rbZoomAlt );
 
-    set_wheel_buttons(
-            m_currentScrollMod.panh, m_rbPanHNone, m_rbPanHCtrl, m_rbPanHShift, m_rbPanHAlt );
+    set_wheel_buttons( m_currentScrollMod.panh, m_rbPanHNone, m_rbPanHCtrl, m_rbPanHShift,
+                       m_rbPanHAlt );
 
-    set_wheel_buttons(
-            m_currentScrollMod.panv, m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift, m_rbPanVAlt );
+    set_wheel_buttons( m_currentScrollMod.panv, m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift,
+                       m_rbPanVAlt );
 }
