@@ -34,7 +34,7 @@
 
 #include "3d_canvas/board_adapter.h"
 #include "3d_canvas/eda_3d_canvas.h"
-#include "3d_rendering/ctrack_ball.h"
+#include "3d_rendering/track_ball.h"
 #include <kiway_player.h>
 #include <wx/colourdata.h>
 #include <dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition

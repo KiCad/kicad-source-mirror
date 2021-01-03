@@ -30,8 +30,8 @@
 #include "3d_cache/3d_info.h"
 #include "3d_cache/3d_cache.h"
 #include "3d_cache_dialogs.h"
-#include <3d_model_viewer/c3d_model_viewer.h>
-#include <common_ogl/cogl_att_list.h>
+#include <3d_model_viewer/3d_model_viewer.h>
+#include <common_ogl/ogl_attr_list.h>
 #include <filename_resolver.h>
 #include <pcbnew/footprint.h>
 

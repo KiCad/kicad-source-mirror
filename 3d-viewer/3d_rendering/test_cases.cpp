@@ -28,12 +28,12 @@
  * @brief it run only once and only in debug build
  */
 
-#include "3d_render_raytracing/cfrustum.h"
-#include "3d_render_raytracing/shapes2D/cbbox2d.h"
-#include "3d_render_raytracing/shapes2D/cfilledcircle2d.h"
-#include "3d_render_raytracing/shapes2D/cpolygon2d.h"
-#include "3d_render_raytracing/shapes2D/croundsegment2d.h"
-#include "3d_render_raytracing/shapes3D/cbbox.h"
+#include "3d_render_raytracing/frustum.h"
+#include "3d_render_raytracing/shapes2D/bbox_2d.h"
+#include "3d_render_raytracing/shapes2D/filled_circle_2d.h"
+#include "3d_render_raytracing/shapes2D/polygon_2d.h"
+#include "3d_render_raytracing/shapes2D/round_segment_2d.h"
+#include "3d_render_raytracing/shapes3D/bbox_3d.h"
 #include <wx/debug.h>
 
 //#ifdef DEBUG

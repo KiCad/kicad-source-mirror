@@ -29,8 +29,8 @@
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
 #include <eda_3d_viewer.h>
-#include <3d_rendering/3d_render_raytracing/c3d_render_raytracing.h>
-#include <3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h>
+#include <3d_rendering/3d_render_raytracing/render_3d_raytrace.h>
+#include <3d_rendering/legacy/render_3d_legacy.h>
 #include <3d_viewer_id.h>
 #include <board.h>
 #include <reporter.h>

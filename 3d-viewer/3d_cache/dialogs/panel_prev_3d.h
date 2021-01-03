@@ -42,7 +42,7 @@
 #include <tool/tools_holder.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
-#include <3d_rendering/ctrack_ball.h>
+#include <3d_rendering/track_ball.h>
 
 // Define min and max parameter values
 #define MAX_SCALE          10000.0

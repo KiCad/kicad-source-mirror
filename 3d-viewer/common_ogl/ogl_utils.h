@@ -32,7 +32,7 @@
 #define OGL_UTILS_H_
 
 #include <wx/image.h>
-#include "3d_rendering/cimage.h"
+#include "3d_rendering/image.h"
 #include <plugins/3dapi/c3dmodel.h>
 
 /**

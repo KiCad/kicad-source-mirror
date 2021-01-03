@@ -27,8 +27,8 @@
 
 #include <atomic>
 #include "board_adapter.h"
-#include "3d_rendering/3d_render_raytracing/accelerators/caccelerator.h"
-#include "3d_rendering/c3d_render_base.h"
+#include "3d_rendering/3d_render_raytracing/accelerators/accelerator_3d.h"
+#include "3d_rendering/render_3d_base.h"
 #include "3d_cache/3d_cache.h"
 #include <gal/hidpi_gl_canvas.h>
 #include <wx/image.h>

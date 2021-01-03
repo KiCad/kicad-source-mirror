@@ -27,13 +27,13 @@
 
 #include <array>
 #include <vector>
-#include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
-#include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
-#include "../3d_rendering/ccamera.h"
+#include "../3d_rendering/3d_render_raytracing/accelerators/container_2d.h"
+#include "../3d_rendering/3d_render_raytracing/accelerators/container_3d.h"
+#include "../3d_rendering/3d_render_raytracing/shapes3D/bbox_3d.h"
+#include "../3d_rendering/camera.h"
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"
-#include "../common_ogl/cogl_att_list.h"
+#include "../common_ogl/ogl_attr_list.h"
 
 #include <layers_id_colors_and_visibility.h>
 #include <pad.h>

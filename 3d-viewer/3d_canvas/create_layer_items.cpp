@@ -32,9 +32,9 @@
  */
 
 #include "board_adapter.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
+#include "../3d_rendering/3d_render_raytracing/shapes2D/ring_2d.h"
+#include "../3d_rendering/3d_render_raytracing/shapes2D/filled_circle_2d.h"
+#include "../3d_rendering/3d_render_raytracing/shapes3D/cylinder_3d.h"
 
 #include <board.h>
 #include <footprint.h>

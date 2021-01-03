@@ -33,7 +33,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board.h>
-#include <common_ogl/cogl_att_list.h>
+#include <common_ogl/ogl_attr_list.h>
 #include <gal/dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>

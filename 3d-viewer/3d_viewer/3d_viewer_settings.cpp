@@ -19,7 +19,7 @@
  */
 
 #include <3d_enums.h>
-#include <common_ogl/cogl_att_list.h>
+#include <common_ogl/ogl_attr_list.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 
