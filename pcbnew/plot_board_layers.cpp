@@ -50,6 +50,7 @@
 #include <plotters_specific.h>
 #include <pcb_painter.h>
 #include <gbr_metadata.h>
+#include <advanced_config.h>
 
 /*
  * Plot a solder mask layer.  Solder mask layers have a minimum thickness value and cannot be
@@ -632,7 +633,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
-                                  ? SMALL_DRILL : INT_MAX;
+                                  ? ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize : INT_MAX;
 
             for( FOOTPRINT* footprint : aBoard->Footprints() )
             {

@@ -143,6 +143,13 @@ static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
 
 static const wxChar SkipBoundingBoxFpLoad[] = wxT( "SkipBoundingBoxFpLoad" );
 
+/**
+ * The diameter of the drill marks on print and plot outputs (in mm),
+ * when the "Drill marks" option is set to "Small mark"
+ */
+static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
+
+
 } // namespace KEYS
 
 
@@ -243,6 +250,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_SkipBoundingBoxOnFpLoad   = false;
 
+    m_SmallDrillMarkSize	= 0.35;
+
     loadFromConfigFile();
 }
 
@@ -325,6 +334,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad,
                                                 &m_SkipBoundingBoxOnFpLoad, false ) );
+    
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
+                                                  &m_SmallDrillMarkSize, 0.35, 0.0, 3.0 ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

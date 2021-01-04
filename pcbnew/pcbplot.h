@@ -56,8 +56,6 @@ class wxFileName;
 #define PLOT_MIN_SCALE 0.01
 #define PLOT_MAX_SCALE 100.0
 
-// Small drill marks (small pad holes) diameter value
-#define SMALL_DRILL KiROUND( 0.35 * IU_PER_MM )
 
 
 // A helper class to plot board items

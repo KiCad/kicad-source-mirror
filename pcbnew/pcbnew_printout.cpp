@@ -32,6 +32,7 @@
 #include <pcbnew_settings.h>
 #include <view/view.h>
 #include <pcbplot.h>
+#include <advanced_config.h>
 
 PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
     : BOARD_PRINTOUT_SETTINGS( aPageInfo )
@@ -238,7 +239,7 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
         break;
 
     case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
-        painter.SetDrillMarks( false, Millimeter2iu( 0.3 ) );
+        painter.SetDrillMarks( false, Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) );
 
         painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::BLACK );
         painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );

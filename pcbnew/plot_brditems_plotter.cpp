@@ -50,6 +50,7 @@
 #include <pad_shapes.h>                       // for PAD_ATTRIB_NPTH
 #include <pcbplot.h>
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
+#include <advanced_config.h>
 
 #include <board.h>
 #include <board_item.h>                       // for BOARD_ITEM, S_CIRCLE
@@ -1014,7 +1015,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
     /* If small drills marks were requested prepare a clamp value to pass
        to the helper function */
-    int smallDrill = GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE ? SMALL_DRILL : 0;
+    int smallDrill = GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE 
+                    ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) : 0;
 
     /* In the filled trace mode drill marks are drawn white-on-black to scrape
        the underlying pad. This works only for drivers supporting color change,

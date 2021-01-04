@@ -149,6 +149,12 @@ public:
      */
     bool m_SkipBoundingBoxOnFpLoad;
 
+    /**
+     * The diameter of the drill marks on print and plot outputs (in mm), 
+     * when the "Drill marks" option is set to "Small mark"
+     */
+    double m_SmallDrillMarkSize;
+
 private:
     ADVANCED_CFG();
 
