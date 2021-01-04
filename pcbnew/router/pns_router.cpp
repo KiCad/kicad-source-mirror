@@ -185,14 +185,30 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
     if( m_mode == PNS_MODE_ROUTE_SINGLE && aStartItem )
     {
-        VECTOR2I startPoint = aStartItem->Anchor( 0 );
-        SEGMENT  dummyStartSeg( SEG( startPoint, startPoint ), aStartItem->Net() );
+        VECTOR2I         startPoint = aStartItem->Anchor( 0 );
+        SHAPE_LINE_CHAIN dummyStartSeg;
+        LINE             dummyStartLine;
 
-        dummyStartSeg.SetWidth( m_sizes.TrackWidth() );
-        dummyStartSeg.SetLayer( aLayer );
+        dummyStartSeg.Append( startPoint );
+        dummyStartSeg.Append( startPoint, true );
 
-        if( m_world->CheckColliding( &dummyStartSeg, ITEM::ANY_T ) )
+        dummyStartLine.SetShape( dummyStartSeg );
+        dummyStartLine.SetLayer( aLayer );
+        dummyStartLine.SetNet( aStartItem->Net() );
+        dummyStartLine.SetWidth( m_sizes.TrackWidth() );
+
+        if( m_world->CheckColliding( &dummyStartLine, ITEM::ANY_T ) )
+        {
+            ITEM_SET          dummyStartSet( &dummyStartLine );
+            NODE::ITEM_VECTOR highlightedItems;
+
+            markViolations( m_world.get(), dummyStartSet, highlightedItems );
+
+            for( ITEM* item : highlightedItems )
+                m_iface->HideItem( item );
+
             return false;
+        }
     }
     else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR && aStartItem )
     {
@@ -204,7 +220,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {   
-    if( ! isStartingPointRoutable( aP, aStartItem, aLayer ) )
+    if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
     {
         SetFailureReason( _( "The routing start point violates DRC." ) );
         return false;
@@ -516,6 +532,12 @@ void ROUTER::StopRouting()
     m_state = IDLE;
     m_world->KillChildren();
     m_world->ClearRanks();
+}
+
+
+void ROUTER::ClearViewDecorations()
+{
+    m_iface->EraseView();
 }
 
 

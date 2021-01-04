@@ -969,8 +969,18 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        frame()->ShowInfoBarError( m_router->FailureReason() );
+        // It would make more sense to leave the net highlighted as the higher-contrast mode
+        // makes the router clearances more visible.  However, since we just started routing
+        // the conversion of the screen from low contrast to high contrast is a bit jarring and
+        // makes the infobar coming up less noticable.
         highlightNet( false );
+
+        frame()->ShowInfoBarError( m_router->FailureReason(), true,
+                                   [&]()
+                                   {
+                                       m_router->ClearViewDecorations();
+                                   } );
+
         controls()->SetAutoPan( false );
         return false;
     }
@@ -1000,6 +1010,8 @@ bool ROUTER_TOOL::finishInteractive()
 
 void ROUTER_TOOL::performRouting()
 {
+    m_router->ClearViewDecorations();
+
     if( !prepareInteractive() )
         return;
 
@@ -1298,6 +1310,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     // Store routing settings till the next invocation
     m_savedSizes = m_router->Sizes();
+    m_router->ClearViewDecorations();
 
     return 0;
 }
@@ -1305,6 +1318,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::performDragging( int aMode )
 {
+    m_router->ClearViewDecorations();
+
     VIEW_CONTROLS* ctls = getViewControls();
 
     if( m_startItem && m_startItem->IsLocked() )

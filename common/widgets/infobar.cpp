@@ -153,6 +153,9 @@ void WX_INFOBAR::Dismiss()
     if( m_auiManager )
         updateAuiLayout( false );
 
+    if( m_callback )
+        (*m_callback)();
+
     m_updateLock = false;
 }
 

@@ -150,6 +150,7 @@ public:
     void UndoLastSegment();
     void CommitRouting();
     void StopRouting();
+    void ClearViewDecorations();
 
     NODE* GetWorld() const
     {

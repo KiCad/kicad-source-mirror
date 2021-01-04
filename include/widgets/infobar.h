@@ -21,6 +21,7 @@
 #ifndef INFOBAR_H_
 #define INFOBAR_H_
 
+#include <core/optional.h>
 #include <wx/event.h>
 #include <wx/infobar.h>
 #include <wx/wx.h>
@@ -130,6 +131,16 @@ public:
     void RemoveAllButtons();
 
     /**
+     * Provide a callback to be called when the infobar is dismissed (either by user action
+     * or timer).
+     * @param aCallback
+     */
+    void SetCallback( std::function<void(void)> aCallback )
+    {
+        m_callback = aCallback;
+    }
+
+    /**
      * Show the infobar with the provided message and icon for a specific period
      * of time.
      *
@@ -213,6 +224,8 @@ protected:
     bool          m_updateLock;     ///< True if this infobar requested the UI update
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
     wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
+
+    OPT<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
 
     DECLARE_EVENT_TABLE()
 };

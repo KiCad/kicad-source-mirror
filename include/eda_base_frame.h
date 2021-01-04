@@ -215,15 +215,32 @@ public:
     WX_INFOBAR* GetInfoBar() { return m_infoBar; }
 
     /**
-     * Show the #WX_INFOBAR displayed on the top of the canvas with a message
-     * and a error icon on the left of the infobar.
+     * Show the #WX_INFOBAR displayed on the top of the canvas with a message and an error
+     * icon on the left of the infobar, and an optional closebox to the right.
      *
      * The infobar will be closed after a timeout.
      *
-     * @param aErrorMsg is the message to display
+     * @param aErrorMsg is the message to display.
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false );
+
+    /**
+     * Show the #WX_INFOBAR displayed on the top of the canvas with a message and an error
+     * icon on the left of the infobar, and an optional closebox to the right.
+     *
+     * The infobar will be closed after a timeout.
+     *
+     * This version accepts a callback which will be called when the infobar is dismissed
+     * (either as a result of user action or a timeout).  This can be useful when the caller
+     * wants to make other decorations in the canvas to highlight the error.
+     *
+     * @param aErrorMsg is the message to display.
+     * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
+     * @param aCallback a callback to be called when the infobar is dismissed.
+     */
+    void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
+                           std::function<void(void)> aCallback );
 
     /**
      * Show the #WX_INFOBAR displayed on the top of the canvas with a message and a warning

@@ -722,6 +722,21 @@ void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowClos
 }
 
 
+void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
+                                       std::function<void(void)> aCallback )
+{
+    m_infoBar->RemoveAllButtons();
+
+    if( aShowCloseButton )
+        m_infoBar->AddCloseButton();
+
+    if( aCallback )
+        m_infoBar->SetCallback( aCallback );
+
+    GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR );
+}
+
+
 void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton )
 {
     m_infoBar->RemoveAllButtons();
