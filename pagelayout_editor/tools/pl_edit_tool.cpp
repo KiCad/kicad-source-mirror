@@ -106,6 +106,14 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() || m_moveInProgress )
         return 0;
 
+    std::set<WS_DATA_ITEM*> unique_peers;
+
+    for( EDA_ITEM* item : selection )
+    {
+        WS_DRAW_ITEM_BASE* drawItem = static_cast<WS_DRAW_ITEM_BASE*>( item );
+        unique_peers.insert( drawItem->GetPeer() );
+    }
+
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
@@ -136,7 +144,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Apply any initial offset in case we're coming from a previous command.
                 //
-                for( EDA_ITEM* item : selection )
+                for( WS_DATA_ITEM* item : unique_peers )
                     moveItem( item, m_moveOffset );
 
                 // Set up the starting position and move/drag offset
@@ -148,7 +156,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I delta = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
-                    for( EDA_ITEM* item : selection )
+                    for( WS_DATA_ITEM* item : unique_peers )
                         moveItem( item, delta );
 
                     selection.SetReferencePoint( m_cursor );
@@ -182,7 +190,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             m_moveOffset += delta;
             prevPos = m_cursor;
 
-            for( EDA_ITEM* item : selection )
+            for( WS_DATA_ITEM* item : unique_peers )
                 moveItem( item, delta );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
@@ -261,14 +269,11 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void PL_EDIT_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
+void PL_EDIT_TOOL::moveItem( WS_DATA_ITEM* aItem, VECTOR2I aDelta )
 {
-    WS_DRAW_ITEM_BASE*  drawItem = static_cast<WS_DRAW_ITEM_BASE*>( aItem );
-    WS_DATA_ITEM* dataItem = drawItem->GetPeer();
+    aItem->MoveToUi( aItem->GetStartPosUi() + (wxPoint) aDelta );
 
-    dataItem->MoveToUi( dataItem->GetStartPosUi() + (wxPoint) aDelta );
-
-    for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
+    for( WS_DRAW_ITEM_BASE* item : aItem->GetDrawItems() )
     {
         getView()->Update( item );
         item->SetFlags( IS_MOVED );

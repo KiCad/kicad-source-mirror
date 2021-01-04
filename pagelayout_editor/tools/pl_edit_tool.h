@@ -68,7 +68,7 @@ public:
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
-    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
+    void moveItem( WS_DATA_ITEM* aItem, VECTOR2I aDelta );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
