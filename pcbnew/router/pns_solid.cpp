@@ -34,7 +34,8 @@
 
 namespace PNS {
 
-static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, int aClearance, int aWalkaroundThickness )
+static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
+                                                          int aWalkaroundThickness )
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
 
@@ -43,15 +44,20 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
     case SH_RECT:
     {
         const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>( aShape );
-        return OctagonalHull( rect->GetPosition(), rect->GetSize(), cl + 1, 0.2 * cl );
+        return OctagonalHull( rect->GetPosition(),
+                              rect->GetSize(),
+                              cl + 1,
+                              0.2 * cl );
     }
 
     case SH_CIRCLE:
     {
         const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( aShape );
         int r = circle->GetRadius();
-        return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ), VECTOR2I( 2 * r, 2 * r ),
-                              cl + 1, 0.52 * ( r + cl ) );
+        return OctagonalHull( circle->GetCenter() - VECTOR2I( r, r ),
+                              VECTOR2I( 2 * r, 2 * r ),
+                              cl + 1,
+                              0.52 * ( r + cl ) );
     }
 
     case SH_SEGMENT:
@@ -91,12 +97,13 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
 
         if ( cmpnd->Shapes().size() == 1 )
         {
-            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance, aWalkaroundThickness );
+            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance,
+                                               aWalkaroundThickness );
         }
         else
         {
-            // fixme - shouldn't happen but one day we should move TransformShapeWithClearanceToPolygon()
-            // to the Geometry Library
+            // fixme - shouldn't happen but one day we should move
+            // TransformShapeWithClearanceToPolygon() to the Geometry Library
             return SHAPE_LINE_CHAIN();
         }
     }
@@ -118,12 +125,13 @@ const SHAPE_LINE_CHAIN SOLID::HoleHull( int aClearance, int aWalkaroundThickness
 
         if ( cmpnd->Shapes().size() == 1 )
         {
-            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance, aWalkaroundThickness );
+            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance,
+                                               aWalkaroundThickness );
         }
         else
         {
-            // fixme - shouldn't happen but one day we should move TransformShapeWithClearanceToPolygon()
-            // to the Geometry Library
+            // fixme - shouldn't happen but one day we should move
+            // TransformShapeWithClearanceToPolygon() to the Geometry Library
             return SHAPE_LINE_CHAIN();
         }
     }

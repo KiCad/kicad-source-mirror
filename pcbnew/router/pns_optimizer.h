@@ -111,14 +111,14 @@ public:
     ~OPTIMIZER();
 
     ///> a quick shortcut to optmize a line without creating and setting up an optimizer
-    static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I aV = VECTOR2I(0, 0) );
+    static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld,
+                          const VECTOR2I aV = VECTOR2I(0, 0) );
     
     bool Optimize( LINE* aLine, LINE* aResult = NULL );
     bool Optimize( DIFF_PAIR* aPair );
 
 
     void SetWorld( NODE* aNode ) { m_world = aNode; }
-    void CacheStaticItem( ITEM* aItem );
     void CacheRemove( ITEM* aItem );
     void ClearCache( bool aStaticOnly = false );
 
@@ -131,7 +131,6 @@ public:
     {
         m_effortLevel = aEffort;
     }
-
 
     void SetPreserveVertex( const VECTOR2I& aV )
     {
@@ -154,9 +153,6 @@ public:
     void ClearConstraints();
     void AddConstraint ( OPT_CONSTRAINT *aConstraint );
 
-    bool extractPadGrids( std::vector<JOINT*>& aPadJoints );
-    void BuildPadGrids();
-
 private:
     static const int MaxCachedItems = 256;
 
@@ -173,7 +169,6 @@ private:
     bool mergeObtuse( LINE* aLine );
     bool mergeFull( LINE* aLine );
     bool mergeColinear( LINE* aLine );
-    bool removeUglyCorners( LINE* aLine );
     bool runSmartPads( LINE* aLine );
     bool mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );
     bool fanoutCleanup( LINE * aLine );
@@ -186,13 +181,12 @@ private:
     void cacheAdd( ITEM* aItem, bool aIsStatic );
     void removeCachedSegments( LINE* aLine, int aStartVertex = 0, int aEndVertex = -1 );
 
-    bool checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement );
-
-
+    bool checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine,
+                            const SHAPE_LINE_CHAIN& aCurrentPath,
+                            const SHAPE_LINE_CHAIN& aReplacement );
 
     BREAKOUT_LIST circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
-    BREAKOUT_LIST ovalBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST customBreakouts( int aWidth, const ITEM* aItem, bool aPermitDiagonal ) const;
     BREAKOUT_LIST computeBreakouts( int aWidth, const ITEM* aItem, bool aPermitDiagonal ) const;
 
@@ -200,20 +194,18 @@ private:
 
     ITEM* findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const;
 
-    SHAPE_INDEX_LIST<ITEM*> m_cache;
+private:
+    SHAPE_INDEX_LIST<ITEM*>                m_cache;
+    std::vector<OPT_CONSTRAINT*>           m_constraints;
+    std::unordered_map<ITEM*, CACHED_ITEM> m_cacheTags;
 
-    std::vector<OPT_CONSTRAINT*> m_constraints;
-    typedef std::unordered_map<ITEM*, CACHED_ITEM> CachedItemTags;
-    CachedItemTags m_cacheTags;
-    NODE* m_world;
-    int m_collisionKindMask;
-    int m_effortLevel;
-    bool m_keepPostures;
+    NODE*               m_world;
+    int                 m_collisionKindMask;
+    int                 m_effortLevel;
 
-
-    VECTOR2I m_preservedVertex;
+    VECTOR2I            m_preservedVertex;
     std::pair<int, int> m_restrictedVertexRange;
-    BOX2I m_restrictArea;
+    BOX2I               m_restrictArea;
 };
 
 class OPT_CONSTRAINT
@@ -221,72 +213,58 @@ class OPT_CONSTRAINT
 public:
     OPT_CONSTRAINT( NODE* aWorld ) :
         m_world( aWorld )
-        {
-            m_priority = 0;
-        };
-
-    virtual ~OPT_CONSTRAINT() {};
-
-    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) = 0;
-
-    int GetPriority() const
     {
-        return m_priority;
-    }
+        m_priority = 0;
+    };
 
-    void SetPriority( int aPriority )
+    virtual ~OPT_CONSTRAINT()
     {
-        m_priority = aPriority;
-    }
+    };
+
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                        const SHAPE_LINE_CHAIN& aCurrentPath,
+                        const SHAPE_LINE_CHAIN& aReplacement ) = 0;
+
+    int GetPriority() const { return m_priority; }
+    void SetPriority( int aPriority ) { m_priority = aPriority; }
 
 protected:
     NODE* m_world;
-    int m_priority;
+    int   m_priority;
 };
 
-class ANGLE_CONSTRAINT_45: public OPT_CONSTRAINT
-{
-public:
-    ANGLE_CONSTRAINT_45( NODE* aWorld, int aEntryDirectionMask = -1, int aExitDirectionMask = -1 ) :
-        OPT_CONSTRAINT( aWorld ),
-        m_entryDirectionMask( aEntryDirectionMask ),
-        m_exitDirectionMask( aExitDirectionMask )
-        {
-
-        }
-
-    virtual ~ANGLE_CONSTRAINT_45() {};
-
-    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
-
-private:
-    int m_entryDirectionMask;
-    int m_exitDirectionMask;
-};
 
 class AREA_CONSTRAINT : public OPT_CONSTRAINT
 {
 public:
     AREA_CONSTRAINT( NODE* aWorld, const  BOX2I& aAllowedArea ) :
         OPT_CONSTRAINT( aWorld ),
-        m_allowedArea ( aAllowedArea ) {};
+        m_allowedArea ( aAllowedArea )
+    {
+    };
 
-        virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                const SHAPE_LINE_CHAIN& aCurrentPath,
+                const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     BOX2I m_allowedArea;
-
 };
+
 
 class KEEP_TOPOLOGY_CONSTRAINT: public OPT_CONSTRAINT
 {
 public:
     KEEP_TOPOLOGY_CONSTRAINT( NODE* aWorld ) :
         OPT_CONSTRAINT( aWorld )
-        {};
+    {
+    };
 
-    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                const SHAPE_LINE_CHAIN& aCurrentPath,
+                const SHAPE_LINE_CHAIN& aReplacement ) override;
 };
+
 
 class PRESERVE_VERTEX_CONSTRAINT: public OPT_CONSTRAINT
 {
@@ -294,13 +272,16 @@ public:
     PRESERVE_VERTEX_CONSTRAINT( NODE* aWorld, const VECTOR2I& aV ) :
         OPT_CONSTRAINT( aWorld ),
         m_v( aV )
-        {};
+    {
+    };
 
-    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                const SHAPE_LINE_CHAIN& aCurrentPath,
+                const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
-
     VECTOR2I m_v;
 };
+
 
 class RESTRICT_VERTEX_RANGE_CONSTRAINT: public OPT_CONSTRAINT
 {
@@ -309,11 +290,13 @@ public:
         OPT_CONSTRAINT( aWorld ),
         m_start( aStart ),
         m_end( aEnd )
-        {};
+    {
+    };
 
-    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                        const SHAPE_LINE_CHAIN& aCurrentPath,
+                        const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
-
     int m_start;
     int m_end;
 };

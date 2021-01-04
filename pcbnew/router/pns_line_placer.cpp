@@ -368,18 +368,19 @@ bool LINE_PLACER::mergeHead()
 
 VECTOR2I closestProjectedPoint( const SHAPE_LINE_CHAIN& line, const VECTOR2I& p )
 {
-    int min_dist = INT_MAX;
-    VECTOR2I closest;
+    // Keep distances squared for performance
+    SEG::ecoord min_dist_sq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I    closest;
 
-    for(int i = 0; i < line.SegmentCount(); i++ )
+    for( int i = 0; i < line.SegmentCount(); i++ )
     {
-        const auto& s = line.CSegment(i);
-        auto a = s.NearestPoint( p );
-        auto d = (a - p).EuclideanNorm();
+        const SEG& s = line.CSegment(i);
+        VECTOR2I   a = s.NearestPoint( p );
+        int        d_sq = (a - p).SquaredEuclideanNorm();
 
-        if( d < min_dist )
+        if( d_sq < min_dist_sq )
         {
-            min_dist = d;
+            min_dist_sq = d_sq;
             closest = a;
         }
     }
@@ -407,14 +408,14 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     WALKAROUND::RESULT wr = walkaround.Route( initTrack );
     //WALKAROUND::WALKAROUND_STATUS wf = walkaround.Route( initTrack, walkFull, false );
 
-    auto l_cw = wr.lineCw.CLine();
-    auto l_ccw = wr.lineCcw.CLine();
+    SHAPE_LINE_CHAIN l_cw = wr.lineCw.CLine();
+    SHAPE_LINE_CHAIN l_ccw = wr.lineCcw.CLine();
 
     if( wr.statusCcw == WALKAROUND::ALMOST_DONE || wr.statusCw == WALKAROUND::ALMOST_DONE )
     {
 
-        auto p_cw = closestProjectedPoint( l_cw, aP );
-        auto p_ccw = closestProjectedPoint( l_ccw, aP );
+        VECTOR2I p_cw = closestProjectedPoint( l_cw, aP );
+        VECTOR2I p_ccw = closestProjectedPoint( l_ccw, aP );
 
         int idx_cw = l_cw.Split( p_cw );
         int idx_ccw = l_ccw.Split( p_ccw );
@@ -1097,7 +1098,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             if( arcIndex == lastArc )
                 continue;
 
-            auto arc = std::make_unique<ARC>( l.Arc( arcIndex ), m_currentNet );
+            std::unique_ptr<ARC> arc = std::make_unique<ARC>( l.Arc( arcIndex ), m_currentNet );
             arc->SetWidth( pl.Width() );
             arc->SetLayer( m_currentLayer );
             m_lastNode->Add( std::move( arc ) );
@@ -1481,7 +1482,7 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 
         for( int i = 0; i < m_trail.SegmentCount() - 1; i++ )
         {
-            const auto& s_trail = m_trail.CSegment( i );
+            const SEG& s_trail = m_trail.CSegment( i );
 
             if( s_trail.Distance( s_new ) <= m_tolerance )
             {
@@ -1495,9 +1496,7 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 
     m_trail.Simplify();
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-
-    dbg->AddLine( m_trail, 5, 100000 );
+    ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( m_trail, 5, 100000 );
 }
 
 
@@ -1526,13 +1525,11 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         return m_direction;
     }
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-
-    auto p0 = m_trail.CPoint( 0 );
-
-    double refLength = SEG( p0, aP ).Length();
-
+    DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    VECTOR2I         p0 = m_trail.CPoint( 0 );
+    double           refLength = SEG( p0, aP ).Length();
     SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false, false ) );
+
     straight.SetClosed( true );
     straight.Append( m_trail.Reverse() );
     straight.Simplify();
