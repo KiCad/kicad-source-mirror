@@ -1,13 +1,13 @@
-# lê văn lập <levanlap2502@gmail.com>, 2020.
+# lê văn lập <levanlap2502@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"PO-Revision-Date: 2021-01-04 14:10+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7073,45 +7073,50 @@ msgstr "Bộ lọc footprint:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
-msgstr ""
+msgstr "Hiện footprint được chọn"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr ""
+msgstr "Xem footprint đã chọn trong chương trình xem footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr ""
+msgstr "Quản lý Tệp Liên kết footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
+#, fuzzy
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"Cấu hình danh sách tập tin kết hợp dấu chân (.equ).Những tập tin này được "
+"dùng để tự động đặt tên footprint từ giá trị symbol."
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save to Schematic"
-msgstr ""
+msgstr "Lưu vào Sơ đồ mạch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:69
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
+"Lưu các liên kết footprint trong các trường symbol và footprint trong sơ đồ "
+"mạch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next unassigned symbol"
-msgstr ""
+msgstr "Chọn symbol chưa được gán tiếp theo"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
 msgid "Select next symbol with no footprint assignment"
-msgstr ""
+msgstr "Chọn symbol tiếp theo mà không gán footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous unassigned symbol"
-msgstr ""
+msgstr "Chọn symbol chưa được gán trước đó"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
 msgid "Select previous symbol with no footprint assignment"
-msgstr ""
+msgstr "Chọn symbol trước đó mà không gán footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 #, fuzzy
@@ -7130,76 +7135,78 @@ msgstr "Tự động sao lưu dự án"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
 msgid "Perform automatic footprint assignment"
-msgstr ""
+msgstr "Thực hiện gán footprint tự động"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete association"
-msgstr ""
+msgstr "Xóa liên kết"
 
 #: cvpcb/tools/cvpcb_actions.cpp:123
 msgid "Delete selected footprint associations"
-msgstr ""
+msgstr "Xóa các liên kết footprint đã chọn"
 
 #: cvpcb/tools/cvpcb_actions.cpp:128 cvpcb/tools/cvpcb_actions.cpp:129
 msgid "Delete all footprint associations"
-msgstr ""
+msgstr "Xóa các liên kết footprint đã chọn"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Use symbol footprint filters"
-msgstr ""
+msgstr "Sử dụng bộ lọc footprint và symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:137
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
+"Lọc danh sách footprint bằng bộ lọc footprint được xác định trong symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter by pin count"
-msgstr ""
+msgstr "Lọc theo số lượng chân pin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:144
 msgid "Filter footprint list by pin count"
-msgstr ""
+msgstr "Lọc danh sách footprint theo số lượng chân pin"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter by library"
-msgstr ""
+msgstr "Lọc theo thư viện"
 
 #: cvpcb/tools/cvpcb_actions.cpp:151
 msgid "Filter footprint list by library"
-msgstr ""
+msgstr "Lọc danh sách footprint theo thư viện"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:267
 msgid "Delete all associations?"
-msgstr ""
+msgstr "Xóa tất cả các liên kết?"
 
 #: eeschema/annotate.cpp:127
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "%d dấu thời gian trùng lặp đã được tìm thấy và thay thế."
 
 #: eeschema/annotate.cpp:217
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s"
-msgstr ""
+msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
 #: eeschema/annotate.cpp:223
 #, c-format
 msgid "Updated %s from %s to %s"
-msgstr ""
+msgstr "Đã cập nhật %s từ %s thành %s"
 
 #: eeschema/annotate.cpp:231
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr ""
+msgstr "Chú thích %s (đơn vị %s) là %s"
 
 #: eeschema/annotate.cpp:236
 #, c-format
 msgid "Annotated %s as %s"
-msgstr ""
+msgstr "Chú thích %s là %s"
 
 #: eeschema/annotate.cpp:246
+#, fuzzy
 msgid "Annotation complete."
-msgstr ""
+msgstr "Gán Chú thích hoàn tất."
 
 #: eeschema/bom_plugins.cpp:35
 #, c-format
@@ -7208,6 +7215,9 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
+"Tệp script:\n"
+"%s\n"
+"không tìm thấy. Tập lệnh không có sẵn."
 
 #: eeschema/class_library.cpp:53
 #, c-format
@@ -7216,16 +7226,19 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a "
 "schematic."
 msgstr ""
+"Thư viện \"%s\" có tên mục nhập trùng lặp \"%s\".\n"
+"Điều này có thể gây ra một số hành vi không mong muốn khi tải các thành phần "
+"vào sơ đồ mạch."
 
 #: eeschema/class_library.cpp:495
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:918
 #: eeschema/symbol_tree_model_adapter.cpp:65
 msgid "Loading Symbol Libraries"
-msgstr ""
+msgstr "Đang tải thư viện symbol"
 
 #: eeschema/class_library.cpp:513
 msgid "Loading "
-msgstr ""
+msgstr "Đang tải "
 
 #: eeschema/class_library.cpp:556
 #, c-format
@@ -7233,6 +7246,8 @@ msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
+"Không tải được thư viện symbol\"%s\". Lỗi:\n"
+" %s"
 
 #: eeschema/class_library.cpp:580
 #, c-format
@@ -7240,60 +7255,67 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
+"Không tải được thư viện symbol\"%s\". \n"
+"Lỗi: %s"
 
 #: eeschema/component_references_lister.cpp:527
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr ""
+msgstr "Mục không có chú thích: %s%s (đơn vị %d)\n"
 
 #: eeschema/component_references_lister.cpp:534
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr ""
+msgstr "Mục không có chú thích: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:555
-#, c-format
+#, c-format, fuzzy
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr ""
+msgstr "Lỗi: symbol %s %s đơn vị %d và symbol chỉ có %d đơn vị được xác định\n"
 
 #: eeschema/component_references_lister.cpp:593
 #: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
-msgstr ""
+msgstr "Nhiều mục %s%s (đơn vị %d)\n"
 
 #: eeschema/component_references_lister.cpp:600
 #: eeschema/component_references_lister.cpp:630
-#, c-format
+#, c-format, fuzzy
 msgid "Multiple item %s%s\n"
-msgstr ""
+msgstr "Nhiều mục %s%s\n"
 
 #: eeschema/component_references_lister.cpp:644
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr ""
+msgstr "Các giá trị khác nhau cho %s %d %s (%s) và %s %d %s (%s)"
 
 #: eeschema/connection_graph.cpp:214
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
+"Cả %s và %s đều được gắn vào các mục giống nhau; %s sẽ được sử dụng trong "
+"netlist"
 
 #: eeschema/connection_graph.cpp:2367
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
+"Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
+"của bus đó"
 
 #: eeschema/connection_graph.cpp:2739
-#, c-format
+#, c-format, fuzzy
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
+"chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
 #: eeschema/cross-probing.cpp:256 pcbnew/cross-probing.cpp:167
 #, c-format
 msgid "%s pin %s found"
-msgstr ""
+msgstr "%s pin %s tìm thấy"
 
 #: eeschema/cross-probing.cpp:258
 #, fuzzy, c-format
@@ -7303,29 +7325,29 @@ msgstr "Không tìm thấy Footprint"
 #: eeschema/cross-probing.cpp:262 pcbnew/cross-probing.cpp:180
 #, c-format
 msgid "%s found"
-msgstr ""
+msgstr "%s được tìm thấy"
 
 #: eeschema/cross-probing.cpp:267 pcbnew/cross-probing.cpp:163
 #: pcbnew/cross-probing.cpp:182
 #, c-format
 msgid "%s not found"
-msgstr ""
+msgstr "%s không tìm thấy"
 
 #: eeschema/cross-probing.cpp:316
 msgid "Selected net:"
-msgstr ""
+msgstr "net đã chọn:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:96
 msgid "Annotation Messages:"
-msgstr ""
+msgstr "Thông báo chú thích:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:100
 msgid "Annotate"
-msgstr ""
+msgstr "Chú thích"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Entire schematic"
-msgstr ""
+msgstr "Toàn bộ sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Current sheet only"
