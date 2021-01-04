@@ -73,6 +73,9 @@
     #elif defined(__x86_64__)
         #define LIBCONTEXT_PLATFORM_apple_x86_64
         #define LIBCONTEXT_CALL_CONVENTION
+    #elif __aarch64__
+        #define LIBCONTEXT_PLATFORM_apple_arm64
+        #define LIBCONTEXT_CALL_CONVENTION
     #endif
     #endif
 #elif defined (_MSC_VER)
