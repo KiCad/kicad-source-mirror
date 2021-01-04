@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2020-12-31 17:25+0100\n"
+"POT-Creation-Date: 2021-01-04 16:03+0100\n"
+"PO-Revision-Date: 2021-01-04 16:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2284,42 +2284,39 @@ msgstr "Sélectionnez Le Chemin des Paramètres"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Comment souhaitez-vous configurer KiCad ?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Importater paramètres  d’une version précédente (aucun trouvé)"
+msgstr "Importer les paramètres d’une version précédente à :"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Ajuster le décalage de longueur d'une paire différentielle"
+msgstr "Choisissez un chemin différent"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Le chemin sélectionné ne contient pas de paramètres KiCad valides !"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Importater paramètres  d’une version précédente (aucun trouvé)"
+msgstr "Importer configuration de librairie  d’une version précédente"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Une fois vérifiées, les tables de librairies de symboles et d’empreintes de "
+"la version précédente seront importées dans cette version"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Rétablir les Paramètres par Défaut"
+msgstr "Démarrer avec paramètres par défaut"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Configurer les Chemins"
+msgstr "Configurer les Chemins de Paramètres de KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -4250,33 +4247,32 @@ msgstr ""
 "d'empreintes spécifique au projet et nommée footprints.pretty."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Le chemin contenant les projets modèles installés avec KiCad."
+msgstr ""
+"Un répertoire contenant des scripts à l’échelle du système installés avec "
+"KiCad"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Le chemin contenant les projets modèles installés avec KiCad."
+msgstr ""
+"Un répertoire contenant des scripts spécifiques à l’utilisateur installé "
+"avec KiCad"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Version obsolète de KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Version obsolète de KICAD_TEMPLATE_DIR."
+msgstr "Version obsolète de KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Version obsolète de KICAD_TEMPLATE_DIR."
+msgstr "Version obsolète de KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Version obsolète de KICAD_TEMPLATE_DIR."
+msgstr "Version obsolète de KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -8205,11 +8201,11 @@ msgstr "Style:"
 msgid "Combo!"
 msgstr "Combo!"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:216
+#: eeschema/dialogs/dialog_edit_one_field.cpp:222
 msgid "Illegal reference designator value!"
 msgstr "Valeur du champ  référence schématique illégale!"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:224
+#: eeschema/dialogs/dialog_edit_one_field.cpp:230
 msgid "Value may not be empty."
 msgstr "La valeur ne peut pas être vide."
 
@@ -17722,11 +17718,6 @@ msgstr "%s fermé [pid=%d]\n"
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
 
-#: libs/kiplatform/msw/environment.cpp:47
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
-
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
 msgstr "Plan"
@@ -18152,7 +18143,7 @@ msgstr ""
 "Montrer le bloc titre en mode édition:\n"
 "Les textes avec format seront affichés comme ${keyword} mots clés."
 
-#: pagelayout_editor/tools/pl_edit_tool.cpp:466
+#: pagelayout_editor/tools/pl_edit_tool.cpp:471
 msgid "Error writing objects to clipboard"
 msgstr "Erreur d’écriture d’objets dans le presse-papiers"
 
@@ -22454,13 +22445,14 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "L'export STEP a échoué.SVP enregistrer le C.I. et essayez à nouveau"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Le contour du PCB est absent ou mal formé. Exécuter DRC pour une analyse "
-"complète."
+"Le contour du circuit est manquant ou non fermé en utilisant une tolérance "
+"de %.3f mm.\n"
+"Exécuter le DRC pour une analyse complète."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -22526,24 +22518,21 @@ msgstr "Tolérance:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Serré  (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "Standard (1,2,3)"
+msgstr "Standard (0.01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Lâche (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
-"La tolérance définit la distance entre deux points considérés comme joints.  "
-"La valeur standard est de 0,001 mm."
+"La tolérance définit la distance entre deux points considérés comme joints."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
@@ -24193,13 +24182,12 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Attention: La taille de la pastille est plus petite que zéro."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
-"Avertissement : Le perçage du pad est plus grand que la taille du pad ou la "
-"forme du trou et celle du du pad ne se recouvrent pas."
+"Avertissement : Le perçage du pad ne laisse pas de cuivre ou la forme du "
+"trou et celle du du pad ne se recouvrent pas."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
@@ -27581,9 +27569,8 @@ msgid "Annular width"
 msgstr "Largeur des anneaux"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drill out of range"
-msgstr "Longueur de piste hors de plage"
+msgstr "Perçage hors de plage"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
@@ -27594,9 +27581,8 @@ msgid "Padstack is not valid"
 msgstr "Le padstack n’est pas valide"
 
 #: pcbnew/drc/drc_item.cpp:117
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "Diamètre perçage microvia trop petit"
+msgstr "Perçage microvia hors de plage"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -29527,9 +29513,9 @@ msgid "Pad of %s on %s"
 msgstr "Pad de %s sur %s"
 
 #: pcbnew/pad.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Pads traversants"
+msgstr "Pad traversant de %s"
 
 #: pcbnew/pad.cpp:1096
 #, c-format
@@ -29537,9 +29523,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s de %s sur %s"
 
 #: pcbnew/pad.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Pads traversants"
+msgstr "Pad traversant %s de %s"
 
 #: pcbnew/pad.cpp:1379
 msgid "Edge connector"
@@ -29740,9 +29726,8 @@ msgid "End Y"
 msgstr "Fin Y"
 
 #: pcbnew/pcb_target.cpp:151
-#, fuzzy
 msgid "PCB Target"
-msgstr "Texte PCB"
+msgstr "Mire de superposition"
 
 #: pcbnew/pcb_text.cpp:111
 msgid "PCB Text"
@@ -34034,10 +34019,6 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
 #~ msgid "Tight"
 #~ msgstr "Serrée"
 
@@ -34112,6 +34093,10 @@ msgstr ""
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
