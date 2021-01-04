@@ -137,7 +137,6 @@ private:
     FOOTPRINT_LIST*          m_fp_list;
     FOOTPRINT_FILTER         m_fp_filter;
     bool                     m_zero_filter;
-    EDA_DRAW_FRAME*          m_eda_frame;
 
     void OnComboBox( wxCommandEvent& aEvent );
     void OnComboInteractive( wxCommandEvent& aEvent );
