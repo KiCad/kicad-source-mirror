@@ -272,6 +272,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
+            fields.clear();
             symbol->GetFields( fields, false );
 
             for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
