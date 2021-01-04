@@ -181,6 +181,14 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_alternatesGrid->SetTable( m_alternatesDataModel );
     m_alternatesGrid->PushEventHandler( new GRID_TRICKS( m_alternatesGrid ) );
 
+    if( aPin->GetParent()->HasConversion() )
+    {
+        m_alternatesTurndown->Collapse();
+        m_alternatesTurndown->Disable();
+        m_alternatesTurndown->SetToolTip(
+                _( "Alternate pin assignments are not available for DeMorgan components." ) );
+    }
+
     // Set special attributes
     wxGridCellAttr* attr;
 

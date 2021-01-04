@@ -326,7 +326,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
         // free-form alternate assignments as well.  (We won't know how to map the alternates
         // back and forth when the conversion is changed.)
-        m_notebook1->RemovePage( 1 );
+        m_pinTablePage->Disable();
+        m_pinTablePage->SetToolTip(
+                _( "Alternate pin assignments are not available for DeMorgan components." ) );
     }
     else
     {
