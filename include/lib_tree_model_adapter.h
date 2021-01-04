@@ -179,8 +179,9 @@ public:
      * Set the search string provided by the user.
      *
      * @param aSearch   full, unprocessed search text
+     * @param aState    if true, we are keeping the state and so we shouldn't collapse the tree
      */
-    void UpdateSearchString( wxString const& aSearch );
+    void UpdateSearchString( wxString const& aSearch, bool aState );
 
     /**
      * Attach to a wxDataViewCtrl and initialize it. This will set up columns

@@ -1,5 +1,6 @@
-boost_root
 .downloads-by-cmake
+.gdb_history
+boost_root
 Build*
 build*
 common/fp_lib_table_keywords.cpp

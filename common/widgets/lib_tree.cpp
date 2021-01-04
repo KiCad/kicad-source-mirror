@@ -203,7 +203,7 @@ void LIB_TREE::Regenerate( bool aKeepState )
         current = getState();
 
     wxString filter = m_query_ctrl->GetValue();
-    m_adapter->UpdateSearchString( filter );
+    m_adapter->UpdateSearchString( filter, aKeepState );
     postPreselectEvent();
 
     // Restore the state
