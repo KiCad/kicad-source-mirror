@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Oct  9 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -63,7 +64,7 @@ class DIALOG_MIGRATE_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Configure KiCad Settings Path"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION );
+		DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure KiCad Settings Path"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION );
 		~DIALOG_MIGRATE_SETTINGS_BASE();
 
 };
