@@ -139,6 +139,9 @@ void BOARD::BuildConnectivity()
 
 void BOARD::SetProject( PROJECT* aProject )
 {
+    if( m_project )
+        ClearProject();
+
     m_project = aProject;
 
     if( aProject )
