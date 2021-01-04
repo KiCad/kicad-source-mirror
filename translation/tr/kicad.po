@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-03 20:48+0000\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2238,14 +2238,12 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Öntanımlı Ayarlara Sıfırla"
+msgstr "Öntanımlı ayarlarla başlat"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Yolları Yapılandır"
+msgstr "KiCad Ayarları Yolunu Yapılandır"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -20971,11 +20969,13 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
-msgstr "Kart ana hatları eksik veya bozuk. Tam analiz için DRC'yi çalıştırın."
+msgstr ""
+"Kart ana hatları eksik veya %.3f mm tolerans kullanılarak kapatılmadı.\n"
+"Tam analiz için DRC'yi çalıştırın."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
