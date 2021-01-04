@@ -320,13 +320,11 @@ private:
     void removeLoops( NODE* aNode, LINE& aLatest );
 
     /**
-     * Function simplifyNewLine()
-     *
-     * Assembles a line starting from segment aLatest, removes collinear segments
+     * Assembles a line starting from segment or arc aLatest, removes collinear segments
      * and redundant vertexes. If a simplification bhas been found, replaces the
      * old line with the simplified one in aNode.
      */
-    void simplifyNewLine( NODE* aNode, SEGMENT* aLatest );
+    void simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest );
 
     /**
      * Function handleSelfIntersections()

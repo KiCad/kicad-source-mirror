@@ -1111,9 +1111,10 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     else
         lastV = std::max( 1, l.SegmentCount() - 1 );
 
-    SEGMENT  seg;
-    SEGMENT* lastSeg = nullptr;
-    int      lastArc = -1;
+    ARC          arc;
+    SEGMENT      seg;
+    LINKED_ITEM* lastItem = nullptr;
+    int          lastArc  = -1;
 
     for( int i = 0; i < lastV; i++ )
     {
@@ -1126,27 +1127,28 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             seg.SetLayer( m_currentLayer );
 
             if( m_lastNode->Add( std::make_unique<SEGMENT>( seg ) ) )
-                lastSeg = &seg;
+                lastItem = &seg;
         }
         else
         {
             if( arcIndex == lastArc )
                 continue;
 
-            std::unique_ptr<ARC> arc = std::make_unique<ARC>( l.Arc( arcIndex ), m_currentNet );
-            arc->SetWidth( pl.Width() );
-            arc->SetLayer( m_currentLayer );
-            m_lastNode->Add( std::move( arc ) );
-            lastSeg = nullptr;
-            lastArc = arcIndex;
+            arc = ARC( l.Arc( arcIndex ), m_currentNet );
+            arc.SetWidth( pl.Width() );
+            arc.SetLayer( m_currentLayer );
+
+            m_lastNode->Add( std::make_unique<ARC>( arc ) );
+            lastItem = &arc;
+            lastArc  = arcIndex;
         }
     }
 
     if( pl.EndsWithVia() )
         m_lastNode->Add( Clone( pl.Via() ) );
 
-    if( realEnd && lastSeg )
-        simplifyNewLine( m_lastNode, lastSeg );
+    if( realEnd && lastItem )
+        simplifyNewLine( m_lastNode, lastItem );
 
     if( !realEnd )
     {
@@ -1297,8 +1299,9 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 }
 
 
-void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
+void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 {
+    wxASSERT( aLatest->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) );
     LINE l = aNode->AssembleLine( aLatest );
 
     bool optimized = OPTIMIZER::Optimize( &l, OPTIMIZER::MERGE_COLINEAR, aNode );

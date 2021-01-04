@@ -958,7 +958,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
         prev_seg = li;
     }
 
-    pl.Line().Simplify();
+    // Remove duplicate verts, but do NOT remove colinear segments here!
+    pl.Line().Simplify( false );
 
     assert( pl.SegmentCount() != 0 );
 

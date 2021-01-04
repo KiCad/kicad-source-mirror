@@ -936,7 +936,7 @@ const OPT<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() c
 }
 
 
-SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
+SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 {
     std::vector<VECTOR2I> pts_unique;
     std::vector<ssize_t> shapes_unique;
@@ -961,11 +961,25 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     {
         int j = i + 1;
 
-        while( j < np && m_points[i] == m_points[j] && m_shapes[i] == m_shapes[j] )
+        // We can eliminate duplicate vertices as long as they are part of the same shape, OR if
+        // one of them is part of a shape and one is not.
+        while( j < np && m_points[i] == m_points[j] &&
+               ( m_shapes[i] == m_shapes[j] ||
+                 m_shapes[i] == SHAPE_IS_PT ||
+                 m_shapes[j] == SHAPE_IS_PT ) )
+        {
             j++;
+        }
+
+        int shapeToKeep = m_shapes[i];
+
+        if( shapeToKeep == SHAPE_IS_PT )
+            shapeToKeep = m_shapes[j - 1];
+
+        wxASSERT( shapeToKeep < static_cast<int>( m_arcs.size() ) );
 
         pts_unique.push_back( CPoint( i ) );
-        shapes_unique.push_back( m_shapes[i] );
+        shapes_unique.push_back( shapeToKeep );
 
         i = j;
     }
@@ -976,17 +990,20 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
 
     i = 0;
 
-    // stage 1: eliminate collinear segments
+    // stage 2: eliminate colinear segments
     while( i < np - 2 )
     {
         const VECTOR2I p0 = pts_unique[i];
         const VECTOR2I p1 = pts_unique[i + 1];
         int n = i;
 
-        while( n < np - 2
-                && ( SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1
-                        || SEG( p0, p1 ).Collinear( SEG( p1, pts_unique[n + 2] ) ) ) )
-            n++;
+        if( aRemoveColinear )
+        {
+            while( n < np - 2
+                    && ( SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1
+                            || SEG( p0, p1 ).Collinear( SEG( p1, pts_unique[n + 2] ) ) ) )
+                n++;
+        }
 
         m_points.push_back( p0 );
         m_shapes.push_back( shapes_unique[i] );

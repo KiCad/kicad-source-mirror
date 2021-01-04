@@ -628,9 +628,10 @@ public:
      * Function Simplify()
      *
      * Simplifies the line chain by removing colinear adjacent segments and duplicate vertices.
+     * @param aRemoveColinear controsl the removal of colinear adjacent segments
      * @return reference to self.
      */
-    SHAPE_LINE_CHAIN& Simplify();
+    SHAPE_LINE_CHAIN& Simplify( bool aRemoveColinear = true );
 
     /**
      * Converts an arc to only a point chain by removing the arc and references
@@ -747,7 +748,14 @@ public:
 
     bool isArc( size_t aSegment ) const
     {
-        return aSegment < m_shapes.size() && m_shapes[aSegment] != SHAPE_IS_PT;
+        /**
+         * A segment is part of an arc except in the special case of two arcs next to each other
+         * but without a shared vertex.  Here there is a segment between the end of the first arc
+         * and the start of the second arc.
+         */
+        return ( aSegment < m_shapes.size() - 1
+                 && m_shapes[aSegment] != SHAPE_IS_PT
+                 && m_shapes[aSegment] == m_shapes[aSegment + 1] );
     }
 
     virtual const VECTOR2I GetPoint( int aIndex ) const override { return CPoint(aIndex); }
