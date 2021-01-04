@@ -1,13 +1,14 @@
 # aris-kimi <aris_kimi@hotmail.com>, 2020.
+# fresh <fresh190@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2275,26 +2276,23 @@ msgstr "Επιλογή Διαδρομής Ρυθμίσεων"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Πώς θα θέλατε να διαμορφώσετε το KiCad;"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Εισαγωγή ρυθμίσεων προηγούμενης έκδοσης (δεν βρέθηκε)"
+msgstr "Εισαγωγή ρυθμίσεων προηγούμενης έκδοσης σε:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Ρύθμιση απόκλισης διαφορικού ζευγαριού"
+msgstr "Επιλέξτε ένα διαφορετικό μονοπάτι"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Το επιλεγμένο μονοπάτι δεν περιέχει έγκυρες ρυθμίσεις KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Εισαγωγή ρυθμίσεων προηγούμενης έκδοσης (δεν βρέθηκε)"
+msgstr "Εισαγωγή ρυθμίσεων από βιβλιοθήκη από προηγούμενης έκδοσης"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -17696,9 +17694,8 @@ msgid "Bitmap DPI:"
 msgstr "Bitmap DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:393
-#, fuzzy
 msgid "Step"
-msgstr "Βήμα Χ:"
+msgstr "Βήμα"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:401
 msgid "Repeat count:"
@@ -17735,9 +17732,8 @@ msgid "Set to Default"
 msgstr "Ορισμός σε Προκαθορισμένα"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:554
-#, fuzzy
 msgid "Page Margins"
-msgstr "Περιθώρια Σελίδας:"
+msgstr "Περιθώρια Σελίδας"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:562
 msgid "Left:"
@@ -19308,9 +19304,8 @@ msgid "Number of Twists per Length"
 msgstr "Αριθμός Στροφών ανά Μήκος"
 
 #: pcb_calculator/transline_ident.cpp:428
-#, fuzzy
 msgid "ErEnv"
-msgstr "ErEnv:"
+msgstr "ErEnv"
 
 #: pcb_calculator/transline_ident.cpp:429
 msgid "Relative Permittivity of Environment"
@@ -19483,9 +19478,8 @@ msgid "no layers"
 msgstr "κανένα επίπεδο"
 
 #: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1041 pcbnew/track.cpp:1058
-#, fuzzy
 msgid "Position X"
-msgstr "Θέση Χ:"
+msgstr "Θέση Χ"
 
 #: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1044 pcbnew/track.cpp:1061
 msgid "Position Y"
@@ -20332,9 +20326,8 @@ msgid "Front reference start:"
 msgstr "Αναφορές αποτυπωμάτων"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "Προκαθορισμένη ένδειξη αναφοράς:"
+msgstr "Προκαθορισμένη ένδειξη αναφοράς."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:219
 #, fuzzy
