@@ -34,18 +34,19 @@ namespace PNS {
 
 class ITEM;
 
-class SIZES_SETTINGS {
-
+class SIZES_SETTINGS
+{
 public:
-    SIZES_SETTINGS()
-            : m_trackWidth( 155000 ),
-              m_diffPairWidth( 125000 ),
-              m_diffPairGap( 180000 ),
-              m_diffPairViaGap( 180000 ),
-              m_viaDiameter( 600000 ),
-              m_viaDrill( 250000 ),
-              m_diffPairViaGapSameAsTraceGap( true ),
-              m_viaType( VIATYPE::THROUGH ){};
+    SIZES_SETTINGS() :
+            m_trackWidth( 155000 ),
+            m_diffPairWidth( 125000 ),
+            m_diffPairGap( 180000 ),
+            m_diffPairViaGap( 180000 ),
+            m_viaDiameter( 600000 ),
+            m_viaDrill( 250000 ),
+            m_diffPairViaGapSameAsTraceGap( true ),
+            m_viaType( VIATYPE::THROUGH )
+    {};
 
     ~SIZES_SETTINGS() {};
 
@@ -58,7 +59,8 @@ public:
     int DiffPairWidth() const { return m_diffPairWidth; }
     int DiffPairGap() const { return m_diffPairGap; }
 
-    int DiffPairViaGap() const {
+    int DiffPairViaGap() const
+    {
         if( m_diffPairViaGapSameAsTraceGap )
             return m_diffPairGap;
         else
@@ -89,28 +91,17 @@ public:
     int GetLayerTop() const;
     int GetLayerBottom() const;
 
-    void SetViaType( VIATYPE aViaType )
-    {
-        m_viaType = aViaType;
-    }
-
-    VIATYPE ViaType() const
-    {
-        return m_viaType;
-    }
+    void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
+    VIATYPE ViaType() const { return m_viaType; }
 
 private:
-
-    bool inheritTrackWidth( ITEM* aItem, int* aInheritedWidth );
-
-    int m_trackWidth;
-    int m_diffPairWidth;
-    int m_diffPairGap;
-    int m_diffPairViaGap;
-    int m_viaDiameter;
-    int m_viaDrill;
-
-    bool m_diffPairViaGapSameAsTraceGap;
+    int     m_trackWidth;
+    int     m_diffPairWidth;
+    int     m_diffPairGap;
+    int     m_diffPairViaGap;
+    int     m_viaDiameter;
+    int     m_viaDrill;
+    bool    m_diffPairViaGapSameAsTraceGap;
 
     VIATYPE m_viaType;
 
