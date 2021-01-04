@@ -4,16 +4,16 @@
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
 # Jonathan Haas <haasjona@gmail.com>, 2020.
-# Mathias Neumann <alfrede@opferindustries.de>, 2020.
+# Mathias Neumann <alfrede@opferindustries.de>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2020-12-29 21:39+0000\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
 "Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2329,6 +2329,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Wenn diese Option aktiviert ist, werden die Symbol- und Footprint-"
+"Bibliothekstabellen der vorherigen Version in diese Version importiert"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 #, fuzzy
@@ -13243,6 +13245,7 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Textvariablen konnten nicht festgelegt werden, da kein Projekt angehängt ist."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -14819,7 +14822,7 @@ msgstr "Projekt"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Normal als Vorgang speichern"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
@@ -24859,19 +24862,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Fehler: Negative lokale Freigabewerte haben keine Auswirkung."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
 msgstr ""
+"Fehler: Negative Lötmaskenabstände werden für benutzerdefinierte Padformen "
+"nicht unterstützt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Warnung: Negativer Lötmaskenabstand größer als Pad. Es wird keine Lötmaske "
+"erzeugt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
 #, fuzzy
@@ -24950,7 +24957,7 @@ msgstr "BGA Eigenschaft kann nur für SMD-Pads gesetzt werden"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Fehler: Eckgröße keine Zahl."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 #, fuzzy
@@ -24959,11 +24966,13 @@ msgstr "Inkorrekte (negative) Größe für Eckwert"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Warnung: Durch die Eckgröße wird das Pad kreisförmig."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
+"Fehler: Die benutzerdefinierte Padform muss in ein einzelnes Polygon "
+"aufgelöst werden."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -26407,19 +26416,21 @@ msgstr "Beschreibung Footprint Elternelement"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "Durch Ändern des Netzes wird auch %s Pad %s auf %s aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
-"Dies wird das Netz zugewiesen zu %s Pad %s und %s Pad %s zu %s ändern.\n"
-"Möchten Sie fortfahren?"
+"Änderungen des Netz wird auch das  %s Pad %s und das  %s  sowie das Pad %s  "
+"auf %s ändern."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
+"Durch Ändern des Netzes werden auch %lu angeschlossene Pads auf %s "
+"aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
 #, fuzzy
@@ -31000,6 +31011,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Die Bemaßungs-ID %s hat in CADSTAR den Stil 'Extern'. Externe Bemaßungsstile "
+"werden in KiCad noch nicht unterstützt. Das Dimensionsobjekt wurde "
+"stattdessen mit einem internen Dimensionsstil importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, fuzzy, c-format
@@ -31160,6 +31174,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"Textvariablen konnten nicht festgelegt werden, da kein Projekt geladen ist."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -31236,6 +31251,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"Die Dimensions-ID %s verwendet einen Einheitentyp, der in KiCad nicht "
+"unterstützt wird. Stattdessen wurden Millimeter angewendet."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
