@@ -58,39 +58,44 @@ static std::unique_ptr<wxBitmap> LayerPairBitmap;
 #define BM_LAYERICON_SIZE 24
 static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 {
-    // 0 = draw pixel with active layer color
-    // 1 = draw pixel with top layer color (top/bottom layer used inautoroute and place via)
-    // 2 = draw pixel with bottom layer color
-    // 3 = draw pixel with via color
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
-    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    // 0 = draw pixel with white
+    // 1 = draw pixel with black
+    // 2 = draw pixel with top layer from router pair
+    // 3 = draw pixel with bottom layer from router pair
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
+    { 2, 2, 2, 2, 2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
 };
+
+static COLOR4D ICON_WHITE { 0.86, 0.86, 0.86, 1.0 };
+static COLOR4D ICON_BLACK { 0.28, 0.28, 0.28, 1.0 };
 
 
 void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 {
     int        ii, jj;
-    COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
+    COLOR4D    top_color, bottom_color, background_color;
     bool       change = aForceRebuild;
 
     int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
@@ -98,14 +103,6 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     if( m_prevIconVal.previous_requested_scale != requested_scale )
     {
         m_prevIconVal.previous_requested_scale = requested_scale;
-        change = true;
-    }
-
-    active_layer_color = GetColorSettings()->GetColor( GetActiveLayer() );
-
-    if( m_prevIconVal.previous_active_layer_color != active_layer_color )
-    {
-        m_prevIconVal.previous_active_layer_color = active_layer_color;
         change = true;
     }
 
@@ -125,15 +122,6 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    int via_type = static_cast<int>( GetDesignSettings().m_CurrentViaType );
-    via_color = GetColorSettings()->GetColor( LAYER_VIAS + via_type );
-
-    if( m_prevIconVal.previous_via_color != via_color )
-    {
-        m_prevIconVal.previous_via_color = via_color;
-        change = true;
-    }
-
     background_color = GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 
     if( m_prevIconVal.previous_background_color != background_color )
@@ -146,8 +134,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     {
         LayerPairBitmap = std::make_unique<wxBitmap>( 24, 24 );
 
-        // Draw the icon, with colors according to the active layer and layer pairs for via
-        // command (change layer)
+        // Draw the icon, with colors according to the router's layer pair
         wxMemoryDC iconDC;
         iconDC.SelectObject( *LayerPairBitmap );
         wxBrush    brush;
@@ -168,10 +155,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
                     switch( s_BitmapLayerIcon[ii][jj] )
                     {
                     default:
-                    case 0: pen.SetColour( active_layer_color.ToColour() ); break;
-                    case 1: pen.SetColour( top_color.ToColour() );          break;
-                    case 2: pen.SetColour( bottom_color.ToColour() );       break;
-                    case 3: pen.SetColour( via_color.ToColour() );          break;
+                    case 0: pen.SetColour( ICON_WHITE.ToColour() );   break;
+                    case 1: pen.SetColour( ICON_BLACK.ToColour() );   break;
+                    case 2: pen.SetColour( top_color.ToColour() );    break;
+                    case 3: pen.SetColour( bottom_color.ToColour() ); break;
                     }
 
                     buttonColor = s_BitmapLayerIcon[ii][jj];
