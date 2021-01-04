@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-02 01:05+0000\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2284,42 +2284,39 @@ msgstr "Выбор каталога настроек"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Как следует настроить KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Импорт параметров из предыдущей версии (не найдена)"
+msgstr "Импорировать параметры из предыдущей версии:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Настроить перекос диф.пары"
+msgstr "Выбрать другой путь"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Выбранный каталог не содержит подходящих настроек KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Импорт параметров из предыдущей версии (не найдена)"
+msgstr "Импортировать настройки библиотек из предыдущей версии"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Если отмечено, таблицы библиотек символов и посад.мест будут импортированы "
+"из предыдущей версии"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Сбросить к значениям по умолчанию"
+msgstr "Запустить со значениями по умолчанию"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Настройка путей"
+msgstr "Настройка пути параметров KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -4250,33 +4247,28 @@ msgstr ""
 "которая храниться в каталоге проекта."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Каталог, содержащий шаблоны проекта, установленный с KiCad."
+msgstr "Каталог, содержащий общесистемные скрипты, установленные с KiCad"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Каталог, содержащий шаблоны проекта, установленный с KiCad."
+msgstr "Каталог, содержащий пользовательские скрипты, установленные с KiCad"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Устаревшая версия переменной KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Устаревшая версия переменной KICAD_TEMPLATE_DIR."
+msgstr "Устаревшая версия переменной KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Устаревшая версия переменной KICAD_TEMPLATE_DIR."
+msgstr "Устаревшая версия переменной KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Устаревшая версия переменной KICAD_TEMPLATE_DIR."
+msgstr "Устаревшая версия переменной KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -22338,13 +22330,13 @@ msgstr ""
 "попробуйте снова"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Контур платы отсутсвует или имеет неудачную форму. Выполните проверку правил "
-"DRC для получения полной информации."
+"Контур платы отсутсвует или имеет отклонение в %.3f мм.\n"
+"Выполните проверку правил DRC для получения полной информации."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -22410,24 +22402,22 @@ msgstr "Точность:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Точно (0.001 мм)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "Обычно (1,2,3)"
+msgstr "Нормально (0.01 мм)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Неточно (0.1 мм)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
 msgstr ""
 "Точность определяет расстояние между двумя точками, которые считаются "
-"соединёнными. Обычно - 0.001мм."
+"соединёнными."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
@@ -24061,7 +24051,6 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Предупреждение: размер конт.пл. меньше нуля."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
@@ -27395,9 +27384,8 @@ msgid "Annular width"
 msgstr "Ширина пояска"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drill out of range"
-msgstr "Длина дорожки превышает предел"
+msgstr "Размер сверла превышает предел"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
@@ -27408,9 +27396,8 @@ msgid "Padstack is not valid"
 msgstr "Неверная конструкция перех.отв."
 
 #: pcbnew/drc/drc_item.cpp:117
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "Размер сверла перех.микроотв. слишком мал"
+msgstr "Размер сверла перех.микроотв. превышает предел"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -29312,9 +29299,9 @@ msgid "Pad of %s on %s"
 msgstr "Конт.пл. от %s на %s"
 
 #: pcbnew/pad.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Конт.пл. со сквозными отв."
+msgstr "Конт.пл. со сквозными отв. от %s"
 
 #: pcbnew/pad.cpp:1096
 #, c-format
@@ -29322,9 +29309,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Конт.пл. %s от %s на %s"
 
 #: pcbnew/pad.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Конт.пл. со сквозными отв."
+msgstr "Конт.пл. со сквозными отв. %s от %s"
 
 #: pcbnew/pad.cpp:1379
 msgid "Edge connector"
@@ -29526,9 +29513,8 @@ msgid "End Y"
 msgstr "Конец Y"
 
 #: pcbnew/pcb_target.cpp:151
-#, fuzzy
 msgid "PCB Target"
-msgstr "Надпись на плате"
+msgstr "Мира совмещения слоёв"
 
 #: pcbnew/pcb_text.cpp:111
 msgid "PCB Text"
