@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 06:36-0800\n"
+"POT-Creation-Date: 2021-01-04 06:10-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -110,14 +110,11 @@ msgstr "Net %s\tNetClass %s\tPadName %s"
 msgid "Net %s\tNetClass %s"
 msgstr "Net %s\tNetClass %s"
 
-msgid "Load OpenGL: board"
-msgstr "Load OpenGL: board"
+msgid "Load Raytracing: board"
+msgstr "Load Raytracing: board"
 
-msgid "Load OpenGL: holes and vias"
-msgstr "Load OpenGL: holes and vias"
-
-msgid "Load OpenGL: layers"
-msgstr "Load OpenGL: layers"
+msgid "Load Raytracing: layers"
+msgstr "Load Raytracing: layers"
 
 msgid "Loading 3D models"
 msgstr "Loading 3D models"
@@ -126,18 +123,8 @@ msgstr "Loading 3D models"
 msgid "Reload time %.3f s"
 msgstr "Reload time %.3f s"
 
-#, c-format
-msgid "Loading %s"
-msgstr "Loading %s"
-
 msgid "Loading..."
 msgstr "Loading…"
-
-msgid "Load Raytracing: board"
-msgstr "Load Raytracing: board"
-
-msgid "Load Raytracing: layers"
-msgstr "Load Raytracing: layers"
 
 #, c-format
 msgid "Rendering time %.3f s"
@@ -149,6 +136,19 @@ msgstr "Rendering: %.0f %%"
 
 msgid "Rendering: Post processing shader"
 msgstr "Rendering: Post processing shader"
+
+msgid "Load OpenGL: board"
+msgstr "Load OpenGL: board"
+
+msgid "Load OpenGL: holes and vias"
+msgstr "Load OpenGL: holes and vias"
+
+msgid "Load OpenGL: layers"
+msgstr "Load OpenGL: layers"
+
+#, c-format
+msgid "Loading %s"
+msgstr "Loading %s"
 
 msgid "Export Current View as PNG..."
 msgstr "Export Current View as PNG…"
@@ -1372,6 +1372,34 @@ msgstr "Import settings from a previous version (none found)"
 msgid "Select Settings Path"
 msgstr "Select Settings Path"
 
+msgid "How would you like to configure KiCad?"
+msgstr "How would you like to configure KiCad?"
+
+msgid "Import settings from a previous version at:"
+msgstr "Import settings from a previous version at:"
+
+msgid "Choose a different path"
+msgstr "Choose a different path"
+
+msgid "The selected path does not contain valid KiCad settings!"
+msgstr "The selected path does not contain valid KiCad settings!"
+
+msgid "Import library configuration from previous version"
+msgstr "Import library configuration from previous version"
+
+msgid ""
+"When checked, the symbol and footprint library tables from the previous "
+"version will be imported into this version"
+msgstr ""
+"When checked, the symbol and footprint library tables from the previous "
+"version will be imported into this version"
+
+msgid "Start with default settings"
+msgstr "Start with default settings"
+
+msgid "Configure KiCad Settings Path"
+msgstr "Configure KiCad Settings Path"
+
 msgid "A5 148x210mm"
 msgstr "A5 148x210mm"
 
@@ -1911,6 +1939,9 @@ msgstr ""
 
 msgid "Import Hotkeys File:"
 msgstr "Import Hotkeys File:"
+
+msgid "Cmd"
+msgstr "Cmd"
 
 msgid "Pan and Zoom"
 msgstr "Pan and Zoom"
@@ -2538,8 +2569,23 @@ msgstr ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 
+msgid "A directory containing system-wide scripts installed with KiCad"
+msgstr "A directory containing system-wide scripts installed with KiCad"
+
+msgid "A directory containing user-specific scripts installed with KiCad"
+msgstr "A directory containing user-specific scripts installed with KiCad"
+
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Deprecated version of KICAD_TEMPLATE_DIR."
+
+msgid "Deprecated version of KICAD6_3DMODEL_DIR."
+msgstr "Deprecated version of KICAD6_3DMODEL_DIR."
+
+msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
+msgstr "Deprecated version of KICAD6_FOOTPRINT_DIR."
+
+msgid "Deprecated version of KICAD_SYMBOL_DIR."
+msgstr "Deprecated version of KICAD_SYMBOL_DIR."
 
 #, c-format
 msgid "from %s : %s() line:%d"
@@ -15769,6 +15815,14 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP export failed!  Please save the PCB and try again"
 
 #, c-format
+msgid ""
+"Board outline is missing or not closed using %.3f mm tolerance.\n"
+"Run DRC for a full analysis."
+msgstr ""
+"Board outline is missing or not closed using %.3f mm tolerance.\n"
+"Run DRC for a full analysis."
+
+#, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "File ‘%s’ already exists. Do you want overwrite this file?"
 
@@ -15814,24 +15868,19 @@ msgstr "Board outline builder:"
 msgid "Tolerance:"
 msgstr "Tolerance:"
 
-msgid "Tight"
-msgstr "Tight"
+msgid "Tight (0.001 mm)"
+msgstr "Tight (0.001 mm)"
 
-msgid "Standard"
-msgstr "Standard"
+msgid "Standard (0.01 mm)"
+msgstr "Standard (0.01 mm)"
 
-msgid "Loose"
-msgstr "Loose"
-
-msgid "Very loose"
-msgstr "Very loose"
+msgid "Loose (0.1 mm)"
+msgstr "Loose (0.1 mm)"
 
 msgid ""
-"Tolerance sets the distance between two points that are considered joined.  "
-"Standard is 0.001mm."
+"Tolerance sets the distance between two points that are considered joined."
 msgstr ""
-"Tolerance sets the distance between two points that are considered joined.  "
-"Standard is 0.001mm."
+"Tolerance sets the distance between two points that are considered joined."
 
 msgid "Export STEP"
 msgstr "Export STEP"
@@ -17028,10 +17077,10 @@ msgid "Warning: Pad size is less than zero."
 msgstr "Warning: Pad size is less than zero."
 
 msgid ""
-"Warning: Pad drill larger than pad size or drill shape and pad shape do not "
+"Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
-"Warning: Pad drill larger than pad size or drill shape and pad shape do not "
+"Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 
 msgid "Error: Negative local clearance values will have no effect."
@@ -18465,9 +18514,6 @@ msgstr ""
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
 
-msgid "Cmd"
-msgstr "Cmd"
-
 msgid "Alt+Cmd"
 msgstr "Alt+Cmd"
 
@@ -19437,8 +19483,8 @@ msgstr "Track width"
 msgid "Annular width"
 msgstr "Annular width"
 
-msgid "Drill too small"
-msgstr "Drill too small"
+msgid "Drill out of range"
+msgstr "Drill out of range"
 
 msgid "Via diameter"
 msgstr "Via diameter"
@@ -19446,8 +19492,8 @@ msgstr "Via diameter"
 msgid "Padstack is not valid"
 msgstr "Padstack is not valid"
 
-msgid "Micro via drill too small"
-msgstr "Micro via drill too small"
+msgid "Micro via drill out of range"
+msgstr "Micro via drill out of range"
 
 msgid "Courtyards overlap"
 msgstr "Courtyards overlap"
@@ -19663,8 +19709,12 @@ msgid "Checking via holes..."
 msgstr "Checking via holes..."
 
 #, c-format
-msgid "(%s %s; actual %s)"
-msgstr "(%s %s; actual %s)"
+msgid "(%s min width %s; actual %s)"
+msgstr "(%s min width %s; actual %s)"
+
+#, c-format
+msgid "(%s max width %s; actual %s)"
+msgstr "(%s max width %s; actual %s)"
 
 #, c-format
 msgid "Missing footprint %s (%s)"
@@ -19745,14 +19795,6 @@ msgstr "Testing %d mask apertures against %d silkscreen features."
 
 msgid "Checking track widths..."
 msgstr "Checking track widths..."
-
-#, c-format
-msgid "(%s min width %s; actual %s)"
-msgstr "(%s min width %s; actual %s)"
-
-#, c-format
-msgid "(%s max width %s; actual %s)"
-msgstr "(%s max width %s; actual %s)"
 
 msgid "Checking via diameters..."
 msgstr "Checking via diameters..."
@@ -20899,8 +20941,16 @@ msgid "Pad of %s on %s"
 msgstr "Pad of %s on %s"
 
 #, c-format
+msgid "Through hole pad of %s"
+msgstr "Through hole pad of %s"
+
+#, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Pad %s of %s on %s"
+
+#, c-format
+msgid "Through hole pad %s of %s"
+msgstr "Through hole pad %s of %s"
 
 msgid "Edge connector"
 msgstr "Edge connector"
@@ -21052,6 +21102,9 @@ msgstr "End X"
 
 msgid "End Y"
 msgstr "End Y"
+
+msgid "PCB Target"
+msgstr "PCB Target"
 
 msgid "PCB Text"
 msgstr "PCB Text"
@@ -24308,6 +24361,42 @@ msgstr "Performing polygon fills…"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Tight"
+#~ msgstr "Tight"
+
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#~ msgid "Loose"
+#~ msgstr "Loose"
+
+#~ msgid "Very loose"
+#~ msgstr "Very loose"
+
+#~ msgid ""
+#~ "Tolerance sets the distance between two points that are considered "
+#~ "joined.  Standard is 0.001mm."
+#~ msgstr ""
+#~ "Tolerance sets the distance between two points that are considered "
+#~ "joined.  Standard is 0.001mm."
+
+#~ msgid ""
+#~ "Warning: Pad drill larger than pad size or drill shape and pad shape do "
+#~ "not overlap."
+#~ msgstr ""
+#~ "Warning: Pad drill larger than pad size or drill shape and pad shape do "
+#~ "not overlap."
+
+#~ msgid "Drill too small"
+#~ msgstr "Drill too small"
+
+#~ msgid "Micro via drill too small"
+#~ msgstr "Micro via drill too small"
+
+#, c-format
+#~ msgid "(%s %s; actual %s)"
+#~ msgstr "(%s %s; actual %s)"
 
 #~ msgid "Electronic rule check file"
 #~ msgstr "Electronic rule check file"
