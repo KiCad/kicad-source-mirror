@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-03 20:48+0000\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2264,12 +2264,11 @@ msgstr "Vybrat cestu nastavení"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Jak byste chtěli nakonfigurovat KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Importovat nastavení z předchozí verze (nenalezeno)"
+msgstr "Importovat nastavení z předchozí verze na:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
@@ -3160,9 +3159,8 @@ msgstr "Import souboru kl. zkratek:"
 
 #: common/dialogs/panel_mouse_settings.cpp:49
 #: pcbnew/dialogs/panel_edit_options_base.cpp:197
-#, fuzzy
 msgid "Cmd"
-msgstr "Příkaz"
+msgstr "Přík"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -4221,19 +4219,16 @@ msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Zastaralá verze KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Zastaralá verze KICAD_TEMPLATE_DIR."
+msgstr "Zastaralá verze KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Zastaralá verze KICAD_TEMPLATE_DIR."
+msgstr "Zastaralá verze KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Zastaralá verze KICAD_TEMPLATE_DIR."
+msgstr "Zastaralá verze KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -4772,7 +4767,7 @@ msgstr "Dráty"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr "Autobusy"
+msgstr "Sbernice"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
@@ -7800,9 +7795,8 @@ msgid "Update Options"
 msgstr "Možnosti aktualizace"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr "Vytvoří nový adresář"
+msgstr "Odeberte pole, pokud nejsou v symbolu knihovny"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
@@ -7810,23 +7804,20 @@ msgid "Removes fields that do not occur in the original library symbols"
 msgstr "Odstraní pole, které se nevyskytují v původní knihovně symbolů"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "Vytvoří nový adresář"
+msgstr "Resetujte pole, pokud jsou v symbolu knihovny prázdná"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "Aktualizovat viditelnost pole"
+msgstr "Aktualizace/reset viditelnosti pole"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 msgid "Update/reset field sizes and styles"
 msgstr "Aktualizace/reset velikostí a stylů polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "Aktualizovat pozice polí"
+msgstr "Aktualizace/reset pozice polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
 msgid "Update Symbols from Library"
@@ -8371,7 +8362,6 @@ msgstr "Zobrazit datasheet v prohlížeči"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:125
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1053
-#, fuzzy
 msgid "The Reference column cannot be hidden."
 msgstr "Sloupec Reference nelze skrýt."
 
@@ -8963,10 +8953,9 @@ msgstr "Smazat položky kreslení alternativního stylu (DeMorgan) ze symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:313
 #: eeschema/symbol_editor/symbol_editor.cpp:842
-#, fuzzy, c-format
+#, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
-msgstr ""
-"Název \"%s\" koliduje s existujícím záznamem v knihovně symbolů \"%s\"."
+msgstr "Název '%s' koliduje s existujícím záznamem v knihovně '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:426
 #: eeschema/dialogs/dialog_symbol_properties.cpp:769
@@ -10242,7 +10231,6 @@ msgid "Measured node"
 msgstr "Měřený uzel"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:246
-#, fuzzy
 msgid "Reference node"
 msgstr "Referenční uzel"
 
@@ -10290,9 +10278,8 @@ msgid "Sensitivity"
 msgstr "Citlivost"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:349
-#, fuzzy
 msgid "Transfer Function"
-msgstr "Přenosová funkce"
+msgstr "Funkce přenosu"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:362
 msgid "Time step:"
@@ -10657,9 +10644,8 @@ msgid "Carrier frequency:"
 msgstr "Nosná frekvence:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:709
-#, fuzzy
 msgid "Modulation index:"
-msgstr "Úhel &otočení:"
+msgstr "Modulační index:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:716
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -10718,9 +10704,8 @@ msgid "Poisson"
 msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:862
-#, fuzzy
 msgid "Individual value duration:"
-msgstr "Počáteční hodnota:"
+msgstr "Trvání individuální hodnoty:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:873
 msgid "Time delay:"
@@ -11566,12 +11551,12 @@ msgstr ""
 "starší položky v tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
 msgstr "Knihovna '%s' nenalezena."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Selhalo uložení souboru knihovny symbolů '%s'."
 
@@ -11666,9 +11651,8 @@ msgid "Remove library from table"
 msgstr "Odebrat knihovnu z tabulky"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:167
-#, fuzzy
 msgid "Migrate Libraries..."
-msgstr "U&ložit všechny knihovny..."
+msgstr "Migrovat knihovny..."
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:177
 msgid "Path Substitutions:"
@@ -12609,13 +12593,12 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Uložit změny do \"%s\" před zavřením?"
 
 #: eeschema/sch_edit_frame.cpp:795
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the Kicad shell "
 "and create a project."
 msgstr ""
-"Nemohu aktualizovat DPS, protože je schématický editor otevřen v samostatném "
+"Nemohu aktualizovat DPS, protože je editor schémat otevřen v samostatném "
 "režimu. Aby bylo možno vytvořit/aktualizovat schéma, musíte spustit základní "
 "program Kicad a vytvořit projekt DPS."
 
@@ -12791,7 +12774,6 @@ msgid "Password for <b>login</b> to some special library server."
 msgstr "Heslo pro <b>username</b> pro některé speciální servery knihoven."
 
 #: eeschema/sch_plugin.cpp:163
-#, fuzzy
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
@@ -14032,9 +14014,8 @@ msgid "Show &Legend"
 msgstr "Zobrazit &legendu"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:103
-#, fuzzy
 msgid "Dotted Current/Phase"
-msgstr "Kreslit aktuální stránku"
+msgstr "Tečkovaný proud/fáze"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:107
 msgid "White Background"
@@ -14264,15 +14245,13 @@ msgstr "Chyba při ukládání %s tabulky symbolů knihovny."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "global"
-msgstr "Globální"
+msgstr "globální"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "project"
-msgstr "Projekt"
+msgstr "projekt"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
@@ -14428,9 +14407,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:812
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Symbol \"%s\" již existuje v knihovně \"%s\""
+msgstr "Symbol '%s' již existuje v knihovně '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:884
 #, c-format
@@ -14833,18 +14812,16 @@ msgid "Make a copy of the selected symbol"
 msgstr "Uložit kopii aktuálního listu"
 
 #: eeschema/tools/ee_actions.cpp:136
-#, fuzzy
 msgid "Save Symbol As..."
-msgstr "Změnit symbol..."
+msgstr "Uložit symbol jako..."
 
 #: eeschema/tools/ee_actions.cpp:137
 msgid "Save the current symbol to a different library."
 msgstr "Uložit aktuální symbol na jiný knihovny."
 
 #: eeschema/tools/ee_actions.cpp:141
-#, fuzzy
 msgid "Remove the selected symbol from its library"
-msgstr "Nastavit pole na 0 pro použití zdroje nebo globálních hodnot"
+msgstr "Odebrat vybraný symbol ze své knihovny"
 
 #: eeschema/tools/ee_actions.cpp:156
 msgid "Paste Symbol"
@@ -14921,9 +14898,8 @@ msgid "Save In Schematic"
 msgstr "Uložit do schématu"
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save the current symbol in the schematic"
-msgstr "Aktualizovat knihovnu symbolů ve schématu"
+msgstr "Uložit aktuální symbol do schématu"
 
 #: eeschema/tools/ee_actions.cpp:213
 msgid "Add Pin"
@@ -15068,7 +15044,6 @@ msgid "Add Hierarchical Label"
 msgstr "Přidat hierarchické označení"
 
 #: eeschema/tools/ee_actions.cpp:310
-#, fuzzy
 msgid "Add a hierarchical label"
 msgstr "Přidat hierarchické označení"
 
@@ -15222,9 +15197,8 @@ msgid "Update Symbols from Library..."
 msgstr "Aktualizace symbolů z knihovny..."
 
 #: eeschema/tools/ee_actions.cpp:422
-#, fuzzy
 msgid "Update symbols to include any changes from the library"
-msgstr "Uložit pouzdro do aktivní knihovny"
+msgstr "Aktualizovat symboly a zahrnout všechny změny z knihovny"
 
 #: eeschema/tools/ee_actions.cpp:428
 #, fuzzy
@@ -15411,19 +15385,16 @@ msgid "Assign Footprints..."
 msgstr "Přiřadit pouzdra..."
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "Přiřazení pouzdra"
+msgstr "Spusťit nástroj pro přiřazení pouzdra"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Import Footprint Assignments..."
 msgstr "Importovat přiřazení pouzdra..."
 
 #: eeschema/tools/ee_actions.cpp:563
-#, fuzzy
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
-msgstr ""
-"Načíst pole přiřazení pouzder ze souboru .cmp vytvořeného programem Pcbnew"
+msgstr "Import přiřazení pouzder ze souboru .cmp vytvořeného programem Pcbnew"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Annotate Schematic..."
@@ -15490,7 +15461,6 @@ msgid "Switch to PCB Editor"
 msgstr "Přepnout do editoru DPS"
 
 #: eeschema/tools/ee_actions.cpp:607
-#, fuzzy
 msgid "Open PCB in board editor"
 msgstr "Otevřít DPS v editoru desky"
 
@@ -15515,27 +15485,24 @@ msgid "Highlight on PCB"
 msgstr "Zvýraznit na DPS"
 
 #: eeschema/tools/ee_actions.cpp:622
-#, fuzzy
 msgid "Highlight corresponding items in board editor"
-msgstr "Zvýraznit odpovídající položky v PCBNew"
+msgstr "Zvýraznit odpovídající položky v editoru desky"
 
 #: eeschema/tools/ee_actions.cpp:627
 msgid "Show Hidden Pins"
 msgstr "Zobrazit skryté vývody"
 
 #: eeschema/tools/ee_actions.cpp:627
-#, fuzzy
 msgid "Toggle display of hidden pins"
-msgstr "Přepnout zobrazení na kříž přes celé okno"
+msgstr "Přepnout zobrazení skrytých vývodů"
 
 #: eeschema/tools/ee_actions.cpp:632
 msgid "Show Hidden Fields"
 msgstr "Zobrazit skrytá pole"
 
 #: eeschema/tools/ee_actions.cpp:632
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "Přepnout zobrazení vrstev pájecí pasty"
+msgstr "Přepnout zobrazení skrytých textových polí"
 
 #: eeschema/tools/ee_actions.cpp:637
 msgid "Force H/V Wires and Buses"
@@ -15569,9 +15536,8 @@ msgid "Hierarchy Navigator"
 msgstr "Zobrazit Hierarchickou navigaci"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "Navigovat hierarchii schéma"
+msgstr "Zobrazit hierarchii listů schématu"
 
 #: eeschema/tools/ee_actions.cpp:661
 #, fuzzy
@@ -17154,9 +17120,8 @@ msgid "Failed to delete '%s'"
 msgstr "Nepodařilo se smazat '%s'"
 
 #: kicad/project_tree_pane.cpp:241
-#, fuzzy
 msgid "Directory name:"
-msgstr "Směr:"
+msgstr "Název adresáře:"
 
 #: kicad/project_tree_pane.cpp:241
 msgid "Create New Directory"
@@ -17244,9 +17209,8 @@ msgid "Delete the files and their contents"
 msgstr "Smazat soubory i s jeho obsahem"
 
 #: kicad/project_tree_pane.cpp:773
-#, fuzzy
 msgid "Print the contents of the file"
-msgstr "Nastavit počáteční bod pro mřížku"
+msgstr "Vytisknout obsah souboru"
 
 #: kicad/project_tree_pane.cpp:815
 msgid "Delete Directory"
@@ -17587,9 +17551,8 @@ msgid "First page only"
 msgstr "Pouze první stránka"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
-#, fuzzy
 msgid "Subsequent pages only"
-msgstr "Použít pouze aktuální stránku"
+msgstr "Pouze následující stránky"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:88
 msgid "H align:"
@@ -17807,19 +17770,16 @@ msgid "New page layout file is unsaved"
 msgstr "Nový soubor rozložení stránky není uložen"
 
 #: pagelayout_editor/pl_editor_frame.cpp:889
-#, fuzzy
 msgid "Page layout changes are unsaved"
-msgstr "Soubory rozvržení stránky"
+msgstr "Změny rozvržení stránky jsou neuložené"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
-#, fuzzy
 msgid "Page Width"
-msgstr "Změnit šířku"
+msgstr "Šířka stránky"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
-#, fuzzy
 msgid "Page Height"
-msgstr "Text Výška"
+msgstr "Výška stránky"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Left Top paper corner"
@@ -19366,7 +19326,7 @@ msgstr "Automatické umístění %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr ""
+msgstr "Okraje desky musí být definovány na vrstvě %s."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -19922,7 +19882,7 @@ msgstr "Pouze vpředu"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:85
 msgid "Only back"
-msgstr "Pouze zadní"
+msgstr "Pouze vzadu"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
 msgid "Only selected"
@@ -20731,9 +20691,8 @@ msgid "Fillet radius:"
 msgstr "Poloměr zaoblení:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:402
-#, fuzzy
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr "Šířka příčky teplotního profilu musí být větší než minimální šířka."
+msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:430
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
@@ -20797,9 +20756,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:128
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
-#, fuzzy
 msgid "Constrain outline to H, V and 45 degrees"
-msgstr "L&imit kreslené čáry na 45 stupňů"
+msgstr "Omezit obrys na H, V a 45 stupňů"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:131
 #, fuzzy
@@ -21464,7 +21422,6 @@ msgstr "Režim pozice:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
-#, fuzzy
 msgid "Outside"
 msgstr "Mimo"
 
@@ -21563,9 +21520,8 @@ msgid "Refill all zones before performing DRC"
 msgstr "Vyplnit všechny zóny před provedením kontroly DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
-#, fuzzy
 msgid "Report all errors for each track"
-msgstr "Hlásit všechny chyby spojů (pomalejší)"
+msgstr "Hlásit všechny chyby pro každý spoj"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -21722,9 +21678,8 @@ msgstr "Povolit otočení o 180 stupňů:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:271
-#, fuzzy
 msgid "Fabrication Attributes"
-msgstr "Výstupy pro &výrobu"
+msgstr "Atributy výroby"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:183
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
@@ -21935,7 +21890,6 @@ msgstr "3D model(y)"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:410
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
-#, fuzzy
 msgid "3D Models"
 msgstr "3D modely"
 
@@ -22004,9 +21958,8 @@ msgid "Update fabrication attributes"
 msgstr "Výstupy pro &výrobu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Update 3D models"
-msgstr "%s 3D modely"
+msgstr "Aktualizovat 3D modely"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:84
 msgid ""
@@ -22031,14 +21984,12 @@ msgid "*** footprint not found ***"
 msgstr "*** pouzdro nenalezeno ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
-#, fuzzy
 msgid "Update all footprints on board"
-msgstr "Aktualizovat všechny pouzdra desky"
+msgstr "Aktualizovat všechny pouzdra na desce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint"
-msgstr "Zobrazit vybrané pouzdro"
+msgstr "Aktualizovat vybrané pouzdro"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 #, fuzzy
@@ -22079,9 +22030,8 @@ msgid "Update/reset fabrication attributes"
 msgstr "Výstupy pro &výrobu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "%s 3D modely"
+msgstr "Aktualizace/reset 3D modelů"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -22217,18 +22167,16 @@ msgid "Tolerance:"
 msgstr "Tolerance:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Tight (0.001 mm)"
-msgstr "Výška textu:"
+msgstr "Těsné (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "Standardní (1,2,3)"
+msgstr "Standardní (0.01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Volné (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -22456,7 +22404,6 @@ msgid "\"%s\" not found"
 msgstr "\"%s\" nenalezeno"
 
 #: pcbnew/dialogs/dialog_find.cpp:333
-#, fuzzy
 msgid "No more items to show"
 msgstr "Žádné další položky k zobrazení"
 
@@ -22493,14 +22440,12 @@ msgid "Search footprint reference designators"
 msgstr "Znova přiřadit pouzdra podle reference"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "Zobrazit hodnoty pouzder"
+msgstr "Hledat hodnoty pouzdra"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "Ostatní textové položky pouzdra"
+msgstr "Hledat další textové položky"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
