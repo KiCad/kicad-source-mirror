@@ -274,7 +274,6 @@ set( BMAPS_MID
     hidden_pin
     hide_ratsnest
     hierarchy_nav
-    highlight_remove
     hotkeys
     hole_to_hole_clearance
     hole_to_copper_clearance
