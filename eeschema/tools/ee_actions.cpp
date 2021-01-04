@@ -414,25 +414,25 @@ TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
         AS_GLOBAL, 0, "",
         _( "Change Symbols..." ),
         _( "Assign different symbols from the library" ),
-        change_lib_symbols_in_schematic_xpm );
+        exchange_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbols( "eeschema.InteractiveEdit.updateSymbols",
         AS_GLOBAL, 0, "",
         _( "Update Symbols from Library..." ),
         _( "Update symbols to include any changes from the library" ),
-        update_lib_symbols_in_schematic_xpm );
+        refresh_xpm );
 
 TOOL_ACTION EE_ACTIONS::changeSymbol( "eeschema.InteractiveEdit.changeSymbol",
         AS_GLOBAL, 0, "",
         _( "Change Symbol..." ),
         _( "Assign a different symbol from the library" ),
-        change_lib_symbols_in_schematic_xpm );
+        exchange_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
         AS_GLOBAL, 0, "",
         _( "Update Symbol..." ),
         _( "Update symbol to include any changes from the library" ),
-        update_lib_symbols_in_schematic_xpm );
+        refresh_xpm );
 
 TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
         AS_GLOBAL, 0, "",

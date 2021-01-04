@@ -394,13 +394,13 @@ TOOL_ACTION PCB_ACTIONS::updateFootprint( "pcbnew.GlobalEdit.updateFootprint",
         AS_GLOBAL, 0, "",
         _( "Update Footprint..." ),
         _( "Update footprint to include any changes from the library" ),
-        reload_xpm );
+        refresh_xpm );
 
 TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.GlobalEdit.updateFootprints",
         AS_GLOBAL, 0, "",
         _( "Update Footprints from Library..." ),
         _( "Update footprints to include any changes from the library" ),
-        reload_xpm );
+        refresh_xpm );
 
 TOOL_ACTION PCB_ACTIONS::removeUnusedPads( "pcbnew.GlobalEdit.removeUnusedPads",
         AS_GLOBAL, 0, "",

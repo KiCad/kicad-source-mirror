@@ -181,7 +181,6 @@ set( BMAPS_MID
     bus_definition_tool
     cancel
     change_entry_orient
-    change_lib_symbols_in_schematic
     contrast_mode
     curved_ratsnest
     checked_ok
@@ -474,7 +473,6 @@ set( BMAPS_MID
     up
     update_pcb_from_sch
     update_sch_from_pcb
-    update_lib_symbols_in_schematic
     use_3D_copper_thickness
     via
     via_annulus
