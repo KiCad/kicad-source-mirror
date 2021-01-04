@@ -48,20 +48,15 @@ MEANDER_SKEW_PLACER::~MEANDER_SKEW_PLACER( )
 
 bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
-    VECTOR2I p;
-
-    if( !aStartItem || !aStartItem->OfKind( ITEM::SEGMENT_T ) )
+    if( !aStartItem || !aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T) )
     {
         Router()->SetFailureReason( _( "Please select a differential pair trace you want to tune." ) );
         return false;
     }
 
-    m_initialSegment = static_cast<SEGMENT*>( aStartItem );
-
-    p = m_initialSegment->Seg().NearestPoint( aP );
-
-    m_currentNode = NULL;
-    m_currentStart = p;
+    m_initialSegment = static_cast<LINKED_ITEM*>( aStartItem );
+    m_currentNode    = nullptr;
+    m_currentStart   = getSnappedStartPoint( m_initialSegment, aP );
 
     m_world = Router()->GetWorld( )->Branch();
     m_originLine = m_world->AssembleLine( m_initialSegment );

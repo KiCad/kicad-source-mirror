@@ -116,7 +116,7 @@ protected:
 
     SHAPE_LINE_CHAIN m_finalShape;
     MEANDERED_LINE   m_result;
-    SEGMENT*         m_initialSegment;
+    LINKED_ITEM*     m_initialSegment;
 
     long long int m_lastLength;
     TUNING_STATUS m_lastStatus;

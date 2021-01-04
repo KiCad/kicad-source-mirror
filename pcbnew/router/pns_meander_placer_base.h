@@ -159,6 +159,8 @@ protected:
     int compareWithTolerance(
             long long int aValue, long long int aExpected, long long int aTolerance = 0 ) const;
 
+    VECTOR2I getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint );
+
     ///> pointer to world to search colliding items
     NODE* m_world;
 

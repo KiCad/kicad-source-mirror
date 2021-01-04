@@ -23,6 +23,7 @@
 #include "pns_meander.h"
 #include "pns_router.h"
 #include "pns_solid.h"
+#include "pns_arc.h"
 
 namespace PNS {
 
@@ -85,8 +86,8 @@ void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const V
         }
     }
 
-    VECTOR2I n = aOrigin.NearestPoint( cp );
-    VECTOR2I m = aOrigin.NearestPoint( aTuneStart );
+    VECTOR2I n = aOrigin.NearestPoint( cp, false );
+    VECTOR2I m = aOrigin.NearestPoint( aTuneStart, false );
 
     SHAPE_LINE_CHAIN l( aOrigin );
     l.Split( n );
@@ -233,6 +234,30 @@ int MEANDER_PLACER_BASE::compareWithTolerance(
         return 1;
     else
         return 0;
+}
+
+
+VECTOR2I MEANDER_PLACER_BASE::getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint )
+{
+    if( aStartItem->Kind() == ITEM::SEGMENT_T )
+    {
+        return static_cast<SEGMENT*>( aStartItem )->Seg().NearestPoint( aStartPoint );
+    }
+    else
+    {
+        wxASSERT( aStartItem->Kind() == ITEM::ARC_T );
+        ARC* arc = static_cast<ARC*>( aStartItem );
+
+        if( ( VECTOR2I( arc->Anchor( 0 ) - aStartPoint ) ).SquaredEuclideanNorm() <=
+            ( VECTOR2I( arc->Anchor( 1 ) - aStartPoint ) ).SquaredEuclideanNorm() )
+        {
+            return arc->Anchor( 0 );
+        }
+        else
+        {
+            return arc->Anchor( 1 );
+        }
+    }
 }
 
 }

@@ -654,16 +654,15 @@ public:
     int NearestSegment( const VECTOR2I& aP ) const;
 
     /**
-     * Function NearestPoint()
-     *
      * Finds a point on the line chain that is closest to point aP.
+     * @param aP is the point to find
+     * @param aAllowInternalShapePoints if false will not return points internal to an arc (i.e.
+     *                                  only the arc endpoints are possible candidates)
      * @return the nearest point.
      */
-    const VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
+    const VECTOR2I NearestPoint( const VECTOR2I& aP, bool aAllowInternalShapePoints = true ) const;
 
     /**
-     * Function NearestPoint()
-     *
      * Finds a point on the line chain that is closest to the line defined by the points of
      * segment aSeg, also returns the distance.
      * @param aSeg Segment defining the line.

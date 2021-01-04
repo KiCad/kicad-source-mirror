@@ -220,6 +220,8 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
             sh = a.m_arcs.size() - sh - 1;
     }
 
+    for( SHAPE_ARC& arc : a.m_arcs )
+        arc.Reverse();
 
     a.m_closed = m_closed;
 
@@ -390,6 +392,11 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 
     if( ii >= 0 )
     {
+        // Are we splitting at the beginning of an arc?  If so, let's split right before so that
+        // the shape is preserved
+        if( ii < PointCount() - 1 && m_shapes[ii] >= 0 && m_shapes[ii] == m_shapes[ii + 1] )
+            ii--;
+
         m_points.insert( m_points.begin() + ii + 1, aP );
         m_shapes.insert( m_shapes.begin() + ii + 1, ssize_t( SHAPE_IS_PT ) );
 
@@ -528,34 +535,42 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
-    for( int i = aStartIndex; i <= aEndIndex && static_cast<size_t>( i ) < m_points.size(); i++ )
-#if 0
+    int numPoints = static_cast<int>( m_points.size() );
+
+    for( int i = aStartIndex; i <= aEndIndex && i < numPoints; i++ )
     {
         if( m_shapes[i] != SHAPE_IS_PT )
         {
-            int arcIdx = m_shapes[i];
+            int  arcIdx   = m_shapes[i];
+            bool wholeArc = true;
+            int  arcStart = i;
 
-            // wxASSERT_MSG( i == 0 || ( m_shapes[i - 1] != arcIdx ),
-            //               "SHAPE_LINE_CHAIN::Slice in the middle of an arc!" );
+            if( i > 0 && m_shapes[i - 1] >= 0 && m_shapes[i - 1] != arcIdx )
+                wholeArc = false;
 
-            rv.Append( m_arcs[arcIdx] );
-
-            while( m_shapes[i] == arcIdx && static_cast<size_t>( i ) < m_shapes.size() )
+            while( i < numPoints && m_shapes[i] == arcIdx )
                 i++;
 
             i--;
 
-            // FIXME: PNS currently slices in the middle of arcs all the time (LINE::Walkaround)
-            // wxASSERT_MSG( i <= aEndIndex, "SHAPE_LINE_CHAIN::Slice in the middle of an arc!" );
+            if( i > aEndIndex )
+                wholeArc = false;
+
+            if( wholeArc )
+            {
+                rv.Append( m_arcs[arcIdx] );
+            }
+            else
+            {
+                rv.Append( m_points[arcStart] );
+                i = arcStart;
+            }
         }
         else
         {
             rv.Append( m_points[i] );
         }
     }
-#else
-            rv.Append( m_points[i] );
-#endif
 
     return rv;
 }
@@ -1036,7 +1051,8 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
 }
 
 
-const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP ) const
+const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP,
+                                               bool aAllowInternalShapePoints ) const
 {
     int min_d = INT_MAX;
     int nearest = 0;
@@ -1045,11 +1061,36 @@ const VECTOR2I SHAPE_LINE_CHAIN::NearestPoint( const VECTOR2I& aP ) const
     {
         int d = CSegment( i ).Distance( aP );
 
-        if( d < min_d )
+        bool isInternalShapePoint = false;
+
+        // An internal shape point here is everything after the start of an arc and before the
+        // second-to-last vertex of the arc, because we are looking at segments here!
+        if( i > 0 && i < SegmentCount() - 1 && m_shapes[i] >= 0 &&
+                ( ( m_shapes[i - 1] >= 0 && m_shapes[i - 1] == m_shapes[i] ) &&
+                  ( m_shapes[i + 2] >= 0 && m_shapes[i + 2] == m_shapes[i] ) ) )
+        {
+            isInternalShapePoint = true;
+        }
+
+        if( ( d < min_d ) && ( aAllowInternalShapePoints || !isInternalShapePoint ) )
         {
             min_d = d;
             nearest = i;
         }
+    }
+
+    // Is this the start of an arc?  If so, return it directly
+    if( !aAllowInternalShapePoints &&
+        ( ( nearest == 0 && m_shapes[nearest] >= 0 ) ||
+          ( m_shapes[nearest] >= 0 && m_shapes[nearest] != m_shapes[nearest - 1] ) ) )
+    {
+        return m_points[nearest];
+    }
+    else if( !aAllowInternalShapePoints && nearest < SegmentCount() &&
+             m_shapes[nearest] >= 0 && m_shapes[nearest + 1] == m_shapes[nearest] )
+    {
+        // If the nearest segment is the last of the arc, just return the arc endpoint
+        return m_points[nearest + 1];
     }
 
     return CSegment( nearest ).NearestPoint( aP );

@@ -145,7 +145,7 @@ private:
 
     SHAPE_LINE_CHAIN m_finalShapeP, m_finalShapeN;
     MEANDERED_LINE m_result;
-    SEGMENT* m_initialSegment;
+    LINKED_ITEM* m_initialSegment;
 
     long long int m_lastLength;
     int           m_padToDieP;

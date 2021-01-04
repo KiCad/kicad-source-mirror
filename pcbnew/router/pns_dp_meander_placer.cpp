@@ -71,20 +71,15 @@ NODE* DP_MEANDER_PLACER::CurrentNode( bool aLoopsRemoved ) const
 
 bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
-    VECTOR2I p;
-
-    if( !aStartItem || !aStartItem->OfKind( ITEM::SEGMENT_T ) )
+    if( !aStartItem || !aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
     {
         Router()->SetFailureReason( _( "Please select a track whose length you want to tune." ) );
         return false;
     }
 
-    m_initialSegment = static_cast<SEGMENT*>( aStartItem );
-
-    p = m_initialSegment->Seg().NearestPoint( aP );
-
-    m_currentNode=NULL;
-    m_currentStart = p;
+    m_initialSegment = static_cast<LINKED_ITEM*>( aStartItem );
+    m_currentNode    = nullptr;
+    m_currentStart   = getSnappedStartPoint( m_initialSegment, aP );
 
     m_world = Router()->GetWorld()->Branch();
 

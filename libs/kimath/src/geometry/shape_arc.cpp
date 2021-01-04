@@ -472,3 +472,15 @@ void SHAPE_ARC::Mirror( bool aX, bool aY, const VECTOR2I& aVector )
 
     update_bbox();
 }
+
+
+void SHAPE_ARC::Reverse()
+{
+    std::swap( m_start, m_end );
+}
+
+
+SHAPE_ARC SHAPE_ARC::Reversed() const
+{
+    return SHAPE_ARC( m_end, m_mid, m_start, m_width );
+}

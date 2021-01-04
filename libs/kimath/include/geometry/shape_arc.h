@@ -135,6 +135,10 @@ public:
 
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } );
 
+    void Reverse();
+
+    SHAPE_ARC Reversed() const;
+
     double GetRadius() const;
 
     SEG GetChord() const
