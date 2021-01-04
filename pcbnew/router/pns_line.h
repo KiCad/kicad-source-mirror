@@ -147,6 +147,7 @@ public:
     int SegmentCount() const { return m_line.SegmentCount(); }
     int PointCount() const { return m_line.PointCount(); }
     int ArcCount() const { return m_line.ArcCount(); }
+    int ShapeCount() const { return m_line.ShapeCount(); }
 
     ///> Returns the aIdx-th point of the line
     const VECTOR2I& CPoint( int aIdx ) const { return m_line.CPoint( aIdx ); }

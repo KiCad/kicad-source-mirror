@@ -329,15 +329,6 @@ private:
     void simplifyNewLine( NODE* aNode, SEGMENT* aLatest );
 
     /**
-     * Function checkObtusity()
-     *
-     * Helper function, checking if segments a and b form an obtuse angle
-     * (in 45-degree regime).
-     * @return true, if angle (aA, aB) is obtuse
-     */
-    bool checkObtusity( const SEG& aA, const SEG& aB ) const;
-
-    /**
      * Function handleSelfIntersections()
      *
      * Checks if the head of the track intersects its tail. If so, cuts the

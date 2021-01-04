@@ -233,6 +233,13 @@ public:
     }
 
     /**
+     * Returns the number of shapes (line segments or arcs) in this line chain.
+     * This is kind of like SegmentCount() but will only count arcs as 1 segment
+     * @return ArcCount() + the number of non-arc segments
+     */
+    int ShapeCount() const;
+
+    /**
      * Function PointCount()
      *
      * Returns the number of points (vertices) in this line chain
@@ -281,6 +288,22 @@ public:
         else
             return SEG( const_cast<VECTOR2I&>( m_points[aIndex] ),
                         const_cast<VECTOR2I&>( m_points[aIndex + 1] ), aIndex );
+    }
+
+    /**
+     * Returns the vertex index of the next shape in the chain, or -1 if aPoint is in the last shape
+     * If aPoint is the start of a segment, this will be ( aPoint + 1 ).
+     * If aPoint is part of an arc, this will be the index of the start of the next shape after the
+     * arc, in other words, the last point of the arc.
+     * @param aPointIndex is a vertex in the chain
+     * @param aForwards is true if the next shape is desired, false for previous shape
+     * @return the vertex index of the start of the next shape after aPoint's shape
+     */
+    int NextShape( int aPointIndex, bool aForwards = true ) const;
+
+    int PrevShape( int aPointIndex ) const
+    {
+        return NextShape( aPointIndex, false );
     }
 
     /**
@@ -488,6 +511,14 @@ public:
     {
         Remove( aIndex, aIndex );
     }
+
+    /**
+     * Removes the shape at the given index from the line chain.
+     * If the given index is inside an arc, the entire arc will be removed.
+     * Otherwise this is equivalent to Remove( aPointIndex ).
+     * @param aPointIndex is the index of the point to remove
+     */
+    void RemoveShape( int aPointIndex );
 
     /**
      * Function Split()

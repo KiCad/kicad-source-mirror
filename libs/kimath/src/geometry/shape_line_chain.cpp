@@ -420,6 +420,104 @@ int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP ) const
 }
 
 
+int SHAPE_LINE_CHAIN::ShapeCount() const
+{
+    if( m_points.empty() )
+        return 0;
+
+    int numPoints = static_cast<int>( m_shapes.size() );
+    int numShapes = 0;
+    int arcIdx    = -1;
+
+    for( int i = 0; i < m_points.size() - 1; i++ )
+    {
+        if( m_shapes[i] == SHAPE_IS_PT )
+        {
+            numShapes++;
+        }
+        else
+        {
+            arcIdx = m_shapes[i];
+            numShapes++;
+
+            // Now skip the rest of the arc
+            while( i < numPoints && m_shapes[i] == arcIdx )
+                i++;
+
+            // Is there another arc right after?  Add the "hidden" segment
+            if( i < numPoints &&
+                m_shapes[i] != SHAPE_IS_PT &&
+                m_shapes[i] != arcIdx &&
+                m_points[i] != m_points[i - 1] )
+            {
+                numShapes++;
+            }
+
+            i--;
+        }
+    }
+
+    return numShapes;
+}
+
+
+int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
+{
+    if( aPointIndex < 0 )
+        aPointIndex += PointCount();
+
+    // First or last point?
+    if( ( aForwards && aPointIndex == PointCount() - 1 ) ||
+        ( !aForwards && aPointIndex == 0 ) )
+    {
+        return -1;
+    }
+
+    int delta = aForwards ? 1 : -1;
+
+    if( m_shapes[aPointIndex] == SHAPE_IS_PT )
+        return aPointIndex + delta;
+
+    int arcIndex = m_shapes[aPointIndex];
+    int arcStart = aPointIndex;
+
+    while( aPointIndex < static_cast<int>( m_shapes.size() ) && m_shapes[aPointIndex] == arcIndex )
+        aPointIndex += delta;
+
+    // We want the last vertex of the arc if the initial point was the start of one
+    // Well-formed arcs should generate more than one point to travel above
+    if( aPointIndex - arcStart > 1 )
+        aPointIndex -= delta;
+
+    return aPointIndex;
+}
+
+
+void SHAPE_LINE_CHAIN::RemoveShape( int aPointIndex )
+{
+    if( aPointIndex < 0 )
+        aPointIndex += PointCount();
+
+    if( m_shapes[aPointIndex] == SHAPE_IS_PT )
+    {
+        Remove( aPointIndex );
+        return;
+    }
+
+    int start  = aPointIndex;
+    int end    = aPointIndex;
+    int arcIdx = m_shapes[aPointIndex];
+
+    while( start >= 0 && m_shapes[start] == arcIdx )
+        start--;
+
+    while( end < static_cast<int>( m_shapes.size() ) - 1 && m_shapes[end] == arcIdx )
+        end++;
+
+    Remove( start, end );
+}
+
+
 const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex ) const
 {
     SHAPE_LINE_CHAIN rv;
@@ -431,7 +529,33 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         aStartIndex += PointCount();
 
     for( int i = aStartIndex; i <= aEndIndex && static_cast<size_t>( i ) < m_points.size(); i++ )
-        rv.Append( m_points[i] );
+#if 0
+    {
+        if( m_shapes[i] != SHAPE_IS_PT )
+        {
+            int arcIdx = m_shapes[i];
+
+            // wxASSERT_MSG( i == 0 || ( m_shapes[i - 1] != arcIdx ),
+            //               "SHAPE_LINE_CHAIN::Slice in the middle of an arc!" );
+
+            rv.Append( m_arcs[arcIdx] );
+
+            while( m_shapes[i] == arcIdx && static_cast<size_t>( i ) < m_shapes.size() )
+                i++;
+
+            i--;
+
+            // FIXME: PNS currently slices in the middle of arcs all the time (LINE::Walkaround)
+            // wxASSERT_MSG( i <= aEndIndex, "SHAPE_LINE_CHAIN::Slice in the middle of an arc!" );
+        }
+        else
+        {
+            rv.Append( m_points[i] );
+        }
+    }
+#else
+            rv.Append( m_points[i] );
+#endif
 
     return rv;
 }

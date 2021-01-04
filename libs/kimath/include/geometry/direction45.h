@@ -90,7 +90,18 @@ public:
     DIRECTION_45( const SEG& aSeg, bool a90 = false ) :
             m_90deg( a90 )
     {
+
         construct_( aSeg.B - aSeg.A );
+    }
+
+    /**
+     * Creates a DIRECTION_45 from the endpoints of a given arc
+     * @param aArc will be translated into the closest DIRECTION_45
+     */
+    DIRECTION_45( const SHAPE_ARC& aArc, bool a90 = false ) :
+            m_90deg( a90 )
+    {
+        construct_( aArc.GetP1() - aArc.GetP0() );
     }
 
     /**

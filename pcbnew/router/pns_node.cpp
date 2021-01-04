@@ -48,7 +48,6 @@ static std::unordered_set<NODE*> allocNodes;
 
 NODE::NODE()
 {
-    wxLogTrace( "PNS", "NODE::create %p", this );
     m_depth = 0;
     m_root = this;
     m_parent = NULL;
@@ -64,8 +63,6 @@ NODE::NODE()
 
 NODE::~NODE()
 {
-    wxLogTrace( "PNS", "NODE::delete %p", this );
-
     if( !m_children.empty() )
     {
         wxLogTrace( "PNS", "attempting to free a node that has kids." );
@@ -127,8 +124,6 @@ NODE* NODE::Branch()
 {
     NODE* child = new NODE;
 
-    wxLogTrace( "PNS", "NODE::branch %p (parent %p)", child, this );
-
     m_children.insert( child );
 
     child->m_depth = m_depth + 1;
@@ -150,10 +145,12 @@ NODE* NODE::Branch()
         child->m_override = m_override;
     }
 
+#if 0
     wxLogTrace( "PNS", "%d items, %d joints, %d overrides",
                 child->m_index->Size(),
                 (int) child->m_joints.size(),
                 (int) child->m_override.size() );
+#endif
 
     return child;
 }
@@ -931,25 +928,37 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
 
     for( int i = i_start + 1; i < i_end; i++ )
     {
-        const VECTOR2I& p = corners[i];
+        const VECTOR2I& p  = corners[i];
+        LINKED_ITEM*    li = segs[i];
 
-        pl.Line().Append( p );
+        if( !li || li->Kind() != ITEM::ARC_T )
+            pl.Line().Append( p );
 
-        if( segs[i] && prev_seg != segs[i] )
+        if( li && prev_seg != li )
         {
-            pl.Link( segs[i] );
+            if( li->Kind() == ITEM::ARC_T )
+            {
+                const ARC*       arc = static_cast<const ARC*>( li );
+                const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
+                pl.Line().Append( *sa );
+            }
+
+            pl.Link( li );
 
             // latter condition to avoid loops
-            if( segs[i] == aSeg && aOriginSegmentIndex && !originSet )
+            if( li == aSeg && aOriginSegmentIndex && !originSet )
             {
                 *aOriginSegmentIndex = n;
                 originSet = true;
             }
+
             n++;
         }
 
-        prev_seg = segs[i];
+        prev_seg = li;
     }
+
+    pl.Line().Simplify();
 
     assert( pl.SegmentCount() != 0 );
 

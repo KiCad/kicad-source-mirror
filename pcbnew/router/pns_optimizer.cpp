@@ -577,6 +577,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         aResult->ClearLinks();
     }
 
+    bool hasArcs = aLine->ArcCount();
     bool rv = false;
 
     if( m_effortLevel & PRESERVE_VERTEX )
@@ -598,19 +599,23 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         AddConstraint( c );
     }
 
-    if( m_effortLevel & MERGE_SEGMENTS )
+    // TODO: Fix for arcs
+    if( !hasArcs && m_effortLevel & MERGE_SEGMENTS )
         rv |= mergeFull( aResult );
 
-    if( m_effortLevel & MERGE_OBTUSE )
+    // TODO: Fix for arcs
+    if( !hasArcs && m_effortLevel & MERGE_OBTUSE )
         rv |= mergeObtuse( aResult );
 
     if( m_effortLevel & MERGE_COLINEAR )
         rv |= mergeColinear( aResult );
 
-    if( m_effortLevel & SMART_PADS )
+    // TODO: Fix for arcs
+    if( !hasArcs && m_effortLevel & SMART_PADS )
         rv |= runSmartPads( aResult );
 
-    if( m_effortLevel & FANOUT_CLEANUP )
+    // TODO: Fix for arcs
+    if( !hasArcs && m_effortLevel & FANOUT_CLEANUP )
         rv |= fanoutCleanup( aResult );
 
     return rv;
@@ -1022,10 +1027,6 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
 
     if( aEffortLevel & OPTIMIZER::PRESERVE_VERTEX )
         opt.SetPreserveVertex( aV );
-
-    // TODO: fix optimizer for arcs
-    if( aLine->ArcCount() )
-        return -1;
 
     return opt.Optimize( aLine );
 }

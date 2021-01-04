@@ -868,20 +868,67 @@ int LINE::Rank() const
 
 void LINE::ClipVertexRange( int aStart, int aEnd )
 {
+    /**
+     * We need to figure out which joints to keep after the clip operation, because arcs will have
+     * multiple vertices.  It is assumed that anything calling this method will have determined the
+     * vertex range to clip based on joints, meaning we will never clip in the middle of an arc.
+     * Clipping in the middle of an arc would break this and various other things...
+     */
+    int firstLink = 0;
+    int lastLink  = std::max( 0, static_cast<int>( m_links.size() ) - 1 );
+    int arcIdx    = -1;
+    int linkIdx   = 0;
+
+    const std::vector<long>& shapes = m_line.CShapes();
+    int numPoints = static_cast<int>( shapes.size() );
+
+    for( int i = 0; i < m_line.PointCount(); i++ )
+    {
+        if( i <= aStart )
+            firstLink = linkIdx;
+
+        if( shapes[i] >= 0 )
+        {
+            // Account for "hidden segments" between two arcs
+            if( i > aStart && ( shapes[i - 1] >= 0 ) && ( shapes[i - 1] != shapes[i] ) )
+                linkIdx++;
+
+            arcIdx = shapes[i];
+
+            // Skip over the rest of the arc vertices
+            while( i < numPoints && shapes[i] == arcIdx )
+                i++;
+
+            // Back up two vertices to restart at the segment coincident with the end of the arc
+            i -= 2;
+        }
+
+        if( i >= aEnd - 1 || linkIdx >= lastLink )
+        {
+            lastLink = linkIdx;
+            break;
+        }
+
+        linkIdx++;
+    }
+
+    wxASSERT( lastLink >= firstLink );
+
     m_line = m_line.Slice( aStart, aEnd );
 
-    if( IsLinked() ) {
-        assert( m_links.size() < INT_MAX );
-        assert( (int) m_links.size() >= (aEnd - aStart) );
+    if( IsLinked() )
+    {
+        wxASSERT( m_links.size() < INT_MAX );
+        wxASSERT( static_cast<int>( m_links.size() ) >= ( lastLink - firstLink ) );
 
         // Note: The range includes aEnd, but we have n-1 segments.
         std::rotate(
             m_links.begin(),
-            m_links.begin() + aStart,
-            m_links.begin() + aEnd
+            m_links.begin() + firstLink,
+            m_links.begin() + lastLink
         );
 
-        m_links.resize( aEnd - aStart );
+        m_links.resize( lastLink - firstLink + 1 );
     }
 }
 

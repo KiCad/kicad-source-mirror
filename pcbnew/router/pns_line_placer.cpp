@@ -189,8 +189,24 @@ bool LINE_PLACER::handlePullback()
         return true;
     }
 
-    DIRECTION_45 first_head( head.CSegment( 0 ) );
-    DIRECTION_45 last_tail( tail.CSegment( -1 ) );
+    DIRECTION_45 first_head, last_tail;
+
+    const std::vector<ssize_t>& headShapes = head.CShapes();
+    const std::vector<ssize_t>& tailShapes = tail.CShapes();
+
+    wxASSERT( tail.PointCount() >= 2 );
+    if( headShapes[0] == -1 )
+        first_head = DIRECTION_45( head.CSegment( 0 ) );
+    else
+        first_head = DIRECTION_45( head.CArcs()[ headShapes[0] ] );
+
+    int lastSegIdx = tail.PointCount() - 2;
+
+    if( tailShapes[lastSegIdx] == -1 )
+        last_tail = DIRECTION_45( tail.CSegment( lastSegIdx ) );
+    else
+        last_tail = DIRECTION_45( tail.CArcs()[tailShapes[lastSegIdx]] );
+
     DIRECTION_45::AngleType angle = first_head.Angle( last_tail );
 
     // case 1: we have a defined routing direction, and the currently computed
@@ -204,9 +220,20 @@ bool LINE_PLACER::handlePullback()
 
     if( pullback_1 || pullback_2 )
     {
-        const SEG last = tail.CSegment( -1 );
-        m_direction = DIRECTION_45( last );
-        m_p_start = last.A;
+        lastSegIdx = tail.PrevShape( -1 );
+
+        if( tailShapes[lastSegIdx] == -1 )
+        {
+            const SEG& seg = tail.CSegment( lastSegIdx );
+            m_direction    = DIRECTION_45( seg );
+            m_p_start      = seg.A;
+        }
+        else
+        {
+            const SHAPE_ARC& arc = tail.CArcs()[tailShapes[lastSegIdx]];
+            m_direction          = DIRECTION_45( arc );
+            m_p_start            = arc.GetP0();
+        }
 
         wxLogTrace( "PNS", "Placer: pullback triggered [%d] [%s %s]",
                 n, last_tail.Format().c_str(), first_head.Format().c_str() );
@@ -217,7 +244,7 @@ bool LINE_PLACER::handlePullback()
         if( n < 2 )
             tail.Clear(); // don't leave a single-point tail
         else
-            tail.Remove( -1, -1 );
+            tail.RemoveShape( -1 );
 
         if( !tail.SegmentCount() )
             m_direction = m_initial_direction;
@@ -294,15 +321,6 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 }
 
 
-bool LINE_PLACER::checkObtusity( const SEG& aA, const SEG& aB ) const
-{
-    const DIRECTION_45 dir_a( aA );
-    const DIRECTION_45 dir_b( aB );
-
-    return dir_a.IsObtuse( dir_b ) || dir_a == dir_b;
-}
-
-
 bool LINE_PLACER::mergeHead()
 {
     SHAPE_LINE_CHAIN& head = m_head.Line();
@@ -315,8 +333,8 @@ bool LINE_PLACER::mergeHead()
     head.Simplify();
     tail.Simplify();
 
-    int n_head  = head.SegmentCount();
-    int n_tail  = tail.SegmentCount();
+    int n_head  = head.ShapeCount();
+    int n_tail  = tail.ShapeCount();
 
     if( n_head < 3 )
     {
@@ -335,25 +353,41 @@ bool LINE_PLACER::mergeHead()
 
     DIRECTION_45 dir_tail, dir_head;
 
-    dir_head = DIRECTION_45( head.CSegment( 0 ) );
+    const std::vector<ssize_t>& headShapes = head.CShapes();
+    const std::vector<ssize_t>& tailShapes = tail.CShapes();
+
+    if( headShapes[0] == -1 )
+        dir_head = DIRECTION_45( head.CSegment( 0 ) );
+    else
+        dir_head = DIRECTION_45( head.CArcs()[ headShapes[0] ] );
 
     if( n_tail )
     {
-        dir_tail = DIRECTION_45( tail.CSegment( -1 ) );
+        wxASSERT( tail.PointCount() >= 2 );
+        int lastSegIdx = tail.PointCount() - 2;
+
+        if( tailShapes[lastSegIdx] == -1 )
+            dir_tail = DIRECTION_45( tail.CSegment( -1 ) );
+        else
+            dir_tail = DIRECTION_45( tail.CArcs()[ tailShapes[lastSegIdx] ] );
 
         if( dir_head.Angle( dir_tail ) & ForbiddenAngles )
             return false;
     }
 
     tail.Append( head );
-    tail.Remove( -1 );
 
     tail.Simplify();
 
-    SEG last = tail.CSegment( -1 );
-
+    SEG last  = tail.CSegment( -1 );
     m_p_start = last.B;
-    m_direction = DIRECTION_45( last ).Right();
+
+    int lastSegIdx = tail.PointCount() - 2;
+
+    if( tailShapes[lastSegIdx] == -1 )
+        m_direction = DIRECTION_45( tail.CSegment( -1 ) );
+    else
+        m_direction = DIRECTION_45( tail.CArcs()[ tailShapes[lastSegIdx] ] );
 
     head.Remove( 0, -1 );
 
@@ -646,7 +680,7 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 
     int threshold = std::min( tail.PointCount(), tailLookbackSegments + 1 );
 
-    if( tail.SegmentCount() < 3 )
+    if( tail.ShapeCount() < 3 )
         return false;
 
     // assemble TailLookbackSegments tail segments with the current head
@@ -691,10 +725,10 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     LINE new_head;
 
-    wxLogTrace( "PNS", "INIT-DIR: %s head: %d, tail: %d segs",
-                m_initial_direction.Format().c_str(),
-                m_head.SegmentCount(),
-                m_tail.SegmentCount() );
+    wxLogTrace( "PNS", "routeStep: direction: %s head: %d, tail: %d shapes",
+                m_direction.Format().c_str(),
+                m_head.ShapeCount(),
+                m_tail.ShapeCount() );
 
     for( i = 0; i < n_iter; i++ )
     {
@@ -1064,6 +1098,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     if( !fixAll && l.ArcCount() )
         fixAll = true;
 
+    // TODO: lastDirSeg will be calculated incorrectly if we end on an arc
     SEG lastDirSeg = ( !fixAll && l.SegmentCount() > 1 ) ? l.CSegment( -2 ) : l.CSegment( -1 );
     lastDirSeg.A.y = -lastDirSeg.A.y;
     lastDirSeg.B.y = -lastDirSeg.B.y;
@@ -1118,9 +1153,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         setInitialDirection( d_last );
         m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
-        NODE* commit = fixAll ? m_lastNode : m_currentNode;
-
-        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, commit );
+        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
 
         m_startItem = NULL;
         m_placingVia = false;
@@ -1322,6 +1355,9 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
     DIRECTION_45 guessedDir = m_postureSolver.GetPosture( aP );
+
+    wxLogTrace( "PNS", "buildInitialLine: m_direction %s, guessedDir %s, tail points %d",
+                m_direction.Format(), guessedDir.Format(), m_tail.PointCount() );
 
     // Rounded corners don't make sense when routing orthogonally (single track at a time)
     bool fillet = !m_orthoMode && Settings().GetCornerMode() == CORNER_MODE::ROUNDED_45;
