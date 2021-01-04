@@ -171,8 +171,9 @@ public:
      * Set the search string provided by the user.
      *
      * @param aSearch   full, unprocessed search text
+     * @param aState    Are we keeping the selection/search state?
      */
-    void UpdateSearchString( wxString const& aSearch );
+    void UpdateSearchString( wxString const& aSearch, bool aState );
 
     /**
      * Attach to a wxDataViewCtrl and initialize it. This will set up columns
