@@ -66,7 +66,7 @@ public:
         ARC_T       =   16,
         VIA_T       =   32,
         DIFF_PAIR_T =   64,
-        ANY_T       = 0xff
+        ANY_T       =   0xff
     };
 
     ITEM( PnsKind aKind )
@@ -111,12 +111,14 @@ public:
      * @param aClearance defines how far from the body of the item the hull should be,
      * @param aWalkaroundThickness is the width of the line that walks around this hull.
      */
-    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const
+    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+                                         int aLayer = -1 ) const
     {
         return SHAPE_LINE_CHAIN();
     }
 
-    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness,
+                                             int aLayer ) const
     {
         return SHAPE_LINE_CHAIN();
     }
@@ -210,8 +212,7 @@ public:
     /**
      * Function Shape()
      *
-     * Returns the geometrical shape of the item. Used
-     * for collision detection & spatial indexing.
+     * Returns the geometrical shape of the item. Used for collision detection & spatial indexing.
      */
     virtual const SHAPE* Shape() const
     {

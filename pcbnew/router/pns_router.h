@@ -139,8 +139,6 @@ public:
     void ClearWorld();
     void SyncWorld();
 
-    void SetView( KIGFX::VIEW* aView );
-
     bool RoutingInProgress() const;
     bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
     void Move( const VECTOR2I& aP, ITEM* aItem );
@@ -152,10 +150,7 @@ public:
     void StopRouting();
     void ClearViewDecorations();
 
-    NODE* GetWorld() const
-    {
-        return m_world.get();
-    }
+    NODE* GetWorld() const { return m_world.get(); }
 
     void FlipPosture();
 
@@ -169,7 +164,6 @@ public:
     int GetCurrentLayer() const;
     const std::vector<int> GetCurrentNets() const;
 
-    void DumpLog();
     LOGGER* Logger();
 
     RULE_RESOLVER* GetRuleResolver() const
@@ -179,8 +173,7 @@ public:
 
     bool IsPlacingVia() const;
 
-    const ITEM_SET   QueryHoverItems( const VECTOR2I& aP );
-    const VECTOR2I      SnapToItem( ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
+    const ITEM_SET QueryHoverItems( const VECTOR2I& aP );
 
     bool StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode = DM_ANY );
     bool StartDragging( const VECTOR2I& aP, ITEM_SET aItems, int aDragMode = DM_COMPONENT );
@@ -216,12 +209,7 @@ public:
         m_settings = aSettings;
     }
 
-    SIZES_SETTINGS& Sizes()
-    {
-        return m_sizes;
-    }
-
-    ITEM* QueryItemByParent( const BOARD_ITEM* aItem ) const;
+    SIZES_SETTINGS& Sizes() { return m_sizes; }
 
     void SetFailureReason( const wxString& aReason ) { m_failureReason = aReason; }
     const wxString& FailureReason() const { return m_failureReason; }
@@ -237,54 +225,37 @@ private:
     void movePlacing( const VECTOR2I& aP, ITEM* aItem );
     void moveDragging( const VECTOR2I& aP, ITEM* aItem );
 
-    void eraseView();
     void updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging = false );
 
-    void clearViewFlags();
-
     // optHoverItem queryHoverItemEx(const VECTOR2I& aP);
-
-    ITEM* pickSingleItem( ITEM_SET& aItems ) const;
-    void splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
-
-    ITEM* syncPad( PAD* aPad );
-    ITEM* syncTrack( TRACK* aTrack );
-    ITEM* syncVia( VIA* aVia );
-
-    void commitPad( SOLID* aPad );
-    void commitSegment( SEGMENT* aTrack );
-    void commitVia( VIA* aVia );
-
-    void highlightCurrent( bool enabled );
 
     void markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved );
     bool isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aItem, int aLayer );
 
-    VECTOR2I m_currentEnd;
-    RouterState m_state;
+    VECTOR2I          m_currentEnd;
+    RouterState       m_state;
 
-    std::unique_ptr< NODE > m_world;
-    NODE*                   m_lastNode;
+    std::unique_ptr<NODE>           m_world;
+    NODE*                           m_lastNode;
 
-    std::unique_ptr< PLACEMENT_ALGO > m_placer;
-    std::unique_ptr< DRAG_ALGO >        m_dragger;
-    std::unique_ptr< SHOVE >          m_shove;
+    std::unique_ptr<PLACEMENT_ALGO> m_placer;
+    std::unique_ptr<DRAG_ALGO>      m_dragger;
+    std::unique_ptr<SHOVE>          m_shove;
 
-    ROUTER_IFACE* m_iface;
+    ROUTER_IFACE*     m_iface;
 
-    int m_iterLimit;
-    bool m_showInterSteps;
-    int m_snapshotIter;
-    bool m_violation;
-    bool m_forceMarkObstaclesMode = false;
+    int               m_iterLimit;
+    bool              m_showInterSteps;
+    int               m_snapshotIter;
+    bool              m_forceMarkObstaclesMode = false;
 
     ROUTING_SETTINGS* m_settings;
-    SIZES_SETTINGS m_sizes;
-    ROUTER_MODE m_mode;
-    LOGGER* m_logger;
+    SIZES_SETTINGS    m_sizes;
+    ROUTER_MODE       m_mode;
+    LOGGER*           m_logger;
 
-    wxString m_toolStatusbarName;
-    wxString m_failureReason;
+    wxString          m_toolStatusbarName;
+    wxString          m_failureReason;
 };
 
 }

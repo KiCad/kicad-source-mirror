@@ -118,13 +118,13 @@ public:
     ITEM_SET::iterator end() { return m_allItems.end(); }
 
 private:
-
     template <class Visitor>
     int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const;
 
-    std::deque<ITEM_SHAPE_INDEX> m_subIndices;
+private:
+    std::deque<ITEM_SHAPE_INDEX>  m_subIndices;
     std::map<int, NET_ITEMS_LIST> m_netMap;
-    ITEM_SET m_allItems;
+    ITEM_SET                      m_allItems;
 };
 
 

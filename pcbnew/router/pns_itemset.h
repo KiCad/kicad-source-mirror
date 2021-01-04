@@ -39,8 +39,8 @@ class LINE;
 class ITEM_SET
 {
 public:
-    struct ENTRY {
-
+    struct ENTRY
+    {
         ENTRY( ITEM* aItem, bool aOwned = false ) :
             item( aItem ),
             owned( aOwned )
@@ -62,17 +62,17 @@ public:
                 delete item;
         }
 
-        bool operator== ( const ENTRY& b ) const
+        bool operator==( const ENTRY& b ) const
         {
             return item == b.item;
         }
 
-        bool operator< ( const ENTRY& b ) const
+        bool operator<( const ENTRY& b ) const
         {
             return item < b.item;
         }
 
-        ENTRY& operator= ( const ENTRY& aOther )
+        ENTRY& operator=( const ENTRY& aOther )
         {
             owned = aOther.owned;
 
@@ -98,9 +98,7 @@ public:
     ITEM_SET( ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
     {
         if( aInitialItem )
-        {
             m_items.push_back( ENTRY( aInitialItem, aBecomeOwner ) );
-        }
     }
 
     ITEM_SET( const ITEM_SET& aOther )
@@ -225,7 +223,6 @@ public:
     }
 
 private:
-
     ENTRIES m_items;
 };
 

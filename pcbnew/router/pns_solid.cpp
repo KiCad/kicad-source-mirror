@@ -142,7 +142,7 @@ ITEM* SOLID::Clone() const
 
 void SOLID::SetPos( const VECTOR2I& aCenter )
 {
-    auto delta = aCenter - m_pos;
+    VECTOR2I delta = aCenter - m_pos;
 
     if( m_shape )
         m_shape->Move( delta );

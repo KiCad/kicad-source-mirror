@@ -65,8 +65,8 @@ public:
     /**
      * Function Start()
      *
-     * Starts routing a single track at point aP, taking item aStartItem as anchor
-     * (unless NULL). Returns true if a dragging operation has started.
+     * Starts routing a single track at point aP, taking item aStartItem as anchor (unless NULL).
+     * Returns true if a dragging operation has started.
      */
     virtual bool Start( const VECTOR2I& aP, ITEM_SET& aPrimitives ) = 0;
 
@@ -90,8 +90,7 @@ public:
     /**
      * Function CurrentNode()
      *
-     * Returns the most recent world state, including all
-     * items changed due to dragging operation.
+     * Returns the most recent world state, including all items changed by dragging operation.
      */
     virtual NODE* CurrentNode() const = 0;
 

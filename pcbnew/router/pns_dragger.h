@@ -113,7 +113,6 @@ public:
     void SetMode( int aDragMode ) override;
 
 private:
-
     const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );
     
     bool dragMarkObstacles( const VECTOR2I& aP );
@@ -126,7 +125,7 @@ private:
     void dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
     void optimizeAndUpdateDraggedLine( LINE& dragged, SEG& aDraggedSeg, const VECTOR2I& aP );
 
-
+private:
     VIA_HANDLE             m_initialVia;
     VIA_HANDLE             m_draggedVia;
 
