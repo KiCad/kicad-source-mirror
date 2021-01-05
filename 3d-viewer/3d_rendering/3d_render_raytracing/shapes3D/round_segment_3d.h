@@ -30,7 +30,8 @@
 #define _ROUND_SEGMENT_H_
 
 #include "object_3d.h"
-#include "../shapes2D/round_segment_2d.h"
+
+class ROUND_SEGMENT_2D;
 
 class ROUND_SEGMENT : public OBJECT_3D
 {

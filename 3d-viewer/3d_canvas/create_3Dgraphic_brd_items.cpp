@@ -82,9 +82,8 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 // Based on
 // void PCB_TEXT::TransformTextShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
-                                                      CONTAINER_2D_BASE* aDstContainer,
-                                                      PCB_LAYER_ID aLayerId, int aClearanceValue )
+void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
+                                           PCB_LAYER_ID aLayerId, int aClearanceValue )
 {
     wxSize size = aText->GetTextSize();
 
@@ -127,12 +126,11 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
 }
 
 
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDimension,
-                                                      CONTAINER_2D_BASE* aDstContainer,
-                                                      PCB_LAYER_ID aLayerId, int aClearanceValue )
+void BOARD_ADAPTER::addShapeWithClearance( const DIMENSION_BASE* aDimension,
+                                           CONTAINER_2D_BASE* aDstContainer,
+                                           PCB_LAYER_ID aLayerId, int aClearanceValue )
 {
-    AddShapeWithClearanceToContainer( &aDimension->Text(), aDstContainer, aLayerId,
-                                      aClearanceValue );
+    addShapeWithClearance( &aDimension->Text(), aDstContainer, aLayerId, aClearanceValue );
 
     const int linewidth = aDimension->GetLineThickness() + ( 2 * aClearanceValue );
 
@@ -179,10 +177,9 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDim
 // Based on
 // void FOOTPRINT::TransformFPShapesWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp#L204
-void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const FOOTPRINT* aFootprint,
-                                                         CONTAINER_2D_BASE* aDstContainer,
-                                                         PCB_LAYER_ID aLayerId,
-                                                         int aInflateValue )
+void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint,
+                                                     CONTAINER_2D_BASE* aDstContainer,
+                                                     PCB_LAYER_ID aLayerId, int aInflateValue )
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
     FP_SHAPE* outline;
@@ -208,8 +205,7 @@ void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const FOOTPRINT* aFootp
             if( outline->GetLayer() != aLayerId )
                 break;
 
-            AddShapeWithClearanceToContainer( (const PCB_SHAPE*) outline, aDstContainer,
-                                              aLayerId, 0 );
+            addShapeWithClearance( (const PCB_SHAPE*) outline, aDstContainer, aLayerId, 0 );
         }
         break;
 
@@ -246,8 +242,8 @@ void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const FOOTPRINT* aFootp
 }
 
 
-void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
-                                    int aClearanceValue )
+void BOARD_ADAPTER::createTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+                                 int aClearanceValue )
 {
     SFVEC2F start3DU( aTrack->GetStart().x * m_biuTo3Dunits,
                       -aTrack->GetStart().y * m_biuTo3Dunits ); // y coord is inverted
@@ -292,7 +288,7 @@ void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDst
             }
         }
 
-        TransformArcToSegments( wxPoint( center.x, center.y ), arc->GetStart(),
+        transformArcToSegments( wxPoint( center.x, center.y ), arc->GetStart(),
                                 arc_angle, circlesegcount,
                                 arc->GetWidth() + 2 * aClearanceValue, aDstContainer, *arc );
         break;
@@ -325,7 +321,7 @@ void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDst
 }
 
 
-void BOARD_ADAPTER::createNewPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
                                                PCB_LAYER_ID aLayer, wxSize aClearanceValue ) const
 {
     SHAPE_POLY_SET poly;
@@ -411,7 +407,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const PAD* aPad, CONTAINER_2D_BAS
                 break;
 
             default:
-                wxFAIL_MSG( "BOARD_ADAPTER::createNewPadWithClearance no implementation for "
+                wxFAIL_MSG( "BOARD_ADAPTER::createPadWithClearance no implementation for "
                             + SHAPE_TYPE_asString( shape->Type() ) );
                 break;
             }
@@ -424,18 +420,18 @@ void BOARD_ADAPTER::createNewPadWithClearance( const PAD* aPad, CONTAINER_2D_BAS
             poly.Inflate( aClearanceValue.x, 32 );
 
         // Add the PAD polygon
-        Convert_shape_line_polygon_to_triangles( poly, *aDstContainer, m_biuTo3Dunits, *aPad );
+        ConvertPolygonToTriangles( poly, *aDstContainer, m_biuTo3Dunits, *aPad );
     }
 }
 
 
-OBJECT_2D* BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue )
+OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue )
 {
     wxSize drillSize = aPad->GetDrillSize();
 
     if( !drillSize.x || !drillSize.y )
     {
-        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createNewPadDrill - found an invalid pad" ) );
+        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithDrill - found an invalid pad" ) );
         return nullptr;
     }
 
@@ -467,13 +463,11 @@ OBJECT_2D* BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue 
 }
 
 
-void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const FOOTPRINT* aFootprint,
-                                                     CONTAINER_2D_BASE* aDstContainer,
-                                                     PCB_LAYER_ID aLayerId,
-                                                     int aInflateValue,
-                                                     bool aSkipNPTHPadsWihNoCopper,
-                                                     bool aSkipPlatedPads,
-                                                     bool aSkipNonPlatedPads )
+void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
+                                          CONTAINER_2D_BASE* aDstContainer,
+                                          PCB_LAYER_ID aLayerId, int aInflateValue,
+                                          bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
+                                          bool aSkipNonPlatedPads )
 {
     for( PAD* pad : aFootprint->Pads() )
     {
@@ -536,14 +530,14 @@ void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const FOOTPRINT* aFootprint
             break;
         }
 
-        createNewPadWithClearance( pad, aDstContainer, aLayerId, margin );
+        createPadWithClearance( pad, aDstContainer, aLayerId, margin );
     }
 }
 
 
 // based on TransformArcToPolygon function from
 // common/convert_basic_shapes_to_polygon.cpp
-void BOARD_ADAPTER::TransformArcToSegments( const wxPoint& aCentre, const wxPoint& aStart,
+void BOARD_ADAPTER::transformArcToSegments( const wxPoint& aCentre, const wxPoint& aStart,
                                             double aArcAngle, int aCircleToSegmentsCount,
                                             int aWidth, CONTAINER_2D_BASE* aDstContainer,
                                             const BOARD_ITEM& aBoardItem )
@@ -612,10 +606,9 @@ void BOARD_ADAPTER::TransformArcToSegments( const wxPoint& aCentre, const wxPoin
 // Based on
 // TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp#L431
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
-                                                      CONTAINER_2D_BASE* aDstContainer,
-                                                      PCB_LAYER_ID aLayerId,
-                                                      int aClearanceValue )
+void BOARD_ADAPTER::addShapeWithClearance( const PCB_SHAPE* aShape,
+                                           CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayerId,
+                                           int aClearanceValue )
 {
     // The full width of the lines to create
     // The extra 1 protects the inner/outer radius values from degeneracy
@@ -651,8 +644,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
 
             polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-            Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
-                                                     *aShape );
+            ConvertPolygonToTriangles( polyList, *aDstContainer, m_biuTo3Dunits, *aShape );
         }
         else
         {
@@ -676,9 +668,9 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
 
     case S_ARC:
     {
-        unsigned int segCount = GetNrSegmentsCircle( aShape->GetBoundingBox().GetSizeMax() );
+        unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
-        TransformArcToSegments( aShape->GetCenter(), aShape->GetArcStart(), aShape->GetAngle(),
+        transformArcToSegments( aShape->GetCenter(), aShape->GetArcStart(), aShape->GetAngle(),
                                 segCount, linewidth, aDstContainer, *aShape );
     }
     break;
@@ -717,13 +709,12 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
         if( polyList.IsEmpty() ) // Just for caution
             break;
 
-        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
-                                                 *aShape );
+        ConvertPolygonToTriangles( polyList, *aDstContainer, m_biuTo3Dunits, *aShape );
     }
     break;
 
     default:
-        wxFAIL_MSG( "BOARD_ADAPTER::AddShapeWithClearanceToContainer no implementation for "
+        wxFAIL_MSG( "BOARD_ADAPTER::addShapeWithClearance no implementation for "
                     + PCB_SHAPE_TYPE_T_asString( aShape->GetShape() ) );
         break;
     }
@@ -733,16 +724,14 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
 // Based on
 // TransformSolidAreasShapesToPolygonSet
 // board_items_to_polygon_shape_transform.cpp
-void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE* aZoneContainer,
-                                                    CONTAINER_2D_BASE* aDstContainer,
-                                                    PCB_LAYER_ID aLayerId )
+void BOARD_ADAPTER::addSolidAreasShapes( const ZONE* aZoneContainer,
+                                         CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayerId )
 {
     // Copy the polys list because we have to simplify it
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList( aLayerId ) );
 
     // This convert the poly in outline and holes
-    Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
-                                             *aZoneContainer );
+    ConvertPolygonToTriangles( polyList, *aDstContainer, m_biuTo3Dunits, *aZoneContainer );
 
     // add filled areas outlines, which are drawn with thick lines segments
     // but only if filled polygons outlines have thickness
@@ -810,9 +799,8 @@ void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE* aZoneContainer,
 }
 
 
-void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const PAD* aPad,
-                                                         CONTAINER_2D_BASE* aDstContainer,
-                                                         int aWidth )
+void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+                                               int aWidth )
 {
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {

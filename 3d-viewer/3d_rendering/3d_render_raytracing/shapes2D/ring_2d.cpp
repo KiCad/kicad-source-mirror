@@ -28,6 +28,7 @@
 
 #include "ring_2d.h"
 #include "../../../3d_fastmath.h"
+#include "../ray.h"
 #include <wx/debug.h>
 
 

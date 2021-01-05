@@ -301,7 +301,7 @@ void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
         if( m_camera_light )
             m_camera_light->SetDirection( -m_camera.GetDir() );
 
-        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
         {
             // Set all pixels of PBO transparent (Alpha to 0)
             // This way it will draw the full buffer but only shows the updated (
@@ -1571,7 +1571,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
 
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
-    hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 0.6f;
+    hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness() * 0.6f;
 
     const SFVEC3F diffuseColorObj = aHitInfo.pHitObject->GetDiffuseColor( aHitInfo );
 
@@ -1766,7 +1766,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                 // This increase the start point by a "fixed" factor so it will work the
                 // same for all distances
                 const SFVEC3F startPoint =
-                        aRay.at( aHitInfo.m_tHit + m_boardAdapter.GetNonCopperLayerThickness3DU() *
+                        aRay.at( aHitInfo.m_tHit + m_boardAdapter.GetNonCopperLayerThickness() *
                                  0.25f );
 
                 const unsigned int refractions_number_of_samples =

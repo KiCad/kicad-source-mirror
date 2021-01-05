@@ -30,6 +30,10 @@
 #define _ROUND_SEGMENT_2D_H_
 
 #include "object_2d.h"
+#include "../ray.h"
+#include <plugins/3dapi/xv3d_types.h>   // SFVEC2F
+
+class BOARD_ITEM;
 
 class ROUND_SEGMENT_2D : public OBJECT_2D
 {
@@ -95,10 +99,9 @@ inline bool Is_segment_a_circle( const SFVEC2F& aStart, const SFVEC2F& aEnd )
 {
     const SFVEC2F vec = aEnd - aStart;
 
-    return (aStart == aEnd) ||
-            // This is the same as calc the length squared (without the sqrt)
-            // and compare with a small value
-            ( glm::dot( vec, vec ) <= s_min_dot );
+    // This is the same as calc the length squared (without the sqrt)
+    // and compare with a small value.
+    return (aStart == aEnd) || ( glm::dot( vec, vec ) <= s_min_dot );
 }
 
 #endif // _ROUND_SEGMENT_2D_H_

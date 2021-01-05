@@ -232,7 +232,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
             m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
     m_checkBoxDisableMoveHoles->SetValue(
             m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
-    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.AntiAliasingGet() ) );
+    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.GetAntiAliasingMode() ) );
 
     // Raytracing options
     m_checkBoxRaytracing_renderShadows->SetValue(
@@ -316,7 +316,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
                         m_checkBoxDisableMoveVias->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,
                         m_checkBoxDisableMoveHoles->GetValue() );
-    m_settings.AntiAliasingSet(
+    m_settings.SetAntiAliasingMode(
             static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
 
     // Raytracing options

@@ -52,7 +52,7 @@ bool EDA_3D_CONDITIONS::materialModeFunction( const SELECTION& aSelection,
                                               BOARD_ADAPTER* aAdapter,
                                               MATERIAL_MODE aMaterial )
 {
-    return aAdapter->MaterialModeGet() == aMaterial;
+    return aAdapter->GetMaterialMode() == aMaterial;
 }
 
 
@@ -68,5 +68,5 @@ bool EDA_3D_CONDITIONS::gridSizeFunction( const SELECTION& aSelection,
                                           BOARD_ADAPTER* aAdapter,
                                           GRID3D_TYPE aGridSize )
 {
-    return aAdapter->GridGet() == aGridSize;
+    return aAdapter->GetGridType() == aGridSize;
 }

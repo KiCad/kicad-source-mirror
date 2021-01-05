@@ -55,7 +55,7 @@ public:
     /**
      * Render the model into the current context.
      */
-    void Draw_opaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
+    void DrawOpaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
     {
         Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor );
     }
@@ -63,8 +63,8 @@ public:
     /**
      * Render the model into the current context.
      */
-    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial,
-                           SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
+    void DrawTransparent( float aOpacity, bool aUseSelectedMaterial,
+                          SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
     {
         Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor );
     }
@@ -72,22 +72,22 @@ public:
     /**
      * Return true if have opaque meshes to render.
      */
-    bool Have_opaque() const { return m_have_opaque_meshes; }
+    bool HasOpaqueMeshes() const { return m_have_opaque_meshes; }
 
     /**
      * Return true if have transparent mesh's to render.
      */
-    bool Have_transparent() const { return m_have_transparent_meshes; }
+    bool HasTransparentMeshes() const { return m_have_transparent_meshes; }
 
     /**
      * Draw main bounding box of the model.
      */
-    void Draw_bbox() const;
+    void DrawBbox() const;
 
     /**
      * Draw individual bounding boxes of each mesh.
      */
-    void Draw_bboxes() const;
+    void DrawBboxes() const;
 
     /**
      * Get the main bounding box.
@@ -111,7 +111,7 @@ private:
     // the material mode that was used to generate the rendering data.
     // FIXME: this can be selected at run-time and does not require re-creation
     //        of the whole model objects.
-    MATERIAL_MODE m_material_mode;
+    MATERIAL_MODE m_materialMode;
 
     BBOX_3D   m_model_bbox;               ///< global bounding box for this model
     std::vector<BBOX_3D> m_meshes_bbox;   ///< individual bbox for each mesh
@@ -164,7 +164,7 @@ private:
                           GLuint* aIdxOut, const glm::vec4& aColor );
 
     void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
-               SFVEC3F aSelectionColor ) const;
+               SFVEC3F& aSelectionColor ) const;
 };
 
 #endif // _MODEL_3D_H_

@@ -162,7 +162,7 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
     default:                wxFAIL;                             break;
     }
 
-    if( m_boardAdapter->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -175,7 +175,7 @@ int EDA_3D_CONTROLLER::SetMaterial( const TOOL_EVENT& aEvent )
 {
     MATERIAL_MODE mode = aEvent.Parameter<MATERIAL_MODE>();
 
-    m_boardAdapter->MaterialModeSet( mode );
+    m_boardAdapter->SetMaterialMode( mode );
 
     if( EDA_3D_VIEWER* viewer = dynamic_cast<EDA_3D_VIEWER*>( m_toolMgr->GetToolHolder() ) )
         viewer->NewDisplay( true );
@@ -190,7 +190,7 @@ int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
 {
     m_camera->ToggleProjection();
 
-    if( m_boardAdapter->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -235,7 +235,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 int EDA_3D_CONTROLLER::On3DGridSelection( const TOOL_EVENT& aEvent )
 {
     GRID3D_TYPE grid = aEvent.Parameter<GRID3D_TYPE>();
-    m_boardAdapter->GridSet( grid );
+    m_boardAdapter->SetGridType( grid );
 
     if( m_canvas )
         m_canvas->Request_refresh();

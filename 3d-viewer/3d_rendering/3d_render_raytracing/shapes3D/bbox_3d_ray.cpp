@@ -28,6 +28,7 @@
  */
 
 #include "bbox_3d.h"
+#include "../ray.h"
 #include <wx/debug.h>
 
 // This BBOX Ray intersection test have the following credits:

@@ -65,60 +65,60 @@ void BOARD_ADAPTER::destroyLayers()
         m_layers_poly.clear();
     }
 
-    delete m_F_Cu_PlatedPads_poly;
-    m_F_Cu_PlatedPads_poly = nullptr;
+    delete m_frontPlatedPadPolys;
+    m_frontPlatedPadPolys = nullptr;
 
-    delete m_B_Cu_PlatedPads_poly;
-    m_B_Cu_PlatedPads_poly = nullptr;
+    delete m_backPlatedPadPolys;
+    m_backPlatedPadPolys = nullptr;
 
-    if( !m_layers_inner_holes_poly.empty() )
+    if( !m_layerHoleIdPolys.empty() )
     {
-        for( auto& poly : m_layers_inner_holes_poly )
+        for( auto& poly : m_layerHoleIdPolys )
             delete poly.second;
 
-        m_layers_inner_holes_poly.clear();
+        m_layerHoleIdPolys.clear();
     }
 
-    if( !m_layers_outer_holes_poly.empty() )
+    if( !m_layerHoleOdPolys.empty() )
     {
-        for( auto& poly : m_layers_outer_holes_poly )
+        for( auto& poly : m_layerHoleOdPolys )
             delete poly.second;
 
-        m_layers_outer_holes_poly.clear();
+        m_layerHoleOdPolys.clear();
     }
 
-    if( !m_layers_container2D.empty() )
+    if( !m_layerMap.empty() )
     {
-        for( auto& poly : m_layers_container2D )
+        for( auto& poly : m_layerMap )
             delete poly.second;
 
-        m_layers_container2D.clear();
+        m_layerMap.clear();
     }
 
-    delete m_platedpads_container2D_F_Cu;
-    m_platedpads_container2D_F_Cu = nullptr;
+    delete m_platedPadsFront;
+    m_platedPadsFront = nullptr;
 
-    delete m_platedpads_container2D_B_Cu;
-    m_platedpads_container2D_B_Cu = nullptr;
+    delete m_platedPadsBack;
+    m_platedPadsBack = nullptr;
 
-    if( !m_layers_holes2D.empty() )
+    if( !m_layerHoleMap.empty() )
     {
-        for( auto& poly : m_layers_holes2D )
+        for( auto& poly : m_layerHoleMap )
             delete poly.second;
 
-        m_layers_holes2D.clear();
+        m_layerHoleMap.clear();
     }
 
-    m_through_holes_inner.Clear();
-    m_through_holes_outer.Clear();
-    m_through_holes_outer_ring.Clear();
-    m_through_holes_vias_outer.Clear();
-    m_through_holes_vias_inner.Clear();
-    m_through_outer_holes_poly_NPTH.RemoveAllContours();
-    m_through_outer_holes_poly.RemoveAllContours();
+    m_throughHoleIds.Clear();
+    m_throughHoleOds.Clear();
+    m_throughHoleAnnularRings.Clear();
+    m_throughHoleViaOds.Clear();
+    m_throughHoleViaIds.Clear();
+    m_nonPlatedThroughHoleOdPolys.RemoveAllContours();
+    m_throughHoleOdPolys.RemoveAllContours();
 
-    m_through_outer_holes_vias_poly.RemoveAllContours();
-    m_through_outer_ring_holes_poly.RemoveAllContours();
+    m_throughHoleViaOdPolys.RemoveAllContours();
+    m_throughHoleAnnularRingPolys.RemoveAllContours();
 }
 
 
@@ -139,12 +139,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];
     LSET         cu_set = LSET::AllCuMask( m_copperLayersCount );
 
-    m_stats_nr_tracks               = 0;
-    m_stats_track_med_width         = 0;
-    m_stats_nr_vias                 = 0;
-    m_stats_via_med_hole_diameter   = 0;
-    m_stats_nr_holes                = 0;
-    m_stats_hole_med_diameter       = 0;
+    m_trackCount               = 0;
+    m_averageTrackWidth        = 0;
+    m_viaCount                 = 0;
+    m_averageViaHoleDiameter   = 0;
+    m_holeCount                = 0;
+    m_averageHoleDiameter      = 0;
 
     // Prepare track list, convert in a vector. Calc statistic for the holes
     std::vector< const TRACK *> trackList;
@@ -153,7 +153,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     for( TRACK* track : m_board->Tracks() )
     {
-        if( !Is3DLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
+        if( !Is3dLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
             continue;
 
         // Note: a TRACK holds normal segment tracks and
@@ -163,22 +163,22 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( track->Type() == PCB_VIA_T )
         {
             const VIA *via = static_cast< const VIA*>( track );
-            m_stats_nr_vias++;
-            m_stats_via_med_hole_diameter += via->GetDrillValue() * m_biuTo3Dunits;
+            m_viaCount++;
+            m_averageViaHoleDiameter += via->GetDrillValue() * m_biuTo3Dunits;
         }
         else
         {
-            m_stats_nr_tracks++;
+            m_trackCount++;
         }
 
-        m_stats_track_med_width += track->GetWidth() * m_biuTo3Dunits;
+        m_averageTrackWidth += track->GetWidth() * m_biuTo3Dunits;
     }
 
-    if( m_stats_nr_tracks )
-        m_stats_track_med_width /= (float)m_stats_nr_tracks;
+    if( m_trackCount )
+        m_averageTrackWidth /= (float)m_trackCount;
 
-    if( m_stats_nr_vias )
-        m_stats_via_med_hole_diameter /= (float)m_stats_nr_vias;
+    if( m_viaCount )
+        m_averageViaHoleDiameter /= (float)m_viaCount;
 
     // Prepare copper layers index and containers
     std::vector< PCB_LAYER_ID > layer_id;
@@ -192,16 +192,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         const PCB_LAYER_ID curr_layer_id = *cu;
 
-        if( !Is3DLayerEnabled( curr_layer_id ) ) // Skip non enabled layers
+        if( !Is3dLayerEnabled( curr_layer_id ) ) // Skip non enabled layers
             continue;
 
         layer_id.push_back( curr_layer_id );
 
         BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
-        m_layers_container2D[curr_layer_id] = layerContainer;
+        m_layerMap[curr_layer_id] = layerContainer;
 
         if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-          && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+          && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
         {
             SHAPE_POLY_SET* layerPoly    = new SHAPE_POLY_SET;
             m_layers_poly[curr_layer_id] = layerPoly;
@@ -210,11 +210,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) && GetFlag( FL_USE_REALISTIC_MODE ) )
     {
-        m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
-        m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
+        m_frontPlatedPadPolys = new SHAPE_POLY_SET;
+        m_backPlatedPadPolys = new SHAPE_POLY_SET;
 
-        m_platedpads_container2D_F_Cu = new BVH_CONTAINER_2D;
-        m_platedpads_container2D_B_Cu = new BVH_CONTAINER_2D;
+        m_platedPadsFront = new BVH_CONTAINER_2D;
+        m_platedPadsBack = new BVH_CONTAINER_2D;
 
     }
 
@@ -224,9 +224,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Create tracks as objects and add it to container
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
+        wxASSERT( m_layerMap.find( curr_layer_id ) != m_layerMap.end() );
 
-        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layerMap[curr_layer_id];
 
         // Add track segments shapes and via annulus shapes
         unsigned int nTracks = trackList.size();
@@ -246,7 +246,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // Add object item to layer container
-            createNewTrack( track, layerContainer, 0.0f );
+            createTrack( track, layerContainer, 0.0f );
         }
     }
 
@@ -268,10 +268,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 const VIA*    via               = static_cast<const VIA*>( track );
                 const VIATYPE viatype           = via->GetViaType();
-                const float   holediameter      = via->GetDrillValue() * BiuTo3Dunits();
-                const float   thickness         = GetCopperThickness3DU();
+                const float   holediameter      = via->GetDrillValue() * BiuTo3dUnits();
+                const float   thickness         = GetCopperThickness();
                 const float   hole_inner_radius = ( holediameter / 2.0f );
-                const float   ring_radius       = via->GetWidth() * BiuTo3Dunits() / 2.0f;
+                const float   ring_radius       = via->GetWidth() * BiuTo3dUnits() / 2.0f;
 
                 const SFVEC2F via_center( via->GetStart().x * m_biuTo3Dunits,
                                           -via->GetStart().y * m_biuTo3Dunits );
@@ -283,16 +283,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     BVH_CONTAINER_2D *layerHoleContainer = nullptr;
 
                     // Check if the layer is already created
-                    if( m_layers_holes2D.find( curr_layer_id ) == m_layers_holes2D.end() )
+                    if( m_layerHoleMap.find( curr_layer_id ) == m_layerHoleMap.end() )
                     {
                         // not found, create a new container
                         layerHoleContainer = new BVH_CONTAINER_2D;
-                        m_layers_holes2D[curr_layer_id] = layerHoleContainer;
+                        m_layerHoleMap[curr_layer_id] = layerHoleContainer;
                     }
                     else
                     {
                         // found
-                        layerHoleContainer = m_layers_holes2D[curr_layer_id];
+                        layerHoleContainer = m_layerHoleMap[curr_layer_id];
                     }
 
                     // Add a hole for this layer
@@ -303,22 +303,22 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     // Add through hole object
-                    m_through_holes_outer.Add( new FILLED_CIRCLE_2D( via_center,
+                    m_throughHoleOds.Add( new FILLED_CIRCLE_2D( via_center,
                                                                      hole_inner_radius + thickness,
                                                                      *track ) );
-                    m_through_holes_vias_outer.Add(
-                                new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
-                                                      *track ) );
+                    m_throughHoleViaOds.Add( new FILLED_CIRCLE_2D( via_center,
+                                                                   hole_inner_radius + thickness,
+                                                                   *track ) );
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
                         GetFlag( FL_USE_REALISTIC_MODE ) )
                     {
-                        m_through_holes_outer_ring.Add( new FILLED_CIRCLE_2D( via_center,
+                        m_throughHoleAnnularRings.Add( new FILLED_CIRCLE_2D( via_center,
                                                                               ring_radius,
                                                                               *track ) );
                     }
 
-                    m_through_holes_inner.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius,
+                    m_throughHoleIds.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius,
                                                                      *track ) );
                 }
             }
@@ -353,32 +353,32 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     SHAPE_POLY_SET *layerInnerHolesPoly = nullptr;
 
                     // Check if the layer is already created
-                    if( m_layers_outer_holes_poly.find( curr_layer_id ) ==
-                        m_layers_outer_holes_poly.end() )
+                    if( m_layerHoleOdPolys.find( curr_layer_id ) ==
+                        m_layerHoleOdPolys.end() )
                     {
                         // not found, create a new container
                         layerOuterHolesPoly = new SHAPE_POLY_SET;
-                        m_layers_outer_holes_poly[curr_layer_id] = layerOuterHolesPoly;
+                        m_layerHoleOdPolys[curr_layer_id] = layerOuterHolesPoly;
 
-                        wxASSERT( m_layers_inner_holes_poly.find( curr_layer_id ) ==
-                                  m_layers_inner_holes_poly.end() );
+                        wxASSERT( m_layerHoleIdPolys.find( curr_layer_id ) ==
+                                  m_layerHoleIdPolys.end() );
 
                         layerInnerHolesPoly = new SHAPE_POLY_SET;
-                        m_layers_inner_holes_poly[curr_layer_id] = layerInnerHolesPoly;
+                        m_layerHoleIdPolys[curr_layer_id] = layerInnerHolesPoly;
                     }
                     else
                     {
                         // found
-                        layerOuterHolesPoly = m_layers_outer_holes_poly[curr_layer_id];
+                        layerOuterHolesPoly = m_layerHoleOdPolys[curr_layer_id];
 
-                        wxASSERT( m_layers_inner_holes_poly.find( curr_layer_id ) !=
-                                  m_layers_inner_holes_poly.end() );
+                        wxASSERT( m_layerHoleIdPolys.find( curr_layer_id ) !=
+                                  m_layerHoleIdPolys.end() );
 
-                        layerInnerHolesPoly = m_layers_inner_holes_poly[curr_layer_id];
+                        layerInnerHolesPoly = m_layerHoleIdPolys[curr_layer_id];
                     }
 
                     const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThicknessBIU();
+                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
 
                     TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
                                               hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
@@ -389,20 +389,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     const int holediameter = via->GetDrillValue();
-                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThicknessBIU();
+                    const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
                     const int hole_outer_ring_radius = via->GetWidth() / 2.0f;
 
                     // Add through hole contours
-                    TransformCircleToPolygon( m_through_outer_holes_poly, via->GetStart(),
+                    TransformCircleToPolygon( m_throughHoleOdPolys, via->GetStart(),
                                               hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
                     // Add same thing for vias only
-                    TransformCircleToPolygon( m_through_outer_holes_vias_poly, via->GetStart(),
+                    TransformCircleToPolygon( m_throughHoleViaOdPolys, via->GetStart(),
                                               hole_outer_radius, ARC_HIGH_DEF, ERROR_INSIDE );
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) && GetFlag( FL_USE_REALISTIC_MODE ) )
                     {
-                        TransformCircleToPolygon( m_through_outer_ring_holes_poly,
+                        TransformCircleToPolygon( m_throughHoleAnnularRingPolys,
                                                   via->GetStart(), hole_outer_ring_radius,
                                                   ARC_HIGH_DEF, ERROR_INSIDE );
                     }
@@ -413,7 +413,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Creates vertical outline contours of the tracks and add it to the poly of the layer
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
@@ -456,25 +456,25 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             // The hole in the body is inflated by copper thickness, if not plated, no copper
             const int inflate = ( pad->GetAttribute () != PAD_ATTRIB_NPTH ) ?
-                                GetHolePlatingThicknessBIU() : 0;
+                                GetHolePlatingThickness() : 0;
 
-            m_stats_nr_holes++;
-            m_stats_hole_med_diameter += ( ( pad->GetDrillSize().x +
+            m_holeCount++;
+            m_averageHoleDiameter += ( ( pad->GetDrillSize().x +
                                              pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
 
-            m_through_holes_outer.Add( createNewPadDrill( pad, inflate ) );
+            m_throughHoleOds.Add( createPadWithDrill( pad, inflate ) );
 
             if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) && GetFlag( FL_USE_REALISTIC_MODE ) )
             {
-                m_through_holes_outer_ring.Add( createNewPadDrill( pad, inflate ) );
+                m_throughHoleAnnularRings.Add( createPadWithDrill( pad, inflate ) );
             }
 
-            m_through_holes_inner.Add( createNewPadDrill( pad, 0 ) );
+            m_throughHoleIds.Add( createPadWithDrill( pad, 0 ) );
         }
     }
 
-    if( m_stats_nr_holes )
-        m_stats_hole_med_diameter /= (float)m_stats_nr_holes;
+    if( m_holeCount )
+        m_averageHoleDiameter /= (float)m_holeCount;
 
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -487,17 +487,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // The hole in the body is inflated by copper thickness.
-            const int inflate = GetHolePlatingThicknessBIU();
+            const int inflate = GetHolePlatingThickness();
 
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
                 if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) && GetFlag( FL_USE_REALISTIC_MODE ) )
                 {
-                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly,
+                    pad->TransformHoleWithClearanceToPolygon( m_throughHoleAnnularRingPolys,
                                                               inflate, ARC_HIGH_DEF, ERROR_INSIDE );
                 }
 
-                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly, inflate,
+                pad->TransformHoleWithClearanceToPolygon( m_throughHoleOdPolys, inflate,
                                                           ARC_HIGH_DEF, ERROR_INSIDE );
             }
             else
@@ -505,11 +505,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // If not plated, no copper.
                 if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) && GetFlag( FL_USE_REALISTIC_MODE ) )
                 {
-                    pad->TransformHoleWithClearanceToPolygon( m_through_outer_ring_holes_poly, 0,
+                    pad->TransformHoleWithClearanceToPolygon( m_throughHoleAnnularRingPolys, 0,
                                                               ARC_HIGH_DEF, ERROR_INSIDE );
                 }
 
-                pad->TransformHoleWithClearanceToPolygon( m_through_outer_holes_poly_NPTH, 0,
+                pad->TransformHoleWithClearanceToPolygon( m_nonPlatedThroughHoleOdPolys, 0,
                                                           ARC_HIGH_DEF, ERROR_INSIDE );
             }
         }
@@ -521,20 +521,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Add footprints PADs objects to containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
+        wxASSERT( m_layerMap.find( curr_layer_id ) != m_layerMap.end() );
 
-        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layerMap[curr_layer_id];
 
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
-            AddPadsWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0,
-                                             true, renderPlatedPadsAsPlated, false );
+            addPadsWithClearance( footprint, layerContainer, curr_layer_id, 0,
+                                  true, renderPlatedPadsAsPlated, false );
 
             // Micro-wave footprints may have items on copper layers
-            AddFPShapesWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0 );
+            addFootprintShapesWithClearance( footprint, layerContainer, curr_layer_id, 0 );
         }
     }
 
@@ -543,20 +543,18 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PLATED PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            AddPadsWithClearanceToContainer( footprint, m_platedpads_container2D_F_Cu, F_Cu,
-                                             0, true, false, true );
+            addPadsWithClearance( footprint, m_platedPadsFront, F_Cu, 0, true, false, true );
 
-            AddPadsWithClearanceToContainer( footprint, m_platedpads_container2D_B_Cu, B_Cu,
-                                             0, true, false, true );
+            addPadsWithClearance( footprint, m_platedPadsBack, B_Cu, 0, true, false, true );
         }
 
-        m_platedpads_container2D_F_Cu->BuildBVH();
-        m_platedpads_container2D_B_Cu->BuildBVH();
+        m_platedPadsFront->BuildBVH();
+        m_platedPadsBack->BuildBVH();
     }
 
     // Add footprints PADs poly contours (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
@@ -583,17 +581,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                footprint->TransformPadsWithClearanceToPolygon( *m_F_Cu_PlatedPads_poly, F_Cu,
+                footprint->TransformPadsWithClearanceToPolygon( *m_frontPlatedPadPolys, F_Cu,
                                                                 0, ARC_HIGH_DEF, ERROR_INSIDE,
                                                                 true, false, true );
 
-                //transformFPShapesToPolygon( footprint, F_Cu, *m_F_Cu_PlatedPads_poly );
-
-                footprint->TransformPadsWithClearanceToPolygon( *m_B_Cu_PlatedPads_poly, B_Cu,
+                footprint->TransformPadsWithClearanceToPolygon( *m_backPlatedPadPolys, B_Cu,
                                                                 0, ARC_HIGH_DEF, ERROR_INSIDE,
                                                                 true, false, true );
-
-                //transformFPShapesToPolygon( footprint, B_Cu, *m_B_Cu_PlatedPads_poly );
             }
         }
     }
@@ -601,9 +595,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // Add graphic item on copper layers to object containers
     for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
+        wxASSERT( m_layerMap.find( curr_layer_id ) != m_layerMap.end() );
 
-        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layerMap[curr_layer_id];
 
         // Add graphic items on copper layers (texts and other graphics)
         for( BOARD_ITEM* item : m_board->Drawings() )
@@ -614,21 +608,21 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                AddShapeWithClearanceToContainer( static_cast<PCB_SHAPE*>( item ), layerContainer,
-                                                  curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<PCB_SHAPE*>( item ), layerContainer,
+                                       curr_layer_id, 0 );
             break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( static_cast<PCB_TEXT*>( item ), layerContainer,
-                                                  curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<PCB_TEXT*>( item ), layerContainer,
+                                       curr_layer_id, 0 );
             break;
 
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( static_cast<DIMENSION_BASE*>( item ),
-                                                  layerContainer, curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<DIMENSION_BASE*>( item ),
+                                       layerContainer, curr_layer_id, 0 );
             break;
 
             default:
@@ -641,7 +635,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Add graphic item on copper layers to poly contours (vertical outlines)
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         for( PCB_LAYER_ID cur_layer_id : layer_id )
         {
@@ -714,10 +708,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     PCB_LAYER_ID layer = zones[areaId].second;
 
-                    auto layerContainer = m_layers_container2D.find( layer );
+                    auto layerContainer = m_layerMap.find( layer );
 
-                    if( layerContainer != m_layers_container2D.end() )
-                        AddSolidAreasShapesToContainer( zone, layerContainer->second, layer );
+                    if( layerContainer != m_layerMap.end() )
+                        addSolidAreasShapes( zone, layerContainer->second, layer );
                 }
 
                 threadsFinished++;
@@ -732,7 +726,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
 
     if( GetFlag( FL_ZONE ) && GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         // Add copper zones
         for( ZONE* zone : m_board->Zones() )
@@ -756,24 +750,24 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         aStatusReporter->Report( _( "Simplifying copper layers polygons" ) );
 
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
+      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) && GetFlag( FL_USE_REALISTIC_MODE ) )
         {
-            if( m_F_Cu_PlatedPads_poly && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
+            if( m_frontPlatedPadPolys && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
             {
                 SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
-                layerPoly_F_Cu->BooleanSubtract( *m_F_Cu_PlatedPads_poly, SHAPE_POLY_SET::PM_FAST );
+                layerPoly_F_Cu->BooleanSubtract( *m_frontPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
 
-                m_F_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+                m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
             }
 
-            if( m_B_Cu_PlatedPads_poly && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
+            if( m_backPlatedPadPolys && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
             {
                 SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
-                layerPoly_B_Cu->BooleanSubtract( *m_B_Cu_PlatedPads_poly, SHAPE_POLY_SET::PM_FAST );
+                layerPoly_B_Cu->BooleanSubtract( *m_backPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
 
-                m_B_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
+                m_backPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
             }
         }
 
@@ -836,15 +830,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     for( PCB_LAYER_ID layer : layer_id )
     {
-        if( m_layers_outer_holes_poly.find( layer ) != m_layers_outer_holes_poly.end() )
+        if( m_layerHoleOdPolys.find( layer ) != m_layerHoleOdPolys.end() )
         {
             // found
-            SHAPE_POLY_SET *polyLayer = m_layers_outer_holes_poly[layer];
+            SHAPE_POLY_SET *polyLayer = m_layerHoleOdPolys[layer];
             polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
 
-            wxASSERT( m_layers_inner_holes_poly.find( layer ) != m_layers_inner_holes_poly.end() );
+            wxASSERT( m_layerHoleIdPolys.find( layer ) != m_layerHoleIdPolys.end() );
 
-            polyLayer = m_layers_inner_holes_poly[layer];
+            polyLayer = m_layerHoleIdPolys[layer];
             polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
         }
     }
@@ -852,10 +846,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // End Build Copper layers
 
     // This will make a union of all added contours
-    m_through_outer_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_through_outer_holes_poly_NPTH.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_through_outer_holes_vias_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_through_outer_ring_holes_poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_throughHoleOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_nonPlatedThroughHoleOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_throughHoleViaOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_throughHoleAnnularRingPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // Build Tech layers
     // Based on:
@@ -890,11 +884,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         const PCB_LAYER_ID curr_layer_id = *seq;
 
-        if( !Is3DLayerEnabled( curr_layer_id ) )
+        if( !Is3dLayerEnabled( curr_layer_id ) )
             continue;
 
         BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
-        m_layers_container2D[curr_layer_id] = layerContainer;
+        m_layerMap[curr_layer_id] = layerContainer;
 
         SHAPE_POLY_SET *layerPoly = new SHAPE_POLY_SET;
         m_layers_poly[curr_layer_id] = layerPoly;
@@ -908,21 +902,21 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                AddShapeWithClearanceToContainer( static_cast<PCB_SHAPE*>( item ), layerContainer,
-                                                  curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<PCB_SHAPE*>( item ), layerContainer,
+                                       curr_layer_id, 0 );
                 break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( static_cast<PCB_TEXT*>( item ), layerContainer,
-                                                  curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<PCB_TEXT*>( item ), layerContainer,
+                                       curr_layer_id, 0 );
                 break;
 
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( static_cast<DIMENSION_BASE*>( item ),
-                                                  layerContainer, curr_layer_id, 0 );
+                addShapeWithClearance( static_cast<DIMENSION_BASE*>( item ), layerContainer,
+                                       curr_layer_id, 0 );
                 break;
 
             default:
@@ -969,16 +963,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
 
-                    buildPadShapeThickOutlineAsSegments( pad, layerContainer, linewidth );
+                    buildPadOutlineAsSegments( pad, layerContainer, linewidth );
                 }
             }
             else
             {
-                AddPadsWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0,
-                                                 false, false, false );
+                addPadsWithClearance( footprint, layerContainer, curr_layer_id, 0,
+                                      false, false, false );
             }
 
-            AddFPShapesWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0 );
+            addFootprintShapesWithClearance( footprint, layerContainer, curr_layer_id, 0 );
         }
 
 
@@ -994,7 +988,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
 
-                    buildPadShapeThickOutlineAsPolygon( pad, *layerPoly, linewidth );
+                    buildPadOutlineAsPolygon( pad, *layerPoly, linewidth );
                 }
             }
             else
@@ -1018,7 +1012,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             for( ZONE* zone : m_board->Zones() )
             {
                 if( zone->IsOnLayer( curr_layer_id ) )
-                    AddSolidAreasShapesToContainer( zone, layerContainer, curr_layer_id );
+                    addSolidAreasShapes( zone, layerContainer, curr_layer_id );
             }
 
             for( ZONE* zone : m_board->Zones() )
@@ -1038,21 +1032,21 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( aStatusReporter )
         aStatusReporter->Report( _( "Build BVH for holes and vias" ) );
 
-    m_through_holes_inner.BuildBVH();
-    m_through_holes_outer.BuildBVH();
-    m_through_holes_outer_ring.BuildBVH();
+    m_throughHoleIds.BuildBVH();
+    m_throughHoleOds.BuildBVH();
+    m_throughHoleAnnularRings.BuildBVH();
 
-    if( !m_layers_holes2D.empty() )
+    if( !m_layerHoleMap.empty() )
     {
-        for( auto& hole : m_layers_holes2D )
+        for( auto& hole : m_layerHoleMap )
             hole.second->BuildBVH();
     }
 
     // We only need the Solder mask to initialize the BVH
     // because..?
-    if( m_layers_container2D[B_Mask] )
-        m_layers_container2D[B_Mask]->BuildBVH();
+    if( m_layerMap[B_Mask] )
+        m_layerMap[B_Mask]->BuildBVH();
 
-    if( m_layers_container2D[F_Mask] )
-        m_layers_container2D[F_Mask]->BuildBVH();
+    if( m_layerMap[F_Mask] )
+        m_layerMap[F_Mask]->BuildBVH();
 }

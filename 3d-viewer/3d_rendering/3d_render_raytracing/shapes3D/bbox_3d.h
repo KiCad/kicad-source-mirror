@@ -30,7 +30,10 @@
 #ifndef _BBOX_3D_H_
 #define _BBOX_3D_H_
 
-#include "../ray.h"
+#include <plugins/3dapi/xv3d_types.h>   // SFVEC2F
+
+class RAY;
+
 
 /**
  * Manage a bounding box defined by two SFVEC3F min max points.

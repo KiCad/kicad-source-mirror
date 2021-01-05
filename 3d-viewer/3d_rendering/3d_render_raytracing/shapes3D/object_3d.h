@@ -30,10 +30,10 @@
 #define _OBJECT_3D_H_
 
 #include "bbox_3d.h"
-#include "../hitinfo.h"
 #include "../material.h"
 
-#include <board_item.h>
+class BOARD_ITEM;
+class HITINFOR;
 
 enum class OBJECT_3D_TYPE
 {
@@ -61,7 +61,7 @@ public:
         m_modelTransparency = aMaterial->GetTransparency(); // Default transparency is from material
     }
 
-    const MATERIAL *GetMaterial() const { return m_material; }
+    const MATERIAL* GetMaterial() const { return m_material; }
     float GetModelTransparency() const { return m_modelTransparency; }
     void SetModelTransparency( float aModelTransparency )
     {

@@ -28,6 +28,7 @@
 
 #include "4pt_polygon_2d.h"
 #include <wx/debug.h>
+#include "../ray.h"
 
 
 POLYGON_4PT_2D::POLYGON_4PT_2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVEC2F& v3,

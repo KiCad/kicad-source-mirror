@@ -28,10 +28,9 @@
 
 
 #include "layer_triangles.h"
+#include "../3d_render_raytracing/ray.h"
 #include <wx/debug.h>   // For the wxASSERT
 #include <mutex>
-#include <thread>
-#include <atomic>
 
 
 TRIANGLE_LIST::TRIANGLE_LIST( unsigned int aNrReservedTriangles, bool aReserveNormals )
@@ -307,8 +306,8 @@ void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const SHAPE_POLY_SET& aPolySet
 
 
 OPENGL_RENDER_LIST::OPENGL_RENDER_LIST( const TRIANGLE_DISPLAY_LIST& aLayerTriangles,
-                                                GLuint aTextureIndexForSegEnds,
-                                                float aZBot, float aZTop )
+                                        GLuint aTextureIndexForSegEnds,
+                                        float aZBot, float aZTop )
 {
     m_zBot = aZBot;
     m_zTop = aZTop;
@@ -613,7 +612,7 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
 {
     wxASSERT( aTriangleContainer != nullptr );
 
-    wxASSERT( (aTriangleContainer->GetVertexSize() % 3) == 0 );
+    wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
 
     // Top and Bot dont have normals array stored in container
     wxASSERT( aTriangleContainer->GetNormalsSize() == 0 );
@@ -676,8 +675,8 @@ GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
 }
 
 
-GLuint OPENGL_RENDER_LIST::generate_top_or_bot_triangles(
-        const TRIANGLE_LIST* aTriangleContainer, bool aIsNormalUp ) const
+GLuint OPENGL_RENDER_LIST::generate_top_or_bot_triangles( const TRIANGLE_LIST* aTriangleContainer,
+                                                          bool aIsNormalUp ) const
 {
     wxASSERT( aTriangleContainer != nullptr );
 

@@ -28,6 +28,7 @@
  */
 
 #include "filled_circle_2d.h"
+#include "../ray.h"
 #include <wx/debug.h>
 
 

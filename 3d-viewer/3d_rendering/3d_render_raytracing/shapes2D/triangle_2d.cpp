@@ -27,13 +27,8 @@
  */
 
 #include "triangle_2d.h"
-#include <map>
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <boost/smart_ptr/shared_array.hpp>
+#include "../ray.h"
 #include <wx/debug.h>
-
-#include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
-                            // also needed on OSX to define __DARWIN__
 #include <geometry/polygon_triangulation.h>
 #include "../../../3d_fastmath.h"
 
@@ -123,17 +118,15 @@ bool TRIANGLE_2D::IsPointInside( const SFVEC2F& aPoint ) const
 }
 
 
-void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET& aPolyList,
-                                              CONTAINER_2D_BASE& aDstContainer,
-                                              float aBiuTo3DunitsScale ,
-                                              const BOARD_ITEM& aBoardItem )
+void ConvertPolygonToTriangles( SHAPE_POLY_SET& aPolyList, CONTAINER_2D_BASE& aDstContainer,
+                                float aBiuTo3dUnitsScale, const BOARD_ITEM& aBoardItem )
 {
     VECTOR2I a;
     VECTOR2I b;
     VECTOR2I c;
 
     aPolyList.CacheTriangulation( false );
-    const double conver_d = (double)aBiuTo3DunitsScale;
+    const double conver_d = (double)aBiuTo3dUnitsScale;
 
     for( unsigned int j = 0; j < aPolyList.TriangulatedPolyCount(); j++ )
     {

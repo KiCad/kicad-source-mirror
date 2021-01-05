@@ -27,6 +27,7 @@
  */
 
 #include "round_segment_3d.h"
+#include "../shapes2D/round_segment_2d.h"
 
 
 ROUND_SEGMENT::ROUND_SEGMENT( const ROUND_SEGMENT_2D& aSeg2D, float aZmin, float aZmax ) :
@@ -229,7 +230,7 @@ bool ROUND_SEGMENT::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     if( delta_End > FLT_EPSILON )
     {
         const float sdelta = sqrtf( delta_End );
-        const float t = (-b_End - sdelta) / a;
+        const float t = ( -b_End - sdelta ) / a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
         if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
@@ -239,8 +240,7 @@ bool ROUND_SEGMENT::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                 aHitInfo.m_tHit = t;
                 aHitInfo.m_HitPoint = aRay.at( t );
 
-                const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x,
-                                                    aHitInfo.m_HitPoint.y );
+                const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x, aHitInfo.m_HitPoint.y );
 
                 aHitInfo.m_HitNormal = SFVEC3F(
                                 (hitPoint2D.x - m_segment.m_End.x) * m_inv_radius,

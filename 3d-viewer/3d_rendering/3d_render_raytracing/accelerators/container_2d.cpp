@@ -27,8 +27,7 @@
  */
 
 #include "container_2d.h"
-#include <vector>
-#include <mutex>
+#include "../ray.h"
 #include <boost/range/algorithm/partition.hpp>
 #include <boost/range/algorithm/nth_element.hpp>
 #include <wx/debug.h>

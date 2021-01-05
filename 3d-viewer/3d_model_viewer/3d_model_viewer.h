@@ -124,7 +124,7 @@ private:
     /// factor to convert the model or any other items to keep it in relation to
     /// the +/-RANGE_SCALE_3D
     /// (it is named same as the board render for better understanding proposes)
-    double m_BiuTo3Dunits;
+    double m_BiuTo3dUnits;
 
     /// Optional cache manager
     S3D_CACHE* m_cacheManager;

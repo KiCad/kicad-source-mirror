@@ -30,6 +30,7 @@
 #include "3d_fastmath.h"
 
 #include "bbox_2d.h"
+#include "../ray.h"
 #include <wx/debug.h>
 
 
@@ -117,7 +118,7 @@ void BBOX_2D::Union( const BBOX_2D& aBBox )
 
 SFVEC2F BBOX_2D::GetCenter() const
 {
-    return (m_max + m_min) * 0.5f;
+    return ( m_max + m_min ) * 0.5f;
 }
 
 
@@ -153,8 +154,8 @@ void BBOX_2D::Scale( float aScale )
     const SFVEC2F scaleV( aScale, aScale );
     const SFVEC2F centerV = GetCenter();
 
-    m_min = (m_min - centerV) * scaleV + centerV;
-    m_max = (m_max - centerV) * scaleV + centerV;
+    m_min = ( m_min - centerV ) * scaleV + centerV;
+    m_max = ( m_max - centerV ) * scaleV + centerV;
 }
 
 
@@ -240,14 +241,14 @@ bool BBOX_2D::Intersect( const RAY2D& aRay, float* t ) const
 {
     wxASSERT( t );
 
-    const float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-    const float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx1 = ( m_min.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
+    const float tx2 = ( m_max.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    const float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
-    const float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty1 = ( m_min.y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
+    const float ty2 = ( m_max.y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );
@@ -306,5 +307,5 @@ bool BBOX_2D::Intersect( const RAY2D& aRay, float* aOutHitT0, float* aOutHitT1 )
     *aOutHitT0 = (tmin > 0.0f)?tmin:0.0f;
     *aOutHitT1 = tmax;
 
-    return (tmax >= 0.0f) && (tmax >= tmin);
+    return ( tmax >= 0.0f ) && ( tmax >= tmin );
 }

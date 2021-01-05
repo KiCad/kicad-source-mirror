@@ -28,7 +28,8 @@
  */
 
 #include "object_3d.h"
-#include <cstdio>
+#include <board_item.h>
+#include "../hitinfo.h"
 #include <map>
 
 

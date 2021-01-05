@@ -30,9 +30,8 @@
 #define _OBJECT_2D_H_
 
 #include "bbox_2d.h"
-#include <cstring>
 
-#include <board_item.h>
+class BOARD_ITEM;
 
 enum class INTERSECTION_RESULT
 {

@@ -94,7 +94,7 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
     m_reload_is_needed = false;
     m_ogl_3dmodel = nullptr;
     m_3d_model = nullptr;
-    m_BiuTo3Dunits = 1.0;
+    m_BiuTo3dUnits = 1.0;
 
     m_glRC = nullptr;
 }
@@ -260,7 +260,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 
         // It convert a model as it was a board, so get the max size dimension of the board
         // and compute the conversion scale
-        m_BiuTo3Dunits =
+        m_BiuTo3dUnits =
                 (double) RANGE_SCALE_3D
                 / ( (double) m_ogl_3dmodel->GetBBox().GetMaxDimension() * UNITS3D_TO_UNITSPCB );
     }
@@ -288,7 +288,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
     {
         glPushMatrix();
 
-        double modelunit_to_3d_units_factor = m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
+        double modelunit_to_3d_units_factor = m_BiuTo3dUnits * UNITS3D_TO_UNITSPCB;
 
         glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor,
                   modelunit_to_3d_units_factor );
@@ -300,8 +300,8 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 
         m_ogl_3dmodel->BeginDrawMulti( true );
 
-        m_ogl_3dmodel->Draw_opaque( false );
-        m_ogl_3dmodel->Draw_transparent( 1.0f, false );
+        m_ogl_3dmodel->DrawOpaque( false );
+        m_ogl_3dmodel->DrawTransparent( 1.0f, false );
 
         m_ogl_3dmodel->EndDrawMulti();
 

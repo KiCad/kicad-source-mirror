@@ -36,6 +36,7 @@
 #include "../3d_math.h"
 #include <wx/debug.h>
 #include <chrono>
+#include <memory>
 
 
 /*
@@ -99,7 +100,7 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
     wxASSERT( a3DModel.m_MaterialsSize > 0 );
     wxASSERT( a3DModel.m_MeshesSize > 0 );
 
-    m_material_mode = aMaterialMode;
+    m_materialMode = aMaterialMode;
 
     if( a3DModel.m_Materials == nullptr || a3DModel.m_Meshes == nullptr
       || a3DModel.m_MaterialsSize == 0 || a3DModel.m_MeshesSize == 0 )
@@ -399,7 +400,7 @@ void MODEL_3D::EndDrawMulti()
 
 
 void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
-                     SFVEC3F aSelectionColor ) const
+                     SFVEC3F& aSelectionColor ) const
 {
     if( aOpacity <= FLT_EPSILON )
         return;
@@ -418,7 +419,7 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
 
     glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( VERTEX ),
                     reinterpret_cast<const void*>(
-                                     m_material_mode == MATERIAL_MODE::CAD_MODE
+                                     m_materialMode == MATERIAL_MODE::CAD_MODE
                                      ? offsetof( VERTEX, m_cad_color )
                                      : offsetof( VERTEX, m_color ) ) );
 
@@ -435,7 +436,7 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
         if( ( mat.IsTransparent() != aTransparent ) && ( aOpacity >= 1.0f ) )
             continue;
 
-        switch( m_material_mode )
+        switch( m_materialMode )
         {
         case MATERIAL_MODE::NORMAL:
             OGL_SetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
@@ -471,7 +472,7 @@ MODEL_3D::~MODEL_3D()
 }
 
 
-void MODEL_3D::Draw_bbox() const
+void MODEL_3D::DrawBbox() const
 {
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bbox" );
@@ -490,7 +491,7 @@ void MODEL_3D::Draw_bbox() const
 }
 
 
-void MODEL_3D::Draw_bboxes() const
+void MODEL_3D::DrawBboxes() const
 {
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bboxes" );

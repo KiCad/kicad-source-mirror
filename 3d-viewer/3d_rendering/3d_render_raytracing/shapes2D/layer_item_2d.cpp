@@ -24,10 +24,10 @@
 
 /**
  * @file layer_item_2d.cpp
- * @brief
  */
 
 #include "layer_item_2d.h"
+#include "../ray.h"
 #include "3d_fastmath.h"
 #include <wx/debug.h>
 

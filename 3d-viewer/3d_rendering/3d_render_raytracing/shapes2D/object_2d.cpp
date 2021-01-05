@@ -27,13 +27,13 @@
  */
 
 #include "object_2d.h"
-#include <cstdio>
-
+#include <wx/log.h>
+#include <map>
 
 OBJECT_2D_STATS *OBJECT_2D_STATS::s_instance = 0;
 
 
-OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM &aBoardItem )
+OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM& aBoardItem )
     : m_boardItem(aBoardItem)
 {
     m_obj_type = aObjType;

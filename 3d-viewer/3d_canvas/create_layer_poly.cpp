@@ -34,9 +34,8 @@
 #include <footprint.h>
 
 
-void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const PAD* aPad,
-                                                        SHAPE_POLY_SET& aCornerBuffer,
-                                                        int aWidth ) const
+void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
+                                              int aWidth ) const
 {
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {

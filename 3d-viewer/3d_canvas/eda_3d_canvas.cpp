@@ -144,7 +144,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
     m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     wxASSERT( a3DCachePointer != nullptr );
-    m_boardAdapter.Set3DCacheManager( a3DCachePointer );
+    m_boardAdapter.Set3dCacheManager( a3DCachePointer );
 
     const wxEventType events[] =
     {
@@ -298,7 +298,7 @@ void EDA_3D_CANVAS::GetScreenshot( wxImage& aDstImage )
 void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
 {
     if( aCachePointer != nullptr )
-        m_boardAdapter.Set3DCacheManager( aCachePointer );
+        m_boardAdapter.Set3dCacheManager( aCachePointer );
 
     if( aBoard != nullptr )
         m_boardAdapter.SetBoard( aBoard );
@@ -439,11 +439,11 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         m_3d_render = m_3d_render_ogl_legacy;
         m_render_raytracing_was_requested = false;
-        m_boardAdapter.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL_LEGACY );
     }
 
     // Check if a raytacing was requested and need to switch to raytracing mode
-    if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
     {
         const bool was_camera_changed = m_camera.ParametersChanged();
 
@@ -492,7 +492,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
             bool reloadRaytracingForIntersectionCalculations = false;
 
-            if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            if( ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
               && m_3d_render_ogl_legacy->IsReloadRequestPending() )
             {
                 reloadRaytracingForIntersectionCalculations = true;
@@ -712,7 +712,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
     m_camera.SetCurMousePosition( eventPosition );
 
     if( !event.Dragging() &&
-        ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) )
+        ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         STATUSBAR_REPORTER reporter( m_parentStatusBar,
                                      static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
@@ -791,7 +791,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         else
         {
             if( ( m_currentIntersectedBoardItem != nullptr ) &&
-                ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) )
+                ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY ) )
             {
                 m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( nullptr );
                 Request_refresh();
@@ -951,7 +951,7 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
     float hit_t;
 
     // Test it with the board bounding box
-    if( m_boardAdapter.GetBBox3DU().Intersect( mouseRay, &hit_t ) )
+    if( m_boardAdapter.GetBBox().Intersect( mouseRay, &hit_t ) )
     {
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
@@ -1126,7 +1126,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-    switch( m_boardAdapter.RenderEngineGet() )
+    switch( m_boardAdapter.GetRenderEngine() )
     {
     case RENDER_ENGINE::OPENGL_LEGACY: m_3d_render = m_3d_render_ogl_legacy; break;
     case RENDER_ENGINE::RAYTRACING:    m_3d_render = m_3d_render_raytracing; break;

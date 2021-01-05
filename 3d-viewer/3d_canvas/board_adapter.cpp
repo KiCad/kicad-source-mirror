@@ -58,15 +58,15 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 {
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
-    m_3D_grid_type     = GRID3D_TYPE::NONE;
-    m_antialiasing_mode = ANTIALIASING_MODE::AA_8X;
+    m_gridType     = GRID3D_TYPE::NONE;
+    m_antiAliasingMode = ANTIALIASING_MODE::AA_8X;
     m_drawFlags.resize( FL_LAST, false );
 
     if( PgmOrNull() )
         m_colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    m_render_engine = RENDER_ENGINE::OPENGL_LEGACY;
-    m_material_mode = MATERIAL_MODE::NORMAL;
+    m_renderEngine = RENDER_ENGINE::OPENGL_LEGACY;
+    m_materialMode = MATERIAL_MODE::NORMAL;
 
     m_boardPos = wxPoint();
     m_boardSize = wxSize();
@@ -74,9 +74,9 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_boardBoundingBox.Reset();
 
-    m_through_holes_inner.Clear();
-    m_through_holes_outer.Clear();
-    m_through_holes_outer_ring.Clear();
+    m_throughHoleIds.Clear();
+    m_throughHoleOds.Clear();
+    m_throughHoleAnnularRings.Clear();
 
     m_copperLayersCount = -1;
     m_epoxyThickness3DU = 0.0f;
@@ -84,12 +84,12 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_nonCopperLayerThickness3DU = 0.0f;
     m_biuTo3Dunits = 1.0;
 
-    m_stats_nr_tracks = 0;
-    m_stats_nr_vias = 0;
-    m_stats_via_med_hole_diameter = 0.0f;
-    m_stats_nr_holes = 0;
-    m_stats_hole_med_diameter = 0.0f;
-    m_stats_track_med_width = 0.0f;
+    m_trackCount = 0;
+    m_viaCount = 0;
+    m_averageViaHoleDiameter = 0.0f;
+    m_holeCount = 0;
+    m_averageHoleDiameter = 0.0f;
+    m_averageTrackWidth = 0.0f;
 
     m_calc_seg_min_factor3DU = 0.0f;
     m_calc_seg_max_factor3DU = 0.0f;
@@ -124,11 +124,11 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_SilkScreenColorBot = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_CopperColor        = SFVEC4F( 0.75, 0.61, 0.23, 1.0 );
 
-    m_platedpads_container2D_F_Cu = nullptr;
-    m_platedpads_container2D_B_Cu = nullptr;
+    m_platedPadsFront = nullptr;
+    m_platedPadsBack = nullptr;
 
-    m_F_Cu_PlatedPads_poly = nullptr;
-    m_B_Cu_PlatedPads_poly = nullptr;
+    m_frontPlatedPadPolys = nullptr;
+    m_backPlatedPadPolys = nullptr;
 
     // Avoid raytracing options not initialized:
     m_raytrace_nrsamples_shadows = 0;
@@ -150,7 +150,7 @@ BOARD_ADAPTER::~BOARD_ADAPTER()
 }
 
 
-bool BOARD_ADAPTER::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
+bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
@@ -241,7 +241,7 @@ void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
 }
 
 
-bool BOARD_ADAPTER::ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const
+bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
     if( aFPAttributes & FP_SMD )
         return GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT );
@@ -257,21 +257,21 @@ bool BOARD_ADAPTER::ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
 
-int BOARD_ADAPTER::GetHolePlatingThicknessBIU() const noexcept
+int BOARD_ADAPTER::GetHolePlatingThickness() const noexcept
 {
     return m_board->GetDesignSettings().GetHolePlatingThickness();
 }
 
 
-unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( float aDiameter3DU ) const
+unsigned int BOARD_ADAPTER::GetCircleSegmentCount( float aDiameter3DU ) const
 {
     wxASSERT( aDiameter3DU > 0.0f );
 
-    return GetNrSegmentsCircle( (int)( aDiameter3DU / m_biuTo3Dunits ) );
+    return GetCircleSegmentCount( (int)( aDiameter3DU / m_biuTo3Dunits ) );
 }
 
 
-unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( int aDiameterBIU ) const
+unsigned int BOARD_ADAPTER::GetCircleSegmentCount( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
@@ -500,7 +500,7 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 }
 
 
-float BOARD_ADAPTER::GetModulesZcoord3DIU( bool aIsFlipped ) const
+float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 {
     if( aIsFlipped )
     {
