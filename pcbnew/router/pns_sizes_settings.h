@@ -39,13 +39,14 @@ class SIZES_SETTINGS
 public:
     SIZES_SETTINGS() :
             m_trackWidth( 155000 ),
+            m_viaType( VIATYPE::THROUGH ),
+            m_viaDiameter( 600000 ),
+            m_viaDrill( 250000 ),
             m_diffPairWidth( 125000 ),
             m_diffPairGap( 180000 ),
             m_diffPairViaGap( 180000 ),
-            m_viaDiameter( 600000 ),
-            m_viaDrill( 250000 ),
             m_diffPairViaGapSameAsTraceGap( true ),
-            m_viaType( VIATYPE::THROUGH )
+            m_holeToHole( 0 )
     {};
 
     ~SIZES_SETTINGS() {};
@@ -61,10 +62,9 @@ public:
 
     int DiffPairViaGap() const
     {
-        if( m_diffPairViaGapSameAsTraceGap )
-            return m_diffPairGap;
-        else
-            return m_diffPairViaGap;
+        int netClassGap = m_diffPairViaGapSameAsTraceGap ? m_diffPairGap : m_diffPairViaGap;
+
+        return std::max( netClassGap, m_holeToHole - m_viaDiameter );
     }
 
     bool DiffPairViaGapSameAsTraceGap() const { return m_diffPairViaGapSameAsTraceGap; }
@@ -91,19 +91,25 @@ public:
     int GetLayerTop() const;
     int GetLayerBottom() const;
 
+    void SetHoleToHole( int aHoleToHole ) { m_holeToHole = aHoleToHole; }
+    int GetHoleToHole() const { return m_holeToHole; }
+
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
     VIATYPE ViaType() const { return m_viaType; }
 
 private:
     int     m_trackWidth;
+
+    VIATYPE m_viaType;
+    int     m_viaDiameter;
+    int     m_viaDrill;
+
     int     m_diffPairWidth;
     int     m_diffPairGap;
     int     m_diffPairViaGap;
-    int     m_viaDiameter;
-    int     m_viaDrill;
     bool    m_diffPairViaGapSameAsTraceGap;
 
-    VIATYPE m_viaType;
+    int     m_holeToHole;
 
     std::map<int, int> m_layerPairs;
 };

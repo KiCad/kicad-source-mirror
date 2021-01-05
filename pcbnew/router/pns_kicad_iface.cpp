@@ -498,6 +498,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetDiffPairGap( diffPairGap );
     aSizes.SetDiffPairViaGap( diffPairViaGap );
 
+    aSizes.SetHoleToHole( bds.m_HoleToHoleMin );
+
     aSizes.ClearLayerPairs();
 
     return true;

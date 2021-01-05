@@ -188,17 +188,12 @@ class DP_GATEWAYS
 {
     public:
         DP_GATEWAYS( int aGap ):
-            m_gap( aGap ), m_viaGap( aGap )
+            m_gap( aGap ),
+            m_viaGap( aGap )
         {
             // Do not leave unitialized members, and keep static analyser quiet:
             m_viaDiameter = 0;
             m_fitVias = true;
-        }
-
-        void SetGap( int aGap )
-        {
-            m_gap = aGap;
-            m_viaGap = aGap;
         }
 
         void Clear()
@@ -210,7 +205,8 @@ class DP_GATEWAYS
         {
             m_fitVias = aEnable;
             m_viaDiameter = aDiameter;
-            if(aViaGap < 0)
+
+            if( aViaGap < 0 )
                 m_viaGap = m_gap;
             else
                 m_viaGap = aViaGap;

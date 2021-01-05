@@ -535,7 +535,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
 
 int DIFF_PAIR_PLACER::viaGap() const
 {
-    return m_sizes.DiffPairViaGap();
+    return m_sizes.DiffPairViaGap() + m_sizes.DiffPairWidth();
 }
 
 
