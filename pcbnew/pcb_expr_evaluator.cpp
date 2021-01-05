@@ -147,20 +147,47 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    FOOTPRINT*        footprint = nullptr;
+    PCB_EXPR_VAR_REF*      vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*            item = vref ? vref->GetObject( aCtx ) : nullptr;
+    EDA_RECT               itemBBox;
+    std::shared_ptr<SHAPE> shape;
 
     if( !item )
         return;
 
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
+    else
+        itemBBox = item->GetBoundingBox();
+
+    auto insideFootprint =
+            [&]( FOOTPRINT* footprint ) -> bool
+            {
+                SHAPE_POLY_SET footprintCourtyard;
+
+                if( footprint->IsFlipped() )
+                    footprintCourtyard = footprint->GetPolyCourtyardBack();
+                else
+                    footprintCourtyard = footprint->GetPolyCourtyardFront();
+
+                if( !footprint->GetBoundingBox().Intersects( itemBBox ) )
+                    return false;
+
+                if( !shape )
+                    shape = item->GetEffectiveShape( context->GetLayer() );
+
+                return footprintCourtyard.Collide( shape.get() );
+            };
+
     if( arg->AsString() == "A" )
     {
-        footprint = dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) );
+        if( insideFootprint( dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) ) ) )
+            result->Set( 1.0 );
     }
     else if( arg->AsString() == "B" )
     {
-        footprint = dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) );
+        if( insideFootprint( dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) ) ) )
+            result->Set( 1.0 );
     }
     else
     {
@@ -168,29 +195,13 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
         {
             if( candidate->GetReference().Matches( arg->AsString() ) )
             {
-                footprint = candidate;
-                break;
+                if( insideFootprint( candidate ) )
+                {
+                    result->Set( 1.0 );
+                    return;
+                }
             }
         }
-    }
-
-    if( footprint )
-    {
-        SHAPE_POLY_SET footprintCourtyard;
-
-        if( footprint->IsFlipped() )
-            footprintCourtyard = footprint->GetPolyCourtyardBack();
-        else
-            footprintCourtyard = footprint->GetPolyCourtyardFront();
-
-        SHAPE_POLY_SET testPoly;
-
-        item->TransformShapeWithClearanceToPolygon( testPoly, context->GetLayer(), 0,
-                                                    ARC_LOW_DEF, ERROR_INSIDE );
-        testPoly.BooleanIntersection( footprintCourtyard, SHAPE_POLY_SET::PM_FAST );
-
-        if( testPoly.OutlineCount() )
-            result->Set( 1.0 );
     }
 }
 
@@ -211,9 +222,10 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
-    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    EDA_RECT          itemBBox;
+    PCB_EXPR_VAR_REF*      vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*            item = vref ? vref->GetObject( aCtx ) : nullptr;
+    EDA_RECT               itemBBox;
+    std::shared_ptr<SHAPE> shape;
 
     if( !item )
         return;
@@ -312,7 +324,8 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 }
                 else
                 {
-                    std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( context->GetLayer() );
+                    if( !shape )
+                        shape = item->GetEffectiveShape( context->GetLayer() );
 
                     return zone->Outline()->Collide( shape.get() );
                 }
