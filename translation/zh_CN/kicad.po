@@ -2247,7 +2247,7 @@ msgstr "选择一个不同的路径"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "所选路径不包含有效的KiCad设置！"
+msgstr "所选路径不包含有效的 KiCad 设置！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
