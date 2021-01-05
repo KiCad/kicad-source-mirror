@@ -990,7 +990,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // TODO: this could be optimized if the pad painter is changed
                     // See https://gitlab.com/kicad/code/kicad/-/issues/6912
-                    return true;
+                    return !!pad;
                 }
 
                 return false;
