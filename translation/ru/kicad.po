@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"PO-Revision-Date: 2021-01-06 18:00+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -2964,7 +2964,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr "Дней"
+msgstr "дней"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3009,7 +3009,7 @@ msgstr "Качественное сглаживание"
 
 #: common/dialogs/panel_common_settings_base.cpp:89
 msgid "3D cache file duration:"
-msgstr "Размер файла кэша 3D:"
+msgstr "Хранить файлы кэша 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
