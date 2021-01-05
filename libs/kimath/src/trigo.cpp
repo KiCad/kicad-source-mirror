@@ -396,7 +396,7 @@ const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const
     {
         if( aStart == aEnd )
         {
-            // This is a special case for a 360° arc.  In this case, the center is halfway between
+            // This is a special case for a 360 degrees arc.  In this case, the center is halfway between
             // the midpoint and either end point
             center.x = ( aStart.x + aMid.x ) / 2.0;
             center.y = ( aStart.y + aMid.y ) / 2.0 ;

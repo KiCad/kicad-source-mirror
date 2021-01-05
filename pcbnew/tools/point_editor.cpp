@@ -502,7 +502,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 break;
             }
 
-            // The alternative constraint limits to 45°
+            // The alternative constraint limits to 45 degrees
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint )

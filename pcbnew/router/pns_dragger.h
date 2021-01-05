@@ -141,7 +141,7 @@ private:
     ///< Contains the list of items that are currently modified by the dragger
     ITEM_SET               m_draggedItems;
 
-    ///< If true, moves the connection lines without maintaining 45° corners
+    ///< If true, moves the connection lines without maintaining 45 degrees corners
     bool                   m_freeAngleMode;
 };
 
