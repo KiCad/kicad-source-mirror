@@ -65,7 +65,6 @@ public:
         ACTION_MENU( true )
     {
         SetTitle( _( "Select" ) );
-        SetIcon( options_generic_xpm );
 
         Add( PCB_ACTIONS::filterSelection );
 

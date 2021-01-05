@@ -246,6 +246,7 @@ set( BMAPS_MID
     file_pos
     file_svg
     fill_zone
+    filter
     find
     find_replace
     flag
