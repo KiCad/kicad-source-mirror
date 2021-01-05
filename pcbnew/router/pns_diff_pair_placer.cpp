@@ -207,7 +207,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent,
 
         SHOVE::SHOVE_STATUS sh1;
 
-        sh1 = shove.ProcessSingleLine( postWalk, preShove, postShove );
+        sh1 = shove.ShoveObstacleLine( postWalk, preShove, postShove );
 
         if( sh1 != SHOVE::SH_OK )
             return false;

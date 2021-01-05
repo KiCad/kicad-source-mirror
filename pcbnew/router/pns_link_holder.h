@@ -44,10 +44,8 @@ public:
 
     ///> Returns the list of links from the owning node that constitute this
     ///> line (or NULL if the line is not linked)
-    LINKS& Links()
-    {
-        return m_links;
-    }
+    LINKS& Links() { return m_links; }
+    const LINKS& Links() const { return m_links; }
 
     bool IsLinked() const
     {

@@ -70,7 +70,7 @@ public:
     SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
 
     SHOVE_STATUS ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere, VIA_HANDLE& aNewVia );
-    SHOVE_STATUS ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
+    SHOVE_STATUS ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine, LINE& aResultLine );
 
     void ForceClearance ( bool aEnabled, int aClearance )
     {
@@ -114,15 +114,17 @@ private:
         bool m_locked;
     };
 
-    SHOVE_STATUS processHullSet( LINE& aCurrent, LINE& aObstacle,
-                                 LINE& aShoved, const HULL_SET& hulls );
+    SHOVE_STATUS shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
+                                     LINE& aResultLine, const HULL_SET& aHulls );
 
     NODE* reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia );
 
     bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia );
 
-    SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
-    bool checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, const LINE& aShoved ) const;
+    SHOVE_STATUS shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLine,
+                                       LINE& aResultLine );
+    bool checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine,
+                              const LINE& aShovedLine ) const;
 
     SHOVE_STATUS onCollidingArc( LINE& aCurrent, ARC* aObstacleArc );
     SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle );

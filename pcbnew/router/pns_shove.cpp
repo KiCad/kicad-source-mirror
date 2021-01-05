@@ -116,19 +116,20 @@ LINE SHOVE::assembleLine( const LINKED_ITEM* aSeg, int* aIndex )
     return m_currentNode->AssembleLine( const_cast<LINKED_ITEM*>( aSeg ), aIndex, true );
 }
 
-// A dumb function that checks if the shoved line is shoved the right way, e.g.
-// visually "outwards" of the line/via applying pressure on it. Unfortunately there's no
-// mathematical concept of orientation of an open curve, so we use some primitive heuristics:
-// if the shoved line wraps around the start of the "pusher", it's likely shoved in wrong direction.
+// A dumb function that checks if the shoved line is shoved the right way, e.g. visually
+// "outwards" of the line/via applying pressure on it. Unfortunately there's no mathematical
+// concept of orientation of an open curve, so we use some primitive heuristics: if the shoved
+// line wraps around the start of the "pusher", it's likely shoved in wrong direction.
 
 // Update: there's no concept of an orientation of an open curve, but nonetheless Tom's dumb as.... (censored)
 // Two open curves put together make a closed polygon... Tom should learn high school geometry!
 
-bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, const LINE& aShoved ) const
+bool SHOVE::checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine,
+                                 const LINE& aShovedLine ) const
 {
-    SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( aCurrent.CPoint(0) );
-    checker.AddPolyline( aObstacle.CLine() );
-    checker.AddPolyline( aShoved.CLine().Reverse() );
+    SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( aCurLine.CPoint( 0) );
+    checker.AddPolyline( aObstacleLine.CLine() );
+    checker.AddPolyline( aShovedLine.CLine().Reverse() );
 
     bool inside = checker.IsInside();
 
@@ -136,22 +137,33 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, con
 }
 
 
-SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
+/*
+ * Push aObstacleLine away from aCurLine's via by the clearance distance, returning the result
+ * in aResultLine.
+ *
+ * Must be called only when aCurLine itself is on another layer (or has no segments) so that it
+ * can be ignored.
+ */
+SHOVE::SHOVE_STATUS SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLine,
+                                                 LINE& aResultLine )
 {
-    int clearance = getClearance( &aCurrent, &aObstacle );
-    int holeClearance = getHoleClearance( &aCurrent.Via(), &aObstacle );
+    // Build a hull for aCurLine's via and re-walk aObstacleLine around it.
 
-    if( holeClearance + aCurrent.Via().Drill() / 2 > clearance + aCurrent.Via().Diameter() / 2 )
-        clearance = holeClearance + aCurrent.Via().Drill() / 2 - aCurrent.Via().Diameter() / 2;
+    int obstacleLineWidth = aObstacleLine.Width();
+    int clearance = getClearance( &aCurLine, &aObstacleLine );
+    int holeClearance = getHoleClearance( &aCurLine.Via(), &aObstacleLine );
 
-    const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width(), aCurrent.Layer() );
+    if( holeClearance + aCurLine.Via().Drill() / 2 > clearance + aCurLine.Via().Diameter() / 2 )
+        clearance = holeClearance + aCurLine.Via().Drill() / 2 - aCurLine.Via().Diameter() / 2;
+
+    SHAPE_LINE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
     SHAPE_LINE_CHAIN path_cw;
     SHAPE_LINE_CHAIN path_ccw;
 
-    if( ! aObstacle.Walkaround( hull, path_cw, true ) )
+    if( ! aObstacleLine.Walkaround( hull, path_cw, true ) )
         return SH_INCOMPLETE;
 
-    if( ! aObstacle.Walkaround( hull, path_ccw, false ) )
+    if( ! aObstacleLine.Walkaround( hull, path_ccw, false ) )
         return SH_INCOMPLETE;
 
     const SHAPE_LINE_CHAIN& shortest = path_ccw.Length() < path_cw.Length() ? path_ccw : path_cw;
@@ -159,15 +171,15 @@ SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, L
     if( shortest.PointCount() < 2 )
         return SH_INCOMPLETE;
 
-    if( aObstacle.CPoint( -1 ) != shortest.CPoint( -1 ) )
+    if( aObstacleLine.CPoint( -1 ) != shortest.CPoint( -1 ) )
         return SH_INCOMPLETE;
 
-    if( aObstacle.CPoint( 0 ) != shortest.CPoint( 0 ) )
+    if( aObstacleLine.CPoint( 0 ) != shortest.CPoint( 0 ) )
         return SH_INCOMPLETE;
 
-    aShoved.SetShape( shortest );
+    aResultLine.SetShape( shortest );
 
-    if( aShoved.Collide( &aCurrent, m_currentNode ) )
+    if( aResultLine.Collide( &aCurLine, m_currentNode ) )
         return SH_INCOMPLETE;
 
     return SH_OK;
@@ -175,12 +187,12 @@ SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, L
 
 
 /*
- * TODO describe....
+ * Re-walk aObstacleLine around the given set of hulls, returning the result in aResultLine.
  */
-SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
-                                                   LINE& aShoved, const HULL_SET& aHulls )
+SHOVE::SHOVE_STATUS SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
+                                               LINE& aResultLine, const HULL_SET& aHulls )
 {
-    const SHAPE_LINE_CHAIN& obs = aObstacle.CLine();
+    const SHAPE_LINE_CHAIN& obs = aObstacleLine.CLine();
 
     int attempt;
 
@@ -191,7 +203,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
         int vFirst = -1, vLast = -1;
 
         SHAPE_LINE_CHAIN path;
-        LINE l( aObstacle );
+        LINE l( aObstacleLine );
 
         for( int i = 0; i < (int) aHulls.size(); i++ )
         {
@@ -223,7 +235,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             }
         }
 
-        if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( aObstacle.CLine() ) )
+        if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( aObstacleLine.CLine() ) )
         {
             wxLogTrace( "PNS", "attempt %d fail vfirst-last", attempt );
             continue;
@@ -235,10 +247,10 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             continue;
         }
 
-        if( !checkBumpDirection( aCurrent, aObstacle, l ) )
+        if( !checkShoveDirection( aCurLine, aObstacleLine, l ) )
         {
             wxLogTrace( "PNS", "attempt %d fail direction-check", attempt );
-            aShoved.SetShape( l.CLine() );
+            aResultLine.SetShape( l.CLine() );
 
             continue;
         }
@@ -249,7 +261,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             continue;
         }
 
-        bool colliding = l.Collide( &aCurrent, m_currentNode );
+        bool colliding = l.Collide( &aCurLine, m_currentNode );
 
 #ifdef DEBUG
         char str[128];
@@ -257,9 +269,9 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
         Dbg()->AddLine( l.CLine(), 3, 20000, str );
 #endif
 
-        if( ( aCurrent.Marker() & MK_HEAD ) && !colliding )
+        if(( aCurLine.Marker() & MK_HEAD ) && !colliding )
         {
-            JOINT* jtStart = m_currentNode->FindJoint( aCurrent.CPoint( 0 ), &aCurrent );
+            JOINT* jtStart = m_currentNode->FindJoint( aCurLine.CPoint( 0 ), &aCurLine );
 
             for( ITEM* item : jtStart->LinkList() )
             {
@@ -274,7 +286,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             continue;
         }
 
-        aShoved.SetShape( l.CLine() );
+        aResultLine.SetShape( l.CLine() );
 
         return SH_OK;
     }
@@ -284,15 +296,17 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
 
 
 /*
- * TODO describe....
+ * Push aObstacleLine line away from aCurLine by the clearance distance, and return the result in
+ * aResultLine.
  */
-SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
+SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
+                                              LINE& aResultLine )
 {
-    aShoved.ClearLinks();
+    aResultLine.ClearLinks();
 
     bool obstacleIsHead = false;
 
-    for( LINKED_ITEM* s : aObstacle.Links() )
+    for( LINKED_ITEM* s : aObstacleLine.Links() )
     {
         if( s->Marker() & MK_HEAD )
         {
@@ -302,62 +316,65 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
     }
 
     SHOVE_STATUS rv;
+    bool viaOnEnd = aCurLine.EndsWithVia();
 
-    bool viaOnEnd = aCurrent.EndsWithVia();
-
-    if( viaOnEnd && ( !aCurrent.LayersOverlap( &aObstacle ) || aCurrent.SegmentCount() == 0 ) )
+    if( viaOnEnd && ( !aCurLine.LayersOverlap( &aObstacleLine ) || aCurLine.SegmentCount() == 0 ) )
     {
-        rv = walkaroundLoneVia( aCurrent, aObstacle, aShoved );
+        // Shove aObstacleLine to the hull of aCurLine's via.
+
+        rv = shoveLineFromLoneVia( aCurLine, aObstacleLine, aResultLine );
     }
     else
     {
-        int w = aObstacle.Width();
-        int n_segs = aCurrent.SegmentCount();
+        // Build a set of hulls around the segments of aCurLine.  Hulls are at the clearance
+        // distance + aObstacleLine's linewidth so that when re-walking aObstacleLine along the
+        // hull it will be at the appropriate clearance.
 
-        int clearance = getClearance( &aCurrent, &aObstacle ) + 1;
+        int      obstacleLineWidth = aObstacleLine.Width();
+        int      clearance = getClearance( &aCurLine, &aObstacleLine ) + 1;
+        int      currentLineSegmentCount = aCurLine.SegmentCount();
+        HULL_SET hulls;
+
+        hulls.reserve( currentLineSegmentCount + 1 );
 
 #ifdef DEBUG
         Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d",
-                                          aCurrent.Net(),
-                                          aObstacle.Net(),
+                                          aCurLine.Net(),
+                                          aObstacleLine.Net(),
                                           clearance ) );
 #endif
 
-        HULL_SET hulls;
-
-        hulls.reserve( n_segs + 1 );
-
-        for( int i = 0; i < n_segs; i++ )
+        for( int i = 0; i < currentLineSegmentCount; i++ )
         {
-            SEGMENT seg( aCurrent, aCurrent.CSegment( i ) );
-            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, w, aObstacle.Layer() );
+            SEGMENT seg( aCurLine, aCurLine.CSegment( i ) );
+            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, obstacleLineWidth, aObstacleLine.Layer() );
 
             hulls.push_back( hull );
         }
 
         if( viaOnEnd )
         {
-            const VIA& via = aCurrent.Via();
-            int viaClearance = getClearance( &via, &aObstacle );
-            int holeClearance = getHoleClearance( &via, &aObstacle );
+            const VIA& via = aCurLine.Via();
+            int viaClearance = getClearance( &via, &aObstacleLine );
+            int holeClearance = getHoleClearance( &via, &aObstacleLine );
 
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
                 viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
-            hulls.push_back( aCurrent.Via().Hull( viaClearance, w ) );
+            hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth ) );
         }
 
 #ifdef DEBUG
         char str[128];
         sprintf( str, "current-cl-%d", clearance );
-        Dbg()->AddLine( aCurrent.CLine(), 5, 20000, str );
+        Dbg()->AddLine( aCurLine.CLine(), 5, 20000, str );
 #endif
 
-        rv = processHullSet( aCurrent, aObstacle, aShoved, hulls );
+        rv = shoveLineToHullSet( aCurLine, aObstacleLine, aResultLine, hulls );
     }
 
     if( obstacleIsHead )
-        aShoved.Mark( aShoved.Marker() | MK_HEAD );
+        aResultLine.Mark( aResultLine.Marker() | MK_HEAD );
 
     return rv;
 }
@@ -376,7 +393,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
     if( obstacleLine.HasLockedSegments() )
         return SH_TRY_WALK;
 
-    SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
+    SHOVE_STATUS rv = ShoveObstacleLine( aCurrent, obstacleLine, shovedLine );
 
     const double extensionWalkThreshold = 1.0;
 
@@ -437,7 +454,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingArc( LINE& aCurrent, ARC* aObstacleArc )
     if( obstacleLine.HasLockedSegments() )
         return SH_TRY_WALK;
 
-    SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
+    SHOVE_STATUS rv = ShoveObstacleLine( aCurrent, obstacleLine, shovedLine );
 
     const double extensionWalkThreshold = 1.0;
 
@@ -492,7 +509,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
 {
     LINE shovedLine( aObstacle );
 
-    SHOVE_STATUS rv = ProcessSingleLine( aCurrent, aObstacle, shovedLine );
+    SHOVE_STATUS rv = ShoveObstacleLine( aCurrent, aObstacle, shovedLine );
 
     #if 0
         m_logger.NewGroup( "on-colliding-line", m_iter );
@@ -626,7 +643,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
             {
                 LINE dummy( lastLine );
 
-                if( ProcessSingleLine( walkaroundLine, lastLine, dummy ) == SH_OK )
+                if( ShoveObstacleLine( walkaroundLine, lastLine, dummy ) == SH_OK )
                 {
                     success = true;
                     break;
@@ -932,7 +949,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
             head.AppendVia( *aObstacleVia );
 
-            SHOVE_STATUS st = ProcessSingleLine( head, cur, shoved );
+            SHOVE_STATUS st = ShoveObstacleLine( head, cur, shoved );
 
             if( st != SH_OK )
             {
@@ -964,7 +981,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
         head.AppendVia( *aObstacleVia );
         head.ClearLinks();
 
-        SHOVE_STATUS st = ProcessSingleLine( head, aCurrent, shoved );
+        SHOVE_STATUS st = ShoveObstacleLine( head, aCurrent, shoved );
 
         if( st != SH_OK )
             return st;
