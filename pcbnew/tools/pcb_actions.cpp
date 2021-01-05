@@ -635,7 +635,7 @@ TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0, "",
         _( "Drill/Place File Origin" ),
         _( "Place origin point for drill files and footprint position files" ),
-        pcb_offset_xpm, AF_ACTIVATE );
+        set_origin_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL,

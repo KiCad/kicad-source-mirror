@@ -365,7 +365,6 @@ set( BMAPS_MID
     pagelayout_special_view_mode
     part_properties
     paste
-    pcb_offset
     pin2pin
     pin_size_to
     pin_show_etype
@@ -432,6 +431,7 @@ set( BMAPS_MID
     sim_add_signal
     sim_settings
     search_tree
+    set_origin
     setcolor_3d_bg
     setcolor_silkscreen
     setcolor_soldermask
