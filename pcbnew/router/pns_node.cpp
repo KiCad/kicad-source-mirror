@@ -940,7 +940,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
             {
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
-                pl.Line().Append( *sa );
+                pl.Line().Append( p == sa->GetP0() ? *sa : sa->Reversed() );
             }
 
             pl.Link( li );
