@@ -813,7 +813,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
                 {
                     if( implicit && ( a_is_non_copper || b_is_non_copper ) )
                     {
-                        REPORT( _( "Board and netclass clearances apply only between copper items." ) );
+                        REPORT( _( "Board and netclass clearances apply only between copper "
+                                   "items." ) );
                         return true;
                     }
                 }
@@ -871,14 +872,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
                         }
                         else if( c->parentRule )
                         {
-                            REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                            REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule "
+                                                         "ignored." ),
                                                       EscapeHTML( c->parentRule->m_LayerSource ) ) )
-                            REPORT( "Rule ignored." )
                         }
                         else
                         {
-                            REPORT( _( "Rule layer not matched." ) )
-                            REPORT( "Rule ignored." )
+                            REPORT( _( "Rule layer not matched; rule ignored." ) )
                         }
 
                         return false;
@@ -893,14 +893,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
                     }
                     else if( c->parentRule )
                     {
-                        REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
+                        REPORT( wxString::Format( _( "Rule layer '%s' not matched; rule ignored." ),
                                                   EscapeHTML( c->parentRule->m_LayerSource ) ) )
-                        REPORT( "Rule ignored." )
                     }
                     else
                     {
-                        REPORT( _( "Rule layer not matched." ) )
-                        REPORT( "Rule ignored." )
+                        REPORT( _( "Rule layer not matched; rule ignored." ) )
                     }
 
                     return false;
