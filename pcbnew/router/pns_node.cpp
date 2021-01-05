@@ -861,8 +861,8 @@ void NODE::Remove( LINE& aLine )
 
 
 void NODE::followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int aLimit,
-                       VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool& aGuardHit,
-                       bool aStopAtLockedJoints )
+                       VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
+                       bool& aGuardHit, bool aStopAtLockedJoints )
 {
     bool prevReversed = false;
 
@@ -877,9 +877,18 @@ void NODE::followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int
 
         aCorners[aPos] = jt->Pos();
         aSegments[aPos] = aCurrent;
+        aArcReversed[aPos] = false;
+
+        if( aCurrent->Kind() == ITEM::ARC_T )
+        {
+            if( ( aScanDirection && jt->Pos() == aCurrent->Anchor( 0 ) ) ||
+                ( !aScanDirection && jt->Pos() == aCurrent->Anchor( 1 ) ) )
+                aArcReversed[aPos] = true;
+        }
+
         aPos += ( aScanDirection ? 1 : -1 );
 
-        if( count && guard == p)
+        if( count && guard == p )
         {
             aSegments[aPos] = NULL;
             aGuardHit = true;
@@ -905,6 +914,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
 
     VECTOR2I corners[MaxVerts + 1];
     LINKED_ITEM* segs[MaxVerts + 1];
+    bool arcReversed[MaxVerts + 1];
 
     LINE pl;
     bool guardHit = false;
@@ -916,10 +926,14 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     pl.SetNet( aSeg->Net() );
     pl.SetOwner( this );
 
-    followLine( aSeg, false, i_start, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
+    followLine( aSeg, false, i_start, MaxVerts, corners, segs, arcReversed,
+                guardHit, aStopAtLockedJoints );
 
     if( !guardHit )
-        followLine( aSeg, true, i_end, MaxVerts, corners, segs, guardHit, aStopAtLockedJoints );
+    {
+        followLine( aSeg, true, i_end, MaxVerts, corners, segs, arcReversed, guardHit,
+                    aStopAtLockedJoints );
+    }
 
     int n = 0;
 
@@ -940,7 +954,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
             {
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape() );
-                pl.Line().Append( p == sa->GetP0() ? *sa : sa->Reversed() );
+                pl.Line().Append( arcReversed[i] ? sa->Reversed() : *sa );
             }
 
             pl.Link( li );

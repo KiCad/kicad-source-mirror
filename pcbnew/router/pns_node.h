@@ -472,8 +472,8 @@ private:
 
     ///> scans the joint map, forming a line starting from segment (current).
     void followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int aLimit,
-                     VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool& aGuardHit,
-                     bool aStopAtLockedJoints );
+                     VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
+                     bool& aGuardHit, bool aStopAtLockedJoints );
 
 private:
     JOINT_MAP       m_joints;           ///> hash table with the joints, linking the items. Joints
