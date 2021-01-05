@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="leave_sheet.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/leave_sheet.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="800"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.6740027"
-     inkscape:cy="12.642366"
+     inkscape:zoom="18.68361"
+     inkscape:cx="15.855951"
+     inkscape:cy="12.992643"
      inkscape:window-x="0"
-     inkscape:window-y="1"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -82,57 +82,21 @@
   </defs>
   <title
      id="title25555">leave_sheet</title>
-  <polyline
-     class="cls-1"
-     points="2.315 6.236 2.315 11.558 4.087 11.558"
-     id="polyline25557"
-     transform="translate(-1.315,-1.5578706)"
-     style="stroke:#1a81c4;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
-     id="polyline25559"
-     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     transform="translate(-1.087,-1.328)"
-     d="M 5.382,19.328 H 4.087 v -8 h 1.5"
-     class="cls-1"
-     sodipodi:nodetypes="cccc" />
-  <rect
-     class="cls-2"
-     x="0"
-     y="0"
-     width="23"
-     height="5"
-     id="rect25561"
-     style="fill:#606060;fill-opacity:1" />
-  <rect
-     class="cls-2"
-     x="5"
-     y="8"
-     width="16"
-     height="5"
-     id="rect25563"
-     style="fill:#606060;fill-opacity:1;stroke-width:0.981209" />
-  <rect
-     class="cls-2"
-     x="5"
-     y="16"
-     width="15.9767"
-     height="4.9766998"
-     id="rect25565"
-     style="fill:#606060;fill-opacity:1;stroke-width:0.981209" />
-  <ellipse
-     class="cls-3"
-     cx="16.977501"
-     cy="17"
-     rx="7.0065999"
-     ry="7"
-     id="ellipse25567" />
+     style="display:inline;fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 4,8 H 15.5"
+     id="path1476" />
   <path
-     class="cls-4"
-     d="m 13.11,17.2093 h 6.3317 A 1.6684,1.6684 0 0 0 21.11,15.5409 v 0 a 1.6683,1.6683 0 0 0 -1.6683,-1.6683"
-     id="path25569" />
-  <polyline
-     class="cls-4"
-     points="16.643 20.964 13.89 18.209 16.643 15.454"
-     id="polyline25571"
-     transform="translate(-1,-1)" />
+     id="path1506"
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 15.5,8.0000005 A 6.5,6.4999995 0 0 1 22,14.5 v 0 A 6.5,6.4999995 0 0 1 15.5,21" />
+  <path
+     style="display:inline;fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 12,21 h 3.5"
+     id="path1476-6" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 7,3 2,8 7,13"
+     id="path1535"
+     sodipodi:nodetypes="ccc" />
 </svg>
