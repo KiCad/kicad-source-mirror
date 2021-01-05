@@ -205,13 +205,13 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    if( m_Uuid != aItem.m_Uuid )
-        return m_Uuid < aItem.m_Uuid;
-
     if( GetPosition().x != aItem.GetPosition().x )
         return GetPosition().x < aItem.GetPosition().x;
 
-    return GetPosition().y < aItem.GetPosition().y;
+    if( GetPosition().y != aItem.GetPosition().y )
+        return GetPosition().y < aItem.GetPosition().y;
+
+    return m_Uuid < aItem.m_Uuid;
 }
 
 
