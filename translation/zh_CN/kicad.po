@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-04 14:10+0000\n"
+"PO-Revision-Date: 2021-01-05 06:20+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2242,34 +2242,30 @@ msgid "Import settings from a previous version at:"
 msgstr "从早期版本导入设置（未找到）"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "调整差分对布线歪斜"
+msgstr "选择一个不同的路径"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "所选路径不包含有效的KiCad设置！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "从早期版本导入设置（未找到）"
+msgstr "从早期版本导入库配置"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr ""
+msgstr "选中后，以前版本的符号和封装库表将被导入该版本中"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "重置为默认值"
+msgstr "以默认设置启动"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "配置路径"
+msgstr "配置 KiCad 设置路径"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -4149,33 +4145,28 @@ msgstr ""
 "夹。"
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "包含与 KiCad 一起安装的项目模板的目录。"
+msgstr "一个包含用 KiCad 安装的系统级脚本的目录"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "包含与 KiCad 一起安装的项目模板的目录。"
+msgstr "一个包含用 KiCad 安装的用户指定脚本的目录"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "KICAD_TEMPLATE_DIR 的弃用版本。"
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "KICAD_TEMPLATE_DIR 的弃用版本。"
+msgstr "KICAD6_3DMODEL_DIR 的废弃版本。"
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "KICAD_TEMPLATE_DIR 的弃用版本。"
+msgstr "KICAD6_FOOTPRINT_DIR 的废弃版本。"
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "KICAD_TEMPLATE_DIR 的弃用版本。"
+msgstr "KICAD_SYMBOL_DIR 的废弃版本。"
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -21967,11 +21958,13 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP 导出失败！ 请保存 PCB 并再次尝试"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
-msgstr "电路板轮廓缺失或畸形。运行设计规则检查 (DRC) 进行全面分析。"
+msgstr ""
+"电路板轮廓缺失或未用 %.3f 毫米公差闭合。\n"
+"运行设计规则检查 (DRC) 进行全面分析。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -22037,16 +22030,15 @@ msgstr "误差："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "紧凑（0.001 毫米）"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "标准 (1,2,3)"
+msgstr "标准 (0.01 毫米)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "松散（0.1 毫米）"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -23649,11 +23641,10 @@ msgid "Warning: Pad size is less than zero."
 msgstr "警告：焊盘尺寸小于零。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
-msgstr "警告：焊盘钻头大于焊盘尺寸或钻头形状和焊盘形状不重叠。"
+msgstr "警告：焊盘钻头不会留下铜或钻头形状和焊盘形状不重叠。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
@@ -26895,9 +26886,8 @@ msgid "Annular width"
 msgstr "环形宽度"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drill out of range"
-msgstr "布线长度超过范围"
+msgstr "钻孔超出范围"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
@@ -26909,9 +26899,8 @@ msgid "Padstack is not valid"
 msgstr "焊盘槽/孔无效"
 
 #: pcbnew/drc/drc_item.cpp:117
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "微孔内径太小"
+msgstr "微通孔钻孔超出范围"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -28784,9 +28773,9 @@ msgid "Pad of %s on %s"
 msgstr "焊盘 %s - %s"
 
 #: pcbnew/pad.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "通孔焊盘"
+msgstr "%s 的通孔焊盘"
 
 #: pcbnew/pad.cpp:1096
 #, c-format
@@ -28794,9 +28783,9 @@ msgid "Pad %s of %s on %s"
 msgstr "焊盘　%s (%s) - %s"
 
 #: pcbnew/pad.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "通孔焊盘"
+msgstr "%s 的通孔焊盘 %s"
 
 #: pcbnew/pad.cpp:1379
 msgid "Edge connector"
@@ -28997,9 +28986,8 @@ msgid "End Y"
 msgstr "结束点 Y"
 
 #: pcbnew/pcb_target.cpp:151
-#, fuzzy
 msgid "PCB Target"
-msgstr "PCB 文本"
+msgstr "PCB 靶子"
 
 #: pcbnew/pcb_text.cpp:111
 msgid "PCB Text"
