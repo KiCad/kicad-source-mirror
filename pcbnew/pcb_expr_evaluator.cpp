@@ -213,9 +213,15 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+    EDA_RECT          itemBBox;
 
     if( !item )
         return;
+
+    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+        itemBBox = static_cast<ZONE*>( item )->GetCachedBoundingBox();
+    else
+        itemBBox = item->GetBoundingBox();
 
     auto insideZone =
             [&]( ZONE* zone ) -> bool
@@ -223,7 +229,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( !zone )
                     return false;
 
-                if( !zone->GetCachedBoundingBox().Intersects( item->GetBoundingBox() ) )
+                if( !zone->GetCachedBoundingBox().Intersects( itemBBox ) )
                     return false;
 
                 if( item->GetFlags() & HOLE_PROXY )
@@ -289,10 +295,27 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     return false;
                 }
 
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                {
+                    ZONE* testZone = static_cast<ZONE*>( item );
 
-                std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( context->GetLayer() );
+                    if( !zone->GetCachedBoundingBox().Contains( itemBBox ) )
+                        return false;
 
-                return zone->Outline()->Collide( shape.get() );
+                    for( auto i = testZone->Outline()->CIterate( 0 ); i; i++ )
+                    {
+                        if( !zone->Outline()->Contains( *i ) )
+                            return false;
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    std::shared_ptr<SHAPE> shape = item->GetEffectiveShape( context->GetLayer() );
+
+                    return zone->Outline()->Collide( shape.get() );
+                }
             };
 
     if( arg->AsString() == "A" )
