@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# taotieren <admin@taotieren.com>,2019-2020.
+# taotieren <admin@taotieren.com>,2019-2020, 2021.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 msgid ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
 "PO-Revision-Date: 2021-01-05 06:20+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1859,7 +1859,6 @@ msgstr ""
 "只会被暂时覆盖。"
 
 #: common/dialogs/dialog_configure_paths.cpp:343
-#, fuzzy
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -1867,9 +1866,11 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次启动 KiCad 时，软件将遵循任何已定义的路径并无视路径配置对话框中定义的任何"
-"设置。如果你不希望软件这么做，要么重命名任何冲突的条目，要么从你的系统中移除"
-"一个或多个外部环境变量。"
+"下次启动 KiCad 时，将支持已定义的\n"
+"任何路径，并忽略在路径配置对话框\n"
+"中定义的任何设置。如果您不打算执\n"
+"行此行为，请重命名任何冲突的条目\n"
+"或从系统中删除外部环境变量。"
 
 #: common/dialogs/dialog_configure_paths.cpp:358
 #, c-format
@@ -2234,12 +2235,11 @@ msgstr "选择设置路径"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "您希望如何配置 KiCad？"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "从早期版本导入设置（未找到）"
+msgstr "在以下位置从先前版本导入设置："
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -22041,10 +22041,9 @@ msgid "Loose (0.1 mm)"
 msgstr "松散（0.1 毫米）"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
-msgstr "容差设置被认为连接的两个点之间的距离。  标准是 0.001毫米。"
+msgstr "公差设置被视为连接的两点之间的距离。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
