@@ -234,7 +234,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="spacer" expanded="1">
                                 <property name="height">0</property>
@@ -317,7 +317,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">10</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticLine" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -513,7 +513,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">10</property>
-                            <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticLine" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -632,7 +632,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">1</property>
                             <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>

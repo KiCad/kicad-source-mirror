@@ -73,13 +73,13 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bSizer2->Add( m_addButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	bSizer2->Add( 20, 0, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer2->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer2->Add( m_deleteButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer2->Add( m_staticline1, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizer2->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_cbGroup = new wxCheckBox( this, wxID_ANY, _("Group by name"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_cbGroup, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
@@ -88,7 +88,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bSizer2->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer2->Add( m_staticline2, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizer2->Add( m_staticline2, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 10 );
 
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Pin numbers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
@@ -96,7 +96,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 
 	m_summary = new wxStaticText( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_summary->Wrap( -1 );
-	bSizer2->Add( m_summary, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( m_summary, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer2->Add( 10, 0, 0, wxEXPAND, 5 );
