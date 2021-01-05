@@ -962,7 +962,7 @@ public:
      * odd corners where the link segments meet the outline.
      *
      * @param aAmount - number of units to offset edges
-     * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
+     * @param aCircleSegmentsCount - number of segments per 360 degrees to use in curve approx
      * @param aCornerStrategy - ALLOW_ACUTE_CORNERS to preserve all angles,
      *                          CHOP_ACUTE_CORNERS to chop angles less than 90°,
      *                          ROUND_ACUTE_CORNERS to round off angles less than 90°,
