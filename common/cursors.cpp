@@ -37,15 +37,22 @@
 #include <cursors/cursor-line-wire-add.xpm>
 #include <cursors/cursor-measure.xpm>
 #include <cursors/cursor-pencil.xpm>
-#include <cursors/cursor-place.xpm>
 #include <cursors/cursor-select-lasso.xpm>
-#include <cursors/cursor-select-m.xpm>
 #include <cursors/cursor-select-window.xpm>
 #include <cursors/cursor-subtract.xpm>
 #include <cursors/cursor-text.xpm>
 #include <cursors/cursor-xor.xpm>
 #include <cursors/cursor-zoom.xpm>
 #include <cursors/cursor-zoom-out.xpm>
+
+// Under MSW, the standard cursor is white on black.  Elsewhere it is black on white
+#ifdef __WINDOWS__
+#include <cursors/cursor-place.xpm>
+#include <cursors/cursor-select-m.xpm>
+#else
+#include <cursors/cursor-place-black.xpm>
+#include <cursors/cursor-select-m-black.xpm>
+#endif
 
 #include <wx/bitmap.h>
 #include <wx/debug.h>
@@ -129,7 +136,11 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         KICURSOR::MOVING,
         nullptr,
         nullptr,
+#ifdef __WINDOWS__
         cursor_select_m_xpm,
+#else
+        cursor_select_m_black_xpm,
+#endif
         { 32, 32 },
         { 1, 1 },
     },
@@ -281,7 +292,11 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         KICURSOR::PLACE,
         nullptr,
         nullptr,
+#ifdef __WINDOWS__
         cursor_place_xpm,
+#else
+        cursor_place_black_xpm,
+#endif
         { 32, 32 },
         { 1, 1 },
     },
