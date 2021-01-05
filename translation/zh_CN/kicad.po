@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"PO-Revision-Date: 2021-01-05 06:39+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2235,7 +2235,7 @@ msgstr "选择设置路径"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr "您希望如何配置 KiCad？"
+msgstr "您想如何配置 KiCad？"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
@@ -2251,13 +2251,13 @@ msgstr "所选路径不包含有效的 KiCad 设置！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr "从早期版本导入库配置"
+msgstr "从先前版本导入库配置"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr "选中后，以前版本的符号和封装库表将被导入该版本中"
+msgstr "选中后，以前版本的符号和封装库表将导入到该版本中"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -22030,15 +22030,15 @@ msgstr "误差："
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr "紧凑（0.001 毫米）"
+msgstr "紧密 (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Standard (0.01 mm)"
-msgstr "标准 (0.01 毫米)"
+msgstr "标准 (0.01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr "松散（0.1 毫米）"
+msgstr "松散 (0.1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid ""
@@ -28986,7 +28986,7 @@ msgstr "结束点 Y"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr "PCB 靶子"
+msgstr "PCB 目标"
 
 #: pcbnew/pcb_text.cpp:111
 msgid "PCB Text"
