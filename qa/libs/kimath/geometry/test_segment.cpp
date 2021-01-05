@@ -148,6 +148,69 @@ bool SegCollinearCorrect( const SEG& aSegA, const SEG& aSegB, bool aExp )
     return ok;
 }
 
+/**
+ * Predicate to check expected parallelism between two segments
+ * @param  aSegA the first #SEG
+ * @param  sSegB the second #SEG
+ * @param  aExp  expected parallelism: true = segments are parallel
+ *                                     false = segments are not parallel
+ * @return       does the parallelism calculated agree?
+ */
+bool SegParallelCorrect( const SEG& aSegA, const SEG& aSegB, bool aExp )
+{
+    const bool AtoB = aSegA.ApproxParallel( aSegB );
+    const bool BtoA = aSegB.ApproxParallel( aSegA );
+
+    const bool ok = ( AtoB == aExp ) && ( BtoA == aExp );
+
+    if( AtoB != BtoA )
+    {
+        std::stringstream ss;
+        ss << "Segment parallelism is not the same in both directions: expected " << aExp
+           << ", got AtoB: " << AtoB << " BtoA:" << BtoA;
+        BOOST_TEST_INFO( ss.str() );
+    }
+    else if( !ok )
+    {
+        std::stringstream ss;
+        ss << "Parallelism incorrect: expected " << aExp << ", got " << AtoB;
+        BOOST_TEST_INFO( ss.str() );
+    }
+
+    return ok;
+}
+
+/**
+ * Predicate to check expected perpendicularity between two segments
+ * @param  aSegA the first #SEG
+ * @param  sSegB the second #SEG
+ * @param  aExp  expected perpendicularity: true = segments are perpendicular
+ *                                          false = segments are not perpendicular
+ * @return       does the perpendicularity calculated agree?
+ */
+bool SegPerpendicularCorrect( const SEG& aSegA, const SEG& aSegB, bool aExp )
+{
+    const bool AtoB = aSegA.ApproxPerpendicular( aSegB );
+    const bool BtoA = aSegB.ApproxPerpendicular( aSegA );
+
+    const bool ok = ( AtoB == aExp ) && ( BtoA == aExp );
+
+    if( AtoB != BtoA )
+    {
+        std::stringstream ss;
+        ss << "Segment perpendicularity is not the same in both directions: expected " << aExp
+           << ", got AtoB: " << AtoB << " BtoA:" << BtoA;
+        BOOST_TEST_INFO( ss.str() );
+    }
+    else if( !ok )
+    {
+        std::stringstream ss;
+        ss << "Perpendicularity incorrect: expected " << aExp << ", got " << AtoB;
+        BOOST_TEST_INFO( ss.str() );
+    }
+
+    return ok;
+}
 
 BOOST_AUTO_TEST_SUITE( Segment )
 
@@ -364,19 +427,21 @@ BOOST_AUTO_TEST_CASE( SegSegCollision )
 
 
 /**
- * Test cases for collinearity
+ * Struct to hold general cases for collinearity, paralellism and perpendicularity
  */
-struct SEG_VEC_COLLINEAR_CASE
+struct SEG_SEG_BOOLEAN_CASE
 {
     std::string m_case_name;
     SEG         m_seg_a;
     SEG         m_seg_b;
-    bool        m_exp_coll;
+    bool        m_exp_result;
 };
 
-
 // clang-format off
-static const std::vector<SEG_VEC_COLLINEAR_CASE> seg_vec_collinear_cases = {
+/**
+ * Test cases for collinearity
+ */
+static const std::vector<SEG_SEG_BOOLEAN_CASE> seg_vec_collinear_cases = {
     {
         "coincident",
         { { 0, 0 }, { 10, 0 } },
@@ -411,17 +476,224 @@ static const std::vector<SEG_VEC_COLLINEAR_CASE> seg_vec_collinear_cases = {
 // clang-format on
 
 
-BOOST_AUTO_TEST_CASE( SegVecCollinear )
+BOOST_AUTO_TEST_CASE( SegSegCollinear )
 {
     for( const auto& c : seg_vec_collinear_cases )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            BOOST_CHECK_PREDICATE(
-                    SegCollinearCorrect, ( c.m_seg_a )( c.m_seg_b )( c.m_exp_coll ) );
+            BOOST_CHECK_PREDICATE( SegCollinearCorrect,
+                                   ( c.m_seg_a )( c.m_seg_b )( c.m_exp_result ) );
         }
     }
 }
 
+
+// clang-format off
+/**
+ * Test cases for paralellism
+ */
+static const std::vector<SEG_SEG_BOOLEAN_CASE> seg_vec_parallel_cases = {
+    {
+        "coincident",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 10, 0 } },
+        true,
+    },
+    {
+        "end-to-end",
+        { { 0, 0 }, { 10, 0 } },
+        { { 10, 0 }, { 20, 0 } },
+        true,
+    },
+    {
+        "In segment",
+        { { 0, 0 }, { 10, 0 } },
+        { { 4, 0 }, { 7, 0 } },
+        true,
+    },
+    {
+        "At side, parallel",
+        { { 0, 0 }, { 10, 0 } },
+        { { 4, 1 }, { 7, 1 } },
+        true,
+    },
+    {
+        "crossing",
+        { { 0, 0 }, { 10, 0 } },
+        { { 5, -5 }, { 5, 5 } },
+        false,
+    },
+};
+// clang-format on
+
+
+BOOST_AUTO_TEST_CASE( SegSegParallel )
+{
+    for( const auto& c : seg_vec_parallel_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            BOOST_CHECK_PREDICATE( SegParallelCorrect,
+                                   ( c.m_seg_a )( c.m_seg_b )( c.m_exp_result ) );
+        }
+    }
+}
+
+
+// clang-format off
+/**
+ * Test cases for perpendicularity
+ */
+static const std::vector<SEG_SEG_BOOLEAN_CASE> seg_vec_perpendicular_cases = {
+    {
+        "coincident",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 10, 0 } },
+        false,
+    },
+    {
+        "end-to-end",
+        { { 0, 0 }, { 10, 0 } },
+        { { 10, 0 }, { 20, 0 } },
+        false,
+    },
+    {
+        "In segment",
+        { { 0, 0 }, { 10, 0 } },
+        { { 4, 0 }, { 7, 0 } },
+        false,
+    },
+    {
+        "At side, parallel",
+        { { 0, 0 }, { 10, 0 } },
+        { { 4, 1 }, { 7, 1 } },
+        false,
+    },
+    {
+        "crossing 45 deg",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 5, 5 } },
+        false,
+    },
+    {
+        "very nearly perpendicular",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 1, 10 } },
+        true, //allow error margin of 1 IU
+    },
+    {
+        "not really perpendicular",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 3, 10 } },
+        false,
+    },
+    {
+        "perpendicular",
+        { { 0, 0 }, { 10, 0 } },
+        { { 0, 0 }, { 0, 10 } },
+        true,
+    },
+    {
+        "perpendicular not intersecting",
+        { { 0, 0 }, { 10, 0 } },
+        { { 15, 5 }, { 15, 10 } },
+        true,
+    },
+};
+// clang-format on
+
+
+BOOST_AUTO_TEST_CASE( SegSegPerpendicular )
+{
+    for( const auto& c : seg_vec_perpendicular_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            BOOST_CHECK_PREDICATE( SegPerpendicularCorrect,
+                                   ( c.m_seg_a )( c.m_seg_b )( c.m_exp_result ) );
+        }
+    }
+}
+
+
+
+/**
+ * Struct to hold cases for operations with a #SEG, and a #VECTOR2I
+ */
+struct SEG_VEC_CASE
+{
+    std::string m_case_name;
+    SEG         m_seg;
+    VECTOR2I    m_vec;
+};
+
+
+// clang-format off
+/**
+ * Test cases to create segments passing through a point
+ */
+static const std::vector<SEG_VEC_CASE> segment_and_point_cases = {
+    {
+        "Horizontal: point on edge of seg",
+        { { 0, 0 }, { 10, 0 } },
+        { 0, 0 },
+    },
+    {
+        "Horizontal: point in middle of seg",
+        { { 0, 0 }, { 10, 0 } },
+        { 5, 0 },
+    },
+    {
+        "Horizontal: point outside seg",
+        { { 0, 0 }, { 10, 0 } },
+        { 20, 20 },
+    },
+    {
+        "Vertical: point on edge of seg",
+        { { 0, 0 }, { 0, 10 } },
+        { 0, 0 },
+    },
+    {
+        "Vertical: point in middle of seg",
+        { { 0, 0 }, { 0, 10 } },
+        { 0, 5 },
+    },
+    {
+        "Vertical: point outside seg",
+        { { 0, 0 }, { 0, 10 } },
+        { 20, 20 },
+    },
+};
+// clang-format on
+
+
+BOOST_AUTO_TEST_CASE( SegCreateParallel )
+{
+    for( const auto& c : segment_and_point_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            SEG perpendicular = c.m_seg.ParallelSeg( c.m_vec );
+
+            BOOST_CHECK_PREDICATE( SegParallelCorrect, ( perpendicular )( c.m_seg )( true ) );
+            BOOST_CHECK_PREDICATE( SegVecDistanceCorrect, ( perpendicular )( c.m_vec )( 0 ) );
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE( SegCreatePerpendicular )
+{
+    for( const auto& c : segment_and_point_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            SEG perpendicular = c.m_seg.PerpendicularSeg( c.m_vec );
+
+            BOOST_CHECK_PREDICATE( SegPerpendicularCorrect, ( perpendicular )( c.m_seg )( true ) );            
+            BOOST_CHECK_PREDICATE( SegVecDistanceCorrect, ( perpendicular )( c.m_vec )( 0 ) );
+        }
+    }
+}
 
 BOOST_AUTO_TEST_SUITE_END()

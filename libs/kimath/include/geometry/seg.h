@@ -300,6 +300,13 @@ public:
     }
 
 
+    bool ApproxPerpendicular( const SEG& aSeg ) const
+    {
+        SEG perp = PerpendicularSeg( A );
+
+        return aSeg.ApproxParallel( perp );
+    }
+
     bool Overlaps( const SEG& aSeg ) const
     {
         if( aSeg.A == aSeg.B ) // single point corner case
