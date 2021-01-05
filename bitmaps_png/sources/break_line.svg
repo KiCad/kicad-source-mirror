@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1035"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="26.977742"
-     inkscape:cx="9.6619293"
-     inkscape:cy="13.212849"
+     inkscape:zoom="15.632348"
+     inkscape:cx="14.166607"
+     inkscape:cy="12.933128"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -79,55 +79,18 @@
   </defs>
   <title
      id="title116258">break_line</title>
-  <path
-     id="line116260"
-     style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 20.5,3 V 4.5"
-     sodipodi:nodetypes="cc" />
-  <path
-     id="line116262"
-     style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 20.5,6.5 V 8"
-     sodipodi:nodetypes="cc" />
-  <path
-     id="line116264"
-     style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 20.5,10 v 1"
-     sodipodi:nodetypes="cc" />
-  <line
-     class="cls-1"
-     x1="3.5"
-     y1="3"
-     x2="3.5"
-     y2="4.5"
-     id="line116266"
-     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
-  <path
-     id="line116268"
-     style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:3.324, 3.324;stroke-dashoffset:0"
-     d="M 3.5,6.5 V 8"
-     sodipodi:nodetypes="cc" />
-  <path
-     id="line116270"
-     style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 3.5,10 0.0148,1.0046"
-     sodipodi:nodetypes="cc" />
   <line
      class="cls-3"
-     x1="0.5"
-     y1="2.5102"
-     x2="23.5"
-     y2="2.5079999"
-     id="line116272" />
+     x1="2"
+     y1="12.010201"
+     x2="10"
+     y2="12.007999"
+     id="line116272"
+     style="opacity:1;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      id="line116274"
-     style="fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round"
-     d="m 14,11.5 9.5,0.008"
-     sodipodi:nodetypes="cc" />
-  <path
-     id="line116276"
-     style="fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round"
-     d="M 0.5,11.5102 10,11.5"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 14,12 8,0.008"
      sodipodi:nodetypes="cc" />
   <path
      class="cls-5"
