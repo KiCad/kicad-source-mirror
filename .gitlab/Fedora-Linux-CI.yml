@@ -74,7 +74,7 @@ report_metrics:
     - job: build_linux
       artifacts: true
   script:
-    - cat build/linux/compilation_log.txt | grep "warning:" | awk '{total+=1}END{print "number_of_warnings "total}' > metrics.txt
+    - cat warnings.txt | { grep "warning:" || test $? = 1; } | awk 'END{print "number_of_warnings "NR}' > metrics.txt
     - cat metrics.txt
   artifacts:
     reports:
