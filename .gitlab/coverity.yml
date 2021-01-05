@@ -66,3 +66,9 @@ Coverity:
       -DKICAD_SPICE=ON
     - coverity/bin/cov-build --dir cov-int make -j8
     - *coverity_submit
+  artifacts:
+    expire_in: 1 year
+    expose_as: 'Coverity log'
+    name: "coverity_log.txt"
+    paths:
+      - cov-int/build-log.txt
