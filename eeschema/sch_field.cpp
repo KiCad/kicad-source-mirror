@@ -558,11 +558,11 @@ BITMAP_DEF SCH_FIELD::GetMenuImage() const
         case REFERENCE_FIELD: return edit_comp_ref_xpm;
         case VALUE_FIELD:     return edit_comp_value_xpm;
         case FOOTPRINT_FIELD: return edit_comp_footprint_xpm;
-        default:              return edit_text_xpm;
+        default:              return text_xpm;
         }
     }
 
-    return edit_text_xpm;
+    return text_xpm;
 }
 
 

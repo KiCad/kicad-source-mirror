@@ -331,7 +331,7 @@ wxString FP_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 BITMAP_DEF FP_TEXT::GetMenuImage() const
 {
-    return footprint_text_xpm;
+    return text_xpm;
 }
 
 

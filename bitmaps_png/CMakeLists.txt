@@ -214,7 +214,6 @@ set( BMAPS_MID
     edit_comp_value
     editor
     edit_cmp_symb_links
-    edit_text
     edit
     edge_to_copper_clearance
     enter_sheet
@@ -253,7 +252,6 @@ set( BMAPS_MID
     flag_remove
     flip_board
     footprint_browser
-    footprint_text
     gbr_select_mode2
     gerber_job_file
     gerbview_show_negative_objects
