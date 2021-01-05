@@ -32,6 +32,8 @@
 
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
+#include <pad.h>
+#include <zone.h>
 
 #include <geometry/shape.h>
 
@@ -169,6 +171,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     return true;
 }
 
+
 bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, int aLayer )
 {
     if( Settings().CanViolateDRC() && Settings().Mode() == RM_MarkObstacles )
@@ -179,12 +182,69 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
     for( ITEM* item : candidates.Items() )
     {
         if( !item->IsRoutable() && item->Layers().Overlaps( aLayer ) )
+        {
+            BOARD_ITEM* parent = item->Parent();
+
+            switch( parent->Type() )
+            {
+            case PCB_PAD_T:
+            {
+                PAD* pad = static_cast<PAD*>( parent );
+
+                if( pad->GetAttribute() == PAD_ATTRIB_NPTH )
+                    SetFailureReason( _( "Cannot start routing from a non-plated hole." ) );
+            }
+                break;
+
+            case PCB_ZONE_T:
+            case PCB_FP_ZONE_T:
+            {
+                ZONE* zone = static_cast<ZONE*>( parent );
+
+                if( !zone->GetZoneName().IsEmpty() )
+                {
+                    SetFailureReason( wxString::Format( _( "Rule area '%s' disallows tracks." ),
+                                                        zone->GetZoneName() ) );
+                }
+                else
+                {
+                    SetFailureReason( _( "Rule area disallows tracks." ) );
+                }
+            }
+                break;
+
+            case PCB_TEXT_T:
+            case PCB_FP_TEXT_T:
+                SetFailureReason( _( "Cannot start routing from a text item." ) );
+                break;
+
+            case PCB_SHAPE_T:
+            case PCB_FP_SHAPE_T:
+                SetFailureReason( _( "Cannot start routing from a graphic." ) );
+
+            default:
+                break;
+            }
+
             return false;
+        }
     }
 
-    if( m_mode == PNS_MODE_ROUTE_SINGLE && aStartItem )
+    VECTOR2I startPoint = aStartItem ? aStartItem->Anchor( 0 ) : aWhere;
+
+    if( aStartItem && aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
     {
-        VECTOR2I         startPoint = aStartItem->Anchor( 0 );
+        VECTOR2I otherEnd = aStartItem->Anchor( 1 );
+
+        if( ( otherEnd - aWhere ).SquaredEuclideanNorm()
+                < ( startPoint - aWhere ).SquaredEuclideanNorm() )
+        {
+            startPoint = otherEnd;
+        }
+    }
+
+    if( m_mode == PNS_MODE_ROUTE_SINGLE )
+    {
         SHAPE_LINE_CHAIN dummyStartSeg;
         LINE             dummyStartLine;
 
@@ -193,7 +253,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
         dummyStartLine.SetShape( dummyStartSeg );
         dummyStartLine.SetLayer( aLayer );
-        dummyStartLine.SetNet( aStartItem->Net() );
+        dummyStartLine.SetNet( aStartItem ? aStartItem->Net() : 0 );
         dummyStartLine.SetWidth( m_sizes.TrackWidth() );
 
         if( m_world->CheckColliding( &dummyStartLine, ITEM::ANY_T ) )
@@ -206,12 +266,65 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             for( ITEM* item : highlightedItems )
                 m_iface->HideItem( item );
 
+            SetFailureReason( _( "The routing start point violates DRC." ) );
             return false;
         }
     }
-    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR && aStartItem )
+    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        // TODO
+        if( !aStartItem )
+        {
+            SetFailureReason( _( "Cannot start a differential pair in the middle of nowhere." ) );
+            return false;
+        }
+
+        DP_PRIMITIVE_PAIR dpPair;
+        wxString          errorMsg;
+
+        if( !DIFF_PAIR_PLACER::FindDpPrimitivePair( m_world.get(), startPoint, aStartItem, dpPair,
+                                                    &errorMsg ) )
+        {
+            SetFailureReason( errorMsg );
+            return false;
+        }
+
+        SHAPE_LINE_CHAIN dummyStartSegA;
+        SHAPE_LINE_CHAIN dummyStartSegB;
+        LINE             dummyStartLineA;
+        LINE             dummyStartLineB;
+
+        dummyStartSegA.Append( dpPair.AnchorN() );
+        dummyStartSegA.Append( dpPair.AnchorN(), true );
+
+        dummyStartSegB.Append( dpPair.AnchorP() );
+        dummyStartSegB.Append( dpPair.AnchorP(), true );
+
+        dummyStartLineA.SetShape( dummyStartSegA );
+        dummyStartLineA.SetLayer( aLayer );
+        dummyStartLineA.SetNet( dpPair.PrimN()->Net() );
+        dummyStartLineA.SetWidth( m_sizes.DiffPairWidth() );
+
+        dummyStartLineB.SetShape( dummyStartSegB );
+        dummyStartLineB.SetLayer( aLayer );
+        dummyStartLineB.SetNet( dpPair.PrimP()->Net() );
+        dummyStartLineB.SetWidth( m_sizes.DiffPairWidth() );
+
+        if( m_world->CheckColliding( &dummyStartLineA, ITEM::ANY_T )
+                || m_world->CheckColliding( &dummyStartLineB, ITEM::ANY_T ) )
+        {
+            ITEM_SET          dummyStartSet;
+            NODE::ITEM_VECTOR highlightedItems;
+
+            dummyStartSet.Add( dummyStartLineA );
+            dummyStartSet.Add( dummyStartLineB );
+            markViolations( m_world.get(), dummyStartSet, highlightedItems );
+
+            for( ITEM* item : highlightedItems )
+                m_iface->HideItem( item );
+
+            SetFailureReason( _( "The routing start point violates DRC." ) );
+            return false;
+        }
     }
 
     return true;
@@ -220,10 +333,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {   
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
-    {
-        SetFailureReason( _( "The routing start point violates DRC." ) );
         return false;
-    }
 
     m_forceMarkObstaclesMode = false;
 

@@ -403,7 +403,7 @@ bool DIFF_PAIR_PLACER::SetLayer( int aLayer )
 }
 
 
-OPT_VECTOR2I DIFF_PAIR_PLACER::getDanglingAnchor( NODE* aNode, ITEM* aItem )
+OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
 {
     switch( aItem->Kind() )
     {
@@ -429,20 +429,19 @@ OPT_VECTOR2I DIFF_PAIR_PLACER::getDanglingAnchor( NODE* aNode, ITEM* aItem )
 
     default:
         return OPT_VECTOR2I();
-        break;
     }
 }
 
 
 
-bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
+bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, ITEM* aItem,
                                             DP_PRIMITIVE_PAIR& aPair, wxString* aErrorMsg )
 {
     int netP, netN;
 
-    wxLogTrace( "PNS", "world %p", m_world );
+    wxLogTrace( "PNS", "world %p", aWorld );
 
-    bool result = m_world->GetRuleResolver()->DpNetPair( aItem, netP, netN );
+    bool result = aWorld->GetRuleResolver()->DpNetPair( aItem, netP, netN );
 
     if( !result )
     {
@@ -460,7 +459,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
 
     wxLogTrace( "PNS", "result %d", !!result );
 
-    OPT_VECTOR2I refAnchor = getDanglingAnchor( m_currentNode, aItem );
+    OPT_VECTOR2I refAnchor = getDanglingAnchor( aWorld, aItem );
     ITEM* primRef = aItem;
 
     wxLogTrace( "PNS", "refAnchor %p", aItem );
@@ -478,7 +477,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
 
     std::set<ITEM*> coupledItems;
 
-    m_currentNode->AllItemsInNet( coupledNet, coupledItems );
+    aWorld->AllItemsInNet( coupledNet, coupledItems );
     double bestDist = std::numeric_limits<double>::max();
     bool found = false;
 
@@ -486,7 +485,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
     {
         if( item->Kind() == aItem->Kind() )
         {
-            OPT_VECTOR2I anchor = getDanglingAnchor( m_currentNode, item );
+            OPT_VECTOR2I anchor = getDanglingAnchor( aWorld, item );
             if( !anchor )
                 continue;
 
@@ -524,7 +523,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
         {
             *aErrorMsg = wxString::Format( _( "Can't find a suitable starting point "
                                               "for coupled net \"%s\"." ),
-                                           m_world->GetRuleResolver()->NetName( coupledNet ) );
+                                           aWorld->GetRuleResolver()->NetName( coupledNet ) );
         }
         return false;
     }
@@ -548,48 +547,15 @@ int DIFF_PAIR_PLACER::gap() const
 bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
     VECTOR2I p( aP );
-    wxString msg;
-
-    if( !aStartItem )
-    {
-        Router()->SetFailureReason( _( "Can't start a differential pair "
-                                       " in the middle of nowhere." ) );
-        return false;
-    }
 
     setWorld( Router()->GetWorld() );
     m_currentNode = m_world;
 
-    if( !findDpPrimitivePair( aP, aStartItem, m_start, &msg ) )
-    {
-        Router()->SetFailureReason( msg );
+    if( !FindDpPrimitivePair( m_currentNode, aP, aStartItem, m_start ) )
         return false;
-    }
 
     m_netP = m_start.PrimP()->Net();
     m_netN = m_start.PrimN()->Net();
-
-    #if 0
-    // FIXME: this also needs to be factored out but not so important right now
-    // Check if the current track/via gap & track width settings are violated
-    BOARD* brd = NULL; // FIXME Router()->GetBoard();
-    NETCLASSPTR netclassP = brd->FindNet( m_netP )->GetNetClass();
-    NETCLASSPTR netclassN = brd->FindNet( m_netN )->GetNetClass();
-    int clearance = std::min( m_sizes.DiffPairGap(), m_sizes.DiffPairViaGap() );
-
-    if( clearance < netclassP->GetClearance() || clearance < netclassN->GetClearance() )
-    {
-        Router()->SetFailureReason( _( "Current track/via gap setting violates "
-                                       "design rules for this net." ) );
-        return false;
-    }
-
-    if( m_sizes.DiffPairWidth() < brd->GetDesignSettings().m_TrackMinWidth )
-    {
-        Router()->SetFailureReason( _( "Current track width setting violates design rules." ) );
-        return false;
-    }
-    #endif
 
     m_currentStart = p;
     m_currentEnd = p;
@@ -646,7 +612,7 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     DP_PRIMITIVE_PAIR target;
 
-    if( findDpPrimitivePair( aP, m_currentEndItem, target ) )
+    if( FindDpPrimitivePair( m_currentNode, aP, m_currentEndItem, target ) )
     {
         gwsTarget.BuildFromPrimitivePair( target, m_startDiagonal );
         m_snapOnTarget = true;
