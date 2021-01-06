@@ -69,7 +69,7 @@ bool CONVERT_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_menu = new CONDITIONAL_MENU( this );
     m_menu->SetIcon( convert_xpm );
-    m_menu->SetTitle( _( "Convert..." ) );
+    m_menu->SetTitle( _( "Convert" ) );
 
     static KICAD_T convertableTracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
     static KICAD_T convertableZones[]  = { PCB_ZONE_T, PCB_FP_ZONE_T, EOT };
@@ -106,11 +106,8 @@ bool CONVERT_TOOL::Init()
 
     m_menu->AddItem( PCB_ACTIONS::convertToArc, lineToArc );
 
-    for( std::shared_ptr<ACTION_MENU>& subMenu : m_selectionTool->GetToolMenu().GetSubMenus() )
-    {
-        if( dynamic_cast<SPECIAL_TOOLS_CONTEXT_MENU*>( subMenu.get() ) )
-            static_cast<CONDITIONAL_MENU*>( subMenu.get() )->AddMenu( m_menu, showConvert );
-    }
+    CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
+    selToolMenu.AddMenu( m_menu, showConvert, 100 );
 
     return true;
 }

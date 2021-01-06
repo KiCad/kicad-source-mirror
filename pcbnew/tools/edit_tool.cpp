@@ -87,7 +87,7 @@ SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool 
         CONDITIONAL_MENU( aTool )
 {
     SetIcon( special_tools_xpm );
-    SetTitle( _( "Special Tools..." ) );
+    SetTitle( _( "Special Tools" ) );
 
     AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::ShowAlways );
     AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
