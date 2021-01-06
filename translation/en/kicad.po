@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-04 06:10-0800\n"
+"POT-Creation-Date: 2021-01-06 10:20-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6123,8 +6123,15 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
 "Enter the number of units for a symbol that contains more than one unit"
 
-msgid "All units are not interchangeable"
-msgstr "All units are not interchangeable"
+msgid "All units are interchangeable"
+msgstr "All units are interchangeable"
+
+msgid ""
+"Check this option when all symbol units are identical except\n"
+"for pin numbers."
+msgstr ""
+"Check this option when all symbol units are identical except\n"
+"for pin numbers."
 
 msgid "Pin Text Options"
 msgstr "Pin Text Options"
@@ -6319,6 +6326,9 @@ msgstr "Paste Special"
 msgid "Alternate Pin Name"
 msgstr "Alternate Pin Name"
 
+msgid "Alternate pin assignments are not available for DeMorgan components."
+msgstr "Alternate pin assignments are not available for DeMorgan components."
+
 msgid "Alternate pin definitions must have a name."
 msgstr "Alternate pin definitions must have a name."
 
@@ -6505,14 +6515,20 @@ msgstr ""
 msgid "HPGL Options"
 msgstr "HPGL Options"
 
-msgid "Position:"
-msgstr "Position:"
+msgid "Position and units:"
+msgstr "Position and units:"
 
-msgid "Bottom left"
-msgstr "Bottom left"
+msgid "Bottom left, plotter units"
+msgstr "Bottom left, plotter units"
 
-msgid "Center on page"
-msgstr "Center on page"
+msgid "Centered, plotter units"
+msgstr "Centered, plotter units"
+
+msgid "Page fit, user units"
+msgstr "Page fit, user units"
+
+msgid "Content fit, user units"
+msgstr "Content fit, user units"
 
 msgid "Pen width:"
 msgstr "Pen width:"
@@ -11912,9 +11928,6 @@ msgstr "Highlight Items of Net “%s”"
 msgid "Highlight Aperture Type \"%s\""
 msgstr "Highlight Aperture Type “%s”"
 
-msgid "Clarify selection"
-msgstr "Clarify selection"
-
 msgid "Layers"
 msgstr "Layers"
 
@@ -12736,9 +12749,6 @@ msgstr ""
 
 msgid "Error writing objects to clipboard"
 msgstr "Error writing objects to clipboard"
-
-msgid "Clarify Selection"
-msgstr "Clarify Selection"
 
 #, c-format
 msgid "Attenuation more than %f dB"
@@ -17283,6 +17293,9 @@ msgstr "Top left"
 msgid "Top right"
 msgstr "Top right"
 
+msgid "Bottom left"
+msgstr "Bottom left"
+
 msgid "Bottom right"
 msgstr "Bottom right"
 
@@ -18260,6 +18273,16 @@ msgstr "Edit track/via properties"
 msgid "Updating nets"
 msgstr "Updating nets"
 
+msgid "Automatically update via nets"
+msgstr "Automatically update via nets"
+
+msgid ""
+"Automatically change the net of this via when the pads or zones it touches "
+"are changed"
+msgstr ""
+"Automatically change the net of this via when the pads or zones it touches "
+"are changed"
+
 msgid "Start point X:"
 msgstr "Start point X:"
 
@@ -18310,16 +18333,6 @@ msgstr "Start layer:"
 
 msgid "End layer:"
 msgstr "End layer:"
-
-msgid "Automatically update via net"
-msgstr "Automatically update via net"
-
-msgid ""
-"Automatically change the net of this via when the pads or zones it touches "
-"are changed"
-msgstr ""
-"Automatically change the net of this via when the pads or zones it touches "
-"are changed"
 
 msgid "Track & Via Properties"
 msgstr "Track & Via Properties"
@@ -19397,11 +19410,11 @@ msgid "Keepout layer(s) not matched."
 msgstr "Keepout layer(s) not matched."
 
 #, c-format
-msgid "Rule layer \"%s\" not matched."
-msgstr "Rule layer \"%s\" not matched."
+msgid "Rule layer '%s' not matched; rule ignored."
+msgstr "Rule layer '%s' not matched; rule ignored."
 
-msgid "Rule layer not matched."
-msgstr "Rule layer not matched."
+msgid "Rule layer not matched; rule ignored."
+msgstr "Rule layer not matched; rule ignored."
 
 msgid "Unconditional constraint applied."
 msgstr "Unconditional constraint applied."
@@ -21981,15 +21994,6 @@ msgstr ""
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "Can't find a suitable starting point for coupled net “%s”."
 
-msgid "Can't start a differential pair  in the middle of nowhere."
-msgstr "Can't start a differential pair  in the middle of nowhere."
-
-msgid "Current track/via gap setting violates design rules for this net."
-msgstr "Current track/via gap setting violates design rules for this net."
-
-msgid "Current track width setting violates design rules."
-msgstr "Current track width setting violates design rules."
-
 msgid "Please select a track whose length you want to tune."
 msgstr "Please select a track whose length you want to tune."
 
@@ -22049,8 +22053,27 @@ msgstr "Too short: skew "
 msgid "Tuned: skew "
 msgstr "Tuned: skew "
 
+msgid "Cannot start routing from a non-plated hole."
+msgstr "Cannot start routing from a non-plated hole."
+
+#, c-format
+msgid "Rule area '%s' disallows tracks."
+msgstr "Rule area '%s' disallows tracks."
+
+msgid "Rule area disallows tracks."
+msgstr "Rule area disallows tracks."
+
+msgid "Cannot start routing from a text item."
+msgstr "Cannot start routing from a text item."
+
+msgid "Cannot start routing from a graphic."
+msgstr "Cannot start routing from a graphic."
+
 msgid "The routing start point violates DRC."
 msgstr "The routing start point violates DRC."
+
+msgid "Cannot start a differential pair in the middle of nowhere."
+msgstr "Cannot start a differential pair in the middle of nowhere."
 
 msgid "Undo last segment"
 msgstr "Undo last segment"
@@ -22514,9 +22537,6 @@ msgstr "Item <b>disallowed</b> at current location."
 msgid "Item allowed at current location."
 msgstr "Item allowed at current location."
 
-msgid "Convert..."
-msgstr "Convert..."
-
 msgid "Convert shapes to polygon"
 msgstr "Convert shapes to polygon"
 
@@ -22574,8 +22594,8 @@ msgstr "Refilling all zones..."
 msgid "DRC"
 msgstr "DRC"
 
-msgid "Special Tools..."
-msgstr "Special Tools..."
+msgid "Special Tools"
+msgstr "Special Tools"
 
 msgid "Select reference point for move..."
 msgstr "Select reference point for move..."
@@ -24361,6 +24381,46 @@ msgstr "Performing polygon fills…"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "All units are not interchangeable"
+#~ msgstr "All units are not interchangeable"
+
+#~ msgid "Position:"
+#~ msgstr "Position:"
+
+#~ msgid "Center on page"
+#~ msgstr "Center on page"
+
+#~ msgid "Clarify selection"
+#~ msgstr "Clarify selection"
+
+#~ msgid "Clarify Selection"
+#~ msgstr "Clarify Selection"
+
+#~ msgid "Automatically update via net"
+#~ msgstr "Automatically update via net"
+
+#, c-format
+#~ msgid "Rule layer \"%s\" not matched."
+#~ msgstr "Rule layer \"%s\" not matched."
+
+#~ msgid "Rule layer not matched."
+#~ msgstr "Rule layer not matched."
+
+#~ msgid "Can't start a differential pair  in the middle of nowhere."
+#~ msgstr "Can't start a differential pair  in the middle of nowhere."
+
+#~ msgid "Current track/via gap setting violates design rules for this net."
+#~ msgstr "Current track/via gap setting violates design rules for this net."
+
+#~ msgid "Current track width setting violates design rules."
+#~ msgstr "Current track width setting violates design rules."
+
+#~ msgid "Convert..."
+#~ msgstr "Convert..."
+
+#~ msgid "Special Tools..."
+#~ msgstr "Special Tools..."
 
 #~ msgid "Tight"
 #~ msgstr "Tight"
