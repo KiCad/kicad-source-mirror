@@ -1406,7 +1406,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
         }
 
         menu.AppendSeparator();
-        menu.Add( _( "Select &All\tA" ), limit + 1, net_highlight_schematic_xpm );
+        menu.Add( _( "Select &All\tA" ), limit + 1, nullptr );
 
         if( !expandSelection && aCollector->HasAdditionalItems() )
             menu.Add( _( "&Expand Selection\tE" ), limit + 2, nullptr );

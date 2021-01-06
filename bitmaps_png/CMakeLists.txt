@@ -370,7 +370,6 @@ set( BMAPS_MID
     pin_table
     pin
     plot
-    plus
     polar_coord
     post_bom
     post_compo

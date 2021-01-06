@@ -589,7 +589,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
     }
 
     menu.AppendSeparator();
-    menu.Add( _( "Select &All\tA" ), limit + 1, plus_xpm );
+    menu.Add( _( "Select &All\tA" ), limit + 1, nullptr );
 
     if( aCollector->m_MenuTitle.Length() )
     {
