@@ -1,16 +1,16 @@
 # Vesa Solonen <vesa.solonen@hut.fi>, 2009, 2010, 2012.
 # Kliment <kliment@0xfb.com>, 2020.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 06:10-0800\n"
-"PO-Revision-Date: 2020-12-28 13:45+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2021-01-06 18:00+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2278,7 +2278,7 @@ msgstr "Valitse Asetusten polku"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Kuinka haluat määrittää KiCadin?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2292,7 +2292,7 @@ msgstr "Viritä differentiaaliparin vinous"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Valittu polku ei sisällä kelvollisia KiCad-asetuksia!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -2304,6 +2304,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Kun tämä on valittu, edellisen version symboli- ja "
+"jalanjälkikirjastotaulukot tuodaan tähän versioon"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 #, fuzzy
@@ -12979,7 +12981,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "Tekstimuuttujia ei voitu asettaa, koska projektia ei ole liitetty."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -13017,6 +13019,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Lohkon tunnus %s (Lohkon nimi: '%s') piirretään taululle '%s', mutta sitä ei "
+"ole linkitetty toiseen taulukkoon mallissa. KiCad vaatii, että kaikki "
+"taulukon symbolit liitetään taulukkoon, joten lohkoa ei ladattu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -14530,7 +14535,7 @@ msgstr "Makrojen tallennus- ja lukuoperaatiot"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Älä tee lisätoimenpiteitä kirjaston tallentamisen jälkeen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 #, fuzzy
@@ -14543,6 +14548,9 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"Korvaa symbolikirjastotaulukon merkintä uudella kirjastolla.\n"
+"\n"
+"Alkuperäinen kirjasto ei ole enää saatavissa käytettäväksi."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 #, fuzzy
@@ -14556,6 +14564,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Lisää uusi merkintä yleiseen symbolikirjastotaulukkoon.\n"
+"\n"
+"Symbolikirjastotaulukon lempinimi on lisätty\n"
+"kokonaisluku, jotta taulukkomerkintöjä ei ole päällekkäisiä."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
 #, fuzzy
@@ -14569,6 +14581,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Lisää uusi merkintä projektisymbolikirjastotaulukkoon.\n"
+"\n"
+"Symbolikirjastotaulukon lempinimi on lisätty\n"
+"kokonaisluku, jotta taulukkomerkintöjä ei ole päällekkäisiä."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, c-format
@@ -17231,6 +17247,7 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Virhe uuden hakemiston luomisessa. Yritä toista polkua. Projektia ei tuotu."
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -22492,7 +22509,7 @@ msgstr "Toleranssi:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Tiukka (0,001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 #, fuzzy
@@ -22501,7 +22518,7 @@ msgstr "Vakio (1,2,3)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Löysä (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -24157,18 +24174,23 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
 msgstr ""
+"Virhe: Negatiivisilla paikallisilla puhdistuma-arvoilla ei ole vaikutusta."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
 msgstr ""
+"Virhe: Negatiivisia juotosmaskin välyksiä ei tueta mukautetuissa "
+"tyynymuodoissa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Varoitus: Negatiivisen juotosmaskin välys on suurempi kuin tyyny. "
+"Juotosmaskia ei luoda."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
 #, fuzzy
@@ -24247,7 +24269,7 @@ msgstr "BGA-ominaisuus voidaan asettaa vain SMD-tyynyille"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Virhe: Kulman koko ei numero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 #, fuzzy
@@ -24256,11 +24278,11 @@ msgstr "Virheellinen (negatiivinen) kulman koon arvo"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Varoitus: Kulman koko tekee tyynystä pyöreän."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Virhe: Mukautetun tyynyn muodon on oltava yksi polygoni."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -29970,6 +29992,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Dimensiotunnuksella %s on \"ulkoinen\" tyyli CADSTARissa. Ulkoisia "
+"ulottuvuustyylejä ei vielä tueta KiCadissa. Dimension-objekti tuotiin sen "
+"sijaan sisäisellä ulottuvuustyylillä."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, fuzzy, c-format
@@ -30115,7 +30140,7 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "Tekstimuuttujia ei voitu asettaa, koska projektia ei ole ladattu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -30188,6 +30213,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"Dimensiotunnus %s käyttää laitetyyppiä, jota KiCad ei tue. Sen sijaan "
+"levitettiin milimetrejä."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
