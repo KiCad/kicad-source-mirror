@@ -335,6 +335,8 @@ void DIALOG_FIND::search( bool aDirection )
         m_frame->SetStatusText( wxEmptyString );
         msg.Printf( _( "\"%s\" not found" ), searchString );
         m_frame->ShowInfoBarMsg( msg );
+
+        m_status->SetLabel( msg );
     }
     else if( endIsReached )
     {
