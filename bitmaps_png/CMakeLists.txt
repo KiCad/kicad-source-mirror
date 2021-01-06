@@ -250,7 +250,6 @@ set( BMAPS_MID
     find
     find_replace
     flag
-    flag_remove
     flip_board
     footprint_browser
     gbr_select_mode2
@@ -316,7 +315,6 @@ set( BMAPS_MID
     mirror_h
     mirror_v
     mode_module
-    module_check
     module_editor
     module_wizard
     module_filtered_list

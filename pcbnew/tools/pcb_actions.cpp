@@ -1230,14 +1230,12 @@ TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
 TOOL_ACTION PCB_ACTIONS::autoplaceSelectedComponents( "pcbnew.Autoplacer.autoplaceSelected",
         AS_GLOBAL, 0, "",
         _( "Place Selected Footprints" ),
-        _( "Performs automatic placement of selected components" ),
-        module_check_xpm );
+        _( "Performs automatic placement of selected components" ) );
 
 TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autoplaceOffboard",
         AS_GLOBAL, 0, "",
         _( "Place Off-Board Footprints" ),
-        _( "Performs automatic placement of components outside board area" ),
-        module_xpm );
+        _( "Performs automatic placement of components outside board area" ) );
 
 
 // ROUTER_TOOL
