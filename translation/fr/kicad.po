@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-06 10:20-0800\n"
-"PO-Revision-Date: 2021-01-04 16:11+0100\n"
+"POT-Creation-Date: 2021-01-06 20:14+0100\n"
+"PO-Revision-Date: 2021-01-06 20:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -9201,16 +9201,17 @@ msgstr ""
 "Entrer le nombre d'unités pour un symbole  qui contient plus d'une unité"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Toutes les unités ne sont pas interchangeables"
+msgstr "Toutes les unités sont interchangeables"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "Activer cette option si le symbole est un symbole d'alimentation"
+msgstr ""
+"Activer cette option lorsque toutes les unités de symboles sont identiques "
+"sauf\n"
+"pour les numéros de pin."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9503,6 +9504,8 @@ msgstr "Nom de Pin Alternatif"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
+"Affectations alternatives de pins ne sont pas disponibles pour les "
+"composants DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9679,6 +9682,11 @@ msgid "E"
 msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:372
+#: eeschema/sch_edit_frame.cpp:909
+msgid "Schematic"
+msgstr "Schématique"
+
+#: eeschema/dialogs/dialog_plot_schematic.cpp:376
 #: pcbnew/dialogs/dialog_export_svg.cpp:235 pcbnew/dialogs/dialog_plot.cpp:803
 #: pcbnew/exporters/gen_footprints_placefile.cpp:251
 #: pcbnew/exporters/gen_footprints_placefile.cpp:348
@@ -9786,25 +9794,24 @@ msgid "HPGL Options"
 msgstr "Options HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Position X:"
+msgstr "Position et unités:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Bas  gauche, unités de traceur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Centré, unités de traceur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Ajustement à la page, unités d’utilisateur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Ajustement au contenu, unités utilisateur"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -12740,10 +12747,6 @@ msgstr ""
 "Ne peut pas mettre à jour le PCB, car l'Editeur de Schémas est ouvert en "
 "mode autonome. Afin de créer/mettre à jour le PCB à partir du schéma, vous "
 "devrez lancer Kicad manager et créez un projet."
-
-#: eeschema/sch_edit_frame.cpp:909
-msgid "Schematic"
-msgstr "Schématique"
 
 #: eeschema/sch_edit_frame.cpp:926
 msgid "New Schematic"
@@ -17733,11 +17736,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:47
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -25768,9 +25766,8 @@ msgid "Updating nets"
 msgstr "Mise à jour nets"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
-msgstr "Mise à jour automatique du net des vias"
+msgstr "Mise à jour automatique des nets de via"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -27477,14 +27474,13 @@ msgid "Keepout layer(s) not matched."
 msgstr "Couche(s) de zone interdite non appairée(s)"
 
 #: pcbnew/drc/drc_engine.cpp:875 pcbnew/drc/drc_engine.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Règle de couche \"%s\" non appairée."
+msgstr "Règle de couche \"%s\" non appairée, règle ignorée."
 
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:901
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "Règle de couche non appairée."
+msgstr "Règle de couche non appairée, règle ignorée."
 
 #: pcbnew/drc/drc_engine.cpp:909
 msgid "Unconditional constraint applied."
@@ -30916,43 +30912,33 @@ msgid "Tuned: skew "
 msgstr "Ajusté: décalage "
 
 #: pcbnew/router/pns_router.cpp:195
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr ""
-"Ne peut pas commencer une piste dans une zone interdite ou sur un contour du "
-"circuit imprimé."
+msgstr "Ne peut pas commencer une piste sur un pad à trou non métallisé."
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "La zone de règle '%s' interdit les pistes."
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "La zone de règle interdit les pistes."
 
 #: pcbnew/router/pns_router.cpp:218
-#, fuzzy
 msgid "Cannot start routing from a text item."
-msgstr ""
-"Ne peut pas commencer une piste dans une zone interdite ou sur un contour du "
-"circuit imprimé."
+msgstr "Ne peut pas commencer une piste sur un texte."
 
 #: pcbnew/router/pns_router.cpp:223
-#, fuzzy
 msgid "Cannot start routing from a graphic."
-msgstr ""
-"Ne peut pas commencer une piste dans une zone interdite ou sur un contour du "
-"circuit imprimé."
+msgstr "Ne peut pas commencer une piste sur un élément graphique."
 
 #: pcbnew/router/pns_router.cpp:269 pcbnew/router/pns_router.cpp:325
 msgid "The routing start point violates DRC."
 msgstr "Le point de départ du routage viole le DRC."
 
 #: pcbnew/router/pns_router.cpp:277
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "On ne peut démarrer une paire différentielle au milieu de nulle part."
+msgstr "Ne peut pas démarrer une paire différentielle au milieu de nulle part."
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
@@ -31654,9 +31640,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:90
-#, fuzzy
 msgid "Special Tools"
-msgstr "Outils Spéciaux..."
+msgstr "Outils Spéciaux"
 
 #: pcbnew/tools/edit_tool.cpp:356
 msgid "Select reference point for move..."
@@ -34062,9 +34047,8 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+#~ msgid "Convert..."
+#~ msgstr "Convertir..."
 
 #~ msgid "Position:"
 #~ msgstr "Position:"
@@ -34086,9 +34070,6 @@ msgstr ""
 #~ msgid "Current track width setting violates design rules."
 #~ msgstr ""
 #~ "Le réglage actuel de largeur de  piste viole les règles de conception."
-
-#~ msgid "Convert..."
-#~ msgstr "Convertir..."
 
 #~ msgid "Tight"
 #~ msgstr "Serrée"
@@ -34164,6 +34145,10 @@ msgstr ""
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
