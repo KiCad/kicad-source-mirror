@@ -172,7 +172,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_DescCtrl->SetValue( m_libEntry->GetDescription() );
     m_KeywordCtrl->SetValue( m_libEntry->GetKeyWords() );
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
-    m_OptionPartsLocked->SetValue( m_libEntry->UnitsLocked() && m_libEntry->GetUnitCount() > 1 );
+    m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
     m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
     m_OptionPower->SetValue( m_libEntry->IsPower() );
     m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
@@ -359,7 +359,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetDescription( m_DescCtrl->GetValue() );
     m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
     m_libEntry->SetUnitCount( m_SelNumberOfUnits->GetValue() );
-    m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && m_OptionPartsLocked->GetValue() );
+    m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && !m_OptionPartsInterchangeable->GetValue() );
     m_libEntry->SetConversion( m_AsConvertButt->GetValue() );
 
     if( m_OptionPower->GetValue() )
@@ -676,7 +676,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns( int aWidth )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_OptionPartsLocked->Enable( m_SelNumberOfUnits->GetValue() > 1 );
+    m_OptionPartsInterchangeable->Enable( m_SelNumberOfUnits->GetValue() > 1 );
     m_pinNameOffset.Enable( m_PinsNameInsideButt->GetValue() );
 
     if( m_grid->IsCellEditControlShown() )
