@@ -286,7 +286,7 @@ TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL,
         'F', LEGACY_HK_NAME( "Flip Item" ),
-        _( "Flip" ), _( "Flips selected item(s) to opposite side of board" ),
+        _( "Change Side / Flip" ), _( "Flips selected item(s) to opposite side of board" ),
         swap_layer_xpm );
 
 TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",

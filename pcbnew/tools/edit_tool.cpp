@@ -741,7 +741,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         TRACK* t1;
         TRACK* t2;
         //If true, start point of track is modified after ARC is added, otherwise the end point:
-        bool   t1Start = true; 
+        bool   t1Start = true;
         bool   t2Start = true;
     };
 
@@ -759,9 +759,9 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 || track->GetLength() == 0 )
         {
             continue;
-        }        
+        }
 
-        auto processFilletOp = 
+        auto processFilletOp =
                 [&]( bool aStartPoint )
                 {
                     wxPoint anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
@@ -796,10 +796,10 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                         }
                     }
                 };
-        
+
         processFilletOp( true ); // on the start point of track
         processFilletOp( false ); // on the end point of track
-        
+
         processedTracks.insert( track );
     }
 
@@ -873,7 +873,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 track1->SetStart( t1newPoint );
             else
                 track1->SetEnd( t1newPoint );
-            
+
             if( filletOp.t2Start )
                 track2->SetStart( t2newPoint );
             else
@@ -1218,7 +1218,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     }
 
     if( !m_dragging )
-        m_commit->Push( _( "Flip" ) );
+        m_commit->Push( _( "Change Side / Flip" ) );
 
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
