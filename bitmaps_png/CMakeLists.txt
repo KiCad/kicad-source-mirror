@@ -450,6 +450,8 @@ set( BMAPS_MID
     show_all_copper_layers
     show_all_front_layers
     show_all_back_layers
+    show_front_assembly_layers
+    show_back_assembly_layers
     special_tools
     spreadsheet
     swap_layer

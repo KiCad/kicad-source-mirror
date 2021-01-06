@@ -1567,7 +1567,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
-                 _( "Show Only Front Assembly Layers" ), KiBitmap( shape_3d_xpm ) );
+                 _( "Show Only Front Assembly Layers" ), KiBitmap( show_front_assembly_layers_xpm ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
                  KiBitmap( show_all_front_layers_xpm ) );
@@ -1583,7 +1583,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
                  KiBitmap( show_all_back_layers_xpm ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY, _( "Show Only Back Assembly Layers" ),
-                 KiBitmap( shape_3d_back_xpm ) );
+                 KiBitmap( show_back_assembly_layers_xpm ) );
 }
 
 
