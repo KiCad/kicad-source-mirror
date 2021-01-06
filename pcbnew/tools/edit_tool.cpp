@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,6 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     Activate();
 
     ARC* theArc = static_cast<ARC*>( selection.Front() );
-    m_commit->Modify( theArc );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -329,7 +328,6 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
             {
                 retval = static_cast<TRACK*>( itemsOnAnchor.front() );
-                m_commit->Modify( retval );
             }
             else
             {
@@ -348,6 +346,11 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
     TRACK* trackOnStart = getUniqueConnectedTrack( theArc->GetStart() );
     TRACK* trackOnEnd = getUniqueConnectedTrack( theArc->GetEnd() );
+
+    // Make copies of items to be edited
+    ARC* theArcCopy = new ARC( *theArc );
+    TRACK* trackOnStartCopy = new TRACK( *trackOnStart );
+    TRACK* trackOnEndCopy = new TRACK( *trackOnEnd );
 
     if( !trackOnStart->IsNew() )
     {
@@ -518,46 +521,50 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         }
     }
 
-    // Remove zero length tracks
-    if( theArc->GetStart() == theArc->GetEnd() )
-        m_commit->Remove( theArc );
-
-    auto cleanupTrack =
-            [&]( TRACK* aTrack )
+    // Ensure we only do one commit operation on each object
+    auto processTrack = 
+        [&]( TRACK* aTrack, TRACK* aTrackCopy ) 
+        {
+            if( aTrack->IsNew() )
             {
-                if( aTrack->IsNew() )
-                {
-                    getView()->Remove( aTrack );
+                getView()->Remove( aTrack );
 
-                    if( aTrack->GetStart() == aTrack->GetEnd() )
-                        delete aTrack;
-                    else
-                        m_commit->Add( aTrack );
-                }
-                else if( aTrack->GetStart() == aTrack->GetEnd() )
+                if( aTrack->GetStart() == aTrack->GetEnd() )
                 {
-                    m_commit->Remove( aTrack );
+                    delete aTrack;
+                    delete aTrackCopy;
+                    aTrack = nullptr;
+                    aTrackCopy = nullptr;
                 }
-            };
+                else
+                {
+                    m_commit->Add( aTrack );
+                    delete aTrackCopy;
+                    aTrackCopy = nullptr;
+                }
+            }
+            else  if( aTrack->GetStart() == aTrack->GetEnd() )
+            {
+                aTrack->SwapData( aTrackCopy ); //restore the original before notifying COMMIT
+                m_commit->Remove( aTrack );
+                delete aTrackCopy;
+                aTrackCopy = nullptr;
+            }
+            else
+            {
+                m_commit->Modified( aTrack, aTrackCopy );
+            }
+        };
 
-    cleanupTrack( trackOnStart );
-    cleanupTrack( trackOnEnd );
+    processTrack( trackOnStart, trackOnStartCopy );
+    processTrack( trackOnEnd, trackOnEndCopy );
+    processTrack( theArc, theArcCopy );
 
     // Should we commit?
     if( restore_state )
-    {
         m_commit->Revert();
-
-        if( trackOnStart->IsNew() )
-            delete trackOnStart;
-
-        if( trackOnEnd->IsNew() )
-            delete trackOnEnd;
-    }
     else
-    {
         m_commit->Push( _( "Drag Arc Track" ) );
-    }
 
     return 0;
 }
