@@ -879,8 +879,8 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
     int arcIdx    = -1;
     int linkIdx   = 0;
 
-    const std::vector<long>& shapes = m_line.CShapes();
-    int numPoints = static_cast<int>( shapes.size() );
+    auto shapes    = m_line.CShapes();
+    int  numPoints = static_cast<int>( shapes.size() );
 
     for( int i = 0; i < m_line.PointCount(); i++ )
     {
