@@ -233,6 +233,7 @@ set( BMAPS_MID
     export_png
     export_step
     export_svg
+    export_to_pcbnew
     export
     fabrication
     file_bom

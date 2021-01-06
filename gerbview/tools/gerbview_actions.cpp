@@ -80,7 +80,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
         AS_GLOBAL, 0, "",
         _( "Export to Pcbnew..." ),
         _( "Export data in Pcbnew format" ),
-        export_xpm );
+        export_to_pcbnew_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( "gerbview.Control.clearLayer",
         AS_GLOBAL, 0, "",
