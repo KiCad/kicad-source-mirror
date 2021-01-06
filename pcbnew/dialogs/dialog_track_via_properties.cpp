@@ -232,6 +232,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_vias )
     {
+        if( m_viaNotFree->GetValue() )
+        {
+            m_netSelectorLabel->Disable();
+            m_netSelector->Disable();
+        }
+
         m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 
         int viaSelection = wxNOT_FOUND;
@@ -279,6 +285,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     }
     else
     {
+        m_viaNotFree->Hide();
         m_MainSizer->Hide( m_sbViaSizer, true );
     }
 
@@ -595,6 +602,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onViaNotFreeClicked( wxCommandEvent& event )
+{
+    m_netSelectorLabel->Enable( !m_viaNotFree->GetValue() );
+    m_netSelector->Enable( !m_viaNotFree->GetValue() );
 }
 
 

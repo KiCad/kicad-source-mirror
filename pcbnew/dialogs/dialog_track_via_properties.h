@@ -41,6 +41,7 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
+    void onViaNotFreeClicked( wxCommandEvent& event ) override;
     void onTrackNetclassCheck( wxCommandEvent& aEvent ) override;
     void onWidthSelect( wxCommandEvent& aEvent ) override;
     void onWidthEdit( wxCommandEvent& aEvent ) override;

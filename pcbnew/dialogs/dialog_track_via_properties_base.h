@@ -20,8 +20,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <widgets/net_selector.h>
-#include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
@@ -45,6 +46,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sbCommonSizer;
 		wxStaticText* m_netSelectorLabel;
 		NET_SELECTOR* m_netSelector;
+		wxCheckBox* m_viaNotFree;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
@@ -91,12 +94,12 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_ViaStartLayer;
 		wxStaticText* m_ViaEndLayerLabel1;
 		PCB_LAYER_BOX_SELECTOR* m_ViaEndLayer;
-		wxCheckBox* m_viaNotFree;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;
 		wxButton* m_StdButtonsCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onViaNotFreeClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
@@ -107,7 +110,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 720,685 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_TRACK_VIA_PROPERTIES_BASE();
 
 };
