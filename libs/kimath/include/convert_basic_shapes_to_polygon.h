@@ -57,6 +57,18 @@ enum RECT_CHAMFER_POSITIONS : int
  * @param aError = the IU allowed for error in approximation
  * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
  */
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, wxPoint aCenter, int aRadius,
+                               int aError, ERROR_LOC aErrorLoc );
+
+/**
+ * Function TransformCircleToPolygon
+ * convert a circle to a polygon, using multiple straight lines
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aCenter = the center of the circle
+ * @param aRadius = the radius of the circle
+ * @param aError = the IU allowed for error in approximation
+ * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
+ */
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc );
 

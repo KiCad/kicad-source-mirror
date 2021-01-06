@@ -89,6 +89,13 @@ private:
      */
     static SHAPE_POLY_SET makePolysFromRects( const std::deque<EDA_ITEM*>& aItems );
 
+    /**
+     * Tries to make polygons from circles
+     * @param aItems is a list of circle shapes to process
+     * @return a SHAPE_POLY_SET containing any polygons that were created
+     */
+    static SHAPE_POLY_SET makePolysFromCircles( const std::deque<EDA_ITEM*>& aItems );
+
     PCB_SELECTION_TOOL* m_selectionTool;
     CONDITIONAL_MENU*   m_menu;
     PCB_BASE_FRAME*     m_frame;
