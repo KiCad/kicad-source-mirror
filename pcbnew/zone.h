@@ -131,6 +131,11 @@ public:
     wxString GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    {
+        return BOARD_ITEM::Matches( GetZoneName(), aSearchData );
+    }
+
     /**
      * Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline

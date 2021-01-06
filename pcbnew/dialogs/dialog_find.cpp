@@ -257,6 +257,15 @@ void DIALOG_FIND::search( bool aDirection )
                         m_hitList.push_back( textItem );
                     }
                 }
+
+                for( BOARD_ITEM* item : m_frame->GetBoard()->Zones() )
+                {
+                    ZONE* zoneItem = dynamic_cast<ZONE*>( item );
+                    if( zoneItem && zoneItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                    {
+                        m_hitList.push_back( zoneItem );
+                    }
+                }
             }
         }
 
