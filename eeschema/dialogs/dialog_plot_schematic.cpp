@@ -364,8 +364,12 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileN
 {
     wxString   path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
     wxFileName outputDir = wxFileName::DirName( path );
+    wxString plotFileName;
 
-    wxString plotFileName = Prj().AbsolutePath( aPlotFileName + wxT( "." ) + aExtension);
+    if( !aPlotFileName.IsEmpty() )
+        plotFileName = Prj().AbsolutePath( aPlotFileName + wxT( "." ) + aExtension );
+    else
+        plotFileName = Prj().AbsolutePath( _( "Schematic" ) + wxT( "." ) + aExtension );
 
     if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
     {
