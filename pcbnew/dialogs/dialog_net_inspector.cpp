@@ -185,14 +185,14 @@ public:
     gen( m_via_count, 1, GetViaCount, SetViaCount, AddViaCount, SubViaCount, ViaCountChanged );
     gen( m_via_length, 2, GetViaLength, SetViaLength, AddViaLength, SubViaLength, ViaLengthChanged );
     gen( m_board_wire_length, 3, GetBoardWireLength, SetBoardWireLength, AddBoardWireLength,
-            SubBoardWireLength, BoardWireLengthChanged );
+         SubBoardWireLength, BoardWireLengthChanged );
     gen( m_chip_wire_length, 4, GetChipWireLength, SetChipWireLength, AddChipWireLength,
-            SubChipWireLength, ChipWireLengthChanged );
+         SubChipWireLength, ChipWireLengthChanged );
 
 #undef gen
 
     // the total length column is always computed, never stored.
-    auto GetTotalLength() const
+    unsigned long long int GetTotalLength() const
     {
         return GetBoardWireLength() + GetViaLength() + GetChipWireLength();
     }
@@ -332,7 +332,6 @@ public:
         return { i };
     }
 
-
     OPT<LIST_ITEM_ITER> findItem( NETINFO_ITEM* aNet )
     {
         if( aNet != nullptr )
@@ -340,7 +339,6 @@ public:
         else
             return {};
     }
-
 
     OPT<LIST_ITEM_ITER> addItem( std::unique_ptr<LIST_ITEM> aItem )
     {
@@ -352,10 +350,11 @@ public:
         // however, if we've got filtering enabled, we might not have all the nets in
         // our list, so do a sorted insertion.
 
-        auto new_i = std::lower_bound( m_items.begin(), m_items.end(), aItem->GetNetCode(),
-                                       LIST_ITEM_NETCODE_CMP_LESS() );
+        auto new_iter = std::lower_bound( m_items.begin(), m_items.end(), aItem->GetNetCode(),
+                                          LIST_ITEM_NETCODE_CMP_LESS() );
 
-        new_i = m_items.insert( new_i, std::move( aItem ) );
+        new_iter = m_items.insert( new_iter, std::move( aItem ) );
+        const std::unique_ptr<LIST_ITEM>& new_item = *new_iter;
 
         if( m_parent.m_groupBy->IsChecked()
                 && ( m_parent.m_groupByKind->GetSelection() == 0
@@ -363,9 +362,9 @@ public:
         {
             for( unsigned int j = 0; j < m_parent.m_groupFilter.size(); ++j )
             {
-                if( m_parent.m_groupFilter[j]->Find(( *new_i )->GetNetName() ) )
+                if( m_parent.m_groupFilter[j]->Find( new_item->GetNetName() ) )
                 {
-                    ( *new_i )->SetParent( &*m_items[j] );
+                    new_item->SetParent( &*m_items[j] );
                     break;
                 }
             }
@@ -376,30 +375,30 @@ public:
         {
             auto groups_begin = m_items.begin();
             auto groups_end   = std::find_if_not( m_items.begin(), m_items.end(),
-                                                  []( const std::unique_ptr<LIST_ITEM>& x )
-                                                  {
-                                                      return x->GetIsGroup();
-                                                  } );
+                    []( const std::unique_ptr<LIST_ITEM>& x )
+                    {
+                        return x->GetIsGroup();
+                    } );
 
             for( std::unique_ptr<EDA_PATTERN_MATCH>& f : m_parent.m_groupFilter )
             {
-                EDA_PATTERN_MATCH::FIND_RESULT match = f->Find(( *new_i )->GetNetName() );
+                EDA_PATTERN_MATCH::FIND_RESULT match = f->Find( new_item->GetNetName() );
 
                 if( match )
                 {
-                    wxString match_str = ( *new_i )->GetNetName().substr( match.start, match.length );
+                    wxString match_str = new_item->GetNetName().substr( match.start, match.length );
 
                     auto group = std::find_if( groups_begin, groups_end,
-                                               [&]( const std::unique_ptr<LIST_ITEM>& x )
-                                               {
-                                                   return x->GetNetName() == match_str;
-                                               } );
+                            [&]( const std::unique_ptr<LIST_ITEM>& x )
+                            {
+                                return x->GetNetName() == match_str;
+                            } );
 
                     if( group == groups_end )
                     {
+                        int dist = std::distance( groups_end, groups_begin );
                         group = m_items.insert( groups_end,
-                                std::make_unique<LIST_ITEM>(
-                                        std::distance( groups_end, groups_begin ), match_str ) );
+                                                std::make_unique<LIST_ITEM>( dist, match_str ) );
 
                         groups_end = group + 1;
 
@@ -407,17 +406,16 @@ public:
                                    wxDataViewItem( &**group ) );
                     }
 
-                    ( *new_i )->SetParent( &**group );
+                    new_item->SetParent( &**group );
                     break;
                 }
             }
         }
 
-        ItemAdded( wxDataViewItem(( *new_i )->Parent() ), wxDataViewItem( &**new_i ) );
+        ItemAdded( wxDataViewItem( new_item->Parent() ), wxDataViewItem( new_item.get() ) );
 
-        return { new_i };
+        return { new_iter };
     }
-
 
     void addItems( std::vector<std::unique_ptr<LIST_ITEM>>&& aItems )
     {
@@ -464,10 +462,10 @@ public:
                             wxString match_str = i->GetNetName().substr( match.start, match.length );
 
                             auto group = std::find_if( groups.begin(), groups.end(),
-                                                       [&]( const std::unique_ptr<LIST_ITEM>& x )
-                                                       {
-                                                           return x->GetNetName() == match_str;
-                                                       } );
+                                    [&]( const std::unique_ptr<LIST_ITEM>& x )
+                                    {
+                                        return x->GetNetName() == match_str;
+                                    } );
 
                             if( group == groups.end() )
                             {
@@ -501,7 +499,6 @@ public:
         }
     }
 
-
     std::unique_ptr<LIST_ITEM> deleteItem( const OPT<LIST_ITEM_ITER>& aRow )
     {
         if( !aRow )
@@ -515,32 +512,32 @@ public:
 
         m_items.erase( *aRow );
 
-        ItemDeleted( wxDataViewItem( parent ), wxDataViewItem( &*i ) );
-
-        ItemChanged( wxDataViewItem( parent ) );
-
-        // for grouping type 2,3 a group item might disappear if it becomes empty.
-        if( ( m_parent.m_groupByKind->GetSelection() == 2
-                    || m_parent.m_groupByKind->GetSelection() == 3 )
-                && parent != nullptr && parent->ChildrenCount() == 0 )
+        if( parent )
         {
-            auto p = std::find_if( m_items.begin(), m_items.end(),
-                                   [&]( std::unique_ptr<LIST_ITEM>& x )
-                                   {
-                                       return x.get() == parent;
-                                   } );
+            ItemDeleted( wxDataViewItem( parent ), wxDataViewItem( &*i ) );
+            ItemChanged( wxDataViewItem( parent ) );
 
-            wxASSERT( p != m_items.end() );
-            m_items.erase( p );
+            // for grouping type 2,3 a group item might disappear if it becomes empty.
+            if( ( m_parent.m_groupByKind->GetSelection() == 2
+                        || m_parent.m_groupByKind->GetSelection() == 3 )
+                    && parent != nullptr && parent->ChildrenCount() == 0 )
+            {
+                auto p = std::find_if( m_items.begin(), m_items.end(),
+                                       [&]( std::unique_ptr<LIST_ITEM>& x )
+                                       {
+                                           return x.get() == parent;
+                                       } );
 
-            ItemDeleted( wxDataViewItem( parent->Parent() ), wxDataViewItem( parent ) );
+                wxASSERT( p != m_items.end() );
+                m_items.erase( p );
+
+                ItemDeleted( wxDataViewItem( parent->Parent() ), wxDataViewItem( parent ) );
+            }
         }
-        else
-            resortIfChanged( parent );
 
+        Resort();
         return i;
     }
-
 
     void deleteAllItems()
     {
@@ -549,24 +546,25 @@ public:
         AfterReset();
     }
 
-
     void updateItem( const OPT<LIST_ITEM_ITER>& aRow )
     {
-        if( !aRow )
-            return;
+        if( aRow )
+        {
+            const std::unique_ptr<LIST_ITEM>& listItem = *aRow.get();
 
-        if(( **aRow )->Parent() )
-            ItemChanged( wxDataViewItem(( **aRow )->Parent() ) );
+            if( listItem->Parent() )
+                ItemChanged( wxDataViewItem( listItem->Parent() ) );
 
-        ItemChanged( wxDataViewItem( &***aRow ) );
-        resortIfChanged( &***aRow );
+            ItemChanged( wxDataViewItem( listItem.get() ) );
+            resortIfChanged( listItem.get() );
+        }
     }
 
 
     void updateAllItems()
     {
         for( std::unique_ptr<LIST_ITEM>& i : m_items )
-            ItemChanged( wxDataViewItem( &*i ) );
+            ItemChanged( wxDataViewItem( i.get() ) );
     }
 
 
@@ -1012,6 +1010,10 @@ bool DIALOG_NET_INSPECTOR::netFilterMatches( NETINFO_ITEM* aNet ) const
 {
     // Note: the filtering is case insensitive.
 
+    // Never show the unconnected net
+    if( aNet->GetNetCode() <= 0 )
+        return false;
+
     // Show no-connect nets only if specifically asked for by filter
     if( m_netFilter.empty() )
         return !aNet->GetNetname().StartsWith( "no_connect_" );
@@ -1214,11 +1216,13 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
 
             if( r )
             {
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = pad->GetPadToDieLength();
-                ( **r )->SubPadCount( 1 );
-                ( **r )->SubChipWireLength( len );
 
-                if( ( **r )->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
+                list_item->SubPadCount( 1 );
+                list_item->SubChipWireLength( len );
+
+                if( list_item->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
                     m_data_model->deleteItem( r );
                 else
                     updateDisplayedRowValues( r );
@@ -1234,13 +1238,15 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
             // try to handle frequent operations quickly.
             if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = track->GetLength();
-                ( **r )->SubBoardWireLength( len );
+
+                list_item->SubBoardWireLength( len );
 
                 if( track->Type() == PCB_VIA_T )
                 {
-                    ( **r )->SubViaCount( 1 );
-                    ( **r )->SubViaLength( calculateViaLength( track ) );
+                    list_item->SubViaCount( 1 );
+                    list_item->SubViaLength( calculateViaLength( track ) );
                 }
 
                 updateDisplayedRowValues( r );
@@ -1341,26 +1347,31 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
         return;
     }
 
-    std::unique_ptr<LIST_ITEM> list_item = buildNewItem( aNet, node_count,
-                                                         relevantConnectivityItems() );
+    std::unique_ptr<LIST_ITEM> new_list_item = buildNewItem( aNet, node_count,
+                                                             relevantConnectivityItems() );
 
     if( !cur_net_row )
-        m_data_model->addItem( std::move( list_item ) );
+    {
+        m_data_model->addItem( std::move( new_list_item ) );
+        return;
+    }
 
-    else if(( **cur_net_row )->GetNetName() != list_item->GetNetName() )
+    const std::unique_ptr<LIST_ITEM>& cur_list_item = *cur_net_row.get();
+
+    if( cur_list_item->GetNetName() != new_list_item->GetNetName() )
     {
         // if the name has changed, it might require re-grouping.
         // it's easier to remove and re-insert it
         m_data_model->deleteItem( cur_net_row );
-        m_data_model->addItem( std::move( list_item ) );
+        m_data_model->addItem( std::move( new_list_item ) );
     }
     else
     {
         // update fields only
-        ( **cur_net_row )->SetPadCount( list_item->GetPadCount() );
-        ( **cur_net_row )->SetViaCount( list_item->GetViaCount() );
-        ( **cur_net_row )->SetBoardWireLength( list_item->GetBoardWireLength() );
-        ( **cur_net_row )->SetChipWireLength( list_item->GetChipWireLength() );
+        cur_list_item->SetPadCount( new_list_item->GetPadCount() );
+        cur_list_item->SetViaCount( new_list_item->GetViaCount() );
+        cur_list_item->SetBoardWireLength( new_list_item->GetBoardWireLength() );
+        cur_list_item->SetChipWireLength( new_list_item->GetChipWireLength() );
 
         updateDisplayedRowValues( cur_net_row );
     }
@@ -1463,8 +1474,10 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
     prev_selected_netcodes.reserve( sel.GetCount() );
 
     for( unsigned int i = 0; i < sel.GetCount(); ++i )
-        prev_selected_netcodes.push_back(
-                static_cast<const LIST_ITEM*>( sel.Item( i ).GetID())->GetNetCode() );
+    {
+        const LIST_ITEM* item = static_cast<const LIST_ITEM*>( sel.Item( i ).GetID() );
+        prev_selected_netcodes.push_back( item->GetNetCode() );
+    }
 
     m_data_model->deleteAllItems();
 
@@ -1476,8 +1489,10 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
             && ( m_groupByKind->GetSelection() == 0 || m_groupByKind->GetSelection() == 1 ) )
     {
         for( unsigned int i = 0; i < m_groupFilter.size(); ++i )
-            new_items.emplace_back(
-                    std::make_unique<LIST_ITEM>( i, m_groupFilter[i]->GetPattern() ) );
+        {
+            const std::unique_ptr<EDA_PATTERN_MATCH>& filter = m_groupFilter[i];
+            new_items.emplace_back( std::make_unique<LIST_ITEM>( i, filter->GetPattern() ) );
+        }
     }
 
     std::vector<CN_ITEM*> prefiltered_cn_items = relevantConnectivityItems();
