@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,23 +289,19 @@ public:
         return r;
     }
 
-
     DATA_MODEL( DIALOG_NET_INSPECTOR& parent ) : m_parent( parent )
     {
     }
-
 
     unsigned int columnCount() const
     {
         return columnDesc().size();
     }
 
-
     unsigned int itemCount() const
     {
         return m_items.size();
     }
-
 
     wxVariant valueAt( unsigned int aCol, unsigned int aRow ) const
     {
@@ -314,12 +310,10 @@ public:
         return r;
     }
 
-
     const LIST_ITEM& itemAt( unsigned int aRow ) const
     {
         return *m_items.at( aRow );
     }
-
 
     OPT<LIST_ITEM_ITER> findItem( int aNetCode )
     {
@@ -523,10 +517,10 @@ public:
                     && parent != nullptr && parent->ChildrenCount() == 0 )
             {
                 auto p = std::find_if( m_items.begin(), m_items.end(),
-                                       [&]( std::unique_ptr<LIST_ITEM>& x )
-                                       {
-                                           return x.get() == parent;
-                                       } );
+                        [&]( std::unique_ptr<LIST_ITEM>& x )
+                        {
+                            return x.get() == parent;
+                        } );
 
                 wxASSERT( p != m_items.end() );
                 m_items.erase( p );
@@ -560,13 +554,11 @@ public:
         }
     }
 
-
     void updateAllItems()
     {
         for( std::unique_ptr<LIST_ITEM>& i : m_items )
             ItemChanged( wxDataViewItem( i.get() ) );
     }
-
 
     void resortIfChanged( LIST_ITEM* aItem )
     {
@@ -584,7 +576,6 @@ public:
                 Resort();
         }
     }
-
 
     bool itemColumnChanged( const LIST_ITEM* aItem, unsigned int aCol ) const
     {
@@ -612,7 +603,6 @@ public:
         return false;
     }
 
-
     // implementation of wxDataViewModel interface
     // these are used to query the data model by the GUI view implementation.
     // these are not supposed to be used to modify the data model.  for that
@@ -623,7 +613,6 @@ protected:
     {
         return columnCount();
     }
-
 
     void GetValue( wxVariant& aOutValue, const wxDataViewItem& aItem,
                    unsigned int aCol ) const override
@@ -659,7 +648,6 @@ protected:
         }
     }
 
-
     static int compareUInt( uint64_t aValue1, uint64_t aValue2, bool aAsc )
     {
         if( aAsc )
@@ -667,7 +655,6 @@ protected:
         else
             return aValue2 < aValue1 ? -1 : 1;
     }
-
 
     int Compare( const wxDataViewItem& aItem1, const wxDataViewItem& aItem2,
                  unsigned int aCol, bool aAsc ) const override
@@ -721,13 +708,11 @@ protected:
         return aAsc ? id1 - id2 : id2 - id1;
     }
 
-
     bool SetValue( const wxVariant& aInValue, const wxDataViewItem& aItem,
                    unsigned int aCol ) override
     {
         return false;
     }
-
 
     wxDataViewItem GetParent( const wxDataViewItem& aItem ) const override
     {
@@ -737,7 +722,6 @@ protected:
         return wxDataViewItem( static_cast<const LIST_ITEM*>( aItem.GetID() )->Parent() );
     }
 
-
     bool IsContainer( const wxDataViewItem& aItem ) const override
     {
         if( !aItem.IsOk() )
@@ -746,12 +730,10 @@ protected:
         return static_cast<const LIST_ITEM*>( aItem.GetID() )->GetIsGroup();
     }
 
-
     bool HasContainerColumns( const wxDataViewItem& aItem ) const override
     {
         return IsContainer( aItem );
     }
-
 
     unsigned int GetChildren( const wxDataViewItem& aParent,
                               wxDataViewItemArray& aChildren ) const override
@@ -787,7 +769,6 @@ protected:
 
         return 0;
     }
-
 
     wxString GetColumnType( unsigned int /* aCol */ ) const override
     {
@@ -1056,9 +1037,9 @@ std::vector<CN_ITEM*> DIALOG_NET_INSPECTOR::relevantConnectivityItems() const
     // calculating the total length for each net.
 
     const auto type_bits = std::bitset<MAX_STRUCT_TYPE_ID>()
-        .set( PCB_TRACE_T )
-        .set( PCB_VIA_T )
-        .set( PCB_PAD_T );
+            .set( PCB_TRACE_T )
+            .set( PCB_VIA_T )
+            .set( PCB_PAD_T );
 
     std::vector<CN_ITEM*> cn_items;
     cn_items.reserve( 1024 );
@@ -1143,13 +1124,15 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
             // try to handle frequent operations quickly.
             if( TRACK* track = dynamic_cast<TRACK*>( i ) )
             {
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = track->GetLength();
-                ( **r )->AddBoardWireLength( len );
+
+                list_item->AddBoardWireLength( len );
 
                 if( track->Type() == PCB_VIA_T )
                 {
-                    ( **r )->AddViaCount( 1 );
-                    ( **r )->AddViaLength( calculateViaLength( track ) );
+                    list_item->AddViaCount( 1 );
+                    list_item->AddViaLength( calculateViaLength( track ) );
                 }
 
                 updateDisplayedRowValues( r );
@@ -1179,11 +1162,13 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
 
             if( r )
             {
+                const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
                 int len = pad->GetPadToDieLength();
-                ( **r )->AddPadCount( 1 );
-                ( **r )->AddChipWireLength( len );
 
-                if( ( **r )->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
+                list_item->AddPadCount( 1 );
+                list_item->AddChipWireLength( len );
+
+                if( list_item->GetPadCount() == 0 && !m_cbShowZeroPad->IsChecked() )
                     m_data_model->deleteItem( r );
                 else
                     updateDisplayedRowValues( r );
@@ -1567,9 +1552,14 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
         auto r = m_data_model->findItem( nc );
 
         if( r )
-            sel.Add( wxDataViewItem( &***r ) );
+        {
+            const std::unique_ptr<LIST_ITEM>& list_item = *r.get();
+            sel.Add( wxDataViewItem( list_item.get() ) );
+        }
         else
+        {
             nc = -1;
+        }
     }
 
     if( !sel.IsEmpty() )
@@ -1578,11 +1568,13 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
         m_netsList->EnsureVisible( sel.Item( 0 ) );
     }
     else
+    {
         m_netsList->UnselectAll();
+    }
 
-    prev_selected_netcodes.erase(
-            std::remove( prev_selected_netcodes.begin(), prev_selected_netcodes.end(), -1 ),
-            prev_selected_netcodes.end() );
+    prev_selected_netcodes.erase( std::remove( prev_selected_netcodes.begin(),
+                                               prev_selected_netcodes.end(), -1 ),
+                                  prev_selected_netcodes.end() );
 
     m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->SetHighlight( false );
 
