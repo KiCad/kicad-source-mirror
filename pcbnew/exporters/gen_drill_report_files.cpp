@@ -338,11 +338,11 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
     wxASSERT( m_pcb );
 
     unsigned    totalHoleCount;
-    wxString    brdFilename = m_pcb->GetFileName();
+    wxFileName  brdFilename( m_pcb->GetFileName() );
 
     std::vector<DRILL_LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
-    out.Print( 0, "Drill report for %s\n", TO_UTF8( brdFilename ) );
+    out.Print( 0, "Drill report for %s\n", TO_UTF8( brdFilename.GetFullName() ) );
     out.Print( 0, "Created on %s\n\n", TO_UTF8( DateAndTime() ) );
 
     // Output the cu layer stackup, so layer name references make sense.
