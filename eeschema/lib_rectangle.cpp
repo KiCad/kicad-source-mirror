@@ -254,6 +254,23 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
+bool LIB_RECTANGLE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    EDA_RECT sel = aRect;
+
+    if ( aAccuracy )
+        sel.Inflate( aAccuracy );
+
+    if( aContained )
+        return sel.Contains( GetBoundingBox() );
+
+    return sel.Intersects( GetBoundingBox() );
+}
+
+
 wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),
