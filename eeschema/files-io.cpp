@@ -177,6 +177,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
         if( aSaveUnderNewName )
         {
             screen->SetFileName( schematicFileName.GetFullPath() );
+            aSheet->SetFileName( schematicFileName.GetFullPath() );
             LockFile( schematicFileName.GetFullPath() );
         }
 
