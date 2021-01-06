@@ -32,8 +32,8 @@
 
 #include <plugins/3dapi/xv3d_types.h>   // SFVEC2F
 
-class RAY2D;
-class RAYSEG2D;
+struct RAY2D;
+struct RAYSEG2D;
 
 /**
  * Manage a bounding box defined by two SFVEC2F min max points.

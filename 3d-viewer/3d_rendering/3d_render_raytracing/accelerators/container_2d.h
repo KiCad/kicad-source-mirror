@@ -33,7 +33,7 @@
 #include <list>
 #include <mutex>
 
-class RAYSEG2D;
+struct RAYSEG2D;
 
 typedef std::list<OBJECT_2D*> LIST_OBJECT2D;
 typedef std::list<const OBJECT_2D*> CONST_LIST_OBJECT2D;
