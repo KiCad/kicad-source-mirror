@@ -35,10 +35,6 @@ class SHAPE_LINE_CHAIN;
 class SHAPE_ARC : public SHAPE
 {
 public:
-    /**
-     * @brief This is the minimum precision for all the points in the arc shape.
-     */
-    static const int MIN_PRECISION_IU = 4;
 
     SHAPE_ARC() :
         SHAPE( SH_ARC ),

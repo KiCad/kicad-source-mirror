@@ -20,7 +20,7 @@
 
 #include <geometry/circle.h>
 #include <geometry/seg.h>
-#include <geometry/shape_arc.h> // for MIN_PRECISION_IU
+#include <geometry/shape.h>     // for MIN_PRECISION_IU
 #include <math/util.h>          // for KiROUND
 #include <math/vector2d.h>      // for VECTOR2I
 #include <math.h>               // for sqrt
@@ -293,12 +293,12 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aLine ) const
     VECTOR2I m = aLine.LineProject( Center );
     int64_t  om = ( m - Center ).EuclideanNorm();
 
-    if( om > ( (int64_t) Radius + SHAPE_ARC::MIN_PRECISION_IU ) )
+    if( om > ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU ) )
     {
         return retval; // does not intersect
     }
-    else if( om <= ( (int64_t) Radius + SHAPE_ARC::MIN_PRECISION_IU )
-             && om >= ( (int64_t) Radius - SHAPE_ARC::MIN_PRECISION_IU ) )
+    else if( om <= ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU )
+             && om >= ( (int64_t) Radius - SHAPE::MIN_PRECISION_IU ) )
     {
         retval.push_back( m );
         return retval; //tangent

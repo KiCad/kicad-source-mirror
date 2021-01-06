@@ -28,6 +28,7 @@ set( KIMATH_SRCS
     test_kimath.cpp
 
     geometry/test_fillet.cpp
+    geometry/test_circle.cpp
     geometry/test_segment.cpp
     geometry/test_shape_compound_collision.cpp
     geometry/test_shape_arc.cpp
