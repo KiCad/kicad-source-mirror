@@ -17,6 +17,9 @@ set( KIMATH_SRCS
     src/geometry/shape_rect.cpp
     src/geometry/shape_compound.cpp
     src/geometry/shape_segment.cpp
+
+
+    src/math/util.cpp
 )
 
 # Include the other smaller math libraries in this one for convenience

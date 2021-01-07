@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -31,7 +30,6 @@
 #include <cstdint>
 #include <limits>
 #include <typeinfo>
-#include <type_traits>
 #include <wx/debug.h>
 #include <wx/log.h>
 
@@ -94,25 +92,9 @@ constexpr ret_type KiROUND( fp_type v )
  */
 
 template <typename T>
-T rescale( T aNumerator, T aValue, T aDenominator, std::false_type )
-{
-    /// Rescales for floating point, casting up to double
-    return static_cast<double>( aNumerator ) * static_cast<double>( aValue )
-                    / static_cast<double>( aDenominator );
-}
-
-template <typename T>
-T rescale( T aNumerator, T aValue, T aDenominator, std::true_type )
-{
-    /// Rescales for integers casting to double and handling rounding to nearest
-    return KiROUND( static_cast<double>( aNumerator ) * static_cast<double>( aValue )
-                    / static_cast<double>( aDenominator ) );
-}
-
-template <typename T>
 T rescale( T aNumerator, T aValue, T aDenominator )
 {
-    return rescale( aNumerator, aValue, aDenominator, std::is_integral<T>() );
+    return aNumerator * aValue / aDenominator;
 }
 
 template <typename T>
@@ -120,5 +102,12 @@ int sign( T val )
 {
     return ( T( 0 ) < val) - ( val < T( 0 ) );
 }
+
+// explicit specializations for integer types, taking care of overflow.
+template <>
+int rescale( int aNumerator, int aValue, int aDenominator );
+
+template <>
+int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
 
 #endif // UTIL_H
