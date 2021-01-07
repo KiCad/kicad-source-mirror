@@ -304,7 +304,7 @@ std::vector<wxString> getProjects( const wxDir& dir )
 
 
 wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
-                                                      const wxTreeItemId& aRoot,
+                                                      const wxTreeItemId& aParent,
                                                       std::vector<wxString>* aProjectNames,
                                                       bool aRecurse )
 {
@@ -378,13 +378,25 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     if( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
                 || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) )
     {
-        if( aProjectNames && !alg::contains( *aProjectNames, currfile.GetName() ) )
-            return wxTreeItemId();
+        if( aProjectNames )
+        {
+            if( !alg::contains( *aProjectNames, currfile.GetName() ) )
+                return wxTreeItemId();
+        }
+        else
+        {
+            PROJECT_TREE_ITEM*    parentTreeItem = GetItemIdData( aParent );
+            wxDir                 parentDir( parentTreeItem->GetDir() );
+            std::vector<wxString> projects = getProjects( parentDir );
+
+            if( !alg::contains( projects, currfile.GetName() ) )
+                return wxTreeItemId();
+        }
     }
 
     // also check to see if it is already there.
     wxTreeItemIdValue cookie;
-    wxTreeItemId      kid = m_TreeProject->GetFirstChild( aRoot, cookie );
+    wxTreeItemId      kid = m_TreeProject->GetFirstChild( aParent, cookie );
 
     while( kid.IsOk() )
     {
@@ -393,14 +405,14 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         if( itemData && itemData->GetFileName() == aName )
             return itemData->GetId();    // well, we would have added it, but it is already here!
 
-        kid = m_TreeProject->GetNextChild( aRoot, cookie );
+        kid = m_TreeProject->GetNextChild( aParent, cookie );
     }
 
     // Only show current files if both legacy and current files are present
     if( type == TREE_FILE_TYPE::LEGACY_PROJECT || type == TREE_FILE_TYPE::JSON_PROJECT
         || type == TREE_FILE_TYPE::LEGACY_SCHEMATIC || type == TREE_FILE_TYPE::SEXPR_SCHEMATIC )
     {
-        kid = m_TreeProject->GetFirstChild( aRoot, cookie );
+        kid = m_TreeProject->GetFirstChild( aParent, cookie );
 
         while( kid.IsOk() )
         {
@@ -444,12 +456,12 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
                 }
             }
 
-            kid = m_TreeProject->GetNextChild( aRoot, cookie );
+            kid = m_TreeProject->GetNextChild( aParent, cookie );
         }
     }
 
     // Append the item (only appending the filename not the full path):
-    wxTreeItemId       newItemId = m_TreeProject->AppendItem( aRoot, file );
+    wxTreeItemId       newItemId = m_TreeProject->AppendItem( aParent, file );
     PROJECT_TREE_ITEM* data = new PROJECT_TREE_ITEM( type, aName, m_TreeProject );
 
     m_TreeProject->SetItemData( newItemId, data );

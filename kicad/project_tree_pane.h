@@ -159,12 +159,12 @@ private:
      * Function addItemToProjectTree
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
-     * @param aRoot = the wxTreeItemId item where to add sub tree items
+     * @param aParent = the wxTreeItemId item where to add sub tree items
      * @param aRecurse = true to add file or subdir names to the current tree item
      *                   false to stop file add.
      * @return the Id for the new tree item
      */
-    wxTreeItemId addItemToProjectTree( const wxString& aName, const wxTreeItemId& aRoot,
+    wxTreeItemId addItemToProjectTree( const wxString& aName, const wxTreeItemId& aParent,
                                        std::vector<wxString>* aProjectNames, bool aRecurse );
 
     /**
