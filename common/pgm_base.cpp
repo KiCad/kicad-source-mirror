@@ -215,6 +215,14 @@ bool PGM_BASE::InitPgm()
 
     wxInitAllImageHandlers();
 
+#ifndef __WINDOWS__
+    if( wxString( wxGetenv( "HOME" ) ).IsEmpty() )
+    {
+        DisplayErrorMessage( nullptr, _( "Environmental variable HOME is empty.  Unable to continue." ) );
+        return false;
+    }
+#endif
+
     m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) +
                                                  wxGetUserId(), GetKicadLockFilePath() );
 
