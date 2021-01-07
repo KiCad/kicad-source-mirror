@@ -165,12 +165,12 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     // Under vcpkg/msvc, we need to explicitly set the python home
     // or else it'll start consuming system python registry keys and the like instead
     // We are going to follow the "unix" layout for the msvc/vcpkg distributions so exes in /root/bin
-    // And the python lib in /root/share/python3(/Lib,/DLLs)
+    // And the python lib in /root/lib/python3(/Lib,/DLLs)
     wxFileName pyHome;
 
     pyHome.Assign( Pgm().GetExecutablePath() );
     pyHome.AppendDir( wxT("..") );
-    pyHome.AppendDir( wxT("share") );
+    pyHome.AppendDir( wxT("lib") );
     pyHome.AppendDir( wxT("python3") );
 
     pyHome.Normalize();

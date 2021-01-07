@@ -767,15 +767,19 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         endif()
     endif()
 
-    if( NOT APPLE )
-        set( PYTHON_DEST "${PYTHON_SITE_PACKAGE_PATH}"
-            CACHE PATH "Python module install path."
-            )
-    else()
+    if( APPLE )
         # relative path for python in bundle
         set( PYTHON_LIB_DIR "python/site-packages" )
         # install into bundle Frameworks folder
         set( PYTHON_DEST "${OSX_BUNDLE_BUILD_LIB_DIR}/${PYTHON_LIB_DIR}"
+            CACHE PATH "Python module install path."
+            )
+	elseif( VCPKG_TOOLCHAIN )
+        set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/lib/python3/Lib/site-packages"
+            CACHE PATH "Python module install path."
+            )
+    else()
+        set( PYTHON_DEST "${PYTHON_SITE_PACKAGE_PATH}"
             CACHE PATH "Python module install path."
             )
     endif()
