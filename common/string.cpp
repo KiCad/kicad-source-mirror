@@ -102,9 +102,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_QUOTED_STR )
         {
-            if( c == '{' )
-                converted += "{brace}";
-            else if( c == '\"' )
+            if( c == '\"' )
                 converted += "{dblquote}";
             else
                 converted += c;
