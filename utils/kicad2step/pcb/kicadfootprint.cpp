@@ -156,7 +156,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
 
 bool KICADFOOTPRINT::parseRect( SEXPR::SEXPR* data )
 {
-    std::unique_ptr<KICADCURVE> rect;
+    std::unique_ptr<KICADCURVE> rect = std::make_unique<KICADCURVE>();
 
     if( !rect->Read( data, CURVE_LINE ) )
         return false;
