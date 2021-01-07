@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
-"PO-Revision-Date: 2021-01-05 06:49+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-01-07 09:30+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8962,19 +8962,16 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "为包含多个单元的元件输入单元数量"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "所有单元不能互换"
+msgstr "所有单位不能互换"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"选中此选项以允许具有多个单位的符号具有不同的符号\n"
-"元素。当除以下以外的所有符号单位都相同时，取消选中此选项\n"
-"引脚号。"
+"当除引脚号外，所有的符号单位都相同时\n"
+"检查这个选项。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9261,7 +9258,7 @@ msgstr "备用引脚号"
 #: eeschema/dialogs/dialog_pin_properties.cpp:189
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr ""
+msgstr "备用引脚分配不适用于 DeMorgan 组件。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9541,25 +9538,24 @@ msgid "HPGL Options"
 msgstr "HPGL 选项"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "位置 X："
+msgstr "位置和单位："
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "左下方，绘图仪单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "居中的绘图仪单元"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "适合页面，用户单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "适合内容，用户单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -25151,7 +25147,6 @@ msgid "Updating nets"
 msgstr "正在更新网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
 msgstr "通过网自动更新"
 
@@ -26791,14 +26786,13 @@ msgid "Keepout layer(s) not matched."
 msgstr "禁止层不匹配。"
 
 #: pcbnew/drc/drc_engine.cpp:875 pcbnew/drc/drc_engine.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "规则层 \"%s\" 不匹配。"
+msgstr "规则层 \"%s\" 不匹配；已忽略规则。"
 
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:901
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "规则层不匹配。"
+msgstr "规则层不匹配；已忽略规则。"
 
 #: pcbnew/drc/drc_engine.cpp:909
 msgid "Unconditional constraint applied."
@@ -30075,35 +30069,31 @@ msgid "Tuned: skew "
 msgstr "调整：歪斜 "
 
 #: pcbnew/router/pns_router.cpp:195
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr "无法在禁止区或板框内开始布线。"
+msgstr "无法从非镀通孔开始布线。"
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "规则区域 “ %s” 不允许导线。"
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "规则区域不允许导线。"
 
 #: pcbnew/router/pns_router.cpp:218
-#, fuzzy
 msgid "Cannot start routing from a text item."
-msgstr "无法在禁止区或板框内开始布线。"
+msgstr "无法从一个文本项开始布线。"
 
 #: pcbnew/router/pns_router.cpp:223
-#, fuzzy
 msgid "Cannot start routing from a graphic."
-msgstr "无法在禁止区或板框内开始布线。"
+msgstr "无法从一张图开始布线。"
 
 #: pcbnew/router/pns_router.cpp:269 pcbnew/router/pns_router.cpp:325
 msgid "The routing start point violates DRC."
 msgstr "布线起点违反 DRC。"
 
 #: pcbnew/router/pns_router.cpp:277
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "无法在空白区域开始差分对布线。"
 
@@ -30793,9 +30783,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:90
-#, fuzzy
 msgid "Special Tools"
-msgstr "特殊工具..."
+msgstr "特殊工具"
 
 #: pcbnew/tools/edit_tool.cpp:356
 msgid "Select reference point for move..."
