@@ -734,7 +734,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             if( connection->SubgraphCode() == 0 )
             {
-                auto subgraph = new CONNECTION_SUBGRAPH( this );
+                CONNECTION_SUBGRAPH* subgraph = new CONNECTION_SUBGRAPH( this );
 
                 subgraph->m_code = m_last_subgraph_code++;
                 subgraph->m_sheet = sheet;
@@ -749,7 +749,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 auto get_items =
                         [&]( SCH_ITEM* aItem ) -> bool
                         {
-                            auto* conn = aItem->Connection( &sheet );
+                            SCH_CONNECTION* conn = aItem->Connection( &sheet );
 
                             if( !conn )
                                 conn = aItem->InitializeConnection( sheet, this );
@@ -761,12 +761,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                               item->ConnectedItems( sheet ).end(),
                               std::back_inserter( members ), get_items );
 
-                for( auto connected_item : members )
+                for( SCH_ITEM* connected_item : members )
                 {
                     if( connected_item->Type() == SCH_NO_CONNECT_T )
                         subgraph->m_no_connect = connected_item;
 
-                    auto connected_conn = connected_item->Connection( &sheet );
+                    SCH_CONNECTION* connected_conn = connected_item->Connection( &sheet );
 
                     wxASSERT( connected_conn );
 
