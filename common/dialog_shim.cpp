@@ -77,8 +77,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
                           const wxString& name ) :
             wxDialog( aParent, id, title, pos, size, style, name ),
             KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
-            m_useCalculatedSize( false ),
             m_units( EDA_UNITS::MILLIMETRES ),
+            m_useCalculatedSize( false ),
             m_firstPaintEvent( true ),
             m_initialFocusTarget( nullptr ),
             m_qmodal_loop( nullptr ),

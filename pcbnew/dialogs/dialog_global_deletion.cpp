@@ -194,8 +194,6 @@ void DIALOG_GLOBAL_DELETION::acceptPcbDelete()
     {
         for( FOOTPRINT* footprint : pcb->Footprints() )
         {
-            bool del_fp = delAll;
-
             if( !delAll )
             {
                 if( footprint->IsLocked() && !m_footprintFilterLocked->GetValue() )
