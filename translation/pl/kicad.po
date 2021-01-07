@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
-"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"PO-Revision-Date: 2021-01-08 13:50+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9140,19 +9140,15 @@ msgstr ""
 "jeden element składowy"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Części składowych nie można zamieniać"
+msgstr "Części składowe są zamienne"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Zaznacz tę opcję, aby zezwolić symbolom o różnych jednostkach składowych\n"
-"posiadać różne elementy.  Odznacz tę opcję, gdy wszystkie jednostki symboli "
-"są\n"
+"Zaznacz tę opcję, gdy wszystkie jednostki symboli są\n"
 "identyczne za wyjątkiem numerów pinów."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
@@ -9445,7 +9441,7 @@ msgstr "Alternatywna nazwa pinu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:189
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr ""
+msgstr "Alternatywne definicje pinów nie są dostępne w kompnentach DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9729,25 +9725,24 @@ msgid "HPGL Options"
 msgstr "Opcje HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Pozycja X:"
+msgstr "Pozycja i jednostki:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Na dole po lewej, jednostki plotera"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Wyśrodkowane, jednostki plotera"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Dopasowanie do strony, jednostki użytkownika"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Dopasowanie do treści, jednostki użytkownika"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -25705,7 +25700,6 @@ msgid "Updating nets"
 msgstr "Uaktualnianie sieci"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
 msgstr "Automatycznie uaktualniaj nazwy sieci na przelotkach"
 
@@ -27408,14 +27402,13 @@ msgid "Keepout layer(s) not matched."
 msgstr "Warstwy chronione nie pasują do siebie."
 
 #: pcbnew/drc/drc_engine.cpp:875 pcbnew/drc/drc_engine.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Warstwa reguł \"%s\" nie pasuje."
+msgstr "Warstwa reguł '%s' nie pasuje; zasada zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:901
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "Warstwa reguł nie została dopasowana."
+msgstr "Warstwa reguł nie pasuje; zasada zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:909
 msgid "Unconditional constraint applied."
@@ -30820,38 +30813,31 @@ msgid "Tuned: skew "
 msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/pns_router.cpp:195
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr ""
-"Nie można rozpocząć trasowania wewnątrz strefy chronionej lub obrysu płytki."
+msgstr "Nie można rozpocząć trasowania z pola nie pokrytego miedzią."
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "Strefa z regułami '%s' nie zezwala na prowadzenie ścieżek."
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "Strefa z regułami nie zezwala na prowadzenie ścieżek."
 
 #: pcbnew/router/pns_router.cpp:218
-#, fuzzy
 msgid "Cannot start routing from a text item."
-msgstr ""
-"Nie można rozpocząć trasowania wewnątrz strefy chronionej lub obrysu płytki."
+msgstr "Nie można rozpocząć trasowania ścieżki z elementu tekstowego."
 
 #: pcbnew/router/pns_router.cpp:223
-#, fuzzy
 msgid "Cannot start routing from a graphic."
-msgstr ""
-"Nie można rozpocząć trasowania wewnątrz strefy chronionej lub obrysu płytki."
+msgstr "Nie można rozpocząć trasowania z elementu graficznego."
 
 #: pcbnew/router/pns_router.cpp:269 pcbnew/router/pns_router.cpp:325
 msgid "The routing start point violates DRC."
 msgstr "Punkt rozpoczęcia trasowania narusza DRC."
 
 #: pcbnew/router/pns_router.cpp:277
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "Nie można rozpocząć trasowania pary różnicowej z tego miejsca."
 
@@ -31556,9 +31542,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:90
-#, fuzzy
 msgid "Special Tools"
-msgstr "Narzędzia specjalne..."
+msgstr "Narzędzia specjalne"
 
 #: pcbnew/tools/edit_tool.cpp:356
 msgid "Select reference point for move..."
