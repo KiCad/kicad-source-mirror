@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
-"PO-Revision-Date: 2021-01-04 14:10+0000\n"
+"PO-Revision-Date: 2021-01-07 09:30+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1036,7 +1036,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "Tampilkan Sumbu 3D"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
@@ -1616,43 +1616,43 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
-msgstr ""
+msgstr "Forum KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr ""
+msgstr "Keseluruhan KiCad EDA Suite dirilis di bawah"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr ""
+msgstr "Lisensi Publik Umum GNU (GPL) versi 3 atau versi yang lebih baru"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Tim Pengembang Utama"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Alumni Pengembang Utama"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Kontribusi Tambahan Oleh"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
-msgstr ""
+msgstr "Lainnya"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Tim Pustakawan KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
-msgstr ""
+msgstr "Model 3D oleh"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr ""
+msgstr "Simbol oleh"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
@@ -1660,33 +1660,33 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
-msgstr ""
+msgstr "Ikon oleh"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Tentang %s"
 
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr ""
+msgstr "Tentang"
 
 #: common/dialog_about/dialog_about.cpp:123
 msgid "Version"
-msgstr ""
+msgstr "Versi"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr ""
+msgstr "Para Pengembang"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr ""
+msgstr "Penulis Dokumentasi"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
-msgstr ""
+msgstr "Pustakawan"
 
 #: common/dialog_about/dialog_about.cpp:133
 msgid "Artists"
@@ -1694,7 +1694,7 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Translators"
-msgstr ""
+msgstr "Penerjemah"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Packagers"
@@ -1702,27 +1702,27 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "License"
-msgstr ""
+msgstr "Lisensi"
 
 #: common/dialog_about/dialog_about.cpp:476
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "Tidak dapat membuka papan klip untuk menulis informasi versi."
 
 #: common/dialog_about/dialog_about.cpp:477
 msgid "Clipboard Error"
-msgstr ""
+msgstr "Kesalahan Papan Klip"
 
 #: common/dialog_about/dialog_about.cpp:485
 msgid "Copied..."
-msgstr ""
+msgstr "Disalin ..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "Judul Aplikasi"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "Info Hak Cipta"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
@@ -1734,27 +1734,27 @@ msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr ""
+msgstr "&Salin Info Versi"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr ""
+msgstr "Salin info versi KiCad ke papan klip"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr ""
+msgstr "Lapo&rkan Kutu"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:645
 msgid "Report a problem with KiCad"
-msgstr ""
+msgstr "Laporkan permasalahan pada KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
-msgstr ""
+msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:46
 msgid "Report"
-msgstr ""
+msgstr "Laporan"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -1762,19 +1762,19 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "Merah:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr ""
+msgstr "Hijau:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
-msgstr ""
+msgstr "Biru:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
@@ -1786,7 +1786,7 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr ""
+msgstr "Saturasi:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1795,7 +1795,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:79
 msgid "Value:"
-msgstr ""
+msgstr "Nilai:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
