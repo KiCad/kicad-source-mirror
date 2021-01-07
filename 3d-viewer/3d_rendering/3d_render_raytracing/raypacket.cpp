@@ -79,10 +79,8 @@ RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition )
 RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition,
                       const SFVEC2F& a2DWindowsPosDisplacementFactor )
 {
-    RAYPACKET_InitRays_with2DDisplacement( aCamera,
-                                           aWindowsPosition,
-                                           a2DWindowsPosDisplacementFactor,
-                                           m_ray );
+    RAYPACKET_InitRays_with2DDisplacement( aCamera, aWindowsPosition,
+                                           a2DWindowsPosDisplacementFactor, m_ray );
 
     RAYPACKET_GenerateFrustum( &m_Frustum, m_ray );
 }

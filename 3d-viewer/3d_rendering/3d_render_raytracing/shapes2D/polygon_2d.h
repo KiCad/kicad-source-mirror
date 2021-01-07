@@ -94,8 +94,7 @@ class POLYGON_2D : public OBJECT_2D
 {
 public:
     POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
-                const OUTERS_AND_HOLES& aOuter_and_holes,
-                const BOARD_ITEM& aBoardItem );
+                const OUTERS_AND_HOLES& aOuterAndHoles, const BOARD_ITEM& aBoardItem );
 
     bool Overlaps( const BBOX_2D& aBBox ) const override;
     bool Intersects( const BBOX_2D& aBBox ) const override;

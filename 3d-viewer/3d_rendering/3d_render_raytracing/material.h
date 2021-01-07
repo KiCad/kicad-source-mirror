@@ -36,12 +36,12 @@
 /**
  * A base class that can be used to derive procedurally generated materials.
  */
-class PROCEDURAL_GENERATOR
+class MATERIAL_GENERATOR
 {
 public:
-    PROCEDURAL_GENERATOR();
+    MATERIAL_GENERATOR();
 
-    virtual ~PROCEDURAL_GENERATOR()
+    virtual ~MATERIAL_GENERATOR()
     {
     }
 
@@ -56,10 +56,10 @@ public:
 };
 
 
-class BOARD_NORMAL : public PROCEDURAL_GENERATOR
+class BOARD_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    BOARD_NORMAL() : PROCEDURAL_GENERATOR() { m_scale = 1.0f; }
+    BOARD_NORMAL() : MATERIAL_GENERATOR() { m_scale = 1.0f; }
     BOARD_NORMAL( float aScale );
 
     virtual ~BOARD_NORMAL()
@@ -76,16 +76,16 @@ private:
 /**
  * Procedural generation of the copper normals.
  */
-class COPPER_NORMAL : public PROCEDURAL_GENERATOR
+class COPPER_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    COPPER_NORMAL() : PROCEDURAL_GENERATOR()
+    COPPER_NORMAL() : MATERIAL_GENERATOR()
     {
         m_board_normal_generator = nullptr;
         m_scale = 1.0f;
     }
 
-    COPPER_NORMAL( float aScale, const PROCEDURAL_GENERATOR* aBoardNormalGenerator );
+    COPPER_NORMAL( float aScale, const MATERIAL_GENERATOR* aBoardNormalGenerator );
 
     virtual ~COPPER_NORMAL()
     {
@@ -94,15 +94,15 @@ public:
     SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    const PROCEDURAL_GENERATOR* m_board_normal_generator;
+    const MATERIAL_GENERATOR* m_board_normal_generator;
     float                       m_scale;
 };
 
 
-class PLATED_COPPER_NORMAL : public PROCEDURAL_GENERATOR
+class PLATED_COPPER_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    PLATED_COPPER_NORMAL() : PROCEDURAL_GENERATOR()
+    PLATED_COPPER_NORMAL() : MATERIAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
@@ -126,11 +126,11 @@ private:
 /**
  * Procedural generation of the solder mask.
  */
-class SOLDER_MASK_NORMAL : public PROCEDURAL_GENERATOR
+class SOLDER_MASK_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    SOLDER_MASK_NORMAL() : PROCEDURAL_GENERATOR() { m_copper_normal_generator = nullptr; }
-    SOLDER_MASK_NORMAL( const PROCEDURAL_GENERATOR* aCopperNormalGenerator );
+    SOLDER_MASK_NORMAL() : MATERIAL_GENERATOR() { m_copper_normal_generator = nullptr; }
+    SOLDER_MASK_NORMAL( const MATERIAL_GENERATOR* aCopperNormalGenerator );
 
     virtual ~SOLDER_MASK_NORMAL()
     {
@@ -139,17 +139,17 @@ public:
     SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    const PROCEDURAL_GENERATOR* m_copper_normal_generator;
+    const MATERIAL_GENERATOR* m_copper_normal_generator;
 };
 
 
 /**
  * Procedural generation of the plastic normals.
  */
-class PLASTIC_NORMAL : public PROCEDURAL_GENERATOR
+class PLASTIC_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    PLASTIC_NORMAL() : PROCEDURAL_GENERATOR()
+    PLASTIC_NORMAL() : MATERIAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
@@ -170,10 +170,10 @@ private:
 /**
  * Procedural generation of the shiny plastic normals.
  */
-class PLASTIC_SHINE_NORMAL : public PROCEDURAL_GENERATOR
+class PLASTIC_SHINE_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    PLASTIC_SHINE_NORMAL() : PROCEDURAL_GENERATOR()
+    PLASTIC_SHINE_NORMAL() : MATERIAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
@@ -184,7 +184,7 @@ public:
     {
     }
 
-    // Imported from PROCEDURAL_GENERATOR
+    // Imported from MATERIAL_GENERATOR
     SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
@@ -195,10 +195,10 @@ private:
 /**
  * Procedural generation of the shiny brushed metal.
  */
-class BRUSHED_METAL_NORMAL : public PROCEDURAL_GENERATOR
+class BRUSHED_METAL_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    BRUSHED_METAL_NORMAL() : PROCEDURAL_GENERATOR()
+    BRUSHED_METAL_NORMAL() : MATERIAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
@@ -216,10 +216,10 @@ private:
 };
 
 
-class SILK_SCREEN_NORMAL : public PROCEDURAL_GENERATOR
+class SILK_SCREEN_NORMAL : public MATERIAL_GENERATOR
 {
 public:
-    SILK_SCREEN_NORMAL() : PROCEDURAL_GENERATOR()
+    SILK_SCREEN_NORMAL() : MATERIAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
@@ -243,29 +243,29 @@ private:
 class MATERIAL
 {
 public:
-    static void SetDefaultNrRefractionsSamples( unsigned int aNrRefractions )
+    static void SetDefaultRefractionRayCount( unsigned int aCount )
     {
-        m_default_nrsamples_refractions = aNrRefractions;
+        m_defaultRefractionRayCount = aCount;
     }
 
-    static void SetDefaultNrReflectionsSamples( unsigned int aNrReflections )
+    static void SetDefaultReflectionRayCount( unsigned int aCount )
     {
-        m_default_nrsamples_reflections = aNrReflections;
+        m_defaultReflectionRayCount = aCount;
     }
 
-    static void SetDefaultRefractionsLevel( unsigned int aRefractionLevel )
+    static void SetDefaultRefractionRecursionCount( unsigned int aCount )
     {
-        m_default_refractions_recursive_levels = aRefractionLevel;
+        m_defaultRefractionRecursionCount = aCount;
     }
 
-    static void SetDefaultReflectionsLevel( unsigned int aReflectionLevel )
+    static void SetDefaultReflectionRecursionCount( unsigned int aCount )
     {
-        m_default_reflections_recursive_levels = aReflectionLevel;
+        m_defaultFeflectionRecursionCount = aCount;
     }
 
     MATERIAL();
     MATERIAL( const SFVEC3F& aAmbient, const SFVEC3F& aEmissive, const SFVEC3F& aSpecular,
-               float aShinness, float aTransparency, float aReflection );
+              float aShinness, float aTransparency, float aReflection );
 
     virtual ~MATERIAL() {}
 
@@ -273,34 +273,34 @@ public:
     const SFVEC3F& GetEmissiveColor() const { return m_emissiveColor; }
     const SFVEC3F& GetSpecularColor() const { return m_specularColor; }
 
-    float GetShinness()     const { return m_shinness; }
+    float GetReflectivity() const { return m_reflectivity; }
     float GetTransparency() const { return m_transparency; }
     float GetReflection()   const { return m_reflection; }
     float GetAbsorvance()   const { return m_absorbance; }
-    unsigned int GetNrRefractionsSamples() const { return m_refraction_nr_samples; }
-    unsigned int GetNrReflectionsSamples() const { return m_reflections_nr_samples; }
-    unsigned int GetReflectionsRecursiveLevel() const { return m_reflections_recursive_levels; }
-    unsigned int GetRefractionsRecursiveLevel() const { return m_refractions_recursive_levels; }
+    unsigned int GetRefractionRayCount() const { return m_refractionRayCount; }
+    unsigned int GetReflectionRayCount() const { return m_reflectionRayCount; }
+    unsigned int GetReflectionRecursionCount() const { return m_reflectionRecursionCount; }
+    unsigned int GetRefractionRecursionCount() const { return m_refractionRecursionCount; }
 
     void SetAbsorvance( float aAbsorvanceFactor ) { m_absorbance = aAbsorvanceFactor; }
-    void SetNrRefractionsSamples( unsigned int aNrRefractions )
+    void SetRefractionRayCount( unsigned int aCount )
     {
-        m_refraction_nr_samples = aNrRefractions;
+        m_refractionRayCount = aCount;
     }
 
-    void SetNrReflectionsSamples( unsigned int aNrReflections )
+    void SetReflectionRayCount( unsigned int aCount )
     {
-        m_reflections_nr_samples = aNrReflections;
+        m_reflectionRayCount = aCount;
     }
 
-    void SetReflectionsRecursiveLevel( unsigned int aReflectionsLevel )
+    void SetReflectionRecursionCount( unsigned int aCount )
     {
-        m_reflections_recursive_levels = aReflectionsLevel;
+        m_reflectionRecursionCount = aCount;
     }
 
-    void SetRefractionsRecursiveLevel( unsigned int aRefractionsLevel )
+    void SetRefractionRecursionCount( unsigned int aCount )
     {
-        m_refractions_recursive_levels = aRefractionsLevel;
+        m_refractionRecursionCount = aCount;
     }
 
     /**
@@ -308,9 +308,9 @@ public:
      *
      * @param aCastShadows true yes it can, false not it cannot
      */
-    void SetCastShadows( bool aCastShadows ) { m_cast_shadows = aCastShadows; }
+    void SetCastShadows( bool aCastShadows ) { m_castShadows = aCastShadows; }
 
-    bool GetCastShadows() const { return m_cast_shadows; }
+    bool GetCastShadows() const { return m_castShadows; }
 
     /**
      * Shade an intersection point.
@@ -329,14 +329,14 @@ public:
                            const SFVEC3F& aLightColor,
                            float aShadowAttenuationFactor ) const = 0;
 
-    void SetNormalPerturbator( const PROCEDURAL_GENERATOR* aPerturbator )
+    void SetGenerator( const MATERIAL_GENERATOR* aGenerator )
     {
-        m_normal_perturbator = aPerturbator;
+        m_generator = aGenerator;
     }
 
-    const PROCEDURAL_GENERATOR* GetNormalPerturbator() const { return m_normal_perturbator; }
+    const MATERIAL_GENERATOR* GetGenerator() const { return m_generator; }
 
-    void PerturbeNormal( SFVEC3F& aNormal, const RAY& aRay, const HITINFO& aHitInfo ) const;
+    void Generate( SFVEC3F& aNormal, const RAY& aRay, const HITINFO& aHitInfo ) const;
 
 protected:
     SFVEC3F m_ambientColor;
@@ -347,33 +347,33 @@ protected:
 
     SFVEC3F m_emissiveColor;
     SFVEC3F m_specularColor;
-    float   m_shinness;
+    float   m_reflectivity;
 
     ///< 1.0 is completely transparent, 0.0 completely opaque.
     float   m_transparency;
     float   m_absorbance;                     ///< absorbance factor for the transparent material.
     float   m_reflection;                     ///< 1.0 completely reflective, 0.0 no reflective.
-    bool    m_cast_shadows;                   ///< true if this object will block the light.
+    bool    m_castShadows;                    ///< true if this object will block the light.
 
-    ///< Number of rays that will be interpolated for this material if it is a transparent.
-    unsigned int     m_refraction_nr_samples;
+    ///< Number of rays that will be interpolated for this material if it is transparent.
+    unsigned int     m_refractionRayCount;
 
     ///< Number of rays that will be interpolated for this material if it is reflective.
-    unsigned int     m_reflections_nr_samples;
+    unsigned int     m_reflectionRayCount;
 
     ///< Number of levels it allows for refraction recursiveness.
-    unsigned int     m_refractions_recursive_levels;
+    unsigned int     m_refractionRecursionCount;
 
     ///< Number of levels it allows for reflection recursiveness.
-    unsigned int     m_reflections_recursive_levels;
+    unsigned int     m_reflectionRecursionCount;
 
-    const PROCEDURAL_GENERATOR* m_normal_perturbator;
+    const MATERIAL_GENERATOR* m_generator;
 
 private:
-    static int m_default_nrsamples_refractions;
-    static int m_default_nrsamples_reflections;
-    static int m_default_refractions_recursive_levels;
-    static int m_default_reflections_recursive_levels;
+    static int m_defaultRefractionRayCount;
+    static int m_defaultReflectionRayCount;
+    static int m_defaultRefractionRecursionCount;
+    static int m_defaultFeflectionRecursionCount;
 };
 
 

@@ -33,7 +33,7 @@
 #include "ogl_utils.h"
 
 
-void OGL_GetScreenshot( wxImage& aDstImage )
+void OglGetScreenshot( wxImage& aDstImage )
 {
     struct viewport_params
     {
@@ -47,9 +47,6 @@ void OGL_GetScreenshot( wxImage& aDstImage )
 
     unsigned char* pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
 
-    // Alphabuffer was causing some transparency problems on some systems (Windows)
-    // unsigned char* alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
-
     // Call glFinish before screenshot to ensure everything is fully drawn.
     glFinish();
 
@@ -59,10 +56,6 @@ void OGL_GetScreenshot( wxImage& aDstImage )
     glReadPixels( viewport.originX, viewport.originY, viewport.x, viewport.y, GL_RGB,
                   GL_UNSIGNED_BYTE, pixelbuffer );
 
-    // glReadPixels( viewport.originX, viewport.originY,
-    //               viewport.x, viewport.y,
-    //               GL_ALPHA, GL_UNSIGNED_BYTE, alphabuffer );
-
     // "Sets the image data without performing checks.
     //  The data given must have the size (width*height*3)
     //  The data must have been allocated with malloc()
@@ -70,13 +63,11 @@ void OGL_GetScreenshot( wxImage& aDstImage )
     //  by the wxImage object, that will be responsible for deleting it."
     aDstImage.SetData( pixelbuffer, viewport.x, viewport.y, false );
 
-    //aDstImage.SetAlpha( alphabuffer, false );
-
     aDstImage = aDstImage.Mirror( false );
 }
 
 
-GLuint OGL_LoadTexture( const IMAGE& aImage )
+GLuint OglLoadTexture( const IMAGE& aImage )
 {
     unsigned char* rgbaBuffer = (unsigned char*) malloc( aImage.GetWidth() *
                                                          aImage.GetHeight() * 4 );
@@ -104,18 +95,9 @@ GLuint OGL_LoadTexture( const IMAGE& aImage )
     glGenTextures( 1, &texture );
     glBindTexture( GL_TEXTURE_2D, texture );
 
-    /*gluBuild2DMipmaps( GL_TEXTURE_2D,
-                       GL_RGBA,
-                       aImage.GetWidth(),
-                       aImage.GetHeight(),
-                       GL_RGBA,
-                       GL_UNSIGNED_BYTE,
-                       rgbaBuffer );*/
-
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aImage.GetWidth(), aImage.GetHeight(), 0, GL_RGBA,
                   GL_UNSIGNED_BYTE, rgbaBuffer );
 
-    //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -133,8 +115,8 @@ GLuint OGL_LoadTexture( const IMAGE& aImage )
 }
 
 
-void OGL_SetMaterial( const SMATERIAL&  aMaterial, float aOpacity, bool aUseSelectedMaterial,
-                      SFVEC3F aSelectionColor )
+void OglSetMaterial( const SMATERIAL&  aMaterial, float aOpacity, bool aUseSelectedMaterial,
+                     SFVEC3F aSelectionColor )
 {
     const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient, 1.0f );
 
@@ -157,7 +139,7 @@ void OGL_SetMaterial( const SMATERIAL&  aMaterial, float aOpacity, bool aUseSele
 }
 
 
-void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity  )
+void OglSetDiffuseMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity  )
 {
     const SFVEC4F ambient  = SFVEC4F( 0.2f, 0.2f, 0.2f, 1.0f );
     const SFVEC4F diffuse  = SFVEC4F( aMaterialDiffuse, aOpacity );
@@ -172,7 +154,7 @@ void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity
 }
 
 
-void OGL_DrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
+void OglDrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
 {
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
@@ -201,7 +183,7 @@ void OGL_DrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
 }
 
 
-void OGL_ResetTextureStateDefaults()
+void OglResetTextureState()
 {
     if( !glActiveTexture || !glClientActiveTexture )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to Reset Textures" );

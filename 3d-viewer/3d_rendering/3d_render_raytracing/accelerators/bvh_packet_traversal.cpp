@@ -98,7 +98,7 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
     if( &m_nodes[0] == nullptr )
         return false;
 
-    bool anyHitted = false;
+    bool anyHit = false;
     int todoOffset = 0, nodeNum = 0;
     StackNode todo[MAX_TODOS];
 
@@ -133,13 +133,13 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
                     {
                         for( unsigned int i = ia; i < ie; ++i )
                         {
-                            const bool hitted = obj->Intersect( aRayPacket.m_ray[i],
-                                                                aHitInfoPacket[i].m_HitInfo );
+                            const bool hit = obj->Intersect( aRayPacket.m_ray[i],
+                                                             aHitInfoPacket[i].m_HitInfo );
 
-                            if( hitted )
+                            if( hit )
                             {
-                                anyHitted |= hitted;
-                                aHitInfoPacket[i].m_hitresult |= hitted;
+                                anyHit |= hit;
+                                aHitInfoPacket[i].m_hitresult |= hit;
                                 aHitInfoPacket[i].m_HitInfo.m_acc_node_info = nodeNum;
                             }
                         }
@@ -157,9 +157,9 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
         ia = node.ia;
     }
 
-    return anyHitted;
+    return anyHit;
 
-}// Ranged Traversal
+}
 #endif
 
 
@@ -210,7 +210,7 @@ static inline unsigned int partRays( const RAYPACKET& aRayPacket, const BBOX_3D&
 
 bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoPacket ) const
 {
-    bool anyHitted = false;
+    bool anyHit = false;
     int todoOffset = 0, nodeNum = 0;
     StackNode todo[MAX_TODOS];
 
@@ -238,8 +238,8 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
             }
             else
             {
-                unsigned int ie = geetLastHit( aRayPacket, curCell->bounds, ia, I,
-                                               aHitInfoPacket );
+                unsigned int ie = getLastHit( aRayPacket, curCell->bounds, ia, I,
+                                              aHitInfoPacket );
 
                 for( int j = 0; j < curCell->nPrimitives; ++j )
                 {
@@ -251,13 +251,13 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
                         {
                             unsigned int idx = I[i];
 
-                            bool hitted = obj->Intersect( aRayPacket.m_ray[idx],
-                                                          aHitInfoPacket[idx].m_HitInfo );
+                            bool hit = obj->Intersect( aRayPacket.m_ray[idx],
+                                                       aHitInfoPacket[idx].m_HitInfo );
 
-                            if( hitted )
+                            if( hit )
                             {
-                                anyHitted |= hitted;
-                                aHitInfoPacket[idx].m_hitresult |= hitted;
+                                anyHit |= hit;
+                                aHitInfoPacket[idx].m_hitresult |= hit;
                                 aHitInfoPacket[idx].m_HitInfo.m_acc_node_info = nodeNum;
                             }
                         }
@@ -275,6 +275,6 @@ bool BVH_PBRT::Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoP
         ia = node.ia;
     }
 
-    return anyHitted;
-}// Partition Traversal
+    return anyHit;
+}
 #endif

@@ -197,7 +197,6 @@ private:
     OPENGL_RENDER_LIST* m_outerThroughHoles;
     OPENGL_RENDER_LIST* m_outerViaThroughHoles;
     OPENGL_RENDER_LIST* m_outerThroughHoleRings;
-    OPENGL_RENDER_LIST* m_vias_and_pad_holes_outer_contourn_and_caps;
 
     LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
     GLuint m_circleTexture;

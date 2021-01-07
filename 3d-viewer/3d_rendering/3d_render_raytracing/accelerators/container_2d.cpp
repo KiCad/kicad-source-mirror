@@ -83,8 +83,8 @@ BVH_CONTAINER_2D::BVH_CONTAINER_2D() : CONTAINER_2D_BASE( OBJECT_2D_TYPE::BVHCON
 {
     m_isInitialized = false;
     m_bbox.Reset();
-    m_elements_to_delete.clear();
-    m_Tree = nullptr;
+    m_elementsToDelete.clear();
+    m_tree = nullptr;
 }
 
 
@@ -97,15 +97,15 @@ void BVH_CONTAINER_2D::Clear()
 
 void BVH_CONTAINER_2D::destroy()
 {
-    for( std::list<BVH_CONTAINER_NODE_2D*>::iterator ii = m_elements_to_delete.begin();
-         ii != m_elements_to_delete.end();
+    for( std::list<BVH_CONTAINER_NODE_2D*>::iterator ii = m_elementsToDelete.begin();
+         ii != m_elementsToDelete.end();
          ++ii )
     {
         delete *ii;
     }
 
-    m_elements_to_delete.clear();
-    m_Tree = nullptr;
+    m_elementsToDelete.clear();
+    m_tree = nullptr;
     m_isInitialized = false;
 }
 
@@ -131,17 +131,17 @@ void BVH_CONTAINER_2D::BuildBVH()
         return;
     }
 
-    m_Tree = new BVH_CONTAINER_NODE_2D;
+    m_tree = new BVH_CONTAINER_NODE_2D;
 
-    m_elements_to_delete.push_back( m_Tree );
-    m_Tree->m_BBox = m_bbox;
+    m_elementsToDelete.push_back( m_tree );
+    m_tree->m_BBox = m_bbox;
 
     for( LIST_OBJECT2D::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        m_Tree->m_LeafList.push_back( static_cast<const OBJECT_2D*>( *ii ) );
+        m_tree->m_LeafList.push_back( static_cast<const OBJECT_2D*>( *ii ) );
     }
 
-    recursiveBuild_MIDDLE_SPLIT( m_Tree );
+    recursiveBuild_MIDDLE_SPLIT( m_tree );
 }
 
 
@@ -152,19 +152,19 @@ void BVH_CONTAINER_2D::BuildBVH()
 // "Split in the middle of the longest Axis"
 // "Creates a binary tree with Top-Down approach.
 //  Fastest BVH building, but least [speed] accuracy."
-static bool sortByCentroid_X( const OBJECT_2D* a, const OBJECT_2D* b )
+static bool sortByCentroidX( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
 
-static bool sortByCentroid_Y( const OBJECT_2D* a, const OBJECT_2D* b )
+static bool sortByCentroidY( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
 
-static bool sortByCentroid_Z( const OBJECT_2D* a, const OBJECT_2D* b )
+static bool sortByCentroidZ( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
@@ -181,8 +181,8 @@ void BVH_CONTAINER_2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNode
         // Create Leaf Nodes
         BVH_CONTAINER_NODE_2D* leftNode  = new BVH_CONTAINER_NODE_2D;
         BVH_CONTAINER_NODE_2D* rightNode = new BVH_CONTAINER_NODE_2D;
-        m_elements_to_delete.push_back( leftNode );
-        m_elements_to_delete.push_back( rightNode );
+        m_elementsToDelete.push_back( leftNode );
+        m_elementsToDelete.push_back( rightNode );
 
         leftNode->m_BBox.Reset();
         rightNode->m_BBox.Reset();
@@ -195,9 +195,9 @@ void BVH_CONTAINER_2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNode
         // Divide the objects
         switch( axis_to_split )
         {
-            case 0: aNodeParent->m_LeafList.sort( sortByCentroid_X ); break;
-            case 1: aNodeParent->m_LeafList.sort( sortByCentroid_Y ); break;
-            case 2: aNodeParent->m_LeafList.sort( sortByCentroid_Z ); break;
+            case 0: aNodeParent->m_LeafList.sort( sortByCentroidX ); break;
+            case 1: aNodeParent->m_LeafList.sort( sortByCentroidY ); break;
+            case 2: aNodeParent->m_LeafList.sort( sortByCentroidZ ); break;
         }
 
         unsigned int i = 0;
@@ -252,8 +252,8 @@ bool BVH_CONTAINER_2D::IntersectAny( const RAYSEG2D& aSegRay ) const
 {
     wxASSERT( m_isInitialized == true );
 
-    if( m_Tree )
-        return recursiveIntersectAny( m_Tree, aSegRay );
+    if( m_tree )
+        return recursiveIntersectAny( m_tree, aSegRay );
 
     return false;
 }
@@ -289,6 +289,7 @@ bool BVH_CONTAINER_2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode
             // Node
             if( recursiveIntersectAny( aNode->m_Children[0], aSegRay ) )
                 return true;
+
             if( recursiveIntersectAny( aNode->m_Children[1], aSegRay ) )
                 return true;
         }
@@ -306,8 +307,8 @@ void BVH_CONTAINER_2D::GetListObjectsIntersects( const BBOX_2D& aBBox,
 
     aOutList.clear();
 
-    if( m_Tree )
-        recursiveGetListObjectsIntersects( m_Tree, aBBox, aOutList );
+    if( m_tree )
+        recursiveGetListObjectsIntersects( m_tree, aBBox, aOutList );
 }
 
 

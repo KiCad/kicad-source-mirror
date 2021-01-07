@@ -70,7 +70,7 @@ bool LAYER_ITEM_2D::Intersects( const BBOX_2D& aBBox ) const
 
 bool LAYER_ITEM_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
-    // NOT IMPLEMENTED
+    // NOT IMPLEMENTED, why?
     return false;
 }
 
@@ -90,6 +90,7 @@ bool LAYER_ITEM_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* a
     {
         //move ray point to start of main object
         float tmpRayDist;
+
         if( !m_objectA->Intersect( aSegRay, &tmpRayDist, &currentNormal ) )
             return false;
 
@@ -97,8 +98,6 @@ bool LAYER_ITEM_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* a
 
         currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
     }
-
-    //wxASSERT( (currentRayDist >= 0.0f) && (currentRayDist <= 1.0f) );
 
     // move through the union of subtracted regions
     if( m_objectB )
@@ -116,8 +115,9 @@ bool LAYER_ITEM_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* a
                     // subtracted region
                     float   hitDist;
                     SFVEC2F tmpNormal;
+
                     if( !( (const OBJECT_2D*) ( *m_objectB )[i] )
-                                    ->Intersect( currentRay, &hitDist, &tmpNormal ) )
+                                 ->Intersect( currentRay, &hitDist, &tmpNormal ) )
                         return false; // ray hit main object but did not leave subtracted volume
 
                     wxASSERT( hitDist <= 1.0f );

@@ -42,37 +42,34 @@
 #include "../common_ogl/ogl_utils.h"
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
-// This should be used in future for the function
-// convertLinearToSRGB
-//#include <glm/gtc/color_space.hpp>
 
 RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
     RENDER_3D_BASE( aAdapter, aCamera ),
-    m_postshader_ssao( aCamera )
+    m_postShaderSsao( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE" ) );
 
-    m_opengl_support_vertex_buffer_object = false;
+    m_openglSupportsVertexBufferObjects = false;
     m_pboId       = GL_NONE;
     m_pboDataSize = 0;
     m_accelerator = nullptr;
-    m_stats_converted_dummy_to_plane = 0;
-    m_stats_converted_roundsegment2d_to_roundsegment = 0;
+    m_convertedDummyBlockCount = 0;
+    m_converted2dRoundSegmentCount = 0;
     m_oldWindowsSize.x = 0;
     m_oldWindowsSize.y = 0;
     m_outlineBoard2dObjects = nullptr;
     m_antioutlineBoard2dObjects = nullptr;
     m_firstHitinfo = nullptr;
     m_shaderBuffer = nullptr;
-    m_camera_light = nullptr;
+    m_cameraLight = nullptr;
 
     m_xoffset = 0;
     m_yoffset = 0;
 
     m_isPreview = false;
-    m_rt_render_state = RT_RENDER_STATE_MAX; // Set to an initial invalid state
-    m_stats_start_rendering_time = 0;
-    m_nrBlocksRenderProgress = 0;
+    m_renderState = RT_RENDER_STATE_MAX; // Set to an initial invalid state
+    m_renderStartTime = 0;
+    m_blockRenderProgressCount = 0;
 }
 
 
@@ -92,7 +89,7 @@ RENDER_3D_RAYTRACE::~RENDER_3D_RAYTRACE()
     delete[] m_shaderBuffer;
     m_shaderBuffer = nullptr;
 
-    opengl_delete_pbo();
+    deletePbo();
 }
 
 
@@ -102,10 +99,10 @@ int RENDER_3D_RAYTRACE::GetWaitForEditingTimeOut()
 }
 
 
-void RENDER_3D_RAYTRACE::opengl_delete_pbo()
+void RENDER_3D_RAYTRACE::deletePbo()
 {
     // Delete PBO if it was created
-    if( m_opengl_support_vertex_buffer_object )
+    if( m_openglSupportsVertexBufferObjects )
     {
         if( glIsBufferARB( m_pboId ) )
             glDeleteBuffers( 1, &m_pboId );
@@ -127,14 +124,14 @@ void RENDER_3D_RAYTRACE::SetCurWindowSize( const wxSize& aSize )
 }
 
 
-void RENDER_3D_RAYTRACE::restart_render_state()
+void RENDER_3D_RAYTRACE::restartRenderState()
 {
-    m_stats_start_rendering_time = GetRunningMicroSecs();
+    m_renderStartTime = GetRunningMicroSecs();
 
-    m_rt_render_state = RT_RENDER_STATE_TRACING;
-    m_nrBlocksRenderProgress = 0;
+    m_renderState = RT_RENDER_STATE_TRACING;
+    m_blockRenderProgressCount = 0;
 
-    m_postshader_ssao.InitFrame();
+    m_postShaderSsao.InitFrame();
 
     m_blockPositionsWasProcessed.resize( m_blockPositions.size() );
 
@@ -145,7 +142,10 @@ void RENDER_3D_RAYTRACE::restart_render_state()
 
 static inline void SetPixel( GLubyte* p, const COLOR_RGB& v )
 {
-    p[0] = v.c[0]; p[1] = v.c[1]; p[2] = v.c[2]; p[3] = 255;
+    p[0] = v.c[0];
+    p[1] = v.c[1];
+    p[2] = v.c[2];
+    p[3] = 255;
 }
 
 
@@ -166,7 +166,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // It will assign the first time the windows size, so it will now
         // revert to preview mode the first time the Redraw is called
         m_oldWindowsSize = m_windowSize;
-        initialize_block_positions();
+        initializeBlockPositions();
     }
 
     std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
@@ -190,7 +190,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         aIsMoving = true;
         requestRedraw = true;
 
-        initialize_block_positions();
+        initializeBlockPositions();
     }
 
 
@@ -214,18 +214,18 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     const bool was_camera_changed = m_camera.ParametersChanged();
 
     if( requestRedraw || aIsMoving || was_camera_changed )
-        m_rt_render_state = RT_RENDER_STATE_MAX; // Set to an invalid state,
-                                                 // so it will restart again latter
+        m_renderState = RT_RENDER_STATE_MAX; // Set to an invalid state,
+                                             // so it will restart again latter
 
     // This will only render if need, otherwise it will redraw the PBO on the screen again
     if( aIsMoving || was_camera_changed )
     {
         // Set head light (camera view light) with the opposite direction of the camera
-        if( m_camera_light )
-            m_camera_light->SetDirection( -m_camera.GetDir() );
+        if( m_cameraLight )
+            m_cameraLight->SetDirection( -m_camera.GetDir() );
 
-        OGL_DrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop),
-                            SFVEC3F( m_boardAdapter.m_BgColorBot) );
+        OglDrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop),
+                           SFVEC3F( m_boardAdapter.m_BgColorBot) );
 
         // Bind PBO
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
@@ -236,7 +236,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( ptrPBO )
         {
-            render_preview( ptrPBO );
+            renderPreview( ptrPBO );
 
             // release pointer to mapping buffer, this initialize the coping to PBO
             glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
@@ -249,7 +249,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // Bind PBO
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
 
-        if( m_rt_render_state != RT_RENDER_STATE_FINISH )
+        if( m_renderState != RT_RENDER_STATE_FINISH )
         {
             // Get the PBO pixel pointer to write the data
             GLubyte* ptrPBO = (GLubyte *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
@@ -259,7 +259,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             {
                 render( ptrPBO, aStatusReporter );
 
-                if( m_rt_render_state != RT_RENDER_STATE_FINISH )
+                if( m_renderState != RT_RENDER_STATE_FINISH )
                     requestRedraw = true;
 
                 // release pointer to mapping buffer, this initialize the coping to PBO
@@ -267,13 +267,9 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             }
         }
 
-        if( m_rt_render_state == RT_RENDER_STATE_FINISH )
+        if( m_renderState == RT_RENDER_STATE_FINISH )
         {
             glClear( GL_COLOR_BUFFER_BIT );
-
-            // Options if we want draw background instead
-            //OGL_DrawBackground( SFVEC3F(m_boardAdapter.m_BgColorTop),
-            //                    SFVEC3F(m_boardAdapter.m_BgColorBot) );
         }
 
         glWindowPos2i( m_xoffset, m_yoffset );
@@ -293,13 +289,12 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
 void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
-    if( ( m_rt_render_state == RT_RENDER_STATE_FINISH )
-      || ( m_rt_render_state >= RT_RENDER_STATE_MAX ) )
+    if( ( m_renderState == RT_RENDER_STATE_FINISH ) || ( m_renderState >= RT_RENDER_STATE_MAX ) )
     {
-        restart_render_state();
+        restartRenderState();
 
-        if( m_camera_light )
-            m_camera_light->SetDirection( -m_camera.GetDir() );
+        if( m_cameraLight )
+            m_cameraLight->SetDirection( -m_camera.GetDir() );
 
         if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
         {
@@ -316,43 +311,41 @@ void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
             }
         }
 
-        m_BgColorTop_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop );
-        m_BgColorBot_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorBot );
+        m_backgroundColorTop = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop );
+        m_backgroundColorBottom = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorBot );
     }
 
-    switch( m_rt_render_state )
+    switch( m_renderState )
     {
     case RT_RENDER_STATE_TRACING:
-        rt_render_tracing( ptrPBO, aStatusReporter );
+        renderTracing( ptrPBO, aStatusReporter );
         break;
 
     case RT_RENDER_STATE_POST_PROCESS_SHADE:
-        rt_render_post_process_shade( ptrPBO, aStatusReporter );
+        postProcessShading( ptrPBO, aStatusReporter );
         break;
 
     case RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH:
-        rt_render_post_process_blur_finish( ptrPBO, aStatusReporter );
+        postProcessBlurFinish( ptrPBO, aStatusReporter );
         break;
 
     default:
-        wxASSERT_MSG( false, "Invalid state on m_rt_render_state");
-        restart_render_state();
+        wxASSERT_MSG( false, "Invalid state on m_renderState");
+        restartRenderState();
         break;
     }
 
-    if( aStatusReporter && ( m_rt_render_state == RT_RENDER_STATE_FINISH ) )
+    if( aStatusReporter && ( m_renderState == RT_RENDER_STATE_FINISH ) )
     {
         // Calculation time in seconds
-        const double calculation_time = (double)( GetRunningMicroSecs() -
-                                                  m_stats_start_rendering_time ) / 1e6;
+        const double elapsed_time = (double)( GetRunningMicroSecs() - m_renderStartTime ) / 1e6;
 
-        aStatusReporter->Report( wxString::Format( _( "Rendering time %.3f s" ),
-                                                       calculation_time ) );
+        aStatusReporter->Report( wxString::Format( _( "Rendering time %.3f s" ), elapsed_time ) );
     }
 }
 
 
-void RENDER_3D_RAYTRACE::rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     m_isPreview = false;
 
@@ -377,7 +370,7 @@ void RENDER_3D_RAYTRACE::rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusRe
             {
                 if( !m_blockPositionsWasProcessed[iBlock] )
                 {
-                    rt_render_trace_block( ptrPBO, iBlock );
+                    renderBlockTracing( ptrPBO, iBlock );
                     numBlocksRendered++;
                     m_blockPositionsWasProcessed[iBlock] = 1;
 
@@ -398,21 +391,21 @@ void RENDER_3D_RAYTRACE::rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusRe
     while( threadsFinished < parallelThreadCount )
         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
-    m_nrBlocksRenderProgress += numBlocksRendered;
+    m_blockRenderProgressCount += numBlocksRendered;
 
     if( aStatusReporter )
         aStatusReporter->Report( wxString::Format( _( "Rendering: %.0f %%" ),
-                                                   (float) ( m_nrBlocksRenderProgress * 100 )
+                                                   (float) ( m_blockRenderProgressCount * 100 )
                                                    / (float) m_blockPositions.size() ) );
 
     // Check if it finish the rendering and if should continue to a post processing
     // or mark it as finished
-    if( m_nrBlocksRenderProgress >= m_blockPositions.size() )
+    if( m_blockRenderProgressCount >= m_blockPositions.size() )
     {
         if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-            m_rt_render_state = RT_RENDER_STATE_POST_PROCESS_SHADE;
+            m_renderState = RT_RENDER_STATE_POST_PROCESS_SHADE;
         else
-            m_rt_render_state = RT_RENDER_STATE_FINISH;
+            m_renderState = RT_RENDER_STATE_FINISH;
     }
 }
 
@@ -452,7 +445,7 @@ SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor )
 #endif
 
 
-void RENDER_3D_RAYTRACE::rt_final_color( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
+void RENDER_3D_RAYTRACE::renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
                                          bool applyColorSpaceConversion )
 {
     SFVEC3F color = rgbColor;
@@ -487,7 +480,7 @@ static void HITINFO_PACKET_init( HITINFO_PACKET* aHitPacket )
 }
 
 
-void RENDER_3D_RAYTRACE::rt_shades_packet( const SFVEC3F* bgColorY, const RAY* aRayPkt,
+void RENDER_3D_RAYTRACE::renderRayPackets( const SFVEC3F* bgColorY, const RAY* aRayPkt,
                                            HITINFO_PACKET* aHitPacket, bool is_testShadow,
                                            SFVEC3F* aOutHitColor )
 {
@@ -509,7 +502,7 @@ void RENDER_3D_RAYTRACE::rt_shades_packet( const SFVEC3F* bgColorY, const RAY* a
 }
 
 
-void RENDER_3D_RAYTRACE::rt_trace_AA_packet( const SFVEC3F* aBgColorY,
+void RENDER_3D_RAYTRACE::renderAnitAliasPackets( const SFVEC3F* aBgColorY,
                                              const HITINFO_PACKET* aHitPck_X0Y0,
                                              const HITINFO_PACKET* aHitPck_AA_X1Y1,
                                              const RAY* aRayPck, SFVEC3F* aOutHitColor )
@@ -556,6 +549,8 @@ void RENDER_3D_RAYTRACE::rt_trace_AA_packet( const SFVEC3F* aBgColorY,
               && ( ( nodex0y0 == nodex1y1 ) || ( nodex1y1 == 0 ) )
               && ( nodex0y0 == node_AA_x0y0 ) )
             {
+                /// @todo Either get rid of the if statement above or do something with the
+                ///       commented out code below.
                 // Option 1
                 // This option will give a very good quality on reflections (slow)
                 /*
@@ -630,7 +625,7 @@ void RENDER_3D_RAYTRACE::rt_trace_AA_packet( const SFVEC3F* aBgColorY,
 #define DISP_FACTOR 0.075f
 
 
-void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlock )
+void RENDER_3D_RAYTRACE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock )
 {
     // Initialize ray packets
     const SFVEC2UI& blockPos = m_blockPositions[iBlock];
@@ -651,8 +646,8 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
     {
         const float posYfactor = (float) ( blockPosI.y + y ) / (float) m_windowSize.y;
 
-        bgColor[y] = m_BgColorTop_LinearRGB * SFVEC3F(posYfactor) +
-                     m_BgColorBot_LinearRGB * ( SFVEC3F(1.0f) - SFVEC3F(posYfactor) );
+        bgColor[y] = m_backgroundColorTop * SFVEC3F(posYfactor) +
+                     m_backgroundColorBottom * ( SFVEC3F(1.0f) - SFVEC3F(posYfactor) );
     }
 
     // Intersect ray packets (calculate the intersection with rays and objects)
@@ -669,9 +664,9 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
 
                 for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
                 {
-                        m_postshader_ssao.SetPixelData( blockPos.x + x, yBlockPos,
-                                                        SFVEC3F( 0.0f ), outColor,
-                                                        SFVEC3F( 0.0f ), 0, 1.0f );
+                        m_postShaderSsao.SetPixelData( blockPos.x + x, yBlockPos,
+                                                       SFVEC3F( 0.0f ), outColor,
+                                                       SFVEC3F( 0.0f ), 0, 1.0f );
                 }
             }
         }
@@ -692,7 +687,7 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
             {
                 GLubyte* ptr = &ptrPBO[( yConst + x ) * 4];
 
-                rt_final_color( ptr, outColor, isFinalColor );
+                renderFinalColor( ptr, outColor, isFinalColor );
             }
         }
 
@@ -704,7 +699,7 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
     SFVEC3F hitColor_X0Y0[RAYPACKET_RAYS_PER_PACKET];
 
     // Shade original (0, 0) hits ("paint" the intersected objects)
-    rt_shades_packet( bgColor, blockPacket.m_ray, hitPacket_X0Y0,
+    renderRayPackets( bgColor, blockPacket.m_ray, hitPacket_X0Y0,
                       m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ), hitColor_X0Y0 );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
@@ -733,7 +728,7 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
         }
         else
         {
-            rt_shades_packet( bgColor, blockPacket_AA_X1Y1.m_ray, hitPacket_AA_X1Y1,
+            renderRayPackets( bgColor, blockPacket_AA_X1Y1.m_ray, hitPacket_AA_X1Y1,
                               m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
                               hitColor_AA_X1Y1 );
         }
@@ -768,14 +763,14 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
                 m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR ),
                 SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y1_half );
 
-        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
-                            hitColor_AA_X1Y0 );
+        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
+                                hitColor_AA_X1Y0 );
 
-        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X0Y1,
-                            hitColor_AA_X0Y1 );
+        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X0Y1,
+                                hitColor_AA_X0Y1 );
 
-        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y1_half,
-                            hitColor_AA_X0Y1_half );
+        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1,
+                                blockRayPck_AA_X1Y1_half, hitColor_AA_X0Y1_half );
 
         // Average the result
         for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
@@ -805,22 +800,18 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
                 const SFVEC3F& hColor = hitColor_X0Y0[i];
 
                 if( hitPacket_X0Y0[i].m_hitresult == true )
-                    m_postshader_ssao.SetPixelData( bPos.x, bPos.y,
-                                                    hitPacket_X0Y0[i].m_HitInfo.m_HitNormal,
-                                                    hColor,
-                                                    blockPacket.m_ray[i].at(
-                                                        hitPacket_X0Y0[i].m_HitInfo.m_tHit ),
-                                                    hitPacket_X0Y0[i].m_HitInfo.m_tHit,
-                                                    hitPacket_X0Y0[i].m_HitInfo.m_ShadowFactor );
+                    m_postShaderSsao.SetPixelData( bPos.x, bPos.y,
+                                                   hitPacket_X0Y0[i].m_HitInfo.m_HitNormal,
+                                                   hColor,
+                                                   blockPacket.m_ray[i].at(
+                                                           hitPacket_X0Y0[i].m_HitInfo.m_tHit ),
+                                                   hitPacket_X0Y0[i].m_HitInfo.m_tHit,
+                                                   hitPacket_X0Y0[i].m_HitInfo.m_ShadowFactor );
                 else
-                    m_postshader_ssao.SetPixelData( bPos.x, bPos.y,
-                                                    SFVEC3F( 0.0f ),
-                                                    hColor,
-                                                    SFVEC3F( 0.0f ),
-                                                    0,
-                                                    1.0f );
+                    m_postShaderSsao.SetPixelData( bPos.x, bPos.y, SFVEC3F( 0.0f ), hColor,
+                                                   SFVEC3F( 0.0f ), 0, 1.0f );
 
-                rt_final_color( ptr, hColor, false );
+                renderFinalColor( ptr, hColor, false );
 
                 bPos.x++;
                 ptr += 4;
@@ -836,7 +827,7 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
         {
             for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
             {
-                rt_final_color( ptr, hitColor_X0Y0[i], true );
+                renderFinalColor( ptr, hitColor_X0Y0[i], true );
                 ptr += 4;
             }
 
@@ -846,7 +837,7 @@ void RENDER_3D_RAYTRACE::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlo
 }
 
 
-void RENDER_3D_RAYTRACE::rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     (void)ptrPBO; // unused
 
@@ -855,7 +846,7 @@ void RENDER_3D_RAYTRACE::rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER
         if( aStatusReporter )
             aStatusReporter->Report( _( "Rendering: Post processing shader" ) );
 
-        m_postshader_ssao.SetShadowsEnabled(
+        m_postShaderSsao.SetShadowsEnabled(
                 m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
 
         std::atomic<size_t> nextBlock( 0 );
@@ -867,15 +858,14 @@ void RENDER_3D_RAYTRACE::rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER
         {
             std::thread t = std::thread( [&]()
             {
-                for( size_t y = nextBlock.fetch_add( 1 );
-                     y < m_realBufferSize.y;
+                for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
                      y = nextBlock.fetch_add( 1 ) )
                 {
                     SFVEC3F* ptr = &m_shaderBuffer[ y * m_realBufferSize.x ];
 
                     for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
                     {
-                        *ptr = m_postshader_ssao.Shade( SFVEC2I( x, y ) );
+                        *ptr = m_postShaderSsao.Shade( SFVEC2I( x, y ) );
                         ptr++;
                     }
                 }
@@ -889,21 +879,20 @@ void RENDER_3D_RAYTRACE::rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER
         while( threadsFinished < parallelThreadCount )
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
-        m_postshader_ssao.SetShadedBuffer( m_shaderBuffer );
+        m_postShaderSsao.SetShadedBuffer( m_shaderBuffer );
 
         // Set next state
-        m_rt_render_state = RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH;
+        m_renderState = RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH;
     }
     else
     {
         // As this was an invalid state, set to finish
-        m_rt_render_state = RT_RENDER_STATE_FINISH;
+        m_renderState = RT_RENDER_STATE_FINISH;
     }
 }
 
 
-void RENDER_3D_RAYTRACE::rt_render_post_process_blur_finish( GLubyte* ptrPBO,
-                                                             REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     (void) aStatusReporter; //unused
 
@@ -926,19 +915,19 @@ void RENDER_3D_RAYTRACE::rt_render_post_process_blur_finish( GLubyte* ptrPBO,
 
                     for( signed int x = 0; x < (int)m_realBufferSize.x; ++x )
                     {
-                        const SFVEC3F bluredShadeColor = m_postshader_ssao.Blur( SFVEC2I( x, y ) );
+                        const SFVEC3F bluredShadeColor = m_postShaderSsao.Blur( SFVEC2I( x, y ) );
 
 #ifdef USE_SRGB_SPACE
                         const SFVEC3F originColor = convertLinearToSRGB(
-                                m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x, y ) ) );
+                                m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) ) );
 #else
                         const SFVEC3F originColor =
-                                m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x, y ) );
+                                m_postShaderSsao.GetColorAtNotProtected( SFVEC2I( x, y ) );
 #endif
-                        const SFVEC3F shadedColor = m_postshader_ssao.ApplyShadeColor(
+                        const SFVEC3F shadedColor = m_postShaderSsao.ApplyShadeColor(
                                 SFVEC2I( x, y ), originColor, bluredShadeColor );
 
-                        rt_final_color( ptr, shadedColor, false );
+                        renderFinalColor( ptr, shadedColor, false );
 
                         ptr += 4;
                     }
@@ -954,15 +943,15 @@ void RENDER_3D_RAYTRACE::rt_render_post_process_blur_finish( GLubyte* ptrPBO,
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
         // Debug code
-        //m_postshader_ssao.DebugBuffersOutputAsImages();
+        //m_postShaderSsao.DebugBuffersOutputAsImages();
     }
 
     // End rendering
-    m_rt_render_state = RT_RENDER_STATE_FINISH;
+    m_renderState = RT_RENDER_STATE_FINISH;
 }
 
 
-void RENDER_3D_RAYTRACE::render_preview( GLubyte* ptrPBO )
+void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
 {
     m_isPreview = true;
 
@@ -1515,10 +1504,11 @@ void RENDER_3D_RAYTRACE::render_preview( GLubyte* ptrPBO )
                         }
 
                         // Set pixel colors
-                        GLubyte* ptr = &ptrPBO[ (4 * x + m_blockPositionsFast[iBlock].x +
-                                                 m_realBufferSize.x *
-                                                 (m_blockPositionsFast[iBlock].y + 4 * y)) * 4 ];
-                        SetPixel( ptr +  0, cLT );
+                        GLubyte* ptr =
+                                &ptrPBO[( 4 * x + m_blockPositionsFast[iBlock].x
+                                          + m_realBufferSize.x
+                                          * ( m_blockPositionsFast[iBlock].y + 4 * y ) ) * 4];
+                        SetPixel( ptr + 0, cLT );
                         SetPixel( ptr +  4, BlendColor( cLT, cLRT, cLTC ) );
                         SetPixel( ptr +  8, cLRT );
                         SetPixel( ptr + 12, BlendColor( cLRT, cRT, cRTC ) );
@@ -1599,14 +1589,6 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
         if( m_isPreview )
             colorOfLight = SFVEC3F( 1.0f );
 
-        /*
-        if( (!m_isPreview) &&
-            // Little hack to make randomness to the shading and shadows
-            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-            vectorToLight = glm::normalize( vectorToLight +
-                                            UniformRandomHemisphereDirection() * 0.1f );
-         */
-
         const float NdotL = glm::dot( aHitInfo.m_HitNormal, vectorToLight );
 
         // Only calc shade if the normal is facing the direction of light,
@@ -1637,7 +1619,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                 {
 
                     const unsigned int shadow_number_of_samples =
-                            m_boardAdapter.m_raytrace_nrsamples_shadows;
+                            m_boardAdapter.m_RtShadowSampleCount;
                     const float shadow_inc_factor = 1.0f / (float) ( shadow_number_of_samples );
 
                     for( unsigned int i = 0; i < shadow_number_of_samples; ++i )
@@ -1653,7 +1635,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                             const SFVEC3F unifVector = UniformRandomHemisphereDirection();
                             const SFVEC3F disturbed_vector_to_light =
                                     glm::normalize( vectorToLight + unifVector *
-                                                    m_boardAdapter.m_raytrace_spread_shadows );
+                                                    m_boardAdapter.m_RtSpreadShadows );
 
                             rayToLight.Init( hitPoint, disturbed_vector_to_light );
                         }
@@ -1683,8 +1665,8 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
     // Improvement: this is not taking in account the lightcolor
     if( nr_lights_that_can_cast_shadows > 0 )
     {
-        aHitInfo.m_ShadowFactor = glm::max( shadow_att_factor_sum /
-                                  (float)(nr_lights_that_can_cast_shadows * 1.0f), 0.0f );
+        aHitInfo.m_ShadowFactor = glm::max(
+                shadow_att_factor_sum / (float) ( nr_lights_that_can_cast_shadows * 1.0f ), 0.0f );
     }
     else
     {
@@ -1699,10 +1681,10 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
         // Reflections
         if( ( objMaterial->GetReflection() > 0.0f )
           && m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS )
-          && ( aRecursiveLevel < objMaterial->GetReflectionsRecursiveLevel() ) )
+          && ( aRecursiveLevel < objMaterial->GetReflectionRecursionCount() ) )
         {
             const unsigned int reflection_number_of_samples =
-                    objMaterial->GetNrReflectionsSamples();
+                    objMaterial->GetReflectionRayCount();
 
             SFVEC3F sum_color = SFVEC3F( 0.0f );
 
@@ -1723,7 +1705,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                     const SFVEC3F random_reflectVector =
                             glm::normalize( reflectVector +
                                             UniformRandomHemisphereDirection() *
-                                            m_boardAdapter.m_raytrace_spread_reflections );
+                                            m_boardAdapter.m_RtSpreadReflections );
 
                     reflectedRay.Init( hitPoint, random_reflectVector );
                 }
@@ -1750,7 +1732,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
         const float objTransparency = aHitInfo.pHitObject->GetModelTransparency();
 
         if( ( objTransparency > 0.0f ) && m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS )
-          && ( aRecursiveLevel < objMaterial->GetRefractionsRecursiveLevel() ) )
+          && ( aRecursiveLevel < objMaterial->GetRefractionRecursionCount() ) )
         {
             const float airIndex = 1.000293f;
             const float glassIndex = 1.49f;
@@ -1770,7 +1752,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                                  0.25f );
 
                 const unsigned int refractions_number_of_samples =
-                        objMaterial->GetNrRefractionsSamples();
+                        objMaterial->GetRefractionRayCount();
 
                 SFVEC3F sum_color = SFVEC3F(0.0f);
 
@@ -1788,7 +1770,7 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
                         const SFVEC3F randomizeRefractedVector =
                                 glm::normalize( refractedVector +
                                                 UniformRandomHemisphereDirection() *
-                                                m_boardAdapter.m_raytrace_spread_refractions );
+                                                m_boardAdapter.m_RtSpreadRefractions );
 
                         refractedRay.Init( startPoint, randomizeRefractedVector );
                     }
@@ -1828,27 +1810,24 @@ SFVEC3F RENDER_3D_RAYTRACE::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, 
         }
     }
 
-   //outColor += glm::max( -glm::dot( aHitInfo.m_HitNormal, aRay.m_Dir ), 0.0f ) *
-   //            objMaterial->GetAmbientColor();
-
     return outColor;
 }
 
 
 void RENDER_3D_RAYTRACE::initializeNewWindowSize()
 {
-    opengl_init_pbo();
+    initPbo();
 }
 
 
-void RENDER_3D_RAYTRACE::opengl_init_pbo()
+void RENDER_3D_RAYTRACE::initPbo()
 {
     if( GLEW_ARB_pixel_buffer_object )
     {
-        m_opengl_support_vertex_buffer_object = true;
+        m_openglSupportsVertexBufferObjects = true;
 
         // Try to delete vbo if it was already initialized
-        opengl_delete_pbo();
+        deletePbo();
 
         // Learn about Pixel buffer objects at:
         // http://www.songho.ca/opengl/gl_pbo.html
@@ -1886,7 +1865,7 @@ static float distance( const SFVEC2UI& a, const SFVEC2UI& b )
 }
 
 
-void RENDER_3D_RAYTRACE::initialize_block_positions()
+void RENDER_3D_RAYTRACE::initializeBlockPositions()
 {
     m_realBufferSize = SFVEC2UI( 0 );
 
@@ -1930,8 +1909,7 @@ void RENDER_3D_RAYTRACE::initialize_block_positions()
     m_xoffset = ( m_windowSize.x - m_realBufferSize.x ) / 2;
     m_yoffset = ( m_windowSize.y - m_realBufferSize.y ) / 2;
 
-    m_postshader_ssao.UpdateSize( m_realBufferSize );
-
+    m_postShaderSsao.UpdateSize( m_realBufferSize );
 
     // Calc block positions for regular rendering. Choose an 'inside out' style of rendering.
     m_blockPositions.clear();
@@ -1956,7 +1934,7 @@ void RENDER_3D_RAYTRACE::initialize_block_positions()
     delete[] m_shaderBuffer;
     m_shaderBuffer = new SFVEC3F[m_realBufferSize.x * m_realBufferSize.y];
 
-    opengl_init_pbo();
+    initPbo();
 }
 
 

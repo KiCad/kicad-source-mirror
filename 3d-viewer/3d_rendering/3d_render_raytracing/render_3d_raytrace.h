@@ -76,25 +76,25 @@ public:
 private:
     bool initializeOpenGL();
     void initializeNewWindowSize();
-    void opengl_init_pbo();
-    void opengl_delete_pbo();
+    void initPbo();
+    void deletePbo();
     void createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d, PCB_LAYER_ID aLayer_id,
                                    const MATERIAL* aMaterialLayer, const SFVEC3F& aLayerColor,
                                    float aLayerZOffset );
 
-    void restart_render_state();
-    void rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void rt_render_post_process_blur_finish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void rt_render_trace_block( GLubyte* ptrPBO , signed int iBlock );
-    void rt_final_color( GLubyte* ptrPBO, const SFVEC3F& rgbColor, bool applyColorSpaceConversion );
+    void restartRenderState();
+    void renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void renderBlockTracing( GLubyte* ptrPBO , signed int iBlock );
+    void renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor, bool applyColorSpaceConversion );
 
-    void rt_shades_packet( const SFVEC3F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
+    void renderRayPackets( const SFVEC3F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
                            bool is_testShadow, SFVEC3F* aOutHitColor );
 
-    void rt_trace_AA_packet( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
-                             const HITINFO_PACKET* aHitPck_AA_X1Y1, const RAY* aRayPck,
-                             SFVEC3F* aOutHitColor );
+    void renderAnitAliasPackets( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
+                                 const HITINFO_PACKET* aHitPck_AA_X1Y1, const RAY* aRayPck,
+                                 SFVEC3F* aOutHitColor );
 
     // Materials
     void setupMaterials();
@@ -109,24 +109,23 @@ private:
      * It tries to optimize some types of objects that will be faster to trace than the
      * LAYER_ITEM object.
      */
-    void create_3d_object_from( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
-                                float aZMin, float aZMax, const MATERIAL* aMaterial,
-                                const SFVEC3F& aObjColor );
+    void createObject( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D, float aZMin,
+                       float aZMax, const MATERIAL* aMaterial, const SFVEC3F& aObjColor );
 
-    void add_3D_vias_and_pads_to_container();
-    void insert3DViaHole( const VIA* aVia );
-    void insert3DPadHole( const PAD* aPad );
-    void load_3D_models( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
-    void add_3D_models( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
-                        const glm::mat4& aModelMatrix, float aFPOpacity,
-                        bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem );
+    void addPadsAndVias();
+    void insertHole( const VIA* aVia );
+    void insertHole( const PAD* aPad );
+    void loadModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
+    void addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
+                    const glm::mat4& aModelMatrix, float aFPOpacity,
+                    bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem );
 
-    MODEL_MATERIALS* get_3D_model_material( const S3DMODEL* a3DModel );
+    MODEL_MATERIALS* getModelMaterial( const S3DMODEL* a3DModel );
 
-    void initialize_block_positions();
+    void initializeBlockPositions();
 
     void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void render_preview( GLubyte* ptrPBO );
+    void renderPreview( GLubyte* ptrPBO );
 
     struct
     {
@@ -139,41 +138,40 @@ private:
         BLINN_PHONG_MATERIAL m_Floor;
     } m_materials;
 
-    BOARD_NORMAL         m_board_normal_perturbator;
-    COPPER_NORMAL        m_copper_normal_perturbator;
-    PLATED_COPPER_NORMAL m_platedcopper_normal_perturbator;
-    SOLDER_MASK_NORMAL   m_solder_mask_normal_perturbator;
-    PLASTIC_NORMAL       m_plastic_normal_perturbator;
-    PLASTIC_SHINE_NORMAL m_plastic_shine_normal_perturbator;
-    BRUSHED_METAL_NORMAL m_brushed_metal_normal_perturbator;
-    SILK_SCREEN_NORMAL   m_silkscreen_normal_perturbator;
+    BOARD_NORMAL         m_boardMaterial;
+    COPPER_NORMAL        m_copperMaterial;
+    PLATED_COPPER_NORMAL m_platedCopperMaterial;
+    SOLDER_MASK_NORMAL   m_solderMaskMaterial;
+    PLASTIC_NORMAL       m_plasticMaterial;
+    PLASTIC_SHINE_NORMAL m_shinyPlasticMaterial;
+    BRUSHED_METAL_NORMAL m_brushedMetalMaterial;
+    SILK_SCREEN_NORMAL   m_silkScreenMaterial;
 
     bool m_isPreview;
 
     /// State used on quality render
-    RT_RENDER_STATE m_rt_render_state;
+    RT_RENDER_STATE m_renderState;
 
     /// Time that the render starts
-    unsigned long int m_stats_start_rendering_time;
+    unsigned long int m_renderStartTime;
 
     /// Save the number of blocks progress of the render
-    size_t m_nrBlocksRenderProgress;
+    size_t m_blockRenderProgressCount;
 
-    POST_SHADER_SSAO m_postshader_ssao;
+    POST_SHADER_SSAO m_postShaderSsao;
 
     LIGHT_SOURCES m_lights;
 
-    DIRECTIONAL_LIGHT* m_camera_light;
+    DIRECTIONAL_LIGHT* m_cameraLight;
 
-    bool m_opengl_support_vertex_buffer_object;
+    bool m_openglSupportsVertexBufferObjects;
 
     GLuint m_pboId;
     GLuint m_pboDataSize;
 
-    CONTAINER_3D m_object_container;
+    CONTAINER_3D m_objectContainer;
 
-    /// This will store the list of created objects special for RT,
-    /// that will be clear in the end
+    ///< Store the list of created objects special for RT that will be clear in the end.
     CONTAINER_2D m_containerWithObjectsToDelete;
 
     CONTAINER_2D* m_outlineBoard2dObjects;
@@ -181,21 +179,19 @@ private:
 
     ACCELERATOR_3D* m_accelerator;
 
-    SFVEC3F m_BgColorTop_LinearRGB;
-    SFVEC3F m_BgColorBot_LinearRGB;
+    SFVEC3F m_backgroundColorTop;
+    SFVEC3F m_backgroundColorBottom;
 
-    // Morton codes
-
-    /// used to see if the windows size changed
+    ///< Used to see if the windows size changed.
     wxSize m_oldWindowsSize;
 
-    /// this encodes the Morton code positions
+    ///< Encode Morton code positions.
     std::vector< SFVEC2UI > m_blockPositions;
 
-    /// this flags if a position was already processed (cleared each new render)
+    ///< Flag if a position was already processed (cleared each new render).
     std::vector< int > m_blockPositionsWasProcessed;
 
-    /// this encodes the Morton code positions (on fast preview mode)
+    ///< Encode the Morton code positions (on fast preview mode).
     std::vector< SFVEC2UI > m_blockPositionsFast;
 
     SFVEC2UI m_realBufferSize;
@@ -210,11 +206,11 @@ private:
     unsigned int m_yoffset;
 
     /// Stores materials of the 3D models
-    MAP_MODEL_MATERIALS m_model_materials;
+    MAP_MODEL_MATERIALS m_modelMaterialMap;
 
     // Statistics
-    unsigned int m_stats_converted_dummy_to_plane;
-    unsigned int m_stats_converted_roundsegment2d_to_roundsegment;
+    unsigned int m_convertedDummyBlockCount;
+    unsigned int m_converted2dRoundSegmentCount;
 };
 
 #define USE_SRGB_SPACE

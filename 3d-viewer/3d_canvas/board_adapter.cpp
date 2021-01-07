@@ -51,7 +51,7 @@ const wxChar *BOARD_ADAPTER::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
 
 BOARD_ADAPTER::BOARD_ADAPTER() :
         m_board( nullptr ),
-        m_3d_model_manager( nullptr ),
+        m_3dModelManager( nullptr ),
         m_colors( nullptr ),
         m_layerZcoordTop(),
         m_layerZcoordBottom()
@@ -91,9 +91,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_averageHoleDiameter = 0.0f;
     m_averageTrackWidth = 0.0f;
 
-    m_calc_seg_min_factor3DU = 0.0f;
-    m_calc_seg_max_factor3DU = 0.0f;
-
     SetFlag( FL_USE_REALISTIC_MODE, true );
     SetFlag( FL_FP_ATTRIBUTES_NORMAL, true );
     SetFlag( FL_SHOW_BOARD_BODY, true );
@@ -131,16 +128,16 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_backPlatedPadPolys = nullptr;
 
     // Avoid raytracing options not initialized:
-    m_raytrace_nrsamples_shadows = 0;
-    m_raytrace_nrsamples_reflections = 0;
-    m_raytrace_nrsamples_refractions = 0;
+    m_RtShadowSampleCount = 0;
+    m_RtReflectionSampleCount = 0;
+    m_RtRefractionSampleCount = 0;
 
-    m_raytrace_spread_shadows = 0.0;
-    m_raytrace_spread_reflections = 0.0;
-    m_raytrace_spread_refractions = 0.0;
+    m_RtSpreadShadows = 0.0;
+    m_RtSpreadReflections = 0.0;
+    m_RtSpreadRefractions = 0.0;
 
-    m_raytrace_recursivelevel_reflections = 0;
-    m_raytrace_recursivelevel_refractions = 0;
+    m_RtRecursiveReflectionCount = 0;
+    m_RtRecursiveRefractionCount = 0;
 }
 
 

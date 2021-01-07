@@ -108,7 +108,7 @@ TRIANGLE::TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 )
 
 
 TRIANGLE::TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
-                      const SFVEC3F& aFaceNormal )
+                    const SFVEC3F& aFaceNormal )
         : OBJECT_3D( OBJECT_3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
@@ -157,9 +157,7 @@ void TRIANGLE::SetColor( const SFVEC3F& aColor )
 }
 
 
-void TRIANGLE::SetColor( const SFVEC3F& aVC0,
-                          const SFVEC3F& aVC1,
-                          const SFVEC3F& aVC2 )
+void TRIANGLE::SetColor( const SFVEC3F& aVC0, const SFVEC3F& aVC1, const SFVEC3F& aVC2 )
 {
     m_vertexColorRGBA[0] = ( (unsigned int) ( aVC0.r * 255 ) << 24 )
                            | ( (unsigned int) ( aVC0.g * 255 ) << 16 )
@@ -182,7 +180,7 @@ void TRIANGLE::SetColor( unsigned int aFaceColorRGBA )
 
 
 void TRIANGLE::SetColor( unsigned int aVertex1ColorRGBA, unsigned int aVertex2ColorRGBA,
-                          unsigned int aVertex3ColorRGBA )
+                         unsigned int aVertex3ColorRGBA )
 {
     m_vertexColorRGBA[0] = aVertex1ColorRGBA;
     m_vertexColorRGBA[1] = aVertex2ColorRGBA;
@@ -212,7 +210,7 @@ bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     const SFVEC3F& A = m_vertex[0];
 
     const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
-    const float t = (m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv]) * lnd;
+    const float t = ( m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv] ) * lnd;
 
     if( !( ( aHitInfo.m_tHit > t ) && ( t > 0.0f ) ) )
         return false;
@@ -242,10 +240,10 @@ bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     aHitInfo.m_HitPoint = aRay.at( t );
 
     // interpolate vertex normals with UVW using Gouraud's shading
-    aHitInfo.m_HitNormal = glm::normalize( (1.0f - u - v) * m_normal[0] + u * m_normal[1] +
-                                            v * m_normal[2] );
+    aHitInfo.m_HitNormal =
+            glm::normalize( ( 1.0f - u - v ) * m_normal[0] + u * m_normal[1] + v * m_normal[2] );
 
-    m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+    m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
     aHitInfo.pHitObject = this;
 
@@ -266,7 +264,7 @@ bool TRIANGLE::IntersectP( const RAY& aRay, float aMaxDistance ) const
     const SFVEC3F A = m_vertex[0];
 
     const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
-    const float t = (m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv]) * lnd;
+    const float t = ( m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv] ) * lnd;
 
     if( !( ( aMaxDistance > t ) && ( t > 0.0f ) ) )
         return false;

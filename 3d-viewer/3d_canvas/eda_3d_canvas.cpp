@@ -291,7 +291,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 
 void EDA_3D_CANVAS::GetScreenshot( wxImage& aDstImage )
 {
-    OGL_GetScreenshot( aDstImage );
+    OglGetScreenshot( aDstImage );
 }
 
 
@@ -318,7 +318,6 @@ void EDA_3D_CANVAS::RenderRaytracingRequest()
         m_3d_render->ReloadRequest();
 
     m_render_raytracing_was_requested = true;
-    //m_mouse_was_moved = true;
 
     Request_refresh();
 }
@@ -341,10 +340,7 @@ void EDA_3D_CANVAS::DisplayStatus()
 
 void EDA_3D_CANVAS::OnPaint( wxPaintEvent& aEvent )
 {
-    // Please have a look at:
-    // https://lists.launchpad.net/kicad-developers/msg25149.html
-    // wxPaintDC( this );
-    // aEvent.Skip( false );
+    // Please have a look at: https://lists.launchpad.net/kicad-developers/msg25149.html
     DoRePaint();
 }
 
@@ -374,7 +370,6 @@ void EDA_3D_CANVAS::DoRePaint()
     wxString err_messages;
 
     // !TODO: implement error reporter
-    //WX_STRING_REPORTER errorReporter( &err_messages );
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
     STATUSBAR_REPORTER activityReporter( m_parentStatusBar,
                                          (int) EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT );
@@ -1080,6 +1075,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
         m_camera.RotateX_T1( glm::radians( -90.0f ) );
+
         // The rotation angle should be 180.
         // We use 179.999 (180 - epsilon) to avoid a full 360 deg rotation when
         // using 180 deg if the previous rotated position was already 180 deg

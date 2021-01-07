@@ -136,8 +136,7 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
     {
         const auto& mesh = a3DModel.m_Meshes[mesh_i];
 
-        // silently ignore meshes that have invalid material references
-        // or invalid geometry.
+        // silently ignore meshes that have invalid material references or invalid geometry.
         if( mesh.m_MaterialIdx >= m_materials.size()
           || mesh.m_Positions == nullptr
           || mesh.m_FaceIdx == nullptr
@@ -439,15 +438,15 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
         switch( m_materialMode )
         {
         case MATERIAL_MODE::NORMAL:
-            OGL_SetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
+            OglSetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
             break;
 
         case MATERIAL_MODE::DIFFUSE_ONLY:
-            OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
+            OglSetDiffuseMaterial( mat.m_Diffuse, aOpacity );
             break;
 
         case MATERIAL_MODE::CAD_MODE:
-            OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
+            OglSetDiffuseMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
             break;
 
         default:

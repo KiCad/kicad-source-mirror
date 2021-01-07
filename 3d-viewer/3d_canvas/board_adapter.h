@@ -78,7 +78,7 @@ public:
      */
     void Set3dCacheManager( S3D_CACHE* aCachePointer ) noexcept
     {
-        m_3d_model_manager = aCachePointer;
+        m_3dModelManager = aCachePointer;
     }
 
     /**
@@ -86,7 +86,7 @@ public:
      */
     S3D_CACHE* Get3dCacheManager() const noexcept
     {
-        return m_3d_model_manager;
+        return m_3dModelManager;
     }
 
     /**
@@ -616,32 +616,30 @@ public:
     SFVEC4F m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
     SFVEC4F m_CopperColor;        ///< in realistic mode: copper color
 
-    SFVEC3F m_opengl_selectionColor;
+    SFVEC3F m_OpenGlSelectionColor;
 
     // Raytracing light colors
+    SFVEC3F m_RtCameraLightColor;
+    SFVEC3F m_RtLightColorTop;
+    SFVEC3F m_RtLightColorBottom;
 
-    SFVEC3F m_raytrace_lightColorCamera;
-    SFVEC3F m_raytrace_lightColorTop;
-    SFVEC3F m_raytrace_lightColorBottom;
-
-    std::vector<SFVEC3F> m_raytrace_lightColor;
-    std::vector<SFVEC2F> m_raytrace_lightSphericalCoords;
+    std::vector<SFVEC3F> m_RtLightColor;
+    std::vector<SFVEC2F> m_RtLightSphericalCoords;
 
     // Raytracing options
-    int m_raytrace_nrsamples_shadows;
-    int m_raytrace_nrsamples_reflections;
-    int m_raytrace_nrsamples_refractions;
+    int m_RtShadowSampleCount;
+    int m_RtReflectionSampleCount;
+    int m_RtRefractionSampleCount;
+    int m_RtRecursiveReflectionCount;
+    int m_RtRecursiveRefractionCount;
 
-    float m_raytrace_spread_shadows;
-    float m_raytrace_spread_reflections;
-    float m_raytrace_spread_refractions;
-
-    int m_raytrace_recursivelevel_reflections;
-    int m_raytrace_recursivelevel_refractions;
+    float m_RtSpreadShadows;
+    float m_RtSpreadReflections;
+    float m_RtSpreadRefractions;
 
 private:
     BOARD*              m_board;
-    S3D_CACHE*          m_3d_model_manager;
+    S3D_CACHE*          m_3dModelManager;
     COLOR_SETTINGS*     m_colors;
 
     std::vector< bool > m_drawFlags;
@@ -692,58 +690,46 @@ private:
     ///< The holes per each layer.
     MAP_CONTAINER_2D_BASE  m_layerHoleMap;
 
-    /// It contains the list of throughHoles of the board,
-    /// the radius of the hole is inflated with the copper thickness
+    ///< List of through holes with the radius of the hole inflated with the copper thickness.
     BVH_CONTAINER_2D   m_throughHoleOds;
 
-    /// It contains the list of throughHoles of the board,
-    /// the radius of the hole is inflated with the annular ring size
+    ///< List of plated through hole annular rings.
     BVH_CONTAINER_2D   m_throughHoleAnnularRings;
 
-    /// It contains the list of throughHoles of the board,
-    /// the radius is the inner hole
+    ///< List of through hole inner diameters.
     BVH_CONTAINER_2D   m_throughHoleIds;
 
-    /// It contains the list of throughHoles vias of the board,
-    /// the radius of the hole is inflated with the copper thickness
+    ///< List of through hole vias with the radius of the hole inflated with the copper thickness.
     BVH_CONTAINER_2D   m_throughHoleViaOds;
 
-    /// It contains the list of throughHoles vias of the board,
-    /// the radius of the hole
+    ///< List of through hole via inner diameters.
     BVH_CONTAINER_2D   m_throughHoleViaIds;
 
-    /// Number of copper layers actually used by the board
+    ///< Number of copper layers actually used by the board.
     unsigned int m_copperLayersCount;
 
-    /// Normalization scale to convert board internal units to 3D units to
-    /// normalize 3D units between -1.0 and +1.0
+    ///< Scale factor to convert board internal units to 3D units normalized between -1.0 and 1.0.
     double m_biuTo3Dunits;
 
-    /// Top (End) Z position of each layer (normalized)
+    ///< Top (End) Z position of each layer in 3D units.
     std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordTop;
 
-    /// Bottom (Start) Z position of each layer (normalized)
+    ///< Bottom (Start) Z position of each layer in 3D units.
     std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordBottom;
 
-    /// Copper thickness (normalized)
+    ///< Copper thickness in 3D units.
     float  m_copperThickness3DU;
 
-    /// Epoxy thickness (normalized)
+    ///< Epoxy thickness in 3D units.
     float  m_epoxyThickness3DU;
 
-    /// Non copper layers thickness
+    ///< Non copper layers thickness in 3D units.
     float  m_nonCopperLayerThickness3DU;
-
-    /// min factor used for circle segment approximation calculation
-    float m_calc_seg_min_factor3DU;
-
-    /// max factor used for circle segment approximation calculation
-    float m_calc_seg_max_factor3DU;
 
     ///< Number of tracks in the board.
     unsigned int m_trackCount;
 
-    /// Track average width
+    ///< Track average width.
     float        m_averageTrackWidth;
 
     ///< Number of through hole vias in the board.
@@ -755,7 +741,7 @@ private:
     ///< Number of holes in the board.
     unsigned int m_holeCount;
 
-    /// Computed average diameter of the holes in 3D units.
+    ///< Computed average diameter of the holes in 3D units.
     float        m_averageHoleDiameter;
 
     /**

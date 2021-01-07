@@ -75,32 +75,31 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 
 void RENDER_3D_RAYTRACE::setupMaterials()
 {
-    MATERIAL::SetDefaultNrRefractionsSamples( m_boardAdapter.m_raytrace_nrsamples_refractions );
-    MATERIAL::SetDefaultNrReflectionsSamples( m_boardAdapter.m_raytrace_nrsamples_reflections );
+    MATERIAL::SetDefaultRefractionRayCount( m_boardAdapter.m_RtRefractionSampleCount );
+    MATERIAL::SetDefaultReflectionRayCount( m_boardAdapter.m_RtReflectionSampleCount );
 
-    MATERIAL::SetDefaultRefractionsLevel( m_boardAdapter.m_raytrace_recursivelevel_refractions );
-    MATERIAL::SetDefaultReflectionsLevel( m_boardAdapter.m_raytrace_recursivelevel_reflections );
+    MATERIAL::SetDefaultRefractionRecursionCount( m_boardAdapter.m_RtRecursiveRefractionCount );
+    MATERIAL::SetDefaultReflectionRecursionCount( m_boardAdapter.m_RtRecursiveReflectionCount );
 
     double mmTo3Dunits = IU_PER_MM * m_boardAdapter.BiuTo3dUnits();
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
     {
-        m_board_normal_perturbator = BOARD_NORMAL( 0.40f * mmTo3Dunits );
+        m_boardMaterial = BOARD_NORMAL( 0.40f * mmTo3Dunits );
 
-        m_copper_normal_perturbator =
-                COPPER_NORMAL( 4.0f * mmTo3Dunits, &m_board_normal_perturbator );
+        m_copperMaterial = COPPER_NORMAL( 4.0f * mmTo3Dunits, &m_boardMaterial );
 
-        m_platedcopper_normal_perturbator = PLATED_COPPER_NORMAL( 0.5f * mmTo3Dunits );
+        m_platedCopperMaterial = PLATED_COPPER_NORMAL( 0.5f * mmTo3Dunits );
 
-        m_solder_mask_normal_perturbator = SOLDER_MASK_NORMAL( &m_board_normal_perturbator );
+        m_solderMaskMaterial = SOLDER_MASK_NORMAL( &m_boardMaterial );
 
-        m_plastic_normal_perturbator = PLASTIC_NORMAL( 0.05f * mmTo3Dunits );
+        m_plasticMaterial = PLASTIC_NORMAL( 0.05f * mmTo3Dunits );
 
-        m_plastic_shine_normal_perturbator = PLASTIC_SHINE_NORMAL( 0.1f * mmTo3Dunits );
+        m_shinyPlasticMaterial = PLASTIC_SHINE_NORMAL( 0.1f * mmTo3Dunits );
 
-        m_brushed_metal_normal_perturbator = BRUSHED_METAL_NORMAL( 0.05f * mmTo3Dunits );
+        m_brushedMetalMaterial = BRUSHED_METAL_NORMAL( 0.05f * mmTo3Dunits );
 
-        m_silkscreen_normal_perturbator = SILK_SCREEN_NORMAL( 0.25f * mmTo3Dunits );
+        m_silkScreenMaterial = SILK_SCREEN_NORMAL( 0.25f * mmTo3Dunits );
     }
 
     // http://devernay.free.fr/cours/opengl/materials.html
@@ -114,14 +113,14 @@ void RENDER_3D_RAYTRACE::setupMaterials()
             SFVEC3F( 0.0f ), copperSpecularLinear, 0.4f * 128.0f, 0.0f, 0.0f );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_Copper.SetNormalPerturbator( &m_platedcopper_normal_perturbator );
+        m_materials.m_Copper.SetGenerator( &m_platedCopperMaterial );
 
     m_materials.m_NonPlatedCopper = BLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( SFVEC3F( 0.191f, 0.073f, 0.022f ) ), SFVEC3F( 0.0f, 0.0f, 0.0f ),
             SFVEC3F( 0.256f, 0.137f, 0.086f ), 0.15f * 128.0f, 0.0f, 0.0f );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_NonPlatedCopper.SetNormalPerturbator( &m_copper_normal_perturbator );
+        m_materials.m_NonPlatedCopper.SetGenerator( &m_copperMaterial );
 
     m_materials.m_Paste = BLINN_PHONG_MATERIAL(
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderPasteColor )
@@ -139,7 +138,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
                         SFVEC3F( 0.0f ), SFVEC3F( 0.10f ) ), 0.078125f * 128.0f, 0.0f, 0.0f );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_SilkS.SetNormalPerturbator( &m_silkscreen_normal_perturbator );
+        m_materials.m_SilkS.SetGenerator( &m_silkScreenMaterial );
 
     // Assume that SolderMaskTop == SolderMaskBot
     const float solderMask_gray =
@@ -157,10 +156,10 @@ void RENDER_3D_RAYTRACE::setupMaterials()
             solderMask_transparency, 0.16f );
 
     m_materials.m_SolderMask.SetCastShadows( true );
-    m_materials.m_SolderMask.SetNrRefractionsSamples( 1 );
+    m_materials.m_SolderMask.SetRefractionRayCount( 1 );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
+        m_materials.m_SolderMask.SetGenerator( &m_solderMaskMaterial );
 
     m_materials.m_EpoxyBoard =
             BLINN_PHONG_MATERIAL( ConvertSRGBToLinear( SFVEC3F( 16.0f / 255.0f, 14.0f / 255.0f,
@@ -173,7 +172,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
-        m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
+        m_materials.m_EpoxyBoard.SetGenerator( &m_boardMaterial );
 
     SFVEC3F bgTop = ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BgColorTop );
 
@@ -181,20 +180,20 @@ void RENDER_3D_RAYTRACE::setupMaterials()
                                                 ( SFVEC3F( 1.0f ) - bgTop ) / 3.0f,
                                                 0.10f * 128.0f, 0.0f, 0.50f );
     m_materials.m_Floor.SetCastShadows( false );
-    m_materials.m_Floor.SetReflectionsRecursiveLevel( 1 );
+    m_materials.m_Floor.SetReflectionRecursionCount( 1 );
 }
 
 
-void RENDER_3D_RAYTRACE::create_3d_object_from( CONTAINER_3D& aDstContainer,
-        const OBJECT_2D* aObject2D, float aZMin, float aZMax, const MATERIAL* aMaterial,
-        const SFVEC3F& aObjColor )
+void RENDER_3D_RAYTRACE::createObject( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
+                                       float aZMin, float aZMax, const MATERIAL* aMaterial,
+                                       const SFVEC3F& aObjColor )
 {
     switch( aObject2D->GetObjectType() )
     {
     case OBJECT_2D_TYPE::DUMMYBLOCK:
     {
-        m_stats_converted_dummy_to_plane++;
-#if 1
+        m_convertedDummyBlockCount++;
+
         XY_PLANE* objPtr;
         objPtr = new XY_PLANE( BBOX_3D(
                 SFVEC3F( aObject2D->GetBBox().Min().x, aObject2D->GetBBox().Min().y, aZMin ),
@@ -209,28 +208,20 @@ void RENDER_3D_RAYTRACE::create_3d_object_from( CONTAINER_3D& aDstContainer,
         objPtr->SetMaterial( aMaterial );
         objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
         aDstContainer.Add( objPtr );
-#else
-        objPtr = new DUMMY_BLOCK( BBOX_3D(
-                SFVEC3F( aObject2D->GetBBox().Min().x, aObject2D->GetBBox().Min().y, aZMin ),
-                SFVEC3F( aObject2D->GetBBox().Max().x, aObject2D->GetBBox().Max().y, aZMax ) ) );
-        objPtr->SetMaterial( aMaterial );
-        aDstContainer.Add( objPtr );
-#endif
+        break;
     }
-    break;
 
     case OBJECT_2D_TYPE::ROUNDSEG:
     {
-        m_stats_converted_roundsegment2d_to_roundsegment++;
+        m_converted2dRoundSegmentCount++;
 
         const ROUND_SEGMENT_2D* aRoundSeg2D = static_cast<const ROUND_SEGMENT_2D*>( aObject2D );
         ROUND_SEGMENT*          objPtr      = new ROUND_SEGMENT( *aRoundSeg2D, aZMin, aZMax );
         objPtr->SetMaterial( aMaterial );
         objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
         aDstContainer.Add( objPtr );
+        break;
     }
-    break;
-
 
     default:
     {
@@ -238,8 +229,8 @@ void RENDER_3D_RAYTRACE::create_3d_object_from( CONTAINER_3D& aDstContainer,
         objPtr->SetMaterial( aMaterial );
         objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
         aDstContainer.Add( objPtr );
+        break;
     }
-    break;
     }
 }
 
@@ -395,7 +386,7 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
                     m_boardAdapter.GetLayerTopZPos( aLayer_id ) + aLayerZOffset );
             objPtr->SetMaterial( aMaterialLayer );
             objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );
-            m_object_container.Add( objPtr );
+            m_objectContainer.Add( objPtr );
         }
         else
         {
@@ -410,7 +401,7 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             objPtr->SetMaterial( aMaterialLayer );
             objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );
 
-            m_object_container.Add( objPtr );
+            m_objectContainer.Add( objPtr );
         }
     }
 }
@@ -424,7 +415,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 {
     m_reloadRequested = false;
 
-    m_model_materials.clear();
+    m_modelMaterialMap.clear();
 
     OBJECT_2D_STATS::Instance().ResetStats();
     OBJECT_3D_STATS::Instance().ResetStats();
@@ -439,7 +430,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         m_camera.SetBoardLookAtPos( camera_pos );
     }
 
-    m_object_container.Clear();
+    m_objectContainer.Clear();
     m_containerWithObjectsToDelete.Clear();
 
     setupMaterials();
@@ -563,7 +554,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
                         objPtr->SetColor(
                                 ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
-                        m_object_container.Add( objPtr );
+                        m_objectContainer.Add( objPtr );
                     }
                     else
                     {
@@ -581,7 +572,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
                         objPtr->SetColor(
                                 ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
-                        m_object_container.Add( objPtr );
+                        m_objectContainer.Add( objPtr );
                     }
                 }
 
@@ -630,7 +621,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                             objPtr->SetColor( ConvertSRGBToLinear(
                                     (SFVEC3F) m_boardAdapter.m_BoardBodyColor ) );
 
-                            m_object_container.Add( objPtr );
+                            m_objectContainer.Add( objPtr );
                         }
                         break;
 
@@ -849,15 +840,15 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     if( object2d_B == CSGITEM_EMPTY )
                     {
 #if 0
-                       create_3d_object_from( m_object_container, object2d_A, zLayerMin,
-                                              zLayerMax, materialLayer, layerColor );
+                       createObject( m_objectContainer, object2d_A, zLayerMin, zLayerMax,
+                                     materialLayer, layerColor );
 #else
                         LAYER_ITEM* objPtr = new LAYER_ITEM( object2d_A, zLayerMin, zLayerMax );
 
                         objPtr->SetMaterial( materialLayer );
                         objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
 
-                        m_object_container.Add( objPtr );
+                        m_objectContainer.Add( objPtr );
 #endif
                     }
                     else
@@ -872,13 +863,13 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                         objPtr->SetMaterial( materialLayer );
                         objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
 
-                        m_object_container.Add( objPtr );
+                        m_objectContainer.Add( objPtr );
                     }
                 }
             }
         }
 
-        add_3D_vias_and_pads_to_container();
+        addPadsAndVias();
     }
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
@@ -889,7 +880,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     if( aStatusReporter )
         aStatusReporter->Report( _( "Loading 3D models" ) );
 
-    load_3D_models( m_object_container, aOnlyLoadCopperAndShapes );
+    loadModels( m_objectContainer, aOnlyLoadCopperAndShapes );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endLoad3DmodelsTime = GetRunningMicroSecs();
@@ -906,9 +897,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             {
                 boardBBox.Scale( 3.0f );
 
-                if( m_object_container.GetList().size() > 0 )
+                if( m_objectContainer.GetList().size() > 0 )
                 {
-                    BBOX_3D containerBBox = m_object_container.GetBBox();
+                    BBOX_3D containerBBox = m_objectContainer.GetBBox();
 
                     containerBBox.Scale( 1.3f );
 
@@ -934,8 +925,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     TRIANGLE* newTriangle1 = new TRIANGLE( v1, v2, v3 );
                     TRIANGLE* newTriangle2 = new TRIANGLE( v3, v4, v1 );
 
-                    m_object_container.Add( newTriangle1 );
-                    m_object_container.Add( newTriangle2 );
+                    m_objectContainer.Add( newTriangle1 );
+                    m_objectContainer.Add( newTriangle2 );
 
                     newTriangle1->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
                     newTriangle2->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
@@ -954,8 +945,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     TRIANGLE* newTriangle3 = new TRIANGLE( v7, v6, v5 );
                     TRIANGLE* newTriangle4 = new TRIANGLE( v5, v8, v7 );
 
-                    m_object_container.Add( newTriangle3 );
-                    m_object_container.Add( newTriangle4 );
+                    m_objectContainer.Add( newTriangle3 );
+                    m_objectContainer.Add( newTriangle4 );
 
                     newTriangle3->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
                     newTriangle4->SetMaterial( (const MATERIAL*) &m_materials.m_Floor );
@@ -976,37 +967,37 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                            && ( aSource.b < ( 1.0f / 255.0f ) ) );
                 };
 
-        m_camera_light = new DIRECTIONAL_LIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                                                m_boardAdapter.m_raytrace_lightColorCamera );
-        m_camera_light->SetCastShadows( false );
+        m_cameraLight = new DIRECTIONAL_LIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                                               m_boardAdapter.m_RtCameraLightColor );
+        m_cameraLight->SetCastShadows( false );
 
-        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorCamera ) )
-            m_lights.Add( m_camera_light );
+        if( !IsColorZero( m_boardAdapter.m_RtCameraLightColor ) )
+            m_lights.Add( m_cameraLight );
 
         const SFVEC3F& boardCenter = m_boardAdapter.GetBBox().GetCenter();
 
-        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorTop ) )
+        if( !IsColorZero( m_boardAdapter.m_RtLightColorTop ) )
             m_lights.Add( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
                                                     +RANGE_SCALE_3D * 2.0f ),
-                                           m_boardAdapter.m_raytrace_lightColorTop ) );
+                                           m_boardAdapter.m_RtLightColorTop ) );
 
-        if( !IsColorZero( m_boardAdapter.m_raytrace_lightColorBottom ) )
+        if( !IsColorZero( m_boardAdapter.m_RtLightColorBottom ) )
             m_lights.Add( new POINT_LIGHT( SFVEC3F( boardCenter.x, boardCenter.y,
                                                     -RANGE_SCALE_3D * 2.0f ),
-                                           m_boardAdapter.m_raytrace_lightColorBottom ) );
+                                           m_boardAdapter.m_RtLightColorBottom ) );
 
-        wxASSERT( m_boardAdapter.m_raytrace_lightColor.size()
-                  == m_boardAdapter.m_raytrace_lightSphericalCoords.size() );
+        wxASSERT( m_boardAdapter.m_RtLightColor.size()
+                  == m_boardAdapter.m_RtLightSphericalCoords.size() );
 
-        for( size_t i = 0; i < m_boardAdapter.m_raytrace_lightColor.size(); ++i )
+        for( size_t i = 0; i < m_boardAdapter.m_RtLightColor.size(); ++i )
         {
-            if( !IsColorZero( m_boardAdapter.m_raytrace_lightColor[i] ) )
+            if( !IsColorZero( m_boardAdapter.m_RtLightColor[i] ) )
             {
-                const SFVEC2F sc = m_boardAdapter.m_raytrace_lightSphericalCoords[i];
+                const SFVEC2F sc = m_boardAdapter.m_RtLightSphericalCoords[i];
 
                 m_lights.Add( new DIRECTIONAL_LIGHT(
                         SphericalToCartesian( glm::pi<float>() * sc.x, glm::pi<float>() * sc.y ),
-                        m_boardAdapter.m_raytrace_lightColor[i] ) );
+                        m_boardAdapter.m_RtLightColor[i] ) );
             }
         }
     }
@@ -1019,7 +1010,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 
     m_accelerator = 0;
 
-    m_accelerator = new BVH_PBRT( m_object_container, 8, SPLITMETHOD::MIDDLE );
+    m_accelerator = new BVH_PBRT( m_objectContainer, 8, SPLITMETHOD::MIDDLE );
 
     if( aStatusReporter )
     {
@@ -1032,7 +1023,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 }
 
 
-void RENDER_3D_RAYTRACE::insert3DViaHole( const VIA* aVia )
+void RENDER_3D_RAYTRACE::insertHole( const VIA* aVia )
 {
     PCB_LAYER_ID top_layer, bottom_layer;
     int          radiusBUI = ( aVia->GetDrillValue() / 2 );
@@ -1064,11 +1055,11 @@ void RENDER_3D_RAYTRACE::insert3DViaHole( const VIA* aVia )
         objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor(
                 LAYER_VIAS + static_cast<int>( aVia->GetViaType() ) ) ) );
 
-    m_object_container.Add( objPtr );
+    m_objectContainer.Add( objPtr );
 }
 
 
-void RENDER_3D_RAYTRACE::insert3DPadHole( const PAD* aPad )
+void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 {
     const OBJECT_2D* object2d_A = nullptr;
 
@@ -1238,7 +1229,7 @@ void RENDER_3D_RAYTRACE::insert3DPadHole( const PAD* aPad )
 
             objPtr->SetMaterial( &m_materials.m_Copper );
             objPtr->SetColor( ConvertSRGBToLinear( objColor ) );
-            m_object_container.Add( objPtr );
+            m_objectContainer.Add( objPtr );
         }
         else
         {
@@ -1252,13 +1243,13 @@ void RENDER_3D_RAYTRACE::insert3DPadHole( const PAD* aPad )
             objPtr->SetMaterial( &m_materials.m_Copper );
             objPtr->SetColor( ConvertSRGBToLinear( objColor ) );
 
-            m_object_container.Add( objPtr );
+            m_objectContainer.Add( objPtr );
         }
     }
 }
 
 
-void RENDER_3D_RAYTRACE::add_3D_vias_and_pads_to_container()
+void RENDER_3D_RAYTRACE::addPadsAndVias()
 {
     // Insert plated vertical holes inside the board
 
@@ -1268,7 +1259,7 @@ void RENDER_3D_RAYTRACE::add_3D_vias_and_pads_to_container()
         if( track->Type() == PCB_VIA_T )
         {
             const VIA* via = static_cast<const VIA*>( track );
-            insert3DViaHole( via );
+            insertHole( via );
         }
     }
 
@@ -1279,15 +1270,14 @@ void RENDER_3D_RAYTRACE::add_3D_vias_and_pads_to_container()
         {
             if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
             {
-                insert3DPadHole( pad );
+                insertHole( pad );
             }
         }
     }
 }
 
 
-void RENDER_3D_RAYTRACE::load_3D_models( CONTAINER_3D& aDstContainer,
-                                         bool aSkipMaterialInformation )
+void RENDER_3D_RAYTRACE::loadModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
 {
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
@@ -1365,8 +1355,8 @@ void RENDER_3D_RAYTRACE::load_3D_models( CONTAINER_3D& aDstContainer,
                         modelMatrix = glm::scale( modelMatrix,
                                 SFVEC3F( sM->m_Scale.x, sM->m_Scale.y, sM->m_Scale.z ) );
 
-                        add_3D_models( aDstContainer, modelPtr, modelMatrix, (float) sM->m_Opacity,
-                                       aSkipMaterialInformation, boardItem );
+                        addModels( aDstContainer, modelPtr, modelMatrix, (float) sM->m_Opacity,
+                                   aSkipMaterialInformation, boardItem );
                     }
                 }
 
@@ -1377,23 +1367,23 @@ void RENDER_3D_RAYTRACE::load_3D_models( CONTAINER_3D& aDstContainer,
 }
 
 
-MODEL_MATERIALS* RENDER_3D_RAYTRACE::get_3D_model_material( const S3DMODEL* a3DModel )
+MODEL_MATERIALS* RENDER_3D_RAYTRACE::getModelMaterial( const S3DMODEL* a3DModel )
 {
     MODEL_MATERIALS* materialVector;
 
     // Try find if the materials already exists in the map list
-    if( m_model_materials.find( a3DModel ) != m_model_materials.end() )
+    if( m_modelMaterialMap.find( a3DModel ) != m_modelMaterialMap.end() )
     {
         // Found it, so get the pointer
-        materialVector = &m_model_materials[a3DModel];
+        materialVector = &m_modelMaterialMap[a3DModel];
     }
     else
     {
         // Materials was not found in the map, so it will create a new for
         // this model.
 
-        m_model_materials[a3DModel] = MODEL_MATERIALS();
-        materialVector              = &m_model_materials[a3DModel];
+        m_modelMaterialMap[a3DModel] = MODEL_MATERIALS();
+        materialVector               = &m_modelMaterialMap[a3DModel];
 
         materialVector->resize( a3DModel->m_MaterialsSize );
 
@@ -1434,7 +1424,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::get_3D_model_material( const S3DMODEL* a3DM
                                             < 0.15f ) ) )
                     {
                         // This may be a black plastic..
-                        blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
+                        blinnMaterial.SetGenerator( &m_plasticMaterial );
                     }
                     else
                     {
@@ -1447,8 +1437,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::get_3D_model_material( const S3DMODEL* a3DM
                                 > 0.25f ) ) )
                         {
                             // This may be a color plastic ...
-                            blinnMaterial.SetNormalPerturbator(
-                                    &m_plastic_shine_normal_perturbator );
+                            blinnMaterial.SetGenerator( &m_shinyPlasticMaterial );
                         }
                         else
                         {
@@ -1463,8 +1452,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::get_3D_model_material( const S3DMODEL* a3DM
                                     < 0.40f ) ) )
                             {
                                 // This may be a brushed metal
-                                blinnMaterial.SetNormalPerturbator(
-                                        &m_brushed_metal_normal_perturbator );
+                                blinnMaterial.SetGenerator( &m_brushedMetalMaterial );
                             }
                         }
                     }
@@ -1482,9 +1470,9 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::get_3D_model_material( const S3DMODEL* a3DM
 }
 
 
-void RENDER_3D_RAYTRACE::add_3D_models( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
-                                        const glm::mat4& aModelMatrix, float aFPOpacity,
-                                        bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
+void RENDER_3D_RAYTRACE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
+                                    const glm::mat4& aModelMatrix, float aFPOpacity,
+                                    bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
 {
     // Validate a3DModel pointers
     wxASSERT( a3DModel != nullptr );
@@ -1511,7 +1499,7 @@ void RENDER_3D_RAYTRACE::add_3D_models( CONTAINER_3D& aDstContainer, const S3DMO
 
         if( !aSkipMaterialInformation )
         {
-            materialVector = get_3D_model_material( a3DModel );
+            materialVector = getModelMaterial( a3DModel );
         }
 
         const glm::mat3 normalMatrix = glm::transpose( glm::inverse( glm::mat3( aModelMatrix ) ) );

@@ -58,7 +58,6 @@ RENDER_3D_LEGACY::RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
     m_outerViaThroughHoles = nullptr;
     m_vias = nullptr;
     m_padHoles = nullptr;
-    m_vias_and_pad_holes_outer_contourn_and_caps = nullptr;
 
     m_circleTexture = 0;
     m_grid = 0;
@@ -142,9 +141,8 @@ void RENDER_3D_LEGACY::render3dArrows()
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    const glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f),
-                                                        SFVEC3F( 0.0f, 0.0f,
-                                                                 -(arrow_size * 2.75f) ) );
+    const glm::mat4 TranslationMatrix =
+            glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( arrow_size * 2.75f ) ) );
 
     const glm::mat4 ViewMatrix = TranslationMatrix * m_camera.GetRotationMatrix();
 
@@ -336,24 +334,24 @@ void RENDER_3D_LEGACY::setLayerMaterial( PCB_LAYER_ID aLayerID )
                     m_materials.m_SolderMask.m_Diffuse * m_materials.m_SolderMask.m_Diffuse;
         }
 
-        OGL_SetMaterial( m_materials.m_SolderMask, 1.0f );
+        OglSetMaterial( m_materials.m_SolderMask, 1.0f );
         break;
     }
 
     case B_Paste:
     case F_Paste:
         m_materials.m_Paste.m_Diffuse = getLayerColor( aLayerID );
-        OGL_SetMaterial( m_materials.m_Paste, 1.0f );
+        OglSetMaterial( m_materials.m_Paste, 1.0f );
         break;
 
     case B_SilkS:
         m_materials.m_SilkSBot.m_Diffuse = getLayerColor( aLayerID );
-        OGL_SetMaterial( m_materials.m_SilkSBot, 1.0f );
+        OglSetMaterial( m_materials.m_SilkSBot, 1.0f );
         break;
 
     case F_SilkS:
         m_materials.m_SilkSTop.m_Diffuse = getLayerColor( aLayerID );
-        OGL_SetMaterial( m_materials.m_SilkSTop, 1.0f );
+        OglSetMaterial( m_materials.m_SilkSTop, 1.0f );
         break;
 
     case B_Adhes:
@@ -380,12 +378,12 @@ void RENDER_3D_LEGACY::setLayerMaterial( PCB_LAYER_ID aLayerID )
 
         m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
         m_materials.m_Plastic.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
-        OGL_SetMaterial( m_materials.m_Plastic, 1.0f );
+        OglSetMaterial( m_materials.m_Plastic, 1.0f );
         break;
 
     default:
         m_materials.m_Copper.m_Diffuse = getLayerColor( aLayerID );
-        OGL_SetMaterial( m_materials.m_Copper, 1.0f );
+        OglSetMaterial( m_materials.m_Copper, 1.0f );
         break;
     }
 }
@@ -497,7 +495,7 @@ void init_lights( void )
 
 void RENDER_3D_LEGACY::setCopperMaterial()
 {
-    OGL_SetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
+    OglSetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
 }
 
 
@@ -522,7 +520,7 @@ void RENDER_3D_LEGACY::renderBoardBody( bool aSkipRenderHoles )
     // opacity to transparency
     m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a;
 
-    OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
+    OglSetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
     OPENGL_RENDER_LIST* ogl_disp_list = nullptr;
 
@@ -597,11 +595,11 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glClearStencil( 0x00 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 
-    OGL_ResetTextureStateDefaults();
+    OglResetTextureState();
 
     // Draw the background ( rectangle with color gradient)
-    OGL_DrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop ),
-                        SFVEC3F( m_boardAdapter.m_BgColorBot ) );
+    OglDrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop ),
+                       SFVEC3F( m_boardAdapter.m_BgColorBot ) );
 
     glEnable( GL_DEPTH_TEST );
 
@@ -657,7 +655,7 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     }
     else
     {
-        OGL_SetMaterial( m_materials.m_GrayMaterial, 1.0f );
+        OglSetMaterial( m_materials.m_GrayMaterial, 1.0f );
     }
 
     if( !( skipRenderVias || skipRenderHoles ) && m_vias )
@@ -672,7 +670,7 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         const PCB_LAYER_ID layer_id = ( PCB_LAYER_ID )( ii->first );
 
         // Mask layers are not processed here because they are a special case
-        if( (layer_id == B_Mask) || (layer_id == F_Mask) )
+        if( ( layer_id == B_Mask ) || ( layer_id == F_Mask ) )
             continue;
 
         // Do not show inner layers when it is displaying the board and board body is full opaque
@@ -797,8 +795,8 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     else if( layer_id == B_Cu && m_platedPadsBack )
                     {
                         m_platedPadsBack->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                             m_outerThroughHoles,
-                                                                             m_antiBoard );
+                                                                            m_outerThroughHoles,
+                                                                            m_antiBoard );
                     }
 
                     unsetDepthOffset();
@@ -851,9 +849,8 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             }
             else
             {
-                if( !skipRenderHoles
-                    && throughHolesOuter
-                    && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
+                if( !skipRenderHoles && throughHolesOuter
+                  && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
                                                                       throughHolesOuter,
@@ -944,7 +941,7 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     render3dModels( true, true );
 
     glDisable( GL_BLEND );
-    OGL_ResetTextureStateDefaults();
+    OglResetTextureState();
 
     glDepthMask( GL_TRUE );
 
@@ -994,13 +991,11 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
 
     circleImage->EfxFilter( circleImage_Copy, IMAGE_FILTER::BLUR_3X3 );
 
-    m_circleTexture = OGL_LoadTexture( *circleImage );
+    m_circleTexture = OglLoadTexture( *circleImage );
 
-    //circleImage_Copy->SaveAsPNG("circleImage.png");
     delete circleImage_Copy;
     circleImage_Copy = 0;
 
-    //circleImage->SaveAsPNG("circleImage_blured.png");
     delete circleImage;
     circleImage = 0;
 
@@ -1112,9 +1107,6 @@ void RENDER_3D_LEGACY::freeAllLists()
 
     delete m_padHoles;
     m_padHoles = nullptr;
-
-    delete m_vias_and_pad_holes_outer_contourn_and_caps;
-    m_vias_and_pad_holes_outer_contourn_and_caps = nullptr;
 }
 
 
@@ -1153,7 +1145,6 @@ void RENDER_3D_LEGACY::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
         else
         {
             // This case there is no layer with mask, so we will render the full board as mask
-
             if( m_outerViaThroughHoles )
                 m_outerViaThroughHoles->ApplyScalePosition( aZPosition, nonCopperThickness );
 
@@ -1302,12 +1293,12 @@ void RENDER_3D_LEGACY::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
                     {
                         modelPtr->DrawTransparent( sM.m_Opacity,
                                                    aFootprint->IsSelected() || aIsSelected,
-                                                   m_boardAdapter.m_opengl_selectionColor );
+                                                   m_boardAdapter.m_OpenGlSelectionColor );
                     }
                     else
                     {
                         modelPtr->DrawOpaque( aFootprint->IsSelected() || aIsSelected,
-                                              m_boardAdapter.m_opengl_selectionColor );
+                                              m_boardAdapter.m_OpenGlSelectionColor );
                     }
 
                     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )
@@ -1495,8 +1486,7 @@ void RENDER_3D_LEGACY::generate3dGrid( GRID3D_TYPE aGridType )
         if( ii % 5 )
             glColor4f( gridColor.r, gridColor.g, gridColor.b, transparency );
         else
-            glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
-                       transparency );
+            glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b, transparency );
 
         const double delta = ii * griSizeMM * IU_PER_MM * scale;
 

@@ -62,7 +62,7 @@ static bool polygon_IsPointInside( const SEGMENTS& aSegments, const SFVEC2F& aPo
 
 
 POLYGON_2D::POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
-                        const OUTERS_AND_HOLES& aOuter_and_holes, const BOARD_ITEM& aBoardItem )
+                        const OUTERS_AND_HOLES& aOuterAndHoles, const BOARD_ITEM& aBoardItem )
         : OBJECT_2D( OBJECT_2D_TYPE::POLYGON, aBoardItem )
 {
     m_open_segments.resize( aOpenSegmentList.size() );
@@ -71,7 +71,7 @@ POLYGON_2D::POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
     for( unsigned int i = 0; i < aOpenSegmentList.size(); i++ )
         m_open_segments[i] = aOpenSegmentList[i];
 
-    m_outers_and_holes = aOuter_and_holes;
+    m_outers_and_holes = aOuterAndHoles;
 
     // Compute bounding box with the points of the polygon
     m_bbox.Reset();
@@ -90,11 +90,11 @@ POLYGON_2D::POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
     wxASSERT( m_open_segments.size() > 0 );
 
     wxASSERT( m_outers_and_holes.m_Outers.size() > 0 );
-    wxASSERT( m_outers_and_holes.m_Outers.size() == aOuter_and_holes.m_Outers.size() );
-    wxASSERT( m_outers_and_holes.m_Holes.size() == aOuter_and_holes.m_Holes.size() );
+    wxASSERT( m_outers_and_holes.m_Outers.size() == aOuterAndHoles.m_Outers.size() );
+    wxASSERT( m_outers_and_holes.m_Holes.size() == aOuterAndHoles.m_Holes.size() );
 
     wxASSERT( m_outers_and_holes.m_Outers[0].size() >= 3 );
-    wxASSERT( m_outers_and_holes.m_Outers[0].size() == aOuter_and_holes.m_Outers[0].size() );
+    wxASSERT( m_outers_and_holes.m_Outers[0].size() == aOuterAndHoles.m_Outers[0].size() );
 
     wxASSERT( m_bbox.IsInitialized() );
 }
@@ -112,7 +112,7 @@ bool POLYGON_2D::Intersects( const BBOX_2D& aBBox ) const
 
 bool POLYGON_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
-    // NOT IMPLEMENTED
+    // NOT IMPLEMENTED, why?
     return false;
 }
 

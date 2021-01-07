@@ -142,8 +142,8 @@ bool ROUND_SEGMENT_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F
     SFVEC2F farHitNormal;
 
     float leftSegT;
-    const bool leftSegmentHit = aSegRay.IntersectSegment( m_leftStart, m_leftEndMinusStart,
-                                                          &leftSegT );
+    const bool leftSegmentHit =
+            aSegRay.IntersectSegment( m_leftStart, m_leftEndMinusStart, &leftSegT );
 
     if( leftSegmentHit )
     {
@@ -156,8 +156,8 @@ bool ROUND_SEGMENT_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F
     }
 
     float rightSegT;
-    const bool rightSegmentHit = aSegRay.IntersectSegment( m_rightStart, m_rightEndMinusStart,
-                                                           &rightSegT );
+    const bool rightSegmentHit =
+            aSegRay.IntersectSegment( m_rightStart, m_rightEndMinusStart, &rightSegT );
 
     if( rightSegmentHit )
     {

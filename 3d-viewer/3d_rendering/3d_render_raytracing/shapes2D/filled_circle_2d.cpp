@@ -54,7 +54,7 @@ FILLED_CIRCLE_2D::FILLED_CIRCLE_2D( const SFVEC2F& aCenter, float aRadius,
 
 bool FILLED_CIRCLE_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
-    // NOT IMPLEMENTED
+    // NOT IMPLEMENTED, why?
     return false;
 }
 
@@ -85,14 +85,12 @@ bool FILLED_CIRCLE_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F
     if( discriminantsqr < FLT_EPSILON )
         return false;
 
-
-    // Otherwise check and make sure that the intersections occur on the ray (t
-    // > 0) and return the closer one
+    // Otherwise check and make sure that the intersections occur on the ray (t > 0) and
+    // return the closer one.
     const float discriminant = sqrt( discriminantsqr );
     const float t1 = ( -qd - discriminant );
     const float t2 = ( -qd + discriminant );
     float       t;
-
 
     if( ( t1 > 0.0f ) && ( t1 < aSegRay.m_Length ) )
     {

@@ -87,15 +87,15 @@ void BBOX_3D::Set( const BBOX_3D& aBBox )
 
 bool BBOX_3D::IsInitialized() const
 {
-    return !( ( FLT_MAX == m_min.x) || ( FLT_MAX == m_min.y) || ( FLT_MAX == m_min.z) ||
-              (-FLT_MAX == m_max.x) || (-FLT_MAX == m_max.y) || (-FLT_MAX == m_max.z) );
+    return !( ( FLT_MAX == m_min.x ) || ( FLT_MAX == m_min.y ) || ( FLT_MAX == m_min.z )
+            || ( -FLT_MAX == m_max.x ) || ( -FLT_MAX == m_max.y ) || ( -FLT_MAX == m_max.z ) );
 }
 
 
 void BBOX_3D::Reset()
 {
     m_min = SFVEC3F( FLT_MAX, FLT_MAX, FLT_MAX );
-    m_max = SFVEC3F(-FLT_MAX,-FLT_MAX,-FLT_MAX );
+    m_max = SFVEC3F( -FLT_MAX, -FLT_MAX, -FLT_MAX );
 }
 
 
@@ -138,7 +138,7 @@ SFVEC3F BBOX_3D::GetCenter() const
 float BBOX_3D::GetCenter( unsigned int aAxis ) const
 {
     wxASSERT( aAxis < 3 );
-    return (m_max[aAxis] + m_min[aAxis]) * 0.5f;
+    return ( m_max[aAxis] + m_min[aAxis] ) * 0.5f;
 }
 
 
@@ -263,6 +263,7 @@ SFVEC3F BBOX_3D::Offset( const SFVEC3F& p ) const
 }
 
 
+/// @todo Why are we keeping both implementations of Intersect()?
 // Intersection code based on the book:
 // "Physical Based Ray Tracing" (by Matt Pharr and Greg Humphrey)
 // https://github.com/mmp/pbrt-v2/blob/master/src/core/geometry.cpp#L68
@@ -312,10 +313,10 @@ bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) c
     const SFVEC3F bounds[2] = {m_min, m_max};
 
     // Check for ray intersection against x and y slabs
-          float tmin  = (bounds[    aRay.m_dirIsNeg[0]].x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-          float tmax  = (bounds[1 - aRay.m_dirIsNeg[0]].x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-    const float tymin = (bounds[    aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y) * aRay.m_InvDir.y;
-    const float tymax = (bounds[1 - aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    float       tmin = ( bounds[aRay.m_dirIsNeg[0]].x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
+    float       tmax = ( bounds[1 - aRay.m_dirIsNeg[0]].x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
+    const float tymin = ( bounds[aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
+    const float tymax = ( bounds[1 - aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
 
     if( ( tmin > tymax ) || ( tymin > tmax ) )
         return false;
@@ -324,8 +325,8 @@ bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) c
     tmax = ( tymax < tmax ) ? tymax : tmax;
 
     // Check for ray intersection against z slab
-    const float tzmin = (bounds[    aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z) * aRay.m_InvDir.z;
-    const float tzmax = (bounds[1 - aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z) * aRay.m_InvDir.z;
+    const float tzmin = ( bounds[aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
+    const float tzmax = ( bounds[1 - aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
     if( ( tmin > tzmax ) || ( tzmin > tmax ) )
         return false;

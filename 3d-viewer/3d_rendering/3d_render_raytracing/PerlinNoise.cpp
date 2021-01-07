@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2016-2002 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,7 @@
 
 /**
  * @file  PerlinNoise.h
- * @brief This source code comes from the project:
- * https://github.com/sol-prog/Perlin_Noise
+ * @brief This source code comes from the project: https://github.com/sol-prog/Perlin_Noise
  *
  * It was changed to work with floats instead of doubles
  *
@@ -126,21 +125,13 @@ float PerlinNoise::noise( float x, float y, float z ) const
     const int BB  = p[B + 1] + Z;
 
     // Add blended results from 8 corners of cube
-    const float res = lerp( w,
-                            lerp( v,
-                                    lerp( u,
-                                          grad( p[AA], x    , y, z),
-                                          grad( p[BA], x - 1, y, z) ),
-                                    lerp( u,
-                                          grad( p[AB], x    , y - 1, z ),
-                                          grad( p[BB], x - 1, y - 1, z) ) ),
-                              lerp( v,
-                                    lerp( u,
-                                          grad( p[AA + 1], x    , y, z - 1 ),
-                                          grad( p[BA + 1], x - 1, y, z - 1) ),
-                                    lerp( u,
-                                          grad( p[AB + 1], x    , y - 1, z - 1 ),
-                                          grad( p[BB + 1], x - 1, y - 1, z - 1 ) ) ) );
+    const float res = lerp(
+            w,
+            lerp( v, lerp( u, grad( p[AA], x, y, z ), grad( p[BA], x - 1, y, z ) ),
+                  lerp( u, grad( p[AB], x, y - 1, z ), grad( p[BB], x - 1, y - 1, z ) ) ),
+            lerp( v, lerp( u, grad( p[AA + 1], x, y, z - 1 ), grad( p[BA + 1], x - 1, y, z - 1 ) ),
+                  lerp( u, grad( p[AB + 1], x, y - 1, z - 1 ),
+                        grad( p[BB + 1], x - 1, y - 1, z - 1 ) ) ) );
 
     return (res + 1.0f) / 2.0f;
 }
@@ -169,27 +160,22 @@ float PerlinNoise::noise( float x, float y ) const
     const int BB  = p[B + 1] + 0;
 
     // Add blended results from 8 corners of cube
-    const float res = lerp( v,
-                            lerp( u,
-                                  grad( p[AA], x    , y ),
-                                  grad( p[BA], x - 1, y ) ),
-                            lerp( u,
-                                  grad( p[AB], x    , y - 1 ),
-                                  grad( p[BB], x - 1, y - 1 ) ) );
+    const float res = lerp( v, lerp( u, grad( p[AA], x, y ), grad( p[BA], x - 1, y ) ),
+                            lerp( u, grad( p[AB], x, y - 1 ), grad( p[BB], x - 1, y - 1 ) ) );
 
-    return (res + 1.0f) / 2.0f;
+    return ( res + 1.0f ) / 2.0f;
 }
 
 
 float PerlinNoise::fade( float t ) const
 {
-    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
+    return t * t * t * ( t * ( t * 6.0f - 15.0f ) + 10.0f );
 }
 
 
 float PerlinNoise::lerp( float t, float a, float b ) const
 {
-    return a + t * (b - a);
+    return a + t * ( b - a );
 }
 
 
@@ -201,7 +187,7 @@ float PerlinNoise::grad( int hash, float x, float y, float z ) const
     const float u = h < 8 ? x : y;
     const float v = h < 4 ? y : h == 12 || h == 14 ? x : z;
 
-    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    return ( ( h & 1 ) == 0 ? u : -u ) + ( ( h & 2 ) == 0 ? v : -v );
 }
 
 
@@ -213,5 +199,5 @@ float PerlinNoise::grad( int hash, float x, float y ) const
     const float u = h < 8 ? x : y;
     const float v = h < 4 ? y : h == 12 || h == 14 ? x : 0.0f;
 
-    return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    return ( ( h & 1 ) == 0 ? u : -u ) + ( ( h & 2 ) == 0 ? v : -v );
 }

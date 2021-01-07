@@ -77,8 +77,8 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 
         if( (float) fabs( aRay.m_Dir.z ) > FLT_EPSILON )
         {
-            tBot    = (m_bbox.Min().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
-            tTop    = (m_bbox.Max().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
+            tBot = ( m_bbox.Min().z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
+            tTop = ( m_bbox.Max().z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
             float tBBoxStartAdjusted = NextFloatUp( tBBoxStart );
 
@@ -119,7 +119,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, -1.0f );
                         aHitInfo.pHitObject = this;
 
-                        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                        m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                         return true;
                     }
@@ -138,7 +138,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
                         aHitInfo.pHitObject = this;
 
-                        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                        m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                         return true;
                     }
@@ -162,7 +162,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                             aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
                             aHitInfo.pHitObject = this;
 
-                            m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                            m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                             return true;
                         }
@@ -186,7 +186,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                                 aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, -1.0f );
                                 aHitInfo.pHitObject = this;
 
-                                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                                m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                                 return true;
                             }
@@ -239,7 +239,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 
                 aHitInfo.pHitObject = this;
 
-                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                 return true;
             }
@@ -249,7 +249,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     }
     else
     {
-
+        /// @todo Either fix the code below or get rid of it.
         // Disabled due to refraction artifacts
         // this will mostly happen inside the board body
 #if 0
@@ -283,7 +283,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                 else
                     aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f,  1.0f );
 
-                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                 return true;
             }
@@ -307,7 +307,7 @@ bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
                     aHitInfo.m_HitNormal = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
                     aHitInfo.pHitObject = this;
 
-                    m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+                    m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                     return true;
                 }

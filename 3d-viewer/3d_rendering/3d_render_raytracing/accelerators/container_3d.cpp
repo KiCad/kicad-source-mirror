@@ -71,7 +71,7 @@ void CONTAINER_3D_BASE::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
         {
             wxASSERT( (*ii) != nullptr );
 
-            aOutVector[i++] = static_cast<const OBJECT_3D *>(*ii);
+            aOutVector[i++] = static_cast<const OBJECT_3D*>( *ii );
         }
     }
 }

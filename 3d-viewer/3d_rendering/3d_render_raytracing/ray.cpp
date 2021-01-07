@@ -103,6 +103,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             if( m_Dir.z < 0 )
             {
                 m_Classification = RAY_CLASSIFICATION::MPM;
+
                 if( m_Dir.y == 0 )
                     m_Classification = RAY_CLASSIFICATION::MOM;
             }
@@ -126,6 +127,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             if( m_Dir.z < 0 )
             {
                 m_Classification = RAY_CLASSIFICATION::PMM;
+
                 if( m_Dir.x == 0 )
                     m_Classification = RAY_CLASSIFICATION::OMM;
             }
@@ -185,8 +187,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
 bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
                        const SFVEC2F &aStartB, const SFVEC2F &aEnd_minus_startB )
 {
-    float rxs = aEnd_minus_startA.x *
-                aEnd_minus_startB.y - aEnd_minus_startA.y *
+    float rxs = aEnd_minus_startA.x * aEnd_minus_startB.y - aEnd_minus_startA.y *
                 aEnd_minus_startB.x;
 
     if( std::abs( rxs ) >  glm::epsilon<float>() )
@@ -216,33 +217,6 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
 bool RAY::IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0,
                            float &aOutT1 ) const
 {
-/*
-    // Ray-sphere intersection: algebraic
-
-    SFVEC3F CO = m_Origin - aCenter;
-
-    float a = glm::dot( m_Dir, m_Dir );
-    float b = 2.0f * glm::dot( CO, m_Dir );
-    float c = glm::dot( CO, CO ) - aRadius*aRadius;
-
-    float discriminant = b * b - 4.0f * a * c;
-
-    if( discriminant < 0.0f )
-        return false;
-
-    aOutT0 = (-b - sqrtf(discriminant)) / (2.0f * a);
-    aOutT1 = (-b + sqrtf(discriminant)) / (2.0f * a);
-
-    if( aOutT0 > aOutT1 )
-    {
-        float temp = aOutT0;
-        aOutT0 = aOutT1;
-        aOutT1 = temp;
-    }
-
-    return true;
-*/
-
     // Ray-sphere intersection: geometric
     SFVEC3F OC = aCenter - m_Origin;
     float p_dot_d = glm::dot( OC, m_Dir );
@@ -291,8 +265,7 @@ RAYSEG2D::RAYSEG2D( const SFVEC2F& s, const SFVEC2F& e )
 }
 
 
-bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart,
-                                 const SFVEC2F &aEnd_minus_start,
+bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart, const SFVEC2F &aEnd_minus_start,
                                  float *aOutT ) const
 {
     float rxs = m_End_minus_start.x * aEnd_minus_start.y - m_End_minus_start.y *
@@ -349,12 +322,8 @@ float RAYSEG2D::DistanceToPointSquared( const SFVEC2F &aPoint ) const
 }
 
 
-bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
-                                float aRadius,
-                                float *aOutT0,
-                                float *aOutT1,
-                                SFVEC2F *aOutNormalT0,
-                                SFVEC2F *aOutNormalT1 ) const
+bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter, float aRadius, float *aOutT0,
+                                float *aOutT1, SFVEC2F *aOutNormalT0, SFVEC2F *aOutNormalT1 ) const
 {
     // This code used directly from Steve Marschner's CS667 framework
     // http://cs665pd.googlecode.com/svn/trunk/photon/sphere.cpp

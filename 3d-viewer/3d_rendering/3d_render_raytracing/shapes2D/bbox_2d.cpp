@@ -304,7 +304,7 @@ bool BBOX_2D::Intersect( const RAY2D& aRay, float* aOutHitT0, float* aOutHitT1 )
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );
 
-    *aOutHitT0 = (tmin > 0.0f)?tmin:0.0f;
+    *aOutHitT0 = ( tmin > 0.0f ) ? tmin : 0.0f;
     *aOutHitT1 = tmax;
 
     return ( tmax >= 0.0f ) && ( tmax >= tmin );

@@ -144,7 +144,7 @@ private:
     CONST_VECTOR_OBJECT m_primitives;
     LinearBVHNode*      m_nodes;
 
-    std::list<void*> m_addresses_pointer_to_mm_free;
+    std::list<void*>    m_nodesToFree;
 
     // Partition traversal
     unsigned int m_I[RAYPACKET_RAYS_PER_PACKET];

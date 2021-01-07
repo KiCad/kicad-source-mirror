@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ XY_PLANE::XY_PLANE( SFVEC3F aCenterPoint, float aXSize, float aYSize )
 
 bool XY_PLANE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
-    const float t = (m_centerPoint.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
+    const float t = ( m_centerPoint.z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
     if( ( t < FLT_EPSILON ) || ( t >= aHitInfo.m_tHit ) )
         return false;
@@ -85,7 +85,7 @@ bool XY_PLANE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
     else
         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f,-1.0f );
 
-    m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+    m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
     return true;
 }
@@ -100,7 +100,7 @@ bool XY_PLANE::IntersectP(const RAY& aRay, float aMaxDistance ) const
 
     const float vSU = t * aRay.m_Dir.x + aRay.m_Origin.x - m_centerPoint.x;
 
-    if( (vSU < -m_xsize) || (vSU > m_xsize) )
+    if( ( vSU < -m_xsize ) || ( vSU > m_xsize ) )
         return false;
 
     const float vSV = t * aRay.m_Dir.y + aRay.m_Origin.y - m_centerPoint.y;

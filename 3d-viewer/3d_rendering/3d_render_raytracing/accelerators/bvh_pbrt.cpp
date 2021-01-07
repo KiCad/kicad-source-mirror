@@ -149,16 +149,16 @@ inline uint32_t LeftShift3( uint32_t x )
 {
     wxASSERT( x <= (1 << 10) );
 
-    if( x == (1 << 10) )
+    if( x == ( 1 << 10 ) )
         --x;
 
-    x = (x | (x << 16)) & 0b00000011000000000000000011111111;
+    x = ( x | ( x << 16 ) ) & 0b00000011000000000000000011111111;
     // x = ---- --98 ---- ---- ---- ---- 7654 3210
-    x = (x | (x << 8)) & 0b00000011000000001111000000001111;
+    x = ( x | ( x << 8 ) ) & 0b00000011000000001111000000001111;
     // x = ---- --98 ---- ---- 7654 ---- ---- 3210
-    x = (x | (x << 4)) & 0b00000011000011000011000011000011;
+    x = ( x | ( x << 4 ) ) & 0b00000011000011000011000011000011;
     // x = ---- --98 ---- 76-- --54 ---- 32-- --10
-    x = (x | (x << 2)) & 0b00001001001001001001001001001001;
+    x = ( x | ( x << 2 ) ) & 0b00001001001001001001001001001001;
     // x = ---- 9--8 --7- -6-- 5--4 --3- -2-- 1--0
 
     return x;
@@ -182,7 +182,7 @@ static void RadixSort( std::vector<MortonPrimitive>* v )
     const int bitsPerPass = 6;
     const int nBits = 30;
 
-    wxASSERT( (nBits % bitsPerPass) == 0 );
+    wxASSERT( ( nBits % bitsPerPass ) == 0 );
 
     const int nPasses = nBits / bitsPerPass;
 
@@ -198,7 +198,7 @@ static void RadixSort( std::vector<MortonPrimitive>* v )
         // Count number of zero bits in array for current radix sort bit
         const int nBuckets = 1 << bitsPerPass;
         int bucketCount[nBuckets] = {0};
-        const int bitMask = (1 << bitsPerPass) - 1;
+        const int bitMask = ( 1 << bitsPerPass ) - 1;
 
         for( uint32_t i = 0; i < in.size(); ++i )
         {
@@ -233,7 +233,7 @@ static void RadixSort( std::vector<MortonPrimitive>* v )
 
 
 BVH_PBRT::BVH_PBRT( const CONTAINER_3D_BASE& aObjectContainer, int aMaxPrimsInNode,
-                      SPLITMETHOD aSplitMethod ) :
+                    SPLITMETHOD aSplitMethod ) :
     m_maxPrimsInNode( std::min( 255, aMaxPrimsInNode ) ),
     m_splitMethod( aSplitMethod )
 {
@@ -285,7 +285,7 @@ BVH_PBRT::BVH_PBRT( const CONTAINER_3D_BASE& aObjectContainer, int aMaxPrimsInNo
 
     // Compute representation of depth-first traversal of BVH tree
     m_nodes = static_cast<LinearBVHNode*>( malloc( sizeof( LinearBVHNode ) * totalNodes ) );
-    m_addresses_pointer_to_mm_free.push_back( m_nodes );
+    m_nodesToFree.push_back( m_nodes );
 
     for( int i = 0; i < totalNodes; ++i )
     {
@@ -305,10 +305,9 @@ BVH_PBRT::BVH_PBRT( const CONTAINER_3D_BASE& aObjectContainer, int aMaxPrimsInNo
 
 BVH_PBRT::~BVH_PBRT()
 {
-    if( !m_addresses_pointer_to_mm_free.empty() )
+    if( !m_nodesToFree.empty() )
     {
-        for( std::list<void *>::iterator ii = m_addresses_pointer_to_mm_free.begin();
-             ii != m_addresses_pointer_to_mm_free.end();
+        for( std::list<void *>::iterator ii = m_nodesToFree.begin(); ii != m_nodesToFree.end();
              ++ii )
         {
             free( *ii );
@@ -316,7 +315,7 @@ BVH_PBRT::~BVH_PBRT()
         }
     }
 
-    m_addresses_pointer_to_mm_free.clear();
+    m_nodesToFree.clear();
 }
 
 
@@ -440,7 +439,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
 
     // !TODO: implement an memory Arena
     BVHBuildNode *node = static_cast<BVHBuildNode *>( malloc( sizeof( BVHBuildNode ) ) );
-    m_addresses_pointer_to_mm_free.push_back( node );
+    m_nodesToFree.push_back( node );
 
     node->bounds.Reset();
     node->firstPrimOffset = 0;
@@ -524,7 +523,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
 
                 wxASSERT( ( mid >= start ) && ( mid <= end ) );
 
-                if( (mid != start) && (mid != end) )
+                if( ( mid != start ) && ( mid != end ) )
                     break;
             }
 
@@ -535,7 +534,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
             case SPLITMETHOD::EQUALCOUNTS:
             {
                 // Partition primitives into equally-sized subsets
-                mid = (start + end) / 2;
+                mid = ( start + end ) / 2;
 
                 std::nth_element( &primitiveInfo[start], &primitiveInfo[mid],
                                   &primitiveInfo[end - 1] + 1, ComparePoints( dim ) );
@@ -550,7 +549,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
                 if( nPrimitives <= 2 )
                 {
                     // Partition primitives into equally-sized subsets
-                    mid = (start + end) / 2;
+                    mid = ( start + end ) / 2;
 
                     std::nth_element( &primitiveInfo[start], &primitiveInfo[mid],
                                       &primitiveInfo[end - 1] + 1, ComparePoints( dim ) );
@@ -622,7 +621,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
                     float minCost = cost[0];
                     int minCostSplitBucket = 0;
 
-                    for( int i = 1; i < (nBuckets - 1); ++i )
+                    for( int i = 1; i < ( nBuckets - 1 ); ++i )
                     {
                         if( cost[i] < minCost )
                         {
@@ -732,7 +731,7 @@ BVHBuildNode *BVH_PBRT::HLBVHBuild( const std::vector<BVHPrimitiveInfo>& primiti
             BVHBuildNode *nodes = static_cast<BVHBuildNode *>( malloc( maxBVHNodes *
                                                                        sizeof( BVHBuildNode ) ) );
 
-            m_addresses_pointer_to_mm_free.push_back( nodes );
+            m_nodesToFree.push_back( nodes );
 
             for( int i = 0; i < maxBVHNodes; ++i )
             {
@@ -851,7 +850,7 @@ BVHBuildNode *BVH_PBRT::emitLBVH( BVHBuildNode* &buildNodes,
         {
             wxASSERT(searchStart != searchEnd);
 
-            const int mid = (searchStart + searchEnd) / 2;
+            const int mid = ( searchStart + searchEnd ) / 2;
 
             if( ( mortonPrims[searchStart].mortonCode & mask ) ==
                 ( mortonPrims[mid].mortonCode & mask ) )
@@ -866,9 +865,9 @@ BVHBuildNode *BVH_PBRT::emitLBVH( BVHBuildNode* &buildNodes,
 
         const int splitOffset = searchEnd;
 
-        wxASSERT( splitOffset <= (nPrimitives - 1) );
-        wxASSERT( (mortonPrims[splitOffset - 1].mortonCode & mask) !=
-                  (mortonPrims[splitOffset].mortonCode & mask) );
+        wxASSERT( splitOffset <= ( nPrimitives - 1 ) );
+        wxASSERT( ( mortonPrims[splitOffset - 1].mortonCode & mask )
+                  != ( mortonPrims[splitOffset].mortonCode & mask ) );
 
         // Create and return interior LBVH node
         (*totalNodes)++;
@@ -908,7 +907,7 @@ BVHBuildNode *BVH_PBRT::buildUpperSAH( std::vector<BVHBuildNode*>& treeletRoots,
 
     BVHBuildNode* node = static_cast<BVHBuildNode*>( malloc( sizeof( BVHBuildNode ) ) );
 
-    m_addresses_pointer_to_mm_free.push_back( node );
+    m_nodesToFree.push_back( node );
 
     node->bounds.Reset();
     node->firstPrimOffset = 0;

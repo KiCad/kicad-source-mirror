@@ -25,7 +25,7 @@
 /**
  * @file ogl_utils.h
  *
- * Implements generic OpenGL functions that are common to any OpenGL target.
+ * Define generic OpenGL functions that are common to any OpenGL target.
  */
 
 #ifndef OGL_UTILS_H_
@@ -43,16 +43,16 @@
  * @param aUseSelectedMaterial if material should be set for selection mode.
  * @param aSelectionColor material to use for selection in case it is enabled.
  */
-void OGL_SetMaterial( const SMATERIAL& aMaterial, float aOpacity,
-                      bool aUseSelectedMaterial = false,
-                      SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
+void OglSetMaterial( const SMATERIAL& aMaterial, float aOpacity,
+                     bool aUseSelectedMaterial = false,
+                     SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 /**
  * Sets only the diffuse color and keep other parameters with default values.
  *
  * @param aMaterialDiffuse the diffuse color to assign to material properties.
  */
-void OGL_SetDiffuseOnlyMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity );
+void OglSetDiffuseMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity );
 
 /**
  * Generate a new OpenGL texture.
@@ -60,20 +60,20 @@ void OGL_SetDiffuseOnlyMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity
  * @param aImage a image to generate the texture from.
  * @return the OpenGL texture index created.
  */
-GLuint OGL_LoadTexture( const IMAGE& aImage );
+GLuint OglLoadTexture( const IMAGE& aImage );
 
 /**
  * Get the pixel data of current OpenGL image.
  *
  * @param aDstImage the output image. the image must be destroyed to free the data.
  */
-void OGL_GetScreenshot( wxImage& aDstImage );
+void OglGetScreenshot( wxImage& aDstImage );
 
-void OGL_DrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor );
+void OglDrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor );
 
 /**
  * Reset to default state the texture settings.
  */
-void OGL_ResetTextureStateDefaults();
+void OglResetTextureState();
 
 #endif // OGL_UTILS_H_

@@ -30,10 +30,10 @@
 #include <3d_math.h>
 #include <wx/debug.h>
 
-int MATERIAL::m_default_nrsamples_refractions = 4;
-int MATERIAL::m_default_nrsamples_reflections = 3;
-int MATERIAL::m_default_refractions_recursive_levels = 2;
-int MATERIAL::m_default_reflections_recursive_levels = 3;
+int MATERIAL::m_defaultRefractionRayCount = 4;
+int MATERIAL::m_defaultReflectionRayCount = 3;
+int MATERIAL::m_defaultRefractionRecursionCount = 2;
+int MATERIAL::m_defaultFeflectionRecursionCount = 3;
 
 // This may be a good value if based on nr of lights
 // that contribute to the illumination of that point
@@ -46,17 +46,17 @@ MATERIAL::MATERIAL()
     m_ambientColor  = SFVEC3F( 0.2f, 0.2f, 0.2f );
     m_emissiveColor = SFVEC3F( 0.0f, 0.0f, 0.0f );
     m_specularColor = SFVEC3F( 1.0f, 1.0f, 1.0f );
-    m_shinness      = 50.2f;
+    m_reflectivity      = 50.2f;
     m_transparency  = 0.0f; // completely opaque
-    m_cast_shadows  = true;
+    m_castShadows  = true;
     m_reflection    = 0.0f;
     m_absorbance    = 1.0f;
-    m_refraction_nr_samples = m_default_nrsamples_refractions;
-    m_reflections_nr_samples = m_default_nrsamples_reflections;
-    m_refractions_recursive_levels = m_default_refractions_recursive_levels;
-    m_reflections_recursive_levels = m_default_reflections_recursive_levels;
+    m_refractionRayCount = m_defaultRefractionRayCount;
+    m_reflectionRayCount = m_defaultReflectionRayCount;
+    m_refractionRecursionCount = m_defaultRefractionRecursionCount;
+    m_reflectionRecursionCount = m_defaultFeflectionRecursionCount;
 
-    m_normal_perturbator = nullptr;
+    m_generator = nullptr;
 }
 
 
@@ -76,25 +76,25 @@ MATERIAL::MATERIAL( const SFVEC3F& aAmbient, const SFVEC3F& aEmissive, const SFV
 
     m_emissiveColor = aEmissive;
     m_specularColor = aSpecular;
-    m_shinness      = aShinness;
+    m_reflectivity      = aShinness;
     m_transparency  = glm::clamp( aTransparency, 0.0f, 1.0f );
     m_absorbance    = 1.0f;
     m_reflection    = aReflection;
-    m_cast_shadows  = true;
-    m_refraction_nr_samples = m_default_nrsamples_refractions;
-    m_reflections_nr_samples = m_default_nrsamples_reflections;
-    m_refractions_recursive_levels = m_default_refractions_recursive_levels;
-    m_reflections_recursive_levels = m_default_reflections_recursive_levels;
+    m_castShadows   = true;
+    m_refractionRayCount = m_defaultRefractionRayCount;
+    m_reflectionRayCount = m_defaultReflectionRayCount;
+    m_refractionRecursionCount = m_defaultRefractionRecursionCount;
+    m_reflectionRecursionCount = m_defaultFeflectionRecursionCount;
 
-    m_normal_perturbator = nullptr;
+    m_generator = nullptr;
 }
 
 
-void MATERIAL::PerturbeNormal( SFVEC3F& aNormal, const RAY& aRay, const HITINFO& aHitInfo ) const
+void MATERIAL::Generate( SFVEC3F& aNormal, const RAY& aRay, const HITINFO& aHitInfo ) const
 {
-    if( m_normal_perturbator )
+    if( m_generator )
     {
-        aNormal = aNormal + m_normal_perturbator->Generate( aRay, aHitInfo );
+        aNormal = aNormal + m_generator->Generate( aRay, aHitInfo );
         aNormal = glm::normalize( aNormal );
     }
 }
@@ -121,7 +121,7 @@ SFVEC3F BLINN_PHONG_MATERIAL::Shade( const RAY& aRay, const HITINFO& aHitInfo, f
 
         //Intensity of the specular light
         const float NdotH = glm::dot( H, aHitInfo.m_HitNormal );
-        const float intensitySpecular = glm::pow( glm::max( NdotH, 0.0f ), m_shinness );
+        const float intensitySpecular = glm::pow( glm::max( NdotH, 0.0f ), m_reflectivity );
 
         return  m_ambientColor +
                 aShadowAttenuationFactor * ( diffuse * aDiffuseObjColor + SPECULAR_FACTOR *
@@ -132,7 +132,7 @@ SFVEC3F BLINN_PHONG_MATERIAL::Shade( const RAY& aRay, const HITINFO& aHitInfo, f
 }
 
 
-PROCEDURAL_GENERATOR::PROCEDURAL_GENERATOR()
+MATERIAL_GENERATOR::MATERIAL_GENERATOR()
 {
 }
 
@@ -140,7 +140,7 @@ PROCEDURAL_GENERATOR::PROCEDURAL_GENERATOR()
 static PerlinNoise s_perlinNoise = PerlinNoise( 0 );
 
 
-BOARD_NORMAL::BOARD_NORMAL( float aScale ) : PROCEDURAL_GENERATOR()
+BOARD_NORMAL::BOARD_NORMAL( float aScale ) : MATERIAL_GENERATOR()
 {
     m_scale = ( 2.0f * glm::pi<float>() ) / aScale;
 }
@@ -165,7 +165,7 @@ SFVEC3F BOARD_NORMAL::Generate( const RAY& aRay, const HITINFO& aHitInfo ) const
 }
 
 
-COPPER_NORMAL::COPPER_NORMAL( float aScale, const PROCEDURAL_GENERATOR* aBoardNormalGenerator )
+COPPER_NORMAL::COPPER_NORMAL( float aScale, const MATERIAL_GENERATOR* aBoardNormalGenerator )
 {
     m_board_normal_generator = aBoardNormalGenerator;
     m_scale = 1.0f / aScale;
@@ -199,7 +199,7 @@ SFVEC3F COPPER_NORMAL::Generate( const RAY& aRay, const HITINFO& aHitInfo ) cons
 }
 
 
-SOLDER_MASK_NORMAL::SOLDER_MASK_NORMAL( const PROCEDURAL_GENERATOR* aCopperNormalGenerator )
+SOLDER_MASK_NORMAL::SOLDER_MASK_NORMAL( const MATERIAL_GENERATOR* aCopperNormalGenerator )
 {
     m_copper_normal_generator = aCopperNormalGenerator;
 }

@@ -103,11 +103,10 @@ bool CYLINDER::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 
         const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x, aHitInfo.m_HitPoint.y );
 
-        aHitInfo.m_HitNormal = SFVEC3F( -(hitPoint2D.x - m_center.x) * m_inv_radius,
-                                        -(hitPoint2D.y - m_center.y) * m_inv_radius,
-                                        0.0f );
+        aHitInfo.m_HitNormal = SFVEC3F( -( hitPoint2D.x - m_center.x ) * m_inv_radius,
+                                        -( hitPoint2D.y - m_center.y ) * m_inv_radius, 0.0f );
 
-        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+        m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
         aHitInfo.pHitObject = this;
     }
@@ -138,7 +137,7 @@ bool CYLINDER::IntersectP(const RAY& aRay , float aMaxDistance ) const
         const float inv_a = 1.0 / a;
 
         const float sdelta = sqrtf( delta );
-        const float t = (-b - sdelta) * inv_a;
+        const float t = ( -b - sdelta ) * inv_a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
         if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
@@ -147,7 +146,7 @@ bool CYLINDER::IntersectP(const RAY& aRay , float aMaxDistance ) const
                 return true;
         }
 
-        const float t1 = (-b + sdelta) * inv_a;
+        const float t1 = ( -b + sdelta ) * inv_a;
         const float z1 = aRay.m_Origin.z + t1 * aRay.m_Dir.z;
 
         if( ( z1 > m_bbox.Min().z ) && ( z1 < m_bbox.Max().z ) )

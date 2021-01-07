@@ -55,7 +55,7 @@ bool DUMMY_BLOCK::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
         else
             aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f,-1.0f );
 
-        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
+        m_material->Generate( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
         aHitInfo.pHitObject = this;
 
