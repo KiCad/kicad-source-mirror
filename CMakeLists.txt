@@ -123,9 +123,9 @@ option( KICAD_NETLIST_QA
     "Run eeschema netlist QA tests (requires Python 3)"
     OFF )
 
-option( KICAD_WIN32_DPI_AWARE
+cmake_dependent_option( KICAD_WIN32_DPI_AWARE
     "Turn on DPI awareness for Windows builds only"
-    OFF )
+    OFF "WIN32" OFF )
 
 option( KICAD_USE_EGL
     "Build KiCad with EGL backend support for Wayland."
