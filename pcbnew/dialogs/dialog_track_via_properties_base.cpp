@@ -41,7 +41,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxRIGHT, 10 );
 
 	m_staticline1 = new wxStaticLine( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_sbCommonSizer->Add( m_lockedCbox, 0, wxALL, 5 );
@@ -154,10 +154,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	fgTrackRightSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_sbTrackSizer->Add( fgTrackRightSizer, 4, wxLEFT, 10 );
+	m_sbTrackSizer->Add( fgTrackRightSizer, 4, wxLEFT|wxEXPAND, 10 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -280,6 +277,9 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 
 	m_MainSizer->Add( m_sbViaSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+
+
+	m_MainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_StdButtons = new wxStdDialogButtonSizer();
 	m_StdButtonsOK = new wxButton( this, wxID_OK );

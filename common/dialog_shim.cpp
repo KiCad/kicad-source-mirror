@@ -77,6 +77,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
                           const wxString& name ) :
             wxDialog( aParent, id, title, pos, size, style, name ),
             KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
+            m_useCalculatedSize( false ),
             m_units( EDA_UNITS::MILLIMETRES ),
             m_firstPaintEvent( true ),
             m_initialFocusTarget( nullptr ),
@@ -211,11 +212,18 @@ bool DIALOG_SHIM::Show( bool show )
 
         if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
         {
-            SetSize( savedDialogRect.GetPosition().x,
-                     savedDialogRect.GetPosition().y,
-                     std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
-                     std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
-                     0 );
+            if( m_useCalculatedSize )
+            {
+                SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
+                         wxDialog::GetSize().x, wxDialog::GetSize().y, 0 );
+            }
+            else
+            {
+                SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
+                         std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
+                         std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
+                         0 );
+            }
         }
 
         // Be sure that the dialog appears in a visible area

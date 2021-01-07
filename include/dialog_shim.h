@@ -194,6 +194,10 @@ protected:
     EDA_UNITS              m_units;    // userUnits for display and parsing
     std::string            m_hash_key; // alternate for class_map when classname re-used
 
+    // The following disables the storing of a user size.  It is used primarily for dialogs
+    // with conditional content which don't need user sizing.
+    bool                   m_useCalculatedSize;
+
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay
     // the initial-focus SetFocus() call to the first paint event.
@@ -208,7 +212,6 @@ protected:
     EDA_BASE_FRAME*        m_parentFrame;
 
     std::vector<wxWindow*> m_tabOrder;
-
 };
 
 #endif  // DIALOG_SHIM_

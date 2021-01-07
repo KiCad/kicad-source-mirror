@@ -281,7 +281,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticLine" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -1648,7 +1648,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">10</property>
-                            <property name="flag">wxLEFT</property>
+                            <property name="flag">wxLEFT|wxEXPAND</property>
                             <property name="proportion">4</property>
                             <object class="wxFlexGridSizer" expanded="1">
                                 <property name="cols">3</property>
@@ -1786,16 +1786,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="0">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">1</property>
-                                    <object class="spacer" expanded="0">
-                                        <property name="height">0</property>
-                                        <property name="permission">protected</property>
-                                        <property name="width">0</property>
                                     </object>
                                 </object>
                             </object>
@@ -3273,6 +3263,16 @@
                                 </object>
                             </object>
                         </object>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="spacer" expanded="1">
+                        <property name="height">0</property>
+                        <property name="permission">protected</property>
+                        <property name="width">0</property>
                     </object>
                 </object>
                 <object class="sizeritem" expanded="0">

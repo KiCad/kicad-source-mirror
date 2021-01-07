@@ -53,6 +53,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_tracks( false ),
     m_vias( false )
 {
+    m_useCalculatedSize = true;
+
     wxASSERT( !m_items.Empty() );
 
     // Configure display origin transforms

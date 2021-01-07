@@ -107,6 +107,8 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
         PCB_LAYER_SELECTOR( aParent ),
         DIALOG_LAYER_SELECTION_BASE( aParent )
 {
+    m_useCalculatedSize = true;
+
     m_layerSelected = aDefaultLayer;
     m_notAllowedLayersMask = aNotAllowedLayersMask;
     m_brd = aBrd;
