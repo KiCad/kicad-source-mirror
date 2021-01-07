@@ -14806,9 +14806,9 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Füge der Projektsymbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Füge der Projektbauteilbibliothekstabelle einen neuen Eintrag hinzu.\n"
 "\n"
-"Das Kürzel der Symbolbibliothekstabelle wird mit dem Suffix versehen\n"
+"Das Kürzel der Bauteilbibliothekstabelle wird mit dem Suffix versehen\n"
 "um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
