@@ -897,17 +897,10 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         // direction so that the posture solver is not biased.
         SEG seg = static_cast<SEGMENT*>( aStartItem )->Seg();
 
-        // NOTE: have to flip this over at the moment because DIRECTION_45(SEG) assumes +y is
-        // North but a SEG will have -y be North in KiCad world coordinate system.
-        // This should probably be fixed in DIRECTION_45 but it's used in a lot of PNS code
-        // that would need to be checked carefully for such a change...
-        seg.A.y = -seg.A.y;
-        seg.B.y = -seg.B.y;
-
         if( aP == seg.A )
-            lastSegDir = DIRECTION_45( seg );
-        else if( aP == seg.B )
             lastSegDir = DIRECTION_45( seg.Reversed() );
+        else if( aP == seg.B )
+            lastSegDir = DIRECTION_45( seg );
     }
     else if( aStartItem && aStartItem->Kind() == ITEM::SOLID_T &&
              static_cast<SOLID*>( aStartItem )->Parent()->Type() == PCB_PAD_T )
@@ -916,6 +909,8 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         angle        = ( angle + 22.5 ) / 45.0;
         initialDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
     }
+
+    wxLogTrace( "PNS", "Posture: init %s, last seg %s", initialDir.Format(), lastSegDir.Format() );
 
     m_postureSolver.Clear();
     m_postureSolver.AddTrailPoint( aP );
@@ -1100,8 +1095,6 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     // TODO: lastDirSeg will be calculated incorrectly if we end on an arc
     SEG lastDirSeg = ( !fixAll && l.SegmentCount() > 1 ) ? l.CSegment( -2 ) : l.CSegment( -1 );
-    lastDirSeg.A.y = -lastDirSeg.A.y;
-    lastDirSeg.B.y = -lastDirSeg.B.y;
     DIRECTION_45 d_last( lastDirSeg );
 
     int lastV;
@@ -1589,6 +1582,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     // in this case, we cancel any forced posture and restart the trail
     if( m_forced && refLength < unlockDistanceFactor * m_tolerance )
     {
+        wxLogTrace( "PNS", "Posture: Unlocked and reset" );
         m_forced = false;
         VECTOR2I start = p0;
         m_trail.Clear();
@@ -1613,15 +1607,8 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     DIRECTION_45 diagDirection;
     DIRECTION_45 newDirection = m_direction;
 
-    SEG seg = straight.CSegment( 0 );
-    seg.A.y = -seg.A.y;
-    seg.B.y = -seg.B.y;
-    straightDirection = DIRECTION_45( seg );
-
-    seg = diag.CSegment( 0 );
-    seg.A.y = -seg.A.y;
-    seg.B.y = -seg.B.y;
-    diagDirection = DIRECTION_45( seg );
+    straightDirection = DIRECTION_45( straight.CSegment( 0 ) );
+    diagDirection     = DIRECTION_45( diag.CSegment( 0 ) );
 
     if( !m_forced && areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
         newDirection = diagDirection;
@@ -1629,6 +1616,12 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         newDirection = straightDirection;
     else
         newDirection = m_direction.IsDiagonal() ? diagDirection : straightDirection;
+
+    if( newDirection != m_direction )
+    {
+        wxLogTrace( "PNS", "Posture: direction update %s => %s", m_direction.Format(),
+                    newDirection.Format() );
+    }
 
     m_direction = newDirection;
 
@@ -1638,10 +1631,20 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     {
         if( straightDirection == m_lastSegDirection )
         {
+            if( m_direction != straightDirection )
+            {
+                wxLogTrace( "PNS", "Posture: forcing straight => %s", straightDirection.Format() );
+            }
+
             m_direction = straightDirection;
         }
         else if( diagDirection == m_lastSegDirection )
         {
+            if( m_direction != straightDirection )
+            {
+                wxLogTrace( "PNS", "Posture: forcing diagonal => %s", diagDirection.Format() );
+            }
+
             m_direction = diagDirection;
         }
         else
@@ -1651,6 +1654,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
             case DIRECTION_45::ANG_HALF_FULL:
                 // Force a better (acute) connection
                 m_direction = m_direction.IsDiagonal() ? straightDirection : diagDirection;
+                wxLogTrace( "PNS", "Posture: correcting half full => %s", m_direction.Format() );
                 break;
 
             case DIRECTION_45::ANG_ACUTE:
@@ -1660,7 +1664,10 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
                                                                   : diagDirection;
 
                 if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_RIGHT )
+                {
+                    wxLogTrace( "PNS", "Posture: correcting right => %s", candidate.Format() );
                     m_direction = candidate;
+                }
 
                 break;
             }
@@ -1672,7 +1679,10 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
                                                                   : diagDirection;
 
                 if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
+                {
+                    wxLogTrace( "PNS", "Posture: correcting obtuse => %s", candidate.Format() );
                     m_direction = candidate;
+                }
 
                 break;
             }

@@ -39,9 +39,10 @@ class DIRECTION_45
 public:
 
     /**
-     * Enum Directions
      * Represents available directions - there are 8 of them, as on a rectilinear map (north = up) +
      * an extra undefined direction, reserved for traces that don't respect 45-degree routing regime.
+     * NOTE: North represents "up" to the user looking at the application, which is the negative-y
+     * direction in the world coordinate space!
      */
     enum Directions : int
     {
@@ -75,11 +76,13 @@ public:
 
     /**
      * Constructor
-     * @param aVec vector, whose direction will be translated into a DIRECTION_45.
+     * @param aVec vector in world space, whose direction will be translated into a DIRECTION_45.
      */
     DIRECTION_45( const VECTOR2I &aVec, bool a90 = false ) :
             m_90deg( a90 )
     {
+        VECTOR2I vec( aVec );
+        vec.y = -vec.y;
         construct_( aVec );
     }
 
@@ -90,8 +93,9 @@ public:
     DIRECTION_45( const SEG& aSeg, bool a90 = false ) :
             m_90deg( a90 )
     {
-
-        construct_( aSeg.B - aSeg.A );
+        VECTOR2I vec( aSeg.B - aSeg.A );
+        vec.y = -vec.y;
+        construct_( vec );
     }
 
     /**
@@ -101,7 +105,9 @@ public:
     DIRECTION_45( const SHAPE_ARC& aArc, bool a90 = false ) :
             m_90deg( a90 )
     {
-        construct_( aArc.GetP1() - aArc.GetP0() );
+        VECTOR2I vec( aArc.GetP1() - aArc.GetP0() );
+        vec.y = -vec.y;
+        construct_( vec );
     }
 
     /**
