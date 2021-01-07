@@ -1267,23 +1267,23 @@ void NODE::releaseGarbage()
 
 
 void NODE::Commit( NODE* aNode )
+{
+    if( aNode->isRoot() )
+        return;
+
+    for( ITEM* item : aNode->m_override )
+        Remove( item );
+
+    for( ITEM* item : *aNode->m_index )
     {
-        if( aNode->isRoot() )
-            return;
-
-        for( ITEM* item : aNode->m_override )
-            Remove( item );
-
-        for( auto i : *aNode->m_index )
-        {
-            i->SetRank( -1 );
-            i->Unmark();
-            Add( std::unique_ptr<ITEM>( i ) );
-        }
-
-        releaseChildren();
-        releaseGarbage();
+        item->SetRank( -1 );
+        item->Unmark();
+        Add( std::unique_ptr<ITEM>( item ) );
     }
+
+    releaseChildren();
+    releaseGarbage();
+}
 
 
 void NODE::KillChildren()
@@ -1298,9 +1298,11 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
 
     if( l_cur )
     {
-        for( ITEM*item : *l_cur )
+        for( ITEM* item : *l_cur )
+        {
             if( item->OfKind( aKindMask ) )
                 aItems.insert( item );
+        }
     }
 
     if( !isRoot() )
@@ -1309,10 +1311,10 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
 
         if( l_root )
         {
-            for( INDEX::NET_ITEMS_LIST::iterator i = l_root->begin(); i != l_root->end(); ++i )
+            for( ITEM* item : *l_root )
             {
-                if( !Overrides( *i ) && (*i)->OfKind( aKindMask ) )
-                    aItems.insert( *i );
+                if( !Overrides( item ) && item->OfKind( aKindMask ) )
+                    aItems.insert( item );
             }
         }
     }
@@ -1321,10 +1323,10 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
 
 void NODE::ClearRanks( int aMarkerMask )
 {
-    for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
+    for( ITEM* item : *m_index )
     {
-        (*i)->SetRank( -1 );
-        (*i)->Mark( (*i)->Marker() & (~aMarkerMask) );
+        item->SetRank( -1 );
+        item->Mark( item->Marker() & ~aMarkerMask );
     }
 }
 
@@ -1342,6 +1344,7 @@ void NODE::RemoveByMarker( int aMarker )
     for( ITEM* item : garbage )
         Remove( item );
 }
+
 
 SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
                                      int aNet )
@@ -1371,10 +1374,12 @@ SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const
     return nullptr;
 }
 
+
 SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 {
     return findRedundantSegment( aSeg->Seg().A, aSeg->Seg().B, aSeg->Layers(), aSeg->Net() );
 }
+
 
 ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
                              int aNet )
@@ -1403,6 +1408,7 @@ ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_R
 
     return nullptr;
 }
+
 
 ARC* NODE::findRedundantArc( ARC* aArc )
 {
