@@ -1,5 +1,5 @@
 # uLe <uestrada@mafu-robotics.de>, 2020.
-# Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>, 2020.
+# Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>, 2020, 2021.
 # Iñigo Figuero Sanz <news@imagedworld.com>, 2020.
 # Echedey <echedeyla@hotmail.com>, 2020.
 msgid ""
@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
-"Last-Translator: Echedey <echedeyla@hotmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2021-01-08 13:50+0000\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2251,7 +2251,7 @@ msgstr "El elemento seleccionado está bloqueado."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Estos elementos se omitirán a menos que anule los bloqueos."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 #, fuzzy
@@ -2289,7 +2289,7 @@ msgstr "Seleccionar ruta de preferencias"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "¿Cómo le gustaría configurar KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2304,7 +2304,7 @@ msgstr "Afinar desvío de un par diferencial"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "¡La ruta seleccionada no contiene configuraciones válidas de KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -2317,6 +2317,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Cuando se ha marcado, las tablas de la biblioteca de símbolos y huellas de "
+"la versión anterior se importarán a esta versión"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 #, fuzzy
@@ -4827,7 +4829,7 @@ msgstr "Línea"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Buses"
 
 #: common/layer_id.cpp:107
 #, fuzzy
@@ -5692,6 +5694,7 @@ msgstr "Excluido "
 #: common/tool/actions.cpp:256
 msgid "Mark current violation in Checker window as an exclusion"
 msgstr ""
+"Marcar la infracción actual en la ventana de Verificador como una exclusión"
 
 #: common/tool/actions.cpp:268
 msgid "Refresh"
