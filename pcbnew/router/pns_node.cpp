@@ -1300,7 +1300,7 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
     {
         for( ITEM* item : *l_cur )
         {
-            if( item->OfKind( aKindMask ) )
+            if( item->OfKind( aKindMask ) && item->IsRoutable() )
                 aItems.insert( item );
         }
     }
@@ -1313,7 +1313,7 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
         {
             for( ITEM* item : *l_root )
             {
-                if( !Overrides( item ) && item->OfKind( aKindMask ) )
+                if( !Overrides( item ) && item->OfKind( aKindMask ) && item->IsRoutable() )
                     aItems.insert( item );
             }
         }
