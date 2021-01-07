@@ -3,7 +3,7 @@
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
-# Jonathan Haas <haasjona@gmail.com>, 2020.
+# Jonathan Haas <haasjona@gmail.com>, 2020, 2021.
 # Mathias Neumann <alfrede@opferindustries.de>, 2020, 2021.
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
 "PO-Revision-Date: 2021-01-07 09:30+0000\n"
-"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -164,13 +164,12 @@ msgid "No footprint loaded."
 msgstr "Kein Footprint ausgewählt."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:487
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Die Grundrisskontur ist fehlerhaft. Führen Sie den Footprint Checker aus, um "
-"eine vollständige Analyse zu erhalten."
+"Die Grundrisskontur ist fehlerhaft. Führen Sie den Footprint Checker für "
+"eine vollständige Analyse aus."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 #, fuzzy
@@ -457,7 +456,7 @@ msgstr "Positionsdruck an DuKo-Restring abschneiden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr "Nicht abgedeckte Kupferpads als reines Kupfer"
+msgstr "Unbeschichtete Kupferpads als reines Kupfer"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
@@ -2258,9 +2257,9 @@ msgid "Image Editor"
 msgstr "Bildeditor"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Gewähltes Element ist gesperrt."
+msgstr "Die Auswahl enthält %d gesperrte Elemente."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -2269,19 +2268,16 @@ msgstr ""
 "überschreiben."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Nicht wieder anzeigen"
+msgstr "Nicht wieder anzeigen."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
-#, fuzzy
 msgid "Override Locks"
-msgstr "Versteckter Text"
+msgstr "Sperren überschreiben"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
-#, fuzzy
 msgid "Locked Items"
-msgstr "Gesperrte Leiterbahnen"
+msgstr "Gesperrte Elemente"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
@@ -2303,26 +2299,23 @@ msgstr "Auswahl Pfadeinstellungen"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Wie möchten Sie KiCad konfigurieren?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Importiere Einstellungen aus einer vorherigen Version (keine gefunden)"
+msgstr "Importiere Einstellungen aus einer vorherigen Version unter:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Anpassen von Versatz und Abstimmung eines differenziellem Signalpaares"
+msgstr "Wählen Sie einen anderen Pfad"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Der ausgewählte Pfad enthält keine gültigen KiCad-Einstellungen!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Importiere Einstellungen aus einer vorherigen Version (keine gefunden)"
+msgstr "Importiere Bibliothekskonfiguration aus vorheriger Version"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -2333,14 +2326,12 @@ msgstr ""
 "Bibliothekstabellen der vorherigen Version in diese Version importiert"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Rücksetzen auf Standardeinstellungen"
+msgstr "Mit Standardeinstellungen starten"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Pfade konfigurieren"
+msgstr "Konfiguriere KiCad-Einstellungspfad"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -2841,9 +2832,8 @@ msgid "View Preset Switcher"
 msgstr "Preset Switcher anzeigen"
 
 #: common/dialogs/panel_color_settings.cpp:49
-#, fuzzy
 msgid "Reveal Themes in Finder"
-msgstr "Im Dateimanager anzeigen"
+msgstr "Themen in Dateimanager anzeigen"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "New theme name:"
@@ -3213,9 +3203,8 @@ msgstr "Import Tastaturbefehledatei:"
 
 #: common/dialogs/panel_mouse_settings.cpp:49
 #: pcbnew/dialogs/panel_edit_options_base.cpp:197
-#, fuzzy
 msgid "Cmd"
-msgstr "Aktion"
+msgstr "Befehl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3981,9 +3970,8 @@ msgid "Component"
 msgstr "Bauteil"
 
 #: common/eda_item.cpp:294
-#, fuzzy
 msgid "Sheet Pin"
-msgstr "Schaltplanpins"
+msgstr "Schaltplanpin"
 
 #: common/eda_item.cpp:295 eeschema/dialogs/dialog_migrate_buses.cpp:101
 #: pcbnew/tools/pcb_actions.cpp:1187
@@ -4278,37 +4266,31 @@ msgstr ""
 "definiert werden die footprints.pretty benannt ist."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr ""
-"Der Pfad zu den Projekt Vorlagen die zusammen mit KiCad installiert worden "
-"sind."
+"Ein Verzeichnis mit systemweiten Skripten, die mit KiCad installiert sind"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
-"Der Pfad zu den Projekt Vorlagen die zusammen mit KiCad installiert worden "
-"sind."
+"Ein Verzeichnis mit benutzerspezifischen Skripten, die mit KiCad installiert "
+"sind"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Veraltete Version von KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Veraltete Version von KICAD_TEMPLATE_DIR."
+msgstr "Veraltete Version von KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Veraltete Version von KICAD_TEMPLATE_DIR."
+msgstr "Veraltete Version von KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Veraltete Version von KICAD_TEMPLATE_DIR."
+msgstr "Veraltete Version von KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -4404,11 +4386,9 @@ msgstr ""
 "Footprintbibliotheken in Zeile %d gefunden."
 
 #: common/fp_lib_table.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
-"Die Footprintbibliothekstabelle enthält keine Bibliothek mit dem Aliasnamen "
-"\"%s\""
+msgstr "fp-lib-table-Dateien enthalten keine Bibliothek mit dem Namen '%s'."
 
 #: common/fp_lib_table.cpp:483 eeschema/symbol_lib_table.cpp:497
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -4851,26 +4831,22 @@ msgid "Rescue"
 msgstr "Wiederherstellung"
 
 #: common/layer_id.cpp:105
-#, fuzzy
 msgid "Wires"
-msgstr "Elektr. Verbindung"
+msgstr "Elektr. Verbindungen"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
 msgstr "Busse"
 
 #: common/layer_id.cpp:107
-#, fuzzy
 msgid "Bus junctions"
-msgstr "Busknotenpunkt"
+msgstr "Busknotenpunkte"
 
 #: common/layer_id.cpp:108
-#, fuzzy
 msgid "Junctions"
-msgstr "Knotenpunkt"
+msgstr "Knotenpunkte"
 
 #: common/layer_id.cpp:109
-#, fuzzy
 msgid "Labels"
 msgstr "Bezeichner"
 
@@ -4885,75 +4861,64 @@ msgid "Hierarchical labels"
 msgstr "Hierarchische Bezeichner"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Pin numbers"
-msgstr "Pinnummern:"
+msgstr "Pinnummern"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Pin names"
-msgstr "Pinname"
+msgstr "Pinnamen"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Symbol references"
-msgstr "Bauteilreferenz"
+msgstr "Bauteilreferenzen"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Symbol values"
-msgstr "Bauteilwert"
+msgstr "Bauteilwerte"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
 msgstr "Bauteilfelder"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
-msgstr "Bauteilumriss"
+msgstr "Bauteilumrisse"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
-msgstr "Füllung Bauteil"
+msgstr "Bauteilfüllungen"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
 msgstr "Notizen"
 
 #: common/layer_id.cpp:120 eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
-#, fuzzy
 msgid "Net names"
-msgstr "Netzname"
+msgstr "Netznamen"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
 msgstr "Pins"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Sheet borders"
-msgstr "Blattumrahmung"
+msgstr "Schaltplanränder"
 
 #: common/layer_id.cpp:123
-#, fuzzy
 msgid "Sheet backgrounds"
-msgstr "Blatthintergrund"
+msgstr "Schaltplanhintergründe"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Sheet names"
-msgstr "Schaltplanname"
+msgstr "Schaltplannamen"
 
 #: common/layer_id.cpp:125
 msgid "Sheet fields"
-msgstr "Blattfelder"
+msgstr "Schaltplanfelder"
 
 #: common/layer_id.cpp:126
-#, fuzzy
 msgid "Sheet file names"
-msgstr "Schaltplandateiname"
+msgstr "Schaltplandateinamen"
 
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
@@ -4961,17 +4926,14 @@ msgid "Sheet pins"
 msgstr "Schaltplanpins"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "No-connect symbols"
-msgstr "'Keine-Verbindung' Markierung"
+msgstr "'Keine-Verbindung'-Markierungen"
 
 #: common/layer_id.cpp:129
-#, fuzzy
 msgid "ERC warnings"
-msgstr "ERC-Warnung"
+msgstr "ERC-Warnungen"
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "ERC errors"
 msgstr "ERC-Fehler"
 
@@ -5003,7 +4965,6 @@ msgid "Highlighted items"
 msgstr "Hervorgehobene Elemente"
 
 #: common/layer_id.cpp:137
-#, fuzzy
 msgid "Hidden items"
 msgstr "Versteckte Elemente"
 
@@ -5018,12 +4979,10 @@ msgid "Worksheet"
 msgstr "Arbeitsblatt"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "Footprints front"
 msgstr "Footprints Vorderseite"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Footprints back"
 msgstr "Footprints Rückseite"
 
@@ -5044,32 +5003,26 @@ msgid "Reference designators"
 msgstr "Referenzbezeichner"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text front"
 msgstr "Footprinttext Vorderseite"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Footprint text back"
 msgstr "Footprinttext Rückseite"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Hidden text"
 msgstr "Versteckter Text"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Pads front"
-msgstr "Pads - vorderseitig"
+msgstr "Pads Vorderseite"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Pads back"
-msgstr "Pads - rückseitig"
+msgstr "Pads Rückseite"
 
 #: common/layer_id.cpp:152
-#, fuzzy
 msgid "Through-hole pads"
 msgstr "Durchkontaktierungspads"
 
@@ -5083,29 +5036,24 @@ msgid "Tracks"
 msgstr "Leiterbahnen"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Through vias"
-msgstr "Durchgehende Durchkontaktierungen:"
+msgstr "Durchgehende DuKos"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Bl/Buried vias"
-msgstr "Blinde/Vergrabene DuKo's"
+msgstr "Blinde/Vergrabene DuKos"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Micro-vias"
-msgstr "Mikro-Durchkontaktierungen:"
+msgstr "Mikro-DuKos"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via holes"
 msgstr "Durchkontaktierungsbohrungen"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Non-plated holes"
-msgstr "Nicht beschichtete Bohrungen"
+msgstr "Nicht metallisierte Bohrungen"
 
 #: common/layer_id.cpp:159 pcbnew/dialogs/panel_edit_options_base.cpp:301
 #: pcbnew/widgets/appearance_controls.cpp:347
@@ -5114,36 +5062,30 @@ msgid "Ratsnest"
 msgstr "Netzlinien"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "No-connects"
-msgstr "Nicht-Angeschlossen"
+msgstr "Keine-Verbindung-Markierungen"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "DRC warnings"
 msgstr "DRC-Warnungen"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "DRC errors"
 msgstr "DRC-Fehler"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "DRC Ausnahmen"
+msgstr "DRC-Ausnahmen"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "DRC Marker Schatten"
+msgstr "DRC-Marker-Schatten"
 
 #: common/layer_id.cpp:165 pcbnew/widgets/appearance_controls.cpp:352
 msgid "Anchors"
 msgstr "Anker"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Grid axes"
 msgstr "Gitterachsen"
 
@@ -5444,9 +5386,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER Schreibfehler"
 
 #: common/settings/color_settings.cpp:312
-#, fuzzy
 msgid "(Footprints)"
-msgstr "Footprints"
+msgstr "(Footprints)"
 
 #: common/settings/color_settings.cpp:364
 msgid "KiCad Default"
@@ -5697,29 +5638,24 @@ msgid "Replace all matches"
 msgstr "Alle Treffer ersetzen"
 
 #: common/tool/actions.cpp:244
-#, fuzzy
 msgid "Previous Marker"
-msgstr "Vorherige Lage"
+msgstr "Vorherige Markierung"
 
 #: common/tool/actions.cpp:244
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "Design Rules Überprüfungen aktivieren"
+msgstr "Gehe zu vorheriger Markierung im Checker-Fenster"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Next Marker"
-msgstr "Finde nächste Markierung"
+msgstr "Nächste Markierung"
 
 #: common/tool/actions.cpp:250
-#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "Design Rules Überprüfungen aktivieren"
+msgstr "Gehe zu nächster Markierung im Checker-Fenster"
 
 #: common/tool/actions.cpp:256
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Ausgeschlossen"
+msgstr "Markierung ausschließen"
 
 #: common/tool/actions.cpp:256
 msgid "Mark current violation in Checker window as an exclusion"
@@ -6187,9 +6123,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Spiegeln an der Y-Achse wird derzeit nicht unterstützt"
 
 #: common/widgets/footprint_preview_widget.cpp:98
-#, fuzzy
 msgid "Footprint not found."
-msgstr "Footprint nicht gefunden"
+msgstr "Footprint nicht gefunden."
 
 #: common/widgets/footprint_select_widget.cpp:214
 msgid "No default footprint"
@@ -6574,9 +6509,8 @@ msgid "Legacy footprint export files"
 msgstr "Alte Footprint Exportdateien"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Elektronische Regel Check (ERC) Datei"
+msgstr "Elektrische-Regel-Check-Datei"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -6944,7 +6878,6 @@ msgid "Lib: %s"
 msgstr "Bibliothek: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like Kicad to attempt to convert them to the new required LIB_ID "
@@ -6952,7 +6885,7 @@ msgid ""
 "will need to re-assign them manually.)"
 msgstr ""
 "Einige der zugewiesenen Footprints sind alte Einträge (sind fehlende "
-"Bibliotheken Kurznamen). Möchten Sie CvPcb versuchen lassen diese in das "
+"Bibliotheken Kurznamen). Möchten Sie Kicad versuchen lassen diese in das "
 "neue Footprint-ID Format umzuwandeln? (Wenn Sie mit Nein antworten dann "
 "werden die Zuweisungen aufgehoben und Sie müssen diese Footprints neu "
 "zuweisen.)"
@@ -7039,42 +6972,34 @@ msgstr ""
 "Schaltplan"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next unassigned symbol"
 msgstr "Nächstes nicht zugeordnetes Bauteil auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Alle existierenden Bauteil zu Footprint Zuordnungen behalten"
+msgstr "Nächstes Bauteil ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous unassigned symbol"
 msgstr "Vorheriges nicht zugeordnetes Bauteil auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Alle existierenden Bauteil zu Footprint Zuordnungen behalten"
+msgstr "Vorheriges Bauteil ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint"
-msgstr "Bauteilfootprints zuweisen"
+msgstr "Footprint zuweisen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:110
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "Zuweisen von PCB-Footprints zu Schaltplansymbolen"
+msgstr "Footprints ausgewählten Bauteilen zuordnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
-#, fuzzy
 msgid "Automatically assign footprints"
-msgstr "Automatsch zugeordnete Footprints"
+msgstr "Automatisch Footprints zuordnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
-#, fuzzy
 msgid "Perform automatic footprint assignment"
 msgstr "Automatische Zuordnung von Footprints durchführen"
 
@@ -7248,11 +7173,11 @@ msgstr ""
 "Net %s ist grafisch mit Bus %s verbunden, gehört jedoch nicht zu diesem Bus"
 
 #: eeschema/connection_graph.cpp:2739
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Hierarchischen Schaltplanpin %s hat keine entsprechendem hierarchischen "
-"Bezeichner im Schaltplan"
+"Schaltplanpin %s hat keinen entsprechenden hierarchischen Bezeichner im "
+"Schaltplan"
 
 #: eeschema/cross-probing.cpp:256 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7260,9 +7185,9 @@ msgid "%s pin %s found"
 msgstr "%s Pin %s gefunden"
 
 #: eeschema/cross-probing.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s gefunden, jedoch %s nicht gefunden."
+msgstr "%s gefunden, jedoch Pin %s nicht gefunden"
 
 #: eeschema/cross-probing.cpp:262 pcbnew/cross-probing.cpp:180
 #, c-format
@@ -7904,24 +7829,24 @@ msgid "Update"
 msgstr "Aktualisiere"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "%s aktualisiert von %s auf %s"
+msgstr "Bauteil %s aktualisiert von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "%s aktualisiert von %s auf %s"
+msgstr "Bauteile %s aktualisiert von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Ändere Wert %s von %s zu %s."
+msgstr "Ändere Bauteil %s von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Ändere Wert %s von %s zu %s."
+msgstr "Ändere Bauteile %s von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:525
 msgid "*** symbol not found ***"
@@ -7956,9 +7881,8 @@ msgid "New library identifier:"
 msgstr "Neue Bibliotheksbezeichnung:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy
 msgid "Update/reset Fields"
-msgstr "Bauteilfelder aktualisieren"
+msgstr "Felder aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
@@ -7984,19 +7908,16 @@ msgid "Reset fields if empty in library symbol"
 msgstr "Zurücksetzen der Felder die im Bibliothekssymbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "%s Sichtbarkeit der Felder"
+msgstr "Feld-Sichtbarkeit aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
-#, fuzzy
 msgid "Update/reset field sizes and styles"
-msgstr "Testgröße und Textart %s"
+msgstr "Textgrößen und -stile aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "Positionen der Felder %s"
+msgstr "Positionen der Felder aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
 msgid "Update Symbols from Library"
@@ -8008,14 +7929,12 @@ msgid "Select with Browser"
 msgstr "Auswahl mittels Bibliotheksbrowser"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "Ausgewählten Footprint platzieren"
+msgstr "Wiederholte Kopien platzieren"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:145
-#, fuzzy
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "Es wurde kein Bauteil zum Speichern ausgewählt."
+msgstr "Lassen Sie das Symbol für nachfolgende Klicks ausgewählt."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place all units"
@@ -8183,9 +8102,8 @@ msgstr "Syntaxhilfe"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:104
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
-#, fuzzy
 msgid "Note:"
-msgstr "Notiz"
+msgstr "Hinweis:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:108
 msgid ""
@@ -8337,9 +8255,8 @@ msgid "Errors, Warnings and Exclusions"
 msgstr "Fehler, Warnungen und Ausschlüsse"
 
 #: eeschema/dialogs/dialog_erc.cpp:276 eeschema/dialogs/dialog_erc.cpp:348
-#, fuzzy
 msgid "Show Annotation dialog."
-msgstr "Zeige den Annotation Dialog"
+msgstr "Annotation-Dialog anzeigen."
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8619,7 +8536,6 @@ msgid "Group symbols"
 msgstr "Bauteile gruppieren"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
-#, fuzzy
 msgid "Group symbols together based on common properties"
 msgstr "Gruppiert Bauteile basierend auf gemeinsamen Eigenschaften"
 
@@ -8678,9 +8594,8 @@ msgid "Filter items by parent symbol library id:"
 msgstr "Filter Elemente nach übergeordneter Bauteilbibliothek-ID:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
-#, fuzzy
 msgid "Filter items by parent symbol type:"
-msgstr "Filtere Elemente nach übergeordnetem Bauteilbibliotheksymbol"
+msgstr "Filtere Elemente nach übergeordnetem Bauteiltyp:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8760,14 +8675,14 @@ msgid "symbol"
 msgstr "Bauteil"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
 "Bei dem Versuch eine leere Bauteilbibliothek zu schreiben ist ein Fehler "
-"aufgetreten:\n"
+"aufgetreten.\n"
 "\n"
 "%s"
 
@@ -8776,18 +8691,18 @@ msgid "Please select a symbol library table file."
 msgstr "Wähle bitte eine Bauteilbibliotheksdatei."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "Datei %s nicht gefunden."
+msgstr "Datei '%s' nicht gefunden."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is not a valid symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Datei \"%s\" ist keine gültige Bauteilbibliothekstabelle.\n"
+"\"%s\" ist keine gültige Bauteilbibliothekstabelle.\n"
 "\n"
 "%s"
 
@@ -9623,6 +9538,7 @@ msgstr "Alternative Knotensequenz:"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
+"Für DeMorgan-Komponenten sind keine alternativen Pinbelegungen verfügbar."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 #, fuzzy
@@ -9917,19 +9833,19 @@ msgstr "Position X:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Unten links, Plottereinheiten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Zentriert, Plottereinheiten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Seitenanpassung, Benutzereinheiten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Inhaltsanpassung, Benutzereinheiten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -11552,23 +11468,20 @@ msgid "Keep hierarchy navigator open"
 msgstr "Hierarchiebrowser geöffnet halten"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
-#, fuzzy
 msgid "Global field name templates:"
-msgstr "%s Vorlagen Feldnamen:"
+msgstr "Globale Feldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
-#, fuzzy
 msgid "Project field name templates:"
-msgstr "%s Vorlagen Feldnamen:"
+msgstr "Projektfeldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:85
 msgid "Untitled Field"
 msgstr "Unbenanntes Feld"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
-#, fuzzy
 msgid "Field name templates:"
-msgstr "Vorlagen Feldnamen"
+msgstr "Feldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 msgid "URL"
@@ -13307,6 +13220,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Die Block-ID %s (Blockname: '%s') ist auf Schaltplan '%s' gezeichnet, ist "
+"jedoch nicht mit einem anderen Schaltplan im Entwurf verknüpft. Bei KiCad "
+"müssen alle Schaltplansymbole einem Schaltplan zugeordnet sein, daher wurde "
+"der Block nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -17577,7 +17494,7 @@ msgstr "<html><h1>Vorlagenauswahl</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:227
 msgid "Select Templates Directory"
-msgstr "Wähle das Verzeichnis für Vorlagen"
+msgstr "Vorlagen-Verzeichnis auswählen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:26
 msgid "Template path:"
@@ -17755,14 +17672,12 @@ msgid "Open project directory in file explorer"
 msgstr "Projektverzeichnis im Dateiexplorer öffnen"
 
 #: kicad/project_template.cpp:52
-#, fuzzy
 msgid "Could open the template path!"
-msgstr "Konnte den Vorlagenordner nicht öffnen. "
+msgstr "Konnte den Vorlagenordner nicht öffnen!"
 
 #: kicad/project_template.cpp:57
-#, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "Konnte die HTML-Metainformation für diese Vorlage nicht öffnen! "
+msgstr "Konnte das Metainformationsverzeichnis für diese Vorlage nicht öffnen!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
@@ -19547,7 +19462,7 @@ msgstr "DuKo: (Durchmesser - Bohrung)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
 msgid "Plated Pad: (diam - drill)"
-msgstr "beschichtetes Pad: (Durchm. - Bohrung)"
+msgstr "Metallisiertes Pad: (Durchm. - Bohrung)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
 msgid "NP Pad: (diam - drill)"
@@ -20484,7 +20399,7 @@ msgstr "Besitzt 'Castelled Pads'"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Plated board edge"
-msgstr "Beschichtete Platinenkante"
+msgstr "Metallisierte Platinenkante"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:151
 msgid "Copper finish:"
@@ -21444,7 +21359,7 @@ msgstr "Größe Y"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Plated"
-msgstr "Beschichtet"
+msgstr "Metallisiert"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
@@ -23904,11 +23819,11 @@ msgstr "Anzahl Löcher"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Plated pads:"
-msgstr "Beschichtete Pads:"
+msgstr "Metallisierte Pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Non-plated pads:"
-msgstr "Nicht beschichtete Pads:"
+msgstr "Nicht metallisierte Pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
@@ -24916,13 +24831,12 @@ msgid "Error: pad has no layer."
 msgstr "Fehler: Sie müssen für das Pad eine Lage wählen"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
-#, fuzzy
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
-"Warnung: Durchbohrte Löcher sollten normalerweise ein Kupferkissen auf "
-"mindestens einer Schicht aufweisen"
+"Warnung: Metallisierte Löcher sollten normalerweise ein Kupferpad auf "
+"mindestens einer Schicht aufweisen."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
 #, fuzzy
@@ -31875,11 +31789,8 @@ msgid "Tuned: skew "
 msgstr "Angepasst: Versatz "
 
 #: pcbnew/router/pns_router.cpp:195
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr ""
-"Das Routing kann nicht innerhalb einer Sperrzone oder auf dem Platinenumriss "
-"gestartet werden."
+msgstr "Das Routing kann nicht in einer mechanischen Bohrung gestartet werden."
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
