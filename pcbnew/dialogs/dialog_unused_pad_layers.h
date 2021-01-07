@@ -44,7 +44,6 @@ private:
    bool AcceptOptions();
 
    void syncImages( wxCommandEvent& aEvent ) override;
-   void onScopeChange( wxCommandEvent& aEvent ) override;
 
    PCB_BASE_FRAME*      m_frame;
    const PCB_SELECTION& m_items;     // List of items to be modified.

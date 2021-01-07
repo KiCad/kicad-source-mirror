@@ -72,20 +72,6 @@ void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_UNUSED_PAD_LAYERS::onScopeChange( wxCommandEvent& aEvent )
-{
-    if( m_rbScope->GetSelection() == SCOPE_PADS )
-    {
-        m_cbPreservePads->SetValue( true );
-        m_cbPreservePads->Disable();
-    }
-    else
-        m_cbPreservePads->Enable();
-
-    syncImages( aEvent );
-}
-
-
 bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 {
     if( m_cbSelectedOnly->IsChecked() )
