@@ -35,7 +35,9 @@ DIALOG_SHEET_PIN_PROPERTIES_BASE::DIALOG_SHEET_PIN_PROPERTIES_BASE( wxWindow* pa
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_hyperlink1 = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_hyperlink1 = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_hyperlink1->SetToolTip( _("Show syntax help window") );
+
 	fgSizer2->Add( m_hyperlink1, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 7 );
 
 

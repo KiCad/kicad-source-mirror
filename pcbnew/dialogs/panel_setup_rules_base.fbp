@@ -207,8 +207,8 @@
                                                 <property name="style">wxHL_DEFAULT_STYLE</property>
                                                 <property name="subclass">; ; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip"></property>
-                                                <property name="url">http://www.wxformbuilder.org</property>
+                                                <property name="tooltip">Show syntax help window</property>
+                                                <property name="url"></property>
                                                 <property name="visited_color"></property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>

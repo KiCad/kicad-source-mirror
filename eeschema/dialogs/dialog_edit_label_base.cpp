@@ -96,6 +96,8 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 15 );
 
 	m_formattingHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_formattingHelp->SetToolTip( _("Show syntax help window") );
+
 	bSizeCtrlSizer->Add( m_formattingHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
 
 

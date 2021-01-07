@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -180,7 +180,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizerSecondLine->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxT("File > Board Setup..."), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	bSizerSecondLine->Add( m_boardSetup, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 
 
