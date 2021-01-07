@@ -134,6 +134,9 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_ZoneDisplayMode     = localSettings.m_ZoneDisplayMode;
     SetDisplayOptions( opts );
 
+    BOARD_DESIGN_SETTINGS& bds   = GetDesignSettings();
+    bds.m_UseConnectedTrackWidth = localSettings.m_AutoTrackWidth;
+
     wxFileName fn( GetCurrentFileName() );
     fn.MakeRelativeTo( Prj().GetProjectPath() );
     LoadWindowState( fn.GetFullPath() );
@@ -180,6 +183,10 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;
     localSettings.m_ZoneOpacity         = displayOpts.m_ZoneOpacity;
     localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
+
+    // Save Design settings
+    const BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
+    localSettings.m_AutoTrackWidth   = bds.m_UseConnectedTrackWidth;
 
     // Save render settings that aren't stored in PCB_DISPLAY_OPTIONS
 

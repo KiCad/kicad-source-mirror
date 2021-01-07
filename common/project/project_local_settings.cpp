@@ -154,6 +154,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            &m_RatsnestMode, RATSNEST_MODE::ALL, RATSNEST_MODE::ALL,
                            RATSNEST_MODE::VISIBLE ) );
 
+    m_params.emplace_back( new PARAM<bool>( "board.auto_track_width",
+                           &m_AutoTrackWidth, true ) );
+
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
                            &m_ZoneDisplayMode,
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
@@ -271,7 +274,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 
 const PROJECT_FILE_STATE* PROJECT_LOCAL_SETTINGS::GetFileState( const wxString& aFileName )
 {
-    auto it = std::find_if( m_files.begin(), m_files.end(), 
+    auto it = std::find_if( m_files.begin(), m_files.end(),
                             [&aFileName]( const PROJECT_FILE_STATE &a )
                             {
                                 return a.fileName == aFileName;
@@ -290,9 +293,9 @@ void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName,
                                             const WINDOW_SETTINGS* aWindowCfg, bool aOpen )
 {
     auto it = std::find_if( m_files.begin(), m_files.end(),
-                            [&aFileName]( const PROJECT_FILE_STATE& a ) 
-                            { 
-                                return a.fileName == aFileName; 
+                            [&aFileName]( const PROJECT_FILE_STATE& a )
+                            {
+                                return a.fileName == aFileName;
                             } );
 
     if( it == m_files.end() )

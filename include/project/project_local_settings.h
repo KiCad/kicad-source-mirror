@@ -116,6 +116,9 @@ public:
     /// The current ratsnest draw mode
     RATSNEST_MODE m_RatsnestMode;
 
+    /// The current setting for whether to automatically adjust track widths to match
+    bool m_AutoTrackWidth;
+
     /// How zones are drawn
     ZONE_DISPLAY_MODE m_ZoneDisplayMode;
 
