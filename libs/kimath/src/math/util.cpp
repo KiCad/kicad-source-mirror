@@ -31,15 +31,21 @@
 template<>
 int rescale( int aNumerator, int aValue, int aDenominator )
 {
-    return (int) ( (int64_t) aNumerator * (int64_t) aValue / (int64_t) aDenominator );
+    int64_t numerator = (int64_t) aNumerator * (int64_t) aValue;
+    return numerator / aDenominator;
 }
 
 
 template<>
 int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator )
 {
-#ifdef __x86_64__
-    return ( (__int128_t) aNumerator * (__int128_t) aValue ) / aDenominator;
+#ifdef __SIZEOF_INT128__
+    __int128_t numerator = (__int128_t) aNumerator * (__int128_t) aValue;
+
+    if( ( numerator < 0 ) ^ ( aDenominator < 0 ) )
+        return ( numerator - aDenominator / 2 ) / aDenominator;
+    else
+        return ( numerator + aDenominator / 2 ) / aDenominator;
 #else
     int64_t r = 0;
     int64_t sign = ( ( aNumerator < 0 ) ? -1 : 1 ) * ( aDenominator < 0 ? -1 : 1 ) *
