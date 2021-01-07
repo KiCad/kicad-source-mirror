@@ -270,6 +270,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     m_bezierCtrl2Y.SetValue( m_item->GetBezControl2().y );
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
+    m_locked->SetValue( m_item->IsLocked() );
     m_thickness.SetValue( m_item->GetWidth() );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
@@ -359,6 +360,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     }
 
     m_item->SetFilled( m_filledCtrl->GetValue() );
+    m_item->SetLocked( m_locked->GetValue() );
     m_item->SetWidth( m_thickness.GetValue() );
     m_item->SetLayer( ToLAYER_ID( layer ) );
 

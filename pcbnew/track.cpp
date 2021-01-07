@@ -728,15 +728,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 #endif
 
     // Display the State member
-    msg = wxT( ". . " );
-
-    if( GetState( TRACK_LOCKED ) )
-        msg[0] = 'L';
-
-    if( GetState( TRACK_AR ) )
-        msg[2] = 'A';
-
-    aList.emplace_back( _( "Status" ), msg );
+    aList.emplace_back( _( "Status" ), IsLocked() ? _( "Locked" ) : _( "" ) );
 }
 
 
@@ -980,11 +972,8 @@ wxString TRACK::ShowState( int stateBits )
     if( stateBits & IS_LINKED )
         ret << wxT( " | IS_LINKED" );
 
-    if( stateBits & TRACK_AR )
-        ret << wxT( " | TRACK_AR" );
-
-    if( stateBits & TRACK_LOCKED )
-        ret << wxT( " | TRACK_LOCKED" );
+    if( stateBits & LOCKED )
+        ret << wxT( " | LOCKED" );
 
     if( stateBits & IN_EDIT )
         ret << wxT( " | IN_EDIT" );

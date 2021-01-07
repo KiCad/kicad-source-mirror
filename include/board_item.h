@@ -248,8 +248,7 @@ public:
      */
     virtual bool IsLocked() const
     {
-        // only footprints & TRACKs can be locked at this time.
-        return false;
+        return GetState( LOCKED );
     }
 
     /**
@@ -257,7 +256,7 @@ public:
      */
     virtual void SetLocked( bool aLocked )
     {
-        // only footprints & TRACKs can be locked at this time.
+        SetState( LOCKED, aLocked );
     }
 
     /**

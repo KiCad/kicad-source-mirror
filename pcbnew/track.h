@@ -133,16 +133,6 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    bool IsLocked() const override
-    {
-        return GetState( TRACK_LOCKED );
-    }
-
-    void SetLocked( bool aLocked ) override
-    {
-        return SetState( TRACK_LOCKED, aLocked );
-    }
-
     /**
      * Function GetLength
      * returns the length of the track using the hypotenuse calculation.

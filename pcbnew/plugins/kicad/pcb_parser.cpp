@@ -2318,8 +2318,13 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             NeedRIGHT();
             break;
 
+        case T_locked:
+            shape->SetLocked( true );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "layer, width, fill, tstamp, or status" );
+            Expecting( "layer, width, fill, tstamp, locked or status" );
         }
     }
 
@@ -3495,8 +3500,13 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             NeedRIGHT();
             break;
 
+        case T_locked:
+            shape->SetLocked( true );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "layer, width, fill, tstamp, or status" );
+            Expecting( "layer, width, fill, tstamp, locked, or status" );
         }
     }
 
@@ -4187,7 +4197,7 @@ ARC* PCB_PARSER::parseARC()
             break;
 
         case T_locked:
-            arc->SetState( TRACK_LOCKED, 1 );
+            arc->SetLocked( true );
             break;
 
         default:
@@ -4258,7 +4268,7 @@ TRACK* PCB_PARSER::parseTRACK()
             break;
 
         case T_locked:
-            track->SetState( TRACK_LOCKED, 1 );
+            track->SetLocked( true );
             break;
 
         default:
@@ -4365,7 +4375,7 @@ VIA* PCB_PARSER::parseVIA()
             break;
 
         case T_locked:
-            via->SetState( TRACK_LOCKED, 1 );
+            via->SetLocked( true );
             NeedRIGHT();
             break;
 

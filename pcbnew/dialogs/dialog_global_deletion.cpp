@@ -43,12 +43,13 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
 {
     m_Parent = parent;
     m_currentLayer = F_Cu;
-    m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
-    m_ModuleFilterLocked->Enable( m_DelModules->GetValue() );
-    m_ModuleFilterNormal->Enable( m_DelModules->GetValue() );
+    m_trackFilterLocked->Enable( m_delTracks->GetValue() );
+    m_trackFilterUnlocked->Enable( m_delTracks->GetValue() );
+    m_trackFilterVias->Enable( m_delTracks->GetValue() );
+    m_footprintFilterLocked->Enable( m_delFootprints->GetValue() );
+    m_footprintFilterUnlocked->Enable( m_delFootprints->GetValue() );
+    m_drawingFilterLocked->Enable( m_delDrawings->GetValue() );
+    m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
     m_sdbSizer1OK->SetDefault();
     SetFocus();
     GetSizer()->SetSizeHints( this );
@@ -74,23 +75,29 @@ void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
 }
 
 
-void DIALOG_GLOBAL_DELETION::OnCheckDeleteTracks( wxCommandEvent& event )
+void DIALOG_GLOBAL_DELETION::onCheckDeleteTracks( wxCommandEvent& event )
 {
-    m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
-    m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
+    m_trackFilterLocked->Enable( m_delTracks->GetValue() );
+    m_trackFilterUnlocked->Enable( m_delTracks->GetValue() );
+    m_trackFilterVias->Enable( m_delTracks->GetValue() );
 }
 
 
-void DIALOG_GLOBAL_DELETION::OnCheckDeleteModules( wxCommandEvent& event )
+void DIALOG_GLOBAL_DELETION::onCheckDeleteFootprints( wxCommandEvent& event )
 {
-    m_ModuleFilterLocked->Enable( m_DelModules->GetValue() );
-    m_ModuleFilterNormal->Enable( m_DelModules->GetValue() );
+    m_footprintFilterLocked->Enable( m_delFootprints->GetValue() );
+    m_footprintFilterUnlocked->Enable( m_delFootprints->GetValue() );
 }
 
 
-void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
+void DIALOG_GLOBAL_DELETION::onCheckDeleteDrawings( wxCommandEvent& event )
+{
+    m_drawingFilterLocked->Enable( m_delDrawings->GetValue() );
+    m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
+}
+
+
+void DIALOG_GLOBAL_DELETION::acceptPcbDelete()
 {
     bool gen_rastnest = false;
 
@@ -99,7 +106,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     bool delAll = false;
 
-    if( m_DelAlls->GetValue() )
+    if( m_delAll->GetValue() )
     {
         if( !IsOK( this, _( "Are you sure you want to delete the entire board?" ) ) )
             return;
@@ -117,7 +124,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
     if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
         layers_filter = LSET( ToLAYER_ID( m_currentLayer ) );
 
-    if( delAll || m_DelZones->GetValue() )
+    if( delAll || m_delZones->GetValue() )
     {
         int area_index = 0;
         auto item = pcb->GetArea( area_index );
@@ -135,8 +142,8 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         }
     }
 
-    bool delDrawings = m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue();
-    bool delTexts = m_DelTexts->GetValue();
+    bool delDrawings = m_delDrawings->GetValue() || m_delBoardEdges->GetValue();
+    bool delTexts = m_delTexts->GetValue();
 
     if( delAll || delDrawings || delTexts )
     {
@@ -146,70 +153,82 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         // Layer mask for drawings
         LSET masque_layer;
 
-        if( m_DelDrawings->GetValue() )
+        if( m_delDrawings->GetValue() )
             masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
 
-        if( m_DelBoardEdges->GetValue() )
+        if( m_delBoardEdges->GetValue() )
             masque_layer.set( Edge_Cuts );
 
         masque_layer &= layers_filter;
 
-        for( auto dwg : pcb->Drawings() )
+        for( BOARD_ITEM* dwg : pcb->Drawings() )
         {
             KICAD_T type = dwg->Type();
             LAYER_NUM layer = dwg->GetLayer();
 
-            if( delAll
-                || ( type == PCB_SHAPE_T && delDrawings && masque_layer[layer] )
-                || ( type == PCB_TEXT_T && delTexts && del_text_layers[layer] ) )
+            if( !delAll )
             {
-                commit.Remove( dwg );
+                if( type == PCB_SHAPE_T )
+                {
+                    if( !delDrawings || !masque_layer[layer] )
+                        continue;
+
+                    if( dwg->IsLocked() && !m_drawingFilterLocked->GetValue() )
+                        continue;
+
+                    if( !dwg->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
+                        continue;
+                }
+                else if( type == PCB_TEXT_T )
+                {
+                    if( !delTexts || !del_text_layers[layer] )
+                        continue;
+                }
             }
+
+            commit.Remove( dwg );
         }
     }
 
-    if( delAll || m_DelModules->GetValue() )
+    if( delAll || m_delFootprints->GetValue() )
     {
-        for( FOOTPRINT* item : pcb->Footprints() )
+        for( FOOTPRINT* footprint : pcb->Footprints() )
         {
             bool del_fp = delAll;
 
-            if( layers_filter[item->GetLayer()] &&
-                ( ( m_ModuleFilterNormal->GetValue() && !item->IsLocked() ) ||
-                  ( m_ModuleFilterLocked->GetValue() && item->IsLocked() ) ) )
-                del_fp = true;
-
-            if( del_fp )
+            if( !delAll )
             {
-                commit.Remove( item );
-                gen_rastnest = true;
+                if( footprint->IsLocked() && !m_footprintFilterLocked->GetValue() )
+                    continue;
+
+                if( !footprint->IsLocked() && !m_footprintFilterUnlocked->GetValue() )
+                    continue;
+
+                if( !layers_filter[footprint->GetLayer()] )
+                    continue;
             }
+
+            commit.Remove( footprint );
+            gen_rastnest = true;
         }
     }
 
-    if( delAll || m_DelTracks->GetValue() )
+    if( delAll || m_delTracks->GetValue() )
     {
-        STATUS_FLAGS track_mask_filter = 0;
-
-        if( !m_TrackFilterLocked->GetValue() )
-            track_mask_filter |= TRACK_LOCKED;
-
-        if( !m_TrackFilterAR->GetValue() )
-            track_mask_filter |= TRACK_AR;
-
-        for( auto track : pcb->Tracks() )
+        for( TRACK* track : pcb->Tracks() )
         {
             if( !delAll )
             {
-                if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter ) != 0 )
-                    continue;
+                if( track->Type() == PCB_TRACE_T )
+                {
+                    if( track->IsLocked() && !m_trackFilterLocked->GetValue() )
+                        continue;
 
-                if( ( track->Type() == PCB_TRACE_T ) &&
-                    ( track->GetState( TRACK_LOCKED | TRACK_AR ) == 0 ) &&
-                    !m_TrackFilterNormal->GetValue() )
-                    continue;
+                    if( !track->IsLocked() && !m_trackFilterUnlocked->GetValue() )
+                        continue;
+                }
 
-                if( ( track->Type() == PCB_VIA_T ) && !m_TrackFilterVias->GetValue() )
+                if( ( track->Type() == PCB_VIA_T ) && !m_trackFilterVias->GetValue() )
                     continue;
 
                 if( ( track->GetLayerSet() & layers_filter ) == 0 )
@@ -223,7 +242,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     commit.Push( "Global delete" );
 
-    if( m_DelMarkers->GetValue() )
+    if( m_delMarkers->GetValue() )
         pcb->DeleteMARKERs();
 
     if( gen_rastnest )

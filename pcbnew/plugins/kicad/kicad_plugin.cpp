@@ -853,6 +853,9 @@ void PCB_IO::format( PCB_SHAPE* aShape, int aNestLevel ) const
             m_out->Print( 0, " (fill none)" );
     }
 
+    if( aShape->IsLocked() )
+        m_out->Print( 0, " (locked)" );
+
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
@@ -947,6 +950,9 @@ void PCB_IO::format( FP_SHAPE* aFPShape, int aNestLevel ) const
         else
             m_out->Print( 0, " (fill none)" );
     }
+
+    if( aFPShape->IsLocked() )
+        m_out->Print( 0, " (locked)" );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 

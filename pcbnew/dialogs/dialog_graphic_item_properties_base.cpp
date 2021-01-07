@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 
 	m_startPointLabel = new wxStaticText( this, wxID_ANY, _("Start Point"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_startPointLabel->Wrap( -1 );
-	m_sizerLeft->Add( m_startPointLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_sizerLeft->Add( m_startPointLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_startXLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_startXLabel->Wrap( -1 );
@@ -54,7 +54,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 
 	m_endPointLabel = new wxStaticText( this, wxID_ANY, _("End Point"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_endPointLabel->Wrap( -1 );
-	m_sizerLeft->Add( m_endPointLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_sizerLeft->Add( m_endPointLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_endXLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_endXLabel->Wrap( -1 );
@@ -80,7 +80,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 
 	m_bezierCtrlPt1Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Pt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bezierCtrlPt1Label->Wrap( -1 );
-	m_sizerLeft->Add( m_bezierCtrlPt1Label, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_sizerLeft->Add( m_bezierCtrlPt1Label, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 
 	m_BezierPointC1XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC1XLabel->Wrap( -1 );
@@ -106,7 +106,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 
 	m_bezierCtrlPt2Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Pt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bezierCtrlPt2Label->Wrap( -1 );
-	m_sizerLeft->Add( m_bezierCtrlPt2Label, wxGBPosition( 4, 3 ), wxGBSpan( 1, 3 ), wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_sizerLeft->Add( m_bezierCtrlPt2Label, wxGBPosition( 4, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 
 	m_BezierPointC2XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BezierPointC2XLabel->Wrap( -1 );
@@ -131,7 +131,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_sizerLeft->Add( m_BezierPointC2YUnit, wxGBPosition( 6, 5 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bUpperSizer->Add( m_sizerLeft, 1, wxEXPAND|wxBOTTOM, 20 );
+	bUpperSizer->Add( m_sizerLeft, 1, wxEXPAND, 20 );
 
 	wxBoxSizer* bUpperRightSizer;
 	bUpperRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -152,6 +152,15 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_angleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_angleUnits->Wrap( -1 );
 	fgUpperRightGridSizer->Add( m_angleUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+
+	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgUpperRightGridSizer->Add( m_locked, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgUpperRightGridSizer->Add( m_filledCtrl, 0, wxTOP|wxLEFT, 5 );
@@ -184,7 +193,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
+	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bUpperSizer->Add( bUpperRightSizer, 0, wxEXPAND, 5 );

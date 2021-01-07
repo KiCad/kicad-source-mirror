@@ -117,8 +117,8 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
 #define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
 #define IS_PASTED      (1 << 17)   ///< Modifier on IS_NEW which indicates it came from clipboard
-#define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
-#define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
+#define LOCKED         (1 << 18)   ///< Pcbnew: locked from movement and deletion
+#define UNUSED         (1 << 19)
 #define MALFORMED_F_COURTYARD (1 << 20)
 #define MALFORMED_B_COURTYARD (1 << 21)
 #define MALFORMED_COURTYARDS ( MALFORMED_F_COURTYARD | MALFORMED_B_COURTYARD )
@@ -133,7 +133,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 #define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
-#define ENTERED        (1 << 30)
+#define ENTERED        (1 << 30)   ///< indicates a group has been entered
 
 // WARNING: if you add flags, you'll probably need to adjust the masks in GetEditFlags() and
 // ClearTempFlags().

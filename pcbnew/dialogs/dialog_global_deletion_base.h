@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,21 +37,22 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxCheckBox* m_DelZones;
-		wxCheckBox* m_DelTexts;
-		wxCheckBox* m_DelBoardEdges;
-		wxCheckBox* m_DelDrawings;
-		wxCheckBox* m_DelModules;
-		wxCheckBox* m_DelTracks;
-		wxCheckBox* m_DelMarkers;
-		wxCheckBox* m_DelAlls;
+		wxCheckBox* m_delZones;
+		wxCheckBox* m_delTexts;
+		wxCheckBox* m_delBoardEdges;
+		wxCheckBox* m_delDrawings;
+		wxCheckBox* m_delFootprints;
+		wxCheckBox* m_delTracks;
+		wxCheckBox* m_delMarkers;
+		wxCheckBox* m_delAll;
 		wxStaticBoxSizer* sbFilter;
-		wxCheckBox* m_TrackFilterAR;
-		wxCheckBox* m_TrackFilterLocked;
-		wxCheckBox* m_TrackFilterNormal;
-		wxCheckBox* m_TrackFilterVias;
-		wxCheckBox* m_ModuleFilterLocked;
-		wxCheckBox* m_ModuleFilterNormal;
+		wxCheckBox* m_drawingFilterLocked;
+		wxCheckBox* m_drawingFilterUnlocked;
+		wxCheckBox* m_footprintFilterLocked;
+		wxCheckBox* m_footprintFilterUnlocked;
+		wxCheckBox* m_trackFilterLocked;
+		wxCheckBox* m_trackFilterUnlocked;
+		wxCheckBox* m_trackFilterVias;
 		wxRadioBox* m_rbLayersOption;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textCtrlCurrLayer;
@@ -61,10 +62,11 @@ class DIALOG_GLOBAL_DELETION_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCheckDeleteModules( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCheckDeleteTracks( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckDeleteDrawings( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckDeleteFootprints( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCheckDeleteTracks( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
