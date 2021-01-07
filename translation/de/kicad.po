@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-06 10:20-0800\n"
 "PO-Revision-Date: 2021-01-08 13:50+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -17505,6 +17505,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Fehler beim Erstellen eines neuen Verzeichnisses. Bitte versuchen Sie einen "
+"anderen Pfad. Das Projekt wurde nicht importiert."
 
 #: kicad/import_project.cpp:196
 #, fuzzy
