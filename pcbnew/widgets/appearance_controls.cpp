@@ -1059,7 +1059,14 @@ void APPEARANCE_CONTROLS::OnLayerChanged()
         b = wxChar( std::max( (int) b - 15, 0 ) );
     }
 
-    PCB_LAYER_ID        current = m_frame->GetActiveLayer();
+    PCB_LAYER_ID current = m_frame->GetActiveLayer();
+
+    if( !m_layerSettingsMap.count( current ) )
+    {
+        wxASSERT( m_layerSettingsMap.count( F_Cu ) );
+        current = F_Cu;
+    }
+
     APPEARANCE_SETTING* newSetting = m_layerSettingsMap[ current ];
 
     newSetting->ctl_panel->SetBackgroundColour( wxColour( r, g, b ) );
@@ -1334,6 +1341,7 @@ void APPEARANCE_CONTROLS::rebuildLayers()
 #endif
 
     m_layerSettings.clear();
+    m_layerSettingsMap.clear();
     m_layersOuterSizer->Clear( true );
 
     auto appendLayer =
