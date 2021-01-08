@@ -141,6 +141,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_TreeProject = NULL;
     m_isRenaming = false;
     m_selectedItem = nullptr;
+    m_watcherNeedReset = false;
 
     m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
@@ -514,7 +515,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
 
 #ifndef __WINDOWS__
     if( subdir_populated )
-        FileWatcherReset();
+        m_watcherNeedReset = true;
 #endif
 
     return newItemId;
@@ -584,11 +585,9 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    // Add items living in the project directory, and do not populate the item
+                    // Add items living in the project directory, and populate the item
                     // if it is a directory (sub directories will be not populated)
-                    // (Populate the directory is better but creates wxWidgets alerts in debug
-                    // mode)
-                    addItemToProjectTree( name, m_root, &projects, false );
+                    addItemToProjectTree( name, m_root, &projects, true );
                 }
 
                 haveFile = dir.GetNext( &filename );
@@ -910,6 +909,12 @@ void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
 {
     // Idle executes once all other events finished processing.  This makes it ideal to launch
     // a new window without starting Focus wars.
+    if( m_watcherNeedReset )
+    {
+        m_selectedItem = nullptr;
+        FileWatcherReset();
+    }
+
     if( m_selectedItem != nullptr )
     {
         // Activate launches a window which may run the event loop on top of us and cause OnIdle
@@ -981,7 +986,7 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
 
 #ifndef __WINDOWS__
     if( subdir_populated )
-        FileWatcherReset();
+        m_watcherNeedReset = true;
 #endif
 }
 
@@ -1173,6 +1178,8 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
 
 void PROJECT_TREE_PANE::FileWatcherReset()
 {
+    m_watcherNeedReset = false;
+
     wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
     #if defined( _WIN32 )
