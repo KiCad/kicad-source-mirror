@@ -458,17 +458,20 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadLayerECO2->SetLabel( m_board->GetLayerName( Eco2_User ) );
     m_PadLayerDraft->SetLabel( m_board->GetLayerName( Dwgs_User ) );
 
-    m_isFlipped = false;
-
     if( m_currentPad )
     {
+        m_locked->SetValue( m_currentPad->IsLocked() );
         m_isFlipped = m_currentPad->IsFlipped();
 
-        // Diplay parent footprint info
         FOOTPRINT* footprint = m_currentPad->GetParent();
 
         if( footprint )
         {
+            angle = m_dummyPad->GetOrientation();
+            angle -= footprint->GetOrientation();
+            m_dummyPad->SetOrientation( angle );
+
+            // Diplay parent footprint info
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
                          footprint->Reference().GetShownText(),
                          footprint->Value().GetShownText(),
@@ -479,17 +482,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         m_parentInfo->SetLabel( msg );
     }
-
-    if( m_currentPad )
+    else
     {
-        FOOTPRINT* footprint = m_currentPad->GetParent();
-
-        if( footprint )
-        {
-            angle = m_dummyPad->GetOrientation();
-            angle -= footprint->GetOrientation();
-            m_dummyPad->SetOrientation( angle );
-        }
+        m_locked->Hide();
+        m_isFlipped = false;
     }
 
     if( m_isFlipped )
@@ -994,6 +990,10 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
+    // Enable/disable position
+    m_posX.Enable( !m_locked->GetValue() );
+    m_posY.Enable( !m_locked->GetValue() );
+
     bool hasHole = true;
     bool hasConnection = true;
 
@@ -1556,8 +1556,12 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // Update values
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
-    m_currentPad->SetPosition( m_padMaster->GetPosition() );
     m_currentPad->SetOrientation( m_padMaster->GetOrientation() );
+
+    m_currentPad->SetLocked( m_locked->GetValue() );
+
+    if( !m_locked->GetValue() )
+        m_currentPad->SetPosition( m_padMaster->GetPosition() );
 
     wxSize     size;
     FOOTPRINT* footprint = m_currentPad->GetParent();

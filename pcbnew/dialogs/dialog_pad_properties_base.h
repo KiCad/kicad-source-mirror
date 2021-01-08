@@ -23,11 +23,11 @@ class WX_GRID;
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <widgets/net_selector.h>
+#include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/checkbox.h>
 #include <wx/simplebook.h>
 #include <wx/combobox.h>
 #include <wx/bitmap.h>
@@ -75,6 +75,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_posYLabel;
 		wxTextCtrl* m_posYCtrl;
 		wxStaticText* m_posYUnits;
+		wxCheckBox* m_locked;
 		wxStaticLine* m_staticline5;
 		wxStaticText* m_shapeLabel;
 		wxChoice* m_PadShapeSelector;

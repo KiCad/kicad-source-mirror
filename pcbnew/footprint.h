@@ -331,8 +331,9 @@ public:
             m_fpStatus &= ~FP_to_PLACE;
     }
 
-    bool PadsLocked() const { return m_fpStatus & FP_PADS_are_LOCKED;  }
+    bool LegacyPadsLocked() const { return m_fpStatus & FP_PADS_are_LOCKED;  }
 
+    /*
     void SetPadsLocked( bool aPadsLocked )
     {
         if( aPadsLocked )
@@ -340,6 +341,7 @@ public:
         else
             m_fpStatus &= ~FP_PADS_are_LOCKED;
     }
+    */
 
     void SetLastEditTime( timestamp_t aTime ) { m_lastEditTime = aTime; }
     void SetLastEditTime() { m_lastEditTime = time( NULL ); }

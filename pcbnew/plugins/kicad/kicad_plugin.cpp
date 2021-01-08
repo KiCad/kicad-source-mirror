@@ -1318,6 +1318,10 @@ void PCB_IO::format( PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")" );
+
+    if( aPad->IsLocked() )
+        m_out->Print( 0, " (locked)" );
+
     m_out->Print( 0, " (size %s)", FormatInternalUnits( aPad->GetSize() ).c_str() );
 
     if( (aPad->GetDelta().GetWidth()) != 0 || (aPad->GetDelta().GetHeight() != 0 ) )

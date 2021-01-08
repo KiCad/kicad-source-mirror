@@ -638,7 +638,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC && !pin->Connection( &sheet ) )
                 {
                     ncNets.push_back( new NET_RECORD( NC_PREFIX, std::vector<MEMBER_RECORD>() ) );
                     ncNets.back()->second.emplace_back( pin, sheet );

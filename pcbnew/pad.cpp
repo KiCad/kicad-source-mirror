@@ -133,13 +133,10 @@ PAD& PAD::operator=( const PAD &aOther )
 
 bool PAD::IsLocked() const
 {
-    if( GetParent() )
-    {
-        FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetParent() );
-        return fp->IsLocked() || fp->PadsLocked();
-    }
+    if( GetParent() && static_cast<FOOTPRINT*>( GetParent() )->IsLocked() )
+        return true;
 
-    return false;
+    return BOARD_ITEM::IsLocked();
 };
 
 

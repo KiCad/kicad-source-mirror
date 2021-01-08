@@ -232,14 +232,10 @@ std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_PAD_T:
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
-        FOOTPRINT* parent = pad->GetParent();
         wxPoint    shapePos = pad->ShapePos();
         wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
-        if( !m_isFootprintEditor )
-            break;
-
-        if( parent && ( parent->IsLocked() || parent->PadsLocked() ) )
+        if( !m_isFootprintEditor || pad->IsLocked() )
             break;
 
         switch( pad->GetShape() )
@@ -1622,7 +1618,7 @@ void POINT_EDITOR::updatePoints()
     case PCB_PAD_T:
     {
         const PAD* pad = static_cast<const PAD*>( item );
-        bool       locked = pad->GetParent() && pad->GetParent()->PadsLocked();
+        bool       locked = pad->GetParent() && pad->IsLocked();
         wxPoint    shapePos = pad->ShapePos();
         wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 

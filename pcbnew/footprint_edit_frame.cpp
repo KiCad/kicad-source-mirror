@@ -452,9 +452,6 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 
     m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
 
-    // Pads are always editable in Footprint Editor
-    aFootprint->SetPadsLocked( false );
-
     PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
 
     if( IsCurrentFPFromBoard() )

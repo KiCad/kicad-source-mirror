@@ -79,6 +79,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_posYUnits->Wrap( -1 );
 	gbSizerCommon->Add( m_posYUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
+	m_locked = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_locked->SetToolTip( _("Do not allow position of pad relative to parent footprint to be changed") );
+
+	gbSizerCommon->Add( m_locked, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	gbSizerCommon->AddGrowableCol( 1 );
 	gbSizerCommon->AddGrowableCol( 4 );
