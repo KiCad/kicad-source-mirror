@@ -276,22 +276,20 @@ public:
     }
 
     /**
-     * Function ToVector()
-     *
-     * Returns a unit vector corresponding to our direction.
+     * @return a unit vector in world coordinate system corresponding to our direction.
      */
     const VECTOR2I ToVector() const
     {
         switch( m_dir )
         {
-            case N: return VECTOR2I( 0, 1 );
-            case S: return VECTOR2I( 0, -1 );
+            case N: return VECTOR2I( 0, -1 );
+            case S: return VECTOR2I( 0, 1 );
             case E: return VECTOR2I( 1, 0 );
             case W: return VECTOR2I( -1, 0 );
-            case NE: return VECTOR2I( 1, 1 );
-            case NW: return VECTOR2I( -1, 1 );
-            case SE: return VECTOR2I( 1, -1 );
-            case SW: return VECTOR2I( -1, -1 );
+            case NE: return VECTOR2I( 1, -1 );
+            case NW: return VECTOR2I( -1, -1 );
+            case SE: return VECTOR2I( 1, 1 );
+            case SW: return VECTOR2I( -1, 1 );
 
             default:
                 return VECTOR2I( 0, 0 );
