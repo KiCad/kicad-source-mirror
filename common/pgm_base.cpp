@@ -457,7 +457,7 @@ bool PGM_BASE::InitPgm()
     // TODO: Move tooltips into KIPLATFORM
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving
-    wxToolTip::SetAutoPop( 1000 );
+    wxToolTip::SetAutoPop( 10000 );
 
     return true;
 }
