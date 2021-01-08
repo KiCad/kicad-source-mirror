@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,8 +214,13 @@ void PROJECT_TREE_PANE::onOpenDirectory( wxCommandEvent& event )
 
         system( msg.c_str() );
 #else
+    #if !wxCHECK_VERSION( 3, 1, 0 )
         // Quote in case there are spaces in the path.
+        // Not needed on 3.1.4, but needed in 3.0 versions
+        // Moreover, on Linux, on 3.1.4 wx version, adding quotes breaks
+        // wxLaunchDefaultApplication
         AddDelimiterString( curr_dir );
+    #endif
 
         wxLaunchDefaultApplication( curr_dir );
 #endif
@@ -579,7 +584,9 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    addItemToProjectTree( name, m_root, &projects, false );
+                    // Add items living in the project directory, and populate the item
+                    // if it is a directory (sub directories will be not populated)
+                    addItemToProjectTree( name, m_root, &projects, true );
                 }
 
                 haveFile = dir.GetNext( &filename );
