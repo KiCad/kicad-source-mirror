@@ -415,7 +415,11 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
     auto handlePadShape =
             [&]( PAD* aPad )
             {
-                addAnchor( aPad->GetPosition(), CORNER | SNAPPABLE, aPad );
+                addAnchor( aPad->GetPosition(), ORIGIN | SNAPPABLE, aPad );
+
+                /// If we are getting a drag point, we don't want to center the edge of pads
+                if( aFrom )
+                    return;
 
                 const std::shared_ptr<SHAPE> eshape = aPad->GetEffectiveShape( aPad->GetLayer() );
 

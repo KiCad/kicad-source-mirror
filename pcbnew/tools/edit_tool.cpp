@@ -333,6 +333,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                std::set<BOARD_ITEM*> to_add;
+
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
@@ -340,7 +342,19 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
                     if( item->Type() == PCB_MARKER_T )
                         aCollector.Remove( item );
+
+                    /// Locked pads do not get moved independently of the footprint
+                    if( item->Type() == PCB_PAD_T && item->IsLocked() )
+                    {
+                        if( !aCollector.HasItem( item->GetParent() ) )
+                            to_add.insert( item->GetParent() );
+
+                        aCollector.Remove( item );
+                    }
                 }
+
+                for( BOARD_ITEM* item : to_add )
+                    aCollector.Append( item );
             },
             true /* prompt user regarding locked items */ );
 
