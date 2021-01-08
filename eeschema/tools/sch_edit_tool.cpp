@@ -1193,7 +1193,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
     EE_SELECTION& selection = m_selectionTool->RequestSelection( filter );
 
-    if( selection.Empty() )
+    if( selection.Size() != 1 )
         return 0;
 
     SCH_ITEM* item = (SCH_ITEM*) selection.Front();
