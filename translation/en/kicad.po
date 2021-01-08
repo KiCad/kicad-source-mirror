@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-06 10:20-0800\n"
+"POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3267,6 +3267,9 @@ msgstr "Executable file (*)|*"
 msgid "Select Preferred Editor"
 msgstr "Select Preferred Editor"
 
+msgid "Environmental variable HOME is empty.  Unable to continue."
+msgstr "Environmental variable HOME is empty.  Unable to continue."
+
 #, c-format
 msgid "%s is already running. Continue?"
 msgstr "%s is already running. Continue?"
@@ -5428,6 +5431,9 @@ msgstr "Text Size:"
 msgid "Syntax help"
 msgstr "Syntax help"
 
+msgid "Show syntax help window"
+msgstr "Show syntax help window"
+
 msgid "Note:"
 msgstr "Note:"
 
@@ -6445,6 +6451,9 @@ msgstr "D"
 
 msgid "E"
 msgstr "E"
+
+msgid "Schematic"
+msgstr "Schematic"
 
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
@@ -8570,9 +8579,6 @@ msgstr ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the Kicad shell "
 "and create a project."
-
-msgid "Schematic"
-msgstr "Schematic"
 
 msgid "New Schematic"
 msgstr "New Schematic"
@@ -16477,11 +16483,14 @@ msgstr "Zones"
 msgid "Board outlines"
 msgstr "Board outlines"
 
-msgid "Drawings"
-msgstr "Drawings"
+msgid "Graphics"
+msgstr "Graphics"
 
 msgid "Footprints"
 msgstr "Footprints"
+
+msgid "Tracks && vias"
+msgstr "Tracks && vias"
 
 msgid "Markers"
 msgstr "Markers"
@@ -16492,20 +16501,23 @@ msgstr "Clear board"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-msgid "Automatically routed tracks"
-msgstr "Automatically routed tracks"
+msgid "Locked graphics"
+msgstr "Locked graphics"
 
-msgid "Locked tracks"
-msgstr "Locked tracks"
-
-msgid "Unlocked tracks"
-msgstr "Unlocked tracks"
+msgid "Unlocked graphics"
+msgstr "Unlocked graphics"
 
 msgid "Locked footprints"
 msgstr "Locked footprints"
 
 msgid "Unlocked footprints"
 msgstr "Unlocked footprints"
+
+msgid "Locked tracks"
+msgstr "Locked tracks"
+
+msgid "Unlocked tracks"
+msgstr "Unlocked tracks"
 
 msgid "All layers"
 msgstr "All layers"
@@ -18352,20 +18364,20 @@ msgstr "&Vias"
 msgid "&Pads"
 msgstr "&Pads"
 
-msgid "&Remove Unused"
-msgstr "&Remove Unused"
+msgid "&Remove unused layers"
+msgstr "&Remove unused layers"
 
-msgid "Reset &Unused"
-msgstr "Reset &Unused"
+msgid "&Keep unused layers"
+msgstr "&Keep unused layers"
 
 msgid "&Selection only"
 msgstr "&Selection only"
 
-msgid "&Keep pads at first and last layers"
-msgstr "&Keep pads at first and last layers"
+msgid "Keep &outside layers"
+msgstr "Keep &outside layers"
 
-msgid "Unused Pad Layers"
-msgstr "Unused Pad Layers"
+msgid "Remove Unused Pads"
+msgstr "Remove Unused Pads"
 
 msgid "Delete footprints with no symbols"
 msgstr "Delete footprints with no symbols"
@@ -19137,6 +19149,9 @@ msgstr "Comments"
 
 msgid "If you want a layer for documentation drawings"
 msgstr "If you want a layer for documentation drawings"
+
+msgid "Drawings"
+msgstr "Drawings"
 
 msgid "User1"
 msgstr "User1"
@@ -22625,8 +22640,8 @@ msgstr "Unable to fillet the selected track segments."
 msgid "Some of the track segments could not be filleted."
 msgstr "Some of the track segments could not be filleted."
 
-msgid "Flip"
-msgstr "Flip"
+msgid "Change Side / Flip"
+msgstr "Change Side / Flip"
 
 msgid "Fill Zone"
 msgstr "Fill Zone"
@@ -24269,9 +24284,6 @@ msgstr "Locked items"
 msgid "Allow selection of locked items"
 msgstr "Allow selection of locked items"
 
-msgid "Graphics"
-msgstr "Graphics"
-
 msgid "Rule Areas"
 msgstr "Rule Areas"
 
@@ -24381,6 +24393,24 @@ msgstr "Performing polygon fills…"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Automatically routed tracks"
+#~ msgstr "Automatically routed tracks"
+
+#~ msgid "&Remove Unused"
+#~ msgstr "&Remove Unused"
+
+#~ msgid "Reset &Unused"
+#~ msgstr "Reset &Unused"
+
+#~ msgid "&Keep pads at first and last layers"
+#~ msgstr "&Keep pads at first and last layers"
+
+#~ msgid "Unused Pad Layers"
+#~ msgstr "Unused Pad Layers"
+
+#~ msgid "Flip"
+#~ msgstr "Flip"
 
 #~ msgid "All units are not interchangeable"
 #~ msgstr "All units are not interchangeable"
