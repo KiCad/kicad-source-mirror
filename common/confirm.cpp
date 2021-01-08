@@ -35,18 +35,20 @@
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 
-KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
-        const wxString& aCaption, long aStyle )
+KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
+                    long aStyle )
     : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
-      m_hash( 0 )
+      m_hash( 0 ),
+      m_cancelMeansCancel( true )
 {
 }
 
 
-KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
-        KD_TYPE aType, const wxString& aCaption )
+KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType,
+                    const wxString& aCaption )
     : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) ),
-      m_hash( 0 )
+      m_hash( 0 ),
+      m_cancelMeansCancel( true )
 {
 }
 
@@ -85,8 +87,10 @@ bool KIDIALOG::Show( bool aShow )
 
     int ret = wxRichMessageDialog::Show( aShow );
 
-    // Has the user asked not to show the dialog again and it was confirmed
-    if( IsCheckBoxChecked() && ret != wxID_CANCEL )
+    // Has the user asked not to show the dialog again?
+    // Note that we don't save a Cancel value unless the Cancel button is being used for some
+    // other function (which is actually more common than it being used for Cancel).
+    if( IsCheckBoxChecked() && (!m_cancelMeansCancel || ret != wxID_CANCEL ) )
         doNotShowAgainDlgs[m_hash] = ret;
 
     return ret;
@@ -103,8 +107,10 @@ int KIDIALOG::ShowModal()
 
     int ret = wxRichMessageDialog::ShowModal();
 
-    // Has the user asked not to show the dialog again
-    if( IsCheckBoxChecked() && ret != wxID_CANCEL )
+    // Has the user asked not to show the dialog again?
+    // Note that we don't save a Cancel value unless the Cancel button is being used for some
+    // other function (which is actually more common than it being used for Cancel).
+    if( IsCheckBoxChecked() && (!m_cancelMeansCancel || ret != wxID_CANCEL ) )
         doNotShowAgainDlgs[m_hash] = ret;
 
     return ret;

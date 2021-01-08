@@ -52,6 +52,12 @@ public:
     KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType,
               const wxString& aCaption = "" );
 
+    bool SetOKCancelLabels( const ButtonLabel& ok, const ButtonLabel& cancel ) override
+    {
+        m_cancelMeansCancel = false;
+        return wxRichMessageDialog::SetOKCancelLabels( ok, cancel );
+    }
+
     ///> Shows the 'do not show again' checkbox
     void DoNotShowCheckbox( wxString file, int line );
 
@@ -63,12 +69,15 @@ public:
     int ShowModal() override;
 
 protected:
-    ///> Unique identifier of the dialog
-    unsigned long m_hash;
-
     // Helper functions for wxRichMessageDialog constructor
     static wxString getCaption( KD_TYPE aType, const wxString& aCaption );
     static long getStyle( KD_TYPE aType );
+
+protected:
+    unsigned long m_hash;               // Unique id
+    bool          m_cancelMeansCancel;  // If the Cancel button is renamed then it should be
+                                        // saved by the DoNotShowAgain checkbox.  If it's really
+                                        // a cancel then it should not.
 };
 
 

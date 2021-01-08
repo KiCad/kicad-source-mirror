@@ -60,7 +60,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
 
     std::vector<ZONE*> toFill;
 
-    for( auto zone : board()->Zones() )
+    for( ZONE* zone : board()->Zones() )
         toFill.push_back(zone);
 
     BOARD_COMMIT commit( this );
