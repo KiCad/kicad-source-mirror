@@ -39,6 +39,7 @@
 #include <wx/sysopt.h>
 #include <wx/richmsgdlg.h>
 #include <wx/filedlg.h>
+#include <wx/tooltip.h>
 
 #include <build_version.h>
 #include <config_params.h>
@@ -452,6 +453,11 @@ bool PGM_BASE::InitPgm()
     // TODO(JE): Remove this if apps are refactored to not assume Prj() always works
     // Need to create a project early for now (it can have an empty path for the moment)
     GetSettingsManager().LoadProject( "" );
+
+    // TODO: Move tooltips into KIPLATFORM
+    // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
+    // Windows as other platforms display tooltips while the mouse is not moving
+    wxToolTip::SetAutoPop( 1000 );
 
     return true;
 }
