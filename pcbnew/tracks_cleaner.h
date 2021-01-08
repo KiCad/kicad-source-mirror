@@ -59,10 +59,11 @@ private:
 
     /**
      * Removes tracks or vias only connected on one end
-     * @param aVia if true, clean vias, if false clean tracks
+     * @param aTrack if true, clean dangling tracks
+     * @param aVia if true, clean dangling vias
      * @return true if any items were deleted
      */
-    bool deleteDanglingTracks( bool aVia );
+    bool deleteDanglingTracks( bool aTrack, bool aVia );
 
     void deleteTracksInPads();
 

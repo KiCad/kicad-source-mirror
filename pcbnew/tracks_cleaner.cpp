@@ -66,11 +66,7 @@ void TRACKS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLE
     if( aDeleteTracksinPad )
         deleteTracksInPads();
 
-    if( aDeleteUnconnected )
-        has_deleted = deleteDanglingTracks( false );
-
-    if( aDeleteDanglingVias )
-        has_deleted |= deleteDanglingTracks( true );
+    has_deleted = deleteDanglingTracks( aDeleteUnconnected, aDeleteDanglingVias );
 
     if( has_deleted && aMergeSegments )
         cleanup( false, false, false, true );
@@ -160,10 +156,13 @@ bool TRACKS_CLEANER::testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart )
 }
 
 
-bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
+bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
 {
     bool item_erased = false;
     bool modified = false;
+
+    if( !aTrack && !aVia )
+        return false;
 
     do // Iterate when at least one track is deleted
     {
@@ -176,7 +175,10 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aVia )
 
         for( TRACK* track : temp_tracks )
         {
-            if( ( aVia && track->Type() != PCB_VIA_T ) || ( !aVia && track->Type() == PCB_VIA_T ) )
+            if( !aVia && track->Type() == PCB_VIA_T )
+                continue;
+
+            if( !aTrack && ( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T ) )
                 continue;
 
             // Test if a track (or a via) endpoint is not connected to another track or zone.
