@@ -584,9 +584,11 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    // Add items living in the project directory, and populate the item
+                    // Add items living in the project directory, and do not populate the item
                     // if it is a directory (sub directories will be not populated)
-                    addItemToProjectTree( name, m_root, &projects, true );
+                    // (Populate the directory is better but creates wxWidgets alerts in debug
+                    // mode)
+                    addItemToProjectTree( name, m_root, &projects, false );
                 }
 
                 haveFile = dir.GetNext( &filename );
