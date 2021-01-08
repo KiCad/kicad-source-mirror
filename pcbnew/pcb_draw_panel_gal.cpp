@@ -399,7 +399,6 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_VIA_THROUGH, true );
 
     // Pad layers controlled by dependencies
-    m_view->SetLayerVisible( LAYER_PADS_TH, true );
     m_view->SetLayerVisible( LAYER_PAD_FR, true );
     m_view->SetLayerVisible( LAYER_PAD_BK, true );
 
