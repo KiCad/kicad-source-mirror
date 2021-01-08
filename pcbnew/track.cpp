@@ -547,7 +547,12 @@ double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 const BOX2I TRACK::ViewBBox() const
 {
     BOX2I bbox = GetBoundingBox();
-    bbox.Inflate( 2 * GetOwnClearance( GetLayer() ) );
+
+    BOARD* board = GetBoard();
+
+    if( board )
+        bbox.Inflate( 2 * board->GetDesignSettings().GetBiggestClearanceValue() );
+
     return bbox;
 }
 

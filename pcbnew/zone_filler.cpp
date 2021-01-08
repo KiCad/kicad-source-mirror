@@ -126,7 +126,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->IsDirty() )
+            {
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
+                pad->BuildEffectivePolygon();
+            }
         }
 
         for( ZONE* zone : footprint->Zones() )

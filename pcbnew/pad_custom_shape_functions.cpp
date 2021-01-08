@@ -60,7 +60,7 @@ void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, b
     item->SetPolyPoints( aPoly );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -73,7 +73,7 @@ void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int a
     item->SetEnd( aEnd );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -88,7 +88,7 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
     item->SetAngle( aArcAngle );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -104,7 +104,7 @@ void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const w
     item->SetBezControl2( aCtrl2 );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -117,7 +117,7 @@ void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThicknes
     item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -131,7 +131,7 @@ void PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThi
     item->SetEnd( aEnd );
     item->SetWidth( aThickness );
     m_editPrimitives.emplace_back( item );
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -144,7 +144,7 @@ void PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPri
     if( aPrimitivesList.size() )
         AppendPrimitives( aPrimitivesList );
 
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -154,7 +154,7 @@ void PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrim
     for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
         AddPrimitive( new PCB_SHAPE( *prim ) );
 
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -162,7 +162,7 @@ void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 {
     m_editPrimitives.emplace_back( aPrimitive );
 
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 
@@ -171,7 +171,7 @@ void PAD::DeletePrimitivesList()
 {
     m_editPrimitives.clear();
 
-    m_shapesDirty = true;
+    SetDirty();
 }
 
 

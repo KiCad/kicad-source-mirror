@@ -421,7 +421,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             //move cursor prediction
             if( !modifier_enabled && !dragAlwaysSelects && !m_selection.Empty()
                     && evt->HasPosition() && selectionContains( evt->Position() ) )
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            }
             else
             {
                 if( m_additive )
@@ -2204,13 +2206,18 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     const unsigned GRIP_MARGIN = 20;
     VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
-    // Check if the point is located within any of the currently selected items bounding boxes
-    for( EDA_ITEM* item : m_selection )
-    {
-        BOX2I itemBox = item->ViewBBox();
-        itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
+    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
+    GENERAL_COLLECTOR          collector;
 
-        if( itemBox.Contains( aPoint ) )
+    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
+                                                    : GENERAL_COLLECTOR::AllBoardItems,
+                       (wxPoint) aPoint, guide );
+
+    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    {
+        BOARD_ITEM* item = collector[i];
+
+        if( item->IsSelected() && item->HitTest( (wxPoint) aPoint, margin.x ) )
             return true;
     }
 

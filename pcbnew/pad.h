@@ -153,7 +153,7 @@ public:
     void SetShape( PAD_SHAPE_T aShape )
     {
         m_padShape = aShape;
-        m_shapesDirty = true;
+        SetDirty();
     }
 
     /**
@@ -164,7 +164,7 @@ public:
     void SetPosition( const wxPoint& aPos ) override
     {
         m_pos = aPos;
-        m_shapesDirty = true;
+        SetDirty();
     }
 
     wxPoint GetPosition() const override { return m_pos; }
@@ -203,7 +203,7 @@ public:
     void SetAnchorPadShape( PAD_SHAPE_T aShape )
     {
         m_anchorPadShape = ( aShape ==  PAD_SHAPE_RECT ) ? PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE;
-        m_shapesDirty = true;
+        SetDirty();
     }
 
     /**
@@ -216,8 +216,8 @@ public:
         return ( GetLayerSet() & LSET::AllCuMask() ) != 0;
     }
 
-    void SetY( int y )                          { m_pos.y = y; m_shapesDirty = true; }
-    void SetX( int x )                          { m_pos.x = x; m_shapesDirty = true; }
+    void SetY( int y )                          { m_pos.y = y; SetDirty(); }
+    void SetX( int x )                          { m_pos.x = x; SetDirty(); }
 
     void SetPos0( const wxPoint& aPos )         { m_pos0 = aPos; }
     const wxPoint& GetPos0() const              { return m_pos0; }
@@ -225,24 +225,24 @@ public:
     void SetY0( int y )                         { m_pos0.y = y; }
     void SetX0( int x )                         { m_pos0.x = x; }
 
-    void SetSize( const wxSize& aSize )         { m_size = aSize; m_shapesDirty = true; }
+    void SetSize( const wxSize& aSize )         { m_size = aSize; SetDirty(); }
     const wxSize& GetSize() const               { return m_size; }
-    void SetSizeX( const int aX )               { m_size.x = aX; m_shapesDirty = true; }
+    void SetSizeX( const int aX )               { m_size.x = aX; SetDirty(); }
     const int GetSizeX() const                  { return m_size.x; }
-    void SetSizeY( const int aY )               { m_size.y = aY; m_shapesDirty = true; }
+    void SetSizeY( const int aY )               { m_size.y = aY; SetDirty(); }
     const int GetSizeY() const                  { return m_size.y; }
 
-    void SetDelta( const wxSize& aSize )        { m_deltaSize = aSize; m_shapesDirty = true; }
+    void SetDelta( const wxSize& aSize )        { m_deltaSize = aSize; SetDirty(); }
     const wxSize& GetDelta() const              { return m_deltaSize; }
 
-    void SetDrillSize( const wxSize& aSize )    { m_drill = aSize; m_shapesDirty = true; }
+    void SetDrillSize( const wxSize& aSize )    { m_drill = aSize; SetDirty(); }
     const wxSize& GetDrillSize() const          { return m_drill; }
-    void SetDrillSizeX( const int aX )          { m_drill.x = aX; m_shapesDirty = true; }
+    void SetDrillSizeX( const int aX )          { m_drill.x = aX; SetDirty(); }
     const int GetDrillSizeX() const             { return m_drill.x; }
-    void SetDrillSizeY( const int aY )          { m_drill.y = aY; m_shapesDirty = true; }
+    void SetDrillSizeY( const int aY )          { m_drill.y = aY; SetDirty(); }
     const int GetDrillSizeY() const             { return m_drill.y; }
 
-    void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; m_shapesDirty = true; }
+    void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; SetDirty(); }
     const wxPoint& GetOffset() const            { return m_offset; }
 
     wxPoint GetCenter() const override          { return GetPosition(); }
@@ -341,8 +341,16 @@ public:
     void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
-    bool IsDirty() const { return m_shapesDirty; }
-    void SetDirty() { m_shapesDirty = true; }
+    bool IsDirty() const
+    {
+        return m_shapesDirty || m_polyDirty;
+    }
+
+    void SetDirty()
+    {
+        m_shapesDirty = true;
+        m_polyDirty = true;
+    }
 
     void SetLayerSet( LSET aLayers ) override   { m_layerMask = aLayers; }
     LSET GetLayerSet() const override           { return m_layerMask; }
@@ -402,7 +410,7 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
-    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( PCB_LAYER_ID = UNDEFINED_LAYER ) const;
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
 
     /**
      * Function GetEffectiveHoleShape
@@ -597,7 +605,7 @@ public:
     {
         m_pos += aMoveVector;
         SetLocalCoord();
-        m_shapesDirty = true;
+        SetDirty();
     }
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
@@ -634,6 +642,7 @@ public:
      * the dirty bit.
      */
     void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
+    void BuildEffectivePolygon() const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -670,11 +679,14 @@ private:
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;
     mutable std::mutex                        m_shapesBuildingLock;
-    mutable int                               m_effectiveBoundingRadius;
     mutable EDA_RECT                          m_effectiveBoundingBox;
     mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
     mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
+
+    mutable bool                              m_polyDirty;
+    mutable std::mutex                        m_polyBuildingLock;
     mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon;
+    mutable int                               m_effectiveBoundingRadius;
 
     /*
      * How to build the custom shape in zone, to create the clearance area:

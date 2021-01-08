@@ -428,7 +428,7 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
         for( ; fwd_it != m_nodes.end(); ++fwd_it )
         {
-            auto nodeB = *fwd_it;
+            const std::shared_ptr<CN_ANCHOR>& nodeB = *fwd_it;
 
             if( nodeB->GetNoLine() )
                 continue;
@@ -446,7 +446,7 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
         /// Step 3: using the same starting point, check points backwards for closer points
         for( ; rev_it != m_nodes.rend(); ++rev_it )
         {
-            auto nodeB = *rev_it;
+            const std::shared_ptr<CN_ANCHOR>& nodeB = *rev_it;
 
             if( nodeB->GetNoLine() )
                 continue;

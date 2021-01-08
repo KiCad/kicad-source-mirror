@@ -1103,20 +1103,6 @@ DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_T ruleID )
 #endif
 
 
-std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_T constraintID )
-{
-    std::vector<DRC_CONSTRAINT> rv;
-
-    if( m_constraintMap.count( constraintID ) )
-    {
-        for ( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[constraintID] )
-            rv.push_back( c->constraint );
-    }
-
-    return rv;
-}
-
-
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 {
     //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
@@ -1131,16 +1117,16 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
 {
     int worst = 0;
 
-    for( const DRC_CONSTRAINT& constraint : QueryConstraintsById( aConstraintId ) )
+    if( m_constraintMap.count( aConstraintId ) )
     {
-        if( constraint.GetValue().HasMin() )
+        for( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[aConstraintId] )
         {
-            int current = constraint.GetValue().Min();
+            int current = c->constraint.GetValue().Min();
 
             if( current > worst )
             {
                 worst = current;
-                aConstraint = constraint;
+                aConstraint = c->constraint;
             }
         }
     }

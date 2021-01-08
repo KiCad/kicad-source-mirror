@@ -145,8 +145,6 @@ public:
                                       PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                       REPORTER* aReporter = nullptr );
 
-    std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_T ruleID );
-
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
     EDA_UNITS UserUnits() const { return m_userUnits; }
