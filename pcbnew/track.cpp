@@ -733,7 +733,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 #endif
 
     // Display the State member
-    aList.emplace_back( _( "Status" ), IsLocked() ? _( "Locked" ) : _( "" ) );
+    aList.emplace_back( _( "Status" ), IsLocked() ? _( "Locked" ) : wxT( "" ) );
 }
 
 
