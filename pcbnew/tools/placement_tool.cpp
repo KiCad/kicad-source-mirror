@@ -66,7 +66,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->Add( PCB_ACTIONS::alignLeft );
     m_placementMenu->Add( PCB_ACTIONS::alignCenterX );
     m_placementMenu->Add( PCB_ACTIONS::alignRight );
-    
+
     m_placementMenu->AppendSeparator();
     m_placementMenu->Add( PCB_ACTIONS::alignTop );
     m_placementMenu->Add( PCB_ACTIONS::alignCenterY );
@@ -162,7 +162,19 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItemsToAlign,
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
         if( boardItem->IsLocked() )
-            lockedItems.push_back( boardItem );
+        {
+            // Locking a pad but not the footprint means that we align the footprint using
+            // the pad position.  So we test for footprint locking here
+            if( m_frame->IsType( FRAME_PCB_EDITOR ) && boardItem->Type() == PCB_PAD_T
+                    && !boardItem->GetParent()->IsLocked() )
+            {
+                itemsToAlign.push_back( boardItem );
+            }
+            else
+            {
+                lockedItems.push_back( boardItem );
+            }
+        }
         else
             itemsToAlign.push_back( boardItem );
     }
