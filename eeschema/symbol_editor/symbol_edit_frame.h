@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -339,6 +339,16 @@ public:
      */
     void LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
                                   const wxString& aReference, int aUnit, int aConvert );
+
+    /**
+     * Test if a symbol is loaded and can be edited.
+     *
+     * The following conditions are required for a symbol to be editable:
+     *  - The symbol must selected from either a library or the schematic.
+     *  - The symbol must be a root symbol.
+     *  - The symbol must not be from a legacy library.
+     */
+    bool IsSymbolEditable() const;
 
     ///< Restore the empty editor screen, without any part or library selected.
     void emptyScreen();

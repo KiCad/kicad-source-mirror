@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@
 #include <panel_sym_lib_table.h>
 
 
-bool SYMBOL_EDIT_FRAME::          m_showDeMorgan    = false;
+bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
 
 
 BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, EDA_DRAW_FRAME )
@@ -337,8 +337,9 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto isEditableCond =
         [this] ( const SELECTION& )
         {
-            // Only root symbols are editable
-            return m_my_part && m_my_part->IsRoot() && !IsSymbolFromLegacyLibrary();
+            // Only root symbols from the new s-expression libraries or the schematic
+            // are editable.
+            return IsSymbolEditable();
         };
 
     auto schematicModifiedCond =
@@ -460,9 +461,9 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
         };
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( isEditableCond && haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
 
     mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
                         ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
@@ -477,11 +478,14 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle, EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,    EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle,
+                        EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,
+                        EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolArc,       EDIT_TOOL( EE_ACTIONS::drawSymbolArc ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,
+                        EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
     RegisterUIUpdateHandler( ID_LIBEDIT_IMPORT_BODY_BUTT, ENABLE( isEditableCond ) );
     RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( haveSymbolCond ) );
@@ -702,7 +706,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
-    GetRenderSettings()->m_ShowDisabled = isAlias || isLegacy;
+    GetRenderSettings()->m_ShowDisabled = ( isAlias || isLegacy ) && !IsSymbolFromSchematic();
     GetCanvas()->DisplayComponent( m_my_part );
     GetCanvas()->GetView()->HideWorksheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
@@ -1109,7 +1113,8 @@ void SYMBOL_EDIT_FRAME::RebuildView()
 {
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
-    GetRenderSettings()->m_ShowDisabled = m_my_part && m_my_part->IsAlias();
+    GetRenderSettings()->m_ShowDisabled =
+            m_my_part && m_my_part->IsAlias() && !IsSymbolFromSchematic();
     GetCanvas()->DisplayComponent( m_my_part );
     GetCanvas()->GetView()->HideWorksheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
@@ -1427,4 +1432,11 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
     }
 
     return true;
+}
+
+
+bool SYMBOL_EDIT_FRAME::IsSymbolEditable() const
+{
+    return m_my_part && m_my_part->IsRoot() &&
+            ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
 }

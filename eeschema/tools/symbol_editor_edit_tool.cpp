@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,62 +65,68 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
                 return m_isSymbolEditor && static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
             };
 
+    auto canEdit =
+            [&]( const SELECTION& sel )
+            {
+                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+                wxCHECK( editor, false );
+
+                return editor->IsSymbolEditable();
+            };
+
     // Add edit actions to the move tool menu
-    //
     if( moveTool )
     {
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator( 200 );
-        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( ACTIONS::doDelete,           EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::rotateCCW,    canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::rotateCW,     canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::mirrorX,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::mirrorY,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( ACTIONS::doDelete,        canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
-        moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
+        moveMenu.AddItem( EE_ACTIONS::properties,   canEdit && EE_CONDITIONS::Count( 1 ), 200 );
 
         moveMenu.AddSeparator( 300 );
-        moveMenu.AddItem( ACTIONS::cut,                EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( ACTIONS::copy,               EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( ACTIONS::duplicate,          EE_CONDITIONS::NotEmpty, 300 );
+        moveMenu.AddItem( ACTIONS::cut,             EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::copy,            EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::duplicate,       canEdit && EE_CONDITIONS::NotEmpty, 300 );
 
         moveMenu.AddSeparator( 400 );
-        moveMenu.AddItem( ACTIONS::selectAll,          havePartCondition, 400 );
+        moveMenu.AddItem( ACTIONS::selectAll,       havePartCondition, 400 );
     }
 
     // Add editing actions to the drawing tool menu
-    //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
     drawMenu.AddSeparator( 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCCW,           EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCW,            EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorX,             EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorY,             EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCCW,        canEdit && EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCW,         canEdit && EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorX,          canEdit && EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorY,          canEdit && EE_CONDITIONS::IdleSelection, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::properties,          EE_CONDITIONS::Count( 1 ), 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,       canEdit && EE_CONDITIONS::Count( 1 ), 200 );
 
     // Add editing actions to the selection tool menu
-    //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,        EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::rotateCW,         EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorX,          EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorY,          EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( ACTIONS::doDelete,            EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,     canEdit && EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCW,      canEdit && EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorX,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorY,       canEdit && EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::doDelete,         canEdit && EE_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
+    selToolMenu.AddItem( EE_ACTIONS::properties,    canEdit && EE_CONDITIONS::Count( 1 ), 200 );
 
     selToolMenu.AddSeparator( 300 );
-    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
-    selToolMenu.AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,            canEdit && EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::duplicate,        canEdit && EE_CONDITIONS::NotEmpty, 300 );
 
     selToolMenu.AddSeparator( 400 );
-    selToolMenu.AddItem( ACTIONS::selectAll,           havePartCondition, 400 );
+    selToolMenu.AddItem( ACTIONS::selectAll,        havePartCondition, 400 );
 
     return true;
 }

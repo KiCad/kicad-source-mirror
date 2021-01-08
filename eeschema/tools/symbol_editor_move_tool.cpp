@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,16 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::move, EE_CONDITIONS::IdleSelection, 150 );
+    auto canEdit =
+            [&]( const SELECTION& sel )
+            {
+                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+                wxCHECK( editor, false );
+
+                return editor->IsSymbolEditable();
+            };
+
+    selToolMenu.AddItem( EE_ACTIONS::move, canEdit && EE_CONDITIONS::IdleSelection, 150 );
 
     return true;
 }
@@ -77,8 +86,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
-    if( !m_frame->GetCurPart() || m_frame->GetCurPart()->IsAlias()
-      || selection.Empty() || m_moveInProgress )
+    if( !m_frame->IsSymbolEditable() || selection.Empty() || m_moveInProgress )
         return 0;
 
     std::string tool = aEvent.GetCommandStr().get();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,14 +93,23 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
+    auto canEdit =
+            [&]( const SELECTION& sel )
+            {
+                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+                wxCHECK( editor, false );
+
+                return editor->IsSymbolEditable();
+            };
+
     auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyType( LIB_PIN_T );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddSeparator( 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    singlePinCondition, 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  singlePinCondition, 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    canEdit && singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  canEdit && singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   canEdit && singlePinCondition, 400 );
 
     return true;
 }
