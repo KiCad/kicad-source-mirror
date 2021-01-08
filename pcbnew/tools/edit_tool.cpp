@@ -344,7 +344,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                         aCollector.Remove( item );
 
                     /// Locked pads do not get moved independently of the footprint
-                    if( item->Type() == PCB_PAD_T && item->IsLocked() )
+                    if( item->Type() == PCB_PAD_T && item->IsLocked()
+                            && !item->GetParent()->IsLocked() )
                     {
                         if( !aCollector.HasItem( item->GetParent() ) )
                             to_add.insert( item->GetParent() );
