@@ -95,7 +95,11 @@ public:
 
     void FlipPosture();
 
-    void SetDisabled( bool aDisabled = true ) { m_disabled = aDisabled; }
+    /**
+     * Disables the mouse-trail portion of the posture solver; leaving only the manual posture
+     * switch and the previous-segment posture algorithm
+     */
+    void SetMouseDisabled( bool aDisabled = true ) { m_disableMouse = aDisabled; }
 
     bool IsManuallyForced() const { return m_manuallyForced; }
 
@@ -105,7 +109,7 @@ private:
     DIRECTION_45     m_direction;
     DIRECTION_45     m_lastSegDirection;
     bool             m_forced;
-    bool             m_disabled;
+    bool             m_disableMouse;
     bool             m_manuallyForced;
 };
 

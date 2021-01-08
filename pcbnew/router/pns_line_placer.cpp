@@ -916,7 +916,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_postureSolver.AddTrailPoint( aP );
     m_postureSolver.SetTolerance( m_head.Width() );
     m_postureSolver.SetDefaultDirections( initialDir, lastSegDir );
-    m_postureSolver.SetDisabled( !Settings().GetAutoPosture() );
+    m_postureSolver.SetMouseDisabled( !Settings().GetAutoPosture() );
 
     NODE *n;
 
@@ -1486,7 +1486,7 @@ int FIXED_TAIL::StageCount() const
 POSTURE_SOLVER::POSTURE_SOLVER()
 {
     m_tolerance = 0;
-    m_disabled  = false;
+    m_disableMouse = false;
     Clear();
 }
 
@@ -1549,10 +1549,13 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     // Adjusts how close to p0 we unlock the posture again if one was locked already
     const int unlockDistanceFactor = 4;
 
-    if( m_disabled || m_trail.PointCount() < 2 || m_manuallyForced )
+    if( m_trail.PointCount() < 2 || m_manuallyForced )
     {
+        // If mouse trail detection is enabled; using the last seg direction as a starting point
+        // will give the best results.  Otherwise, just assume that we switch postures every
+        // segment.
         if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
-            m_direction = m_lastSegDirection;
+            m_direction = m_disableMouse ? m_lastSegDirection.Right() : m_lastSegDirection;
 
         return m_direction;
     }
@@ -1589,7 +1592,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         m_trail.Append( start );
     }
 
-    bool areaOk = true;
+    bool areaOk = false;
 
     // Check the actual trail area against the cutoff.  This prevents flutter when the trail is
     // very close to a straight line.
@@ -1599,8 +1602,8 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         SHAPE_LINE_CHAIN trail( m_trail );
         trail.SetClosed( true );
 
-        if( std::abs( trail.Area() ) < areaCutoff )
-            areaOk = false;
+        if( std::abs( trail.Area() ) > areaCutoff )
+            areaOk = true;
     }
 
     DIRECTION_45 straightDirection;
@@ -1617,18 +1620,20 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     else
         newDirection = m_direction.IsDiagonal() ? diagDirection : straightDirection;
 
-    if( newDirection != m_direction )
+    if( !m_disableMouse && newDirection != m_direction )
     {
         wxLogTrace( "PNS", "Posture: direction update %s => %s", m_direction.Format(),
                     newDirection.Format() );
+        m_direction = newDirection;
     }
-
-    m_direction = newDirection;
 
     // If we have a last segment, correct the direction relative to it.  For segment exit, we want
     // to correct to the least obtuse
-    if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
+    if( !m_manuallyForced && !m_disableMouse && m_lastSegDirection != DIRECTION_45::UNDEFINED )
     {
+        wxLogTrace( "PNS", "Posture: checking direction %s against last seg %s",
+                    m_direction.Format(), m_lastSegDirection.Format() );
+
         if( straightDirection == m_lastSegDirection )
         {
             if( m_direction != straightDirection )
@@ -1695,7 +1700,10 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 
     // If we get far away from the initial point, lock in the current solution to prevent flutter
     if( !m_forced && refLength > lockDistanceFactor * m_tolerance )
+    {
+        wxLogTrace( "PNS", "Posture: solution locked" );
         m_forced = true;
+    }
 
     return m_direction;
 }
