@@ -29,6 +29,7 @@
 
 CIRCLE::CIRCLE()
 {
+    Center = { 0, 0 };
     Radius = 0;
 }
 
@@ -56,7 +57,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
     VECTOR2I intersectPoint;
 
     auto furthestFromIntersect =
-        [&]( VECTOR2I aPt1, VECTOR2I aPt2 ) -> VECTOR2I&
+        [&]( VECTOR2I aPt1, VECTOR2I aPt2 ) -> VECTOR2I
         {
             if( ( aPt1 - intersectPoint ).EuclideanNorm()
                 > ( aPt2 - intersectPoint ).EuclideanNorm() )
@@ -70,7 +71,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         };
 
     auto closestToIntersect =
-        [&]( VECTOR2I aPt1, VECTOR2I aPt2 ) -> VECTOR2I&
+        [&]( VECTOR2I aPt1, VECTOR2I aPt2 ) -> VECTOR2I
         {
             if( ( aPt1 - intersectPoint ).EuclideanNorm()
                 <= ( aPt2 - intersectPoint ).EuclideanNorm() )
@@ -125,15 +126,15 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         }
 
         // Calculate bisector
-        VECTOR2I& lineApt = furthestFromIntersect( aLineA.A, aLineA.B );
-        VECTOR2I& lineBpt = furthestFromIntersect( aLineB.A, aLineB.B );
+        VECTOR2I  lineApt = furthestFromIntersect( aLineA.A, aLineA.B );
+        VECTOR2I  lineBpt = furthestFromIntersect( aLineB.A, aLineB.B );
         VECTOR2I  bisectorPt = GetArcMid( lineApt, lineBpt, intersectPoint, true );
 
         anglebisector.A = intersectPoint;
         anglebisector.B = bisectorPt;
 
         if( aAlternateSolution && ( aLineA.Contains( aP ) || aLineB.Contains( aP ) ) )
-            anglebisector.PerpendicularSeg( intersectPoint );
+            anglebisector = anglebisector.PerpendicularSeg( intersectPoint );
 
         // Create an arbitrary circle that is tangent to both lines
         CIRCLE hSolution;
