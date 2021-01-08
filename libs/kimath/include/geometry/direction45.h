@@ -83,7 +83,7 @@ public:
     {
         VECTOR2I vec( aVec );
         vec.y = -vec.y;
-        construct_( aVec );
+        construct_( vec );
     }
 
     /**
