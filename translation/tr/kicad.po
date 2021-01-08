@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -617,7 +617,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 msgid "Shadows"
-msgstr ""
+msgstr "Gölgeler"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -634,7 +634,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Reflections"
-msgstr ""
+msgstr "Yansımalar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -662,19 +662,19 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
 msgid "Lights configuration"
-msgstr ""
+msgstr "Işık yapılandırması"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Ortam Kamera Işığı"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Top Light"
-msgstr ""
+msgstr "Üst Işık"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
 msgid "Bottom Light"
-msgstr ""
+msgstr "Alt Işık"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
@@ -957,7 +957,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
-msgstr ""
+msgstr "CAD Renk Tarzı"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -993,19 +993,19 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:232
 msgid "Render Shadows"
-msgstr ""
+msgstr "Gölgeleri Oluştur"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:237
 msgid "Procedural Textures"
-msgstr ""
+msgstr "İşlemsel Dokular"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:237
 msgid "Apply procedural textures to materials (slow)"
-msgstr ""
+msgstr "İşlemsel dokuları malzemelere uygula (yavaş)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Add Floor"
-msgstr ""
+msgstr "Kat Ekle"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
@@ -1365,17 +1365,17 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
 msgid "Negative"
-msgstr ""
+msgstr "Negatif"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr ""
+msgstr "Ön ipek baskı"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr ""
+msgstr "Ön lehim maskesi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
@@ -1398,15 +1398,15 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 msgid "Bitmap to Component Converter"
-msgstr ""
+msgstr "Bitmap/Bileşen Dönüştürücü"
 
 #: common/base_units.cpp:481
 msgid "sq. mm"
-msgstr ""
+msgstr "mm kare"
 
 #: common/base_units.cpp:483
 msgid "cu. mm"
-msgstr ""
+msgstr "mm küp"
 
 #: common/base_units.cpp:493 common/eda_draw_frame.cpp:490
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1427,27 +1427,27 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:719
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr ""
+msgstr "mil"
 
 #: common/base_units.cpp:495
 msgid "sq. mils"
-msgstr ""
+msgstr "mil kare"
 
 #: common/base_units.cpp:497
 msgid "cu. mils"
-msgstr ""
+msgstr "mil küp"
 
 #: common/base_units.cpp:507
 msgid "in"
-msgstr ""
+msgstr "inç"
 
 #: common/base_units.cpp:509
 msgid "sq. in"
-msgstr ""
+msgstr "inç kare"
 
 #: common/base_units.cpp:511
 msgid "cu. in"
-msgstr ""
+msgstr "inç küp"
 
 #: common/base_units.cpp:515
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -1480,25 +1480,25 @@ msgstr ""
 #: common/common.cpp:315
 #, c-format
 msgid "Output directory \"%s\" created.\n"
-msgstr ""
+msgstr "Çıktı dizini \"%s\" oluşturuldu.\n"
 
 #: common/common.cpp:324
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
-msgstr ""
+msgstr "Çıktı dizini \"%s\" oluşturulamıyor.\n"
 
 #: common/confirm.cpp:56
 msgid "Do not show again"
-msgstr ""
+msgstr "Tekrar gösterme"
 
 #: common/confirm.cpp:122
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:248
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: common/confirm.cpp:123
 msgid "Question"
-msgstr ""
+msgstr "Soru"
 
 #: common/confirm.cpp:124 common/confirm.cpp:252
 #: common/dialogs/panel_setup_severities.cpp:40
@@ -1511,34 +1511,34 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:334
 #: pcbnew/plugins/kicad/pcb_parser.cpp:675
 msgid "Warning"
-msgstr ""
+msgstr "Uyarı"
 
 #: common/confirm.cpp:155 common/confirm.cpp:182
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "Kaydetmezseniz, tüm değişiklikleriniz kalıcı olarak kaybolacak."
 
 #: common/confirm.cpp:156 common/confirm.cpp:183 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:753
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:891
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183
 msgid "Discard Changes"
-msgstr ""
+msgstr "Değişiklikleri At"
 
 #: common/confirm.cpp:159 common/confirm.cpp:234
 msgid "Apply to all"
-msgstr ""
+msgstr "Tümüne uygula"
 
 #: common/confirm.cpp:195
 msgid "Your current changes will be permanently lost."
-msgstr ""
+msgstr "Geçerli değişiklikleriniz kalıcı olarak kaybolacak."
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:89
 msgid "Revert"
-msgstr ""
+msgstr "Geri al"
 
 #: common/confirm.cpp:196 common/confirm.cpp:226 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:294
@@ -1546,16 +1546,16 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:241 pcbnew/microwave/microwave_polygon.cpp:125
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: common/confirm.cpp:223 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
 msgid "OK"
-msgstr ""
+msgstr "Tamam"
 
 #: common/confirm.cpp:280
 msgid "Info"
-msgstr ""
+msgstr "Bilgi"
 
 #: common/confirm.cpp:293
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
@@ -1568,7 +1568,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:963 pcbnew/router/router_tool.cpp:1327
 #: pcbnew/router/router_tool.cpp:1733 pcbnew/zone_filler.cpp:424
 msgid "Confirmation"
-msgstr ""
+msgstr "Doğrula"
 
 #: common/dialog_about/AboutDialog_main.cpp:114
 #: common/dialogs/dialog_configure_paths_base.cpp:94
@@ -1655,19 +1655,19 @@ msgstr "KiCad Kütüphaneci Takımı"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
-msgstr ""
+msgstr "3B modeller"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr ""
+msgstr "Simgeler"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
-msgstr ""
+msgstr "İz düşümler"
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
-msgstr ""
+msgstr "İkonlar"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
@@ -1765,35 +1765,35 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr ""
+msgstr "Rengi Temizle"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "Kırmızı:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr ""
+msgstr "Yeşil:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
-msgstr ""
+msgstr "Mavi:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:74
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:91
 msgid "Hue:"
-msgstr ""
+msgstr "Ton:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr ""
+msgstr "Doygunluk:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1802,7 +1802,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:94
 #: pcbnew/dialogs/dialog_text_properties.cpp:79
 msgid "Value:"
-msgstr ""
+msgstr "Değer:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
@@ -21804,9 +21804,8 @@ msgid "Footprints"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "Yollar ve geçişler oluştur"
+msgstr "Yollar ve geçişler"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24171,9 +24170,8 @@ msgid "&Selection only"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "Katmanları oluştur"
+msgstr "&Dış katmanları koru"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
