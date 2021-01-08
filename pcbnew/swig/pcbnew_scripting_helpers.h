@@ -45,6 +45,8 @@ BOARD*  LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat );
 // Default LoadBoard() to load .kicad_pcb files:.
 BOARD*  LoadBoard( wxString& aFileName );
 
+SETTINGS_MANAGER* GetSettingsManager();
+
 /**
  * Constructs a default BOARD with a tempoary (no filename) project
  * @return the created board
