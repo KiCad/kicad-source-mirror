@@ -242,24 +242,8 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
         footprint->BuildPolyCourtyards();
     }
 
-    int clearance = 0;
-
-    if( aClearanceType == CLEARANCE_CONSTRAINT )
-    {
-        if( ( aA && ( aA->GetLayerSet() & LSET( 2, Edge_Cuts, Margin ) ).any() )
-            || ( aB && ( aB->GetLayerSet() & LSET( 2, Edge_Cuts, Margin ) ).any() ) )
-        {
-            auto edgeConstraint = drcEngine.EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aA, aB,
-                                                               aLayer, r );
-
-            clearance = edgeConstraint.m_Value.HasMin() ? edgeConstraint.m_Value.Min() : 0;
-        }
-    }
-
     auto constraint = drcEngine.EvalRulesForItems( aClearanceType, aA, aB, aLayer, r );
-
-    if( constraint.m_Value.HasMin() && constraint.m_Value.Min() > clearance )
-        clearance = constraint.m_Value.Min();
+    int  clearance = constraint.m_Value.Min();
 
     wxString clearanceStr = StringFromValue( r->GetUnits(), clearance, true );
 
@@ -380,6 +364,17 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      b->GetSelectMenuText( r->GetUnits() ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
+    }
+    else if( a->GetLayer() == Edge_Cuts || a->GetLayer() == Margin
+                || b->GetLayer() == Edge_Cuts || b->GetLayer() == Margin )
+    {
+        r->Report( "<h7>" + _( "Edge clearance resolution for:" ) + "</h7>" );
+
+        r->Report( wxString::Format( "<ul><li>%s</li><li>%s</li></ul>",
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
+
+        reportClearance( EDGE_CLEARANCE_CONSTRAINT, layer, a, b, r );
     }
     else
     {
