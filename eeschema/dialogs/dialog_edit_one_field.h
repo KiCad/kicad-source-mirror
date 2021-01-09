@@ -102,6 +102,8 @@ protected:
     int         m_horizontalJustification;
     bool        m_isVisible;
 
+    bool        m_firstFocus;
+
     SCINTILLA_TRICKS* m_scintillaTricks;
 };
 

@@ -46,6 +46,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+    m_firstFocus( true ),
     m_scintillaTricks( nullptr )
 {
     wxASSERT( aTextItem );
@@ -166,21 +167,26 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
 void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 {
+    if( m_firstFocus )
+    {
 #ifdef __WXGTK__
-    // Force an update of the text control before setting the text selection
-    // This is needed because GTK seems to ignore the selection on first update
-    //
-    // Note that we can't do this on OSX as it tends to provoke Apple's
-    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
-    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    if( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
-        m_TextCtrl->Update();
+        // Force an update of the text control before setting the text selection
+        // This is needed because GTK seems to ignore the selection on first update
+        //
+        // Note that we can't do this on OSX as it tends to provoke Apple's
+        // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+        // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
+        if( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
+            m_TextCtrl->Update();
 #endif
 
-    if( m_fieldId == REFERENCE_FIELD )
-        KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
-    else if( m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
-        m_TextCtrl->SetSelection( -1, -1 );
+        if( m_fieldId == REFERENCE_FIELD )
+            KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
+        else if( m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
+            m_TextCtrl->SetSelection( -1, -1 );
+
+        m_firstFocus = false;
+    }
 
     event.Skip();
 }
