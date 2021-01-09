@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-07 09:30+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5114,9 +5114,8 @@ msgid "Select Preferred Editor"
 msgstr "选择首选编辑器"
 
 #: common/pgm_base.cpp:221
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "环境变量名称不能为空。"
+msgstr "环境变量 HOME 为空。  无法继续。"
 
 #: common/pgm_base.cpp:232
 #, c-format
@@ -7877,9 +7876,8 @@ msgstr "语法帮助"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "显示控制台窗口"
+msgstr "显示语法帮助窗口"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -22831,9 +22829,8 @@ msgid "Footprints"
 msgstr "封装"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "导线和过孔"
+msgstr "导线 && 过孔"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -22848,14 +22845,12 @@ msgid "Filter Settings"
 msgstr "筛选设置"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "锁定布线"
+msgstr "锁定的图形"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "解锁布线"
+msgstr "未上锁的图形"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -25281,28 +25276,24 @@ msgid "&Pads"
 msgstr "焊盘 (&P)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Remove unused layers"
-msgstr "删除未使用的内容 (&R)"
+msgstr "&删除未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Keep unused layers"
-msgstr "未定义的层："
+msgstr "&保留未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
 msgstr "仅限选择 (&S)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "禁止过孔"
+msgstr "保留 &外部层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "删除未使用的焊盘..."
+msgstr "删除未使用的焊盘"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -30860,7 +30851,7 @@ msgstr "某些布线段无法圆角。"
 #: pcbnew/tools/edit_tool.cpp:1227 pcbnew/tools/pcb_actions.cpp:289
 #, fuzzy
 msgid "Change Side / Flip"
-msgstr "修改过孔外径和内径"
+msgstr "更改 Side / Flip"
 
 #: pcbnew/tools/edit_tool.cpp:1364 pcbnew/tools/zone_filler_tool.cpp:172
 msgid "Fill Zone"
