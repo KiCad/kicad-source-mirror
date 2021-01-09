@@ -39,8 +39,6 @@ public:
         return static_cast<EDA_3D_VIEWER*>( DIALOG_SHIM::GetParent() );
     }
 
-    void initDialog();
-
     void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
     void OnLightsResetToDefaults( wxCommandEvent& event ) override;
 
@@ -74,33 +72,10 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent ) :
         m_settings( aParent->GetAdapter() ),
         m_canvas( aParent->GetCanvas() )
 {
-    initDialog();
-
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-}
-
-
-void DIALOG_3D_VIEW_OPTIONS::initDialog()
-{
-    m_bitmapRealisticMode->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
-    m_bitmapBoardBody->SetBitmap( KiBitmap( ortho_xpm ) );
-    m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
-    m_bitmap3DshapesTH->SetBitmap( KiBitmap( shape_3d_xpm ) );
-    m_bitmap3DshapesSMD->SetBitmap( KiBitmap( shape_3d_xpm ) );
-    m_bitmap3DshapesVirtual->SetBitmap( KiBitmap( shape_3d_xpm ) );
-    m_bitmapBoundingBoxes->SetBitmap( KiBitmap( axis3d_xpm ) );
-    m_bitmapAreas->SetBitmap( KiBitmap( add_zone_xpm ) );
-    m_bitmapSilkscreen->SetBitmap( KiBitmap( text_xpm ) );
-    m_bitmapSolderMask->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
-    m_bitmapSolderPaste->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
-    m_bitmapAdhesive->SetBitmap( KiBitmap( tools_xpm ) );
-    m_bitmapComments->SetBitmap( KiBitmap( editor_xpm ) );
-    m_bitmapECO->SetBitmap( KiBitmap( editor_xpm ) );
-    m_bitmapSubtractMaskFromSilk->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
-    m_bitmapClipSilkOnViaAnnulus->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
 }
 
 

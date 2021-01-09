@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Aug 13 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,23 +11,22 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_shim.h"
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/statbmp.h>
+#include <wx/string.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
+#include <wx/statline.h>
 #include <wx/slider.h>
 #include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/choice.h>
 #include <wx/clrpicker.h>
 #include <wx/button.h>
@@ -47,36 +46,21 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_panelDspOpt;
-		wxStaticBitmap* m_bitmapRealisticMode;
+		wxCheckBox* m_checkBox3DshapesTH;
+		wxCheckBox* m_checkBox3DshapesSMD;
+		wxCheckBox* m_checkBox3DshapesVirtual;
+		wxCheckBox* m_checkBoxSilkscreen;
+		wxCheckBox* m_checkBoxSolderMask;
+		wxCheckBox* m_checkBoxSolderpaste;
+		wxCheckBox* m_checkBoxAdhesive;
+		wxCheckBox* m_checkBoxComments;
+		wxCheckBox* m_checkBoxECO;
 		wxCheckBox* m_checkBoxRealisticMode;
-		wxStaticBitmap* m_bitmapBoardBody;
 		wxCheckBox* m_checkBoxBoardBody;
-		wxStaticBitmap* m_bitmapAreas;
 		wxCheckBox* m_checkBoxAreas;
-		wxStaticBitmap* m_bitmapSubtractMaskFromSilk;
 		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
-		wxStaticBitmap* m_bitmapClipSilkOnViaAnnulus;
 		wxCheckBox* m_checkBoxClipSilkOnViaAnnulus;
 		wxCheckBox* m_checkBoxRenderPlatedPadsAsPlated;
-		wxStaticBitmap* m_bitmap3DshapesTH;
-		wxCheckBox* m_checkBox3DshapesTH;
-		wxStaticBitmap* m_bitmap3DshapesSMD;
-		wxCheckBox* m_checkBox3DshapesSMD;
-		wxStaticBitmap* m_bitmap3DshapesVirtual;
-		wxCheckBox* m_checkBox3DshapesVirtual;
-		wxStaticLine* m_staticlineVertical;
-		wxStaticBitmap* m_bitmapSilkscreen;
-		wxCheckBox* m_checkBoxSilkscreen;
-		wxStaticBitmap* m_bitmapSolderMask;
-		wxCheckBox* m_checkBoxSolderMask;
-		wxStaticBitmap* m_bitmapSolderPaste;
-		wxCheckBox* m_checkBoxSolderpaste;
-		wxStaticBitmap* m_bitmapAdhesive;
-		wxCheckBox* m_checkBoxAdhesive;
-		wxStaticBitmap* m_bitmapComments;
-		wxCheckBox* m_checkBoxComments;
-		wxStaticBitmap* m_bitmapECO;
-		wxCheckBox* m_checkBoxECO;
 		wxStaticText* m_staticTextRotAngle;
 		wxSpinCtrlDouble* m_spinCtrlRotationAngle;
 		wxStaticText* m_staticTextRotAngleUnits;
@@ -85,9 +69,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticAnimationSpeed;
 		wxSlider* m_sliderAnimationSpeed;
 		wxPanel* m_panelOpenGL;
-		wxStaticBitmap* m_bitmapBoundingBoxes;
 		wxCheckBox* m_checkBoxBoundingBoxes;
-		wxStaticBitmap* m_bitmapCuThickness;
 		wxCheckBox* m_checkBoxCuThickness;
 		wxStaticText* m_staticText221;
 		wxChoice* m_choiceAntiAliasing;
@@ -104,7 +86,6 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxRaytracing_addFloor;
 		wxCheckBox* m_checkBoxRaytracing_antiAliasing;
 		wxCheckBox* m_checkBoxRaytracing_postProcessing;
-		wxStaticLine* m_staticline4;
 		wxStaticText* m_staticText19;
 		wxStaticText* m_staticText201;
 		wxStaticText* m_staticText211;
@@ -119,7 +100,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrl_NrSamples_Refractions;
 		wxSpinCtrlDouble* m_spinCtrlDouble_SpreadFactor_Refractions;
 		wxSpinCtrl* m_spinCtrlRecursiveLevel_Refractions;
-		wxPanel* m_panel5;
+		wxPanel* m_lightsConfig;
 		wxStaticText* m_staticText17;
 		wxColourPickerCtrl* m_colourPickerCameraLight;
 		wxStaticText* m_staticText5;
@@ -163,7 +144,6 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlLightElevation8;
 		wxSpinCtrl* m_spinCtrlLightAzimuth8;
 		wxButton* m_buttonLightsResetToDefaults;
-		wxStaticLine* m_staticlineH;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
