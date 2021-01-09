@@ -1,17 +1,17 @@
 # Lithuanian translation of kicad.po
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020.
-# ZbeeGin <zbeegin@op.pl>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 #: pcbnew/track.cpp:736
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4235,14 +4235,12 @@ msgstr ""
 "pavadinta footprints.pretty."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“."
+msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“."
+msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -13447,16 +13445,15 @@ msgstr ""
 "Grįžtant prie talpyklos, norint nustatyti simbolį „%s: %s“ susieti „%s“."
 
 #: eeschema/sch_screen.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr ""
-"Schematinio simbolio „%s %s“ bibliotekos identifikatoriaus nustatymas į "
-"„%s“. "
+"Schematinio simbolio '%s %s' bibliotekos identifikatoriaus nustatymas į '%s'."
 
 #: eeschema/sch_screen.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Nerastas schematinio simbolio „%s %s“ bibliotekos simbolis. "
+msgstr "Nerastas schematinio simbolio '%s %s' bibliotekos simbolis."
 
 #: eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
@@ -24076,18 +24073,16 @@ msgid "%s and %s"
 msgstr "%s ir %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1210
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "Trinkelės dydis turi būti didesnis nei nulis"
+msgstr "Įspėjimas: Trinkelės dydis turi būti didesnis nei nulis."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
 "Įspėjimas: trinkelių grąžtas, didesnis nei trinkelių dydis, ar grąžto forma "
-"ir trinkelės forma nesutampa"
+"ir trinkelės forma nesutampa."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
@@ -24115,28 +24110,24 @@ msgstr ""
 "pastos klirensui)."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1292
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "Klaida: trinkelėje nėra sluoksnio"
+msgstr "Klaida: trinkelėje nėra sluoksnio."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
-#, fuzzy
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
 "Įspėjimas: dengtose kiaurymėse bent jau ant vieno sluoksnio turėtų būti "
-"vario padėklas"
+"vario padėklas."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
-#, fuzzy
 msgid "Incorrect value for pad offset."
-msgstr "Netinkama pado poslinkio vertė"
+msgstr "Netinkama pado poslinkio vertė."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Per didelė trinkelių delta dydžio vertė"
+msgstr "Per didelė trinkelių delta dydžio vertė."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
 #, fuzzy
@@ -29919,11 +29910,11 @@ msgid "Unexpected Dimension type (ID %s). This was not imported"
 msgstr "Dimensijos ID %s neturi „KiCad“ atitikmens. Tai nebuvo importuota"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "Dimensijos ID %s neturi „KiCad“ atitikmens. Tai nebuvo importuota"
+msgstr "Dimensijos ID %s neturi „KiCad“ atitikmens. Tai nebuvo importuota."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
