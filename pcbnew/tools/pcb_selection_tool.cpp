@@ -566,8 +566,25 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
         {
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-            if( boardItem->IsLocked() )
+            if( boardItem->Type() == PCB_GROUP_T )
+            {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
+                bool       lockedDescendant = false;
+
+                group->RunOnDescendants(
+                        [&lockedDescendant]( BOARD_ITEM* child )
+                        {
+                            if( child->IsLocked() )
+                                lockedDescendant = true;
+                        } );
+
+                if( lockedDescendant )
+                    lockedItems.push_back( group );
+            }
+            else if( boardItem->IsLocked() )
+            {
                 lockedItems.push_back( boardItem );
+            }
         }
 
         if( !lockedItems.empty() )
