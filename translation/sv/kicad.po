@@ -1,14 +1,15 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
+# ZbeeGin <zbeegin@op.pl>, 2021.
 #: pcbnew/track.cpp:736
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-06 18:01+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2230,9 +2231,8 @@ msgid "These items will be skipped unless you override the locks."
 msgstr "Dessa objekt hoppas över om du inte åsidosätter lås."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Visa inte nästa gång"
+msgstr "Visa inte nästa gång."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
@@ -2979,9 +2979,8 @@ msgid "Helper Applications"
 msgstr "Hjälpapplikationer"
 
 #: common/dialogs/panel_common_settings_base.cpp:108
-#, fuzzy
 msgid "Text editor:"
-msgstr "Textredigerare"
+msgstr "Textredigerare:"
 
 #: common/dialogs/panel_common_settings_base.cpp:120
 msgid "System default PDF viewer"
@@ -3414,9 +3413,8 @@ msgstr "Busstjocklek"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:827
-#, fuzzy
 msgid "Line Style"
-msgstr "Linjestil:"
+msgstr "Linjestil"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58 common/pgm_base.cpp:75
 #: common/widgets/footprint_select_widget.cpp:215
@@ -4803,9 +4801,8 @@ msgid "Hierarchical labels"
 msgstr "Hierarkiska etiketter"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Pin numbers"
-msgstr "PIN-nummer:"
+msgstr "PIN-nummer"
 
 #: common/layer_id.cpp:113
 msgid "Pin names"
@@ -4844,9 +4841,8 @@ msgid "Pins"
 msgstr "Stift"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Sheet borders"
-msgstr "Arkgräns:"
+msgstr "Arkgräns"
 
 #: common/layer_id.cpp:123
 msgid "Sheet backgrounds"
@@ -4980,9 +4976,8 @@ msgid "Tracks"
 msgstr "Banor"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Through vias"
-msgstr "Genom vias:"
+msgstr "Genom vias"
 
 #: common/layer_id.cpp:155
 msgid "Bl/Buried vias"
@@ -5904,9 +5899,8 @@ msgid "Update schematic with changes made to PCB"
 msgstr "Uppdatera schemat med ändringar gjorda på PCB"
 
 #: common/tool/actions.cpp:592
-#, fuzzy
 msgid "Accelerated Graphics"
-msgstr "Accelererad grafik:"
+msgstr "Accelererad grafik"
 
 #: common/tool/actions.cpp:592
 msgid "Use hardware-accelerated graphics (recommended)"
@@ -7999,9 +7993,8 @@ msgid "Text:"
 msgstr "Text:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:81
-#, fuzzy
 msgid "Text Size:"
-msgstr "Textstorlek"
+msgstr "Textstorlek:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:98
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
@@ -8254,10 +8247,11 @@ msgstr "Ändra svårighetsgrad till Fel för alla '%s' - överträdelser"
 
 #: eeschema/dialogs/dialog_erc.cpp:526 eeschema/dialogs/dialog_erc.cpp:532
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
+#, fuzzy
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Överträdelsens svårighetsgrad kan också redigeras i dialogrutan Board "
-"Setup ..."
+"Setup..."
 
 #: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
@@ -8284,7 +8278,7 @@ msgstr "Redigera svårighetsgraden ..."
 #: eeschema/dialogs/dialog_erc.cpp:548
 #, fuzzy
 msgid "Open the Schematic Setup... dialog"
-msgstr "Öppna dialogrutan Schematisk inställning ..."
+msgstr "Öppna dialogrutan Schematisk inställning..."
 
 #: eeschema/dialogs/dialog_erc.cpp:640
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -8532,9 +8526,8 @@ msgstr "Satt till"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:158
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
-#, fuzzy
 msgid "Text size:"
-msgstr "Textstorlek"
+msgstr "Textstorlek:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
@@ -8574,9 +8567,8 @@ msgid "Line color:"
 msgstr "Linjefärg:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:305
-#, fuzzy
 msgid "Line style:"
-msgstr "Stil för linje"
+msgstr "Stil för linje:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:321
 msgid "Sheet background color:"
@@ -8737,9 +8729,8 @@ msgstr "Längd"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:62
 #: eeschema/fields_grid_table.cpp:203
-#, fuzzy
 msgid "X Position"
-msgstr "X-position:"
+msgstr "X-position"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:71
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:53
@@ -8747,9 +8738,8 @@ msgstr "X-position:"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:60
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:63
 #: eeschema/fields_grid_table.cpp:204
-#, fuzzy
 msgid "Y Position"
-msgstr "Y-position:"
+msgstr "Y-position"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:84
 msgid "Group by name"
@@ -9871,15 +9861,13 @@ msgstr "Importera inställningar från"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:127
-#, fuzzy
 msgid "File not found."
-msgstr "Filen hittades inte!"
+msgstr "Filen hittades inte."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
-#, fuzzy
 msgid "Import from:"
-msgstr "Importera från"
+msgstr "Importera från:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:27
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:31
@@ -9934,7 +9922,7 @@ msgstr "Ersätt med:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
-msgstr "Vägvisning"
+msgstr "Vägvisning:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "F&orward"
@@ -10611,12 +10599,12 @@ msgstr "DC-förskjutning:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:687
 #: eeschema/dialogs/dialog_spice_model_base.cpp:765
 msgid "Amplitude:"
-msgstr "Amplitud"
+msgstr "Amplitud:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:824
 msgid "Frequency:"
-msgstr "Frekvens"
+msgstr "Frekvens:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:497
 #: pcb_calculator/widgets/unit_selector.cpp:103
@@ -11581,9 +11569,9 @@ msgid "Library '%s' not found."
 msgstr "Biblioteket '%s' hittades inte."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Det gick inte att skapa symbolbiblioteksfil \"%s\""
+msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:951
 msgid ""
@@ -12005,9 +11993,8 @@ msgstr ""
 "Detta kan orsaka trasiga symbolbibliotekslänkar under vissa förhållanden."
 
 #: eeschema/files-io.cpp:464 eeschema/files-io.cpp:496
-#, fuzzy
 msgid "Do not show this dialog again."
-msgstr "Visa inte denna dialog igen"
+msgstr "Visa inte denna dialog igen."
 
 #: eeschema/files-io.cpp:489
 msgid "The schematic file will be converted to the new file format on save."
@@ -12251,7 +12238,7 @@ msgstr ""
 
 #: eeschema/libarch.cpp:108
 msgid "Unexpected exception occurred."
-msgstr "Ett oväntat undantag inträffade"
+msgstr "Ett oväntat undantag inträffade."
 
 #: eeschema/libarch.cpp:123
 #, c-format
@@ -12352,9 +12339,8 @@ msgid "Could not find library file %s"
 msgstr "Kunde inte hitta biblioteksfilen %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:122
-#, fuzzy
 msgid "Run command:"
-msgstr "Kör kommandon"
+msgstr "Kör kommandon:"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:128
 #, c-format
@@ -14025,9 +14011,8 @@ msgstr ""
 "Vill du fortsätta?"
 
 #: eeschema/sheet.cpp:569
-#, fuzzy
 msgid "Do not show this message again."
-msgstr "Visa inte detta meddelande igen"
+msgstr "Visa inte detta meddelande igen."
 
 #: eeschema/sheet.cpp:570
 msgid "Create New Sheet"
@@ -15946,9 +15931,8 @@ msgstr "Ingen av rutnät eller dubbla stift hittades."
 #: eeschema/tools/ee_selection_tool.cpp:1402
 #: pagelayout_editor/tools/pl_selection_tool.cpp:587
 #: pcbnew/tools/pcb_selection_tool.cpp:1746
-#, fuzzy
 msgid "Select &All\tA"
-msgstr "Välj & Alla A."
+msgstr "Välj & Alla\tA"
 
 #: eeschema/tools/ee_selection_tool.cpp:1405
 #: pcbnew/tools/pcb_selection_tool.cpp:1749
@@ -16450,9 +16434,8 @@ msgid "Open Gerber File(s)"
 msgstr "Öppna Gerber-fil (er)"
 
 #: gerbview/files.cpp:228
-#, fuzzy
 msgid "File not found:"
-msgstr "Filen hittades inte!"
+msgstr "Filen hittades inte:"
 
 #: gerbview/files.cpp:240
 msgid "Loading Gerber files..."
@@ -17644,9 +17627,9 @@ msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s öppnade [pid = %ld]\n"
 
 #: libs/kiplatform/msw/environment.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Felkod: %s"
+msgstr "Felkod: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -17771,9 +17754,8 @@ msgid "Set to 0 to disable this constraint"
 msgstr "Ställ in på 0 för att inaktivera denna begränsning"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
-#, fuzzy
 msgid "Maximum height:"
-msgstr "Maxhöjd"
+msgstr "Maxhöjd:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 msgid "Set to 0 to use default values"
@@ -18474,7 +18456,7 @@ msgstr "<= 2%"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:641
 msgid "Tolerance"
-msgstr "Tolerans:"
+msgstr "Tolerans"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
 msgid "1st Band"
@@ -19654,14 +19636,12 @@ msgid "no layers"
 msgstr "inga lager"
 
 #: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1035 pcbnew/track.cpp:1052
-#, fuzzy
 msgid "Position X"
-msgstr "Position X:"
+msgstr "Position X"
 
 #: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1038 pcbnew/track.cpp:1055
-#, fuzzy
 msgid "Position Y"
-msgstr "Position Y:"
+msgstr "Position Y"
 
 #: pcbnew/board_item.cpp:187
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
@@ -20631,9 +20611,8 @@ msgstr "Designregler"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83 pcbnew/router/router_tool.cpp:777
 #: pcbnew/router/router_tool.cpp:798
-#, fuzzy
 msgid "Constraints"
-msgstr "Begränsning:"
+msgstr "Begränsning"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
@@ -20693,9 +20672,8 @@ msgid "Through hole:"
 msgstr "Genom hål:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
-#, fuzzy
 msgid "Connector:"
-msgstr "Förbindelser"
+msgstr "Förbindelser:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:144
 msgid "NPTH:"
@@ -21076,9 +21054,8 @@ msgid "Electrical Properties"
 msgstr "Elektriska egenskaper"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
-#, fuzzy
 msgid "Clearance:"
-msgstr "Avstånd"
+msgstr "Avstånd:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:64
@@ -21278,7 +21255,7 @@ msgstr "poängräkning"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 msgid "Bad parameters"
-msgstr "Felaktiga parametrar!"
+msgstr "Felaktiga parametrar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
@@ -21347,9 +21324,8 @@ msgid "From start value"
 msgstr "Från startvärde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:121
-#, fuzzy
 msgid "Initial Pad Number"
-msgstr "Ursprungligt padnummer:"
+msgstr "Ursprungligt padnummer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
@@ -21559,9 +21535,8 @@ msgstr "Text som ska skrivas ut efter måttvärdet"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
 #: pcbnew/dialogs/dialog_plot_base.cpp:387
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:125
-#, fuzzy
 msgid "Precision:"
-msgstr "Precision"
+msgstr "Precision:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
@@ -21614,9 +21589,8 @@ msgstr "Dimensionstext"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101
-#, fuzzy
 msgid "Text width"
-msgstr "Text bredd:"
+msgstr "Text bredd"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:169
@@ -21625,9 +21599,8 @@ msgstr "Text pos X"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:120
-#, fuzzy
 msgid "Text height"
-msgstr "Text höjd:"
+msgstr "Text höjd"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
@@ -21684,7 +21657,7 @@ msgstr "Spegeltext"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:131
 msgid "Justification:"
-msgstr "Motivering"
+msgstr "Motivering:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
 msgid "Position mode:"
@@ -21760,7 +21733,7 @@ msgstr "-------- DRC avbröts av användaren. <br> <br>"
 #: pcbnew/dialogs/dialog_drc.cpp:468
 #, fuzzy
 msgid "Open the Board Setup... dialog"
-msgstr "Öppna dialogrutan Board Setup ..."
+msgstr "Öppna dialogrutan Board Setup..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:634
 #, c-format
@@ -21948,9 +21921,8 @@ msgstr "Tillverkningsattribut"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:183
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
-#, fuzzy
 msgid "Component:"
-msgstr "Komponenter"
+msgstr "Komponenter:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
@@ -22295,9 +22267,9 @@ msgstr "Uppdatera fotavtryck från biblioteket"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
-msgstr "Filen %1 finns redan."
+msgstr "Filen %s finns redan."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
@@ -22308,7 +22280,7 @@ msgstr "Det gick inte att skapa %s"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr "Filnamn"
+msgstr "Filnamn:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
@@ -23011,9 +22983,8 @@ msgid "Report file %s created\n"
 msgstr "Rapportfil %s skapad\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
-#, fuzzy
 msgid "Output folder:"
-msgstr "Utdatakatalog"
+msgstr "Utdatakatalog:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
@@ -23560,7 +23531,7 @@ msgstr "Gruppnamn:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
 msgid "Group members:"
-msgstr "Gruppmedlemmar"
+msgstr "Gruppmedlemmar:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:62
 msgid "Group Properties"
@@ -23996,9 +23967,9 @@ msgid "Select a corner to delete."
 msgstr "Välj ett hörn att radera."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Fotavtryck %s (%s), %s, roterad %.1f grader"
+msgstr "Fotavtryck %s (%s), %s, roterad %g grader"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:475
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
@@ -24622,9 +24593,8 @@ msgid "Scaling factor:"
 msgstr "Skalningsfaktor:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1394
-#, fuzzy
 msgid "Duplicate:"
-msgstr "Duplicera"
+msgstr "Duplicera:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1562
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
@@ -24847,9 +24817,8 @@ msgid "Remove silkscreen from areas without soldermask"
 msgstr "Ta bort silkscreen från områden utan lödmask"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:219
-#, fuzzy
 msgid "Coordinate format:"
-msgstr "Koordinatformat"
+msgstr "Koordinatformat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
 msgid "4.5, unit mm"
@@ -25542,7 +25511,7 @@ msgstr "Egenskaper för textavtryck"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:78
 msgid "Reference:"
-msgstr "Referens"
+msgstr "Referens:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:277
 #, c-format
@@ -25729,9 +25698,8 @@ msgid "&Remove unused layers"
 msgstr "&Ta bort oanvända"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Keep unused layers"
-msgstr "Odefinierade lager:"
+msgstr "Odefinierade lager"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
@@ -26111,9 +26079,8 @@ msgid "Add Existing"
 msgstr "Lägg till befintlig"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:166
-#, fuzzy
 msgid "Path Substitutions"
-msgstr "Banbytningar:"
+msgstr "Banbytningar"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -26275,9 +26242,8 @@ msgid "Minimum through hole:"
 msgstr "Minimalt genomgående hål:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:309
-#, fuzzy
 msgid "Hole to hole clearance:"
-msgstr "Hål till hål"
+msgstr "Hål till hål:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:332
 msgid "uVias"
@@ -27267,9 +27233,9 @@ msgid "Checking %s; edge clearance: %s."
 msgstr "Kontroll %s; kantavstånd: %s."
 
 #: pcbnew/drc/drc_engine.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Kontrollerar %s"
+msgstr "Kontrollerar %s."
 
 #: pcbnew/drc/drc_engine.cpp:816
 msgid "Board and netclass clearances apply only between copper items."
@@ -27396,9 +27362,8 @@ msgid "Drilled holes too close together"
 msgstr "Borrade hål för nära varandra"
 
 #: pcbnew/drc/drc_item.cpp:97
-#, fuzzy
 msgid "Track width"
-msgstr "Spårtjocklek:"
+msgstr "Spårtjocklek"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Annular width"
@@ -27409,9 +27374,8 @@ msgid "Drill out of range"
 msgstr "Borra utom räckhåll"
 
 #: pcbnew/drc/drc_item.cpp:109
-#, fuzzy
 msgid "Via diameter"
-msgstr "Via diameter:"
+msgstr "Via diameter"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
@@ -27506,7 +27470,7 @@ msgstr "FEL i uttryck."
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FEL: <a href='%d:%d'> %d '> %s </a> %s"
+msgstr "FEL: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
@@ -27534,9 +27498,9 @@ msgstr "Okänt objekt '%s'. | Förväntat versionsnummer"
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
 #: pcbnew/drc/drc_rule_parser.cpp:407 pcbnew/drc/drc_rule_parser.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'."
-msgstr "Okänt objekt '%s'"
+msgstr "Okänt objekt '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:415
@@ -28162,9 +28126,8 @@ msgid "Status: "
 msgstr "Status: "
 
 #: pcbnew/footprint.cpp:779
-#, fuzzy
 msgid "Attributes:"
-msgstr "Attribut"
+msgstr "Attribut:"
 
 #: pcbnew/footprint.cpp:784
 #, c-format
@@ -28344,9 +28307,9 @@ msgstr "Fotavtryck exporterat till filen \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:431
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2379
-#, fuzzy, c-format
+#, c-format
 msgid "Library \"%s\" is read only."
-msgstr "Biblioteket \"%s\" är skrivskyddat"
+msgstr "Biblioteket \"%s\" är skrivskyddat."
 
 #: pcbnew/footprint_libraries_utils.cpp:437
 #, c-format
@@ -30322,14 +30285,14 @@ msgid "Library directory \"%s\" has unexpected sub-directories."
 msgstr "Bibliotekets katalog \"%s\" har oväntade underkataloger."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2450
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
-msgstr "oväntad fil \"%s\" hittades i bibliotekssökvägen \"%s\""
+msgstr "oväntad fil \"%s\" hittades i bibliotekssökvägen \"%s\"."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2466
 #, c-format
 msgid "Footprint library \"%s\" cannot be deleted."
-msgstr "Fotavtrycksbiblioteket \"%s\" kan inte tas bort"
+msgstr "Fotavtrycksbiblioteket \"%s\" kan inte tas bort."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:199
 #, c-format
@@ -31411,9 +31374,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:90
-#, fuzzy
 msgid "Special Tools"
-msgstr "Specialverktyg..."
+msgstr "Specialverktyg"
 
 #: pcbnew/tools/edit_tool.cpp:370
 msgid "Select reference point for move..."
@@ -32843,9 +32805,8 @@ msgid "Open Interactive Router settings"
 msgstr "Öppna Interactive Router-inställningar"
 
 #: pcbnew/tools/pcb_actions.cpp:1266
-#, fuzzy
 msgid "Differential Pair Dimensions..."
-msgstr "Differentiella parmått"
+msgstr "Differentiella parmått..."
 
 #: pcbnew/tools/pcb_actions.cpp:1266
 msgid "Open Differential Pair Dimension settings"
