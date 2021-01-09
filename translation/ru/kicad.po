@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-08 13:50+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3687,7 +3687,7 @@ msgstr "Настройки"
 #: common/eda_base_frame.cpp:850 common/hotkey_store.cpp:65
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "Общее"
+msgstr "Общие"
 
 #: common/eda_base_frame.cpp:852
 msgid "Mouse and Touchpad"
@@ -5221,9 +5221,8 @@ msgid "Select Preferred Editor"
 msgstr "Выбор предпочитаемого редактора"
 
 #: common/pgm_base.cpp:221
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "Имя переменной окружения не может быть пустым."
+msgstr "Переменная окружения HOME пуста. Дальнейшая работа невозможна."
 
 #: common/pgm_base.cpp:232
 #, c-format
@@ -8042,9 +8041,8 @@ msgstr "Справка по синтаксису"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Показать окно консоли"
+msgstr "Показать окно справки по синтаксису"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -23235,7 +23233,6 @@ msgid "Footprints"
 msgstr "Посад.места"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
 msgstr "Дорожки и перех.отв."
 
@@ -23252,14 +23249,12 @@ msgid "Filter Settings"
 msgstr "Настройки фильтра"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "Заблокированные дорожки"
+msgstr "Заблокированная графика"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "Разблокированные дорожки"
+msgstr "Разблокированная графика"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -25639,7 +25634,7 @@ msgstr "Обновление цепей"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Automatically update via nets"
-msgstr "Обновлять цепи перех.отв. автоматически"
+msgstr "Автоматически обновлять цепи перех.отв."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -25748,28 +25743,24 @@ msgid "&Pads"
 msgstr "Конт.пл."
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Remove unused layers"
-msgstr "Удалить неиспользуемые"
+msgstr "Удалить неиспользуемые слои"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Keep unused layers"
-msgstr "Неопределённые слои:"
+msgstr "Оставить неиспользуемые слои"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
 msgstr "Только выделенные"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "Запретить перех.отв."
+msgstr "Оставить наружные слои"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "Удалить неиспользуемые конт.пл..."
+msgstr "Удалить неиспользуемые конт.пл."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -31482,7 +31473,7 @@ msgstr "Не все отрезки дорожки удалось скругли�
 
 #: pcbnew/tools/edit_tool.cpp:1227 pcbnew/tools/pcb_actions.cpp:289
 msgid "Change Side / Flip"
-msgstr ""
+msgstr "Сменить сторону/перевернуть"
 
 #: pcbnew/tools/edit_tool.cpp:1364 pcbnew/tools/zone_filler_tool.cpp:172
 msgid "Fill Zone"
