@@ -207,7 +207,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     overlayManager( nullptr ),
     mainBuffer( 0 ),
     overlayBuffer( 0 ),
-    isContextLocked( false ),
+    m_isContextLocked( false ),
     lockClientCookie( 0 )
 {
     if( glMainContext == NULL )
@@ -412,7 +412,7 @@ void OPENGL_GAL::beginDrawing()
     PROF_COUNTER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
 #endif /* __WXDEBUG__ */
 
-    wxASSERT_MSG( isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "
+    wxASSERT_MSG( m_isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "
                                    "Calling GAL::beginDrawing() directly is not allowed." );
 
     wxASSERT_MSG( IsVisible(), "GAL::beginDrawing() must not be entered when GAL is not visible. "
@@ -556,7 +556,7 @@ void OPENGL_GAL::beginDrawing()
 
 void OPENGL_GAL::endDrawing()
 {
-    wxASSERT_MSG( isContextLocked, "What happened to the context lock?" );
+    wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
 #ifdef __WXDEBUG__
     PROF_COUNTER totalRealTime( "OPENGL_GAL::endDrawing()", true );
@@ -595,8 +595,8 @@ void OPENGL_GAL::endDrawing()
 
 void OPENGL_GAL::lockContext( int aClientCookie )
 {
-    wxASSERT_MSG( !isContextLocked, "Context already locked." );
-    isContextLocked = true;
+    wxASSERT_MSG( !m_isContextLocked, "Context already locked." );
+    m_isContextLocked = true;
     lockClientCookie = aClientCookie;
 
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
@@ -605,13 +605,13 @@ void OPENGL_GAL::lockContext( int aClientCookie )
 
 void OPENGL_GAL::unlockContext( int aClientCookie )
 {
-    wxASSERT_MSG( isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
+    wxASSERT_MSG( m_isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
                                    "be stacked rather than making separate lock/unlock calls." );
 
     wxASSERT_MSG( lockClientCookie == aClientCookie, "Context was locked by a different client. "
                                                      "Should not be possible with RAII objects." );
 
-    isContextLocked = false;
+    m_isContextLocked = false;
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
@@ -619,7 +619,7 @@ void OPENGL_GAL::unlockContext( int aClientCookie )
 
 void OPENGL_GAL::beginUpdate()
 {
-    wxASSERT_MSG( isContextLocked, "GAL_UPDATE_CONTEXT RAII object should have locked context. "
+    wxASSERT_MSG( m_isContextLocked, "GAL_UPDATE_CONTEXT RAII object should have locked context. "
                                    "Calling this from anywhere else is not allowed." );
 
     wxASSERT_MSG( IsVisible(), "GAL::beginUpdate() must not be entered when GAL is not visible. "
@@ -2099,7 +2099,7 @@ void OPENGL_GAL::init()
 
     wxASSERT( IsShownOnScreen() );
 
-    wxASSERT_MSG( isContextLocked, "This should only be called from within a locked context." );
+    wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
 
 // IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
 // starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)

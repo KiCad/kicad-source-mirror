@@ -270,6 +270,11 @@ public:
 
     void EnableDepthTest( bool aEnabled = false ) override;
 
+    bool IsContextLocked() override
+    {
+        return m_isContextLocked;
+    }
+
     ///< Parameters passed to the GLU tesselator
     typedef struct
     {
@@ -320,7 +325,7 @@ private:
     bool                    isInitialized;              ///< Basic initialization flag, has to be done
                                                         ///< when the window is visible
     bool                    isGrouping;                 ///< Was a group started?
-    bool                    isContextLocked;            ///< Used for assertion checking
+    bool                    m_isContextLocked;            ///< Used for assertion checking
     int                     lockClientCookie;
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;

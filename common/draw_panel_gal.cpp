@@ -257,6 +257,10 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
+    // If we get a second wx update call before the first finishes, don't crash
+    if( m_gal->IsContextLocked() )
+        return;
+
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize clientSize = GetClientSize();
     WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;

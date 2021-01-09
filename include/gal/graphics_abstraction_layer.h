@@ -1016,6 +1016,15 @@ public:
 
     virtual void EnableDepthTest( bool aEnabled = false ) {};
 
+    /**
+     * Checks the state of the context lock
+     * @return True if the context is currently locked
+     */
+    virtual bool IsContextLocked()
+    {
+        return false;
+    }
+
 protected:
     /// Private: use GAL_CONTEXT_LOCKER RAII object
     virtual void lockContext( int aClientCookie ) {}
