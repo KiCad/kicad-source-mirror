@@ -173,11 +173,20 @@ void DIALOG_GLOBAL_DELETION::acceptPcbDelete()
                     if( !delDrawings || !masque_layer[layer] )
                         continue;
 
-                    if( dwg->IsLocked() && !m_drawingFilterLocked->GetValue() )
-                        continue;
+                    if( layer == Edge_Cuts )
+                    {
+                        // We currently don't differentiate between locked and unlocked board
+                        // edges.  (If we did, we'd also need to add checkboxes to filter them
+                        // as overloading m_drawingFilter* would be confusing.)
+                    }
+                    else
+                    {
+                        if( dwg->IsLocked() && !m_drawingFilterLocked->GetValue() )
+                            continue;
 
-                    if( !dwg->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
-                        continue;
+                        if( !dwg->IsLocked() && !m_drawingFilterUnlocked->GetValue() )
+                            continue;
+                    }
                 }
                 else if( type == PCB_TEXT_T )
                 {
