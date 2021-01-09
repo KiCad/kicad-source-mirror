@@ -341,8 +341,9 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
     wxChar      decimal_point = lc->decimal_point[0];
     wxString    buf( aTextValue.Strip( wxString::both ) );
 
-    // Convert the period in decimal point
+    // Convert any entered decimal point separators to the 'right' one
     buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
 
     // Find the end of the numeric part
     unsigned brk_point = 0;
@@ -351,7 +352,7 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
     {
         wxChar ch = buf[brk_point];
 
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+        if( !( (ch >= '0' && ch <= '9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
         {
             break;
         }
