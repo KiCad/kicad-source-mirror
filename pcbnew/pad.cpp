@@ -392,10 +392,18 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         // GAL renders rectangles faster than 4-point polygons so it's worth checking if our
         // body shape is a rectangle.
         if( corners.PointCount() == 4
-                && corners.CPoint( 0 ).y == corners.CPoint( 1 ).y
-                && corners.CPoint( 1 ).x == corners.CPoint( 2 ).x
-                && corners.CPoint( 2 ).y == corners.CPoint( 3 ).y
-                && corners.CPoint( 4 ).x == corners.CPoint( 0 ).x )
+                &&
+                ( ( corners.CPoint( 0 ).y == corners.CPoint( 1 ).y
+                    && corners.CPoint( 1 ).x == corners.CPoint( 2 ).x
+                    && corners.CPoint( 2 ).y == corners.CPoint( 3 ).y
+                    && corners.CPoint( 3 ).x == corners.CPoint( 0 ).x )
+                    ||
+                ( corners.CPoint( 0 ).x == corners.CPoint( 1 ).x
+                    && corners.CPoint( 1 ).y == corners.CPoint( 2 ).y
+                    && corners.CPoint( 2 ).x == corners.CPoint( 3 ).x
+                    && corners.CPoint( 3 ).y == corners.CPoint( 0 ).y )
+                )
+            )
         {
             int width  = std::abs( corners.CPoint( 2 ).x - corners.CPoint( 0 ).x );
             int height = std::abs( corners.CPoint( 2 ).y - corners.CPoint( 0 ).y );
