@@ -323,12 +323,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Footprint can be freely moved and oriented on the "
                                            "canvas. At least some of the footprint's pads are "
-                                           "unlocked and can be moved with respect to the"
+                                           "unlocked and can be moved with respect to the "
                                            "footprint." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Footprint can be freely moved and oriented on the "
                                            "canvas, but all of its pads are locked with respect "
                                            "to their position within in the footprint." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Footprint is locked: it cannot be freely moved and"
+    m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Footprint is locked: it cannot be freely moved and "
                                            "oriented on the canvas and can only be selected when "
                                            "the 'Locked items' checkbox is enabled in the "
                                            "selection filter." ) );
