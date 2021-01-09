@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-08 13:50+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5194,9 +5194,8 @@ msgid "Select Preferred Editor"
 msgstr "Wybierz preferowany edytor"
 
 #: common/pgm_base.cpp:221
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "Nazwa zmiennej nie może być pusta."
+msgstr "Zmienna środowiskowa HOME jest pusta.  Nie można kontynuować."
 
 #: common/pgm_base.cpp:232
 #, c-format
@@ -8044,9 +8043,8 @@ msgstr "Pomoc dla składni"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Pokaż okno konsoli"
+msgstr "Pokaż okno z pomocą na temat składni"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -9454,7 +9452,7 @@ msgstr "Alternatywna nazwa pinu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:189
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr "Alternatywne definicje pinów nie są dostępne w kompnentach DeMorgan."
+msgstr "Alternatywne definicje pinów nie są dostępne w komponentach DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -23309,7 +23307,6 @@ msgid "Footprints"
 msgstr "Footprinty"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
 msgstr "Ścieżki i przelotki"
 
@@ -23326,14 +23323,12 @@ msgid "Filter Settings"
 msgstr "Ustawienia filtrowania"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
-#, fuzzy
 msgid "Locked graphics"
-msgstr "Zablokowane ścieżki"
+msgstr "Zablokowane el. graficzne"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "Odblokowane ścieżki"
+msgstr "Odblokowane el. graficzne"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -25836,28 +25831,24 @@ msgid "&Pads"
 msgstr "Pola lutownicze"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Remove unused layers"
-msgstr "Usuń nieużywane"
+msgstr "Usuń nieużywane warstwy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Keep unused layers"
-msgstr "Niezdefiniowana warstwa:"
+msgstr "Zachowaj nieużywane warstwy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
 msgstr "Tylko zaznaczone"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "Wyklucz przelotki"
+msgstr "Zachowaj warstwy zewnętrzne"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "Usuń nieużywane pola lutownicze..."
+msgstr "Usuń nieużywane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -30848,7 +30839,7 @@ msgstr "Dostrojono: odchyłka "
 
 #: pcbnew/router/pns_router.cpp:195
 msgid "Cannot start routing from a non-plated hole."
-msgstr "Nie można rozpocząć trasowania z pola nie pokrytego miedzią."
+msgstr "Nie można rozpocząć trasowania z otworu bez metalizacji."
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
@@ -31618,7 +31609,7 @@ msgstr "Pewne segmenty ścieżek nie mogły zostać zaokrąglone."
 
 #: pcbnew/tools/edit_tool.cpp:1227 pcbnew/tools/pcb_actions.cpp:289
 msgid "Change Side / Flip"
-msgstr ""
+msgstr "Zmień stronę / obróć"
 
 #: pcbnew/tools/edit_tool.cpp:1364 pcbnew/tools/zone_filler_tool.cpp:172
 msgid "Fill Zone"
