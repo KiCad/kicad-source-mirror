@@ -43,9 +43,7 @@ using namespace std::placeholders;
 #include <kiway.h>
 #include <lib_id.h>
 #include <macros.h>
-#include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <view/view_controls.h>
@@ -120,16 +118,15 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     AddFootprintToBoard( newFootprint );
 
-    // Clear references to any net info, because the footprint editor
-    // does know any thing about nets handled by the current edited board.
-    // Morever we do not want to save any reference to an unknown net when
-    // saving the footprint in lib cache
-    // so we force the ORPHANED dummy net info for all pads
+    // Clear references to any net info, because the footprint editor does know any thing about
+    // nets handled by the current edited board.
+    // Morever we do not want to save any reference to an unknown net when saving the footprint
+    // in lib cache so we force the ORPHANED dummy net info for all pads.
     newFootprint->ClearAllNets();
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     PlaceFootprint( newFootprint );
-    newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+    newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not yet be initialized
 
     // Put it on FRONT layer,
     // because this is the default in Footprint Editor, and in libs
@@ -179,7 +176,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
         // (for this reason delete operator cannot be used blindly with "top level" windows)
         // so gives a slice of time to delete the viewer frame.
         // This is especially important in OpenGL mode to avoid recreating context before
-        // the old one is deleted
+        // the old one is deleted.
         wxSafeYield();
     }
 
@@ -212,13 +209,12 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
                                                     _( "Loading Footprint Libraries" ), 3 );
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
     bool cancel = progressReporter->WasCancelled();
-    // Force immediate deletion of the WX_PROGRESS_REPORTER
-    // ( do not use Destroy(), or use Destroy() followed by wxSafeYield() )
-    // because on Windows, APP_PROGRESS_DIALOG or WX_PROGRESS_REPORTER has some side
-    // effects on the event loop manager.
-    // A side effect is the call of ShowModal() or ShowQuasiModal() of a dialog following
-    // the use of  a WX_PROGRESS_REPORTER
-    // has a broken behavior (incorrect modal or quasi modal behavior).
+
+    // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
+    // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
+    // WX_PROGRESS_REPORTER have some side effects on the event loop manager.  For instance, a
+    // subsequent call to ShowModal() or ShowQuasiModal() for a dialog following the use of a
+    // WX_PROGRESS_REPORTER results in incorrect modal or quasi modal behavior.
     delete progressReporter;
 
     if( cancel )
@@ -434,7 +430,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 }
 
 
-static FOOTPRINT* s_FootprintInitialCopy = NULL;       // Copy of footprint for abort/undo command
+static FOOTPRINT* s_FootprintInitialCopy = NULL;    // Copy of footprint for abort/undo command
 
 static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
                                                     //   and dragged tracks

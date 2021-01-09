@@ -92,10 +92,9 @@ bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
 
 void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 {
-    // @todo: go to a more HTML !<table>! ? centric output, possibly with
-    // recommendations for remedy of errors.  Add numeric error codes
-    // to PARSE_ERROR, and switch on them for remedies, etc.  Full
-    // access is provided to everything in every exception!
+    // @todo: go to a more HTML !<table>! ? centric output, possibly with recommendations
+    // for remedy of errors.  Add numeric error codes to PARSE_ERROR, and switch on them for
+    // remedies, etc.  Full access is provided to everything in every exception!
 
     HTML_MESSAGE_BOX dlg( aWindow, _( "Load Error" ) );
 
