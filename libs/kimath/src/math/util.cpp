@@ -32,7 +32,13 @@ template<>
 int rescale( int aNumerator, int aValue, int aDenominator )
 {
     int64_t numerator = (int64_t) aNumerator * (int64_t) aValue;
-    return numerator / aDenominator;
+
+    // round to nearest
+    if( ( numerator < 0 ) ^ ( aDenominator < 0 ) )
+        return ( numerator - aDenominator / 2 ) / aDenominator;
+    else
+        return ( numerator + aDenominator / 2 ) / aDenominator;
+
 }
 
 

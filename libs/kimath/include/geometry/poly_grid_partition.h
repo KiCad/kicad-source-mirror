@@ -55,6 +55,8 @@
  * - idem for the edge to the right of (p), just reverse the edge types
  * - if the cell doesn't contain any edges, scan horizontal cells to the left and right (switching sides with each iteration)
  *   until an edge if found.
+ * NOTE: the rescale_trunc() function is used for grid<->world coordinate conversion because it rounds towards 0 (not to nearest)
+ * It's important as rouding to nearest (which the standard rescale() function does) will shift the grid by half a cell.
  */
 
 class POLY_GRID_PARTITION
@@ -218,12 +220,18 @@ private:
         return false;
     }
 
+    int rescale_trunc( int aNumerator, int aValue, int aDenominator ) const
+    {
+        int64_t numerator = (int64_t) aNumerator * (int64_t) aValue;
+        return numerator / aDenominator;
+    }
+
+
     // convertes grid cell coordinates to the polygon coordinates
     const VECTOR2I grid2poly( const VECTOR2I& p ) const
     {
-        int px  = rescale( p.x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
-        int py  = rescale( p.y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y;     // (int) floor( (double) p.y / m_gridSize * (double) m_bbox.GetHeight() + m_bbox.GetPosition().y );
-
+        int px  = rescale_trunc( p.x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
+        int py  = rescale_trunc( p.y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y; 
         return VECTOR2I( px, py );
     }
 
@@ -235,18 +243,18 @@ private:
 
     int grid2polyX( int x ) const
     {
-        return rescale( x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
+        return rescale_trunc( x, m_bbox.GetWidth(), m_gridSize ) + m_bbox.GetPosition().x;
     }
 
     int grid2polyY( int y ) const
     {
-        return rescale( y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y;
+        return rescale_trunc( y, m_bbox.GetHeight(), m_gridSize ) + m_bbox.GetPosition().y;
     }
 
     const VECTOR2I poly2grid( const VECTOR2I& p ) const
     {
-        int px  = rescale( p.x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
-        int py  = rescale( p.y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
+        int px  = rescale_trunc( p.x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
+        int py  = rescale_trunc( p.y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
 
         if( px < 0 )
             px = 0;
@@ -265,7 +273,7 @@ private:
 
     int poly2gridX( int x ) const
     {
-        int px = rescale( x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
+        int px = rescale_trunc( x - m_bbox.GetPosition().x, m_gridSize, m_bbox.GetWidth() );
 
         if( px < 0 )
             px = 0;
@@ -278,7 +286,7 @@ private:
 
     int poly2gridY( int y ) const
     {
-        int py = rescale( y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
+        int py = rescale_trunc( y - m_bbox.GetPosition().y, m_gridSize, m_bbox.GetHeight() );
 
         if( py < 0 )
             py = 0;
@@ -379,7 +387,7 @@ private:
                 for( int x = gx0; x <= gx1; x++ )
                 {
                     int px  = grid2polyX( x );
-                    int py  = ( edge.A.y + rescale( dir.y, px - edge.A.x, dir.x ) );
+                    int py  = ( edge.A.y + rescale_trunc( dir.y, px - edge.A.x, dir.x ) );
                     int yy  = poly2gridY( py );
 
                     indices.insert( m_gridSize * yy + x );
@@ -402,7 +410,7 @@ private:
                 for( int y = gy0; y <= gy1; y++ )
                 {
                     int py  = grid2polyY( y );
-                    int px  = ( edge.A.x + rescale( dir.x, py - edge.A.y, dir.y ) );
+                    int px  = ( edge.A.x + rescale_trunc( dir.x, py - edge.A.y, dir.y ) );
                     int xx  = poly2gridX( px );
 
                     indices.insert( m_gridSize * y + xx );
