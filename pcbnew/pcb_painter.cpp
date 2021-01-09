@@ -966,7 +966,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             // inflation along separate axes.  So for those cases we build a dummy pad instead,
             // and inflate it.
 
-            if( pad_size.x + margin.x <= 0 || pad_size.y + margin.y <= 0 )
+            // Margin is added to both sides.  If the total margin is larger than the pad
+            // then don't display this layer
+            if( pad_size.x + 2 * margin.x <= 0 || pad_size.y + 2 * margin.y <= 0 )
                 return;
 
             dummyPad.reset( static_cast<PAD*>( aPad->Duplicate() ) );
