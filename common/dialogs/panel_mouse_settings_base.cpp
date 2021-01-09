@@ -115,15 +115,15 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizer1->Add( m_choiceRightButtonDrag, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer2->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
+	sbSizer2->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
+	bSizer1->Add( sbSizer2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Mouse Wheel and Touchpad Scrolling") ), wxVERTICAL );
 
-	m_staticText21 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Behavior of vertical touchpad or scroll wheel:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Behavior of vertical touchpad or scroll wheel movement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	sbSizer3->Add( m_staticText21, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -132,11 +132,11 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText19 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("While pressing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
 	fgSizer2->Add( m_staticText19, 0, wxALIGN_RIGHT|wxALL, 5 );
 
-	m_staticText17 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("No Modifiers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	fgSizer2->Add( m_staticText17, 0, wxALL, 5 );
 
@@ -168,7 +168,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_rbZoomAlt = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_rbZoomAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 
-	m_staticText11 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan up / down:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan up/down:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	fgSizer2->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
@@ -184,7 +184,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_rbPanVAlt = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_rbPanVAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 
-	m_staticText20 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left / right:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left/right:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
 	fgSizer2->Add( m_staticText20, 0, wxALIGN_RIGHT|wxALL, 5 );
 
@@ -203,13 +203,13 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	sbSizer3->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 24 );
 
-	m_checkEnablePanH = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left/right with horizontal touchpad or scroll wheel movement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkEnablePanH = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left/right with horizontal movement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnablePanH->SetToolTip( _("Pan the canvas left and right when scrolling left to right on the touchpad") );
 
 	sbSizer3->Add( m_checkEnablePanH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
+	bSizer1->Add( sbSizer3, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	this->SetSizer( bSizer1 );

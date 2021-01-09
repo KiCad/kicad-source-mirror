@@ -96,45 +96,55 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( gbSizer1, 0, wxEXPAND|wxALL, 15 );
 
 	wxStaticBoxSizer* sizerHelperApps;
-	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxHORIZONTAL );
+	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxVERTICAL );
 
-	wxGridBagSizer* gridHelperApps;
-	gridHelperApps = new wxGridBagSizer( 5, 3 );
-	gridHelperApps->SetFlexibleDirection( wxBOTH );
-	gridHelperApps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gridHelperApps->SetEmptyCellSize( wxSize( -1,1 ) );
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* textEditorLabel;
 	textEditorLabel = new wxStaticText( sizerHelperApps->GetStaticBox(), wxID_ANY, _("Text editor:"), wxDefaultPosition, wxDefaultSize, 0 );
 	textEditorLabel->Wrap( -1 );
-	gridHelperApps->Add( textEditorLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
+	bSizer61->Add( textEditorLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_textEditorPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textEditorPath->SetMinSize( wxSize( 280,-1 ) );
 
-	gridHelperApps->Add( m_textEditorPath, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 8 );
+	bSizer61->Add( m_textEditorPath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_textEditorBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	gridHelperApps->Add( m_textEditorBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizer61->Add( m_textEditorBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sizerHelperApps->Add( bSizer61, 0, wxEXPAND|wxRIGHT, 5 );
+
+
+	sizerHelperApps->Add( 0, 12, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
 	m_defaultPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
-	gridHelperApps->Add( m_defaultPDFViewer, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), 0, 4 );
+	bSizer8->Add( m_defaultPDFViewer, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	sizerHelperApps->Add( bSizer8, 0, wxEXPAND|wxBOTTOM, 3 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_otherPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("Other:"), wxDefaultPosition, wxDefaultSize, 0 );
-	gridHelperApps->Add( m_otherPDFViewer, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
+	bSizer7->Add( m_otherPDFViewer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_PDFViewerPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PDFViewerPath->SetMinSize( wxSize( 280,-1 ) );
 
-	gridHelperApps->Add( m_PDFViewerPath, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 8 );
+	bSizer7->Add( m_PDFViewerPath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_pdfViewerBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	gridHelperApps->Add( m_pdfViewerBtn, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizer7->Add( m_pdfViewerBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gridHelperApps->AddGrowableCol( 1 );
-
-	sizerHelperApps->Add( gridHelperApps, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	sizerHelperApps->Add( bSizer7, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bLeftSizer->Add( sizerHelperApps, 0, wxEXPAND|wxALL, 5 );
