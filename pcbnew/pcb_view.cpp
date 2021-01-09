@@ -98,18 +98,18 @@ void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
     {
         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( boardItem );
         footprint->RunOnChildren(
-                [this, aUpdateFlags]( BOARD_ITEM* aModItem )
+                [this, aUpdateFlags]( BOARD_ITEM* child )
                 {
-                    VIEW::Update( aModItem, aUpdateFlags );
+                    VIEW::Update( child, aUpdateFlags );
                 } );
     }
     else if( boardItem && boardItem->Type() == PCB_GROUP_T )
     {
         const PCB_GROUP* group = static_cast<const PCB_GROUP*>( boardItem );
         group->RunOnChildren(
-                [this, aUpdateFlags]( BOARD_ITEM* aModItem )
+                [this, aUpdateFlags]( BOARD_ITEM* child )
                 {
-                    VIEW::Update( aModItem, aUpdateFlags );
+                    Update( child, aUpdateFlags );
                 } );
     }
 
