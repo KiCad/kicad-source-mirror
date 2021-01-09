@@ -31,6 +31,7 @@
 #include <limits>
 #include <iostream>
 #include <sstream>
+#include <type_traits>
 
 #include <math/util.h>
 
@@ -376,15 +377,33 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
 template <class T>
 VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 {
-    // Avoid 0 radian rotation, case very frequently found
-    if( aAngle == 0.0 )
+    // Avoid common radian rotations that may allow for angular error
+    if( aAngle == 0.0 || aAngle == 2 * M_PI )
         return VECTOR2<T> ( T( x ), T( y ) );
+
+    if( aAngle == M_PI_2 )
+        return VECTOR2<T>( -T( y ), T( x ) );
+
+    if( aAngle == M_PI )
+        return VECTOR2<T>( -T(x), -T( y ) );
+
+    if( aAngle == 3 * M_PI_2 )
+        return VECTOR2<T>( T( y ), -T( x ) );
 
     double  sa  = sin( aAngle );
     double  ca  = cos( aAngle );
 
-    return VECTOR2<T> ( T( (double) x * ca - (double) y * sa ),
-                        T( (double) x * sa + (double) y * ca ) );
+    if( std::is_integral<T>::value )
+    {
+        return VECTOR2<T> ( KiROUND( (double) x * ca - (double) y * sa ),
+                            KiROUND( (double) x * sa + (double) y * ca ) );
+
+    }
+    else
+    {
+        return VECTOR2<T> ( T( (double) x * ca - (double) y * sa ),
+                            T( (double) x * sa + (double) y * ca ) );
+    }
 }
 
 
@@ -397,9 +416,24 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
     extended_type l_sq_current = (extended_type) x * x + (extended_type) y * y;
     extended_type l_sq_new = (extended_type) aNewLength * aNewLength;
 
-    return VECTOR2<T> (
-        ( x < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ),
-        ( y < 0 ? -1 : 1 ) * sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) * sign( aNewLength );
+    if( std::is_integral<T>::value )
+    {
+        return VECTOR2<T> (
+            ( x < 0 ? -1 : 1 ) *
+                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ),
+            ( y < 0 ? -1 : 1 ) *
+                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
+                    * sign( aNewLength ) );
+    }
+    else
+    {
+        return VECTOR2<T> (
+            ( x < 0 ? -1 : 1 ) *
+                std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ),
+            ( y < 0 ? -1 : 1 ) *
+                std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
+                    * sign( aNewLength );
+    }
 }
 
 
@@ -467,7 +501,7 @@ VECTOR2<T> VECTOR2<T>::operator*( const T& aFactor ) const
 template <class T>
 VECTOR2<T> VECTOR2<T>::operator/( const T& aFactor ) const
 {
-    VECTOR2<T> vector( x / aFactor, y / aFactor );
+    VECTOR2<T> vector( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
     return vector;
 }
 
