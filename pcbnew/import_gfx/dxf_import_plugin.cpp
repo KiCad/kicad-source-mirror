@@ -76,6 +76,7 @@
  *    8. There is no sane way to make text look perfect like the original CAD.
  *       DXF simply does mpt secifying text/font enough to make it portable.
  *       We however make do try to get it somewhat close/visually appealing.
+ *    9. We silently drop the z coordinate on 3d polylines
  */
 
 
@@ -422,14 +423,6 @@ void DXF_IMPORT_PLUGIN::endEntity()
 {
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
-
-    // skip 3d polylines we obviously can't support
-    // TODO: maybe inform the user somehow this was encountered?
-    if( m_curr_entity.m_EntityFlag & DL_POLYLINE3D )
-    {
-        m_curr_entity.Clear();
-        return;
-    }
 
     if( m_curr_entity.m_EntityType == DL_ENTITY_POLYLINE ||
         m_curr_entity.m_EntityType == DL_ENTITY_LWPOLYLINE )
