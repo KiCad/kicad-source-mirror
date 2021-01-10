@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2020 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,14 +118,20 @@ public:
 
     /**
      * Return an #FP_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
-     * fallBack table fragment.
+     * fall back table fragment.
+     *
+     * If \a aCheckIfEnabled is true, the library will be ignored even if it is disabled.
+     * Otherwise, the row found will be returned even if entry is disabled.
      *
      * The #PLUGIN is loaded and attached to the "plugin" field of the #FP_LIB_TABLE_ROW if
      * not already loaded.
      *
+     * @param aNickName is the name of library nickname to find.
+     * @param aCheckIfEnabled is the flag to check if the library found is enabled.
+     * @return the library \a NickName if found.
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
+    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName, bool aCheckIfEnabled = false );
 
     /**
      * Return a list of footprint names contained within the library given by @a aNickname.

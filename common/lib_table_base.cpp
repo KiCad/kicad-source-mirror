@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,7 +146,7 @@ bool LIB_TABLE::IsEmpty( bool aIncludeFallback )
 
 const wxString LIB_TABLE::GetDescription( const wxString& aNickname )
 {
-    // use "no exception" form of find row:
+    // Use "no exception" form of find row and ignore disabled flag.
     const LIB_TABLE_ROW* row = findRow( aNickname );
 
     if( row )
@@ -158,12 +158,9 @@ const wxString LIB_TABLE::GetDescription( const wxString& aNickname )
 
 bool LIB_TABLE::HasLibrary( const wxString& aNickname, bool aCheckEnabled ) const
 {
-    const LIB_TABLE_ROW* row = findRow( aNickname );
+    const LIB_TABLE_ROW* row = findRow( aNickname, aCheckEnabled );
 
     if( row == nullptr )
-        return false;
-
-    if( aCheckEnabled && !row->GetIsEnabled() )
         return false;
 
     return true;
@@ -172,7 +169,7 @@ bool LIB_TABLE::HasLibrary( const wxString& aNickname, bool aCheckEnabled ) cons
 
 wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars ) const
 {
-    const LIB_TABLE_ROW* row = findRow( aNickname );
+    const LIB_TABLE_ROW* row = findRow( aNickname, true );
 
     wxString retv;
 
@@ -183,8 +180,9 @@ wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars )
 }
 
 
-LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
+LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabled ) const
 {
+    LIB_TABLE_ROW* row = nullptr;
     LIB_TABLE* cur = (LIB_TABLE*) this;
 
     do
@@ -194,7 +192,12 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
         for( const std::pair<const wxString, int>& entry : cur->nickIndex )
         {
             if( entry.first == aNickName )
-                return &cur->rows[entry.second ];
+            {
+                row = &cur->rows[entry.second];
+
+                if( !aCheckIfEnabled || ( aCheckIfEnabled && row->GetIsEnabled() ) )
+                    return row;
+            }
         }
 
         // Repeat, this time looking for names that were "fixed" by legacy versions because
@@ -205,7 +208,12 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
             legacyLibName.Replace( " ", "_" );
 
             if( legacyLibName == aNickName )
-                return &cur->rows[entry.second ];
+            {
+                row = &cur->rows[entry.second];
+
+                if( !aCheckIfEnabled || ( aCheckIfEnabled && row->GetIsEnabled() ) )
+                    return row;
+            }
         }
 
         // not found, search fall back table(s), if any

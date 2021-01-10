@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -492,8 +492,12 @@ protected:
     /**
      * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
+     *
+     * @param aNickname is the name of the library table entry to find.
+     * @param aCheckIfEnabled is a flag to check if the library table entry is enabled.
+     * @return a pointer to the #LIB_TABLE_ROW found.
      */
-    LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
+    LIB_TABLE_ROW* findRow( const wxString& aNickname, bool aCheckIfEnabled = false ) const;
 
     void reindex()
     {

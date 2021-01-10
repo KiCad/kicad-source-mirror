@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,19 +244,26 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 
 long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 {
+    long long hash = 0;
+
     if( aNickname )
     {
-        const FP_LIB_TABLE_ROW* row = FindRow( *aNickname );
-        wxASSERT( (PLUGIN*) row->plugin );
-        return row->plugin->GetLibraryTimestamp( row->GetFullURI( true ) ) + wxHashTable::MakeKey( *aNickname );
+        const FP_LIB_TABLE_ROW* row = FindRow( *aNickname, true );
+
+        wxCHECK( row && row->plugin, hash );
+
+        return row->plugin->GetLibraryTimestamp( row->GetFullURI( true ) ) +
+                wxHashTable::MakeKey( *aNickname );
     }
 
-    long long hash = 0;
-    for( wxString const& nickname : GetLogicalLibs() )
+    for( const wxString& nickname : GetLogicalLibs() )
     {
-        const FP_LIB_TABLE_ROW* row = FindRow( nickname );
-        wxASSERT( (PLUGIN*) row->plugin );
-        hash += row->plugin->GetLibraryTimestamp( row->GetFullURI( true ) ) + wxHashTable::MakeKey( nickname );
+        const FP_LIB_TABLE_ROW* row = FindRow( nickname, true );
+
+        wxCHECK2( row && row->plugin, continue );
+
+        hash += row->plugin->GetLibraryTimestamp( row->GetFullURI( true ) ) +
+                wxHashTable::MakeKey( nickname );
     }
 
     return hash;
@@ -266,7 +273,7 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
                                        bool aBestEfforts )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
                                      row->GetProperties() );
@@ -275,17 +282,17 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 
 void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
 
-const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
+const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool aCheckIfEnabled )
 {
     // Do not optimize this code.  Is done this way specifically to fix a runtime
     // error with clang 4.0.1.
-    LIB_TABLE_ROW* ltrow = findRow( aNickname );
+    LIB_TABLE_ROW* ltrow = findRow( aNickname, aCheckIfEnabled );
     FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( ltrow );
 
     if( !row )
@@ -333,7 +340,7 @@ static void setLibNickname( FOOTPRINT* aModule, const wxString& aNickname,
 const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
                                                        const wxString& aFootprintName )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
 
     return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
@@ -345,7 +352,7 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 {
     try
     {
-        const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+        const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
         wxASSERT( (PLUGIN*) row->plugin );
 
         return row->plugin->FootprintExists( row->GetFullURI( true ), aFootprintName,
@@ -360,7 +367,7 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 
 FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
 
     FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
@@ -375,7 +382,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxStrin
 FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
                                                   const FOOTPRINT* aFootprint, bool aOverwrite )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
 
     if( !aOverwrite )
@@ -401,7 +408,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
 
 void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& aFootprintName )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->FootprintDelete( row->GetFullURI( true ), aFootprintName,
                                          row->GetProperties() );
@@ -410,7 +417,7 @@ void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& a
 
 bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
 }
@@ -418,7 +425,7 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 
 void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     row->plugin->FootprintLibDelete( row->GetFullURI( true ), row->GetProperties() );
 }
@@ -426,7 +433,7 @@ void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 
 void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 {
-    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PLUGIN*) row->plugin );
     row->plugin->FootprintLibCreate( row->GetFullURI( true ), row->GetProperties() );
 }

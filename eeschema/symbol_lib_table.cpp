@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2019 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,7 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 
     for( const auto& libName : libNames )
     {
-        const SYMBOL_LIB_TABLE_ROW* row = FindRow( libName );
+        const SYMBOL_LIB_TABLE_ROW* row = FindRow( libName, true );
 
         if( !row || !row->plugin )
         {
@@ -282,7 +282,7 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                                            bool aPowerSymbolsOnly )
 {
-    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
 
     wxString options = row->GetOptions();
@@ -299,10 +299,10 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
 }
 
 
-SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
-
+SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname, bool aCheckIfEnabled )
 {
-    SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
+    SYMBOL_LIB_TABLE_ROW* row =
+            dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname, aCheckIfEnabled ) );
 
     if( !row )
         return nullptr;
@@ -320,7 +320,7 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                                       const wxString& aNickname, bool aPowerSymbolsOnly )
 {
-    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */  );
 
     wxString options = row->GetOptions();
@@ -351,7 +351,7 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
 
 LIB_PART* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
-    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
 
     if( !row || !row->plugin )
         return nullptr;
@@ -381,7 +381,7 @@ LIB_PART* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStrin
 SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname,
                                                        const LIB_PART* aSymbol, bool aOverwrite )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, SAVE_SKIPPED );
 
     if( !aOverwrite )
@@ -407,7 +407,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 
 void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
     return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName,
                                       row->GetProperties() );
@@ -416,14 +416,14 @@ void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& 
 
 bool SYMBOL_LIB_TABLE::IsSymbolLibWritable( const wxString& aNickname )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, false );
     return row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) );
 }
 
 bool SYMBOL_LIB_TABLE::IsSymbolLibLoaded( const wxString& aNickname )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row, false );
     return row->GetIsLoaded();
 }
@@ -431,7 +431,7 @@ bool SYMBOL_LIB_TABLE::IsSymbolLibLoaded( const wxString& aNickname )
 
 void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
     row->plugin->DeleteSymbolLib( row->GetFullURI( true ), row->GetProperties() );
 }
@@ -439,7 +439,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 
 void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
     row->plugin->CreateSymbolLib( row->GetFullURI( true ), row->GetProperties() );
 }

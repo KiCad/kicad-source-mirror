@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -92,7 +92,9 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
         // libraries before the symbol library table which prevents the library from being
         // removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )
-          || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true ) )
+          || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true )
+          || ( m_frame->Prj().SchSymbolLibTable()->FindRow( name, true ) !=
+               m_frame->Prj().SchSymbolLibTable()->FindRow( name, false ) ) )
         {
             it = deleteLibrary( it );
             continue;

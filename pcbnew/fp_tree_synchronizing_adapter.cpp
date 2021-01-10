@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C)-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -68,11 +68,14 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
 {
     // Process already stored libraries
-    for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end();   )
+    for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
     {
         const wxString& name = it->get()->m_Name;
 
-        if( !m_libs->HasLibrary( name, true ) )
+        // Remove the library if it no longer exists or it exists in both the global and the
+        // project library but the project library entry is disabled.
+        if( !m_libs->HasLibrary( name, true )
+          || ( m_libs->FindRow( name, true ) != m_libs->FindRow( name, false ) ) )
         {
             it = deleteLibrary( it );
             continue;
@@ -89,7 +92,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync()
     {
         if( m_libMap.count( libName ) == 0 )
         {
-            const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName );
+            const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
 
             DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
             m_libMap.insert( libName  );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,12 +142,10 @@ public:
      * not already loaded.
      *
      * @param aNickName is the name of the row to find.
-     *
+     * @param aCheckIfEnabled is a flag to verify if the table entry is enabled or disabled.
      * @return the row found or NULL if \a aNickName was not found.
-     *
-     * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
+    SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName, bool aCheckIfEnabled = false );
 
     int GetModifyHash();
 

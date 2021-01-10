@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -45,7 +45,7 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries()
 {
     for( const wxString& libName : m_libs->GetLogicalLibs() )
     {
-        const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName );
+        const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
 
         DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), true );
     }
