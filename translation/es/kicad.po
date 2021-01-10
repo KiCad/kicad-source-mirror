@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"PO-Revision-Date: 2021-01-10 23:11+0000\n"
 "Last-Translator: Echedey <echedeyla@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -1415,9 +1415,8 @@ msgid "User layer Eco2"
 msgstr "Utilizar capa Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "Capa para el contorno:"
+msgstr "Capa para el contorno"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
