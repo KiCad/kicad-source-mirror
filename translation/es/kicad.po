@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-11 01:34+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -6007,7 +6007,7 @@ msgstr "Editar las variables de entorno de configuración rutas"
 
 #: common/tool/actions.cpp:607
 msgid "Manage Symbol Libraries..."
-msgstr "Administrar librerías de símbolos..."
+msgstr "Administrar Biblioteca..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit the global and project symbol library lists"
@@ -6015,7 +6015,7 @@ msgstr "Editar las listas de librerías de símbolos globales y de proyecto"
 
 #: common/tool/actions.cpp:613
 msgid "Manage Footprint Libraries..."
-msgstr "Administrar librerías de huellas..."
+msgstr "Administrar Bibliotecas..."
 
 #: common/tool/actions.cpp:614
 msgid "Edit the global and project footprint library lists"
@@ -13076,6 +13076,9 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"El símbolo '%s' se escala en el esquema CADSTAR original, pero esto no es "
+"compatible con KiCad. El símbolo se cargó con una escala de 1: 1 y puede "
+"requerir un ajuste manual."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:884
 #, c-format
@@ -13089,6 +13092,8 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"No se pudieron establecer las variables de texto porque no hay ningún "
+"proyecto adjunto."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -13097,6 +13102,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"El símbolo '%s' se gira en un ángulo de %.1f grados en el diseño CADSTAR "
+"original, pero KiCad solo admite ángulos de rotación múltiplos de 90 grados. "
+"Las líneas de conexión necesitarán un ajuste manual."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1240
 #, c-format
@@ -13123,6 +13131,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"El bloque con ID %s (Nombre: '%s') está dibujado en la hoja '%s' pero no "
+"está vinculado a otra hoja del diseño. KiCad requiere que todos los símbolos "
+"de hoja estén asociados a una hoja, por lo que el bloque no se cargó."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -14519,15 +14530,16 @@ msgstr ""
 "esquema."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:729
-#, fuzzy
 msgid "Manage symbol libraries"
-msgstr "Administrar librerías de símbolos..."
+msgstr "Administrar biblioteca de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Los símbolos de las bibliotecas heredadas no se pueden editar. Utilice "
+"Administrar Bibliotecas de Símbolos para migrar al formato actual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:750
 #, c-format
