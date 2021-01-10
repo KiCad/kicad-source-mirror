@@ -2312,9 +2312,8 @@ msgstr ""
 "la versión anterior se importarán a esta versión"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Restablecer los ajustes predeterminados"
+msgstr "Iniciar con los ajustes predeterminados"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
