@@ -631,7 +631,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     {
         can_switch_to_project = false;
         can_create_new_directory = false;
-        can_open_this_directory = false;
         can_rename = false;
         can_print = false;
     }
@@ -657,7 +656,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             can_rename = false;
             can_print = false;
 
-            if( curr_item == m_TreeProject->GetRootItem() )
+            if( item->GetId() == m_TreeProject->GetRootItem() )
             {
                 can_switch_to_project = false;
                 can_delete = false;
