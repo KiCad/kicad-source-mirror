@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:19+0000\n"
-"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -2317,7 +2317,7 @@ msgstr "Iniciar con los ajustes predeterminados"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 msgid "Configure KiCad Settings Path"
-msgstr "Configurar la ruta de la configuración de KiCad"
+msgstr "Configurar Ruta de Ajustes de KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
