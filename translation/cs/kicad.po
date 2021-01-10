@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-05 06:20+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4206,14 +4206,13 @@ msgstr ""
 "knihovnu pouzder s názvem footprints.pretty, použitých v projektu."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Adresář obsahující šablony projektu nainstalované s KiCadem."
+msgstr "Adresář obsahující systémové skripty nainstalované s KiCadem"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Adresář obsahující šablony projektu nainstalované s KiCadem."
+msgstr ""
+"Adresář obsahující skripty specifické pro uživatele nainstalované s KiCadem"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -9121,11 +9120,12 @@ msgid "All units are interchangeable"
 msgstr "Všechny jednotky nejsou zaměnitelné"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
-msgstr "Zaškrtněte tuto volbu, pokud je se jedná o symbol napájení"
+msgstr ""
+"Tuto možnost aktivujte, pokud jsou všechny jednotky symbolů stejné, kromě\n"
+"čísla vývodů."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -22123,12 +22123,13 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "Export STEP se nezdařil!  Uložte PCB a zkuste to znovu"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Obrys desky chybí nebo má nesprávný tvar. Spusťte DRC pro úplnou analýzu."
+"Obrys desky chybí nebo není uzavřen s tolerancí %.3f mm.\n"
+"Spusťte DRC pro úplnou analýzu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -23927,9 +23928,8 @@ msgid "Incorrect value for pad offset."
 msgstr "Nesprávná hodnota pro offset plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Příliš velká hodnota pro rozdílovou velikost plošky"
+msgstr "Příliš velká hodnota pro velikost sklonu plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
 msgid "Error: Through hole pad has no hole."
@@ -24139,10 +24139,9 @@ msgstr "Zkosení rohů:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:257
-#, fuzzy
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr "Souřadnice jsou relativní k ukotvení plošky, orientace 0"
+msgstr "Zkosené rohy. Poloha je relativní k orientaci plošky na 0 stupňů."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:214
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:264
@@ -24362,9 +24361,8 @@ msgid "Primitives list:"
 msgstr "Seznam základních tvarů:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:792
-#, fuzzy
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "Souřadnice jsou relativní k ukotvení plošky, orientace 0"
+msgstr "Poznámka: souřadnice jsou relativní k ukotvení plošky, orientace 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:813
 msgid "Edit Primitive"
@@ -25111,14 +25109,12 @@ msgid "Interactive Router Settings"
 msgstr "Nastavení interaktivního routeru"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:164
-#, fuzzy
 msgid "Reset to the current distance from the reference position."
-msgstr "Přemístit aktuálně zvolený řádek o jednu pozici výš"
+msgstr "Obnovte aktuální vzdálenost od referenční polohy."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
-#, fuzzy
 msgid "Reset to the current angle from the reference position."
-msgstr "Přemístit aktuálně zvolený řádek o jednu pozici výš"
+msgstr "Obnovit na aktuální úhel od referenční polohy."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:169
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
@@ -25378,19 +25374,19 @@ msgid "Parent footprint description"
 msgstr "Orientace pouzdra zdoje"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "Měním síť pouzdra %s vývod %s ze sítě %s na %s."
+msgstr "Změna sítě také aktualizuje %s ploška %s na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "Měním síť pouzdra %s vývod %s ze sítě %s na %s."
+msgstr "Změna sítě také zaktualizuje %s ploška %s a %s ploška \"%s na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "Měním síť pouzdra %s vývod %s ze sítě %s na %s."
+msgstr "Změna sítě také zaktualizuje připojené podložky %lu na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 #, fuzzy
@@ -25536,9 +25532,8 @@ msgid "&Remove unused layers"
 msgstr "&Odstranit nepoužité"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Keep unused layers"
-msgstr "Nedefinované vrstvy:"
+msgstr "&Ponechat nepoužité vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
@@ -26850,16 +26845,15 @@ msgstr ""
 "Nechte to na 0, pokud nevíte, co děláte."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:86
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder paste.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a maskou\n"
-"pro toto pouzdro\n"
-"Tato hodnota může být nahrazena místní hodnotou plošky.\n"
-"Pokud je hodnota 0, je použita globální hodnota"
+"Globální izolační mezera mezi ploškami a pájecí maskou.\n"
+"Tuto hodnotu lze nahradit místními hodnotami pro pouzdro nebo plošku.\n"
+"Konečná hodnota mezery je součtem této hodnoty a poměru hodnoty izolační "
+"mezery."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:91
 #, fuzzy
@@ -29171,9 +29165,9 @@ msgid "Pad of %s on %s"
 msgstr "Ploška na %s z %s"
 
 #: pcbnew/pad.cpp:1105
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Průchozí díra plošek"
+msgstr "Průchozí otvor plošky %s"
 
 #: pcbnew/pad.cpp:1113
 #, c-format
@@ -29181,9 +29175,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Ploška %s na %s z %s"
 
 #: pcbnew/pad.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Průchozí díra plošek"
+msgstr "Průchozí díra plošek %s na %s"
 
 #: pcbnew/pad.cpp:1396
 msgid "Edge connector"
