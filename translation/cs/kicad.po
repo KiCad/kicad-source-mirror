@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"PO-Revision-Date: 2021-01-10 23:11+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -7161,9 +7161,8 @@ msgid "Reset existing annotations"
 msgstr "Vynulovat existující očíslování"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
-#, fuzzy
 msgid "Reset, but keep order of multi-unit parts"
-msgstr "Vynulovat, ale dodržet pořadí jednotek u vícejednotkových součástek"
+msgstr "Reset, ale udržet pořadí jednotek s více jednotkami"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Numbering"
@@ -7705,9 +7704,8 @@ msgid "Remove fields if not in new symbol"
 msgstr "Odstranit pole, pokud nejsou v novém symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:131
-#, fuzzy
 msgid "Reset fields if empty in new symbol"
-msgstr "Vytvoří nový adresář"
+msgstr "Resetovat pole, pokud jsou v novém symbolu prázdná"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update field visibilities"
@@ -7931,9 +7929,8 @@ msgid "New Library Reference"
 msgstr "Nová knihovna Reference"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:58
-#, fuzzy
 msgid "Map Orphans"
-msgstr "Mapovat sirotky"
+msgstr "Mapujte osiřelé symboly"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:59
 msgid ""
@@ -8466,9 +8463,8 @@ msgid "Wires && wire labels"
 msgstr "Testovat podobná označení"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Buses && bus labels"
-msgstr "Testovat podobná označení"
+msgstr "Sběrnice && označení sběrnic"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Sheet titles"
@@ -9392,9 +9388,8 @@ msgid "Browse Generators..."
 msgstr "Procházet generátory..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:109
-#, fuzzy
 msgid "Script Generator Properties"
-msgstr "Vlastnosti listu schématu"
+msgstr "Vlastnosti generátoru skriptů"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:22
 msgid "Paste Options"
@@ -9762,9 +9757,8 @@ msgstr "Tisk pouze č&ernobíle"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:206
-#, fuzzy
 msgid "Print background color"
-msgstr "Vyplňte pozadí"
+msgstr "Tisknout barvu pozadí"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
@@ -9886,9 +9880,8 @@ msgid "Import:"
 msgstr "Import:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
-#, fuzzy
 msgid "Formatting preferences"
-msgstr "Reference pouzder"
+msgstr "Vlastnosti formátování"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -9948,16 +9941,14 @@ msgid "Wildcards"
 msgstr "Žolíky"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
-#, fuzzy
 msgid "Search pin &names and numbers"
-msgstr "Hledat všechny &jména a čísla vývodů"
+msgstr "Hledat &jména a čísla vývodů"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
 msgstr "Hledat skrytá pole"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
-#, fuzzy
 msgid "Search the current &sheet only"
 msgstr "Hledat pouze na aktuálním &listu"
 
@@ -25545,9 +25536,8 @@ msgid "Keep &outside layers"
 msgstr "Bez prokovů"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "Smazat nepoužívané plošky..."
+msgstr "Smazat nepoužívané plošky"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -25572,10 +25562,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
-#, fuzzy
 msgid ""
 "Clear the net name of pads when there is only one pad belonging to this net."
-msgstr "Vybrat jméno sítě a zvýraznit grafické položky patřící do této sítě"
+msgstr "Vymažte název sítě plošky, pokud do této sítě patří pouze jedna ploška."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:51
 #, fuzzy
@@ -25717,9 +25706,8 @@ msgstr "Není soubor modulu"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:91
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
-#, fuzzy
 msgid "Select item(s)."
-msgstr "Vybrat položku(y)"
+msgstr "Vybrat položku(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 #: pcbnew/dialogs/panel_edit_options_base.cpp:182
@@ -25740,9 +25728,8 @@ msgstr "Odebrat položku(y) z výběru."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:121
 #: pcbnew/dialogs/panel_edit_options_base.cpp:202
-#, fuzzy
 msgid "Toggle selected state of item(s)."
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Přepnout stav výběru položku(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:131
 #: pcbnew/dialogs/panel_edit_options_base.cpp:212
@@ -25954,9 +25941,8 @@ msgid "Display Origin"
 msgstr "Počátek vrtání"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
-#, fuzzy
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr "Zvolit, které prvky budou zobrazeny"
+msgstr "Vyberte počátek, který se použije pro zobrazení souřadnic X, Y."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 #, fuzzy
@@ -27115,14 +27101,12 @@ msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Pravidlo vrstvy \"%s\" neodpovídá."
 
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:901
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "Znovu načíst všechny vrstvy"
+msgstr "Pravidlo vrstva neodpovídá; pravidlo ignorováno."
 
 #: pcbnew/drc/drc_engine.cpp:909
-#, fuzzy
 msgid "Unconditional constraint applied."
-msgstr "Žádné omezení"
+msgstr "Bylo použito bezpodmínečné omezení."
 
 #: pcbnew/drc/drc_engine.cpp:910
 msgid "Unconditional rule applied."
@@ -27504,9 +27488,8 @@ msgid "(nets %s and %s)"
 msgstr "(sítě %s a %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:80
-#, fuzzy
 msgid "Checking footprint courtyard definitions..."
-msgstr "Modul '%s' nenalezeno"
+msgstr "Kontrola definice pole pouzdra..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:130
 #, fuzzy
