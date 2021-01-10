@@ -45,9 +45,9 @@ public:
     /**
      * Constructs this circle such that it is tangent to the given lines and passes through the
      * given point. There are two possible solutions, controlled by aAlternateSolution.
-     * 
+     *
      * When aAlternateSolution is false, find the best solution that can be used to fillet both
-     * lines (i.e. choose the most likely quadrant and find the solution with smallest arc angle 
+     * lines (i.e. choose the most likely quadrant and find the solution with smallest arc angle
      * between the tangent points on the lines)
      *
      * @param aLineA is the first tangent line. Treated as an infinite line except for the purpose
@@ -64,11 +64,11 @@ public:
     /**
      * Function NearestPoint()
      *
-     * Computes the point on the circumference of the circle that is the closest to aP. 
+     * Computes the point on the circumference of the circle that is the closest to aP.
      *
      * In other words: finds the intersection point of this circle and a line that passes through
      * both this circle's center and aP.
-     * 
+     *
      * @param aP
      * @return nearest point to aP
      */
@@ -76,9 +76,9 @@ public:
 
     /**
      * Function Intersect()
-     * 
+     *
      * Computes the intersection points between this circle and aCircle.
-     * 
+     *
      * @param aCircle The other circle to intersect with this.
      * @return std::vector containing:
      *           - 0 elements if the circles do not intersect
@@ -89,9 +89,9 @@ public:
 
     /**
      * Function Intersect()
-     * 
+     *
      * Computes the intersection points between this circle and aLine.
-     * 
+     *
      * @param aLine The line to intersect with this circle (end points ignored)
      * @return std::vector containing:
      *           - 0 elements if there is no intersection

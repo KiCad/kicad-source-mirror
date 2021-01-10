@@ -303,9 +303,9 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     bool restore_state = false;
 
     VECTOR2I arcCenter = theArc->GetCenter();
-    SEG tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
-    SEG tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
-    
+    SEG      tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
+    SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
+
     if( !tanStart.ApproxParallel( tanEnd ) )
     {
         //Ensure the tangent segments are in the correct orientation
@@ -316,7 +316,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         tanEnd.B = theArc->GetEnd();
     }
 
-    KICAD_T  track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
+    KICAD_T track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
 
     auto getUniqueConnectedTrack =
         [&]( const VECTOR2I& aAnchor ) -> TRACK*
@@ -340,7 +340,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 retval->SetFlags( IS_NEW );
                 getView()->Add( retval );
             }
-            
+
             return retval;
         };
 
@@ -348,7 +348,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     TRACK* trackOnEnd = getUniqueConnectedTrack( theArc->GetEnd() );
 
     // Make copies of items to be edited
-    ARC* theArcCopy = new ARC( *theArc );
+    ARC*   theArcCopy = new ARC( *theArc );
     TRACK* trackOnStartCopy = new TRACK( *trackOnStart );
     TRACK* trackOnEndCopy = new TRACK( *trackOnEnd );
 
@@ -365,8 +365,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     }
 
     OPT_VECTOR2I optInterectTan = tanStart.IntersectLines( tanEnd );
-    int tanStartSide = tanStart.Side( theArc->GetMid() );
-    int tanEndSide = tanEnd.Side( theArc->GetMid() );
+    int          tanStartSide = tanStart.Side( theArc->GetMid() );
+    int          tanEndSide = tanEnd.Side( theArc->GetMid() );
 
     bool isStartTrackOnStartPt = ( VECTOR2I( theArc->GetStart() ) - tanStart.A ).EuclideanNorm()
                                  < ( VECTOR2I( theArc->GetStart() ) - tanStart.B ).EuclideanNorm();
@@ -375,10 +375,10 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                                < ( VECTOR2I( theArc->GetStart() ) - tanEnd.B ).EuclideanNorm();
 
     // Calculate constraints
-    CIRCLE maxTangentCircle;
+    CIRCLE   maxTangentCircle;
     VECTOR2I startOther = ( isStartTrackOnStartPt ) ? tanStart.B : tanStart.A;
     maxTangentCircle.ConstructFromTanTanPt( tanStart, tanEnd, startOther );
- 
+
     VECTOR2I maxTanPtStart = tanStart.LineProject( maxTangentCircle.Center );
     VECTOR2I maxTanPtEnd = tanEnd.LineProject( maxTangentCircle.Center );
 
@@ -478,7 +478,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         CIRCLE circlehelper;
         circlehelper.ConstructFromTanTanPt( tanStart, tanEnd, m_cursor );
 
-        VECTOR2I newCenter = circlehelper.Center; 
+        VECTOR2I newCenter = circlehelper.Center;
         VECTOR2I newStart = tanStart.LineProject( newCenter );
         VECTOR2I newEnd = tanEnd.LineProject( newCenter );
         VECTOR2I newMid = GetArcMid( newStart, newEnd, newCenter );
@@ -497,7 +497,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             trackOnEnd->SetStart( (wxPoint) newEnd );
         else
             trackOnEnd->SetEnd( (wxPoint) newEnd );
-            
+
         //Update view
         getView()->Update( trackOnStart );
         getView()->Update( trackOnEnd );
@@ -522,8 +522,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     }
 
     // Ensure we only do one commit operation on each object
-    auto processTrack = 
-        [&]( TRACK* aTrack, TRACK* aTrackCopy ) 
+    auto processTrack =
+        [&]( TRACK* aTrack, TRACK* aTrackCopy )
         {
             if( aTrack->IsNew() )
             {

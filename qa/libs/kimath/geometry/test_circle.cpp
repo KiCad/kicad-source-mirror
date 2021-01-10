@@ -142,14 +142,14 @@ struct CIR_CIR_VECPT_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const CIRCLE& aCircle ) 
+ * Test cases for #CIRCLE::Intersect( const CIRCLE& aCircle )
  */
 static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
     {
         "two point aligned",
         { { 10, 10 }, 20 },
         { { 10, 45 }, 20 },
-        { 
+        {
             { 0, 27 },
             { 21, 27 },
         },
@@ -158,7 +158,7 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
         "two point angled",
         { { 10, 10 }, 20 },
         { { 20, 20 }, 20 },
-        { 
+        {
             { 2, 28 },
             { 28, 2 },
         },
@@ -167,7 +167,7 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
         "tangent aligned",
         { { 10, 10 }, 20 },
         { { 10, 50 }, 20 },
-        { 
+        {
             { 10, 30 },
         },
     },
@@ -175,7 +175,7 @@ static const std::vector<CIR_CIR_VECPT_CASE> intersect_circle_cases = {
         "no intersection",
         { { 10, 10 }, 20 },
         { { 10, 51 }, 20 },
-        { 
+        {
             //no points
         },
     },
@@ -218,14 +218,14 @@ struct SEG_SEG_VECPT_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const SEG& aSeg ) 
+ * Test cases for #CIRCLE::Intersect( const SEG& aSeg )
  */
 static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
     {
         "two point aligned",
         { { 0, 0 }, 20 },
         { { 10, 45 }, {10, 40} },
-        { 
+        {
             { 10, -17 },
             { 10, 17 },
         },
@@ -234,7 +234,7 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
         "two point angled",
         { { 0, 0 }, 20 },
         { { -20, -40 }, {20, 40} },
-        { 
+        {
             { 8, 17 },
             { -8, -17 },
         },
@@ -243,7 +243,7 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
         "tangent",
         { { 0, 0 }, 20 },
         { { 20, 0 }, {20, 40} },
-        { 
+        {
             { 20, 0 }
         },
     },
@@ -251,7 +251,7 @@ static const std::vector<SEG_SEG_VECPT_CASE> intersect_line_cases = {
         "no intersection",
         { { 0, 0 }, 20 },
         { { 25, 0 }, {25, 40} },
-        { 
+        {
             //no points
         },
     },
@@ -286,7 +286,7 @@ struct CIR_SEG_VECPT_CASE
 
 // clang-format off
 /**
- * Test cases for #CIRCLE::Intersect( const SEG& aSeg ) 
+ * Test cases for #CIRCLE::Intersect( const SEG& aSeg )
  */
 static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
     {
@@ -301,8 +301,7 @@ static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
         { { 0, 0 }, {    0, 1000 } },
         { { 0, 0 }, { 1000, 0    } },
         { 200, 100 },
-        { { 490, 490} , 490 }, // ammended to get the test to pass
-        //{ { 500, 500} , 500 }, // result from LibreCAD 2.2.0-rc2
+        { { 500, 500} , 500 }, // result from LibreCAD 2.2.0-rc2
     },
     {
         "45 degree segs, point on seg",
@@ -316,8 +315,7 @@ static const std::vector<CIR_SEG_VECPT_CASE> construct_tan_tan_pt_cases = {
         { { 0, 0 }, { 1000000,       0 } },
         { { 0, 0 }, { 1000000, 1000000 } },
         { 200000, 100000 },
-        { { 332434, 137698} , 137698 }, // ammended to get the test to pass
-        //{ { 332439, 137701} , 137701 }, // result from LibreCAD 2.2.0-rc2
+        { { 332439, 137701} , 137701 }, // result from LibreCAD 2.2.0-rc2
     },
     {
         "135 degree segs, point on seg",

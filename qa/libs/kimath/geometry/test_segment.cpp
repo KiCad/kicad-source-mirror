@@ -690,7 +690,7 @@ BOOST_AUTO_TEST_CASE( SegCreatePerpendicular )
         {
             SEG perpendicular = c.m_seg.PerpendicularSeg( c.m_vec );
 
-            BOOST_CHECK_PREDICATE( SegPerpendicularCorrect, ( perpendicular )( c.m_seg )( true ) );            
+            BOOST_CHECK_PREDICATE( SegPerpendicularCorrect, ( perpendicular )( c.m_seg )( true ) );
             BOOST_CHECK_PREDICATE( SegVecDistanceCorrect, ( perpendicular )( c.m_vec )( 0 ) );
         }
     }

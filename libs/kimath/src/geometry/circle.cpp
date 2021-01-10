@@ -269,7 +269,7 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aLine ) const
 {
     std::vector<VECTOR2I> retval;
 
-    // 
+    //
     //           .   *   .
     //         *           *
     //  -----1-------m-------2----
@@ -287,7 +287,7 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aLine ) const
     // to the radius.
     //
     // The distance M1 = M2 can be computed by pythagoras since O1 = O2 = Radius
-    // 
+    //
     // O1= O2 = sqrt( Radius^2 - OM^2)
     //
 
