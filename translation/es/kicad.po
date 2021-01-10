@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:38+0000\n"
-"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -10890,7 +10890,7 @@ msgstr "Intensidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:921
 msgid "Source Type"
-msgstr "Tipo de fuente"
+msgstr "Tipo de Fuente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
 msgid "Source"
@@ -11642,7 +11642,7 @@ msgstr "Editor de librerías"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "No puede haber más de una biblioteca con el mismo apodo ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, c-format
@@ -11689,12 +11689,16 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Seleccione una o más filas de la tabla que contengan bibliotecas heredadas "
+"para guardarlas en el formato actual (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"¿Guardar '%s' en el formato actual (* .kicad_sym) y reemplazar la entrada "
+"heredada en la tabla?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -11702,6 +11706,8 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"¿Guardar %d bibliotecas heredadas en el formato actual (* .kicad_sym) y "
+"reemplazar las entradas heredadas en la tabla?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
 #, fuzzy, c-format
@@ -11929,7 +11935,7 @@ msgstr "La configuración actual no incluye la biblioteca '%s'"
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "La biblioteca '%s' no está habilitada en la configuración actual."
 
 #: eeschema/erc_item.cpp:42
 #, fuzzy
