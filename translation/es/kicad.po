@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:11+0000\n"
-"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1416,7 +1416,7 @@ msgstr "Utilizar capa Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "Capa para el contorno"
+msgstr "Capa para el Contorno"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
