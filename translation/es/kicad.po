@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:31+0000\n"
-"Last-Translator: Echedey <echedeyla@hotmail.com>\n"
+"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -4247,11 +4247,11 @@ msgstr ""
 
 #: common/env_vars.cpp:88
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Una carpeta conteniendo scripts del sistema instalados con KiCad"
+msgstr "Una carpeta que contiene scripts del sistema instalados con KiCad"
 
 #: common/env_vars.cpp:90
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Una carpeta conteniendo scripts del usuario instalados con KiCad"
+msgstr "Una carpeta que contiene scripts del usuario instalados con KiCad"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -9008,6 +9008,11 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Marque esta opción para permitir que los símbolos con varias unidades tengan "
+"\n"
+"diferentes elementos. Desmarque esta opción cuando todas las unidades del "
+"símbolo\n"
+"sean idénticas con la excepción de los números de los pines."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
@@ -9537,6 +9542,8 @@ msgstr "Nombre de pin alternativo"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
+"Las asignaciones de pines alternativas no están disponibles para los "
+"componentes DeMorgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9837,15 +9844,15 @@ msgstr "Esquina inferior izquierda"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Centrado, unidades del trazador"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Ajustar a página, unidades del usuario"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Ajustar al contenido, unidades de usuario"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
