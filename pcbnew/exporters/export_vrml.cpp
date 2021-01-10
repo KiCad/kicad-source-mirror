@@ -45,6 +45,8 @@
 #include "streamwrapper.h"
 #include "vrml_layer.h"
 #include "pcb_edit_frame.h"
+
+#include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 #include <zone_filler.h>
@@ -737,6 +739,30 @@ static void export_vrml_drawsegment( MODEL_VRML& aModel, PCB_SHAPE* drawseg )
         export_vrml_line( aModel, layer, x, y, xf, yf, w );
         break;
 
+    case S_CURVE:
+    {
+        std::vector<VECTOR2D> output;
+        std::vector<VECTOR2D> pointCtrl;
+
+        pointCtrl.emplace_back( x, y );
+        pointCtrl.emplace_back( drawseg->GetBezControl1().x * BOARD_SCALE,
+                drawseg->GetBezControl1().y * BOARD_SCALE );
+        pointCtrl.emplace_back( drawseg->GetBezControl2().x * BOARD_SCALE,
+                drawseg->GetBezControl2().y * BOARD_SCALE );
+        pointCtrl.emplace_back( xf, yf );
+
+        BEZIER_POLY converter( pointCtrl );
+        converter.GetPoly( output, w );
+
+        for( size_t i = 1; i < output.size(); ++i )
+        {
+            export_vrml_line( aModel, layer, output[i - 1].x, output[i - 1].y,
+                                             output[i].x, output[i].y, w );
+        }
+
+        break;
+    }
+
     case S_RECT:
         export_vrml_line( aModel, layer, x, y, xf, y, w );
         export_vrml_line( aModel, layer, xf, y, xf, yf, w );
@@ -1094,6 +1120,30 @@ static void export_vrml_fp_shape( MODEL_VRML& aModel, FP_SHAPE* aOutline, FOOTPR
         export_vrml_polygon( aModel, layer, aOutline, aFootprint->GetOrientationRadians(),
                              aFootprint->GetPosition() );
         break;
+
+    case S_CURVE:
+    {
+        std::vector<VECTOR2D> output;
+        std::vector<VECTOR2D> pointCtrl;
+
+        pointCtrl.emplace_back( x, y );
+        pointCtrl.emplace_back( aOutline->GetBezControl1().x * BOARD_SCALE,
+                aOutline->GetBezControl1().y * BOARD_SCALE );
+        pointCtrl.emplace_back( aOutline->GetBezControl2().x * BOARD_SCALE,
+                aOutline->GetBezControl2().y * BOARD_SCALE );
+        pointCtrl.emplace_back( xf, yf );
+
+        BEZIER_POLY converter( pointCtrl );
+        converter.GetPoly( output, w );
+
+        for( size_t i = 1; i < output.size(); ++i )
+        {
+            export_vrml_line( aModel, layer, output[i - 1].x, output[i - 1].y,
+                                             output[i].x, output[i].y, w );
+        }
+
+        break;
+    }
 
     case S_RECT:
         export_vrml_line( aModel, layer, x, y, xf, y, w );
