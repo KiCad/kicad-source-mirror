@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 23:15+0000\n"
+"PO-Revision-Date: 2021-01-10 23:19+0000\n"
 "Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -4246,10 +4246,8 @@ msgstr ""
 "footprints.pretty."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr ""
-"La carpeta que contiene las plantillas de proyecto instaladas por KiCad."
+msgstr "Una carpeta conteniendo scripts del sistema instalados con KiCad"
 
 #: common/env_vars.cpp:90
 #, fuzzy
