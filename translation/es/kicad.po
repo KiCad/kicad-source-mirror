@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 23:20+0000\n"
-"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
+"PO-Revision-Date: 2021-01-10 23:31+0000\n"
+"Last-Translator: Echedey <echedeyla@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -6832,9 +6832,8 @@ msgid "Relative"
 msgstr "Relativa"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
-msgstr "Tipo de ruta:"
+msgstr "Tipo de ruta"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -10883,9 +10882,8 @@ msgid "Current"
 msgstr "Intensidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:921
-#, fuzzy
 msgid "Source Type"
-msgstr "Tipo de fuente:"
+msgstr "Tipo de fuente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
 msgid "Source"
