@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:11+0000\n"
-"Last-Translator: Echedey <echedeyla@hotmail.com>\n"
+"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -2256,9 +2256,8 @@ msgid "Do not show again."
 msgstr "No mostrar de nuevo."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
-#, fuzzy
 msgid "Override Locks"
-msgstr "Texto oculto"
+msgstr "Desactivar Bloqueos"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 #, fuzzy
