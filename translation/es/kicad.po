@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 23:12+0000\n"
+"PO-Revision-Date: 2021-01-10 23:13+0000\n"
 "Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -2300,10 +2300,8 @@ msgid "The selected path does not contain valid KiCad settings!"
 msgstr "¡La ruta seleccionada no contiene configuraciones válidas de KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr ""
-"Importar preferencias de una versión anterior (no se ha encontrado ninguna)"
+msgstr "Importar preferencias de una versión anterior"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
