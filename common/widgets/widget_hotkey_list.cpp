@@ -451,8 +451,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     AppendColumn( _( "Description" ), 900, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
 
 
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+#if defined( __WXGTK__ )// && !wxCHECK_VERSION( 3, 1, 0 )
     // Automatic column widths are broken in wxGTK 3.0.x; set min widths to ensure visibility
+    // They are also broken in wxGTK 3.1.4
 
     wxDataViewCtrl* dv = GetDataView();
 
