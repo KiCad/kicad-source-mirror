@@ -405,7 +405,7 @@ TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.GlobalEdit.updateFootprints",
 TOOL_ACTION PCB_ACTIONS::removeUnusedPads( "pcbnew.GlobalEdit.removeUnusedPads",
         AS_GLOBAL, 0, "",
         _( "Remove Unused Pads..." ),
-        _( "Remove or reset the unconnected inner layers on through hole pads and vias" ),
+        _( "Remove or restore the unconnected inner layers on through hole pads and vias" ),
         pads_remove_xpm );
 
 TOOL_ACTION PCB_ACTIONS::changeFootprint( "pcbnew.GlobalEdit.changeFootprint",

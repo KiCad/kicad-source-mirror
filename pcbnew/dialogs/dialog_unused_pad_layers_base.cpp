@@ -29,10 +29,10 @@ DIALOG_UNUSED_PAD_LAYERS_BASE::DIALOG_UNUSED_PAD_LAYERS_BASE( wxWindow* parent, 
 	m_rbScope->SetSelection( 0 );
 	fgSizerProps->Add( m_rbScope, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	wxString m_rbActionChoices[] = { _("&Remove unused layers"), _("&Keep unused layers") };
+	wxString m_rbActionChoices[] = { _("&Remove unused layers"), _("Res&tore unused layers") };
 	int m_rbActionNChoices = sizeof( m_rbActionChoices ) / sizeof( wxString );
 	m_rbAction = new wxRadioBox( this, wxID_ANY, _("Action"), wxDefaultPosition, wxDefaultSize, m_rbActionNChoices, m_rbActionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbAction->SetSelection( 0 );
+	m_rbAction->SetSelection( 1 );
 	fgSizerProps->Add( m_rbAction, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbSelectedOnly = new wxCheckBox( this, wxID_ANY, _("&Selection only"), wxDefaultPosition, wxDefaultSize, 0 );
