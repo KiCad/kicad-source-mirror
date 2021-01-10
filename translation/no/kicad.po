@@ -1,13 +1,13 @@
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
-# Allan Nordhøy <epost@anotheragency.no>, 2020.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021.
 #: pcbnew/track.cpp:736
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"PO-Revision-Date: 2021-01-10 14:06+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -2263,7 +2263,7 @@ msgstr "Velg Innstillingssti"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Hvordan vil du sette opp KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2276,8 +2276,9 @@ msgid "Choose a different path"
 msgstr "Still skjevheten til et differensialpar"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
+#, fuzzy
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Valgt sti inneholder ingen gyldige KiCad-innstillinger."
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -22394,7 +22395,9 @@ msgstr "TRIN-eksport mislyktes! Lagre PCB og prøv igjen"
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
-msgstr "Styrets disposisjon er misdannet. Kjør DRC for en full analyse."
+msgstr ""
+"Kretskortsomriss mangler, eller ikke stengt med %.3f mm toleranse.\n"
+"Kjør DRC for full analyse."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -29383,7 +29386,7 @@ msgstr "Pad av %s på %s"
 #: pcbnew/pad.cpp:1105
 #, fuzzy, c-format
 msgid "Through hole pad of %s"
-msgstr "Gjennomgående hull"
+msgstr "Gjennomgående hull på %s"
 
 #: pcbnew/pad.cpp:1113
 #, c-format
@@ -29391,9 +29394,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s av %s på %s"
 
 #: pcbnew/pad.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Gjennomgående hull"
+msgstr "Gjennomgående hull %s av %s"
 
 #: pcbnew/pad.cpp:1396
 msgid "Edge connector"
