@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
 "PO-Revision-Date: 2021-01-10 23:11+0000\n"
-"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
+"Last-Translator: Tomás Mora <tom.mora96@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -2288,10 +2288,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "¿Cómo le gustaría configurar KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr ""
-"Importar preferencias de una versión anterior (no se ha encontrado ninguna)"
+msgstr "Importar preferencias de una versión anterior en:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
