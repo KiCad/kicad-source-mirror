@@ -619,7 +619,12 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos 
 
         // This is a bit redundant but better safe than sorry here
         if( connected.empty() )
+        {
+            if( aPos )
+                *aPos = aTrack->GetPosition();
+
             return true;
+        }
 
         // Here, we check if the via is connected only to items on a single layer
         int first_layer = connected.front()->Layer();
@@ -629,6 +634,9 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos 
            if( item->Layer() != first_layer )
                return false;
         }
+
+        if( aPos )
+            *aPos = aTrack->GetPosition();
 
         return true;
     }

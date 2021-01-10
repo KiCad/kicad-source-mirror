@@ -78,7 +78,7 @@ DRC_ITEM DRC_ITEM::zoneHasEmptyNet( DRCE_ZONE_HAS_EMPTY_NET,
         wxT( "zone_has_empty_net" ) );
 
 DRC_ITEM DRC_ITEM::viaDangling( DRCE_DANGLING_VIA,
-        _( "Via is not connected" ),
+        _( "Via is not connected or connected on only one layer" ),
         wxT( "via_dangling" ) );
 
 DRC_ITEM DRC_ITEM::trackDangling( DRCE_DANGLING_TRACK,
