@@ -208,8 +208,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        KIGFX::MOUSE_DRAG_ACTION dragAction = m_frame->GetDragAction();
-        TRACK_DRAG_ACTION        trackDragAction = m_frame->Settings().m_TrackDragAction;
+        MOUSE_DRAG_ACTION dragAction = m_frame->GetDragAction();
+        TRACK_DRAG_ACTION trackDragAction = m_frame->Settings().m_TrackDragAction;
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
         // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
@@ -340,11 +340,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
-            if( modifier_enabled || dragAction == KIGFX::MOUSE_DRAG_ACTION::SELECT )
+            if( modifier_enabled || dragAction == MOUSE_DRAG_ACTION::SELECT )
             {
                 selectMultiple();
             }
-            else if( m_selection.Empty() && dragAction != KIGFX::MOUSE_DRAG_ACTION::DRAG_ANY )
+            else if( m_selection.Empty() && dragAction != MOUSE_DRAG_ACTION::DRAG_ANY )
             {
                 selectMultiple();
             }
@@ -424,7 +424,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             //move cursor prediction
             if( !modifier_enabled
-                    && dragAction == KIGFX::MOUSE_DRAG_ACTION::DRAG_SELECTED
+                    && dragAction == MOUSE_DRAG_ACTION::DRAG_SELECTED
                     && !m_selection.Empty()
                     && evt->HasPosition()
                     && selectionContains( evt->Position() ) )

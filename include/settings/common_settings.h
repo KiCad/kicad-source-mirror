@@ -24,6 +24,18 @@
 #include <settings/json_settings.h>
 
 
+enum class MOUSE_DRAG_ACTION
+{
+    // WARNING: these are encoded as integers in the file, so don't change their values.
+    DRAG_ANY = -2,
+    DRAG_SELECTED,
+    SELECT,
+    ZOOM,
+    PAN,
+    NONE
+};
+
+
 class COMMON_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -69,9 +81,9 @@ public:
         int scroll_modifier_pan_h;
         int scroll_modifier_pan_v;
 
-        int drag_left;
-        int drag_middle;
-        int drag_right;
+        MOUSE_DRAG_ACTION drag_left;
+        MOUSE_DRAG_ACTION drag_middle;
+        MOUSE_DRAG_ACTION drag_right;
     };
 
     struct GRAPHICS

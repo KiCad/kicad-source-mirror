@@ -35,7 +35,7 @@ TOOLS_HOLDER::TOOLS_HOLDER() :
         m_actions( nullptr ),
         m_toolDispatcher( nullptr ),
         m_immediateActions( true ),
-        m_dragAction( KIGFX::MOUSE_DRAG_ACTION::SELECT ),
+        m_dragAction( MOUSE_DRAG_ACTION::SELECT ),
         m_moveWarpsCursor( true )
 { }
 
@@ -122,7 +122,7 @@ void TOOLS_HOLDER::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsCh
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
     m_moveWarpsCursor = settings->m_Input.warp_mouse_on_move;
-    m_dragAction = static_cast<KIGFX::MOUSE_DRAG_ACTION>( settings->m_Input.drag_left );
+    m_dragAction = settings->m_Input.drag_left;
     m_immediateActions = settings->m_Input.immediate_actions;
 }
 

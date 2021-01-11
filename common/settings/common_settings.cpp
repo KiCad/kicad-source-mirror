@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,12 +21,8 @@
 #include <set>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
-#include <view/view_controls.h>
-#include <view/zoom_controller.h>
 #include <wx/config.h>
 #include <wx/log.h>
-
-using KIGFX::MOUSE_DRAG_ACTION;
 
 
 ///! The following environment variables will never be migrated from a previous version
@@ -127,41 +123,38 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     int default_zoom_speed = 1;
 #endif
 
-    m_params.emplace_back(
-            new PARAM<int>( "input.zoom_speed", &m_Input.zoom_speed, default_zoom_speed ) );
+    m_params.emplace_back( new PARAM<int>( "input.zoom_speed",
+            &m_Input.zoom_speed, default_zoom_speed ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "input.zoom_speed_auto", &m_Input.zoom_speed_auto, true ) );
+    m_params.emplace_back( new PARAM<bool>( "input.zoom_speed_auto",
+            &m_Input.zoom_speed_auto, true ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "input.scroll_modifier_zoom", &m_Input.scroll_modifier_zoom, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_zoom",
+            &m_Input.scroll_modifier_zoom, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "input.scroll_modifier_pan_h", &m_Input.scroll_modifier_pan_h, WXK_CONTROL ) );
+    m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_pan_h",
+            &m_Input.scroll_modifier_pan_h, WXK_CONTROL ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "input.scroll_modifier_pan_v", &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
+    m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_pan_v",
+            &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
 
-    m_params.emplace_back( new PARAM<int>( "input.mouse_left", &m_Input.drag_left,
-            static_cast<int>( MOUSE_DRAG_ACTION::DRAG_SELECTED ),
-            static_cast<int>( MOUSE_DRAG_ACTION::DRAG_ANY ),
-            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ) ) );
+    m_params.emplace_back( new PARAM_ENUM<MOUSE_DRAG_ACTION>( "input.mouse_left",
+            &m_Input.drag_left, MOUSE_DRAG_ACTION::DRAG_SELECTED, MOUSE_DRAG_ACTION::DRAG_ANY,
+            MOUSE_DRAG_ACTION::SELECT ) );
 
-    m_params.emplace_back( new PARAM<int>( "input.mouse_middle", &m_Input.drag_middle,
-            static_cast<int>( MOUSE_DRAG_ACTION::PAN ),
-            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ),
-            static_cast<int>( MOUSE_DRAG_ACTION::NONE ) ) );
+    m_params.emplace_back( new PARAM_ENUM<MOUSE_DRAG_ACTION>( "input.mouse_middle",
+            &m_Input.drag_middle, MOUSE_DRAG_ACTION::PAN, MOUSE_DRAG_ACTION::SELECT,
+            MOUSE_DRAG_ACTION::NONE ) );
 
-    m_params.emplace_back( new PARAM<int>( "input.mouse_right", &m_Input.drag_right,
-            static_cast<int>( MOUSE_DRAG_ACTION::PAN ),
-            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ),
-            static_cast<int>( MOUSE_DRAG_ACTION::NONE ) ) );
+    m_params.emplace_back( new PARAM_ENUM<MOUSE_DRAG_ACTION>( "input.mouse_right",
+            &m_Input.drag_right, MOUSE_DRAG_ACTION::PAN, MOUSE_DRAG_ACTION::SELECT,
+            MOUSE_DRAG_ACTION::NONE ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.opengl_antialiasing_mode",
-                                       &m_Graphics.opengl_aa_mode, 0, 0, 4 ) );
+            &m_Graphics.opengl_aa_mode, 0, 0, 4 ) );
 
     m_params.emplace_back( new PARAM<int>( "graphics.cairo_antialiasing_mode",
-                                       &m_Graphics.cairo_aa_mode, 0, 0, 3 ) );
+            &m_Graphics.cairo_aa_mode, 0, 0, 3 ) );
 
     m_params.emplace_back( new PARAM<int>( "system.autosave_interval",
             &m_System.autosave_interval, 600 ) );

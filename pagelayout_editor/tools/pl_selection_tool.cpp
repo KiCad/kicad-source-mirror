@@ -204,7 +204,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( !modifier_enabled
                     && !m_selection.Empty()
-                    && m_frame->GetDragAction() == KIGFX::MOUSE_DRAG_ACTION::DRAG_SELECTED
+                    && m_frame->GetDragAction() == MOUSE_DRAG_ACTION::DRAG_SELECTED
                     && evt->HasPosition()
                     && selectionContains( evt->Position() ) )
             {

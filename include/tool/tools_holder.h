@@ -131,7 +131,7 @@ public:
      * Indicates whether a drag should draw a selection rectangle or drag selected (or unselected)
      * objects.
      */
-    KIGFX::MOUSE_DRAG_ACTION GetDragAction() const { return m_dragAction; }
+    MOUSE_DRAG_ACTION GetDragAction() const { return m_dragAction; }
 
     /**
      * Indicate that a move operation should warp the mouse pointer to the origin of the
@@ -171,7 +171,7 @@ protected:
                                             // the first invocation of a hotkey will just
                                             // select the relevant tool rather than executing
                                             // the tool's action.
-    KIGFX::MOUSE_DRAG_ACTION m_dragAction;  // DRAG_ANY/DRAG_SELECTED/SELECT.
+    MOUSE_DRAG_ACTION m_dragAction;         // DRAG_ANY/DRAG_SELECTED/SELECT.
 
     bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
 };

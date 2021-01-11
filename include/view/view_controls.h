@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -26,32 +26,15 @@
  *
  */
 
-/**
- * @file view_controls.h
- * @brief VIEW_CONTROLS class definition.
- */
-
 #ifndef __VIEW_CONTROLS_H
 #define __VIEW_CONTROLS_H
 
 #include <math/box2.h>
+#include <settings/common_settings.h>
 
 namespace KIGFX
 {
 class VIEW;
-
-
-///< Action to perform when the mouse is dragged
-// Warning: these are encoded as integers in the file, so don't change their values
-enum class MOUSE_DRAG_ACTION
-{
-    DRAG_ANY = -2,
-    DRAG_SELECTED,
-    SELECT,
-    ZOOM,
-    PAN,
-    NONE
-};
 
 
 ///< Structure to keep VIEW_CONTROLS settings for easy store/restore operations
