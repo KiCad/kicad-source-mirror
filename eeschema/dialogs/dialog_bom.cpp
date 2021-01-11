@@ -332,6 +332,9 @@ void DIALOG_BOM::installGeneratorsList()
         // Populate list box
         for( unsigned ii = 0; ii < m_generators.size(); ii++ )
         {
+            if( !m_generators[ii]->GetFile().Exists( wxFILE_EXISTS_REGULAR ) )
+                continue;
+
             m_lbGenerators->Append( m_generators[ii]->GetName() );
 
             if( active_plugin_name == m_generators[ii]->GetName() )
