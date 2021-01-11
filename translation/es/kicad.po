@@ -3,14 +3,15 @@
 # Iñigo Figuero Sanz <news@imagedworld.com>, 2020.
 # Echedey <echedeyla@hotmail.com>, 2020, 2021.
 # Tomás Mora <tom.mora96@gmail.com>, 2021.
+# Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 #: pcbnew/track.cpp:736
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-08 05:55-0800\n"
-"PO-Revision-Date: 2021-01-10 23:38+0000\n"
-"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
+"PO-Revision-Date: 2021-01-11 01:34+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1283,7 +1284,7 @@ msgstr "Imagen en escala de grises"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr "Imagen en Blanco y Negro &&W"
+msgstr "Imagen en blanco y negro"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
@@ -1327,7 +1328,7 @@ msgstr "Parámetros de salida"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr "Bloquear relación alto/ancho"
+msgstr "Bloquear relación altura-anchura"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1342,7 +1343,7 @@ msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr "Cargar Bitmap"
+msgstr "Cargar mapa de bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
@@ -1430,7 +1431,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 msgid "Bitmap to Component Converter"
-msgstr "Conversor de Bitmap a Componente"
+msgstr "Conversor de mapas de bits en componentes"
 
 #: common/base_units.cpp:481
 msgid "sq. mm"
@@ -10890,7 +10891,7 @@ msgstr "Intensidad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:921
 msgid "Source Type"
-msgstr "Tipo de Fuente"
+msgstr "Tipo de fuente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:929
 msgid "Source"
@@ -14532,6 +14533,7 @@ msgstr ""
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
+"El símbolo %s se deriva de %s. Los gráficos de símbolos no se podrán editar."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
 #, fuzzy, c-format
@@ -31498,14 +31500,13 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4564
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2575
-#, fuzzy
 msgid "Legacy Zone Warning"
-msgstr "Aviso"
+msgstr "Aviso de zona heredada"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:543
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "El archivo '%s' tiene una versión no reconocida: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:697
 #, c-format
