@@ -613,6 +613,34 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 }
 
 
+LIBEVAL::VALUE PCB_EXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+{
+    BOARD_ITEM* item = GetObject( aCtx );
+
+    if( !item )
+        return LIBEVAL::VALUE();
+
+    if( item->IsConnected() )
+        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetClassName() );
+    else
+        return LIBEVAL::VALUE();
+}
+
+
+LIBEVAL::VALUE PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
+{
+    BOARD_ITEM* item = GetObject( aCtx );
+
+    if( !item )
+        return LIBEVAL::VALUE();
+
+    if( item->IsConnected() )
+        return LIBEVAL::VALUE( static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNetname() );
+    else
+        return LIBEVAL::VALUE();
+}
+
+
 LIBEVAL::FUNC_CALL_REF PCB_EXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
     PCB_EXPR_BUILTIN_FUNCTIONS& registry = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
@@ -626,6 +654,27 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     std::unique_ptr<PCB_EXPR_VAR_REF> vref;
+
+    // Check for a couple of very common cases and compile them straight to "object code".
+
+    if( aField.CmpNoCase( "NetClass" ) )
+    {
+        if( aVar == "A" )
+            return std::make_unique<PCB_EXPR_NETCLASS_REF>( 0 );
+        else if( aVar == "B" )
+            return std::make_unique<PCB_EXPR_NETCLASS_REF>( 1 );
+        else
+            return nullptr;
+    }
+    else if( aField.CmpNoCase( "NetName" ) )
+    {
+        if( aVar == "A" )
+            return std::make_unique<PCB_EXPR_NETNAME_REF>( 0 );
+        else if( aVar == "B" )
+            return std::make_unique<PCB_EXPR_NETNAME_REF>( 1 );
+        else
+            return nullptr;
+    }
 
     if( aVar == "A" )
         vref = std::make_unique<PCB_EXPR_VAR_REF>( 0 );

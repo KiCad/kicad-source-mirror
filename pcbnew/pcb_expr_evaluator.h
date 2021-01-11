@@ -116,6 +116,36 @@ private:
 };
 
 
+// "Object code" version of a netclass reference (for performance).
+class PCB_EXPR_NETCLASS_REF : public PCB_EXPR_VAR_REF
+{
+public:
+    PCB_EXPR_NETCLASS_REF( int aItemIndex ) :
+        PCB_EXPR_VAR_REF( aItemIndex )
+    {
+        SetType( LIBEVAL::VT_STRING );
+        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
+    }
+
+    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+};
+
+
+// "Object code" version of a netname reference (for performance).
+class PCB_EXPR_NETNAME_REF : public PCB_EXPR_VAR_REF
+{
+public:
+    PCB_EXPR_NETNAME_REF( int aItemIndex ) :
+        PCB_EXPR_VAR_REF( aItemIndex )
+    {
+        SetType( LIBEVAL::VT_STRING );
+        //printf("*** CreateVarRef %p %d\n", this, aItemIndex );
+    }
+
+    LIBEVAL::VALUE GetValue( LIBEVAL::CONTEXT* aCtx ) override;
+};
+
+
 class PCB_EXPR_BUILTIN_FUNCTIONS
 {
 public:

@@ -265,6 +265,12 @@ public:
 class CONTEXT
 {
 public:
+    CONTEXT() :
+        m_stackPtr( 0 )
+    {
+        m_ownedValues.reserve( 20 );
+    }
+
     virtual ~CONTEXT()
     {
         for( VALUE* value : m_ownedValues )
@@ -280,25 +286,23 @@ public:
 
     void Push( VALUE* v )
     {
-        m_stack.push( v );
+        m_stack[ m_stackPtr++ ] = v;
     }
 
     VALUE* Pop()
     {
-        if( m_stack.size() == 0 )
+        if( m_stackPtr == 0 )
         {
             ReportError( _( "Malformed expression" ) );
             return AllocValue();
         }
 
-        VALUE* value = m_stack.top();
-        m_stack.pop();
-        return value;
+        return m_stack[ --m_stackPtr ];
     }
 
     int SP() const
     {
-        return m_stack.size();
+        return m_stackPtr;
     };
 
     void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
@@ -312,7 +316,8 @@ public:
 
 private:
     std::vector<VALUE*> m_ownedValues;
-    std::stack<VALUE*>  m_stack;
+    VALUE*              m_stack[100];       // std::stack not performant enough
+    int                 m_stackPtr;
     ERROR_STATUS        m_errorStatus;
 
     std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
