@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-11 16:20+0000\n"
-"Last-Translator: Dozimas <ozangunaydin@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2021-01-11 19:47+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -192,7 +192,7 @@ msgstr "Oluşturma süresi %.0f ms ( %.1f fps)"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Ağ %s\tAğ Sınıfı %s\tDolgu Adı %s"
+msgstr "Ağ %s\tAğ Sınıfı %s\tPed Adı %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:762
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
@@ -530,9 +530,8 @@ msgid "Other Options"
 msgstr "Diğer Seçenekler"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Kenar yumuşatma"
+msgstr "Kenar yumuşatma:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -557,9 +556,8 @@ msgstr ""
 "açılmalıdır"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "Seçim rengi"
+msgstr "Seçim rengi:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -620,9 +618,8 @@ msgid "Recursion Level"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "Gölgeler"
+msgstr "Gölgeler:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -637,9 +634,8 @@ msgid "Random direction factor of the cast rays"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "Yansımalar"
+msgstr "Yansımalar:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -652,9 +648,8 @@ msgid ""
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "Kırılmalar"
+msgstr "Kırılmalar:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -666,24 +661,20 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "Işık yapılandırması"
+msgstr "Işık Yapılandırması"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "Ortam Kamera Işığı"
+msgstr "Ortam kamera ışığı:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "Üst Işık"
+msgstr "Üst ışık:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Alt Işık"
+msgstr "Alt ışık:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -696,44 +687,36 @@ msgid "Azimuth (degrees)"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "2"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -1210,7 +1193,7 @@ msgstr "PostScript Dosyası Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:808
 msgid "Create Symbol Library"
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "Sembol Kütüphanesi Oluştur"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:847
 msgid "Create Footprint Library"
@@ -1642,7 +1625,7 @@ msgstr "3B modeller"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr "Simgeler"
+msgstr "Semboller"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
@@ -1650,7 +1633,7 @@ msgstr "İz düşümler"
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
-msgstr "İkonlar"
+msgstr "Simgeler"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
@@ -4651,7 +4634,7 @@ msgstr ""
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr "Simge referansları"
+msgstr "Sembol referansları"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
@@ -4663,7 +4646,7 @@ msgstr ""
 
 #: common/layer_id.cpp:117
 msgid "Symbol body outlines"
-msgstr "Simge gövdesi ana hatları"
+msgstr "Sembol gövdesi ana hatları"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
@@ -7334,12 +7317,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_change_symbols.cpp:490
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "%s simgesini '%s'den '%s'e güncelle"
+msgstr "%s sembolünü '%s'den '%s'e güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:497
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "%s simgelerini '%s'den '%s'e güncelle"
+msgstr "%s sembollerini '%s'den '%s'e güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:507
 #, c-format
@@ -7423,7 +7406,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
 msgid "Update Symbols from Library"
-msgstr "Simgeleri Kütüphaneden Güncelle"
+msgstr "Sembolleri Kütüphaneden Güncelle"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:139
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
@@ -13397,7 +13380,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:733
 msgid "Manage symbol libraries"
-msgstr "Simge kütüphanelerini yönet"
+msgstr "Sembol kütüphanelerini yönet"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:744
 msgid ""
@@ -13495,7 +13478,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1424
 #, c-format
 msgid "Error saving %s symbol library table."
-msgstr "%s simge kütüphanesi tablosu kaydedilirken hata oluştu."
+msgstr "%s sembol kütüphanesi tablosu kaydedilirken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1369
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1425
@@ -13854,7 +13837,7 @@ msgstr ""
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
-msgstr "Simge seç"
+msgstr "Sembol seç"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
@@ -13866,7 +13849,7 @@ msgstr ""
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
-msgstr "Simge Görüntüleyici"
+msgstr "Sembol Görüntüleyici"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
@@ -22755,9 +22738,8 @@ msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Malzeme Özellikleri"
+msgstr "Ped Özellikleri Hataları"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Pad Properties Warnings"
@@ -24122,38 +24104,37 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:104
 msgid "Pre-defined widths:"
-msgstr ""
+msgstr "Önceden tanımlanan genişlikler:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr ""
+msgstr "Yol genişliği:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
-msgstr ""
+msgstr "Ağ sınıfı genişliklerini kullan"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
-msgstr ""
+msgstr "Önceden tanımlanan boyutlar:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr ""
+msgstr "Geçiş çapı:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Delikleri devre dışı bırak"
+msgstr "Geçiş deliği:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
-msgstr ""
+msgstr "Ağ sınıfı boyutlarını kullan"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:247
 msgid "Via type:"
-msgstr ""
+msgstr "Geçiş türü:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1013
@@ -24172,52 +24153,51 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:259
 msgid "Start layer:"
-msgstr ""
+msgstr "Başlangıç katmanı:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
 msgid "End layer:"
-msgstr ""
+msgstr "Bitiş katmanı:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:113
 msgid "Track & Via Properties"
-msgstr ""
+msgstr "Yol ve Geçiş Özellikleri"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size has to be smaller than via diameter"
-msgstr ""
+msgstr "Geçiş matkap boyutu geçiş çapından küçük olmalıdır"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr ""
+msgstr "Geçiş matkabı:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr ""
+msgstr "Yol Genişliği ve Geçiş Boyutu"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:140
 msgid "Set Unused Pad Properties"
-msgstr ""
+msgstr "Kullanılmayan Ped Özelliklerini Ayarla"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr ""
+msgstr "&Geçişler"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr ""
+msgstr "&Pedler"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
-msgstr ""
+msgstr "Kullanılmayan katmanları &kaldır"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "&Dış katmanları koru"
+msgstr "Kullanılmayan katmanları &geri yükle"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
-msgstr ""
+msgstr "Yalnızca &seçim"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
@@ -24225,11 +24205,11 @@ msgstr "&Dış katmanları koru"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
-msgstr ""
+msgstr "Kullanılmayan Pedleri Kaldır"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr ""
+msgstr "Sembolü olmayan iz düşümleri sil"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
@@ -24264,36 +24244,36 @@ msgstr ""
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Do not show"
-msgstr ""
+msgstr "Gösterme"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads"
-msgstr ""
+msgstr "Pedlerde göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr ""
+msgstr "Yollarda göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr ""
+msgstr "Pedlerde ve yollarda göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
-msgstr ""
+msgstr "Ağ Adları"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr ""
+msgstr "Pedlerde ve/veya yollarda ağ adlarını göster veya gizle."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:798
 msgid "Show pad numbers"
-msgstr ""
+msgstr "Ped numaralarını göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
-msgstr ""
+msgstr "Ped <ağ yok> göstergesini göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
@@ -24313,7 +24293,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
-msgstr ""
+msgstr "Her zaman göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track Clearance"
@@ -24382,26 +24362,26 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:91
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
 msgid "Select item(s)."
-msgstr ""
+msgstr "Öge(ler) seç."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 #: pcbnew/dialogs/panel_edit_options_base.cpp:182
 msgid "Add item(s) to selection."
-msgstr ""
+msgstr "Öge(ler)i seçime ekle."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:106
 msgid "Shift+Alt"
-msgstr ""
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:111
 #: pcbnew/dialogs/panel_edit_options_base.cpp:192
 msgid "Remove item(s) from selection."
-msgstr ""
+msgstr "Öge(ler)i seçimden kaldır."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:121
 #: pcbnew/dialogs/panel_edit_options_base.cpp:202
 msgid "Toggle selected state of item(s)."
-msgstr ""
+msgstr "Öge(ler)in seçilme durumlarını değiştir."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:131
 #: pcbnew/dialogs/panel_edit_options_base.cpp:212
@@ -24410,7 +24390,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:136
 msgid "Ctrl+Shift"
-msgstr ""
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:222
@@ -24425,11 +24405,11 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:187
 msgid "Shift+Cmd"
-msgstr ""
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:217
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 msgid "Magnetic Points"
