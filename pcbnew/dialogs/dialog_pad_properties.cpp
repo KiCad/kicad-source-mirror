@@ -188,6 +188,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_staticTextInfoPosValue->SetFont( infoFont );
     m_staticTextPrimitiveListWarning->SetFont( infoFont );
 
+    // Do not allow locking items in the footprint editor
+    m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
+
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
     TransferDataToWindow();

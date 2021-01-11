@@ -735,7 +735,21 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         // Create the "new" footprint
         FOOTPRINT* newFootprint = (FOOTPRINT*) GetBoard()->GetFirstFootprint()->Duplicate();
         newFootprint->SetParent( pcbframe->GetBoard() );
-        newFootprint->SetLink( 0 );
+        newFootprint->SetLink( niluuid );
+        newFootprint->SetFlags(IS_NEW ); // whatever
+
+        // Pads in the library all have orphaned nets.  Replace with Default.
+        for( PAD* pad : newFootprint->Pads() )
+        {
+            pad->SetLocked( !pcbframe->Settings().m_AddUnlockedPads );
+            pad->SetNetCode( 0 );
+        }
+
+        // Put it on FRONT layer,
+        // (Can be stored flipped if the lib is an archive built from a board)
+        if( newFootprint->IsFlipped() )
+            newFootprint->Flip( newFootprint->GetPosition(),
+                    pcbframe->Settings().m_FlipLeftRight );
 
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();
@@ -743,6 +757,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         commit.Add( newFootprint );
         viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
         pcbframe->PlaceFootprint( newFootprint );
+
         newFootprint->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
         commit.Push( wxT( "Insert footprint" ) );

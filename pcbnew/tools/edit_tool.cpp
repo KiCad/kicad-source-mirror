@@ -251,7 +251,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                     BOARD_ITEM* item = aCollector[ i ];
 
                     // We don't operate on pads; convert them to footprint selections
-                    if( !sTool->IsFootprintEditor() && item->Type() == PCB_PAD_T
+                    if( !sTool->IsFootprintEditor() && item->IsLocked() && item->Type() == PCB_PAD_T
                             && !item->GetParent()->IsLocked() )
                     {
                         aCollector.Remove( item );
@@ -263,7 +263,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForGroups( aCollector );
             },
-            true /* prompt user regarding locked items */ );
+            !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -358,7 +358,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 for( BOARD_ITEM* item : to_add )
                     aCollector.Append( item );
             },
-            true /* prompt user regarding locked items */ );
+            !m_isFootprintEditor /* prompt user regarding locked items only in pcb editor*/ );
 
     if( selection.Empty() )
         return 0;
@@ -988,7 +988,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForGroups( aCollector );
             },
-            !m_dragging /* prompt user regarding locked items */ );
+            !m_dragging && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1114,7 +1114,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForGroups( aCollector );
             },
-            !m_dragging /* prompt user regarding locked items */ );
+            !m_dragging && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1233,7 +1233,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForGroups( aCollector );
             },
-            !m_dragging /* prompt user regarding locked items */ );
+            !m_dragging && !m_isFootprintEditor/* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1323,7 +1323,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                 },
-                true /* prompt user regarding locked items */ );
+                !m_isFootprintEditor /* prompt user regarding locked items */ );
     }
 
     bool isHover = selectionCopy.IsHover();
@@ -1530,7 +1530,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForGroups( aCollector );
             },
-            true /* prompt user regarding locked items */ );
+            !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1958,7 +1958,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
             },
-            aEvent.IsAction( &ACTIONS::cut ) /* prompt user regarding locked items */ );
+            aEvent.IsAction( &ACTIONS::cut ) && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( !selection.Empty() )
     {

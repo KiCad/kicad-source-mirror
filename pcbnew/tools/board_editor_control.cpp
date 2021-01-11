@@ -904,7 +904,10 @@ int BOARD_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
                 // Pads in the library all have orphaned nets.  Replace with Default.
                 for( PAD* pad : fp->Pads() )
+                {
+                    pad->SetLocked( !m_frame->Settings().m_AddUnlockedPads );
                     pad->SetNetCode( 0 );
+                }
 
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)

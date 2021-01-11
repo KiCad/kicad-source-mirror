@@ -78,7 +78,7 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                 }
             },
-            true /* prompt user regarding locked items */ );
+            !m_isFootprintEditor /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;

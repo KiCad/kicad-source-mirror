@@ -27,6 +27,7 @@
  */
 
 #include <pcb_base_edit_frame.h>
+#include <pcb_edit_frame.h>
 #include <wx/valnum.h>
 #include <board_commit.h>
 #include <pcb_layer_box_selector.h>
@@ -114,6 +115,9 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_AngleValidator.SetRange( -360.0, 360.0 );
     m_angleCtrl->SetValidator( m_AngleValidator );
     m_AngleValidator.SetWindow( m_angleCtrl );
+
+    // Do not allow locking items in the footprint editor
+    m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
 
     // Configure the layers list selector
     if( m_fp_item )

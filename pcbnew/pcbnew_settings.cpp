@@ -67,6 +67,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
           m_Use45DegreeGraphicSegments( false ),
           m_FlipLeftRight( false ),
+          m_AddUnlockedPads( false ),
           m_PolarCoords( false ),
           m_RotationAngle( 900 ),
           m_PlotLineWidth( 0.1 ),
@@ -102,6 +103,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
             &m_FlipLeftRight, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.add_unlocked_pads",
+            &m_AddUnlockedPads, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );

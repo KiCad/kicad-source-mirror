@@ -484,7 +484,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                 }
             },
-            true /* prompt user regarding locked items */ );
+            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -605,7 +605,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                 }
             },
-            true /* prompt user regarding locked items */ );
+            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;

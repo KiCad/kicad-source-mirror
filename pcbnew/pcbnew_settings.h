@@ -281,6 +281,9 @@ public:
     bool m_FlipLeftRight;                // True: Flip footprints across Y axis
     // False: Flip footprints across X axis
 
+    bool m_AddUnlockedPads;             // True: Pads are unlocked when new footprints are added to the board
+                                        // False: Pads are locked in new footprints
+
     bool m_PolarCoords;
 
     int m_RotationAngle;
