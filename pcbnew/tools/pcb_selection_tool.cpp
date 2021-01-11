@@ -2497,7 +2497,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
             continue;
         }
 
-        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( item, m_enteredGroup );
+        PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( item, m_enteredGroup, m_isFootprintEditor );
 
         if( aTop )
         {

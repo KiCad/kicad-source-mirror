@@ -89,10 +89,11 @@ public:
     /*
      * Searches for highest level group containing item.
      *
-     * @param scope restricts the search to groups within the group scope.
+     * @param aScope restricts the search to groups within the group scope.
+     * @param aFootprintEditor true if we should stop promoting at the footprint level
      * @return group containing item, if it exists, otherwise, NULL
      */
-    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope );
+    static PCB_GROUP* TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool aFootprintEditor );
 
     static bool WithinScope( BOARD_ITEM* item, PCB_GROUP* scope );
 

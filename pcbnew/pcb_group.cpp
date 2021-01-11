@@ -69,17 +69,24 @@ void PCB_GROUP::RemoveAll()
 }
 
 
-PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
+PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool aFootprintEditor )
 {
-    PCB_GROUP* candidate = item->GetParentGroup();
+    PCB_GROUP* candidate = aItem->GetParentGroup();
 
-    if( !candidate && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
-        candidate = item->GetParent()->GetParentGroup();
+    // Don't get the footprint's group if we are in the footprint editor
+    if( !candidate && aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T
+            && !aFootprintEditor )
+        candidate = aItem->GetParent()->GetParentGroup();
 
-    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
+    while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != aScope )
+    {
+        if( candidate->GetParent()->Type() == PCB_FOOTPRINT_T && aFootprintEditor )
+            break;
+
         candidate = candidate->GetParentGroup();
+    }
 
-    return candidate == scope ? nullptr : candidate;
+    return candidate == aScope ? nullptr : candidate;
 }
 
 
