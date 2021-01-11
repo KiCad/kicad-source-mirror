@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -44,6 +44,7 @@
 #include "spice_reporter.h"
 
 #include <menus_helpers.h>
+#include <dialog_shim.h>
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
 {
@@ -1134,7 +1135,7 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
 {
-    class NETLIST_VIEW_DIALOG : public wxDialog
+    class NETLIST_VIEW_DIALOG : public DIALOG_SHIM
     {
     public:
         enum
@@ -1147,12 +1148,13 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
             EndModal( GetReturnCode() );
         }
 
-        NETLIST_VIEW_DIALOG(wxWindow* parent, wxString source) :
-            wxDialog(parent, wxID_ANY, "SPICE Netlist",
-                     wxDefaultPosition, wxSize(1500,900),
-                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        NETLIST_VIEW_DIALOG( wxWindow* parent, wxString source ) :
+            DIALOG_SHIM( parent, wxID_ANY, "SPICE Netlist",
+                         wxDefaultPosition, wxDefaultSize,
+                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         {
             wxStyledTextCtrl* text = new wxStyledTextCtrl( this, wxID_ANY );
+            text->SetMinSize( wxSize( 600, 400 ) );
 
             text->SetMarginWidth( MARGIN_LINE_NUMBERS, 50 );
             text->StyleSetForeground( wxSTC_STYLE_LINENUMBER, wxColour( 75, 75, 75 ) );
@@ -1172,6 +1174,8 @@ void SIM_PLOT_FRAME::onShowNetlist( wxCommandEvent& event )
 
             Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NETLIST_VIEW_DIALOG::onClose ), NULL,
                     this );
+
+            FinishDialogSettings();
         }
     };
 
