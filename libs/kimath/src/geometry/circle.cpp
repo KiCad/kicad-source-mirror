@@ -48,8 +48,7 @@ CIRCLE::CIRCLE( const CIRCLE& aOther )
 }
 
 
-CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, const VECTOR2I& aP,
-                                       bool aAlternateSolution )
+CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, const VECTOR2I& aP )
 {
     //fixme: There might be more efficient / accurate solution than using geometrical constructs
 
@@ -91,7 +90,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         // The radius will be half the distance between the two lines
         // The possible centers can be found by intersection
 
-        SEG perpendicularAtoB( aLineA.A, aLineB.LineProject( aLineA.A ) );
+        SEG      perpendicularAtoB( aLineA.A, aLineB.LineProject( aLineA.A ) );
         VECTOR2I midPt = perpendicularAtoB.Center();
         Radius = ( midPt - aLineA.A ).EuclideanNorm();
 
@@ -103,10 +102,9 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         wxCHECK_MSG( possibleCenters.size() > 0, *this, "No solutions exist!" );
         intersectPoint = aLineA.A; // just for the purpose of deciding which solution to return
 
-        if( aAlternateSolution )
-            Center = closestToIntersect( possibleCenters.front(), possibleCenters.back() );
-        else
-            Center = furthestFromIntersect( possibleCenters.front(), possibleCenters.back() );
+        // For the special case of the two segments being parallel, we will return the solution
+        // whose center is closest to aLineA.A
+        Center = closestToIntersect( possibleCenters.front(), possibleCenters.back() );
     }
     else
     {
@@ -126,15 +124,12 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         }
 
         // Calculate bisector
-        VECTOR2I  lineApt = furthestFromIntersect( aLineA.A, aLineA.B );
-        VECTOR2I  lineBpt = furthestFromIntersect( aLineB.A, aLineB.B );
-        VECTOR2I  bisectorPt = GetArcMid( lineApt, lineBpt, intersectPoint, true );
+        VECTOR2I lineApt = furthestFromIntersect( aLineA.A, aLineA.B );
+        VECTOR2I lineBpt = furthestFromIntersect( aLineB.A, aLineB.B );
+        VECTOR2I bisectorPt = GetArcMid( lineApt, lineBpt, intersectPoint, true );
 
         anglebisector.A = intersectPoint;
         anglebisector.B = bisectorPt;
-
-        if( aAlternateSolution && ( aLineA.Contains( aP ) || aLineB.Contains( aP ) ) )
-            anglebisector = anglebisector.PerpendicularSeg( intersectPoint );
 
         // Create an arbitrary circle that is tangent to both lines
         CIRCLE hSolution;
@@ -142,16 +137,13 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         hSolution.Radius = aLineA.LineDistance( hSolution.Center );
 
         // Find the homothetic image of aP in the construction circle (hSolution)
-        SEG throughaP( intersectPoint, aP );
+        SEG                   throughaP( intersectPoint, aP );
         std::vector<VECTOR2I> hProjections = hSolution.Intersect( throughaP );
         wxCHECK_MSG( hProjections.size() > 0, *this, "No solutions exist!" );
 
-        VECTOR2I hSelected;
-
-        if( aAlternateSolution )
-            hSelected = furthestFromIntersect( hProjections.front(), hProjections.back() );
-        else
-            hSelected = closestToIntersect( hProjections.front(), hProjections.back() );
+        // We want to create a fillet, so the projection of homothetic projection of aP
+        // should be the one closest to the intersection
+        VECTOR2I hSelected = closestToIntersect( hProjections.front(), hProjections.back() );
 
         VECTOR2I hTanLineA = aLineA.LineProject( hSolution.Center );
         VECTOR2I hTanLineB = aLineB.LineProject( hSolution.Center );
@@ -160,7 +152,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         if( ( hTanLineA - aP ).EuclideanNorm() > ( hTanLineB - aP ).EuclideanNorm() )
         {
             // Find the tangent at line A by homothetic inversion
-            SEG hT( hTanLineA, hSelected );
+            SEG          hT( hTanLineA, hSelected );
             OPT_VECTOR2I actTanA = hT.ParallelSeg( aP ).IntersectLines( aLineA );
             wxCHECK_MSG( actTanA, *this, "No solutions exist!" );
 

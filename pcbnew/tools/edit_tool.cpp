@@ -399,74 +399,11 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
         // Constrain cursor
         // Fix-me: this is a bit ugly but it works
-        if( tanStartSide != tanStart.Side( m_cursor ) )
+        if( tanStartSide != tanStart.Side( m_cursor )
+            || tanEndSide != tanEnd.Side( m_cursor )
+            || constraintSegSide != constraintSeg.Side( m_cursor ) )
         {
-            VECTOR2I projected = tanStart.LineProject( m_cursor );
 
-            if( tanEndSide != tanEnd.Side( projected ) )
-            {
-                m_cursor = tanEnd.LineProject( m_cursor );
-
-                if( tanStartSide != tanStart.Side( m_cursor ) )
-                    m_cursor = optInterectTan.get();
-            }
-            else if( constraintSegSide != constraintSeg.Side( projected ) )
-            {
-                m_cursor = constraintSeg.LineProject( m_cursor );
-
-                if( tanStartSide != tanStart.Side( m_cursor ) )
-                    m_cursor = maxTanPtStart;
-            }
-            else
-            {
-                m_cursor = projected;
-            }
-        }
-        else if( tanEndSide != tanEnd.Side( m_cursor ) )
-        {
-            VECTOR2I projected = tanEnd.LineProject( m_cursor );
-
-            if( tanStartSide != tanStart.Side( projected ) )
-            {
-                m_cursor = tanStart.LineProject( m_cursor );
-
-                if( tanEndSide != tanEnd.Side( m_cursor ) )
-                    m_cursor = optInterectTan.get();
-            }
-            else if( constraintSegSide != constraintSeg.Side( projected ) )
-            {
-                m_cursor = constraintSeg.LineProject( m_cursor );
-
-                if( tanEndSide != tanEnd.Side( m_cursor ) )
-                    m_cursor = maxTanPtEnd;
-            }
-            else
-            {
-                m_cursor = projected;
-            }
-        }
-        else if( constraintSegSide != constraintSeg.Side( m_cursor ) )
-        {
-            VECTOR2I projected = constraintSeg.LineProject( m_cursor );
-
-            if( tanStartSide != tanStart.Side( projected ) )
-            {
-                m_cursor = tanStart.LineProject( m_cursor );
-
-                if( constraintSegSide != constraintSeg.Side( m_cursor ) )
-                    m_cursor = maxTanPtStart;
-            }
-            else if( tanEndSide != tanEnd.Side( projected ) )
-            {
-                m_cursor = tanEnd.LineProject( m_cursor );
-
-                if( constraintSegSide != constraintSeg.Side( m_cursor ) )
-                    m_cursor = maxTanPtEnd;
-            }
-            else
-            {
-                m_cursor = projected;
-            }
         }
 
         if( ( m_cursor - maxTangentCircle.Center ).EuclideanNorm() < maxTangentCircle.Radius )

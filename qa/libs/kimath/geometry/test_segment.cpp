@@ -617,7 +617,6 @@ BOOST_AUTO_TEST_CASE( SegSegPerpendicular )
 }
 
 
-
 /**
  * Struct to hold cases for operations with a #SEG, and a #VECTOR2I
  */

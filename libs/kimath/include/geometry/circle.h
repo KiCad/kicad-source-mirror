@@ -43,23 +43,20 @@ public:
     CIRCLE( const CIRCLE& aOther );
 
     /**
-     * Constructs this circle such that it is tangent to the given lines and passes through the
-     * given point. There are two possible solutions, controlled by aAlternateSolution.
+     * Constructs this circle such that it is tangent to the given segmetns and passes through the
+     * given point, generating the solution which can be used to fillet both segments.
      *
-     * When aAlternateSolution is false, find the best solution that can be used to fillet both
-     * lines (i.e. choose the most likely quadrant and find the solution with smallest arc angle
-     * between the tangent points on the lines)
+     * The caller is responsible for ensuring it is providing a solvable problem. This function will
+     * assert if this is not the case.
      *
      * @param aLineA is the first tangent line. Treated as an infinite line except for the purpose
      * of selecting the solution to return.
      * @param aLineB is the second tangent line. Treated as an infinite line except for the purpose
      * of selecting the solution to return.
      * @param aP is the point to pass through
-     * @param aAlternateSolution If true, returns the other solution.
      * @return *this
      */
-    CIRCLE& ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, const VECTOR2I& aP,
-                                   bool aAlternateSolution = false );
+    CIRCLE& ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, const VECTOR2I& aP );
 
     /**
      * Function NearestPoint()
