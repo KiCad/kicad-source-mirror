@@ -71,33 +71,33 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "auto_backup.backup_on_autosave", &m_Backup.backup_on_autosave, false ) );
+    m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",
+            &m_Backup.backup_on_autosave, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "auto_backup.limit_total_files", &m_Backup.limit_total_files, 25 ) );
+    m_params.emplace_back( new PARAM<int>( "auto_backup.limit_total_files",
+            &m_Backup.limit_total_files, 25 ) );
 
-    m_params.emplace_back( new PARAM<unsigned long long>(
-            "auto_backup.limit_total_size", &m_Backup.limit_total_size, 104857600 ) );
+    m_params.emplace_back( new PARAM<unsigned long long>( "auto_backup.limit_total_size",
+            &m_Backup.limit_total_size, 104857600 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "auto_backup.limit_daily_files", &m_Backup.limit_daily_files, 5 ) );
+    m_params.emplace_back( new PARAM<int>( "auto_backup.limit_daily_files",
+            &m_Backup.limit_daily_files, 5 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "auto_backup.min_interval", &m_Backup.min_interval, 300 ) );
+    m_params.emplace_back( new PARAM<int>( "auto_backup.min_interval",
+            &m_Backup.min_interval, 300 ) );
 
     m_params.emplace_back( new PARAM<bool>( "environment.show_warning_dialog",
-                                         &m_Env.show_warning_dialog, false ) );
+            &m_Env.show_warning_dialog, false ) );
 
     m_params.emplace_back( new PARAM_MAP<wxString>( "environment.vars", &m_Env.vars, {} ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.auto_pan", &m_Input.auto_pan, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "input.auto_pan_acceleration", &m_Input.auto_pan_acceleration, 5 ) );
+    m_params.emplace_back( new PARAM<int>( "input.auto_pan_acceleration",
+            &m_Input.auto_pan_acceleration, 5 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "input.center_on_zoom", &m_Input.center_on_zoom, true ) );
+    m_params.emplace_back( new PARAM<bool>( "input.center_on_zoom",
+            &m_Input.center_on_zoom, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.immediate_actions",
             &m_Input.immediate_actions, true ) );
@@ -105,8 +105,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.warp_mouse_on_move",
             &m_Input.warp_mouse_on_move, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "input.horizontal_pan", &m_Input.horizontal_pan, false ) );
+    m_params.emplace_back( new PARAM<bool>( "input.horizontal_pan",
+            &m_Input.horizontal_pan, false ) );
 
 #if defined(__WXMAC__) || defined(__WXGTK3__)
     bool default_zoom_acceleration = false;
@@ -114,8 +114,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     bool default_zoom_acceleration = true;
 #endif
 
-    m_params.emplace_back( new PARAM<bool>(
-            "input.zoom_acceleration", &m_Input.zoom_acceleration, default_zoom_acceleration ) );
+    m_params.emplace_back( new PARAM<bool>( "input.zoom_acceleration",
+            &m_Input.zoom_acceleration, default_zoom_acceleration ) );
 
 #ifdef __WXMAC__
     int default_zoom_speed = 5;
