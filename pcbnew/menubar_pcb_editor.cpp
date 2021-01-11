@@ -404,7 +404,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false );
     submenuActionPlugins->SetTool( selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
-    submenuActionPlugins->SetIcon( hammer_xpm );
+    submenuActionPlugins->SetIcon( puzzle_piece_xpm );
 
     submenuActionPlugins->Add( _( "Refresh Plugins" ),
                                _( "Reload all python plugins and refresh plugin menus" ),

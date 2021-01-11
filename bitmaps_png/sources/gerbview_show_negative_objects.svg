@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="gerbview_show_negative_objects.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2631"
-     inkscape:window-height="1611"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="825"
-     inkscape:window-y="265"
+     inkscape:zoom="25.126575"
+     inkscape:cx="12.502081"
+     inkscape:cy="11.98658"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -80,14 +80,17 @@
   <title
      id="title25087">gerbview_show_negative_opbjects</title>
   <path
-     class="cls-1"
-     d="M 22.9669,4.998 V 18.9741 H 0.9951 V 4.998 h 21.9718 m 1,-1 H -0.0049 v 15.9761 h 23.9718 z"
-     id="path25089" />
-  <path
      id="polygon25091"
-     style="fill:#b9b9b9;stroke:#545454;stroke-width:1;stroke-opacity:1;fill-opacity:1"
-     d="m 19.5,4.5 -15,15 h -4 v -15 z"
+     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1"
+     d="m 19.5,4.5 -15,15 h -3 v -15 z"
      sodipodi:nodetypes="ccccc" />
+  <rect
+     style="display:inline;fill:none;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect1427"
+     width="21"
+     height="15"
+     x="1.5"
+     y="4.5" />
   <line
      class="cls-3"
      x1="0.5"

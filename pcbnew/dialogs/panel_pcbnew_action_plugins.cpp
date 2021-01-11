@@ -36,7 +36,7 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame
         PANEL_PCBNEW_ACTION_PLUGINS_BASE( aWindow->GetTreebook() ),
         m_frame( aFrame )
 {
-    m_genericIcon = KiBitmap( hammer_xpm );
+    m_genericIcon = KiBitmap( puzzle_piece_xpm );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
     m_moveUpButton->SetBitmap( KiBitmap( small_up_xpm ) );

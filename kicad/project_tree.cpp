@@ -59,7 +59,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_LEGACY_PCB
     m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_SEXPR_PCB
     m_imageList->Add( KiBitmap( icon_gerbview_24_xpm ) );       // TREE_GERBER
-    m_imageList->Add( KiBitmap( gerber_job_file_xpm ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
+    m_imageList->Add( KiBitmap( file_gerber_job_xpm ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
     m_imageList->Add( KiBitmap( file_html_xpm ) );              // TREE_HTML
     m_imageList->Add( KiBitmap( file_pdf_xpm ) );               // TREE_PDF
     m_imageList->Add( KiBitmap( editor_xpm ) );                 // TREE_TXT

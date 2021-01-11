@@ -50,7 +50,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
         AS_GLOBAL, 0, "",
         _( "Open Gerber Job File..." ),
         _( "Open a Gerber job file and its associated gerber plot files" ),
-        gerber_job_file_xpm );
+        file_gerber_job_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
         AS_GLOBAL, 0, "",

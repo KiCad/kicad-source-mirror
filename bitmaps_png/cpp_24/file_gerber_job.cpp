@@ -52,6 +52,6 @@ static const unsigned char png[] = {
  0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE gerber_job_file_xpm[1] = {{ png, sizeof( png ), "gerber_job_file_xpm" }};
+const BITMAP_OPAQUE file_gerber_job_xpm[1] = {{ png, sizeof( png ), "file_gerber_job_xpm" }};
 
 //EOF

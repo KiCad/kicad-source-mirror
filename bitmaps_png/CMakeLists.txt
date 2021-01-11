@@ -240,6 +240,7 @@ set( BMAPS_MID
     file_drl
     file_dsn
     file_gbr
+    file_gerber_job
     file_html
     file_idf
     file_pdf
@@ -251,14 +252,10 @@ set( BMAPS_MID
     find_replace
     flag
     flip_board
-    footprint_browser
     gbr_select_mode2
-    gerber_job_file
     gerbview_show_negative_objects
-    gerbview_drill_file
     general_deletions
     general_ratsnest
-    green
     grid_select
     grid_select_axis
     grid
@@ -268,7 +265,6 @@ set( BMAPS_MID
     group_leave
     group_remove
     group_ungroup
-    hammer
     help
     hidden_pin
     hide_ratsnest
@@ -277,6 +273,7 @@ set( BMAPS_MID
     hole_to_hole_clearance
     hole_to_copper_clearance
     icon_cvpcb_24
+    icon_footprint_browser
     icon_gerbview_24
     import3d
     image
@@ -387,6 +384,7 @@ set( BMAPS_MID
     ps_diff_pair_tune_phase
     ps_tune_length
     push_pad_settings
+    puzzle_piece
     py_script
     recent
     redo

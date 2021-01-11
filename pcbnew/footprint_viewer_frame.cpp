@@ -130,7 +130,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( footprint_browser_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( icon_footprint_browser_xpm ) );
     SetIcon( icon );
 
     wxPanel* libPanel = new wxPanel( this );
