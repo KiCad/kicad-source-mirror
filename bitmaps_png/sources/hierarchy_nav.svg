@@ -29,9 +29,9 @@
      inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="15.537264"
-     inkscape:cx="7.5174055"
-     inkscape:cy="11.751399"
+     inkscape:zoom="17.072312"
+     inkscape:cx="13.406842"
+     inkscape:cy="12.960758"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
@@ -82,40 +82,44 @@
   </defs>
   <title
      id="title25217">hierarchy_nav</title>
-  <path
-     id="polyline25219"
-     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 2,6 v 6"
-     class="cls-1"
-     sodipodi:nodetypes="cc" />
+  <rect
+     style="fill:#f3f3f3;stroke:#545454;stroke-linecap:round;stroke-opacity:1;fill-opacity:1"
+     id="rect845"
+     width="21"
+     height="21"
+     x="1.5"
+     y="1.5" />
   <path
      id="polyline25221"
      style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 5,21 H 2 v -9 h 3"
+     d="M 7,17 H 5 V 3"
      class="cls-1"
-     sodipodi:nodetypes="cccc" />
+     sodipodi:nodetypes="ccc" />
+  <path
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 8.5,9 H 5"
+     id="path1420" />
   <rect
      class="cls-2"
-     x="1"
-     y="1"
-     width="22"
-     height="6"
-     id="rect25223"
-     style="fill:#606060;fill-opacity:1;stroke-width:0.999992" />
-  <rect
-     class="cls-2"
-     x="5"
-     y="9"
-     width="17"
-     height="6"
+     x="8.5"
+     y="6.5"
+     width="11.000001"
+     height="5.0000033"
      id="rect25225"
-     style="fill:#606060;fill-opacity:1;stroke-width:0.999999" />
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-opacity:1" />
   <rect
      class="cls-2"
-     x="5"
-     y="17"
-     width="17"
-     height="6"
+     x="8.5"
+     y="14.5"
+     width="11"
+     height="5.0000033"
      id="rect25227"
-     style="fill:#606060;fill-opacity:1;stroke-width:0.999994" />
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:0.999994;stroke-opacity:1" />
+  <rect
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect849"
+     width="21"
+     height="2.5"
+     x="1.5"
+     y="1.4999999" />
 </svg>
