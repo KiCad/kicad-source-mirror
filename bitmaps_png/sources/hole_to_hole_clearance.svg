@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="hole_to_hole_clearance.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="13.183169"
+     inkscape:cx="3.5764435"
+     inkscape:cy="14.191273"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -98,16 +98,16 @@
      x2="15.7628"
      y2="8.3104"
      id="line157587" />
-  <polygon
+  <path
+     id="polygon26709"
+     style="fill:#545454"
+     d="M 5.2827533,19.202483 6.5,13.5 l 4.387177,4.093003 z"
      class="cls-3"
-     points="11.072,17.167 6.235,20.012 9.001,15.129 "
-     id="polygon157589"
-     transform="matrix(1.2627322,0.26273219,0.26273219,1.2627322,-7.9045117,-7.9045113)"
-     style="stroke-width:0.809653" />
-  <polygon
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="polygon26709-0"
+     style="fill:#545454"
+     d="M 18.877579,5.1615793 17.521256,10.832593 13.235474,6.6335358 Z"
      class="cls-3"
-     points="17.104,11.035 19.869,6.153 15.032,8.998 "
-     id="polygon157591"
-     transform="matrix(1.2627322,0.26273219,0.26273219,1.2627322,-7.8282382,-7.8282378)"
-     style="stroke-width:0.809653" />
+     sodipodi:nodetypes="cccc" />
 </svg>

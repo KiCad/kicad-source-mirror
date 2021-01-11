@@ -622,7 +622,7 @@ TOOL_ACTION ACTIONS::help( "common.SuiteControl.help",
         AS_GLOBAL, 0, "",
         _( "Help" ),
         _( "Open product documentation in a web browser" ),
-        online_help_xpm );
+        help_online_xpm );
 
 TOOL_ACTION ACTIONS::listHotKeys( "common.SuiteControl.listHotKeys",
         AS_GLOBAL,

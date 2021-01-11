@@ -266,6 +266,7 @@ set( BMAPS_MID
     group_remove
     group_ungroup
     help
+    help_online
     hidden_pin
     hide_ratsnest
     hierarchy_nav
@@ -339,7 +340,6 @@ set( BMAPS_MID
     new_project_with_template
     noconn
     normal
-    online_help
     open_project
     options_3drender
     options_board

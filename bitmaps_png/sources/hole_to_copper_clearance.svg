@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="hole_to_copper_clearance.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="32.479099"
+     inkscape:cx="1.0294644"
+     inkscape:cy="23.870499"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -94,14 +94,16 @@
      x2="7.8479004"
      y2="15.3377"
      id="line25243" />
-  <polygon
-     class="cls-4"
-     points="16.196,7.735 13.78,12.8 11.571,10.913 "
-     id="polygon25245"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-4"
-     points="5.971,19.706 10.596,16.528 8.387,14.641 "
-     id="polygon25247"
-     transform="translate(-1,-1)" />
+  <path
+     id="polygon26709"
+     style="fill:#545454;stroke:none"
+     d="m 4.971,18.706 0.8962582,-5.761659 4.6093278,3.841106 z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="polygon26709-6"
+     style="fill:#545454;stroke:none;stroke-linecap:round;stroke-linejoin:round"
+     d="M 15.196,6.735 14.299742,12.496659 9.6904139,8.655553 Z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
 </svg>

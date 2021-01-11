@@ -164,6 +164,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
         m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
         m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
         m_bitmapMinuViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
+        m_bitmapHoleClearance->SetBitmap( KiBitmap( hole_to_copper_clearance_xpm ) );
         m_bitmapMinHoleClearance->SetBitmap( KiBitmap( hole_to_hole_clearance_xpm ) );
         m_bitmapEdgeClearance->SetBitmap( KiBitmap( edge_to_copper_clearance_xpm ) );
         m_bitmapBlindBuried->SetBitmap( KiBitmap( via_buried_xpm ) );
