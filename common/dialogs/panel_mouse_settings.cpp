@@ -81,23 +81,28 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     if( !isScrollModSetValid( m_currentScrollMod ) )
         return false;
 
-    int  drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::NONE );
-    int  drag_right  = static_cast<int>( MOUSE_DRAG_ACTION::NONE );
+    switch( m_choiceLeftButtonDrag->GetSelection() )
+    {
+    case 0: cfg->m_Input.drag_left = static_cast<int>( MOUSE_DRAG_ACTION::SELECT );        break;
+    case 1: cfg->m_Input.drag_left = static_cast<int>( MOUSE_DRAG_ACTION::DRAG_SELECTED ); break;
+    case 2: cfg->m_Input.drag_left = static_cast<int>( MOUSE_DRAG_ACTION::DRAG_ANY );      break;
+    default:                                                                               break;
+    }
 
     switch( m_choiceMiddleButtonDrag->GetSelection() )
     {
-    case 0: drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
-    case 1: drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
-    case 2:                                                            break;
-    default:                                                           break;
+    case 0: cfg->m_Input.drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
+    case 1: cfg->m_Input.drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
+    case 2: cfg->m_Input.drag_middle = static_cast<int>( MOUSE_DRAG_ACTION::NONE ); break;
+    default:                                                                        break;
     }
 
     switch( m_choiceRightButtonDrag->GetSelection() )
     {
-    case 0: drag_right = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
-    case 1: drag_right = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
-    case 2:                                                           break;
-    default:                                                          break;
+    case 0: cfg->m_Input.drag_right = static_cast<int>( MOUSE_DRAG_ACTION::PAN );  break;
+    case 1: cfg->m_Input.drag_right = static_cast<int>( MOUSE_DRAG_ACTION::ZOOM ); break;
+    case 2: cfg->m_Input.drag_right = static_cast<int>( MOUSE_DRAG_ACTION::NONE ); break;
+    default:                                                                       break;
     }
 
     cfg->m_Input.center_on_zoom        = m_checkZoomCenter->GetValue();
@@ -111,9 +116,6 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     cfg->m_Input.scroll_modifier_zoom  = m_currentScrollMod.zoom;
     cfg->m_Input.scroll_modifier_pan_h = m_currentScrollMod.panh;
     cfg->m_Input.scroll_modifier_pan_v = m_currentScrollMod.panv;
-
-    cfg->m_Input.drag_middle           = drag_middle;
-    cfg->m_Input.drag_right            = drag_right;
 
     return true;
 }
@@ -140,6 +142,14 @@ void PANEL_MOUSE_SETTINGS::applySettingsToPanel( const COMMON_SETTINGS& aSetting
     m_autoPanSpeed->SetValue( aSettings.m_Input.auto_pan_acceleration );
 
     m_zoomSpeed->Enable( !aSettings.m_Input.zoom_speed_auto );
+
+    switch( static_cast<MOUSE_DRAG_ACTION>( aSettings.m_Input.drag_left ) )
+    {
+    case MOUSE_DRAG_ACTION::SELECT:        m_choiceLeftButtonDrag->SetSelection( 0 ); break;
+    case MOUSE_DRAG_ACTION::DRAG_SELECTED: m_choiceLeftButtonDrag->SetSelection( 1 ); break;
+    case MOUSE_DRAG_ACTION::DRAG_ANY:      m_choiceLeftButtonDrag->SetSelection( 2 ); break;
+    default:                                                                          break;
+    }
 
     auto set_mouse_buttons =
             []( const MOUSE_DRAG_ACTION& aVal, wxChoice* aChoice )

@@ -202,9 +202,14 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( m_frame->ToolStackIsEmpty() )
         {
-            if( !modifier_enabled && !m_selection.Empty() && !m_frame->GetDragSelects()
-                    && evt->HasPosition() && selectionContains( evt->Position() ) )
+            if( !modifier_enabled
+                    && !m_selection.Empty()
+                    && m_frame->GetDragAction() == KIGFX::MOUSE_DRAG_ACTION::DRAG_SELECTED
+                    && evt->HasPosition()
+                    && selectionContains( evt->Position() ) )
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            }
             else
             {
                 if( m_additive )

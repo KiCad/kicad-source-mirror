@@ -208,8 +208,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
-        TRACK_DRAG_ACTION dragAction = getEditFrame<PCB_BASE_FRAME>()->Settings().m_TrackDragAction;
+        KIGFX::MOUSE_DRAG_ACTION dragAction = m_frame->GetDragAction();
+        TRACK_DRAG_ACTION        trackDragAction = m_frame->Settings().m_TrackDragAction;
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
         // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
@@ -340,7 +340,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
-            if( modifier_enabled || dragAlwaysSelects )
+            if( modifier_enabled || dragAction == KIGFX::MOUSE_DRAG_ACTION::SELECT )
+            {
+                selectMultiple();
+            }
+            else if( m_selection.Empty() && dragAction != KIGFX::MOUSE_DRAG_ACTION::DRAG_ANY )
             {
                 selectMultiple();
             }
@@ -384,9 +388,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Yes -> run the move tool and wait till it finishes
                     TRACK* track = dynamic_cast<TRACK*>( m_selection.GetItem( 0 ) );
 
-                    if( track && dragAction == TRACK_DRAG_ACTION::DRAG )
+                    if( track && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, true );
-                    else if( track && dragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                    else if( track && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
                     else
                         m_toolMgr->RunAction( PCB_ACTIONS::move, true );
@@ -419,8 +423,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
         {
             //move cursor prediction
-            if( !modifier_enabled && !dragAlwaysSelects && !m_selection.Empty()
-                    && evt->HasPosition() && selectionContains( evt->Position() ) )
+            if( !modifier_enabled
+                    && dragAction == KIGFX::MOUSE_DRAG_ACTION::DRAG_SELECTED
+                    && !m_selection.Empty()
+                    && evt->HasPosition()
+                    && selectionContains( evt->Position() ) )
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
             }

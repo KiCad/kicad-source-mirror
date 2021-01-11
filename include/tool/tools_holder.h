@@ -25,6 +25,7 @@
 #define  TOOL_HOLDER_H
 
 #include <vector>
+#include <view/view_controls.h>
 #include <tool/action_manager.h>
 #include <tool/selection.h>
 #include <tool/tool_action.h>
@@ -127,10 +128,10 @@ public:
     bool GetDoImmediateActions() const { return m_immediateActions; }
 
     /**
-     * Indicate that a drag should draw a selection rectangle, even when started over an
-     * item.
+     * Indicates whether a drag should draw a selection rectangle or drag selected (or unselected)
+     * objects.
      */
-    bool GetDragSelects() const { return m_dragSelects; }
+    KIGFX::MOUSE_DRAG_ACTION GetDragAction() const { return m_dragAction; }
 
     /**
      * Indicate that a move operation should warp the mouse pointer to the origin of the
@@ -170,7 +171,8 @@ protected:
                                             // the first invocation of a hotkey will just
                                             // select the relevant tool rather than executing
                                             // the tool's action.
-    bool              m_dragSelects;        // Prefer selection to dragging.
+    KIGFX::MOUSE_DRAG_ACTION m_dragAction;  // DRAG_ANY/DRAG_SELECTED/SELECT.
+
     bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
 };
 

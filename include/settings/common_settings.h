@@ -58,7 +58,6 @@ public:
         int  auto_pan_acceleration;
         bool center_on_zoom;
         bool immediate_actions;
-        bool prefer_select_to_drag;
         bool warp_mouse_on_move;
         bool horizontal_pan;
 
@@ -70,6 +69,7 @@ public:
         int scroll_modifier_pan_h;
         int scroll_modifier_pan_v;
 
+        int drag_left;
         int drag_middle;
         int drag_right;
     };
@@ -105,6 +105,7 @@ public:
 
 private:
     bool migrateSchema0to1();
+    bool migrateSchema1to2();
 
 public:
     APPEARANCE m_Appearance;

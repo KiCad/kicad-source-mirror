@@ -40,7 +40,7 @@ const std::set<wxString> envVarBlacklist =
 
 
 ///! Update the schema version whenever a migration is required
-const int commonSchemaVersion = 1;
+const int commonSchemaVersion = 2;
 
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
@@ -106,9 +106,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.immediate_actions",
             &m_Input.immediate_actions, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "input.prefer_select_to_drag",
-            &m_Input.prefer_select_to_drag, false ) );
-
     m_params.emplace_back( new PARAM<bool>( "input.warp_mouse_on_move",
             &m_Input.warp_mouse_on_move, true ) );
 
@@ -144,6 +141,11 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>(
             "input.scroll_modifier_pan_v", &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
+
+    m_params.emplace_back( new PARAM<int>( "input.mouse_left", &m_Input.drag_left,
+            static_cast<int>( MOUSE_DRAG_ACTION::DRAG_SELECTED ),
+            static_cast<int>( MOUSE_DRAG_ACTION::DRAG_ANY ),
+            static_cast<int>( MOUSE_DRAG_ACTION::SELECT ) ) );
 
     m_params.emplace_back( new PARAM<int>( "input.mouse_middle", &m_Input.drag_middle,
             static_cast<int>( MOUSE_DRAG_ACTION::PAN ),
@@ -189,6 +191,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         &m_Session.remember_open_files, false ) );
 
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
+    registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
 }
 
 
@@ -230,6 +233,31 @@ bool COMMON_SETTINGS::migrateSchema0to1()
         ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_pan_v" )] = WXK_SHIFT;
         ( *this )[nlohmann::json::json_pointer( "/input/scroll_modifier_zoom" )]  = 0;
     }
+
+    return true;
+}
+
+
+bool COMMON_SETTINGS::migrateSchema1to2()
+{
+    nlohmann::json::json_pointer v1_pointer( "/input/prefer_select_to_drag"_json_pointer );
+
+    bool prefer_selection = false;
+
+    try
+    {
+        prefer_selection = at( v1_pointer );
+        at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "prefer_select_to_drag" );
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" );
+    }
+
+    if( prefer_selection )
+        ( *this )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::SELECT;
+    else
+        ( *this )[nlohmann::json::json_pointer( "/input/mouse_left" )] = MOUSE_DRAG_ACTION::DRAG_ANY;
 
     return true;
 }

@@ -46,6 +46,8 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_panSizer;
 		wxStaticText* m_staticText22;
 		wxSlider* m_autoPanSpeed;
+		wxStaticText* m_leftButtonDragLabel;
+		wxChoice* m_choiceLeftButtonDrag;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceMiddleButtonDrag;
 		wxStaticText* m_staticText31;
@@ -79,7 +81,7 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 584,550 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_MOUSE_SETTINGS_BASE();
 
 };

@@ -67,7 +67,6 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
 		wxCheckBox* m_checkBoxIconsInMenus;
-		wxCheckBox* m_PreferSelectToDrag;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;
 		wxCheckBox* m_cbBackupEnabled;

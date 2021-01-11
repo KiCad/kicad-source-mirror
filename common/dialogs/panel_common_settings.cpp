@@ -126,9 +126,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
 
-    commonSettings->m_Input.immediate_actions = !m_NonImmediateActions->GetValue();
-    commonSettings->m_Input.prefer_select_to_drag = m_PreferSelectToDrag->GetValue();
-    commonSettings->m_Input.warp_mouse_on_move = m_warpMouseOnMove->GetValue();
+    commonSettings->m_Input.immediate_actions   = !m_NonImmediateActions->GetValue();
+    commonSettings->m_Input.warp_mouse_on_move  = m_warpMouseOnMove->GetValue();
 
     commonSettings->m_Backup.enabled            = m_cbBackupEnabled->GetValue();
     commonSettings->m_Backup.backup_on_autosave = m_cbBackupAutosave->GetValue();
@@ -203,7 +202,6 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );
 
-    m_PreferSelectToDrag->SetValue( aSettings.m_Input.prefer_select_to_drag );
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );
 

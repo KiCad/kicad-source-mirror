@@ -44,6 +44,8 @@ class VIEW;
 ///< Action to perform when the mouse is dragged
 enum class MOUSE_DRAG_ACTION
 {
+    DRAG_ANY,
+    DRAG_SELECTED,
     SELECT,
     ZOOM,
     PAN,
@@ -119,10 +121,8 @@ struct VC_SETTINGS
     ///< What modifier key to enable vertical with the (vertical) scroll wheel.
     int m_scrollModifierPanV;
 
-    ///< What drag action to perform when the middle button is pressed.
+    MOUSE_DRAG_ACTION m_dragLeft;
     MOUSE_DRAG_ACTION m_dragMiddle;
-
-    ///< What drag action to perform when the right button is pressed.
     MOUSE_DRAG_ACTION m_dragRight;
 
     ///< Is last cursor motion event coming from keyboard arrow cursor motion action.

@@ -145,6 +145,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
     m_settings.m_scrollModifierZoom    = cfg->m_Input.scroll_modifier_zoom;
     m_settings.m_scrollModifierPanH    = cfg->m_Input.scroll_modifier_pan_h;
     m_settings.m_scrollModifierPanV    = cfg->m_Input.scroll_modifier_pan_v;
+    m_settings.m_dragLeft              = static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_left );
     m_settings.m_dragMiddle            = static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_middle );
     m_settings.m_dragRight             = static_cast<MOUSE_DRAG_ACTION>( cfg->m_Input.drag_right );
 
