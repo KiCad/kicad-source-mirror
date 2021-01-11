@@ -42,9 +42,10 @@ class VIEW;
 
 
 ///< Action to perform when the mouse is dragged
+// Warning: these are encoded as integers in the file, so don't change their values
 enum class MOUSE_DRAG_ACTION
 {
-    DRAG_ANY,
+    DRAG_ANY = -2,
     DRAG_SELECTED,
     SELECT,
     ZOOM,
