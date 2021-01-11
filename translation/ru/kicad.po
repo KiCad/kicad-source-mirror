@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"PO-Revision-Date: 2021-01-11 19:47+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -502,11 +502,11 @@ msgstr "Удалить шёлкографию над перех.отв."
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Использовать цвет меди для нелужёной меди"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Использовать разные цвета для лужёной и нелужёной меди. (Медленнее)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -551,9 +551,8 @@ msgid "Other Options"
 msgstr "Другие параметры"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Сглаживание"
+msgstr "Сглаживание:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -576,9 +575,8 @@ msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr "Чтобы параметр вступил в силу нужно повторно открыть 3D просмотрщик"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "Цвет выделения"
+msgstr "Цвет выделения:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -635,14 +633,12 @@ msgid "Spread Factor %"
 msgstr "Коэф. распространения %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
-#, fuzzy
 msgid "Recursion Level"
 msgstr "Уровень рекурсии"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "Тени"
+msgstr "Тени:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -659,9 +655,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Фактор случайного отклонения при обработке лучей"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "Отражения"
+msgstr "Отражения:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -679,9 +674,8 @@ msgstr ""
 "прозрачным платам)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "Преломления"
+msgstr "Преломления:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -695,24 +689,20 @@ msgstr "Количество отражений от объектов, кото�
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
 msgstr "Параметры освещения"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "Окружающее освещение"
+msgstr "Окружающее освещение:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "Освещение сверху"
+msgstr "Освещение сверху:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Освещение снизу"
+msgstr "Освещение снизу:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -725,44 +715,36 @@ msgid "Azimuth (degrees)"
 msgstr "Азимут(°)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1:1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "R2:"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -3231,28 +3213,26 @@ msgstr ""
 "Насколько быстро панорамировать при перемещении объекта за пределы экрана"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Жесты"
+msgstr "Перетаскивание"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Перетаскивание правой кнопкой:"
+msgstr "Перетаскивание левой кнопкой:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Чертить прямоугольник"
+msgstr "Формировать область выделения"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr ""
+"Перетащить выбранные объекты; если не выделено – формировать область "
+"выделения"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Перетащить выбранные элементы"
+msgstr "Перетащить любые элементы (выделенные или нет)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3295,19 +3275,16 @@ msgid "Right button drag:"
 msgstr "Перетаскивание правой кнопкой:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Жесты"
+msgstr "Прокрутка"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "Панорамировать влево/вправо при горизонтальной прокрутке"
+msgstr "Вертикальная прокрутка с помощью сенсорной панели или колеса мыши:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: pcbnew/dialogs/panel_edit_options_base.cpp:126
@@ -3331,17 +3308,14 @@ msgid "Zoom:"
 msgstr "Масштабировать:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Pan up/down:"
 msgstr "Панорамировать вверх/вниз:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:209
-#, fuzzy
 msgid "Pan left/right:"
 msgstr "Панорамировать влево/вправо:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
 msgstr "Панорамировать влево/вправо при горизонтальной прокрутке"
 
@@ -3419,9 +3393,8 @@ msgid "Via Size"
 msgstr "Размер перех.отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
-#, fuzzy
 msgid "Via Hole"
-msgstr "Отверстия перех.отв."
+msgstr "Сверло перех.отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
@@ -3429,9 +3402,8 @@ msgid "uVia Size"
 msgstr "Размер перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Отверстия перех.отв."
+msgstr "Сверло перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -5026,7 +4998,7 @@ msgstr "Перех.микроотв."
 
 #: common/layer_id.cpp:157
 msgid "Via holes"
-msgstr "Отверстия перех.отв."
+msgstr "Перех.отв."
 
 #: common/layer_id.cpp:158
 msgid "Non-plated holes"
@@ -20643,14 +20615,12 @@ msgid "Constraints"
 msgstr "Ограничения"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "Пред.установленные:"
+msgstr "Пред.установленные размеры"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
-#, fuzzy
 msgid "Custom Rules"
-msgstr "Особый набор слоёв"
+msgstr "Особые правила"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:148
 #, c-format
@@ -22767,22 +22737,26 @@ msgid ""
 "the footprint's pads are unlocked and can be moved with respect to the "
 "footprint."
 msgstr ""
+"Посад.место может быть свободно перемещено или повёрнуто. По крайней мере "
+"некоторые конт.пл. посад.места не заблокированы и могут свободно "
+"перемещаться по отношению к посад.месту."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:328
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
 msgstr ""
+"Посад.место может быть свободно перемещено или повёрнуто, но положение всех "
+"конт.пл. посад.места заблокировано по отношению к точке привязки посад.места."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
-#, fuzzy
 msgid ""
 "Footprint is locked: it cannot be freely moved and oriented on the canvas "
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"Компонент заблокирован: запрещено перемещать или автоматически размещать, "
-"можно выделить только если активен фильтр \"Заблокированные\"."
+"Посад.место заблокировано: его запрещено перемещать или поворачивать, "
+"выделить можно только если активен фильтр \"Заблокированные\"."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -24140,18 +24114,17 @@ msgstr ""
 "пересекаются."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1249
-#, fuzzy
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Ошибка: отрицательные значения локального зазора ни на что не влияют."
+msgstr ""
+"Предупреждение: отрицательные значения локального зазора ни на что не влияют."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances are not supported for custom pad "
 "shapes."
 msgstr ""
-"Ошибка: отрицательные зазоры паяльной маски не поддерживаются конт.пл. "
-"сложной формы."
+"Предупреждение: отрицательные зазоры паяльной маски не поддерживаются "
+"конт.пл. сложной формы."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1271
 msgid ""
@@ -24185,47 +24158,40 @@ msgid "Too large value for pad delta size."
 msgstr "Слишком большое значение разницы размеров конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1318
-#, fuzzy
 msgid "Warning: Through hole pad has no hole."
-msgstr "Ошибка: конт.пл. со сквозным отв. не имеет отв."
+msgstr "Предупреждение: конт.пл. со сквозным отв. не имеет отв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1325
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
 msgstr ""
-"Ошибка: конт.пл. соединителя не имеет слоя паяльной пасты. Используйте SMD "
-"конт.пл."
+"Предупреждение: конт.пл. соединителя не имеет слоя паяльной пасты. "
+"Используйте SMD конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1335
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Предупреждение: SMD конт.пл. не имеет наружных слоёв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1344
-#, fuzzy
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. реперной."
+msgstr "Предупреждение: не имеет смысла обозначать NPTH конт.пл. реперной."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1350
-#, fuzzy
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. тестовой."
+msgstr "Предупреждение: не имеет смысла обозначать NPTH конт.пл. тестовой."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1356
-#, fuzzy
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. теплоотводной."
+msgstr "Предупреждение: не имеет смысла обозначать NPTH конт.пл. теплоотводной."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1362
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
 msgstr ""
-"Предупреждение: нельзя обозначить PTH конт.пл. как периферийное полу-"
-"отверстие."
+"Предупреждение: только PTH конт.пл. могут быть обозначены как периферийные "
+"полу-отверстия."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
 msgstr "Предупреждение: только SMD конт.пл. могут быть обозначены как BGA."
 
@@ -24246,14 +24212,12 @@ msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr "Ошибка: конт.пл. сложной формы должна образовать единый полигон."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Свойства контактной площадки"
+msgstr "Ошибки свойств конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1405
-#, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "Свойства контактной площадки"
+msgstr "Предупреждения свойств конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1638
 msgid "Modify pad"
@@ -24304,7 +24268,7 @@ msgstr "Номер конт.пл.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
-msgstr ""
+msgstr "Запретить перемещение конт.пл. по отношению к опорной точке посад.места"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -25681,7 +25645,6 @@ msgid "Leave Nets Unchanged"
 msgstr "Не изменять"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
 msgstr "Сверло должно быть меньше размера перех.отв."
 
@@ -25748,9 +25711,8 @@ msgid "Via diameter:"
 msgstr "Диаметр перех.отв.:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Отверстия перех.отв."
+msgstr "Сверло перех.отв.:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -25816,9 +25778,8 @@ msgid "&Remove unused layers"
 msgstr "Удалить неиспользуемые слои"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "Удалить неиспользуемые слои"
+msgstr "Восстановить неиспользуемые слои"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
@@ -26373,9 +26334,8 @@ msgid "Minimum uVia diameter:"
 msgstr "Минимальный диаметр перех.микроотв.:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:362
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "Минимальный размер перех.микроотв.:"
+msgstr "Минимальное сверло перех.микроотв.:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:385
 msgid "Silkscreen"
@@ -27303,9 +27263,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:928
-#, fuzzy
 msgid "Hole"
-msgstr "Отверстия"
+msgstr "Сверло"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:143
 msgid "Differential Pairs"
@@ -27507,9 +27466,8 @@ msgid "Copper zone net has no pads"
 msgstr "Зона меди не подключена ни к одному выводу"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "Удалять перех.отв., подключённые лишь к одному слою"
+msgstr "Перех.отв. не подключено или подключено только к одному слою"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
@@ -29410,7 +29368,6 @@ msgid "Length in Package"
 msgstr "Длина в корпусе"
 
 #: pcbnew/pad.cpp:934
-#, fuzzy
 msgid "Hole X / Y"
 msgstr "Сверло X / Y"
 
@@ -31365,9 +31322,8 @@ msgid "%s not present on layer %s.  No clearance defined."
 msgstr "%s отсутствует на слое %s. Зазор не определён."
 
 #: pcbnew/tools/board_inspection_tool.cpp:371
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Разрешённый зазор для:"
+msgstr "Разрешённый зазор у края платы для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:381
 msgid "Clearance resolution for:"
@@ -32075,12 +32031,11 @@ msgid "Remove Unused Pads..."
 msgstr "Удалить неиспользуемые конт.пл..."
 
 #: pcbnew/tools/pcb_actions.cpp:408
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Удалить или сбросить не подключённые внутренние слои из сквозных конт.пл. и "
-"перех.отв."
+"Удалить или восстановить не подключённые внутренние слои из сквозных "
+"конт.пл. и перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Assign a different footprint from the library"
@@ -33412,7 +33367,7 @@ msgstr "Неактивные слои будут показаны в затем�
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
-msgstr "Скрыто"
+msgstr "Скрыть"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
 msgid "Non-active layers will be hidden"
