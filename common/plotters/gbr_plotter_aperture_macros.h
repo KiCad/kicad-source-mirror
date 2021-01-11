@@ -27,7 +27,12 @@
 
 // A aperture macro to define a rounded rect pad shape
 // In many gerber readers, the rotation of the full shape is broken
-// so we are using primitives that does not need a rotation
+// so we are using primitives that does not need a rotation around aperture origin.
+// Note also the primitive 1 (circle) can use 4 or 5 parameters
+// the 5th parameter is the rotation (not used by Kicad ) around aperture origin and is
+// a recent optional parameter and can create compatibility issues with old
+// Gerber viewer, so it is not output (default = 0).
+
 #define APER_MACRO_ROUNDRECT_NAME "RoundRect"
 
 #define APER_MACRO_ROUNDRECT_HEADER \
@@ -38,10 +43,10 @@
 0 Add a 4 corners polygon primitive as box body*\n\
 4,1,4,$2,$3,$4,$5,$6,$7,$8,$9,$2,$3,0*\n\
 0 Add four circle primitives for the rounded corners*\n\
-1,1,$1+$1,$2,$3,0*\n\
-1,1,$1+$1,$4,$5,0*\n\
-1,1,$1+$1,$6,$7,0*\n\
-1,1,$1+$1,$8,$9,0*\n\
+1,1,$1+$1,$2,$3*\n\
+1,1,$1+$1,$4,$5*\n\
+1,1,$1+$1,$6,$7*\n\
+1,1,$1+$1,$8,$9*\n\
 0 Add four rect primitives between the rounded corners*\n\
 20,1,$1+$1,$2,$3,$4,$5,0*\n\
 20,1,$1+$1,$4,$5,$6,$7,0*\n\
@@ -78,8 +83,8 @@
 0 Add line between two ends*\n\
 20,1,$1,$2,$3,$4,$5,0*\n\
 0 Add two circle primitives to create the rounded ends*\n\
-1,1,$1,$2,$3,0*\n\
-1,1,$1,$4,$5,0*%\n"
+1,1,$1,$2,$3*\n\
+1,1,$1,$4,$5*%\n"
 
 // A aperture macro to define a trapezoid (polygon) by 4 corners
 // and a rotation angle
