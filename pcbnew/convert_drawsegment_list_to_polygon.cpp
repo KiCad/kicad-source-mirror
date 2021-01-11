@@ -281,10 +281,10 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 double               orientation = 0.0;
                 VECTOR2I             offset = VECTOR2I( 0, 0 );
 
-                if( aSegList[0]->GetParentFootprint() )
+                if( graphic->GetParentFootprint() )
                 {
-                    orientation = aSegList[0]->GetParentFootprint()->GetOrientation();
-                    offset = aSegList[0]->GetParentFootprint()->GetPosition();
+                    orientation = graphic->GetParentFootprint()->GetOrientation();
+                    offset = graphic->GetParentFootprint()->GetPosition();
                 }
 
                 for( auto iter = poly.CIterate(); iter; iter++ )
@@ -380,6 +380,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
             prevPt = (wxPoint) pt;
         }
+
+        polygonComplete = true;
     }
     else
     {
