@@ -99,7 +99,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->EnableDragColSize( false );
 	m_viaSizesGrid->SetColLabelSize( 24 );
 	m_viaSizesGrid->SetColLabelValue( 0, _("Size") );
-	m_viaSizesGrid->SetColLabelValue( 1, _("Drill") );
+	m_viaSizesGrid->SetColLabelValue( 1, _("Hole") );
 	m_viaSizesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows

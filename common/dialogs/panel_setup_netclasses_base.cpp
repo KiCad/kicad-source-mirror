@@ -41,9 +41,9 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 1, _("Clearance") );
 	m_netclassGrid->SetColLabelValue( 2, _("Track Width") );
 	m_netclassGrid->SetColLabelValue( 3, _("Via Size") );
-	m_netclassGrid->SetColLabelValue( 4, _("Via Drill") );
+	m_netclassGrid->SetColLabelValue( 4, _("Via Hole") );
 	m_netclassGrid->SetColLabelValue( 5, _("uVia Size") );
-	m_netclassGrid->SetColLabelValue( 6, _("uVia Drill") );
+	m_netclassGrid->SetColLabelValue( 6, _("uVia Hole") );
 	m_netclassGrid->SetColLabelValue( 7, _("DP Width") );
 	m_netclassGrid->SetColLabelValue( 8, _("DP Gap") );
 	m_netclassGrid->SetColLabelValue( 9, _("Wire Thickness") );

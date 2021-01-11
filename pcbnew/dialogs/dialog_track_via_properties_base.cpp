@@ -213,7 +213,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaDiameterUnit->Wrap( -1 );
 	fgViaLeftSizer->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_ViaDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via drill:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via hole:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillLabel->Wrap( -1 );
 	fgViaLeftSizer->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 

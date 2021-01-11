@@ -385,7 +385,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             && m_ViaDrillCtrl->IsEnabled() && !m_viaDrill.IsIndeterminate()
             && m_viaDiameter.GetValue() <= m_viaDrill.GetValue() )
         {
-            DisplayError( GetParent(), _( "Via drill size must be smaller than via diameter" ) );
+            DisplayError( GetParent(), _( "Via hole size must be smaller than via diameter" ) );
             m_ViaDrillCtrl->SelectAll();
             m_ViaDrillCtrl->SetFocus();
             return false;

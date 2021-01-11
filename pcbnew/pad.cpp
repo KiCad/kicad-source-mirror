@@ -925,13 +925,13 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     {
         if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         {
-            aList.emplace_back( _( "Drill" ),
+            aList.emplace_back( _( "Hole" ),
                                 wxString::Format( "%s",
                                                   MessageTextFromValue( units, m_drill.x ) ) );
         }
         else
         {
-            aList.emplace_back( _( "Drill X / Y" ),
+            aList.emplace_back( _( "Hole X / Y" ),
                                 wxString::Format( "%s / %s",
                                                   MessageTextFromValue( units, m_drill.x ),
                                                   MessageTextFromValue( units, m_drill.y ) ) );
