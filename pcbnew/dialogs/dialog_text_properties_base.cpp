@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,7 +56,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_MultiLineText->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_MultiLineText->SetToolTip( _("Enter the text placed on selected layer.") );
 
-	m_MultiLineSizer->Add( m_MultiLineText, 1, wxEXPAND | wxALL, 5 );
+	m_MultiLineSizer->Add( m_MultiLineText, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( m_MultiLineSizer, 20, wxEXPAND|wxALL, 10 );
@@ -72,6 +72,15 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 
 	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
+	wxBoxSizer* bSizerLocked;
+	bSizerLocked = new wxBoxSizer( wxHORIZONTAL );
+
+	m_cbLocked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLocked->Add( m_cbLocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bMainSizer->Add( bSizerLocked, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxFlexGridSizer* fgSizerSetup;
 	fgSizerSetup = new wxFlexGridSizer( 0, 5, 4, 0 );

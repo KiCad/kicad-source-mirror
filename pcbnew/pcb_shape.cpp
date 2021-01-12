@@ -471,6 +471,9 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Type" ), _( "Drawing" ) );
 
+    if( IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "locked" ) );
+
     wxString shape = _( "Shape" );
 
     switch( m_shape )

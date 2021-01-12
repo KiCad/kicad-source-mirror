@@ -110,6 +110,9 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "PCB Text" ), GetShownText() );
 
+    if( IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "locked" ) );
+
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );

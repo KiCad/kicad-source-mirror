@@ -288,6 +288,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_statusLine->Show( false );
     }
 
+    m_cbLocked->SetValue( m_item->IsLocked() );
+
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
     m_textWidth.SetValue( m_edaText->GetTextSize().x );
@@ -355,6 +357,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
             m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
         }
     }
+
+    m_item->SetLocked( m_cbLocked->GetValue() );
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
