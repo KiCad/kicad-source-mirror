@@ -1,46 +1,47 @@
 # Latvian translation of kicad.po
+# Rihards Skuja <rhssk@posteo.eu>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-06 10:20-0800\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lv/>\n"
+"PO-Revision-Date: 2021-01-13 14:21+0000\n"
+"Last-Translator: Rihards Skuja <rhssk@posteo.eu>\n"
+"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Visi faili (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Visi atbalstītie faili (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Pieejamie ceļi:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Konfigurēt ceļus"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "Izvēlēties 3D modeli"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "Mērogs"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -63,7 +64,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1332
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -89,27 +90,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1343
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:797
 #: pcbnew/pad.cpp:916
 msgid "Rotation"
-msgstr ""
+msgstr "Pagriešana"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "Nobīde"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "Necaurspīdīgums"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -117,155 +118,159 @@ msgstr ""
 #: eeschema/dialogs/dialog_print_using_printer.cpp:275
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
-msgstr ""
+msgstr "Priekšskatījums"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Mainīt uz izometrisko perspektīvu"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Pārlādēt plati un 3D modeļus"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:284
 msgid "Build board outline"
-msgstr ""
+msgstr "Būvēt plates kontūru"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:446
 msgid "Create layers"
-msgstr ""
+msgstr "Izveidot slāņus"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:468
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
 msgid "No footprint loaded."
-msgstr ""
+msgstr "Nospiedums nav ielādēts."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:484
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Trūkst nospieduma kontūra vai arī tā ir izkropļota. Palaidiet nospiedumu "
+"pārbaudītāju pilnai analīzei."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:493
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"Trūkst plates kontūra vai arī tā ir izkropļota. Palaidiet DRC pilnai "
+"analīzei."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Izveidot celiņus un tiltus"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:680
 msgid "Create zones"
-msgstr ""
+msgstr "Izveidot zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:750
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Vienkāršo vara slāņu poligonus"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:829
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Vienkāršo caurumu kontūras"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:858
 msgid "Build Tech layers"
-msgstr ""
+msgstr "Būvēt tehniskos slāņus"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
 msgid "Build BVH for holes and vias"
-msgstr ""
+msgstr "Būvēt BVH caurumiem un tiltiem"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:412
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Jūsu OpenGL versija nav atbalstīta. Zemākā versija ir 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr ""
+msgstr "Atveides laiks %.0f ms ( %.1f kadri sekundē)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr ""
+msgstr "Tīkls %s\tTīklaKlase %s\tPēdasNosaukums %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:762
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:775
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr ""
+msgstr "Tīkls %s\tTīklaKlase %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:439
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "Ielādēt staru trasēšanu: plate"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:638
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "Ielādēt staru trasēšanu: slāņi"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:653
 msgid "Loading 3D models"
-msgstr ""
+msgstr "Ielādē 3D modeļus"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:663
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "Pārlādes laiks %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:178
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:559
 msgid "Loading..."
-msgstr ""
+msgstr "Ielādē..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:343
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "Atainošanas laiks %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:397
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Atainošana: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:847
 msgid "Rendering: Post processing shader"
-msgstr ""
+msgstr "Atainošana: pēcapstrādes ēnotājs"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:454
 msgid "Load OpenGL: board"
-msgstr ""
+msgstr "Ielādēt OpenGL: plate"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:487
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Ielādēt OpenGL: caurumi un tiltiņi"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:553
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "Ielādēt OpenGL: slāņi"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:895
 #, c-format
 msgid "Loading %s"
-msgstr ""
+msgstr "Ielādē %s"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Eksportēt pašreizējo skatu kā PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Eksportēt pašreizējo skatu kā JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:556 pcbnew/footprint_viewer_frame.cpp:949
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
-msgstr ""
+msgstr "3D skatītājs"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "Kopēt 3D attēlu"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:157
@@ -273,70 +278,70 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:1000 pagelayout_editor/pl_editor_frame.cpp:469
 #: pcbnew/footprint_edit_frame.cpp:904 pcbnew/pcbnew_config.cpp:55
 msgid "Display Options"
-msgstr ""
+msgstr "Attēlojuma opcijas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Raytracing"
-msgstr ""
+msgstr "Staru trasējums"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "Render Options"
-msgstr ""
+msgstr "Atainošanas opcijas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
-msgstr ""
+msgstr "Materiālu īpašības"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr ""
+msgstr "Staru trasēšanas opcijas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
-msgstr ""
+msgstr "Izvēlēties krāsas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
-msgstr ""
+msgstr "Augšpuses fona krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
 msgid "Background Bottom Color..."
-msgstr ""
+msgstr "Apakšpuses fona krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
-msgstr ""
+msgstr "Virsmas apdrukas krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:168
 msgid "Solder Mask Color..."
-msgstr ""
+msgstr "Lodalvas maskas krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:172
 msgid "Solder Paste Color..."
-msgstr ""
+msgstr "Lodalvas pastas krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:176
 msgid "Copper/Surface Finish Color..."
-msgstr ""
+msgstr "Vara/virsmas pārklājuma krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
 msgid "Board Body Color..."
-msgstr ""
+msgstr "Plates rumpja krāsa..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Iegūt krāsas no fiziskās grēdas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
-msgstr ""
+msgstr "3D režģis"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "Atiestatīt uz noklusētajiem iestatījumiem"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:269
@@ -345,7 +350,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Preferences..."
-msgstr ""
+msgstr "Iestatījumi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:270
@@ -354,7 +359,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:442
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Rādīt iestatījumus visiem atvērtajiem rīkiem"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:286
@@ -364,7 +369,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:250 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr ""
+msgstr "&Fails"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:85
 #: eeschema/menubar.cpp:287
@@ -372,7 +377,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:251
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "&Edit"
-msgstr ""
+msgstr "&Labot"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223 eeschema/menubar.cpp:288
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
@@ -381,113 +386,113 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:252 pcbnew/menubar_pcb_editor.cpp:460
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr ""
+msgstr "&Skatīt"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
 msgid "&Preferences"
-msgstr ""
+msgstr "&Iestatījumi"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
-msgstr ""
+msgstr "Pārlādēt plati"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "Kopēt 3D attēlu starpliktuvē"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Iestatīt attēlojuma opcijas un dažu skatu redzamību"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Atainot pašreizējo skatu ar staru trasēšanu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 msgid "3D Model Visibility"
-msgstr ""
+msgstr "3D modeļa redzamība"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
-msgstr ""
+msgstr "Rādīt caurumu 3D modeļus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:33
 msgid "Show 3D SMD models"
-msgstr ""
+msgstr "Rādīt SMD 3D modeļus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show 3D virtual models"
-msgstr ""
+msgstr "Rādīt virtuālos 3D modeļus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:43
 msgid "Board Layers"
-msgstr ""
+msgstr "Plates slāņi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:45
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "Rādīt virsmas apdrukas slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:48
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "Rādīt lodalvas maskas slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
 msgid "Show solder paste layers"
-msgstr ""
+msgstr "Rādīt lodalvas pastas slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show adhesive layers"
-msgstr ""
+msgstr "Rādīt saistvielas slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "Lietotāja slāņi (netiek rādīti reālistiskajā režīmā)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "Rādīt komentārus un zīmējumu slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show ECO layers"
-msgstr ""
+msgstr "Rādīt ECO slāņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:81
 msgid "Realistic mode"
-msgstr ""
+msgstr "Reālistiskais režīms"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:84
 msgid "Show board body"
-msgstr ""
+msgstr "Rādīt plates rumpi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "Rādīt aizpildītās vietas zonās"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:90
 #: pcbnew/dialogs/dialog_plot_base.cpp:214
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "Atņemt lodalvas masku no virsmas apdrukas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Apgriezt virsmas apdruku ap tiltiņu gredzeniem"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Izmantot parastu vara krāsu priekš nepārklāta vara"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Izmantot dažādas krāsas pārklātam un nepārklātam varam. (Lēni)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
-msgstr ""
+msgstr "Fotokameras opcijas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
 msgid "Rotation Increment:"
-msgstr ""
+msgstr "Pagriešanas solis:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:522 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -497,87 +502,89 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1364
 msgid "deg"
-msgstr ""
+msgstr "grāds"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:128
 msgid "Enable animation"
-msgstr ""
+msgstr "Ieslēgt animāciju"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:135
 msgid "Animation speed:"
-msgstr ""
+msgstr "Animācijas ātrums:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:166
 msgid "OpenGL Render Options"
-msgstr ""
+msgstr "OpenGL atainošanas opcijas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
 msgid "Show model bounding boxes"
-msgstr ""
+msgstr "Rādīt modeļu ietvarus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
 msgid "Show copper thickness"
-msgstr ""
+msgstr "Rādīt vara biezumu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
 msgid "Other Options"
-msgstr ""
+msgstr "Citas opcijas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
 msgid "Anti-aliasing:"
-msgstr ""
+msgstr "Nogludināšana:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
-msgstr ""
+msgstr "Izslēgts"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:193
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"3D skatītāju ir jāaizver un jāatver no jauna, lai šis iestatījums tiktu "
+"pielietots"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
 msgid "Selection color:"
-msgstr ""
+msgstr "Atlases krāsa:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
-msgstr ""
+msgstr "Kamēr kustas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "Atslēgt nogludināšanu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
 msgid "Disable thickness"
-msgstr ""
+msgstr "Atslēgt biezumu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable vias"
-msgstr ""
+msgstr "Atslēgt tiltiņus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:222
 msgid "Disable holes"
-msgstr ""
+msgstr "Atslēgt caurumus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:246
 msgid "Raytracing Render Options"
-msgstr ""
+msgstr "Staru trasēšanas atainošanas opcijas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:252
 msgid "Procedural textures"
@@ -841,7 +848,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "Ieslēgt/izslēgt taisnleņķa projekciju"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
 msgid "View Front"
@@ -2783,6 +2790,9 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
+"Ieturēt pauzi pēc pirmās izmaiņas, lai izveidotu plates rezerves kopiju uz "
+"diska.\n"
+"Ja tiek norādīta 0, automātiskās rezerves kopijas netiks veidotas"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:260
@@ -2798,6 +2808,8 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"3D kešfaili, kas ir vecāki par šo vērtību, tiek izdzēsti.\n"
+"Ja tiek norādīta 0, kešfailu tīrīšana tiek izslēgta"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
@@ -10216,7 +10228,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:936
 msgid "Disable symbol for simulation"
-msgstr ""
+msgstr "Atslēgt simbolu priekš simulācijas"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:942
 msgid "Alternate node sequence:"
@@ -10649,6 +10661,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"Principshēmas redaktorā:\n"
+"Ja ieslēgts, uzklikšķinot uz kājiņas, tiks iezīmēts piederīgais simbols.\n"
+"Ja izslēgts, uzklikšķinot uz kājiņas, tiks iezīmēta tikai kājiņa."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
 msgid "Symbol Field Automatic Placement"
@@ -16670,7 +16685,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:178
 msgid "Set to 0 to disable this constraint"
-msgstr ""
+msgstr "Norādot 0, ierobežojums tiks atslēgts"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Maximum height:"
@@ -20513,7 +20528,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:235
 msgid "Disable hotkey move commands and Auto Placement"
-msgstr ""
+msgstr "Atslēgt ātro taustiņu pārvietošanas komandas un automātisko novietošanu"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:383
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:472
