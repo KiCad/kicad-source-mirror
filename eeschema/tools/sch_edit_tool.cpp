@@ -64,6 +64,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <dialogs/dialog_edit_label.h>
+#include <core/kicad_algo.h>
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -1021,6 +1022,22 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             sch_item->SetFlags( STRUCT_DELETED );
             // clean up junctions at the end
         }
+        else if( sch_item->Type() == SCH_SHEET_PIN_T )
+        {
+            SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) sch_item;
+            SCH_SHEET*     sheet = pin->GetParent();
+
+            if( !alg::contains( items, sheet ) )
+            {
+                pin->SetFlags( STRUCT_DELETED );
+                saveCopyInUndoList( item, UNDO_REDO::DELETED, appendToUndo );
+                appendToUndo = true;
+
+                updateItem( pin, false );
+
+                sheet->RemovePin( pin );
+            }
+        }
         else
         {
             sch_item->SetFlags( STRUCT_DELETED );
@@ -1029,17 +1046,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
             updateItem( sch_item, false );
 
-            if( sch_item->Type() == SCH_SHEET_PIN_T )
-            {
-                SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) sch_item;
-                SCH_SHEET*     sheet = pin->GetParent();
-
-                sheet->RemovePin( pin );
-            }
-            else
-            {
-                m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
-            }
+            m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
 
             if( sch_item->Type() == SCH_SHEET_T )
                 m_frame->UpdateHierarchyNavigator();
