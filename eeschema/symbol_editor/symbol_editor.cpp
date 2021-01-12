@@ -60,8 +60,8 @@ public:
                                        "library." ) );
         m_replaceTableEntry = new wxRadioButton( this, wxID_ANY,
                                                  _( "Replace library table entry" ) );
-        m_replaceTableEntry->SetToolTip( _( "Replacy symbol library table entry with new library."
-                                            "\n\nThe original library will no longer be avaliable "
+        m_replaceTableEntry->SetToolTip( _( "Replace symbol library table entry with new library."
+                                            "\n\nThe original library will no longer be available "
                                             "for use." ) );
         m_addGlobalTableEntry = new wxRadioButton( this, wxID_ANY,
                                                    _( "Add new global library table entry" ) );
