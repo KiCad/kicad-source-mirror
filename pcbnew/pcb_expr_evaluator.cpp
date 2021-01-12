@@ -657,7 +657,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
 
     // Check for a couple of very common cases and compile them straight to "object code".
 
-    if( aField.CmpNoCase( "NetClass" ) )
+    if( aField.CmpNoCase( "NetClass" ) == 0 )
     {
         if( aVar == "A" )
             return std::make_unique<PCB_EXPR_NETCLASS_REF>( 0 );
@@ -666,7 +666,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
         else
             return nullptr;
     }
-    else if( aField.CmpNoCase( "NetName" ) )
+    else if( aField.CmpNoCase( "NetName" ) == 0 )
     {
         if( aVar == "A" )
             return std::make_unique<PCB_EXPR_NETNAME_REF>( 0 );
