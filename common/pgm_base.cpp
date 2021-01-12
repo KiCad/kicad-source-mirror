@@ -236,12 +236,6 @@ bool PGM_BASE::InitPgm()
             return false;
     }
 
-    m_settings_manager = std::make_unique<SETTINGS_MANAGER>();
-
-    // Something got in the way of settings load: can't continue
-    if( !m_settings_manager->IsOK() )
-        return false;
-
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
     // something like set KICAD=d:\kicad
@@ -272,9 +266,16 @@ bool PGM_BASE::InitPgm()
     wxFileSystem::AddHandler( new wxZipFSHandler );
 
     // Analyze the command line & initialize the binary path
+    wxString tmp;
     setExecutablePath();
-
     SetLanguagePath();
+    SetDefaultLanguage( tmp );
+
+    m_settings_manager = std::make_unique<SETTINGS_MANAGER>();
+
+    // Something got in the way of settings load: can't continue
+    if( !m_settings_manager->IsOK() )
+        return false;
 
     wxFileName baseSharePath;
 #if defined( __WXMSW__ )
@@ -438,7 +439,6 @@ bool PGM_BASE::InitPgm()
     // Init user language *before* calling loadCommonSettings, because
     // env vars could be incorrectly initialized on Linux
     // (if the value contains some non ASCII7 chars, the env var is not initialized)
-    wxString tmp;
     SetLanguage( tmp, true );
 
     loadCommonSettings();
@@ -653,6 +653,44 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
         cfg->m_System.language = languageSel;
         cfg->SaveToFile( GetSettingsManager().GetPathForSettingsFile( cfg ) );
     }
+
+    // Try adding the dictionary if it is not currently loaded
+    if( !m_locale->IsLoaded( dictionaryName ) )
+        m_locale->AddCatalog( dictionaryName );
+
+    // Verify the Kicad dictionary was loaded properly
+    // However, for the English language, the dictionary is not mandatory, as
+    // all messages are already in English, just restricted to ASCII7 chars,
+    // the verification is skipped.
+    if( !m_locale->IsLoaded( dictionaryName ) && m_language_id != wxLANGUAGE_ENGLISH )
+    {
+        wxLogTrace( traceLocale, "Unable to load dictionary %s.mo in %s",
+                    dictionaryName, m_locale->GetName() );
+
+        setLanguageId( wxLANGUAGE_DEFAULT );
+        delete m_locale;
+
+        m_locale = new wxLocale;
+        m_locale->Init();
+
+        aErrMsg = _( "The KiCad language file for this language is not installed." );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool PGM_BASE::SetDefaultLanguage( wxString& aErrMsg )
+{
+    setLanguageId( wxLANGUAGE_DEFAULT );
+
+    // dictionary file name without extend (full name is kicad.mo)
+    wxString dictionaryName( "kicad" );
+
+    delete m_locale;
+    m_locale = new wxLocale;
+    m_locale->Init();
 
     // Try adding the dictionary if it is not currently loaded
     if( !m_locale->IsLoaded( dictionaryName ) )
