@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-11 19:47+0000\n"
+"PO-Revision-Date: 2021-01-13 14:21+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -6099,7 +6099,7 @@ msgstr "Линии"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Small crosses"
-msgstr "Маленькие перекрестия"
+msgstr "Малые перекрестия"
 
 #: common/widgets/gal_options_panel.cpp:92
 msgid "Grid Style"
