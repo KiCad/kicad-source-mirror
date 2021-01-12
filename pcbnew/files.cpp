@@ -581,9 +581,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // consumming, so display a busy cursor
     wxBusyCursor dummy;
 
-    // Unlink the old project if needed
-    GetBoard()->ClearProject();
-
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
 
@@ -603,6 +600,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // calls SaveProject
         SaveProjectSettings();
 
+        GetBoard()->ClearProject();
         mgr->UnloadProject( &mgr->Prj() );
 
         mgr->LoadProject( pro.GetFullPath() );
