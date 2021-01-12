@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"PO-Revision-Date: 2021-01-12 12:54+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -485,11 +485,11 @@ msgstr "删除过孔周围的丝印"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "对非电镀的铜使用裸铜色"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "对镀铜和非镀铜使用不同的颜色。（慢）"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -534,9 +534,8 @@ msgid "Other Options"
 msgstr "其他选项"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "抗锯齿"
+msgstr "抗锯齿："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -559,9 +558,8 @@ msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr "必须关闭并重新打开 3D 查看器才能应用此设置"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "选区颜色"
+msgstr "选区颜色："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -618,14 +616,12 @@ msgid "Spread Factor %"
 msgstr "扩散系数 %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
-#, fuzzy
 msgid "Recursion Level"
-msgstr "递归深度"
+msgstr "递归层级"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "阴影"
+msgstr "阴影："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -640,9 +636,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "投射光线方向的随机度"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "反射"
+msgstr "反射："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -656,9 +651,8 @@ msgstr ""
 "一束光线所能穿过的物体数量。(递归深度越大，效果越好，特别是在非常透明的板上)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "折射"
+msgstr "折射："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -670,24 +664,20 @@ msgstr "一束光线所能在反光的物体上反射的次数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
 msgstr "灯光配置"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "相机环境光"
+msgstr "相机环境光："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "顶灯"
+msgstr "顶部光："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "底灯"
+msgstr "底部光："
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -700,44 +690,36 @@ msgid "Azimuth (degrees)"
 msgstr "方位角（度）"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1:1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "R2："
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -3144,28 +3126,24 @@ msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr "将对象移出屏幕边缘时的平移速度"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "手势"
+msgstr "拖动手势"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
-#, fuzzy
 msgid "Left button drag:"
-msgstr "右键拖动："
+msgstr "左键拖动："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "绘制矩形"
+msgstr "将选定区域绘制为矩形"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "拖动选定的对象；否则将选定区绘制为矩形"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "拖动所选项目"
+msgstr "拖动任意项目（选中或未选中）"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3208,19 +3186,16 @@ msgid "Right button drag:"
 msgstr "右键拖动："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "手势"
+msgstr "滚动手势"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "使用水平触摸板或滚轮移动向左/向右平移"
+msgstr "垂直触控板或滚动轮运动："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: pcbnew/dialogs/panel_edit_options_base.cpp:126
@@ -3244,19 +3219,16 @@ msgid "Zoom:"
 msgstr "缩放："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Pan up/down:"
 msgstr "触摸板向上/向下："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:209
-#, fuzzy
 msgid "Pan left/right:"
 msgstr "触摸板向左/向右："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr "使用水平触摸板或滚轮移动向左/向右平移"
+msgstr "用水平移动向左/向右平移触摸板"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 msgid ""
@@ -3330,7 +3302,6 @@ msgid "Via Size"
 msgstr "过孔外径"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
-#, fuzzy
 msgid "Via Hole"
 msgstr "辅助孔"
 
@@ -3340,9 +3311,8 @@ msgid "uVia Size"
 msgstr "微孔外径"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "uVia Hole"
-msgstr "辅助孔"
+msgstr "U形辅助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -20311,14 +20281,12 @@ msgid "Constraints"
 msgstr "约束"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "预定义尺寸："
+msgstr "预定义尺寸"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
-#, fuzzy
 msgid "Custom Rules"
-msgstr "自定义图层设置"
+msgstr "自定义规则"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:148
 #, c-format
@@ -22389,23 +22357,20 @@ msgid ""
 "Footprint can be freely moved and oriented on the canvas. At least some of "
 "the footprint's pads are unlocked and can be moved with respect to the "
 "footprint."
-msgstr ""
+msgstr "封装可以在画布上被自由移动和定向。至少部分封装的焊盘处于未锁定状态，可以相对于封装进行移动。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:328
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
-msgstr ""
+msgstr "封装可以在画布上被自由移动和定向，但所有的焊盘都被锁定在该封装内的相应位置上。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
-#, fuzzy
 msgid ""
 "Footprint is locked: it cannot be freely moved and oriented on the canvas "
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
-msgstr ""
-"封装已锁定：无法被自由移动或自动放置，并且只有当“锁定项目”复选框在选择筛选器"
-"中启用时才能被选中。"
+msgstr "封装已锁定：无法在画布上被自由移动和定位，并且只有当“锁定项目”复选框在选择筛选器中启用时才能被选中。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -23731,16 +23696,14 @@ msgid ""
 msgstr "警告：焊盘钻头不会留下铜或钻头形状和焊盘形状不重叠。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1249
-#, fuzzy
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "错误：局部间隙值为负将没有效果。"
+msgstr "警告：局部间隙值为负将没有效果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances are not supported for custom pad "
 "shapes."
-msgstr "错误：自定义形状焊盘不支持负的阻焊间隙值。"
+msgstr "警告：自定义形状焊盘不支持负的阻焊间隙值。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1271
 msgid ""
@@ -23769,45 +23732,38 @@ msgid "Too large value for pad delta size."
 msgstr "焊盘增量尺寸值太大。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1318
-#, fuzzy
 msgid "Warning: Through hole pad has no hole."
-msgstr "错误：通孔焊盘没有孔。"
+msgstr "警告：通孔焊盘没有孔。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1325
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
-msgstr "错误：连接器焊盘没有焊膏。使用表面黏装零件（SMD）焊盘代替。"
+msgstr "警告：连接器焊盘一般而言没有焊膏。使用表面黏装零件（SMD）焊盘代替。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1335
 msgid "Warning: SMD pad has no outer layers."
 msgstr "警告：表面黏装零件焊盘没有外层。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1344
-#, fuzzy
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "警告：基准属性不能被设置在\"非导通孔\"(NPTH) 焊盘上。"
+msgstr "警告：基准属性在\"非导通孔\"(NPTH) 焊盘上没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1350
-#, fuzzy
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "警告：测试点属性不能被设置在\"非导通孔\"(NPTH)焊盘上。"
+msgstr "警告：测试点属性在\"非导通孔\"(NPTH)焊盘上没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1356
-#, fuzzy
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "警告：散热片属性不能被设置在\"非导通孔\"(NPTH) 焊盘上。"
+msgstr "警告：散热片属性在\"非导通孔\"(NPTH) 焊盘上没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1362
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "警告：雉堞状属性只能被设置在镀通孔 (PTH) 焊盘上。"
+msgstr "警告：雉堞状属性用于镀通孔 (PTH) 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
-msgstr "警告：“球状网格阵列”属性只能设置在表面组装设备（SMD）焊盘上。"
+msgstr "警告：“球状网格阵列”属性用于表面组装设备（SMD）焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1380
 msgid "Error: Corner size not a number."
@@ -23826,14 +23782,12 @@ msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr "错误：自定义焊盘形状必须解析为单个多边形。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "焊盘属性"
+msgstr "焊盘属性错误"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1405
-#, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "焊盘属性"
+msgstr "焊盘属性警告"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1638
 msgid "Modify pad"
@@ -23884,7 +23838,7 @@ msgstr "焊盘编号："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
-msgstr ""
+msgstr "不允许改变焊盘相对于主封装的位置"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -25222,9 +25176,8 @@ msgid "Leave Nets Unchanged"
 msgstr "保持网络不变"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "过孔内径尺寸必须小于过孔外径"
+msgstr "通路孔尺寸必须小于导通孔直径"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:397
 msgid "Via start layer and end layer cannot be the same"
@@ -25287,9 +25240,8 @@ msgid "Via diameter:"
 msgstr "过孔外径："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "辅助孔"
+msgstr "辅助孔/通路孔："
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -25355,9 +25307,8 @@ msgid "&Remove unused layers"
 msgstr "&删除未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "&删除未使用的层"
+msgstr "&恢复未使用的层"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
@@ -25899,9 +25850,8 @@ msgid "Minimum uVia diameter:"
 msgstr "最小微孔外径："
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:362
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "最小微孔尺寸："
+msgstr "最小U形导通孔："
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:385
 msgid "Silkscreen"
@@ -26808,9 +26758,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:928
-#, fuzzy
 msgid "Hole"
-msgstr "过孔"
+msgstr "孔"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:143
 msgid "Differential Pairs"
@@ -27012,9 +26961,8 @@ msgid "Copper zone net has no pads"
 msgstr "铜区没有焊盘连接"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "删除仅在一个图层上连接的过孔"
+msgstr "通孔未连接或只连接在了一层上"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
@@ -28887,9 +28835,8 @@ msgid "Length in Package"
 msgstr "封装长度"
 
 #: pcbnew/pad.cpp:934
-#, fuzzy
 msgid "Hole X / Y"
-msgstr "钻孔 X / Y"
+msgstr "孔 X / Y"
 
 #: pcbnew/pad.cpp:944 pcbnew/track.cpp:653 pcbnew/track.cpp:696
 #: pcbnew/zone.cpp:628
@@ -30750,9 +30697,8 @@ msgid "%s not present on layer %s.  No clearance defined."
 msgstr "%s 不在层 %s 上。    未定义间隙。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:371
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "间隙解析适用于:"
+msgstr "边缘间隙解析解像度，用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:381
 msgid "Clearance resolution for:"
@@ -30970,7 +30916,6 @@ msgid "Some of the track segments could not be filleted."
 msgstr "某些布线段无法圆角。"
 
 #: pcbnew/tools/edit_tool.cpp:1279 pcbnew/tools/pcb_actions.cpp:289
-#, fuzzy
 msgid "Change Side / Flip"
 msgstr "更改 Side / Flip"
 
@@ -31457,10 +31402,9 @@ msgid "Remove Unused Pads..."
 msgstr "删除未使用的焊盘..."
 
 #: pcbnew/tools/pcb_actions.cpp:408
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
-msgstr "移除或重置通孔焊盘和通孔上未连接的内层"
+msgstr "移除或恢复通孔焊盘和通孔上未连接的内层"
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Assign a different footprint from the library"
