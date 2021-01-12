@@ -116,7 +116,7 @@ set( BMAPS_SMALL
     )
 
 
-# image basenames that go into the toolbar sized destinations, i.e. 26x26
+# image basenames that go into the toolbar sized destinations, i.e. 24x24
 set( BMAPS_MID
     about
     add_aligned_dimension
