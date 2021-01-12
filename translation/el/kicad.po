@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-10 23:11+0000\n"
+"PO-Revision-Date: 2021-01-13 14:21+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -492,11 +492,13 @@ msgstr "Συγκράτιση μεταξοτυπίας στο δακτύλιο τ
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Χρήση χρώματος χαλκού για μη επιμεταλλωμένο χαλκό"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
+"Χρήση διαφορετικών χρωμάτων για επιμεταλλωμένο και μη επιμεταλλωμένο χαλκό. "
+"(Αργό)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -9626,7 +9628,7 @@ msgstr "Κάτω αριστερά, μονάδες σχεδιαστή"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Στο κέντρο, μονάδες σχεδιαστή"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
@@ -10313,6 +10315,10 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
+"Η αρίθμηση των pins των συμβόλων δεν ταιριάζει πάντα με την απαιτούμενη "
+"σειρά των pins στο SPICE\n"
+"Ελέγξτε το σύμβολο και χρησιμοποιήστε την \"Εναλλάσουσα σειρά κόμβων:\" για "
+"να αναδιατάξετε τα pin, εάν είναι απαραίτητο"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:454
 msgid "For a Diode, pin order is anode, cathode"
@@ -12824,6 +12830,9 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"Το καθορισμένο εξάρτημα '%s' αναφέρεται στο σύμβολο '%s' (εναλλακτικό '%s') "
+"που δεν βρέθηκε στη βιβλιοθήκη συμβόλων. Το εξάρτημα δεν έχει φορτωθεί στη "
+"βιβλιοθήκη του KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:336
 #, c-format
@@ -12873,6 +12882,8 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Δεν ήταν δυνατός ο ορισμός μεταβλητών κειμένου, καθώς δεν υπάρχει συνημμένο "
+"έργο."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
