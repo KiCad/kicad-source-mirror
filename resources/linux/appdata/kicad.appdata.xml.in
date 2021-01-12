@@ -62,22 +62,22 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1024" height="576">https://kicad.org/img/screenshots/appstream/kicad.png</image>
+      <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/kicad_6.png</image>
     </screenshot>
 
     <screenshot>
       <caption>Eeschema Schematic Editor</caption>
-      <image width="1024" height="576">https://kicad.org/img/screenshots/appstream/eeschema.png</image>
+      <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/eeschema_6.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew PCB Layout</caption>
-      <image width="1024" height="576">https://kicad.org/img/screenshots/appstream/pcbnew.png</image>
+      <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/pcbnew_6.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew 3D Viewer</caption>
-      <image width="1024" height="576">https://kicad.org/img/screenshots/appstream/3dviewer.png</image>
+      <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/3dviewer_6.png</image>
     </screenshot>
   </screenshots>
 
@@ -85,6 +85,7 @@
   <url type="bugtracker">https://kicad.org/help/report-a-bug/</url>
   <url type="help">https://docs.kicad.org/</url>
   <url type="donation">https://go.kicad.org/donate</url>
+  <url type="translate">https://hosted.weblate.org/projects/kicad/</url>
 
   <update_contact>kicad-developers@lists.launchpad.net</update_contact>
   <developer_name>The KiCad Developers</developer_name>
