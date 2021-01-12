@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
 "PO-Revision-Date: 2021-01-13 14:21+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2608,7 +2608,7 @@ msgstr "关闭"
 
 #: common/dialogs/dialog_print_generic.cpp:107
 msgid "Warning: Bad scale number"
-msgstr "警告：缩放编号错误"
+msgstr "警告：缩放比例错误"
 
 #: common/dialogs/dialog_print_generic.cpp:116
 #, c-format
@@ -2616,8 +2616,8 @@ msgid ""
 "Warning: Scale option set to a very large value.\n"
 " Clamped to %f"
 msgstr ""
-"警告：缩放选项设置为非常大的值。\n"
-" 固定到 %f"
+"警告：缩放比例被设置为非常大的值。\n"
+" 已限制到 %f"
 
 #: common/dialogs/dialog_print_generic.cpp:124
 #, c-format
@@ -2625,13 +2625,13 @@ msgid ""
 "Warning: Scale option set to a very small value.\n"
 " Clamped to %f"
 msgstr ""
-"警告：缩放选项设置为一个很小的值。\n"
-" 固定到 %f"
+"警告：缩放比例被设置为一个很小的值。\n"
+" 已限制到 %f"
 
 #: common/dialogs/dialog_print_generic.cpp:193
 #: common/dialogs/dialog_print_generic.cpp:240
 msgid "Nothing to print"
-msgstr "没有打印"
+msgstr "没有要打印的内容"
 
 #: common/dialogs/dialog_print_generic.cpp:231
 #: eeschema/dialogs/dialog_print_using_printer.cpp:312
@@ -2644,7 +2644,7 @@ msgstr "打印发生问题。"
 
 #: common/dialogs/dialog_print_generic.cpp:304
 msgid "An error occurred initializing the printer information."
-msgstr "打印机初始化时发生错误。"
+msgstr "初始化打印机信息时发生错误。"
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
@@ -2693,7 +2693,7 @@ msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:64
 msgid "Fit to page"
-msgstr "适合图框"
+msgstr "适合页面"
 
 #: common/dialogs/dialog_print_generic_base.cpp:70
 msgid "Custom:"
@@ -2706,7 +2706,7 @@ msgstr "设置 X 方向调整比例使输出更精确"
 #: common/dialogs/dialog_print_generic_base.cpp:96
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
 msgid "Page Setup..."
-msgstr "图框设置..."
+msgstr "页面设置..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
@@ -2731,7 +2731,7 @@ msgstr "视图预设切换器"
 
 #: common/dialogs/panel_color_settings.cpp:49
 msgid "Reveal Themes in Finder"
-msgstr "在筛选器中显示主题"
+msgstr "在访达中显示主题文件"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "New theme name:"
@@ -2780,7 +2780,7 @@ msgstr "覆盖单个项目的颜色"
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
-msgstr "即使属性中设置了特定的颜色，也要以默认颜色显示所有项目。"
+msgstr "即使属性中设置了特定的颜色，也以其默认颜色显示所有项目。"
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 msgid "Open Theme Folder"
@@ -2803,9 +2803,8 @@ msgid ""
 msgstr ""
 "设置画布的缩放比例。\n"
 "\n"
-"在某些平台的高 DPI 显示器上，KiCad 无法确定缩放因子。\n"
-"在这种情况下，你可能需要将其设置为一个值，以匹配系统的 DPI 缩放。2.0 是一个常"
-"见的值。\n"
+"在某些平台的高 DPI 显示器上，KiCad 无法确定缩放倍数。\n"
+"在这种情况下，你可能需要将其设置为一个匹配系统 DPI 缩放的数值。2.0 是一个常见的值。\n"
 "如果这与系统 DPI 缩放不匹配，则画布将与窗口大小和光标位置不匹配。"
 
 #: common/dialogs/panel_common_settings.cpp:62
@@ -2815,7 +2814,7 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"使用画布缩放自动值。\n"
+"自动确定画布缩放比例。\n"
 "\n"
 "在某些平台上，自动值不正确，应手动设置。"
 
@@ -2829,7 +2828,7 @@ msgstr "选择默认 PDF 浏览器"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
-msgstr "自动保存: (&A)"
+msgstr "自动保存 (&A) :"
 
 #: common/dialogs/panel_common_settings_base.cpp:34
 msgid ""
@@ -2846,14 +2845,14 @@ msgstr "分钟"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr "历史文件大小："
+msgstr "文件历史个数："
 
 #: common/dialogs/panel_common_settings_base.cpp:57
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"将删除大于此版本的 3D 缓存文件。\n"
+"将删除此时间以前的 3D 缓存文件。\n"
 "如果设置为 0，则禁用缓存清除"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
@@ -2907,7 +2906,7 @@ msgstr "3D 缓存文件持续时间："
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
-msgstr "应用程序助手"
+msgstr "辅助应用"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "Text editor:"
@@ -2953,17 +2952,17 @@ msgstr "编辑"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Warp mouse to origin of moved object"
-msgstr "将鼠标扭曲到移动对象的原点"
+msgstr "将鼠标移动到被移动的对象的原点"
 
 #: common/dialogs/panel_common_settings_base.cpp:207
 msgid "First hotkey selects tool"
-msgstr "第一个热键选择工具"
+msgstr "首次按下快捷键仅选择对应工具"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr "如果未选中，热键将立即执行操作，即使之前未选择相关工具也是如此。"
+msgstr "如果未选中，即使未选择快捷键对应的工具，按下快捷键也将立即执行对应的动作。"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
 msgid "Project Backup"
@@ -2976,7 +2975,7 @@ msgstr "自动备份工程"
 #: common/dialogs/panel_common_settings_base.cpp:224
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "保存文件时自动创建当前项目的备份压缩"
+msgstr "保存文件时自动创建当前项目的压缩备份"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "Create backups when auto save occurs"
@@ -3042,12 +3041,11 @@ msgstr "记住下次启动工程时打开的文件"
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
-msgstr ""
-"如果选中，启动工程还将启动包含以前打开的文件的工具，如 eesschema 和 pcbnew"
+msgstr "如果选中，启动工程时还将使用 eesschema 和 pcbnew 等工具打开以前打开的文件"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
-msgstr "筛选器文本框"
+msgstr "输入筛选文字"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:114
 msgid "Undo All Changes"
@@ -3081,11 +3079,11 @@ msgstr "平移和缩放"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
-msgstr "缩放时居中和扭曲光标"
+msgstr "缩放时居中光标"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
-msgstr "缩放时将光标居中在屏幕上。"
+msgstr "缩放时将光标移至屏幕中心。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
@@ -3095,7 +3093,7 @@ msgstr "移动对象时自动平移"
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
-msgstr "当绘制布线或移动项目时， 在接近显示器边缘时平移。"
+msgstr "当绘制布线或移动项目时， 在接近显示器边缘时平移画布。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3233,7 +3231,7 @@ msgstr "用水平移动向左/向右平移触摸板"
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr "在触摸板上从左到右滚动时，将画布向左和向右平移"
+msgstr "在触摸板上左右滚动时，将画布左右平移"
 
 #: common/dialogs/panel_setup_netclasses.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -3316,11 +3314,11 @@ msgstr "U形辅助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
-msgstr "DP（差分对）宽度"
+msgstr "差分对线宽"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Gap"
-msgstr "DP（差分对）间距"
+msgstr "差分对间距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "Wire Thickness"
@@ -3392,7 +3390,7 @@ msgstr "关联到列表中的网络"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:179
 msgid "Assign To Selected Nets"
-msgstr "关联给选择的网络"
+msgstr "关联到选择的网络"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:207
 #: pcbnew/board_connected_item.cpp:163
@@ -3413,7 +3411,7 @@ msgstr "忽略"
 
 #: common/dialogs/panel_setup_severities.cpp:105
 msgid "From Pin Conflicts Map"
-msgstr "从引脚冲突映射"
+msgstr "与引脚冲突映射相同"
 
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
@@ -3434,7 +3432,7 @@ msgstr "文本替换"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:537
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:557
 msgid "Error:"
-msgstr "误差："
+msgstr "错误："
 
 #: common/dialogs/wx_html_report_panel.cpp:189
 #: common/dialogs/wx_html_report_panel.cpp:212
@@ -3490,7 +3488,7 @@ msgstr "动作"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:60
 msgid "Infos"
-msgstr "相关信息"
+msgstr "信息"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:66
 #: eeschema/dialogs/dialog_erc_base.cpp:95
@@ -3523,7 +3521,7 @@ msgstr "预期 '%s'"
 #: common/dsnlexer.cpp:340
 #, c-format
 msgid "Unexpected %s"
-msgstr "异常 %s"
+msgstr "未预料的 %s"
 
 #: common/dsnlexer.cpp:348
 #, c-format
@@ -3533,7 +3531,7 @@ msgstr "%s 是重复的"
 #: common/dsnlexer.cpp:356
 #, c-format
 msgid "Unexpected '%s'"
-msgstr "异常 '%s'"
+msgstr "未预料的 '%s'"
 
 #: common/dsnlexer.cpp:401
 #, c-format
@@ -3586,7 +3584,7 @@ msgstr "你没有 \"%s\" 文件夹的写入权限。"
 #: common/eda_base_frame.cpp:904
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
-msgstr "你没有写入权限保存文件 \"%s\" 到文件夹 \"%s\"。"
+msgstr "你没有写入权限把文件 \"%s\" 保存到文件夹 \"%s\"。"
 
 #: common/eda_base_frame.cpp:909 pcbnew/plugins/altium/altium_pcb.cpp:1155
 #, c-format
@@ -3613,12 +3611,12 @@ msgstr "自动保存文件不能重命名为电路板文件名称。"
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
-msgstr "Doc 文件"
+msgstr "文档文件"
 
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr "Doc 文件 \"%s\" 没有找到"
+msgstr "文档文件 \"%s\" 没有找到"
 
 #: common/eda_doc.cpp:201
 #, c-format
@@ -3681,12 +3679,11 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
-"KiCad 可以使用您的显卡为您提供更流畅、更快速的体验。默认情况下，此选项处于关"
-"闭状态，因为它并不与所有计算机兼容。\n"
+"KiCad 可以使用您的显卡为您提供更流畅、更快速的体验。默认情况下，此选项处于关闭状态，因为不是所有计算机都兼容该选项。\n"
 "\n"
 "是否要尝试启用图形加速？\n"
 "\n"
-"如果您想稍后选择，请在首选项菜单中选择硬件加速图形。"
+"如果您想稍后选择，请在首选项菜单中选择“硬件加速图形”。"
 
 #: common/eda_draw_frame.cpp:1022
 msgid "Enable Graphics Acceleration"
@@ -4086,15 +4083,15 @@ msgstr "垂直对齐"
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
-msgstr "本地安装的系统封装库基本路径 (.pretty 文件夹)。"
+msgstr "本地安装的系统封装库 (.pretty 文件夹) 存放目录的路径 。"
 
 #: common/env_vars.cpp:73
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr "系统封装 3D 模型的基本路径 (.3Dshapes 文件夹)。"
+msgstr "系统封装 3D 模型 (.3Dshapes 文件夹) 存放目录的路径。"
 
 #: common/env_vars.cpp:75
 msgid "The base path of the locally installed symbol libraries."
-msgstr "本地安装的系统符号库的基本路径。"
+msgstr "本地安装的系统符号库存放目录的路径。"
 
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
@@ -4114,10 +4111,9 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
-"由 KiCad 内部定义（不能被编辑），并设置为当前加载的工程文件的绝对路径。这个环"
-"境变量可以用于定义相对于当前加载的工程文件和路径。例如，${KIPRJMOD}/libs/"
-"footprints.pretty 可以被定义为包含名为 footprints.pretty 专用工程封装库的文件"
-"夹。"
+"由 KiCad "
+"内部定义（不能被编辑），并设置为当前加载的工程文件的绝对路径。这个环境变量可以用于定义相对于当前加载的工程文件和路径。例如，${KIPRJMOD}/"
+"libs/footprints.pretty 可以被定义为包含名为 footprints.pretty 工程专用封装库的文件夹。"
 
 #: common/env_vars.cpp:88
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -4217,7 +4213,7 @@ msgstr "无法打开配置文件"
 
 #: common/filename_resolver.cpp:664
 msgid "Problems writing configuration file"
-msgstr "编写配置文件时出错"
+msgstr "写入配置文件时出错"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:858
 msgid "Load Error"
@@ -4298,7 +4294,7 @@ msgstr "复制"
 
 #: common/grid_tricks.cpp:241
 msgid "Copy selected cells to clipboard"
-msgstr "复制选择单元到剪贴板"
+msgstr "复制选中的单元格到剪贴板"
 
 #: common/grid_tricks.cpp:242 common/tool/actions.cpp:164
 msgid "Paste"
@@ -4355,11 +4351,11 @@ msgstr "忽略网格捕捉"
 
 #: common/hotkey_store.cpp:51
 msgid "Ignore Other Snaps"
-msgstr "忽略其他快照"
+msgstr "忽略其他吸附"
 
 #: common/hotkey_store.cpp:66
 msgid "Project Manager"
-msgstr "工程管理"
+msgstr "工程管理器"
 
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:64
 #: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1230
@@ -4405,7 +4401,7 @@ msgstr ""
 
 #: common/kiway.cpp:276
 msgid "It is missing.\n"
-msgstr "它是缺少的。\n"
+msgstr "该文件缺失。\n"
 
 #: common/kiway.cpp:278
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
@@ -4879,7 +4875,7 @@ msgstr "布线"
 
 #: common/layer_id.cpp:154
 msgid "Through vias"
-msgstr "贯穿孔"
+msgstr "通孔过孔"
 
 #: common/layer_id.cpp:155
 msgid "Bl/Buried vias"
@@ -4891,11 +4887,11 @@ msgstr "微孔"
 
 #: common/layer_id.cpp:157
 msgid "Via holes"
-msgstr "辅助孔"
+msgstr "过孔钻孔"
 
 #: common/layer_id.cpp:158
 msgid "Non-plated holes"
-msgstr "非电镀孔"
+msgstr "无镀铜孔"
 
 #: common/layer_id.cpp:159 pcbnew/dialogs/panel_edit_options_base.cpp:301
 #: pcbnew/widgets/appearance_controls.cpp:347
@@ -4933,11 +4929,11 @@ msgstr "网格轴"
 
 #: common/lib_id.cpp:280
 msgid "Illegal character found in logical library name"
-msgstr "在逻辑库名称找到非法字符"
+msgstr "逻辑库名称中包含非法字符"
 
 #: common/lib_id.cpp:296
 msgid "Illegal character found in revision"
-msgstr "在修订版本找到非法字符"
+msgstr "修订版本中包含非法字符"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
 #: eeschema/sch_pin.cpp:166 eeschema/symbol_editor/symbol_editor.cpp:1331
@@ -4989,7 +4985,7 @@ msgstr "无法识别的属性 '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:901
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr "无法识别的功能 '%s'"
+msgstr "无法识别的函数 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:996
 #, c-format
