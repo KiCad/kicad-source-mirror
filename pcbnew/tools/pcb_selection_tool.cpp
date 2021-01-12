@@ -45,6 +45,7 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
 #include <painter.h>
+#include <router/router_tool.h>
 #include <bitmaps.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_event.h>
@@ -282,9 +283,15 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
         bool brd_editor = frame && frame->IsType( FRAME_PCB_EDITOR );
+        ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
 
+        // If the router tool is active, don't override
+        if( router && router->IsToolActive() )
+        {
+            evt->SetPassEvent();
+        }
         // Single click? Select single object
-        if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             if( highlight_modifier && brd_editor )
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
