@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,8 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
 
 
 static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
-        bool expectError = false, BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
+                          bool expectError = false, BOARD_ITEM* itemA = nullptr,
+                          BOARD_ITEM* itemB = nullptr )
 {
     PCB_EXPR_COMPILER compiler;
     PCB_EXPR_UCODE    ucode;
@@ -96,7 +97,7 @@ static bool testEvalExpr( const wxString& expr, LIBEVAL::VALUE expectedResult,
     context.SetItems( itemA, itemB );
 
 
-    BOOST_TEST_MESSAGE("Expr: '" << expr.c_str() << "'");
+    BOOST_TEST_MESSAGE( "Expr: '" << expr.c_str() << "'" );
 
     bool error = !compiler.Compile( expr, &ucode, &preflightContext );
 
@@ -139,7 +140,7 @@ BOOST_AUTO_TEST_CASE( SimpleExpressions )
 {
     for( const auto& expr : simpleExpressions )
     {
-        bool ok = testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
+        testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
     }
 }
 
@@ -152,29 +153,29 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
 
     NETINFO_LIST& netInfo = brd.GetNetInfo();
 
-    NETCLASSPTR netclass1( new NETCLASS("HV") );
-    NETCLASSPTR netclass2( new NETCLASS("otherClass" ) );
+    NETCLASSPTR netclass1( new NETCLASS( "HV" ) );
+    NETCLASSPTR netclass2( new NETCLASS( "otherClass" ) );
 
-    auto net1info = new NETINFO_ITEM( &brd, "net1", 1);
-    auto net2info = new NETINFO_ITEM( &brd, "net2", 2);
+    auto net1info = new NETINFO_ITEM( &brd, "net1", 1 );
+    auto net2info = new NETINFO_ITEM( &brd, "net2", 2 );
 
     net1info->SetNetClass( netclass1 );
     net2info->SetNetClass( netclass2 );
 
-    TRACK trackA(&brd);
-    TRACK trackB(&brd);
+    TRACK trackA( &brd );
+    TRACK trackB( &brd );
 
     trackA.SetNet( net1info );
     trackB.SetNet( net2info );
 
     trackB.SetLayer( F_Cu );
 
-    trackA.SetWidth( Mils2iu( 10 ));
-    trackB.SetWidth( Mils2iu( 20 ));
+    trackA.SetWidth( Mils2iu( 10 ) );
+    trackB.SetWidth( Mils2iu( 20 ) );
 
     for( const auto& expr : introspectionExpressions )
     {
-        bool ok = testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
+        testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
     }
 }
 
