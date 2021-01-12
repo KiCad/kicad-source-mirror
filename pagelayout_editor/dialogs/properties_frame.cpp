@@ -304,7 +304,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
             From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_IncrementVector.x ) );
 
     m_textCtrlStepYBinder.SetDoubleValue(
-            From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_IncrementVector.x ) );
+            From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_IncrementVector.y ) );
 
     // The number of widgets was modified, so recalculate sizers
     m_swItemProperties->Layout();
