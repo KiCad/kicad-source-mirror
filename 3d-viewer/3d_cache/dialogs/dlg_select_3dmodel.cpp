@@ -184,8 +184,7 @@ void DLG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 
-    SetEscapeId( wxID_OK );
-    Close();
+    EndQuasiModal( wxID_OK );
 }
 
 
