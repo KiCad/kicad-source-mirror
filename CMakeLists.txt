@@ -490,8 +490,14 @@ if( NOT APPLE )
     set( KICAD_BIN bin
         CACHE PATH "Location of KiCad binaries." )
 
-    set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
-        CACHE PATH "Location of KiCad data files." )
+    # Do not make these variables "PATH" b/c cmake will truncate them and we need the full path
+    if( NOT IS_ABSOLUTE ${CMAKE_INSTALL_DATADIR} )
+        set( KICAD_DATA ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/kicad
+            CACHE STRING "Location of KiCad data files." )
+    else()
+        set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
+            CACHE STRING "Location of KiCad data files." )
+    endif()
 
     if( WIN32 )
         set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins

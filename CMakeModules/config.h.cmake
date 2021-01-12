@@ -77,6 +77,9 @@
 /// Allows scripts install directory to be referenced by the program code.
 #define PYTHON_DEST                     "@PYTHON_DEST@"
 
+/// Allows scripts install directory to be referenced by the program code.
+#define KICAD_DATA                     "@KICAD_DATA@"
+
 /// ngspice version string detected by pkg-config when available.
 #cmakedefine NGSPICE_BUILD_VERSION           "@NGSPICE_BUILD_VERSION@"
 

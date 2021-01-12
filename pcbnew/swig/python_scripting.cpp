@@ -41,6 +41,8 @@
 
 #include <wx/app.h>
 
+#include <config.h>
+
 /* init functions defined by swig */
 
 #if PY_MAJOR_VERSION >= 3
@@ -658,7 +660,7 @@ wxString PyScriptingPath( bool aUserPath )
 #if defined( __WXMAC__ )
             path = GetOSXKicadDataDir() + wxT( "/scripting" );
 #else
-            path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
+            path = Pgm().GetExecutablePath() + KICAD_DATA + wxS( "/scripting" );
 #endif
         }
     }
