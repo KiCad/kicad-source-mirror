@@ -563,7 +563,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddCloseButton();
-        m_infoBar->ShowMessage( "Schematic file is read only.", wxICON_WARNING );
+        m_infoBar->ShowMessage( _( "Schematic file is read only." ), wxICON_WARNING );
     }
 
 #ifdef PROFILE

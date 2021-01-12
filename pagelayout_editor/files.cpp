@@ -232,7 +232,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();
-            m_infoBar->ShowMessage( "Layout file is read only.", wxICON_WARNING );
+            m_infoBar->ShowMessage( _( "Layout file is read only." ), wxICON_WARNING );
         }
 
         return true;
