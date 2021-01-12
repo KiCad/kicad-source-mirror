@@ -38,6 +38,7 @@
 #include <dialogs/html_messagebox.h>
 #include <macros.h>
 #include <pcb_base_frame.h>
+#include <footprint_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <settings/color_settings.h>
@@ -136,6 +137,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits, true )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
+    m_isFpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aParent ) != nullptr;
 
     m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
                                 // from the footprint editor to set default pad setup
@@ -189,7 +191,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_staticTextPrimitiveListWarning->SetFont( infoFont );
 
     // Do not allow locking items in the footprint editor
-    m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
+    m_locked->Show( !m_isFpEditor );
 
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes
@@ -994,8 +996,8 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     // Enable/disable position
-    m_posX.Enable( !m_locked->GetValue() );
-    m_posY.Enable( !m_locked->GetValue() );
+    m_posX.Enable( !m_locked->GetValue() || m_isFpEditor );
+    m_posY.Enable( !m_locked->GetValue() || m_isFpEditor );
 
     bool hasHole = true;
     bool hasConnection = true;
@@ -1547,7 +1549,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     m_currentPad->SetLocked( m_locked->GetValue() );
 
-    if( !m_locked->GetValue() )
+    if( !m_locked->GetValue() || m_isFpEditor )
         m_currentPad->SetPosition( m_padMaster->GetPosition() );
 
     wxSize     size;

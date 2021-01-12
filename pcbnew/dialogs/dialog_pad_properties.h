@@ -64,6 +64,7 @@ private:
                                     //    which case some Y coordinates values must be negated
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
+    bool    m_isFpEditor;           // true if the caller is the footprint editor
 
     std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
                                                               // local coords, orient 0
