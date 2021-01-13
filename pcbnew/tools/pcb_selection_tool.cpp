@@ -2234,11 +2234,13 @@ void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, bool
 
 bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
-    const unsigned GRIP_MARGIN = 20;
-    VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
-
     GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
     GENERAL_COLLECTOR          collector;
+
+    // Since we're just double-checking, we want something considerably sloppier than the initial
+    // selection (most tools use a 5 pixel slop value).  We increase this to an effective 20 pixels
+    // by inflating the value of a pixel by 4x.
+    guide.SetOnePixelInIU( guide.OnePixelInIU() * 4 );
 
     collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                     : GENERAL_COLLECTOR::AllBoardItems,
@@ -2248,7 +2250,7 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     {
         BOARD_ITEM* item = collector[i];
 
-        if( item->IsSelected() && item->HitTest( (wxPoint) aPoint, margin.x ) )
+        if( item->IsSelected() && item->HitTest( (wxPoint) aPoint, 5 * guide.OnePixelInIU() ) )
             return true;
     }
 

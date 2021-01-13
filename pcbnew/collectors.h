@@ -426,7 +426,7 @@ public:
 
         m_preferredLayer            = aPreferredLayer;
         m_ignorePreferredLayer      = false;
-        m_visibleLayers              = aVisibleLayerMask;
+        m_visibleLayers             = aVisibleLayerMask;
         m_ignoreLockedLayers        = true;
         m_ignoreNonVisibleLayers    = true;
         m_ignoreLockedItems         = false;
@@ -437,18 +437,18 @@ public:
         m_includeSecondary          = true;
 #endif
 
-        m_ignoreHiddenFPText  = true; // g_ModuleTextNOVColor;
+        m_ignoreHiddenFPText        = true; // g_ModuleTextNOVColor;
         m_ignoreFPTextOnBack        = true;
         m_ignoreFPTextOnFront       = false;
-        m_ignoreFootprintsOnBack       = true; // !Show_footprints_Cmp;
-        m_ignoreFootprintsOnFront      = false;
+        m_ignoreFootprintsOnBack    = true; // !Show_footprints_Cmp;
+        m_ignoreFootprintsOnFront   = false;
 
         m_ignorePadsOnFront         = false;
         m_ignorePadsOnBack          = false;
         m_ignoreThroughHolePads     = false;
 
-        m_ignoreFPValues         = false;
-        m_ignoreFPReferences         = false;
+        m_ignoreFPValues            = false;
+        m_ignoreFPReferences        = false;
 
         m_ignoreThroughVias         = false;
         m_ignoreBlindBuriedVias     = false;
@@ -601,6 +601,7 @@ public:
     void SetIgnoreZoneFills( bool ignore ) { m_ignoreZoneFills = ignore; }
 
     double OnePixelInIU() const override { return m_onePixelInIU; }
+    void SetOnePixelInIU( double aValue ) { m_onePixelInIU = aValue; }
 };
 
 

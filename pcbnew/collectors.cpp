@@ -457,7 +457,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( dimension )
                     {
-                        // Dimensions feels particularly hard to select, probably due to their
+                        // Dimensions feel particularly hard to select, probably due to their
                         // noisy shape making it feel like they should have a larger bounary.
                         if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
                         {
@@ -467,7 +467,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else
                     {
-                        if( item->HitTest( m_refPos, 0 ) )
+                        if( item->HitTest( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
