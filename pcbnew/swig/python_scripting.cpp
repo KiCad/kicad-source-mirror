@@ -660,7 +660,7 @@ wxString PyScriptingPath( bool aUserPath )
 #if defined( __WXMAC__ )
             path = GetOSXKicadDataDir() + wxT( "/scripting" );
 #else
-            path = Pgm().GetExecutablePath() + KICAD_DATA + wxS( "/scripting" );
+            path = KICAD_DATA + wxS( "/scripting" );
 #endif
         }
     }
