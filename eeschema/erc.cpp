@@ -530,6 +530,7 @@ int ERC_TESTER::TestPinToPin()
                             ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
                                                                           ERCE_PIN_TO_PIN_ERROR );
                     ercItem->SetItems( refPin, testPin );
+                    ercItem->SetIsSheetSpecific();
 
                     ercItem->SetErrorMessage(
                             wxString::Format( _( "Pins of type %s and %s are connected" ),
@@ -602,6 +603,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                                 pin->GetNumber(), netName, pinToNetMap[name].first ) );
 
                         ercItem->SetItems( pin, pinToNetMap[name].second );
+                        ercItem->SetIsSheetSpecific();
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem,
                                                              pin->GetTransformedPosition() );

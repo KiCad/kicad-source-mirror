@@ -264,34 +264,60 @@ void ERC_SETTINGS::ResetPinMap()
 }
 
 
+void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER* )> aVisitor )
+{
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
+
+    std::set<SCH_SCREEN*> seenScreens;
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        bool firstTime = seenScreens.count( sheetList[i].LastScreen() ) == 0;
+
+        if( firstTime )
+            seenScreens.insert( sheetList[i].LastScreen() );
+
+        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
+
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
+                continue;
+
+            // Don't show non-specific markers more than once
+            if( !firstTime &&
+                !static_cast<ERC_ITEM*>( marker->GetRCItem().get() )->IsSheetSpecific() )
+            {
+                continue;
+            }
+
+            aVisitor( marker );
+        }
+    }
+}
+
+
 void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 {
     m_severities = aSeverities;
 
     m_filteredMarkers.clear();
 
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-    ERC_SETTINGS&  settings  = m_schematic->ErcSettings();
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            SEVERITY    markerSeverity;
+    visitMarkers(
+            [&]( SCH_MARKER* aMarker )
+            {
+                SEVERITY markerSeverity;
 
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
+                if( aMarker->IsExcluded() )
+                    markerSeverity = RPT_SEVERITY_EXCLUSION;
+                else
+                    markerSeverity = settings.GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
 
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = settings.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity & m_severities )
-                m_filteredMarkers.push_back( marker );
-        }
-    }
+                if( markerSeverity & m_severities )
+                    m_filteredMarkers.push_back( aMarker );
+            } );
 }
 
 
@@ -302,28 +328,21 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
 
     int count = 0;
 
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-    ERC_SETTINGS&  settings  = m_schematic->ErcSettings();
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            SEVERITY    markerSeverity;
+    visitMarkers(
+            [&]( SCH_MARKER* aMarker )
+            {
+                SEVERITY markerSeverity;
 
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
+                if( aMarker->IsExcluded() )
+                    markerSeverity = RPT_SEVERITY_EXCLUSION;
+                else
+                    markerSeverity = settings.GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
 
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = settings.GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity == aSeverity )
-                count++;
-        }
-    }
+                if( markerSeverity == aSeverity )
+                    count++;
+            } );
 
     return count;
 }

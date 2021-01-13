@@ -52,12 +52,16 @@ public:
         return allItemTypes;
     }
 
+    bool IsSheetSpecific() const { return m_sheetSpecific; }
+    void SetIsSheetSpecific( bool aSpecific = true ) { m_sheetSpecific = aSpecific; }
+
 private:
     ERC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
     {
-        m_errorCode   = aErrorCode;
-        m_errorTitle  = aTitle;
-        m_settingsKey = aSettingsKey;
+        m_errorCode     = aErrorCode;
+        m_errorTitle    = aTitle;
+        m_settingsKey   = aSettingsKey;
+        m_sheetSpecific = false;
     }
 
     /// A list of all ERC_ITEM types which are valid error codes
@@ -90,6 +94,9 @@ private:
     static ERC_ITEM unresolvedVariable;
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;
+
+    /// True if this item is specific to a sheet instance (as opposed to applying to all instances)
+    bool m_sheetSpecific;
 };
 
 

@@ -2743,6 +2743,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
                 ercItem->SetItems( unmatched.second );
                 ercItem->SetErrorMessage( msg );
+                ercItem->SetIsSheetSpecific();
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
                 sheet.LastScreen()->Append( marker );
