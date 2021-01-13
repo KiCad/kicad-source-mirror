@@ -1112,6 +1112,8 @@ void CADSTAR_ARCHIVE_PARSER::ATTRNAME::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
                 AttributeOwner = ATTROWNER::PART_DEFINITION;
             else if( attOwnerVal == wxT( "PIN" ) )
                 AttributeOwner = ATTROWNER::PIN;
+            else if( attOwnerVal == wxT( "SIGNALREF" ) )
+                AttributeOwner = ATTROWNER::SIGNALREF;
             else if( attOwnerVal == wxT( "SYMBOL" ) )
                 AttributeOwner = ATTROWNER::SYMBOL;
             else if( attOwnerVal == wxT( "SYMDEF" ) )

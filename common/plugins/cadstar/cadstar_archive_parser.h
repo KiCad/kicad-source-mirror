@@ -631,6 +631,7 @@ public:
         PART,            ///< Only library Attributes
         PART_DEFINITION, ///< Only library Attributes
         PIN,
+        SIGNALREF,
         SYMBOL,
         SYMDEF,
         TEMPLATE,
