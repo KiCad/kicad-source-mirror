@@ -26,13 +26,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextType->Wrap( -1 );
 	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 4 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
@@ -353,11 +353,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Step text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInclabel->Wrap( -1 );
 	fgSizer8->Add( m_staticTextInclabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlTextIncrement = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlTextIncrement->SetToolTip( _("Number of characters or digits to step text by for each repeat.") );
+
 	fgSizer8->Add( m_textCtrlTextIncrement, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
@@ -368,6 +370,8 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer8->Add( m_staticTextStepX, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlStepX = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_textCtrlStepX->SetToolTip( _("Distance on the X axis to step for each repeat.") );
+
 	fgSizer8->Add( m_textCtrlStepX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextStepXUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -379,6 +383,8 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer8->Add( m_staticTextStepY, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlStepY = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlStepY->SetToolTip( _("Distance to step on Y axis for each repeat.") );
+
 	fgSizer8->Add( m_textCtrlStepY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextStepYUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
