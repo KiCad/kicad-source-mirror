@@ -56,6 +56,11 @@ enum RECT_POINTS
     RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOT_RIGHT, RECT_BOT_LEFT
 };
 
+enum RECT_LINES
+{
+    RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
+};
+
 enum ARC_POINTS
 {
     ARC_CENTER, ARC_START, ARC_MID, ARC_END
@@ -186,6 +191,16 @@ std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( wxPoint( shape->GetEnd().x, shape->GetStart().y ) );
             points->AddPoint( shape->GetEnd() );
             points->AddPoint( wxPoint( shape->GetStart().x, shape->GetEnd().y ) );
+
+            points->AddLine( points->Point( RECT_TOP_LEFT ), points->Point( RECT_TOP_RIGHT ) );
+            points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
+            points->AddLine( points->Point( RECT_TOP_RIGHT ), points->Point( RECT_BOT_RIGHT ) );
+            points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
+            points->AddLine( points->Point( RECT_BOT_RIGHT ), points->Point( RECT_BOT_LEFT ) );
+            points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
+            points->AddLine( points->Point( RECT_BOT_LEFT ), points->Point( RECT_TOP_LEFT ) );
+            points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
+
             break;
 
         case S_ARC:
@@ -1108,6 +1123,28 @@ void POINT_EDITOR::updateItem() const
             {
                 shape->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
                 shape->SetEndY( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().y );
+            }
+            else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
+            {
+                shape->SetStartY( m_editPoints->Point( RECT_TOP_LEFT ).GetPosition().y );
+            }
+            else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
+            {
+                shape->SetStartX( m_editPoints->Point( RECT_BOT_LEFT ).GetPosition().x );
+            }
+            else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
+            {
+                shape->SetEndY( m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition().y );
+            }
+            else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
+            {
+                shape->SetEndX( m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition().x );
+            }
+
+            for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+            {
+                if( !isModified( m_editPoints->Line( i ) ) )
+                    m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
             }
         }
             break;
