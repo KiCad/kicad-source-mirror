@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2006-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,8 @@
 #include <symbol_edit_frame.h>
 
 
-DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent, LIB_ITEM* aItem ) :
+DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent,
+                                                      LIB_ITEM* aItem ) :
     DIALOG_LIB_EDIT_DRAW_ITEM_BASE( aParent ),
     m_frame( aParent ),
     m_item( aItem ),
@@ -44,7 +45,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
 
-    if( aParent->IsSymbolFromLegacyLibrary() )
+    if( !aParent->IsSymbolEditable() )
     {
         m_sdbSizerCancel->SetDefault();
         m_sdbSizerOK->SetLabel( _( "Read Only" ) );
@@ -70,6 +71,7 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
     m_checkApplyToAllConversions->SetValue( m_item->GetConvert() == 0 );
 
     bool enblConvOptStyle = symbol && symbol->HasConversion();
+
     // if a symbol contains no graphic items, symbol->HasConversion() returns false.
     // but when creating a new symbol, with DeMorgan option set, the ApplyToAllConversions
     // must be enabled even if symbol->HasConversion() returns false in order to be able

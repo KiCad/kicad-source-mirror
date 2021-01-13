@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,6 @@
 
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
-
-private:
-    // Because the rows of the grid can either be a single pin or a group of pins, the
-    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
-    // contains only a single pin.
-    std::vector<LIB_PINS> m_rows;
-
-    EDA_UNITS m_userUnits;
-    bool      m_edited;
-
 public:
     PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) : m_userUnits( aUserUnits ), m_edited( false )
     {
@@ -380,6 +370,15 @@ public:
     {
         return m_edited;
     }
+
+private:
+    // Because the rows of the grid can either be a single pin or a group of pins, the
+    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
+    // contains only a single pin.
+    std::vector<LIB_PINS> m_rows;
+
+    EDA_UNITS m_userUnits;
+    bool      m_edited;
 };
 
 
@@ -426,7 +425,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     attr = new wxGridCellAttr;
     wxArrayString orientationNames = PinOrientationNames();
     orientationNames.push_back( INDETERMINATE_STATE );
-    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinOrientationIcons(), orientationNames ) );
+    attr->SetRenderer( new GRID_CELL_ICON_TEXT_RENDERER( PinOrientationIcons(),
+                                                         orientationNames ) );
     attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinOrientationIcons(), orientationNames ) );
     m_grid->SetColAttr( COL_ORIENTATION, attr );
 
@@ -449,7 +449,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     GetSizer()->SetSizeHints(this);
     Centre();
 
-    if( parent->IsSymbolFromLegacyLibrary() )
+    if( parent->IsSymbolEditable() )
     {
         m_ButtonsCancel->SetDefault();
         m_ButtonsOK->SetLabel( _( "Read Only" ) );
@@ -466,7 +466,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_width = 0;
 
     // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_COL_SORT,
+                     wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
 }
 
 
@@ -476,7 +477,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
     cfg->m_PinTableVisibleColumns = m_grid->GetShownColumns().ToStdString();
 
     // Disconnect Events
-    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT,
+                        wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_dataModel );

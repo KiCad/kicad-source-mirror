@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2001 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );
 
-    if( aParent->IsSymbolFromLegacyLibrary() )
+    if( !aParent->IsSymbolEditable() )
     {
         m_sdbSizerButtonsCancel->SetDefault();
         m_sdbSizerButtonsOK->SetLabel( _( "Read Only" ) );
