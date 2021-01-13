@@ -1133,6 +1133,13 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
     }
     else
     {
+        // Ratsnest visibility is controlled by the ratsnest option, and not by the preset
+        if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        {
+            PCB_DISPLAY_OPTIONS opt = m_frame->GetDisplayOptions();
+            aLayers.set( LAYER_RATSNEST, opt.m_ShowGlobalRatsnest );
+        }
+
         m_frame->GetBoard()->SetVisibleElements( aLayers );
     }
 }
