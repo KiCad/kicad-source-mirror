@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,12 +87,13 @@ private:
     void postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void renderBlockTracing( GLubyte* ptrPBO , signed int iBlock );
-    void renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor, bool applyColorSpaceConversion );
+    void renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
+                           bool applyColorSpaceConversion );
 
     void renderRayPackets( const SFVEC3F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
                            bool is_testShadow, SFVEC3F* aOutHitColor );
 
-    void renderAnitAliasPackets( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
+    void renderAntiAliasPackets( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
                                  const HITINFO_PACKET* aHitPck_AA_X1Y1, const RAY* aRayPck,
                                  SFVEC3F* aOutHitColor );
 

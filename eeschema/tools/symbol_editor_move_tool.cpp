@@ -291,8 +291,16 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
 
-                if( !pinTool->PlacePin( (LIB_PIN*) selection.Front() ) )
+                try
+                {
+                    if( !pinTool->PlacePin( (LIB_PIN*) selection.Front() ) )
+                        restore_state = true;
+                }
+                catch( const boost::bad_pointer& e )
+                {
                     restore_state = true;
+                    wxLogError( "Boost pointer exception occurred: \"%s\"", e.what() );
+                }
             }
 
             break; // Finish

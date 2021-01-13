@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -502,10 +502,10 @@ void RENDER_3D_RAYTRACE::renderRayPackets( const SFVEC3F* bgColorY, const RAY* a
 }
 
 
-void RENDER_3D_RAYTRACE::renderAnitAliasPackets( const SFVEC3F* aBgColorY,
-                                             const HITINFO_PACKET* aHitPck_X0Y0,
-                                             const HITINFO_PACKET* aHitPck_AA_X1Y1,
-                                             const RAY* aRayPck, SFVEC3F* aOutHitColor )
+void RENDER_3D_RAYTRACE::renderAntiAliasPackets( const SFVEC3F* aBgColorY,
+                                                 const HITINFO_PACKET* aHitPck_X0Y0,
+                                                 const HITINFO_PACKET* aHitPck_AA_X1Y1,
+                                                 const RAY* aRayPck, SFVEC3F* aOutHitColor )
 {
     const bool is_testShadow =  m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
 
@@ -535,12 +535,13 @@ void RENDER_3D_RAYTRACE::renderAnitAliasPackets( const SFVEC3F* aBgColorY,
 
             unsigned int nodex0y1 = 0;
 
-            if( y < (RAYPACKET_DIM - 1) )
-                nodex0y1 = aHitPck_X0Y0[ idx0y1 ].m_HitInfo.m_acc_node_info;
+            if( y < ( RAYPACKET_DIM - 1 ) && idx0y1 < RAYPACKET_RAYS_PER_PACKET )
+                nodex0y1 = aHitPck_X0Y0[idx0y1].m_HitInfo.m_acc_node_info;
 
             unsigned int nodex1y1 = 0;
 
-            if( idx1y1 < RAYPACKET_RAYS_PER_PACKET )
+            if( ( x < ( RAYPACKET_DIM - 1 ) ) && ( y < ( RAYPACKET_DIM - 1 ) )
+              && idx1y1 < RAYPACKET_RAYS_PER_PACKET )
                 nodex1y1 = aHitPck_X0Y0[idx1y1].m_HitInfo.m_acc_node_info;
 
             // If all notes are equal we assume there was no change on the object hits.
@@ -763,13 +764,13 @@ void RENDER_3D_RAYTRACE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock 
                 m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR ),
                 SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y1_half );
 
-        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
+        renderAntiAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
                                 hitColor_AA_X1Y0 );
 
-        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X0Y1,
+        renderAntiAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X0Y1,
                                 hitColor_AA_X0Y1 );
 
-        renderAnitAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1,
+        renderAntiAliasPackets( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1,
                                 blockRayPck_AA_X1Y1_half, hitColor_AA_X0Y1_half );
 
         // Average the result
