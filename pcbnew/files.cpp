@@ -935,6 +935,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     SetStatusText( lowerTxt, 0 );
 
+    // Get rid of the old version conversion warning, or any other dismissable warning :)
+    if( m_infoBar->IsShown() && m_infoBar->HasCloseButton() )
+        m_infoBar->Dismiss();
+
     GetScreen()->ClrModify();
     GetScreen()->ClrSave();
     return true;
