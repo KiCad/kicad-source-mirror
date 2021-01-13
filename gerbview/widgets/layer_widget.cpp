@@ -128,7 +128,7 @@ void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorS
 
     AddMenuItem( &menu, ID_CHANGE_LAYER_COLOR,
                  _( "Change Layer Color for" ) + wxS( " " ) + aLayerName,
-                 KiBitmap( setcolor_copper_xpm ) );
+                 KiBitmap( color_materials_xpm ) );
     menu.AppendSeparator();
 
     OnLayerRightClick( menu );
@@ -178,7 +178,7 @@ void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColor
 
     AddMenuItem( &menu, ID_CHANGE_RENDER_COLOR,
                  _( "Change Render Color for" ) + wxS( " " )+ aRenderName,
-                 KiBitmap( setcolor_board_body_xpm ) );
+                 KiBitmap( color_materials_xpm ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                [aColorSwatch]( wxCommandEvent& event )

@@ -120,7 +120,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Material properties submenu
     ACTION_MENU* propsSubmenu = new ACTION_MENU( false, tool );
     propsSubmenu->SetTitle( _( "Material Properties" ) );
-    propsSubmenu->SetIcon( color_materials_xpm );
 
     propsSubmenu->Add( EDA_3D_ACTIONS::materialNormal,  ACTION_MENU::CHECK );
     propsSubmenu->Add( EDA_3D_ACTIONS::materialDiffuse, ACTION_MENU::CHECK );
@@ -133,7 +132,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Raytracing  submenu
     ACTION_MENU* raySubmenu = new ACTION_MENU( false, tool );
     raySubmenu->SetTitle( _( "Raytracing Options" ) );
-    raySubmenu->SetIcon( tools_xpm );
 
     raySubmenu->Add( EDA_3D_ACTIONS::renderShadows,      ACTION_MENU::CHECK );
     raySubmenu->Add( EDA_3D_ACTIONS::proceduralTextures, ACTION_MENU::CHECK );
@@ -155,31 +153,31 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     colorSubmenu->Add( _( "Background Top Color..." ),
                        ID_MENU3D_BGCOLOR_TOP,
-                       setcolor_3d_bg_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Background Bottom Color..." ),
                        ID_MENU3D_BGCOLOR_BOTTOM,
-                       setcolor_3d_bg_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Silkscreen Color..." ),
                        ID_MENU3D_SILKSCREEN_COLOR,
-                       setcolor_silkscreen_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Solder Mask Color..." ),
                        ID_MENU3D_SOLDERMASK_COLOR,
-                       setcolor_soldermask_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Solder Paste Color..." ),
                        ID_MENU3D_SOLDERPASTE_COLOR,
-                       setcolor_solderpaste_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Copper/Surface Finish Color..." ),
                        ID_MENU3D_COPPER_COLOR,
-                       setcolor_copper_xpm );
+                       nullptr );
 
     colorSubmenu->Add( _( "Board Body Color..." ),
                        ID_MENU3D_PCB_BODY_COLOR,
-                       setcolor_board_body_xpm );
+                       nullptr );
 
     // Only allow the stackup to be used in the PCB editor, since it isn't editable in the other frames
     if( Parent()->IsType( FRAME_PCB_EDITOR ) )
