@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -197,7 +197,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 
     // End point
     m_textCtrlEndXBinder.SetDoubleValue(
-            From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_End.m_Pos.y ) );
+            From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_End.m_Pos.x ) );
     m_textCtrlEndYBinder.SetDoubleValue(
             From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_End.m_Pos.y ) );
 
