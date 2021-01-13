@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,10 +24,10 @@
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
 #include <wx/statbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -141,7 +141,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_TextBottomMarginUnits;
 		wxButton* m_buttonGeneralOptsOK;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }

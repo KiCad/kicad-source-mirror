@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -56,6 +56,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_stcText->SetViewWhiteSpace( false );
 	m_stcText->SetMarginWidth( 2, 0 );
 	m_stcText->SetIndentationGuides( false );
+	m_stcText->SetReadOnly( false );
 	m_stcText->SetMarginWidth( 1, 0 );
 	m_stcText->SetMarginWidth( 0, 0 );
 	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -411,7 +412,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Text Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInclabel->Wrap( -1 );
 	fgSizer8->Add( m_staticTextInclabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -424,7 +425,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_staticTextStepX = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStepX = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("X Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStepX->Wrap( -1 );
 	fgSizer8->Add( m_staticTextStepX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -438,7 +439,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_TextStepXUnits->Wrap( -1 );
 	fgSizer8->Add( m_TextStepXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
-	m_staticTextStepY = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStepY = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Y Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStepY->Wrap( -1 );
 	fgSizer8->Add( m_staticTextStepY, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
