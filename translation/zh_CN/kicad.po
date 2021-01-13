@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-13 14:21+0000\n"
+"PO-Revision-Date: 2021-01-18 07:28+0000\n"
 "Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5194,7 +5194,7 @@ msgstr "压缩文件 \"%s\"：错误！\n"
 #: common/project/project_archiver.cpp:271
 #, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr "Zip 压缩 \"%s\" 创建 (%s 未压缩，%s 已压缩)\n"
+msgstr "已创建 Zip 压缩包 \"%s\" (%s 未压缩，%s 已压缩)\n"
 
 #: common/rc_item.cpp:328
 msgid "Excluded "
@@ -5215,15 +5215,15 @@ msgstr "无法打开文件名 \"%s\" 进行读取"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
-msgstr "超出了最大线路长度"
+msgstr "超出了最大行长度"
 
 #: common/richio.cpp:267
 msgid "Line length exceeded"
-msgstr "超出了线路长度"
+msgstr "超出了最大行长度"
 
 #: common/richio.cpp:551
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-msgstr "输出流_输出格式器写入错误"
+msgstr "OUTPUTSTREAM_OUTPUTFORMATTER 写入错误"
 
 #: common/settings/color_settings.cpp:312
 msgid "(Footprints)"
