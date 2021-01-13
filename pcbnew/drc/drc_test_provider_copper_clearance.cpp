@@ -128,15 +128,24 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     for( ZONE* zone : m_board->Zones() )
     {
         if( !zone->GetIsRuleArea() )
+        {
             m_zones.push_back( zone );
+            m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
+        }
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
+        for( PAD* pad : footprint->Pads() )
+            m_largestClearance = std::max( m_largestClearance, pad->GetLocalClearance() );
+
         for( ZONE* zone : footprint->Zones() )
         {
             if( !zone->GetIsRuleArea() )
+            {
                 m_zones.push_back( zone );
+                m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
+            }
         }
     }
 
