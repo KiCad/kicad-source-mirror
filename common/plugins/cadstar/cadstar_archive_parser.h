@@ -119,7 +119,7 @@ public:
      * larger in KiCad.
      */
     static const double TXT_HEIGHT_RATIO;
-    
+
     /**
      * These are speccial fields in text objects enclosed between the tokens '<@' and '@>' such as
      * <@[FIELD_NAME][FIELD_VALUE]@>. For example: "<@DESIGN TITLEProject Title@>"
@@ -160,7 +160,7 @@ public:
         /**
          * CADSTAR doesn't have user defined text fields but does allow loading text from a
          * file. This map stores all the text items that exist in the original CADSTAR design. They
-         * will be replaced by a text variable of the form ${FROM_FILE_[filename]_[extension]} 
+         * will be replaced by a text variable of the form ${FROM_FILE_[filename]_[extension]}
          */
         std::map<wxString, wxString> FilenamesToTextMap;
 
@@ -191,7 +191,7 @@ public:
      * in aParserContext
      * @param aTextString Text string to parse
      * @param aParserContext PARSER_CONTEXT in which to store the values of the found fields
-     * @return 
+     * @return
      */
     static wxString ParseTextFields( wxString aTextString, PARSER_CONTEXT* aParserContext );
 
@@ -199,6 +199,8 @@ public:
     struct PARSER
     {
         virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) = 0;
+
+        virtual ~PARSER() {};
     };
 
 
@@ -971,12 +973,12 @@ public:
                 wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
                                                           ///< in the component footprint
                                                           ///< subnode="PINIDENTIFIER". It is assumed
-                                                          ///< that this could be empty in earlier 
+                                                          ///< that this could be empty in earlier
                                                           ///< versions of CADSTAR
                 wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
                                                           ///< displayed wil be Identifier
                                                           ///< (subnode="PINNAME")
-                                                          ///< This seems to be equivalent to "Pin 
+                                                          ///< This seems to be equivalent to "Pin
                                                           ///< Number" in KiCad.
                 wxString Label = wxEmptyString;           ///< This Can be empty (subnode=
                                                           ///< "PINLABEL")
@@ -991,7 +993,7 @@ public:
                                                           ///< correctly placed after any Gate and
                                                           ///< Pin Swaps are Back Annotated to the
                                                           ///< Schematic design."
-                                                          ///< This seems to be equivalent to "Pin 
+                                                          ///< This seems to be equivalent to "Pin
                                                           ///< Name" in KiCad.
                 wxString Signal = wxEmptyString;          ///< Usually for Power/Ground pins,
                                                           ///< (subnode="PINSIGNAL")

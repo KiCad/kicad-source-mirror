@@ -679,9 +679,8 @@ void SYMBOL_EDIT_FRAME::Save()
     }
     else if( !getTargetLibId().GetLibNickname().empty() )
     {
-        LIB_ID          libId = getTargetLibId();
+        LIB_ID          libId   = getTargetLibId();
         const wxString& libName = libId.GetLibNickname();
-        const wxString& partName = libId.GetLibItemName();
 
         if( m_libMgr->IsLibraryReadOnly( libName ) )
         {
