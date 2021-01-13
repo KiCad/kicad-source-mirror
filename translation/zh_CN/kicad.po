@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-12 12:54+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-01-13 14:21+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -489,7 +489,7 @@ msgstr "对非电镀的铜使用裸铜色"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "对镀铜和非镀铜使用不同的颜色。（慢）"
+msgstr "对镀铜和非镀铜使用不同的颜色。 (慢)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -3139,7 +3139,7 @@ msgstr "将选定区域绘制为矩形"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr "拖动选定的对象；否则将选定区绘制为矩形"
+msgstr "拖动选定的对象；否则绘制选择矩形"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
@@ -9243,7 +9243,7 @@ msgstr "备用引脚号"
 #: eeschema/dialogs/dialog_pin_properties.cpp:189
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr "备用引脚分配不适用于 DeMorgan 组件。"
+msgstr "备用引脚分配不适用于德摩根元件。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9541,11 +9541,11 @@ msgstr "居中的绘图仪单元"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr "适合页面，用户单位"
+msgstr "页面适配，用户单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr "适合内容，用户单位"
+msgstr "内容适配，用户单位"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -22363,7 +22363,7 @@ msgstr "封装可以在画布上被自由移动和定向。至少部分封装的
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
-msgstr "封装可以在画布上被自由移动和定向，但所有的焊盘都被锁定在该封装内的相应位置上。"
+msgstr "封装可以在画布上自由移动和定向，但所有的焊盘都被锁定在该封装内的相应位置上。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
 msgid ""
@@ -30163,11 +30163,11 @@ msgstr "无法从非镀通孔开始布线。"
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "规则区域 “ %s” 不允许导线。"
+msgstr "规则区域 '%s' 不允许布线。"
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr "规则区域不允许导线。"
+msgstr "规则区域不允许布线。"
 
 #: pcbnew/router/pns_router.cpp:218
 msgid "Cannot start routing from a text item."
