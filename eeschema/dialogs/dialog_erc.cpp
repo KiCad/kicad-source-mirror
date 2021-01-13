@@ -102,7 +102,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddButton( button );
-        m_infoBar->ShowMessage( _( "Annotation not complete. ERC cannot be run." ) );
+        m_infoBar->ShowMessage( _( "Annotation is incomplete. ERC cannot be run." ) );
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings

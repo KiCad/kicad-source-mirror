@@ -1639,6 +1639,32 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetAppearancePanel()->OnColorThemeChanged();
 
+    // Netclass definitions could have changed, either by us or by Eeschema
+    DRC_TOOL*   drcTool = m_toolManager->GetTool<DRC_TOOL>();
+    WX_INFOBAR* infobar = GetInfoBar();
+
+    try
+    {
+        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+        infobar->Hide();
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Edit design rules" ),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    ShowBoardSetupDialog( _( "Custom Rules" ) );
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+        infobar->AddCloseButton();
+        infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR );
+    }
+
     // Update the environment variables in the Python interpreter
     if( aEnvVarsChanged )
         PythonSyncEnvironmentVariables();

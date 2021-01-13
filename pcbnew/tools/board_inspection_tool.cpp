@@ -226,7 +226,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
     catch( PARSE_ERROR& pe )
     {
         r->Report( "" );
-        r->Report( _( "Report incomplete: could not compile design rules.  " )
+        r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                    + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         return;
     }
@@ -484,7 +484,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( compileError )
         {
             r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile design rules.  " )
+            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                        + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
@@ -521,7 +521,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( compileError )
         {
             r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile design rules.  " )
+            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                        + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
@@ -555,7 +555,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( compileError )
         {
             r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile design rules.  " )
+            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                        + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
@@ -593,7 +593,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( compileError )
         {
             r->Report( "" );
-            r->Report( _( "Report incomplete: could not compile design rules.  " )
+            r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                        + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
         }
         else
@@ -622,7 +622,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     if( compileError )
     {
         r->Report( "" );
-        r->Report( _( "Report incomplete: could not compile design rules.  " )
+        r->Report( _( "Report incomplete: could not compile custom design rules.  " )
                    + "<a href='boardsetup'>" + _( "Show design rules." ) + "</a>" );
     }
     else
