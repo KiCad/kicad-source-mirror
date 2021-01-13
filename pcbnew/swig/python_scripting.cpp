@@ -657,8 +657,11 @@ wxString PyScriptingPath( bool aUserPath )
         }
         else
         {
+            //TODO(snh) break out the directory functions into KIPLATFORM
 #if defined( __WXMAC__ )
             path = GetOSXKicadDataDir() + wxT( "/scripting" );
+#elif defined( __WXMSW__ )
+            path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 #else
             path = KICAD_DATA + wxS( "/scripting" );
 #endif
