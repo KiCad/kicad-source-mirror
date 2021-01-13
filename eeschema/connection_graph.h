@@ -84,7 +84,9 @@ public:
               m_bus_entry( nullptr ),
               m_driver( nullptr ),
               m_driver_connection( nullptr ),
-              m_hier_parent( nullptr )
+              m_hier_parent( nullptr ),
+              m_first_driver( nullptr ),
+              m_second_driver( nullptr )
     {}
 
     ~CONNECTION_SUBGRAPH() = default;
@@ -95,10 +97,10 @@ public:
      * If multiple possible drivers exist, picks one according to the priority.
      * If multiple "winners" exist, returns false and sets m_driver to nullptr.
      *
-     * @param aCreateMarkers controls whether ERC markers should be added for conflicts
+     * @param aCheckMultipleDrivers controls whether the second driver should be captured for ERC
      * @return true if m_driver was set, or false if a conflict occurred
      */
-    bool ResolveDrivers( bool aCreateMarkers = false );
+    bool ResolveDrivers( bool aCheckMultipleDrivers = false );
 
     /**
      * Returns the fully-qualified net name for this subgraph (if one exists)
@@ -110,6 +112,8 @@ public:
 
     /// Returns the candidate net name for a driver
     const wxString& GetNameForDriver( SCH_ITEM* aItem );
+
+    const wxString GetNameForDriver( SCH_ITEM* aItem ) const;
 
     /// Combines another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );
@@ -216,6 +220,19 @@ public:
 
     /// A cache of escaped netnames from schematic items
     std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
+
+    /**
+     * Stores the primary driver for the multiple drivers ERC check.  This is the chosen driver
+     * before subgraphs are absorbed (so m_driver may be different)
+     */
+    SCH_ITEM* m_first_driver;
+
+    /// Used for multiple drivers ERC message; stores the second possible driver (or nullptr)
+    SCH_ITEM* m_second_driver;
+
+private:
+
+    wxString driverName( SCH_ITEM* aItem ) const;
 };
 
 /// Associates a net code with the final name of a net
@@ -443,6 +460,15 @@ private:
                                                           CONNECTION_SUBGRAPH* aSubgraph );
 
     void recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName );
+
+    /**
+     * If the subgraph has multiple drivers of equal priority that are graphically connected,
+     * ResolveDrivers() will have stored the second driver for use by this function, which actually
+     * creates the markers
+     * @param aSubgraph is the subgraph to examine
+     * @return  true for no errors, false for errors
+     */
+    bool ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Checks one subgraph for conflicting connections between net and bus labels
