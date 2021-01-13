@@ -161,7 +161,10 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                     item = dataItem->GetDrawItems()[0];
                     item->SetFlags( IS_NEW | IS_MOVED );
-                    m_selectionTool->AddItemToSel( item );
+
+                    // Select the item but don't inform other tools (to prevent the Properties
+                    // panel from updating the item before it has been placed)
+                    m_selectionTool->AddItemToSel( item, true );
 
                     // update the cursor so it looks correct before another event
                     setCursor();
@@ -174,6 +177,11 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 item->SetPosition( item->GetPeer()->GetStartPosUi( 0 ) );
                 item->ClearEditFlags();
                 getView()->Update( item );
+
+                // Now we re-select and inform other tools, so that the Properties panel
+                // is updated.
+                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+                m_selectionTool->AddItemToSel( item, false );
 
                 item = nullptr;
 
