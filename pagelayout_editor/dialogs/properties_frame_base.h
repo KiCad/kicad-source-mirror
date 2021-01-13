@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,16 +18,16 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/stc/stc.h>
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
 #include <wx/statbox.h>
-#include <wx/button.h>
+#include <wx/gbsizer.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -47,9 +47,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxBoxSizer* m_SizerItemProperties;
 		wxStaticText* m_staticTextType;
 		wxChoice* m_choicePageOpt;
-		wxStaticLine* m_staticline5;
 		wxBoxSizer* m_SizerTextOptions;
-		wxStaticText* m_staticTextText;
 		wxStyledTextCtrl* m_stcText;
 		wxStaticText* m_staticTextHjust;
 		wxChoice* m_choiceHjustify;
@@ -70,7 +68,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlConstraintY;
 		wxStaticText* m_TextConstraintYUnits;
 		wxStaticText* m_staticTextSizeInfo;
-		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticTextComment;
 		wxTextCtrl* m_textCtrlComment;
 		wxStaticBoxSizer* sbSizerPos;
@@ -91,17 +88,13 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_TextEndYUnits;
 		wxStaticText* m_staticTextOrgEnd;
 		wxComboBox* m_comboBoxCornerEnd;
-		wxBoxSizer* m_SizerLineThickness;
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
 		wxStaticText* m_TextLineThicknessUnits;
-		wxStaticText* m_staticTextInfoThickness;
-		wxBoxSizer* m_SizerRotation;
 		wxStaticText* m_staticTextRot;
 		wxTextCtrl* m_textCtrlRotation;
-		wxBoxSizer* m_SizerPPI;
-		wxStaticText* m_staticTextBitmapPPI1;
-		wxTextCtrl* m_textCtrlBitmapPPI;
+		wxStaticText* m_staticTextBitmapDPI;
+		wxTextCtrl* m_textCtrlBitmapDPI;
 		wxStaticText* m_staticTextRepeatCnt;
 		wxTextCtrl* m_textCtrlRepeatCount;
 		wxStaticText* m_staticTextInclabel;
@@ -141,7 +134,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_TextBottomMarginUnits;
 		wxButton* m_buttonGeneralOptsOK;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }

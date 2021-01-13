@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,25 +26,18 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextType->Wrap( -1 );
 	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND, 5 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
 
-	m_staticline5 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_SizerItemProperties->Add( m_staticline5, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
 	m_SizerTextOptions = new wxBoxSizer( wxVERTICAL );
-
-	m_staticTextText = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextText->Wrap( -1 );
-	m_SizerTextOptions->Add( m_staticTextText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_stcText = new wxStyledTextCtrl( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
 	m_stcText->SetUseTabs( true );
@@ -56,7 +49,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_stcText->SetViewWhiteSpace( false );
 	m_stcText->SetMarginWidth( 2, 0 );
 	m_stcText->SetIndentationGuides( false );
-	m_stcText->SetReadOnly( false );
 	m_stcText->SetMarginWidth( 1, 0 );
 	m_stcText->SetMarginWidth( 0, 0 );
 	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -125,80 +117,65 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_SizerTextOptions->Add( bSizerFontOpt, 0, wxEXPAND|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer2->AddGrowableCol( 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextTsizeX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTsizeX->Wrap( -1 );
-	fgSizer2->Add( m_staticTextTsizeX, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer2->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer2->Add( m_staticTextTsizeX, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlTextSizeX = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textCtrlTextSizeX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlTextSizeX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextTextSizeXUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextTextSizeXUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextTextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_TextTextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_staticTextTsizeY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTsizeY->Wrap( -1 );
-	fgSizer2->Add( m_staticTextTsizeY, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer2->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer2->Add( m_staticTextTsizeY, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlTextSizeY = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textCtrlTextSizeY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlTextSizeY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextTextSizeYUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextTextSizeYUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextTextSizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_TextTextSizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT|wxLEFT, 5 );
 
-	m_staticTextConstraintX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextConstraintX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Max width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextConstraintX->Wrap( -1 );
 	m_staticTextConstraintX->SetToolTip( _("Set to 0 to disable this constraint") );
 
-	fgSizer2->Add( m_staticTextConstraintX, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer2->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer2->Add( m_staticTextConstraintX, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlConstraintX = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textCtrlConstraintX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlConstraintX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextConstraintXUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextConstraintXUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextConstraintXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_TextConstraintXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
-	m_staticTextConstraintY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextConstraintY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextConstraintY->Wrap( -1 );
 	m_staticTextConstraintY->SetToolTip( _("Set to 0 to disable this constraint") );
 
-	fgSizer2->Add( m_staticTextConstraintY, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer2->Add( m_staticTextConstraintY, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlConstraintY = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_textCtrlConstraintY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_textCtrlConstraintY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextConstraintYUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextConstraintYUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextConstraintYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer2->Add( m_TextConstraintYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT|wxLEFT, 5 );
 
 
-	m_SizerTextOptions->Add( fgSizer2, 0, wxEXPAND, 5 );
+	m_SizerTextOptions->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM, 3 );
 
 	m_staticTextSizeInfo = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 to use default values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeInfo->Wrap( -1 );
-	m_SizerTextOptions->Add( m_staticTextSizeInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_staticline6 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_SizerTextOptions->Add( m_staticline6, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_SizerTextOptions->Add( m_staticTextSizeInfo, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 
 
 	m_SizerItemProperties->Add( m_SizerTextOptions, 1, wxEXPAND, 5 );
@@ -213,36 +190,36 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	sbSizerPos = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("Position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizer3->AddGrowableCol( 1 );
-	fgSizer3->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextPosX = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosX->Wrap( -1 );
-	fgSizer3->Add( m_staticTextPosX, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_staticTextPosX, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlPosX = new wxTextCtrl( sbSizerPos->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrlPosX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizer3->Add( m_textCtrlPosX, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_TextPosXUnits = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPosXUnits->Wrap( -1 );
-	fgSizer3->Add( m_TextPosXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer3->Add( m_TextPosXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_staticTextPosY = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosY->Wrap( -1 );
-	fgSizer3->Add( m_staticTextPosY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer3->Add( m_staticTextPosY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlPosY = new wxTextCtrl( sbSizerPos->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrlPosY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizer3->Add( m_textCtrlPosY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TextPosYUnits = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPosYUnits->Wrap( -1 );
-	fgSizer3->Add( m_TextPosYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer3->Add( m_TextPosYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_staticTextOrgPos = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("From:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrgPos->Wrap( -1 );
-	fgSizer3->Add( m_staticTextOrgPos, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_staticTextOrgPos, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_comboBoxCornerPos = new wxComboBox( sbSizerPos->GetStaticBox(), wxID_ANY, _("Lower Right"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, 0 );
 	m_comboBoxCornerPos->Append( _("Upper Right") );
@@ -252,13 +229,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerPos->SetSelection( 2 );
 	m_comboBoxCornerPos->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer3->Add( m_comboBoxCornerPos, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_comboBoxCornerPos, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbSizerPos->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	sbSizerPos->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM, 3 );
 
 
 	m_SizerItemProperties->Add( sbSizerPos, 0, wxEXPAND, 5 );
@@ -266,36 +243,36 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_sbSizerEndPosition = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("End Position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer4 = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextEndX = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextEndX->Wrap( -1 );
-	fgSizer4->Add( m_staticTextEndX, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_staticTextEndX, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlEndX = new wxTextCtrl( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_textCtrlEndX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizer4->Add( m_textCtrlEndX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TextEndXUnits = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextEndXUnits->Wrap( -1 );
-	fgSizer4->Add( m_TextEndXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer4->Add( m_TextEndXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_staticTextEndY = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextEndY->Wrap( -1 );
-	fgSizer4->Add( m_staticTextEndY, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_staticTextEndY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlEndY = new wxTextCtrl( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_textCtrlEndY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizer4->Add( m_textCtrlEndY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TextEndYUnits = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextEndYUnits->Wrap( -1 );
-	fgSizer4->Add( m_TextEndYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer4->Add( m_TextEndYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_staticTextOrgEnd = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("From:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrgEnd->Wrap( -1 );
-	fgSizer4->Add( m_staticTextOrgEnd, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_staticTextOrgEnd, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_comboBoxCornerEnd = new wxComboBox( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("Lower Left"), wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, 0 );
 	m_comboBoxCornerEnd->Append( _("Upper Right") );
@@ -305,156 +282,111 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerEnd->SetSelection( 3 );
 	m_comboBoxCornerEnd->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	m_sbSizerEndPosition->Add( fgSizer4, 0, wxEXPAND|wxRIGHT, 5 );
+	m_sbSizerEndPosition->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM, 3 );
 
 
 	m_SizerItemProperties->Add( m_sbSizerEndPosition, 0, wxEXPAND, 5 );
 
-	m_SizerLineThickness = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* sizerMisc;
+	sizerMisc = new wxBoxSizer( wxHORIZONTAL );
 
-	wxFlexGridSizer* fgSizer10;
-	fgSizer10 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer10->SetFlexibleDirection( wxBOTH );
-	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Line width:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_staticTextThickness->Wrap( -1 );
-	fgSizer10->Add( m_staticTextThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextThickness, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
 
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_textCtrlThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_textCtrlThickness, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_TextLineThicknessUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextLineThicknessUnits->Wrap( -1 );
-	fgSizer10->Add( m_TextLineThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
-
-
-	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_staticTextInfoThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 for default"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfoThickness->Wrap( -1 );
-	fgSizer10->Add( m_staticTextInfoThickness, 0, wxALIGN_CENTER|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_SizerLineThickness->Add( fgSizer10, 1, wxEXPAND, 5 );
-
-
-	m_SizerItemProperties->Add( m_SizerLineThickness, 0, 0, 5 );
-
-	m_SizerRotation = new wxBoxSizer( wxVERTICAL );
-
-	wxFlexGridSizer* fgSizerRotation;
-	fgSizerRotation = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerRotation->SetFlexibleDirection( wxBOTH );
-	fgSizerRotation->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->Add( m_TextLineThicknessUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_staticTextRot = new wxStaticText( m_swItemProperties, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRot->Wrap( -1 );
-	fgSizerRotation->Add( m_staticTextRot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_staticTextRot, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlRotation = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRotation->Add( m_textCtrlRotation, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->Add( m_textCtrlRotation, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+
+	m_staticTextBitmapDPI = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBitmapDPI->Wrap( -1 );
+	gbSizer1->Add( m_staticTextBitmapDPI, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 3 );
+
+	m_textCtrlBitmapDPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_textCtrlBitmapDPI, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	m_SizerRotation->Add( fgSizerRotation, 0, wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 1 );
+
+	sizerMisc->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT, 3 );
 
 
-	m_SizerItemProperties->Add( m_SizerRotation, 0, wxEXPAND, 5 );
-
-	m_SizerPPI = new wxBoxSizer( wxVERTICAL );
-
-	wxFlexGridSizer* fgSizerPPI;
-	fgSizerPPI = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerPPI->SetFlexibleDirection( wxBOTH );
-	fgSizerPPI->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticTextBitmapPPI1 = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextBitmapPPI1->Wrap( -1 );
-	fgSizerPPI->Add( m_staticTextBitmapPPI1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_textCtrlBitmapPPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPPI->Add( m_textCtrlBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
-
-
-	m_SizerPPI->Add( fgSizerPPI, 0, wxEXPAND, 5 );
-
-
-	m_SizerItemProperties->Add( m_SizerPPI, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( sizerMisc, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 
 	wxStaticBoxSizer* m_sbStep;
-	m_sbStep = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("Step") ), wxVERTICAL );
+	m_sbStep = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("Repeat") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer8;
-	fgSizer8 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer8->AddGrowableCol( 0 );
+	fgSizer8 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizer8->AddGrowableCol( 1 );
 	fgSizer8->SetFlexibleDirection( wxBOTH );
 	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextRepeatCnt = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Repeat count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRepeatCnt = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRepeatCnt->Wrap( -1 );
-	fgSizer8->Add( m_staticTextRepeatCnt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer8->Add( m_staticTextRepeatCnt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlRepeatCount = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer8->Add( m_textCtrlRepeatCount, 0, wxEXPAND|wxLEFT, 5 );
+	fgSizer8->Add( m_textCtrlRepeatCount, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Text Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInclabel = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInclabel->Wrap( -1 );
-	fgSizer8->Add( m_staticTextInclabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer8->Add( m_staticTextInclabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
 	m_textCtrlTextIncrement = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer8->Add( m_textCtrlTextIncrement, 0, wxEXPAND|wxLEFT, 5 );
+	fgSizer8->Add( m_textCtrlTextIncrement, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_staticTextStepX = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("X Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStepX = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Step X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStepX->Wrap( -1 );
-	fgSizer8->Add( m_staticTextStepX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer8->Add( m_staticTextStepX, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlStepX = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	fgSizer8->Add( m_textCtrlStepX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizer8->Add( m_textCtrlStepX, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextStepXUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextStepXUnits->Wrap( -1 );
-	fgSizer8->Add( m_TextStepXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer8->Add( m_TextStepXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
-	m_staticTextStepY = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Y Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStepY = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Step Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStepY->Wrap( -1 );
-	fgSizer8->Add( m_staticTextStepY, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
+	fgSizer8->Add( m_staticTextStepY, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlStepY = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer8->Add( m_textCtrlStepY, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer8->Add( m_textCtrlStepY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_TextStepYUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextStepYUnits->Wrap( -1 );
-	fgSizer8->Add( m_TextStepYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer8->Add( m_TextStepYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 
-	m_sbStep->Add( fgSizer8, 0, wxEXPAND, 5 );
+	m_sbStep->Add( fgSizer8, 0, wxEXPAND|wxBOTTOM, 3 );
 
 
 	m_SizerItemProperties->Add( m_sbStep, 0, wxEXPAND, 5 );

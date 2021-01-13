@@ -66,10 +66,8 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_scintillaTricks = new SCINTILLA_TRICKS( m_stcText, wxT( "{}" ) );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_staticTextSizeInfo->SetFont( infoFont );
     infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-    m_staticTextInfoThickness->SetFont( infoFont );
+    m_staticTextSizeInfo->SetFont( infoFont );
 
     m_buttonOK->SetDefault();
 
@@ -274,7 +272,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
         WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
         // select definition in PPI
         msg.Printf( wxT("%d"), item->GetPPI() );
-        m_textCtrlBitmapPPI->SetValue( msg );
+        m_textCtrlBitmapDPI->SetValue( msg );
     }
 
     m_SizerItemProperties->Show( true );
@@ -284,14 +282,22 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
     m_sbSizerEndPosition->Show( aItem->GetType() == WS_DATA_ITEM::WS_SEGMENT
                            || aItem->GetType() == WS_DATA_ITEM::WS_RECT );
 
-    m_SizerLineThickness->Show( aItem->GetType() != WS_DATA_ITEM::WS_BITMAP );
-    // Polygons have no defaut value for line width
-    m_staticTextInfoThickness->Show( aItem->GetType() != WS_DATA_ITEM::WS_POLYPOLYGON );
+    m_textCtrlThicknessBinder.Show( aItem->GetType() != WS_DATA_ITEM::WS_BITMAP );
 
-    m_SizerRotation->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT
-                        || aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON );
+    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT
+            || aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
+    {
+        m_staticTextRot->Show( true );
+        m_textCtrlRotation->Show( true );
+    }
+    else
+    {
+        m_staticTextRot->Show( false );
+        m_textCtrlRotation->Show( false );
+    }
 
-    m_SizerPPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
+    m_staticTextBitmapDPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
+    m_textCtrlBitmapDPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
 
     m_staticTextInclabel->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
     m_textCtrlTextIncrement->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
@@ -478,9 +484,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
     {
         WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
-        // Set definition in PPI
-        long value;
-        msg = m_textCtrlBitmapPPI->GetValue();
+        long                 value;
+
+        msg = m_textCtrlBitmapDPI->GetValue();
+
         if( msg.ToLong( &value ) )
             item->SetPPI( (int)value );
     }
