@@ -78,7 +78,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                     if( pin )
                     {
                         pos = pin->GetPosition();
-                        foundItem = component;
+                        foundItem = pin;
                         break;
                     }
                 }
