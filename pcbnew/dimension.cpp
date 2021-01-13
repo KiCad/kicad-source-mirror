@@ -887,23 +887,6 @@ void LEADER::updateGeometry()
 {
     m_shapes.clear();
 
-    VECTOR2I firstLine( m_end - m_start );
-    VECTOR2I start( m_start );
-    start += firstLine.Resize( m_extensionOffset );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, m_end ) );
-
-    // Add arrows
-    VECTOR2I arrowEnd( m_arrowLength, 0 );
-
-    double arrowRotPos = firstLine.Angle() + DEG2RAD( s_arrowAngle );
-    double arrowRotNeg = firstLine.Angle() - DEG2RAD( s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
-                                              start + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
-                                              start + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
-
     updateText();
 
     // Now that we have the text updated, we can determine how to draw the second line
@@ -919,8 +902,31 @@ void LEADER::updateGeometry()
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
     polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
 
+    VECTOR2I firstLine( m_end - m_start );
+    VECTOR2I start( m_start );
+    start += firstLine.Resize( m_extensionOffset );
+
+    SEG primarySeg( m_start, m_end );
+    OPT_VECTOR2I primaryEndpoint = segPolyIntersection( polyBox, primarySeg );
+
+    if( !primaryEndpoint )
+        primaryEndpoint = m_end;
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start, *primaryEndpoint ) );
+
+    // Add arrows
+    VECTOR2I arrowEnd( m_arrowLength, 0 );
+
+    double arrowRotPos = firstLine.Angle() + DEG2RAD( s_arrowAngle );
+    double arrowRotNeg = firstLine.Angle() - DEG2RAD( s_arrowAngle );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
+                                              start + wxPoint( arrowEnd.Rotate( arrowRotPos ) ) ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start,
+                                              start + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
+
     SEG textSeg( m_end, m_text.GetPosition() );
-    OPT_VECTOR2I endpoint = segPolyIntersection( polyBox, textSeg );
+    OPT_VECTOR2I textEndpoint = segPolyIntersection( polyBox, textSeg );
 
     if( !GetText().IsEmpty() )
     {
@@ -941,12 +947,12 @@ void LEADER::updateGeometry()
             m_shapes.emplace_back( new SHAPE_CIRCLE( textBox.GetCenter(), radius ) );
 
             // Calculated bbox endpoint won't be right
-            if( endpoint )
+            if( textEndpoint )
             {
                 VECTOR2I totalLength( textBox.GetCenter() - m_end );
-                VECTOR2I circleEndpoint( *endpoint - m_end );
+                VECTOR2I circleEndpoint( *textEndpoint - m_end );
                 circleEndpoint = circleEndpoint.Resize( totalLength.EuclideanNorm() - radius );
-                endpoint = OPT_VECTOR2I( VECTOR2I( m_end ) + circleEndpoint );
+                textEndpoint = OPT_VECTOR2I( VECTOR2I( m_end ) + circleEndpoint );
             }
 
             break;
@@ -957,8 +963,8 @@ void LEADER::updateGeometry()
         }
     }
 
-    if( endpoint )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *endpoint ) );
+    if( textEndpoint && *primaryEndpoint == m_end )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *textEndpoint ) );
 }
 
 
