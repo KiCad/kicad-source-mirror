@@ -67,22 +67,22 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/kicad.png</image>
+      <image width="1290" height="825">https://kicad-pcb.org/img/screenshots/appstream/kicad.png</image>
     </screenshot>
 
     <screenshot>
       <caption>Eeschema Schematic Editor</caption>
-      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/eeschema.png</image>
+      <image width="1290" height="825">https://kicad-pcb.org/img/screenshots/appstream/eeschema.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew PCB Layout</caption>
-      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/pcbnew.png</image>
+      <image width="1290" height="825">https://kicad-pcb.org/img/screenshots/appstream/pcbnew.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew 3D Viewer</caption>
-      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/3dviewer.png</image>
+      <image width="1290" height="825">https://kicad-pcb.org/img/screenshots/appstream/3dviewer.png</image>
     </screenshot>
   </screenshots>
 
