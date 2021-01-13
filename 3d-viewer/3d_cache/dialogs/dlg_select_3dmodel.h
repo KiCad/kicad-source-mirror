@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,18 +40,6 @@ class C3D_MODEL_VIEWER;
 
 class DLG_SELECT_3DMODEL : public DLG_SELECT_3D_MODELE_BASE
 {
-private:
-    FP_3DMODEL*        m_model;       // data for the selected model
-    S3D_CACHE*         m_cache;       // cache manager
-    FILENAME_RESOLVER* m_resolver;    // 3D filename resolver
-
-    wxString& m_previousDir;
-    int&      m_previousFilterIndex;
-
-    C3D_MODEL_VIEWER* m_modelViewer;
-
-    void updateDirChoiceList( void );
-
 public:
     DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, FP_3DMODEL* aModelItem,
                         wxString& prevModelSelectDir, int& prevModelWildcard );
@@ -61,6 +49,18 @@ public:
     void OnFileActivated( wxCommandEvent& event )override;
     void SetRootDir( wxCommandEvent& event ) override;
     void Cfg3DPaths( wxCommandEvent& event ) override;
+
+private:
+    void updateDirChoiceList( void );
+
+    FP_3DMODEL*        m_model;       // data for the selected model
+    S3D_CACHE*         m_cache;       // cache manager
+    FILENAME_RESOLVER* m_resolver;    // 3D filename resolver
+
+    wxString& m_previousDir;
+    int&      m_previousFilterIndex;
+
+    C3D_MODEL_VIEWER* m_modelViewer;
 };
 
 #endif  // DLG_SELECT_3DMODEL_H

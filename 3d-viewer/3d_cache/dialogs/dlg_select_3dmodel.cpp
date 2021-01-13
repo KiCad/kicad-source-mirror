@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ void DLG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 
-    EndQuasiModal( wxID_OK );
+    EmulateButtonClickIfPresent( wxID_OK );
 }
 
 
