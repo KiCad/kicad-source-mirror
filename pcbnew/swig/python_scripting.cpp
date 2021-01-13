@@ -663,7 +663,7 @@ wxString PyScriptingPath( bool aUserPath )
 #elif defined( __WXMSW__ )
             path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 #else
-            path = KICAD_DATA + wxS( "/scripting" );
+            path = wxString( KICAD_DATA ) + wxS( "/scripting" );
 #endif
         }
     }
