@@ -1806,6 +1806,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     CONNECTION_SUBGRAPH* driver = aSubgraph;
     CONNECTION_SUBGRAPH::PRIORITY highest =
             CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver );
+    bool originalStrong = ( highest >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
 
     // Check if a subsheet has a higher-priority connection to the same net
     if( highest < CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
@@ -1815,13 +1816,20 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             CONNECTION_SUBGRAPH::PRIORITY priority =
                     CONNECTION_SUBGRAPH::GetDriverPriority( subgraph->m_driver );
 
-            // Upgrade driver to be this subgraph if this subgraph has a power pin or global
-            // Also upgrade if we found something with a shorter sheet path (higher in hierarchy)
-            // but with an equivalent priority
+            bool candidateStrong = ( priority >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+
+            // Pick a better driving subgraph if it:
+            // a) has a power pin or global driver
+            // b) is a strong driver and we're a weak driver
+            // c) meets or exceeds our priority, is a strong driver, and has a shorter path
 
             if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN ) ||
-                ( priority >= highest && subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) )
+                ( !originalStrong && candidateStrong ) ||
+                ( priority >= highest && candidateStrong &&
+                  subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) )
+            {
                 driver = subgraph;
+            }
         }
     }
 
