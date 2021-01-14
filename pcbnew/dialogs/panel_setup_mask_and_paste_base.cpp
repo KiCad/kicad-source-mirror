@@ -66,6 +66,8 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_MaskMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskMinWidthCtrl->SetToolTip( _("Minimum distance between openings in the solder mask.  Pad openings closer than this distance will be plotted as a single opening.") );
+
 	fgGridSolderMaskSizer->Add( m_MaskMinWidthCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	m_MaskMinWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -103,6 +105,8 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	fgGridSolderMaskSizer->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginRatioCtrl->SetToolTip( _("Additional clearance as a percentage of the pad size.") );
+
 	fgGridSolderMaskSizer->Add( m_SolderPasteMarginRatioCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	m_SolderPasteRatioMarginUnits = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );

@@ -507,8 +507,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose strategy to handle tracks an vias sizes:
     m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
                                  KiScaledBitmap( auto_track_width_xpm, this ),
-                                 _( "Auto track width: when starting on an existing track "
-                                    "use its width\notherwise, use current width setting" ),
+                                 _( "When routing from an existing track use its width instead "
+                                    "of the current width setting" ),
                                  wxITEM_CHECK );
 
     // Add the box to display and select the current grid size:
