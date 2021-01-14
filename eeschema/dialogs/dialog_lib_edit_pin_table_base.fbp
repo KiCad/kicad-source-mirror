@@ -88,10 +88,10 @@
                         <property name="close_button">1</property>
                         <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                         <property name="col_label_size">24</property>
-                        <property name="col_label_values">&quot;Number&quot; &quot;Name&quot; &quot;Electrical Type&quot; &quot;Graphic Style&quot; &quot;Orientation&quot; &quot;Number Text Size&quot; &quot;Name Text Size&quot; &quot;Length&quot; &quot;X Position&quot; &quot;Y Position&quot;</property>
+                        <property name="col_label_values">&quot;Number&quot; &quot;Name&quot; &quot;Electrical Type&quot; &quot;Graphic Style&quot; &quot;Orientation&quot; &quot;Number Text Size&quot; &quot;Name Text Size&quot; &quot;Length&quot; &quot;X Position&quot; &quot;Y Position&quot; &quot;Visible&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
-                        <property name="cols">10</property>
-                        <property name="column_sizes">66,84,140,140,100,110,110,84,84,84</property>
+                        <property name="cols">11</property>
+                        <property name="column_sizes">66,84,140,140,100,110,110,84,84,84,84</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="default_pane">0</property>
