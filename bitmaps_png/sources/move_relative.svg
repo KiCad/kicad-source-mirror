@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="move_relative.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="11.342976"
-     inkscape:cy="13.959203"
+     inkscape:zoom="14.197719"
+     inkscape:cx="3.3821287"
+     inkscape:cy="15.950488"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,35 +83,41 @@
      class="cls-1"
      points="24.995,13 20.203,8.208 20.203,17.792 "
      id="polygon25837"
-     transform="translate(-1,-1)" />
+     transform="matrix(1.0434057,0,0,1,-2.0799254,-1)"
+     style="stroke-width:0.978979" />
   <polygon
      class="cls-1"
      points="13,1.005 8.208,5.797 17.792,5.797 "
      id="polygon25839"
-     transform="translate(-1,-1)" />
+     transform="matrix(1,0,0,1.0434057,-1,-1.0486227)"
+     style="stroke-width:0.978979" />
   <polygon
      class="cls-1"
      points="13,24.995 17.792,20.203 8.208,20.203 "
      id="polygon25841"
-     transform="translate(-1,-1)" />
+     transform="matrix(1,0,0,1.0434057,-1,-2.0799254)"
+     style="stroke-width:0.978979" />
   <polygon
      class="cls-1"
-     points="1.005,13 5.797,17.792 5.797,8.208 "
+     points="5.797,8.208 1.005,13 5.797,17.792 "
      id="polygon25843"
-     transform="translate(-1,-1)" />
+     transform="matrix(1.0434057,0,0,1,-1.0436227,-1)"
+     style="stroke-width:0.978979" />
   <rect
      class="cls-1"
-     x="9.6625996"
-     y="4.2891002"
-     width="4.6747999"
+     x="10"
+     y="4.289"
+     width="4"
      height="15.4218"
-     id="rect25845" />
+     id="rect25845"
+     style="stroke-width:0.999996" />
   <rect
      class="cls-1"
-     x="9.6625996"
-     y="-19.710899"
-     width="4.6747999"
-     height="15.4218"
+     x="10"
+     y="-19.7111"
+     width="4"
+     height="15.422"
      transform="rotate(90)"
-     id="rect25847" />
+     id="rect25847"
+     style="stroke-width:0.999996" />
 </svg>

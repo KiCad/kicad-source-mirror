@@ -12,7 +12,11 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="move.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <path
+     id="rect25847"
+     style="fill:#545454;stroke-width:0.999996"
+     d="M 11.994141 0 L 7.2011719 5 L 9.9941406 5 L 9.9941406 9 L 13.994141 9 L 13.994141 5 L 16.787109 5 L 11.994141 0 z M 5 7.2070312 L 0 12 L 5 16.792969 L 5 14 L 9 14 L 9 10 L 5 10 L 5 7.2070312 z M 18.994141 7.2070312 L 18.994141 10 L 15 10 L 15 14 L 18.994141 14 L 18.994141 16.792969 L 23.994141 12 L 18.994141 7.2070312 z M 9.9941406 15 L 9.9941406 19 L 7.2011719 19 L 11.994141 24 L 16.787109 19 L 13.994141 19 L 13.994141 15 L 9.9941406 15 z " />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +26,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="10.542585"
+     inkscape:cx="20.947304"
+     inkscape:cy="15.423284"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,24 +83,4 @@
   </defs>
   <title
      id="title25783">move</title>
-  <polygon
-     class="cls-1"
-     points="5.797,10.663 5.797,8.208 1.005,13 5.797,17.792 5.797,15.337 10,15.337 10,10.663 "
-     id="polygon25785"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-1"
-     points="15.337,10 15.337,5.797 17.792,5.797 13,1.005 8.208,5.797 10.663,5.797 10.663,10 "
-     id="polygon25787"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-1"
-     points="10.663,16 10.663,20.203 8.208,20.203 13,24.995 17.792,20.203 15.337,20.203 15.337,16 "
-     id="polygon25789"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-1"
-     points="20.203,8.208 20.203,10.663 16,10.663 16,15.337 20.203,15.337 20.203,17.792 24.995,13 "
-     id="polygon25791"
-     transform="translate(-1,-1)" />
 </svg>
