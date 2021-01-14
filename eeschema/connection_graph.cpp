@@ -2754,6 +2754,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 {
     int errors = 0;
 
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+
     for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
@@ -2766,7 +2768,20 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
             std::map<wxString, SCH_SHEET_PIN*> pins;
 
             for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
+            {
                 pins[pin->GetText()] = pin;
+
+                if( pin->IsDangling() && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
+                    ercItem->SetItems( pin );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
+                    sheet.LastScreen()->Append( marker );
+
+                    errors++;
+                }
+            }
 
             for( SCH_ITEM* subItem : parentSheet->GetScreen()->Items() )
             {
