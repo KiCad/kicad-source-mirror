@@ -298,7 +298,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 item->ClearEditFlags();
                 item = nullptr;
-                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
+
+                // Activate point editor immediately to allow resizing of the item just created
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor, true );
 
                 m_frame->OnModify();
             }
