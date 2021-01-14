@@ -142,7 +142,20 @@ void ALTIUM_PCB::HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aCo
         FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aShape );
 
         if( fpShape )
+        {
             fpShape->SetLocalCoord();
+
+            // TODO: SetLocalCoord() does not update the polygon shape!
+            // This workaround converts the poly shape into the local coordinates
+            SHAPE_POLY_SET& polyShape = fpShape->GetPolyShape();
+            if( !polyShape.IsEmpty() )
+            {
+                FOOTPRINT* fp = m_components.at( aComponent );
+
+                polyShape.Move( -fp->GetPosition() );
+                polyShape.Rotate( -fp->GetOrientationRadians() );
+            }
+        }
     }
 }
 
@@ -1967,6 +1980,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 wxPoint p21 = aElem.position + wxPoint( -offsetX, offsetY );
 
                 shape->SetShape( S_POLYGON );
+                shape->SetFilled( true );
                 shape->SetPolyPoints( { p11, p12, p22, p21 } );
             }
             else if( aElem.topsize.x == aElem.topsize.y )
