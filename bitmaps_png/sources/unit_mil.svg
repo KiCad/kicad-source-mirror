@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="unit_mil.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1770"
-     inkscape:window-height="1181"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview22"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="12.758468"
-     inkscape:cy="12.763801"
-     inkscape:window-x="1476"
-     inkscape:window-y="293"
+     inkscape:zoom="22.713636"
+     inkscape:cx="10.8646"
+     inkscape:cy="10.221992"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -183,12 +183,16 @@
        x="11.797802"
        y="12.963709"
        style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.8667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#545454;fill-opacity:1">mil</tspan></text>
-  <line
-     class="cls-1"
-     x1="20.452101"
-     y1="16.8393"
-     x2="3.5479002"
-     y2="16.8393"
-     id="line9"
-     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#Arrow2Sstart);marker-end:url(#Arrow2Send)" />
+  <path
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 1,17 6,-2.5 v 5 L 1,17"
+     id="path911" />
+  <path
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 23,17 -6,-2.5 v 5 L 23,17"
+     id="path911-5" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 18,17 H 6"
+     id="path928" />
 </svg>
