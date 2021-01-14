@@ -422,13 +422,13 @@ bool ROUTER_TOOL::Init()
     auto& menu = m_menu.GetMenu();
     menu.SetTitle( _( "Interactive Router" ) );
 
-    auto trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
-    trackViaMenu->SetTool( this );
-    m_menu.AddSubMenu( trackViaMenu );
+    m_trackViaMenu = std::make_shared<TRACK_WIDTH_MENU>( *frame );
+    m_trackViaMenu->SetTool( this );
+    m_menu.AddSubMenu( m_trackViaMenu );
 
-    auto diffPairMenu = std::make_shared<DIFF_PAIR_MENU>( *frame );
-    diffPairMenu->SetTool( this );
-    m_menu.AddSubMenu( diffPairMenu );
+    m_diffPairMenu = std::make_shared<DIFF_PAIR_MENU>( *frame );
+    m_diffPairMenu->SetTool( this );
+    m_menu.AddSubMenu( m_diffPairMenu );
 
     menu.AddItem( ACTIONS::cancelInteractive,        SELECTION_CONDITIONS::ShowAlways );
 
@@ -460,8 +460,8 @@ bool ROUTER_TOOL::Init()
             return m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR;
         };
 
-    menu.AddMenu( trackViaMenu.get(),                SELECTION_CONDITIONS::ShowAlways );
-    menu.AddMenu( diffPairMenu.get(),                diffPairCond );
+    menu.AddMenu( m_trackViaMenu.get(),              SELECTION_CONDITIONS::ShowAlways );
+    menu.AddMenu( m_diffPairMenu.get(),              diffPairCond );
 
     menu.AddItem( PCB_ACTIONS::routerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
 
@@ -1082,6 +1082,18 @@ void ROUTER_TOOL::performRouting()
             m_router->FlipPosture();
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            ACTION_MENU* menu;
+
+            if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+                menu = m_diffPairMenu.get();
+            else
+                menu = m_trackViaMenu.get();
+
+            menu->SetDirty();
+            SetContextMenu( menu, CMENU_NOW );
         }
         else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
         {
