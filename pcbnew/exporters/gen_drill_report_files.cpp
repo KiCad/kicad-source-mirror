@@ -143,7 +143,10 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         offset.x = KiROUND( double( bbbox.Centre().x ) - ( pageSizeIU.x / 2.0 ) / scale );
         offset.y = KiROUND( double( bbbox.Centre().y ) - ( ypagesize_for_board / 2.0 ) / scale );
 
-        bottom_limit = ( pageSizeIU.y - margin ) / scale;
+        // bottom_limit is used to plot the legend (drill diameters)
+        // texts are scaled differently for scale > 1.0 and <= 1.0
+        // so the limit is scaled differently.
+        bottom_limit = ( pageSizeIU.y - margin ) / std::min( scale, 1.0 );
 
         if( aFormat == PLOT_FORMAT::SVG )
             plotter = new SVG_PLOTTER;
@@ -253,7 +256,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     // For some formats (PS, PDF SVG) we plot the drill size list on more than one column
     // because the list must be contained inside the printed page
     // (others formats do not have a defined page size)
-    int max_line_len = 0;   // The max line len in iu of the currently plotte column
+    int max_line_len = 0;   // The max line len in iu of the currently plotted column
 
     for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
     {
@@ -265,7 +268,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         plotY += intervalle;
 
         // Ensure there are room to plot the line
-        if( bottom_limit && plotY+intervalle > bottom_limit )
+        if( bottom_limit && ( plotY+intervalle > bottom_limit ) )
         {
             plotY = bbbox.GetBottom() + intervalle;
             plotX += max_line_len + Millimeter2iu( 10 );//column_width;
