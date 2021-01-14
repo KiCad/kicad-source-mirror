@@ -1883,43 +1883,6 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
 }
 
 
-BOARD_ITEM* PCB_SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
-{
-    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
-
-    if( 0 == count )
-        count = aCollector->GetCount();
-
-    for( int i = 0; i < count; ++i )
-    {
-        if(( *aCollector )[i]->Type() != PCB_FOOTPRINT_T )
-            return NULL;
-    }
-
-    // All are footprints, now find smallest FOOTPRINT
-    int minDim = 0x7FFFFFFF;
-    int minNdx = 0;
-
-    for( int i = 0; i < count; ++i )
-    {
-        FOOTPRINT* footprint = (FOOTPRINT*) ( *aCollector )[i];
-
-        int lx = footprint->GetFootprintRect().GetWidth();
-        int ly = footprint->GetFootprintRect().GetHeight();
-
-        int lmin = std::min( lx, ly );
-
-        if( lmin < minDim )
-        {
-            minDim = lmin;
-            minNdx = i;
-        }
-    }
-
-    return (*aCollector)[minNdx];
-}
-
-
 bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
@@ -2237,9 +2200,9 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
     GENERAL_COLLECTOR          collector;
 
-    // Since we're just double-checking, we want something considerably sloppier than the initial
-    // selection (most tools use a 5 pixel slop value).  We increase this to an effective 20 pixels
-    // by inflating the value of a pixel by 4x.
+    // Since we're just double-checking, we want a considerably sloppier check than the initial
+    // selection (for which most tools use 5 pixels).  So we increase this to an effective 20
+    // pixels by artificially inflating the value of a pixel by 4X.
     guide.SetOnePixelInIU( guide.OnePixelInIU() * 4 );
 
     collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
@@ -2430,7 +2393,13 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
                 && static_cast<ZONE*>( item )->HitTestForEdge( where, MAX_SLOP * pixel / 2 ) )
         {
             // Zone borders are very specific, so make them "small"
-            area = MAX_SLOP * pixel * pixel;
+            area = MAX_SLOP * SEG::Square( pixel );
+        }
+        else if( item->Type() == PCB_VIA_T )
+        {
+            // Vias rarely hide other things, and we don't want them deferring to short track
+            // segments -- so make them artificially small by dropping the π from πr².
+            area = SEG::Square( static_cast<VIA*>( item )->GetDrill() / 2 );
         }
         else
         {

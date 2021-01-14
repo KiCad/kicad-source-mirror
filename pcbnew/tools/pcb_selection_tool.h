@@ -311,14 +311,6 @@ private:
     bool itemPassesFilter( BOARD_ITEM* aItem );
 
     /**
-     * Function pickSmallestComponent()
-     * Allows one to find the smallest (in terms of bounding box area) item from the list.
-     *
-     * @param aCollector containes the list of items.
-     */
-    BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
-
-    /**
      * Function unselect()
      * Takes necessary action mark an item as unselected.
      *

@@ -763,12 +763,6 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
 }
 
 
-BOARD_ITEM* PCB_SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
-{
-    return nullptr;
-}
-
-
 bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     return false;
