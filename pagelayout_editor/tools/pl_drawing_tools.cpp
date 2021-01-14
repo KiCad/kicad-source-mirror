@@ -284,10 +284,18 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 item = dataItem->GetDrawItems()[0];
                 item->SetFlags( IS_NEW );
-                m_selectionTool->AddItemToSel( item );
+
+                // Select the item but don't inform other tools (to prevent the Properties
+                // panel from updating the item before it has been placed)
+                m_selectionTool->AddItemToSel( item, true );
             }
             else    // finish drawing
             {
+                // Now we re-select and inform other tools, so that the Properties panel
+                // is updated.
+                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+                m_selectionTool->AddItemToSel( item, false );
+
                 item->ClearEditFlags();
                 item = nullptr;
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
