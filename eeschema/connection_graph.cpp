@@ -2640,6 +2640,11 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( aSubgraph->m_no_connect )
         return true;
 
+    // Buses are excluded from this test: many users create buses with only a single instance
+    // and it's not really a problem as long as the nets in the bus pass ERC
+    if( aSubgraph->m_driver_connection->IsBus() )
+        return true;
+
     ERC_SETTINGS& settings            = m_schematic->ErcSettings();
     bool          ok                  = true;
     SCH_TEXT*     text                = nullptr;
