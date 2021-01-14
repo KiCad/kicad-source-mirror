@@ -441,6 +441,9 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     m_cmp->ClearFlags();
     m_cmp->SetFlags( flags );
 
+    wxString originalRef = m_cmp->GetField( REFERENCE )->GetText();
+    wxString originalValue = m_cmp->GetField( VALUE )->GetText();
+
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i < m_fields->size();  ++i )
         m_fields->at( i ).Offset( m_cmp->GetPosition() );
@@ -490,17 +493,31 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         SCH_REFERENCE_LIST components;
         GetParent()->GetCurrentSheet().GetComponents( components );
 
-        for( unsigned i = 0; i < components.GetCount(); i++ )
+        // Handle each unit only once
+        for( int unit = 1; unit <= m_cmp->GetUnitCount(); unit++)
         {
-            SCH_REFERENCE component = components[i];
+            // Don't attempt to change the current unit; this was already changed above
+            if( unit == thisUnit )
+                continue;
 
-            if( component.GetRef() == thisRef && component.GetUnit() != thisUnit )
+            for( unsigned i = 0; i < components.GetCount(); i++ )
             {
-                SCH_COMPONENT* otherUnit = component.GetComp();
-                GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
-                otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
-                otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
-                otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+                SCH_REFERENCE otherComp = components[i];
+                SCH_COMPONENT* otherUnit = otherComp.GetComp();
+
+                // Match a single unit instance although in an unannotated schematic, there may be many
+                if( otherComp.GetUnit() != unit )
+                    continue;
+
+                if( otherUnit->GetField( REFERENCE )->GetText() == originalRef
+                        && otherUnit->GetField( VALUE )->GetText() == originalValue )
+                {
+                    GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+                    otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
+                    otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
+                    otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+                    break;
+                }
             }
         }
     }
