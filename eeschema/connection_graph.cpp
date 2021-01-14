@@ -1803,10 +1803,11 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     }
 
     // Now, find the best driver for this chain of subgraphs
-    CONNECTION_SUBGRAPH* driver = aSubgraph;
+    CONNECTION_SUBGRAPH* original = aSubgraph;
     CONNECTION_SUBGRAPH::PRIORITY highest =
             CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver );
-    bool originalStrong = ( highest >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+    bool     originalStrong = ( highest >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+    wxString originalName   = original->m_driver_connection->Name();
 
     // Check if a subsheet has a higher-priority connection to the same net
     if( highest < CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
@@ -1816,31 +1817,36 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             CONNECTION_SUBGRAPH::PRIORITY priority =
                     CONNECTION_SUBGRAPH::GetDriverPriority( subgraph->m_driver );
 
-            bool candidateStrong = ( priority >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+            bool     candidateStrong = ( priority >= CONNECTION_SUBGRAPH::PRIORITY::HIER_LABEL );
+            wxString candidateName   = subgraph->m_driver_connection->Name();
 
             // Pick a better driving subgraph if it:
             // a) has a power pin or global driver
             // b) is a strong driver and we're a weak driver
             // c) meets or exceeds our priority, is a strong driver, and has a shorter path
+            // d) is weak, we're week, and is alphabetically lower
 
             if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN ) ||
                 ( !originalStrong && candidateStrong ) ||
                 ( priority >= highest && candidateStrong &&
-                  subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) )
+                  subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) ||
+                ( !originalStrong && !candidateStrong && candidateName < originalName ) )
             {
-                driver = subgraph;
+                original       = subgraph;
+                highest        = priority;
+                originalStrong = candidateStrong;
             }
         }
     }
 
-    if( driver != aSubgraph )
+    if( original != aSubgraph )
     {
         wxLogTrace( ConnTrace, "%lu (%s) overridden by new driver %lu (%s)",
-                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name(),
-                    driver->m_code, driver->m_driver_connection->Name() );
+                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name(), original->m_code,
+                    original->m_driver_connection->Name() );
     }
 
-    conn = driver->m_driver_connection;
+    conn = original->m_driver_connection;
 
     for( CONNECTION_SUBGRAPH* subgraph : visited )
     {
