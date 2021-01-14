@@ -13,7 +13,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="show_zone_outline_only.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,15 +23,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview42"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="-4.0949109"
-     inkscape:cy="13"
+     inkscape:zoom="19.385992"
+     inkscape:cx="9.9710284"
+     inkscape:cy="11.030906"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -103,20 +103,23 @@
   </defs>
   <title
      id="title13">show_zone_disable копия</title>
+  <circle
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="path867"
+     cx="17"
+     cy="11"
+     r="2"
+     sodipodi:insensitive="true" />
+  <rect
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="rect869"
+     width="5"
+     height="2"
+     x="17"
+     y="10"
+     sodipodi:insensitive="true" />
   <path
      id="polygon838"
-     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 3,13 v 8 H 21 V 3 H 9 v 10 z"
-     class="st0"
-     sodipodi:nodetypes="ccccccc" />
-  <circle
-     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
-     id="path2824"
-     cx="16.557219"
-     cy="11.010588"
-     r="3.8178968" />
-  <path
-     id="path2776"
-     style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:1.832;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
-     d="m 17.004172,8.976563 a 2.0635231,2.010251 0 0 0 -2.064453,2.011718 2.0635231,2.010251 0 0 0 2.064453,2.009766 A 2.0635231,2.010251 0 0 0 18.785422,12 h 3.185547 c 0.04089,0 0.07422,-0.03333 0.07422,-0.07422 v -1.851562 c 0,-0.04089 -0.03333,-0.07422 -0.07422,-0.07422 H 18.799094 A 2.0635231,2.010251 0 0 0 17.004172,8.976561 Z" />
+     style="display:inline;fill:none;stroke:#1a81c4;stroke-opacity:1"
+     d="M 8.5 2.5 L 8.5 12.5 L 2.5 12.5 L 2.5 21.5 L 21.5 21.5 L 21.5 14.5 L 19.828125 14.5 A 4.5 4.5 0 0 1 17 15.5 A 4.5 4.5 0 0 1 12.5 11 A 4.5 4.5 0 0 1 17 6.5 A 4.5 4.5 0 0 1 19.828125 7.5 L 21.5 7.5 L 21.5 2.5 L 8.5 2.5 z " />
 </svg>
