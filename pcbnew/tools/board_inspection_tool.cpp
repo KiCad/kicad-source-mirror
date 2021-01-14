@@ -36,6 +36,7 @@
 #include <dialogs/dialog_constraints_reporter.h>
 #include <kicad_string.h>
 #include "board_inspection_tool.h"
+#include <widgets/appearance_controls.h>
 
 
 void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
@@ -1200,6 +1201,8 @@ void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
 
     m_frame->GetCanvas()->RedrawRatsnest();
     m_frame->GetCanvas()->Refresh();
+
+    m_frame->GetAppearancePanel()->OnBoardNetSettingsChanged( *m_frame->GetBoard() );
 }
 
 
