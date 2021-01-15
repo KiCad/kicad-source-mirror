@@ -23,6 +23,7 @@
  */
 
 #include <richio.h>
+#include <common.h>
 #include <title_block.h>
 
 void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
@@ -68,3 +69,60 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
         aFormatter->Print( aNestLevel, ")\n\n" );
     }
 }
+
+
+bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) const
+{
+    bool tokenUpdated = false;
+
+    if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
+    {
+        *aToken = GetDate();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
+    {
+        *aToken = GetRevision();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "TITLE" ) ) )
+    {
+        *aToken = GetTitle();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "COMPANY" ) ) )
+    {
+        *aToken = GetCompany();
+        tokenUpdated = true;
+    }
+    else if( aToken->Left( aToken->Len() - 1 ).IsSameAs( wxT( "COMMENT" ) ) )
+    {
+        wxChar c = aToken->Last();
+
+        switch( c )
+        {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            *aToken = GetComment( c - '0' );
+            tokenUpdated = true;
+        }
+    }
+
+    if( tokenUpdated )
+    {
+       *aToken = ExpandTextVars( *aToken, nullptr, aProject );
+       return true;
+    }
+
+    return false;
+}
+
+

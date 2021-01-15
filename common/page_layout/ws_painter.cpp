@@ -162,46 +162,9 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                     *token = m_sheetLayer ? *m_sheetLayer : wxString( "" );
                     tokenUpdated = true;
                 }
-                else if( token->IsSameAs( wxT( "ISSUE_DATE" ) ) )
+                else if( m_titleBlock )
                 {
-                    *token = m_titleBlock ? m_titleBlock->GetDate() : wxString( "" );
-                    tokenUpdated = true;
-                }
-                else if( token->IsSameAs( wxT( "REVISION" ) ) )
-                {
-                    *token = m_titleBlock ? m_titleBlock->GetRevision() : wxString( "" );
-                    tokenUpdated = true;
-                }
-                else if( token->IsSameAs( wxT( "TITLE" ) ) )
-                {
-                    *token = m_titleBlock ? m_titleBlock->GetTitle() : wxString( "" );
-                    tokenUpdated = true;
-                }
-                else if( token->IsSameAs( wxT( "COMPANY" ) ) )
-                {
-                    *token = m_titleBlock ? m_titleBlock->GetCompany() : wxString( "" );
-                    tokenUpdated = true;
-                }
-                else if( token->Left( token->Len() - 1 ).IsSameAs( wxT( "COMMENT" ) ) )
-                {
-                    wxChar c = token->Last();
-
-                    switch( c )
-                    {
-                    case '0':
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                        *token = m_titleBlock ? m_titleBlock->GetComment( c - '0' )
-                                              : wxString( "" );
-                        tokenUpdated = true;
-                    }
+                    m_titleBlock->TextVarResolver( token, m_project );
                 }
 
                 if( tokenUpdated )

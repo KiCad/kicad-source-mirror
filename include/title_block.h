@@ -29,6 +29,7 @@
 #include <ki_exception.h>
 
 class OUTPUTFORMATTER;
+class PROJECT;
 
 /**
  * Hold the information shown in the lower right corner of a plot, printout, or
@@ -114,6 +115,8 @@ public:
     {
         m_tbTexts.Clear();
     }
+
+    bool TextVarResolver( wxString* aToken, const PROJECT* aProject ) const;
 
     /**
      * Output the object to \a aFormatter in s-expression form.
