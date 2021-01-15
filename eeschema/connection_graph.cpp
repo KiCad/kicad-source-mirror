@@ -1864,12 +1864,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN ) ||
                 ( !originalStrong && candidateStrong ) ||
                 ( priority >= highest && candidateStrong &&
-                  subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) ||
-                ( !originalStrong && !candidateStrong && candidateName < originalName ) )
+                  subgraph->m_sheet.size() < original->m_sheet.size() ) ||
+                ( ( originalStrong == candidateStrong ) && candidateName < originalName ) )
             {
                 original       = subgraph;
                 highest        = priority;
                 originalStrong = candidateStrong;
+                originalName   = subgraph->m_driver_connection->Name();
             }
         }
     }
