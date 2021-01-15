@@ -201,7 +201,7 @@ public:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
                                            ValueFromString( m_userUnits, aValue ) ) );
                 break;
-            
+
             case COL_VISIBLE:
                 pin->SetVisible(BoolFromString( aValue ));
                 break;
@@ -380,14 +380,6 @@ public:
     }
 
 private:
-    // Because the rows of the grid can either be a single pin or a group of pins, the
-    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
-    // contains only a single pin.
-    std::vector<LIB_PINS> m_rows;
-
-    EDA_UNITS m_userUnits;
-    bool      m_edited;
-    
     static wxString StringFromBool( bool aValue )
     {
         if( aValue )
@@ -409,10 +401,19 @@ private:
         else
         {
             wxFAIL_MSG( wxString::Format( "string \"%s\" can't be converted to boolean "
-                                        "correctly, it will have been perceived as FALSE", aValue ) );
+                                          "correctly, it will have been perceived as FALSE",
+                                          aValue ) );
             return false;
         }
     }
+
+    // Because the rows of the grid can either be a single pin or a group of pins, the
+    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
+    // contains only a single pin.
+    std::vector<LIB_PINS> m_rows;
+
+    EDA_UNITS m_userUnits;
+    bool      m_edited;
 };
 
 
@@ -463,7 +464,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                          orientationNames ) );
     attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinOrientationIcons(), orientationNames ) );
     m_grid->SetColAttr( COL_ORIENTATION, attr );
-    
+
     attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetEditor( new wxGridCellBoolEditor() );
@@ -471,7 +472,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->SetColAttr( COL_VISIBLE, attr );
 
     /* Right-aligned position values look much better, but only MSW and GTK2+
-     * currently support righ-aligned textEditCtrls, so the text jumps on all
+     * currently support right-aligned textEditCtrls, so the text jumps on all
      * the other platforms when you edit it.
     attr = new wxGridCellAttr;
     attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_TOP );
@@ -489,7 +490,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     GetSizer()->SetSizeHints(this);
     Centre();
 
-    if( parent->IsSymbolEditable() )
+    if( !parent->IsSymbolEditable() )
     {
         m_ButtonsCancel->SetDefault();
         m_ButtonsOK->SetLabel( _( "Read Only" ) );
@@ -526,7 +527,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
 
-    // This is our copy of the pins.  If they were transfered to the part on an OK, then
+    // This is our copy of the pins.  If they were transferred to the part on an OK, then
     // m_pins will already be empty.
     for( auto pin : m_pins )
         delete pin;
