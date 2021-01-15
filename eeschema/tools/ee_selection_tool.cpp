@@ -1630,7 +1630,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
                 if( aMode == SELECTED )
                     aChild->SetSelected();
                 else if( aMode == BRIGHTENED )
-                    aChild->SetSelected();
+                    aChild->SetBrightened();
             } );
     }
 
