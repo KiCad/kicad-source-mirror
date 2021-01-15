@@ -69,6 +69,8 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                std::set<BOARD_ITEM*> to_add;
+
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
@@ -76,7 +78,20 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 
                     if( item->Type() == PCB_MARKER_T )
                         aCollector.Remove( item );
+
+                    /// Locked pads do not get moved independently of the footprint
+                    if( !sTool->IsFootprintEditor() && item->Type() == PCB_PAD_T && item->IsLocked()
+                        && !item->GetParent()->IsLocked() )
+                    {
+                        if( !aCollector.HasItem( item->GetParent() ) )
+                            to_add.insert( item->GetParent() );
+
+                        aCollector.Remove( item );
+                    }
                 }
+
+                for( BOARD_ITEM* item : to_add )
+                    aCollector.Append( item );
             },
             !m_isFootprintEditor /* prompt user regarding locked items */ );
 
