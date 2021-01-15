@@ -1807,6 +1807,7 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
             PCB_DISPLAY_OPTIONS opt  = m_frame->GetDisplayOptions();
             opt.m_ShowGlobalRatsnest = isVisible;
             m_frame->SetDisplayOptions( opt );
+            m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
             m_frame->GetCanvas()->RedrawRatsnest();
         }
 
