@@ -259,4 +259,10 @@ BOOST_AUTO_TEST_CASE( HierRenaming )
 }
 
 
+BOOST_AUTO_TEST_CASE( NoConnects )
+{
+    doNetlistTest( "noconnects" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
