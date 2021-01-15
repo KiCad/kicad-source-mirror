@@ -37,7 +37,11 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* 
         m_frame( aFrame ),
         m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
         m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
-{}
+{
+    // Make the color swatch show "Clear Color" instead
+    m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+    m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+}
 
 
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()

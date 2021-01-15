@@ -139,10 +139,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.repeat_label_increment, 1, -10, 10 ) );
 
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_border_color",
-            &m_Drawing.default_sheet_border_color, COLOR4D( MAGENTA ) ) );
+            &m_Drawing.default_sheet_border_color, COLOR4D::UNSPECIFIED ) );
 
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
-            &m_Drawing.default_sheet_background_color, COLOR4D( WHITE ).WithAlpha( 0.0 ) ) );
+            &m_Drawing.default_sheet_background_color, COLOR4D::UNSPECIFIED ) );
 
     m_params.emplace_back( new PARAM_LIST<double>( "drawing.junction_size_mult_list",
             &m_Drawing.junction_size_mult_list, { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 } ) );
