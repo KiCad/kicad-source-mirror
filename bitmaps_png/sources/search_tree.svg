@@ -13,7 +13,7 @@
    height="24"
    width="24"
    sodipodi:docname="search_tree.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,17 +23,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1596"
-     inkscape:window-height="1023"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview159670"
      showgrid="true"
-     inkscape:zoom="19.771793"
-     inkscape:cx="20.175083"
-     inkscape:cy="15.88683"
+     inkscape:zoom="18.24844"
+     inkscape:cx="8.1043882"
+     inkscape:cy="12.033009"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="svg2"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid240585"
@@ -54,32 +55,53 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     transform="translate(-0.92307692,-1027.2853)"
-     id="layer1">
-    <rect
-       y="1033.3237"
-       x="1.4230769"
-       height="12.058696"
-       width="21.153847"
-       id="rect3336"
-       style="fill:#d2d2d2;fill-opacity:1;stroke:#000000;stroke-width:0.999996;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <text
-       id="text4138"
-       y="1044.2235"
-       x="2.0834394"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.4308px;line-height:125%;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.4308px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans'"
-         id="tspan240587">          </tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.4308px;line-height:125%;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';text-align:start;writing-mode:lr-tb;text-anchor:start"
-         y="1044.2235"
-         x="2.0834394"
-         id="tspan4140">ab?</tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.4308px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans'"
-         id="tspan240589" /></text>
-  </g>
+  <rect
+     style="fill:#f3f3f3;fill-opacity:1;stroke:#545454;stroke-width:1.84557;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect1430"
+     width="9.2307692"
+     height="4.6153779"
+     x="2.7692311"
+     y="1.8461697" />
+  <rect
+     style="fill:#545454;fill-opacity:1;stroke:#545454;stroke-width:1.84557;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect1430-0"
+     width="5.5390453"
+     height="3.6928916"
+     x="13.845571"
+     y="9.230691" />
+  <rect
+     style="fill:#545454;fill-opacity:1;stroke:#545454;stroke-width:1.84557;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect1430-0-7"
+     width="5.5390453"
+     height="3.6928914"
+     x="13.845861"
+     y="16.615091" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.84615;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 7.3846155,6.9231 V 18.4616 H 13.846152"
+     id="path1462" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.84615;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6.923077,11.077 h 7.384614"
+     id="path1464" />
 </svg>
