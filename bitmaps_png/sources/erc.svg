@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="erc.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/erc.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -29,11 +29,11 @@
      inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="23.021961"
+     inkscape:zoom="15.33781"
      inkscape:cx="9.8441168"
-     inkscape:cy="12.793031"
-     inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:cy="15.400965"
+     inkscape:window-x="360"
+     inkscape:window-y="198"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -137,9 +137,10 @@
      id="ellipse22-7"
      style="display:inline;fill:#bf2641;stroke:none;stroke-width:0.999999"
      r="7" />
-  <path
-     id="polyline27-5"
-     style="display:inline;fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 20.999998,13.999999 c -2.357185,1.67684 -4.004037,4.029012 -5,7.000001 -0.849846,-1.153818 -1.572836,-2.437587 -2.999999,-3"
-     sodipodi:nodetypes="ccc" />
+  <polyline
+     class="cls-5"
+     points="21.746 16.275 17.173 20.846 14.418 18.093"
+     id="polyline21"
+     transform="matrix(0.99907229,0,0,0.99907223,-0.98355199,-0.98982831)"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
 </svg>

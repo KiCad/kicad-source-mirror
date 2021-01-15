@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_hierarchical_label.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/import_hierarchical_label.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="4.5777163"
-     inkscape:cy="10.840893"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="21.081183"
+     inkscape:cx="11.578293"
+     inkscape:cy="10.777611"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,53 +79,78 @@
      id="defs25427">
     <style
        id="style25425">.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-3,.cls-4,.cls-7{fill:none;stroke-linejoin:round;}.cls-3{stroke:#1a81c4;}.cls-4{stroke:#545454;}.cls-4,.cls-7{stroke-linecap:round;}.cls-5{fill:#545454;}.cls-6{fill:#bf2641;}.cls-7{stroke:#f5f5f5;stroke-width:2px;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath855">
+      <rect
+         style="fill:#d0c5ac;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+         id="rect857"
+         width="20"
+         height="19"
+         x="0"
+         y="0"
+         ry="0" />
+    </clipPath>
   </defs>
   <title
      id="title25429">import_hierarchical_label</title>
-  <rect
-     style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-     id="rect12834"
-     width="19"
-     height="18"
-     x="0.5"
-     y="0.5"
-     ry="0" />
-  <path
-     id="polygon25439"
-     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 11.5,6 15,9.5 18.5,6 15,2.5 C 13.940063,3.6302691 12.59547,4.9045297 11.5,6 Z"
-     class="cls-4"
-     sodipodi:nodetypes="ccccc" />
-  <ellipse
-     class="cls-6"
-     cx="16.997499"
-     cy="17"
-     rx="7.0064998"
-     ry="7"
-     id="ellipse25443"
-     style="stroke:#ffffff;stroke-opacity:1" />
-  <line
-     class="cls-7"
-     x1="16.8936"
-     y1="20.368799"
-     x2="16.8936"
-     y2="13.3688"
-     id="line25445" />
-  <polyline
-     class="cls-7"
-     points="20.649 18.836 17.894 21.588 15.139 18.836"
-     id="polyline25447"
-     transform="translate(-1,-1)" />
-  <text
-     xml:space="preserve"
-     style="font-size:11.9066px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.893005"
-     x="1.5720218"
-     y="10.637396"
-     id="text10712"
-     transform="scale(1.0280166,0.97274693)"><tspan
-       sodipodi:role="line"
-       id="tspan10710"
+  <g
+     id="g853"
+     clip-path="url(#clipPath855)">
+    <rect
+       style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect12834"
+       width="19"
+       height="18"
+       x="0.5"
+       y="0.5"
+       ry="0" />
+    <path
+       id="polygon25439"
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 11.5,6 15,9.5 18.5,6 15,2.5 C 13.940063,3.6302691 12.59547,4.9045297 11.5,6 Z"
+       class="cls-4"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:11.9066px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.893005"
        x="1.5720218"
        y="10.637396"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.9066px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#545454;fill-opacity:1;stroke-width:0.893005">A</tspan></text>
+       id="text10712"
+       transform="scale(1.0280166,0.97274693)"><tspan
+         sodipodi:role="line"
+         id="tspan10710"
+         x="1.5720218"
+         y="10.637396"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.9066px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#545454;fill-opacity:1;stroke-width:0.893005">A</tspan></text>
+    <circle
+       style="fill:#ffffff;stroke:none;stroke-linecap:square"
+       id="path846"
+       cx="17"
+       cy="17"
+       r="8" />
+  </g>
+  <g
+     id="g842"
+     style="display:inline">
+    <circle
+       class="cls-6"
+       cx="17"
+       cy="17"
+       id="ellipse25443"
+       style="stroke:none;stroke-width:0.999996;stroke-opacity:1"
+       r="7" />
+    <line
+       class="cls-7"
+       x1="17"
+       y1="20.368799"
+       x2="17"
+       y2="13.3688"
+       id="line25445" />
+    <polyline
+       class="cls-7"
+       points="20.649 18.836 17.894 21.588 15.139 18.836"
+       id="polyline25447"
+       transform="translate(-0.894,-1)" />
+  </g>
 </svg>

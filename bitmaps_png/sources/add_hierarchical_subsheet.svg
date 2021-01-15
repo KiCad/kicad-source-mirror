@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_hierarchical_subsheet.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/add_hierarchical_subsheet.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.0750893"
-     inkscape:cy="10.930158"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="22.477288"
+     inkscape:cx="16.936935"
+     inkscape:cy="13.019198"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,39 +79,73 @@
      id="defs222">
     <style
        id="style220">.cls-1{fill:none;stroke:#bf2641;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#333;}.cls-4{fill:#545454;}.cls-5{fill:#1a81c4;}.cls-6{fill:#b9b9b9;}.cls-7{fill:#bf2641;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1241">
+      <path
+         class="cls-6"
+         d="M 3.6700405,2.9950626e-6 18.250606,0.01752642 c 2.070731,0.002489 3.749395,1.22300038 3.749395,3.33296628 V 18.632218 c 0,2.11005 -1.545709,3.368766 -3.616525,3.367782 L 3.1650115,21.99278 C 1.094195,21.991797 -0.00846391,21.077816 4.8921459e-5,18.967783 L 0.06182291,3.6561863 C 0.07033541,1.5462374 1.5993081,-0.00248569 3.6700405,2.9950626e-6 Z"
+         id="path1243"
+         style="fill:#d0c5ac;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:nodetypes="sssssssss" />
+    </clipPath>
   </defs>
   <title
      id="title224">add_hierarchical_subshet</title>
-  <path
-     class="cls-6"
-     d="m 3.9716671,0.45089534 13.9854879,0.0168132 c 1.986219,0.002388 3.596371,1.17343306 3.596371,3.19788366 V 18.327961 c 0,2.024532 -1.482624,3.232232 -3.468924,3.231289 L 3.4872499,21.552322 C 1.5009497,21.551379 0.44329364,20.674441 0.45145904,18.649926 L 0.51071184,3.9588963 C 0.51887692,1.9344621 1.9854476,0.44850752 3.9716671,0.45089534 Z"
-     id="path262"
-     style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     sodipodi:nodetypes="sssssssss" />
-  <rect
-     class="cls-4"
-     x="8.9918327"
-     y="15"
-     width="1.9623766"
-     height="6.9920864"
-     id="rect280"
-     style="fill:#545454;fill-opacity:1;stroke-width:2.44704" />
-  <path
-     class="cls-3"
-     d="M 7.8752094,14.327228 A 0.97449688,0.99325346 0 0 1 7.3859428,14.193318 L 3.923399,12.161343 A 0.98082851,0.99970697 0 1 1 4.9019251,10.429017 L 8.36433,12.460991 a 0.98097242,0.99985364 0 0 1 -0.4905596,1.866237 z"
-     id="path290"
-     style="stroke-width:1.45279;fill:#545454;fill-opacity:1" />
-  <path
-     class="cls-5"
-     d="m 5.5,16 4,-5.5 c 0.546375,-0.776048 0.776157,-0.922245 1,0 L 11,15 c 0.187441,0.773779 -0.21161,0.887626 -1,1 L 6.5,16.5 C 5.542565,16.635973 4.9439048,16.790948 5.5,16 Z"
-     id="path292"
-     style="fill:#545454;fill-opacity:1;stroke-width:2.396;stroke-miterlimit:4;stroke-dasharray:none"
-     sodipodi:nodetypes="ccccccc" />
-  <path
-     class="cls-3"
-     d="M 3.3200619,11.072167 H 1.0104528 a 0.98126022,1.000147 0 1 1 0,-2.000147 h 2.3096091 a 0.98126022,1.000147 0 1 1 0,2.000147 z"
-     id="path294"
-     style="stroke-width:1.45279;fill:#545454;fill-opacity:1" />
+  <g
+     id="g1239"
+     clip-path="url(#clipPath1241)">
+    <path
+       class="cls-6"
+       d="M 4.0032183,0.50000273 17.921032,0.51672962 C 19.897639,0.51910536 21.5,1.684139 21.5,3.6981973 V 18.285298 c 0,2.014139 -1.47545,3.21564 -3.452138,3.214701 L 3.5211451,21.493107 C 1.5444565,21.492169 0.49191846,20.619732 0.50004435,18.60561 L 0.55901043,3.9899957 C 0.567136,1.9759537 2.02661,0.49762716 4.0032183,0.50000273 Z"
+       id="path262"
+       style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       sodipodi:nodetypes="sssssssss" />
+    <rect
+       class="cls-4"
+       x="8.9918327"
+       y="15"
+       width="1.9623766"
+       height="6.9920864"
+       id="rect280"
+       style="fill:#545454;fill-opacity:1;stroke-width:2.44704" />
+    <path
+       class="cls-3"
+       d="M 7.8752094,14.327228 A 0.97449688,0.99325346 0 0 1 7.3859428,14.193318 L 3.923399,12.161343 A 0.98082851,0.99970697 0 1 1 4.9019251,10.429017 L 8.36433,12.460991 a 0.98097242,0.99985364 0 0 1 -0.4905596,1.866237 z"
+       id="path290"
+       style="fill:#545454;fill-opacity:1;stroke-width:1.45279" />
+    <path
+       class="cls-5"
+       d="m 5.5,16 4,-5.5 c 0.546375,-0.776048 0.776157,-0.922245 1,0 L 11,15 c 0.187441,0.773779 -0.21161,0.887626 -1,1 L 6.5,16.5 C 5.542565,16.635973 4.9439048,16.790948 5.5,16 Z"
+       id="path292"
+       style="fill:#545454;fill-opacity:1;stroke-width:2.396;stroke-miterlimit:4;stroke-dasharray:none"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       class="cls-3"
+       d="M 3.3200619,11.072167 H 1.0104528 a 0.98126022,1.000147 0 1 1 0,-2.000147 h 2.3096091 a 0.98126022,1.000147 0 1 1 0,2.000147 z"
+       id="path294"
+       style="fill:#545454;fill-opacity:1;stroke-width:1.45279" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 4.5,8 10,5 V 0.5"
+       id="path12135" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 4,15 V 5"
+       id="path12137"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 9.9999996,4 H 21.499999"
+       id="path12139"
+       inkscape:connector-curvature="0" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-linecap:square;paint-order:normal"
+       id="path1245"
+       cx="17"
+       cy="17"
+       r="8" />
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer1"
@@ -119,11 +153,11 @@
      style="display:inline">
     <circle
        class="cls-5"
-       cx="17.0061"
+       cx="17"
        cy="17"
        r="7"
        id="circle115659"
-       style="display:inline;fill:#bf2641;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#ffffff;stroke-opacity:1" />
+       style="display:inline;fill:#bf2641;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <line
        class="cls-6"
        x1="17"
@@ -141,18 +175,4 @@
        id="line115663"
        style="display:inline;fill:none;stroke:#f5f5f5;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   </g>
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 4.5,8 10,5 V 0.5"
-     id="path12135" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 4,15 V 5"
-     id="path12137"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 9.9999996,4 H 21.499999"
-     id="path12139"
-     inkscape:connector-curvature="0" />
 </svg>

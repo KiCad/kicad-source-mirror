@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2600"
-     inkscape:window-height="1803"
+     inkscape:window-width="1920"
+     inkscape:window-height="1041"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="22.627417"
+     inkscape:zoom="24.845204"
      inkscape:cx="21.602049"
      inkscape:cy="21.685627"
-     inkscape:window-x="1077"
-     inkscape:window-y="173"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -128,12 +128,6 @@
      height="6.9999995"
      id="rect883"
      style="stroke-width:1" />
-  <polygon
-     class="cls-3"
-     points="22.203,24.963 17.667,22.578 13.13,24.963 13.997,19.912 10.327,16.335 15.399,15.598 17.667,11.002 19.935,15.598 25.007,16.335 21.337,19.912 "
-     id="polygon855"
-     style="fill:#ffffff;stroke-width:0.877391;fill-opacity:1"
-     transform="matrix(1.1362398,0,0,1.1432562,-3.5789482,-3.6021049)" />
   <polygon
      class="cls-3"
      points="10.327,16.335 15.399,15.598 17.667,11.002 19.935,15.598 25.007,16.335 21.337,19.912 22.203,24.963 17.667,22.578 13.13,24.963 13.997,19.912 "

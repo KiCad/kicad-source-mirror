@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="delete.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,17 +22,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview18"
      showgrid="true"
-     inkscape:zoom="19.771793"
-     inkscape:cx="-11.237571"
-     inkscape:cy="9.6806269"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="21.081183"
+     inkscape:cx="11.009757"
+     inkscape:cy="12.526767"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g857"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -76,32 +76,29 @@
      id="title7">delete</title>
   <g
      id="g857"
-     transform="translate(0.05,0.05)">
+     transform="translate(-2.0506384e-4,-3e-4)">
     <path
        class="cls-1"
        d="m 21.95,21.95 a 7,7 0 1 1 0,-9.8994 7,7 0 0 1 0,9.8994 z"
        id="path9" />
-    <g
-       id="g851">
-      <line
-         class="cls-2"
-         x1="19.4704"
-         y1="14.5209"
-         x2="14.5207"
-         y2="19.4706"
-         id="line11" />
-      <line
-         class="cls-2"
-         x1="19.4704"
-         y1="19.4706"
-         x2="14.5207"
-         y2="14.5209"
-         id="line13" />
-    </g>
+    <line
+       class="cls-2"
+       x1="19.4704"
+       y1="14.5209"
+       x2="14.5207"
+       y2="19.4706"
+       id="line11" />
+    <line
+       class="cls-2"
+       x1="19.4704"
+       y1="19.4706"
+       x2="14.5207"
+       y2="14.5209"
+       id="line13" />
   </g>
   <path
      class="cls-3"
      d="m 4,1 11.044342,10.162501 -4.602179,0.291004 c 0.448152,1.022828 1.113273,2.529962 1.693021,3.846455 a 1.7016,1.7016 0 0 1 -0.876051,2.244678 v 0 A 1.7015,1.7015 0 0 1 9.017368,16.673017 C 8.4372342,15.356696 7.7712809,13.847532 7.3214393,12.821279 l -3.3335708,3.187364 z"
      id="path15"
-     style="stroke:#ffffff;stroke-opacity:1" />
+     style="stroke:none;stroke-opacity:1" />
 </svg>

@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_symbol_to_schematic.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/add_symbol_to_schematic.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -75,11 +75,11 @@
      inkscape:window-height="995"
      id="namedview24"
      showgrid="true"
-     inkscape:zoom="21.797591"
+     inkscape:zoom="23.444345"
      inkscape:cx="15.356926"
      inkscape:cy="13.275634"
-     inkscape:window-x="2083"
-     inkscape:window-y="23"
+     inkscape:window-x="259"
+     inkscape:window-y="6"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -130,13 +130,14 @@
      id="title7">add_symbol_to_schematic</title>
   <path
      class="cls-3"
-     d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
-     id="path17" />
+     d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
+     id="path17"
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:none" />
   <line
      class="cls-4"
-     x1="17.1038"
+     x1="17"
      y1="13.6312"
-     x2="17.1038"
+     x2="17"
      y2="20.631201"
      id="line19"
      style="stroke:#ffffff;stroke-opacity:1" />

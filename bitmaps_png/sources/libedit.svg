@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="3285"
-     inkscape:window-height="1587"
+     inkscape:window-width="1904"
+     inkscape:window-height="1041"
      id="namedview18"
      showgrid="true"
-     inkscape:zoom="39.543587"
+     inkscape:zoom="43.419382"
      inkscape:cx="11.291265"
      inkscape:cy="14.552795"
-     inkscape:window-x="3709"
-     inkscape:window-y="155"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -115,13 +115,6 @@
        id="path2237"
        sodipodi:nodetypes="cc" />
   </g>
-  <circle
-     class="cls-3"
-     cx="17"
-     cy="17"
-     id="circle842"
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.999999"
-     r="7.9999995" />
   <circle
      class="cls-3"
      cx="17"

@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2520"
-     inkscape:window-height="1803"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="45.254834"
-     inkscape:cx="12.387647"
-     inkscape:cy="18.903195"
-     inkscape:window-x="1077"
-     inkscape:window-y="173"
-     inkscape:window-maximized="0"
+     inkscape:zoom="24.125921"
+     inkscape:cx="4.9503672"
+     inkscape:cy="11.049661"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
     <inkscape:grid
@@ -128,29 +128,25 @@
      height="6.9999995"
      id="rect883"
      style="stroke-width:1" />
-  <circle
-     class="cls-3"
-     cx="17"
-     cy="17"
-     id="circle842"
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.999999"
-     r="7.9999995" />
-  <circle
-     class="cls-3"
-     cx="17"
-     cy="17"
-     id="ellipse22"
-     style="fill:#bf2641;stroke-width:0.999999;fill-opacity:1"
-     r="7" />
-  <path
-     class="cls-4"
-     d="m 21.539701,13 -0.645179,-0.645178 c -0.401772,-0.40166 -1.053055,-0.40166 -1.454827,0 l -5.316089,5.34082 2.100005,2.100132 5.31609,-5.340946 c 0.401659,-0.401772 0.401659,-1.053056 0,-1.454828 z"
-     id="path25"
-     style="fill:#ffffff;stroke-width:1"
-     sodipodi:nodetypes="ccccccc" />
-  <path
-     id="polygon27"
-     style="fill:#ffffff;stroke-width:1"
-     d="m 13,21 h 3 c -0.779315,-0.772295 -2.28388,-2.275534 -3,-3 z"
-     sodipodi:nodetypes="cccc" />
+  <g
+     id="g846">
+    <circle
+       class="cls-3"
+       cx="17"
+       cy="17"
+       id="ellipse22"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:0.999999"
+       r="7" />
+    <path
+       class="cls-4"
+       d="m 21.539701,13 -0.645179,-0.645178 c -0.401772,-0.40166 -1.053055,-0.40166 -1.454827,0 l -5.316089,5.34082 2.100005,2.100132 5.31609,-5.340946 c 0.401659,-0.401772 0.401659,-1.053056 0,-1.454828 z"
+       id="path25"
+       style="fill:#ffffff;stroke-width:1"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       id="polygon27"
+       style="fill:#ffffff;stroke-width:1"
+       d="m 13,21 h 3 c -0.779315,-0.772295 -2.28388,-2.275534 -3,-3 z"
+       sodipodi:nodetypes="cccc" />
+  </g>
 </svg>

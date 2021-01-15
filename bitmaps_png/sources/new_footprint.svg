@@ -22,18 +22,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2791"
-     inkscape:window-height="1648"
+     inkscape:window-width="1920"
+     inkscape:window-height="1041"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="32"
+     inkscape:zoom="35.136424"
      inkscape:cx="10.440535"
      inkscape:cy="12.560535"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="g982">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -139,13 +139,6 @@
        class="cls-3"
        cx="17.5"
        cy="17.5"
-       id="circle942"
-       style="fill:#ffffff;fill-opacity:1;stroke-width:1"
-       r="7.5" />
-    <circle
-       class="cls-3"
-       cx="17.5"
-       cy="17.5"
        id="ellipse158474"
        style="fill:#bf2641;fill-opacity:1;stroke-width:1"
        r="6.5" />
@@ -186,7 +179,7 @@
        d="M 17.5,21.742641 V 13.257359"
        id="path938" />
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 13.257359,17.5 h 8.485282"
        id="path940" />
   </g>

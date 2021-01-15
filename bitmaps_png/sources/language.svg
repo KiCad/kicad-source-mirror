@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1041"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="10.486022"
-     inkscape:cy="13.207157"
+     inkscape:zoom="30.702139"
+     inkscape:cx="10.844303"
+     inkscape:cy="11.415751"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,52 +79,54 @@
   </defs>
   <title
      id="title25509">language</title>
-  <path
-     class="cls-1"
-     d="m 2.6645,-0.003 h 10.6666 a 2.6664,2.6664 0 0 1 2.6664,2.6664 v 10.6644 a 2.6664,2.6664 0 0 1 -2.6664,2.6664 H 2.6644 A 2.6663,2.6663 0 0 1 -0.0019,13.3279 V 2.6634 A 2.6664,2.6664 0 0 1 2.6645,-0.003 Z"
-     id="path25511" />
-  <line
-     class="cls-2"
-     x1="2.4524"
-     y1="4.4120002"
-     x2="11.8143"
-     y2="4.4120002"
-     id="line25513" />
-  <line
-     class="cls-2"
-     x1="7.1447001"
-     y1="4.3439999"
-     x2="7.1447001"
-     y2="2.8706"
-     id="line25515" />
-  <path
-     class="cls-2"
-     d="M 9.689,4.4649 A 16.8986,16.8986 0 0 1 7.339,7.822 14.4193,14.4193 0 0 1 4.12,10.27"
-     id="path25517" />
-  <path
-     class="cls-2"
-     d="M 5.3838,5.9149 A 13.0661,13.0661 0 0 0 6.8633,7.822 14.4175,14.4175 0 0 0 10.0821,10.27"
-     id="path25519" />
+  <g
+     id="g846"
+     transform="matrix(1.1556846,0,0,1.1556846,-1.8393041,-2.3175082)"
+     style="stroke-width:0.865288">
+    <line
+       class="cls-2"
+       x1="2.4524"
+       y1="4.4120002"
+       x2="11.8143"
+       y2="4.4120002"
+       id="line25513" />
+    <line
+       class="cls-2"
+       x1="7.1447001"
+       y1="4.3439999"
+       x2="7.1447001"
+       y2="2.8706"
+       id="line25515" />
+    <path
+       class="cls-2"
+       d="M 9.689,4.4649 A 16.8986,16.8986 0 0 1 7.339,7.822 14.4193,14.4193 0 0 1 4.12,10.27"
+       id="path25517" />
+    <path
+       class="cls-2"
+       d="M 5.3838,5.9149 A 13.0661,13.0661 0 0 0 6.8633,7.822 14.4175,14.4175 0 0 0 10.0821,10.27"
+       id="path25519" />
+  </g>
   <path
      class="cls-3"
-     d="m 21.480733,6.697817 v -2.2463 a 2,2 0 0 0 -2,-2 h -1.8611"
-     id="path25521" />
+     d="m 6.5,11.99998 v 3.393271 c 0,1.7158 1.391465,3.106729 3.107924,3.106729 h 3.392077"
+     id="path25521"
+     style="stroke-width:1"
+     sodipodi:nodetypes="cssc" />
   <polyline
      class="cls-3"
      points="21.55 6.357 22.803 7.61 24.055 6.357"
      id="polyline25523"
-     transform="translate(-1.3218706,-0.82118295)" />
+     transform="matrix(-1.5090551,0,0,-1.5090551,40.91132,22.983889)"
+     style="stroke-width:0.662666" />
   <polyline
      class="cls-3"
      points="19.305 2.041 18.053 3.293 19.305 4.546"
      id="polyline25525"
-     transform="translate(-1.3218706,-0.82118295)" />
-  <path
-     class="cls-4"
-     d="m 10.6787,7.9972 h 10.6668 a 2.6663,2.6663 0 0 1 2.6663,2.6663 V 21.328 a 2.6664,2.6664 0 0 1 -2.6664,2.6664 H 10.6788 A 2.6664,2.6664 0 0 1 8.0124,21.328 V 10.6635 a 2.6663,2.6663 0 0 1 2.6663,-2.6663 z"
-     id="path25527" />
+     transform="matrix(-1.5090551,0,0,-1.5090551,40.632308,23.469298)"
+     style="stroke-width:0.662666" />
   <path
      class="cls-5"
-     d="m 18.2,18.4552 h -3.9033 l -0.794,2.334 h -1.6845 l 3.664,-9.9961 h 1.5742 l 3.6236,9.9961 h -1.6919 z m -3.4238,-1.3935 h 2.9511 l -1.4443,-4.27 h -0.041 z"
-     id="path25529" />
+     d="m 20.572224,20.66509 h -3.964172 l -0.806383,2.334911 H 14.0909 l 3.72114,-10 h 1.598749 l 3.68011,10 H 21.372614 Z M 17.09503,19.271047 h 2.997122 L 18.625328,14.99938 h -0.04164 z"
+     id="path25529"
+     style="stroke-width:1" />
 </svg>

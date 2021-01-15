@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2511"
-     inkscape:window-height="1424"
+     inkscape:window-width="1904"
+     inkscape:window-height="1041"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="-0.30043993"
-     inkscape:cy="11.333675"
+     inkscape:zoom="61.404278"
+     inkscape:cx="11.497128"
+     inkscape:cy="15.744882"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -133,23 +133,19 @@
      style="fill:#1a81c4;stroke-width:0.999998" />
   <path
      class="cls-6"
-     d="M 24.999997,16.992578 A 8,7.9999993 0 1 1 16.999882,9.0000006 7.9962321,7.9962313 0 0 1 24.999997,16.992578 Z"
-     id="path887"
-     style="stroke-width:1;fill:#ffffff;fill-opacity:1" />
-  <path
-     class="cls-6"
-     d="m 24.0057,16.9993 a 7.0065,7.0065 0 1 1 -7.0066,-7 7.0032,7.0032 0 0 1 7.0066,7 z"
-     id="path157813" />
+     d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7.0001,-6.993506 6.9967031,6.9967026 0 0 1 7.0001,6.993506 z"
+     id="path157813"
+     style="stroke-width:0.999996" />
   <line
      class="cls-7"
-     x1="17.1031"
+     x1="17"
      y1="20.4111"
-     x2="17.1031"
+     x2="17"
      y2="13.4111"
      id="line157815" />
   <polyline
      class="cls-7"
      points="20.858 18.878 18.103 21.63 15.348 18.878"
      id="polyline157817"
-     transform="translate(-1,-1)" />
+     transform="translate(-1.103,-1)" />
 </svg>

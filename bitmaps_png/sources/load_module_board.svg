@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="load_module_board.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/import_brd_file.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,18 +25,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2632"
-     inkscape:window-height="1390"
+     inkscape:window-width="1920"
+     inkscape:window-height="1041"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="11.095875"
-     inkscape:cy="10.426716"
+     inkscape:zoom="21.709691"
+     inkscape:cx="6.1233866"
+     inkscape:cy="15.216777"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="g952">
+     inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -81,23 +81,25 @@
        id="style25339">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3,.cls-6{fill:none;}.cls-3{stroke:#b9b9b9;stroke-miterlimit:10;stroke-width:0.9551px;}.cls-4{fill:#1a81c4;}.cls-5{fill:#bf2641;}.cls-6{stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath954">
+       id="clipPath884">
       <rect
-         style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-         id="rect956"
+         style="display:inline;fill:#f29100;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect886"
          width="21"
          height="21"
          x="-33"
          y="-2"
-         ry="3.4854646" />
+         ry="3.4854646"
+         rx="3.4854646" />
     </clipPath>
   </defs>
   <title
      id="title25343">import_brd_file</title>
   <g
      id="g952"
-     clip-path="url(#clipPath954)"
-     transform="translate(33.00181,1.9988756)">
+     clip-path="url(#clipPath884)"
+     transform="translate(33.00181,1.9988756)"
+     inkscape:label="g952">
     <rect
        class="cls-1"
        x="1.4020385e-07"
@@ -217,27 +219,31 @@
        cy="5.9967451"
        r="1.6027977"
        clip-path="none" />
+    <path
+       class="cls-5"
+       d="M -8.0018126,14.993702 A 8.0000004,7.9999996 0 1 1 -16.001813,7.0011253 7.9962324,7.9962316 0 0 1 -8.0018126,14.993702 Z"
+       id="path908"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1"
+       inkscape:connector-curvature="0" />
   </g>
-  <path
-     class="cls-5"
-     d="M 24.684765,16.99287 A 7.6847681,7.6847674 0 1 1 16.999997,9.3152328 7.6811486,7.6811478 0 0 1 24.684765,16.99287 Z"
-     id="path908"
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.99999994"
-     inkscape:connector-curvature="0" />
-  <path
-     class="cls-5"
-     d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
-     id="path25365" />
-  <line
-     class="cls-6"
-     x1="17.103901"
-     y1="20.4118"
-     x2="17.103901"
-     y2="13.4118"
-     id="line25367" />
-  <polyline
-     class="cls-6"
-     points="20.859 18.879 18.104 21.631 15.349 18.879"
-     id="polyline25369"
-     transform="translate(-1,-1)" />
+  <g
+     id="g857">
+    <path
+       class="cls-5"
+       d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
+       id="path25365"
+       style="stroke-width:0.999996" />
+    <line
+       class="cls-6"
+       x1="17"
+       y1="20.4118"
+       x2="17"
+       y2="13.4118"
+       id="line25367" />
+    <polyline
+       class="cls-6"
+       points="20.859 18.879 18.104 21.631 15.349 18.879"
+       id="polyline25369"
+       transform="translate(-1.104,-1)" />
+  </g>
 </svg>

@@ -1,49 +1,172 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="auto_associate.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs489">
-      <style id="style487">.cls-1{fill:#b9b9b9;}.cls-2,.cls-3,.cls-4,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#bf2641;}.cls-2,.cls-3,.cls-4{stroke-width:0.9549px;}.cls-3{stroke:#1a81c4;}.cls-4{stroke:#0f71a8;}.cls-5{fill:#1a81c4;}.cls-6{fill:#bf2641;}.cls-7{stroke:#fff;stroke-width:2px;}</style>
-   </defs>
-   <title id="title491">auto_associate</title>
-   <polyline class="cls-2" points="12.524 3.317 10.873 4.968 11.81 7.587 7.27 4.917" id="polyline495" transform="translate(-1,-1)" />
-   <line class="cls-2" x1="8.9284" y1="8.4679003" x2="6.2586999" y2="3.9287" id="line497" />
-   <line class="cls-2" x1="8.9166002" y1="8.4797001" x2="4.3773999" y2="5.8099999" id="line499" />
-   <line class="cls-2" x1="7.0354004" y1="10.3609" x2="4.3656998" y2="5.8217001" id="line501" />
-   <line class="cls-2" x1="7.0236998" y1="10.3726" x2="2.4844" y2="7.7028999" id="line503" />
-   <polyline class="cls-2" points="3.473 8.715 4.651 11.19 2.986 12.855" id="polyline505" transform="translate(-1,-1)" />
-   <path class="cls-3" d="m 17.257,7.5741 a 1.2747,1.2747 0 1 1 0,-1.8027 1.2747,1.2747 0 0 1 0,1.8027 z" id="path507" />
-   <circle class="cls-3" cx="7.3188" cy="15.7097" r="1.2747" id="circle509" />
-   <line class="cls-4" x1="15.9958" y1="7.0207996" x2="14.5061" y2="8.5106001" id="line511" />
-   <line class="cls-4" x1="7.6295996" y1="15.386999" x2="9.1194" y2="13.8972" id="line513" />
-   <rect class="cls-5" x="14.271912" y="-4.5898185" width="4.0065999" height="8.4250002" transform="rotate(45.001)" id="rect515" />
-   <path class="cls-6" d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z" id="path517" />
-   <path class="cls-7" d="m 17.2893,16.7107 v 0 a 1.6461,1.6461 0 0 1 0,-2.3279 l 0.8383,-0.8382 a 1.6458,1.6458 0 0 1 2.3278,0 v 0 a 1.6458,1.6458 0 0 1 0,2.3278 l -0.8382,0.8383 a 1.6461,1.6461 0 0 1 -2.3279,0 z" id="path519" />
-   <path class="cls-7" d="m 13.5446,20.4554 v 0 a 1.6458,1.6458 0 0 1 0,-2.3278 l 0.8382,-0.8383 a 1.6461,1.6461 0 0 1 2.3279,0 v 0 a 1.6461,1.6461 0 0 1 0,2.3279 l -0.8383,0.8382 a 1.6458,1.6458 0 0 1 -2.3278,0 z" id="path521" />
-   <line class="cls-7" x1="17.83" y1="16.17" x2="16.1297" y2="17.8703" id="line523" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="auto_associate.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="20.839722"
+     inkscape:cx="20.232152"
+     inkscape:cy="13.225241"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs489">
+    <style
+       id="style487">.cls-1{fill:#b9b9b9;}.cls-2,.cls-3,.cls-4,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#bf2641;}.cls-2,.cls-3,.cls-4{stroke-width:0.9549px;}.cls-3{stroke:#1a81c4;}.cls-4{stroke:#0f71a8;}.cls-5{fill:#1a81c4;}.cls-6{fill:#bf2641;}.cls-7{stroke:#fff;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title491">auto_associate</title>
+  <polyline
+     class="cls-2"
+     points="12.524 3.317 10.873 4.968 11.81 7.587 7.27 4.917"
+     id="polyline495"
+     transform="translate(-1,-1)" />
+  <line
+     class="cls-2"
+     x1="8.9284"
+     y1="8.4679003"
+     x2="6.2586999"
+     y2="3.9287"
+     id="line497" />
+  <line
+     class="cls-2"
+     x1="8.9166002"
+     y1="8.4797001"
+     x2="4.3773999"
+     y2="5.8099999"
+     id="line499" />
+  <line
+     class="cls-2"
+     x1="7.0354004"
+     y1="10.3609"
+     x2="4.3656998"
+     y2="5.8217001"
+     id="line501" />
+  <line
+     class="cls-2"
+     x1="7.0236998"
+     y1="10.3726"
+     x2="2.4844"
+     y2="7.7028999"
+     id="line503" />
+  <polyline
+     class="cls-2"
+     points="3.473 8.715 4.651 11.19 2.986 12.855"
+     id="polyline505"
+     transform="translate(-1,-1)" />
+  <path
+     class="cls-3"
+     d="m 17.257,7.5741 a 1.2747,1.2747 0 1 1 0,-1.8027 1.2747,1.2747 0 0 1 0,1.8027 z"
+     id="path507" />
+  <circle
+     class="cls-3"
+     cx="7.3188"
+     cy="15.7097"
+     r="1.2747"
+     id="circle509" />
+  <line
+     class="cls-4"
+     x1="15.9958"
+     y1="7.0207996"
+     x2="14.5061"
+     y2="8.5106001"
+     id="line511" />
+  <line
+     class="cls-4"
+     x1="7.6295996"
+     y1="15.386999"
+     x2="9.1194"
+     y2="13.8972"
+     id="line513" />
+  <rect
+     class="cls-5"
+     x="14.271912"
+     y="-4.5898185"
+     width="4.0065999"
+     height="8.4250002"
+     transform="rotate(45.001)"
+     id="rect515" />
+  <path
+     class="cls-6"
+     d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
+     id="path517"
+     style="stroke-width:0.999996" />
+  <g
+     id="g857"
+     transform="matrix(0.45454559,0,0,0.45454546,17.454548,10.636363)"
+     style="stroke-width:2.20001">
+    <path
+       id="path852-8-8"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.19999"
+       d="m -3.7080931,10.590455 c 0,0 -0.09921,0.07843 -0.372837,0.349213 -2.585519,2.561503 -2.604395,6.74182 -0.0699,9.264046 0.0044,0.0049 0.01193,0.01181 0.0167,0.01653 l 2.9094581,2.876071 c 2.564955,2.53842 6.736372,2.538071 9.30094,0 2.564942,-2.537982 2.564993,-6.666805 0,-9.204744 l -1.484689,-1.541811 -1.291611,3.594265 0.2996,0.342624 c 1.212918,1.200296 1.250836,3.153131 0.04994,4.365171 -1.2128,1.223821 -3.205374,1.232449 -4.427435,0.02306 L -1.68405,17.795512 c -1.219981,-1.207368 -1.214876,-3.156272 0,-4.358581 0.160162,-0.158236 0.446073,-0.368981 0.446073,-0.368981 z"
+       sodipodi:nodetypes="cccccccccccccccc" />
+    <path
+       id="path852-8-5"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.19999"
+       d="m -5.4258041,2.9999999 c -1.684449,4.3e-5 -3.368186,0.635167 -4.6504709,1.904202 -2.564941,2.537981 -2.564992,6.6668061 0,9.2047461 l 1.4846889,1.54181 1.291612,-3.594264 -0.299601,-0.342625 c -1.212917,-1.200296 -1.250835,-3.1531311 -0.04994,-4.3651711 1.2128,-1.223821 3.205375,-1.232449 4.427435,-0.02306 l 2.9094561,2.8793651 c 1.219981,1.207368 1.214876,3.156273 0,4.358582 -0.160162,0.158236 -0.449401,0.368981 -0.449401,0.368981 l 2.470042,2.47744 c 0,0 0.09921,-0.07844 0.372837,-0.349213 2.585519,-2.561504 2.604395,-6.741821 0.06991,-9.2640461 -0.0044,-0.0049 -0.01193,-0.01181 -0.0167,-0.01653 l -2.9094,-2.876016 C -2.05781,3.6349929 -3.7413551,2.9999559 -5.4258041,2.9999999 Z"
+       sodipodi:nodetypes="scccccccccccccccs" />
+  </g>
 </svg>

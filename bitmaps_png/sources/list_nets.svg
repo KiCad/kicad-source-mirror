@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="list_nets.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="29.813295"
+     inkscape:cx="12.730744"
+     inkscape:cy="10.216007"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -152,7 +152,7 @@
      class="cls-3"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
      id="path158194"
-     style="stroke:#ffffff;stroke-opacity:1" />
+     style="stroke:none;stroke-opacity:1" />
   <path
      class="cls-4"
      d="m 18.1812,21.12 c -0.495,-0.0342 -0.6439,-0.2322 -0.62,-0.7329 a 1.8728,1.8728 0 0 1 0.059,-0.3966 c 0.2283,-0.8479 0.4846,-1.6887 0.6905,-2.5418 0.4377,-1.8138 -0.7687,-2.3591 -1.9426,-2.0709 -0.3443,0.0845 -0.6851,0.1771 -1.0309,0.2829 -0.37,0.1129 -0.6326,0.2629 -0.594,0.73 a 0.9721,0.9721 0 0 0 0.134,-0.0158 c 1.2077,-0.3226 1.55,-0.0031 1.2495,1.1973 -0.21,0.8372 -0.4823,1.6591 -0.6782,2.4992 a 1.4729,1.4729 0 0 0 1.6874,1.965 7.1579,7.1579 0 0 0 1.5124,-0.3626 0.523,0.523 0 0 0 0.4356,-0.6244 5.9829,5.9829 0 0 1 -0.9027,0.0706 z"
