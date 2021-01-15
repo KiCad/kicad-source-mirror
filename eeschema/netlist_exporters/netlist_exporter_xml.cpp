@@ -579,7 +579,6 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     typedef std::pair<SCH_PIN*, SCH_SHEET_PATH>             MEMBER_RECORD;
     typedef std::pair<wxString, std::vector<MEMBER_RECORD>> NET_RECORD;
     std::vector<NET_RECORD*> nets;
-    std::vector<NET_RECORD*> ncNets;
 
     for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
@@ -590,16 +589,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         if( subgraphs.empty() )
             continue;
 
-        if( !subgraphs[0]->m_strong_driver && subgraphs[0]->m_no_connect )
-        {
-            ncNets.push_back( new NET_RECORD( NC_PREFIX, std::vector<MEMBER_RECORD>() ) );
-            net_record = ncNets.back();
-        }
-        else
-        {
-            nets.push_back( new NET_RECORD( net_name, std::vector<MEMBER_RECORD>() ) );
-            net_record = nets.back();
-        }
+        nets.push_back( new NET_RECORD( net_name, std::vector<MEMBER_RECORD>() ) );
+        net_record = nets.back();
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
@@ -625,36 +616,12 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         }
     }
 
-    // Add no_connect_* nets for no-connect pins.
-    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-
-    for( unsigned ii = 0; ii < sheetList.size(); ii++ )
-    {
-        SCH_SHEET_PATH& sheet = sheetList[ii];
-
-        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
-        {
-            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
-
-            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
-            {
-                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC && !pin->Connection( &sheet ) )
-                {
-                    ncNets.push_back( new NET_RECORD( NC_PREFIX, std::vector<MEMBER_RECORD>() ) );
-                    ncNets.back()->second.emplace_back( pin, sheet );
-                }
-            }
-        }
-    }
-
     // Netlist ordering: Net name, then ref des, then pin name
     std::sort( nets.begin(), nets.end(),
                []( const NET_RECORD* a, const NET_RECORD*b )
                {
                    return StrNumCmp( a->first, b->first ) < 0;
                } );
-
-    nets.insert( nets.end(), ncNets.begin(), ncNets.end() );
 
     for( int i = 0; i < (int) nets.size(); ++i )
     {

@@ -69,7 +69,7 @@ public:
     LIB_PIN* GetLibPin() const { return m_libPin; }
 
     void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
-    wxString GetDefaultNetName( const SCH_SHEET_PATH& aPath );
+    wxString GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect = false );
 
     wxString GetAlt() const { return m_alt; }
     void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }

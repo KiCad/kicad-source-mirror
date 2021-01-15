@@ -231,7 +231,7 @@ void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 }
 
 
-wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
+wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect )
 {
     if( m_libPin->IsPowerConnection() )
         return m_libPin->GetName();
@@ -242,6 +242,9 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
         return m_net_name_map.at( aPath );
 
     wxString name = "Net-(";
+
+    if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
+        name = ( "no_connect_(" );
 
     name << GetParentSymbol()->GetRef( &aPath );
 

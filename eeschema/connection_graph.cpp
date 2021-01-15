@@ -268,8 +268,9 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     {
     case SCH_PIN_T:
     {
+        bool forceNoConnect = m_no_connect != nullptr;
         SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
-        return pin->GetDefaultNetName( m_sheet );
+        return pin->GetDefaultNetName( m_sheet, forceNoConnect );
         break;
     }
 
@@ -518,19 +519,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         {
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
-            // TODO(JE) right now this relies on GetPins() returning good SCH_PIN pointers
-            // that contain good LIB_PIN pointers.  Since these get invalidated whenever the
-            // library component is refreshed, the current solution as of ed025972 is to just
-            // rebuild the SCH_PIN list when the component is refreshed, and then re-run the
-            // connectivity calculations.  This is slow and should be improved before release.
-            // See https://gitlab.com/kicad/code/kicad/issues/3784
-
             for( SCH_PIN* pin : component->GetPins( &aSheet ) )
             {
-                // Not connected pins are not connected.
-                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
-                    continue;
-
                 pin->InitializeConnection( aSheet, this );
 
                 wxPoint pos = pin->GetPosition();
@@ -789,23 +779,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     }
 
     /**
-     * TODO(JE)
-     *
-     * It would be good if net codes were preserved as much as possible when
-     * generating netlists, so that unnamed nets don't keep shifting around when
-     * you regenerate.
-     *
-     * Right now, we are clearing out the old connections up in
-     * updateItemConnectivity(), but that is useful information, so maybe we
-     * need to just set the dirty flag or something.
-     *
-     * That way, ResolveDrivers() can check what the driver of the subgraph was
-     * previously, and if it is in the situation of choosing between equal
-     * candidates for an auto-generated net name, pick the previous one.
-     *
-     * N.B. the old algorithm solves this by sorting the possible net names
-     * alphabetically, so as long as the same refdes components are involved,
-     * the net will be the same.
+     * TODO(JE): Net codes are non-deterministic.  Fortunately, they are also not really used for
+     * anything. We should consider removing them entirely and just using net names everywhere.
      */
 
     // Resolve drivers for subgraphs and propagate connectivity info
@@ -1511,6 +1486,16 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                  subgraphId = nextSubgraph++ )
             {
                 CONNECTION_SUBGRAPH* subgraph = m_driver_subgraphs[subgraphId];
+
+                // Make sure weakly-driven single-pin nets get the no_connect_ prefix
+                if( !subgraph->m_strong_driver && subgraph->m_drivers.size() == 1 &&
+                    subgraph->m_driver->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
+                    pin->ClearDefaultNetName( &subgraph->m_sheet );
+                    subgraph->m_driver_connection->ConfigureFromLabel(
+                            pin->GetDefaultNetName( subgraph->m_sheet, true ) );
+                }
 
                 subgraph->m_dirty = false;
                 subgraph->UpdateItemConnections();
