@@ -1414,6 +1414,13 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 started = true;
             }
+            else if( shape == S_CIRCLE )
+            {
+                // No clever logic if drawing a circle
+                preview.Clear();
+                twoPointManager.Reset();
+                break;
+            }
             else
             {
                 PCB_SHAPE* snapItem = dyn_cast<PCB_SHAPE*>( grid.GetSnapped() );
