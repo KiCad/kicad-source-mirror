@@ -78,6 +78,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
     RegisterUIUpdateHandler( item->GetId(), cond );
 
+    fileMenu->AppendSeparator();
     fileMenu->Add( KICAD_MANAGER_ACTIONS::closeProject );
 
     fileMenu->AppendSeparator();
@@ -202,7 +203,6 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     // New
     m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newProject );
-    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
     m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::openProject );
 
     m_mainToolBar->AddScaledSeparator( this );
