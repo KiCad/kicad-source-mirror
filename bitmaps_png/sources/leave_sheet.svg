@@ -29,7 +29,7 @@
      inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="18.68361"
+     inkscape:zoom="17.934904"
      inkscape:cx="15.855951"
      inkscape:cy="12.992643"
      inkscape:window-x="0"
@@ -84,19 +84,12 @@
      id="title25555">leave_sheet</title>
   <path
      style="display:inline;fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 4,8 H 15.5"
-     id="path1476" />
-  <path
-     id="path1506"
-     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 15.5,8.0000005 A 6.5,6.4999995 0 0 1 22,14.5 v 0 A 6.5,6.4999995 0 0 1 15.5,21" />
-  <path
-     style="display:inline;fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 12,21 h 3.5"
-     id="path1476-6" />
+     d="M 12,4 V 21"
+     id="path1476"
+     sodipodi:nodetypes="cc" />
   <path
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 7,3 2,8 7,13"
+     d="M 17,8 12,3 7,8"
      id="path1535"
      sodipodi:nodetypes="ccc" />
 </svg>
