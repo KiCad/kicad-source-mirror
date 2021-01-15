@@ -149,7 +149,7 @@ private:
 
     bool updateFootprintParameters( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
 
-    bool updateComponentPadConnections( FOOTPRINT* aPcbComponent, COMPONENT* aNewComponent );
+    bool updateComponentPadConnections( FOOTPRINT* aFootprint, COMPONENT* aNewComponent );
 
     void cacheCopperZoneConnections();
 

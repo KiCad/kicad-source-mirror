@@ -348,18 +348,17 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbComponent,
+bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint,
                                                            COMPONENT* aNewComponent )
 {
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    FOOTPRINT* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr
-                                                          : (FOOTPRINT*) aPcbComponent->Clone();
+    FOOTPRINT* copy = m_commit.GetStatus( aFootprint ) ? nullptr : (FOOTPRINT*) aFootprint->Clone();
     bool       changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( PAD* pad : aPcbComponent->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
 
@@ -385,7 +384,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbCompon
             if( !pad->GetNetname().IsEmpty() )
             {
                 msg.Printf( _( "Disconnect %s pin %s." ),
-                            aPcbComponent->GetReference(),
+                            aFootprint->GetReference(),
                             pad->GetName() );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
             }
@@ -393,7 +392,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbCompon
             {
                 // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net for symbol %s pin %s." ),
-                            aPcbComponent->GetReference(),
+                            aFootprint->GetReference(),
                             pad->GetName() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
             }
@@ -451,17 +450,17 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbCompon
                     m_oldToNewNets[ pad->GetNetname() ] = netName;
 
                     msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
-                                aPcbComponent->GetReference(),
+                                aFootprint->GetReference(),
                                 pad->GetName(),
-                               UnescapeString( pad->GetNetname() ),
-                               UnescapeString( netName ) );
+                                UnescapeString( pad->GetNetname() ),
+                                UnescapeString( netName ) );
                 }
                 else
                 {
                     msg.Printf( _( "Connect %s pin %s to %s."),
-                                aPcbComponent->GetReference(),
+                                aFootprint->GetReference(),
                                 pad->GetName(),
-                               UnescapeString( netName ) );
+                                UnescapeString( netName ) );
                 }
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
@@ -477,7 +476,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbCompon
     }
 
     if( changed && copy )
-        m_commit.Modified( aPcbComponent, copy );
+        m_commit.Modified( aFootprint, copy );
     else
         delete copy;
 
@@ -623,42 +622,6 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 }
 
 
-bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
-{
-    wxString msg;
-    const COMPONENT* component;
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        if(( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
-            continue;
-
-        if( m_lookupByTimestamp )
-            component = aNetlist.GetComponentByPath( footprint->GetPath() );
-        else
-            component = aNetlist.GetComponentByReference( footprint->GetReference() );
-
-        if( component == NULL || component->GetProperties().count( "exclude_from_board" ) )
-        {
-            if( footprint->IsLocked() )
-            {
-                msg.Printf( _( "Cannot remove unused footprint %s (locked)." ), footprint->GetReference() );
-                m_reporter->Report( msg, RPT_SEVERITY_WARNING );
-                continue;
-            }
-
-            msg.Printf( _( "Remove unused footprint %s." ), footprint->GetReference() );
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-
-            if( !m_isDryRun )
-                m_commit.Remove( footprint );
-        }
-    }
-
-    return true;
-}
-
-
 bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 {
     int       count = 0;
@@ -784,11 +747,13 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
 
 bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 {
-    wxString msg;
+    FOOTPRINT* lastPreexistingFootprint = nullptr;
+    COMPONENT* component = nullptr;
+    wxString   msg;
+
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    FOOTPRINT* lastPreexistingFootprint = nullptr;
 
     std::map<COMPONENT*, FOOTPRINT*> footprintMap;
 
@@ -797,21 +762,23 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     cacheCopperZoneConnections();
 
+    // First mark all nets (except <no net>) as stale; we'll update those which are current
+    // in the following two loops.
+    //
     if( !m_isDryRun )
     {
         m_board->SetStatus( 0 );
 
-        // Mark all nets (except <no net>) as stale; we'll update those to current that
-        // we find in the netlist
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             net->SetIsCurrent( net->GetNetCode() == 0 );
     }
 
+    // Next go through the netlist updating all board footprints which have matching component
+    // entries and adding new footprints for those that don't.
+    //
     for( unsigned i = 0; i < aNetlist.GetCount(); i++ )
     {
-        COMPONENT* component = aNetlist.GetComponent( i );
-        int        matchCount = 0;
-        FOOTPRINT* tmp;
+        component = aNetlist.GetComponent( i );
 
         if( component->GetProperties().count( "exclude_from_board" ) )
             continue;
@@ -821,21 +788,20 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
+        int matchCount = 0;
+
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            bool     match = false;
+            bool match = false;
 
-            if( footprint )
-            {
-                if( m_lookupByTimestamp )
-                    match = footprint->GetPath() == component->GetPath();
-                else
-                    match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
-            }
+            if( m_lookupByTimestamp )
+                match = footprint->GetPath() == component->GetPath();
+            else
+                match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
 
             if( match )
             {
-                tmp = footprint;
+                FOOTPRINT* tmp = footprint;
 
                 if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
                     tmp = replaceComponent( aNetlist, footprint, component );
@@ -860,14 +826,14 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         if( matchCount == 0 )
         {
-            tmp = addNewComponent( component );
+            FOOTPRINT* footprint = addNewComponent( component );
 
-            if( tmp )
+            if( footprint )
             {
-                footprintMap[ component ] = tmp;
+                footprintMap[ component ] = footprint;
 
-                updateFootprintParameters( tmp, component );
-                updateComponentPadConnections( tmp, component );
+                updateFootprintParameters( footprint, component );
+                updateComponentPadConnections( footprint, component );
             }
         }
         else if( matchCount > 1 )
@@ -880,8 +846,52 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     updateCopperZoneNets( aNetlist );
 
-    if( m_deleteUnusedComponents )
-        deleteUnusedComponents( aNetlist );
+    // Finally go through the board footprints and update all those that *don't* have matching
+    // component entries.
+    //
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        bool doDelete = m_deleteUnusedComponents;
+
+        if( ( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
+            doDelete = false;
+
+        if( doDelete )
+        {
+            if( m_lookupByTimestamp )
+                component = aNetlist.GetComponentByPath( footprint->GetPath() );
+            else
+                component = aNetlist.GetComponentByReference( footprint->GetReference() );
+
+            if( component && component->GetProperties().count( "exclude_from_board" ) == 0 )
+                doDelete = false;
+        }
+
+        if( doDelete && footprint->IsLocked() )
+        {
+            msg.Printf( _( "Cannot remove unused footprint %s (locked)." ),
+                        footprint->GetReference() );
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            doDelete = false;
+        }
+
+        if( doDelete )
+        {
+            msg.Printf( _( "Remove unused footprint %s." ), footprint->GetReference() );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+            if( !m_isDryRun )
+                m_commit.Remove( footprint );
+        }
+        else if( !m_isDryRun )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( pad->GetNet() )
+                    pad->GetNet()->SetIsCurrent( true );
+            }
+        }
+    }
 
     if( !m_isDryRun )
     {
