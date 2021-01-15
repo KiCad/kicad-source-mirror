@@ -60,7 +60,7 @@
         "courtyards_overlap": "error",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
-        "drill_too_small": "error",
+        "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "hole_clearance": "error",
@@ -68,10 +68,9 @@
         "invalid_outline": "error",
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
-        "keepout": "error",
         "length_out_of_range": "error",
         "malformed_courtyard": "error",
-        "microvia_drill_too_small": "error",
+        "microvia_drill_out_of_range": "error",
         "missing_courtyard": "ignore",
         "missing_footprint": "warning",
         "net_conflict": "warning",
@@ -89,7 +88,6 @@
         "unconnected_items": "error",
         "unresolved_variable": "error",
         "via_dangling": "warning",
-        "via_hole_larger_than_pad": "error",
         "zone_has_empty_net": "error",
         "zones_intersect": "error"
       },
@@ -99,6 +97,7 @@
         "max_error": 0.005,
         "min_clearance": 0.0,
         "min_copper_edge_clearance": 0.01,
+        "min_hole_clearance": 0.0,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
@@ -124,6 +123,7 @@
     "equivalence_files": []
   },
   "erc": {
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
@@ -377,7 +377,7 @@
   },
   "sheets": [
     [
-      "98534e61-3bfa-407b-930d-dbcb716b8f23",
+      "00000000-0000-0000-0000-000048553e53",
       ""
     ],
     [

@@ -1,7 +1,5 @@
 (kicad_sch (version 20201015) (generator eeschema)
 
-  (page 1 3)
-
   (paper "A4")
 
   (title_block
@@ -27,6 +25,16 @@
       )
       (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "74LS125_0_0"
+        (pin power_in line (at -1.27 5.08 270) (length 2.54)
+          (name "VCC" (effects (font (size 0.508 0.508))))
+          (number "14" (effects (font (size 0.762 0.762))))
+        )
+        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
+          (name "GND" (effects (font (size 0.508 0.508))))
+          (number "7" (effects (font (size 0.508 0.508))))
+        )
       )
       (symbol "74LS125_1_0"
         (polyline
@@ -120,16 +128,6 @@
           (number "13" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "74LS125_0_0"
-        (pin power_in line (at -1.27 5.08 270) (length 2.54)
-          (name "VCC" (effects (font (size 0.508 0.508))))
-          (number "14" (effects (font (size 0.762 0.762))))
-        )
-        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
-          (name "GND" (effects (font (size 0.508 0.508))))
-          (number "7" (effects (font (size 0.508 0.508))))
-        )
-      )
     )
     (symbol "flat_hierarchy_schlib:74LS125_1" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (id 0) (at 5.08 3.81 0)
@@ -146,6 +144,16 @@
       )
       (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "74LS125_1_0_0"
+        (pin power_in line (at -1.27 5.08 270) (length 2.54)
+          (name "VCC" (effects (font (size 0.508 0.508))))
+          (number "14" (effects (font (size 0.762 0.762))))
+        )
+        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
+          (name "GND" (effects (font (size 0.508 0.508))))
+          (number "7" (effects (font (size 0.508 0.508))))
+        )
       )
       (symbol "74LS125_1_1_0"
         (polyline
@@ -239,16 +247,6 @@
           (number "13" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "74LS125_1_0_0"
-        (pin power_in line (at -1.27 5.08 270) (length 2.54)
-          (name "VCC" (effects (font (size 0.508 0.508))))
-          (number "14" (effects (font (size 0.762 0.762))))
-        )
-        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
-          (name "GND" (effects (font (size 0.508 0.508))))
-          (number "7" (effects (font (size 0.508 0.508))))
-        )
-      )
     )
     (symbol "flat_hierarchy_schlib:74LS125_2" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (id 0) (at 5.08 3.81 0)
@@ -265,6 +263,16 @@
       )
       (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "74LS125_2_0_0"
+        (pin power_in line (at -1.27 5.08 270) (length 2.54)
+          (name "VCC" (effects (font (size 0.508 0.508))))
+          (number "14" (effects (font (size 0.762 0.762))))
+        )
+        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
+          (name "GND" (effects (font (size 0.508 0.508))))
+          (number "7" (effects (font (size 0.508 0.508))))
+        )
       )
       (symbol "74LS125_2_1_0"
         (polyline
@@ -358,16 +366,6 @@
           (number "13" (effects (font (size 1.27 1.27))))
         )
       )
-      (symbol "74LS125_2_0_0"
-        (pin power_in line (at -1.27 5.08 270) (length 2.54)
-          (name "VCC" (effects (font (size 0.508 0.508))))
-          (number "14" (effects (font (size 0.762 0.762))))
-        )
-        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
-          (name "GND" (effects (font (size 0.508 0.508))))
-          (number "7" (effects (font (size 0.508 0.508))))
-        )
-      )
     )
     (symbol "flat_hierarchy_schlib:74LS125_3" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (id 0) (at 5.08 3.81 0)
@@ -384,6 +382,16 @@
       )
       (property "ki_fp_filters" "DIP?14*" (id 4) (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "74LS125_3_0_0"
+        (pin power_in line (at -1.27 5.08 270) (length 2.54)
+          (name "VCC" (effects (font (size 0.508 0.508))))
+          (number "14" (effects (font (size 0.762 0.762))))
+        )
+        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
+          (name "GND" (effects (font (size 0.508 0.508))))
+          (number "7" (effects (font (size 0.508 0.508))))
+        )
       )
       (symbol "74LS125_3_1_0"
         (polyline
@@ -475,16 +483,6 @@
         (pin input inverted (at 2.54 -5.08 90) (length 4.445)
           (name "~" (effects (font (size 1.27 1.27))))
           (number "13" (effects (font (size 1.27 1.27))))
-        )
-      )
-      (symbol "74LS125_3_0_0"
-        (pin power_in line (at -1.27 5.08 270) (length 2.54)
-          (name "VCC" (effects (font (size 0.508 0.508))))
-          (number "14" (effects (font (size 0.762 0.762))))
-        )
-        (pin power_in line (at -1.27 -5.08 90) (length 2.54)
-          (name "GND" (effects (font (size 0.508 0.508))))
-          (number "7" (effects (font (size 0.508 0.508))))
         )
       )
     )
@@ -1999,6 +1997,12 @@
       (property "Datasheet" "" (id 3) (at 0 0 0)
         (effects (font (size 1.524 1.524)))
       )
+      (symbol "PWR_FLAG_0_0"
+        (pin power_out line (at 0 0 90) (length 0)
+          (name "pwr" (effects (font (size 0.508 0.508))))
+          (number "1" (effects (font (size 0.508 0.508))))
+        )
+      )
       (symbol "PWR_FLAG_0_1"
         (polyline
           (pts
@@ -2010,12 +2014,6 @@
             (xy 0 1.27)
           )
           (stroke (width 0)) (fill (type none))
-        )
-      )
-      (symbol "PWR_FLAG_0_0"
-        (pin power_out line (at 0 0 90) (length 0)
-          (name "pwr" (effects (font (size 0.508 0.508))))
-          (number "1" (effects (font (size 0.508 0.508))))
         )
       )
     )
@@ -2704,6 +2702,12 @@
       (property "Datasheet" "" (id 3) (at 0 0 0)
         (effects (font (size 1.524 1.524)))
       )
+      (symbol "VCC_0_0"
+        (pin power_in line (at 0 0 90) (length 0) hide
+          (name "VCC" (effects (font (size 0.508 0.508))))
+          (number "1" (effects (font (size 0.508 0.508))))
+        )
+      )
       (symbol "VCC_0_1"
         (circle (center 0 1.27) (radius 0.508) (stroke (width 0)) (fill (type none)))
         (polyline
@@ -2713,12 +2717,6 @@
             (xy 0 0.762)
           )
           (stroke (width 0)) (fill (type none))
-        )
-      )
-      (symbol "VCC_0_0"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "VCC" (effects (font (size 0.508 0.508))))
-          (number "1" (effects (font (size 0.508 0.508))))
         )
       )
     )
@@ -2735,6 +2733,12 @@
       (property "Datasheet" "" (id 3) (at 0 0 0)
         (effects (font (size 1.524 1.524)))
       )
+      (symbol "VPP_0_0"
+        (pin power_in line (at 0 0 90) (length 0) hide
+          (name "VPP" (effects (font (size 1.016 1.016))))
+          (number "1" (effects (font (size 1.016 1.016))))
+        )
+      )
       (symbol "VPP_0_1"
         (circle (center 0 2.032) (radius 0.508) (stroke (width 0)) (fill (type none)))
         (polyline
@@ -2743,12 +2747,6 @@
             (xy 0 0)
           )
           (stroke (width 0)) (fill (type none))
-        )
-      )
-      (symbol "VPP_0_0"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "VPP" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
         )
       )
     )
@@ -2793,11 +2791,11 @@
   (junction (at 259.08 134.62) (diameter 1.016) (color 0 0 0 0))
 
   (no_connect (at 22.86 148.59))
-  (no_connect (at 43.18 86.36))
-  (no_connect (at 43.18 83.82))
-  (no_connect (at 43.18 99.06))
-  (no_connect (at 43.18 81.28))
   (no_connect (at 22.86 161.29))
+  (no_connect (at 43.18 81.28))
+  (no_connect (at 43.18 83.82))
+  (no_connect (at 43.18 86.36))
+  (no_connect (at 43.18 99.06))
 
   (wire (pts (xy 35.56 176.53) (xy 35.56 182.88))
     (stroke (width 0) (type solid) (color 0 0 0 0))
@@ -3312,16 +3310,28 @@
     (effects (font (size 1.524 1.524)) (justify left bottom))
   )
 
-  (global_label "CLOCK-RB6" (shape output) (at 142.24 114.3 0)
+  (global_label "CLOCK-RB6" (shape output) (at 142.24 114.3 0)    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+
     (effects (font (size 1.524 1.524)) (justify left))
   )
-  (global_label "DATA-RB7" (shape output) (at 147.32 80.01 0)
+  (global_label "DATA-RB7" (shape output) (at 147.32 80.01 0)    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+
     (effects (font (size 1.524 1.524)) (justify left))
   )
-  (global_label "VPP-MCLR" (shape output) (at 226.06 38.1 0)
+  (global_label "VPP-MCLR" (shape output) (at 226.06 38.1 0)    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+
     (effects (font (size 1.524 1.524)) (justify left))
   )
-  (global_label "VCC_PIC" (shape output) (at 226.06 96.52 0)
+  (global_label "VCC_PIC" (shape output) (at 226.06 96.52 0)    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+
     (effects (font (size 1.524 1.524)) (justify left))
   )
 
