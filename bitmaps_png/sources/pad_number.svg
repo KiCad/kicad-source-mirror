@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="pad_number.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/pad_number.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="13.515963"
-     inkscape:cy="11.644836"
+     inkscape:zoom="20.070778"
+     inkscape:cx="12.132848"
+     inkscape:cy="12.895868"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -84,19 +84,23 @@
      id="title26111">pad_number</title>
   <path
      class="cls-1"
-     d="M 10.5,-0.0039 A 10.5045,10.5045 0 1 0 21.0039,10.5006 10.5167,10.5167 0 0 0 10.5,-0.0039 Z m 0,20.1337 A 9.6292,9.6292 0 1 1 20.1292,10.5006 9.64,9.64 0 0 1 10.5,20.13 Z"
-     id="path26113" />
+     d="M 12.000629,1 A 11,11 0 1 0 23.000001,12 11.012776,11.012776 0 0 0 12.000629,1 Z m 0,21.083413 A 10.083412,10.083412 0 1 1 22.084041,12 10.094722,10.094722 0 0 1 12.000629,22.083622 Z"
+     id="path26113"
+     style="stroke-width:1;fill:#f29100;fill-opacity:1" />
   <path
      class="cls-1"
-     d="m 10.5,2.3809 a 8.12,8.12 0 1 0 8.12,8.12 8.1287,8.1287 0 0 0 -8.12,-8.12 z m 0,12.7381 A 4.6185,4.6185 0 1 1 15.1184,10.5006 4.624,4.624 0 0 1 10.5,15.119 Z"
-     id="path26115" />
+     d="m 11.997606,3.4972918 a 8.5,8.5 0 1 0 8.5,8.5000002 8.5091071,8.5091071 0 0 0 -8.5,-8.5000002 z m 0,13.3342182 a 4.8346366,4.8346366 0 1 1 4.834532,-4.834533 4.8403941,4.8403941 0 0 1 -4.834532,4.834533 z"
+     id="path26115"
+     style="opacity:1;stroke-width:0.999998" />
   <polygon
      class="cls-2"
-     points="10.399,7.126 7.615,7.126 7.615,4.967 13.184,4.429 13.184,18.642 10.399,18.642 "
+     points="7.615,4.967 13.184,4.429 13.184,18.642 10.399,18.642 10.399,7.126 7.615,7.126 "
      id="polygon26117"
-     transform="translate(-1,-1)" />
+     transform="matrix(1.0471703,0,0,1.0471703,-0.04182969,-0.04308627)"
+     style="stroke-width:0.954955" />
   <path
      class="cls-3"
-     d="M 11.9332,3.7043 V 17.392 H 9.6492 V 5.8756 H 6.8657 V 4.1934 l 5.0675,-0.4891 m 0.5,-0.5506 -0.548,0.0529 L 6.8176,3.6957 6.3657,3.7393 V 6.3756 H 9.1492 V 17.892 h 3.284 z"
-     id="path26119" />
+     d="M 13.501433,4.8831169 V 19.21647 H 11.109696 V 7.1568378 H 8.1948977 V 5.3952879 L 13.501433,4.8831169 M 14.025018,4.306545 13.451169,4.3619403 8.1445288,4.8741113 7.6713126,4.9197679 V 7.680423 h 2.9147984 v 12.059632 h 3.438907 z"
+     id="path26119"
+     style="stroke-width:1" />
 </svg>
