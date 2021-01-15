@@ -320,8 +320,16 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                                       const std::vector<BOARD_ITEM*>& aSkip )
 {
-    int snapDist      = GetGrid().x;
-    int snapRange     = snapDist;
+    // Tuning constant: snap radius in screen space
+    const int snapSize = 25;
+
+    // Snapping distance is in screen space, clamped to the current grid to ensure that the grid
+    // points that are visible can always be snapped to.
+    // see https://gitlab.com/kicad/code/kicad/-/issues/5638
+    // see https://gitlab.com/kicad/code/kicad/-/issues/7125
+    double snapScale = snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale();
+    int    snapRange = std::min( KiROUND( snapScale ), GetGrid().x );
+    int    snapDist  = snapRange;
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
               VECTOR2I( snapRange, snapRange ) );
