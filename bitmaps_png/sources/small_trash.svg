@@ -13,7 +13,7 @@
    version="1.0"
    id="svg2"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="trash.svg"
+   sodipodi:docname="small_trash.svg"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_16/trash2.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -55,15 +55,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1035"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview173"
      showgrid="true"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="true"
-     inkscape:zoom="45.202419"
-     inkscape:cx="4.9942591"
-     inkscape:cy="7.1101731"
+     inkscape:zoom="31.38764"
+     inkscape:cx="7.6592364"
+     inkscape:cy="9.0623318"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
@@ -529,45 +529,15 @@
        y2="7.75" />
   </defs>
   <path
-     id="path3871"
-     style="fill:#f2f2f2;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 2.2242716,2.5440772 4.3648243,14.5 C 6.8211677,15.161041 9.2008841,15.172273 11.5,14.5 L 13.640553,2.5440772"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
+     fill="currentColor"
+     d="M 4.0002727,13.223214 3.5,5.5 h 9 l -0.50009,7.723214 C 11.954345,13.92691 11.419915,14.5 10.704456,14.5 H 5.2957273 c -0.7154599,0 -1.204881,-0.577457 -1.2954546,-1.276786 z"
+     id="path3438"
+     style="display:inline;fill:#545454;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="sccssss" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 1.72,2 C 5.7764652,2.7259314 9.9932352,2.6050992 14.301684,2"
-     id="path3087"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6.8621358,14.5 5.7918595,2.5440772"
-     id="path3859"
-     inkscape:connector-curvature="0" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path3865"
-     d="M 9.0026886,14.5 10.072964,2.5440772"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 12.927035,5.5 C 9.5859843,6.2006337 6.2573434,6.1319655 2.9377892,5.5"
-     id="path3873"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 12.570276,8.5 C 9.5427199,9.1319306 6.5637948,9.2006672 3.6513067,8.5"
-     id="path3877"
-     inkscape:connector-curvature="0" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path3879"
-     d="m 11.856759,11.5 c -2.5930589,0.69594 -5.2112575,0.636851 -7.8486934,0"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     sodipodi:nodetypes="cc" />
+     fill="currentColor"
+     d="M 13.659092,2.0002024 H 10.420455 L 10.166766,1.353778 C 10.057148,1.1368694 9.8323771,0.9998299 9.5865091,1.0000047 H 6.5017068 C 6.2563014,0.9990761 6.0319547,1.1364947 5.9241503,1.353778 L 5.6704548,2.0002024 H 2.4318181 C 2.1933315,2.0002024 2,2.1907478 2,2.4257976 V 3.5742023 C 2,3.8092521 2.1933315,3.9997977 2.4318181,3.9997977 H 13.659092 c 0.238487,2e-7 0.431818,-0.1905454 0.431818,-0.4255953 V 2.4257976 c 0,-0.2350499 -0.193331,-0.4255955 -0.431818,-0.4255952 z"
+     id="path4028"
+     style="display:inline;fill:#545454;fill-opacity:1;stroke-width:0.999997;stroke-miterlimit:4;stroke-dasharray:none"
+     sodipodi:nodetypes="cccccccsssscssc" />
 </svg>

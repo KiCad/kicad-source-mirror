@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="cut.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="18.294187"
+     inkscape:cx="13.37627"
+     inkscape:cy="10.559529"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,30 +81,30 @@
      id="title827">cut</title>
   <ellipse
      class="cls-1"
-     cx="19.6346"
-     cy="18.648899"
-     rx="3.3654001"
-     ry="3.3511"
+     cx="18.940546"
+     cy="17.984011"
+     rx="3.0594547"
+     ry="3.0159903"
      id="ellipse829" />
   <line
      class="cls-2"
-     x1="1"
-     y1="7.1817999"
-     x2="20.9177"
-     y2="15.559601"
+     x1="2"
+     y1="7.66362"
+     x2="20.107"
+     y2="15.203642"
      id="line831" />
   <ellipse
      class="cls-1"
-     cx="19.6346"
-     cy="5.3511"
-     rx="3.3654001"
-     ry="3.3511"
+     cx="18.940546"
+     cy="6.0159903"
+     rx="3.0594547"
+     ry="3.0159903"
      id="ellipse833" />
   <line
      class="cls-2"
-     x1="1"
-     y1="16.818199"
-     x2="20.9177"
-     y2="8.4404001"
+     x1="2"
+     y1="16.33638"
+     x2="20.107"
+     y2="8.79636"
      id="line835" />
 </svg>
