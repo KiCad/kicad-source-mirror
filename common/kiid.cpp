@@ -30,6 +30,13 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/functional/hash.hpp>
 
+#if BOOST_VERSION >= 106700
+#include <boost/uuid/entropy_error.hpp>
+#endif
+
+#include <wx/log.h>
+
+
 // Create only once, as seeding is *very* expensive
 static boost::uuids::random_generator randomGenerator;
 
@@ -40,6 +47,7 @@ static boost::uuids::nil_generator    nilGenerator;
 // Global nil reference
 KIID niluuid( 0 );
 
+
 // For static initialization
 KIID& NilUuid()
 {
@@ -48,8 +56,25 @@ KIID& NilUuid()
 }
 
 
-KIID::KIID() : m_uuid( randomGenerator() ), m_cached_timestamp( 0 )
+KIID::KIID()
 {
+    m_cached_timestamp = 0;
+
+#if BOOST_VERSION >= 106700
+    try
+    {
+#endif
+
+        m_uuid = randomGenerator();
+
+#if BOOST_VERSION >= 106700
+    }
+    catch( const boost::uuids::entropy_error& e )
+    {
+        wxLogFatalError( "A Boost UUID entropy exception was thrown in %s:%s.",
+                         __FILE__, __FUNCTION__ );
+    }
+#endif
 }
 
 
@@ -87,7 +112,21 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
         {
             // Failed to parse string representation; best we can do is assign a new
             // random one.
-            m_uuid = randomGenerator();
+#if BOOST_VERSION >= 106700
+            try
+            {
+#endif
+
+                m_uuid = randomGenerator();
+
+#if BOOST_VERSION >= 106700
+            }
+            catch( const boost::uuids::entropy_error& e )
+            {
+                wxLogFatalError( "A Boost UUID entropy exception was thrown in %s:%s.",
+                                 __FILE__, __FUNCTION__ );
+            }
+#endif
         }
     }
 }
