@@ -24,7 +24,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
 
@@ -335,7 +335,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_SizerItemProperties->Add( sizerMisc, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 
 	wxStaticBoxSizer* m_sbStep;
-	m_sbStep = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("Repeat") ), wxVERTICAL );
+	m_sbStep = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("Repeat Parameters") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer8;
 	fgSizer8 = new wxFlexGridSizer( 0, 3, 3, 0 );
