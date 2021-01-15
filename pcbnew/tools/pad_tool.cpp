@@ -101,7 +101,23 @@ bool PAD_TOOL::Init()
         menu.AddItem( PCB_ACTIONS::pushPadSettings,        singlePadSel, 400 );
     }
 
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // cancel current tool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive,           SELECTION_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddSeparator( 1 );
+
+    ctxMenu.AddItem( PCB_ACTIONS::rotateCcw,               SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::rotateCw,                SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::flip,                    SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::mirror,                  SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::properties,              SELECTION_CONDITIONS::ShowAlways );
+
+    // Finally, add the standard zoom/grid items
+    getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
+
     return true;
+
 }
 
 
@@ -526,19 +542,22 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         PAD*         pad = static_cast<PAD*>( selection[0] );
         PCB_LAYER_ID layer = explodePad( pad );
 
-        m_wasHighContrast = ( opts.m_ContrastModeDisplay !=
-                              HIGH_CONTRAST_MODE::NORMAL );
+        m_wasHighContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
         frame()->SetActiveLayer( layer );
 
         if( !m_wasHighContrast )
             m_toolMgr->RunAction( ACTIONS::highContrastMode, false );
 
         if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
+        {
             msg.Printf( _( "Pad Edit Mode.  Press %s again to exit." ),
-                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
+                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );}
+
         else
+        {
             msg.Printf( _( "Pad Edit Mode.  Press %s to exit." ),
                         KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
+        }
 
         infoBar->RemoveAllButtons();
         infoBar->ShowMessage( msg, wxICON_INFORMATION );
@@ -548,8 +567,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
     if( m_editPad == niluuid )
     {
-        bool highContrast = ( opts.m_ContrastModeDisplay !=
-                              HIGH_CONTRAST_MODE::NORMAL );
+        bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
         if( m_wasHighContrast != highContrast )
             m_toolMgr->RunAction( ACTIONS::highContrastMode, false );

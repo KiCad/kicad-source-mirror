@@ -23,7 +23,6 @@
 
 #include "pcb_tool_base.h"
 
-#include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <board_commit.h>
 #include <footprint.h>
@@ -220,6 +219,13 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             {
                 // Refresh preview after event runs
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
+            }
+            else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+            {
+                frame()->OnEditItemRequest( newItem.get() );
+
+                // Notify other tools of the changes
+                m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
             }
             else if( evt->IsAction( &ACTIONS::refreshPreview ) )
             {
