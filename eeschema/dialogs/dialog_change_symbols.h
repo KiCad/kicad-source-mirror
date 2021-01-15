@@ -36,7 +36,7 @@ class SCH_SHEET_PATH;
 class DIALOG_CHANGE_SYMBOLS : public DIALOG_CHANGE_SYMBOLS_BASE
 {
 public:
-    enum class MODE { CHANGE, UPDATE };
+    enum class MODE { CHANGE = 0, UPDATE };
 
     DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
                            MODE aMode = MODE::UPDATE );

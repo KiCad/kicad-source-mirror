@@ -71,6 +71,7 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetFieldVisibilities;
 		wxCheckBox* m_resetFieldEffects;
 		wxCheckBox* m_resetFieldPositions;
+		wxCheckBox* m_resetAttributes;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

@@ -137,6 +137,12 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_updateOptionsSizer->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
 
 
+	m_updateOptionsSizer->Add( 0, 15, 1, wxEXPAND, 5 );
+
+	m_resetAttributes = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset symbol attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
 	bSizerUpdate->Add( m_updateOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 
 

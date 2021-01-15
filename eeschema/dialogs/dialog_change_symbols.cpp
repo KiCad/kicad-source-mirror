@@ -39,12 +39,13 @@
 
 bool g_selectRefDes = false;
 bool g_selectValue  = false;
-
-bool g_removeExtraFields      = false;
-bool g_resetEmptyFields       = false;
-bool g_resetFieldVisibilities = false;
-bool g_resetFieldEffects      = false;
-bool g_resetFieldPositions    = false;
+                                // { change, update }
+bool g_removeExtraFields[2]      = { false,  false  };
+bool g_resetEmptyFields[2]       = { false,  false  };
+bool g_resetFieldVisibilities[2] = { true,   false  };
+bool g_resetFieldEffects[2]      = { true,   false  };
+bool g_resetFieldPositions[2]    = { true,   false  };
+bool g_resetAttributes[2]        = { true,   false  };
 
 
 DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aSymbol,
@@ -134,11 +135,12 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
         m_resetFieldPositions->SetLabel( _( "Update field positions" ) );
     }
 
-    m_removeExtraBox->SetValue( g_removeExtraFields );
-    m_resetEmptyFields->SetValue( g_resetEmptyFields );
-    m_resetFieldVisibilities->SetValue( g_resetFieldVisibilities );
-    m_resetFieldEffects->SetValue( g_resetFieldEffects );
-    m_resetFieldPositions->SetValue( g_resetFieldPositions );
+    m_removeExtraBox->SetValue( g_removeExtraFields[ (int) m_mode ] );
+    m_resetEmptyFields->SetValue( g_resetEmptyFields[ (int) m_mode ] );
+    m_resetFieldVisibilities->SetValue( g_resetFieldVisibilities[ (int) m_mode ] );
+    m_resetFieldEffects->SetValue( g_resetFieldEffects[ (int) m_mode ] );
+    m_resetFieldPositions->SetValue( g_resetFieldPositions[ (int) m_mode ] );
+    m_resetAttributes->SetValue( g_resetAttributes[ (int) m_mode ] );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.
@@ -204,11 +206,12 @@ DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
     g_selectRefDes = m_fieldsBox->IsChecked( REFERENCE_FIELD );
     g_selectValue = m_fieldsBox->IsChecked( VALUE_FIELD );
 
-    g_removeExtraFields = m_removeExtraBox->GetValue();
-    g_resetEmptyFields = m_resetEmptyFields->GetValue();
-    g_resetFieldVisibilities = m_resetFieldVisibilities->GetValue();
-    g_resetFieldEffects = m_resetFieldEffects->GetValue();
-    g_resetFieldPositions = m_resetFieldPositions->GetValue();
+    g_removeExtraFields[ (int) m_mode ] = m_removeExtraBox->GetValue();
+    g_resetEmptyFields[ (int) m_mode ] = m_resetEmptyFields->GetValue();
+    g_resetFieldVisibilities[ (int) m_mode ] = m_resetFieldVisibilities->GetValue();
+    g_resetFieldEffects[ (int) m_mode ] = m_resetFieldEffects->GetValue();
+    g_resetFieldPositions[ (int) m_mode ] = m_resetFieldPositions->GetValue();
+    g_resetAttributes[ (int) m_mode ] = m_resetAttributes->GetValue();
 }
 
 
@@ -545,6 +548,12 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
         aSymbol->SetLibId( aNewId );
 
     aSymbol->SetLibSymbol( flattenedSymbol.release() );
+
+    if( m_resetAttributes )
+    {
+        aSymbol->SetIncludeInBom( libSymbol->GetIncludeInBom() );
+        aSymbol->SetIncludeOnBoard( libSymbol->GetIncludeOnBoard() );
+    }
 
     bool removeExtras = m_removeExtraBox->GetValue();
     bool resetEmpty = m_resetEmptyFields->GetValue();
