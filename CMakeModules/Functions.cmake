@@ -134,7 +134,7 @@ function( translate_language LANG OUT_FILE)
     add_custom_command(
         OUTPUT ${OUT_FILE}
         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
-                ${CMAKE_CURRENT_SOURCE_DIR}/${LANG}/kicad.po
+                ${CMAKE_CURRENT_SOURCE_DIR}/pofiles/${LANG}.po
                 -o ${OUT_FILE}
         COMMENT "Building translation library for ${LANG}"
         )

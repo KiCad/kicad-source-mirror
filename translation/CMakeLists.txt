@@ -7,7 +7,7 @@ else()
         CACHE PATH "Location of KiCad i18n files." )
 endif()
 
-file(STRINGS LINGUAS LANG_ARRAY REGEX "^[^#].*")
+file(STRINGS pofiles/LINGUAS LANG_ARRAY REGEX "^[^#].*")
 
 # Add the commands to translate each language file
 foreach( LANG ${LANG_ARRAY} )
