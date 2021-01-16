@@ -25,7 +25,7 @@
 
 #include "pcb_picker_tool.h"
 #include "pcb_actions.h"
-#include "grid_helper.h"
+#include "pcb_grid_helper.h"
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include "pcb_selection_tool.h"
@@ -42,7 +42,7 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_BASE_FRAME*       frame = getEditFrame<PCB_BASE_FRAME>();
-    GRID_HELPER           grid( m_toolMgr, frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER           grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
     std::string tool = *aEvent.Parameter<std::string*>();

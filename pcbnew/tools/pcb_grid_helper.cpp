@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@
  */
 
 #include <functional>
-using namespace std::placeholders;
-
 #include <board.h>
 #include <dimension.h>
 #include <fp_shape.h>
@@ -39,26 +37,18 @@ using namespace std::placeholders;
 #include <geometry/shape_simple.h>
 #include <macros.h>
 #include <math/util.h> // for KiROUND
-#include <math/vector2d.h>
 #include <painter.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>
 #include <view/view.h>
-#include <view/view_controls.h>
-
-#include "grid_helper.h"
+#include "pcb_grid_helper.h"
 
 
-GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
-    m_toolMgr( aToolMgr ),
+PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
+    GRID_HELPER( aToolMgr ),
     m_magneticSettings( aMagneticSettings )
 {
-    m_enableSnap = true;
-    m_enableGrid = true;
-    m_enableSnapLine = true;
-    m_snapItem = nullptr;
-
     KIGFX::VIEW*            view = m_toolMgr->GetView();
     KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
     KIGFX::COLOR4D          auxItemsColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
@@ -85,68 +75,7 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSe
 }
 
 
-GRID_HELPER::~GRID_HELPER()
-{
-}
-
-
-VECTOR2I GRID_HELPER::GetGrid() const
-{
-    VECTOR2D size = m_toolMgr->GetView()->GetGAL()->GetGridSize();
-
-    return VECTOR2I( KiROUND( size.x ), KiROUND( size.y ) );
-}
-
-
-VECTOR2I GRID_HELPER::GetOrigin() const
-{
-    VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
-
-    return VECTOR2I( origin );
-}
-
-
-void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
-{
-    if( aEnable )
-    {
-        m_auxAxis = aOrigin;
-        m_viewAxis.SetPosition( wxPoint( aOrigin ) );
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
-    }
-    else
-    {
-        m_auxAxis = OPT<VECTOR2I>();
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
-    }
-}
-
-
-VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
-{
-    if( !m_enableGrid )
-        return aPoint;
-
-    const VECTOR2D gridOffset( GetOrigin() );
-    const VECTOR2D grid( GetGrid() );
-
-    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / grid.x ) * grid.x + gridOffset.x,
-                      KiROUND( ( aPoint.y - gridOffset.y ) / grid.y ) * grid.y + gridOffset.y );
-
-    if( !m_auxAxis )
-        return nearest;
-
-    if( std::abs( m_auxAxis->x - aPoint.x ) < std::abs( nearest.x - aPoint.x ) )
-        nearest.x = m_auxAxis->x;
-
-    if( std::abs( m_auxAxis->y - aPoint.y ) < std::abs( nearest.y - aPoint.y ) )
-        nearest.y = m_auxAxis->y;
-
-    return nearest;
-}
-
-
-VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
+VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 {
     OPT_VECTOR2I pts[6];
 
@@ -184,7 +113,7 @@ VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 }
 
 
-VECTOR2I GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc )
+VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc )
 {
     if( !m_enableSnap )
         return aPoint;
@@ -214,7 +143,8 @@ VECTOR2I GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc 
 }
 
 
-VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOARD_ITEM*>& aItems )
+VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
+                                          std::vector<BOARD_ITEM*>& aItems )
 {
     clearAnchors();
 
@@ -259,48 +189,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOA
 }
 
 
-std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
-                                                 const std::vector<BOARD_ITEM*>& aSkip ) const
-{
-    std::set<BOARD_ITEM*> items;
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-
-    KIGFX::VIEW*                  view = m_toolMgr->GetView();
-    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
-    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
-    bool                          isHighContrast = settings->GetHighContrast();
-
-    view->Query( aArea, selectedItems );
-
-    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
-
-        // If we are in the footprint editor, don't use the footprint itself
-        if( static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() )->IsFootprintEditor()
-                && item->Type() == PCB_FOOTPRINT_T )
-        {
-            continue;
-        }
-
-        // The item must be visible and on an active layer
-        if( view->IsVisible( item )
-                && ( !isHighContrast || activeLayers.count( it.second ) )
-                && item->ViewGetLOD( it.second, view ) < view->GetScale() )
-        {
-            items.insert ( item );
-        }
-    }
-
-
-    for( BOARD_ITEM* skipItem : aSkip )
-        items.erase( skipItem );
-
-    return items;
-}
-
-
-VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem )
+VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem )
 {
     LSET layers;
     std::vector<BOARD_ITEM*> item;
@@ -317,8 +206,8 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 }
 
 
-VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                                      const std::vector<BOARD_ITEM*>& aSkip )
+VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+                                          const std::vector<BOARD_ITEM*>& aSkip )
 {
     // Tuning constant: snap radius in screen space
     const int snapSize = 25;
@@ -403,16 +292,56 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
 }
 
 
-BOARD_ITEM* GRID_HELPER::GetSnapped() const
+BOARD_ITEM* PCB_GRID_HELPER::GetSnapped() const
 {
     if( !m_snapItem )
         return nullptr;
 
-    return m_snapItem->item;
+    return static_cast<BOARD_ITEM*>( m_snapItem->item );
 }
 
 
-void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom )
+std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
+                                                     const std::vector<BOARD_ITEM*>& aSkip ) const
+{
+    std::set<BOARD_ITEM*> items;
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+    KIGFX::VIEW*                  view = m_toolMgr->GetView();
+    RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
+    const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
+    bool                          isHighContrast = settings->GetHighContrast();
+
+    view->Query( aArea, selectedItems );
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+        // If we are in the footprint editor, don't use the footprint itself
+        if( static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() )->IsFootprintEditor()
+                && item->Type() == PCB_FOOTPRINT_T )
+        {
+            continue;
+        }
+
+        // The item must be visible and on an active layer
+        if( view->IsVisible( item )
+                && ( !isHighContrast || activeLayers.count( it.second ) )
+                && item->ViewGetLOD( it.second, view ) < view->GetScale() )
+        {
+            items.insert ( item );
+        }
+    }
+
+    for( BOARD_ITEM* skipItem : aSkip )
+        items.erase( skipItem );
+
+    return items;
+}
+
+
+void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom )
 {
     VECTOR2I                      origin;
     KIGFX::VIEW*                  view = m_toolMgr->GetView();
@@ -749,15 +678,17 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 }
 
 
-GRID_HELPER::ANCHOR* GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags,
-                                                 LSET aMatchLayers )
+PCB_GRID_HELPER::ANCHOR* PCB_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags,
+                                                         LSET aMatchLayers )
 {
     double  minDist = std::numeric_limits<double>::max();
     ANCHOR* best = NULL;
 
     for( ANCHOR& a : m_anchors )
     {
-        if( ( aMatchLayers & a.item->GetLayerSet() ) == 0 )
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( a.item );
+
+        if( ( aMatchLayers & item->GetLayerSet() ) == 0 )
             continue;
 
         if( ( aFlags & a.flags ) != aFlags )

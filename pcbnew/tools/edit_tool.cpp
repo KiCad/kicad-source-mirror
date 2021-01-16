@@ -42,7 +42,7 @@
 #include <tools/edit_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/tool_event_utils.h>
-#include <tools/grid_helper.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
 #include <pad_naming.h>
 #include <view/view_controls.h>
@@ -398,7 +398,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     bool        restore_state = false;
     VECTOR2I    totalMovement;
-    GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
 
@@ -1949,7 +1949,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     std::string  tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     CLIPBOARD_IO io;
-    GRID_HELPER grid( m_toolMgr, getEditFrame<PCB_BASE_EDIT_FRAME>()->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, getEditFrame<PCB_BASE_EDIT_FRAME>()->GetMagneticItemsSettings() );
 
     frame()->PushTool( tool );
     Activate();

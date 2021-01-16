@@ -29,7 +29,7 @@
 #include "tools/pcb_control.h"
 #include "tools/pcb_picker_tool.h"
 #include "tools/placement_tool.h"
-#include "tools/point_editor.h"
+#include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
@@ -928,7 +928,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCB_POINT_EDITOR );
     m_toolManager->RegisterTool( new PCB_CONTROL );            // copy/paste
     m_toolManager->RegisterTool( new FOOTPRINT_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
@@ -942,7 +942,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->GetTool<EDIT_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<PAD_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<DRAWING_TOOL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<POINT_EDITOR>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCB_POINT_EDITOR>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<PCB_CONTROL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<PCB_PICKER_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetIsFootprintEditor( true );

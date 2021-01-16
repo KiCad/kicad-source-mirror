@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef POINT_EDITOR_H
-#define POINT_EDITOR_H
+#ifndef PCB_POINT_EDITOR_H
+#define PCB_POINT_EDITOR_H
 
 #include <tool/tool_interactive.h>
 #include "tool/edit_points.h"
@@ -36,14 +36,14 @@ class PCB_SELECTION_TOOL;
 class SHAPE_POLY_SET;
 
 /**
- * POINT_EDITOR
+ * PCB_POINT_EDITOR
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class POINT_EDITOR : public PCB_TOOL_BASE
+class PCB_POINT_EDITOR : public PCB_TOOL_BASE
 {
 public:
-    POINT_EDITOR();
+    PCB_POINT_EDITOR();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

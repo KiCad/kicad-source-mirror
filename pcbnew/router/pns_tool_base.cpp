@@ -31,7 +31,7 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <bitmaps.h>
 
-#include <tools/grid_helper.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 
@@ -103,7 +103,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 
     m_router->LoadSettings( settings->m_PnsSettings.get() );
 
-    m_gridHelper = new GRID_HELPER( m_toolMgr, frame()->GetMagneticItemsSettings() );
+    m_gridHelper = new PCB_GRID_HELPER( m_toolMgr, frame()->GetMagneticItemsSettings() );
 }
 
 

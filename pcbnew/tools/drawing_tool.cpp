@@ -30,7 +30,7 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/grid_helper.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
@@ -643,7 +643,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     TOOL_EVENT      originalEvent = aEvent;
     DIMENSION_BASE* dimension     = nullptr;
     BOARD_COMMIT    commit( m_frame );
-    GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
@@ -1159,7 +1159,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         return 0;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
-    GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -1248,7 +1248,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     assert( shape == S_SEGMENT || shape == S_CIRCLE || shape == S_RECT );
 
     EDA_UNITS    userUnits = m_frame->GetUserUnits();
-    GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     PCB_SHAPE*&  graphic = *aGraphic;
 
     m_lineWidth = getSegmentWidth( m_frame->GetActiveLayer() );
@@ -1566,7 +1566,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     PCB_SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &arcAsst );
-    GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     m_controls->ShowCursor( true );
 
@@ -1860,7 +1860,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
 
     bool    started     = false;
-    GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     STATUS_TEXT_POPUP status( m_frame );
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
@@ -2046,7 +2046,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
     struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        GRID_HELPER m_gridHelper;
+        PCB_GRID_HELPER m_gridHelper;
 
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
             m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() )

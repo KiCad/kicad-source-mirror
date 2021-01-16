@@ -59,7 +59,7 @@
 #include <tool/zoom_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_picker_tool.h>
-#include <tools/point_editor.h>
+#include <tools/pcb_point_editor.h>
 #include <tools/edit_tool.h>
 #include <tools/group_tool.h>
 #include <tools/drc_tool.h>
@@ -473,7 +473,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new GLOBAL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCB_POINT_EDITOR );
     m_toolManager->RegisterTool( new PCB_CONTROL );
     m_toolManager->RegisterTool( new BOARD_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new BOARD_INSPECTION_TOOL );

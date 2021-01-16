@@ -40,7 +40,7 @@ using namespace std::placeholders;
 #include <tool/tool_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
-#include <tools/grid_helper.h>
+#include <tools/pcb_grid_helper.h>
 
 #include "router_tool.h"
 #include "pns_segment.h"

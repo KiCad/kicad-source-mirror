@@ -431,6 +431,7 @@ set( COMMON_SRCS
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/editor_conditions.cpp
+    tool/grid_helper.cpp
     tool/grid_menu.cpp
     tool/picker_tool.cpp
     tool/selection_conditions.cpp
@@ -560,7 +561,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
 
-    ${CMAKE_SOURCE_DIR}/pcbnew/tools/grid_helper.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_editor_conditions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp

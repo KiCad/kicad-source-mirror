@@ -27,7 +27,7 @@
 #include <pcbnew_settings.h>
 #include <preview_items/ruler_item.h>
 #include <tool/actions.h>
-#include <tools/grid_helper.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_viewer_tools.h>
 #include <view/view_controls.h>
@@ -215,7 +215,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
 
-    GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
 
     bool originSet = false;
 

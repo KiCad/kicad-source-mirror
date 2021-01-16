@@ -34,7 +34,7 @@
 
 #include "pns_router.h"
 
-class GRID_HELPER;
+class PCB_GRID_HELPER;
 
 class PNS_KICAD_IFACE;
 class PNS_TUNE_STATUS_POPUP;
@@ -73,7 +73,7 @@ protected:
     ITEM*            m_endItem;
     VECTOR2I         m_endSnapPoint;
 
-    GRID_HELPER*     m_gridHelper;
+    PCB_GRID_HELPER*     m_gridHelper;
     PNS_KICAD_IFACE* m_iface;
     ROUTER*          m_router;
 

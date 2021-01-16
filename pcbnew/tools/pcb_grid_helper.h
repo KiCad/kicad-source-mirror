@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,59 +23,65 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EE_GRID_HELPER_H
-#define EE_GRID_HELPER_H
+#ifndef PCB_GRID_HELPER_H
+#define PCB_GRID_HELPER_H
 
-#include <math/vector2d.h>
-#include <origin_viewitem.h>
+#include <vector>
 #include <tool/grid_helper.h>
-#include <ee_selection.h>
 
-class SCH_ITEM;
+class TOOL_MANAGER;
 
-
-enum EE_GRID_HELPER_LAYERS : int
-{
-    LAYER_ANY = SCH_LAYER_ID_END + 1,
-    LAYER_CONNECTABLE,
-    LAYER_GRAPHICS
-};
-
-
-class EE_GRID_HELPER : public GRID_HELPER
+class PCB_GRID_HELPER : public GRID_HELPER
 {
 public:
 
-    EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
+    PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings );
 
     /**
      * Function GetSnapped
-     * If the EE_GRID_HELPER has highlighted a snap point (target shown), this function
+     * If the PCB_GRID_HELPER has highlighted a snap point (target shown), this function
      * will return a pointer to the item to which it snapped.
      *
      * @return NULL if not snapped.  Pointer to snapped item otherwise
      */
-    SCH_ITEM* GetSnapped() const;
+    BOARD_ITEM* GetSnapped() const;
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, int aLayer, const EE_SELECTION& aItems );
+    VECTOR2I Align( const VECTOR2I& aPoint ) const override
+    {
+        if( !m_enableGrid )
+            return aPoint;
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SCH_ITEM* aDraggedItem );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, const EE_SELECTION& aSkip = {} );
+        return GRID_HELPER::Align( aPoint );
+    }
+
+    VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
+
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
+
+    VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
+
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+                             const std::vector<BOARD_ITEM*>& aSkip = {} );
 
 private:
-    std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const EE_SELECTION& aSkipList ) const;
+    std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea,
+                                        const std::vector<BOARD_ITEM*>& aSkip ) const;
 
-    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, int aMatchLayer );
+    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
 
     /**
      * computeAnchors inserts the local anchor points in to the grid helper for the specified
-     * schematic item, given the reference point and the direction of use for the point.
+     * board item, given the reference point and the direction of use for the point.
      *
-     * @param aItem The schematic item for which to compute the anchors
+     * @param aItem The board item for which to compute the anchors
      * @param aRefPos The point for which to compute the anchors (if used by the component)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
-    void computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );
+
+private:
+    MAGNETIC_SETTINGS*     m_magneticSettings;
 };
 
 #endif

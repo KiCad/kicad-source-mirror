@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2019 CERN
+ * Copyright (C) 2013-2021 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,16 +25,14 @@
 #include <functional>
 #include <memory>
 using namespace std::placeholders;
-#include <advanced_config.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
 #include <confirm.h>
 #include "pcb_actions.h"
 #include "pcb_selection_tool.h"
-#include "point_editor.h"
-#include "grid_helper.h"
+#include "pcb_point_editor.h"
+#include "pcb_grid_helper.h"
 #include <board_commit.h>
 #include <bitmaps.h>
 #include <status_popup.h>
@@ -88,7 +86,7 @@ enum DIMENSION_POINTS
     DIM_CROSSBAREND,
 };
 
-POINT_EDITOR::POINT_EDITOR() :
+PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
     m_editedPoint( nullptr ),
@@ -101,7 +99,7 @@ POINT_EDITOR::POINT_EDITOR() :
 }
 
 
-void POINT_EDITOR::Reset( RESET_REASON aReason )
+void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     m_refill = false;
     m_editPoints.reset();
@@ -114,7 +112,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 }
 
 
-bool POINT_EDITOR::Init()
+bool PCB_POINT_EDITOR::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -122,16 +120,16 @@ bool POINT_EDITOR::Init()
     wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, POINT_EDITOR::addCornerCondition );
+    menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, PCB_POINT_EDITOR::addCornerCondition );
     menu.AddItem( PCB_ACTIONS::pointEditorRemoveCorner,
-                  std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
+                  std::bind( &PCB_POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }
 
 
-void POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
-                                        const SHAPE_POLY_SET* aOutline )
+void PCB_POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
+                                            const SHAPE_POLY_SET* aOutline )
 {
     int cornersCount = aOutline->TotalVertices();
 
@@ -164,7 +162,7 @@ void POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
 }
 
 
-std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
+std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 {
     std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
 
@@ -345,7 +343,7 @@ std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 }
 
 
-void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
+void PCB_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
     EDIT_POINT* point;
     EDIT_POINT* hovered = nullptr;
@@ -386,7 +384,7 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
     if( !m_selectionTool || aEvent.Matches( EVENTS::InhibitSelectionEditing ) )
         return 0;
@@ -404,7 +402,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     controls->ShowCursor( true );
 
-    GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
     if( !item )
@@ -691,8 +689,8 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 }
 
 
-void POINT_EDITOR::editArcEndpointKeepShape( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aMid,
-                                             VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepShape( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aMid,
+                                                 VECTOR2I aEnd, const VECTOR2I aCursor ) const
 {
     VECTOR2I diff;
 
@@ -707,9 +705,9 @@ void POINT_EDITOR::editArcEndpointKeepShape( PCB_SHAPE* aArc, VECTOR2I aStart, V
 }
 
 
-void POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                              VECTOR2I aMid, VECTOR2I aEnd,
-                                              const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter,
+                                                  VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
+                                                  const VECTOR2I aCursor ) const
 {
     bool clockwise;
     bool movingStart;
@@ -784,8 +782,9 @@ void POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter,
 }
 
 
-void POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                         VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                             VECTOR2I aMid, VECTOR2I aEnd,
+                                             const VECTOR2I aCursor ) const
 {
     // Now, update the edit point position
     // Express the point in a cercle-centered coordinate system.
@@ -842,8 +841,8 @@ void POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECT
 }
 
 
-void POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
-                                            const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
+                                                const VECTOR2I aCursor ) const
 {
     // Let 'm' be the middle point of the chord between the start and end points
     VECTOR2I  m = ( aStart + aEnd ) / 2;
@@ -859,7 +858,7 @@ void POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VE
 }
 
 
-void POINT_EDITOR::updateItem() const
+void PCB_POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -1314,7 +1313,7 @@ void POINT_EDITOR::updateItem() const
 }
 
 
-void POINT_EDITOR::finishItem()
+void PCB_POINT_EDITOR::finishItem()
 {
     auto item = m_editPoints->GetParent();
 
@@ -1331,7 +1330,7 @@ void POINT_EDITOR::finishItem()
 }
 
 
-bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
+bool PCB_POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
 {
     bool valid = !aPoly.IsSelfIntersecting();
 
@@ -1353,7 +1352,7 @@ bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
 }
 
 
-void POINT_EDITOR::updatePoints()
+void PCB_POINT_EDITOR::updatePoints()
 {
     if( !m_editPoints )
         return;
@@ -1575,7 +1574,7 @@ void POINT_EDITOR::updatePoints()
 }
 
 
-void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
+void PCB_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -1597,7 +1596,7 @@ void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 }
 
 
-void POINT_EDITOR::setAltConstraint( bool aEnabled )
+void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
 {
     if( aEnabled )
     {
@@ -1636,7 +1635,7 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
 }
 
 
-EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
+EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -1691,7 +1690,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 }
 
 
-bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
+bool PCB_POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
 {
     const auto type = aItem.Type();
 
@@ -1709,7 +1708,7 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
 }
 
 
-bool POINT_EDITOR::addCornerCondition( const SELECTION& aSelection )
+bool PCB_POINT_EDITOR::addCornerCondition( const SELECTION& aSelection )
 {
     if( aSelection.Size() != 1 )
         return false;
@@ -1736,7 +1735,7 @@ findVertex( SHAPE_POLY_SET& aPolySet, const EDIT_POINT& aPoint )
 }
 
 
-bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
+bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
     if( !m_editPoints || !m_editedPoint )
         return false;
@@ -1780,7 +1779,7 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 }
 
 
-int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints )
         return 0;
@@ -1911,7 +1910,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints || !m_editedPoint )
         return 0;
@@ -1987,27 +1986,27 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
     return 0;
 }
 
-int POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
+int PCB_POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
 {
     m_altEditMethod = !m_altEditMethod;
     return 0;
 }
 
-void POINT_EDITOR::setTransitions()
+void PCB_POINT_EDITOR::setTransitions()
 {
-    Go( &POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
-    Go( &POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
-    Go( &POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::InhibitSelectionEditing );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UninhibitSelectionEditing );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
+    Go( &PCB_POINT_EDITOR::changeEditMethod, ACTIONS::changeEditMethod.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::InhibitSelectionEditing );
+    Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UninhibitSelectionEditing );
 }

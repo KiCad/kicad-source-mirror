@@ -23,38 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * EE_GRID_HELPER
- *
- * A helper class for doing grid and object snapping.
- *
- * It shares its roots with PCBNew's GRID_HELPER, but uses the layers architecture to split
- * connectable items from graphic items.
- */
-
 #include <functional>
-using namespace std::placeholders;
-
-#include <geometry/shape_line_chain.h>
-#include <macros.h>
-#include <math/util.h>      // for KiROUND
-#include <math/vector2d.h>
 #include <sch_item.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <view/view.h>
-#include <view/view_controls.h>
-
 #include "ee_grid_helper.h"
 
 
 EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
-    m_toolMgr( aToolMgr )
+    GRID_HELPER( aToolMgr )
 {
-    m_enableSnap = true;
-    m_enableSnapLine = true;
-    m_enableGrid = true;
-    m_snapItem = nullptr;
     KIGFX::VIEW* view = m_toolMgr->GetView();
 
     m_viewAxis.SetSize( 20000 );
@@ -77,112 +56,6 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
     view->SetVisible( &m_viewSnapLine, false );
 }
 
-
-EE_GRID_HELPER::~EE_GRID_HELPER()
-{
-}
-
-
-VECTOR2I EE_GRID_HELPER::GetGrid() const
-{
-    VECTOR2D size = m_toolMgr->GetView()->GetGAL()->GetGridSize();
-
-    return VECTOR2I( KiROUND( size.x ), KiROUND( size.y ) );
-}
-
-
-VECTOR2I EE_GRID_HELPER::GetOrigin() const
-{
-    VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
-
-    return VECTOR2I( origin );
-}
-
-
-void EE_GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin )
-{
-    if( aEnable )
-    {
-        m_auxAxis = aOrigin;
-        m_viewAxis.SetPosition( wxPoint( aOrigin ) );
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, true );
-    }
-    else
-    {
-        m_auxAxis = OPT<VECTOR2I>();
-        m_toolMgr->GetView()->SetVisible( &m_viewAxis, false );
-    }
-}
-
-
-VECTOR2I EE_GRID_HELPER::AlignGrid( const VECTOR2I& aPoint ) const
-{
-    const VECTOR2D gridOffset( GetOrigin() );
-    const VECTOR2D grid( GetGrid() );
-
-    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / grid.x ) * grid.x + gridOffset.x,
-                      KiROUND( ( aPoint.y - gridOffset.y ) / grid.y ) * grid.y + gridOffset.y );
-
-    return nearest;
-}
-
-
-VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint ) const
-{
-    if( !m_toolMgr->GetView()->GetGAL()->GetGridSnapping() )
-        return aPoint;
-
-    VECTOR2I nearest = AlignGrid( aPoint );
-
-    if( !m_auxAxis )
-        return nearest;
-
-    if( std::abs( m_auxAxis->x - aPoint.x ) < std::abs( nearest.x - aPoint.x ) )
-        nearest.x = m_auxAxis->x;
-
-    if( std::abs( m_auxAxis->y - aPoint.y ) < std::abs( nearest.y - aPoint.y ) )
-        nearest.y = m_auxAxis->y;
-
-    return nearest;
-}
-
-
-VECTOR2I EE_GRID_HELPER::AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg )
-{
-    OPT_VECTOR2I pts[6];
-
-    if( !m_enableSnap )
-        return aPoint;
-
-    const VECTOR2D gridOffset( GetOrigin() );
-    const VECTOR2D gridSize( GetGrid() );
-
-    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
-                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
-
-    pts[0] = aSeg.A;
-    pts[1] = aSeg.B;
-    pts[2] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( -1, 0 ), nearest + VECTOR2I( 1, 0 ) ) );
-    pts[3] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( 0, -1 ), nearest + VECTOR2I( 0, 1 ) ) );
-
-    int min_d = std::numeric_limits<int>::max();
-
-    for( int i = 0; i < 4; i++ )
-    {
-        if( pts[i] && aSeg.Contains( *pts[i] ) )
-        {
-            int d = (*pts[i] - aPoint).EuclideanNorm();
-
-            if( d < min_d )
-            {
-                min_d = d;
-                nearest = *pts[i];
-            }
-        }
-    }
-
-    return nearest;
-}
 
 VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, int aLayer,
                                          const EE_SELECTION& aItems )
@@ -227,32 +100,6 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, int aLayer,
     }
 
     return best ? best->pos : aMousePos;
-}
-
-
-std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
-                                                  const EE_SELECTION& aSkip ) const
-{
-    std::set<SCH_ITEM*>                       items;
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-
-    view->Query( aArea, selectedItems );
-
-    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( it.first );
-
-        // The item must be visible and on an active layer
-        if( view->IsVisible( item ) && item->ViewGetLOD( it.second, view ) < view->GetScale() )
-            items.insert ( item );
-    }
-
-    for( EDA_ITEM* skipItem : aSkip )
-        items.erase( static_cast<SCH_ITEM*>( skipItem ) );
-
-    return items;
 }
 
 
@@ -380,7 +227,33 @@ SCH_ITEM* EE_GRID_HELPER::GetSnapped() const
     if( !m_snapItem )
         return nullptr;
 
-    return m_snapItem->item;
+    return static_cast<SCH_ITEM*>( m_snapItem->item );
+}
+
+
+std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
+                                                  const EE_SELECTION& aSkipList ) const
+{
+    std::set<SCH_ITEM*>                       items;
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+
+    view->Query( aArea, selectedItems );
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
+    {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( it.first );
+
+        // The item must be visible and on an active layer
+        if( view->IsVisible( item ) && item->ViewGetLOD( it.second, view ) < view->GetScale() )
+            items.insert ( item );
+    }
+
+    for( EDA_ITEM* skipItem : aSkipList )
+        items.erase( static_cast<SCH_ITEM*>( skipItem ) );
+
+    return items;
 }
 
 
@@ -422,12 +295,14 @@ EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int
 
     for( ANCHOR& a : m_anchors )
     {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( a.item );
+
         if( ( aFlags & a.flags ) != aFlags )
             continue;
 
-        if( aMatchLayer == LAYER_CONNECTABLE && !a.item->IsConnectable() )
+        if( aMatchLayer == LAYER_CONNECTABLE && !item->IsConnectable() )
             continue;
-        else if( aMatchLayer == LAYER_GRAPHICS && a.item->IsConnectable() )
+        else if( aMatchLayer == LAYER_GRAPHICS && item->IsConnectable() )
             continue;
 
         double dist = a.Distance( aPos );
