@@ -185,14 +185,14 @@ macro( linux_metadata_translation SRC_FILE OUT_FILE PO_DIR )
                     ${OPT_TYPE} --template=${SRC_FILE}
                     -d ${PO_DIR}
                     -o ${OUT_FILE}
-            COMMENT "Translating ${OUT_FNAME}"
+            COMMENT "Translating file ${OUT_FNAME}"
             )
     else()
         add_custom_command(
             OUTPUT ${OUT_FILE}
             DEPENDS ${SRC_FILE}
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SRC_FILE}" "${OUT_FILE}"
-            COMMENT "Copying ${OUT_FNAME}"
+            COMMENT "Copying file ${OUT_FNAME}"
             )
     endif()
 endmacro()

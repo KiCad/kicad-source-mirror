@@ -47,6 +47,15 @@ elseif( UNIX )
                                 ${PROJECT_BINARY_DIR}/resources/linux/launchers/pcbnew.desktop
                                 ${PROJECT_SOURCE_DIR}/translation/pofiles )
 
+    # Translate the MIME info, which are read from the source directory
+    linux_metadata_translation( ${PROJECT_SOURCE_DIR}/resources/linux/mime/kicad-gerbers.xml.in
+                                ${PROJECT_BINARY_DIR}/resources/linux/mime/kicad-gerbers.xml
+                                ${PROJECT_SOURCE_DIR}/translation/pofiles )
+
+    linux_metadata_translation( ${PROJECT_SOURCE_DIR}/resources/linux/mime/kicad-kicad.xml.in
+                                ${PROJECT_BINARY_DIR}/resources/linux/mime/kicad-kicad.xml
+                                ${PROJECT_SOURCE_DIR}/translation/pofiles )
+
     add_custom_target( metadata ALL
                        DEPENDS ${PROJECT_BINARY_DIR}/resources/linux/appdata/kicad.appdata.xml
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/bitmap2component.desktop
@@ -55,21 +64,19 @@ elseif( UNIX )
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/kicad.desktop
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/pcbcalculator.desktop
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/pcbnew.desktop
+                               ${PROJECT_BINARY_DIR}/resources/linux/mime/kicad-gerbers.xml
+                               ${PROJECT_BINARY_DIR}/resources/linux/mime/kicad-kicad.xml
                       )
 
-    # Set paths
-    set( UNIX_MIME_DIR linux/mime )
-    set( UNIX_MIME_FILES ${UNIX_MIME_DIR}/mime )
-    set( UNIX_ICON_FILES ${UNIX_MIME_DIR}/icons )
 
-    # Install Mime directory
-    install( DIRECTORY ${UNIX_ICON_FILES}
+    # Install icons
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/resources/linux/icons
              TYPE DATA
              COMPONENT resources
              )
 
-    # Install Icons
-    install( DIRECTORY ${UNIX_MIME_FILES}/
+    # Install MIME type files
+    install( DIRECTORY ${PROJECT_BINARY_DIR}/resources/linux/mime/
              DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages
              COMPONENT resources
              )

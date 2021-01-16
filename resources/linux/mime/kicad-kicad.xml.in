@@ -3,21 +3,18 @@
 	<mime-type type="application/x-kicad-project">
 		<sub-class-of type="text/plain"/>
 		<comment>KiCad Project</comment>
-		<comment xml:lang="fr">Projet KiCad</comment>
 		<glob pattern="*.pro"/>
 		<glob pattern="*.kicad_pro"/>
 	</mime-type>
 	<mime-type type="application/x-kicad-schematic">
 		<sub-class-of type="text/plain"/>
 		<comment>KiCad Schematic</comment>
-		<comment xml:lang="fr">Schéma électronique KiCad</comment>
 		<glob pattern="*.sch"/>
 		<glob pattern="*.kicad_sch"/>
 	</mime-type>
 	<mime-type type="application/x-kicad-pcb">
 		<sub-class-of type="text/plain"/>
 		<comment>KiCad Printed Circuit Board</comment>
-		<comment xml:lang="fr">Circuit imprimé KiCad</comment>
 		<glob pattern="*.kicad_pcb"/>
 	</mime-type>
 </mime-info>
