@@ -209,16 +209,10 @@ std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetArcMid() );
             points->AddPoint( shape->GetArcEnd() );
 
-            // Set constraints
-            // Arc end has to stay at the same radius as the start
-            points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
-                                                                   points->Point( ARC_CENTER ),
-                                                                   points->Point( ARC_START ) ) );
-
-            points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
-                                                                 points->Point( ARC_CENTER ) ) );
-
             points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
+            points->Point( ARC_START ).SetGridConstraint( SNAP_TO_GRID );
+            points->Point( ARC_CENTER ).SetGridConstraint( SNAP_BY_GRID );
+            points->Point( ARC_END ).SetGridConstraint( SNAP_TO_GRID );
             break;
 
         case S_CIRCLE:
@@ -595,172 +589,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                               VECTOR2I aMid, VECTOR2I aEnd,
-                                               const VECTOR2I aCursor ) const
-{
-    VECTOR2D startLine = aStart - aCenter;
-    VECTOR2D endLine   = aEnd - aCenter;
-    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-    bool clockwise;
-    bool movingStart;
-    bool arcValid = true;
-
-    VECTOR2I *p1, *p2, *p3;
-    // p1 does not move, p2 does.
-
-    if( aStart != aArc->GetArcStart() )
-    {
-        aStart      = aCursor;
-        p1          = &aEnd;
-        p2          = &aStart;
-        p3          = &aMid;
-        movingStart = true;
-    }
-    else
-    {
-        aEnd        = aCursor;
-        p1          = &aStart;
-        p2          = &aEnd;
-        p3          = &aMid;
-        movingStart = false;
-    }
-
-    VECTOR2D v1, v2, v3, v4;
-
-    // Move the coordinate system
-    v1 = *p1 - aCenter;
-    v2 = *p2 - aCenter;
-    v3 = *p3 - aCenter;
-
-    VECTOR2D u1, u2, u3;
-
-    // A point cannot be both the center and on the arc.
-    if( ( v1.EuclideanNorm() == 0 ) || ( v2.EuclideanNorm() == 0 ) )
-        return;
-
-    u1 = v1 / v1.EuclideanNorm();
-    u2 = v3 - ( u1.x * v3.x + u1.y * v3.y ) * u1;
-    u2 = u2 / u2.EuclideanNorm();
-
-    // [ u1, u3 ] is a base centered on the circle with:
-    //  u1 : unit vector toward the point that does not move
-    //  u2 : unit vector toward the mid point.
-
-    // Get vectors v1, and v2 in that coordinate system.
-
-    double det  = u1.x * u2.y - u2.x * u1.y;
-
-    // u1 and u2 are unit vectors, and perpendicular.
-    // det should not be 0. In case it is, do not change the arc.
-    if( det == 0 )
-        return;
-
-    double tmpx = v1.x * u2.y - v1.y * u2.x;
-    double tmpy = -v1.x * u1.y + v1.y * u1.x;
-    v1.x        = tmpx;
-    v1.y        = tmpy;
-    v1          = v1 / det;
-
-    tmpx = v2.x * u2.y - v2.y * u2.x;
-    tmpy = -v2.x * u1.y + v2.y * u1.x;
-    v2.x = tmpx;
-    v2.y = tmpy;
-    v2   = v2 / det;
-
-    double R               = v1.EuclideanNorm();
-    bool   transformCircle = false;
-
-    /*                    p2
-        *                     X***
-        *                         **  <---- This is the arc
-        *            y ^            **
-        *              |      R       *
-        *              | <-----------> *
-        *       x------x------>--------x p1
-        *     C' <----> C      x
-        *         delta
-        *
-        * p1 does not move, and the tangent at p1 remains the same.
-        *  => The new center, C', will be on the C-p1 axis.
-        * p2 moves
-        *
-        * The radius of the new circle is delta + R
-        *
-        * || C' p2 || = || C' P1 ||
-        * is the same as :
-        * ( delta + p2.x ) ^ 2 + p2.y ^ 2 = ( R + delta ) ^ 2
-        *
-        * delta = ( R^2  - p2.x ^ 2 - p2.y ^2 ) / ( 2 * p2.x - 2 * R )
-        *
-        * We can use this equation for any point p2 with p2.x < R
-        */
-
-    if( v2.x == R )
-    {
-        // Straight line, do nothing
-    }
-    else
-    {
-        if( v2.x > R )
-        {
-            // If we need to invert the curvature.
-            // We modify the input so we can use the same equation
-            transformCircle = true;
-            v2.x            = 2 * R - v2.x;
-        }
-        // We can keep the tangent constraint.
-        double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
-
-        // This is just to limit the radius, so nothing overflows later when drawing.
-        if( abs( v2.y / ( R - v2.x ) ) > ADVANCED_CFG::GetCfg().m_DrawArcCenterMaxAngle )
-        {
-            arcValid = false;
-        }
-        // Never recorded a problem, but still checking.
-        if( !std::isfinite( delta ) )
-        {
-            arcValid = false;
-        }
-        // v4 is the new center
-        v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) : VECTOR2D( 2 * R + delta, 0 );
-
-        clockwise = aArc->GetAngle() > 0;
-
-        if( transformCircle )
-            clockwise = !clockwise;
-
-        tmpx = v4.x * u1.x + v4.y * u2.x;
-        tmpy = v4.x * u1.y + v4.y * u2.y;
-        v4.x = tmpx;
-        v4.y = tmpy;
-
-        aCenter = v4 + aCenter;
-
-        startLine = aStart - aCenter;
-        endLine   = aEnd - aCenter;
-        newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-        if( clockwise && newAngle < 0.0 )
-            newAngle += 3600.0;
-        else if( !clockwise && newAngle > 0.0 )
-            newAngle -= 3600.0;
-
-        if( arcValid )
-        {
-            aArc->SetAngle( newAngle, false );
-            aArc->SetCenter( wxPoint( aCenter.x, aCenter.y ) );
-
-            if( movingStart )
-                aArc->SetArcStart( wxPoint( aStart.x, aStart.y ) );
-            else
-                aArc->SetArcEnd( wxPoint( aEnd.x, aEnd.y ) );
-        }
-    }
-}
-
-
 /**
  * Update the coordinates of 4 corners of a rectangle, according to pad constraints and the
  * moved corner
@@ -860,6 +688,22 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 
         break;
     }
+}
+
+
+void POINT_EDITOR::editArcEndpointKeepShape( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aMid,
+                                             VECTOR2I aEnd, const VECTOR2I aCursor ) const
+{
+    VECTOR2I diff;
+
+    if( aStart != aArc->GetArcStart() )
+        diff = aStart - aArc->GetArcStart();
+    else
+        diff = aEnd - aArc->GetArcEnd();
+
+    aMid = VECTOR2I( aArc->GetArcMid() ) + diff / 2;
+
+    aArc->SetArcGeometry( (wxPoint) aStart, (wxPoint) aMid, (wxPoint) aEnd );
 }
 
 
@@ -998,82 +842,20 @@ void POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECT
 }
 
 
-void POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                           VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
+                                            const VECTOR2I aCursor ) const
 {
-    bool     clockwise;
-    VECTOR2I oldCenter = aArc->GetCenter();
+    // Let 'm' be the middle point of the chord between the start and end points
+    VECTOR2I  m = ( aStart + aEnd ) / 2;
 
+    // Legal midpoints lie on a vector starting just off the chord midpoint and extending out
+    // past the existing midpoint.  We do not allow arc inflection while point editing.
+    const int JUST_OFF = ( aStart - aEnd ).EuclideanNorm() / 100;
+    VECTOR2I  v = (VECTOR2I) aArc->GetArcMid() - m;
+    SEG       legal( m + v.Resize( JUST_OFF ), m + v.Resize( INT_MAX / 2 ) );
+    VECTOR2I  mid = legal.NearestPoint( aCursor );
 
-    // This allows the user to go on the sides of the arc
-    aMid = aCursor;
-    // Find the new center
-    aCenter = GetArcCenter( aStart, aMid, aEnd );
-
-    aArc->SetCenter( (wxPoint) aCenter );
-
-    // Check if the new arc is CW or CCW
-    VECTOR2D startLine = aStart - aCenter;
-    VECTOR2D endLine   = aEnd - aCenter;
-    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-    VECTOR2D v1, v2;
-
-    v1           = aStart - aMid;
-    v2           = aEnd - aMid;
-    double theta = RAD2DECIDEG( v1.Angle() );
-    RotatePoint( &( v1.x ), &( v1.y ), theta );
-    RotatePoint( &( v2.x ), &( v2.y ), theta );
-    clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
-
-    // Normalize the angle
-    if( clockwise && newAngle < 0.0 )
-        newAngle += 3600.0;
-    else if( !clockwise && newAngle > 0.0 )
-        newAngle -= 3600.0;
-
-    // Accuracy test
-    // First, get the angle
-    VECTOR2I endTest = aStart;
-    RotatePoint( &( endTest.x ), &( endTest.y ), aCenter.x, aCenter.y, -newAngle );
-    double distance = ( endTest - aEnd ).SquaredEuclideanNorm();
-
-    if( distance > ADVANCED_CFG::GetCfg().m_DrawArcAccuracy )
-    {
-        // Cancel Everything
-        // If the accuracy is low, we can't draw precisely the arc.
-        // It may happen when the radius is *high*
-        aArc->SetCenter( (wxPoint) oldCenter );
-    }
-    else
-    {
-        aArc->SetAngle( newAngle, false );
-    }
-
-    // Now, update the edit point position
-    // Express the point in a cercle-centered coordinate system.
-    aMid = aCursor - aCenter;
-
-    double sqRadius = ( aEnd - aCenter ).SquaredEuclideanNorm();
-
-    // Special case, because the tangent would lead to +/- infinity
-    if( aMid.x == 0 )
-    {
-        aMid.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
-    }
-    else
-    {
-        // Circle : x^2 + y^2 = R ^ 2
-        // In this coordinate system, the angular position of the cursor is (r, theta)
-        // The line coming from the center of the circle is y = start.y / start.x * x
-        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
-
-        double tan = aMid.y / static_cast<double>( aMid.x );
-        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
-        // Move to the correct quadrant
-        tmp    = aMid.x > 0 ? tmp : -tmp;
-        aMid.y = aMid.y / static_cast<double>( aMid.x ) * tmp;
-        aMid.x = tmp;
-    }
+    aArc->SetArcGeometry( (wxPoint) aStart, (wxPoint) mid, (wxPoint) aEnd );
 }
 
 
@@ -1168,7 +950,7 @@ void POINT_EDITOR::updateItem() const
                 if( m_altEditMethod )
                     editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
                 else
-                    editArcMidKeepEnpoints( shape, center, start, mid, end, cursorPos );
+                    editArcMidKeepEndpoints( shape, start, end, cursorPos );
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
                      || isModified( m_editPoints->Point( ARC_END ) ) )
@@ -1178,7 +960,7 @@ void POINT_EDITOR::updateItem() const
                 if( m_altEditMethod )
                     editArcEndpointKeepCenter( shape, center, start, mid, end, cursorPos );
                 else
-                    editArcEndpointKeepTangent( shape, center, start, mid, end, cursorPos );
+                    editArcEndpointKeepShape( shape, start, mid, end, cursorPos );
             }
         }
             break;
