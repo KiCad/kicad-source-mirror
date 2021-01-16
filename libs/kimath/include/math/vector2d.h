@@ -422,8 +422,8 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
             ( x < 0 ? -1 : 1 ) *
                 KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ),
             ( y < 0 ? -1 : 1 ) *
-                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
-                    * sign( aNewLength ) );
+                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) )
+                    * sign( aNewLength );
     }
     else
     {
