@@ -7,7 +7,4 @@ Categories=Science;Electronics;
 Exec=pcb_calculator
 Name=PCB Calculator
 GenericName=PCB Calculator
-GenericName[zh_CN]=PCB 计算器
 Comment=Calculator for various electronics-related computations
-Comment[it]=Calcolatore per CAD e varie grandezze elettroniche
-Comment[zh_CN]=用于各种电子相关计算的计算器

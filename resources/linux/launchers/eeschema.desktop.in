@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=eeschema
+Type=Application
+Categories=Science;Electronics;
+Exec=eeschema %f
+MimeType=application/x-kicad-schematic;
+Name=Eeschema (Standalone)
+GenericName=Electronic schematic capture
+Comment=KiCad electronic schematic design (standalone)

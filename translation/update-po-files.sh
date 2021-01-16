@@ -63,7 +63,7 @@ cd $SOURCEDIR
 #Generate/update template pot file
 find $POTDIRS -name '*.cpp' -or -name '*.h' |
   sort |
-  xgettext -f- -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
+  xgettext -f- -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/pofiles/kicad.pot
 
 LINGUAS=`cat $LOCALDIR/pofiles/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
 
@@ -93,7 +93,7 @@ for i in $LINGUAS
 do
   echo "## $i"
   if [ "$i" = "en" ] ; then
-    msgmerge --no-location --no-fuzzy-matching --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2> /dev/null
+    msgmerge --no-location --no-fuzzy-matching --force-po $LOCALDIR/pofiles/$i.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$i.po 2> /dev/null
     msgen $LOCALDIR/pofiles/$i.po -o $LOCALDIR/pofiles/$i.po.tmp && mv $LOCALDIR/pofiles/$i.po.tmp $LOCALDIR/pofiles/$i.po
   else
     msgmerge --force-po $LOCALDIR/pofiles/$i.po $LOCALDIR/pofiles/kicad.pot -o $LOCALDIR/pofiles/$i.po 2> /dev/null

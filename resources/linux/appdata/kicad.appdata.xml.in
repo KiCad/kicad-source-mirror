@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
-<!-- Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors. -->
+<!-- Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors. -->
 <component type="desktop">
   <id>org.kicad_pcb.kicad</id>
   <name>KiCad</name>
@@ -11,9 +11,6 @@
   <metadata_license>CC-BY-SA-4.0</metadata_license>
 
   <summary>EDA Suite</summary>
-  <summary xml:lang="de">EDA Lösung</summary>
-  <summary xml:lang="it">Suite EDA</summary>
-  <summary xml:lang="sv">EDA Programpaket</summary>
 
   <provides>
     <binary>kicad</binary>
@@ -38,25 +35,8 @@
 
   <description>
     <p>
-      A Cross Platform and Open Source Electronics Design Automation Suite.
+      KiCad is a Cross Platform and Open Source Electronics Design Automation Suite.
       The programs handle Schematic Capture, and PCB Layout with Gerber output.
-    </p>
-    <p xml:lang="de">
-      KiCad ist eine Plattform übergreifende freie Software Lösung für
-      Elektronische Design-Automation (EDA). KiCad enthält Programme zum
-      Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten
-      als auch zum Export von Leiterplatten, z.B. per Gerber Format.
-    </p>
-    <p xml:lang="it">
-      KiCad è una soluzione software EDA (Electronic Design Automation) gratuita
-      e multipiattaforma. Contiene programmi per lo sviluppo e la modifica di
-      schemi elettrici e circuiti stampati esportabili in formato Gerber.
-    </p>
-    <p xml:lang="sv">
-      KiCad är ett plattformslös och öppen källkods programpaket för elektronisk
-      design automatisering. KiCad innehåller program för utveckling och redigering
-      av kretsscheman och tryckta kretskort samt för export av kretskort,
-      t.ex. med Gerber-format.
     </p>
   </description>
 
