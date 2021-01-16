@@ -12,3 +12,6 @@ pcb_calculator
 pcbnew
 plugins
 tools
+resources/linux/appdata
+resources/linux/launchers
+resources/linux/mime
