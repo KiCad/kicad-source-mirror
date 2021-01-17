@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1692,6 +1692,9 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
+        // Store the current zoom level into the current screen before switching
+        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
+
         m_frame->GetCurrentSheet().push_back( sheet );
         m_frame->DisplayCurrentSheet();
         m_frame->UpdateHierarchyNavigator();
@@ -1707,6 +1710,9 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
     {
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+        // Store the current zoom level into the current screen before switching
+        m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
 
         m_frame->GetCurrentSheet().pop_back();
         m_frame->DisplayCurrentSheet();

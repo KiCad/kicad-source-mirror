@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,6 +250,10 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
     wxTreeItemId  itemSel = m_Tree->GetSelection();
     TreeItemData* itemData = static_cast<TreeItemData*>( m_Tree->GetItemData( itemSel ) );
 
+    // Store the current zoom level into the current screen before switching
+    m_SchFrameEditor->GetScreen()->m_LastZoomLevel =
+                m_SchFrameEditor->GetCanvas()->GetView()->GetScale();
+
     m_SchFrameEditor->SetCurrentSheet( itemData->m_SheetPath );
     m_SchFrameEditor->DisplayCurrentSheet();
 
@@ -286,7 +290,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     wxASSERT( screen );
@@ -304,7 +307,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
     else
     {
-        // RedrawScreen() will set zoom to last used
+        // Set zoom to last used in this screen
+        GetCanvas()->GetView()->SetScale( GetScreen()->m_LastZoomLevel );
         RedrawScreen( (wxPoint) GetScreen()->m_ScrollCenter, false );
     }
 
