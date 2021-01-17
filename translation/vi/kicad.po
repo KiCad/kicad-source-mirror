@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-04 14:10+0000\n"
+"PO-Revision-Date: 2021-01-18 07:28+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -481,12 +481,13 @@ msgid "Clip silkscreen at via annulus"
 msgstr "Xén lớp silkscreen tại via annulus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
+#, fuzzy
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Sử dụng màu đồng trần cho lớp đồng không mạ"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Sử dụng các màu khác nhau cho đồng mạ và đồng không mạ. (Chậm)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -2242,7 +2243,7 @@ msgstr "Chọn Đường dẫn Cài đặt"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Bạn muốn định cấu hình KiCad như thế nào?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2251,11 +2252,11 @@ msgstr "Nhập vào các cài đặt từ phiên bản trước (không tìm th�
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
-msgstr ""
+msgstr "Chọn một con đường khác"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Đường dẫn đã chọn không chứa cài đặt KiCad hợp lệ!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -2267,6 +2268,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Khi được chọn, các bảng thư viện symbol và footprint từ phiên bản trước sẽ "
+"được nhập vào phiên bản này"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 #, fuzzy
@@ -3194,7 +3197,7 @@ msgstr "Nhập tệp tin cài đặt phím nóng:"
 #: common/dialogs/panel_mouse_settings.cpp:49
 #: pcbnew/dialogs/panel_edit_options_base.cpp:197
 msgid "Cmd"
-msgstr ""
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3266,11 +3269,11 @@ msgstr "Ưu tiên lựa chọn để kéo"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Kéo các đối tượng đã chọn; nếu không thì vẽ hình chữ nhật lựa chọn"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr ""
+msgstr "Kéo bất kỳ đối tượng nào (được chọn hoặc không)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3324,7 +3327,7 @@ msgstr "Pan trái / phải bằng bàn di chuột ngang hoặc di chuyển con l
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: pcbnew/dialogs/panel_edit_options_base.cpp:126
@@ -7423,7 +7426,7 @@ msgstr "Toàn bộ sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Current sheet only"
-msgstr ""
+msgstr "Chỉ trang vẽ hiện tại"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7431,112 +7434,115 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:28
 msgid "Scope"
-msgstr ""
+msgstr "Phạm vi"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 msgid "Order"
-msgstr ""
+msgstr "Thứ tự"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
-msgstr ""
+msgstr "Sắp xếp các linh kiện theo vị trí &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:65
 msgid "Sort components by &Y position"
-msgstr ""
+msgstr "Sắp xếp các linh kiện theo vị trí &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Keep existing annotations"
-msgstr ""
+msgstr "Giữ các chú thích hiện có"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset existing annotations"
-msgstr ""
+msgstr "Đặt lại chú thích hiện có"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset, but keep order of multi-unit parts"
-msgstr ""
+msgstr "Đặt lại, nhưng giữ thứ tự của các linh kiện gồm nhiều phần"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Numbering"
-msgstr ""
+msgstr "Đánh số"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 msgid "Use first free number after:"
-msgstr ""
+msgstr "Sử dụng số tự do đầu tiên sau:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:100
 msgid "First free after sheet number X 100"
-msgstr ""
+msgstr "Tự do đầu tiên sau tờ số X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:103
 msgid "First free after sheet number X 1000"
-msgstr ""
+msgstr "Tự do đầu tiên sau tờ số X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:126
 msgid "Clear Annotation"
-msgstr ""
+msgstr "Xóa chú thích"
 
 #: eeschema/dialogs/dialog_annotate_base.h:80
 msgid "Annotate Schematic"
-msgstr ""
+msgstr "Chú thích Sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_bom.cpp:244
 msgid "Generate"
-msgstr ""
+msgstr "Tạo"
 
 #: eeschema/dialogs/dialog_bom.cpp:522 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
-msgstr ""
+msgstr "Tạo Biệt danh:"
 
 #: eeschema/dialogs/dialog_bom.cpp:522
 msgid "Add Generator"
-msgstr ""
+msgstr "Thêm Trình tạo"
 
 #: eeschema/dialogs/dialog_bom.cpp:531
 #, c-format
 msgid "Nickname \"%s\" already in use."
-msgstr ""
+msgstr "Biệt danh \"%s\" đã được sử dụng."
 
 #: eeschema/dialogs/dialog_bom.cpp:566 eeschema/dialogs/dialog_netlist.cpp:759
 msgid "Generator files:"
-msgstr ""
+msgstr "Trình tạo tệp tin:"
 
 #: eeschema/dialogs/dialog_bom.cpp:585
+#, fuzzy
 msgid "Generator file name not found."
-msgstr ""
+msgstr "Không tìm thấy tên Trình tạo tệp."
 
 #: eeschema/dialogs/dialog_bom.cpp:595
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr ""
+"Không có trình soạn thảo văn bản nào được chọn trong KiCad. Hãy chọn một cái."
 
 #: eeschema/dialogs/dialog_bom.cpp:607
+#, fuzzy
 msgid "Bill of Material Generation Help"
-msgstr ""
+msgstr "Trợ giúp Trình tạo BOM(Bill of Material)"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM generator scripts:"
-msgstr ""
+msgstr "Các tập lệnh của trình tạo BOM:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr ""
+msgstr "Thêm trình tạo BOM mới và dòng lệnh của nó vào danh sách"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
-msgstr ""
+msgstr "Chỉnh sửa tệp tập lệnh trong trình soạn thảo văn bản"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
-msgstr ""
+msgstr "Xóa tập lệnh trình tạo hiện tại khỏi danh sách"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr ""
+msgstr "Dòng lệnh chạy trình tạo:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
-msgstr ""
+msgstr "Hiển thị cửa sổ dòng lệnh"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
 msgid ""
@@ -7544,12 +7550,16 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
+"Theo mặc định, dòng lệnh chạy với cửa sổ dòng lệnh được ẩn và đầu ra được "
+"chuyển hướng đến màn hình thông tin.\n"
+"Đặt tùy chọn này để hiển thị cửa sổ của lệnh đang chạy."
 
 #: eeschema/dialogs/dialog_bom_base.h:80
 msgid "Bill of Material"
-msgstr ""
+msgstr "Hóa đơn vật liệu"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
+#, fuzzy
 msgid ""
 "# 1 - Full documentation\n"
 "\n"
@@ -7735,47 +7745,230 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
+"# 1 - Tài liệu đầy đủ\n"
+"\n"
+"Tài liệu Eeschema (* eeschema.html *) mô tả danh sách mạng trung gian này và "
+"đưa ra các ví dụ (chương *** tạo danh sách mạng tùy chỉnh và tệp bom ***).\n"
+"\n"
+"# 2 - Tệp Netlist trung gian\n"
+"\n"
+"Tệp BOM (và tệp danh sách mạng) có thể được tạo từ * tệp danh sách mạng "
+"trung gian * do Eeschema tạo.\n"
+"\n"
+"Tệp này sử dụng cú pháp XML và được gọi là netlist trung gian. Danh sách "
+"mạng trung gian bao gồm một lượng lớn dữ liệu về hội đồng quản trị của bạn "
+"và do đó, danh sách này có thể được sử dụng với quá trình xử lý hậu kỳ để "
+"tạo BOM hoặc các báo cáo khác.\n"
+"\n"
+"Tùy thuộc vào đầu ra (BOM hoặc netlist), các tập con khác nhau của tệp "
+"Netlist trung gian hoàn chỉnh sẽ được sử dụng trong quá trình xử lý hậu kỳ.\n"
+"\n"
+"# 3 - Chuyển đổi sang định dạng mới\n"
+"\n"
+"Bằng cách áp dụng bộ lọc xử lý sau cho tệp netlist Trung gian, bạn có thể "
+"tạo các tệp netlist nước ngoài cũng như các tệp BOM. Bởi vì chuyển đổi này "
+"là một chuyển đổi văn bản thành văn bản, bộ lọc xử lý sau này có thể được "
+"viết bằng * Python *, * XSLT * hoặc bất kỳ công cụ nào khác có khả năng lấy "
+"XML làm đầu vào.\n"
+"\n"
+"Bản thân XSLT là một ngôn ngữ XML thích hợp cho các phép biến đổi XML. Có "
+"một chương trình miễn phí gọi là `xsltproc` mà bạn có thể tải xuống và cài "
+"đặt. Chương trình `xsltproc` có thể được sử dụng để đọc tệp đầu vào netlist "
+"XML trung gian, áp dụng biểu định kiểu để chuyển đổi đầu vào và lưu kết quả "
+"trong tệp đầu ra. Việc sử dụng `xsltproc` yêu cầu phải có tệp style-sheet sử "
+"dụng các quy ước XSLT. Quá trình chuyển đổi đầy đủ do Eeschema xử lý, sau "
+"khi nó được định cấu hình một lần để chạy `xsltproc` theo một cách cụ thể.\n"
+"\n"
+"Tập lệnh Python có phần dễ tạo hơn.\n"
+"\n"
+"# 4 - Khởi tạo cửa sổ hộp thoại\n"
+"\n"
+"Bạn nên thêm một plugin mới (một tập lệnh) trong danh sách plugin bằng cách "
+"nhấp vào nút Thêm Plugin.\n"
+"\n"
+"## 4.1 - Tham số cấu hình plugin\n"
+"\n"
+"Hộp thoại cấu hình trình cắm thêm Eeschema yêu cầu thông tin sau:\n"
+"\n"
+" * Tiêu đề: ví dụ: tên của định dạng danh sách mạng.\n"
+" * Dòng lệnh để khởi chạy bộ chuyển đổi (thường là một tập lệnh).\n"
+"\n"
+"*** Lưu ý (chỉ dành cho Windows): ***\n"
+"* Theo mặc định, dòng lệnh chạy với cửa sổ bảng điều khiển ẩn và đầu ra được "
+"chuyển hướng đến trường \"Thông tin plugin\". Để hiển thị cửa sổ của lệnh "
+"đang chạy, hãy đặt hộp kiểm \"Hiển thị cửa sổ bảng điều khiển\". *\n"
+"\n"
+"Khi bạn nhấp vào nút tạo, điều sau sẽ xảy ra:\n"
+"\n"
+"1. Eeschema tạo một tệp netlist trung gian \\ *. Xml, chẳng hạn như `test."
+"xml`.\n"
+"2. Eeschema chạy tập lệnh từ dòng lệnh để tạo tệp đầu ra cuối cùng.\n"
+"\n"
+"## 4.2 - Tạo tệp netlist bằng dòng lệnh\n"
+"\n"
+"Giả sử chúng ta đang sử dụng chương trình `xsltproc.exe` để áp dụng kiểu "
+"trang tính cho tệp trung gian,` xsltproc.exe` được thực thi bằng lệnh sau.\n"
+"\n"
+"``\n"
+"xsltproc.exe -o <tên tập tin đầu ra> <tên tập tin style-sheet> <đầu vào tập "
+"tin XML để chuyển đổi>\n"
+"``\n"
+"\n"
+"Trên Windows dòng lệnh như sau.\n"
+"\n"
+"``\n"
+"f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter.xsl "
+"\"% I\"\n"
+"``\n"
+"\n"
+"Trên Linux, lệnh sẽ trở thành như sau.\n"
+"\n"
+"``\n"
+"xsltproc -o \"% O\" / usr / local / Regiad / bin / plugins / myconverter ."
+"xsl \"% I\"\n"
+"``\n"
+"trong đó `myconverter.xsl` là style-sheet mà bạn đang áp dụng.\n"
+"\n"
+"Đừng quên dấu ngoặc kép xung quanh tên tệp, điều này cho phép chúng có "
+"khoảng trắng sau khi thay thế bởi Eeschema.\n"
+"\n"
+"Nếu một tập lệnh Python được sử dụng, dòng lệnh sẽ giống như (tùy thuộc vào "
+"tập lệnh Python):\n"
+"\n"
+"``\n"
+"python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% O\"\n"
+"``\n"
+"\n"
+"hoặc là\n"
+"\n"
+"``\n"
+"python / usr / local / Regiad / bin / plugins / bom-in-python / myconverter ."
+"xsl \"% I\" \"% O\"\n"
+"``\n"
+"\n"
+"Định dạng dòng lệnh chấp nhận các tham số cho tên tệp. Các thông số định "
+"dạng được hỗ trợ là:\n"
+"\n"
+" * `% B`: tên tệp cơ sở của tệp đầu ra đã chọn, trừ đường dẫn và phần mở "
+"rộng.\n"
+" * `% P`: thư mục dự án, không có tên và không có dấu '/'.\n"
+" * `% I`: tên tệp hoàn chỉnh và đường dẫn của tệp đầu vào tạm thời\n"
+"(tệp mạng trung gian).\n"
+" * `% O`: tên tệp và đường dẫn hoàn chỉnh (nhưng không có phần mở rộng) của "
+"người dùng\n"
+"tệp đầu ra đã chọn.\n"
+"\n"
+"`% I` sẽ được thay thế bằng tên tệp trung gian thực tế (thường là tên tệp "
+"trang tính gốc đầy đủ có phần mở rộng là\" .xml \").\n"
+"`% O` sẽ được thay thế bằng tên tệp đầu ra thực tế (tên tệp trang tính gốc "
+"đầy đủ trừ phần mở rộng).\n"
+"`% B` sẽ được thay thế bằng tên tệp ngắn đầu ra thực tế (tên tệp trang tính "
+"gốc ngắn trừ phần mở rộng).\n"
+"`% P` sẽ được thay thế bằng đường dẫn dự án hiện tại thực tế.\n"
+"\n"
+"## 4.3 - Định dạng dòng lệnh:\n"
+"\n"
+"### 4.3.1 - Nhận xét:\n"
+"\n"
+"Hầu hết thời gian, tệp được tạo phải có phần mở rộng, tùy thuộc vào loại của "
+"nó.\n"
+"Do đó, bạn phải thêm vào tùy chọn ***% O *** phần mở rộng tệp phù hợp.\n"
+"\n"
+"Ví dụ:\n"
+"\n"
+" * **% O.csv ** để tạo tệp .csv (tệp giá trị được phân tách bằng dấu phẩy).\n"
+" * **% O.htm ** để tạo tệp .html.\n"
+" * **% O.bom ** để tạo tệp .bom.\n"
+"\n"
+"### 4.3.2 Ví dụ cho xsltproc:\n"
+"\n"
+"Định dạng dòng lệnh cho xsltproc như sau:\n"
+"\n"
+"``\n"
+"<đường dẫn của xsltproc> xsltproc <thông số xsltproc>\n"
+"``\n"
+"\n"
+"Trên Windows:\n"
+"``\n"
+"f: /kicad/bin/xsltproc.exe -o \"% O.bom\" f: /kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"% I\"\n"
+"``\n"
+"\n"
+"Trên Linux:\n"
+"``\n"
+"xsltproc -o \"% O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"% I\"\n"
+"``\n"
+"\n"
+"Các ví dụ trên giả sử `xsltproc` được cài đặt trên PC của bạn trong Windows "
+"và các tệp xsl nằm trong` <path_to_kicad> / Regiad / bin / plugins / `.\n"
+"\n"
+"\n"
+"### 4.3.3 Ví dụ cho các tập lệnh Python:\n"
+"\n"
+"Giả sử python được cài đặt trên PC của bạn và các tập lệnh python được đặt "
+"trong\n"
+"\n"
+" `<path_to_kicad> / Regiad / bin / plugins / bom-in-python /`,\n"
+"\n"
+"định dạng dòng lệnh cho python giống như sau:\n"
+"\n"
+"``\n"
+"python <tên tệp tập lệnh> <tên tệp đầu vào> <tên tệp đầu ra>\n"
+"``\n"
+"\n"
+"Trên Windows:\n"
+"``\n"
+"python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\" \""
+"% O.html\"\n"
+"``\n"
+"\n"
+"Trên Linux:\n"
+"``\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\""
+" \"% O.csv\"\n"
+"``\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
 msgid "Bus Definitions"
-msgstr ""
+msgstr "Định nghĩa Bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:58
 msgid "Bus Aliases"
-msgstr ""
+msgstr "Bí danh Bus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:68
 msgid "Alias Name"
-msgstr ""
+msgstr "Tên Bí danh"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:78
 #: eeschema/dialogs/dialog_bus_manager.cpp:112
 msgid "Rename"
-msgstr ""
+msgstr "Đổi tên"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:92
 msgid "Alias Members"
-msgstr ""
+msgstr "Thành viên bí danh"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:102
 msgid "Member Name"
-msgstr ""
+msgstr "Tên thành viên"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:183
 msgid "Bus Alias Name"
-msgstr ""
+msgstr "Tên bí danhBus"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:184
 msgid "Net or Bus Name"
-msgstr ""
+msgstr "Tên Net hoặc Bus"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 msgid "Change all symbols in schematic"
-msgstr ""
+msgstr "Thay đổi tất cả các Symbol trong sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
 msgid "Change Symbols"
-msgstr ""
+msgstr "Thay đổi Symbols"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 msgid "Change selected Symbol"
