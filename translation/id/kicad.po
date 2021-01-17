@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-07 09:30+0000\n"
+"PO-Revision-Date: 2021-01-18 07:28+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -5359,67 +5359,69 @@ msgstr ""
 #: common/tool/actions.cpp:203 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 msgid "Find"
-msgstr ""
+msgstr "Cari"
 
 #: common/tool/actions.cpp:203
 msgid "Find text"
-msgstr ""
+msgstr "Cari teks"
 
 #: common/tool/actions.cpp:209 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr ""
+msgstr "Cari dan Ganti"
 
 #: common/tool/actions.cpp:209
 msgid "Find and replace text"
-msgstr ""
+msgstr "Cari dan ganti teks"
 
 #: common/tool/actions.cpp:215 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr ""
+msgstr "Cari Berikutnya"
 
 #: common/tool/actions.cpp:215
 msgid "Find next match"
-msgstr ""
+msgstr "Cari kecocokan berikutnya"
 
 #: common/tool/actions.cpp:221
 msgid "Find Next Marker"
-msgstr ""
+msgstr "Cari Penanda Berikutnya"
 
 #: common/tool/actions.cpp:227
 msgid "Replace and Find Next"
-msgstr ""
+msgstr "Ganti dan Cari Berikutnya"
 
 #: common/tool/actions.cpp:227
 msgid "Replace current match and find next"
-msgstr ""
+msgstr "Ganti kecocokan saat ini dan cari berikutnya"
 
 #: common/tool/actions.cpp:233
 msgid "Replace All"
-msgstr ""
+msgstr "Ganti Semua"
 
 #: common/tool/actions.cpp:233
 msgid "Replace all matches"
-msgstr ""
+msgstr "Ganti semua kecocokan"
 
 #: common/tool/actions.cpp:244
 msgid "Previous Marker"
-msgstr ""
+msgstr "Penanda Sebelumnya"
 
 #: common/tool/actions.cpp:244
+#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr ""
+msgstr "Pergi ke penanda sebelumnya di jendela Pemeriksa"
 
 #: common/tool/actions.cpp:250
 msgid "Next Marker"
-msgstr ""
+msgstr "Penanda Berikutnya"
 
 #: common/tool/actions.cpp:250
+#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr ""
+msgstr "Pergi ke penanda berikutnya di jendela Pemeriksa"
 
 #: common/tool/actions.cpp:256
 msgid "Exclude Marker"
-msgstr ""
+msgstr "Kecualikan Penanda"
 
 #: common/tool/actions.cpp:256
 msgid "Mark current violation in Checker window as an exclusion"
@@ -5427,7 +5429,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:268
 msgid "Refresh"
-msgstr ""
+msgstr "Segarkan"
 
 #: common/tool/actions.cpp:279
 msgid "Zoom to Fit"
@@ -5461,51 +5463,51 @@ msgstr ""
 
 #: common/tool/actions.cpp:343
 msgid "Cursor Up"
-msgstr ""
+msgstr "Kursor Naik"
 
 #: common/tool/actions.cpp:349
 msgid "Cursor Down"
-msgstr ""
+msgstr "Kursor Turun"
 
 #: common/tool/actions.cpp:355
 msgid "Cursor Left"
-msgstr ""
+msgstr "Kursor Kiri"
 
 #: common/tool/actions.cpp:361
 msgid "Cursor Right"
-msgstr ""
+msgstr "Kursor Kanan"
 
 #: common/tool/actions.cpp:368
 msgid "Cursor Up Fast"
-msgstr ""
+msgstr "Kursor Naik Cepat"
 
 #: common/tool/actions.cpp:374
 msgid "Cursor Down Fast"
-msgstr ""
+msgstr "Kursor Turun Cepat"
 
 #: common/tool/actions.cpp:380
 msgid "Cursor Left Fast"
-msgstr ""
+msgstr "Kursor Kiri Cepat"
 
 #: common/tool/actions.cpp:386
 msgid "Cursor Right Fast"
-msgstr ""
+msgstr "Kursor Kanan Cepat"
 
 #: common/tool/actions.cpp:392
 msgid "Click"
-msgstr ""
+msgstr "Klik"
 
 #: common/tool/actions.cpp:392
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "Melakukan klik kiri tetikus"
 
 #: common/tool/actions.cpp:398
 msgid "Double-click"
-msgstr ""
+msgstr "Klik-ganda"
 
 #: common/tool/actions.cpp:398
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "Melakukan klik-ganda kiri tetikus"
 
 #: common/tool/actions.cpp:406
 msgid "Pin Library"
@@ -5565,11 +5567,11 @@ msgstr ""
 
 #: common/tool/actions.cpp:479
 msgid "Set grid dimensions"
-msgstr ""
+msgstr "Setel dimensi kisi"
 
 #: common/tool/actions.cpp:484
 msgid "Use inches"
-msgstr ""
+msgstr "Gunakan inci"
 
 #: common/tool/actions.cpp:489
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5577,11 +5579,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Mils"
-msgstr ""
+msgstr "Mils"
 
 #: common/tool/actions.cpp:489
 msgid "Use mils"
-msgstr ""
+msgstr "Gunakan mils"
 
 #: common/tool/actions.cpp:494
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5592,19 +5594,19 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:51
 msgid "Millimeters"
-msgstr ""
+msgstr "Milimeter"
 
 #: common/tool/actions.cpp:494
 msgid "Use millimeters"
-msgstr ""
+msgstr "Gunakan milimeter"
 
 #: common/tool/actions.cpp:503
 msgid "Switch units"
-msgstr ""
+msgstr "Ganti satuan"
 
 #: common/tool/actions.cpp:503
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "Beralih antara satuan imperial dan metrik"
 
 #: common/tool/actions.cpp:508
 msgid "Polar Coordinates"
@@ -5718,11 +5720,11 @@ msgstr ""
 
 #: common/tool/actions.cpp:587
 msgid "Update schematic with changes made to PCB"
-msgstr ""
+msgstr "Perbarui skematik dengan perubahan yang dilakukan pada PCB"
 
 #: common/tool/actions.cpp:592
 msgid "Accelerated Graphics"
-msgstr ""
+msgstr "Grafik yang Diakselerasi"
 
 #: common/tool/actions.cpp:592
 msgid "Use hardware-accelerated graphics (recommended)"
@@ -6509,7 +6511,7 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
-msgstr ""
+msgstr "Sunting Berkas"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
@@ -6533,16 +6535,16 @@ msgstr ""
 #: pcbnew/footprint.cpp:1932 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:280 pcbnew/text_mod_grid_table.cpp:110
 msgid "Value"
-msgstr ""
+msgstr "Nilai"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Absolute"
-msgstr ""
+msgstr "Absolut"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Relative"
-msgstr ""
+msgstr "Relatif"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
@@ -16330,30 +16332,30 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:834
 msgid "Delete File"
-msgstr ""
+msgstr "Hapus Berkas"
 
 #: kicad/project_tree_pane.cpp:835
 #, c-format
 msgid "Are you sure you want to delete '%s'?"
-msgstr ""
+msgstr "Apakah Anda yakin ingin menghapus '%s'?"
 
 #: kicad/project_tree_pane.cpp:840
 #, c-format
 msgid "Are you sure you want to delete %lu items?"
-msgstr ""
+msgstr "Apakah Anda yakin ingin menghapus %lu item?"
 
 #: kicad/project_tree_pane.cpp:842
 msgid "Delete Multiple Items"
-msgstr ""
+msgstr "Hapus Beberapa Item"
 
 #: kicad/project_tree_pane.cpp:874
 #, c-format
 msgid "Change filename: \"%s\""
-msgstr ""
+msgstr "Ubah nama berkas: \"%s\""
 
 #: kicad/project_tree_pane.cpp:876
 msgid "Change filename"
-msgstr ""
+msgstr "Ubah nama berkas"
 
 #: kicad/project_tree_pane.cpp:1191
 msgid "Network path: not monitoring folder changes"
@@ -16365,47 +16367,47 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
-msgstr ""
+msgstr "Proyek Baru..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "Create new blank project"
-msgstr ""
+msgstr "Buat proyek kosong baru"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
-msgstr ""
+msgstr "Proyek Baru dari Templat..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "Create new project from template"
-msgstr ""
+msgstr "Buat proyek baru dari templat"
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open Project..."
-msgstr ""
+msgstr "Buka Proyek..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Open an existing project"
-msgstr ""
+msgstr "Buka proyek yang sudah ada"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Close Project"
-msgstr ""
+msgstr "Tutup Proyek"
 
 #: kicad/tools/kicad_manager_actions.cpp:59
 msgid "Close the current project"
-msgstr ""
+msgstr "Tutup proyek saat ini"
 
 #: kicad/tools/kicad_manager_actions.cpp:65
 msgid "Edit Schematic"
-msgstr ""
+msgstr "Sunting Skematik"
 
 #: kicad/tools/kicad_manager_actions.cpp:71
 msgid "Edit Schematic Symbols"
-msgstr ""
+msgstr "Sunting Simbol Skematik"
 
 #: kicad/tools/kicad_manager_actions.cpp:77
 msgid "Edit PCB"
-msgstr ""
+msgstr "Sunting PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:83
 msgid "Edit PCB Footprints"
@@ -16413,19 +16415,19 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:89
 msgid "View Gerber Files"
-msgstr ""
+msgstr "Lihat Berkas Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:95
 msgid "Convert Image"
-msgstr ""
+msgstr "Konversi Gambar"
 
 #: kicad/tools/kicad_manager_actions.cpp:95
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr ""
+msgstr "Konversi gambar bitmap ke komponen skematik atau PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:100
 msgid "Calculator Tools"
-msgstr ""
+msgstr "Alat Kalkulator"
 
 #: kicad/tools/kicad_manager_actions.cpp:100
 msgid "Run component calculations, track width calculations, etc."
@@ -16433,27 +16435,27 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:106
 msgid "Edit Worksheet"
-msgstr ""
+msgstr "Sunting Lembar Kerja"
 
 #: kicad/tools/kicad_manager_actions.cpp:106
 msgid "Edit worksheet graphics and text"
-msgstr ""
+msgstr "Sunting grafik dan teks lembar kerja"
 
 #: kicad/tools/kicad_manager_actions.cpp:112
 msgid "Open Text Editor"
-msgstr ""
+msgstr "Buka Penyunting Teks"
 
 #: kicad/tools/kicad_manager_actions.cpp:112
 msgid "Launch preferred text editor"
-msgstr ""
+msgstr "Luncurkan penyunting teks pilihan"
 
 #: kicad/tools/kicad_manager_control.cpp:44
 msgid "Create a new directory for the project"
-msgstr ""
+msgstr "Buat sebuah direktori baru untuk proyek"
 
 #: kicad/tools/kicad_manager_control.cpp:84
 msgid "Create New Project"
-msgstr ""
+msgstr "Buat Proyek Baru"
 
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:215
@@ -16464,6 +16466,9 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
+"Direktori \"%s\" tidak dapat dibuat.\n"
+"\n"
+"Harap pastikan Anda memiliki izin menulis dan coba lagi."
 
 #: kicad/tools/kicad_manager_control.cpp:127
 msgid ""
@@ -16472,105 +16477,110 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"Direktori yang dipilih tidak kosong.  Direkomendasikan agar Anda membuat "
+"proyek di direktori kosongnya sendiri.\n"
+"\n"
+"Apakah Anda ingin melanjutkan?"
 
 #: kicad/tools/kicad_manager_control.cpp:155
 msgid "System Templates"
-msgstr ""
+msgstr "Templat Sistem"
 
 #: kicad/tools/kicad_manager_control.cpp:164
 msgid "User Templates"
-msgstr ""
+msgstr "Templat Pengguna"
 
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "No project template was selected.  Cannot generate new project."
 msgstr ""
+"Tidak ada templat proyek yang dipilih.  Tidak dapat membuat proyek baru."
 
 #: kicad/tools/kicad_manager_control.cpp:181
 msgid "New Project Folder"
-msgstr ""
+msgstr "Folder Proyek Baru"
 
 #: kicad/tools/kicad_manager_control.cpp:227
 #: kicad/tools/kicad_manager_control.cpp:541
 #, c-format
 msgid "Cannot write to folder \"%s\"."
-msgstr ""
+msgstr "Tidak dapat menulis ke folder \"%s\"."
 
 #: kicad/tools/kicad_manager_control.cpp:228
 #: kicad/tools/kicad_manager_control.cpp:542
 msgid "Error!"
-msgstr ""
+msgstr "Kesalahan!"
 
 #: kicad/tools/kicad_manager_control.cpp:229
 #: kicad/tools/kicad_manager_control.cpp:543
 msgid "Please check your access permissions to this folder and try again."
-msgstr ""
+msgstr "Harap periksa izin akses Anda ke folder ini dan coba lagi."
 
 #: kicad/tools/kicad_manager_control.cpp:252
 msgid "Overwriting files:"
-msgstr ""
+msgstr "Menimpa berkas:"
 
 #: kicad/tools/kicad_manager_control.cpp:257
 msgid "Similar files already exist in the destination folder."
-msgstr ""
+msgstr "Berkas yang serupa sudah ada di folder tujuan."
 
 #: kicad/tools/kicad_manager_control.cpp:275
 msgid "A problem occurred creating new project from template!"
-msgstr ""
+msgstr "Terjadi masalah saat membuat proyek baru dari templat!"
 
 #: kicad/tools/kicad_manager_control.cpp:276
 msgid "Template Error"
-msgstr ""
+msgstr "Kesalahan Templat"
 
 #: kicad/tools/kicad_manager_control.cpp:298
 msgid "Open Existing Project"
-msgstr ""
+msgstr "Buka Proyek yang Ada"
 
 #: kicad/tools/kicad_manager_control.cpp:480
 #, c-format
 msgid "Cannot copy folder \"%s\"."
-msgstr ""
+msgstr "Tidak dapat menyalin folder \"%s\"."
 
 #: kicad/tools/kicad_manager_control.cpp:512
 msgid "Save Project To"
-msgstr ""
+msgstr "Simpan Proyek Ke"
 
 #: kicad/tools/kicad_manager_control.cpp:611
 msgid "Application failed to load:\n"
-msgstr ""
+msgstr "Aplikasi gagal dimuat:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:611
 #: kicad/tools/kicad_manager_control.cpp:618 pcbnew/pcb_edit_frame.cpp:1440
 #: pcbnew/pcb_edit_frame.cpp:1471
 msgid "KiCad Error"
-msgstr ""
+msgstr "Kesalahan KiCad"
 
 #: kicad/tools/kicad_manager_control.cpp:618
 msgid "Application failed to load."
-msgstr ""
+msgstr "Aplikasi gagal dimuat."
 
 #: kicad/tools/kicad_manager_control.cpp:689
 #, c-format
 msgid "%s closed [pid=%d]\n"
-msgstr ""
+msgstr "%s ditutup [pid=%d]\n"
 
 #: kicad/tools/kicad_manager_control.cpp:749
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
-msgstr ""
+msgstr "%s %s dibuka [pid=%ld]\n"
 
 #: libs/kiplatform/msw/environment.cpp:47
 #, c-format
 msgid "Error code: %d"
-msgstr ""
+msgstr "Kode kesalahan: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
-msgstr ""
+msgstr "Tata Letak"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 #, c-format
 msgid "Size: %.1fx%.1fmm"
-msgstr ""
+msgstr "Ukuran: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
@@ -16595,14 +16605,14 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:300
 msgid "Upper Right"
-msgstr ""
+msgstr "Kanan Atas"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:248
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:301
 msgid "Upper Left"
-msgstr ""
+msgstr "Kiri Atas"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -16610,7 +16620,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:249
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:302
 msgid "Lower Right"
-msgstr ""
+msgstr "Kanan Bawah"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -16618,7 +16628,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:299
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:303
 msgid "Lower Left"
-msgstr ""
+msgstr "Kiri Bawah"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:90
 msgid "X end:"
@@ -16630,7 +16640,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:72
 msgid "New Item"
-msgstr ""
+msgstr "Item Baru"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:235
 msgid "Print Page Layout"
@@ -16642,15 +16652,15 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
 msgid "Printing"
-msgstr ""
+msgstr "Mencetak"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "Show on all pages"
-msgstr ""
+msgstr "Tampilkan pada semua halaman"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "First page only"
-msgstr ""
+msgstr "Halaman pertama saja"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 msgid "Subsequent pages only"
@@ -16668,141 +16678,141 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:485
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:166
 msgid "Text width:"
-msgstr ""
+msgstr "Lebar teks:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:146
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:499
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 msgid "Text height:"
-msgstr ""
+msgstr "Tinggi teks:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Maximum width:"
-msgstr ""
+msgstr "Lebar maksimum:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:178
 msgid "Set to 0 to disable this constraint"
-msgstr ""
+msgstr "Setel ke 0 untuk menonaktifkan batasan ini"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Maximum height:"
-msgstr ""
+msgstr "Tinggi maksimum:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 msgid "Set to 0 to use default values"
-msgstr ""
+msgstr "Setel ke 0 untuk menggunakan nilai bawaan"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:205
 msgid "Comment:"
-msgstr ""
+msgstr "Komentar:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr ""
+msgstr "Posisi"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:242
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:295
 msgid "From:"
-msgstr ""
+msgstr "Dari:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:265
 msgid "End Position"
-msgstr ""
+msgstr "Posisi Akhir"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:339
 msgid "Set to 0 for default"
-msgstr ""
+msgstr "Setel ke 0 untuk bawaan"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:359
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 msgid "Rotation:"
-msgstr ""
+msgstr "Rotasi:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:379
 msgid "Bitmap DPI:"
-msgstr ""
+msgstr "Bitmap DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:393
 msgid "Step"
-msgstr ""
+msgstr "Langkah"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:401
 msgid "Repeat count:"
-msgstr ""
+msgstr "Jumlah pengulangan:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:461
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:621
 msgid "Apply"
-msgstr ""
+msgstr "Terapkan"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:470
 msgid "Item Properties"
-msgstr ""
+msgstr "Properti Item"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:477
 #: pcbnew/footprint_edit_frame.cpp:907
 msgid "Default Values"
-msgstr ""
+msgstr "Nilai Bawaan"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:513
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:209
 msgid "Line thickness:"
-msgstr ""
+msgstr "Ketebalan garis:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:527
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:203
 msgid "Text thickness:"
-msgstr ""
+msgstr "Ketebalan teks:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:547
 msgid "Set to Default"
-msgstr ""
+msgstr "Setel ke Bawaan"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:554
 msgid "Page Margins"
-msgstr ""
+msgstr "Margin Halaman"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:562
 msgid "Left:"
-msgstr ""
+msgstr "Kiri:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:576
 msgid "Right:"
-msgstr ""
+msgstr "Kanan:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:590
 msgid "Top:"
-msgstr ""
+msgstr "Atas:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:604
 msgid "Bottom:"
-msgstr ""
+msgstr "Bawah:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:633
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
 msgid "General Options"
-msgstr ""
+msgstr "Opsi Umum"
 
 #: pagelayout_editor/files.cpp:51
 msgid "Page Layout Description File"
-msgstr ""
+msgstr "Berkas Deskripsi Tata Letak Halaman"
 
 #: pagelayout_editor/files.cpp:57
 msgid "The current page layout has been modified. Save changes?"
-msgstr ""
+msgstr "Tata letak halaman saat ini telah diubah. Simpan perubahan?"
 
 #: pagelayout_editor/files.cpp:70
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr ""
+msgstr "Berkas \"%s\" dimuat"
 
 #: pagelayout_editor/files.cpp:98
 msgid "The current page layout has been modified.  Save changes?"
-msgstr ""
+msgstr "Tata letak halaman saat ini telah diubah.  Simpan perubahan?"
 
 #: pagelayout_editor/files.cpp:117
 msgid "Append Existing Page Layout File"
@@ -16811,31 +16821,31 @@ msgstr ""
 #: pagelayout_editor/files.cpp:128 pagelayout_editor/files.cpp:153
 #, c-format
 msgid "Unable to load %s file"
-msgstr ""
+msgstr "Tak dapat memuat berkas %s"
 
 #: pagelayout_editor/files.cpp:135
 #, c-format
 msgid "File \"%s\" inserted"
-msgstr ""
+msgstr "Berkas \"%s\" disisipkan"
 
 #: pagelayout_editor/files.cpp:143
 msgid "Open"
-msgstr ""
+msgstr "Buka"
 
 #: pagelayout_editor/files.cpp:168
 #, c-format
 msgid "Unable to write \"%s\""
-msgstr ""
+msgstr "Tak dapat menulis \"%s\""
 
 #: pagelayout_editor/files.cpp:180
 msgid "Save As"
-msgstr ""
+msgstr "Simpan Sebagai"
 
 #: pagelayout_editor/files.cpp:198 pcbnew/exporters/export_gencad.cpp:246
 #: pcbnew/exporters/gen_footprints_placefile.cpp:526
 #, c-format
 msgid "Unable to create \"%s\""
-msgstr ""
+msgstr "Tak dapat membuat \"%s\""
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -16843,12 +16853,12 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:178
 msgid "Properties"
-msgstr ""
+msgstr "Properti"
 
 #: pagelayout_editor/pl_editor_frame.cpp:317
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr ""
+msgstr "Kesalahan saat memuat berkas \"%s\""
 
 #: pagelayout_editor/pl_editor_frame.cpp:427
 msgid "Error Init Printer info"
@@ -16856,7 +16866,7 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:537
 msgid "no file selected"
-msgstr ""
+msgstr "tak ada berkas yang dipilih"
 
 #: pagelayout_editor/pl_editor_frame.cpp:745
 #, c-format
@@ -16865,39 +16875,39 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:885
 msgid "New page layout file is unsaved"
-msgstr ""
+msgstr "Berkas tata letak halaman baru tidak disimpan"
 
 #: pagelayout_editor/pl_editor_frame.cpp:889
 msgid "Page layout changes are unsaved"
-msgstr ""
+msgstr "Perubahan tata letak halaman tidak disimpan"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
-msgstr ""
+msgstr "Lebar Halaman"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
 msgid "Page Height"
-msgstr ""
+msgstr "Tinggi Halaman"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Left Top paper corner"
-msgstr ""
+msgstr "Sudut kertas Kiri Atas"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Right Bottom page corner"
-msgstr ""
+msgstr "Sudut halaman Kanan Bawah"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:76
 msgid "Left Bottom page corner"
-msgstr ""
+msgstr "Sudut halaman Kiri Bawah"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:77
 msgid "Right Top page corner"
-msgstr ""
+msgstr "Sudut halaman Kanan Atas"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:78
 msgid "Left Top page corner"
-msgstr ""
+msgstr "Sudut halaman Kiri Atas"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:89
 msgid "Origin of coordinates displayed to the status bar"
@@ -16905,11 +16915,11 @@ msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:104
 msgid "Page 1"
-msgstr ""
+msgstr "Halaman 1"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:105
 msgid "Other pages"
-msgstr ""
+msgstr "Halaman lain"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:115
 msgid ""
