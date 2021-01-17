@@ -45,14 +45,6 @@
  * setting of 40 is arbitrary.
  */
 #define MAX_SELECT_ITEM_IDS 40
-
-
-SELECTION_CONDITION PL_CONDITIONS::Idle = [] (const SELECTION& aSelection )
-{
-    return ( !aSelection.Front() || aSelection.Front()->GetEditFlags() == 0 );
-};
-
-
 #define HITTEST_THRESHOLD_PIXELS 3
 
 
@@ -75,11 +67,10 @@ bool PL_SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddSeparator( 200 );
-    menu.AddItem( PL_ACTIONS::drawLine,                PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::drawRectangle,           PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::placeText,               PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::placeImage,              PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::appendImportedWorksheet, PL_CONDITIONS::Idle, 250 );
+    menu.AddItem( PL_ACTIONS::drawLine,      SELECTION_CONDITIONS::Empty, 200 );
+    menu.AddItem( PL_ACTIONS::drawRectangle, SELECTION_CONDITIONS::Empty, 200 );
+    menu.AddItem( PL_ACTIONS::placeText,     SELECTION_CONDITIONS::Empty, 200 );
+    menu.AddItem( PL_ACTIONS::placeImage,    SELECTION_CONDITIONS::Empty, 200 );
 
     menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
@@ -795,5 +786,3 @@ void PL_SELECTION_TOOL::setTransitions()
     Go( &PL_SELECTION_TOOL::RemoveItemsFromSel,    PL_ACTIONS::removeItemsFromSel.MakeEvent() );
     Go( &PL_SELECTION_TOOL::SelectionMenu,         PL_ACTIONS::selectionMenu.MakeEvent() );
 }
-
-

@@ -39,13 +39,6 @@ namespace KIGFX
 }
 
 
-class PL_CONDITIONS : public SELECTION_CONDITIONS
-{
-public:
-    static SELECTION_CONDITION Idle;
-};
-
-
 class PL_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:

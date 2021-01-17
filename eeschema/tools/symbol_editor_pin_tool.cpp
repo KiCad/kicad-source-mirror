@@ -106,10 +106,10 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddSeparator( 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    canEdit && singlePinCondition, 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  canEdit && singlePinCondition, 400 );
-    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   canEdit && singlePinCondition, 400 );
+    selToolMenu.AddSeparator( 250 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    canEdit && singlePinCondition, 250 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  canEdit && singlePinCondition, 250 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   canEdit && singlePinCondition, 250 );
 
     return true;
 }
@@ -451,4 +451,3 @@ void SYMBOL_EDITOR_PIN_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNameSize.MakeEvent() );
     Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNumSize.MakeEvent() );
 }
-

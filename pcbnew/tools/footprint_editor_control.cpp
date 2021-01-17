@@ -97,8 +97,8 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
     ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
-    ctxMenu.AddSeparator();
 
+    ctxMenu.AddSeparator();
     ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
@@ -106,25 +106,25 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( PCB_ACTIONS::newFootprint,      SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::newFootprint,      libSelectedCondition );
 #ifdef KICAD_SCRIPTING
-    ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   libSelectedCondition );
 #endif
     ctxMenu.AddItem( PCB_ACTIONS::editFootprint,     fpSelectedCondition );
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( ACTIONS::save,                  fpSelectedCondition );
     ctxMenu.AddItem( ACTIONS::saveCopyAs,            fpSelectedCondition );
-    ctxMenu.AddItem( PCB_ACTIONS::deleteFootprint,   fpSelectedCondition );
     ctxMenu.AddItem( ACTIONS::revert,                fpSelectedCondition );
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::cutFootprint,      fpSelectedCondition );
     ctxMenu.AddItem( PCB_ACTIONS::copyFootprint,     fpSelectedCondition );
     ctxMenu.AddItem( PCB_ACTIONS::pasteFootprint,    SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteFootprint,   fpSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   libSelectedCondition );
     ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,   fpSelectedCondition );
 
     return true;

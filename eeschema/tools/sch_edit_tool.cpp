@@ -272,7 +272,6 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
-        moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
         moveMenu.AddItem( EE_ACTIONS::editReference,   singleSymbolCondition );
@@ -288,6 +287,7 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddSeparator();
         moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
+        moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
         moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
 
         moveMenu.AddSeparator();
@@ -333,7 +333,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
-    selToolMenu.AddItem( ACTIONS::doDelete,            E_C::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
@@ -362,6 +361,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::pasteSpecial,        E_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::doDelete,            E_C::NotEmpty, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
 
     selToolMenu.AddSeparator( 400 );
