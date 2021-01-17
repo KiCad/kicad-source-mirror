@@ -59,10 +59,6 @@ enum id_eeschema_frm
     /* Library editor horizontal toolbar IDs. */
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
-    /* Library editor vertical toolbar IDs. */
-    ID_LIBEDIT_IMPORT_BODY_BUTT,
-    ID_LIBEDIT_EXPORT_BODY_BUTT,
-
     /* Library viewer horizontal toolbar IDs */
     ID_LIBVIEW_SELECT_PART,
     ID_LIBVIEW_NEXT,

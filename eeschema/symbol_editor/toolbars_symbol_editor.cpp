@@ -65,15 +65,6 @@ void SYMBOL_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawSymbolArc,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSymbolLines,      ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolAnchor,    ACTION_TOOLBAR::TOGGLE );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString,
-                            KiScaledBitmap( import_xpm, this ),
-                            _( "Import existing drawings" ), wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString,
-                            KiScaledBitmap( export_xpm, this ),
-                            _( "Export current drawing" ), wxITEM_CHECK  );
-
     m_drawToolBar->Add( ACTIONS::deleteTool,              ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();

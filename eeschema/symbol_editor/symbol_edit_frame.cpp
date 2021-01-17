@@ -79,10 +79,6 @@ BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, SYMBOL_EDIT_FRAME::OnSelectUnit )
 
-    // Right vertical toolbar.
-    EVT_TOOL( ID_LIBEDIT_IMPORT_BODY_BUTT, SYMBOL_EDIT_FRAME::OnImportBody )
-    EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, SYMBOL_EDIT_FRAME::OnExportBody )
-
     // menubar commands
     EVT_MENU( wxID_EXIT, SYMBOL_EDIT_FRAME::OnExitKiCad )
     EVT_MENU( wxID_CLOSE, SYMBOL_EDIT_FRAME::CloseWindow )
@@ -487,9 +483,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,
                         EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
-    RegisterUIUpdateHandler( ID_LIBEDIT_IMPORT_BODY_BUTT, ENABLE( isEditableCond ) );
-    RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( haveSymbolCond ) );
-
 #undef CHECK
 #undef ENABLE
 #undef EDIT_TOOL
@@ -780,22 +773,6 @@ SYMBOL_LIBRARY_MANAGER& SYMBOL_EDIT_FRAME::GetLibManager()
 {
     wxASSERT( m_libMgr );
     return *m_libMgr;
-}
-
-
-void SYMBOL_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
-{
-    m_toolManager->DeactivateTool();
-    LoadOneSymbol();
-    m_drawToolBar->ToggleTool( ID_LIBEDIT_IMPORT_BODY_BUTT, false );
-}
-
-
-void SYMBOL_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
-{
-    m_toolManager->DeactivateTool();
-    SaveOneSymbol();
-    m_drawToolBar->ToggleTool( ID_LIBEDIT_EXPORT_BODY_BUTT, false );
 }
 
 

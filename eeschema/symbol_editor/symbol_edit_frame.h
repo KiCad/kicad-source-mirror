@@ -116,9 +116,6 @@ public:
     // See comments for m_SyncPinEdit.
     bool SynchronizePins();
 
-    void OnImportBody( wxCommandEvent& aEvent );
-    void OnExportBody( wxCommandEvent& aEvent );
-
     /**
      * Create or add an existing library to the symbol library table.
      */
@@ -421,21 +418,6 @@ private:
      */
     bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
                                 int aConvert );
-
-    /**
-     * Read a symbol file (*.sym ) and add graphic items to the current symbol.
-     *
-     * A symbol file *.sym has the same format as a library, and contains only one symbol.
-     */
-    void LoadOneSymbol();
-
-    /**
-     * Save the current symbol to a symbol file.
-     *
-     * The symbol file format is similar to the standard symbol library file format, but
-     * there is only one symbol.  Invisible pins are not saved.
-     */
-    void SaveOneSymbol();
 
     /**
      * Display a dialog asking the user to select a symbol library table.
