@@ -2375,6 +2375,12 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
     SCH_ITEM* bus_wire = nullptr;
     wxString bus_name;
 
+    if( !aSubgraph->m_driver_connection )
+    {
+        // Incomplete bus entry.  Let the unconnected tests handle it.
+        return true;
+    }
+
     for( auto item : aSubgraph->m_items )
     {
         switch( item->Type() )
@@ -2632,7 +2638,7 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
     if( aSubgraph->m_driver )
         return true;
 
-    std::vector<SCH_LINE*> wires;
+    std::vector<SCH_ITEM*> wires;
 
     // We've gotten this far, so we know we have no valid driver.  All we need to do is check
     // for a wire that we can place the error on.
@@ -2640,7 +2646,9 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
     for( SCH_ITEM* item : aSubgraph->m_items )
     {
         if( item->Type() == SCH_LINE_T && item->GetLayer() == LAYER_WIRE )
-            wires.emplace_back( static_cast<SCH_LINE*>( item ) );
+            wires.emplace_back( item );
+        else if( item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            wires.emplace_back( item );
     }
 
     if( !wires.empty() )
@@ -2672,6 +2680,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     // So, if there is a no-connect, we will never generate a warning here
     if( aSubgraph->m_no_connect )
+        return true;
+
+    if( !aSubgraph->m_driver_connection )
         return true;
 
     // Buses are excluded from this test: many users create buses with only a single instance

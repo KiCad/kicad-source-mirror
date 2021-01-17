@@ -459,17 +459,18 @@ bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
             }
             else
             {
-                if( aMemberList )
+                if( aMemberList && !tmp.IsEmpty() )
                     aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
 
                 return true;
             }
         }
 
-        if( aGroup[i] == ' ' )
+        // Commas aren't strictly legal, but we can be pretty sure what the author had in mind.
+        if( aGroup[i] == ' ' || aGroup[i] == ',' )
         {
-            if( aMemberList )
-                    aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
+            if( aMemberList && !tmp.IsEmpty() )
+                aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
 
             tmp.Clear();
             continue;
