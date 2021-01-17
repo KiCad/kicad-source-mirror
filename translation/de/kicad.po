@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
 "PO-Revision-Date: 2021-01-18 07:27+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3234,7 +3234,8 @@ msgstr "Auswahlrechteck zeichnen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr "Ausgewählte Objekte ziehen; sonst Auswahlrechteck zeichnen"
+msgstr ""
+"Ziehen Sie ausgewählte Objekte. Andernfalls zeichnen Sie ein Auswahlrechteck"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
@@ -14620,7 +14621,8 @@ msgstr "Normale Speichern-Unter-Operation"
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
 msgstr ""
-"Keine weiteren Operationen nach dem Speichern der Bibliothek durchführen."
+"Führen Sie nach dem Speichern der Bibliothek keine zusätzlichen "
+"Bearbeitungen aus."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 msgid "Replace library table entry"
@@ -14632,9 +14634,9 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
-"Ersetze Bauteilbibliotheks-Eintrag mit neuer Bibliothek.\n"
+"Tabelleneintrag für Replikationssymbolbibliothek mit neuer Bibliothek.\n"
 "\n"
-"Die originale Bibliothek kann dann nicht mehr benutzt werden."
+"Die Originalbibliothek kann nicht mehr verwendet werden."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid "Add new global library table entry"
@@ -14647,11 +14649,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Füge der globalen Bauteilbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Fügen Sie der globalen Symbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
 "\n"
-"Das Kürzel der Bauteilbibliothekstabelle wird mit einem Ganzzahlsuffix "
-"versehen\n"
-"um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
+"Das Kürzel  der Symbolbibliothekstabelle wird mit dem Suffix versehen\n"
+"um sicherzustellen, dass es keine doppelten Tabelleneinträge geben wird."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
 msgid "Add new project library table entry"
@@ -22675,7 +22676,7 @@ msgstr "Toleranz:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr "Fein (0,001 mm)"
+msgstr "Breite (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Standard (0.01 mm)"
@@ -22683,7 +22684,7 @@ msgstr "Standard (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr "Grob (0,1 mm)"
+msgstr "Ungenauigkeit (0.1mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid ""
@@ -22989,8 +22990,9 @@ msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
 msgstr ""
-"Der Footprint kann frei bewegt und ausgerichtet werden, aber alle Pad-"
-"Positionen sind in Bezug auf den Footprints gesperrt."
+"Der Footprint kann frei bewegt und auf der Leinwand ausgerichtet werden, "
+"aber alle Pads sind in Bezug auf ihre Position innerhalb des Footprints "
+"verriegelt."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
 msgid ""
@@ -24387,8 +24389,8 @@ msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Warnung: Negativer Lötmaskenabstand größer als Pad. Es wird keine Lötmaske "
-"erzeugt."
+"Warnung: Der negative Lötmaskenabstand ist größer als das Pad. Es wird keine "
+"Lötmaske erzeugt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid ""
@@ -24454,7 +24456,7 @@ msgstr "Warnung: BGA-Eigenschaft kann nur für SMD-Pads gesetzt werden."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1380
 msgid "Error: Corner size not a number."
-msgstr "Fehler: Eckgröße keine Zahl."
+msgstr "Fehler: Die Eckengröße ist keine Zahl."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Negative corner size."
@@ -24462,12 +24464,12 @@ msgstr "Fehler: Negative Eckgröße."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1387
 msgid "Warning: Corner size will make pad circular."
-msgstr "Warnung: Durch die Eckgröße wird das Pad kreisförmig."
+msgstr "Warnung: Durch die Größe der Ecken wird das Pad kreisförmig."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1398
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
-"Fehler: Die benutzerdefinierte Padform muss in ein einzelnes Polygon "
+"Fehler: Benutzerdefinierte Padformen müßen in ein einzelnes Polygon "
 "aufgelöst werden."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1404
@@ -24528,8 +24530,8 @@ msgstr "Padnummer:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
-"Nicht zulassen, dass Pad-Positionen relativ zum Footprint verschoben werden "
-"können"
+"Lassen Sie nicht zu, dass die Position des Pads relativ zum übergeordneten "
+"Footprint geändert wird"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -25900,7 +25902,7 @@ msgstr "Beschreibung Footprint Elternelement"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "Durch Ändern des Netzes wird auch %s Pad %s auf %s aktualisiert."
+msgstr "Durch Ändern des Netzes wird auch das  %s Pad %s auf %s aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
@@ -25913,7 +25915,7 @@ msgstr ""
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
-"Durch Ändern des Netzes werden auch %lu angeschlossene Pads auf %s "
+"Durch Ändern des Netz werden auch %lu  die verbundenen Pads auf %s "
 "aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
@@ -30557,7 +30559,7 @@ msgid ""
 "Milimetres were applied instead."
 msgstr ""
 "Die Dimensions-ID %s verwendet einen Einheitentyp, der in KiCad nicht "
-"unterstützt wird. Stattdessen wurden Millimeter angewendet."
+"unterstützt wird. Stattdessen werden Millimeter angewendet."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
@@ -31935,7 +31937,7 @@ msgstr "Manche Leiterbahnsegmente konnten nicht abgerundet werden."
 
 #: pcbnew/tools/edit_tool.cpp:1279 pcbnew/tools/pcb_actions.cpp:289
 msgid "Change Side / Flip"
-msgstr "Seite wechseln / Umdrehen"
+msgstr "Seite wechseln / spiegeln"
 
 #: pcbnew/tools/edit_tool.cpp:1416 pcbnew/tools/zone_filler_tool.cpp:172
 msgid "Fill Zone"
