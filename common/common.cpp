@@ -55,10 +55,16 @@ enum Bracket
 };
 
 
+wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject )
+{
+    return ExpandTextVars( aSource, nullptr, nullptr, aProject );
+}
+
+
 wxString ExpandTextVars( const wxString& aSource,
                          const std::function<bool( wxString* )>* aLocalResolver,
-                         const PROJECT* aProject,
-                         const std::function<bool( wxString* )>* aFallbackResolver )
+                         const std::function<bool( wxString* )>* aFallbackResolver,
+                         const PROJECT* aProject )
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();
@@ -267,7 +273,7 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aPro
 
 const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject )
 {
-    wxString uri = ExpandTextVars( aUri, nullptr, aProject );
+    wxString uri = ExpandTextVars( aUri, aProject );
 
     // URL-like URI: return as is.
     wxURL url( uri );

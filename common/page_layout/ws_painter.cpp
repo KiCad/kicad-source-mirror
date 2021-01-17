@@ -171,14 +171,14 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                 if( tokenUpdated )
                 {
-                   *token = ExpandTextVars( *token, nullptr, m_project );
+                   *token = ExpandTextVars( *token, m_project );
                    return true;
                 }
 
                 return false;
             };
 
-    return ExpandTextVars( aTextbase, &wsResolver, m_project );
+    return ExpandTextVars( aTextbase, &wsResolver, nullptr, m_project );
 }
 
 

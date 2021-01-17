@@ -276,8 +276,7 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
 }
 
 
-void AddGerberX2Header( PLOTTER * aPlotter,
-            const BOARD *aBoard, bool aUseX1CompatibilityMode )
+void AddGerberX2Header( PLOTTER * aPlotter, const BOARD *aBoard, bool aUseX1CompatibilityMode )
 {
     wxString text;
 
@@ -312,8 +311,8 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     msg = fn.GetName();
     msg.Replace( wxT( "," ), wxT( "_" ) );
 
-    // build the <rec> string. All non ASCII chars and comma are replaced by '_'
-    wxString rev = ((BOARD*)aBoard)->GetTitleBlock().GetRevision();
+    // build the <revision id> string. All non ASCII chars and comma are replaced by '_'
+    wxString rev = ExpandTextVars( aBoard->GetTitleBlock().GetRevision(), aBoard->GetProject() );
     rev.Replace( wxT( "," ), wxT( "_" ) );
 
     if( rev.IsEmpty() )

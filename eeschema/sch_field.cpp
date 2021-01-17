@@ -154,13 +154,13 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
         if( aDepth < 10 )
         {
             if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
-                text = ExpandTextVars( text, &symbolResolver, project );
+                text = ExpandTextVars( text, &symbolResolver, nullptr, project );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-                text = ExpandTextVars( text, &sheetResolver, project );
+                text = ExpandTextVars( text, &sheetResolver, nullptr, project );
             else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
-                text = ExpandTextVars( text, &globalLabelResolver, project );
+                text = ExpandTextVars( text, &globalLabelResolver, nullptr, project );
             else
-                text = ExpandTextVars( text, nullptr, project );
+                text = ExpandTextVars( text, project );
         }
     }
 

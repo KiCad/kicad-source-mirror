@@ -434,7 +434,7 @@ wxString FP_TEXT::GetShownText( int aDepth ) const
             project = static_cast<BOARD*>( parentFootprint->GetParent() )->GetProject();
 
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &footprintResolver, project, &boardTextResolver );
+            text = ExpandTextVars( text, &footprintResolver, &boardTextResolver, project );
     }
 
     return text;

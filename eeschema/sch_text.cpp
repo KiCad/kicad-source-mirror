@@ -560,7 +560,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
             project = &Schematic()->Prj();
 
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &textResolver, project );
+            text = ExpandTextVars( text, &textResolver, nullptr, project );
     }
 
     return text;

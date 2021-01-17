@@ -377,15 +377,15 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
         xsheet->AddAttribute( "name", sheetList[i].PathHumanReadable() );
         xsheet->AddAttribute( "tstamps", sheetList[i].PathAsString() );
 
-
         TITLE_BLOCK tb = screen->GetTitleBlock();
+        PROJECT*    prj = &m_schematic->Prj();
 
         xsheet->AddChild( xtitleBlock = node( "title_block" ) );
 
-        xtitleBlock->AddChild( node( "title", tb.GetTitle() ) );
-        xtitleBlock->AddChild( node( "company", tb.GetCompany() ) );
-        xtitleBlock->AddChild( node( "rev", tb.GetRevision() ) );
-        xtitleBlock->AddChild( node( "date", tb.GetDate() ) );
+        xtitleBlock->AddChild( node( "title", ExpandTextVars( tb.GetTitle(), prj ) ) );
+        xtitleBlock->AddChild( node( "company", ExpandTextVars( tb.GetCompany(), prj ) ) );
+        xtitleBlock->AddChild( node( "rev", ExpandTextVars( tb.GetRevision(), prj ) ) );
+        xtitleBlock->AddChild( node( "date", ExpandTextVars( tb.GetDate(), prj ) ) );
 
         // We are going to remove the fileName directories.
         sourceFileName = wxFileName( screen->GetFileName() );
@@ -393,39 +393,39 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "1" );
-        xcomment->AddAttribute( "value", tb.GetComment( 0 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 0 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "2" );
-        xcomment->AddAttribute( "value", tb.GetComment( 1 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 1 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "3" );
-        xcomment->AddAttribute( "value", tb.GetComment( 2 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 2 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "4" );
-        xcomment->AddAttribute( "value", tb.GetComment( 3 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 3 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "5" );
-        xcomment->AddAttribute( "value", tb.GetComment( 4 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 4 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "6" );
-        xcomment->AddAttribute( "value", tb.GetComment( 5 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 5 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "7" );
-        xcomment->AddAttribute( "value", tb.GetComment( 6 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 6 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "8" );
-        xcomment->AddAttribute( "value", tb.GetComment( 7 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 7 ), prj ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "9" );
-        xcomment->AddAttribute( "value", tb.GetComment( 8 ) );
+        xcomment->AddAttribute( "value", ExpandTextVars( tb.GetComment( 8 ), prj ) );
     }
 
     return xdesign;

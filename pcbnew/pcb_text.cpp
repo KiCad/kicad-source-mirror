@@ -92,7 +92,7 @@ wxString PCB_TEXT::GetShownText( int aDepth ) const
     wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
     if( board && processTextVars && aDepth < 10 )
-        text = ExpandTextVars( text, &pcbTextResolver, board->GetProject(), &boardTextResolver );
+        text = ExpandTextVars( text, &pcbTextResolver, &boardTextResolver, board->GetProject() );
 
     return text;
 }

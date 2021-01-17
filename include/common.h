@@ -113,8 +113,10 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aPro
  */
 wxString ExpandTextVars( const wxString& aSource,
                          const std::function<bool( wxString* )>* aLocalResolver,
-                         const PROJECT* aProject,
-                         const std::function<bool( wxString* )>* aFallbackResolver = nullptr );
+                         const std::function<bool( wxString* )>* aFallbackResolver,
+                         const PROJECT* aProject );
+
+wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
 
 /**
  * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
