@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-10 23:11+0000\n"
+"PO-Revision-Date: 2021-01-18 07:28+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -539,9 +539,8 @@ msgid "Other Options"
 msgstr "Další možnosti"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-aliasing"
+msgstr "Anti-aliasing:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -565,9 +564,8 @@ msgstr ""
 "3D-prohlížeč musí být uzavřen a znovu otevřen pro použití tohoto nastavení"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "Výběr barev"
+msgstr "Výběr barev:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -624,14 +622,12 @@ msgid "Spread Factor %"
 msgstr "Faktor rozložení %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
-#, fuzzy
 msgid "Recursion Level"
-msgstr "Rekurzivní úroveň"
+msgstr "Úroveň rekurze"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "Stíny"
+msgstr "Stíny:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -648,9 +644,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Faktor náhodného směru vylitých paprsků"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "Odrazy"
+msgstr "Odrazy:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -665,9 +660,8 @@ msgstr ""
 "zlepšuje výsledky, zvláště na velmi transparentních deskách)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "Refrakce"
+msgstr "Lomy:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -679,24 +673,20 @@ msgstr "Počet odrazů, které může paprsek zasáhnout reflexní objekty"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "Konfigurace světla"
+msgstr "Nastavení světla"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "Okolní světlo kamery"
+msgstr "Okolní světlo kamery:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "Světlo shora"
+msgstr "Světlo shora:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Světlo zespodu"
+msgstr "Světlo zespodu:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -709,44 +699,36 @@ msgid "Azimuth (degrees)"
 msgstr "Azimut (stupně)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1:1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "R2:"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -2253,18 +2235,16 @@ msgid "Import settings from a previous version at:"
 msgstr "Importovat nastavení z předchozí verze na:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Ladit sklon diferenciálního páru"
+msgstr "Vyberte jinou cestu"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Importovat nastavení z předchozí verze (nenalezeno)"
+msgstr "Import konfigurace knihovny z předchozí verze"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -2273,14 +2253,12 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Obnovit výchozí nastavení"
+msgstr "Začněte s výchozím nastavením"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Konfigurace cest"
+msgstr "Nakonfigurovat cesty nastavení KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -3193,28 +3171,24 @@ msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr "Jak rychle se pohybovat při pohybu objektu od okraje obrazovky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Gesta"
+msgstr "Přetáhnout gesta"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Přetažení pravým tlačítkem:"
+msgstr "Tažení levým tlačítkem:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Nakreslit obdélník"
+msgstr "Nakreslit obdélník výběru"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Přetáhnout libovolný objekt (vybraný nebo ne)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3257,20 +3231,16 @@ msgid "Right button drag:"
 msgstr "Přetažení pravým tlačítkem:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Gesta"
+msgstr "Posunout gesta"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
-"Posouvání doleva / doprava s vodorovným touchpadem nebo pohybem kolečka"
+msgstr "Vertikální pohyb touchpadu nebo kolečka:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: pcbnew/dialogs/panel_edit_options_base.cpp:126
@@ -3294,20 +3264,16 @@ msgid "Zoom:"
 msgstr "Zvětšení:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Pan up/down:"
 msgstr "Posun nahoru/dolů:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:209
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Posun doleva/doprava:"
+msgstr "Posun vlevo/vpravo:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr ""
-"Posouvání doleva / doprava s vodorovným touchpadem nebo pohybem kolečka"
+msgstr "Posouvat doleva/doprava s vodorovným pohybem"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 msgid ""
@@ -3382,9 +3348,8 @@ msgid "Via Size"
 msgstr "Velikosti prokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
-#, fuzzy
 msgid "Via Hole"
-msgstr "Díry prokovu"
+msgstr "Díra prokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
@@ -3392,9 +3357,8 @@ msgid "uVia Size"
 msgstr "mikroprokov Velikost"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Díry prokovu"
+msgstr "Díra mikroprokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -5180,9 +5144,8 @@ msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "Hodnota proměnné prostředí \"%s\" nemůže být přejmenována."
+msgstr "Proměnná prostředí HOME je prázdná.  Nelze pokračovat."
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -6441,9 +6404,8 @@ msgid "Legacy footprint export files"
 msgstr "Soubory exportovaných pouzder Kicad"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Soubory kontroly pravidel elektrického návrhu"
+msgstr "Soubor kontroly pravidel elektrického návrhu"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -7641,9 +7603,8 @@ msgid "Bus Definitions"
 msgstr "Definice sběrnice"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:58
-#, fuzzy
 msgid "Bus Aliases"
-msgstr "Aliasy"
+msgstr "Aliasy sběrnic"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:68
 msgid "Alias Name"
@@ -7655,18 +7616,16 @@ msgid "Rename"
 msgstr "Přejmenovat"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:92
-#, fuzzy
 msgid "Alias Members"
-msgstr "Aliasy"
+msgstr "Alias člen"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:102
 msgid "Member Name"
 msgstr "Jméno člena"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:183
-#, fuzzy
 msgid "Bus Alias Name"
-msgstr "Název aliasu"
+msgstr "Název aliasu sběrnice"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:184
 msgid "Net or Bus Name"
@@ -7685,14 +7644,12 @@ msgid "Change selected Symbol"
 msgstr "Změnit vybraný symbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:91
-#, fuzzy
 msgid "Change symbols matching reference designator:"
-msgstr "%s pouzdro s odkazem:"
+msgstr "Změnit symboly odpovídající referenci schématu:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
-#, fuzzy
 msgid "Change symbols matching value:"
-msgstr "%s pouzdra s hodnotou:"
+msgstr "Změnit symboly odpovídající hodnotě:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching library identifier:"
@@ -7770,14 +7727,12 @@ msgid "Update selected symbol"
 msgstr "Aktualizovat vybraný symbol"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
-#, fuzzy
 msgid "Update symbols matching reference designator:"
-msgstr "%s pouzdro s odkazem:"
+msgstr "Aktualizovat symboly odpovídající označení reference:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
-#, fuzzy
 msgid "Update symbols matching value:"
-msgstr "%s pouzdra s hodnotou:"
+msgstr "Aktualizovat symboly odpovídající hodnotě:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
@@ -7835,14 +7790,12 @@ msgid "Select with Browser"
 msgstr "Vybrat prohlížečem"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "Umístit vybraná pouzdra"
+msgstr "Umístit opakované kopie"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:145
-#, fuzzy
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "Neexistuje žádný symbol k uložení."
+msgstr "Symbol nechte vybraný při dalších kliknutích."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place all units"
@@ -8007,9 +7960,8 @@ msgstr "Nápověda k syntaxi"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Zobrazit okno konzole"
+msgstr "Zobrazit okno nápovědy k syntaxi"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8444,9 +8396,8 @@ msgid "Group symbols"
 msgstr "Skupina symbolů"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
-#, fuzzy
 msgid "Group symbols together based on common properties"
-msgstr "Seskupuje součástky dohromady podle společných vlastností"
+msgstr "Symboly seskupovat na základě společných vlastností"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
@@ -8508,9 +8459,8 @@ msgid "Filter items by parent symbol type:"
 msgstr "Filtrování položek podle typu nadřazeného symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Non-power symbols"
-msgstr "Symbol napájení"
+msgstr "Symbol Bez napájení"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Power symbols"
@@ -8586,13 +8536,13 @@ msgid "symbol"
 msgstr "symbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Chyba nastala při zápisu prázdné tabulky knihovny symbolů.\n"
+"Došlo k chybě při zápisu prázdné tabulky knihovny symbolů.\n"
 "\n"
 "%s"
 
@@ -8617,9 +8567,9 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "Nelze vytvořit knihovnu pouzder \"%s\"."
+msgstr "Nelze vytvořit globální tabulku knihoven cesta '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
@@ -8628,13 +8578,13 @@ msgstr ""
 "Nelze zkopírovat soubor tabulky globální knihovny symbolů '%s' do '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Při načítání globální tabulky knihoven symbolů došlo k chybě:\n"
+"Při načítání globální tabulky knihoven symbolů došlo k chybě.\n"
 "\n"
 "%s"
 
@@ -9114,9 +9064,8 @@ msgstr ""
 "Zadejte počet jednotek pro součástky, které obsahují více než jednu jednotku"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Všechny jednotky nejsou zaměnitelné"
+msgstr "Všechny jednotky jsou zaměnitelné"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
@@ -9417,9 +9366,8 @@ msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
-#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr "Pouzdro musí mít název."
+msgstr "Alternativní definice vývodů musí mít název."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:295
 #, fuzzy, c-format
