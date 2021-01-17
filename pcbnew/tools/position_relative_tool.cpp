@@ -62,9 +62,15 @@ bool POSITION_RELATIVE_TOOL::Init()
 }
 
 
+// TODO: Clean up this global once TOOL_EVENT supports std::functions as parameters
+BOARD_ITEM* g_PositionRelativePadAnchor;
+
+
 int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+
+    g_PositionRelativePadAnchor = nullptr;
 
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -86,6 +92,8 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
                         if( !aCollector.HasItem( item->GetParent() ) )
                             to_add.insert( item->GetParent() );
 
+                        g_PositionRelativePadAnchor = item;
+
                         aCollector.Remove( item );
                     }
                 }
@@ -99,6 +107,11 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
         return 0;
 
     m_selection = selection;
+
+    if( g_PositionRelativePadAnchor )
+        m_selectionAnchor = static_cast<PAD*>( g_PositionRelativePadAnchor )->GetPosition();
+    else
+        m_selectionAnchor = m_selection.GetTopLeftItem()->GetPosition();
 
     // The dialog is not modal and not deleted between calls.
     // It means some options can have changed since the last call.
@@ -115,11 +128,6 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     m_dialog->Show( true );
 
     return 0;
-}
-
-wxPoint POSITION_RELATIVE_TOOL::GetSelectionAnchorPosition() const
-{
-    return m_selection.GetTopLeftItem()->GetPosition();
 }
 
 

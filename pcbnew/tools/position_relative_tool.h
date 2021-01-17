@@ -73,7 +73,7 @@ public:
      * Returns the postion of the selected item(s)
      *
      */
-    wxPoint GetSelectionAnchorPosition() const;
+    wxPoint GetSelectionAnchorPosition() const { return m_selectionAnchor; }
 
     /**
      * Function RelativeItemSelectionMove()
@@ -91,6 +91,7 @@ private:
 
     PCB_SELECTION_TOOL*           m_selectionTool;
     PCB_SELECTION                 m_selection;
+    wxPoint                       m_selectionAnchor;
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 
