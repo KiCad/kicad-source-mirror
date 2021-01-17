@@ -2144,7 +2144,8 @@ int CONNECTION_GRAPH::RunERC()
         if( seenDriverInstances.count( subgraph->m_driver ) )
             continue;
 
-        seenDriverInstances.insert( subgraph->m_driver );
+        if( subgraph->m_driver )
+            seenDriverInstances.insert( subgraph->m_driver );
 
         /**
          * NOTE:
