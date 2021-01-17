@@ -1171,7 +1171,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
             }
 
             GEOM_GRAPHIC& graphic = board_graphics.back();
-            graphic.elements.emplace( std::move( gr_item ) );
+            graphic.elements->emplace( std::move( gr_item ) );
         }
         else
         {
@@ -1188,7 +1188,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
                 gr->second.id   = id;
             }
 
-            auto result = gr->second.elements.emplace( std::move( gr_item ) );
+            auto result = gr->second.elements->emplace( std::move( gr_item ) );
         }
     }
 
@@ -1850,7 +1850,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             {
                 auto& graphic = gr_ref.second;
 
-                for( auto& seg : graphic.elements )
+                for( auto& seg : *graphic.elements )
                 {
                     PCB_LAYER_ID layer = Dwgs_User;
 
@@ -2526,7 +2526,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
         else
             layer = Cmts_User;
 
-        for( auto& seg : geom.elements )
+        for( auto& seg : *geom.elements )
         {
             switch( seg->shape )
             {

@@ -370,7 +370,7 @@ private:
         std::string     refdes;     ///<! REFDES
         int             id;         ///<! RECORD_TAG[0]
 
-        graphic_element elements;
+        std::unique_ptr<graphic_element> elements;
 
         struct BY_ID
         {
