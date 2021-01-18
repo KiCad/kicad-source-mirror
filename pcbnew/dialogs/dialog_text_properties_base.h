@@ -72,9 +72,6 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_PositionYCtrl;
 		wxStaticText* m_PositionYUnits;
 		wxCheckBox* m_KeepUpright;
-		wxStaticText* m_LineThicknessLabel;
-		wxTextCtrl* m_LineThicknessCtrl;
-		wxStaticText* m_LineThicknessUnits;
 		wxStaticText* m_statusLine;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;

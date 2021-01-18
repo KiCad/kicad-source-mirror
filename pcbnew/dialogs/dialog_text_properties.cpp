@@ -49,8 +49,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
-    m_linesThickness( aParent, m_LineThicknessLabel, m_LineThicknessCtrl, m_LineThicknessUnits,
-                      true ),
     m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr, false )
 {
     wxString title;
@@ -93,9 +91,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
 
-        // This option make sense only for footprint texts; texts on board are always visible.
+        // This option makes sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );
-        m_Visible->Show( false );
+        m_Visible->Enable( false );
 
         m_KeepUpright->Show( false );
         m_statusLine->Show( false );
@@ -141,7 +139,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
             m_ThicknessCtrl,
             m_PositionXCtrl,
             m_PositionYCtrl,
-            m_LineThicknessCtrl,
             m_Visible,
             m_Italic,
             m_JustifyChoice,

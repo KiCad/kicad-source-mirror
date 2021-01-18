@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,17 +52,16 @@ public:
 
 private:
     PCB_BASE_EDIT_FRAME* m_Parent;
-    BOARD_ITEM*          m_item;        // FP_TEXT, PCB_TEXT, or DIMENSION
+    BOARD_ITEM*          m_item;        // FP_TEXT or PCB_TEXT
     EDA_TEXT*            m_edaText;     // always non-null
     FP_TEXT*             m_fpText;      // only non-null for FP_TEXTs
-    PCB_TEXT*            m_pcbText;     // only non-null for PCB_TEXTs and DIMENSIONs
+    PCB_TEXT*            m_pcbText;     // only non-null for PCB_TEXTs
 
     UNIT_BINDER          m_textWidth;
     UNIT_BINDER          m_textHeight;
     UNIT_BINDER          m_thickness;
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
-    UNIT_BINDER          m_linesThickness;  // lines thickness for dimension graphic
     UNIT_BINDER          m_orientation;     // rotation in degrees
     double               m_OrientValue;
 
