@@ -71,7 +71,7 @@ BOARD* FABMASTER_PLUGIN::Load( const wxString &aFileName, BOARD *aAppendToMe,
 
     if( !m_fabmaster.Read( aFileName.ToStdString() ) )
     {
-        std::string readerr =
+        std::string readerr;
 
         readerr = _( "Could not read file " ) + aFileName.ToStdString();
         THROW_IO_ERROR( readerr );
