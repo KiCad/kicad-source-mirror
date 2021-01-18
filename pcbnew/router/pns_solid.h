@@ -66,6 +66,7 @@ public:
 
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
+        m_orientation = aSolid.m_orientation;
     }
 
     static inline bool ClassOf( const ITEM* aItem )

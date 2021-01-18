@@ -75,6 +75,7 @@ void VC_SETTINGS::Reset()
     m_scrollModifierZoom              = 0;
     m_scrollModifierPanH              = WXK_CONTROL;
     m_scrollModifierPanV              = WXK_SHIFT;
+    m_dragLeft                        = MOUSE_DRAG_ACTION::NONE;
     m_dragMiddle                      = MOUSE_DRAG_ACTION::PAN;
     m_dragRight                       = MOUSE_DRAG_ACTION::PAN;
     m_lastKeyboardCursorPositionValid = false;
