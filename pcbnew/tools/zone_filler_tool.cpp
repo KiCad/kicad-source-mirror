@@ -128,6 +128,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
     else
         filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ), 3 );
 
+    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
+
     if( filler.Fill( toFill ) )
     {
         commit.Push( _( "Fill Zone(s)" ), false );
@@ -170,6 +172,8 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     ZONE_FILLER filler( board(), &commit );
     filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
+
+    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
 
     if( filler.Fill( toFill ) )
         commit.Push( _( "Fill Zone(s)" ), false );

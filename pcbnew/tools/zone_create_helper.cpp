@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/spinlock.h>
+#include <connectivity/connectivity_data.h>
 #include <tools/zone_create_helper.h>
 #include <tool/tool_manager.h>
 #include <zone.h>
@@ -168,6 +170,8 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, ZONE& aCutout )
 
     ZONE_FILLER filler( board, &commit );
 
+    std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
+
     if( !filler.Fill( newZones ) )
     {
         commit.Revert();
@@ -207,9 +211,12 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             aZone->HatchBorder();
             bCommit.Add( aZone.get() );
 
+            BOARD* board = m_tool.getModel<BOARD>();
+            std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
+
             if( !m_params.m_keepout )
             {
-                ZONE_FILLER filler( m_tool.getModel<BOARD>(), &bCommit );
+                ZONE_FILLER filler( board, &bCommit );
                 std::vector<ZONE*> toFill = { aZone.get() };
 
                 if( !filler.Fill( toFill ) )

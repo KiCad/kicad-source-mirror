@@ -125,6 +125,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     commit.Stage( pickedList );
 
+    std::lock_guard<KISPINLOCK> lock( GetBoard()->GetConnectivity()->GetLock() );
+
     if( zones_to_refill.size() )
     {
         ZONE_FILLER filler( GetBoard(), &commit );

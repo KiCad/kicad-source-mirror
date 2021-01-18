@@ -44,6 +44,13 @@ public:
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
     void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
+
+    /**
+     * Fills the given list of zones.  Invalidates connectivity - it is up to the caller to obtain
+     * a lock on the connectivity data before calling Fill to prevent access to stale data by other
+     * coroutines (for example, ratsnest redraw).  This will generally be required if a UI-based
+     * progress reporter has been installed.
+     */
     bool Fill( std::vector<ZONE*>& aZones, bool aCheck = false, wxWindow* aParent = nullptr );
 
     bool IsDebug() const { return m_debugZoneFiller; }

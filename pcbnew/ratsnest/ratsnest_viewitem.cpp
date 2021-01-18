@@ -63,7 +63,7 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
 
 void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    std::unique_lock<std::mutex> lock( m_data->GetLock(), std::try_to_lock );
+    std::unique_lock<KISPINLOCK> lock( m_data->GetLock(), std::try_to_lock );
 
     if( !lock )
         return;

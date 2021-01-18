@@ -88,10 +88,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
-    std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
-
-    if( !lock )
-        return false;
 
     // Rebuild just in case. This really needs to be reliable.
     connectivity->Clear();

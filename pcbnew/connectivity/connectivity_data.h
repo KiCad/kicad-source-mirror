@@ -28,6 +28,7 @@
 #define __CONNECTIVITY_DATA_H
 
 #include <core/typeinfo.h>
+#include <core/spinlock.h>
 
 #include <memory>
 #include <mutex>
@@ -261,7 +262,7 @@ public:
         return m_connAlgo;
     }
 
-    std::mutex& GetLock()
+    KISPINLOCK& GetLock()
     {
         return m_lock;
     }
@@ -307,7 +308,7 @@ private:
 
     bool m_skipRatsnest = false;
 
-    std::mutex m_lock;
+    KISPINLOCK m_lock;
 
     /// Map of netcode -> netclass the net is a member of; used for ratsnest painting
     std::map<int, wxString> m_netclassMap;
