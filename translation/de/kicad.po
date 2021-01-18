@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-18 07:28+0000\n"
+"PO-Revision-Date: 2021-01-18 17:40+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -25903,7 +25903,7 @@ msgstr "Beschreibung Footprint Elternelement"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "Durch Ändern des Netzes wird auch das  %s Pad %s auf %s aktualisiert."
+msgstr "Durch Ändern des Netzes wird auch das %s Pad %s auf %s aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
@@ -25916,8 +25916,7 @@ msgstr ""
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
-"Durch Ändern des Netz werden auch %lu  die verbundenen Pads auf %s "
-"aktualisiert."
+"Durch Ändern des Netz werden auch %lu verbundene Pads auf %s aktualisiert."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 msgid "Change Nets"
