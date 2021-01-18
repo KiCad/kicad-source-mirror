@@ -202,13 +202,21 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
 
 void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
-    NETLIST_EXPORTER_KICAD exporter( &Schematic() );
-    STRING_FORMATTER       formatter;
+    std::string packet;
 
-    // @todo : trim GNL_ALL down to minimum for CVPCB
-    exporter.Format( &formatter, GNL_ALL );
+    {
+        NETLIST_EXPORTER_KICAD exporter( &Schematic() );
+        STRING_FORMATTER       formatter;
 
-    std::string packet = formatter.GetString();  // an abbreviated "kicad" (s-expr) netlist
+        // @todo : trim GNL_ALL down to minimum for CVPCB
+        exporter.Format( &formatter, GNL_ALL );
+
+        packet = formatter.GetString();  // an abbreviated "kicad" (s-expr) netlist
+
+        // NETLIST_EXPORTER_KICAD must go out of scope so it can clean up things like the
+        // current sheet setting before sending expressmail
+    }
+
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }
 
