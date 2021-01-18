@@ -176,7 +176,41 @@ void WX_VIEW_CONTROLS::LoadSettings()
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     bool isAutoPanning = false;
-    VECTOR2D mousePos( aEvent.GetX(), aEvent.GetY() );
+    int x = aEvent.GetX();
+    int y = aEvent.GetY();
+    VECTOR2D mousePos( x, y );
+
+    if( !aEvent.Dragging() &&
+        ( m_settings.m_cursorCaptured || m_settings.m_grabMouse || m_settings.m_autoPanEnabled ) )
+    {
+        bool warp = false;
+        wxSize parentSize = m_parentPanel->GetClientSize();
+
+        if( x < 0 )
+        {
+            x = 0;
+            warp = true;
+        }
+        else if( x >= parentSize.x )
+        {
+            x = parentSize.x - 1;
+            warp = true;
+        }
+
+        if( y < 0 )
+        {
+            y = 0;
+            warp = true;
+        }
+        else if( y >= parentSize.y )
+        {
+            y = parentSize.y - 1;
+            warp = true;
+        }
+
+        if( warp )
+            m_parentPanel->WarpPointer( x, y );
+    }
 
     if( m_settings.m_autoPanEnabled && m_settings.m_autoPanSettingEnabled )
         isAutoPanning = handleAutoPanning( aEvent );
@@ -185,22 +219,90 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D d = m_dragStartPoint - mousePos;
-            VECTOR2D delta = m_view->ToWorld( d, false );
+            static bool justWarped = false;
+            int warpX = 0;
+            int warpY = 0;
+            wxSize parentSize = m_parentPanel->GetClientSize();
 
-            m_view->SetCenter( m_lookStartPoint + delta );
-            aEvent.StopPropagation();
+            if( x < 0 )
+            {
+                warpX = parentSize.x;
+            }
+            else if(x >= parentSize.x )
+            {
+                warpX = -parentSize.x;
+            }
+
+            if( y < 0 )
+            {
+                warpY = parentSize.y;
+            }
+            else if( y >= parentSize.y )
+            {
+                warpY = -parentSize.y;
+            }
+
+            if( !justWarped )
+            {
+                VECTOR2D d = m_dragStartPoint - mousePos;
+                VECTOR2D delta = m_view->ToWorld( d, false );
+                m_view->SetCenter( m_lookStartPoint + delta );
+                aEvent.StopPropagation();
+            }
+
+            if( warpX || warpY )
+            {
+                if( !justWarped )
+                {
+                    m_parentPanel->WarpPointer( x + warpX, y + warpY );
+                    m_dragStartPoint += VECTOR2D( warpX, warpY );
+                    justWarped = true;
+                }
+                else
+                    justWarped = false;
+            }
+            else
+                justWarped = false;
         }
         else if( m_state == DRAG_ZOOMING )
         {
-            VECTOR2D d = m_dragStartPoint - mousePos;
+            static bool justWarped = false;
+            int warpY = 0;
+            wxSize parentSize = m_parentPanel->GetClientSize();
 
-            double scale = 1 + ( d.y * m_settings.m_zoomSpeed * 0.001 );
+            if( y < 0 )
+            {
+                warpY = parentSize.y;
+            }
+            else if( y >= parentSize.y )
+            {
+                warpY = -parentSize.y;
+            }
 
-            wxLogTrace( traceZoomScroll, wxString::Format( "dy: %f  scale: %f", d.y, scale ) );
+            if( !justWarped )
+            {
+                VECTOR2D d = m_dragStartPoint - mousePos;
+                double scale = exp( d.y * m_settings.m_zoomSpeed * 0.001 );
 
-            m_view->SetScale( m_initialZoomScale * scale, m_view->ToWorld( m_dragStartPoint ) );
-            aEvent.StopPropagation();
+                wxLogTrace( traceZoomScroll, wxString::Format( "dy: %f  scale: %f", d.y, scale ) );
+
+                m_view->SetScale( m_initialZoomScale * scale, m_view->ToWorld( m_zoomStartPoint ) );
+                aEvent.StopPropagation();
+            }
+
+            if( warpY )
+            {
+                if( !justWarped )
+                {
+                    m_parentPanel->WarpPointer( x, y + warpY );
+                    m_dragStartPoint += VECTOR2D( 0, warpY );
+                    justWarped = true;
+                }
+                else
+                    justWarped = false;
+            }
+            else
+                justWarped = false;
         }
     }
 
@@ -309,13 +411,16 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
+            m_parentPanel->CaptureMouse();
         }
         else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM ) ||
                  ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
         {
             m_dragStartPoint   = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            m_zoomStartPoint = m_dragStartPoint;
             m_initialZoomScale = m_view->GetScale();
             m_state = DRAG_ZOOMING;
+            m_parentPanel->CaptureMouse();
         }
 
         if( aEvent.LeftUp() )
@@ -326,7 +431,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
     case DRAG_ZOOMING:
     case DRAG_PANNING:
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
+        {
             m_state = IDLE;
+            m_parentPanel->ReleaseMouse();
+        }
 
         break;
     }
@@ -364,38 +472,7 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
-    if( m_settings.m_cursorCaptured )
-    {
-        bool warp = false;
-        int x = aEvent.GetX();
-        int y = aEvent.GetY();
-        wxSize parentSize = m_parentPanel->GetClientSize();
 
-        if( x < 0 )
-        {
-            x = 0;
-            warp = true;
-        }
-        else if( x >= parentSize.x )
-        {
-            x = parentSize.x - 1;
-            warp = true;
-        }
-
-        if( y < 0 )
-        {
-            y = 0;
-            warp = true;
-        }
-        else if( y >= parentSize.y )
-        {
-            y = parentSize.y - 1;
-            warp = true;
-        }
-
-        if( warp )
-            m_parentPanel->WarpPointer( x, y );
-    }
 }
 
 
@@ -511,6 +588,28 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
         m_parentPanel->ReleaseMouse();
 
     VIEW_CONTROLS::SetGrabMouse( aEnabled );
+}
+
+
+void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
+{
+    if( aEnabled && !m_settings.m_cursorCaptured )
+        m_parentPanel->CaptureMouse();
+    else if( !aEnabled && m_settings.m_cursorCaptured )
+        m_parentPanel->ReleaseMouse();
+
+    VIEW_CONTROLS::CaptureCursor( aEnabled );
+}
+
+
+void WX_VIEW_CONTROLS::SetAutoPan( bool aEnabled )
+{
+    if( aEnabled && !m_settings.m_autoPanEnabled )
+        m_parentPanel->CaptureMouse();
+    else if( !aEnabled && m_settings.m_autoPanEnabled )
+        m_parentPanel->ReleaseMouse();
+
+    VIEW_CONTROLS::SetAutoPan( aEnabled );
 }
 
 

@@ -72,6 +72,21 @@ public:
      */
     void SetGrabMouse( bool aEnabled ) override;
 
+    /**
+     * Force the cursor to stay within the drawing panel area.
+     *
+     * @param aEnabled determines if the cursor should be captured.
+     */
+    void CaptureCursor( bool aEnabled ) override;
+
+    /**
+     * Turn on/off auto panning (this feature is used when there is a tool active (eg. drawing a
+     * track) and user moves mouse to the VIEW edge - then the view can be translated or not).
+     *
+     * @param aEnabled tells if the autopanning should be active.
+     */
+    void SetAutoPan( bool aEnabled ) override;
+
     ///< @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
 
@@ -168,6 +183,9 @@ private:
 
     ///< The zoom scale when a drag zoom started.
     double      m_initialZoomScale;
+
+    ///< The mouse position when a drag zoom started.
+    VECTOR2D      m_zoomStartPoint;
 
 #ifdef __WXGTK3__
     ///< Last event timestamp used to de-bounce mouse wheel.
