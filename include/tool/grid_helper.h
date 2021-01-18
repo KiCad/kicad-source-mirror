@@ -61,7 +61,11 @@ public:
     }
 
     void SetSnap( bool aSnap ) { m_enableSnap = aSnap; }
+    bool GetSnap() const { return m_enableSnap; }
+
     void SetUseGrid( bool aSnapToGrid ) { m_enableGrid = aSnapToGrid; }
+    bool GetUseGrid() const { return m_enableGrid; }
+
     void SetSnapLine( bool aSnap ) { m_enableSnapLine = aSnap; }
 
 protected:

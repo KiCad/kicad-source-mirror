@@ -219,6 +219,9 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
                                                                  points->Point( ARC_CENTER ) ) );
 
             points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
+            points->Point( ARC_START ).SetGridConstraint( SNAP_TO_GRID );
+            points->Point( ARC_CENTER ).SetGridConstraint( SNAP_BY_GRID );
+            points->Point( ARC_END ).SetGridConstraint( SNAP_TO_GRID );
             break;
 
         case S_CIRCLE:
@@ -465,50 +468,49 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_original = *m_editedPoint;    // Save the original position
                 controls->SetAutoPan( true );
                 inDrag = true;
-                grid.SetAuxAxes( true, m_original.GetPosition() );
+
+                if( m_editedPoint->GetGridConstraint() != SNAP_BY_GRID )
+                    grid.SetAuxAxes( true, m_original.GetPosition() );
+
                 setAltConstraint( true );
                 m_editedPoint->SetActive();
             }
+
+            VECTOR2I pos = evt->Position();
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
             switch( m_editedPoint->GetGridConstraint() )
             {
             case IGNORE_GRID:
-                m_editedPoint->SetPosition( evt->Position() );
+                m_editedPoint->SetPosition( pos );
                 break;
 
             case SNAP_TO_GRID:
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers,
-                                                                 { item } ) );
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, { item } ) );
                 break;
 
             case SNAP_BY_GRID:
             {
-                VECTOR2I start = m_editedPoint->GetPosition();
-                VECTOR2I startGrid = grid.BestSnapAnchor( start, snapLayers, { item } );
-                VECTOR2I end = evt->Position();
-                VECTOR2I endGrid = grid.BestSnapAnchor( end, snapLayers, { item } );
-
-                if( start == startGrid )
+                if( grid.GetUseGrid() )
                 {
-                    end = endGrid;
-                }
-                else if( start.x == startGrid.x )
-                {
-                    end.x = endGrid.x;
+                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
 
-                    if( abs( end.y - start.y ) < grid.GetGrid().y )
-                        end.y = start.y;
-                }
-                else if( start.y == startGrid.y )
-                {
-                    end.y = endGrid.y;
+                    VECTOR2I last = m_editedPoint->GetPosition();
+                    VECTOR2I delta = pos - last;
+                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, { item } );
 
-                    if( abs( end.x - start.x ) < grid.GetGrid().x )
-                        end.x = start.x;
+                    if( abs( delta.x ) > grid.GetGrid().x / 2 )
+                        pos.x = last.x + deltaGrid.x;
+                    else
+                        pos.x = last.x;
+
+                    if( abs( delta.y ) > grid.GetGrid().x / 2 )
+                        pos.y = last.y + deltaGrid.y;
+                    else
+                        pos.y = last.y;
                 }
 
-                m_editedPoint->SetPosition( end );
+                m_editedPoint->SetPosition( pos );
             }
                 break;
             }
@@ -522,13 +524,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->ApplyConstraint();
 
             if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
-            {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                                                                 snapLayers, { item } ) );
-            }
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, { item } ) );
 
-            controls->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updateItem();
+            controls->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
         }
         else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
@@ -863,9 +862,9 @@ static void pinEditedCorner( int aEditedPointIndex, int aMinWidth, int aMinHeigh
 }
 
 
-void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                              VECTOR2I aMid, VECTOR2I aEnd,
-                                              const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter,
+                                                  VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
+                                                  const VECTOR2I aCursor ) const
 {
     bool clockwise;
     bool movingStart;
@@ -999,8 +998,9 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
 }
 
 
-void PCB_POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                           VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                                VECTOR2I aMid, VECTOR2I aEnd,
+                                                const VECTOR2I aCursor ) const
 {
     bool     clockwise;
     VECTOR2I oldCenter = aArc->GetCenter();
@@ -1169,7 +1169,7 @@ void PCB_POINT_EDITOR::updateItem() const
                 if( m_altEditMethod )
                     editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
                 else
-                    editArcMidKeepEnpoints( shape, center, start, mid, end, cursorPos );
+                    editArcMidKeepEndpoints( shape, center, start, mid, end, cursorPos );
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
                      || isModified( m_editPoints->Point( ARC_END ) ) )
