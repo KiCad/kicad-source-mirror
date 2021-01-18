@@ -157,8 +157,11 @@ bool PCB_SELECTION_TOOL::Init()
                 return m_enteredGroup != nullptr;
             };
 
-    menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty );
-    menu.AddSeparator( 1000 );
+    if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
+    {
+        menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty  );
+        menu.AddSeparator( 1000 );
+    }
 
     // "Cancel" goes at the top of the context menu when a tool is active
     menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
