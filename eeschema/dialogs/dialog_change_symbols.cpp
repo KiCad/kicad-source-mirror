@@ -549,7 +549,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
 
     aSymbol->SetLibSymbol( flattenedSymbol.release() );
 
-    if( m_resetAttributes )
+    if( m_resetAttributes->GetValue() )
     {
         aSymbol->SetIncludeInBom( libSymbol->GetIncludeInBom() );
         aSymbol->SetIncludeOnBoard( libSymbol->GetIncludeOnBoard() );
