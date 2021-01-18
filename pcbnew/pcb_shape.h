@@ -227,14 +227,6 @@ public:
      */
     void SetCenter( const wxPoint& aCenterPoint ) { m_start = aCenterPoint; }
 
-    /**
-     * Set the three controlling points for an arc.
-     *
-     * NB: these are NOT what's currently stored, so we have to do some calculations behind
-     * the scenes.  However, they are what SHOULD be stored.
-     */
-    void SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
-
     const wxPoint GetFocusPosition() const override
     {
         return GetCenter();

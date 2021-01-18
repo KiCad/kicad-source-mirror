@@ -131,26 +131,26 @@ private:
     int removeCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
-    /**
-     * Move an end point of the arc, while keeping the same subtended angle.
+    /** Move an end point of the arc, while keeping the tangent at the other endpoint.
+     * 
      */
-    void editArcEndpointKeepShape( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
-                                   const VECTOR2I aCursor ) const;
+    void editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                     VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
 
-    /**
-     * Move an end point of the arc around the circumference.
+    /** Move an end point of the arc, while keeping radius, and the other point position.
+     * 
      */
     void editArcEndpointKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
                                     VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
 
-    /**
-     * Move the mid point of the arc, while keeping the two endpoints.
+    /** Move the mid point of the arc, while keeping the two endpoints.
+     * 
      */
-    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
-                                  const VECTOR2I aCursor ) const;
+    void editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
+                                 VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
 
-    /**
-     * Move the mid point of the arc, while keeping the angle.
+    /** Move the mid point of the arc, while keeping the angle.
+     * 
      */
     void editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart, VECTOR2I aMid,
                                VECTOR2I aEnd, const VECTOR2I aCursor ) const;

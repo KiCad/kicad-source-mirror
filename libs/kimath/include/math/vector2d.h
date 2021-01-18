@@ -501,8 +501,10 @@ VECTOR2<T> VECTOR2<T>::operator*( const T& aFactor ) const
 template <class T>
 VECTOR2<T> VECTOR2<T>::operator/( const T& aFactor ) const
 {
-    VECTOR2<T> vector( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
-    return vector;
+    if( std::is_integral<T>::value )
+        return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
+    else
+        return VECTOR2<T>( x / aFactor, y / aFactor );
 }
 
 
