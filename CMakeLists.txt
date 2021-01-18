@@ -99,8 +99,8 @@ option( KICAD_SPICE
     ON )
 
 option( KICAD_BUILD_I18N
-    "Buid the translations."
-    ON )
+    "Build the translation libraries."
+    OFF )
 
 option( KICAD_I18N_UNIX_STRICT_PATH
     "Use standard Unix locale lookup path (default OFF)."
