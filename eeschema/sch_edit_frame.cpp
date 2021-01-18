@@ -1384,6 +1384,9 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
 void SCH_EDIT_FRAME::OnPageSettingsChange()
 {
+    // Store the current zoom level into the current screen before calling
+    // DisplayCurrentSheet() that set the zoom to GetScreen()->m_LastZoomLevel
+    GetScreen()->m_LastZoomLevel = GetCanvas()->GetView()->GetScale();
     // Rebuild the sheet view (draw area and any other items):
     DisplayCurrentSheet();
 }
