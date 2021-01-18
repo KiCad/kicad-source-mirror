@@ -185,31 +185,26 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     if( !part )
         return 0;
 
-    wxString    msg;
-    const int   min_grid_size = 25;
-    const int   grid_size = KiROUND( getView()->GetGAL()->GetGridSize().x );
-    const int   clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
-    LIB_PINS    pinList;
+    LIB_PINS                  pinList;
+    std::unique_ptr<LIB_PART> flattenedPart = part->Flatten();
 
-    part->GetPins( pinList );
-
-    if( pinList.empty() )
-    {
-        DisplayInfoMessage( m_frame, _( "No pins!" ) );
-        return 0;
-    }
+    flattenedPart->GetPins( pinList );
 
     // Sort pins by pin num, so 2 duplicate pins
     // (pins with the same number) will be consecutive in list
     sort( pinList.begin(), pinList.end(), sort_by_pin_number );
 
     // Test for duplicates:
-    DIALOG_DISPLAY_HTML_TEXT_BASE error_display( m_frame, wxID_ANY, _( "Marker Information" ),
+    DIALOG_DISPLAY_HTML_TEXT_BASE error_display( m_frame, wxID_ANY, _( "Symbol Warnings" ),
                                                  wxDefaultPosition, wxSize( 750, 600 ) );
 
-    std::vector<wxString> messages;
+    const int min_grid_size = 25;
+    const int grid_size = KiROUND( getView()->GetGAL()->GetGridSize().x );
+    const int clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
 
-    int dup_error = 0;
+    std::vector<wxString> messages;
+    wxString              msg;
+    int                   dup_error = 0;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
@@ -219,67 +214,76 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         if( pin->GetNumber() != next->GetNumber() || pin->GetConvert() != next->GetConvert() )
             continue;
 
+        wxString pinName;
+        wxString nextName;
+
+        if( pin->GetName() != "~"  && !pin->GetName().IsEmpty() )
+            pinName = " '" + pin->GetName() + "'";
+
+        if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
+            nextName = " '" + next->GetName() + "'";
+
         dup_error++;
 
         if( part->HasConversion() && next->GetConvert() )
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b> of converted" ),
-                                        next->GetNumber(),
-                                        next->GetName(),
-                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
+                               " of converted" ),
+                            next->GetNumber(),
+                            nextName,
+                            next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                            pin->GetNumber(),
+                            pin->GetName(),
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
             }
             else
             {
-                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " in units %c and %c of converted" ),
-                                        next->GetNumber(),
-                                        next->GetName(),
-                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                                        'A' + next->GetUnit() - 1,
-                                        'A' + pin->GetUnit() - 1 );
+                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
+                               " in units %c and %c of converted" ),
+                            next->GetNumber(),
+                            nextName,
+                            next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                            'A' + next->GetUnit() - 1,
+                            'A' + pin->GetUnit() - 1 );
             }
         }
         else
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                                        next->GetNumber(),
-                                        next->GetName(),
-                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>" ),
+                            next->GetNumber(),
+                            nextName,
+                            next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
             }
             else
             {
-                msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                           " in units %c and %c" ),
-                                        next->GetNumber(),
-                                        next->GetName(),
-                                        next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                                        'A' + next->GetUnit() - 1,
-                                        'A' + pin->GetUnit() - 1 );
+                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
+                               " in units %c and %c" ),
+                            next->GetNumber(),
+                            nextName,
+                            next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                            'A' + next->GetUnit() - 1,
+                            'A' + pin->GetUnit() - 1 );
             }
         }
 
-        msg += wxT( ".<br>" );
-
+        msg += wxT( ".<br><br>" );
         messages.push_back( msg );
     }
 
@@ -288,54 +292,63 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 
     for( LIB_PIN* pin : pinList )
     {
-        if( ( (pin->GetPosition().x % clamped_grid_size) == 0 ) &&
-            ( (pin->GetPosition().y % clamped_grid_size) == 0 ) )
+        if( ( (pin->GetPosition().x % clamped_grid_size) == 0 )
+                && ( (pin->GetPosition().y % clamped_grid_size) == 0 ) )
+        {
             continue;
+        }
 
         // "pin" is off grid here.
         offgrid_error++;
+
+        wxString pinName = pin->GetName();
+
+        if( pinName.IsEmpty() || pinName == "~" )
+            pinName = "";
+        else
+            pinName = "'" + pinName + "'";
 
         if( part->HasConversion() && pin->GetConvert() )
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
-                                           "<b>(%.3f, %.3f)</b> of converted.<br>" ),
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " of converted" ),
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
             }
             else
             {
-                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
-                                           "<b>(%.3f, %.3f)</b> in symbol %c of converted.<br>" ),
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                                        'A' + pin->GetUnit() - 1 );
+                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " in symbol %c of converted" ),
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                            'A' + pin->GetUnit() - 1 );
             }
         }
         else
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
-                                           "<b>(%.3f, %.3f)</b>.<br>" ),
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>" ),
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
             }
             else
             {
-                msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
-                                           "<b>(%.3f, %.3f)</b> in symbol %c.<br>" ),
-                                        pin->GetNumber(),
-                                        pin->GetName(),
-                                        pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                                        'A' + pin->GetUnit() - 1 );
+                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                               " in symbol %c" ),
+                            pin->GetNumber(),
+                            pinName,
+                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                            'A' + pin->GetUnit() - 1 );
             }
         }
 
+        msg += wxT( ".<br><br>" );
         messages.push_back( msg );
     }
 
@@ -346,8 +359,8 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         wxString outmsg = wxString::Format( "<html><body bgcolor='%s' text='%s'>",
-                bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
-                fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
+                                            bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                            fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
 
         for( auto& msgPart : messages )
             outmsg += msgPart;
