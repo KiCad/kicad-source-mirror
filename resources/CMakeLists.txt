@@ -79,6 +79,9 @@ elseif( UNIX )
     install( DIRECTORY ${PROJECT_BINARY_DIR}/resources/linux/mime/
              DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages
              COMPONENT resources
+             FILES_MATCHING
+             PATTERN "*.xml"
+             PATTERN "*.in" EXCLUDE
              )
 
     # Install application launchers (.desktop files)
