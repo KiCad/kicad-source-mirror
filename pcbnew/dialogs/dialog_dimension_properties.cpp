@@ -37,7 +37,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_textWidth( aParent, m_lblTextWidth, m_txtTextWidth, m_lblTextWidthUnits, true ),
         m_textHeight( aParent, m_lblTextHeight, m_txtTextHeight, m_lblTextHeightUnits, true ),
         m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness,
-                         m_lblTextHeightUnits, true ),
+                         m_lblTextThicknessUnits, true ),
         m_textPosX( aParent, m_lblTextPosX, m_txtTextPosX, m_lblTextPosXUnits ),
         m_textPosY( aParent, m_lblTextPosY, m_txtTextPosY, m_lblTextPosYUnits ),
         m_orientValidator( 1, &m_orientValue ),

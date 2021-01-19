@@ -2973,7 +2973,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT</property>
                                     <property name="row">3</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxComboBox" expanded="0">
@@ -3600,7 +3600,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">1</property>
-                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                                     <property name="row">0</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxTextCtrl" expanded="0">
@@ -4004,7 +4004,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">1</property>
-                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                                     <property name="row">1</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxTextCtrl" expanded="1">
