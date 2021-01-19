@@ -372,14 +372,14 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
     {
         partial = m_StyledTextCtrl->GetTextRange( start, pos );
 
-        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( m_field->GetParent() );
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( m_field->GetParent() );
         SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
 
-        if( comp )
+        if( symbol )
         {
-            comp->GetContextualTextVars( &autocompleteTokens );
+            symbol->GetContextualTextVars( &autocompleteTokens );
 
-            SCHEMATIC* schematic = comp->Schematic();
+            SCHEMATIC* schematic = symbol->Schematic();
 
             if( schematic && schematic->CurrentSheet().Last() )
                 schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
@@ -405,14 +405,14 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
     if( parent && parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( parent );
+        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( parent );
 
         if( fieldType == REFERENCE_FIELD )
-            comp->SetRef( aSheetPath, m_text );
+            symbol->SetRef( aSheetPath, m_text );
         else if( fieldType == VALUE_FIELD )
-            comp->SetValue( m_text );
+            symbol->SetValue( m_text );
         else if( fieldType == FOOTPRINT_FIELD )
-            comp->SetFootprint( m_text );
+            symbol->SetFootprint( m_text );
     }
 
     bool positioningModified = false;

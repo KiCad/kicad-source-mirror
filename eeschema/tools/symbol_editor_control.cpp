@@ -450,16 +450,16 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 
         wxCHECK( part->GetLibId().IsValid(), 0 );
 
-        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId, &schframe->GetCurrentSheet(), unit,
-                                                 convert );
+        SCH_COMPONENT* symbol = new SCH_COMPONENT( *part, libId, &schframe->GetCurrentSheet(),
+                                                   unit, convert );
 
-        comp->SetParent( schframe->GetCurrentSheet().LastScreen() );
+        symbol->SetParent( schframe->GetCurrentSheet().LastScreen() );
 
         if( schframe->eeconfig()->m_AutoplaceFields.enable )
-            comp->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+            symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         schframe->Raise();
-        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, comp );
+        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, symbol );
     }
 
     return 0;

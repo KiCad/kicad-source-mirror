@@ -102,7 +102,7 @@ class COMPONENT
     /// this one is a copy of the netlist footprint assignment
     LIB_ID         m_altFpid;
 
-    /// The #FOOTPRINT loaded for #m_fpid.
+    /// The #FOOTPRINT loaded for #m_FPID.
     std::unique_ptr< FOOTPRINT > m_footprint;
 
     /// Component-specific properties found in the netlist.

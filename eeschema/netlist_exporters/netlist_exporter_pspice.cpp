@@ -286,22 +286,22 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
         // Process component attributes to find Spice directives
         for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextSymbol( item, &sheet );
+            SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
 
-            if( !comp )
+            if( !symbol )
                 continue;
 
-            CreatePinList( comp, &sheet );
+            CreatePinList( symbol, &sheet );
             SPICE_ITEM spiceItem;
-            spiceItem.m_parent = comp;
+            spiceItem.m_parent = symbol;
 
             // Obtain Spice fields
-            SCH_FIELD* fieldLibFile = comp->FindField( GetSpiceFieldName( SF_LIB_FILE ) );
-            SCH_FIELD* fieldSeq     = comp->FindField( GetSpiceFieldName( SF_NODE_SEQUENCE ) );
+            SCH_FIELD* fieldLibFile = symbol->FindField( GetSpiceFieldName( SF_LIB_FILE ) );
+            SCH_FIELD* fieldSeq     = symbol->FindField( GetSpiceFieldName( SF_NODE_SEQUENCE ) );
 
-            spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
-            spiceItem.m_model     = GetSpiceField( SF_MODEL, comp, aCtl );
-            spiceItem.m_refName   = comp->GetRef( &sheet );
+            spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, symbol, aCtl )[0];
+            spiceItem.m_model     = GetSpiceField( SF_MODEL, symbol, aCtl );
+            spiceItem.m_refName   = symbol->GetRef( &sheet );
 
             // Duplicate references will result in simulation errors
             if( refNames.count( spiceItem.m_refName ) )
@@ -314,7 +314,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             refNames.insert( spiceItem.m_refName );
 
             // Check to see if component should be removed from Spice netlist
-            spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, comp, aCtl ) );
+            spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, symbol, aCtl ) );
 
             if( fieldLibFile && !fieldLibFile->GetShownText().IsEmpty() )
                 m_libraries.insert( fieldLibFile->GetShownText() );

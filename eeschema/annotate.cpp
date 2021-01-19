@@ -41,17 +41,18 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT* comp = references[ i ].GetSymbol();
+        SCH_COMPONENT*  symbol = references[ i ].GetSymbol();
         SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
-        KIID_PATH curr_full_uuid = curr_sheetpath->Path();
-        curr_full_uuid.push_back( comp->m_Uuid );
+        KIID_PATH       curr_full_uuid = curr_sheetpath->Path();
 
-        wxString ref = comp->GetRef( curr_sheetpath );
+        curr_full_uuid.push_back( symbol->m_Uuid );
 
-        if( comp->GetUnitCount() > 1 )
-            ref << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
+        wxString ref = symbol->GetRef( curr_sheetpath );
 
-        if( comp->IsAnnotated( curr_sheetpath ) )
+        if( symbol->GetUnitCount() > 1 )
+            ref << LIB_PART::SubReference( symbol->GetUnitSelection( curr_sheetpath ) );
+
+        if( symbol->IsAnnotated( curr_sheetpath ) )
             aMap[ curr_full_uuid.AsString() ] = ref;
     }
 }

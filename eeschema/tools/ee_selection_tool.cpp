@@ -56,10 +56,10 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
     {
-        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
-        if( comp )
-            return !comp->GetPartRef() || !comp->GetPartRef()->IsPower();
+        if( symbol )
+            return !symbol->GetPartRef() || !symbol->GetPartRef()->IsPower();
     }
 
     return false;
@@ -70,10 +70,10 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& 
 {
     if( aSel.GetSize() == 1 )
     {
-        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
-        if( comp )
-            return comp->GetPartRef() && comp->GetPartRef()->HasConversion();
+        if( symbol )
+            return symbol->GetPartRef() && symbol->GetPartRef()->HasConversion();
     }
 
     return false;
@@ -84,10 +84,10 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION&
 {
     if( aSel.GetSize() == 1 )
     {
-        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
-        if( comp )
-            return comp->GetPartRef() && comp->GetPartRef()->GetUnitCount() >= 2;
+        if( symbol )
+            return symbol->GetPartRef() && symbol->GetPartRef()->GetUnitCount() >= 2;
     }
 
     return false;

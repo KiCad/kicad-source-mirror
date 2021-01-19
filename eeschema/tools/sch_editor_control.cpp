@@ -636,11 +636,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 else if( item->Type() == SCH_PIN_T )
                 {
                     SCH_PIN*       pin = (SCH_PIN*) item;
-                    SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
+                    SCH_COMPONENT* symbol = (SCH_COMPONENT*) item->GetParent();
                     wxString       param;
                     wxString       primitive;
 
-                    primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, comp, 0 );
+                    primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, symbol, 0 );
                     primitive.LowerCase();
 
                     if( primitive == "c" || primitive == "l" || primitive == "r" )
@@ -650,7 +650,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                     else
                         param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
-                    simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
+                    simFrame->AddCurrentPlot( symbol->GetRef( &m_frame->GetCurrentSheet() ),
+                                              param );
                 }
 
                 return true;
@@ -830,16 +831,16 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         else
         {
             SCH_ITEM*      item = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
-            SCH_COMPONENT* comp = nullptr;
+            SCH_COMPONENT* symbol = nullptr;
 
             if( item )
             {
                 if( item->Type() == SCH_FIELD_T )
-                    comp = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
+                    symbol = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
 
-                if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+                if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
                 {
-                    std::vector<SCH_PIN*> pins = comp->GetPins();
+                    std::vector<SCH_PIN*> pins = symbol->GetPins();
 
                     if( pins.size() == 1 )
                         conn = pins[0]->Connection();
@@ -996,15 +997,15 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     for( SCH_ITEM* item : screen->Items() )
     {
         SCH_CONNECTION* itemConn  = nullptr;
-        SCH_COMPONENT*  comp      = nullptr;
+        SCH_COMPONENT*  symbol    = nullptr;
         bool            redraw    = item->IsBrightened();
         bool            highlight = false;
 
         if( item->Type() == SCH_COMPONENT_T )
-            comp = static_cast<SCH_COMPONENT*>( item );
+            symbol = static_cast<SCH_COMPONENT*>( item );
 
-        if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
-            itemConn = comp->Connection();
+        if( symbol && symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
+            itemConn = symbol->Connection();
         else
             itemConn = item->Connection();
 
@@ -1053,14 +1054,14 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
         redraw |= item->IsBrightened();
 
-        // comp is only non-null if the item is a SCH_COMPONENT_T
-        if( comp )
+        // symbol is only non-null if the item is a SCH_COMPONENT_T
+        if( symbol )
         {
-            redraw |= comp->HasBrightenedPins();
+            redraw |= symbol->HasBrightenedPins();
 
-            comp->ClearBrightenedPins();
+            symbol->ClearBrightenedPins();
 
-            for( SCH_PIN* pin : comp->GetPins() )
+            for( SCH_PIN* pin : symbol->GetPins() )
             {
                 SCH_CONNECTION* pin_conn = pin->Connection();
 
@@ -1071,9 +1072,9 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+            if( symbol->GetPartRef() && symbol->GetPartRef()->IsPower() )
             {
-                std::vector<SCH_FIELD>& fields = comp->GetFields();
+                std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
                 for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
                 {
@@ -1297,12 +1298,12 @@ void SCH_EDITOR_CONTROL::updatePastedInstances( const SCH_SHEET_PATH& aPastePath
     {
         if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
             if( aForceKeepAnnotations )
             {
                 KIID_PATH clipItemPath = aClipPath;
-                clipItemPath.push_back( comp->m_Uuid );
+                clipItemPath.push_back( symbol->m_Uuid );
 
                 // SCH_REFERENCE_LIST doesn't include the root sheet in the path
                 clipItemPath.erase( clipItemPath.begin() );
@@ -1313,19 +1314,19 @@ void SCH_EDITOR_CONTROL::updatePastedInstances( const SCH_SHEET_PATH& aPastePath
                 {
                     SCH_REFERENCE instance = m_supplementaryClipboardInstances[ ii ];
 
-                    comp->SetUnit( instance.GetUnit() );
-                    comp->SetRef( &aPastePath, instance.GetRef() );
-                    comp->SetValue( &aPastePath, instance.GetValue() );
-                    comp->SetFootprint( &aPastePath, instance.GetFootprint() );
+                    symbol->SetUnit( instance.GetUnit() );
+                    symbol->SetRef( &aPastePath, instance.GetRef() );
+                    symbol->SetValue( &aPastePath, instance.GetValue() );
+                    symbol->SetFootprint( &aPastePath, instance.GetFootprint() );
                 }
                 else
                 {
-                    comp->ClearAnnotation( &aPastePath );
+                    symbol->ClearAnnotation( &aPastePath );
                 }
             }
             else
             {
-                comp->ClearAnnotation( &aPastePath );
+                symbol->ClearAnnotation( &aPastePath );
             }
         }
         else if( item->Type() == SCH_SHEET_T )

@@ -403,9 +403,9 @@ int ERC_TESTER::TestNoConnectPins()
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-            for( SCH_PIN* pin : comp->GetPins( &sheet ) )
+            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
                 if( pin->GetLibPin()->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                     pinMap[pin->GetPosition()].emplace_back( pin );

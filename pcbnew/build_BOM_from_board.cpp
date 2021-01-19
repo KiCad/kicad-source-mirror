@@ -30,11 +30,10 @@
 #include <pcb_edit_frame.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
-#include <board.h>
 #include <footprint.h>
 #include <wx/listimpl.cpp>
 
-/* creates a BOM list rom board
+/* creates a BOM list from board
  *  The format is:
  *  "Id";"Designator";"Package";"Number";"Designation";"Supplier and ref";
  *  1;"P1";"DB25FC";1;"DB25FEMELLE";;;
@@ -53,19 +52,18 @@
 
 const wxString CsvFileExtension( wxT( "csv" ) );    // BOM file extension
 
-
-class cmp
+class BOM_ENTRY
 {
 public:
     wxString m_Ref;
     wxString m_Val;
-    LIB_ID   m_fpid;
+    LIB_ID   m_FPID;
     int      m_Id;
-    int      m_CmpCount;
+    int      m_Count;
 };
-WX_DECLARE_LIST( cmp, CmpList );
+WX_DECLARE_LIST( BOM_ENTRY, BOM_ENTRY_LIST );
 
-WX_DEFINE_LIST( CmpList )
+WX_DEFINE_LIST( BOM_ENTRY_LIST )
 
 
 void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
@@ -114,25 +112,24 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     fprintf( fp_bom, "%s", TO_UTF8( msg ) );
 
     // Build list
-    CmpList           list;
-    cmp*              comp = NULL;
-    CmpList::iterator iter;
-    int               i = 1;
+    BOM_ENTRY_LIST list;
+    int            i = 1;
 
-    for( FOOTPRINT* fp : GetBoard()->Footprints() )
+    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
         bool valExist = false;
 
         // try to find component in existing list
-        for( iter = list.begin(); iter != list.end(); ++iter )
+        for( auto iter = list.begin(); iter != list.end(); ++iter )
         {
-            cmp* current = *iter;
+            BOM_ENTRY* curEntry = *iter;
 
-            if( current->m_Val == fp->GetValue() && current->m_fpid == fp->GetFPID() )
+            if( curEntry->m_Val == footprint->GetValue()
+                    && curEntry->m_FPID == footprint->GetFPID() )
             {
-                current->m_Ref.Append( wxT( ", " ), 1 );
-                current->m_Ref.Append( fp->Reference().GetShownText() );
-                current->m_CmpCount++;
+                curEntry->m_Ref.Append( wxT( ", " ), 1 );
+                curEntry->m_Ref.Append( footprint->Reference().GetShownText() );
+                curEntry->m_Count++;
 
                 valExist = true;
                 break;
@@ -142,34 +139,34 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         // If component does not exist yet, create new one and append it to the list.
         if( valExist == false )
         {
-            comp = new cmp();
-            comp->m_Id  = i++;
-            comp->m_Val = fp->Value().GetShownText();
-            comp->m_Ref = fp->Reference().GetShownText();
-            comp->m_fpid = fp->GetFPID();
-            comp->m_CmpCount = 1;
-            list.Append( comp );
+            BOM_ENTRY* newEntry = new BOM_ENTRY();
+            newEntry->m_Id  = i++;
+            newEntry->m_Val = footprint->Value().GetShownText();
+            newEntry->m_Ref = footprint->Reference().GetShownText();
+            newEntry->m_FPID = footprint->GetFPID();
+            newEntry->m_Count = 1;
+            list.Append( newEntry );
         }
     }
 
     // Print list. Also delete temporary created objects.
     for( size_t ii = list.GetCount(); ii > 0; ii-- )
     {
-        cmp* current = *list.begin();   // Because the first object will be removed
-                                        // from list, all objects will be get here
+        BOM_ENTRY* curEntry = *list.begin();   // Because the first object will be removed
+                                               // from list, all objects will be get here
 
         msg.Empty();
 
-        msg << current->m_Id << wxT( ";\"" );
-        msg << current->m_Ref << wxT( "\";\"" );
-        msg << FROM_UTF8( current->m_fpid.GetLibItemName().c_str() ) << wxT( "\";" );
-        msg << current->m_CmpCount << wxT( ";\"" );
-        msg << current->m_Val << wxT( "\";;;\n" );
+        msg << curEntry->m_Id << wxT( ";\"" );
+        msg << curEntry->m_Ref << wxT( "\";\"" );
+        msg << FROM_UTF8( curEntry->m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
+        msg << curEntry->m_Count << wxT( ";\"" );
+        msg << curEntry->m_Val << wxT( "\";;;\n" );
         fprintf( fp_bom, "%s", TO_UTF8( msg ) );
 
         // We do not need this object, now: remove it from list and delete it
-        list.DeleteObject( current );
-        delete (current);
+        list.DeleteObject( curEntry );
+        delete (curEntry);
     }
 
     fclose( fp_bom );

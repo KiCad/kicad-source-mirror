@@ -261,13 +261,13 @@ protected:
 
         for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBoundingBox() ) )
         {
-            if( SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( item ) )
+            if( SCH_COMPONENT* candidate = dynamic_cast<SCH_COMPONENT*>( item ) )
             {
-                if( comp == m_symbol )
+                if( candidate == m_symbol )
                     continue;
 
                 std::vector<SCH_FIELD*> fields;
-                comp->GetFields( fields, /* aVisibleOnly */ true );
+                candidate->GetFields( fields, /* aVisibleOnly */ true );
 
                 for( SCH_FIELD* field : fields )
                     aItems.push_back( field );

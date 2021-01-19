@@ -72,31 +72,31 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
         // Process component attributes
         for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextSymbol( item, &sheet );
+            SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
 
-            if( !comp )
+            if( !symbol )
                 continue;
 
-            CreatePinList( comp, &sheet );
+            CreatePinList( symbol, &sheet );
 
-            if( comp->GetPartRef() && comp->GetPartRef()->GetFPFilters().GetCount() != 0  )
-                cmpList.push_back( SCH_REFERENCE( comp, comp->GetPartRef().get(), sheet ) );
+            if( symbol->GetPartRef() && symbol->GetPartRef()->GetFPFilters().GetCount() != 0  )
+                cmpList.push_back( SCH_REFERENCE( symbol, symbol->GetPartRef().get(), sheet ) );
 
-            footprint = comp->GetFootprint( &sheet, true );
+            footprint = symbol->GetFootprint( &sheet, true );
             footprint.Replace( wxT( " " ), wxT( "_" ) );
 
             if( footprint.IsEmpty() )
                 footprint = wxT( "$noname" );
 
             ret |= fprintf( f, " ( %s %s",
-                            TO_UTF8( sheet.PathAsString() + comp->m_Uuid.AsString() ),
+                            TO_UTF8( sheet.PathAsString() + symbol->m_Uuid.AsString() ),
                             TO_UTF8( footprint ) );
 
-            field = comp->GetRef( &sheet );
+            field = symbol->GetRef( &sheet );
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = comp->GetValue( &sheet, true );
+            field = symbol->GetValue( &sheet, true );
             field.Replace( wxT( " " ), wxT( "_" ) );
 
             ret |= fprintf( f, " %s", TO_UTF8( field ) );
