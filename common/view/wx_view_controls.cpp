@@ -494,13 +494,21 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         double borderSize = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                       m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
 
+        // When the mouse cursor is outside the area with no pan,
+        // m_panDirection is the dist to this area limit ( in pixels )
+        // It will be used also as pan value (the pan speed depends on this dist).
         VECTOR2D dir( m_panDirection );
 
+        // When the mouse cursor is outside the area with no pan, the pan value
+        // is accelerated depending on the dist between the area and the cursor
         float accel = 0.5f + ( m_settings.m_autoPanAcceleration / 5.0f );
 
-        if( dir.EuclideanNorm() > borderSize / 2 )
-            dir = dir.Resize( pow( borderSize, accel ) );
-        else if( dir.EuclideanNorm() > borderSize )
+        // For a small mouse cursor dist to area, just use the distance.
+        // But for a dist > borderSize / 2, use an accelerated pan value
+
+        if( dir.EuclideanNorm() >= borderSize )         // far from area limits
+            dir = dir.Resize( borderSize * accel );
+        else if( dir.EuclideanNorm() > borderSize / 2 ) // Near from area limits
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
