@@ -90,7 +90,10 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
     {
-        m_comboName->Append( static_cast<SCH_HIERLABEL*>( item )->GetText() );
+        wxString txt = static_cast<SCH_HIERLABEL*>( item )->GetText();
+
+        if( m_comboName->FindString( txt, true ) == wxNOT_FOUND )
+            m_comboName->Append( txt );
     }
 
     m_comboName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
