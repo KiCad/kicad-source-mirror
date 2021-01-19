@@ -23,14 +23,6 @@
 #include <wx/odcombo.h>
 
 /**
- * Event thrown when an item is selected "interactively". This includes direct clicks
- * and presses of the Enter key, but not arrow key motion. Integer data will be the
- * item selected.
- */
-wxDECLARE_EVENT( EVT_INTERACTIVE_CHOICE, wxCommandEvent );
-
-
-/**
  * Customized combo box for footprint selection. This provides the following features:
  *
  * - library name is greyed out for readability when lib:footprint format is found in
@@ -71,24 +63,6 @@ protected:
      * @param aInner - true if event was called for the inner list (ie the popup)
      */
     void TryVetoSelect( wxCommandEvent& aEvent, bool aInner );
-
-    /**
-     * Mouse up on an item in the list.
-     */
-    void OnMouseUp( wxMouseEvent& aEvent );
-
-    /**
-     * Key up on an item in the list.
-     */
-    void OnKeyUp( wxKeyEvent& aEvent );
-
-    /**
-     * For arrow key events, skip over separators.
-     *
-     * @param aEvent - the wxKeyEvent caller
-     * @param aInner - true if event was called for the inner list (ie the popup)
-     */
-    void TrySkipSeparator( wxKeyEvent& aEvent, bool aInner );
 
     /**
      * Safely get a string for an item, returning wxEmptyString if the item doesn't exist.

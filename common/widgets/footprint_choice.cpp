@@ -22,9 +22,6 @@
 #include <wx/dc.h>
 #include <wx/pen.h>
 
-wxDEFINE_EVENT( EVT_INTERACTIVE_CHOICE, wxCommandEvent );
-
-
 wxColour FOOTPRINT_CHOICE::m_grey( 0x808080 );
 
 
@@ -51,15 +48,9 @@ void FOOTPRINT_CHOICE::DoSetPopupControl( wxComboPopup* aPopup )
     GetVListBoxComboPopup()->Bind( wxEVT_MOTION, &FOOTPRINT_CHOICE::TryVetoMouse, this );
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_DOWN, &FOOTPRINT_CHOICE::TryVetoMouse, this );
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_UP, &FOOTPRINT_CHOICE::TryVetoMouse, this );
-    GetVListBoxComboPopup()->Bind( wxEVT_LEFT_UP, &FOOTPRINT_CHOICE::OnMouseUp, this );
     GetVListBoxComboPopup()->Bind( wxEVT_LEFT_DCLICK, &FOOTPRINT_CHOICE::TryVetoMouse, this );
-    GetVListBoxComboPopup()->Bind(
-            wxEVT_LISTBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect, this, _1, true ) );
+    GetVListBoxComboPopup()->Bind( wxEVT_LISTBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect, this, _1, true ) );
     Bind( wxEVT_COMBOBOX, std::bind( &FOOTPRINT_CHOICE::TryVetoSelect, this, _1, false ) );
-    GetVListBoxComboPopup()->Bind(
-            wxEVT_CHAR_HOOK, std::bind( &FOOTPRINT_CHOICE::TrySkipSeparator, this, _1, true ) );
-    GetVListBoxComboPopup()->Bind( wxEVT_CHAR_HOOK, &FOOTPRINT_CHOICE::OnKeyUp, this );
-    Bind( wxEVT_KEY_DOWN, std::bind( &FOOTPRINT_CHOICE::TrySkipSeparator, this, _1, false ) );
 }
 
 
@@ -164,33 +155,6 @@ void FOOTPRINT_CHOICE::TryVetoMouse( wxMouseEvent& aEvent )
 }
 
 
-void FOOTPRINT_CHOICE::OnMouseUp( wxMouseEvent& aEvent )
-{
-    int item = GetVListBoxComboPopup()->VirtualHitTest( aEvent.GetPosition().y );
-
-    wxCommandEvent evt( EVT_INTERACTIVE_CHOICE );
-    evt.SetInt( item );
-    wxPostEvent( this, evt );
-
-    aEvent.Skip();
-}
-
-
-void FOOTPRINT_CHOICE::OnKeyUp( wxKeyEvent& aEvent )
-{
-    int item = GetSelectionEither( true );
-
-    if( aEvent.GetKeyCode() == WXK_RETURN )
-    {
-        wxCommandEvent evt( EVT_INTERACTIVE_CHOICE );
-        evt.SetInt( item );
-        wxPostEvent( this, evt );
-    }
-
-    aEvent.Skip();
-}
-
-
 void FOOTPRINT_CHOICE::TryVetoSelect( wxCommandEvent& aEvent, bool aInner )
 {
     int sel = GetSelectionEither( aInner );
@@ -209,28 +173,6 @@ void FOOTPRINT_CHOICE::TryVetoSelect( wxCommandEvent& aEvent, bool aInner )
             aEvent.Skip();
         }
     }
-}
-
-
-void FOOTPRINT_CHOICE::TrySkipSeparator( wxKeyEvent& aEvent, bool aInner )
-{
-    int key = aEvent.GetKeyCode();
-    int sel = GetSelectionEither( aInner );
-    int new_sel = sel;
-
-    if( key == WXK_UP && SafeGetString( sel - 1 ) == wxEmptyString )
-    {
-        new_sel = sel - 2;
-    }
-    else if( key == WXK_DOWN && SafeGetString( sel + 1 ) == wxEmptyString )
-    {
-        new_sel = sel + 2;
-    }
-
-    if( new_sel != sel )
-        SetSelectionEither( aInner, new_sel );
-    else
-        aEvent.Skip();
 }
 
 

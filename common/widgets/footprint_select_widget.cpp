@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialog_shim.h>
 #include <eda_draw_frame.h>
 #include <kiway.h>
 #include <kiway_player.h>
@@ -27,16 +26,6 @@
 
 #include <wx/wupdlock.h>
 #include <widgets/progress_reporter.h>
-
-/**
- * Fixed positions for standard items in the list
- */
-enum
-{
-    POS_DEFAULT,
-    POS_OTHER,
-    POS_SEPARATOR
-};
 
 
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
@@ -62,7 +51,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
     m_sizer->Fit( this );
 
     m_fp_sel_ctrl->Bind( wxEVT_COMBOBOX, &FOOTPRINT_SELECT_WIDGET::OnComboBox, this );
-    m_fp_sel_ctrl->Bind( EVT_INTERACTIVE_CHOICE, &FOOTPRINT_SELECT_WIDGET::OnComboInteractive, this );
 }
 
 
@@ -90,81 +78,15 @@ void FOOTPRINT_SELECT_WIDGET::OnComboBox( wxCommandEvent& aEvent )
     wxCommandEvent evt( EVT_FOOTPRINT_SELECTED );
     int            sel = m_fp_sel_ctrl->GetSelection();
 
-    switch( sel )
-    {
-    case wxNOT_FOUND: return;
+    if( sel == wxNOT_FOUND )
+        return;
 
-    case POS_SEPARATOR:
-        // User somehow managed to select the separator. This should not be
-        // possible, but just in case... deselect it
-        m_fp_sel_ctrl->SetSelection( m_last_item );
-        break;
+    wxStringClientData* clientdata =
+            static_cast<wxStringClientData*>( m_fp_sel_ctrl->GetClientObject( sel ) );
+    wxASSERT( clientdata );
 
-    case POS_OTHER:
-        // When POS_OTHER is selected, a dialog should be shown. However, we don't want to
-        // do this ALL the time, as some times (e.g. when moving around with the arrow keys)
-        // it could be very annoying. Therefore showing the picker is done from the custom
-        // "interactive select" event on FOOTPRINT_CHOICE, which only fires for more direct
-        // choice actions.
-        break;
-
-    default:
-    {
-        wxStringClientData* clientdata =
-                static_cast<wxStringClientData*>( m_fp_sel_ctrl->GetClientObject( sel ) );
-        wxASSERT( clientdata );
-
-        evt.SetString( clientdata->GetData() );
-        wxPostEvent( this, evt );
-    }
-    }
-}
-
-
-void FOOTPRINT_SELECT_WIDGET::OnComboInteractive( wxCommandEvent& aEvent )
-{
-    if( aEvent.GetInt() == POS_OTHER && !m_fp_sel_ctrl->IsPopupShown() )
-    {
-        DoOther();
-    }
-}
-
-
-void FOOTPRINT_SELECT_WIDGET::DoOther()
-{
-    wxCommandEvent evt( EVT_FOOTPRINT_SELECTED );
-
-    wxString fpname = ShowPicker();
-    m_other_footprint = fpname;
-    UpdateList();
-    m_fp_sel_ctrl->SetSelection( POS_OTHER );
-    m_last_item = POS_OTHER;
-
-    evt.SetString( m_other_footprint );
+    evt.SetString( clientdata->GetData() );
     wxPostEvent( this, evt );
-}
-
-
-wxString FOOTPRINT_SELECT_WIDGET::ShowPicker()
-{
-    wxString     fpname;
-    wxWindow*    parent = ::wxGetTopLevelParent( this );
-    DIALOG_SHIM* dsparent = dynamic_cast<DIALOG_SHIM*>( parent );
-
-    // Only quasimodal dialogs can launch modal kiface dialogs. Otherwise the
-    // event loop goes all silly.
-    wxASSERT( !dsparent || dsparent->IsQuasiModal() );
-
-    auto frame = m_kiway->Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
-
-    if( !frame->ShowModal( &fpname, parent ) )
-    {
-        fpname = wxEmptyString;
-    }
-
-    frame->Destroy();
-
-    return fpname;
 }
 
 
@@ -172,7 +94,6 @@ void FOOTPRINT_SELECT_WIDGET::ClearFilters()
 {
     m_fp_filter.ClearFilters();
     m_default_footprint.Clear();
-    m_other_footprint.Clear();
     m_zero_filter = false;
 }
 
@@ -213,14 +134,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
     m_fp_sel_ctrl->Append( m_default_footprint.IsEmpty() ?
                                    _( "No default footprint" ) :
                                    "[" + _( "Default" ) + "] " + m_default_footprint,
-            new wxStringClientData( m_default_footprint ) );
-
-    m_fp_sel_ctrl->Append( m_other_footprint.IsEmpty() ?
-                                   _( "Other..." ) :
-                                   "[" + _( "Other..." ) + "] " + m_other_footprint,
-            new wxStringClientData( m_other_footprint ) );
-
-    m_fp_sel_ctrl->Append( "", new wxStringClientData( "" ) );
+                           new wxStringClientData( m_default_footprint ) );
 
     if( !m_zero_filter )
     {
@@ -243,7 +157,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 
 void FOOTPRINT_SELECT_WIDGET::SelectDefault()
 {
-    m_fp_sel_ctrl->SetSelection( POS_DEFAULT );
+    m_fp_sel_ctrl->SetSelection( 0 );
 }
 
 

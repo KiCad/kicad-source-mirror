@@ -131,7 +131,6 @@ private:
     bool                     m_update;
     int                      m_max_items;
     wxString                 m_default_footprint;
-    wxString                 m_other_footprint;
     int                      m_last_item;
 
     FOOTPRINT_LIST*          m_fp_list;
@@ -139,13 +138,6 @@ private:
     bool                     m_zero_filter;
 
     void OnComboBox( wxCommandEvent& aEvent );
-    void OnComboInteractive( wxCommandEvent& aEvent );
-
-    /// Show the component picker and return the selected component. Used by DoOther()
-    wxString ShowPicker();
-
-    /// Handle activation of the "Other..." item
-    void DoOther();
 };
 
 
