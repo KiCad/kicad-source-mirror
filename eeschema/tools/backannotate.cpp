@@ -65,7 +65,8 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     m_appendUndo = false;
     wxString msg;
 
-    if( !m_processValues && !m_processFootprints && !m_processReferences && !m_processNetNames )
+    if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
+        && !m_processNetNames )
     {
         m_reporter.ReportTail( _( "Select at least one property to back annotate." ),
                                RPT_SEVERITY_ERROR );
