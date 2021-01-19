@@ -146,8 +146,8 @@ private:
     /**
      * Move the mid point of the arc, while keeping the two endpoints.
      */
-    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                  VECTOR2I aMid, VECTOR2I aEnd, const VECTOR2I aCursor ) const;
+    void editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
+                                  const VECTOR2I aCursor ) const;
 
     /**
      * Move the mid point of the arc, while keeping the angle.

@@ -441,6 +441,29 @@ double PCB_SHAPE::GetArcAngleEnd() const
 }
 
 
+void PCB_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
+{
+    SetArcStart( aStart );
+    SetArcEnd( aEnd );
+
+    // Sadly we currently store center and angle rather than mid.  So we have to calculate
+    // those.
+    wxPoint  center = GetArcCenter( aStart, aMid, aEnd );
+    VECTOR2D startLine = aStart - center;
+    VECTOR2D endLine   = aEnd - center;
+    bool     clockwise = GetAngle() > 0;
+    double   angle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+
+    if( clockwise && angle < 0.0 )
+        angle += 3600.0;
+    else if( !clockwise && angle > 0.0 )
+        angle -= 3600.0;
+
+    SetAngle( angle, false );
+    SetCenter( center );
+}
+
+
 void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 {
     // m_Angle must be >= -360 and <= +360 degrees

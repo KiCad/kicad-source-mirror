@@ -209,15 +209,6 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetArcMid() );
             points->AddPoint( shape->GetArcEnd() );
 
-            // Set constraints
-            // Arc end has to stay at the same radius as the start
-            points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
-                                                                   points->Point( ARC_CENTER ),
-                                                                   points->Point( ARC_START ) ) );
-
-            points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
-                                                                 points->Point( ARC_CENTER ) ) );
-
             points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
             points->Point( ARC_START ).SetGridConstraint( SNAP_TO_GRID );
             points->Point( ARC_CENTER ).SetGridConstraint( SNAP_BY_GRID );
@@ -998,83 +989,20 @@ void PCB_POINT_EDITOR::editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, 
 }
 
 
-void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                                VECTOR2I aMid, VECTOR2I aEnd,
+void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, VECTOR2I aStart, VECTOR2I aEnd,
                                                 const VECTOR2I aCursor ) const
 {
-    bool     clockwise;
-    VECTOR2I oldCenter = aArc->GetCenter();
+    // Let 'm' be the middle point of the chord between the start and end points
+    VECTOR2I  m = ( aStart + aEnd ) / 2;
 
+    // Legal midpoints lie on a vector starting just off the chord midpoint and extending out
+    // past the existing midpoint.  We do not allow arc inflection while point editing.
+    const int JUST_OFF = ( aStart - aEnd ).EuclideanNorm() / 100;
+    VECTOR2I  v = (VECTOR2I) aArc->GetArcMid() - m;
+    SEG       legal( m + v.Resize( JUST_OFF ), m + v.Resize( INT_MAX / 2 ) );
+    VECTOR2I  mid = legal.NearestPoint( aCursor );
 
-    // This allows the user to go on the sides of the arc
-    aMid = aCursor;
-    // Find the new center
-    aCenter = GetArcCenter( aStart, aMid, aEnd );
-
-    aArc->SetCenter( (wxPoint) aCenter );
-
-    // Check if the new arc is CW or CCW
-    VECTOR2D startLine = aStart - aCenter;
-    VECTOR2D endLine   = aEnd - aCenter;
-    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-    VECTOR2D v1, v2;
-
-    v1           = aStart - aMid;
-    v2           = aEnd - aMid;
-    double theta = RAD2DECIDEG( v1.Angle() );
-    RotatePoint( &( v1.x ), &( v1.y ), theta );
-    RotatePoint( &( v2.x ), &( v2.y ), theta );
-    clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
-
-    // Normalize the angle
-    if( clockwise && newAngle < 0.0 )
-        newAngle += 3600.0;
-    else if( !clockwise && newAngle > 0.0 )
-        newAngle -= 3600.0;
-
-    // Accuracy test
-    // First, get the angle
-    VECTOR2I endTest = aStart;
-    RotatePoint( &( endTest.x ), &( endTest.y ), aCenter.x, aCenter.y, -newAngle );
-    double distance = ( endTest - aEnd ).SquaredEuclideanNorm();
-
-    if( distance > ADVANCED_CFG::GetCfg().m_DrawArcAccuracy )
-    {
-        // Cancel Everything
-        // If the accuracy is low, we can't draw precisely the arc.
-        // It may happen when the radius is *high*
-        aArc->SetCenter( (wxPoint) oldCenter );
-    }
-    else
-    {
-        aArc->SetAngle( newAngle, false );
-    }
-
-    // Now, update the edit point position
-    // Express the point in a cercle-centered coordinate system.
-    aMid = aCursor - aCenter;
-
-    double sqRadius = ( aEnd - aCenter ).SquaredEuclideanNorm();
-
-    // Special case, because the tangent would lead to +/- infinity
-    if( aMid.x == 0 )
-    {
-        aMid.y = aMid.y > 0 ? sqrt( sqRadius ) : -sqrt( sqRadius );
-    }
-    else
-    {
-        // Circle : x^2 + y^2 = R ^ 2
-        // In this coordinate system, the angular position of the cursor is (r, theta)
-        // The line coming from the center of the circle is y = start.y / start.x * x
-        // The intersection fulfills : x^2  = R^2 /  ( 1 + ( start.y / start.x ) ^ 2 )
-
-        double tan = aMid.y / static_cast<double>( aMid.x );
-        double tmp = sqrt( sqRadius / ( 1.0 + tan * tan ) );
-        // Move to the correct quadrant
-        tmp    = aMid.x > 0 ? tmp : -tmp;
-        aMid.y = aMid.y / static_cast<double>( aMid.x ) * tmp;
-        aMid.x = tmp;
-    }
+    aArc->SetArcGeometry( (wxPoint) aStart, (wxPoint) mid, (wxPoint) aEnd );
 }
 
 
@@ -1096,12 +1024,15 @@ void PCB_POINT_EDITOR::updateItem() const
         {
         case S_SEGMENT:
             if( isModified( m_editPoints->Point( SEG_START ) ) )
+            {
                 shape->SetStart( wxPoint( m_editPoints->Point( SEG_START ).GetPosition().x,
                                           m_editPoints->Point( SEG_START ).GetPosition().y ) );
-
+            }
             else if( isModified( m_editPoints->Point( SEG_END ) ) )
+            {
                 shape->SetEnd( wxPoint( m_editPoints->Point( SEG_END ).GetPosition().x,
                                         m_editPoints->Point( SEG_END ).GetPosition().y ) );
+            }
 
             break;
 
@@ -1169,7 +1100,7 @@ void PCB_POINT_EDITOR::updateItem() const
                 if( m_altEditMethod )
                     editArcMidKeepCenter( shape, center, start, mid, end, cursorPos );
                 else
-                    editArcMidKeepEndpoints( shape, center, start, mid, end, cursorPos );
+                    editArcMidKeepEndpoints( shape, start, end, cursorPos );
             }
             else if( isModified( m_editPoints->Point( ARC_START ) )
                      || isModified( m_editPoints->Point( ARC_END ) ) )
@@ -1970,10 +1901,13 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     if( !item )
         return false;
 
-    if( !( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T
-           || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T ) &&
-             static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON ) ) )
+    if( !( item->Type() == PCB_ZONE_T
+            || item->Type() == PCB_FP_ZONE_T
+            || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
+                    && static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON ) ) )
+    {
         return false;
+    }
 
     SHAPE_POLY_SET *polyset;
 
@@ -2044,8 +1978,8 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         // and therefore break this segment into two segments
 
         // Object to iterate through the corners of the outlines (main contour and its holes)
-        SHAPE_POLY_SET::ITERATOR iterator = zoneOutline->Iterate( 0,
-                zoneOutline->OutlineCount()-1, /* IterateHoles */ true );
+        SHAPE_POLY_SET::ITERATOR iterator = zoneOutline->Iterate( 0, zoneOutline->OutlineCount()-1,
+                                                                  /* IterateHoles */ true );
         int curr_idx = 0;
 
         // Iterate through all the corners of the outlines and search the best segment
@@ -2155,10 +2089,10 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     }
     else if( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
     {
-        auto ds = static_cast<PCB_SHAPE*>( item );
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
 
-        if( ds->GetShape() == S_POLYGON )
-            polygon = &ds->GetPolyShape();
+        if( shape->GetShape() == S_POLYGON )
+            polygon = &shape->GetPolyShape();
     }
 
     if( !polygon )
