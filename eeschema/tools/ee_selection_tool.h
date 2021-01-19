@@ -170,7 +170,6 @@ public:
      */
     void RebuildSelection();
 
-private:
     /**
      * Function CollectHits()
      * Selects one or more items at the location given by parameter aWhere.
@@ -182,9 +181,10 @@ private:
      * @param aFilterList is a list of items that are acceptable for collection
      * @param aCheckLocked indicates if locked items should be excluded.
      */
-    bool collectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
+    bool CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                       const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
 
+private:
     /**
      * Applies rules to narrow the collection down to selectable objects, and then heuristics
      * to try and narrow it to a single object.

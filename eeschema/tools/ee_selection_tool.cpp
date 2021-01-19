@@ -343,7 +343,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             bool continueSelect = true;
 
             // Collect items at the clicked location (doesn't select them yet)
-            if( collectHits( collector, evt->Position() ) )
+            if( CollectHits( collector, evt->Position()) )
             {
                 narrowSelection( collector, evt->Position(), false );
 
@@ -514,7 +514,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             // We are checking if we should display a pencil when hovering over anchors
             // for "auto starting" wires when clicked
-            if( collectHits( collector, evt->Position() ) )
+            if( CollectHits( collector, evt->Position()) )
             {
                 narrowSelection( collector, evt->Position(), false );
 
@@ -635,7 +635,7 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 }
 
 
-bool EE_SELECTION_TOOL::collectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
+bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& aWhere,
                                      const KICAD_T* aFilterList )
 {
     aCollector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
@@ -770,7 +770,7 @@ bool EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFil
 {
     EE_COLLECTOR collector;
 
-    if( !collectHits( collector, aWhere, aFilterList ) )
+    if( !CollectHits( collector, aWhere, aFilterList ) )
         return false;
 
     narrowSelection( collector, aWhere, aCheckLocked );
