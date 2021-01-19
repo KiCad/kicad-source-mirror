@@ -281,16 +281,18 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         // generate errors before we will find m_refs member to which item linked
         while( i < m_refs.GetCount() && m_refs[i].GetPath() != item.first.GetPath() )
         {
-            const SCH_REFERENCE& ref = m_refs[i++];
+            const SCH_REFERENCE& ref = m_refs[i];
 
             if( ref.GetSymbol()->GetIncludeOnBoard() )
             {
                 wxString msg = wxString::Format( _( "Footprint '%s' is not present on PCB. "
                                                     "Corresponding symbols in schematic must be "
                                                     "manually deleted (if desired)." ),
-                                                 m_refs[i++].GetFullRef() );
+                                                 m_refs[i].GetFullRef() );
                 m_reporter.ReportTail( msg, RPT_SEVERITY_WARNING );
             }
+
+            ++i;
         }
 
         ++i;
