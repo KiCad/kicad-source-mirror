@@ -70,8 +70,8 @@ elseif( UNIX )
 
 
     # Install icons
-    install( DIRECTORY ${PROJECT_SOURCE_DIR}/resources/linux/icons
-             TYPE DATA
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/resources/linux/icons/
+             DESTINATION ${CMAKE_INSTALL_DATADIR}/icons
              COMPONENT resources
              )
 
