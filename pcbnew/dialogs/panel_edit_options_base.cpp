@@ -33,7 +33,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizeFPEdit->Add( m_magneticGraphics, 0, wxBOTTOM, 15 );
 
 
-	bOptionsSizer->Add( bSizeFPEdit, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bOptionsSizer->Add( bSizeFPEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBoardEdit;
 	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
@@ -309,7 +309,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbMagnets->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	pcbOptionsSizer->Add( sbMagnets, 1, wxEXPAND, 5 );
+	pcbOptionsSizer->Add( sbMagnets, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Ratsnest") ), wxVERTICAL );
@@ -321,7 +321,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizer3->Add( m_OptDisplayCurvedRatsnestLines, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	pcbOptionsSizer->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
+	pcbOptionsSizer->Add( sbSizer3, 0, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Annotations") ), wxVERTICAL );
@@ -331,7 +331,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizer4->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	pcbOptionsSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP, 5 );
+	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Track Editing") ), wxVERTICAL );
@@ -342,29 +342,29 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	sbSizer41->Add( m_staticText5, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
 
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+
 	m_rbTrackDragMove = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Move"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbTrackDragMove->SetToolTip( _("Moves the track segment without moving connected tracks") );
 
-	sbSizer41->Add( m_rbTrackDragMove, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	sbSizer41->Add( 0, 5, 0, wxEXPAND, 5 );
+	bSizer8->Add( m_rbTrackDragMove, 0, wxBOTTOM, 3 );
 
 	m_rbTrackDrag45 = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (45 degree mode)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbTrackDrag45->SetToolTip( _("Drags the track segment while keeping connected tracks at 45 degrees.") );
 
-	sbSizer41->Add( m_rbTrackDrag45, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	sbSizer41->Add( 0, 5, 0, wxEXPAND, 5 );
+	bSizer8->Add( m_rbTrackDrag45, 0, wxBOTTOM, 3 );
 
 	m_rbTrackDragFree = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (free angle)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbTrackDragFree->SetToolTip( _("Drags the nearest joint in the track without restricting the track angle.") );
 
-	sbSizer41->Add( m_rbTrackDragFree, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( m_rbTrackDragFree, 0, 0, 3 );
 
 
-	pcbOptionsSizer->Add( sbSizer41, 1, wxEXPAND|wxTOP, 5 );
+	sbSizer41->Add( bSizer8, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	pcbOptionsSizer->Add( sbSizer41, 0, wxEXPAND|wxTOP, 5 );
 
 
 	pcbPage->SetSizer( pcbOptionsSizer );
