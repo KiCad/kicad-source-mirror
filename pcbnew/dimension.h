@@ -119,10 +119,10 @@ public:
      * @return the origin point of this dimension
      */
     virtual const wxPoint& GetStart() const { return m_start; }
-    virtual void SetStart( const wxPoint& aPoint );
+    virtual void SetStart( const wxPoint& aPoint ) { m_start = aPoint; }
 
     virtual const wxPoint& GetEnd() const { return m_end; }
-    virtual void SetEnd( const wxPoint& aPoint );
+    virtual void SetEnd( const wxPoint& aPoint ) { m_end = aPoint; }
 
     wxPoint GetPosition() const override { return m_start; }
     void SetPosition( const wxPoint& aPos ) override { m_start = aPos; }
@@ -363,7 +363,7 @@ public:
      * Sets the distance from the feature points to the crossbar line
      * @param aHeight is the new height.
      */
-    void SetHeight( int aHeight );
+    void SetHeight( int aHeight ) { m_height = aHeight; }
     int GetHeight() const {  return m_height; }
 
     /**
@@ -391,6 +391,8 @@ public:
     {
         return wxT( "ALIGNED_DIMENSION" );
     }
+
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
 

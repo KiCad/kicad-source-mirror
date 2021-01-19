@@ -1388,8 +1388,9 @@ void PCB_POINT_EDITOR::updateItem() const
                 dimension->SetHeight( -featureLine.EuclideanNorm() );
             else
                 dimension->SetHeight( featureLine.EuclideanNorm() );
-        }
 
+            dimension->Update();
+        }
         else if( isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
         {
             VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetEnd() );
@@ -1399,28 +1400,31 @@ void PCB_POINT_EDITOR::updateItem() const
                 dimension->SetHeight( -featureLine.EuclideanNorm() );
             else
                 dimension->SetHeight( featureLine.EuclideanNorm() );
-        }
 
+            dimension->Update();
+        }
         else if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
             dimension->SetStart( wxPoint( m_editedPoint->GetPosition().x,
                                           m_editedPoint->GetPosition().y ) );
+            dimension->Update();
+
             m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
-                                                                             m_editPoints->Point( DIM_START ) ) );
+                                                                                 m_editPoints->Point( DIM_START ) ) );
             m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
                                                                              m_editPoints->Point( DIM_END ) ) );
         }
-
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
             dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x,
                                         m_editedPoint->GetPosition().y ) );
+            dimension->Update();
+
             m_editPoints->Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARSTART ),
                                                                              m_editPoints->Point( DIM_START ) ) );
             m_editPoints->Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBAREND ),
                                                                              m_editPoints->Point( DIM_END ) ) );
         }
-
         else if( isModified( m_editPoints->Point(DIM_TEXT ) ) )
         {
             // Force manual mode if we weren't already in it
@@ -1472,8 +1476,9 @@ void PCB_POINT_EDITOR::updateItem() const
             // Force manual mode if we weren't already in it
             dimension->SetTextPositionMode( DIM_TEXT_POSITION::MANUAL );
             dimension->Text().SetPosition( wxPoint( m_editedPoint->GetPosition() ) );
-            dimension->Update();
         }
+
+        dimension->Update();
 
         break;
     }

@@ -293,20 +293,6 @@ void DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 }
 
 
-void DIMENSION_BASE::SetStart( const wxPoint& aOrigin )
-{
-    m_start = aOrigin;
-    Update();
-}
-
-
-void DIMENSION_BASE::SetEnd( const wxPoint& aEnd )
-{
-    m_end = aEnd;
-    Update();
-}
-
-
 void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class PCB_TEXT.
@@ -526,13 +512,6 @@ BITMAP_DEF ALIGNED_DIMENSION::GetMenuImage() const
 }
 
 
-void ALIGNED_DIMENSION::SetHeight( int aHeight )
-{
-    m_height = aHeight;
-    Update();
-}
-
-
 void ALIGNED_DIMENSION::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd )
 {
     VECTOR2D height( aCrossbarStart - GetStart() );
@@ -667,6 +646,15 @@ void ALIGNED_DIMENSION::updateText()
     }
 
     DIMENSION_BASE::updateText();
+}
+
+
+void ALIGNED_DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                         std::vector<MSG_PANEL_ITEM>& aList )
+{
+    DIMENSION_BASE::GetMsgPanelInfo( aFrame, aList );
+
+    aList.emplace_back( _( "Height" ), MessageTextFromValue( aFrame->GetUserUnits(), m_height ) );
 }
 
 

@@ -632,6 +632,7 @@ void DRAWING_TOOL::constrainDimension( DIMENSION_BASE* aDim )
     const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetStart() };
 
     aDim->SetEnd( wxPoint( VECTOR2I( aDim->GetStart() ) + GetVectorSnapped45( lineVector ) ) );
+    aDim->Update();
 }
 
 
@@ -826,6 +827,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetExtensionOffset( boardSettings.m_DimensionExtensionOffset );
                 dimension->SetStart( (wxPoint) cursorPos );
                 dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->Update();
 
                 preview.Add( dimension );
                 frame()->SetMsgPanel( dimension );
@@ -838,6 +840,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
             {
                 dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->Update();
 
                 if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
@@ -903,6 +906,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
             case SET_END:
                 dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->Update();
 
                 if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
                     constrainDimension( dimension );
@@ -921,6 +925,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     wxPoint delta( (wxPoint) cursorPos - dimension->GetEnd() );
                     double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
                     aligned->SetHeight( height );
+                    aligned->Update();
                 }
                 else if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
                 {
@@ -944,6 +949,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                     VECTOR2I heightVector( cursorPos - dimension->GetStart() );
                     ortho->SetHeight( vert ? heightVector.x : heightVector.y );
+                    ortho->Update();
                 }
                 else if( dimension->Type() == PCB_DIM_LEADER_T )
                 {
