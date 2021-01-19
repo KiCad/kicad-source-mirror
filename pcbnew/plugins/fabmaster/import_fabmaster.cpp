@@ -1148,9 +1148,9 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogError( wxString::Format( _( "Invalid graphic item "
+            wxLogError( wxString::Format( _( "Unhandled graphic item '%s' "
                                              "in Geometric definition row %zu" ),
-                    geo_tag.c_str(), rownum ) );
+                    gr_data.graphic_dataname.c_str(), geo_tag.c_str(), rownum ) );
             continue;
         }
 
@@ -1164,9 +1164,10 @@ size_t FABMASTER::processGeometry( size_t aRow )
             {
                 GEOM_GRAPHIC new_gr;
                 new_gr.subclass = row[geo_subclass_col];
-                new_gr.refdes = row[geo_refdes_col];
-                new_gr.name = row[geo_sym_name_col];
-                new_gr.id   = id;
+                new_gr.refdes   = row[geo_refdes_col];
+                new_gr.name     = row[geo_sym_name_col];
+                new_gr.id       = id;
+                new_gr.elements = std::make_unique<graphic_element>();
                 board_graphics.push_back( std::move( new_gr ) );
             }
 
@@ -1183,9 +1184,10 @@ size_t FABMASTER::processGeometry( size_t aRow )
             if( map_it.second )
             {
                 gr->second.subclass = row[geo_subclass_col];
-                gr->second.refdes = row[geo_refdes_col];
-                gr->second.name = row[geo_sym_name_col];
-                gr->second.id   = id;
+                gr->second.refdes   = row[geo_refdes_col];
+                gr->second.name     = row[geo_sym_name_col];
+                gr->second.id       = id;
+                gr->second.elements = std::make_unique<graphic_element>();
             }
 
             auto result = gr->second.elements->emplace( std::move( gr_item ) );
@@ -1320,8 +1322,9 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogError( wxString::Format( _( "Invalid graphic item "
-                                             "in Traces definition row %zu" ), rownum ) );
+            wxLogError( wxString::Format( _( "Unhandled graphic item '%s' "
+                                             "in Traces definition row %zu" ),
+                    gr_data.graphic_dataname.c_str(), rownum ) );
             continue;
         }
 
