@@ -37,7 +37,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALO
     m_magneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
     m_magneticGraphics->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
     m_flipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
-    m_addUnlockedPads->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
+    m_autoLockPads->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
 
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
@@ -72,7 +72,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
         m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
         m_flipLeftRight->SetValue( general_opts.m_FlipLeftRight );
-        m_addUnlockedPads->SetValue( general_opts.m_AddUnlockedPads );
+        m_autoLockPads->SetValue( !general_opts.m_AddUnlockedPads );
 
         m_Show_Page_Limits->SetValue( m_frame->ShowPageLimits() );
 
@@ -117,7 +117,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
         m_frame->Settings().m_FlipLeftRight = m_flipLeftRight->GetValue();
         m_frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
-        m_frame->Settings().m_AddUnlockedPads = m_addUnlockedPads->GetValue();
+        m_frame->Settings().m_AddUnlockedPads = !m_autoLockPads->GetValue();
 
         if( m_rbTrackDragMove->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;

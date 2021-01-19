@@ -23,33 +23,39 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
 
+	wxBoxSizer* bSizeFPEdit;
+	bSizeFPEdit = new wxBoxSizer( wxVERTICAL );
+
 	m_magneticPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptionsSizer->Add( m_magneticPads, 0, wxRIGHT|wxLEFT, 5 );
-
-
-	bOptionsSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+	bSizeFPEdit->Add( m_magneticPads, 0, wxBOTTOM, 3 );
 
 	m_magneticGraphics = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptionsSizer->Add( m_magneticGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizeFPEdit->Add( m_magneticGraphics, 0, wxBOTTOM, 15 );
 
 
-	bOptionsSizer->Add( 0, 6, 0, wxEXPAND, 5 );
+	bOptionsSizer->Add( bSizeFPEdit, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerBoardEdit;
+	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
+
+	m_autoLockPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Lock pads of newly added footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_autoLockPads->SetToolTip( _("If checked, when a footprint is added to the board, the pads will be freely moveable.") );
+
+	bSizerBoardEdit->Add( m_autoLockPads, 0, wxBOTTOM, 15 );
+
+	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBoardEdit->Add( m_flipLeftRight, 0, wxBOTTOM, 15 );
+
+
+	bOptionsSizer->Add( bSizerBoardEdit, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerUniversal;
+	bSizerUniversal = new wxBoxSizer( wxVERTICAL );
 
 	m_segments45OnlyCtrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_segments45OnlyCtrl->SetToolTip( _("When drawing graphic lines force to horizontal, vertical, or 45 degrees.") );
 
-	bOptionsSizer->Add( m_segments45OnlyCtrl, 0, wxALL, 5 );
-
-
-	bOptionsSizer->Add( 0, 6, 0, wxEXPAND, 5 );
-
-	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptionsSizer->Add( m_flipLeftRight, 0, wxALL, 5 );
-
-	m_addLockedPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Add footprints with pads unlocked"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_addLockedPads->SetToolTip( _("If checked, when a footprint is added to the board, the pads will be freely moveable.") );
-
-	bOptionsSizer->Add( m_addLockedPads, 0, wxALL, 5 );
+	bSizerUniversal->Add( m_segments45OnlyCtrl, 0, wxBOTTOM, 3 );
 
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -59,7 +65,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticTextRotationAngle = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("&Rotation angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotationAngle->Wrap( -1 );
-	fgSizer12->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_rotationAngle = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotationAngle->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
@@ -67,7 +73,10 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizer12->Add( m_rotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
-	bOptionsSizer->Add( fgSizer12, 0, wxEXPAND|wxTOP, 5 );
+	bSizerUniversal->Add( fgSizer12, 0, wxEXPAND, 5 );
+
+
+	bOptionsSizer->Add( bSizerUniversal, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMiddleLeftSizer->Add( bOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
