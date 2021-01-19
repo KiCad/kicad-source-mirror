@@ -1645,7 +1645,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         }
         else if( diagDirection == m_lastSegDirection )
         {
-            if( m_direction != straightDirection )
+            if( m_direction != diagDirection )
             {
                 wxLogTrace( "PNS", "Posture: forcing diagonal => %s", diagDirection.Format() );
             }
