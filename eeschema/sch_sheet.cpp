@@ -114,6 +114,9 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
         m_pins.back()->SetParent( this );
     }
 
+    for( SCH_FIELD& field : m_fields )
+        field.SetParent( this );
+
     m_borderWidth = aSheet.m_borderWidth;
     m_borderColor = aSheet.m_borderColor;
     m_backgroundColor = aSheet.m_backgroundColor;
