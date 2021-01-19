@@ -504,7 +504,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     else
                         pos.x = last.x;
 
-                    if( abs( delta.y ) > grid.GetGrid().x / 2 )
+                    if( abs( delta.y ) > grid.GetGrid().y / 2 )
                         pos.y = last.y + deltaGrid.y;
                     else
                         pos.y = last.y;
