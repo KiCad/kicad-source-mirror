@@ -138,7 +138,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.pad_through_hole",         LAYER_PADS_TH            );
     CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );
     CLR( "board.ratsnest",                 LAYER_RATSNEST           );
-    CLR( "board.select_overlay",           LAYER_SELECT_OVERLAY     );
     CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND         );
     CLR( "board.via_hole",                 LAYER_VIAS_HOLES         );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
