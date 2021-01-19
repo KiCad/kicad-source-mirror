@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-18 09:49-0800\n"
-"PO-Revision-Date: 2021-01-18 17:40+0000\n"
+"POT-Creation-Date: 2021-01-11 08:21-0800\n"
+"PO-Revision-Date: 2021-01-21 16:56+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -14637,9 +14637,7 @@ msgstr "Normale Speichern-Unter-Operation"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
-"Führen Sie nach dem Speichern der Bibliothek keine zusätzlichen "
-"Bearbeitungen aus."
+msgstr "Nach dem Speichern der Bibliothek keine weiteren Vorgänge ausführen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 msgid "Replace library table entry"
@@ -22683,7 +22681,7 @@ msgstr "Alte Datei überschreiben"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 msgid "Board outline builder:"
-msgstr "Platinenumriss-Builder:"
+msgstr "Platinenumriss-Erzeuger:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid "Tolerance:"
@@ -22691,7 +22689,7 @@ msgstr "Toleranz:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr "Breite (0.001 mm)"
+msgstr "Fein (0,001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Standard (0.01 mm)"
@@ -22699,7 +22697,7 @@ msgstr "Standard (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr "Ungenauigkeit (0.1mm)"
+msgstr "Grob (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid ""
@@ -24039,7 +24037,7 @@ msgstr "Pad Anzahl"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:73
 msgid "Via Count"
-msgstr "Anzahl Doku's"
+msgstr "Anzahl DuKos"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:74
 msgid "Via Length"
@@ -26016,7 +26014,7 @@ msgstr "Verwende Größen der Netzklasse"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:247
 msgid "Via type:"
-msgstr "Doku-Typ:"
+msgstr "DuKo-Typ:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1013
@@ -27561,7 +27559,7 @@ msgstr "Kein DuKo Bohrdurchmesser definiert."
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:275
 #, c-format
 msgid "Via drill less than minimum through hole (%s)."
-msgstr "DoKu-Bohrung ist kleiner als die minimale Lochgröße (%s)."
+msgstr "DuKo-Bohrung ist kleiner als die minimale Lochgröße (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:284
 msgid "Via drill larger than via diameter."
@@ -32002,7 +32000,7 @@ msgstr "Bogen aus Liniensegment erstellen"
 
 #: pcbnew/tools/drawing_tool.cpp:69
 msgid "Select Via Size"
-msgstr "DoKu-Größe wählen"
+msgstr "DuKo-Größe wählen"
 
 #: pcbnew/tools/drawing_tool.cpp:264 pcbnew/tools/drawing_tool.cpp:1440
 msgid "Draw a line segment"
@@ -33428,7 +33426,7 @@ msgstr "Alle Leiterbahnen im Netz aus Auswahl entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Deselektiert alle Leiterbahnen & DoKus, die zum selben Netz gehören."
+msgstr "Deselektiert alle Leiterbahnen & DuKos, die zum selben Netz gehören."
 
 #: pcbnew/tools/pcb_actions.cpp:1188
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -33725,7 +33723,7 @@ msgstr "Micro DuKo %s auf %s"
 #: pcbnew/track.cpp:88
 #, c-format
 msgid "Via %s on %s"
-msgstr "DoKu %s auf %s"
+msgstr "DuKo %s auf %s"
 
 #: pcbnew/track.cpp:144
 msgid "removed annular ring"
@@ -33788,7 +33786,7 @@ msgstr "Lage Unten"
 
 #: pcbnew/track.cpp:1079
 msgid "Via Type"
-msgstr "Doku-Typ"
+msgstr "DuKo-Typ"
 
 #: pcbnew/undo_redo.cpp:586
 msgid "Incomplete undo/redo operation: some items not found"
