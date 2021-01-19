@@ -889,6 +889,12 @@ void FOOTPRINT_EDIT_FRAME::FocusOnLibID( const LIB_ID& aLibID )
 }
 
 
+void FOOTPRINT_EDIT_FRAME::OnDisplayOptionsChanged()
+{
+    m_appearancePanel->UpdateDisplayOptions();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 {
     m_appearancePanel->OnLayerAlphaChanged();

@@ -264,6 +264,8 @@ public:
     ///> @copydoc PCB_BASE_FRAME::OnUpdateLayerAlpha()
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
 
+    void OnDisplayOptionsChanged() override;
+
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
