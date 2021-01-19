@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 64 16" version="1.1"
-     xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:cc="http://creativecommons.org/ns#"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
-     <metadata id="metadata43">
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100%"
+   height="100%"
+   viewBox="0 0 64 16"
+   version="1.1"
+   xml:space="preserve"
+   style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"
+   id="svg836"
+   sodipodi:docname="stroke_solid.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><defs
+   id="defs840" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1280"
+   inkscape:window-height="715"
+   id="namedview838"
+   showgrid="false"
+   inkscape:zoom="10.679189"
+   inkscape:cx="32"
+   inkscape:cy="8"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg836" />
+     <metadata
+   id="metadata43">
           <rdf:RDF>
-               <cc:Work rdf:about="">
+               <cc:Work
+   rdf:about="">
                     <dc:format>image/svg+xml</dc:format>
-                    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                    <dc:type
+   rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
                     <dc:title></dc:title>
-                    <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+                    <cc:license
+   rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
                </cc:Work>
-               <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
-                    <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-                    <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-                    <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-                    <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-                    <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-               </cc:License>
-          </rdf:RDF>
+               
+          <cc:License
+   rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+     rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+     rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+     rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+     rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+     rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+     rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF>
      </metadata>
-     <path d="M63,8c0,-1.656 -1.344,-3 -3,-3l-56,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l56,0c1.656,0 3,-1.344 3,-3Z" style="fill:#001bff;stroke:#000;stroke-width:0.09px;"/>
+     <path
+   d="M63,8c0,-1.656 -1.344,-3 -3,-3l-56,0c-1.656,0 -3,1.344 -3,3c0,1.656 1.344,3 3,3l56,0c1.656,0 3,-1.344 3,-3Z"
+   style="fill:#545454;stroke:#000;stroke-width:0.09000000000000000px;fill-opacity:1"
+   id="path834" />
 </svg>
