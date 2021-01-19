@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-18 09:49-0800\n"
-"PO-Revision-Date: 2021-01-18 07:28+0000\n"
+"POT-Creation-Date: 2021-01-11 08:21-0800\n"
+"PO-Revision-Date: 2021-01-21 16:56+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -488,7 +488,7 @@ msgstr "Zkrátit potisk na prstenec prokovu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Pro nepokovenou měď použijte barvu holé mědi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -20361,9 +20361,8 @@ msgid "Constraints"
 msgstr "Omezení"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "Předdefinované velikosti:"
+msgstr "Předdefinované velikosti"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
@@ -25477,9 +25476,8 @@ msgid "Via diameter:"
 msgstr "Průměr prokovu:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Díry prokovu"
+msgstr "Díry prokovu:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
