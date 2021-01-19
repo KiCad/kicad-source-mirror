@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,7 +45,7 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_magneticGraphics;
 		wxCheckBox* m_segments45OnlyCtrl;
 		wxCheckBox* m_flipLeftRight;
-		wxCheckBox* m_addUnlockedPads;
+		wxCheckBox* m_addLockedPads;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_rotationAngle;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,7 +36,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bOptionsSizer->Add( 0, 6, 0, wxEXPAND, 5 );
 
 	m_segments45OnlyCtrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segments45OnlyCtrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
+	m_segments45OnlyCtrl->SetToolTip( _("When drawing graphic lines force to horizontal, vertical, or 45 degrees.") );
 
 	bOptionsSizer->Add( m_segments45OnlyCtrl, 0, wxALL, 5 );
 
@@ -46,10 +46,10 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bOptionsSizer->Add( m_flipLeftRight, 0, wxALL, 5 );
 
-	m_addUnlockedPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Add footprints with pads unlocked"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_addUnlockedPads->SetToolTip( _("If checked, when a footprint is added to the board, the pads will be freely moveable.") );
+	m_addLockedPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Add footprints with pads unlocked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_addLockedPads->SetToolTip( _("If checked, when a footprint is added to the board, the pads will be freely moveable.") );
 
-	bOptionsSizer->Add( m_addUnlockedPads, 0, wxALL, 5 );
+	bOptionsSizer->Add( m_addLockedPads, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 0, 2, 0, 0 );
