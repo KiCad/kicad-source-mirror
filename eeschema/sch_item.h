@@ -215,7 +215,7 @@ public:
 
     SCH_ITEM( const SCH_ITEM& aItem );
 
-    ~SCH_ITEM();
+    virtual ~SCH_ITEM();
 
     virtual wxString GetClass() const override
     {

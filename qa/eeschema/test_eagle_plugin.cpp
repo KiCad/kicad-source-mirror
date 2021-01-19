@@ -34,7 +34,9 @@
  */
 BOOST_AUTO_TEST_CASE( FindPlugin )
 {
-    BOOST_CHECK_NE( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ), nullptr );
+    SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
+    BOOST_CHECK_NE( pi, nullptr );
+    SCH_IO_MGR::ReleasePlugin( pi );
 }
 
 
@@ -66,4 +68,6 @@ BOOST_AUTO_TEST_CASE( Load )
     // This doesn't work with a null KiWay.
     // const SCH_SHEET* sheet = pi->Load( fn.GetFullPath(), nullptr );
     // BOOST_CHECK_NE( nullptr, sheet );
+
+    SCH_IO_MGR::ReleasePlugin( pi );
 }

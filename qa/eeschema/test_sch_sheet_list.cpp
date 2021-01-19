@@ -40,6 +40,7 @@ public:
 
     virtual ~TEST_SCH_SHEET_LIST_FIXTURE()
     {
+        m_schematic.Reset();
         delete m_pi;
     }
 

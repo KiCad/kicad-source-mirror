@@ -145,6 +145,8 @@ public:
 
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& aOther );
 
+    ~SCH_SHEET_PATH() = default;
+
     /// Forwarded method from std::vector
     SCH_SHEET* at( size_t aIndex ) const { return m_sheets.at( aIndex ); }
 

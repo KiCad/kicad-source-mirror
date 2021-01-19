@@ -702,6 +702,9 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         }
     }
 
+    for( NET_RECORD* record : nets )
+        delete record;
+
     return xnets;
 }
 

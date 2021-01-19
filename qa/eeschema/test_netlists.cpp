@@ -42,6 +42,12 @@ public:
         m_pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
     }
 
+    virtual ~TEST_NETLISTS_FIXTURE()
+    {
+        m_schematic.Reset();
+        SCH_IO_MGR::ReleasePlugin( m_pi );
+    }
+
     void loadSchematic( const wxString& aBaseName );
 
     wxString getNetlistFileName( bool aTest = false );
@@ -196,6 +202,7 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
 void TEST_NETLISTS_FIXTURE::cleanup()
 {
     wxRemoveFile( getNetlistFileName( true ) );
+    m_schematic.Reset();
 }
 
 

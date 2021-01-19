@@ -174,6 +174,9 @@ BOOST_AUTO_TEST_CASE( Junctions )
     }
 
     BOOST_CHECK_EQUAL( count, 51 );
+
+    for( SCH_ITEM* item : m_tree )
+        delete item;
 }
 
 BOOST_AUTO_TEST_CASE( MixedElements )
@@ -239,6 +242,9 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     }
 
     BOOST_CHECK_EQUAL( count, 1 );
+
+    for( SCH_ITEM* item : m_tree )
+        delete item;
 }
 
 // This tests the case where the tree has no branches but we want to iterator over a subset
@@ -269,6 +275,9 @@ BOOST_AUTO_TEST_CASE( SingleElementTree )
     }
 
     BOOST_CHECK_EQUAL( count, 1 );
+
+    for( SCH_ITEM* item : m_tree )
+        delete item;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

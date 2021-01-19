@@ -139,6 +139,8 @@ BOOST_AUTO_TEST_CASE( AddPins )
     BOOST_CHECK_EQUAL( m_sheet.HasPins(), false );
     BOOST_CHECK_EQUAL( m_sheet.HasPin( "pinname" ), false );
     BOOST_CHECK_EQUAL( m_sheet.GetPin( pinPos ), nullptr );
+
+    delete &pinRef;
 }
 
 /**
