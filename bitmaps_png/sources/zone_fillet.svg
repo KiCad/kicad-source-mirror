@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zone_fillet.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.3416042"
-     inkscape:cy="13.295395"
+     inkscape:zoom="15.850952"
+     inkscape:cx="7.1102979"
+     inkscape:cy="14.614735"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -82,18 +82,19 @@
   <path
      class="cls-1"
      d="M 23.9907,24.0007 H 0.0159 V 0.0093 h 6.5463 v 2.8333 a 14.96,14.96 0 0 0 14.5952,14.6529 h 2.8333 z"
-     id="path27776" />
+     id="path27776"
+     style="stroke:none;fill:#39b4ea;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="M 6.5,0 V 1.3143554 A 16.185659,16.185842 0 0 0 22.685659,17.5 H 24"
+     id="path27780"
+     style="stroke-width:0.999996;stroke:#1a81c4;stroke-opacity:1" />
   <polyline
      class="cls-2"
      points="7.282 1.009 7.282 18.718 24.991 18.718"
      id="polyline27778"
      transform="matrix(0.98819809,0,0,0.98820046,-0.6960585,-0.99709426)"
      style="stroke-width:1.01194" />
-  <path
-     class="cls-2"
-     d="M 6.5,0 V 1.3143554 A 16.185659,16.185842 0 0 0 22.685659,17.5 H 24"
-     id="path27780"
-     style="stroke-width:0.999996" />
   <rect
      class="cls-3"
      x="5"
