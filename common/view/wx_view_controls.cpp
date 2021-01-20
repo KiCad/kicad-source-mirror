@@ -114,6 +114,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_MOUSE_CAPTURE_LOST,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), NULL, this );
 
     m_cursorWarped = false;
 
@@ -128,6 +130,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
+    if( m_parentPanel->HasCapture() )
+        m_parentPanel->ReleaseMouse();
 }
 
 
@@ -477,6 +481,10 @@ void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 
 }
 
+void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
+{
+   // This method must be present to suppress the capture-lost assertion
+}
 
 void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 {

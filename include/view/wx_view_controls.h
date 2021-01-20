@@ -64,6 +64,7 @@ public:
     void onLeave( wxMouseEvent& WXUNUSED( aEvent ) );
     void onTimer( wxTimerEvent& WXUNUSED( aEvent ) );
     void onScroll( wxScrollWinEvent& aEvent );
+    void onCaptureLost( wxMouseEvent& WXUNUSED( aEvent ) );
 
     /**
      * Enable or disable mouse cursor grabbing (limits the movement field only to the panel area).
