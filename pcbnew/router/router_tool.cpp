@@ -1085,15 +1085,13 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            ACTION_MENU* menu;
-
-            if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
-                menu = m_diffPairMenu.get();
-            else
-                menu = m_trackViaMenu.get();
-
-            menu->SetDirty();
-            SetContextMenu( menu, CMENU_NOW );
+            frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            controls()->SetAutoPan( false );
+            {
+                m_toolMgr->RunAction( ACT_CustomTrackWidth, true );
+            }
+            controls()->SetAutoPan( true );
+            setCursor();
         }
         else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
         {
