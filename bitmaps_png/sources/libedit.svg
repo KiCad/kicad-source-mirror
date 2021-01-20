@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="libedit.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,25 +22,25 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1904"
-     inkscape:window-height="1041"
-     id="namedview18"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
      showgrid="true"
-     inkscape:zoom="43.419382"
-     inkscape:cx="11.291265"
-     inkscape:cy="14.552795"
+     inkscape:zoom="18.975104"
+     inkscape:cx="12.45946"
+     inkscape:cy="13.255836"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
-       id="grid843"
+       id="grid_kicad"
        spacingx="0.5"
        spacingy="0.5"
-       color="#a5a5ff"
-       opacity="0.1254902"
+       color="#9999ff"
+       opacity="0.13"
        empspacing="2" />
   </sodipodi:namedview>
   <metadata
@@ -53,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>export_part</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -73,64 +73,79 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs5">
+     id="defs117075">
     <style
-       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
+       id="style117073">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#bf2641;}.cls-4{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
-     id="title7">libedit</title>
+     id="title117077">export_part</title>
   <g
-     id="g889"
-     transform="translate(2,1.5000002)">
+     id="g893"
+     transform="translate(1.614474,5.118756)"
+     style="display:inline">
+    <polygon
+       class="cls-1"
+       points="5,2 5,24 21.654,13 "
+       id="polygon27928"
+       transform="matrix(0.99890119,0,0,1,-2.6122763,-6.1182919)"
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="19.018129"
+       y1="6.8817091"
+       x2="21.385527"
+       y2="6.8817091"
+       id="line27930"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="2.3043151"
+       y1="0.88170809"
+       x2="-0.614474"
+       y2="0.88170809"
+       id="line27932"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="2.2867343"
+       y1="12.881707"
+       x2="-0.614474"
+       y2="12.881707"
+       id="line27934"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 2.260794,0.398484 V 21.027055 L 17.732224,10.71277 Z"
-       id="path2231"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 5,6.9999998 H 7.953399"
-       id="path2229" />
-    <path
-       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 5.023301,13.976699 H 7.9767"
-       id="path2301" />
-    <path
-       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 6.5,15.453398 V 12.5"
-       id="path2303" />
-    <path
-       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 18.003652,10.71277 h 3.257142"
-       id="path2233"
+       id="line27936"
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 5.3789332,3.3817081 H 8.3756368"
+       class="cls-1"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M -1,4.4999998 H 2"
-       id="path2235"
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 6.877285,6.8817082 V 11.881708"
+       id="path17250"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M -1,16.5 H 1.759064"
-       id="path2237"
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 4.3807133,9.3459452 4.9938248,0.03576"
+       id="path17252"
        sodipodi:nodetypes="cc" />
   </g>
-  <circle
+  <ellipse
      class="cls-3"
-     cx="17"
-     cy="17"
-     id="ellipse22"
-     style="fill:#bf2641;fill-opacity:1;stroke-width:0.999999"
-     r="7" />
+     cx="16.9967"
+     cy="17.012199"
+     rx="7.0064998"
+     ry="7"
+     id="ellipse117087" />
   <path
      class="cls-4"
-     d="m 21.539701,13 -0.645179,-0.645178 c -0.401772,-0.40166 -1.053055,-0.40166 -1.454827,0 l -5.316089,5.340819 2.100005,2.100133 5.31609,-5.340947 c 0.40166,-0.401771 0.40166,-1.053056 0,-1.454827 z"
+     d="m 21.539701,13.497285 -0.645179,-0.645178 c -0.401772,-0.40166 -1.053055,-0.40166 -1.454827,0 l -5.316089,5.340819 2.100005,2.100133 5.31609,-5.340947 c 0.40166,-0.401771 0.40166,-1.053056 0,-1.454827 z"
      id="path25"
-     style="fill:#ffffff;stroke-width:1"
+     style="fill:#ffffff;stroke-width:1;stroke:none"
      sodipodi:nodetypes="ccccccc" />
   <path
      id="polygon27"
-     style="fill:#ffffff;stroke-width:1"
-     d="m 13,21 h 3 c -0.779315,-0.772295 -2.28388,-2.275535 -3,-3.000001 z"
+     style="fill:#ffffff;stroke-width:1;stroke:none"
+     d="m 13,21.497285 h 3 C 15.220685,20.72499 13.71612,19.22175 13,18.497284 Z"
      sodipodi:nodetypes="cccc" />
 </svg>

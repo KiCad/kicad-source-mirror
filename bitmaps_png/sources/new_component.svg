@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="new_component.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,18 +22,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1041"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="24.845204"
-     inkscape:cx="15.134048"
-     inkscape:cy="12.526417"
+     inkscape:zoom="6.8135863"
+     inkscape:cx="-10.556068"
+     inkscape:cy="25.958916"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="g982">
+     inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -53,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>export_part</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -73,44 +73,63 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs158462">
+     id="defs117075">
     <style
-       id="style158460">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#bf2641;}.cls-4{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style117073">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#bf2641;}.cls-4{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
-     id="title158464">new_component</title>
-  <path
-     style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 4.260794,0.8984842 V 21.527055 L 19.732224,11.21277 Z"
-     id="path2231"
-     sodipodi:nodetypes="cccc" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 7,7.5 H 9.953399"
-     id="path2229" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 7.023301,14.476699 H 9.9767"
-     id="path2301" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 8.5,15.953398 V 13"
-     id="path2303" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 20.003652,11.21277 h 3.257142"
-     id="path2233"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 1,5 H 4"
-     id="path2235"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 1,17 H 3.759064"
-     id="path2237"
-     sodipodi:nodetypes="cc" />
+     id="title117077">export_part</title>
+  <g
+     id="g893"
+     transform="translate(1.614474,5.118756)"
+     style="display:inline">
+    <polygon
+       class="cls-1"
+       points="5,24 21.654,13 5,2 "
+       id="polygon27928"
+       transform="matrix(0.99890119,0,0,1,-2.6122763,-6.1182919)"
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="19.018129"
+       y1="6.8817091"
+       x2="21.385527"
+       y2="6.8817091"
+       id="line27930"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="2.3043151"
+       y1="0.88170809"
+       x2="-0.614474"
+       y2="0.88170809"
+       id="line27932"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-1"
+       x1="2.2867343"
+       y1="12.881707"
+       x2="-0.614474"
+       y2="12.881707"
+       id="line27934"
+       style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="line27936"
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 5.3789332,3.3817081 H 8.3756368"
+       class="cls-1"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 6.877285,6.8817082 V 11.881708"
+       id="path17250"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 4.3807133,9.3459452 4.9938248,0.03576"
+       id="path17252"
+       sodipodi:nodetypes="cc" />
+  </g>
   <g
      id="g982">
     <circle
@@ -118,7 +137,7 @@
        cx="17.5"
        cy="17.5"
        id="ellipse158474"
-       style="stroke-width:1"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:1"
        r="6.5" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -157,7 +176,7 @@
        d="M 17.5,21.742641 V 13.257359"
        id="path938" />
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 13.257359,17.5 h 8.485282"
        id="path940" />
   </g>

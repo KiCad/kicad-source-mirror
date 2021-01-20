@@ -26,9 +26,9 @@
      inkscape:window-height="715"
      id="namedview3927"
      showgrid="true"
-     inkscape:zoom="17.905361"
-     inkscape:cx="14.234981"
-     inkscape:cy="12.823142"
+     inkscape:zoom="26.135106"
+     inkscape:cx="7.2318249"
+     inkscape:cy="6.5339112"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
@@ -81,7 +81,12 @@
      id="title3900">hidden_pin</title>
   <path
      style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 12,22 V 2"
+     d="M 12,22 V 18.5"
+     id="path3748"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 12,5.5 V 2"
      id="path17255-9"
      sodipodi:nodetypes="cc" />
   <g
@@ -92,7 +97,7 @@
        points="5,24 21.654,13 5,2 "
        id="polygon27928"
        transform="matrix(0.99890119,0,0,1,-2.6122763,-6.1182919)"
-       style="fill:#f3f3f3;fill-opacity:1;stroke:#545454;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2.0011px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-1"
        x1="19.018129"

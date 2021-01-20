@@ -648,7 +648,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       wxEmptyString,
                                       "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master",
                                       SYMBOL_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( new_component_xpm ) ) );
+                                      aInfo.CreateKiBitmap( add_component_xpm ) ) );
 
     #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Thomas Pointhuber",
