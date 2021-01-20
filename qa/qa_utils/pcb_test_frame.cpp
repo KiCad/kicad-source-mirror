@@ -62,7 +62,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <pcbnew/tools/pcb_selection_tool.h>
 #include <plugins/kicad/kicad_plugin.h>
 
 #include "pcb_test_frame.h"
@@ -122,12 +122,10 @@ class TEST_ACTIONS : public ACTIONS
 
 void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType )
 {
-    KIGFX::GAL_DISPLAY_OPTIONS options;
-
-    options.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE; //SUPERSAMPLING_X4;
+    m_displayOptions.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE; //SUPERSAMPLING_X4;
 
     m_galPanel = std::make_shared<PCB_DRAW_PANEL_GAL>( aParent, -1, wxPoint( 0,
-                            0 ), wxDefaultSize, options, aGalType );
+                            0 ), wxDefaultSize, m_displayOptions, aGalType );
     m_galPanel->UpdateColors();
     
     m_galPanel->SetEvtHandlerEnabled( true );

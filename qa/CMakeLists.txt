@@ -60,4 +60,5 @@ add_subdirectory( drc_proto )
 add_subdirectory( common_tools )
 add_subdirectory( pcbnew_tools )
 
+add_subdirectory( pns )
 

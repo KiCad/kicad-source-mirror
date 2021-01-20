@@ -67,6 +67,8 @@ protected:
 
     std::shared_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
     std::shared_ptr < BOARD > m_board;
+    KIGFX::GAL_DISPLAY_OPTIONS m_displayOptions;
+
 #ifdef USE_TOOL_MANAGER
     unique_ptr < TOOL_MANAGER > m_toolManager;
     unique_ptr < TOOL_DISPATCHER > m_toolDispatcher;
