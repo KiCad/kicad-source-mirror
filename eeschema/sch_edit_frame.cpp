@@ -546,6 +546,13 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     m_schematic->RootScreen()->SetFileName( wxEmptyString );
 
+    // Don't leave root page number empty
+    SCH_SHEET_PATH rootSheetPath;
+    rootSheetPath.push_back( &m_schematic->Root() );
+    m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
+    m_schematic->Root().AddInstance( rootSheetPath.Path() );
+    m_schematic->Root().SetPageNumber( rootSheetPath, wxT( "1" ) );
+
     if( GetScreen() == NULL )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
