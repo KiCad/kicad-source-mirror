@@ -180,8 +180,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     int y = aEvent.GetY();
     VECTOR2D mousePos( x, y );
 
-    if( !aEvent.Dragging() &&
-        ( m_settings.m_cursorCaptured || m_settings.m_grabMouse || m_settings.m_autoPanEnabled ) )
+    if( !aEvent.Dragging() && m_settings.m_grabMouse )
     {
         bool warp = false;
         wxSize parentSize = m_parentPanel->GetClientSize();
@@ -411,7 +410,8 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
-            m_parentPanel->CaptureMouse();
+            if( !m_parentPanel->HasCapture() )
+                m_parentPanel->CaptureMouse();
         }
         else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM ) ||
                  ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
@@ -420,7 +420,8 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_zoomStartPoint = m_dragStartPoint;
             m_initialZoomScale = m_view->GetScale();
             m_state = DRAG_ZOOMING;
-            m_parentPanel->CaptureMouse();
+            if( !m_parentPanel->HasCapture() )
+                m_parentPanel->CaptureMouse();
         }
 
         if( aEvent.LeftUp() )
@@ -433,7 +434,8 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
         {
             m_state = IDLE;
-            m_parentPanel->ReleaseMouse();
+            if( !m_settings.m_grabMouse && m_parentPanel->HasCapture() )
+                m_parentPanel->ReleaseMouse();
         }
 
         break;
@@ -590,9 +592,9 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
-    if( aEnabled && !m_settings.m_grabMouse )
+    if( aEnabled && !m_parentPanel->HasCapture() )
         m_parentPanel->CaptureMouse();
-    else if( !aEnabled && m_settings.m_grabMouse )
+    else if( !aEnabled && m_parentPanel->HasCapture() && m_state == IDLE )
         m_parentPanel->ReleaseMouse();
 
     VIEW_CONTROLS::SetGrabMouse( aEnabled );
@@ -601,22 +603,14 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 
 void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
 {
-    if( aEnabled && !m_settings.m_cursorCaptured )
-        m_parentPanel->CaptureMouse();
-    else if( !aEnabled && m_settings.m_cursorCaptured )
-        m_parentPanel->ReleaseMouse();
-
+    SetGrabMouse( aEnabled );
     VIEW_CONTROLS::CaptureCursor( aEnabled );
 }
 
 
 void WX_VIEW_CONTROLS::SetAutoPan( bool aEnabled )
 {
-    if( aEnabled && !m_settings.m_autoPanEnabled )
-        m_parentPanel->CaptureMouse();
-    else if( !aEnabled && m_settings.m_autoPanEnabled )
-        m_parentPanel->ReleaseMouse();
-
+    SetGrabMouse( aEnabled );
     VIEW_CONTROLS::SetAutoPan( aEnabled );
 }
 
