@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-18 09:49-0800\n"
-"PO-Revision-Date: 2021-01-18 07:28+0000\n"
+"POT-Creation-Date: 2021-01-11 08:21-0800\n"
+"PO-Revision-Date: 2021-01-21 16:56+0000\n"
 "Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5471,7 +5471,7 @@ msgstr "替换并查找下一项"
 
 #: common/tool/actions.cpp:227
 msgid "Replace current match and find next"
-msgstr "替换当前匹配并找到下一个"
+msgstr "替换当前匹配项并查找下一个"
 
 #: common/tool/actions.cpp:233
 msgid "Replace All"
@@ -5503,7 +5503,7 @@ msgstr "排除标记"
 
 #: common/tool/actions.cpp:256
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr "在Checker窗口中将当前违规标记为排除项"
+msgstr "在检查器窗口中将当前违规标记为排除项"
 
 #: common/tool/actions.cpp:268
 msgid "Refresh"
@@ -5661,7 +5661,7 @@ msgstr "密尔(Mils)"
 
 #: common/tool/actions.cpp:487
 msgid "Use mils"
-msgstr "使用密耳"
+msgstr "使用密尔"
 
 #: common/tool/actions.cpp:492
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5744,7 +5744,7 @@ msgstr "交互测量点之间的距离"
 
 #: common/tool/actions.cpp:554
 msgid "Show 3D viewer window"
-msgstr "显示3D 查看器窗口"
+msgstr "显示 3D 查看器窗口"
 
 #: common/tool/actions.cpp:559 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:896
@@ -5814,7 +5814,7 @@ msgstr "标准图形"
 
 #: common/tool/actions.cpp:595
 msgid "Use software graphics (fall-back)"
-msgstr "使用软件图形 (软件加速)"
+msgstr "使用软件图形 (软件渲染)"
 
 #: common/tool/actions.cpp:600
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
@@ -5824,7 +5824,7 @@ msgstr "配置路径..."
 
 #: common/tool/actions.cpp:600
 msgid "Edit path configuration environment variables"
-msgstr "编辑路劲配置环境变量"
+msgstr "编辑路径环境变量配置"
 
 #: common/tool/actions.cpp:605
 msgid "Manage Symbol Libraries..."
@@ -22289,7 +22289,7 @@ msgstr "包含覆铜 (&Z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 msgid "Filter Selection"
-msgstr "选择滤波器"
+msgstr "选择筛选器"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
