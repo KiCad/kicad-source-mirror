@@ -523,7 +523,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 const wxString& netname = pad->GetShortNetname();
 
                 if( !netname.IsEmpty() )
-                    component->AddNet( pad->GetName(), netname, wxEmptyString );
+                {
+                    component->AddNet( pad->GetName(), netname, pad->GetPinFunction(),
+                                       pad->GetPinType() );
+                }
             }
 
             netlist.AddComponent( component );

@@ -868,6 +868,9 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( !GetPinFunction().IsEmpty() )
         aList.emplace_back( _( "Pin Name" ), GetPinFunction() );
 
+    if( !GetPinType().IsEmpty() )
+        aList.emplace_back( _( "Pin Type" ), GetPinType() );
+
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
     aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
@@ -1433,6 +1436,10 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
                     &PAD::SetName, &PAD::GetName ) );
+        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Name" ),
+                    &PAD::SetPinFunction, &PAD::GetPinFunction ) );
+        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
+                    &PAD::SetPinType, &PAD::GetPinType ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Orientation" ),
                     &PAD::SetOrientationDegrees, &PAD::GetOrientationDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );

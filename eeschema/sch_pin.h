@@ -118,6 +118,11 @@ public:
 
     ELECTRICAL_PINTYPE GetType() const;
 
+    wxString GetCanonicalElectricalTypeName() const
+    {
+        return LIB_PIN::GetCanonicalElectricalTypeName( GetType() );
+    }
+
     GRAPHIC_PINSHAPE GetShape() const;
 
     int GetOrientation() const;

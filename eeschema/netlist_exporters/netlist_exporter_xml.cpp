@@ -678,9 +678,6 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             {
                 netCodeTxt.Printf( "%d", i + 1 );
 
-                if( net_record->first == "no_connect_" )
-                    net_record->first += netCodeTxt;
-
                 xnets->AddChild( xnet = node( "net" ) );
                 xnet->AddAttribute( "code", netCodeTxt );
                 xnet->AddAttribute( "name", net_record->first );
@@ -699,6 +696,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
             if( !pinName.IsEmpty() )
                 xnode->AddAttribute( "pinfunction", pinName );
+
+            xnode->AddAttribute( "pintype", pin->GetCanonicalElectricalTypeName() );
         }
     }
 

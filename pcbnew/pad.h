@@ -136,6 +136,12 @@ public:
     const wxString& GetPinFunction() const { return m_pinFunction; }
 
     /**
+     * Set the pad electrical type
+     */
+    void SetPinType( const wxString& aType ) { m_pinType = aType; }
+    const wxString& GetPinType() const { return m_pinType; }
+
+    /**
      * Before we had custom pad shapes it was common to have multiple overlapping pads to
      * represent a more complex shape.
      * @param other
@@ -663,7 +669,8 @@ private:
 
 private:
     wxString      m_name;               // Pad name (pin number in schematic)
-    wxString      m_pinFunction;        // Pin function in schematic
+    wxString      m_pinFunction;        // Pin name in schematic
+    wxString      m_pinType;            // Pin electrical type in schematic
 
     wxPoint       m_pos;                // Pad Position on board
 

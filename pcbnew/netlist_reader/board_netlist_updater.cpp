@@ -363,9 +363,13 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
 
         wxString pinFunction;
+        wxString pinType;
 
         if( net.IsValid() )     // i.e. the pad has a name
+        {
             pinFunction = net.GetPinFunction();
+            pinType = net.GetPinType();
+        }
 
         if( !m_isDryRun )
         {
@@ -373,6 +377,12 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
             {
                 changed = true;
                 pad->SetPinFunction( pinFunction );
+            }
+
+            if( pad->GetPinType() != pinType )
+            {
+                changed = true;
+                pad->SetPinType( pinType );
             }
         }
         else

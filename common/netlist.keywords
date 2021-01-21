@@ -28,6 +28,7 @@ part
 pin
 pins
 pinfunction
+pintype
 property
 ref
 sheetpath

@@ -189,6 +189,7 @@ void KICAD_NETLIST_PARSER::parseNet()
     wxString   reference;
     wxString   pin_number;
     wxString   pin_function;
+    wxString   pin_type;
 
     // The token net was read, so the next data is (code <number>)
     while( (token = NextTok() ) != T_EOF )
@@ -213,7 +214,9 @@ void KICAD_NETLIST_PARSER::parseNet()
             break;
 
         case T_node:
-            pin_function.Clear();   // By default: no pin function.
+            // By default: no pin function or type.
+            pin_function.Clear();
+            pin_type.Clear();
 
             while( (token = NextTok() ) != T_EOF )
             {
@@ -242,6 +245,12 @@ void KICAD_NETLIST_PARSER::parseNet()
                     NeedRIGHT();
                     break;
 
+                case T_pintype:
+                    NeedSYMBOLorNUMBER();
+                    pin_type = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                    break;
+
                 default:
                     skipCurrent();
                     break;
@@ -265,7 +274,7 @@ void KICAD_NETLIST_PARSER::parseNet()
                                        m_lineReader->LineNumber(), m_lineReader->Length() );
                 }
 
-                component->AddNet( pin_number, name, pin_function );
+                component->AddNet( pin_number, name, pin_function, pin_type );
             }
             break;
 

@@ -46,19 +46,24 @@ class COMPONENT_NET
     wxString m_pinName;
     wxString m_netName;
     wxString m_pinFunction;
+    wxString m_pinType;
 
 public:
     COMPONENT_NET() {}
 
     COMPONENT_NET( const wxString& aPinName, const wxString& aNetName,
-                   const wxString& aPinFunction ) :
-        m_pinName( aPinName ), m_netName( aNetName ), m_pinFunction( aPinFunction )
+                   const wxString& aPinFunction, const wxString& aPinType ) :
+        m_pinName( aPinName ),
+        m_netName( aNetName ),
+        m_pinFunction( aPinFunction ),
+        m_pinType( aPinType )
     {
     }
 
     const wxString& GetPinName() const { return m_pinName; }
     const wxString& GetNetName() const { return m_netName; }
     const wxString& GetPinFunction() const { return m_pinFunction; }
+    const wxString& GetPinType() const { return m_pinType; }
 
     bool IsValid() const { return !m_pinName.IsEmpty(); }
 
@@ -125,9 +130,10 @@ public:
 
     virtual ~COMPONENT() { };
 
-    void AddNet( const wxString& aPinName, const wxString& aNetName, const wxString& aPinFunction )
+    void AddNet( const wxString& aPinName, const wxString& aNetName, const wxString& aPinFunction,
+                 const wxString& aPinType )
     {
-        m_nets.push_back( COMPONENT_NET( aPinName, aNetName, aPinFunction ) );
+        m_nets.push_back( COMPONENT_NET( aPinName, aNetName, aPinFunction, aPinType ) );
     }
 
     unsigned GetNetCount() const { return m_nets.size(); }
