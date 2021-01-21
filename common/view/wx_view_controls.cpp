@@ -191,7 +191,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     int y = aEvent.GetY();
     VECTOR2D mousePos( x, y );
 
-    if( !aEvent.Dragging() && m_settings.m_grabMouse )
+    if( m_state != DRAG_PANNING && m_state != DRAG_ZOOMING && m_settings.m_grabMouse )
     {
         bool warp = false;
         wxSize parentSize = m_parentPanel->GetClientSize();
@@ -618,7 +618,8 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 #if defined USE_MOUSE_CAPTURE
     if( aEnabled && !m_parentPanel->HasCapture() )
         m_parentPanel->CaptureMouse();
-    else if( !aEnabled && m_parentPanel->HasCapture() && m_state == IDLE )
+    else if( !aEnabled && m_parentPanel->HasCapture()
+             && m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
         m_parentPanel->ReleaseMouse();
 #endif
 
