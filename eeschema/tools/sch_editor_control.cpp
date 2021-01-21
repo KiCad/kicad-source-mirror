@@ -1238,7 +1238,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
     STRING_FORMATTER formatter;
     SCH_SEXPR_PLUGIN plugin;
 
-    plugin.Format( &selection, &formatter );
+    plugin.Format( &selection, &m_frame->GetCurrentSheet(), &formatter );
 
     return m_toolMgr->SaveClipboard( formatter.GetString() );
 }

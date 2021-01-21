@@ -96,7 +96,8 @@ public:
 
     void Format( SCH_SHEET* aSheet );
 
-    void Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
+    void Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath,
+                 OUTPUTFORMATTER* aFormatter );
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
@@ -130,7 +131,7 @@ private:
     void loadHierarchy( SCH_SHEET* aSheet );
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
-    void saveSymbol( SCH_COMPONENT* aComponent, int aNestLevel );
+    void saveSymbol( SCH_COMPONENT* aComponent, SCH_SHEET_PATH* aSheetPath, int aNestLevel );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
     void saveSheet( SCH_SHEET* aSheet, int aNestLevel );

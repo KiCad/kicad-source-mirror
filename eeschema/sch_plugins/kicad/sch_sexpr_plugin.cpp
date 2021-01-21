@@ -636,7 +636,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         {
         case SCH_COMPONENT_T:
             m_out->Print( 0, "\n" );
-            saveSymbol( static_cast<SCH_COMPONENT*>( item ), 1 );
+            saveSymbol( static_cast<SCH_COMPONENT*>( item ), nullptr, 1 );
             break;
 
         case SCH_BITMAP_T:
@@ -776,7 +776,8 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aFormatter )
+void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSheetPath, 
+                               OUTPUTFORMATTER* aFormatter )
 {
     wxCHECK( aSelection && aFormatter, /* void */ );
 
@@ -830,7 +831,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aForma
         switch( item->Type() )
         {
         case SCH_COMPONENT_T:
-            saveSymbol( static_cast< SCH_COMPONENT* >( item ), 0 );
+            saveSymbol( static_cast<SCH_COMPONENT*>( item ), aSheetPath, 0 );
             break;
 
         case SCH_BITMAP_T:
@@ -872,7 +873,8 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aForma
 }
 
 
-void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
+void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath,
+                                   int aNestLevel )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
@@ -934,8 +936,14 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
         m_out->Print( 0, ")" );
     }
 
+    int unit = -1;
+
     if( !( aSymbol->GetInstanceReferences().size() > 1 ) )
-        m_out->Print( 0, " (unit %d)", aSymbol->GetUnit() );
+        unit = aSymbol->GetUnit();
+    else if( aSheetPath != nullptr )
+        unit = aSymbol->GetUnitSelection( aSheetPath );
+    if ( unit >= 0 )
+        m_out->Print( 0, " (unit %d)", unit );
 
     if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );
