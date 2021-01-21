@@ -1300,21 +1300,23 @@ void SCH_EDITOR_CONTROL::updatePastedInstances( const SCH_SHEET_PATH& aPastePath
         {
             SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-            if( aForceKeepAnnotations )
+            KIID_PATH clipItemPath = aClipPath;
+            clipItemPath.push_back( symbol->m_Uuid );
+
+            // SCH_REFERENCE_LIST doesn't include the root sheet in the path
+            clipItemPath.erase( clipItemPath.begin() );
+
+            int ii = m_supplementaryClipboardInstances.FindRefByPath( clipItemPath.AsString() );
+
+            if( ii >= 0 )
             {
-                KIID_PATH clipItemPath = aClipPath;
-                clipItemPath.push_back( symbol->m_Uuid );
+                SCH_REFERENCE instance = m_supplementaryClipboardInstances[ ii ];
 
-                // SCH_REFERENCE_LIST doesn't include the root sheet in the path
-                clipItemPath.erase( clipItemPath.begin() );
+                symbol->SetUnitSelection( &aPastePath, instance.GetUnit() );
+                symbol->SetUnit( instance.GetUnit() );
 
-                int ii = m_supplementaryClipboardInstances.FindRefByPath( clipItemPath.AsString() );
-
-                if( ii >= 0 )
+                if( aForceKeepAnnotations )
                 {
-                    SCH_REFERENCE instance = m_supplementaryClipboardInstances[ ii ];
-
-                    symbol->SetUnit( instance.GetUnit() );
                     symbol->SetRef( &aPastePath, instance.GetRef() );
                     symbol->SetValue( &aPastePath, instance.GetValue() );
                     symbol->SetFootprint( &aPastePath, instance.GetFootprint() );
