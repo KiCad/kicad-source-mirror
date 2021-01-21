@@ -37,6 +37,9 @@
 #include <math/util.h>      // for KiROUND
 #include <widgets/ui_common.h>
 
+#if defined _WIN32 || defined _WIN64
+    #define USE_MOUSE_CAPTURE
+#endif
 
 using namespace KIGFX;
 
@@ -114,8 +117,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+#if defined USE_MOUSE_CAPTURE
     m_parentPanel->Connect( wxEVT_MOUSE_CAPTURE_LOST,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onCaptureLost ), NULL, this );
+#endif
 
     m_cursorWarped = false;
 
@@ -130,8 +135,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
+#if defined USE_MOUSE_CAPTURE
     if( m_parentPanel->HasCapture() )
         m_parentPanel->ReleaseMouse();
+#endif
 }
 
 
@@ -414,8 +421,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
             m_state = DRAG_PANNING;
+#if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
                 m_parentPanel->CaptureMouse();
+#endif
         }
         else if( ( aEvent.MiddleDown() && m_settings.m_dragMiddle == MOUSE_DRAG_ACTION::ZOOM ) ||
                  ( aEvent.RightDown() && m_settings.m_dragRight == MOUSE_DRAG_ACTION::ZOOM ) )
@@ -424,8 +433,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
             m_zoomStartPoint = m_dragStartPoint;
             m_initialZoomScale = m_view->GetScale();
             m_state = DRAG_ZOOMING;
+#if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
                 m_parentPanel->CaptureMouse();
+#endif
         }
 
         if( aEvent.LeftUp() )
@@ -438,8 +449,10 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
         {
             m_state = IDLE;
+#if defined USE_MOUSE_CAPTURE
             if( !m_settings.m_grabMouse && m_parentPanel->HasCapture() )
                 m_parentPanel->ReleaseMouse();
+#endif
         }
 
         break;
@@ -478,7 +491,9 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
-
+#if !defined USE_MOUSE_CAPTURE
+    onMotion( aEvent );
+#endif
 }
 
 void WX_VIEW_CONTROLS::onCaptureLost( wxMouseEvent& aEvent )
@@ -600,10 +615,12 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
+#if defined USE_MOUSE_CAPTURE
     if( aEnabled && !m_parentPanel->HasCapture() )
         m_parentPanel->CaptureMouse();
     else if( !aEnabled && m_parentPanel->HasCapture() && m_state == IDLE )
         m_parentPanel->ReleaseMouse();
+#endif
 
     VIEW_CONTROLS::SetGrabMouse( aEnabled );
 }
