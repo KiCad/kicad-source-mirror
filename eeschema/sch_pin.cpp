@@ -238,8 +238,13 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     std::lock_guard<std::recursive_mutex> lock( m_netmap_mutex );
 
-    if( m_net_name_map.count( aPath ) > 0 )
-        return m_net_name_map.at( aPath );
+    auto it = m_net_name_map.find( aPath );
+
+    if( it != m_net_name_map.end() )
+    {
+        if( it->second.second == aForceNoConnect )
+            return it->second.first;
+    }
 
     wxString name = "Net-(";
 
@@ -260,7 +265,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     name << "-Pad" << m_libPin->GetNumber() << ")";
 
     if( annotated )
-        m_net_name_map[ aPath ] = name;
+        m_net_name_map[ aPath ] = std::make_pair( name, aForceNoConnect );
 
     return name;
 }
