@@ -312,7 +312,7 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL,
         'E', LEGACY_HK_NAME( "Edit Item" ),
         _( "Properties..." ), _( "Displays item properties dialog" ),
-        config_xpm );
+        edit_xpm );
 
 
 // FOOTPRINT_EDITOR_CONTROL
