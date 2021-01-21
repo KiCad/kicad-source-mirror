@@ -553,7 +553,12 @@ public:
 
     // Returns the instance-specific unit selection for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
+
+    // Set the selected unit of this symbol on one sheet
     void SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection );
+
+    // Set the selected unit of this symbol for all sheets
+    void SetUnitSelection( int aUnitSelection );
 
     // Returns the instance-specific value for the given sheet path.
     const wxString GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const;

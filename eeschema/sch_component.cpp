@@ -576,6 +576,13 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
 }
 
 
+void SCH_COMPONENT::SetUnitSelection( int aUnitSelection )
+{
+    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        instance.m_Unit = aUnitSelection;
+}
+
+
 const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const
 {
     KIID_PATH path = sheet->Path();
