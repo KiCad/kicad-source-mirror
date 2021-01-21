@@ -26,9 +26,9 @@
      inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="15.640278"
-     inkscape:cx="17.681837"
-     inkscape:cy="17.697062"
+     inkscape:zoom="15.013527"
+     inkscape:cx="10.121988"
+     inkscape:cy="14.366732"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -79,70 +79,60 @@
   </defs>
   <title
      id="title1021">edit_comp_footprint</title>
-  <path
-     id="polygon9"
-     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
-     d="M 4.5000002,22.5 H 19.5 V 1.5 H 15 l -1.5,1.9999999 h -3 L 9,1.5 H 4.5000002 Z"
+  <polygon
      class="cls-1"
-     sodipodi:nodetypes="ccccccccc" />
+     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     id="polygon9"
+     transform="matrix(1.1338986,0,0,1.1442747,-0.91624335,-1.2001748)"
+     style="fill:none;stroke:#545454;stroke-width:0.877906;stroke-linecap:round;stroke-linejoin:round" />
   <rect
      class="cls-2"
-     x="3"
-     y="-23"
-     width="4"
-     height="6"
+     x="2.9609404"
+     y="0"
+     width="5.0280428"
+     height="6.9999995"
      id="rect19"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1"
-     transform="rotate(90)" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <rect
      class="cls-2"
-     x="10"
-     y="-23"
-     width="4"
-     height="5.9999995"
+     x="9.9609404"
+     y="0"
+     width="5.0280428"
+     height="6.9999995"
      id="rect875"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1"
-     transform="rotate(90)" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <rect
      class="cls-2"
-     x="17"
-     y="-23"
-     width="4.000001"
-     height="5.9999995"
+     x="16.960941"
+     y="0"
+     width="5.0280428"
+     height="6.9999995"
      id="rect877"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1"
-     transform="rotate(90)" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <rect
      class="cls-2"
-     x="3"
-     y="-7"
-     width="4"
-     height="5.9999995"
+     x="2.9609404"
+     y="17"
+     width="5.0280428"
+     height="6.9999995"
      id="rect879"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:0.999998"
-     transform="rotate(90)" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <rect
      class="cls-2"
-     x="10"
-     y="-7"
-     width="4"
-     height="5.9999995"
+     x="9.9609404"
+     y="17"
+     width="5.0280428"
+     height="6.9999995"
      id="rect881"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1"
-     transform="rotate(90)" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <rect
      class="cls-2"
-     x="17"
-     y="-7"
-     width="4.000001"
-     height="5.9999995"
+     x="16.960941"
+     y="17"
+     width="5.0280428"
+     height="6.9999995"
      id="rect883"
-     style="fill:#b9b9b9;fill-opacity:1;stroke:none;stroke-width:1"
-     transform="rotate(90)" />
-  <path
-     style="display:none;fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 16.5,18 3,3"
-     id="path848" />
+     style="fill:#b9b9b9;stroke:none;stroke-width:1;fill-opacity:1" />
   <path
      id="path852-8"
      style="fill:#1a81c4;fill-opacity:1;stroke:none;stroke-width:0.999997"
