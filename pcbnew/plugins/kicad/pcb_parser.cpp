@@ -826,6 +826,7 @@ void PCB_PARSER::parseHeader()
     NeedLEFT();
 
     T tok = NextTok();
+
     if( tok == T_version )
     {
         m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
@@ -844,7 +845,8 @@ void PCB_PARSER::parseHeader()
     }
     else
     {
-        m_requiredVersion = SEXPR_BOARD_FILE_VERSION;
+        m_requiredVersion = 20201115;   // Last version before we started writing version #s
+                                        // in footprint files as well as board files.
         m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
 
         // Skip the host name and host build version information.
