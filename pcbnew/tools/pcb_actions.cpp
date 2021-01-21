@@ -1033,8 +1033,7 @@ TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
 //Show board statistics tool
 TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog",
         AS_GLOBAL, 0, "",
-        _( "Show Board Statistics" ), _( "Shows board statistics" ),
-        icon_pcbnew_24_xpm );
+        _( "Show Board Statistics" ), _( "Shows board statistics" ) );
 
 TOOL_ACTION PCB_ACTIONS::inspectClearance( "pcbnew.InspectionTool.InspectClearance",
         AS_GLOBAL, 0, "",
