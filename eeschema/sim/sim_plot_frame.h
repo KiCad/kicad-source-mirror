@@ -59,18 +59,7 @@ class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
 
-// Identifiers (indexes) for color choice in color table
-enum SIM_COLOR_SET
-{
-    SIM_BG_COLOR,
-    SIM_FG_COLOR,
-    SIM_AXIS_COLOR,
-    SIM_CURSOR_COLOR,
-    SIM_TRACE_COLOR     // First index for trace colors list
-};
-
-
-///< Trace descriptor class
+///> Trace descriptor class
 class TRACE_DESC
 {
 public:
@@ -187,17 +176,6 @@ public:
      */
     bool GetPlotBgOpt() const { return m_plotUseWhiteBg; }
 
-    /**
-     * @return the wxColor selected in color list.
-     * @param aColorId is the index in color list
-     */
-    wxColor GetPlotColor( int aColorId );
-
-    /**
-     * @return the count of colors in color list
-     */
-    int GetPlotColorCount() { return m_colorList.size(); }
-
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -212,13 +190,6 @@ private:
      * Give icons to menuitems of the main menubar
      */
     void setIconsForMenuItems();
-
-    /**
-     * Fill m_colorList by a default set of colors.
-     *
-     *  @param aWhiteBg true to use a white (or clear) background false to use a dark background.
-     */
-    void fillDefaultColorList( bool aWhiteBg );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).
@@ -427,9 +398,6 @@ private:
     int m_splitterTuneValuesSashPosition;
     bool m_plotUseWhiteBg;
     unsigned int m_plotNumber;
-
-    ///< The color list to draw traces, bg, fg, axis...
-    std::vector<wxColour> m_colorList;
 };
 
 // Commands

@@ -286,6 +286,7 @@ if( KICAD_SPICE )
         ${EESCHEMA_SRCS}
         sim/netlist_exporter_pspice_sim.cpp
         sim/ngspice.cpp
+        sim/sim_plot_colors.cpp
         sim/sim_plot_frame.cpp
         sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp

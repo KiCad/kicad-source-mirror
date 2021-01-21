@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "sim_plot_colors.h"
 #include "sim_plot_panel.h"
 #include "sim_plot_frame.h"
 
@@ -260,8 +261,9 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     wxCoord topPx    = m_drawOutsideMargins ? 0 : aWindow.GetMarginTop();
     wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() : aWindow.GetScrY() - aWindow.GetMarginBottom();
 
-    aDC.SetPen( wxPen( m_plotPanel->GetPlotColor( SIM_CURSOR_COLOR ), 1,
-                       m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH ) );
+    wxPen pen = GetPen();
+    pen.SetStyle( m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH );
+    aDC.SetPen( pen );
 
     if( topPx < cursorPos.y && cursorPos.y < bottomPx )
         aDC.DrawLine( leftPx, cursorPos.y, rightPx, cursorPos.y );
@@ -294,7 +296,6 @@ void CURSOR::UpdateReference()
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxString aCommand, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
         wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
         : SIM_PANEL_BASE( aCommand, parent, id, pos, size, style, name ),
-          m_colorIdx( 0 ),
           m_axis_x( nullptr ),
           m_axis_y1( nullptr ),
           m_axis_y2( nullptr ),
@@ -307,8 +308,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxString aCommand, wxWindow* parent, SIM_PLOT_FR
     m_plotWin->LimitView( true );
     m_plotWin->SetMargins( 50, 80, 50, 80 );
 
-    m_plotWin->SetColourTheme( GetPlotColor( SIM_BG_COLOR ), GetPlotColor( SIM_FG_COLOR ),
-            GetPlotColor( SIM_AXIS_COLOR ) );
+    UpdatePlotColors();
 
     switch( GetType() )
     {
@@ -417,16 +417,17 @@ void SIM_PLOT_PANEL::prepareDCAxes()
 void SIM_PLOT_PANEL::UpdatePlotColors()
 {
     // Update bg and fg colors:
-    m_plotWin->SetColourTheme( GetPlotColor( SIM_BG_COLOR ), GetPlotColor( SIM_FG_COLOR ),
-            GetPlotColor( SIM_AXIS_COLOR ) );
+    m_plotWin->SetColourTheme( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::BACKGROUND ),
+                               m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::FOREGROUND ),
+                               m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
+
+    // Update color of all traces
+    for( auto& t : m_traces )
+        if( t.second->GetCursor() )
+            t.second->GetCursor()->SetPen(
+                    wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
 
     m_plotWin->UpdateAll();
-}
-
-
-wxColour SIM_PLOT_PANEL::GetPlotColor( int aIndex )
-{
-    return m_masterFrame->GetPlotColor( aIndex );
 }
 
 
@@ -472,7 +473,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
         // New entry
         trace = new TRACE( aName );
-        trace->SetTraceColour( generateColor() );
+        trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
         UpdateTraceStyle( trace );
         m_traces[aName] = trace;
 
@@ -550,7 +551,6 @@ void SIM_PLOT_PANEL::DeleteAllTraces()
         DeleteTrace( t.first );
     }
 
-    m_colorIdx = 0;
     m_traces.clear();
 }
 
@@ -578,6 +578,7 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
                                    - GetPlotWin()->GetMarginRight() )
                                    / 2;
         c->SetX( plotCenter );
+        c->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
         t->SetCursor( c );
         m_plotWin->AddLayer( c );
     }
@@ -608,34 +609,5 @@ void SIM_PLOT_PANEL::ResetScales()
         t.second->UpdateScales();
 }
 
-
-wxColour SIM_PLOT_PANEL::generateColor()
-{
-    const unsigned int colorCount = m_masterFrame->GetPlotColorCount() - SIM_TRACE_COLOR;
-
-    for( int i = 0; i < (int)colorCount - 1; i++ )
-    {
-        const wxColour color = GetPlotColor( i+SIM_TRACE_COLOR );
-        bool hasColor = false;
-
-        for( auto& t : m_traces )
-        {
-            TRACE* trace = t.second;
-
-            if( trace->GetTraceColour() == color )
-            {
-                hasColor = true;
-                break;
-            }
-        }
-
-        if( !hasColor )
-            return color;
-    }
-
-    // If all colors are in use, choose a suitable color in list
-    int idx = m_traces.size() % colorCount;
-    return wxColour( GetPlotColor( idx + SIM_TRACE_COLOR ) );
-}
 
 wxDEFINE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

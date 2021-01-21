@@ -31,8 +31,10 @@
 #include "sim_types.h"
 #include <map>
 #include <widgets/mathplot.h>
+#include <wx/colour.h>
 #include <wx/sizer.h>
 #include "sim_panel_base.h"
+#include "sim_plot_colors.h"
 
 class SIM_PLOT_FRAME;
 class SIM_PLOT_PANEL;
@@ -42,10 +44,10 @@ class TRACE;
 class CURSOR : public mpInfoLayer
 {
 public:
-    CURSOR( const TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel )
-        : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-        m_trace( aTrace ), m_updateRequired( true ), m_updateRef( false ),
-        m_coords( 0.0, 0.0 ), m_window( nullptr ), m_plotPanel( aPlotPanel )
+    CURSOR( const TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel ) :
+            mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
+            m_trace( aTrace ), m_updateRequired( true ), m_updateRef( false ), m_coords( 0.0, 0.0 ),
+            m_window( nullptr )
     {
         SetDrawOutsideMargins( false );
     }
@@ -84,7 +86,6 @@ private:
     bool m_updateRequired, m_updateRef;
     wxRealPoint m_coords;
     mpWindow* m_window;
-    SIM_PLOT_PANEL* m_plotPanel;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -278,14 +279,7 @@ public:
     ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 
-    /**
-     * A proxy to SIM_PLOT_FRAME::GetPlotColor()
-     * @return the color stored in m_colorList.
-     * @param aIndex is the index in list
-     */
-    wxColour GetPlotColor( int aIndex );
-
-    ///< Update plot colors
+    ///> Update plot colors
     void UpdatePlotColors();
 
     ///< Getter for math plot window
@@ -295,14 +289,10 @@ public:
     }
 
 private:
-    ///< @return a new color from the palette
-    wxColour generateColor();
-
     ///< @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes();
 
-    // Color index to get a new color from the palette
-    unsigned int m_colorIdx;
+    SIM_PLOT_COLORS m_colors;
 
     // Top-level plot window
     mpWindow*   m_plotWin;

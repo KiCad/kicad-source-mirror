@@ -36,6 +36,7 @@
 #include <dialogs/dialog_signal_list.h>
 #include "netlist_exporter_pspice_sim.h"
 #include <pgm_base.h>
+#include "sim_plot_colors.h"
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
@@ -142,7 +143,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     LoadSettings( config() );
 
     // Prepare the color list to plot traces
-    fillDefaultColorList( GetPlotBgOpt() );
+    SIM_PLOT_COLORS::FillDefaultColorList( GetPlotBgOpt() );
 
     // Give icons to menuitems
     setIconsForMenuItems();
@@ -370,56 +371,6 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 
     if( m_splitterTuneValuesSashPosition > 0 )
         m_splitterTuneValues->SetSashPosition( m_splitterTuneValuesSashPosition );
-}
-
-
-wxColor SIM_PLOT_FRAME::GetPlotColor( int aColorId )
-{
-    // return the wxColor selected in color list or BLACK is not in list
-    if( aColorId >= 0 && aColorId < (int)m_colorList.size() )
-        return m_colorList[aColorId];
-
-    return wxColor( 0, 0, 0 );
-}
-
-
-void SIM_PLOT_FRAME::fillDefaultColorList( bool aWhiteBg )
-{
-    m_colorList.clear();
-
-    if( aWhiteBg )
-    {
-        m_colorList.emplace_back( 255, 255, 255 );  // Bg color
-        m_colorList.emplace_back( 0, 0, 0 );        // Fg color (texts)
-        m_colorList.emplace_back( 130, 130, 130 );  // Axis color
-        m_colorList.emplace_back( 0, 0, 0 );        // cursors color
-    }
-    else
-    {
-        m_colorList.emplace_back( 0, 0, 0 );        // Bg color
-        m_colorList.emplace_back( 255, 255, 255 );  // Fg color (texts)
-        m_colorList.emplace_back( 130, 130, 130 );  // Axis color
-        m_colorList.emplace_back( 255, 255, 255 );  // cursors color
-    }
-
-    // Add a list of color for traces, starting at index SIM_TRACE_COLOR
-    m_colorList.emplace_back( 0xE4, 0x1A, 0x1C );
-    m_colorList.emplace_back( 0x37, 0x7E, 0xB8 );
-    m_colorList.emplace_back( 0x4D, 0xAF, 0x4A );
-    m_colorList.emplace_back( 0x98, 0x4E, 0xA3 );
-    m_colorList.emplace_back( 0xFF, 0x7F, 0x00 );
-    m_colorList.emplace_back( 0xFF, 0xFF, 0x33 );
-    m_colorList.emplace_back( 0xA6, 0x56, 0x28 );
-    m_colorList.emplace_back( 0xF7, 0x81, 0xBF );
-    m_colorList.emplace_back( 0x66, 0xC2, 0xA5 );
-    m_colorList.emplace_back( 0xFC, 0x8D, 0x62 );
-    m_colorList.emplace_back( 0x8D, 0xA0, 0xCB );
-    m_colorList.emplace_back( 0xE7, 0x8A, 0xC3 );
-    m_colorList.emplace_back( 0xA6, 0xD8, 0x54 );
-    m_colorList.emplace_back( 0xFF, 0xD9, 0x2F );
-    m_colorList.emplace_back( 0xE5, 0xC4, 0x94 );
-    m_colorList.emplace_back( 0xB3, 0xB3, 0xB3 );
-
 }
 
 
@@ -824,7 +775,7 @@ void SIM_PLOT_FRAME::updateSignalList()
     {
         wxBitmap bitmap( isize, isize );
         bmDC.SelectObject( bitmap );
-        wxColour tcolor = trace.second->GetTraceColour();
+        wxColour tcolor = trace.second->GetPen().GetColour();
 
         wxColour bgColor = m_signals->wxWindow::GetBackgroundColour();
         bmDC.SetPen( wxPen( bgColor ) );
@@ -1213,7 +1164,7 @@ void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
     m_plotUseWhiteBg = not m_plotUseWhiteBg;
 
     // Rebuild the color list to plot traces
-    fillDefaultColorList( GetPlotBgOpt() );
+    SIM_PLOT_COLORS::FillDefaultColorList( GetPlotBgOpt() );
 
     // Now send changes to all SIM_PLOT_PANEL
     for( size_t page = 0; page < m_plotNotebook->GetPageCount(); page++ )
