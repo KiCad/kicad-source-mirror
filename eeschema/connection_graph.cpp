@@ -1492,9 +1492,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     subgraph->m_driver->Type() == SCH_PIN_T )
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
+                    wxString name = pin->GetDefaultNetName( subgraph->m_sheet, true );
+
                     pin->ClearDefaultNetName( &subgraph->m_sheet );
-                    subgraph->m_driver_connection->ConfigureFromLabel(
-                            pin->GetDefaultNetName( subgraph->m_sheet, true ) );
+                    subgraph->m_driver_connection->ConfigureFromLabel( name );
                 }
 
                 subgraph->m_dirty = false;
