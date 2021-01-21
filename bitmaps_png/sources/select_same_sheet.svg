@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="select_same_sheet.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="15.995752"
+     inkscape:cx="10.229962"
+     inkscape:cy="12.305898"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,78 +83,89 @@
      class="cls-1"
      points="23.5 20.5 23.5 23.5 20.5 23.5"
      id="polyline159703"
-     transform="translate(-1,-1)" />
+     transform="translate(-2,-2)"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="14.5"
-     y1="22.5"
+     y1="21.5"
      x2="7"
-     y2="22.5"
-     id="line159705" />
+     y2="21.5"
+     id="line159705"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <polyline
      class="cls-1"
      points="5.5 23.5 2.5 23.5 2.5 20.5"
      id="polyline159707"
-     transform="translate(-1,-1)" />
+     transform="translate(0,-2)"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <line
      class="cls-2"
-     x1="1.5"
+     x1="2.5"
      y1="14.5"
-     x2="1.5"
+     x2="2.5"
      y2="7"
-     id="line159709" />
+     id="line159709"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <polyline
      class="cls-1"
      points="2.5 5.5 2.5 2.5 5.5 2.5"
      id="polyline159711"
-     transform="translate(-1,-1)" />
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="9.5"
-     y1="1.5"
+     y1="2.5"
      x2="17"
-     y2="1.5"
-     id="line159713" />
+     y2="2.5"
+     id="line159713"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <polyline
      class="cls-1"
      points="20.5 2.5 23.5 2.5 23.5 5.5"
      id="polyline159715"
-     transform="translate(-1,-1)" />
+     transform="translate(-2)"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <line
      class="cls-2"
-     x1="22.5"
+     x1="21.5"
      y1="9.5"
-     x2="22.5"
+     x2="21.5"
      y2="17"
-     id="line159717" />
+     id="line159717"
+     style="stroke:#b9b9b9;stroke-opacity:1" />
   <rect
      class="cls-3"
-     x="0.0018999577"
-     y="20.570801"
-     width="3.4282999"
-     height="3.4282999"
-     id="rect159719" />
+     x="1"
+     y="20"
+     width="3"
+     height="3"
+     id="rect159719"
+     style="stroke-width:0.999998;stroke:none" />
   <rect
      class="cls-3"
-     x="0.00049996376"
-     y="0.00090003014"
-     width="3.4284"
-     height="3.4282999"
-     id="rect159721" />
+     x="1"
+     y="1"
+     width="3"
+     height="3"
+     id="rect159721"
+     style="stroke-width:0.999998" />
   <rect
      class="cls-3"
-     x="20.5711"
-     y="20.570801"
-     width="3.4284"
-     height="3.4282999"
-     id="rect159723" />
+     x="20"
+     y="20"
+     width="3"
+     height="3"
+     id="rect159723"
+     style="stroke-width:0.999998;stroke:none" />
   <rect
      class="cls-3"
-     x="20.569799"
-     y="0.00090003014"
-     width="3.4282999"
-     height="3.4282999"
-     id="rect159725" />
+     x="20"
+     y="1"
+     width="3"
+     height="3"
+     id="rect159725"
+     style="stroke-width:0.999998" />
   <line
      class="cls-4"
      x1="12"
@@ -164,11 +175,12 @@
      id="line159727" />
   <rect
      class="cls-5"
-     x="15.153099"
+     x="15"
      y="13.9666"
-     width="4.3915"
-     height="6.1233001"
-     id="rect159729" />
+     width="3.9999995"
+     height="6.0333991"
+     id="rect159729"
+     style="stroke-width:0.999997" />
   <path
      class="cls-6"
      d="M 13.97,16.5382 A 1.9716,1.9716 0 1 1 12.0708,14.497 1.9716,1.9716 0 0 1 13.97,16.5382 Z"
@@ -179,11 +191,12 @@
      id="path159733" />
   <rect
      class="cls-5"
-     x="15.153099"
-     y="3.4826002"
-     width="4.3915"
-     height="6.1234002"
-     id="rect159735" />
+     x="15"
+     y="4"
+     width="3.9999995"
+     height="5.9999995"
+     id="rect159735"
+     style="stroke-width:0.999998" />
   <line
      class="cls-4"
      x1="6.4678998"
@@ -193,21 +206,23 @@
      id="line159737" />
   <rect
      class="cls-5"
-     x="4.3783002"
+     x="5"
      y="13.9666"
-     width="4.3915"
-     height="6.1233001"
-     id="rect159739" />
-  <rect
-     class="cls-5"
-     x="4.3460002"
-     y="3.4826002"
-     width="4.3915"
-     height="6.1234002"
-     id="rect159741" />
+     width="4"
+     height="6.0333991"
+     id="rect159739"
+     style="stroke-width:0.999997" />
   <polyline
      class="cls-4"
      points="9.685 7.35 12.36 7.35 14.067 9.057 14.067 11.594 15.413 12.941 18.308 12.941 18.308 14.988"
      id="polyline159743"
      transform="translate(-1,-1)" />
+  <rect
+     class="cls-5"
+     x="5"
+     y="4"
+     width="4"
+     height="5.9999995"
+     id="rect159741"
+     style="stroke-width:1" />
 </svg>
