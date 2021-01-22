@@ -37,7 +37,7 @@
 #include <math/util.h>      // for KiROUND
 #include <widgets/ui_common.h>
 
-#if defined _WIN32 || defined _WIN64
+#if defined __WXMSW__
     #define USE_MOUSE_CAPTURE
 #endif
 
@@ -96,7 +96,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_RIGHT_DOWN,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
-#if defined _WIN32 || defined _WIN64
+#if defined __WXMSW__
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
 #endif
@@ -191,36 +191,8 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     int y = aEvent.GetY();
     VECTOR2D mousePos( x, y );
 
-    if( m_state != DRAG_PANNING && m_state != DRAG_ZOOMING && m_settings.m_grabMouse )
-    {
-        bool warp = false;
-        wxSize parentSize = m_parentPanel->GetClientSize();
-
-        if( x < 0 )
-        {
-            x = 0;
-            warp = true;
-        }
-        else if( x >= parentSize.x )
-        {
-            x = parentSize.x - 1;
-            warp = true;
-        }
-
-        if( y < 0 )
-        {
-            y = 0;
-            warp = true;
-        }
-        else if( y >= parentSize.y )
-        {
-            y = parentSize.y - 1;
-            warp = true;
-        }
-
-        if( warp )
-            m_parentPanel->WarpPointer( x, y );
-    }
+    if( m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
+        handleCursorCapture( x, y );
 
     if( m_settings.m_autoPanEnabled && m_settings.m_autoPanSettingEnabled )
         isAutoPanning = handleAutoPanning( aEvent );
@@ -450,7 +422,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_state = IDLE;
 #if defined USE_MOUSE_CAPTURE
-            if( !m_settings.m_grabMouse && m_parentPanel->HasCapture() )
+            if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
                 m_parentPanel->ReleaseMouse();
 #endif
         }
@@ -613,7 +585,7 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 }
 
 
-void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
+void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
 {
 #if defined USE_MOUSE_CAPTURE
     if( aEnabled && !m_parentPanel->HasCapture() )
@@ -622,22 +594,7 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
              && m_state != DRAG_PANNING && m_state != DRAG_ZOOMING )
         m_parentPanel->ReleaseMouse();
 #endif
-
-    VIEW_CONTROLS::SetGrabMouse( aEnabled );
-}
-
-
-void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
-{
-    SetGrabMouse( aEnabled );
     VIEW_CONTROLS::CaptureCursor( aEnabled );
-}
-
-
-void WX_VIEW_CONTROLS::SetAutoPan( bool aEnabled )
-{
-    SetGrabMouse( aEnabled );
-    VIEW_CONTROLS::SetAutoPan( aEnabled );
 }
 
 
@@ -836,6 +793,41 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 
     wxASSERT_MSG( false, wxT( "This line should never be reached" ) );
     return false;    // Should not be reached, just avoid the compiler warnings..
+}
+
+
+void WX_VIEW_CONTROLS::handleCursorCapture( int x, int y )
+{
+    if( m_settings.m_cursorCaptured )
+    {
+        bool warp = false;
+        wxSize parentSize = m_parentPanel->GetClientSize();
+
+        if( x < 0 )
+        {
+            x = 0;
+            warp = true;
+        }
+        else if( x >= parentSize.x )
+        {
+            x = parentSize.x - 1;
+            warp = true;
+        }
+
+        if( y < 0 )
+        {
+            y = 0;
+            warp = true;
+        }
+        else if( y >= parentSize.y )
+        {
+            y = parentSize.y - 1;
+            warp = true;
+        }
+
+        if( warp )
+            m_parentPanel->WarpPointer( x, y );
+    }
 }
 
 

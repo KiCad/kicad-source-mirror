@@ -66,12 +66,6 @@ public:
     void onScroll( wxScrollWinEvent& aEvent );
     void onCaptureLost( wxMouseEvent& WXUNUSED( aEvent ) );
 
-    /**
-     * Enable or disable mouse cursor grabbing (limits the movement field only to the panel area).
-     *
-     * @param aEnabled says whether the option should be enabled or disabled.
-     */
-    void SetGrabMouse( bool aEnabled ) override;
 
     /**
      * Force the cursor to stay within the drawing panel area.
@@ -80,13 +74,6 @@ public:
      */
     void CaptureCursor( bool aEnabled ) override;
 
-    /**
-     * Turn on/off auto panning (this feature is used when there is a tool active (eg. drawing a
-     * track) and user moves mouse to the VIEW edge - then the view can be translated or not).
-     *
-     * @param aEnabled tells if the autopanning should be active.
-     */
-    void SetAutoPan( bool aEnabled ) override;
 
     ///< @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
@@ -143,6 +130,14 @@ private:
      *         is in the area that causes autopanning to happen).
      */
     bool handleAutoPanning( const wxMouseEvent& aEvent );
+
+    /**
+     * Limit the cursor position to within the canvas by warping it
+     *
+     * @param x Mouse position
+     * @param y Mouse position
+     */
+    void handleCursorCapture( int x, int y );
 
     /**
      * Send an event to refresh mouse position.
