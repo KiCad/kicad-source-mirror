@@ -32,6 +32,7 @@
 #include <wx/log.h>
 #include <wx/app.h>
 #include <wx/stdpaths.h>
+#include <wx/msgdlg.h>
 
 #include <filehistory.h>
 #include <hotkeys_basic.h>
@@ -45,6 +46,10 @@
 #include "kicad_manager_frame.h"
 #include "kicad_settings.h"
 
+#if defined( _WIN32 )
+#include <config.h>
+#include <VersionHelpers.h>
+#endif
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_i.h>
@@ -261,6 +266,20 @@ struct APP_KICAD : public wxApp
         // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump for half a hour
         // _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC
         _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
+#endif
+
+#if defined( _WIN32 ) && defined( PYTHON_VERSION_MAJOR )                                           \
+        && ( ( PYTHON_VERSION_MAJOR == 3 && PYTHON_VERSION_MINOR >= 8 )                            \
+             || PYTHON_VERSION_MAJOR > 3 )
+
+        // Python 3.8 switched to Windows 8+ API, we do not support Windows 7 and will not attempt to hack around it
+        // Gracefully inform the user and refuse to start (because python will crash us if we continue)
+        if( !IsWindows8OrGreater() )
+        {
+            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and it's dependencies." ),
+                          _( "Unsupported Operating System" ), wxOK | wxICON_ERROR );
+            return false;
+        }
 #endif
 
         if( !program.OnPgmInit() )
