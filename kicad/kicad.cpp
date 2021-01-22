@@ -276,7 +276,7 @@ struct APP_KICAD : public wxApp
         // Gracefully inform the user and refuse to start (because python will crash us if we continue)
         if( !IsWindows8OrGreater() )
         {
-            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and it's dependencies." ),
+            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and its dependencies." ),
                           _( "Unsupported Operating System" ), wxOK | wxICON_ERROR );
             return false;
         }
