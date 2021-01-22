@@ -306,20 +306,20 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     SEG      tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
     SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
 
-    if( !tanStart.ApproxParallel( tanEnd ) )
-    {
-        //Ensure the tangent segments are in the correct orientation
-        OPT_VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd );
-        tanStart.A = tanIntersect.get();
-        tanStart.B = theArc->GetStart();
-        tanEnd.A = tanIntersect.get();
-        tanEnd.B = theArc->GetEnd();
-    }
+    if( tanStart.ApproxParallel( tanEnd ) )
+        return 0; // don't bother with 180 degree arcs
+
+    //Ensure the tangent segments are in the correct orientation
+    VECTOR2I tanIntersect = tanStart.IntersectLines( tanEnd ).get();
+    tanStart.A = tanIntersect;
+    tanStart.B = theArc->GetStart();
+    tanEnd.A = tanIntersect;
+    tanEnd.B = theArc->GetEnd();
 
     KICAD_T track_types[] = { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, EOT };
 
-    auto getUniqueConnectedTrack =
-        [&]( const VECTOR2I& aAnchor ) -> TRACK*
+    auto getUniqueTrackAtAnchorCollinear =
+        [&]( const VECTOR2I& aAnchor, const SEG& aCollinearSeg ) -> TRACK*
         {
             auto conn = board()->GetConnectivity();
             auto itemsOnAnchor = conn->GetConnectedItemsAtAnchor( theArc, aAnchor, track_types );
@@ -328,8 +328,14 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
             {
                 retval = static_cast<TRACK*>( itemsOnAnchor.front() );
+                SEG trackSeg( retval->GetStart(), retval->GetEnd() );
+
+                //Ensure it is collinear
+                if( !trackSeg.ApproxCollinear( aCollinearSeg ) )
+                    retval = nullptr;
             }
-            else
+
+            if( !retval )
             {
                 retval = new TRACK( theArc->GetParent() );
                 retval->SetStart( (wxPoint) aAnchor );
@@ -344,80 +350,141 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             return retval;
         };
 
-    TRACK* trackOnStart = getUniqueConnectedTrack( theArc->GetStart() );
-    TRACK* trackOnEnd = getUniqueConnectedTrack( theArc->GetEnd() );
+    TRACK* trackOnStart = getUniqueTrackAtAnchorCollinear( theArc->GetStart(), tanStart);
+    TRACK* trackOnEnd = getUniqueTrackAtAnchorCollinear( theArc->GetEnd(), tanEnd );
 
     // Make copies of items to be edited
     ARC*   theArcCopy = new ARC( *theArc );
     TRACK* trackOnStartCopy = new TRACK( *trackOnStart );
     TRACK* trackOnEndCopy = new TRACK( *trackOnEnd );
 
-    if( !trackOnStart->IsNew() )
+    if( trackOnStart->GetLength() > tanStart.Length() )
     {
         tanStart.A = trackOnStart->GetStart();
         tanStart.B = trackOnStart->GetEnd();
     }
 
-    if( !trackOnEnd->IsNew() )
+    if( trackOnEnd->GetLength() > tanEnd.Length() )
     {
         tanEnd.A = trackOnEnd->GetStart();
         tanEnd.B = trackOnEnd->GetEnd();
     }
 
-    OPT_VECTOR2I optInterectTan = tanStart.IntersectLines( tanEnd );
-    int          tanStartSide = tanStart.Side( theArc->GetMid() );
-    int          tanEndSide = tanEnd.Side( theArc->GetMid() );
+    auto isTrackStartClosestToArcStart =
+        [&]( TRACK* aPointA ) -> bool
+        {
+            return GetLineLength( aPointA->GetStart(), theArc->GetStart() )
+                   < GetLineLength( aPointA->GetEnd(), theArc->GetStart() );
+        };
 
-    bool isStartTrackOnStartPt = ( VECTOR2I( theArc->GetStart() ) - tanStart.A ).EuclideanNorm()
-                                 < ( VECTOR2I( theArc->GetStart() ) - tanStart.B ).EuclideanNorm();
-
-    bool isEndTrackOnStartPt = ( VECTOR2I( theArc->GetStart() ) - tanEnd.A ).EuclideanNorm()
-                               < ( VECTOR2I( theArc->GetStart() ) - tanEnd.B ).EuclideanNorm();
+    bool isStartTrackOnStartPt = isTrackStartClosestToArcStart( trackOnStart );
+    bool isEndTrackOnStartPt = isTrackStartClosestToArcStart( trackOnEnd );
 
     // Calculate constraints
-    CIRCLE   maxTangentCircle;
-    VECTOR2I startOther = ( isStartTrackOnStartPt ) ? tanStart.B : tanStart.A;
-    maxTangentCircle.ConstructFromTanTanPt( tanStart, tanEnd, startOther );
+    //======================
+    // maxTanCircle is the circle with maximum radius that is tangent to the two adjacent straight
+    // tracks and whose tangent points are constrained within the original tracks and their
+    // projected intersection points.
+    //
+    // The cursor will be constrained first within the isosceles triangle formed by the segments
+    // cSegTanStart, cSegTanEnd and cSegChord. After that it will be constratined to be outside
+    // maxTanCircle.
+    //
+    //
+    //                   ____________  <-cSegTanStart
+    //                  /     *   . '   *
+    //    cSegTanEnd-> /  *   . '           *
+    //                /*  . ' <-cSegChord     *
+    //               /. '
+    //              /*                           *
+    //
+    //              *             c               *  <-maxTanCircle
+    //
+    //               *                           *
+    //
+    //                  *                     *
+    //                    *                 *
+    //                        *        *
+    //
 
-    VECTOR2I maxTanPtStart = tanStart.LineProject( maxTangentCircle.Center );
-    VECTOR2I maxTanPtEnd = tanEnd.LineProject( maxTangentCircle.Center );
+    auto getFurthestPointToTanInterstect =
+        [&]( VECTOR2I& aPointA, VECTOR2I& aPointB ) -> VECTOR2I
+        {
+            if( ( aPointA - tanIntersect ).EuclideanNorm()
+                > ( aPointB - tanIntersect ).EuclideanNorm() )
+            {
+                return aPointA;
+            }
+            else
+            {
+                return aPointB;
+            }
+        };
 
-    if( !tanEnd.Contains( maxTanPtEnd ) )
-    {
-        startOther = ( isEndTrackOnStartPt ) ? tanEnd.B : tanEnd.A;
-        maxTangentCircle.ConstructFromTanTanPt( tanStart, tanEnd, startOther );
-        maxTanPtStart = tanStart.LineProject( maxTangentCircle.Center );
-        maxTanPtEnd = tanEnd.LineProject( maxTangentCircle.Center );
-    }
+    CIRCLE   maxTanCircle;
 
-    SEG constraintSeg( maxTanPtStart, maxTanPtEnd );
-    int constraintSegSide = constraintSeg.Side( theArc->GetMid() );
+    VECTOR2I tanStartPoint = getFurthestPointToTanInterstect( tanStart.A, tanStart.B );
+    VECTOR2I tanEndPoint = getFurthestPointToTanInterstect( tanEnd.A, tanEnd.B );
+    VECTOR2I tempTangentPoint = tanEndPoint;
 
+    if( getFurthestPointToTanInterstect( tanStartPoint, tanEndPoint ) == tanEndPoint )
+        tempTangentPoint = tanStartPoint;
+
+    maxTanCircle.ConstructFromTanTanPt( tanStart, tanEnd, tempTangentPoint );
+    VECTOR2I maxTanPtStart = tanStart.LineProject( maxTanCircle.Center );
+    VECTOR2I maxTanPtEnd = tanEnd.LineProject( maxTanCircle.Center );
+
+    SEG cSegTanStart( maxTanPtStart, tanIntersect );
+    SEG cSegTanEnd( maxTanPtEnd, tanIntersect );
+    SEG cSegChord( maxTanPtStart, maxTanPtEnd );
+
+    int cSegTanStartSide = cSegTanStart.Side( theArc->GetMid() );
+    int cSegTanEndSide = cSegTanEnd.Side( theArc->GetMid() );
+    int cSegChordSide = cSegChord.Side( theArc->GetMid() );
+
+    // Start the tool loop
+    //====================
     while( TOOL_EVENT* evt = Wait() )
     {
         m_cursor = controls->GetMousePosition();
 
-        // Constrain cursor
-        // Fix-me: this is a bit ugly but it works
-        if( tanStartSide != tanStart.Side( m_cursor )
-            || tanEndSide != tanEnd.Side( m_cursor )
-            || constraintSegSide != constraintSeg.Side( m_cursor ) )
+        // Constrain cursor within the isosceles triangle
+        if( cSegTanStartSide != cSegTanStart.Side( m_cursor )
+            || cSegTanEndSide != cSegTanEnd.Side( m_cursor )
+            || cSegChordSide != cSegChord.Side( m_cursor ) )
         {
+            std::vector<VECTOR2I> possiblePoints;
 
+            possiblePoints.push_back( cSegTanEnd.NearestPoint( m_cursor ) );
+            possiblePoints.push_back( cSegChord.NearestPoint( m_cursor ) );
+
+            VECTOR2I closest = cSegTanStart.NearestPoint( m_cursor );
+
+            for( VECTOR2I candidate : possiblePoints )
+            {
+                if( ( candidate - m_cursor ).EuclideanNorm()
+                    < ( closest - m_cursor ).EuclideanNorm() )
+                {
+                    closest = candidate;
+                }
+            }
+
+            m_cursor = closest;
         }
 
-        if( ( m_cursor - maxTangentCircle.Center ).EuclideanNorm() < maxTangentCircle.Radius )
-            m_cursor = maxTangentCircle.NearestPoint( m_cursor );
+        // Constrain cursor to be outside maxTanCircle
+        if( ( m_cursor - maxTanCircle.Center ).EuclideanNorm() < maxTanCircle.Radius )
+            m_cursor = maxTanCircle.NearestPoint( m_cursor );
 
         controls->ForceCursorPosition( true, m_cursor );
 
         // Calculate resulting object coordinates
         CIRCLE circlehelper;
-        circlehelper.ConstructFromTanTanPt( tanStart, tanEnd, m_cursor );
+        circlehelper.ConstructFromTanTanPt( cSegTanStart, cSegTanEnd, m_cursor );
 
         VECTOR2I newCenter = circlehelper.Center;
-        VECTOR2I newStart = tanStart.LineProject( newCenter );
-        VECTOR2I newEnd = tanEnd.LineProject( newCenter );
+        VECTOR2I newStart = cSegTanStart.LineProject( newCenter );
+        VECTOR2I newEnd = cSegTanEnd.LineProject( newCenter );
         VECTOR2I newMid = GetArcMid( newStart, newEnd, newCenter );
 
         //Update objects
@@ -454,7 +521,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT )
                  || evt->IsDblClick( BUT_LEFT ) )
         {
-            break; // finish
+            break; // Finish
         }
     }
 
