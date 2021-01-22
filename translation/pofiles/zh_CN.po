@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-21 16:56+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-01-24 22:54+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -7674,9 +7674,8 @@ msgid "Update/reset field positions"
 msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "更新/重置制造属性"
+msgstr "更新/重置符号属性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -7987,9 +7986,8 @@ msgid "Show Annotation dialog"
 msgstr "显示标注对话框"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
-#, fuzzy
 msgid "Annotation is incomplete. ERC cannot be run."
-msgstr "标注未完成。无法运行 ERC。"
+msgstr "注解不完整。无法运行 ERC。"
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -11808,9 +11806,8 @@ msgstr ""
 "新文件格式无法使用早期版本的 KiCad 打开。"
 
 #: eeschema/files-io.cpp:566
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "电路图文件 \"%s\" 已经打开。"
+msgstr "电路图文件是只读的。"
 
 #: eeschema/files-io.cpp:591
 msgid "Append Schematic"
@@ -14204,7 +14201,6 @@ msgid "Replace library table entry"
 msgstr "替换库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
-#, fuzzy
 msgid ""
 "Replace symbol library table entry with new library.\n"
 "\n"
@@ -15534,70 +15530,65 @@ msgid "Align Elements to Grid"
 msgstr "将元素与网格对齐"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "符号库"
+msgstr "符号警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> of converted"
 msgstr ""
-"<b>重复引脚 %s</b> \"%s\" 位于 <b>(%.3f, %.3f)</b> 与 %s \"%s\" 位于"
-"<b>(%.3f, %.3f)</b> 发生冲突"
+"<b>重复引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于转换后的坐标 <b>(%.3f, %."
+"3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
 msgstr ""
-"<b>发现重复引脚 %s</b> \"%s\" 位于 <b>(%.3f, %.3f)</b> 与 %s \"%s\" 位于"
-"<b>(%.3f, %.3f)</b> 发生冲突，单元为转换后的 %c 和 %c"
+"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 <b>(%.3f, %.3f)</b>, "
+"冲突区域在转换后的单元 %c 和 %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>发现重复引脚， %s</b> \"%s\" 位于 <b>(%.3f, %.3f)</b> 与 %s \"%s\" 位于"
-"<b>(%.3f, %.3f)</b> 发生冲突"
+"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
 msgstr ""
-"<b>发现重复引脚， %s</b> \"%s\" 位于 <b>(%.3f, %.3f)</b> 与 %s \"%s\" 位于"
-"<b>(%.3f, %.3f)</b> 发生冲突，单元为 %c 和 %c"
+"<b>重复引脚 %s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 <b>(%.3f, %.3f)</b>，"
+"冲突区域在单元 %c 和 %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
-msgstr "<b>网格外引脚 %s</b> \"%s\" 位于转换的位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
 "converted"
-msgstr ""
-"<b>网格外引脚 %s</b> \"%s\" 在位置 <b>(%.3f, %.3f)</b>在已转换的符号 %c 中。"
-"<br>"
+msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在转换后的符号 %c 中"
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>网格外引脚 %s</b> \"%s\" 在位置 <b>(%.3f, %.3f)</b>.<br>"
+msgstr "<b>网格外引脚 %s</b> %s 在位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
-msgstr ""
-"<b>网格外引脚 %s</b> \"%s\" 在位置 <b>(%.3f, %.3f)</b>在符号 %c 中。<br>"
+msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在符号 %c 中"
 
 #: eeschema/tools/ee_inspection_tool.cpp:356
 msgid "No off grid or duplicate pins were found."
@@ -17407,7 +17398,6 @@ msgid "Text height:"
 msgstr "文本高度："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
 msgstr "最大宽度："
 
@@ -17417,7 +17407,6 @@ msgid "Set to 0 to disable this constraint"
 msgstr "设置为 0 可禁用此约束"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Max height:"
 msgstr "最大高度："
 
@@ -17453,9 +17442,8 @@ msgid "Bitmap DPI:"
 msgstr "位图 DPI："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "重复参数："
+msgstr "重复参数"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -17468,16 +17456,15 @@ msgstr "步骤文本："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr ""
+msgstr "每重复一次，文本应该步进的字符或数字位数。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "步距 Y："
+msgstr "步骤 X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "每重复一次，X轴上的步进距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
@@ -17485,7 +17472,7 @@ msgstr "步距 Y："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "每重复一次，Y轴上的步进距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -17592,9 +17579,8 @@ msgid "Unable to create \"%s\""
 msgstr "\"%s\" 无法建立"
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "\"%s\" 库为只读。"
+msgstr "布局文件为只读。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -21403,9 +21389,8 @@ msgid "Rules"
 msgstr "规则"
 
 #: pcbnew/dialogs/dialog_drc.cpp:215
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "DRC 不完整：无法编译设计规则。  "
+msgstr "DRC 不完整：无法编译自定义设计规则。  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/tools/board_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:489
@@ -25470,16 +25455,14 @@ msgid "Flip board items L/R (default is T/B)"
 msgstr "翻转板项目 L/R (默认值为 T/B)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:49
-#, fuzzy
 msgid "Add footprints with pads unlocked"
-msgstr "添加封装筛选器"
+msgstr "添加焊盘处于解锁状态的封装"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, the pads will be freely "
 "moveable."
-msgstr "不锁定封装在板内将可移动, 确定吗?"
+msgstr "若选中，当添加一个封装到电路板时, 焊盘将可自由移动。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:60
 msgid "&Rotation angle:"
@@ -26636,7 +26619,7 @@ msgstr ""
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
-msgstr ""
+msgstr "阻焊层中开口之间的最小距离。小于此距离的焊盘开口将绘制为单个开口。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -26668,7 +26651,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "额外的间隙占焊盘尺寸的百分比。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid ""
@@ -27661,17 +27644,14 @@ msgid "noname"
 msgstr "无名称"
 
 #: pcbnew/files.cpp:518
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous Kicad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此电路板上的区域被重新填充，将使用 Copper Edge Clearance 设置 （见电路板"
-"配置 > 设计规则）\n"
-"这可能导致来自先前 Kicad 版本的不同填充，它们在 Edge Cuts 层上使用板边界的线"
-"厚度。"
+"如果此电路板上的区域被重新填充，将使用 Copper Edge Clearance 设置 （见电路板配置 > 设计规则 >限制）。\n"
+"这可能导致来自先前 Kicad 版本的不同填充，它们在 Edge Cuts 层上使用板边界的线厚度。"
 
 #: pcbnew/files.cpp:522
 msgid "Edge Clearance Warning"
@@ -29009,9 +28989,8 @@ msgid "The auto save file \"%s\" could not be removed!"
 msgstr "自动保存文件 \"%s\" 不能被删除！"
 
 #: pcbnew/pcb_edit_frame.cpp:1070
-#, fuzzy
 msgid "Board file is read only."
-msgstr "仅电路板区域"
+msgstr "电路板文件是只读的。"
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 msgid "PCB file changes are unsaved"
@@ -29044,14 +29023,12 @@ msgid "Eeschema failed to load:\n"
 msgstr "Eeschema 无法加载:\n"
 
 #: pcbnew/pcb_edit_frame.cpp:1653
-#, fuzzy
 msgid "Edit design rules"
-msgstr "设计规则"
+msgstr "编辑设计规则"
 
 #: pcbnew/pcb_edit_frame.cpp:1665
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC 不完整：无法编译设计规则。  "
+msgstr "无法编译自定义设计规则。"
 
 #: pcbnew/pcb_edit_frame.cpp:1693
 msgid "Export Hyperlynx Layout"
@@ -29711,23 +29688,22 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略一个圆，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
-#, fuzzy
 msgid "Could not read file "
-msgstr "无法创建文件 \"%s\"。"
+msgstr "无法读取文件 "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
-msgstr ""
+msgstr "J 行 %zu 中的行大小无效。预计有 11 个元素，但发现了 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
-msgstr ""
+msgstr "找不到单位值，默认为 Mils"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s"
-msgstr "无法找到库文件 \"%s\""
+msgstr "无法找到列标签 %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:297
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:378
@@ -29742,81 +29718,81 @@ msgstr "无法找到库文件 \"%s\""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1568
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
-msgstr ""
+msgstr "%zu 行中的行大小无效。预期有 %zu 个元素，但发现 %zu 个"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:428
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
-msgstr ""
+msgstr "预期钻头尺寸值，但找到了 %s!%s!%s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:474
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr ""
+msgstr "期望焊盘尺寸值，但找到了%s : %s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "无效的大小 %lld: 太大"
+msgstr "行 %zu 上无效的焊盘尺寸"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr ""
+msgstr "期望焊盘偏移值，但找到了%s：%s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name %s at line %zu"
-msgstr "未知图框类型 \"%s\" 在线：%d"
+msgstr "未知的焊盘形状名 %s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:871
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
-msgstr ""
+msgstr "id 字符串 \"%s\" 格式无效，该字符串位于自定义焊盘列 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:908
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
-msgstr ""
+msgstr "未识别的焊盘形状图元 \"%s\"，位于行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr ""
+msgstr "无效的令牌计数。预期为 8，但找到了 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1141
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Geometric definition row %zu"
-msgstr ""
+msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于几何定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1151
 #, c-format
 msgid "Invalid graphic item in Geometric definition row %zu"
-msgstr ""
+msgstr "无效的图形项，位于几何定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1313
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Traces definition row %zu"
-msgstr ""
+msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于 traces 定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1323
 #, c-format
 msgid "Invalid graphic item in Traces definition row %zu"
-msgstr ""
+msgstr "无效图形项，位于 Traces 定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1359
 #, c-format
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
-msgstr ""
+msgstr "ID %d 和 序列 %d 项目重复， 重复项目位于 Traces 定义行 %zu \n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2268
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr ""
+msgstr "期望在铜层上找到蚀刻数据。找到了 Row， 位于层 '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -30681,13 +30657,10 @@ msgid "Insert footprint in board"
 msgstr "将封装放置到电路板"
 
 #: pcbnew/toolbars_pcb_editor.cpp:510
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
-msgstr ""
-"自动布线宽度：在开始现有的布线时使用它的宽度，\n"
-"否则，使用当前的宽度设置"
+msgstr "从现有的线路发送时，使用它的宽度而不是当前的宽度设置"
 
 #: pcbnew/toolbars_pcb_editor.cpp:580
 msgid "Track: use netclass width"
@@ -30829,9 +30802,8 @@ msgstr "间隙： %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:559
 #: pcbnew/tools/board_inspection_tool.cpp:597
 #: pcbnew/tools/board_inspection_tool.cpp:626
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules.  "
-msgstr "报告不完整：无法编译设计规则。  "
+msgstr "报告不完整：无法编译自定义设计规则。  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:252
 #, c-format
@@ -33402,118 +33374,100 @@ msgstr "[信息] 载入失败：输入行太长\n"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
-#, fuzzy
 msgid "KiCad"
-msgstr "退出 KiCad"
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA 套装"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
-msgstr ""
+msgstr "KiCad 是一款跨平台和开源电子设计自动化套件。该程序可处理原理图捕获和带 Gerber 输出的 PCB 布局。"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
-#, fuzzy
 msgid "Eeschema Schematic Editor"
-msgstr "切换到原理图编辑器"
+msgstr "Eeschema 原理图编辑器"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
-#, fuzzy
 msgid "PcbNew PCB Layout"
-msgstr "Gerber 布局"
+msgstr "PcbNew PCB 布局"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
 msgid "PcbNew 3D Viewer"
-msgstr "3D 查看器"
+msgstr "PcbNew 3D 查看器"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "开发人员"
+msgstr "KiCad 开发者们"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "从位图创建一个组件以与 KiCad 一起使用"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
-#, fuzzy
 msgid "Eeschema (Standalone)"
-msgstr "Eeschema 手册 (&M)"
+msgstr "Eeschema（独立式）"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
-#, fuzzy
 msgid "Electronic schematic capture"
-msgstr "Altium 原理图文件"
+msgstr "电子原理图捕获"
 
 #: resources/linux/launchers/eeschema.desktop.in:12
-#, fuzzy
 msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad 旧版原理图文件"
+msgstr "KiCad 电子原理图设计（独立版）"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Gerber 文件"
+msgstr "Gerber 文件查看器"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
 msgstr "查看 Gerber 文件"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr ""
+msgstr "电子设计自动化套件"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "用于各种电子相关计算的计算器"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
-#, fuzzy
 msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew 手册 (&M)"
+msgstr "Pcbnew （独立式）"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout"
-msgstr "PCB 编辑器"
+msgstr "PCB 布局"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
-#, fuzzy
 msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad PCB 文件"
+msgstr "KiCad 印刷电路板布局（独立式）"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
 msgstr "Gerber 文件"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "生成出色的钻取文件"
+msgstr "出色的钻头文件"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "KiCad 工程文件"
+msgstr "KiCad 项目"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "编辑原理图"
+msgstr "KiCad 原理图"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "KiCad PCB 文件"
+msgstr "KiCad 印刷电路板"
 
 #, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
