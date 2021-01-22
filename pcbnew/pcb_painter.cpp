@@ -791,6 +791,12 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 }
 
 
+bool isImplicitNet( const wxString& aNetName )
+{
+    return aNetName.StartsWith( wxT( "Net-(" ) ) || aNetName.StartsWith( wxT( "unconnected-(" ) );
+}
+
+
 void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     // Draw description layer
@@ -860,9 +866,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             if( displayNetname )
             {
                 wxString netname = UnescapeString( aPad->GetShortNetname() );
+                wxString pinType = aPad->GetPinType();
 
-                if( netname.StartsWith( "no_connect_" ) )
+                if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
                     netname = "x";
+                else if( pinType == wxT( "free" ) && isImplicitNet( netname ) )
+                    netname = "*";
 
                 // calculate the size of net name text:
                 double tsize = 1.5 * padsize.x / netname.Length();

@@ -995,9 +995,9 @@ bool DIALOG_NET_INSPECTOR::netFilterMatches( NETINFO_ITEM* aNet ) const
     if( aNet->GetNetCode() <= 0 )
         return false;
 
-    // Show no-connect nets only if specifically asked for by filter
+    // Show unconnected nets only if specifically asked for by filter
     if( m_netFilter.empty() )
-        return !aNet->GetNetname().StartsWith( "no_connect_" );
+        return !aNet->GetNetname().StartsWith( "unconnected-(" );
 
     wxString net_str = UnescapeString( aNet->GetNetname() ).Upper();
 

@@ -1098,12 +1098,14 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                          case T_power_out:      return ELECTRICAL_PINTYPE::PT_POWER_OUT;
                          case T_open_collector: return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
                          case T_open_emitter:   return ELECTRICAL_PINTYPE::PT_OPENEMITTER;
-                         case T_unconnected:    return ELECTRICAL_PINTYPE::PT_NC;
+                         case T_unconnected:
+                         case T_no_connect:     return ELECTRICAL_PINTYPE::PT_NC;
+                         case T_free:           return ELECTRICAL_PINTYPE::PT_NIC;
 
                          default:
                              Expecting( "input, output, bidirectional, tri_state, passive, "
                                         "unspecified, power_in, power_out, open_collector, "
-                                        "open_emitter, or unconnected" );
+                                        "open_emitter, free or noconnect" );
                              return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
                          }
                      };

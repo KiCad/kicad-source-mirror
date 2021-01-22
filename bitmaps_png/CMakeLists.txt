@@ -97,6 +97,7 @@ set( BMAPS_SMALL
     pintype_poweroutput
     pintype_opencoll
     pintype_openemit
+    pintype_nic
     pintype_noconnect
     small_down
     small_edit

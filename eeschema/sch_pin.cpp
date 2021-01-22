@@ -249,7 +249,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     wxString name = "Net-(";
 
     if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
-        name = ( "no_connect_(" );
+        name = ( "unconnected-(" );
 
     name << GetParentSymbol()->GetRef( &aPath );
 

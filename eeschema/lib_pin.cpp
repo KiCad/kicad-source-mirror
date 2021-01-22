@@ -53,12 +53,13 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
         wxT( "bidirectional" ),
         wxT( "tri_state" ),
         wxT( "passive" ),
+        wxT( "free" ),
         wxT( "unspecified" ),
         wxT( "power_in" ),
         wxT( "power_out" ),
         wxT( "open_collector" ),
         wxT( "open_emitter" ),
-        wxT( "unconnected" )
+        wxT( "no_connect" )
     };
 
     return msgPinElectricType[static_cast<int>( aType )];

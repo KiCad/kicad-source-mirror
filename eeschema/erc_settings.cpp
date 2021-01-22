@@ -38,20 +38,21 @@ const int ercSettingsSchemaVersion = 0;
  * Default Look up table which gives the ERC error level for a pair of connected pins
  */
 PIN_ERROR ERC_SETTINGS::m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
-        {
-/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
-/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
-/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
-/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  ERR },
-/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  ERR },
-/*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
-/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
-        };
+{
+/*         I,   O,    Bi,   3S,   Pas,  NIC,  UnS,  PwrI, PwrO, OC,   OE,   NC */
+/* I  */ { OK,  OK,   OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/* O  */ { OK,  ERR,  OK,   WAR,  OK,   OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* Bi */ { OK,  OK,   OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
+/* 3S */ { OK,  WAR,  OK,   OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  ERR },
+/*Pas */ { OK,  OK,   OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*NIC */ { OK,  OK,   OK,   OK,   OK,   OK,   OK,   OK,   OK,   OK,   OK,   ERR },
+/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  OK,   WAR,  WAR,  WAR,  WAR,  WAR,  ERR },
+/*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* OC */ { OK,  ERR,  OK,   WAR,  OK,   OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
+};
 
 
 /**
@@ -65,20 +66,21 @@ PIN_ERROR ERC_SETTINGS::m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PI
  * NOD have no valid source signal.
  */
 int ERC_SETTINGS::m_PinMinDrive[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
-        {
-/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
-/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
-/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NPI },
-/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
-/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
-        };
+{
+/*         I,    O,    Bi,   3S,   Pas,  NIC,  UnS,  PwrI, PwrO, OC,   OE,   NC */
+/* I  */ { NOD,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/* O  */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  DRV,  DRV,  DRV,  DRV,  NPI },
+/* Bi */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/* 3S */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/*Pas */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/*NIC */ { NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  NPI },
+/*UnS */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/*PwrI*/ { NOD,  DRV,  NOD,  NOD,  NOD,  NOD,  NOD,  NOD,  DRV,  NOD,  NOD,  NPI },
+/*PwrO*/ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  DRV,  DRV,  DRV,  DRV,  NPI },
+/* OC */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/* OE */ { DRV,  DRV,  DRV,  DRV,  DRV,  NOD,  DRV,  NOD,  DRV,  DRV,  DRV,  NPI },
+/* NC */ { NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI,  NPI }
+};
 
 
 ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :

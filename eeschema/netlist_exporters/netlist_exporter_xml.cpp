@@ -557,9 +557,6 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 }
 
 
-#define NC_PREFIX "no_connect_"
-
-
 XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 {
     XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
@@ -576,8 +573,29 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         </net>
     */
 
-    typedef std::pair<SCH_PIN*, SCH_SHEET_PATH>             MEMBER_RECORD;
-    typedef std::pair<wxString, std::vector<MEMBER_RECORD>> NET_RECORD;
+    struct NET_NODE
+    {
+        NET_NODE( SCH_PIN* aPin, const SCH_SHEET_PATH& aSheet, bool aNoConnect ) :
+                m_Pin( aPin ),
+                m_Sheet( aSheet ),
+                m_NoConnect( aNoConnect )
+        {}
+
+        SCH_PIN*       m_Pin;
+        SCH_SHEET_PATH m_Sheet;
+        bool           m_NoConnect;
+    };
+
+    struct NET_RECORD
+    {
+        NET_RECORD( const wxString& aName ) :
+            m_Name( aName )
+        {};
+
+        wxString              m_Name;
+        std::vector<NET_NODE> m_Nodes;
+    };
+
     std::vector<NET_RECORD*> nets;
 
     for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
@@ -589,11 +607,12 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         if( subgraphs.empty() )
             continue;
 
-        nets.push_back( new NET_RECORD( net_name, std::vector<MEMBER_RECORD>() ) );
+        nets.emplace_back( new NET_RECORD( net_name ) );
         net_record = nets.back();
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
+            bool nc = subgraph->m_no_connect && subgraph->m_no_connect->Type() == SCH_NO_CONNECT_T;
             const SCH_SHEET_PATH& sheet = subgraph->m_sheet;
 
             for( SCH_ITEM* item : subgraph->m_items )
@@ -610,7 +629,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                         continue;
                     }
 
-                    net_record->second.emplace_back( pin, sheet );
+                    net_record->m_Nodes.emplace_back( pin, sheet, nc );
                 }
             }
         }
@@ -620,7 +639,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     std::sort( nets.begin(), nets.end(),
                []( const NET_RECORD* a, const NET_RECORD*b )
                {
-                   return StrNumCmp( a->first, b->first ) < 0;
+                   return StrNumCmp( a->m_Name, b->m_Name ) < 0;
                } );
 
     for( int i = 0; i < (int) nets.size(); ++i )
@@ -630,17 +649,14 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         XNODE*      xnode;
 
         // Netlist ordering: Net name, then ref des, then pin name
-        std::sort( net_record->second.begin(), net_record->second.end(),
-                   []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
-                       const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
+        std::sort( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
+                   []( const NET_NODE& a, const NET_NODE& b )
                    {
-                       SCH_PIN* pinA = a.first;
-                       SCH_PIN* pinB = b.first;
-                       wxString refA = pinA->GetParentSymbol()->GetRef( &a.second );
-                       wxString refB = pinB->GetParentSymbol()->GetRef( &b.second );
+                       wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
+                       wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
 
                        if( refA == refB )
-                           return pinA->GetNumber() < pinB->GetNumber();
+                           return a.m_Pin->GetNumber() < b.m_Pin->GetNumber();
 
                        return refA < refB;
                    } );
@@ -648,27 +664,21 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         // Some duplicates can exist, for example on multi-unit parts with duplicated
         // pins across units.  If the user connects the pins on each unit, they will
         // appear on separate subgraphs.  Remove those here:
-        net_record->second.erase(
-                std::unique( net_record->second.begin(), net_record->second.end(),
-                             []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
-                                 const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                             {
-                                 SCH_PIN* pinA = a.first;
-                                 SCH_PIN* pinB = b.first;
-                                 wxString refA = pinA->GetParentSymbol()->GetRef( &a.second );
-                                 wxString refB = pinB->GetParentSymbol()->GetRef( &b.second );
+        net_record->m_Nodes.erase(
+                std::unique( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
+                        []( const NET_NODE& a, const NET_NODE& b )
+                        {
+                            wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
+                            wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
 
-                                 return refA == refB && pinA->GetNumber() == pinB->GetNumber();
-                             } ),
-                net_record->second.end() );
+                            return refA == refB && a.m_Pin->GetNumber() == b.m_Pin->GetNumber();
+                        } ),
+                net_record->m_Nodes.end() );
 
-        for( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& pair : net_record->second )
+        for( const NET_NODE& netNode : net_record->m_Nodes )
         {
-            SCH_PIN* pin = pair.first;
-            SCH_SHEET_PATH sheet = pair.second;
-
-            wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
-            wxString pinText = pin->GetNumber();
+            wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
+            wxString pinText = netNode.m_Pin->GetNumber();
 
             // Skip power symbols and virtual components
             if( refText[0] == wxChar( '#' ) )
@@ -680,7 +690,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
                 xnets->AddChild( xnet = node( "net" ) );
                 xnet->AddAttribute( "code", netCodeTxt );
-                xnet->AddAttribute( "name", net_record->first );
+                xnet->AddAttribute( "name", net_record->m_Name );
 
                 added = true;
             }
@@ -689,15 +699,17 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             xnode->AddAttribute( "ref", refText );
             xnode->AddAttribute( "pin", pinText );
 
-            wxString pinName;
+            wxString pinName = netNode.m_Pin->GetName();
+            wxString pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
 
-            if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
-                pinName = pin->GetName();
-
-            if( !pinName.IsEmpty() )
+            //  ~ is a char used to code empty strings in libs.
+            if( pinName != "~" && !pinName.IsEmpty() )
                 xnode->AddAttribute( "pinfunction", pinName );
 
-            xnode->AddAttribute( "pintype", pin->GetCanonicalElectricalTypeName() );
+            if( netNode.m_NoConnect )
+                pinType += "+no_connect";
+
+            xnode->AddAttribute( "pintype", pinType );
         }
     }
 

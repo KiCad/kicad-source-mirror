@@ -38,6 +38,7 @@ enum class ELECTRICAL_PINTYPE
     PT_BIDI,          ///< input or output (like port for a microprocessor)
     PT_TRISTATE,      ///< tris state bus pin
     PT_PASSIVE,       ///< pin for passive components: must be connected, and can be connected to any pin
+    PT_NIC,           ///< not internally connected (may be connected to anything)
     PT_UNSPECIFIED,   ///< unknown electrical properties: creates always a warning when connected
     PT_POWER_IN,      ///< power input (GND, VCC for ICs). Must be connected to a power output.
     PT_POWER_OUT,     ///< output of a regulator: intended to be connected to power input pins

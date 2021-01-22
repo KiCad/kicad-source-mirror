@@ -1487,14 +1487,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             {
                 CONNECTION_SUBGRAPH* subgraph = m_driver_subgraphs[subgraphId];
 
-                // Make sure weakly-driven single-pin nets get the no_connect_ prefix
+                // Make sure weakly-driven single-pin nets get the unconnected_ prefix
                 if( !subgraph->m_strong_driver && subgraph->m_drivers.size() == 1 &&
                     subgraph->m_driver->Type() == SCH_PIN_T )
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( subgraph->m_driver );
                     wxString name = pin->GetDefaultNetName( subgraph->m_sheet, true );
 
-                    pin->ClearDefaultNetName( &subgraph->m_sheet );
                     subgraph->m_driver_connection->ConfigureFromLabel( name );
                 }
 
@@ -2598,6 +2597,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         // Only one pin, and it's not a no-connect pin
         if( pin && !has_other_connections
                 && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC
+                && pin->GetType() != ELECTRICAL_PINTYPE::PT_NIC
                 && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );

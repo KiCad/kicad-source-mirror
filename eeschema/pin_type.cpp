@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
 
 #include <pin_type.h>
 #include <lib_pin.h>
-#include <base_units.h>
 #include <core/arraydim.h>
 
 
@@ -45,9 +44,6 @@ struct pinTypeStruct
     const BITMAP_OPAQUE* bitmap;
 };
 
-/*
-* Conversion map between PLOT_DASH_TYPE values and style names displayed
-*/
 // clang-format off
 const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::PT_INPUT,        { _( "Input" ),             pintype_input_xpm } },
@@ -55,12 +51,13 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::PT_BIDI,         { _( "Bidirectional" ),     pintype_bidi_xpm } },
     { ELECTRICAL_PINTYPE::PT_TRISTATE,     { _( "Tri-state" ),         pintype_3states_xpm } },
     { ELECTRICAL_PINTYPE::PT_PASSIVE,      { _( "Passive" ),           pintype_passive_xpm } },
+    { ELECTRICAL_PINTYPE::PT_NIC,          { _( "Free" ),              pintype_nic_xpm } },
     { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,  { _( "Unspecified" ),       pintype_notspecif_xpm } },
     { ELECTRICAL_PINTYPE::PT_POWER_IN,     { _( "Power input" ),       pintype_powerinput_xpm } },
     { ELECTRICAL_PINTYPE::PT_POWER_OUT,    { _( "Power output" ),      pintype_poweroutput_xpm } },
     { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,{ _( "Open collector" ),    pintype_opencoll_xpm } },
     { ELECTRICAL_PINTYPE::PT_OPENEMITTER,  { _( "Open emitter" ),      pintype_openemit_xpm } },
-    { ELECTRICAL_PINTYPE::PT_NC,           { _( "Not connected" ),     pintype_noconnect_xpm } },
+    { ELECTRICAL_PINTYPE::PT_NC,           { _( "Unconnected" ),       pintype_noconnect_xpm } },
 };
 // clang-format on
 
@@ -71,9 +68,7 @@ struct pinShapeStruct
     const BITMAP_OPAQUE* bitmap;
 };
 
-/*
-* Conversion map between PLOT_DASH_TYPE values and style names displayed
-*/
+
 // clang-format off
 const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
     { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               pinshape_normal_xpm } },

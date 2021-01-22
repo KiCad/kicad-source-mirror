@@ -111,6 +111,9 @@ static const char* getPinElectricalTypeToken( ELECTRICAL_PINTYPE aType )
     case ELECTRICAL_PINTYPE::PT_PASSIVE:
         return SCHEMATIC_LEXER::TokenName( T_passive );
 
+    case ELECTRICAL_PINTYPE::PT_NIC:
+        return SCHEMATIC_LEXER::TokenName( T_free );
+
     case ELECTRICAL_PINTYPE::PT_UNSPECIFIED:
         return SCHEMATIC_LEXER::TokenName( T_unspecified );
 
@@ -127,7 +130,7 @@ static const char* getPinElectricalTypeToken( ELECTRICAL_PINTYPE aType )
         return SCHEMATIC_LEXER::TokenName( T_open_emitter );
 
     case ELECTRICAL_PINTYPE::PT_NC:
-        return SCHEMATIC_LEXER::TokenName( T_unconnected );
+        return SCHEMATIC_LEXER::TokenName( T_no_connect );
 
     default:
         wxFAIL_MSG( "Missing symbol library pin connection type" );

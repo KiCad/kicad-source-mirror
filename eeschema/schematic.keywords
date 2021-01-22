@@ -35,6 +35,7 @@ extends
 fill
 font
 footprint
+free
 global_label
 hide
 hierarchical_label
