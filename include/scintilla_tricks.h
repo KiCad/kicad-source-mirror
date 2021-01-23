@@ -49,6 +49,7 @@ protected:
     wxString          m_braces;
 
     int               m_lastCaretPos;
+    bool              m_suppressAutocomplete;
 };
 
 #endif  // SCINTILLA_TRICKS_H

@@ -29,11 +29,13 @@
 #include <dialog_shim.h>
 #include <wx/clipbrd.h>
 #include <wx/settings.h>
+#include <confirm.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
-        m_lastCaretPos( -1 )
+        m_lastCaretPos( -1 ),
+        m_suppressAutocomplete( false )
 {
     // A hack which causes Scintilla to auto-size the text editor canvas
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
@@ -104,6 +106,9 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
     wxString c = aEvent.GetUnicodeKey();
+
+    if( !isalpha( aEvent.GetKeyCode() ) )
+        m_suppressAutocomplete = false;
 
     if( ConvertSmartQuotesAndDashes( &c ) )
     {
@@ -184,6 +189,18 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             m_te->DeleteBack();
         else
             m_te->DeleteRange( m_te->GetSelectionStart(), 1 );
+    }
+    else if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        if( m_te->AutoCompActive() )
+        {
+            m_te->AutoCompCancel();
+            m_suppressAutocomplete = true; // Don't run autocomplete again on the next char...
+        }
+        else if( IsOK( m_te->GetParent(), _( "Cancel changes?" ) ) )
+        {
+            aEvent.Skip();
+        }
     }
     else if( isCtrlSlash( aEvent ) )
     {
@@ -292,6 +309,9 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 
 void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens )
 {
+    if( m_suppressAutocomplete )
+        return;
+
     wxArrayString matchedTokens;
 
     wxString filter = wxT( "*" ) + aPartial.Lower() + wxT( "*" );

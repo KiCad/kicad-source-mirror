@@ -319,7 +319,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
     }
 
     if( !tokens.IsEmpty() )
-        m_scintillaTricks->DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
+        m_scintillaTricks-> DoAutocomplete( partial, wxSplit( tokens, ' ' ) );
 }
 
 
