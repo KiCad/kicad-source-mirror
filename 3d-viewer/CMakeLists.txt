@@ -1,8 +1,6 @@
 #add_definitions(-DPRINT_STATISTICS_3D_VIEWER)
 add_definitions(-DPCBNEW)
 
-configure_file( 3d_plugin_dir.h.in 3d_plugin_dir.h @ONLY )
-
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}

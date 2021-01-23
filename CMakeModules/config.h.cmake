@@ -85,6 +85,9 @@
 /// Allows scripts install directory to be referenced by the program code.
 #define KICAD_DATA                     "@KICAD_DATA@"
 
+// Plugins directory
+#define KICAD_PLUGINDIR						"@CMAKE_INSTALL_FULL_LIBDIR@"
+
 /// ngspice version string detected by pkg-config when available.
 #cmakedefine NGSPICE_BUILD_VERSION           "@NGSPICE_BUILD_VERSION@"
 

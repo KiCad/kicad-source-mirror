@@ -24,6 +24,7 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <config.h>
 
 
 wxString PATHS::GetUserPluginsPath()
@@ -127,7 +128,7 @@ wxString PATHS::GetStockPluginsPath()
 #else
     // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
-    wxString tfname = wxString::FromUTF8Unchecked( PLUGINDIR );
+    wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
     fn.Assign( tfname, "" );
     fn.AppendDir( "kicad" );
     fn.AppendDir( wxT( "plugins" ) );
