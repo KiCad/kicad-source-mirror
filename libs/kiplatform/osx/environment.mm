@@ -56,3 +56,9 @@ wxString KIPLATFORM::ENV::GetDocumentsDir()
 {
     return wxStandardPaths::Get().GetDocumentsDir();
 }
+
+
+wxString KIPLATFORM::ENV::GetUserConfigDir()
+{
+    return wxStandardPaths::Get().GetUserConfigDir();
+}

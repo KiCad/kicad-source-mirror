@@ -52,3 +52,9 @@ wxString KIPLATFORM::ENV::GetDocumentsDir()
 {
     return g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
 }
+
+
+wxString KIPLATFORM::ENV::GetUserConfigDir()
+{
+    return g_get_user_config_dir();
+}

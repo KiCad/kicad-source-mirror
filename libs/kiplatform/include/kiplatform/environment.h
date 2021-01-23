@@ -53,5 +53,7 @@ namespace KIPLATFORM
          * @return Path for the given aPath
          */
         wxString GetDocumentsDir();
+
+        wxString GetUserConfigDir();
     }
 }

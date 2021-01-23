@@ -6,6 +6,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
+
 wxString PATHS::GetUserScriptingPath()
 {
     wxFileName tmp;
