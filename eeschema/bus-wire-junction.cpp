@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,16 +83,26 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd )
     SCH_SCREEN* screen = GetScreen();
     bool        retval = false;
 
+    std::vector<SCH_LINE*> wires;
+    EDA_RECT    bb( aStart, wxSize( 1, 1 ) );
+
+    bb.Merge( aEnd );
+
     if( aStart == aEnd )
         return retval;
 
-    for( EDA_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+    // We cannot modify the RTree while iterating, so push the possible
+    // wires into a separate structure.
+    for( EDA_ITEM* item : screen->Items().Overlapping( bb ) )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-        if( line->GetLayer() != LAYER_WIRE )
-            continue;
+        if( item->Type() == SCH_LINE_T && line->GetLayer() == LAYER_WIRE )
+            wires.push_back( line );
+    }
 
+    for( SCH_LINE* line : wires )
+    {
         // Don't remove wires that are already deleted or are currently being dragged
         if( line->GetEditFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
             continue;
