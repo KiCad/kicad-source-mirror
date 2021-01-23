@@ -8,6 +8,7 @@ public:
     static wxString GetUserScriptingPath();
     static wxString GetUserTemplatesPath();
     static wxString GetDefaultUserProjectsPath();
+    static wxString GetStockScriptingPath();
 };
 
 #endif
