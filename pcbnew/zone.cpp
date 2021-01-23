@@ -1185,9 +1185,13 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     if( board )
     {
-        edgeClearance = board->GetDesignSettings().m_CopperEdgeClearance;
-        maxError = board->GetDesignSettings().m_MaxError;
-        keepExternalFillets = board->GetDesignSettings().m_ZoneKeepExternalFillets;
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+        DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, this,
+                                                               nullptr, UNDEFINED_LAYER );
+        edgeClearance = c.Value().Min();
+        maxError = bds.m_MaxError;
+        keepExternalFillets = bds.m_ZoneKeepExternalFillets;
     }
 
     auto smooth = [&]( SHAPE_POLY_SET& aPoly )
