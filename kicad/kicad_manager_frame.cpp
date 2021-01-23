@@ -529,11 +529,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
 
             if( file.IsOpened() )
                 // Create a small dummy file as a stub for pcbnew:
-                file.Write( wxString::Format( "(kicad_pcb (version %4.4d%2.2d%2.2d) (host pcbnew)\n)",
-                                              SEXPR_BOARD_FILE_VERSION/10000,
-                                              (SEXPR_BOARD_FILE_VERSION%10000) / 100,
-                                              SEXPR_BOARD_FILE_VERSION%100
-                                              ) );
+                file.Write( wxString::Format( "(kicad_pcb (version %d) (host pcbnew)\n)",
+                                              SEXPR_BOARD_FILE_VERSION ) );
 
             // wxFFile dtor will close the file
         }
