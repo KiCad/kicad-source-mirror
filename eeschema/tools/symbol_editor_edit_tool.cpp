@@ -445,7 +445,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    else
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
     return 0;
 }
