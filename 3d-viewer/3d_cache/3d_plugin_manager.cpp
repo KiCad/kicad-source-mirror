@@ -34,8 +34,9 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
-#include "common.h"
-#include "pgm_base.h"
+#include <common.h>
+#include <paths.h>
+#include <pgm_base.h>
 #include "3d_plugin_dir.h"
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
@@ -152,34 +153,12 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     }
 #endif
 
-#ifndef _WIN32
-        // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
-        // corresponding to the install path used for constructing KICAD_USER_PLUGIN
-        wxString tfname = wxString::FromUTF8Unchecked( PLUGINDIR );
-        fn.Assign( tfname, "" );
-        fn.AppendDir( "kicad" );
-#else
-        // on windows the plugins directory is within the executable's directory
-        fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
-#endif
-
-    fn.AppendDir( wxT( "plugins" ) );
-    fn.AppendDir( wxT( "3d" ) );
-
-    // checks plugin directory relative to executable path
+    fn.AssignDir( PATHS::GetStockPlugins3DPath() );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
 
     // check for per-user third party plugins
     // note: GetUserDataDir() gives '.pcbnew' rather than '.kicad' since it uses the exe name;
-    fn.Assign( wxStandardPaths::Get().GetUserDataDir(), "" );
-    fn.RemoveLastDir();
-#ifdef _WIN32
-    fn.AppendDir( wxT( "kicad" ) );
-#else
-    fn.AppendDir( wxT( ".kicad" ) );
-#endif
-    fn.AppendDir( wxT( "plugins" ) );
-    fn.AppendDir( wxT( "3d" ) );
+    fn.AssignDir( PATHS::GetUserPlugins3DPath() );
     checkPluginPath( fn.GetPathWithSep(), searchpaths );
 #else
 
@@ -191,10 +170,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
    checkPluginPath( GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
 
    // (3) Bundle   kicad.app/Contents/PlugIns/3d
-   fn.Assign( Pgm().GetExecutablePath() );
-   fn.AppendDir( wxT( "Contents" ) );
-   fn.AppendDir( wxT( "PlugIns" ) );
-   fn.AppendDir( wxT( "3d" ) );
+   fn.AssignDir( PATHS::GetStockPluginsPath() );
    checkPluginPath( fn.GetPathWithSep(), searchpaths );
 
 #endif
