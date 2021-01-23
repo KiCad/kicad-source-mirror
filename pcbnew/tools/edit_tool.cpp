@@ -1293,8 +1293,16 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    OPT<VECTOR2I> oldRefPt;
+
+    if( selection.HasReferencePoint() )
+        oldRefPt = selection.GetReferencePoint();
+    else
+        oldRefPt = NULLOPT;
+
     updateModificationPoint( selection );
-    auto refPt = selection.GetReferencePoint();
+
+    VECTOR2I refPt = selection.GetReferencePoint();
     const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
     // When editing footprints, all items have the same parent
@@ -1332,9 +1340,12 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
 
-    // Clear reference so any mouse dragging that occurs doesn't make the selection jump
+    // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
-    selection.ClearReferencePoint();
+    if( oldRefPt != NULLOPT )
+        selection.SetReferencePoint( *oldRefPt );
+    else
+        selection.ClearReferencePoint();
 
     return 0;
 }
@@ -1538,19 +1549,26 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    OPT<VECTOR2I> oldRefPt;
+
+    if( selection.HasReferencePoint() )
+        oldRefPt = selection.GetReferencePoint();
+    else
+        oldRefPt = NULLOPT;
+
     updateModificationPoint( selection );
 
     // Flip around the anchor for footprints, and the bounding box center for board items
-    VECTOR2I modPoint = IsFootprintEditor() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
+    VECTOR2I refPt = IsFootprintEditor() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
 
     // If only one item selected, flip around the selection or item anchor point (instead
     // of the bounding box center) to avoid moving the item anchor
     if( selection.GetSize() == 1 )
     {
         if( m_dragging && selection.HasReferencePoint() )
-            modPoint = selection.GetReferencePoint();
+            refPt = selection.GetReferencePoint();
         else
-            modPoint = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();
+            refPt = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();
     }
 
     bool leftRight = frame()->Settings().m_FlipLeftRight;
@@ -1572,7 +1590,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                                                                });
         }
 
-        static_cast<BOARD_ITEM*>( item )->Flip( modPoint, leftRight );
+        static_cast<BOARD_ITEM*>( item )->Flip( refPt, leftRight );
     }
 
     if( !m_dragging )
@@ -1586,9 +1604,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
 
-    // Clear reference so any mouse dragging that occurs doesn't make the selection jump
+    // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
-    selection.ClearReferencePoint();
+    if( oldRefPt != NULLOPT )
+        selection.SetReferencePoint( *oldRefPt );
+    else
+        selection.ClearReferencePoint();
 
     return 0;
 }
