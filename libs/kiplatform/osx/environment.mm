@@ -66,5 +66,10 @@ wxString KIPLATFORM::ENV::GetUserConfigDir()
 
 wxString KIPLATFORM::ENV::GetUserCacheDir()
 {
-    return wxStandardPaths::Get().GetUserDir( wxStandardPaths::Dir::Dir_Cache );
+    NSURL* url = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory
+                                                 inDomain:NSUserDomainMask
+                                                 appropriateForURL:nil
+                                                 create:NO error:nil];
+
+    return wxCFStringRef::AsString((CFStringRef)url.path);
 }
