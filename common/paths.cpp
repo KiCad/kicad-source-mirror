@@ -72,7 +72,7 @@ wxString PATHS::GetUserTemplatesPath()
     tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
     tmp.AppendDir( "kicad" );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
-    tmp.AppendDir( "templates" );
+    tmp.AppendDir( "template" );
 
     return tmp.GetFullPath();
 }
