@@ -62,3 +62,9 @@ wxString KIPLATFORM::ENV::GetUserConfigDir()
 {
     return wxStandardPaths::Get().GetUserConfigDir();
 }
+
+
+wxString KIPLATFORM::ENV::GetUserCacheDir()
+{
+    return wxStandardPaths::Get().GetUserDir( wxStandardPaths::Dir::Dir_Cache );
+}

@@ -70,3 +70,14 @@ wxString KIPLATFORM::ENV::GetUserConfigDir()
 {
     return wxStandardPaths::Get().GetUserConfigDir();
 }
+
+
+wxString KIPLATFORM::ENV::GetUserCacheDir()
+{
+    // Unforunately AppData/Local is the closest analog to "Cache" directories of other platforms
+
+    // Make sure we dont include the "appinfo" (appended app name)
+    wxStandardPaths::Get().UseAppInfo( wxStandardPaths::AppInfo_None );
+
+    return wxStandardPaths::Get().GetUserLocalDataDir();
+}

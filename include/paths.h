@@ -66,6 +66,11 @@ public:
      */
     static wxString GetStockPlugins3DPath();
 
+    /**
+     * Gets the stock (install) 3d viewer pluginspath
+     */
+    static wxString GetUserCachePath();
+
 private:
     // we are a static helper
     PATHS() {}

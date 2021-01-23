@@ -54,6 +54,7 @@
 #include "plugins/3dapi/ifsg_api.h"
 
 #include <filename_resolver.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
@@ -553,40 +554,24 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     // 1. OSX: ~/Library/Caches/kicad/3d/
     // 2. Linux: ${XDG_CACHE_HOME}/kicad/3d ~/.cache/kicad/3d/
     // 3. MSWin: AppData\Local\kicad\3d
-    wxString cacheDir;
+    wxFileName cacheDir;
+    cacheDir.AssignDir( PATHS::GetUserCachePath() );
+    cacheDir.AppendDir( "3d" );
 
-#if defined( _WIN32 )
-    wxStandardPaths::Get().UseAppInfo( wxStandardPaths::AppInfo_None );
-    cacheDir = wxStandardPaths::Get().GetUserLocalDataDir();
-    cacheDir.append( "\\kicad\\3d" );
-#elif defined( __APPLE )
-    cacheDir = "${HOME}/Library/Caches/kicad/3d";
-#else   // assume Linux
-    cacheDir = ExpandEnvVarSubstitutions( "${XDG_CACHE_HOME}", nullptr );
-
-    if( cacheDir.empty() || cacheDir == "${XDG_CACHE_HOME}" )
-        cacheDir = "${HOME}/.cache";
-
-    cacheDir.append( "/kicad/3d" );
-#endif
-
-    cacheDir = ExpandEnvVarSubstitutions( cacheDir, m_project );
-    cfgdir.Assign( cacheDir, "" );
-
-    if( !cfgdir.DirExists() )
+    if( !cacheDir.DirExists() )
     {
-        cfgdir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+        cacheDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-        if( !cfgdir.DirExists() )
+        if( !cacheDir.DirExists() )
         {
             wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * failed to create 3D cache directory '%s'",
-                        __FILE__, __FUNCTION__, __LINE__, cfgdir.GetPath() );
+                        __FILE__, __FUNCTION__, __LINE__, cacheDir.GetPath() );
 
             return false;
         }
     }
 
-    m_CacheDir = cfgdir.GetPathWithSep();
+    m_CacheDir = cacheDir.GetPathWithSep();
     return true;
 }
 

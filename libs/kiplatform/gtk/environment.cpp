@@ -58,3 +58,9 @@ wxString KIPLATFORM::ENV::GetUserConfigDir()
 {
     return g_get_user_config_dir();
 }
+
+
+wxString KIPLATFORM::ENV::GetUserCacheDir()
+{
+    return g_get_user_cache_dir();
+}

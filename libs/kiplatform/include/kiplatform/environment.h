@@ -55,5 +55,7 @@ namespace KIPLATFORM
         wxString GetDocumentsDir();
 
         wxString GetUserConfigDir();
+
+        wxString GetUserCacheDir();
     }
 }

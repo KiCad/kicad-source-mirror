@@ -18,6 +18,7 @@
  */
 
 #include <wx/filename.h>
+#include <wx/stdpaths.h>
 #include <wx/string.h>
 
 #include <kiplatform/environment.h>
@@ -146,4 +147,16 @@ wxString PATHS::GetStockPlugins3DPath()
     fn.AppendDir( "3d" );
 
     return fn.GetPathWithSep();
+}
+
+
+wxString PATHS::GetUserCachePath()
+{
+    wxFileName tmp;
+
+    tmp.AssignDir( KIPLATFORM::ENV::GetUserCacheDir() );
+    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
+
+    return tmp.GetPathWithSep();
 }
