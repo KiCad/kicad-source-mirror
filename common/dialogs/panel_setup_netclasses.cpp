@@ -30,7 +30,6 @@
 #include <grid_tricks.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <tool/tool_manager.h>
-#include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <kicad_string.h>
 #include <widgets/grid_color_swatch_helpers.h>
@@ -472,7 +471,9 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
     int curRow = m_netclassGrid->GetGridCursorRow();
 
     if( curRow < 0 )
+    {
         return;
+    }
     else if( curRow == 0 )
     {
         DisplayErrorMessage( this, _( "The default net class is required." ) );
