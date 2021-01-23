@@ -23,6 +23,7 @@
 #import <Cocoa/Cocoa.h>
 #include <wx/osx/core/cfstring.h>
 #include <wx/filefn.h>
+#include <wx/stdpaths.h>
 
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 {
