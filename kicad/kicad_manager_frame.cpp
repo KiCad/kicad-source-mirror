@@ -51,6 +51,8 @@
 #include <widgets/app_progress_dialog.h>
 #include <wx/ffile.h>
 
+#include <../pcbnew/plugins/kicad/kicad_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
+
 
 #ifdef __WXMAC__
 #include <MacTypes.h>
@@ -526,7 +528,12 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
             wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
-                file.Write( wxT( "(kicad_pcb (version 4) (host kicad \"dummy file\") )\n" ) );
+                // Create a small dummy file as a stub for pcbnew:
+                file.Write( wxString::Format( "(kicad_pcb (version %4.4d%2.2d%2.2d) (host pcbnew)\n)",
+                                              SEXPR_BOARD_FILE_VERSION/10000,
+                                              (SEXPR_BOARD_FILE_VERSION%10000) / 100,
+                                              SEXPR_BOARD_FILE_VERSION%100
+                                              ) );
 
             // wxFFile dtor will close the file
         }
