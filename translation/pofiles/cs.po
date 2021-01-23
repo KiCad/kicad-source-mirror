@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-21 16:56+0000\n"
+"PO-Revision-Date: 2021-01-24 22:53+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7781,9 +7781,8 @@ msgid "Update/reset field positions"
 msgstr "Aktualizace/reset pozice polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Výstupy pro &výrobu"
+msgstr "Aktualizovat/resetovat atributy symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -8096,9 +8095,8 @@ msgid "Show Annotation dialog"
 msgstr "Zobrazit dialog Očíslování"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
-#, fuzzy
 msgid "Annotation is incomplete. ERC cannot be run."
-msgstr "Očíslování nebylo dokončeno. ERC nelze spustit."
+msgstr "Očíslování je neúplné. ERC nelze spustit."
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -8164,9 +8162,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Kontrola nevyřešených proměnných ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:412
-#, fuzzy
 msgid "Checking no connect pins for connections..."
-msgstr "Kontrola konfliktů..."
+msgstr "Kontrola, zda nejsou připojeny piny \"žádné připojení\"..."
 
 #: eeschema/dialogs/dialog_erc.cpp:418
 msgid "Checking for library symbol issues..."
@@ -8419,9 +8416,8 @@ msgid "Other symbol fields"
 msgstr "Další pole symbolu"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
-#, fuzzy
 msgid "Wires && wire labels"
-msgstr "Testovat podobná označení"
+msgstr "Spoje && označení spojů"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
@@ -9318,9 +9314,8 @@ msgid "Error. You must provide a Title"
 msgstr "Chyba. Musíte zadat název"
 
 #: eeschema/dialogs/dialog_netlist.cpp:786
-#, fuzzy
 msgid "Do not forget to choose a title for this netlist control page"
-msgstr "Nezapomeňte zvolit název přehledu netlistu"
+msgstr "Nezapomeňte zvolit název této stránky kontroly netlistu"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9378,14 +9373,14 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Alternativní definice vývodů musí mít název."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it\n"
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
-"Tento vývod není na mřížce %d milů\n"
-"Ve schématu nebude snadné ho připojit\n"
+"Tento vývod není na mřížce %d milů a\n"
+"ve schématu nebude snadné ho připojit.\n"
 "Chcete pokračovat?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:35
@@ -9626,9 +9621,8 @@ msgid "Black and White"
 msgstr "Černobílý"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
-#, fuzzy
 msgid "Plot background color"
-msgstr "Vyplňte pozadí"
+msgstr "Barva pozadí vykreslení"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -9661,9 +9655,8 @@ msgid "HPGL Options"
 msgstr "Možnosti HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Pozice X:"
+msgstr "Pozice a jednotky:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
@@ -9912,9 +9905,8 @@ msgid "Search the current &sheet only"
 msgstr "Hledat pouze na aktuálním &listu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Replace matches in reference designators"
-msgstr "Nahradit součástk&u označení reference"
+msgstr "Nahradit shody v referenci schématu"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
@@ -9937,9 +9929,8 @@ msgid "Import Settings from Another Project..."
 msgstr "Import nastavení z jiného projektu ..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
-#, fuzzy
 msgid "Formatting"
-msgstr "Formát"
+msgstr "Formátování"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:69
@@ -10160,9 +10151,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:93
-#, fuzzy
 msgid "DC Sweep Source 1"
-msgstr "Rozmítaný"
+msgstr "Rozmítaný DC zdroj 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:95
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:156
@@ -10199,9 +10189,8 @@ msgid "Increment step:"
 msgstr "Krok přírůstku:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:154
-#, fuzzy
 msgid "DC Sweep Source 2"
-msgstr "Rozmítaný"
+msgstr "Rozmítaný DC zdroj 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:217
 msgid "DC Transfer"
@@ -10599,9 +10588,8 @@ msgid "Fall delay time:"
 msgstr "Čas zpoždění:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:592
-#, fuzzy
 msgid "Fall time constant:"
-msgstr "Časové konstanta sestupu:"
+msgstr "Sestupná časová konstanta:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:607
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
@@ -10869,9 +10857,8 @@ msgstr "Alternativní přiřazení vývodů"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:521
-#, fuzzy
 msgid "Library link:"
-msgstr "Knihovna:"
+msgstr "Odkaz na knihovnu:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:315
 msgid "Spice Model..."
@@ -10994,7 +10981,6 @@ msgid "Failed to create backup folder \"%s\"\n"
 msgstr "Nepodařilo se vytvoření složky zálohy \"%s\"\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:490
-#, fuzzy
 msgid "Some of the project files could not be backed up."
 msgstr "Některé soubory projektu nelze zálohovat."
 
@@ -11014,10 +11000,11 @@ msgstr "Aktualizace schématu"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:32
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
-#, fuzzy
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "Uložit přiřazení pouzdra v polích pouzdra symbolu schématu"
+msgstr ""
+"Opětovné propojení pouzder se symboly schématu na základě jejich označení "
+"referencí"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -11107,9 +11094,8 @@ msgid "Draw selected text items as box"
 msgstr "Kreslení &vybraných položek při přesunu"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
-#, fuzzy
 msgid "Draw selected child items"
-msgstr "Smazat vybranou položku"
+msgstr "Kreslit vybrané podřízené položky"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
@@ -11189,9 +11175,8 @@ msgid "Sheet background:"
 msgstr "Pozadí listu:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
-#, fuzzy
 msgid "Clicking on a pin selects the symbol"
-msgstr "Vybrat další nepropojenou součástku"
+msgstr "Kliknutím na vývod vyberete symbol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:76
 msgid ""
@@ -15611,9 +15596,8 @@ msgid "Align Elements to Grid"
 msgstr "Zarovnat doprava"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "Alias součástky:"
+msgstr "Varování symbolu"
 
 #: eeschema/tools/ee_inspection_tool.cpp:232
 #, fuzzy, c-format
@@ -15653,32 +15637,29 @@ msgstr ""
 "vývodem %s \"%s\" na místě <b>(%.3f, %.3f)</b>v jednotkách %c a %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
-msgstr ""
-"<b>Mimo mřížku vývod %s</b> \"%s\" na pozici <b>(%.3f, %.3f)</b> převedeného."
-"<br>"
+msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> převedeno"
 
 #: eeschema/tools/ee_inspection_tool.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
 "converted"
 msgstr ""
-"<b>Mimo mřížku vývod %s</b> \"%s\" na pozici <b>(%.3f, %.3f)</b>v symbolu %c "
-"převedeného.<br>"
+"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>v symbolu %c "
+"převedeného"
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Mimo mřížku vývod %s</b> \"%s\" na pozici <b>(%.3f, %.3f)</b>.<br>"
+msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
 msgstr ""
-"<b>Mimo mřížku vývod %s</b> \"%s\" na pozici <b>(%.3f, %.3f)</b> v symbolu "
-"%c.<br>"
+"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> v symbolu %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:356
 msgid "No off grid or duplicate pins were found."
@@ -17572,9 +17553,8 @@ msgid "Bitmap DPI:"
 msgstr "Bitmapa DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "Opakovat parametry:"
+msgstr "Opakovat parametry"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -25136,14 +25116,12 @@ msgid "Offset Y:"
 msgstr "Posun Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:172
-#, fuzzy
 msgid "Reset to the current X offset from the reference position."
-msgstr "Přemístit aktuálně zvolený řádek o jednu pozici výš"
+msgstr "Obnovit na aktuální X offset od polohy reference."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
-#, fuzzy
 msgid "Reset to the current Y offset from the reference position."
-msgstr "Přemístit aktuálně zvolený řádek o jednu pozici výš"
+msgstr "Obnovit na aktuální Y offset od polohy reference."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:239
 #, fuzzy
@@ -25707,11 +25685,12 @@ msgid "Add footprints with pads unlocked"
 msgstr "Knihovny pouzder"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, the pads will be freely "
 "moveable."
-msgstr "Neuzamčená pouzdra uvnitř desky budou přesunuta. OK?"
+msgstr ""
+"Pokud je zaškrtnuto, po přidání pouzdra na desku budou plošky volně "
+"pohyblivé."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:60
 msgid "&Rotation angle:"
@@ -28500,9 +28479,8 @@ msgid "Items in the imported file could not be handled properly."
 msgstr "Položky v importovaném souboru nelze správně zpracovat."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:343
-#, fuzzy
 msgid "There is no plugin to handle this file type."
-msgstr "Neexistuje žádný zásuvný modul pro zpracování tohoto typu souboru"
+msgstr "Pro tento typ souboru neexistuje žádný plugin."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
@@ -29333,9 +29311,8 @@ msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Automaticky uložený soubor \"%s\" nelze odstranit!"
 
 #: pcbnew/pcb_edit_frame.cpp:1070
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Pouze plocha desky"
+msgstr "Soubor desky je pouze pro čtení."
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 msgid "PCB file changes are unsaved"
@@ -29375,9 +29352,8 @@ msgid "Edit design rules"
 msgstr "Pravidla návrhu"
 
 #: pcbnew/pcb_edit_frame.cpp:1665
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "Nelze otevřít konfigurační soubor"
+msgstr "Nelze sestavit vlastní pravidla návrhu."
 
 #: pcbnew/pcb_edit_frame.cpp:1693
 msgid "Export Hyperlynx Layout"
@@ -29528,9 +29504,9 @@ msgid "File not found: '%s'"
 msgstr "Soubor nebyl nalezen: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicated Netclass name \"%s\""
-msgstr "Duplicitní název třídy spojů \"%s\"."
+msgstr "Duplicitní název třídy spojů \"%s\""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:880
 #: pcbnew/plugins/altium/altium_pcb.cpp:957
@@ -29751,11 +29727,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr "Rozměr ID %s nemá v KiCadu ekvivalent. Nebylo importováno"
+msgstr ""
+"ID kóty %s je šikmá kóta, která nemá v KiCadu ekvivalent. Místo toho byla "
+"načtena zarovnaná kóta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29771,11 +29749,13 @@ msgid "Unexpected Dimension type (ID %s). This was not imported"
 msgstr "Rozměr ID %s nemá v KiCadu ekvivalent. Nebylo importováno"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "Rozměr ID %s nemá v KiCadu ekvivalent. Nebylo importováno"
+msgstr ""
+"ID kóty %s je úhlový rozměr, který nemá v KiCadu ekvivalent. Objekt nebyl "
+"importován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
@@ -29990,9 +29970,8 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
-#, fuzzy
 msgid "Could not read file "
-msgstr "Nelze vytvořit soubor \"%s\""
+msgstr "Nepodařilo se přečíst soubor "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
@@ -30034,9 +30013,9 @@ msgid "Expecting pad size values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "Neplatná velikost stránky"
+msgstr "Neplatná velikost plošky na řádku %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
@@ -30044,9 +30023,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name %s at line %zu"
-msgstr "Neznámý typ listu \"%s\" na řádku:%d"
+msgstr "Neznámý název tvaru plošky %s na řádku %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:871
 #, c-format
@@ -31356,9 +31335,8 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:90
-#, fuzzy
 msgid "Special Tools"
-msgstr "Speciální nástroje..."
+msgstr "Speciální nástroje"
 
 #: pcbnew/tools/edit_tool.cpp:373
 #, fuzzy
@@ -32654,9 +32632,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Constraints Resolution..."
-msgstr "Izolační mezera porušení"
+msgstr "Rozlišení omezení..."
 
 #: pcbnew/tools/pcb_actions.cpp:1048
 #, fuzzy
@@ -32954,9 +32931,8 @@ msgid "Footprint Name"
 msgstr "Název pouzdra"
 
 #: pcbnew/tools/pcb_point_editor.cpp:111
-#, fuzzy
 msgid "Self-intersecting polygons are not allowed."
-msgstr "Protínající se polygony nejsou povoleny"
+msgstr "Protínající se polygony nejsou povoleny."
 
 #: pcbnew/tools/pcb_point_editor.cpp:542
 msgid "Drag a corner"
