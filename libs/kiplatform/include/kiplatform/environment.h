@@ -43,5 +43,15 @@ namespace KIPLATFORM
          * @return true if given path is on a network location
          */
         bool IsNetworkPath( const wxString& aPath );
+
+
+        /**
+         * Retrieves the operating system specific path for a given path type
+         *
+         * @param aType is the type of path
+         *
+         * @return Path for the given aPath
+         */
+        wxString GetDocumentsDir();
     }
 }

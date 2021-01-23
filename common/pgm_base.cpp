@@ -52,9 +52,11 @@
 #include <gestfich.h>
 #include <hotkeys_basic.h>
 #include <id.h>
+#include <kiplatform/environment.h>
 #include <lockfile.h>
 #include <macros.h>
 #include <menus_helpers.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -402,9 +404,7 @@ bool PGM_BASE::InitPgm()
     else
     {
         // Default user template path.
-        tmpFileName.AssignDir( wxStandardPaths::Get().GetDocumentsDir() );
-        tmpFileName.AppendDir( "kicad" );
-        tmpFileName.AppendDir( "template" );
+        tmpFileName.AssignDir( PATHS::GetUserTemplatesPath() );
         envVarItem.SetDefinedExternally( false );
     }
 

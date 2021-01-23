@@ -37,8 +37,11 @@
 #include <trace_helpers.h>
 #include <kicad_string.h>
 
+#include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+
+#include <kiplatform/environment.h>
 
 #include <wx/app.h>
 
@@ -669,7 +672,7 @@ wxString PyScriptingPath( bool aUserPath )
     //@todo This should this be a user configurable variable eg KISCRIPT?
     if( aUserPath )
     {
-        path = SETTINGS_MANAGER::GetUserSettingsPath() + wxT( "/scripting" );
+        path = PATHS::GetUserScriptingPath();
     }
     else
     {

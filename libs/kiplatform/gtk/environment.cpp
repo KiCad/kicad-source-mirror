@@ -45,3 +45,9 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
     // placeholder, we "nerf" behavior if its a network path so return false by default
     return false;
 }
+
+
+wxString KIPLATFORM::ENV::GetDocumentsDir()
+{
+    return wxStandardPaths::Get().GetDocumentsDir();
+}

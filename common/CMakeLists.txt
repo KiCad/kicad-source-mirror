@@ -367,6 +367,7 @@ set( COMMON_SRCS
     netclass.cpp
     observable.cpp
     origin_transforms.cpp
+    paths.cpp
     printout.cpp
     project.cpp
     properties.cpp

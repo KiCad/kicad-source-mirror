@@ -20,6 +20,8 @@
 
 #include <kiplatform/environment.h>
 #include <wx/intl.h>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 #include <wx/string.h>
 
 #include <Windows.h>
@@ -55,4 +57,10 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 {
     return ::PathIsNetworkPathW( aPath.wc_str() );
+}
+
+
+wxString KIPLATFORM::ENV::GetDocumentsDir()
+{
+    return wxStandardPaths::Get().GetDocumentsDir();
 }
