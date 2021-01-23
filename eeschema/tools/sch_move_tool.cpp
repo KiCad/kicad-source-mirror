@@ -602,7 +602,13 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             {
                 // Add a new wire between the component or junction and the selected item so
                 // the selected item can be dragged.
-                SCH_LINE* newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                SCH_LINE* newWire = nullptr;
+
+                if( test->GetLayer() == LAYER_BUS_JUNCTION )
+                    newWire = new SCH_LINE( aPoint, LAYER_BUS );
+                else
+                    newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
