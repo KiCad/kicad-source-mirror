@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-18 09:49-0800\n"
-"PO-Revision-Date: 2021-01-12 12:54+0000\n"
+"PO-Revision-Date: 2021-01-24 22:54+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -185,7 +185,7 @@ msgstr "Tworzenie BVH dla otworów i przelotek"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:412
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1,5"
+msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
 #, c-format
@@ -7835,9 +7835,8 @@ msgid "Update/reset field positions"
 msgstr "Uaktualnij/zresetuj pozycje pól"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Uaktualnij/zresetuj atrybuty fabrykacji"
+msgstr "Uaktualnij/zresetuj atrybuty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -8150,7 +8149,6 @@ msgid "Show Annotation dialog"
 msgstr "Pokazuje okno dialogowe numeracji"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
-#, fuzzy
 msgid "Annotation is incomplete. ERC cannot be run."
 msgstr "Numeracja nie jest kompletna. Nie można uruchomić ERC."
 
@@ -12046,9 +12044,8 @@ msgstr ""
 "KiCad."
 
 #: eeschema/files-io.cpp:566
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "Schemat \"%s\" jest już otwarty."
+msgstr "Plik schematu jest tylko do odczytu."
 
 #: eeschema/files-io.cpp:591
 msgid "Append Schematic"
@@ -14517,7 +14514,6 @@ msgid "Replace library table entry"
 msgstr "Zamień wpis w tabeli bibliotek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
-#, fuzzy
 msgid ""
 "Replace symbol library table entry with new library.\n"
 "\n"
@@ -15872,76 +15868,71 @@ msgid "Align Elements to Grid"
 msgstr "Wyrównaj elementy do siatki"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "Biblioteki symboli"
+msgstr "Ostrzeżenia symboli"
 
 #: eeschema/tools/ee_inspection_tool.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> of converted"
 msgstr ""
-"<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w "
-"konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b> w symbolu "
-"skonwertowanym"
+"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w symbolu skonwertowanym"
 
 #: eeschema/tools/ee_inspection_tool.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
 msgstr ""
-"<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w "
-"konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b> w jednostce %c "
-"oraz skonwertowanej %c"
+"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostce %c oraz "
+"skonwertowanej %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w "
-"konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
+"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
 msgstr ""
-"<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w "
-"konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b> w jednostkach %c "
-"oraz %c"
+"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostkach %c oraz %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
 msgstr ""
-"<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> w symbolu "
-"skonwertowanym.<br>"
+"<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"skonwertowanym"
 
 #: eeschema/tools/ee_inspection_tool.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
 "converted"
 msgstr ""
-"<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
-"skonwertowanym.<br>"
+"<b>Pin poza siatką %s</b>%sna pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
+"skonwertowanym"
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b>.<br>"
+msgstr "<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
-msgstr ""
-"<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> w symbolu %c."
-"<br>"
+msgstr "<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:356
 msgid "No off grid or duplicate pins were found."
@@ -17777,7 +17768,6 @@ msgid "Text height:"
 msgstr "Wysokość tekstu:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
 msgstr "Maksymalna szerokość:"
 
@@ -17787,7 +17777,6 @@ msgid "Set to 0 to disable this constraint"
 msgstr "Ustaw 0 by wyłączyć tą restrykcję"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Max height:"
 msgstr "Maksymalna wysokość:"
 
@@ -17823,9 +17812,8 @@ msgid "Bitmap DPI:"
 msgstr "Rozdzielczość DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "Parametry regulatora"
+msgstr "Powtarzanie parametrów"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -17839,15 +17827,15 @@ msgstr "Skok tekstu:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
+"Liczba znaków lub cyfr o które ma zmieniać się tekst przy każdym powtórzeniu."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Skok Y:"
+msgstr "Skok X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "Przesunięcie w osi X przy każdym powtórzeniu."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
@@ -17855,7 +17843,7 @@ msgstr "Skok Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "Przesunięcie w osi Y przy każdym powtórzeniu."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -17962,9 +17950,8 @@ msgid "Unable to create \"%s\""
 msgstr "Nie można utworzyć \"%s\""
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "Biblioteka \"%s\" jest tylko do odczytu."
+msgstr "Plik z układem strony jest tylko do odczytu."
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -20701,7 +20688,7 @@ msgstr "Zdefiniowane rozmiary"
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
 #: pcbnew/pcb_edit_frame.cpp:1659
 msgid "Custom Rules"
-msgstr "Zasady własne"
+msgstr "Reguły użytkownika"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:148
 #, c-format
@@ -21823,7 +21810,6 @@ msgid "Rules"
 msgstr "Reguły"
 
 #: pcbnew/dialogs/dialog_drc.cpp:215
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr "DRC jest niekompletne: nie można skompilować reguł projektowych.  "
 
@@ -26033,15 +26019,16 @@ msgid "Flip board items L/R (default is T/B)"
 msgstr "Przerzucaj elementy na płytce Lewo/Prawo (domyślnie Góra/Dół)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:49
-#, fuzzy
 msgid "Add footprints with pads unlocked"
-msgstr "Dodaje filtr footprintów"
+msgstr "Dodaj footrinty z odblokowanymi polami"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
 msgid ""
 "If checked, when a footprint is added to the board, the pads will be freely "
 "moveable."
 msgstr ""
+"Jeśli zaznaczone, to podczas dodawania footprintu na płytkę pola lutownicze "
+"będzie można przesuwać."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:60
 msgid "&Rotation angle:"
@@ -27230,6 +27217,8 @@ msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Minimalny odstęp pomiędzy otwarciami na soldermasce.  Otwarcia znajdujące "
+"się bliżej niż określony odstęp będą traktowane jako jedno otwarcie."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -27267,7 +27256,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Dodatkowy prześwit jako procent rozmiaru pola."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid ""
@@ -28283,7 +28272,6 @@ msgid "noname"
 msgstr "bez_nazwy"
 
 #: pcbnew/files.cpp:518
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -29654,9 +29642,8 @@ msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Plik autozapisu \"%s\" nie może zostać usunięty!"
 
 #: pcbnew/pcb_edit_frame.cpp:1070
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Tylko obszar płytki"
+msgstr "Plik z płytką jest tylko do odczytu."
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 msgid "PCB file changes are unsaved"
@@ -29690,14 +29677,12 @@ msgid "Eeschema failed to load:\n"
 msgstr "Eeschema nie może załadować:\n"
 
 #: pcbnew/pcb_edit_frame.cpp:1653
-#, fuzzy
 msgid "Edit design rules"
-msgstr "Reguły projektowe"
+msgstr "Edycja reguł projektowych"
 
 #: pcbnew/pcb_edit_frame.cpp:1665
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC jest niekompletne: nie można skompilować reguł projektowych.  "
+msgstr "Nie można skompilować reguł projektowych."
 
 #: pcbnew/pcb_edit_frame.cpp:1693
 msgid "Export Hyperlynx Layout"
@@ -30441,23 +30426,25 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoruję okrąg, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
-#, fuzzy
 msgid "Could not read file "
-msgstr "Nie można utworzyć pliku \"%s\"."
+msgstr "Nie można odczytać pliku "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
+"Nieprawidłowy rozmiar wiersza w wierszu J %zu.  Spodziewano się 11 "
+"elementów, jednak znaleziono %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
 msgstr ""
+"Nie można znaleźć jednostki dla tej wartości, będzie potraktowana jako milsy"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s"
-msgstr "Nie można odnaleźć pliku biblioteki %s"
+msgstr "Nie można odnaleźć etykiety kolumny %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:297
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:378
@@ -30473,68 +30460,81 @@ msgstr "Nie można odnaleźć pliku biblioteki %s"
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
 msgstr ""
+"Nieprawidłowy rozmiar wiersza w wierszu %zu.  Spodziewano się %zu elementów, "
+"jednak znaleziono %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:428
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
 msgstr ""
+"Spodziewano się wartości rozmiaru wiercenia, jednakże znaleziono %s!%s!%s w "
+"linii %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:474
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
 msgstr ""
+"Spodziewano się wartości rozmiaru padu, jednak znaleziono %s : %s w linii %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "Nieprawidłowy rozmiar %lld: za duży"
+msgstr "Nieprawidłowy rozmiar pola w linii %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr ""
+"Spodziewano się wartości przesunięcia pól, jednak znaleziono %s : %s w linii "
+"%zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name %s at line %zu"
-msgstr "Nieznany typ arkusza \"%s\" w linii:%d"
+msgstr "Nieznany kształt pola %s w linii %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:871
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
 msgstr ""
+"Nieprawidłowy format dla ciągu identyfikatora \"%s\" w niestandardowym "
+"rzędzie padów %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:908
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
-msgstr ""
+msgstr "Nierozpoznany prymityw w kształcie pola \"%s\" w linii %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr ""
+msgstr "Nieprawidłowa liczba tokenów. Oczekiwano 8, ale znaleziono %z u"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1141
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Geometric definition row %zu"
 msgstr ""
+"Nieprawidłowy format ciągu 'record_tag' \"%s\" w wierszu definicji "
+"geometrycznej %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1151
 #, c-format
 msgid "Invalid graphic item in Geometric definition row %zu"
-msgstr ""
+msgstr "Nieprawidłowy element graficzny w wierszu definicji geometrycznej %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1313
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Traces definition row %zu"
 msgstr ""
+"Nieprawidłowy format ciągu 'record_tag' \"%s\" w wierszu definicji 'Traces' "
+"%zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1323
 #, c-format
 msgid "Invalid graphic item in Traces definition row %zu"
-msgstr ""
+msgstr "Nieprawidłowy element graficzny w wierszu definicji 'Traces' %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1359
@@ -30542,11 +30542,15 @@ msgstr ""
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
 msgstr ""
+"Zduplikowany element dla ID %d i sekwencji %d w wierszu definicji 'Traces' "
+"%zu \n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2268
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
+"Spodziewano się, iż dane trawienia występują na warstwie miedzi. Wiersz "
+"znaleziony na warstwie '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -31436,14 +31440,12 @@ msgid "Insert footprint in board"
 msgstr "Wstaw footprint na płytkę"
 
 #: pcbnew/toolbars_pcb_editor.cpp:510
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Automatyczna szerokość ścieżki: gdy zaczynasz na istniejącej ścieżce użyj "
-"jej szerokości,\n"
-" w przeciwnym wypadku użyj bieżących ustawień szerokości"
+"Gdy rozpoczęto trasowanie na istniejącej ścieżce użyj jej szerokości zamiast "
+"bieżących ustawień szerokości"
 
 #: pcbnew/toolbars_pcb_editor.cpp:580
 msgid "Track: use netclass width"
@@ -31586,7 +31588,6 @@ msgstr "Prześwit: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:559
 #: pcbnew/tools/board_inspection_tool.cpp:597
 #: pcbnew/tools/board_inspection_tool.cpp:626
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Raport niekompletny: nie można skompilować reguł projektowych.  "
 
@@ -33972,11 +33973,11 @@ msgstr "Nazwa ustawienia warstwy:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2283
 msgid "Save Layer Preset"
-msgstr "Zapisuje ustawienia warstwy"
+msgstr "Zapisuje ustawienia warstw"
 
 #: pcbnew/widgets/appearance_controls.cpp:2318
 msgid "Presets"
-msgstr "Ustawienia"
+msgstr "Ustawienia wstępne"
 
 #: pcbnew/widgets/appearance_controls.cpp:2330
 msgid "Delete Preset"
@@ -34089,7 +34090,7 @@ msgstr "Bez pól miedzi"
 
 #: pcbnew/zone.cpp:579
 msgid "No footprints"
-msgstr "Brak footprintów"
+msgstr "Bez footprintów"
 
 #: pcbnew/zone.cpp:582
 msgid "Restrictions"
@@ -34118,12 +34119,12 @@ msgstr "Linie kreskowe"
 
 #: pcbnew/zone.cpp:659
 msgid "Corner Count"
-msgstr "Liczba Wierzchołków"
+msgstr "Liczba wierzchołków"
 
 #: pcbnew/zone.cpp:872
 #, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "Reguła Obszaru odciętego na %s"
+msgstr "Odcięta strefa z regułami na %s"
 
 #: pcbnew/zone.cpp:874
 #, c-format
@@ -34133,7 +34134,7 @@ msgstr "Strefa odcięta na %s"
 #: pcbnew/zone.cpp:879
 #, c-format
 msgid "Rule Area on %s"
-msgstr "Reguła Obszaru na %s"
+msgstr "Strefa z regułami na %s"
 
 #: pcbnew/zone.cpp:881
 #, c-format
@@ -34190,14 +34191,13 @@ msgstr "[INFO] Wczytywanie nie powiodło się: wprowadzona linia jest za długa\
 
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
-#, fuzzy
 msgid "KiCad"
-msgstr "Zamknij KiCad"
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Suite"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
@@ -34205,103 +34205,89 @@ msgid ""
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
 msgstr ""
+"KiCad to wieloplatformowy i otwartoźródłowy pakiet do wspomagania "
+"projektowania elektroniki. Program posiada narzędzia do tworzenia schematów "
+"oraz obwodów drukowanych z obsług plików wynikowych w formacie Gerber."
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
-#, fuzzy
 msgid "Eeschema Schematic Editor"
-msgstr "Przełącz na edytor schematów"
+msgstr "Edytor Schematów Eeschema"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
-#, fuzzy
 msgid "PcbNew PCB Layout"
-msgstr "Układ plików Gerber"
+msgstr "Edytor obwodów drukowanych Pcbnew"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
 msgid "PcbNew 3D Viewer"
-msgstr "Podgląd 3D"
+msgstr "Przeglądarka 3D programu Pcbnew"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
 msgid "The KiCad Developers"
 msgstr "Twórcy oprogramowania"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "Tworzy komponent z mapy bitowej by można go było użyć w programie KiCad"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
-#, fuzzy
 msgid "Eeschema (Standalone)"
-msgstr "Eeschema (plik .lib)"
+msgstr "Eeschema (Tryb standalone)"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
-#, fuzzy
 msgid "Electronic schematic capture"
-msgstr "Pliki schematu programu Altium"
+msgstr "Edytor schematów elektronicznych"
 
 #: resources/linux/launchers/eeschema.desktop.in:12
-#, fuzzy
 msgid "KiCad electronic schematic design (standalone)"
-msgstr "Pliki schematu starszych wersji programu KiCad"
+msgstr "Schemat programu KiCad (tryb standalone)"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Pliki Gerber"
+msgstr "Przeglądarka plików Gerber"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
-msgstr "Przeglądaj pliki Gerber"
+msgstr "Przeglądanie plików Gerber"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr ""
+msgstr "Pakiet Electronic Design Automation"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Kalkulator do różnych obliczeń związanych z elektroniką"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
-#, fuzzy
 msgid "Pcbnew (Standalone)"
-msgstr "Format S-expression Pcbnew (.kicad_mod)"
+msgstr "Pcbnew (Tryb standalone)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout"
-msgstr "Układ"
+msgstr "Obwód drukowany (PCB)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
-#, fuzzy
 msgid "KiCad printed circuit board layout (standalone)"
-msgstr "Pliki obwodu drukowanego programu KiCad"
+msgstr "Obwód drukowany programu KiCad (tryb standalone)"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
-msgstr "Pliki Gerber"
+msgstr "Plik Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Tworzenie plików wierceń w formacie Excellon"
+msgstr "Plik wierceń Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "Plik projektu KiCad"
+msgstr "Projekt KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Edytuj schemat"
+msgstr "Schemat KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "Pliki obwodu drukowanego programu KiCad"
+msgstr "Obwód drukowany KiCad"
 
 #, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
