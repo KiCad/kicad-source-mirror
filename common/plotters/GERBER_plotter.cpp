@@ -52,6 +52,13 @@
 #define GBR_USE_MACROS_FOR_TRAPEZOID
 #define GBR_USE_MACROS_FOR_ROTATED_OVAL
 #define GBR_USE_MACROS_FOR_ROTATED_RECT
+//#define GBR_USE_MACROS_FOR_CUSTOM_PAD     // work in progress
+
+// max count of corners to create a aperture macro for a custom shape.
+// provided just in case a aperture macro type free polygon creates issues
+// when the number of corners is too high.
+// (1 corner = up to 24 chars)
+#define GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT 100000
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
@@ -690,6 +697,10 @@ void GERBER_PLOTTER::writeApertureList()
                 fprintf( m_outputFile, "%%%s%d*\n", "AMFp", tool.m_DCode );
                 fprintf( m_outputFile, "4,1,%d,", (int)tool.m_Corners.size() );
 
+                // Insert a newline after curr_line_count_max coordiantes.
+                int curr_line_corner_count = 0;
+                const int curr_line_count_max = 50;     // <= 0 to disable newlines
+
                 for( size_t ii = 0; ii <= tool.m_Corners.size(); ii++ )
                 {
                     int jj = ii;
@@ -697,8 +708,14 @@ void GERBER_PLOTTER::writeApertureList()
                     if( ii >= tool.m_Corners.size() )
                         jj = 0;
 
-                fprintf( m_outputFile, "%#f,%#f,",
-                         tool.m_Corners[jj].x * fscale, -tool.m_Corners[jj].y * fscale );
+                    fprintf( m_outputFile, "%#f,%#f,",
+                             tool.m_Corners[jj].x * fscale, -tool.m_Corners[jj].y * fscale );
+                    if( curr_line_count_max >= 0
+                            && ++curr_line_corner_count >= curr_line_count_max )
+                    {
+                        fprintf( m_outputFile, "\n" );
+                        curr_line_corner_count = 0;
+                    }
                 }
                 // output rotation parameter
                 fputs( "$1*%\n", m_outputFile );
@@ -1428,7 +1445,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
 
 
 void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                     SHAPE_POLY_SET* aPolygons,
+                                     double aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 
 {
@@ -1463,7 +1480,32 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         if( aTraceMode == SKETCH )
             PlotPoly( cornerList, FILL_TYPE::NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
         else
+        {
+#ifdef GBR_USE_MACROS_FOR_CUSTOM_PAD
+            if( m_gerberDisableApertMacros
+                    || cornerList.size() > GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT )
+                PlotGerberRegion( cornerList, &gbr_metadata );
+            else
+            {
+               // An AM will be created. the shape must be in position 0,0 and orientation 0
+                // to be able to reuse the same AM for pads having the same shape
+                for( size_t ii = 0; ii < cornerList.size(); ii++ )
+                {
+                    cornerList[ii] -= aPadPos;
+                    RotatePoint( &cornerList[ii], -aOrient );
+                }
+
+                DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+                selectAperture( cornerList, aOrient/10.0,
+                                APERTURE::AM_FREE_POLYGON, gbr_metadata.GetApertureAttrib() );
+                formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
+
+                emitDcode( pos_dev, 3 );
+            }
+#else
             PlotGerberRegion( cornerList, &gbr_metadata );
+#endif
+        }
     }
 }
 

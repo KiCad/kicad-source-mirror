@@ -277,8 +277,8 @@ void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMod
 
         if( polygons->OutlineCount() )
         {
-            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), polygons.get(), aPlotMode,
-                                       &gbr_metadata );
+            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), aPad->GetOrientation(),
+                                       polygons.get(), aPlotMode, &gbr_metadata );
         }
     }
         break;
@@ -1015,7 +1015,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
     /* If small drills marks were requested prepare a clamp value to pass
        to the helper function */
-    int smallDrill = GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE 
+    int smallDrill = GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE
                     ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) : 0;
 
     /* In the filled trace mode drill marks are drawn white-on-black to scrape

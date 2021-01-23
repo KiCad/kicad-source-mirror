@@ -118,35 +118,19 @@ public:
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  OUTLINE_MODE trace_mode, void* aData ) override;
 
-    /**
-     * Filled oval flashes are handled as aperture in the 90 degree positions only
-     */
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
+    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& size, double orient,
                                OUTLINE_MODE trace_mode, void* aData ) override;
-    /**
-     * Filled rect flashes are handled as aperture in the 0 90 180 or 270 degree orientation only
-     * and as polygon for other orientations
-     * TODO: always use flashed shapes (aperture macros)
-     */
-    virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
+
+    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& size,
                                double orient, OUTLINE_MODE trace_mode, void* aData ) override;
 
-    /**
-     * Roundrect pad at the moment are not handled as aperture, since
-     * they require aperture macros
-     * TODO: always use flashed shapes (aperture macros)
-     */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                 SHAPE_POLY_SET* aPolygons,
+                                 double aPadOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
-    /**
-     * Trapezoidal pad at the moment are *never* handled as aperture, since
-     * they require aperture macros
-     * TODO: always use flashed shapes (aperture macros)
-     */
+
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                             double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 

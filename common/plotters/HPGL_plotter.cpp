@@ -797,7 +797,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
 }
 
 void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                   SHAPE_POLY_SET* aPolygons,
+                                   double aOrient, SHAPE_POLY_SET* aPolygons,
                                    OUTLINE_MODE aTraceMode, void* aData )
 {
     std::vector< wxPoint > cornerList;

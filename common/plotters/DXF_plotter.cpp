@@ -795,8 +795,8 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
 }
 
 void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                   SHAPE_POLY_SET* aPolygons,
-                                   OUTLINE_MODE aTraceMode, void* aData )
+                                  double aOrient, SHAPE_POLY_SET* aPolygons,
+                                  OUTLINE_MODE aTraceMode, void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
