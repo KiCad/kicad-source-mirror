@@ -32,6 +32,7 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <panel_hotkeys_editor.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
@@ -98,7 +99,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         m_isNonUserClose( false )
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
-    m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
+    m_mruPath       = PATHS::GetDefaultUserProjectsPath();
     m_frameSize     = wxSize( s_defaultSize_x, s_defaultSize_y );
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
