@@ -138,5 +138,5 @@
     (net (code "5") (name "LIVE")
       (node (ref "J1") (pin "1") (pinfunction "Pin_1"))
       (node (ref "R2") (pin "2")))
-    (net (code "6") (name "no_connect_(J1-Pad3)")
+    (net (code "6") (name "unconnected-(J1-Pad3)")
       (node (ref "J1") (pin "3") (pinfunction "Pin_3")))))
