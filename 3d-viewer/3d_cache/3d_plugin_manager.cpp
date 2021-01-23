@@ -169,7 +169,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
    checkPluginPath( GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
 
    // (3) Bundle   kicad.app/Contents/PlugIns/3d
-   fn.AssignDir( PATHS::GetStockPluginsPath() );
+   fn.AssignDir( PATHS::GetStockPlugins3DPath() );
    checkPluginPath( fn.GetPathWithSep(), searchpaths );
 
 #endif
