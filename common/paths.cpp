@@ -17,6 +17,7 @@ wxString PATHS::GetUserScriptingPath()
     return tmp.GetFullPath();
 }
 
+
 wxString PATHS::GetUserTemplatesPath()
 {
     wxFileName tmp;
@@ -25,6 +26,19 @@ wxString PATHS::GetUserTemplatesPath()
     tmp.AppendDir( "kicad" );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "templates" );
+
+    return tmp.GetFullPath();
+}
+
+
+wxString PATHS::GetDefaultUserProjectsPath()
+{
+    wxFileName tmp;
+
+    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
+    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
+    tmp.AppendDir( "projects" );
 
     return tmp.GetFullPath();
 }

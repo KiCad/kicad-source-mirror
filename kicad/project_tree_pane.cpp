@@ -38,6 +38,7 @@
 #include <wildcards_and_files_ext.h>
 #include <kiplatform/environment.h>
 #include <core/kicad_algo.h>
+#include <paths.h>
 
 #include "project_tree_item.h"
 #include "project_tree.h"
@@ -201,7 +202,7 @@ void PROJECT_TREE_PANE::onOpenDirectory( wxCommandEvent& event )
 
             // As a last resort use the user's documents folder.
             if( curr_dir.IsEmpty() || !wxFileName::DirExists( curr_dir ) )
-                curr_dir = wxStandardPaths::Get().GetDocumentsDir();
+                curr_dir = PATHS::GetDefaultUserProjectsPath();
 
             if( !curr_dir.IsEmpty() )
                 curr_dir += wxFileName::GetPathSeparator();
@@ -540,7 +541,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     if( !fn.IsOk() )
     {
         fn.Clear();
-        fn.SetPath( wxStandardPaths::Get().GetDocumentsDir() );
+        fn.SetPath( PATHS::GetDefaultUserProjectsPath() );
         fn.SetName( NAMELESS_PROJECT );
         fn.SetExt( ProjectFileExtension );
         prjReset = true;

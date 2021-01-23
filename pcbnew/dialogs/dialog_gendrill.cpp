@@ -34,6 +34,7 @@
 #include <board.h>
 #include <track.h>
 #include <footprint.h>
+#include <paths.h>
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
@@ -422,7 +423,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     defaultPath = Prj().AbsolutePath( defaultPath );
 
     if( defaultPath.IsEmpty() )
-        defaultPath = wxStandardPaths::Get().GetDocumentsDir();
+        defaultPath = PATHS::GetDefaultUserProjectsPath();
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath, fn.GetFullName(),
                       ReportFileWildcard(), wxFD_SAVE );

@@ -49,6 +49,7 @@
 #include <wx/wupdlock.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <paths.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
@@ -167,7 +168,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     }
     else
     {
-        path = wxStandardPaths::Get().GetDocumentsDir();
+        path = PATHS::GetDefaultUserProjectsPath();
         // leave name empty
     }
 
@@ -419,7 +420,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 savePath = GetMruPath();
 
                 if( !savePath.IsOk() || !savePath.IsDirWritable() )
-                    savePath = wxStandardPaths::Get().GetDocumentsDir();
+                    savePath = PATHS::GetDefaultUserProjectsPath();
             }
 
             wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
@@ -1040,7 +1041,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
 
     if( GetBoard()->GetFileName().IsEmpty() )
     {
-        tmpFileName = wxFileName( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
+        tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), wxT( "noname" ),
                                   KiCadPcbFileExtension );
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
     }

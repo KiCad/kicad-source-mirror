@@ -7,6 +7,7 @@ class PATHS
 public:
     static wxString GetUserScriptingPath();
     static wxString GetUserTemplatesPath();
+    static wxString GetDefaultUserProjectsPath();
 };
 
 #endif

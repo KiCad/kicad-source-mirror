@@ -60,6 +60,7 @@
 #include <wx/ffile.h>
 #include <wx/stdpaths.h>
 #include <tools/ee_inspection_tool.h>
+#include <paths.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
 {
@@ -90,7 +91,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             savePath = GetMruPath();
 
             if( !savePath.IsOk() || !savePath.IsDirWritable() )
-                savePath = wxStandardPaths::Get().GetDocumentsDir();
+                savePath = PATHS::GetDefaultUserProjectsPath();
         }
 
         wxFileDialog dlg( this, _( "Schematic Files" ), savePath.GetPath(),
