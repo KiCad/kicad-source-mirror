@@ -1082,27 +1082,6 @@ bool DRC_ENGINE::ReportPhase( const wxString& aMessage )
 }
 
 
-#if 0
-DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_T ruleID )
-{
-    DRC_CONSTRAINT rv;
-
-    rv.m_Value.SetMin( std::numeric_limits<int>::max() );
-    rv.m_Value.SetMax( std::numeric_limits<int>::min() );
-    for( auto rule : QueryRulesById( ruleID ) )
-    {
-        auto mm = rule->GetConstraint().m_Value;
-        if( mm.HasMax() )
-            rv.m_Value.SetMax( std::max( mm.Max(), rv.m_Value.Max() ) );
-        if( mm.HasMin() )
-            rv.m_Value.SetMin( std::min( mm.Min(), rv.m_Value.Min() ) );
-    }
-
-    return rv;
-}
-#endif
-
-
 bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 {
     //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );

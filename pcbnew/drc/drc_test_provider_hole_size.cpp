@@ -134,8 +134,6 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
     bool fail_max = false;
     int  constraintValue;
 
-    accountCheck( constraint );
-
     if( constraint.Value().HasMin() && holeMinor < constraint.Value().Min() )
     {
         fail_min        = true;
@@ -199,8 +197,6 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
     bool fail_min = false;
     bool fail_max = false;
     int  constraintValue;
-
-    accountCheck( constraint );
 
     if( constraint.Value().HasMin() && via->GetDrillValue() < constraint.Value().Min() )
     {

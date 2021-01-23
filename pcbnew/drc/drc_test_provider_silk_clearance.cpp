@@ -140,10 +140,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
                     return false;
 
-                if ( isInvisibleText( aRefItem->parent ) )
-                    return true;
-
-                if ( isInvisibleText( aTestItem->parent ) )
+                if( isInvisibleText( aRefItem->parent ) || isInvisibleText( aTestItem->parent ) )
                     return true;
 
                 auto constraint = m_drcEngine->EvalRulesForItems( SILK_CLEARANCE_CONSTRAINT,
@@ -154,11 +151,13 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 if( constraint.IsNull() )
                     return true;
 
-                int      minClearance = constraint.GetValue().Min();
+                int minClearance = constraint.GetValue().Min();
+
+                if( minClearance < 0 )
+                    return true;
+
                 int      actual;
                 VECTOR2I pos;
-
-                accountCheck( constraint );
 
                 // Graphics are often compound shapes so ignore collisions between shapes in a
                 // single footprint or on the board.
@@ -174,27 +173,28 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                         return true;
                 }
 
-                if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
-                    return true;
-
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_SILK );
-
-                if( minClearance > 0 )
+                if( aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                 {
-                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                  constraint.GetParentRule()->m_Name,
-                                  MessageTextFromValue( userUnits(), minClearance ),
-                                  MessageTextFromValue( userUnits(), actual ) );
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_SILK );
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    if( minClearance > 0 )
+                    {
+                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetParentRule()->m_Name,
+                                      MessageTextFromValue( userUnits(), minClearance ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    }
+
+                    drcItem->SetItems( aRefItem->parent, aTestItem->parent );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drcItem, (wxPoint) pos );
+
+                    *aCollisionDetected = true;
                 }
 
-                drcItem->SetItems( aRefItem->parent, aTestItem->parent );
-                drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                reportViolation( drcItem, (wxPoint) pos );
-
-                *aCollisionDetected = true;
                 return true;
             };
 

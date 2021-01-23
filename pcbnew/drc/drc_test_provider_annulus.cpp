@@ -99,8 +99,6 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 bool fail_min = false;
                 bool fail_max = false;
 
-                accountCheck( constraint );
-
                 if( constraint.Value().HasMin() )
                 {
                     v_min = constraint.Value().Min();

@@ -281,9 +281,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     auto constraint = m_drcEngine->EvalRulesForItems( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther );
     int  minClearance = constraint.GetValue().Min();
 
-    accountCheck( constraint.GetParentRule() );
-
-    if( actual < minClearance )
+    if( minClearance >= 0 && actual < minClearance )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 

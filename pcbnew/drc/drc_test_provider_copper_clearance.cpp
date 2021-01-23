@@ -273,7 +273,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool           testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
     DRC_CONSTRAINT constraint;
-    int            clearance;
+    int            clearance = -1;
     int            actual;
     VECTOR2I       pos;
 
@@ -289,9 +289,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     {
         constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, track, other, layer );
         clearance = constraint.GetValue().Min();
+    }
 
-        accountCheck( constraint );
-
+    if( clearance >= 0 )
+    {
         // Special processing for track:track intersections
         if( track->Type() == PCB_TRACE_T && other->Type() == PCB_TRACE_T )
         {
@@ -305,29 +306,32 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drcItem, (wxPoint) intersection.get() );
-                return true;
+
+                return m_drcEngine->GetReportAllTrackErrors();
             }
         }
-
-        std::shared_ptr<SHAPE> otherShape = getShape( other, layer );
-
-        if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
+        else
         {
-            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+            std::shared_ptr<SHAPE> otherShape = getShape( other, layer );
 
-            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                          constraint.GetName(),
-                          MessageTextFromValue( userUnits(), clearance ),
-                          MessageTextFromValue( userUnits(), actual ) );
+            if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
+            {
+                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-            drce->SetItems( track, other );
-            drce->SetViolatingRule( constraint.GetParentRule() );
+                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                              constraint.GetName(),
+                              MessageTextFromValue( userUnits(), clearance ),
+                              MessageTextFromValue( userUnits(), actual ) );
 
-            reportViolation( drce, (wxPoint) pos );
+                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                drce->SetItems( track, other );
+                drce->SetViolatingRule( constraint.GetParentRule() );
 
-            if( !m_drcEngine->GetReportAllTrackErrors() )
-                return false;
+                reportViolation( drce, (wxPoint) pos );
+
+                if( !m_drcEngine->GetReportAllTrackErrors() )
+                    return false;
+            }
         }
     }
 
@@ -356,9 +360,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
             constraint = m_drcEngine->EvalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, other, track );
             clearance = constraint.GetValue().Min();
 
-            accountCheck( constraint.GetParentRule() );
-
-            if( trackShape->Collide( holeShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
+            if( clearance >= 0 && trackShape->Collide( holeShape.get(),
+                                                       std::max( 0, clearance - m_drcEpsilon ),
+                                                       &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -372,6 +376,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
                 reportViolation( drce, (wxPoint) pos );
+
+                if( !m_drcEngine->GetReportAllTrackErrors() )
+                    return false;
             }
         }
     }
@@ -401,7 +408,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
         {
             auto constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, aItem, zone,
                                                               aLayer );
-            int        clearance = constraint.GetValue().Min();
+            int clearance = constraint.GetValue().Min();
+
+            if( clearance < 0 )
+                continue;
+
             int        actual;
             VECTOR2I   pos;
             DRC_RTREE* zoneTree = m_zoneTrees[ zone ].get();
@@ -586,10 +597,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                          otherPad );
             clearance = constraint.GetValue().Min();
 
-            accountCheck( constraint.GetParentRule() );
-
-            if( padShape->Collide( otherPad->GetEffectiveHoleShape(), clearance - m_drcEpsilon,
-                                   &actual, &pos ) )
+            if( clearance >= 0 && padShape->Collide( otherPad->GetEffectiveHoleShape(),
+                                                     std::max( 0, clearance - m_drcEpsilon ),
+                                                     &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -612,10 +622,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                                                          otherPad );
             clearance = constraint.GetValue().Min();
 
-            accountCheck( constraint.GetParentRule() );
-
-            if( otherShape->Collide( pad->GetEffectiveHoleShape(), clearance - m_drcEpsilon,
-                                     &actual, &pos ) )
+            if( clearance >= 0 && otherShape->Collide( pad->GetEffectiveHoleShape(),
+                                                       std::max( 0, clearance - m_drcEpsilon ),
+                                                       &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
 
@@ -645,9 +654,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, pad, other, layer );
         clearance = constraint.GetValue().Min();
 
-        accountCheck( constraint );
-
-        if( padShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
+        if( clearance > 0 && padShape->Collide( otherShape.get(),
+                                                std::max( 0, clearance - m_drcEpsilon ),
+                                                &actual, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
@@ -787,8 +796,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
                     continue;
 
-                // test for different types
-                if( zoneRef->GetIsRuleArea() != zoneToTest->GetIsRuleArea() )
+                // rule areas may overlap at will
+                if( zoneRef->GetIsRuleArea() || zoneToTest->GetIsRuleArea() )
                     continue;
 
                 // Examine a candidate zone: compare zoneToTest to zoneRef
@@ -797,13 +806,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZones()
                 auto constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, zoneRef,
                                                                   zoneToTest );
                 int  zone2zoneClearance = constraint.GetValue().Min();
-
-                accountCheck( constraint );
-
-                // Keepout areas have no clearance, so set zone2zoneClearance to 1
-                // ( zone2zoneClearance = 0  can create problems in test functions)
-                if( zoneRef->GetIsRuleArea() ) // fixme: really?
-                    zone2zoneClearance = 1;
 
                 // test for some corners of zoneRef inside zoneToTest
                 for( auto iterator = smoothed_polys[ia].IterateWithHoles(); iterator; iterator++ )

@@ -91,9 +91,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
     int      actual;
     VECTOR2I pos;
 
-    accountCheck( constraint );
-
-    if( itemShape->Collide( edgeShape.get(), minClearance, &actual, &pos ) )
+    if( minClearance >= 0 && itemShape->Collide( edgeShape.get(), minClearance, &actual, &pos ) )
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( aErrorCode );
 

@@ -122,43 +122,46 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
                     return false;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( SILK_CLEARANCE_CONSTRAINT,
-                                                                  aRefItem->parent,
-                                                                  aTestItem->parent );
-
-                int      minClearance = constraint.GetValue().Min();
-                int      actual;
-                VECTOR2I pos;
-
                 if( isInvisibleText( aRefItem->parent ) )
                     return true;
 
                 if( isInvisibleText( aTestItem->parent ) )
                     return true;
 
-                accountCheck( constraint );
+                auto constraint = m_drcEngine->EvalRulesForItems( SILK_CLEARANCE_CONSTRAINT,
+                                                                  aRefItem->parent,
+                                                                  aTestItem->parent );
 
-                if( !aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
+                int minClearance = constraint.GetValue().Min();
+
+                if( minClearance < 0 )
                     return true;
 
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
+                int      actual;
+                VECTOR2I pos;
 
-                if( minClearance > 0 )
+                if( aRefItem->shape->Collide( aTestItem->shape, minClearance, &actual, &pos ) )
                 {
-                    m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                                  constraint.GetName(),
-                                  MessageTextFromValue( userUnits(), minClearance ),
-                                  MessageTextFromValue( userUnits(), actual ) );
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SILK_MASK_CLEARANCE );
 
-                    drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                    if( minClearance > 0 )
+                    {
+                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), minClearance ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                    }
+
+                    drce->SetItems( aRefItem->parent, aTestItem->parent );
+                    drce->SetViolatingRule( constraint.GetParentRule() );
+
+                    reportViolation( drce, (wxPoint) pos );
+
+                    *aCollisionDetected = true;
                 }
 
-                drcItem->SetItems( aRefItem->parent, aTestItem->parent );
-                drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                reportViolation( drcItem, (wxPoint) pos );
-
-                *aCollisionDetected = true;
                 return true;
             };
 
