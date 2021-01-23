@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib.h>
 #include <gio/gio.h>
 #include <kiplatform/environment.h>
 
@@ -49,5 +50,5 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 
 wxString KIPLATFORM::ENV::GetDocumentsDir()
 {
-    return wxStandardPaths::Get().GetDocumentsDir();
+    return g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
 }
