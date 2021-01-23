@@ -1315,7 +1315,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         std::string componentId;
 
         // find the highest numbered netCode within the board.
-        int highestNetCode = aBoard->GetNetCount() - 1;
+        int           highestNetCode = 0;
+        NETINFO_LIST& netInfo = aBoard->GetNetInfo();
+
+        for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
+            highestNetCode = std::max( highestNetCode, i->GetNetCode() );
 
         deleteNETs();
 
@@ -1325,13 +1329,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         for( unsigned i = 1 /* skip "No Net" at [0] */; i < m_nets.size(); ++i )
             m_nets[i] = new NET( m_pcb->network );
 
-        for( unsigned ii = 0; ii < aBoard->GetNetCount(); ii++ )
+        for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
         {
-            NETINFO_ITEM*   net     = aBoard->FindNet( ii );
-            int             netcode = net->GetNetCode();
-
-            if( netcode > 0 )
-                m_nets[ netcode ]->net_id = TO_UTF8( net->GetNetname() );
+            if( i->GetNetCode() > 0 )
+                m_nets[ i->GetNetCode() ] = new NET( m_pcb->network );
         }
 
         items.Collect( aBoard, scanMODULEs );
