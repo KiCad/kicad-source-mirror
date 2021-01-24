@@ -545,6 +545,8 @@ void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
 {
     m_lostFocus = true;
 
+    m_viewControls->CancelDrag();
+
     aEvent.Skip();
 }
 

@@ -598,6 +598,19 @@ void WX_VIEW_CONTROLS::CaptureCursor( bool aEnabled )
 }
 
 
+void WX_VIEW_CONTROLS::CancelDrag()
+{
+    if( m_state == DRAG_PANNING || m_state == DRAG_ZOOMING )
+    {
+        m_state = IDLE;
+#if defined USE_MOUSE_CAPTURE
+        if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )
+            m_parentPanel->ReleaseMouse();
+#endif
+    }
+}
+
+
 VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 {
     wxPoint msp = getMouseScreenPosition();

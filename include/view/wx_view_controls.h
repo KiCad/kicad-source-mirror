@@ -102,6 +102,9 @@ public:
     ///< Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();
 
+    ///< End any mouse drag action still in progress
+    void CancelDrag();
+
     void ForceCursorPosition( bool aEnabled,
                               const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
 
