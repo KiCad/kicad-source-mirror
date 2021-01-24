@@ -197,7 +197,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             m_te->AutoCompCancel();
             m_suppressAutocomplete = true; // Don't run autocomplete again on the next char...
         }
-        else if( IsOK( m_te->GetParent(), _( "Cancel changes?" ) ) )
+        else
         {
             aEvent.Skip();
         }
