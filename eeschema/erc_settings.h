@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018-2020 CERN
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -64,12 +65,19 @@ enum ERCE_T
     ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
     ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or
                                   ///< the library symbol link no longer valid.
-    ERCE_LAST = ERCE_LIB_SYMBOL_ISSUES,
+    ERCE_UNANNOTATED,             ///< Symbol has not been annotated.
+    ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
+    ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.
+    ERCE_DUPLICATE_REFERENCE,     ///< More than one symbol with the same reference.
+
+    ERCE_LAST = ERCE_DUPLICATE_REFERENCE,
 
     // Errors after this point will not automatically appear in the Severities Panel
 
     ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
     ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
+    ERCE_ANNOTATION_ACTION      // Not actually an error; just an action performed during
+                                // annotation which is passed back through the error handler.
 };
 
 /// The values a pin-to-pin entry in the pin matrix can take on
@@ -165,6 +173,7 @@ private:
 
     static PIN_ERROR m_defaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 };
+
 
 /**
  * An implementation of the RC_ITEM_LIST interface which uses the global SHEETLIST

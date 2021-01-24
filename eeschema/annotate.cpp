@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,11 @@
 
 #include <algorithm>
 
-#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-
+#include <erc_settings.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
 
@@ -243,8 +242,15 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
 
     // Final control (just in case ... ).
-    if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
+    if( !CheckAnnotate(
+            [ &aReporter ]( ERCE_T , const wxString& aMsg, SCH_REFERENCE* , SCH_REFERENCE* )
+            {
+                aReporter.Report( aMsg, RPT_SEVERITY_ERROR );
+            },
+            !aAnnotateSchematic ) )
+    {
         aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
+    }
 
     // Update on screen references, that can be modified by previous calculations:
     GetCurrentSheet().UpdateAllScreenReferences();
@@ -259,7 +265,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 }
 
 
-int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
+int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, bool aOneSheetOnly )
 {
     SCH_REFERENCE_LIST  referenceList;
     constexpr bool      includePowerSymbols = false;
@@ -274,5 +280,5 @@ int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
     if( referenceList.GetCount() == 0 )
         return 0;
 
-    return referenceList.CheckAnnotation( aReporter );
+    return referenceList.CheckAnnotation( aErrorHandler );
 }

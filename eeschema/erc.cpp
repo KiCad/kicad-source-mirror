@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file erc.cpp
- * @brief Electrical Rules Check implementation.
- */
-
 #include "connection_graph.h"
 #include <erc.h>
 #include <kicad_string.h>
@@ -48,23 +43,12 @@
  * output, or a passive pin )
  */
 
-
 /*
  *  Minimal ERC requirements:
  *  All pins *must* be connected (except ELECTRICAL_PINTYPE::PT_NC).
  *  When a pin is not connected in schematic, the user must place a "non
  * connected" symbol to this pin.
  *  This ensures a forgotten connection will be detected.
- */
-
-/* Messages for conflicts :
- *   ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE:PT_:BIDI,
- *   ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_PASSIVE,
- *   ELECTRICAL_PINTYPE::PT_UNSPECIFIED, ELECTRICAL_PINTYPE::PT_POWER_IN,
- *   ELECTRICAL_PINTYPE::PT_POWER_OUT, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
- *   ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
- *
- *  These messages are used to show the ERC matrix in ERC dialog
  */
 
 // Messages for matrix rows:
@@ -75,6 +59,7 @@ const wxString CommentERC_H[] =
     _( "Bidirectional Pin" ),
     _( "Tri-State Pin" ),
     _( "Passive Pin" ),
+    _( "Free Pin" ),
     _( "Unspecified Pin" ),
     _( "Power Input Pin" ),
     _( "Power Output Pin" ),
@@ -91,6 +76,7 @@ const wxString CommentERC_V[] =
     _( "Bidirectional Pin" ),
     _( "Tri-State Pin" ),
     _( "Passive Pin" ),
+    _( "Free Pin" ),
     _( "Unspecified Pin" ),
     _( "Power Input Pin" ),
     _( "Power Output Pin" ),

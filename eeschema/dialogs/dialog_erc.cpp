@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_warningsBadge->SetMaximumNumber( 999 );
     m_exclusionsBadge->SetMaximumNumber( 999 );
 
-    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
     {
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
                                                        _("Show Annotation dialog"),
@@ -102,7 +102,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddButton( button );
-        m_infoBar->ShowMessage( _( "Annotation is incomplete. ERC cannot be run." ) );
+        m_infoBar->ShowMessage( _( "Schematic is not fully annotated. "
+                                   "ERC results will be incomplete." ) );
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -263,24 +264,6 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     SCHEMATIC* sch = &m_parent->Schematic();
 
-    // Build the whole sheet list in hierarchy (sheet, not screen)
-    sch->GetSheets().AnnotatePowerSymbols();
-
-    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
-    {
-        m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
-
-        m_messages->Clear();
-        m_messages->Report( _( "Annotation not complete. ERC cannot be run." )
-                            + wxT( " <a href='annotate'>" )
-                            + _( "Show Annotation dialog." )
-                            + wxT( "</a>" ) );
-
-        m_messages->Flush();
-        m_infoBar->Hide();      // No need for duplicated error messages
-        return;
-    }
-
     m_infoBar->Hide();
 
     m_parent->RecordERCExclusions();
@@ -295,6 +278,22 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_sdbSizer1OK->Enable( false );
     m_buttondelmarkers->Enable( false );
     m_saveReport->Enable( false );
+
+    sch->GetSheets().AnnotatePowerSymbols();
+    m_parent->CheckAnnotate(
+            []( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA, SCH_REFERENCE* aItemB )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aType );
+                ercItem->SetErrorMessage( aMsg );
+
+                if( aItemB )
+                    ercItem->SetItems( aItemA->GetSymbol(), aItemB->GetSymbol() );
+                else
+                    ercItem->SetItems( aItemA->GetSymbol() );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, aItemA->GetSymbol()->GetPosition() );
+                aItemA->GetSheetPath().LastScreen()->Append( marker );
+            } );
 
     testErc();
 
@@ -340,19 +339,6 @@ void DIALOG_ERC::testErc()
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
     sch->GetSheets().AnnotatePowerSymbols();
-
-    if( m_parent->CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
-    {
-        Report( _( "Annotation not complete. ERC cannot be run." )
-                    + wxT( " <a href='annotate'>" )
-                    + _( "Show Annotation dialog." )
-                    + wxT( "</a>" ) );
-
-        m_infoBar->Hide();      // No need for duplicated error messages
-        return;
-    }
-
-    m_infoBar->Hide();
 
     SCH_SCREENS screens( sch->Root() );
     ERC_SETTINGS& settings = sch->ErcSettings();

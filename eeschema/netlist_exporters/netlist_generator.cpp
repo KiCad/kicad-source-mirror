@@ -166,7 +166,7 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
     Schematic().GetSheets().AnnotatePowerSymbols();
 
     // Components must be annotated
-    if( CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+    if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
     {
         if( aSilentAnnotate )
         {
@@ -179,11 +179,12 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
                 return false;
 
             // Schematic must be annotated: call Annotate dialog and tell the user why.
-            ModalAnnotate(
-                    _( "Exporting the netlist requires a completely annotated schematic." ) );
+            ModalAnnotate( _( "Exporting netlist requires a completely annotated schematic." ) );
 
-            if( CheckAnnotate( NULL_REPORTER::GetInstance(), false ) )
+            if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
+            {
                 return false;
+            }
         }
     }
 

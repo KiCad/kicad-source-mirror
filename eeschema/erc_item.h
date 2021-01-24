@@ -94,6 +94,10 @@ private:
     static ERC_ITEM unresolvedVariable;
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;
+    static ERC_ITEM unannotated;
+    static ERC_ITEM extraUnits;
+    static ERC_ITEM differentUnitValue;
+    static ERC_ITEM duplicateReference;
 
     /// True if this item is specific to a sheet instance (as opposed to applying to all instances)
     bool m_sheetSpecific;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see authors.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see authors.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_text.h>
+#include <erc_settings.h>
 
 #include <map>
 
@@ -185,6 +186,13 @@ public:
 
 
 /**
+ * Defines a standard error handler for annotation errors.
+ */
+typedef std::function<void( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA,
+                            SCH_REFERENCE* aItemB )> ANNOTATION_ERROR_HANDLER;
+
+
+/**
  * SCH_REFERENCE_LIST
  * is used to create a flattened list of symbols because in a complex hierarchy, a symbol
  * can be used more than once and its reference designator is dependent on the sheet path for
@@ -193,6 +201,7 @@ public:
  */
 class SCH_REFERENCE_LIST
 {
+
 private:
     std::vector<SCH_REFERENCE> flatList;
 
@@ -296,10 +305,10 @@ public:
      * <li>Symbols with multiple parts per package with invalid part count.</li>
      * </ul>
      * </p>
-     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
+     * @param aErrorHandler A handler for errors.
      * @return The number of errors found.
      */
-    int CheckAnnotation( REPORTER& aReporter );
+    int CheckAnnotation( ANNOTATION_ERROR_HANDLER aErrorHandler );
 
     /**
      * Function SortByXCoordinate

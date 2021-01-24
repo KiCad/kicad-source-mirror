@@ -134,6 +134,22 @@ ERC_ITEM ERC_ITEM::libSymbolIssues( ERCE_LIB_SYMBOL_ISSUES,
         _( "Library symbol issue" ),
         wxT( "lib_symbol_issues" ) );
 
+ERC_ITEM ERC_ITEM::unannotated( ERCE_UNANNOTATED,
+        _( "Symbol is not annotated" ),
+        wxT( "unannotated" ) );
+
+ERC_ITEM ERC_ITEM::extraUnits( ERCE_EXTRA_UNITS,
+        _( "Symbol has more units than are defined" ),
+        wxT( "extra_units" ) );
+
+ERC_ITEM ERC_ITEM::differentUnitValue( ERCE_DIFFERENT_UNIT_VALUE,
+                                       _( "Units of same symbol have different values" ),
+                                       wxT( "unit_value_mismatch" ) );
+
+ERC_ITEM ERC_ITEM::duplicateReference( ERCE_DUPLICATE_REFERENCE,
+        _( "Duplicate reference designators" ),
+        wxT( "duplicate_reference" ) );
+
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::heading_connections,
                  ERC_ITEM::pinNotConnected,
@@ -146,7 +162,10 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::wireDangling,
 
                  ERC_ITEM::heading_conflicts,
+                 ERC_ITEM::duplicateReference,
                  ERC_ITEM::pinTableWarning,
+                 ERC_ITEM::differentUnitValue,
+                 ERC_ITEM::differentUnitFootprint,
                  ERC_ITEM::differentUnitNet,
                  ERC_ITEM::duplicateSheetName,
                  ERC_ITEM::hierLabelMismatch,
@@ -157,11 +176,12 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::netNotBusMember,
 
                  ERC_ITEM::heading_misc,
+                 ERC_ITEM::unannotated,
                  ERC_ITEM::unresolvedVariable,
                  ERC_ITEM::similarLabels,
                  ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
-                 ERC_ITEM::differentUnitFootprint,
+                 ERC_ITEM::extraUnits,
          } );
 
 
@@ -193,6 +213,10 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );
+    case ERCE_UNANNOTATED:             return std::make_shared<ERC_ITEM>( unannotated );
+    case ERCE_EXTRA_UNITS:             return std::make_shared<ERC_ITEM>( extraUnits );
+    case ERCE_DIFFERENT_UNIT_VALUE:    return std::make_shared<ERC_ITEM>( differentUnitValue );
+    case ERCE_DUPLICATE_REFERENCE:     return std::make_shared<ERC_ITEM>( duplicateReference );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( "Unknown ERC error code" );

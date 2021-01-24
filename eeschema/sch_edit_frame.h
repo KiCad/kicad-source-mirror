@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -449,11 +449,11 @@ public:
      *   between parts.
      *
      * @return Number of annotation errors found.
-     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
-     * @param aOneSheetOnly Check the current sheet only if true.  Otherwise check
-     *                      the entire schematic.
+     * @param aReporter A handler for error reporting.
+     * @param aOneSheetOnly Check the current sheet only if true.  Otherwise check the entire
+     *                      schematic.
      */
-    int CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly );
+    int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, bool aOneSheetOnly = false );
 
     /**
      * Run a modal version of the Annotate dialog for a specific purpose.
@@ -478,25 +478,21 @@ public:
     void DisplayCurrentSheet();
 
     /**
-     * Use the wxWidgets print code to draw an image of the current sheet onto
-     * the clipboard.
+     * Use the wxWidgets print code to draw an image of the current sheet onto the clipboard.
      */
     void DrawCurrentSheetToClipboard();
 
     /**
      * Called when modifying the page settings.
-     * In derived classes it can be used to modify parameters like draw area size,
-     * and any other local parameter related to the page settings.
+     * In derived classes it can be used to modify parameters like draw area size, and any other
+     * local parameter related to the page settings.
      */
     void OnPageSettingsChange() override;
 
     /**
-     * @return a filename that can be used in plot and print functions
-     * for the current screen and sheet path.
-     * This filename is unique and must be used instead of the screen filename
-     * (or screen filename) when one must creates file for each sheet in the
-     * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
-     * used more than once
+     * @return a filename that can be used in plot and print functions for the current screen
+     * and sheet path.  This filename is unique and must be used instead of the screen filename
+     * when one must create files for each sheet in the hierarchy.
      * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
      * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
      */
@@ -532,10 +528,10 @@ public:
     /**
      * Save \a aSheet to a schematic file.
      *
-     * @param aSheet A pointer to the #SCH_SHEET object to save.  A NULL pointer saves
-     *               the current screen only.
+     * @param aSheet A pointer to the #SCH_SHEET object to save.  A NULL pointer saves the
+     *               current screen only.
      * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
-     *                          or under a new name .
+     *                          or under a new name.
      * @return True if the file has been saved.
      */
     bool SaveEEFile( SCH_SHEET* aSheet,

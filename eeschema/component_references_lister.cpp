@@ -1,14 +1,9 @@
-/**
- * @file component_references_lister.cpp
- * @brief functions to create a component flat list and to annotate schematic.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2018 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file component_references_lister.cpp
+ * @brief functions to create a component flat list and to annotate schematic.
+ */
+
 #include <sch_reference_list.h>
 
 #include <wx/regex.h>
@@ -36,8 +36,7 @@
 #include <unordered_set>
 
 #include <refdes_utils.h>
-#include <reporter.h>
-
+#include <erc_settings.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 
@@ -496,7 +495,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     }
 }
 
-int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
+int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 {
     int            error = 0;
     wxString       tmp;
@@ -521,8 +520,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                 tmp = wxT( "?" );
 
 
-            if(  ( flatList[ii].m_unit > 0 )
-              && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
+            if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
                             flatList[ii].GetRef(),
@@ -536,36 +534,33 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                             tmp );
             }
 
-            aReporter.Report( msg, RPT_SEVERITY_WARNING );
+            aHandler( ERCE_UNANNOTATED, msg, &flatList[ii], nullptr );
             error++;
             break;
         }
 
-        // Error if unit number selected does not exist ( greater than the  number of
-        // parts in the component ).  This can happen if a component has changed in a
-        // library after a previous annotation.
-        if( std::max( flatList[ii].GetLibPart()->GetUnitCount(), 1 )
-            < flatList[ii].m_unit )
+        // Error if unit number selected does not exist (greater than the  number of units in
+        // the component).  This can happen if a component has changed in a library after a
+        // previous annotation.
+        if( std::max( flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < flatList[ii].m_unit )
         {
             if( flatList[ii].m_numRef >= 0 )
                 tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
-            msg.Printf( _( "Error: symbol %s%s unit %d and symbol has only %d units defined\n" ),
+            msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n" ),
                         flatList[ii].GetRef(),
                         tmp,
+                        LIB_PART::SubReference( flatList[ii].m_unit ),
                         flatList[ii].m_unit,
                         flatList[ii].GetLibPart()->GetUnitCount() );
 
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            aHandler( ERCE_EXTRA_UNITS, msg, &flatList[ii], nullptr );
             error++;
             break;
         }
     }
-
-    if( error )
-        return error;
 
     // count the duplicated elements (if all are annotated)
     int imax = flatList.size() - 1;
@@ -577,7 +572,9 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 
         if(  ( flatList[ii].CompareRef( flatList[ii + 1] ) != 0 )
           || ( flatList[ii].m_numRef != flatList[ ii + 1].m_numRef )  )
+        {
             continue;
+        }
 
         // Same reference found. If same unit, error!
         if( flatList[ii].m_unit == flatList[ ii + 1].m_unit )
@@ -587,22 +584,21 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_unit > 0 )
-             && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
+            if( ( flatList[ii].m_unit > 0 ) && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                msg.Printf( _( "Duplicate items %s%s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_unit );
+                            LIB_PART::SubReference( flatList[ii].m_unit ) );
             }
             else
             {
-                msg.Printf( _( "Multiple item %s%s\n" ),
+                msg.Printf( _( "Duplicate items %s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp );
             }
 
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
             error++;
             continue;
         }
@@ -620,19 +616,19 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
             if( ( flatList[ii].m_unit > 0 )
              && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
             {
-                msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
+                msg.Printf( _( "Duplicate items %s%s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_unit );
+                            LIB_PART::SubReference( flatList[ii].m_unit ) );
             }
             else
             {
-                msg.Printf( _( "Multiple item %s%s\n" ),
+                msg.Printf( _( "Duplicate items %s%s\n" ),
                             flatList[ii].GetRef(),
                             tmp );
             }
 
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &flatList[ii], &flatList[ii+1] );
             error++;
         }
 
@@ -651,7 +647,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                         LIB_PART::SubReference( flatList[next].m_unit ),
                         flatList[next].m_value );
 
-            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &flatList[ii], &flatList[ii+1] );
             error++;
         }
     }
