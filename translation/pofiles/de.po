@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 08:21-0800\n"
-"PO-Revision-Date: 2021-01-21 16:56+0000\n"
+"PO-Revision-Date: 2021-01-24 22:54+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7893,9 +7893,8 @@ msgid "Update/reset field positions"
 msgstr "Positionen der Felder aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Fertigungsattribute aktualisieren/zurücksetzen"
+msgstr "Bauteilattribute aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -8212,11 +8211,8 @@ msgid "Show Annotation dialog"
 msgstr "Zeige den Annotation Dialog"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
-#, fuzzy
 msgid "Annotation is incomplete. ERC cannot be run."
-msgstr ""
-"Annotation der Bauteile ist nicht vollständig. ERC kann nicht ausgeführt "
-"werden."
+msgstr "Annotation ist unvollständig. ERC kann nicht ausgeführt werden."
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -12144,9 +12140,8 @@ msgstr ""
 "werden."
 
 #: eeschema/files-io.cpp:566
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "Die Schaltplandatei \"%s\" ist bereits geöffnet."
+msgstr "Schaltplandatei ist schreibgeschützt."
 
 #: eeschema/files-io.cpp:591
 msgid "Append Schematic"
@@ -14644,15 +14639,14 @@ msgid "Replace library table entry"
 msgstr "Bibliothekstabelleneintrag ersetzen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
-#, fuzzy
 msgid ""
 "Replace symbol library table entry with new library.\n"
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Tabelleneintrag für Replikationssymbolbibliothek mit neuer Bibliothek.\n"
+"Bauteilbibliothekseintrag mit neuer Bibliothek ersetzen.\n"
 "\n"
-"Die Originalbibliothek kann nicht mehr verwendet werden."
+"Die Originalbibliothek wird nicht mehr verwendbar sein."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid "Add new global library table entry"
@@ -16021,77 +16015,73 @@ msgid "Align Elements to Grid"
 msgstr "Am Gitter ausrichten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "Bauteilbibliotheken"
+msgstr "Bauteilwarnungen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> of converted"
 msgstr ""
-"<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b> vom konvertierten"
+"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> vom konvertierten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
 msgstr ""
-"<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b> in Einheiten %c "
-"und %c vom konvertierten"
+"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c vom "
+"konvertierten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
 "%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
 msgstr ""
-"<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b> in Einheiten %c "
-"und %c"
+"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
 msgstr ""
-"<b>Pin %s</b> \"%s\" außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> "
-"vom konvertierten.<br>"
+"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> vom "
+"konvertierten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
 "converted"
 msgstr ""
-"<b>Pin %s</b> \"%s\" außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> "
-"in Bauteil %c vom konvertierten.<br>"
+"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> in "
+"Bauteil %c vom konvertierten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-msgstr ""
-"<b>Pin %s</b> \"%s\" außerhalb des Rasters an Position <b>(%.3f, %.3f)</b>."
-"<br>"
+msgstr "<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
 msgstr ""
-"<b>Pin %s</b> \"%s\" außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> "
-"im Bauteil %c.<br>"
+"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> im "
+"Bauteil %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:356
 msgid "No off grid or duplicate pins were found."
@@ -17934,7 +17924,6 @@ msgid "Text height:"
 msgstr "Texthöhe:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
 msgstr "Maximalbreite:"
 
@@ -17944,7 +17933,6 @@ msgid "Set to 0 to disable this constraint"
 msgstr "Auf 0 setzen, um diese Einschränkung zu deaktivieren"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Max height:"
 msgstr "Maximale Höhe:"
 
@@ -17980,9 +17968,8 @@ msgid "Bitmap DPI:"
 msgstr "Bitmap DPI:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "Spannungsregler-Parameter"
+msgstr "Wiederholungs-Parameter"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -17996,23 +17983,24 @@ msgstr "Schrittweite Text:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
+"Anzahl der Zeichen oder Ziffern, um die der Text bei jeder Wiederholung "
+"verschoben werden soll."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
-#, fuzzy
 msgid "Step X:"
-msgstr "Y-Versatz:"
+msgstr "X-Schritt:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "Distanz auf der X-Achse, die jede Wiederholung versetzt wird."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
-msgstr "Y-Versatz:"
+msgstr "Y-Schritt:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "Distanz auf der Y-Achse, die jede Wiederholung versetzt wird."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -18120,9 +18108,8 @@ msgid "Unable to create \"%s\""
 msgstr "Kann \"%s\" nicht erzeugen"
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "Bibliothek \"%s\" ist schreibgeschützt."
+msgstr "Layoutdatei ist schreibgeschützt."
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -21999,9 +21986,10 @@ msgid "Rules"
 msgstr "Regeln"
 
 #: pcbnew/dialogs/dialog_drc.cpp:215
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules.  "
-msgstr "DRC unvollständig: Entwurfsregeln konnten nicht kompiliert werden.  "
+msgstr ""
+"DRC unvollständig: Benutzerdefinierte Entwurfsregeln konnten nicht "
+"kompiliert werden.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/tools/board_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:489
@@ -25617,7 +25605,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr "Korrigieren Sie alle Segmente beim Klicken"
+msgstr "Alle Segmente beim Klicken fixieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25648,11 +25636,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:122
 msgid "low"
-msgstr "Low"
+msgstr "niedrig"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:131
 msgid "high"
-msgstr "High"
+msgstr "hoch"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:70
 msgid "Interactive Router Settings"
@@ -26228,18 +26216,16 @@ msgid "Flip board items L/R (default is T/B)"
 msgstr "Platinenelemente auf L/R umschalten (Standard ist T/B)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:49
-#, fuzzy
 msgid "Add footprints with pads unlocked"
-msgstr "Footprintfilter hinzufügen"
+msgstr "Footprints mit entsperrten Pads hinzufügen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:50
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, the pads will be freely "
 "moveable."
 msgstr ""
-"Auf der Platine sich befindlichene nicht gesperrte Footprints werden "
-"verschoben. Möchten Sie dieses durchführen?"
+"Falls gesetzt, werden Pads von zur Platine hinzugefügten Footprints frei "
+"beweglich sein."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:60
 msgid "&Rotation angle:"
@@ -27429,6 +27415,8 @@ msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Mindestabstand zwischen den Öffnungen in der Lötmaske.  Pad-Öffnungen mit "
+"kleinerem Abstand werden als einzelne Öffnung geplottet."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -27467,7 +27455,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Zusätzlicher Abstand als Prozentsatz der Padgröße."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid ""
@@ -28487,7 +28475,6 @@ msgid "noname"
 msgstr "namenlos"
 
 #: pcbnew/files.cpp:518
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -28495,8 +28482,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Wenn die Zonen auf dieser Platine neu gefüllt werden wird die Einstellung "
-"'Abstand minimale Kupferbreite' verwendet (siehe Datei -> Platine/Board "
-"einrichten... -> Design-Regeln).\n"
+"'Abstand minimale Kupferbreite' verwendet (siehe Platine/Board einrichten... "
+"> Design-Regeln > Einschränkungen).\n"
 "Dies kann zu anderen Füllungen als in früheren KiCad-Versionen führen, bei "
 "denen die Linienstärke der Platinenbegrenzung auf der Edge Cuts-Lage "
 "verwendet wurde."
@@ -29884,9 +29871,8 @@ msgstr ""
 "Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
 
 #: pcbnew/pcb_edit_frame.cpp:1070
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Nur Platinenareal"
+msgstr "Platinendatei ist schreibgeschützt."
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 msgid "PCB file changes are unsaved"
@@ -29921,14 +29907,12 @@ msgid "Eeschema failed to load:\n"
 msgstr "Fehler beim Einlesen in Eeschema:\n"
 
 #: pcbnew/pcb_edit_frame.cpp:1653
-#, fuzzy
 msgid "Edit design rules"
-msgstr "Design-Regeln"
+msgstr "Design-Regeln bearbeiten"
 
 #: pcbnew/pcb_edit_frame.cpp:1665
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC unvollständig: Entwurfsregeln konnten nicht kompiliert werden.  "
+msgstr "Benutzerdefinierte Entwurfsregeln konnten nicht kompiliert werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1693
 msgid "Export Hyperlynx Layout"
@@ -30683,23 +30667,23 @@ msgstr ""
 "zugeordnet"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
-#, fuzzy
 msgid "Could not read file "
-msgstr "Konnte Datei \"%s\" nicht erstellen."
+msgstr "Konnte Datei nicht lesen "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
+"Ungültige Zeilengröße in Zeile %zu.  Erwarte 11 Elemente, aber %zu gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
-msgstr ""
+msgstr "Wert für Einheit konnte nicht gefunden werden, wähle Standard Mils"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s"
-msgstr "Konnte die Bibliotheksdatei %s nicht finden"
+msgstr "Konnte Spaltenbeschriftung %s nicht finden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:297
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:378
@@ -30715,68 +30699,75 @@ msgstr "Konnte die Bibliotheksdatei %s nicht finden"
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
 msgstr ""
+"Ungültige Zeilengröße in Zeile %zu.  Erwarte %zu Elemente, aber %zu gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:428
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
-msgstr ""
+msgstr "Erwartete Bohrgrößenwert aber %s!%s!%s in Zeile %zu gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:474
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Erwartete Padgrößen-Wert aber %s : %s gefunden in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "Ungültige Größe %lld: zu groß"
+msgstr "Ungültige Padgröße in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Erwartete Pad-Offset-Werte aber %s : %s gefunden in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name %s at line %zu"
-msgstr "Unbekannter Schaltplantyp \"%s\" in Zeile: %d"
+msgstr "Unbekannter Pad-Form-Name %s in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:871
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
 msgstr ""
+"Ungültiges Format für ID-Zeichenfolge \"%s\" in benutzerdefinierter Pad-"
+"Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:908
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
-msgstr ""
+msgstr "Nicht erkannte Pad-Grundform \"%s\" in Zeile %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr ""
+msgstr "Ungültige Tokenanzahl. Erwartete 8, aber %zu gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1141
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Geometric definition row %zu"
 msgstr ""
+"Ungültiges Format für record_tag-Zeichenfolge \"%s\" in der \"Geometrische "
+"Definition\"-Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1151
 #, c-format
 msgid "Invalid graphic item in Geometric definition row %zu"
-msgstr ""
+msgstr "Ungültiges Grafikelement in \"Geometrische Definition-\"Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1313
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Traces definition row %zu"
 msgstr ""
+"Ungültiges Format für record_tag-Zeichenfolge \"%s\" in Traces-Definitions-"
+"Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1323
 #, c-format
 msgid "Invalid graphic item in Traces definition row %zu"
-msgstr ""
+msgstr "Ungültiges Grafikelement in Traces-Definitions-Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1359
@@ -30784,11 +30775,12 @@ msgstr ""
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
 msgstr ""
+"Doppeltes Element für ID %d und Sequenz %d in Traces-Definitions-Zeile %zu \n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2268
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr ""
+msgstr "Erwarte Ätzdaten auf Kupferlage. Zeile auf Lage \"%s\" gefunden"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -31691,15 +31683,12 @@ msgid "Insert footprint in board"
 msgstr "Footprint der Platine hinzufügen"
 
 #: pcbnew/toolbars_pcb_editor.cpp:510
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Automatische Leiterbahnbreite: Wenn auf einem vorhandenen Leiterbahn "
-"begonnen wird,\n"
-" benutze die Breite der bestehenden Leiterbahn, andernfalls benutze die "
-"aktuelle Einstellung"
+"Wenn von einer existierenden Leiterbahn geroutet wird, deren Breite benutzen "
+"statt der aktuellen Einstellung"
 
 #: pcbnew/toolbars_pcb_editor.cpp:580
 msgid "Track: use netclass width"
@@ -31843,10 +31832,10 @@ msgstr "Abstandsmaß: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:559
 #: pcbnew/tools/board_inspection_tool.cpp:597
 #: pcbnew/tools/board_inspection_tool.cpp:626
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr ""
-"Bericht unvollständig: Entwurfsregeln konnten nicht kompiliert werden.  "
+"Bericht unvollständig: Benutzerdefinierte Entwurfsregeln konnten nicht "
+"kompiliert werden.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:252
 #, c-format
@@ -34473,14 +34462,13 @@ msgstr "[INFO] Laden fehlgeschlagen: Eingabezeile zu lang\n"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
-#, fuzzy
 msgid "KiCad"
-msgstr "KiCad beenden"
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Suite"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
@@ -34488,103 +34476,89 @@ msgid ""
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
 msgstr ""
+"KiCad ist eine plattformübergreifende und quelloffenene Electronics-Design-"
+"Automation-Suite. Die Programme verarbeiten Schematic Capture und PCB-Layout "
+"mit Gerber-Ausgabe."
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
-#, fuzzy
 msgid "Eeschema Schematic Editor"
-msgstr "Wechseln zum Schaltplan Editor"
+msgstr "Eeschema Schaltplan Editor"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
-#, fuzzy
 msgid "PcbNew PCB Layout"
-msgstr "Gerber Layout"
+msgstr "PcbNew PCB-Layout"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
 msgid "PcbNew 3D Viewer"
-msgstr "3D-Betrachter"
+msgstr "PcbNew 3D-Betrachter"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Entwickler"
+msgstr "Die KiCad-Entwickler"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "Eine KiCad-Komponente aus einer Bitmap erstellen"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
-#, fuzzy
 msgid "Eeschema (Standalone)"
-msgstr "Eeschema (.lib Datei)"
+msgstr "Eeschema (eigenständig)"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
-#, fuzzy
 msgid "Electronic schematic capture"
-msgstr "Altium Schaltplandateien"
+msgstr "Elektronische Schaltplanerfassung"
 
 #: resources/linux/launchers/eeschema.desktop.in:12
-#, fuzzy
 msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad Legacy Schaltplandateien"
+msgstr "KiCad elektronischer Schaltplanentwurf (eigenständig)"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Gerber Dateien"
+msgstr "Gerber-Datei-Betrachter"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
-msgstr "Gerberdatei betrachten"
+msgstr "Gerberdateien betrachten"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr ""
+msgstr "Electronic Design Automation Suite"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Rechner für verschiedene elektronikbezogene Berechnungen"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
-#, fuzzy
 msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew (.kicad_mod Datei)"
+msgstr "Pcbnew (eigenständig)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout"
-msgstr "PCB Layout Editor"
+msgstr "PCB-Layout"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
-#, fuzzy
 msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad PCB-Dateien"
+msgstr "KiCad PCB-Layout (eigenständig)"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
-msgstr "Gerber Dateien"
+msgstr "Gerber-Datei"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Excellon Bohrdatei(en) erstellen"
+msgstr "Excellon Bohrdatei"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "KiCad-Projektdatei"
+msgstr "KiCad-Projekt"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Editiere Schaltplan"
+msgstr "KiCad-Schaltplan"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "KiCad PCB-Dateien"
+msgstr "KiCad Printed Circuit Board"
 
 #, c-format
 #~ msgid "More than one symbol found in symbol file \"%s\"."
