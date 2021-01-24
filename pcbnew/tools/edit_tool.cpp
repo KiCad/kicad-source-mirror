@@ -1293,12 +1293,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    OPT<VECTOR2I> oldRefPt;
+    OPT<VECTOR2I> oldRefPt = boost::make_optional<VECTOR2I>( false, VECTOR2I( 0, 0 ) );
 
     if( selection.HasReferencePoint() )
         oldRefPt = selection.GetReferencePoint();
-    else
-        oldRefPt = NULLOPT;
 
     updateModificationPoint( selection );
 
@@ -1342,7 +1340,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
-    if( oldRefPt != NULLOPT )
+    if( oldRefPt )
         selection.SetReferencePoint( *oldRefPt );
     else
         selection.ClearReferencePoint();
@@ -1549,12 +1547,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    OPT<VECTOR2I> oldRefPt;
+    OPT<VECTOR2I> oldRefPt = boost::make_optional<VECTOR2I>( false, VECTOR2I( 0, 0 ) );
 
     if( selection.HasReferencePoint() )
         oldRefPt = selection.GetReferencePoint();
-    else
-        oldRefPt = NULLOPT;
 
     updateModificationPoint( selection );
 
@@ -1606,7 +1602,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
-    if( oldRefPt != NULLOPT )
+    if( oldRefPt )
         selection.SetReferencePoint( *oldRefPt );
     else
         selection.ClearReferencePoint();
