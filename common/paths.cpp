@@ -27,13 +27,19 @@
 #include <settings/settings_manager.h>
 #include <config.h>
 
+// lowercase or pretty case depending on platform
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+#define KICAD_PATH_STR "KiCad"
+#else
+#define KICAD_PATH_STR "kicad"
+#endif
 
 wxString PATHS::GetUserPluginsPath()
 {
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
-    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "plugins" );
 
@@ -57,7 +63,7 @@ wxString PATHS::GetUserScriptingPath()
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
-    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "scripting" );
 
@@ -70,7 +76,7 @@ wxString PATHS::GetUserTemplatesPath()
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
-    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "template" );
 
@@ -83,7 +89,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
-    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "projects" );
 
@@ -131,7 +137,7 @@ wxString PATHS::GetStockPluginsPath()
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
     wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
     fn.Assign( tfname, "" );
-    fn.AppendDir( "kicad" );
+    fn.AppendDir( "kicad" );    // linux use lowercase
     fn.AppendDir( wxT( "plugins" ) );
 #endif
 
@@ -155,7 +161,7 @@ wxString PATHS::GetUserCachePath()
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetUserCacheDir() );
-    tmp.AppendDir( "kicad" );
+    tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
 
     return tmp.GetPathWithSep();
