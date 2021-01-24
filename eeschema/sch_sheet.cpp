@@ -273,6 +273,12 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
     for( SCH_SHEET_PIN* sheetPin : sheet->m_pins )
         sheetPin->SetParent( sheet );
 
+    for( SCH_FIELD& field : m_fields )
+        field.SetParent( this );
+
+    for( SCH_FIELD& field : sheet->m_fields )
+        field.SetParent( sheet );
+
     std::swap( m_borderWidth, sheet->m_borderWidth );
     std::swap( m_borderColor, sheet->m_borderColor );
     std::swap( m_backgroundColor, sheet->m_backgroundColor );
