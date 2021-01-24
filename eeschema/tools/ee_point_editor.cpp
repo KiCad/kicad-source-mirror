@@ -338,7 +338,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             else if( evt->IsCancelInteractive() )
                 break;
 
-            if( evt->IsActivate() && !evt->IsMoveTool() )
+            if( evt->IsActivate() )
                 break;
         }
 
