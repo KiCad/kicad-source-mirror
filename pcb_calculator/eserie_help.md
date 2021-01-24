@@ -9,14 +9,10 @@ equally spaced in a logarithmic scale.
 
 This calculator finds combinations of standard E-series components to
 create arbitrary values.  You can enter the required resistance from 0,0025 to 4000 kOhm. 
-Solutions using up to 3 components are given.  
+Solutions using up to 4 components are given.  
 
-If a closer solutions is needed, the 4R checkbox option will give solutions 
-using 4 components for the E12 series only.  This option
-may take longer to compute.  
-
-It is also possible to specify up to two values to exclude from the solution if these
-component values are not available
+By default, the request value is always excluded from the solution set.  It is also possible to specify
+up to two additional values to exclude from the solution if these component values are not available
 
 Solutions are given in the following formats:
 

@@ -26,10 +26,10 @@ extern double DoubleFromString( const wxString& TextValue );
 
 /**
  * If BENCHMARK is defined, any 4R E12 calculations will print its execution time to console
- * My Hasswell Enthusiast reports 225 mSec what are reproducable within plusminus 2 percent 
+ * My Hasswell Enthusiast reports 225 mSec what are reproducable within plusminus 2 percent
  */
 
-#define BENCHMARK
+//#define BENCHMARK
 
 /**
  * E-Values derived from a geometric sequence formula by Charles Renard were already
@@ -49,7 +49,7 @@ enum             { E1, E3, E6, E12 };
 enum             { S2R, S3R, S4R };
 
 /**
- * 6 decade E-series values from 10 Ohms to 1M and its associated BOM strings. 
+ * 6 decade E-series values from 10 Ohms to 1M and its associated BOM strings.
  * Series E3,E6,E12 are defined by additional values for cumulative use with previous series
  */
 
@@ -134,7 +134,7 @@ class eserie
                                               { E1_VAL, E3_ADD, E6_ADD, E12_ADD }
                                           };
 /*
- * TODO: Manual array size calculation is dangerous. Unlike legacy ANSI-C Arrays 
+ * TODO: Manual array size calculation is dangerous. Unlike legacy ANSI-C Arrays
  * std::array can not drop length param by providing aggregate init list up
  * to C++17. Reserved array size should be 2*E12² of std::vector primary list.
  * Exceeding memory limit 7442 will crash the calculator without any warnings !
@@ -157,8 +157,8 @@ class eserie
     double reqR;			// required Resistor
 
 /**
- * Build all 2R combinations from the selected E-serie values 
- * 
+ * Build all 2R combinations from the selected E-serie values
+ *
  * Pre-calculated value combinations are saved in intermediate look up table cmb_lut
  * @return is the number of found combinations what also depends from exclude values
 */
@@ -168,7 +168,7 @@ class eserie
  * Search for closest two component solution
  *
  * @param aSize is the number of valid 2R combinations in cmb_lut on where to search
- * The 2R result with smallest deviation will be saved in results 
+ * The 2R result with smallest deviation will be saved in results
 */
     void simple_solution( uint32_t aSize );
 
@@ -182,10 +182,10 @@ class eserie
     void combine3( uint32_t aSize );
 
 /**
- * Check if there is a better four component solution. 
+ * Check if there is a better four component solution.
  *
  * @param aSsize gives the number of 2R combinations to be checked inside cmb_lut
- * Occupied calculation time depends from number of available E-serie values 
+ * Occupied calculation time depends from number of available E-serie values
  * with the power of 4 why execution for E12 is conditional with 4R check box
  * for the case the previously found 3R solution is already exact
 */
@@ -230,7 +230,7 @@ public:
     void calculate( void );
 
 /**
- * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results 
+ * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
  */
     void                     set_4R_cb ( bool a_tb );
     bool                     get_4R_cb ( void );
