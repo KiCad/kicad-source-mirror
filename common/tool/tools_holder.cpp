@@ -43,7 +43,15 @@ TOOLS_HOLDER::TOOLS_HOLDER() :
 // TODO: Implement an RAII mechanism for the stack PushTool/PopTool pairs
 void TOOLS_HOLDER::PushTool( const std::string& actionName )
 {
-    m_toolStack.push_back( actionName );
+    if( m_toolStack.size() && m_toolStack.back() == actionName )
+    {
+        // Tool already on the stack; we don't need to push again.  (Happens when one tool is
+        // popped due to the activation of the same tool that is underneath it on the stack.)
+    }
+    else
+    {
+        m_toolStack.push_back( actionName );
+    }
 
     // Human cognitive stacking is very shallow; deeper tool stacks just get annoying
     if( m_toolStack.size() > 3 )
