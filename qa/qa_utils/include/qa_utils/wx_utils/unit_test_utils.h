@@ -24,7 +24,10 @@
 #ifndef UNIT_TEST_UTILS__H
 #define UNIT_TEST_UTILS__H
 
+#define BOOST_NO_AUTO_PTR
+
 #include <boost/test/unit_test.hpp>
+#include <turtle/mock.hpp>
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
