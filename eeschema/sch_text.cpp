@@ -1126,11 +1126,6 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
             std::sort( pageListCopy.begin(), pageListCopy.end() );
 
-            wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
-            pageListCopy.erase( std::remove( pageListCopy.begin(),
-                                             pageListCopy.end(),
-                                             currentPage ), pageListCopy.end() );
-
             token->Printf( "%s", settings.m_IntersheetRefsPrefix );
 
             if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )

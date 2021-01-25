@@ -477,22 +477,22 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
                     sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
             }
 
-            for( const wxString& pageNo : pageListCopy )
+            for( int i = 0; i < (int) pageListCopy.size(); ++i )
             {
-                menu.Append( -1, wxString::Format( _( "Go to Page %s (%s)" ),
-                                                   pageNo,
-                                                   sheetNames[ pageNo ] ) );
+                menu.Append( i, wxString::Format( _( "Go to Page %s (%s)" ),
+                                                  pageListCopy[i],
+                                                  sheetNames[ pageListCopy[i] ] ) );
             }
 
             menu.AppendSeparator();
-            menu.Append( -1, _( "Back" ) );
+            menu.Append( 999, _( "Back" ) );
 
             int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
             void* param = nullptr;
 
-            if( sel >= 1 && sel <= (int) pageListCopy.size() )
-                param = (void*) &pageListCopy[ sel - 1 ];
-            else if( sel == (int) pageListCopy.size() )
+            if( sel >= 0 && sel < (int) pageListCopy.size() )
+                param = (void*) &pageListCopy[ sel ];
+            else if( sel == 999 )
                 param = (void*) &back;
 
             if( param )
