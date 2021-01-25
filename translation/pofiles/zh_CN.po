@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-24 22:54+0000\n"
+"PO-Revision-Date: 2021-01-25 16:33+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5246,12 +5246,11 @@ msgstr "KiCad 经典版"
 #: common/single_top.cpp:175 kicad/kicad.cpp:279
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
+msgstr "KiCad 及其依赖不再支持 Windows 7 及先前系统。"
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "不支持的过孔样式: %s"
+msgstr "不支持的操作系统"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -12190,9 +12189,8 @@ msgid "Open emitter"
 msgstr "发射极开路"
 
 #: eeschema/pin_type.cpp:60
-#, fuzzy
 msgid "Unconnected"
-msgstr "未连接的项目"
+msgstr "未连接"
 
 #: eeschema/pin_type.cpp:75
 msgid "Inverted"
@@ -18702,7 +18700,6 @@ msgid "PCB Calculator"
 msgstr "PCB 计算器"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18738,18 +18735,14 @@ msgstr ""
 "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"此计算器可查找标准 E 系列元件的组合。\n"
-"创建任意值。您可以输入所需的电阻，范围从0,0025 到 4000 kΩ。\n"
-"给出了使用多达 3 个元件的解决方案。\n"
+"此计算器可查找标准 E 系列元件的组合来\n"
+"创建任意值。您可以输入所需的电阻，范围从0,0025 到 4000 kOhm。\n"
+"给出了使用多达 4 个元件的解决方案。\n"
 "\n"
-"如果需要更接近的解决方案，4R 复选框选项将提供解决方案。\n"
-"仅对 E12 系列使用 4 个元件。此选项。\n"
-"可能需要更长的计算时间。\n"
+"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排除在解决方案之外，前提是\n"
+"这些组件值不可用。\n"
 "\n"
-"如果满足以下条件，还可以指定最多两个要从解决方案中排除的值。\n"
-"元件值不可用\n"
-"\n"
-"以下格式提供了解决方案：\n"
+"解决方案依照下列格式提供：\n"
 "\n"
 "\tR1 + R2 +...+ Rn\t串联电阻\n"
 "\tR1 | R2 |...| Rn\t并联电阻\n"
@@ -25450,9 +25443,8 @@ msgid "Magnetic graphics"
 msgstr "磁性图"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
-#, fuzzy
 msgid "Lock pads of newly added footprints"
-msgstr "锁定封装"
+msgstr "锁定新添加封装的焊盘"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
 msgid ""
@@ -25471,7 +25463,7 @@ msgstr "限制图形线水平，垂直和 45 度角 (&I)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
-msgstr ""
+msgstr "绘制图形线时，强制水平、垂直或45度。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -25719,14 +25711,12 @@ msgid "Open Plugin Directory"
 msgstr "打开插件目录"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "刷新插件"
+msgstr "重新加载插件"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "插件属性"
+msgstr "显示插件错误"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -28845,9 +28835,8 @@ msgid "Pin Name"
 msgstr "引脚名称"
 
 #: pcbnew/pad.cpp:872 pcbnew/pad.cpp:1441
-#, fuzzy
 msgid "Pin Type"
-msgstr "插件类型"
+msgstr "引脚类型"
 
 #: pcbnew/pad.cpp:890
 msgid "BGA"
@@ -29794,9 +29783,9 @@ msgid ""
 msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于几何定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1172
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
-msgstr "无效的图形项，位于几何定义行 %zu"
+msgstr "未处理的图形项'%s'，位于几何定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #, c-format
@@ -29805,9 +29794,9 @@ msgid ""
 msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于 traces 定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Traces definition row %zu"
-msgstr "无效图形项，位于 Traces 定义行 %zu"
+msgstr "未处理图形项 '%s'，位于 Traces 定义行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1380
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1393
@@ -31043,9 +31032,8 @@ msgid "Special Tools"
 msgstr "特殊工具"
 
 #: pcbnew/tools/edit_tool.cpp:571
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "拖拉 布线/过孔"
+msgstr "拖拉圆弧线路"
 
 #: pcbnew/tools/edit_tool.cpp:672
 msgid "Select reference point for move..."
