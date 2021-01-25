@@ -41,14 +41,13 @@
 #include <track.h>
 #include <zone.h>
 #include <kicad_string.h>
-
-#include "pcb_netlist.h"
+#include <pcbnew_settings.h>
+#include <pcb_edit_frame.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <connectivity/connectivity_data.h>
 #include <reporter.h>
 
 #include "board_netlist_updater.h"
-
-#include <pcb_edit_frame.h>
 
 
 BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard ) :
@@ -168,11 +167,15 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
                 aComponent->GetFPID().Format().wx_str() );
     m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
-    // Set the pads ratsnest settings to the global settings
-    bool set_ratsnest = m_frame->GetDisplayOptions().m_ShowGlobalRatsnest;
-
     for( PAD* pad : footprint->Pads() )
-        pad->SetLocalRatsnestVisible( set_ratsnest );
+    {
+        // Set the pads ratsnest settings to the global settings
+        pad->SetLocalRatsnestVisible( m_frame->GetDisplayOptions().m_ShowGlobalRatsnest );
+        pad->SetLocked( !m_frame->Settings().m_AddUnlockedPads );
+
+        // Pads in the library all have orphaned nets.  Replace with Default.
+        pad->SetNetCode( 0 );
+    }
 
     m_newFootprintsCount++;
 
@@ -187,7 +190,9 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         return footprint;
     }
     else
+    {
         delete footprint;
+    }
 
     return NULL;
 }

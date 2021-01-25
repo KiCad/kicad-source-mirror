@@ -738,10 +738,13 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         newFootprint->SetLink( niluuid );
         newFootprint->SetFlags(IS_NEW ); // whatever
 
-        // Pads in the library all have orphaned nets.  Replace with Default.
         for( PAD* pad : newFootprint->Pads() )
         {
+            // Set the pads ratsnest settings to the global settings
+            pad->SetLocalRatsnestVisible( pcbframe->GetDisplayOptions().m_ShowGlobalRatsnest );
             pad->SetLocked( !pcbframe->Settings().m_AddUnlockedPads );
+
+            // Pads in the library all have orphaned nets.  Replace with Default.
             pad->SetNetCode( 0 );
         }
 

@@ -39,7 +39,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	bSizerBoardEdit = new wxBoxSizer( wxVERTICAL );
 
 	m_autoLockPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Lock pads of newly added footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_autoLockPads->SetToolTip( _("If checked, when a footprint is added to the board, the pads will be freely moveable.") );
+	m_autoLockPads->SetToolTip( _("If checked, when a footprint is added to the board, its pads will be locked and not movable with respect to the footprint.") );
 
 	bSizerBoardEdit->Add( m_autoLockPads, 0, wxBOTTOM, 15 );
 
