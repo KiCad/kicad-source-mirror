@@ -1634,6 +1634,9 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
                 m_frame->RemoveFromScreen( text, m_frame->GetScreen() );
                 m_frame->AddToScreen( newtext, m_frame->GetScreen() );
+
+                if( convertTo == SCH_GLOBAL_LABEL_T )
+                    static_cast<SCH_GLOBALLABEL*>( newtext )->UpdateIntersheetRefProps();
             }
 
             if( selected )
