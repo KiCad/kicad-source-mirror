@@ -101,7 +101,7 @@ struct SPICE_ITEM
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_PSPICE( SCHEMATIC* aSchematic ) :
+    NETLIST_EXPORTER_PSPICE( SCHEMATIC_IFACE* aSchematic ) :
             NETLIST_EXPORTER_BASE( aSchematic )
     {
     }

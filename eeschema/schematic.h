@@ -35,13 +35,27 @@ class SCH_SHEET;
 class SCH_SHEET_LIST;
 
 
+class SCHEMATIC_IFACE
+{
+public:
+    SCHEMATIC_IFACE() {};
+    virtual ~SCHEMATIC_IFACE() {};
+
+    virtual CONNECTION_GRAPH* ConnectionGraph() const = 0;
+    virtual SCH_SHEET_LIST GetSheets() const = 0;
+    virtual void SetCurrentSheet( const SCH_SHEET_PATH& aPath ) = 0;
+    virtual SCH_SHEET_PATH& CurrentSheet() const = 0;
+    virtual wxString GetFileName() const = 0;
+    virtual PROJECT& Prj() const = 0;
+};
+
 /**
  * Holds all the data relating to one schematic
  * A schematic may consist of one or more sheets (and one root sheet)
  * Right now, eeschema can have only one schematic open at a time, but this could change.
  * Please keep this possibility in mind when adding to this object.
  */
-class SCHEMATIC : public EDA_ITEM
+class SCHEMATIC : public SCHEMATIC_IFACE, public EDA_ITEM
 {
     friend class SCH_EDIT_FRAME;
 
@@ -71,7 +85,7 @@ private:
 public:
     SCHEMATIC( PROJECT* aPrj );
 
-    ~SCHEMATIC();
+    virtual ~SCHEMATIC();
 
     virtual wxString GetClass() const override
     {
@@ -82,7 +96,7 @@ public:
     void Reset();
 
     /// Return a reference to the project this schematic is part of
-    PROJECT& Prj() const
+    PROJECT& Prj() const override
     {
         return *m_project;
     }
@@ -94,7 +108,7 @@ public:
      * TODO: can this be cached?
      * @return a SCH_SHEET_LIST containing the schematic hierarchy
      */
-    SCH_SHEET_LIST GetSheets() const
+    SCH_SHEET_LIST GetSheets() const override
     {
         return SCH_SHEET_LIST( m_rootSheet );
     }
@@ -122,19 +136,19 @@ public:
     SCH_SCREEN* RootScreen() const;
 
     /// Helper to retrieve the filename from the root sheet screen
-    wxString GetFileName() const;
+    wxString GetFileName() const override;
 
-    SCH_SHEET_PATH& CurrentSheet() const
+    SCH_SHEET_PATH& CurrentSheet() const override
     {
         return *m_currentSheet;
     }
 
-    void SetCurrentSheet( const SCH_SHEET_PATH& aPath )
+    void SetCurrentSheet( const SCH_SHEET_PATH& aPath ) override
     {
         *m_currentSheet = aPath;
     }
 
-    CONNECTION_GRAPH* ConnectionGraph() const
+    CONNECTION_GRAPH* ConnectionGraph() const override
     {
         return m_connectionGraph;
     }

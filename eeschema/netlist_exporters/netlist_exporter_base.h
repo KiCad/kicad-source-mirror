@@ -108,7 +108,7 @@ protected:
     std::set<LIB_PART*, LIB_PART_LESS_THAN> m_libParts;
 
     /// The schematic we're generating a netlist for
-    SCHEMATIC*            m_schematic;
+    SCHEMATIC_IFACE*            m_schematic;
 
     /// The schematic's CurrentSheet when we entered.  Restore on exiting.
     SCH_SHEET_PATH        m_savedCurrentSheet;
@@ -163,7 +163,7 @@ public:
      * @param aMasterList we take ownership of this here.
      * @param aLibTable is the symbol library table of the project.
      */
-    NETLIST_EXPORTER_BASE( SCHEMATIC* aSchematic ) :
+    NETLIST_EXPORTER_BASE( SCHEMATIC_IFACE* aSchematic ) :
         m_schematic( aSchematic )
     {
         wxASSERT( aSchematic );
