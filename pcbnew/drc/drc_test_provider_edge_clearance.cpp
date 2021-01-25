@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2021 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,7 +191,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ), queryBoardOutlineItems );
+    forEachGeometryItem( { PCB_SHAPE_T, PCB_FP_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ),
+                         queryBoardOutlineItems );
     forEachGeometryItem( s_allBasicItemsButZones, LSET::AllCuMask(), queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )
