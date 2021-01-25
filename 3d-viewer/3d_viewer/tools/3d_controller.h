@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@ public:
     int ToggleVisibility( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
 
     int doZoomInOut( bool aDirection, bool aCenterOnCursor );

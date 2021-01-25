@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,6 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER;
 
 /**
- * RULER_ITEM
- *
  * A drawn ruler item for showing the distance between two points.
  */
 class RULER_ITEM : public EDA_ITEM
@@ -45,13 +43,13 @@ class RULER_ITEM : public EDA_ITEM
 public:
     RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS userUnits );
 
-    ///> @copydoc EDA_ITEM::ViewBBox()
+    ///< @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
-    ///> @copydoc EDA_ITEM::ViewGetLayers()
+    ///< @copydoc EDA_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    ///> @copydoc EDA_ITEM::ViewDraw();
+    ///< @copydoc EDA_ITEM::ViewDraw();
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
 

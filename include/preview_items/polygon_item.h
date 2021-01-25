@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,21 +39,16 @@ namespace PREVIEW
 {
 
 /**
- * POLYGON_ITEM
- *
- * A preview item which shows an in-progress polygon, which
- * can be used for zone outlines, etc
+ * A preview item which shows an in-progress polygon, which can be used for zone outlines, etc.
  */
 class POLYGON_ITEM : public SIMPLE_OVERLAY_ITEM
 {
 
 public:
-
     POLYGON_ITEM();
 
-    ///> Gets the bounding box of the polygon
+    ///< Gets the bounding box of the polygon
     virtual const BOX2I ViewBBox() const override;
-
 
     /**
      * Set the polygon points
@@ -66,14 +61,13 @@ public:
                     const SHAPE_LINE_CHAIN& aLeaderPts );
 
 private:
-
-    ///> Draw rectangle and centre line onto GAL
+    ///< Draw rectangle and center line onto GAL
     void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
-    ///> complete polyline of locked in and leader points
+    ///< complete polyline of locked in and leader points
     SHAPE_LINE_CHAIN m_lockedChain, m_leaderChain;
 
-    ///> polygon fill
+    ///< polygon fill
     SHAPE_POLY_SET m_polyfill;
 
     static const double POLY_LINE_WIDTH;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
  */
 
 /**
- * This file is part of the common library
+ * This file is part of the common library.
+ *
  * @file  confirm.h
  * @see   common.h
  */
@@ -44,7 +45,7 @@ class wxStaticBitmap;
 class KIDIALOG : public wxRichMessageDialog
 {
 public:
-    ///> Dialog type. Selects appropriate icon and default dialog title
+    ///< Dialog type. Selects appropriate icon and default dialog title
     enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
     KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
@@ -58,10 +59,10 @@ public:
         return wxRichMessageDialog::SetOKCancelLabels( ok, cancel );
     }
 
-    ///> Shows the 'do not show again' checkbox
+    ///< Shows the 'do not show again' checkbox
     void DoNotShowCheckbox( wxString file, int line );
 
-    ///> Checks the 'do not show again' setting for the dialog
+    ///< Checks the 'do not show again' setting for the dialog
     bool DoNotShowAgain() const;
     void ForceShowAgain();
 
@@ -154,7 +155,7 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
 bool IsOK( wxWindow* aParent, const wxString& aMessage );
 
 /**
- * Displays a warning dialog with \a aMessage and returns the user response.
+ * Display a warning dialog with \a aMessage and returns the user response.
  *
  * @param aParent is the parent window.  NULL can be used if the parent is the top level window.
  * @param aWarning is the warning to display in the top part of the dialog box using a bold font.
@@ -174,7 +175,7 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
 
 
 /**
- * Displays a dialog with radioboxes asking the user to select an option.
+ * Display a dialog with radioboxes asking the user to select an option.
  *
  * @param aParent is the parent window.
  * @param aTitle is the dialog title.
@@ -183,6 +184,6 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
  * @return Index of the selected option or -1 when the dialog has been canceled.
  */
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
-        const wxArrayString& aOptions );
+                        const wxArrayString& aOptions );
 
 #endif /* __INCLUDE__CONFIRM_H__ */

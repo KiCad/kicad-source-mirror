@@ -3,8 +3,9 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Stroke font class
  *
@@ -46,7 +47,7 @@ typedef std::vector<std::vector<VECTOR2D>*> GLYPH;
 typedef std::vector<GLYPH*>                 GLYPH_LIST;
 
 /**
- * Class STROKE_FONT implements stroke font drawing.
+ * Implement a stroke font drawing.
  *
  * A stroke font is composed of lines.
  */
@@ -142,7 +143,7 @@ private:
     BOX2D computeBoundingBox( const GLYPH* aGlyph, double aGlyphWidth ) const;
 
     /**
-     * Draws a single line of text. Multiline texts should be split before using the
+     * Draw a single line of text. Multiline texts should be split before using the
      * function.
      *
      * @param aText is the text to be drawn.
@@ -168,21 +169,21 @@ private:
     const GLYPH_LIST*         m_glyphs;               ///< Glyph list
     const std::vector<BOX2D>* m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
 
-    ///> Factor that determines relative vertical position of the overbar.
+    ///< Factor that determines relative vertical position of the overbar.
     static const double OVERBAR_POSITION_FACTOR;
     static const double UNDERLINE_POSITION_FACTOR;
 
-    ///> Factor that determines relative line width for bold text.
+    ///< Factor that determines relative line width for bold text.
     static const double BOLD_FACTOR;
 
-    ///> Scale factor for a glyph
+    ///< Scale factor for a glyph
     static const double STROKE_FONT_SCALE;
 
-    ///> Tilt factor for italic style (the is is the scaling factor
-    ///> on dY relative coordinates to give a tilst shape
+    ///< Tilt factor for italic style (the is is the scaling factor
+    ///< on dY relative coordinates to give a tilt shape
     static const double ITALIC_TILT;
 
-    ///> Factor that determines the pitch between 2 lines.
+    ///< Factor that determines the pitch between 2 lines.
     static const double INTERLINE_PITCH_RATIO;
 };
 } // namespace KIGFX

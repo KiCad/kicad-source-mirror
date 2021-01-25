@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 CERN
+ * Copyright (C) 2017-2021 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,24 +39,24 @@ class TEXT_CTRL_EVAL : public wxTextCtrl
 {
 public:
     TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const wxString& aValue = wxEmptyString,
-            const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
-            long aStyle = 0, const wxValidator& aValidator = wxDefaultValidator,
-            const wxString& aName = wxTextCtrlNameStr );
+                    const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
+                    long aStyle = 0, const wxValidator& aValidator = wxDefaultValidator,
+                    const wxString& aName = wxTextCtrlNameStr );
 
     virtual ~TEXT_CTRL_EVAL()
     {
     }
 
     /**
-     * Set a new value in evaluator buffer, and display it
-     * in the wxTextCtrl.
+     * Set a new value in evaluator buffer, and display it in the wxTextCtrl.
+     *
      * @param aValue is the new value to store and display
      * if aValue is empty, the value "0" is stored and displayed
      */
     void SetValue( const wxString& aValue ) override;
 
 protected:
-    ///> Numeric expression evaluator
+    ///< Numeric expression evaluator
     NUMERIC_EVALUATOR m_eval;
 
     void onTextFocusGet( wxFocusEvent& aEvent );

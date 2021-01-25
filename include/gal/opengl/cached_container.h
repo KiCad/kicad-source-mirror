@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -54,19 +54,19 @@ public:
         return true;
     }
 
-    ///> @copydoc VERTEX_CONTAINER::SetItem()
+    ///< @copydoc VERTEX_CONTAINER::SetItem()
     virtual void SetItem( VERTEX_ITEM* aItem ) override;
 
-    ///> @copydoc VERTEX_CONTAINER::FinishItem()
+    ///< @copydoc VERTEX_CONTAINER::FinishItem()
     virtual void FinishItem() override;
 
-    ///> @copydoc VERTEX_CONTAINER::Allocate()
+    ///< @copydoc VERTEX_CONTAINER::Allocate()
     virtual VERTEX* Allocate( unsigned int aSize ) override;
 
-    ///> @copydoc VERTEX_CONTAINER::Delete()
+    ///< @copydoc VERTEX_CONTAINER::Delete()
     virtual void Delete( VERTEX_ITEM* aItem ) override;
 
-    ///> @copydoc VERTEX_CONTAINER::Clear()
+    ///< @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear() override;
 
     /**
@@ -79,14 +79,14 @@ public:
      */
     virtual bool IsMapped() const = 0;
 
-    ///> @copydoc VERTEX_CONTAINER::Map()
+    ///< @copydoc VERTEX_CONTAINER::Map()
     virtual void Map() override = 0;
 
-    ///> @copydoc VERTEX_CONTAINER::Unmap()
+    ///< @copydoc VERTEX_CONTAINER::Unmap()
     virtual void Unmap() override = 0;
 
 protected:
-    ///> Maps size of free memory chunks to their offsets
+    ///< Maps size of free memory chunks to their offsets
     typedef std::pair<unsigned int, unsigned int> CHUNK;
     typedef std::multimap<unsigned int, unsigned int> FREE_CHUNK_MAP;
 
@@ -153,20 +153,20 @@ protected:
      */
     void addFreeChunk( unsigned int aOffset, unsigned int aSize );
 
-    ///> Store size & offset of free chunks.
+    ///< Store size & offset of free chunks.
     FREE_CHUNK_MAP  m_freeChunks;
 
-    ///> Stored VERTEX_ITEMs
+    ///< Stored VERTEX_ITEMs
     ITEMS m_items;
 
-    ///> Currently modified item
+    ///< Currently modified item
     VERTEX_ITEM* m_item;
 
-    ///> Properties of currently modified chunk & item
+    ///< Properties of currently modified chunk & item
     unsigned int m_chunkSize;
     unsigned int m_chunkOffset;
 
-    ///> Maximal vertex index number stored in the container
+    ///< Maximal vertex index number stored in the container
     unsigned int m_maxIndex;
 
 private:

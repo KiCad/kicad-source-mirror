@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -66,7 +66,7 @@ public:
     virtual void DrawAll() = 0;
 
     /**
-     * Clears the container after drawing routines.
+     * Clear the container after drawing routines.
      */
     virtual void EndDrawing() = 0;
 
@@ -85,19 +85,19 @@ public:
 protected:
     GPU_MANAGER( VERTEX_CONTAINER* aContainer );
 
-    ///> Drawing status flag.
+    ///< Drawing status flag.
     bool m_isDrawing;
 
-    ///> Container that stores vertices data.
+    ///< Container that stores vertices data.
     VERTEX_CONTAINER* m_container;
 
-    ///> Shader handling
+    ///< Shader handling
     SHADER* m_shader;
 
-    ///> Location of shader attributes (for glVertexAttribPointer)
+    ///< Location of shader attributes (for glVertexAttribPointer)
     int m_shaderAttrib;
 
-    ///> true: enable Z test when drawing
+    ///< true: enable Z test when drawing
     bool m_enableDepthTest;
 };
 
@@ -108,44 +108,44 @@ public:
     GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer );
     ~GPU_CACHED_MANAGER();
 
-    ///> @copydoc GPU_MANAGER::BeginDrawing()
+    ///< @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing() override;
 
-    ///> @copydoc GPU_MANAGER::DrawIndices()
+    ///< @copydoc GPU_MANAGER::DrawIndices()
     virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
 
-    ///> @copydoc GPU_MANAGER::DrawAll()
+    ///< @copydoc GPU_MANAGER::DrawAll()
     virtual void DrawAll() override;
 
-    ///> @copydoc GPU_MANAGER::EndDrawing()
+    ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing() override;
 
-    ///> Maps vertex buffer stored in GPU memory.
+    ///< Map vertex buffer stored in GPU memory.
     void Map();
 
-    ///> Unmaps vertex buffer.
+    ///< Unmap vertex buffer.
     void Unmap();
 
 protected:
-    ///> Resizes the indices buffer to aNewSize if necessary
+    ///< Resizes the indices buffer to aNewSize if necessary
     void resizeIndices( unsigned int aNewSize );
 
-    ///> Buffers initialization flag
+    ///< Buffers initialization flag
     bool m_buffersInitialized;
 
-    ///> Pointer to the current indices buffer
+    ///< Pointer to the current indices buffer
     boost::scoped_array<GLuint> m_indices;
 
-    ///> Pointer to the first free cell in the indices buffer
+    ///< Pointer to the first free cell in the indices buffer
     GLuint* m_indicesPtr;
 
-    ///> Handle to indices buffer
+    ///< Handle to indices buffer
     GLuint  m_indicesBuffer;
 
-    ///> Number of indices stored in the indices buffer
+    ///< Number of indices stored in the indices buffer
     unsigned int m_indicesSize;
 
-    ///> Current indices buffer size
+    ///< Current indices buffer size
     unsigned int m_indicesCapacity;
 };
 
@@ -155,16 +155,16 @@ class GPU_NONCACHED_MANAGER : public GPU_MANAGER
 public:
     GPU_NONCACHED_MANAGER( VERTEX_CONTAINER* aContainer );
 
-    ///> @copydoc GPU_MANAGER::BeginDrawing()
+    ///< @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing() override;
 
-    ///> @copydoc GPU_MANAGER::DrawIndices()
+    ///< @copydoc GPU_MANAGER::DrawIndices()
     virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
 
-    ///> @copydoc GPU_MANAGER::DrawAll()
+    ///< @copydoc GPU_MANAGER::DrawAll()
     virtual void DrawAll() override;
 
-    ///> @copydoc GPU_MANAGER::EndDrawing()
+    ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing() override;
 };
 } // namespace KIGFX

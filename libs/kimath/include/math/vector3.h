@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,14 +21,13 @@
 #define VECTOR3_H_
 
 /**
- * VECTOR2_TRAITS
- * traits class for VECTOR2.
+ * Traits class for VECTOR2.
  */
 template <class T>
 struct VECTOR3_TRAITS
 {
-    ///> extended range/precision types used by operations involving multiple
-    ///> multiplications to prevent overflow.
+    ///< extended range/precision types used by operations involving multiple
+    ///< multiplications to prevent overflow.
     typedef T extended_type;
 };
 
@@ -40,8 +39,7 @@ struct VECTOR3_TRAITS<int>
 
 
 /**
- * VECTOR3
- * defines a general 3D-vector.
+ * Define a general 3D-vector.
  *
  * This class uses templates to be universal. Several operators are provided to help
  * easy implementing of linear algebra equations.
@@ -65,7 +63,7 @@ public:
     /// Construct a vector with given components x, y
     VECTOR3( T x, T y, T z );
 
-    /// Initializes a vector from another specialization. Beware of rouding
+    /// Initializes a vector from another specialization. Beware of rounding
     /// issues.
     template <typename CastingType>
     VECTOR3( const VECTOR3<CastingType>& aVec )
@@ -84,35 +82,33 @@ public:
     }
 
     /**
-     * Function Cross()
-     * computes cross product of self with aVector
+     * Compute cross product of self with \a aVector
      */
     VECTOR3<T> Cross( const VECTOR3<T>& aVector ) const;
 
     /**
-     * Function Dot()
-     * computes dot product of self with aVector
+     * Compute the dot product of self with \a aVector
      */
     VECTOR3<T>::extended_type Dot( const VECTOR3<T>& aVector ) const;
 
     /**
-     * Function Euclidean Norm
-     * computes the Euclidean norm of the vector, which is defined as sqrt(x ** 2 + y ** 2).
+     * Compute the Euclidean norm of the vector, which is defined as sqrt(x ** 2 + y ** 2).
+     *
      * It is used to calculate the length of the vector.
+     *
      * @return Scalar, the euclidean norm
      */
     T EuclideanNorm() const;
 
     /**
-     * Function Normalize()
-     * computes the normalized vector
+     * Compute the normalized vector.
      */
     VECTOR3<T> Normalize();
 
-    /// Equality operator
+    ///< Equality operator
     bool operator==( const VECTOR3<T>& aVector ) const;
 
-    /// Not equality operator
+    ///< Not equality operator
     bool operator!=( const VECTOR3<T>& aVector ) const;
 };
 

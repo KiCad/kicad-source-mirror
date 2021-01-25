@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,8 +37,7 @@ class SHAPE_RECT : public SHAPE
 {
 public:
     /**
-     * Constructor
-     * Creates an empty (0-sized) rectangle
+     * Create an empty (0-sized) rectangle.
      */
     SHAPE_RECT() :
         SHAPE( SH_RECT ),
@@ -45,8 +46,7 @@ public:
     {}
 
     /**
-     * Constructor
-     * Creates a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
+     * Create a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
      */
     SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
         SHAPE( SH_RECT ),
@@ -56,8 +56,7 @@ public:
     {}
 
     /**
-     * Constructor
-     * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
+     * Create a rectangle defined by top-left corner aP0, width aW and height aH.
      */
     SHAPE_RECT( const VECTOR2I& aP0, int aW, int aH ) :
         SHAPE( SH_RECT ),
@@ -83,14 +82,12 @@ public:
     {
         BOX2I bbox( VECTOR2I( m_p0.x - aClearance,  m_p0.y - aClearance ),
                     VECTOR2I( m_w + 2 * aClearance, m_h + 2 * aClearance ) );
-        //printf("bb : %s\n",bbox.Format().c_str());
         return bbox;
     }
 
     /**
-     * Function Diagonal()
+     * Return length of the diagonal of the rectangle.
      *
-     * Returns length of the diagonal of the rectangle
      * @return diagonal length
      */
     int Diagonal() const
@@ -114,9 +111,7 @@ public:
                   VECTOR2I* aLocation = nullptr ) const override;
 
     /**
-     * Function GetPosition()
-     *
-     * @return top-left corner of the rectangle
+     * @return the top left corner of the rectangle.
      */
     const VECTOR2I& GetPosition() const
     {
@@ -124,9 +119,7 @@ public:
     }
 
     /**
-     * Function GetSize()
-     *
-     * @return size of the rectangle
+     * @return the size of the rectangle.
      */
     const VECTOR2I GetSize() const
     {
@@ -134,9 +127,7 @@ public:
     }
 
     /**
-     * Function GetWidth()
-     *
-     * @return width of the rectangle
+     * @return the width of the rectangle.
      */
      const int GetWidth() const
      {
@@ -144,9 +135,7 @@ public:
      }
 
     /**
-     * Function GetHeight()
-     *
-     * @return height of the rectangle
+     * @return the height of the rectangle.
      */
     const int GetHeight() const
     {
@@ -159,12 +148,9 @@ public:
     }
 
     /**
-     * Function Rotate()
      * This function has limited utility for SHAPE_RECT as non-cartesian rotations will distort
      * the rectangle.  If you might need to handle non-90º rotations then the SHAPE_RECT should
      * first be converted to a SHAPE_SIMPLE which can then be free-rotated.
-     * @param aAngle
-     * @param aCenter
      */
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
@@ -196,9 +182,9 @@ public:
     virtual const std::string Format( ) const override;
 
 private:
-    VECTOR2I m_p0;      ///> Top-left corner
-    int      m_w;       ///> Width
-    int      m_h;       ///> Height
+    VECTOR2I m_p0;      ///< Top-left corner
+    int      m_w;       ///< Width
+    int      m_h;       ///< Height
 };
 
 #endif // __SHAPE_RECT_H

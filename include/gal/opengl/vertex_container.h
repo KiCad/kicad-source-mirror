@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -167,16 +167,16 @@ protected:
         return m_currentSize - m_freeSpace;
     }
 
-    ///> Free space left in the container, expressed in vertices
+    ///< Free space left in the container, expressed in vertices
     unsigned int    m_freeSpace;
 
-    ///> Current container size, expressed in vertices
+    ///< Current container size, expressed in vertices
     unsigned int    m_currentSize;
 
-    ///> Store the initial size, so it can be resized to this on Clear()
+    ///< Store the initial size, so it can be resized to this on Clear()
     unsigned int    m_initialSize;
 
-    ///> Actual storage memory
+    ///< Actual storage memory
     VERTEX*         m_vertices;
 
     // Status flags

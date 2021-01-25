@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -52,7 +52,7 @@ typedef std::map<wxString, FOOTPRINT*> FOOTPRINT_MAP;
 typedef std::map<wxString, EINSTANCE*> EINSTANCE_MAP;
 typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 
-///> Translates Eagle special characters to their counterparts in KiCad.
+///< Translates Eagle special characters to their counterparts in KiCad.
 wxString escapeName( const wxString& aNetName );
 
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName )
@@ -63,8 +63,7 @@ static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName
 
 
 /**
- * XML_PARSER_ERROR
- * implements a simple wrapper around runtime_error to isolate the errors thrown by the
+ * Implement a simple wrapper around runtime_error to isolate the errors thrown by the
  * Eagle XML parser.
  */
 struct XML_PARSER_ERROR : std::runtime_error
@@ -97,8 +96,8 @@ struct TRIPLET
 
 
 /**
- * XPATH
- * keeps track of what we are working on within a PTREE.
+ * Keep track of what we are working on within a PTREE.
+ *
  * Then if an exception is thrown, the place within the tree that gave us
  * grief can be reported almost accurately.  To minimally impact
  * speed, merely assign const char* pointers during the tree walking
@@ -165,8 +164,8 @@ public:
 
 
 /**
- * Function Convert
- * converts a wxString to a generic type T.
+ * Convert a wxString to a generic type T.
+ *
  * @param  aValue is a wxString containing the value that will be converted to type T.
  * @throw XML_PARSER_ERROR - an exception is thrown if the parsing fails or if the conversion to
  *        type T is unknown.
@@ -181,8 +180,8 @@ template <>
 wxString Convert<wxString>( const wxString& aValue );
 
 /**
- * OPTIONAL_XML_ATTRIBUTE
- * models an optional XML attribute.
+ * Model an optional XML attribute.
+ *
  * This was implemented as an alternative to OPT. This class should be replaced with a
  * simple typedef per type using std::optional when C++17 is published.
  */
@@ -198,8 +197,7 @@ private:
 
 public:
     /**
-     * Constructor OPTIONAL_XML_ATTRIBUTE
-     * construct a default OPTIONAL_XML_ATTRIBUTE, whose data is not available.
+     * Construct a default OPTIONAL_XML_ATTRIBUTE, whose data is not available.
      */
     OPTIONAL_XML_ATTRIBUTE() :
         m_isAvailable( false ),
@@ -207,7 +205,6 @@ public:
     {}
 
     /**
-     * Constructor OPTIONAL_XML_ATTRIBUTE
      * @param  aData is a wxString containing the value that should be converted to type T. If
      *               aData is empty, the attribute is understood as unavailable; otherwise, the
      *               conversion to T is tried.
@@ -222,7 +219,6 @@ public:
     }
 
     /**
-     * Constructor OPTIONAL_XML_ATTRIBUTE
      * @param  aData is the value of the XML attribute. If this constructor is called, the
      *               attribute is available.
      */
@@ -233,8 +229,7 @@ public:
     {}
 
     /**
-     * Operator bool
-     * @return bool - the availability of the attribute.
+     * @return bool the availability of the attribute.
      */
     operator bool() const
     {
@@ -242,8 +237,8 @@ public:
     }
 
     /**
-     * Assignment operator
-     * to a string (optionally) containing the data.
+     * Assign to a string (optionally) containing the data.
+     *
      * @param aData is a wxString that should be converted to T. If the string is empty, the
      *              attribute is set to unavailable.
      */
@@ -258,8 +253,8 @@ public:
     }
 
     /**
-     * Assignment operator
-     * to an object of the base type containing the data.
+     * Assign to an object of the base type containing the data.
+     *
      * @param aData is the actual value of the attribute. Calling this assignment, the attribute
      *              is automatically made available.
      */
@@ -272,8 +267,6 @@ public:
     }
 
     /**
-     * Equal operator
-     * to an object of the base type.
      * @param aOther is the object of the base type that should be compared with this one.
      */
     bool operator ==( const T& aOther ) const
@@ -282,8 +275,8 @@ public:
     }
 
     /**
-     * Function Set
-     * tries to convert a string to the base type.
+     * Attempt to convert a string to the base type.
+     *
      * @param aString is the string that will be converted to the base type.
      */
     void Set( const wxString& aString )
@@ -293,8 +286,8 @@ public:
     }
 
     /**
-     * Function Get
-     * returns a reference to the value of the attribute assuming it is available.
+     * Return a reference to the value of the attribute assuming it is available.
+     *
      * @return T& - the value of the attribute.
      */
     T& Get()
@@ -304,8 +297,8 @@ public:
     }
 
     /**
-     * Function CGet
-     * returns a constant reference to the value of the attribute assuming it is available.
+     * Return a constant reference to the value of the attribute assuming it is available.
+     *
      * @return const T& - the value of the attribute.
      */
     const T& CGet() const
@@ -315,8 +308,8 @@ public:
     }
 
     /**
-     * Operator *
-     * returns a reference to the value of the attribute assuming it is available.
+     * Return a reference to the value of the attribute assuming it is available.
+     *
      * @return T& - the value of the attribute.
      */
     T& operator*()
@@ -325,8 +318,8 @@ public:
     }
 
     /**
-     * Operator *
-     * returns a constant reference to the value of the attribute assuming it is available.
+     * Return a constant reference to the value of the attribute assuming it is available.
+     *
      * @return const T& - the value of the attribute.
      */
     const T& operator*() const
@@ -335,8 +328,8 @@ public:
     }
 
     /**
-     * Operator ->
-     * returns a pointer to the value of the attribute assuming it is available.
+     * Return a pointer to the value of the attribute assuming it is available.
+     *
      * @return T* - the value of the attribute.
      */
     T* operator->()
@@ -345,8 +338,8 @@ public:
     }
 
     /**
-     * Operator ->
-     * returns a constant pointer to the value of the attribute assuming it is available.
+     * Return a constant pointer to the value of the attribute assuming it is available.
+     *
      * @return const T* - the value of the attribute.
      */
     const T* operator->() const
@@ -357,15 +350,15 @@ public:
 
 
 /**
- * Function MapChildren
- * provides an easy access to the children of an XML node via their names.
+ * Provide an easy access to the children of an XML node via their names.
+ *
  * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
- * @return NODE_MAP - a map linking the name of each children to the children itself (via a
+ * @return NODE_MAP is a map linking the name of each children to the children itself (via a
  *                  wxXmlNode*)
  */
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
-///> Convert an Eagle curve end to a KiCad center for S_ARC
+///< Convert an Eagle curve end to a KiCad center for S_ARC
 wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 
 // Pre-declare for typedefs
@@ -396,10 +389,10 @@ struct ECOORD
         EU_MIL,    ///< mils/thous
     };
 
-    ///> Value expressed in nanometers
+    ///< Value expressed in nanometers
     long long int value;
 
-    ///> Unit used for the value field
+    ///< Unit used for the value field
     static constexpr EAGLE_UNIT ECOORD_UNIT = EU_NM;
 
     ECOORD()
@@ -452,7 +445,7 @@ struct ECOORD
         return value == aOther.value;
     }
 
-    ///> Converts a size expressed in a certain unit to nanometers.
+    ///< Converts a size expressed in a certain unit to nanometers.
     static long long int ConvertToNm( int aValue, enum EAGLE_UNIT aUnit );
 };
 
@@ -594,10 +587,10 @@ struct ERECT
 
 
 /**
- * EATTR
- * parses an Eagle "attribute" XML element.  Note that an attribute element
- * is different than an XML element attribute.  The attribute element is a
- * full XML node in and of itself, and has attributes of its own.  Blame Eagle.
+ * Parse an Eagle "attribute" XML element.
+ *
+ * @note An attribute element is different than an XML element attribute.  The attribute element
+ *       is a full XML node in and of itself, and has attributes of its own.  Blame Eagle.
  */
 struct EATTR
 {

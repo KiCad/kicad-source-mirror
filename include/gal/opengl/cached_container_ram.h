@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -48,10 +48,10 @@ public:
     CACHED_CONTAINER_RAM( unsigned int aSize = DEFAULT_SIZE );
     ~CACHED_CONTAINER_RAM();
 
-    ///> @copydoc VERTEX_CONTAINER::Unmap()
+    ///< @copydoc VERTEX_CONTAINER::Unmap()
     void Map() override {}
 
-    ///> @copydoc VERTEX_CONTAINER::Unmap()
+    ///< @copydoc VERTEX_CONTAINER::Unmap()
     void Unmap() override;
 
     bool IsMapped() const override
@@ -78,7 +78,7 @@ protected:
      */
     bool defragmentResize( unsigned int aNewSize ) override;
 
-    ///> Handle to vertices buffer
+    ///< Handle to vertices buffer
     GLuint  m_verticesBuffer;
 };
 } // namespace KIGFX

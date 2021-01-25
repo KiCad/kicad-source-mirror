@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-
     wxBoxSizer* m_mainSizer;
 
     wxRadioBox* m_gridStyle;
@@ -70,7 +69,7 @@ private:
     wxRadioBox* m_cursorShape;
     wxCheckBox* m_forceCursorDisplay;
 
-    ///> The GAL options to read/write
+    ///< The GAL options to read/write
     KIGFX::GAL_DISPLAY_OPTIONS& m_galOptions;
 };
 

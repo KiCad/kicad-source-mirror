@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -30,8 +30,6 @@
 
 
 /**
- * WX_HTML_REPORT_PANEL
- *
  * A widget for browsing a rich text error/status report. Used in numerous
  * dialogs in eeschema and pcbnew. Provides error filtering functionality
  * and saving report files.
@@ -46,10 +44,10 @@ public:
             const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
     ~WX_HTML_REPORT_PANEL();
 
-    ///> Set the min size of the area which displays html messages:
+    ///< Set the min size of the area which displays html messages:
     void MsgPanelSetMinSize( const wxSize& aMinSize );
 
-    ///> returns the reporter object that reports to this panel
+    ///< returns the reporter object that reports to this panel
     REPORTER& Reporter();
 
     /**
@@ -61,43 +59,43 @@ public:
     void Report( const wxString& aText, SEVERITY aSeverity,
                  REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
 
-    ///> clears the report panel
+    ///< clears the report panel
     void Clear();
 
-    ///> return the number of messages matching the given severity mask.
+    ///< return the number of messages matching the given severity mask.
     int Count( int severityMask );
 
-    ///> sets the frame label
+    ///< sets the frame label
     void SetLabel( const wxString& aLabel ) override;
 
-    ///> Sets the lasy update. If this mode is on, messages are stored but the display
-    ///> is not updated (Updating display can be very time consumming if there are many messages)
-    ///> A call to Flush() will be needed after build the report
+    ///< Sets the lasy update. If this mode is on, messages are stored but the display
+    ///< is not updated (Updating display can be very time consumming if there are many messages)
+    ///< A call to Flush() will be needed after build the report
     void SetLazyUpdate( bool aLazyUpdate );
 
-    ///> Forces updating the HTML page, after the report is built in lazy mode
-    ///> If aSort = true, the body messages will be ordered by severity
+    ///< Forces updating the HTML page, after the report is built in lazy mode
+    ///< If aSort = true, the body messages will be ordered by severity
     void Flush( bool aSort = false );
 
-    ///> Set the visible severity filter.
-    ///> if aSeverities < 0 the m_showAll option is set
+    ///< Set the visible severity filter.
+    ///< if aSeverities < 0 the m_showAll option is set
     void SetVisibleSeverities( int aSeverities );
 
-    ///> @return the visible severity filter.
-    ///> If the m_showAll option is set, the mask is < 0
+    ///< @return the visible severity filter.
+    ///< If the m_showAll option is set, the mask is < 0
     int GetVisibleSeverities() const;
 
-    ///> If true prints Info: at the beginning of each Info severity line (Default)
+    ///< If true prints Info: at the beginning of each Info severity line (Default)
     void SetPrintInfo( bool aPrintInfo );
 
-    ///> @return the visible severity filter.
-    ///> If the m_showAll option is set, the mask is < 0
+    ///< @return the visible severity filter.
+    ///< If the m_showAll option is set, the mask is < 0
     void SetShowSeverity( SEVERITY aSeverity, bool aValue );
 
-    ///> Set the report full file name to the string
+    ///< Set the report full file name to the string
     void SetFileName( const wxString& aReportFileName );
 
-    ///> @return reference to the current report fill file name string.
+    ///< @return reference to the current report fill file name string.
     wxString& GetFileName( void );
 
 
@@ -128,27 +126,27 @@ private:
 
     void onBtnSaveToFile( wxCommandEvent& event ) override;
 
-    ///> copy of the report, stored for filtering
+    ///< copy of the report, stored for filtering
     REPORT_LINES m_report;
 
-    ///> Lines to print at the very end of the report, regardless of sorting
+    ///< Lines to print at the very end of the report, regardless of sorting
     REPORT_LINES m_reportTail;
 
-    ///> Lines to print at the very beginning of the report, regardless of sorting
+    ///< Lines to print at the very beginning of the report, regardless of sorting
     REPORT_LINES m_reportHead;
 
-    ///> the reporter
+    ///< the reporter
     WX_HTML_PANEL_REPORTER m_reporter;
 
-    ///> message severities to display (mask)
+    ///< message severities to display (mask)
     int m_severities;
 
     bool m_lazyUpdate;
 
-    ///> Print "Info:" at the front of Info messages (default)
+    ///< Print "Info:" at the front of Info messages (default)
     bool m_printInfo;
 
-    ///> Use this as the filename instead of /bin/report.txt (default)
+    ///< Use this as the filename instead of /bin/report.txt (default)
     wxString m_reportFileName;
 };
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee dot org>
- * Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,19 +102,19 @@ protected:
     }
 
 private:
-    ///> Bitmap shown when button is enabled
+    ///< Bitmap shown when button is enabled
     wxBitmap  m_normalBitmap;
 
-    ///> Bitmap shown when button is disabled
+    ///< Bitmap shown when button is disabled
     wxBitmap  m_disabledBitmap;
 
-    ///> Current state of the button
+    ///< Current state of the button
     int       m_buttonState;
 
-    ///> Padding on each side of the bitmap
+    ///< Padding on each side of the bitmap
     int       m_padding;
 
-    ///> Size without the padding
+    ///< Size without the padding
     wxSize    m_unadjustedMinSize;
 };
 

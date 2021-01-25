@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -85,13 +86,13 @@ public:
     void UnlockCtx( wxGLContext* aContext );
 
 private:
-    ///> Map of GL contexts & their parent canvases.
+    ///< Map of GL contexts & their parent canvases.
     std::map<wxGLContext*, wxGLCanvas*> m_glContexts;
 
-    ///> Currently bound GL context.
+    ///< Currently bound GL context.
     wxGLContext* m_glCtx;
 
-    ///> Lock to prevent unexpected GL context switching.
+    ///< Lock to prevent unexpected GL context switching.
     std::mutex m_glCtxMutex;
 
     // Singleton

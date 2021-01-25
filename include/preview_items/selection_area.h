@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,12 +38,10 @@ namespace PREVIEW
 {
 
 /**
- * SELECTION_AREA
+ * Represent a selection area (currently a rectangle) in a VIEW, drawn corner-to-corner between
+ * two points.
  *
- * Represents a selection area (currently a rectangle) in a VIEW,
- * drawn corner-to-corner between two points. This is useful when
- * selecting a rectangular area, for lasso-select or zooming, for
- * example.
+ * This is useful when selecting a rectangular area, for lasso-select or zooming, for example.
  */
 class SELECTION_AREA : public SIMPLE_OVERLAY_ITEM
 {
@@ -52,7 +52,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    ///> Set the origin of the rectange (the fixed corner)
+    ///< Set the origin of the rectangle (the fixed corner)
     void SetOrigin( VECTOR2I aOrigin )
     {
         m_origin = aOrigin;

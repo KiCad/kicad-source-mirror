@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Joshua Redstone redstone at gmail.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ class VIEW;
 }
 
 /**
- * PCB_GROUP is a set of BOARD_ITEMs (i.e., without duplicates)
+ * A set of BOARD_ITEMs (i.e., without duplicates).
  *
  * The group parent is always board, not logical parent group. The group is transparent
  * container - e.g., its position is derived from the position of its members.  A selection
@@ -76,14 +76,14 @@ public:
     }
 
     /**
-     * Adds item to group. Does not take ownership of item.
+     * Add item to group. Does not take ownership of item.
      *
      * @return true if item was added (false if item belongs to a different group).
      */
     bool AddItem( BOARD_ITEM* aItem );
 
     /**
-     * Removes item from group.
+     * Remove item from group.
      *
      * @return true if item was removed (false if item was not in the group).
      */
@@ -92,7 +92,7 @@ public:
     void RemoveAll();
 
     /*
-     * Searches for highest level group containing item.
+     * Search for highest level group containing item.
      *
      * @param aScope restricts the search to groups within the group scope.
      * @param aFootprintEditor true if we should stop promoting at the footprint level
@@ -109,22 +109,22 @@ public:
     }
 #endif
 
-    ///> @copydoc EDA_ITEM::GetPosition
+    ///< @copydoc EDA_ITEM::GetPosition
     wxPoint GetPosition() const override;
 
-    ///> @copydoc EDA_ITEM::SetPosition
+    ///< @copydoc EDA_ITEM::SetPosition
     void SetPosition( const wxPoint& aNewpos ) override;
 
-    ///> @copydoc BOARD_ITEM::GetLayerSet
+    ///< @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
 
-    ///> @copydoc BOARD_ITEM::SetLayer
+    ///< @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {
         wxFAIL_MSG( "groups don't support layer SetLayer" );
     }
 
-    ///> @copydoc EDA_ITEM::Clone
+    ///< @copydoc EDA_ITEM::Clone
     EDA_ITEM* Clone() const override;
 
     /*
@@ -137,51 +137,51 @@ public:
      */
     PCB_GROUP* DeepDuplicate() const;
 
-    ///> @copydoc BOARD_ITEM::SwapData
+    ///< @copydoc BOARD_ITEM::SwapData
     void SwapData( BOARD_ITEM* aImage ) override;
 
-    ///> @copydoc BOARD_ITEM::IsOnLayer
+    ///< @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
-    ///> @copydoc EDA_ITEM::HitTest
+    ///< @copydoc EDA_ITEM::HitTest
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    ///> @copydoc EDA_ITEM::HitTest
+    ///< @copydoc EDA_ITEM::HitTest
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    ///> @copydoc EDA_ITEM::GetBoundingBox
+    ///< @copydoc EDA_ITEM::GetBoundingBox
     const EDA_RECT GetBoundingBox() const override;
 
-    ///> @copydoc EDA_ITEM::Visit
+    ///< @copydoc EDA_ITEM::Visit
     SEARCH_RESULT Visit( INSPECTOR aInspector, void* aTestData,
                          const KICAD_T aScanTypes[] ) override;
 
-    ///> @copydoc VIEW_ITEM::ViewGetLayers
+    ///< @copydoc VIEW_ITEM::ViewGetLayers
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    ///> @copydoc VIEW_ITEM::ViewGetLOD
+    ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    ///> @copydoc BOARD_ITEM::Move
+    ///< @copydoc BOARD_ITEM::Move
     void Move( const wxPoint& aMoveVector ) override;
 
-    ///> @copydoc BOARD_ITEM::Rotate
+    ///< @copydoc BOARD_ITEM::Rotate
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    ///> @copydoc BOARD_ITEM::Flip
+    ///< @copydoc BOARD_ITEM::Flip
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
-    ///> @copydoc EDA_ITEM::GetSelectMenuText
+    ///< @copydoc EDA_ITEM::GetSelectMenuText
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    ///> @copydoc EDA_ITEM::GetMenuImage
+    ///< @copydoc EDA_ITEM::GetMenuImage
     BITMAP_DEF GetMenuImage() const override;
 
-    ///> @copydoc EDA_ITEM::GetMsgPanelInfo
+    ///< @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
-     * Invokes a function on all members of the group.
+     * Invoke a function on all members of the group.
      *
      * @note This function should not add or remove items to the group.
      *
@@ -190,7 +190,7 @@ public:
     void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const;
 
     /**
-     * Invokes a function on all descendants of the group.
+     * Invoke a function on all descendants of the group.
      *
      * @note This function should not add or remove items to the group or descendant groups.
      * @param aFunction is the function to be invoked.

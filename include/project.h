@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ class PROJECT_LOCAL_SETTINGS;
 /**
  * Container for project specific data.
  *
- * Because it is in the neutral program top, which is not linked to by subsidiarly DSOs,
+ * Because it is in the neutral program top, which is not linked to by subsidiary DSOs,
  * any functions in this interface must be virtual.
  */
 class PROJECT
@@ -67,7 +67,7 @@ public:
      *
      * Derive #PROJECT elements from this, it has a virtual destructor, and Elem*() functions
      * can work with it.  Implementation is opaque in class #PROJECT.  If find you have to
-     * include derived class headersin this file, you are doing incompatible with the goal
+     * include derived class headers in this file, you are doing incompatible with the goal
      * of this class.  Keep knowledge of derived classes opaque to class PROJECT please.
     */
     class _ELEM
@@ -180,10 +180,10 @@ public:
      * Return a "retained string", which is any session and project specific string
      * identified in enum #RSTRING_T.
      *
-     *Retained strings are not written to disk, and are therefore good only for the current
+     * Retained strings are not written to disk, and are therefore good only for the current
      * session.
      */
-    virtual  const wxString& GetRString( RSTRING_T aStringId );
+    virtual const wxString& GetRString( RSTRING_T aStringId );
 
     /**
      * Store a "retained string", which is any session and project specific string
@@ -192,7 +192,7 @@ public:
      * Retained strings are not written to disk, and are therefore good only for the current
      * session.
      */
-    virtual  void SetRString( RSTRING_T aStringId, const wxString& aString );
+    virtual void SetRString( RSTRING_T aStringId, const wxString& aString );
 
     /**
      * The set of #_ELEMs that a #PROJECT can hold.
@@ -255,7 +255,7 @@ public:
     virtual FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
 
     // These are the non-virtual DATA LOAD ON DEMAND members. They load project related
-    // data on demand, and do so typicallly into m_elems[] at a particular index using
+    // data on demand, and do so typically into m_elems[] at a particular index using
     // SetElem() & GetElem().  That is, they wrap SetElem() and GetElem().
     // To get the data to reload on demand, first SetProjectFullName(),
     // then call SetElem( ELEM_T, NULL ) from client code.
@@ -342,7 +342,7 @@ private:
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
 
-    ///> True if the project is read-only: no project files will be written
+    ///< True if the project is read-only: no project files will be written
     bool m_readOnly;
 
     /// Backing store for project data -- owned by SETTINGS_MANAGER

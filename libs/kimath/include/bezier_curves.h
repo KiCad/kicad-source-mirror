@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 
 /**
  * Bezier curves to polygon converter.
+ *
  * Only quadratic and cubic Bezier curves are handled
  */
 class BEZIER_POLY
@@ -44,9 +45,10 @@ public:
     }
 
     /**
-     * Converts Bezier curve to a polygon.
+     * Convert a Bezier curve to a polygon.
+     *
      * @param aOutput will be used as an output vector storing polygon points.
-     * @param aMinSegLen is the min dist between 2 successve points.
+     * @param aMinSegLen is the min dist between 2 successive points.
      * It can be used to reduce the number of points.
      * (the last point is always generated)
      */
@@ -56,7 +58,7 @@ public:
 private:
     double m_minSegLen;
 
-    ///> Control points
+    ///< Control points
     std::vector<VECTOR2D> m_ctrlPts;
 };
 

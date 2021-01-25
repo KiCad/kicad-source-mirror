@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +49,8 @@ public:
     VECTOR2I A;
     VECTOR2I B;
 
-    /** Default constructor
-     * Creates an empty (0, 0) segment
+    /**
+     * Create an empty (0, 0) segment.
      */
     SEG()
     {
@@ -57,8 +58,7 @@ public:
     }
 
     /**
-     * Constructor
-     * Creates a segment between (aX1, aY1) and (aX2, aY2)
+     * Create a segment between (aX1, aY1) and (aX2, aY2).
      */
     SEG( int aX1, int aY1, int aX2, int aY2 ) :
         A( VECTOR2I( aX1, aY1 ) ),
@@ -68,8 +68,7 @@ public:
     }
 
     /**
-     * Constructor
-     * Creates a segment between (aA) and (aB)
+     * Create a segment between (aA) and (aB).
      */
     SEG( const VECTOR2I& aA, const VECTOR2I& aB ) :
         A( aA ),
@@ -79,8 +78,8 @@ public:
     }
 
     /**
-     * Constructor
-     * Creates a segment between (aA) and (aB), referenced to a multi-segment shape
+     * Create a segment between (aA) and (aB), referenced to a multi-segment shape.
+     *
      * @param aA reference to the start point in the parent shape
      * @param aB reference to the end point in the parent shape
      * @param aIndex index of the segment within the parent shape
@@ -93,7 +92,7 @@ public:
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      */
     SEG( const SEG& aSeg ) :
         A( aSeg.A ),
@@ -127,19 +126,17 @@ public:
     }
 
     /**
-      * Function LineProject()
-      *
-      * Computes the perpendicular projection point of aP on a line passing through
+      * Compute the perpendicular projection point of aP on a line passing through
       * ends of the segment.
+      *
       * @param aP point to project
       * @return projected point
       */
     VECTOR2I LineProject( const VECTOR2I& aP ) const;
 
     /**
-      * Function Side()
+      * Determine on which side of directed line passing via segment ends point aP lies.
       *
-      * Determines on which side of directed line passing via segment ends point aP lies.
       * @param aP point to determine the orientation wrs to self
       * @return: < 0: left, 0 : on the line, > 0 : right
       */
@@ -151,10 +148,9 @@ public:
     }
 
     /**
-      * Function LineDistance()
-      *
-      * Returns the closest Euclidean distance between point aP and the line defined by
+      * Return the closest Euclidean distance between point aP and the line defined by
       * the ends of segment (this).
+      *
       * @param aP the point to test
       * @param aDetermineSide: when true, the sign of the returned value indicates
       * the side of the line at which we are (negative = left)
@@ -163,23 +159,22 @@ public:
     int LineDistance( const VECTOR2I& aP, bool aDetermineSide = false ) const;
 
     /**
-      * Function NearestPoint()
+      * Compute a point on the segment (this) that is closest to point \a aP.
       *
-      * Computes a point on the segment (this) that is closest to point aP.
       * @return the nearest point
       */
     const VECTOR2I NearestPoint( const VECTOR2I &aP ) const;
 
     /**
-      * Computes a point on the segment (this) that is closest to any point on aSeg.
+      * Compute a point on the segment (this) that is closest to any point on \a aSeg.
+      *
       * @return the nearest point
       */
     const VECTOR2I NearestPoint( const SEG &aSeg ) const;
 
     /**
-     * Function Intersect()
+     * Compute intersection point of segment (this) with segment \a aSeg.
      *
-     * Computes intersection point of segment (this) with segment aSeg.
      * @param aSeg: segment to intersect with
      * @param aIgnoreEndpoints: don't treat corner cases (i.e. end of one segment touching the
      * other) as intersections.
@@ -190,9 +185,8 @@ public:
                             bool aLines = false ) const;
 
     /**
-     * Function IntersectLines()
+     * Compute the intersection point of lines passing through ends of (this) and \a aSeg.
      *
-     * Computes the intersection point of lines passing through ends of (this) and aSeg
      * @param aSeg segment defining the line to intersect with
      * @return intersection point, if exists
      */
@@ -202,18 +196,16 @@ public:
     }
 
     /**
-     * Function PerpendicularSeg()
-     * 
-     * Computes a segment perpendicular to this one, passing through point aP
+     * Compute a segment perpendicular to this one, passing through point \a aP.
+     *
      * @param aP Point through which the new segment will pass
      * @return SEG perpendicular to this passing through point aP
      */
     SEG PerpendicularSeg( const VECTOR2I& aP ) const;
 
     /**
-     * Function ParallelSeg()
-     * 
-     * Computes a segment parallel to this one, passing through point aP
+     * Compute a segment parallel to this one, passing through point \a aP.
+     *
      * @param aP Point through which the new segment will pass
      * @return SEG parallel to this passing through point aP
      */
@@ -224,9 +216,8 @@ public:
     ecoord SquaredDistance( const SEG& aSeg ) const;
 
     /**
-     * Function Distance()
+     * Compute minimum Euclidean distance to segment \a aSeg.
      *
-     * Computes minimum Euclidean distance to segment aSeg.
      * @param aSeg other segment
      * @return minimum distance
      */
@@ -241,9 +232,8 @@ public:
     }
 
     /**
-     * Function Distance()
+     * Compute minimum Euclidean distance to point \a aP.
      *
-     * Computes minimum Euclidean distance to point aP.
      * @param aP the point
      * @return minimum distance
      */
@@ -260,10 +250,9 @@ public:
     }
 
     /**
-     * Function Collinear()
+     * Check if segment aSeg lies on the same line as (this).
      *
-     * Checks if segment aSeg lies on the same line as (this).
-     * @param aSeg the segment to chech colinearity with
+     * @param aSeg the segment to check colinearity with
      * @return true, when segments are collinear.
      */
     bool Collinear( const SEG& aSeg ) const
@@ -298,7 +287,6 @@ public:
 
         return std::abs( dist1 - dist2 ) <= 1;
     }
-
 
     bool ApproxPerpendicular( const SEG& aSeg ) const
     {
@@ -345,9 +333,8 @@ public:
     }
 
     /**
-     * Function Length()
+     * Return the length (this).
      *
-     * Returns the length (this)
      * @return length
      */
     int Length() const
@@ -363,9 +350,9 @@ public:
     ecoord TCoef( const VECTOR2I& aP ) const;
 
     /**
-     * Function Index()
+     * Return the index of this segment in its parent shape (applicable only to non-local
+     * segments).
      *
-     * Return the index of this segment in its parent shape (applicable only to non-local segments)
      * @return index value
      */
     int Index() const
@@ -385,7 +372,7 @@ public:
         return SEG( B, A );
     }
 
-    ///> Returns the center point of the line
+    ///< Returns the center point of the line
     VECTOR2I Center() const
     {
         return A + ( B - A ) / 2;
@@ -395,7 +382,7 @@ private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 
 private:
-    ///> index withing the parent shape (used when m_is_local == false)
+    ///< index withing the parent shape (used when m_is_local == false)
     int m_index;
 };
 

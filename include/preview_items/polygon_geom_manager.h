@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,8 @@
 #include <geometry/shape_line_chain.h>
 
 /**
- * Class that handles the drawing of a polygon, including
- * management of last corner deletion and drawing of leader lines
- * with various constraints (eg 45 deg only).
+ * Class that handles the drawing of a polygon, including management of last corner deletion
+ * and drawing of leader lines with various constraints (eg 45 deg only).
  *
  * This class handles only the geometry of the process.
  */
@@ -46,17 +45,17 @@ public:
     public:
         /**
          * Called before the first point is added - clients can do
-         * initialisation here, and can veto the start of the process
+         * initialization here, and can veto the start of the process
          * (e.g. if user cancels a dialog)
          *
          * @return false to veto start of new polygon
          */
         virtual bool OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
-        ///> Sent when the polygon geometry changes
+        ///< Sent when the polygon geometry changes
         virtual void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
-        ///> Called when the polygon is complete
+        ///< Called when the polygon is complete
         virtual void OnComplete( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
         virtual ~CLIENT()
@@ -69,8 +68,8 @@ public:
      */
     enum class LEADER_MODE
     {
-        DIRECT,     ///> Unconstrained point-to-point
-        DEG45,      ///> 45 Degree only
+        DIRECT,     ///< Unconstrained point-to-point
+        DEG45,      ///< 45 Degree only
     };
 
     /**
@@ -84,18 +83,17 @@ public:
     bool AddPoint( const VECTOR2I& aPt );
 
     /**
-     * Mark the polygon finished and update the client
+     * Mark the polygon finished and update the client.
      */
     void SetFinished();
 
     /**
-     * Clear the manager state and start again
+     * Clear the manager state and start again.
      */
     void Reset();
 
     /**
-     * Set the leader mode to use when calculating the leader/returner
-     * lines
+     * Set the leader mode to use when calculating the leader/returner lines.
      */
     void SetLeaderMode( LEADER_MODE aMode );
 
@@ -106,6 +104,7 @@ public:
 
     /**
      * Enables/disables self-intersecting polygons.
+     *
      * @param aEnabled true if self-intersecting polygons are enabled.
      */
     void AllowIntersections( bool aEnabled )
@@ -114,7 +113,8 @@ public:
     }
 
     /**
-     * Checks whether self-intersecting polygons are enabled.
+     * Check whether self-intersecting polygons are enabled.
+     *
      * @return true if self-intersecting polygons are enabled.
      */
     bool IntersectionsAllowed() const
@@ -123,7 +123,8 @@ public:
     }
 
     /**
-     * Checks whether the locked points constitute a self-intersecting outline.
+     * Check whether the locked points constitute a self-intersecting outline.
+     *
      * @param aIncludeLeaderPts when true, also the leading points (not placed ones) will be tested.
      * @return True when the outline is self-intersecting.
      */
@@ -141,8 +142,7 @@ public:
     bool IsPolygonInProgress() const;
 
     /**
-     * @return true if locking in the given point would close the
-     * current polygon
+     * @return true if locking in the given point would close the current polygon.
      */
     bool NewPointClosesOutline( const VECTOR2I& aPt ) const;
 
@@ -183,19 +183,19 @@ private:
     void updateLeaderPoints( const VECTOR2I& aEndPoint,
                              LEADER_MODE aModifier = LEADER_MODE::DIRECT );
 
-    ///> The "user" of the polygon data that is informed when the geometry changes
+    ///< The "user" of the polygon data that is informed when the geometry changes
     CLIENT& m_client;
 
-    ///> The current mode of the leader line
+    ///< The current mode of the leader line
     LEADER_MODE m_leaderMode;
 
-    ///> Flag enabling self-intersecting polygons
+    ///< Flag enabling self-intersecting polygons
     bool m_intersectionsAllowed;
 
-    ///> Point that have been "locked in"
+    ///< Point that have been "locked in"
     SHAPE_LINE_CHAIN m_lockedPoints;
 
-    ///> Points in the temporary "leader" line(s)
+    ///< Points in the temporary "leader" line(s)
     SHAPE_LINE_CHAIN m_leaderPts;
 };
 

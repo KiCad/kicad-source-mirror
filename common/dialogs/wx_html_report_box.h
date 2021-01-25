@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,9 +27,7 @@
 #include <eda_units.h>
 
 /**
- * WX_HTML_REPORT_BOX
- *
- * A slimmed down version of WX_HTML_REPORT_PANEL
+ * A slimmed down version of #WX_HTML_REPORT_PANEL
  */
 class WX_HTML_REPORT_BOX : public wxHtmlWindow, public REPORTER
 {
@@ -60,7 +58,7 @@ private:
     // reports, but can be very slow for larger reports.
     bool                  m_immediateMode;
 
-    ///> copy of the report, stored for filtering
+    ///< copy of the report, stored for filtering
     std::vector<wxString> m_messages;
 };
 

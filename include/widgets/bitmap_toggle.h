@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,13 +43,13 @@ class BITMAP_TOGGLE : public wxPanel
 public:
     BITMAP_TOGGLE() {}
 
-    BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap& aCheckedBitmap,
+    BITMAP_TOGGLE( wxWindow* aParent, wxWindowID aId, const wxBitmap& aCheckedBitmap,
                    const wxBitmap& aUncheckedBitmap, bool aChecked = false );
 
-    ///> Set the checkbox state
+    ///< Set the checkbox state
     void SetValue( bool aValue );
 
-    ///> Read the checkbox state
+    ///< Read the checkbox state
     bool GetValue() const { return m_checked; }
 
 private:
@@ -57,10 +57,10 @@ private:
 
     wxStaticBitmap* m_bitmap;
 
-    ///> Bitmap to display in unchecked state
+    ///< Bitmap to display in unchecked state
     wxBitmap m_unchecked_bitmap;
 
-    ///> Bitmap to display in checked state
+    ///< Bitmap to display in checked state
     wxBitmap m_checked_bitmap;
 };
 

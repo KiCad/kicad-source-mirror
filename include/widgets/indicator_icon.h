@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public:
         virtual ~ICON_PROVIDER() {};
 
         /**
-         * Gets a reference to the row icon in the given mode
+         * Get a reference to the row icon in the given mode.
          *
          * @param aIconId the id of the icon to get (depends on the
          * provider).
@@ -63,7 +63,7 @@ public:
 
     /**
      * Accessor for the default icon providers, which take
-     * true and false for IDs, meaining on/off.
+     * true and false for IDs, meaning on/off.
      *
      * @param aAlternative false for blue arrow/blank, true for the
      * green diamond
@@ -82,7 +82,7 @@ public:
                    ICON_ID aInitialIcon, int aID );
 
     /**
-     * Sets the row indiciator to the given state
+     * Set the row indicator to the given state.
      *
      * @param aIconId the icon ID to pass to the provider.
      */
@@ -96,34 +96,33 @@ public:
 
 private:
 
-    ///> An class that delivers icons for the indictor (currently just
-    ///> uses a default implementation).
+    ///< An class that delivers icons for the indicator (currently just
+    ///< uses a default implementation).
     ICON_PROVIDER& m_iconProvider;
 
-    ///> Handle on the bitmap widget
+    ///< Handle on the bitmap widget
     wxStaticBitmap* m_bitmap;
 
-    ///> Is the icon currently "on"
+    ///< Is the icon currently "on"
     ICON_ID m_currentId;
 };
 
 
 /**
- * Icon provider for the "standard" row indicators, for example in
- * layer selection lists
+ * Icon provider for the "standard" row indicators, for example in layer selection lists
  */
 class ROW_ICON_PROVIDER: public INDICATOR_ICON::ICON_PROVIDER
 {
 public:
 
-    ///> State constants to select the right icons
+    ///< State constants to select the right icons
     enum STATE
     {
-        OFF,    ///> Row "off" or "deselected"
-        DIMMED, ///> Row "dimmed"
-        ON,     ///> Row "on" or "selected"
-        UP,     ///> Row above design alpha
-        DOWN,   ///> Row below design alpha
+        OFF,    ///< Row "off" or "deselected"
+        DIMMED, ///< Row "dimmed"
+        ON,     ///< Row "on" or "selected"
+        UP,     ///< Row above design alpha
+        DOWN,   ///< Row below design alpha
     };
 
     /**
@@ -132,7 +131,7 @@ public:
      */
     ROW_ICON_PROVIDER( int aSize );
 
-    ///> @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
+    ///< @copydoc INDICATOR_ICON::ICON_PROVIDER::GetIndicatorIcon()
     const wxBitmap& GetIndicatorIcon( INDICATOR_ICON::ICON_ID aIconId ) const override;
 
 private:
@@ -142,7 +141,6 @@ private:
     wxBitmap m_downArrowBitmap;
     wxBitmap m_dotBitmap;
 };
-
 
 
 #endif // ROW_INDICATOR__H_

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -90,34 +90,34 @@ public:
      *
      * @param aLayerName a text which can be printed as layer name.
      * @param aPageNum the number of the current page (only used to print this value).
-     * @param aPageCount the number of pages to ptint (only used to print this value).
+     * @param aPageCount the number of pages to print (only used to print this value).
      */
     virtual void DrawPage( const wxString& aLayerName = wxEmptyString,
                            int aPageNum = 1, int aPageCount = 1 );
 
 protected:
-    ///> Convert mils to internal units
+    ///< Convert mils to internal units
     virtual int milsToIU( double aMils ) const = 0;
 
-    ///> Enables layers visibility for a printout
+    ///< Enables layers visibility for a printout
     virtual void setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet );
 
-    ///> Configures PAINTER object for a printout
+    ///< Configures PAINTER object for a printout
     virtual void setupPainter( KIGFX::PAINTER& aPainter );
 
-    ///> Configures GAL object for a printout
+    ///< Configures GAL object for a printout
     virtual void setupGal( KIGFX::GAL* aGal );
 
-    ///> Returns bounding box of the printed objects (excluding worksheet frame)
+    ///< Returns bounding box of the printed objects (excluding worksheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
 
-    ///> Returns a PAINTER instance used to draw the items.
+    ///< Returns a PAINTER instance used to draw the items.
     virtual std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) = 0;
 
-    ///> Source VIEW object (note that actual printing only refers to this object)
+    ///< Source VIEW object (note that actual printing only refers to this object)
     const KIGFX::VIEW* m_view;
 
-    ///> Printout parameters
+    ///< Printout parameters
     BOARD_PRINTOUT_SETTINGS m_settings;
 };
 

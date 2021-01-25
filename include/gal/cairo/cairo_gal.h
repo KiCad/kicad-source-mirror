@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -40,7 +40,7 @@
 #include <memory>
 
 /**
- * Class CAIRO_GAL is the cairo implementation of the graphics abstraction layer.
+ * The Cairo implementation of the graphics abstraction layer.
  *
  * Quote from Wikipedia:
  * " Cairo is a software library used to provide a vector graphics-based, device-independent
@@ -213,7 +213,7 @@ public:
 
     void EnableDepthTest( bool aEnabled = false ) override;
 
-    ///> @copydoc GAL::DrawGrid()
+    ///< @copydoc GAL::DrawGrid()
     void DrawGrid() override;
 
 
@@ -264,17 +264,17 @@ protected:
     void storePath();                           ///< Store the actual path
 
     /**
-     * Blits cursor into the current screen.
+     * Blit cursor into the current screen.
      */
     void blitCursor( wxMemoryDC& clientDC );
 
-    /// Drawing polygons & polylines is the same in cairo, so here is the common code
+    /// Drawing polygons & polylines is the same in Cairo, so here is the common code
     void drawPoly( const std::deque<VECTOR2D>& aPointList );
     void drawPoly( const VECTOR2D aPointList[], int aListSize );
     void drawPoly( const SHAPE_LINE_CHAIN& aLineChain );
 
     /**
-     * Returns a valid key that can be used as a new group number.
+     * Return a valid key that can be used as a new group number.
      *
      * @return An unique group number that is not used by any other group.
      */
@@ -369,7 +369,7 @@ public:
 
     ~CAIRO_GAL();
 
-    ///> @copydoc GAL::IsVisible()
+    ///< @copydoc GAL::IsVisible()
     bool IsVisible() const override
     {
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
@@ -443,7 +443,7 @@ public:
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
-    ///> Cairo-specific update handlers
+    ///< Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
 protected:
@@ -462,7 +462,7 @@ protected:
     unsigned char*          wxOutput;               ///< wxImage compatible buffer
 
     // Variables related to Cairo <-> wxWidgets
-    unsigned char*      bitmapBuffer;           ///< Storage of the cairo image
+    unsigned char*      bitmapBuffer;           ///< Storage of the Cairo image
     int                 stride;                 ///< Stride value for Cairo
     int                 wxBufferWidth;
     bool                isInitialized;          ///< Are Cairo image & surface ready to use

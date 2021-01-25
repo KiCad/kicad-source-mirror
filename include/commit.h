@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2016-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -34,15 +35,15 @@
 
 class EDA_ITEM;
 
-///> Types of changes
+///< Types of changes
 enum CHANGE_TYPE {
     CHT_ADD     = 1,
     CHT_REMOVE  = 2,
     CHT_MODIFY  = 4,
     CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY,
 
-    ///> Flag to indicate the change is already applied,
-    ///> just notify observers (not compatible with CHT_MODIFY)
+    ///< Flag to indicate the change is already applied,
+    ///< just notify observers (not compatible with CHT_MODIFY)
     CHT_DONE    = 8,
     CHT_FLAGS   = CHT_DONE
 };
@@ -73,39 +74,39 @@ public:
     COMMIT();
     virtual ~COMMIT();
 
-    ///> Adds a new item to the model
+    ///< Add a new item to the model
     COMMIT& Add( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_ADD );
     }
 
-    ///> Notifies observers that aItem has been added
+    ///< Notify observers that aItem has been added
     COMMIT& Added( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_ADD | CHT_DONE );
     }
 
-    ///> Removes a new item from the model
+    ///< Remove a new item from the model
     COMMIT& Remove( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_REMOVE );
     }
 
-    ///> Notifies observers that aItem has been removed
+    ///< Notify observers that aItem has been removed
     COMMIT& Removed( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_REMOVE | CHT_DONE );
     }
 
-    ///> Modifies a given item in the model.
-    ///> Must be called before modification is performed.
+    ///< Modify a given item in the model.
+    ///< Must be called before modification is performed.
     COMMIT& Modify( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_MODIFY );
     }
 
-    ///> Creates an undo entry for an item that has been already modified. Requires a copy done
-    ///> before the modification.
+    ///< Create an undo entry for an item that has been already modified. Requires a copy done
+    ///< before the modification.
     COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy )
     {
         return createModified( aItem, aCopy );
@@ -121,7 +122,7 @@ public:
         return *this;
     }
 
-    ///> Adds a change of the item aItem of type aChangeType to the change list.
+    ///< Add a change of the item aItem of type aChangeType to the change list.
     virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
 
     virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
@@ -129,11 +130,11 @@ public:
     virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems,
                            UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
 
-    ///> Executes the changes.
+    ///< Execute the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) = 0;
 
-    ///> Revert the commit by restoring the modified items state.
+    ///< Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;
 
     bool Empty() const
@@ -141,15 +142,15 @@ public:
         return m_changes.empty();
     }
 
-    ///> Returns status of an item.
+    ///< Returns status of an item.
     int GetStatus( EDA_ITEM* aItem );
 
 protected:
     struct COMMIT_LINE
     {
-        EDA_ITEM*   m_item;       ///> Main item that is added/deleted/modified
-        EDA_ITEM*   m_copy;       ///> Optional copy of the item
-        CHANGE_TYPE m_type;       ///> Modification type
+        EDA_ITEM*   m_item;       ///< Main item that is added/deleted/modified
+        EDA_ITEM*   m_copy;       ///< Optional copy of the item
+        CHANGE_TYPE m_type;       ///< Modification type
     };
 
     // Should be called in Push() & Revert() methods

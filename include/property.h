@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -43,7 +44,7 @@ class PROPERTY_BASE;
 template<typename T>
 class ENUM_MAP;
 
-///> Common property types
+///< Common property types
 enum PROPERTY_DISPLAY
 {
     DEFAULT,    ///< Default property for a given type
@@ -52,7 +53,7 @@ enum PROPERTY_DISPLAY
     DECIDEGREE  ///< Convert decidegrees to degrees for display
 };
 
-///> Macro to generate unique identifier for a type
+///< Macro to generate unique identifier for a type
 #define TYPE_HASH( x ) typeid( x ).hash_code()
 #define TYPE_NAME( x ) typeid( x ).name()
 //#define TYPE_HASH( x ) typeid( std::decay<x>::type ).hash_code()
@@ -169,7 +170,7 @@ public:
 class PROPERTY_BASE
 {
 private:
-    ///> Used to generate unique IDs.  Must come up front so it's initialized before ctor.
+    ///< Used to generate unique IDs.  Must come up front so it's initialized before ctor.
 
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
@@ -189,7 +190,7 @@ public:
     }
 
     /**
-     * Returns a limited set of possible values (e.g. enum). Check with HasChoices() if a particular
+     * Return a limited set of possible values (e.g. enum). Check with HasChoices() if a particular
      * PROPERTY provides such set.
      */
     virtual const wxPGChoices& Choices() const
@@ -199,7 +200,7 @@ public:
     }
 
     /**
-     * Sets the possible values for for the property.
+     * Set the possible values for for the property.
      */
     virtual void SetChoices( const wxPGChoices& aChoices )
     {
@@ -207,7 +208,7 @@ public:
     }
 
     /**
-     * Returns true if this PROPERTY has a limited set of possible values.
+     * Return true if this PROPERTY has a limited set of possible values.
      * @see PROPERTY_BASE::Choices()
      */
     virtual bool HasChoices() const
@@ -216,7 +217,7 @@ public:
     }
 
     /**
-     * Returns true if aObject offers this PROPERTY.
+     * Return true if aObject offers this PROPERTY.
      */
     bool Available( INSPECTABLE* aObject ) const
     {
@@ -224,7 +225,7 @@ public:
     }
 
     /**
-     * Sets a callback function to determine whether an object provides this property.
+     * Set a callback function to determine whether an object provides this property.
      */
     void SetAvailableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
@@ -232,17 +233,17 @@ public:
     }
 
     /**
-     * Returns type-id of the Owner class.
+     * Return type-id of the Owner class.
      */
     virtual size_t OwnerHash() const = 0;
 
     /**
-     * Returns type-id of the Base class.
+     * Return type-id of the Base class.
      */
     virtual size_t BaseHash() const = 0;
 
     /**
-     * Returns type-id of the property type.
+     * Return type-id of the property type.
      */
     virtual size_t TypeHash() const = 0;
 
@@ -279,7 +280,7 @@ private:
     const wxString                    m_name;
     const PROPERTY_DISPLAY            m_display;
 
-    std::function<bool(INSPECTABLE*)> m_availFunc;   ///> Eval to determine if prop is available
+    std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 
     friend class INSPECTABLE;
 };
@@ -360,19 +361,19 @@ protected:
         return res;
     }
 
-    ///> Set method
+    ///< Set method
     std::unique_ptr<SETTER_BASE<Owner, T>> m_setter;
 
-    ///> Get method
+    ///< Get method
     std::unique_ptr<GETTER_BASE<Owner, T>> m_getter;
 
-    ///> Owner class type-id
+    ///< Owner class type-id
     const size_t m_ownerHash;
 
-    ///> Base class type-id
+    ///< Base class type-id
     const size_t m_baseHash;
 
-    ///> Property value type-id
+    ///< Property value type-id
     const size_t m_typeHash;
 };
 
@@ -596,7 +597,7 @@ private:
     DECLARE_ENUM_TO_WXANY( type )                                                           \
     IMPLEMENT_ENUM_TO_WXANY( type )
 
-///> Macro to define read-only fields (no setter method available)
+///< Macro to define read-only fields (no setter method available)
 #define NO_SETTER( owner, type ) ( ( void ( owner::* )( type ) ) nullptr )
 
 /*

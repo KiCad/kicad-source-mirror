@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KICAD, a free EDA CAD application.
 *
-* Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+* Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ namespace KIGFX
         GAL_DISPLAY_OPTIONS();
 
         /**
-         * Read GAL config options from applicaton-level config
+         * Read GAL config options from application-level config
          * @param aCfg      the window settings to load from
          */
         void ReadWindowSettings( WINDOW_SETTINGS& aCfg );
@@ -120,28 +120,28 @@ namespace KIGFX
 
         DPI_SCALING m_dpi;
 
-        ///> The grid style to draw the grid in
+        ///< The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
 
-        ///> Snapping options for the grid
+        ///< Snapping options for the grid
         GRID_SNAPPING m_gridSnapping;
 
-        ///> Thickness to render grid lines/dots
+        ///< Thickness to render grid lines/dots
         double m_gridLineWidth;
 
-        ///> Minimum pixel distance between displayed grid lines
+        ///< Minimum pixel distance between displayed grid lines
         double m_gridMinSpacing;
 
-        ///> Whether or not to draw the coordinate system axes
+        ///< Whether or not to draw the coordinate system axes
         bool m_axesEnabled;
 
-        ///> Fullscreen crosshair or small cross
+        ///< Fullscreen crosshair or small cross
         bool m_fullscreenCursor;
 
-        ///> Force cursor display
+        ///< Force cursor display
         bool m_forceDisplayCursor;
 
-        ///> The pixel scale factor (>1 for hi-DPI scaled displays)
+        ///< The pixel scale factor (>1 for hi-DPI scaled displays)
         double m_scaleFactor;
     };
 

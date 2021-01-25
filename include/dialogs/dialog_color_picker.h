@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -84,9 +84,10 @@ public:
      * Dialog constructor
      * @param aParent is the caller
      * @param aCurrentColor is the current color, used to show it in dialog
-     * @param aAllowOpacityControl = true to allow opacity (alpha channel) setting
+     * @param aAllowOpacityControl true to allow opacity (alpha channel) setting
      * false to not show this setting (opacity = 1.0 always)
-     * @param aUserColors: if not null is a list of defined colors replacing the dialog predefined colors
+     * @param aUserColors if not null is a list of defined colors replacing the dialog
+     *                    predefined colors
      */
 	DIALOG_COLOR_PICKER( wxWindow* aParent, const KIGFX::COLOR4D& aCurrentColor,
                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr,
@@ -105,7 +106,7 @@ private:
     bool m_allowMouseEvents;
     bool m_allowOpacityCtrl;            ///< true to show the widget,
                                         ///< false to keep alpha channel = 1.0
-    KIGFX::COLOR4D m_previousColor4D;   ///< the inital color4d
+    KIGFX::COLOR4D m_previousColor4D;   ///< the initial color4d
     KIGFX::COLOR4D m_newColor4D;        ///< the current color4d
     KIGFX::COLOR4D m_defaultColor;      ///< The default color4d
 
@@ -117,7 +118,7 @@ private:
     wxPoint m_cursorBitmapGreen;        ///< the green cursor on the RGB bitmap palette.
     wxPoint m_cursorBitmapBlue;         ///< the blue cursor on the RGB bitmap palette.
     wxPoint m_cursorBitmapHSV;          ///< the cursor on the HSV bitmap palette.
-    wxPoint* m_selectedCursor;          ///< the ref cursor to the selected curor, if any, or null.
+    wxPoint* m_selectedCursor;          ///< the ref cursor to the selected cursor, if any, or null.
 
     double m_hue;                       ///< the current hue, in degrees (0 ... 360)
     double m_sat;                       ///< the current saturation (0 ... 1.0)
@@ -136,7 +137,7 @@ private:
     void createRGBBitmap();             ///< generate the bitmap that shows the RVB color space
     void drawRGBPalette();              ///< draws the RVB color space
 
-    ///> repaint a static bitmap with the aColor4D color
+    ///< repaint a static bitmap with the aColor4D color
     void updatePreview( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D );
 
     ///< Event handler from wxSlider: brightness (value) control
@@ -152,7 +153,7 @@ private:
     void OnChangeEditHue( wxSpinEvent& event ) override;
     void OnChangeEditSat( wxSpinEvent& event ) override;
 
-    ///> mouse handlers, when clicking on a palette bitmap
+    ///< mouse handlers, when clicking on a palette bitmap
 	void onRGBMouseClick( wxMouseEvent& event ) override;
 	void onRGBMouseDrag( wxMouseEvent& event ) override;
 	void onHSVMouseClick( wxMouseEvent& event ) override;
@@ -163,8 +164,9 @@ private:
     ///< Event handler for the reset button press
     void OnResetButton( wxCommandEvent& aEvent ) override;
 
-    /** manage the Hue and Saturation settings when the mouse cursor
-     * is at aMouseCursor.
+    /**
+     * Manage the Hue and Saturation settings when the mouse cursor is at aMouseCursor.
+     *
      * @param aMouseCursor is the mouse cursor position on the HSV bitmap
      * @return true if the Hue and Saturation can be set from aMouseCursor,
      * if Saturation value computed from aMouseCursor is <= 1.0,
@@ -172,14 +174,16 @@ private:
      */
 	bool setHSvaluesFromCursor( wxPoint aMouseCursor );
 
-    ///> Event handler for defined color buttons
+    ///< Event handler for defined color buttons
     void buttColorClick( wxMouseEvent& event );
 
-    ///> called when creating the dialog
+    ///< called when creating the dialog
     bool TransferDataToWindow() override;
 
-    /** creates the bitmap buttons for each defined colors
-     * if aPredefinedColors is nullptr, a internal predefined list will be used
+    /**
+     * Create the bitmap buttons for each defined colors.
+     *
+     * If aPredefinedColors is nullptr, a internal predefined list will be used.
      */
     void initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors );
 

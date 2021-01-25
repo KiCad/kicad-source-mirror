@@ -4,7 +4,7 @@
  * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,7 +148,7 @@ wxString GetOSXKicadDataDir();
 // this function, so add it if missing
 #if !wxCHECK_VERSION( 3, 1, 0 )
 #define USE_KICAD_WXSTRING_HASH     // for common.cpp
-///> Template specialization to enable wxStrings for certain containers (e.g. unordered_map)
+///< Template specialization to enable wxStrings for certain containers (e.g. unordered_map)
 namespace std
 {
     template<> struct hash<wxString>

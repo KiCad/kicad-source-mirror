@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2020 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@
 #include <wx/stc/stc.h>
 #include <kiplatform/app.h>
 
-///> Stores information about a mouse button state
+///< Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
 {
     BUTTON_STATE( TOOL_MOUSE_BUTTONS aButton, const wxEventType& aDownEvent,
@@ -57,45 +57,45 @@ struct TOOL_DISPATCHER::BUTTON_STATE
         dblClickEvent( aDblClickEvent )
     {};
 
-    ///> Flag indicating that dragging is active for the given button.
+    ///< Flag indicating that dragging is active for the given button.
     bool dragging;
 
-    ///> Flag indicating that the given button is pressed.
+    ///< Flag indicating that the given button is pressed.
     bool pressed;
 
-    ///> Point where dragging has started (in world coordinates).
+    ///< Point where dragging has started (in world coordinates).
     VECTOR2D dragOrigin;
 
-    ///> Point where click event has occurred.
+    ///< Point where click event has occurred.
     VECTOR2D downPosition;
 
-    ///> Difference between drag origin point and current mouse position (expressed as distance in
-    ///> pixels).
+    ///< Difference between drag origin point and current mouse position (expressed as distance in
+    ///< pixels).
     double dragMaxDelta;
 
-    ///> Determines the mouse button for which information are stored.
+    ///< Determines the mouse button for which information are stored.
     TOOL_MOUSE_BUTTONS button;
 
-    ///> The type of wxEvent that determines mouse button press.
+    ///< The type of wxEvent that determines mouse button press.
     wxEventType downEvent;
 
-    ///> The type of wxEvent that determines mouse button release.
+    ///< The type of wxEvent that determines mouse button release.
     wxEventType upEvent;
 
-    ///> The type of wxEvent that determines mouse button double click.
+    ///< The type of wxEvent that determines mouse button double click.
     wxEventType dblClickEvent;
 
-    ///> Time stamp for the last mouse button press event.
+    ///< Time stamp for the last mouse button press event.
     wxLongLong downTimestamp;
 
-    ///> Restores initial state.
+    ///< Restores initial state.
     void Reset()
     {
         dragging = false;
         pressed = false;
     }
 
-    ///> Checks the current state of the button.
+    ///< Checks the current state of the button.
     bool GetState() const
     {
         wxMouseState mouseState = wxGetMouseState();
@@ -251,6 +251,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     return false;
 }
 
+
 // Helper function to know if a special key ( see key list ) should be captured
 // or if the event can be skipped
 // on Linux, the event must be passed to the GUI if they are not used by KiCad,
@@ -278,6 +279,7 @@ bool isKeySpecialCode( int aKeyCode )
 
     return isInList;
 }
+
 
 // Helper function to know if a key should be managed by DispatchWxEvent()
 // or if the event can be ignored and skipped because the key is only a modifier
@@ -430,7 +432,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     wxWindow*       focus = wxWindow::FindFocus();
 
     // Required in win32 to ensure wxTimer events get scheduled in between other events
-    // Or else we may stall them out entirely and never get them during actions like rapid mouse moves
+    // Or else we may stall them out entirely and never get them during actions like rapid
+    // mouse moves.
     KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
 
     wxEventType type = aEvent.GetEventType();
@@ -607,7 +610,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // Not handled wxEVT_CHAR must be Skipped (sent to GUI).
     // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
     // Escape key presses are never skipped by the handler since they correspond to tool cancel
-    // events, and if they aren't skipped then they are propagated to other frames (which we don't want).
+    // events, and if they aren't skipped then they are propagated to other frames (which we
+    // don't want).
     if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK)
          && !keyIsSpecial
          && !handled

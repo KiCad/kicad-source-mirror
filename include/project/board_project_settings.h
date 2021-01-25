@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -83,16 +83,16 @@ struct SELECTION_FILTER_OPTIONS
 };
 
 /**
- * Determines how inactive layers should be displayed
+ * Determine how inactive layers should be displayed.
  */
 enum class HIGH_CONTRAST_MODE
 {
-    NORMAL = 0,     ///> Non-active layers are shown normally (no high-contrast mode)
-    DIMMED,         ///> Non-active layers are dimmed (old high-contrast mode)
-    HIDDEN          ///> Non-active layers are hidden
+    NORMAL = 0,     ///< Non-active layers are shown normally (no high-contrast mode)
+    DIMMED,         ///< Non-active layers are dimmed (old high-contrast mode)
+    HIDDEN          ///< Non-active layers are hidden
 };
 
-///> Determines how zones should be displayed
+///< Determine how zones should be displayed.
 enum class ZONE_DISPLAY_MODE
 {
     SHOW_FILLED,          ///< Filled polygons are shown
@@ -100,7 +100,7 @@ enum class ZONE_DISPLAY_MODE
     SHOW_FILLED_OUTLINE   ///< Outlines of filled polygons are shown
 };
 
-///> Determines how net color overrides should be applied
+///< Determine how net color overrides should be applied.
 enum class NET_COLOR_MODE
 {
     OFF,        ///< Net (and netclass) colors are not shown
@@ -108,7 +108,7 @@ enum class NET_COLOR_MODE
     ALL         ///< Net/netclass colors are shown on all net copper
 };
 
-///> Determines how ratsnest lines are drawn
+///< Determine how ratsnest lines are drawn.
 enum class RATSNEST_MODE
 {
     ALL,        ///< Ratsnest lines are drawn to items on all layers (default)
@@ -116,7 +116,7 @@ enum class RATSNEST_MODE
 };
 
 /**
- * A saved set of layers that are visible
+ * A saved set of layers that are visible.
  */
 struct LAYER_PRESET
 {

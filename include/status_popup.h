@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ public:
 
     virtual void Popup( wxWindow* aFocus = nullptr );
     virtual void PopupFor( int aMsecs );
-    virtual void Move( const wxPoint &aWhere );
+    virtual void Move( const wxPoint& aWhere );
     virtual void Move( const VECTOR2I& aWhere );
 
     /**
@@ -64,7 +64,7 @@ protected:
 
     void onCharHook( wxKeyEvent& aEvent );
 
-    ///> Expire timer even handler
+    ///< Expire timer even handler
     void onExpire( wxTimerEvent& aEvent );
 
     wxPanel* m_panel;

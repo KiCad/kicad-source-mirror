@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +53,9 @@ public:
      * Add a point to the construction manager
      *
      * @param aPt the new point
-     * @param aLockIn whether to "lock in" the point, and move the
-     * geometry manager to the next (or previous) step. False to
-     * update geometry and not affect manager state
+     * @param aLockIn whether to "lock in" the point, and move the geometry manager to the
+     *                next (or previous) step. False to update geometry and not affect
+     *                manager state.
      */
     void AddPoint( const VECTOR2I& aPt, bool aLockIn )
     {
@@ -73,16 +73,14 @@ public:
     }
 
     /**
-     * Undo the last point, and move the manager back to the previous
-     * step
+     * Undo the last point, and move the manager back to the previous step.
      */
     void RemoveLastPoint()
     {
         performStep( false );
 
-        // process the last point again, but in the previous step mode
-        // it doesn't matter if accepted or not, as long as the geometry
-        // is regenerated if needed
+        // process the last point again, but in the previous step mode it doesn't matter if
+        // accepted or not, as long as the geometry is regenerated if needed.
         acceptPoint( GetLastPoint() );
         setGeometryChanged();
     }
@@ -96,7 +94,7 @@ public:
     }
 
     /**
-     * Reset the manager to the initial state
+     * Reset the manager to the initial state.
      */
     void Reset()
     {
@@ -105,7 +103,7 @@ public:
     }
 
     /**
-     * @return true if the manager reached the final state
+     * @return true if the manager reached the final state.
      */
     bool IsComplete() const
     {
@@ -113,10 +111,10 @@ public:
     }
 
     /**
-     * Gets the last point added (locked in or not). This can
-     * be useful when drawing previews, as the point given isn't always
-     * what gets locked into the geometry, if that step doesn't have
-     * full degrees of freedom
+     * Get the last point added (locked in or not).
+     *
+     * This can* be useful when drawing previews, as the point given isn't always what gets
+     * locked into the geometry, if that step doesn't have full degrees of freedom.
      */
     VECTOR2I GetLastPoint() const
     {
@@ -124,8 +122,7 @@ public:
     }
 
     /**
-     * @return true if the geoemtry has changed, eg such that a client
-     * should redraw
+     * @return true if the geometry has changed, eg such that a client should redraw.
      */
     bool HasGeometryChanged() const
     {
@@ -133,8 +130,8 @@ public:
     }
 
     /**
-     * Clear the geometry changed flag, call after the client code has
-     * updated everything as needed.
+     * Clear the geometry changed flag, call after the client code has updated everything
+     * as needed.
      */
     void ClearGeometryChanged()
     {
@@ -143,13 +140,13 @@ public:
 
 protected:
 
-    ///> Mark the geometry as changed for clients to notice
+    ///< Mark the geometry as changed for clients to notice
     void setGeometryChanged()
     {
         m_changed = true;
     }
 
-    ///> Get the current stage of the manager
+    ///< Get the current stage of the manager
     int getStep() const
     {
         return m_step;
@@ -157,17 +154,17 @@ protected:
 
 private:
 
-    ///> Function that accepts a point for a stage, or rejects it
-    ///> to return to the previous stage
+    ///< Function that accepts a point for a stage, or rejects it
+    ///< to return to the previous stage
     virtual bool acceptPoint( const VECTOR2I& aPt ) = 0;
 
     /**
-     * The highest step this manager has - used to recognise completion
+     * The highest step this manager has - used to recognize completion
      * and to clamp the step as it advances.
      */
     virtual int getMaxStep() const = 0;
 
-    ///> Moves the manager forward or backward through the stages
+    ///< Moves the manager forward or backward through the stages
     void performStep( bool aForward )
     {
         m_step += aForward ? 1 : -1;
@@ -176,15 +173,14 @@ private:
         m_step = std::min( std::max( m_step, 0 ), getMaxStep() );
     }
 
-    ///> Has the gemotry changed such that a client should redraw?
+    ///< Has the geometry changed such that a client should redraw?
     bool m_changed = false;
 
-    ///> The last (raw) point added, which is usually the cursor position
+    ///< The last (raw) point added, which is usually the cursor position
     VECTOR2I m_lastPoint;
 
     /**
-     * The current manager step, from 0 to some highest number that
-     * depends on the manager
+     * The current manager step, from 0 to some highest number that depends on the manager.
      */
     int m_step = 0;
 };

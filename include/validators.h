@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -150,16 +150,16 @@ public:
     bool Validate( wxWindow* aParent ) override;
 
 protected:
-    ///> Compiles and stores a regular expression
+    ///< Compiles and stores a regular expression
     void compileRegEx( const wxString& aRegEx, int aFlags );
 
-    ///> Original regular expression (for copy constructor)
+    ///< Original regular expression (for copy constructor)
     wxString m_regExString;
 
-    ///> Original compilation flags (for copy constructor)
+    ///< Original compilation flags (for copy constructor)
     int m_regExFlags;
 
-    ///> Compiled regex
+    ///< Compiled regex
     wxRegEx m_regEx;
 };
 

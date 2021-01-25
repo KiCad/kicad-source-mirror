@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +40,8 @@
 
 namespace KIGFX
 {
-///> Possible types of shaders (keep consistent with the actual shader source in gl_builtin_shaders.cpp)
+///< Possible types of shaders (keep consistent with the actual shader source in
+///< gl_builtin_shaders.cpp).
 enum SHADER_MODE
 {
     SHADER_NONE = 0,
@@ -53,7 +56,7 @@ enum SHADER_MODE
     SHADER_LINE_F = 10
 };
 
-///> Data structure for vertices {X,Y,Z,R,G,B,A,shader&param}
+///< Data structure for vertices {X,Y,Z,R,G,B,A,shader&param}
 struct VERTEX
 {
     GLfloat x, y, z;        // Coordinates

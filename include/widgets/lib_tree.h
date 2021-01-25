@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ class LIB_TABLE;
 class LIB_TREE : public wxPanel
 {
 public:
-    ///> Flags to select extra widgets
+    ///< Flags to select extra widgets
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
     /**
@@ -80,7 +80,7 @@ public:
     void SelectLibId( const LIB_ID& aLibId );
 
     /**
-     * Ensure that an item is visible (preferrably centered).
+     * Ensure that an item is visible (preferably centered).
      */
     void CenterLibId( const LIB_ID& aLibId );
 
@@ -95,7 +95,7 @@ public:
     void ExpandLibId( const LIB_ID& aLibId );
 
     /**
-     * Regenerates the tree.
+     * Regenerate the tree.
      */
     void Regenerate( bool aKeepState );
 
@@ -108,7 +108,7 @@ public:
 
 protected:
     /**
-     * Expands or collapses a node, switching it to the opposite state.
+     * Expand or collapse a node, switching it to the opposite state.
      */
     void toggleExpand( const wxDataViewItem& aTreeId );
 
@@ -137,21 +137,21 @@ protected:
      */
     struct STATE
     {
-        ///> List of expanded nodes
+        ///< List of expanded nodes
         std::vector<wxDataViewItem> expanded;
         std::vector<wxString>       pinned;
 
-        ///> Current selection, might be not valid if nothing was selected
+        ///< Current selection, might be not valid if nothing was selected
         LIB_ID selection;
     };
 
     /**
-     * Returns the component tree widget state.
+     * Return the component tree widget state.
      */
     STATE getState() const;
 
     /**
-     * Restores the component tree widget state from an object.
+     * Restore the component tree widget state from an object.
      */
     void setState( const STATE& aState );
 
@@ -176,10 +176,10 @@ protected:
     wxHtmlWindow*    m_details_ctrl;
 };
 
-///> Custom event sent when a new component is preselected
+///< Custom event sent when a new component is preselected
 wxDECLARE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
 
-///> Custom event sent when a component is selected
+///< Custom event sent when a component is selected
 wxDECLARE_EVENT( COMPONENT_SELECTED, wxCommandEvent );
 
 #endif /* LIB_TREE_H */

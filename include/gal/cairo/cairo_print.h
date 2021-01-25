@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -71,7 +71,7 @@ private:
     cairo_surface_t* m_surface;
 
 #ifdef __WXMSW__
-    ///> DC handle on Windows
+    ///< DC handle on Windows
     void* m_hdc;        // the real type is HDC, but do not pull in extra headers
 #endif /* __WXMSW__ */
 
@@ -110,17 +110,17 @@ public:
     void SetSheetSize( const VECTOR2D& aSize ) override;
 
 private:
-    ///> Returns true if page orientation is landscape
+    ///< Returns true if page orientation is landscape
     bool isLandscape() const
     {
         return m_nativePaperSize.x > m_nativePaperSize.y;
     }
 
-    ///> Printout size
+    ///< Printout size
     VECTOR2D m_nativePaperSize;
 
-    ///> Flag indicating whether the platform rotates page automatically or
-    ///> GAL needs to handle it in the transformation matrix
+    ///< Flag indicating whether the platform rotates page automatically or
+    ///< GAL needs to handle it in the transformation matrix
     bool m_hasNativeLandscapeRotation;
 
     std::unique_ptr<CAIRO_PRINT_CTX> m_printCtx;

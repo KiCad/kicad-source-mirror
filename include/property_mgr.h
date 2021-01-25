@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -37,7 +39,7 @@
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;
 
-///> Unique type identifier
+///< Unique type identifier
 using TYPE_ID = size_t;
 
 using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
@@ -45,7 +47,7 @@ using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
 using PROPERTY_SET = std::set<std::pair<size_t, wxString>>;
 
 /**
- * Provides class metadata. Each class handled by PROPERTY_MANAGER
+ * Provide class metadata. Each class handled by PROPERTY_MANAGER
  * needs to be described using AddProperty(), AddTypeCast() and InheritsAfter() methods.
  *
  * Enum types use a dedicated property type (PROPERTY_ENUM), define its possible values
@@ -68,9 +70,9 @@ public:
     }
 
     /**
-     * Associates a name with a type.
+     * Associate a name with a type.
      *
-     * Builds a map to provide faster type look-up.
+     * Build a map to provide faster type look-up.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @param aName is the type name.
@@ -78,7 +80,7 @@ public:
     void RegisterType( TYPE_ID aType, const wxString& aName );
 
     /**
-     * Returns name of a type.
+     * Return name of a type.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @return Name of the type or empty string, if not available.
@@ -86,7 +88,7 @@ public:
     const wxString& ResolveType( TYPE_ID aType ) const;
 
     /**
-     * Returns a property for a specific type.
+     * Return a property for a specific type.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @param aProperty is the property name used during class registration.
@@ -95,7 +97,7 @@ public:
     PROPERTY_BASE* GetProperty( TYPE_ID aType, const wxString& aProperty ) const;
 
     /**
-     * Returns all properties for a specific type.
+     * Return all properties for a specific type.
      *
      * @param aType is the type identifier (obtained using TYPE_HASH()).
      * @return Vector storing all properties of the requested type.
@@ -103,7 +105,7 @@ public:
     const PROPERTY_LIST& GetProperties( TYPE_ID aType ) const;
 
     /**
-     * Casts a type to another type. Used for correct type-casting of types with
+     * Cast a type to another type. Used for correct type-casting of types with
      * multi-inheritance. Requires registration of an appropriate converter (AddTypeCast).
      *
      * @param aSource is a pointer to the casted object.
@@ -121,14 +123,14 @@ public:
     }
 
     /**
-     * Registers a property.
+     * Register a property.
      *
      * @param aProperty is the property to register.
      */
     void AddProperty( PROPERTY_BASE* aProperty );
 
     /**
-     * Replaces an existing property for a specific type.
+     * Replace an existing property for a specific type.
      *
      * It is used to modify a property that has been inherited from a base class.
      * This method is used instead of AddProperty().
@@ -140,14 +142,14 @@ public:
     void ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew );
 
     /**
-     * Registers a type converter. Required prior TypeCast() usage.
+     * Register a type converter. Required prior TypeCast() usage.
      *
      * @param aCast is the type converter to register.
      */
     void AddTypeCast( TYPE_CAST_BASE* aCast );
 
     /**
-     * Declares an inheritance relationship between types.
+     * Declare an inheritance relationship between types.
      *
      * @param aBase is the base type identifier (obtained using TYPE_HASH()).
      * @param aDerived is the derived type identifier (obtained using TYPE_HASH()).
@@ -155,7 +157,7 @@ public:
     void InheritsAfter( TYPE_ID aDerived, TYPE_ID aBase );
 
     /**
-     * Returns true if aDerived is inherited from aBase.
+     * Return true if aDerived is inherited from aBase.
      */
     bool IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const;
 
@@ -170,7 +172,7 @@ public:
     }
 
     /**
-     * Rebuilds the list of all registered properties. Needs to be called
+     * Rebuild the list of all registered properties. Needs to be called
      * once before GetProperty()/GetProperties() are used.
      */
     void Rebuild();
@@ -194,7 +196,7 @@ private:
     {
     }
 
-    ///> Structure holding type meta-data
+    ///< Structure holding type meta-data
     struct CLASS_DESC
     {
         CLASS_DESC( TYPE_ID aId )
@@ -202,38 +204,38 @@ private:
         {
         }
 
-        ///> Unique type identifier (obtained using TYPE_HASH)
+        ///< Unique type identifier (obtained using TYPE_HASH)
         const TYPE_ID m_id;
 
-        ///> Types after which this type inherits
+        ///< Types after which this type inherits
         std::vector<std::reference_wrapper<CLASS_DESC>> m_bases;
 
-        ///> Properties unique to this type (i.e. not inherited)
+        ///< Properties unique to this type (i.e. not inherited)
         std::map<wxString, std::unique_ptr<PROPERTY_BASE>> m_ownProperties;
 
-        ///> Type converters available for this type
+        ///< Type converters available for this type
         std::map<TYPE_ID, std::unique_ptr<TYPE_CAST_BASE>> m_typeCasts;
 
-        ///> All properties (both unique to the type and inherited)
+        ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
-        ///> Replaced properties (TYPE_ID / name)
+        ///< Replaced properties (TYPE_ID / name)
         PROPERTY_SET m_replaced;
 
-        ///> Recreates the list of properties
+        ///< Recreates the list of properties
         void rebuild();
 
-        ///> Traverses the class inheritance hierarchy bottom-to-top, gathering
-        ///> all properties available to a type
+        ///< Traverses the class inheritance hierarchy bottom-to-top, gathering
+        ///< all properties available to a type
         void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced ) const;
     };
 
-    ///> Returns metadata for a specific type
+    ///< Returns metadata for a specific type
     CLASS_DESC& getClass( TYPE_ID aTypeId );
 
     std::unordered_map<TYPE_ID, wxString> m_classNames;
 
-    ///> Map of all available types
+    ///< Map of all available types
     std::unordered_map<TYPE_ID, CLASS_DESC> m_classes;
 
     /// Flag indicating that the list of properties needs to be rebuild (RebuildProperties())
@@ -243,7 +245,7 @@ private:
 };
 
 
-///> Helper macro to map type hashes to names
+///< Helper macro to map type hashes to names
 #define REGISTER_TYPE(x) PROPERTY_MANAGER::Instance().RegisterType(TYPE_HASH(x), TYPE_NAME(x))
 
 #endif /* PROPERTY_MGR_H */

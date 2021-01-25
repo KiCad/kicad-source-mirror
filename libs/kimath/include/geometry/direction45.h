@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,18 +31,18 @@
 #undef Opposite
 
 /**
- * DIRECTION_45.
- * Represents route directions & corner angles in a 45-degree metric.
+ * Represent route directions & corner angles in a 45-degree metric.
  */
-
 class DIRECTION_45
 {
 public:
 
     /**
-     * Represents available directions - there are 8 of them, as on a rectilinear map (north = up) +
-     * an extra undefined direction, reserved for traces that don't respect 45-degree routing regime.
-     * NOTE: North represents "up" to the user looking at the application, which is the negative-y
+     * Available directions, there are 8 of them, as on a rectilinear map (north = up) +
+     * an extra undefined direction, reserved for traces that don't respect 45-degree routing
+     * regime.
+     *
+     * @note North represents "up" to the user looking at the application, which is the negative-y
      * direction in the world coordinate space!
      */
     enum Directions : int
@@ -59,8 +60,7 @@ public:
     };
 
     /**
-     * Enum AngleType
-     * Represents kind of angle formed by vectors heading in two DIRECTION_45s.
+     * Represent kind of angle formed by vectors heading in two DIRECTION_45s.
      */
     enum AngleType
     {
@@ -75,7 +75,6 @@ public:
     DIRECTION_45( Directions aDir = UNDEFINED ) : m_dir( aDir ), m_90deg( false ) {}
 
     /**
-     * Constructor
      * @param aVec vector in world space, whose direction will be translated into a DIRECTION_45.
      */
     DIRECTION_45( const VECTOR2I &aVec, bool a90 = false ) :
@@ -87,7 +86,6 @@ public:
     }
 
     /**
-     * Constructor
      * @param aSeg segment, whose direction will be translated into a DIRECTION_45.
      */
     DIRECTION_45( const SEG& aSeg, bool a90 = false ) :
@@ -99,7 +97,8 @@ public:
     }
 
     /**
-     * Creates a DIRECTION_45 from the endpoints of a given arc
+     * Create a DIRECTION_45 from the endpoints of a given arc.
+     *
      * @param aArc will be translated into the closest DIRECTION_45
      */
     DIRECTION_45( const SHAPE_ARC& aArc, bool a90 = false ) :
@@ -111,8 +110,8 @@ public:
     }
 
     /**
-     * Function Format()
-     * Formats the direction in a human readable word.
+     * Format the direction in a human readable word.
+     *
      * @return name of the direction
      */
     const std::string Format() const
@@ -152,8 +151,8 @@ public:
     }
 
     /**
-     * Function Opposite()
-     * Returns a direction opposite (180 degree) to (this)
+     * Return a direction opposite (180 degree) to (this).
+     *
      * @return opposite direction
      */
     DIRECTION_45 Opposite() const
@@ -163,8 +162,8 @@ public:
     }
 
     /**
-     * Function Angle()
-     * Returns the type of angle between directions (this) and aOther.
+     * Return the type of angle between directions (this) and \a aOther.
+     *
      * @param aOther direction to compare angle with
      */
     AngleType Angle( const DIRECTION_45& aOther ) const
@@ -187,8 +186,7 @@ public:
     }
 
     /**
-     * Function IsObtuse()
-     * @return true, when (this) forms an obtuse angle with aOther
+     * @return true, when (this) forms an obtuse angle with \a aOther.
      */
     bool IsObtuse( const DIRECTION_45& aOther ) const
     {
@@ -196,8 +194,8 @@ public:
     }
 
     /**
-     * Function IsDiagonal()
-     * Returns true if the direction is diagonal (e.g. North-West, South-East, etc)
+     * Returns true if the direction is diagonal (e.g. North-West, South-East, etc).
+     *
      * @return true, when diagonal.
      */
     bool IsDiagonal() const
@@ -211,8 +209,9 @@ public:
     }
 
     /**
-     * Builds a 2-segment line chain between points aP0 and aP1 and following 45-degree routing
+     * Build a 2-segment line chain between points aP0 and aP1 and following 45-degree routing
      * regime. If aStartDiagonal is true, the trace starts with a diagonal segment.
+     *
      * @param aP0 starting point
      * @param aP1 ending point
      * @param aStartDiagonal whether the first segment has to be diagonal
@@ -234,10 +233,7 @@ public:
     }
 
     /**
-     * Function Right()
-     *
-     * Returns the direction on the right side of this (i.e. turns right
-     * by 45 or 90 deg)
+     * Return the direction on the right side of this (i.e. turns right by 45 or 90 deg).
      */
     const DIRECTION_45 Right() const
     {
@@ -255,10 +251,7 @@ public:
     }
 
     /**
-     * Function Left()
-     *
-     * Returns the direction on the left side of this (i.e. turns left
-     * by 45 or 90 deg)
+     * Return the direction on the left side of this (i.e. turns left by 45 or 90 deg).
      */
     const DIRECTION_45 Left() const
     {
@@ -304,9 +297,9 @@ public:
 private:
 
     /**
-     * Function construct()
-     * Calculates the direction from a vector. If the vector's angle is not a multiple of 45
+     * Calculate the direction from a vector. If the vector's angle is not a multiple of 45
      * degrees, the direction is rounded to the nearest octant.
+     *
      * @param aVec our vector
      */
     void construct_( const VECTOR2I& aVec )
@@ -337,10 +330,10 @@ private:
         return;
     }
 
-    ///> our actual direction
+    ///< our actual direction
     Directions m_dir;
 
-    ///> Are we routing on 45 or 90 degree increments
+    ///< Are we routing on 45 or 90 degree increments
     bool m_90deg;
 };
 

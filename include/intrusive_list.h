@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +27,7 @@
 #ifndef INTRUSIVE_LIST_H
 #define INTRUSIVE_LIST_H
 
-///> A lightweight intrusive list container
+///< A lightweight intrusive list container
 template <class T>
 class INTRUSIVE_LIST
 {

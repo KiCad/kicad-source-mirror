@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -144,8 +144,7 @@ struct TOOL_MANAGER::TOOL_STATE
     }
 
     /**
-     * Function Push()
-     * Stores the current state of the tool on stack. Stacks are stored internally and are not
+     * Store the current state of the tool on stack. Stacks are stored internally and are not
      * shared between different TOOL_STATE objects.
      */
     void Push()
@@ -156,9 +155,9 @@ struct TOOL_MANAGER::TOOL_STATE
     }
 
     /**
-     * Function Pop()
-     * Restores state of the tool from stack. Stacks are stored internally and are not
+     * Restore state of the tool from stack. Stacks are stored internally and are not
      * shared between different TOOL_STATE objects.
+     *
      * @return True if state was restored, false if the stack was empty.
      */
     bool Pop()
@@ -179,10 +178,10 @@ struct TOOL_MANAGER::TOOL_STATE
     }
 
 private:
-    ///> Stack preserving previous states of a TOOL.
+    ///< Stack preserving previous states of a TOOL.
     std::stack<std::unique_ptr<TOOL_STATE>> stateStack;
 
-    ///> Restores the initial state.
+    ///< Restores the initial state.
     void clear()
     {
         idle               = true;

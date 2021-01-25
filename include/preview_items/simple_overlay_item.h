@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,13 +58,13 @@ public:
     SIMPLE_OVERLAY_ITEM();
 
     /**
-     * Sets the overlay layer only. You can override this if
+     * Set the overlay layer only. You can override this if
      * you have more layers to draw on.
      */
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
-     * Draws the preview - this is done by calling the two functions:
+     * Draw the preview - this is done by calling the two functions:
      * setupGal() and drawPreviewShape(). If you need more than this,
      * or direct access to the VIEW, you probably should make a new
      *.
@@ -87,19 +87,19 @@ public:
         return "SIMPLE_OVERLAY_ITEM";
     }
 
-    ///> Set the stroke colour to set before drawing preview
+    ///< Set the stroke color to set before drawing preview
     void SetStrokeColor( const COLOR4D& aNewColor )
     {
         m_strokeColor = aNewColor;
     }
 
-    ///> Set the fill colour to set before drawing preview
+    ///< Set the fill color to set before drawing preview
     void SetFillColor( const COLOR4D& aNewColor )
     {
         m_fillColor = aNewColor;
     }
 
-    ///> Set the line width to set before drawing preview
+    ///< Set the line width to set before drawing preview
     void SetLineWidth( double aNewWidth )
     {
         m_lineWidth = aNewWidth;
@@ -110,15 +110,15 @@ private:
     /**
      * Set up the GAL canvas - this provides a default implementation,
      * that sets fill, stroke and width.
+     *
      * If that's not suitable, you can set more options in
      * updatePreviewShape(), but you might find that defining a new
-     * EDA_ITEM derivative is easier for heavily customised cases.
+     * EDA_ITEM derivative is easier for heavily customized cases.
      */
     void setupGal( KIGFX::GAL& aGal ) const;
 
     /**
-     * Draw the preview onto the given GAL. setupGal() will be called
-     * before this function.
+     * Draw the preview onto the given GAL. setupGal() will be called before this function.
      *
      * Subclasses should implement this in terms of their own graphical
      * data.

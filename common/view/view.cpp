@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -70,8 +72,7 @@ private:
     friend class VIEW;
 
     /**
-     * Function getLayers()
-     * Returns layer numbers used by the item.
+     * Return layer numbers used by the item.
      *
      * @param aLayers[]: output layer index array
      * @param aCount: number of layer indices in aLayers[]
@@ -91,17 +92,16 @@ private:
     int     m_requiredUpdate;   ///< Flag required for updating
     int     m_drawPriority;     ///< Order to draw this item in a layer, lowest first
 
-    ///> Helper for storing cached items group ids
+    ///< Helper for storing cached items group ids
     typedef std::pair<int, int> GroupPair;
 
-    ///> Indexes of cached GAL display lists corresponding to the item (for every layer it occupies).
-    ///> (in the std::pair "first" stores layer number, "second" stores group id).
+    ///< Indexes of cached GAL display lists corresponding to the item (for every layer it.
+    ///<  occupies)(in the std::pair "first" stores layer number, "second" stores group id).
     GroupPair* m_groups;
     int        m_groupsSize;
 
     /**
-     * Function getGroup()
-     * Returns number of the group id for the given layer, or -1 in case it was not cached before.
+     * Return number of the group id for the given layer, or -1 in case it was not cached before.
      *
      * @param aLayer is the layer number for which group id is queried.
      * @return group id or -1 in case there is no group id (ie. item is not cached).
@@ -118,8 +118,7 @@ private:
     }
 
     /**
-     * Function setGroup()
-     * Sets a group id for the item and the layer combination.
+     * Set a group id for the item and the layer combination.
      *
      * @param aLayer is the layer numbe.
      * @param aGroup is the group id.
@@ -151,8 +150,7 @@ private:
 
 
     /**
-     * Function deleteGroups()
-     * Removes all of the stored group ids. Forces recaching of the item.
+     * Remove all of the stored group ids. Forces recaching of the item.
      */
     void deleteGroups()
     {
@@ -163,8 +161,7 @@ private:
 
 
     /**
-     * Function storesGroups()
-     * Returns information if the item uses at least one group id (ie. if it is cached at all).
+     * Return information if the item uses at least one group id (ie. if it is cached at all).
      *
      * @returns true in case it is cached at least for one layer.
      */
@@ -175,7 +172,8 @@ private:
 
 
     /**
-     * Reorders the stored groups (to facilitate reordering of layers)
+     * Reorder the stored groups (to facilitate reordering of layers).
+     *
      * @see VIEW::ReorderLayerData
      *
      * @param aReorderMap is the mapping of old to new layer ids
@@ -202,8 +200,7 @@ private:
     std::vector<int> m_layers;
 
     /**
-     * Function saveLayers()
-     * Saves layers used by the item.
+     * Save layers used by the item.
      *
      * @param aLayers is an array containing layer numbers to be saved.
      * @param aCount is the size of the array.
@@ -222,8 +219,7 @@ private:
     }
 
     /**
-     * Function viewRequiredUpdate()
-     * Returns current update flag for an item.
+     * Return current update flag for an item.
      */
     int requiredUpdate() const
     {
@@ -231,8 +227,7 @@ private:
     }
 
     /**
-     * Function clearUpdateFlags()
-     * Marks an item as already updated, so it is not going to be redrawn.
+     * Mark an item as already updated, so it is not going to be redrawn.
      */
     void clearUpdateFlags()
     {
@@ -240,8 +235,7 @@ private:
     }
 
     /**
-     * Function isRenderable()
-     * Returns if the item should be drawn or not.
+     * Return if the item should be drawn or not.
      */
     bool isRenderable() const
     {
@@ -1198,7 +1192,8 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
     }
     else
     {
-        // updateLayers updates geometry too, so we do not have to update both of them at the same time
+        // updateLayers updates geometry too, so we do not have to update both of them at the
+        // same time
         if( aUpdateFlags & LAYERS )
         {
             updateLayers( aItem );

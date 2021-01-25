@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,21 +76,21 @@ public:
      */
     struct CURSOR_DEF
     {
-        ///> The ID key used to uniquely identify a cursor in a given store
+        ///< The ID key used to uniquely identify a cursor in a given store
         KICURSOR m_id_key;
 
-        ///> The image data bitmap
+        ///< The image data bitmap
         const unsigned char* m_image_data;
 
-        ///> The mask data bitmap
+        ///< The mask data bitmap
         const unsigned char* m_mask_data;
 
         const char** m_xpm;
 
-        ///> The image size in pixels
+        ///< The image size in pixels
         wxSize m_size;
 
-        ///> The "hotspot" where the cursor "is" in the image
+        ///< The "hotspot" where the cursor "is" in the image
         wxPoint m_hotspot;
     };
 
@@ -116,7 +116,7 @@ public:
     static const wxStockCursor GetStockCursor( KICURSOR aCursorType );
 
 private:
-    ///> Internal store of cursors by ID
+    ///< Internal store of cursors by ID
     std::map<KICURSOR, wxCursor> m_store;
 };
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -35,7 +35,6 @@ namespace KIGFX
 /**
  * Specialization of CACHED_CONTAINER that stores data in video memory via memory mapping.
  */
-
 class CACHED_CONTAINER_GPU : public CACHED_CONTAINER
 {
 public:
@@ -52,10 +51,10 @@ public:
         return m_isMapped;
     }
 
-    ///> @copydoc VERTEX_CONTAINER::Map()
+    ///< @copydoc VERTEX_CONTAINER::Map()
     void Map() override;
 
-    ///> @copydoc VERTEX_CONTAINER::Unmap()
+    ///< @copydoc VERTEX_CONTAINER::Unmap()
     void Unmap() override;
 
 protected:
@@ -71,13 +70,13 @@ protected:
     bool defragmentResize( unsigned int aNewSize ) override;
     bool defragmentResizeMemcpy( unsigned int aNewSize );
 
-    ///> Flag saying if vertex buffer is currently mapped
+    ///< Flag saying if vertex buffer is currently mapped
     bool m_isMapped;
 
-    ///> Vertex buffer handle
+    ///< Vertex buffer handle
     unsigned int m_glBufferHandle;
 
-    ///> Flag saying whether it is safe to use glCopyBufferSubData
+    ///< Flag saying whether it is safe to use glCopyBufferSubData
     bool m_useCopyBuffer;
 };
 } // namespace KIGFX

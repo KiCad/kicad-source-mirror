@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 Virtenio GmbH, Torsten Hueter, torsten.hueter <at> virtenio.de
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -40,14 +40,13 @@
 #endif
 
 /**
- * VECTOR2_TRAITS
- * traits class for VECTOR2.
+ * Traits class for VECTOR2.
  */
 template <class T>
 struct VECTOR2_TRAITS
 {
-    ///> extended range/precision types used by operations involving multiple
-    ///> multiplications to prevent overflow.
+    ///< extended range/precision types used by operations involving multiple
+    ///< multiplications to prevent overflow.
     typedef T extended_type;
 };
 
@@ -64,8 +63,7 @@ template <class T>
 std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector );
 
 /**
- * VECTOR2
- * defines a general 2D-vector/point.
+ * Define a general 2D-vector/point.
  *
  * This class uses templates to be universal. Several operators are provided to help
  * easy implementing of linear algebra equations.
@@ -83,8 +81,6 @@ public:
 
     T x, y;
 
-    // Constructors
-
     /// Construct a 2D-vector with x, y = 0
     VECTOR2();
 
@@ -99,8 +95,7 @@ public:
     /// Construct a vector with given components x, y
     VECTOR2( T x, T y );
 
-    /// Initializes a vector from another specialization. Beware of rouding
-    /// issues.
+    /// Initializes a vector from another specialization. Beware of rounding issues.
     template <typename CastingType>
     VECTOR2( const VECTOR2<CastingType>& aVec )
     {
@@ -115,8 +110,7 @@ public:
         y = aVec.y;
     }
 
-    /// Casts a vector to another specialized subclass. Beware of rouding
-    /// issues.
+    /// Cast a vector to another specialized subclass. Beware of rounding issues.
     template <typename CastedType>
     VECTOR2<CastedType> operator()() const
     {
@@ -124,81 +118,80 @@ public:
     }
 
     /**
-     * (wxPoint)
-     * implements the cast to wxPoint.
-     * @return wxPoint - the vector cast to wxPoint.
+     * Implement the cast to wxPoint.
+     *
+     * @return the vector cast to wxPoint.
      */
     explicit operator wxPoint() const
     {
         return wxPoint( x, y );
     }
 
-    /// Destructor
     // virtual ~VECTOR2();
 
     /**
-     * Function Euclidean Norm
-     * computes the Euclidean norm of the vector, which is defined as sqrt(x ** 2 + y ** 2).
+     * Compute the Euclidean norm of the vector, which is defined as sqrt(x ** 2 + y ** 2).
+     *
      * It is used to calculate the length of the vector.
+     *
      * @return Scalar, the euclidean norm
      */
     T EuclideanNorm() const;
 
     /**
-     * Function Squared Euclidean Norm
-     * computes the squared euclidean norm of the vector, which is defined as (x ** 2 + y ** 2).
+     * Compute the squared euclidean norm of the vector, which is defined as (x ** 2 + y ** 2).
+     *
      * It is used to calculate the length of the vector.
+     *
      * @return Scalar, the euclidean norm
      */
     extended_type SquaredEuclideanNorm() const;
 
 
     /**
-     * Function Perpendicular
-     * computes the perpendicular vector
+     * Compute the perpendicular vector.
+     *
      * @return Perpendicular vector
      */
     VECTOR2<T> Perpendicular() const;
 
     /**
-     * Function Resize
-     * returns a vector of the same direction, but length specified in aNewLength
-     * @param aNewLength: length of the rescaled vector
-     * @return rescaled vector
+     * Return a vector of the same direction, but length specified in \a aNewLength.
+     *
+     * @param aNewLength is the length of the rescaled vector.
+     * @return the rescaled vector.
      */
     VECTOR2<T> Resize( T aNewLength ) const;
 
     /**
-     * Function Angle
-     * computes the angle of the vector
-     * @return vector angle, in radians
+     * Compute the angle of the vector.
+     *
+     * @return the vector angle in radians.
      */
     double Angle() const;
 
     /**
-     * Function Rotate
-     * rotates the vector by a given angle
+     * Rotate the vector by a given angle.
+     *
      * @param aAngle rotation angle in radians
      * @return rotated vector
      */
     VECTOR2<T> Rotate( double aAngle ) const;
 
     /**
-     * Function Format
-     * returns the vector formatted as a string
+     * Return the vector formatted as a string.
+     *
      * @return the formatted string
      */
     const std::string Format() const;
 
     /**
-     * Function Cross()
-     * computes cross product of self with aVector
+     * Compute cross product of self with \a aVector.
      */
     extended_type Cross( const VECTOR2<T>& aVector ) const;
 
     /**
-     * Function Dot()
-     * computes dot product of self with aVector
+     * Compute dot product of self with \a aVector.
      */
     extended_type Dot( const VECTOR2<T>& aVector ) const;
 

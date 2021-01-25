@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ private:
     void OnExportToFile( wxCommandEvent& event ) override;
     void OnExportToClipboard( wxCommandEvent& event ) override;
 
-    ///> @return the EDA_UNITS from the m_PixelUnit choice
+    ///< @return the EDA_UNITS from the m_PixelUnit choice
     EDA_UNITS getUnitFromSelection();
 
     // return a string giving the output size, according to the selected unit

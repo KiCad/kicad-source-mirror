@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -56,7 +56,7 @@ class SHADER;
 class GL_BITMAP_CACHE;
 
 /**
- * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
+ * OpenGL implementation of the Graphics Abstraction Layer.
  *
  * This is a direct OpenGL-implementation and uses low-level graphics primitives like triangles
  * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
@@ -66,8 +66,6 @@ class OPENGL_GAL : public GAL, public HIDPI_GL_CANVAS
 {
 public:
     /**
-     * @brief Constructor OPENGL_GAL
-     *
      * @param aParent is the wxWidgets immediate wxWindow parent of this object.
      *
      * @param aMouseListener is the wxEvtHandler that should receive the mouse events,
@@ -87,7 +85,8 @@ public:
     ~OPENGL_GAL();
 
     /**
-     * @brief Checks OpenGL features
+     * Checks OpenGL features.
+     *
      * @param aOptions
      * @return wxEmptyString if OpenGL 2.1 or greater is available, otherwise returns error message
      */
@@ -102,7 +101,7 @@ public:
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
-    ///> @copydoc GAL::IsVisible()
+    ///< @copydoc GAL::IsVisible()
     bool IsVisible() const override
     {
         return IsShownOnScreen() && !GetClientRect().IsEmpty();
@@ -302,30 +301,32 @@ private:
 
     // Vertex buffer objects related fields
     typedef std::unordered_map< unsigned int, std::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
-    GROUPS_MAP              groups;                 ///< Stores informations about VBO objects (groups)
-    unsigned int            groupCounter;           ///< Counter used for generating keys for groups
-    VERTEX_MANAGER*         currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
-    VERTEX_MANAGER*         cachedManager;          ///< Container for storing cached VERTEX_ITEMs
-    VERTEX_MANAGER*         nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
-    VERTEX_MANAGER*         overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
+    GROUPS_MAP              groups;             ///< Stores information about VBO objects (groups)
+    unsigned int            groupCounter;       ///< Counter used for generating keys for groups
+    VERTEX_MANAGER*         currentManager;     ///< Currently used VERTEX_MANAGER (for storing
+                                                ///< VERTEX_ITEMs).
+    VERTEX_MANAGER*         cachedManager;      ///< Container for storing cached VERTEX_ITEMs
+    VERTEX_MANAGER*         nonCachedManager;   ///< Container for storing non-cached VERTEX_ITEMs
+    VERTEX_MANAGER*         overlayManager;     ///< Container for storing overlaid VERTEX_ITEMs
 
     // Framebuffer & compositing
-    OPENGL_COMPOSITOR*      compositor;             ///< Handles multiple rendering targets
-    unsigned int            mainBuffer;             ///< Main rendering target
-    unsigned int            overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
-    RENDER_TARGET           currentTarget;          ///< Current rendering target
+    OPENGL_COMPOSITOR*      compositor;         ///< Handles multiple rendering targets
+    unsigned int            mainBuffer;         ///< Main rendering target
+    unsigned int            overlayBuffer;      ///< Auxiliary rendering target (for menus etc.)
+    RENDER_TARGET           currentTarget;      ///< Current rendering target
 
     // Shader
-    SHADER*                 shader;                 ///< There is only one shader used for different objects
+    SHADER*                 shader;             ///< There is only one shader used for different
+                                                ///< objects.
 
     // Internal flags
     bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
     static bool             isBitmapFontLoaded;         ///< Is the bitmap font texture loaded?
     bool                    isBitmapFontInitialized;    ///< Is the shader set to use bitmap fonts?
-    bool                    isInitialized;              ///< Basic initialization flag, has to be done
-                                                        ///< when the window is visible
-    bool                    isGrouping;                 ///< Was a group started?
-    bool                    m_isContextLocked;            ///< Used for assertion checking
+    bool                    isInitialized;       ///< Basic initialization flag, has to be done
+                                                 ///< when the window is visible
+    bool                    isGrouping;          ///< Was a group started?
+    bool                    m_isContextLocked;   ///< Used for assertion checking
     int                     lockClientCookie;
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
@@ -367,8 +368,10 @@ private:
     void drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
     /**
-     * @brief Draw a semicircle. Depending on settings (isStrokeEnabled & isFilledEnabled) it runs
-     * the proper function (drawStrokedSemiCircle or drawFilledSemiCircle).
+     * Draw a semicircle.
+     *
+     * Depending on settings (isStrokeEnabled & isFilledEnabled) it runs the proper function
+     * (drawStrokedSemiCircle or drawFilledSemiCircle).
      *
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semicircle.
@@ -378,7 +381,7 @@ private:
     void drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @brief Draw a filled semicircle.
+     *Draw a filled semicircle.
      *
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semicircle.
@@ -388,7 +391,7 @@ private:
     void drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @brief Draw a stroked semicircle.
+     * Draw a stroked semicircle.
      *
      * @param aCenterPoint is the center point.
      * @param aRadius is the radius of the semicircle.
@@ -398,28 +401,31 @@ private:
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @brief Generic way of drawing a polyline stored in different containers.
+     * Generic way of drawing a polyline stored in different containers.
+     *
      * @param aPointGetter is a function to obtain coordinates of n-th vertex.
      * @param aPointCount is the number of points to be drawn.
      */
     void drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter, int aPointCount );
 
     /**
-     * @brief Draws a filled polygon. It does not need the last point to have the same coordinates
+     * Draw a filled polygon. It does not need the last point to have the same coordinates
      * as the first one.
+     *
      * @param aPoints is the vertices data (3 coordinates: x, y, z).
      * @param aPointCount is the number of points.
      */
     void drawPolygon( GLdouble* aPoints, int aPointCount );
 
     /**
-     * @brief Draws a set of polygons with a cached triangulation. Way faster than drawPolygon.
+     * Draw a set of polygons with a cached triangulation. Way faster than drawPolygon.
      */
     void drawTriangulatedPolyset( const SHAPE_POLY_SET& aPoly );
 
 
     /**
-     * @brief Draws a single character using bitmap font.
+     * Draw a single character using bitmap font.
+     *
      * Its main purpose is to be used in BitmapText() function.
      *
      * @param aChar is the character to be drawn.
@@ -428,7 +434,8 @@ private:
     int drawBitmapChar( unsigned long aChar );
 
     /**
-     * @brief Draws an overbar over the currently drawn text.
+     * Draw an overbar over the currently drawn text.
+     *
      * Its main purpose is to be used in BitmapText() function.
      * This method requires appropriate scaling to be applied (as is done in BitmapText() function).
      * The current X coordinate will be the overbar ending.
@@ -439,7 +446,7 @@ private:
     void drawBitmapOverbar( double aLength, double aHeight );
 
     /**
-     * @brief Computes a size of text drawn using bitmap font with current text setting applied.
+     * Compute a size of text drawn using bitmap font with current text setting applied.
      *
      * @param aText is the text to be drawn.
      * @return Pair containing text bounding box and common Y axis offset. The values are expressed
@@ -449,33 +456,33 @@ private:
 
     // Event handling
     /**
-     * @brief This is the OnPaint event handler.
+     * This is the OnPaint event handler.
      *
      * @param aEvent is the OnPaint event.
      */
     void onPaint( wxPaintEvent& aEvent );
 
     /**
-     * @brief Skip the mouse event to the parent.
+     * Skip the mouse event to the parent.
      *
      * @param aEvent is the mouse event.
      */
     void skipMouseEvent( wxMouseEvent& aEvent );
 
     /**
-     * @brief Blits cursor into the current screen.
+     * Blit cursor into the current screen.
      */
     void blitCursor();
 
     /**
-     * @brief Returns a valid key that can be used as a new group number.
+     * Return a valid key that can be used as a new group number.
      *
      * @return An unique group number that is not used by any other group.
      */
     unsigned int getNewGroupNumber();
 
     /**
-     * @brief Compute the angle step when drawing arcs/circles approximated with lines.
+     * Compute the angle step when drawing arcs/circles approximated with lines.
      */
     double calcAngleStep( double aRadius ) const
     {
@@ -488,7 +495,8 @@ private:
     VECTOR2D getScreenPixelSize() const;
 
     /**
-     * @brief Basic OpenGL initialization and feature checks
+     * Basic OpenGL initialization and feature checks.
+     *
      * @throw std::runtime_error if any of the OpenGL feature checks failed
      */
     void init();

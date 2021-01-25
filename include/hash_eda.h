@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +26,7 @@
 
 #ifndef HASH_EDA_H_
 #define HASH_EDA_H_
+
 /**
  * @brief Hashing functions for EDA_ITEMs.
  */
@@ -34,13 +36,13 @@
 
 class EDA_ITEM;
 
-///> Enables/disables properties that will be used for calculating the hash.
-///> The properties might be combined using the bitwise 'or' operator.
+///< Enables/disables properties that will be used for calculating the hash.
+///< The properties might be combined using the bitwise 'or' operator.
 enum HASH_FLAGS
 {
     HASH_POS    = 0x01,
 
-    ///> use coordinates relative to the parent object
+    ///< use coordinates relative to the parent object
     REL_COORD   = 0x02,
     HASH_ROT    = 0x04,
     HASH_LAYER  = 0x08,
@@ -51,7 +53,8 @@ enum HASH_FLAGS
 };
 
 /**
- * Calculates hash of an EDA_ITEM.
+ * Calculate hash of an EDA_ITEM.
+ *
  * @param aItem is the item for which the hash will be computed.
  * @return Hash value.
  */
@@ -64,7 +67,8 @@ std::size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_A
 static inline void hash_combine( std::size_t &seed ) {}
 
 /**
- * @brief Combine multiple hashes utilizing previous hash result
+ * Combine multiple hashes utilizing previous hash result.
+ *
  * @tparam T      A hashable type
  * @param seed    A seed value input and output for the result.
  * @param val     A hashable object of type T

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@ public:
     void SetAppIcon( const wxIcon& aIcon ) { m_appIcon = aIcon; }
     wxIcon& GetAppIcon() { return m_appIcon; }
 
-    ///> Wrapper to manage memory allocation for bitmaps
+    ///< Wrapper to manage memory allocation for bitmaps
     wxBitmap* CreateKiBitmap( BITMAP_DEF aBitmap )
     {
         m_bitmaps.emplace_back( KiBitmapNew( aBitmap ) );
@@ -140,7 +140,7 @@ private:
 
     wxIcon       m_appIcon;
 
-    ///> Bitmaps to be freed when the dialog is closed
+    ///< Bitmaps to be freed when the dialog is closed
     std::vector<std::unique_ptr<wxBitmap>> m_bitmaps;
 };
 

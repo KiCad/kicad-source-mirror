@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,16 +35,13 @@ namespace PREVIEW
 {
 
 /**
- * TWO_POINT_GEOMETRY_MANAGER
- *
- * Represents a very simple geometry manager for items that have
- * a start and end point.
+ * Represent a very simple geometry manager for items that have a start and end point.
  */
 class TWO_POINT_GEOMETRY_MANAGER
 {
 public:
 
-    ///> Set the origin of the ruler (the fixed end)
+    ///< Set the origin of the ruler (the fixed end)
     void SetOrigin( const VECTOR2I& aOrigin )
     {
         m_origin = aOrigin;
@@ -58,8 +55,7 @@ public:
     }
 
     /**
-     * Set the current end of the rectangle (the end that moves
-     * with the cursor.
+     * Set the current end of the rectangle (the end that moves with the cursor.
      */
     void SetEnd( const VECTOR2I& aEnd )
     {
@@ -107,8 +103,7 @@ public:
     }
 
     /**
-     * @return true if the geoemtry has changed, eg such that a client
-     * should redraw
+     * @return true if the geometry has changed, eg such that a client should redraw.
      */
     bool HasGeometryChanged() const
     {
@@ -116,8 +111,8 @@ public:
     }
 
     /**
-     * Clear the geometry changed flag, call after the client code has
-     * updated everything as needed.
+     * Clear the geometry changed flag, call after the client code has updated everything as
+     * needed.
      */
     void ClearGeometryChanged()
     {
@@ -125,7 +120,7 @@ public:
     }
 
 protected:
-    ///> Mark the geometry as changed for clients to notice
+    ///< Mark the geometry as changed for clients to notice
     void setGeometryChanged()
     {
         m_changed = true;
@@ -136,7 +131,7 @@ private:
     VECTOR2I m_origin, m_end;
     bool m_angleSnap = false;
 
-    ///> Has the gemotry changed such that a client should redraw?
+    ///< Has the geometry changed such that a client should redraw?
     bool m_changed   = false;
     bool m_originSet = false;
 };

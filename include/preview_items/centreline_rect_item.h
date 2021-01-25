@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,36 +40,31 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER;
 
 /**
- * CENTRELINE_RECT_ITEM
+ * Represent an area drawn by drawing a rectangle of a given aspect along a vector, with the
+ * midpoint of one side on the start point and the mid point of the opposite side on the end.
  *
- * Represents an area drawn by drawing a rectangle of a given aspect
- * along a vector, with the midpoiunt of one side on the start point
- * and the mid point of the opposite side on the end.
- *
- * The centre line does not have to horizontal or vertical, it
- * can be at any angle.
+ * The center line does not have to horizontal or vertical, it can be at any angle.
  */
 class CENTRELINE_RECT_ITEM : public SIMPLE_OVERLAY_ITEM
 {
 public:
 
-    CENTRELINE_RECT_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr,
-                          double aAspect );
+    CENTRELINE_RECT_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, double aAspect );
 
-    ///> Gets the bounding box of the rectangle
+    ///< Gets the bounding box of the rectangle
     virtual const BOX2I ViewBBox() const override;
 
 private:
 
-    ///> Get the rectangular outline
+    ///< Get the rectangular outline
     SHAPE_POLY_SET getOutline() const;
 
-    ///> Draw rectangle and centre line onto GAL
+    ///< Draw rectangle and center line onto GAL
     void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
 
-    ///> The aspect ratio of the rectangle to draw
+    ///< The aspect ratio of the rectangle to draw
     double m_aspect;
 };
 

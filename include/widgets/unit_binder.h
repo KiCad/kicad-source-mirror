@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,7 +43,6 @@ class UNIT_BINDER : public wxEvtHandler
 public:
 
     /**
-     * Constructor.
      * @param aParent is the parent EDA_DRAW_FRAME.
      * @param aLabel is the static text used to label the text input widget (note: the label
      *               text, trimmed of its colon, will also be used in error messages)
@@ -81,8 +80,8 @@ public:
     void SetDataType( EDA_DATA_TYPE aDataType );
 
     /**
-     * Function SetValue
-     * Sets new value (in Internal Units) for the text field, taking care of units conversion.
+     * Set new value (in Internal Units) for the text field, taking care of units conversion.
+     *
      * @param aValue is the new value.
      */
     virtual void SetValue( int aValue );
@@ -90,8 +89,8 @@ public:
     void SetValue( wxString aValue );
 
     /**
-     * Function SetDoubleValue
-     * Sets new value (in Internal Units) for the text field, taking care of units conversion.
+     * Set new value (in Internal Units) for the text field, taking care of units conversion.
+     *
      * @param aValue is the new value.
      * the initialized value will be truncated according to the precision set by SetPrecision()
      * (if not <= 0)
@@ -99,9 +98,9 @@ public:
     virtual void SetDoubleValue( double aValue );
 
     /**
-     * Function ChangeValue
-     * Changes the value (in Internal Units) for the text field, taking care of units conversion
+     * Change the value (in Internal Units) for the text field, taking care of units conversion
      * but does not trigger the update routine
+     *
      * @param aValue is the new value.
      */
     virtual void ChangeValue( int aValue );
@@ -109,36 +108,32 @@ public:
     void ChangeValue( const wxString& aValue );
 
     /**
-     * Function GetValue
-     * Returns the current value in Internal Units.
+     * Return the current value in Internal Units.
      */
     virtual long long int GetValue();
 
     /**
-     * Function GetValue
-     * Returns the current value in Internal Units.
-     * the returned value will be truncated according to the precision set by
+     * Return the current value in Internal Units.
+     *
+     * The returned value will be truncated according to the precision set by
      * SetPrecision() (if not <= 0)
      */
     virtual double GetDoubleValue();
 
     /**
-     * Function IsIndeterminate
-     * Returns true if the control holds the indeterminate value (for instance, if it
+     * Return true if the control holds the indeterminate value (for instance, if it
      * represents a multiple selection of differing values).
      */
     bool IsIndeterminate() const;
 
     /**
-     * Function GetOriginalText
-     * Returns the pre-evaluated text (or the current text if evaluation is not supported).
+     * Return the pre-evaluated text (or the current text if evaluation is not supported).
      * Used primarily to remember values between dialog invocations.
      */
     wxString GetOriginalText() const;
 
     /**
-     * Function Validate
-     * Validates the control against the given range, informing the user of any errors found.
+     * Validate the control against the given range, informing the user of any errors found.
      *
      * @param aMin a minimum value for validation
      * @param aMax a maximum value for validation
@@ -150,14 +145,12 @@ public:
     void SetLabel( const wxString& aLabel );
 
     /**
-     * Function Enable
-     * Enables/diasables the label, widget and units label.
+     * Enable/disable the label, widget and units label.
      */
     void Enable( bool aEnable );
 
     /**
-     * Function Show
-     * Shows/hides the label, widget and units label.
+     * Show/hide the label, widget and units label.
      *
      * @param aShow called for the Show() routine in wx
      * @param aResize if true, the element will be sized to 0 on hide and -1 on show
@@ -175,8 +168,7 @@ public:
     }
 
     /**
-     * Function SetOriginTransform
-     * Sets the current origin transform mode
+     * Set the current origin transform mode
      */
     void SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType )
     {
@@ -191,10 +183,12 @@ protected:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
-    /** When m_precision > 0 truncate the value aValue to show only
+    /**
+     * When m_precision > 0 truncate the value aValue to show only
      * m_precision digits in mantissa.
      * used in GetDoubleValue to return a rounded value.
      * Mainly for units set to DEGREES.
+     *
      * @param aValue is the value to modify.
      * @param aValueUsesUserUnits must be set to true if aValue is a user value,
      * and set to false if aValue is a internal unit value.
@@ -204,25 +198,25 @@ protected:
 
     EDA_DRAW_FRAME*   m_frame;
 
-    ///> The bound widgets
+    ///< The bound widgets
     wxStaticText*     m_label;
     wxWindow*         m_valueCtrl;
     wxStaticText*     m_unitLabel;  // Can be nullptr
 
-    ///> Currently used units.
+    ///< Currently used units.
     EDA_UNITS         m_units;
     EDA_DATA_TYPE     m_dataType;
     int               m_precision;     // 0 to 6
 
-    ///> Validation support.
+    ///< Validation support.
     wxString          m_errorMessage;
 
-    ///> Evaluator
+    ///< Evaluator
     NUMERIC_EVALUATOR m_eval;
     bool              m_allowEval;
     bool              m_needsEval;
 
-    ///> Selection start and end of the original text
+    ///< Selection start and end of the original text
     long              m_selStart;
     long              m_selEnd;
 

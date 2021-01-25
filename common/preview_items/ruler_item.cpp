@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,9 +90,9 @@ static double getTickLineWidth( const TEXT_DIMS& textDims, bool aDrawingDropShad
  */
 struct TICK_FORMAT
 {
-    double divisionBase;    ///> multiple from the last scale
-    int majorStep;          ///> ticks between major ticks
-    int midStep;            ///> ticks between medium ticks (0 if no medium ticks)
+    double divisionBase;    ///< multiple from the last scale
+    int majorStep;          ///< ticks between major ticks
+    int midStep;            ///< ticks between medium ticks (0 if no medium ticks)
 };
 
 

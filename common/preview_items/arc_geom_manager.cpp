@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 using namespace KIGFX::PREVIEW;
 
 
-///> Snap an angle to the nearest 45 degrees
+///< Snap an angle to the nearest 45 degrees
 static double snapAngle( double aAngle )
 {
     return KiROUND( aAngle / M_PI_4 ) * M_PI_4;
