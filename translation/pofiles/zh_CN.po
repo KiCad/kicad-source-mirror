@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-25 16:33+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-01-26 08:00+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17479,7 +17479,7 @@ msgstr "步骤 X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr "每重复一次，X轴上的步进距离。"
+msgstr "每重复一次，X 轴上的步进距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
@@ -17487,7 +17487,7 @@ msgstr "步距 Y："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr "每重复一次，Y轴上的步进距离。"
+msgstr "每重复一次，Y 轴上的步进距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -25463,7 +25463,7 @@ msgstr "限制图形线水平，垂直和 45 度角 (&I)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
-msgstr "绘制图形线时，强制水平、垂直或45度。"
+msgstr "绘制图形线时，强制水平、垂直或 45 度。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -29710,7 +29710,7 @@ msgstr "无法读取文件 "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
-msgstr "J 行 %zu 中的行大小无效。预计有 11 个元素，但发现了 %zu"
+msgstr "J 行 %zu 中的行大小无效。预计有 11 个元素，但发现了 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
