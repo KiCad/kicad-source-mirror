@@ -299,7 +299,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* placeMenu = new ACTION_MENU( false, selTool );
 
-    placeMenu->Add( PCB_ACTIONS::placeModule );
+    placeMenu->Add( PCB_ACTIONS::placeFootprint );
     placeMenu->Add( PCB_ACTIONS::drawVia );
     placeMenu->Add( PCB_ACTIONS::drawZone );
     placeMenu->Add( PCB_ACTIONS::drawRuleArea );

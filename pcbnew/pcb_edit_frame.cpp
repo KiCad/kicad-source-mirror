@@ -699,7 +699,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     // These tools edit the board, so they must be disabled during some operations
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeModule );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );

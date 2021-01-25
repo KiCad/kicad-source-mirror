@@ -493,7 +493,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     PlaceFootprint( aNew, false );
 
-    // PlaceModule will move the footprint to the cursor position, which we don't want.  Copy
+    // PlaceFootprint will move the footprint to the cursor position, which we don't want.  Copy
     // the original position across.
     aNew->SetPosition( aExisting->GetPosition() );
 

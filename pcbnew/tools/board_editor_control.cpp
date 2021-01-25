@@ -164,7 +164,7 @@ bool BOARD_EDITOR_CONTROL::Init()
     auto placeModuleCondition =
             [ this ] ( const SELECTION& aSel )
             {
-                return m_frame->IsCurrentTool( PCB_ACTIONS::placeModule ) && aSel.GetSize() == 0;
+                return m_frame->IsCurrentTool( PCB_ACTIONS::placeFootprint ) && aSel.GetSize() == 0;
             };
 
     auto& ctxMenu = m_menu.GetMenu();
@@ -792,7 +792,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -1398,7 +1398,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
 
     // Placing tools
     Go( &BOARD_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::PlaceModule,            PCB_ACTIONS::placeModule.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::PlaceFootprint, PCB_ACTIONS::placeFootprint.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
 
     Go( &BOARD_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editFpInFpEditor.MakeEvent() );

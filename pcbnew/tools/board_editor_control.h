@@ -95,10 +95,10 @@ public:
     int PlaceTarget( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceModule()
+     * Function PlaceFootprint()
      * Displays a dialog to select a footprint to be added and allows the user to set its position.
      */
-    int PlaceModule( const TOOL_EVENT& aEvent );
+    int PlaceFootprint( const TOOL_EVENT& aEvent );
 
     ///> Toggles 'lock' property for selected items.
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
