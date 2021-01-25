@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-24 22:54+0000\n"
+"PO-Revision-Date: 2021-01-25 16:33+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5326,11 +5326,12 @@ msgstr "Klasyczny programu KiCad"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"Windows 7 i starsze systemy operacyjne nie są już wspierane przez program "
+"KiCad oraz jego moduły zależne."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Niewspierany kształt przelotki: %s"
+msgstr "Niewspierany System Operacyjny"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -12434,9 +12435,8 @@ msgid "Open emitter"
 msgstr "Otwarty emiter"
 
 #: eeschema/pin_type.cpp:60
-#, fuzzy
 msgid "Unconnected"
-msgstr "Niepołączone elementy"
+msgstr "Niepołączone"
 
 #: eeschema/pin_type.cpp:75
 msgid "Inverted"
@@ -19078,7 +19078,6 @@ msgid "PCB Calculator"
 msgstr "Kalkulator PCB"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19117,15 +19116,12 @@ msgstr ""
 "Ten kalkulator znajduje kombinację standardowych rezystancji z serii E by "
 "ją\n"
 "utworzyć.  Można wprowadzić wymaganą rezystancję od 0,0025 do 4000 kΩ. \n"
-"Podane rozwiązania wykorzystują maksymalnie 3 składniki.  \n"
+"Podane rozwiązania wykorzystują maksymalnie 4 składniki.  \n"
 "\n"
-"Jeśli można znaleźć lepsze dopasowanie, podane są rozwiązania "
-"wykorzystujące \n"
-"3 lub 4 rezystory. Wybór opcji 4R będzie skutkował dłuższym czasem obliczeń\n"
-"bo stosowane będą tylko wartości z szeregu E12.  \n"
-"\n"
-"Opcjonalnie można wykluczyć do dwóch dodatkowych wartości z rozwiązania \n"
-"z powodu ich niedostępności.\n"
+"Domyślnie żądania wartość jest zawsze wykluczona z zestawu rozwiązań.  "
+"Możliwe jest również określenie\n"
+"maksymalnie dwóch dodatkowych wartości wykluczanych z danego rozwiązania, "
+"jeśli te wartości nie są dostępne\n"
 "\n"
 "Rozwiązania podane są w następujących formatach:\n"
 "\n"
@@ -26011,9 +26007,8 @@ msgid "Magnetic graphics"
 msgstr "Magnetyczne elementy graficzne"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
-#, fuzzy
 msgid "Lock pads of newly added footprints"
-msgstr "Zablokowane footprinty"
+msgstr "Zablokuj pola lutownicze w nowo dodanych footprintach"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
 msgid ""
@@ -26035,6 +26030,8 @@ msgstr "Linie graficzne tylko poziomo, pionowo i pod kątem 45 stopni"
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
 msgstr ""
+"Podczas rysowania linii graficznych wymuszaj pozycję poziomą, pionową lub "
+"pod kątem 45 stopni."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -26295,14 +26292,12 @@ msgid "Open Plugin Directory"
 msgstr "Otwórz Folder Wtyczek"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "Odśwież wtyczki"
+msgstr "Przeładuj wtyczki"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Pokaż kursor"
+msgstr "Pokaż błędy wtyczki"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -29494,9 +29489,8 @@ msgid "Pin Name"
 msgstr "Nazwa pinu"
 
 #: pcbnew/pad.cpp:872 pcbnew/pad.cpp:1441
-#, fuzzy
 msgid "Pin Type"
-msgstr "Typ wtyczki"
+msgstr "Typ pinu"
 
 #: pcbnew/pad.cpp:890
 msgid "BGA"
@@ -30541,9 +30535,10 @@ msgstr ""
 "geometrycznej %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1172
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
-msgstr "Nieprawidłowy element graficzny w wierszu definicji geometrycznej %zu"
+msgstr ""
+"Nieprawidłowy element graficzny '%s' w wierszu definicji geometrycznej %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #, c-format
@@ -30554,9 +30549,9 @@ msgstr ""
 "%zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Traces definition row %zu"
-msgstr "Nieprawidłowy element graficzny w wierszu definicji 'Traces' %zu"
+msgstr "Nieprawidłowy element graficzny '%s' w wierszu definicji 'Traces' %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1380
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1393
@@ -31825,9 +31820,8 @@ msgid "Special Tools"
 msgstr "Narzędzia specjalne"
 
 #: pcbnew/tools/edit_tool.cpp:571
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Przeciągnij Ścieżkę/Przelotkę"
+msgstr "Przeciągnij ścieżkę zakrzywioną"
 
 #: pcbnew/tools/edit_tool.cpp:672
 msgid "Select reference point for move..."
