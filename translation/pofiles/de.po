@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-24 22:54+0000\n"
+"PO-Revision-Date: 2021-01-25 16:33+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5375,11 +5375,12 @@ msgstr "KiCad Klassisch"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"Windows 7 und älter wird von KiCad und seinen Abhängigkeiten nicht mehr "
+"unterstützt."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Nicht unterstützte Form für Durchkontaktierung: %s"
+msgstr "Nicht unterstütztes Betriebssystem"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -12537,9 +12538,8 @@ msgid "Open emitter"
 msgstr "Offener Emitter"
 
 #: eeschema/pin_type.cpp:60
-#, fuzzy
 msgid "Unconnected"
-msgstr "Nicht verbundene Elemente"
+msgstr "Unverbunden"
 
 #: eeschema/pin_type.cpp:75
 msgid "Inverted"
@@ -19234,7 +19234,6 @@ msgid "PCB Calculator"
 msgstr "PCB-Kalkulator"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19274,15 +19273,12 @@ msgstr ""
 "Dieser Rechner findet Kombinationen von Standardkomponenten der E-Serie, um\n"
 "beliebige Werte zu erzeugen.  Sie können den gewünschten Widerstand von "
 "0,0025 bis 4000 kOhm eingeben. \n"
-"Es werden Lösungen mit bis zu 3 Komponenten angegeben.  \n"
+"Es werden Lösungen mit bis zu 4 Komponenten angegeben.  \n"
 "\n"
-"Wenn eine genauere Lösung benötigt wird, ermittelt die Option 4R Lösungen \n"
-"mit 4 Komponenten nur für die E12-Serie.  Diese Option\n"
-"kann die Berechnung verlängern.  \n"
-"\n"
-"Es ist auch möglich, bis zu zwei Werte anzugeben, die aus der Lösung "
-"ausgeschlossen werden sollen, wenn diese\n"
-"Komponentenwerte nicht verfügbar sind\n"
+"Standardmäßig wird der angefragte Wert von den Lösungen ausgeschlossen.  Es "
+"ist außerdem möglich,\n"
+"bis zu 2 weitere Werte von den Lösungen auszuschließen, falls diese nicht "
+"verfügbar sind.\n"
 "\n"
 "Lösungen werden in folgenden Formaten angegeben:\n"
 "\n"
@@ -26207,9 +26203,8 @@ msgid "Magnetic graphics"
 msgstr "Magnetische Grafiken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
-#, fuzzy
 msgid "Lock pads of newly added footprints"
-msgstr "Gesperrte Footprints"
+msgstr "Pads von neu hinzugefügten Footprints sperren"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
 msgid ""
@@ -26231,6 +26226,8 @@ msgstr "Begrenze grafische L&inien auf H,V und 45 Grad"
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
 msgstr ""
+"Horizontale, vertikale oder 45-Grad-Winkel beim Zeichnen von grafischen "
+"Linien erzwingen."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -26490,14 +26487,12 @@ msgid "Open Plugin Directory"
 msgstr "Plugin-Verzeichnis öffnen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "Aktualisierung Plugins"
+msgstr "Plugins neu laden"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Plugineigenschaften"
+msgstr "Plugin-Fehler anzeigen"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -29721,9 +29716,8 @@ msgid "Pin Name"
 msgstr "Pinname"
 
 #: pcbnew/pad.cpp:872 pcbnew/pad.cpp:1441
-#, fuzzy
 msgid "Pin Type"
-msgstr "Plugintyp"
+msgstr "Pin-Typ"
 
 #: pcbnew/pad.cpp:890
 msgid "BGA"
@@ -30695,7 +30689,7 @@ msgstr "Konnte Datei nicht lesen "
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
-"Ungültige Zeilengröße in Zeile %zu.  Erwarte 11 Elemente, aber %zu gefunden"
+"Ungültige Zeilengröße in J-Zeile %zu.  Erwarte 11 Elemente, aber %zu gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
@@ -30773,9 +30767,10 @@ msgstr ""
 "Definition\"-Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1172
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
-msgstr "Ungültiges Grafikelement in \"Geometrische Definition-\"Zeile %zu"
+msgstr ""
+"Unbehandeltes Grafikelement '%s' in \"Geometrische Definition\"-Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1346
 #, c-format
@@ -30786,9 +30781,9 @@ msgstr ""
 "Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled graphic item '%s' in Traces definition row %zu"
-msgstr "Ungültiges Grafikelement in Traces-Definitions-Zeile %zu"
+msgstr "Unbehandeltes Grafikelement '%s' in Traces-Definitions-Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1380
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1393
@@ -32073,9 +32068,8 @@ msgid "Special Tools"
 msgstr "Spezialwerkzeuge"
 
 #: pcbnew/tools/edit_tool.cpp:571
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Leiterbahn/Durchkontaktierung ziehen"
+msgstr "Leiterbahn-Bogen ziehen"
 
 #: pcbnew/tools/edit_tool.cpp:672
 msgid "Select reference point for move..."
@@ -34524,7 +34518,8 @@ msgstr "Die KiCad-Entwickler"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr "Eine KiCad-Komponente aus einer Bitmap erstellen"
+msgstr ""
+"Eine Komponente aus einer Bitmap erstellen um diese mit KiCad zu verwenden"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
 msgid "Eeschema (Standalone)"
