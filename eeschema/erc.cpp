@@ -475,11 +475,15 @@ int ERC_TESTER::TestPinToPin()
             if( DrivenPinTypes.count( refType ) )
             {
                 // needsDriver will be the pin shown in the error report eventually, so try to
-                // upgrade to a "better" pin if possible: something visible and not a power symbol
+                // upgrade to a "better" pin if possible: something visible and only a power symbol
+                // if this net needs a power driver
                 if( !needsDriver ||
-                        ( !needsDriver->IsVisible() && refPin->IsVisible() ) ||
-                        ( needsDriver->IsPowerConnection() && !refPin->IsPowerConnection() ) )
+                    ( !needsDriver->IsVisible() && refPin->IsVisible() ) ||
+                    ( ispowerNet != needsDriver->IsPowerConnection() &&
+                      ispowerNet == refPin->IsPowerConnection() ) )
+                {
                     needsDriver = refPin;
+                }
             }
 
             if( ispowerNet )
