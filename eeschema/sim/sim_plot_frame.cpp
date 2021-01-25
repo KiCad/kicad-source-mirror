@@ -207,7 +207,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_toolBar->Realize();
 
-    m_welcomePanel = new SIM_PANEL_BASE( ST_UNKNOWN, m_plotNotebook, wxID_ANY );
+    m_welcomePanel = new SIM_PANEL_BASE( wxEmptyString, m_plotNotebook, wxID_ANY );
     m_plotNotebook->AddPage( m_welcomePanel, _( "Welcome!" ), 1, true );
 
     // the settings dialog will be created later, on demand.
@@ -476,14 +476,15 @@ bool SIM_PLOT_FRAME::IsSimulationRunning()
 }
 
 
-SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
+SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( wxString aSimCommand )
 {
     SIM_PANEL_BASE* plotPanel;
+    SIM_TYPE        simType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( aSimCommand );
 
-    if( SIM_PANEL_BASE::IsPlottable( aSimType ) )
+    if( SIM_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* panel;
-        panel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, this, wxID_ANY );
+        panel = new SIM_PLOT_PANEL( aSimCommand, m_plotNotebook, this, wxID_ANY );
 
         panel->GetPlotWin()->EnableMouseWheelPan(
                 Pgm().GetCommonSettings()->m_Input.scroll_modifier_zoom != 0 );
@@ -493,7 +494,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
     else
     {
         SIM_NOPLOT_PANEL* panel;
-        panel     = new SIM_NOPLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
+        panel = new SIM_NOPLOT_PANEL( aSimCommand, m_plotNotebook, wxID_ANY );
         plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
     }
 
@@ -503,7 +504,7 @@ SIM_PANEL_BASE* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
         m_welcomePanel = nullptr;
     }
 
-    wxString pageTitle( m_simulator->TypeToName( aSimType, true ) );
+    wxString pageTitle( m_simulator->TypeToName( simType, true ) );
     pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), (unsigned int) ++m_plotNumber ) );
 
     m_plotNotebook->AddPage( dynamic_cast<wxWindow*>( plotPanel ), pageTitle, true );
@@ -612,7 +613,8 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( !plotPanel || plotPanel->GetType() != simType )
-        plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( simType ) );
+        plotPanel =
+                dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_exporter->GetUsedSimCommand() ) );
 
     wxASSERT( plotPanel );
 
@@ -920,8 +922,9 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
         if( !file.GetNextLine().ToLong( &plotType ) )
             return false;
 
-        SIM_PANEL_BASE* plotPanel  = NewPlotPanel( (SIM_TYPE) plotType );
-        m_plots[plotPanel].m_simCommand = file.GetNextLine();
+        wxString        simCommand = file.GetNextLine();
+        SIM_PANEL_BASE* plotPanel = NewPlotPanel( simCommand );
+        m_plots[plotPanel].m_simCommand = simCommand;
         StartSimulation( m_plots[plotPanel].m_simCommand );
 
         // Perform simulation, so plots can be added with values
@@ -1031,7 +1034,8 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
     if( SIM_PANEL_BASE::IsPlottable( type ) )
     {
         SIM_PLOT_PANEL* prevPlot = CurrentPlot();
-        SIM_PLOT_PANEL* newPlot  = dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( type ) );
+        SIM_PLOT_PANEL* newPlot =
+                dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( m_exporter->GetUsedSimCommand() ) );
 
         // If the previous plot had the same type, copy the simulation command
         if( prevPlot )
@@ -1314,13 +1318,18 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
     if( m_settingsDlg->ShowModal() == wxID_OK )
     {
+        wxString oldCommand = m_plots[plotPanelWindow].m_simCommand;
         wxString newCommand = m_settingsDlg->GetSimCommand();
         SIM_TYPE newSimType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( newCommand );
 
         // If it is a new simulation type, open a new plot
-        if( !plotPanelWindow || ( plotPanelWindow && plotPanelWindow->GetType() != newSimType ) )
+        // For the DC sim, check if sweep source type has changed (char 4 will contain 'v', 'i', 'r' or 't'
+        if( !plotPanelWindow 
+            || ( plotPanelWindow && plotPanelWindow->GetType() != newSimType )
+            || ( newSimType == ST_DC
+                 && oldCommand.Lower().GetChar( 4 ) != newCommand.Lower().GetChar( 4 ) ) )
         {
-            plotPanelWindow = NewPlotPanel( newSimType );
+            plotPanelWindow = NewPlotPanel( newCommand );
         }
 
         m_plots[plotPanelWindow].m_simCommand = newCommand;
@@ -1501,7 +1510,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     SIM_PANEL_BASE* plotPanelWindow = currentPlotWindow();
 
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
-        plotPanelWindow = NewPlotPanel( simType );
+        plotPanelWindow = NewPlotPanel( m_exporter->GetUsedSimCommand() );
 
     if( IsSimulationRunning() )
         return;

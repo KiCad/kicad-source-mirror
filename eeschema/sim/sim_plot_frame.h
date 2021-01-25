@@ -136,10 +136,10 @@ public:
     /**
      * @brief Creates a new plot panel for a given simulation type and adds it to the main
      * notebook.
-     * @param aSimType is requested simulation type.
+     * @param aSimCommand is the SPICE command used for simulation.
      * @return The new plot panel.
      */
-    SIM_PANEL_BASE* NewPlotPanel( SIM_TYPE aSimType );
+    SIM_PANEL_BASE* NewPlotPanel( wxString aSimCommand );
 
     /**
      * @brief Adds a voltage plot for a given net name.

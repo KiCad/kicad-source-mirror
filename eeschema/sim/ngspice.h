@@ -60,7 +60,7 @@ public:
     std::string GetXAxis( SIM_TYPE aType ) const override;
 
     ///> @copydoc SPICE_SIMULATOR::AllPlots()
-    std::vector<std::string> AllPlots() override;
+    std::vector<std::string> AllPlots() const override;
 
     ///> @copydoc SPICE_SIMULATOR::GetPlot()
     std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;

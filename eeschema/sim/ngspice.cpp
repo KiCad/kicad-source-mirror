@@ -71,7 +71,7 @@ void NGSPICE::Init()
 }
 
 
-vector<string> NGSPICE::AllPlots()
+vector<string> NGSPICE::AllPlots() const
 {
     LOCALE_IO c_locale; // ngspice works correctly only with C locale
     char*     currentPlot = m_ngSpice_CurPlot();
@@ -293,20 +293,28 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
         case ST_AC:
         case ST_NOISE:
             return string( "frequency" );
-            break;
 
         case ST_DC:
-            return string( "v-sweep" );
+            // find plot, which ends with "-sweep"
+            for( auto& plot : AllPlots() )
+            {
+                const string sweepEnding = "-sweep";
+                unsigned int len = sweepEnding.length();
+
+                if( plot.length() > len
+                    && plot.substr( plot.length() - len, len ).compare( sweepEnding ) == 0 )
+                {
+                    return string( plot );
+                }
+            }
             break;
 
         case ST_TRANSIENT:
             return string( "time" );
-            break;
 
         default:
             break;
     }
-
     return string( "" );
 }
 

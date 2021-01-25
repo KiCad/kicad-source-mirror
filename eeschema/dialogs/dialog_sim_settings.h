@@ -84,6 +84,32 @@ private:
         LINEAR
     };
 
+    ///!> Generates events to update UI state
+    void refreshUIControls()
+    {
+        wxQueueEvent( m_dcEnable2, new wxCommandEvent( wxEVT_CHECKBOX ) );
+        wxQueueEvent( m_dcSourceType1, new wxCommandEvent( wxEVT_RADIOBOX ) );
+        wxQueueEvent( m_dcSourceType2, new wxCommandEvent( wxEVT_RADIOBOX ) );
+    }
+
+    /**
+     * @brief Reads values from one DC sweep source to form a part of sim command
+     * @return string of four SPICE values if values are correct, empty string upon error.
+     */
+    wxString evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart, wxTextCtrl* aDcStop,
+                                 wxTextCtrl* aDcIncr );
+
+    /**
+     * @brief Updates DC sweep source with components from schematic
+     */
+    void updateDCSources( wxChar aType, wxChoice* aSource );
+
+    /**
+     * @brief Updates units on labels depending on selected source
+     */
+    void updateDCUnits( wxChar aType, wxChoice* aSource, wxStaticText* aStartValUnit,
+                        wxStaticText* aEndValUnit, wxStaticText* aStepUnit );
+
     virtual void onInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
@@ -103,6 +129,26 @@ private:
     void onLoadDirectives( wxCommandEvent& event ) override
     {
         loadDirectives();
+    }
+
+    void onDCEnableSecondSource( wxCommandEvent& event ) override;
+    void onSwapDCSources( wxCommandEvent& event ) override;
+    void onDCSource1Selected( wxCommandEvent& event ) override
+    {
+        wxChar type =
+                m_dcSourceType1->GetString( m_dcSourceType1->GetSelection() ).Upper().GetChar( 0 );
+        updateDCSources( type, m_dcSource1 );
+        updateDCUnits( type, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit,
+                       m_src1DCStepUnit );
+    }
+
+    void onDCSource2Selected( wxCommandEvent& event ) override
+    {
+        wxChar type =
+                m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper().GetChar( 0 );
+        updateDCSources( type, m_dcSource2 );
+        updateDCUnits( type, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit,
+                       m_src2DCStepUnit );
     }
 
     static wxString scaleToString( int aOption )

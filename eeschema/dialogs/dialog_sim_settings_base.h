@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,9 +26,10 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/checkbox.h>
-#include <wx/combobox.h>
-#include <wx/statbox.h>
+#include <wx/choice.h>
 #include <wx/button.h>
+#include <wx/gbsizer.h>
+#include <wx/combobox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -55,30 +56,28 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_acFreqStop;
 		wxStaticText* m_staticText110;
 		wxPanel* m_pgDC;
-		wxCheckBox* m_dcEnable1;
-		wxStaticText* m_staticText41;
-		wxComboBox* m_dcSource1;
-		wxStaticText* m_staticText51;
-		wxTextCtrl* m_dcStart1;
-		wxStaticText* m_staticText511;
-		wxStaticText* m_staticText61;
-		wxTextCtrl* m_dcStop1;
-		wxStaticText* m_staticText512;
-		wxStaticText* m_staticText71;
-		wxTextCtrl* m_dcIncr1;
-		wxStaticText* m_staticText513;
 		wxCheckBox* m_dcEnable2;
+		wxRadioBox* m_dcSourceType1;
+		wxRadioBox* m_dcSourceType2;
 		wxStaticText* m_staticText4;
-		wxComboBox* m_dcSource2;
+		wxChoice* m_dcSource1;
+		wxChoice* m_dcSource2;
 		wxStaticText* m_staticText5;
+		wxTextCtrl* m_dcStart1;
+		wxStaticText* m_src1DCStartValUnit;
 		wxTextCtrl* m_dcStart2;
-		wxStaticText* m_staticText52;
+		wxStaticText* m_src2DCStartValUnit;
 		wxStaticText* m_staticText6;
+		wxTextCtrl* m_dcStop1;
+		wxStaticText* m_src1DCEndValUnit;
 		wxTextCtrl* m_dcStop2;
-		wxStaticText* m_staticText53;
+		wxStaticText* m_src2DCEndValUnit;
 		wxStaticText* m_staticText7;
+		wxTextCtrl* m_dcIncr1;
+		wxStaticText* m_src1DCStepUnit;
 		wxTextCtrl* m_dcIncr2;
-		wxStaticText* m_staticText54;
+		wxStaticText* m_src2DCStepUnit;
+		wxButton* m_swapDCSources;
 		wxPanel* m_pgDistortion;
 		wxPanel* m_pgNoise;
 		wxStaticText* m_staticText14;
@@ -123,6 +122,10 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void onDCEnableSecondSource( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDCSource1Selected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDCSource2Selected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSwapDCSources( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadDirectives( wxCommandEvent& event ) { event.Skip(); }
 
 
