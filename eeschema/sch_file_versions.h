@@ -58,4 +58,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200827  // Remove host tag
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200828  // Add footprint to symbol_instances.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20201015  // Add sheet instance properties.
-#define SEXPR_SCHEMATIC_FILE_VERSION 20210123    // Rename "unconnected" pintype to "no_connect".
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20210123  // Rename "unconnected" pintype to "no_connect".
+#define SEXPR_SCHEMATIC_FILE_VERSION 20210125    // R/W uuids for pins, labels, wires, etc.

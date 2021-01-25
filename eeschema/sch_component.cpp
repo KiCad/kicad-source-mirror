@@ -268,9 +268,12 @@ wxString SCH_COMPONENT::GetDatasheet() const
 void SCH_COMPONENT::UpdatePins()
 {
     std::map<wxString, wxString> altPinMap;
+    std::map<wxString, KIID>     pinUuidMap;
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
+        pinUuidMap[ pin->GetNumber() ] = pin->m_Uuid;
+
         if( !pin->GetAlt().IsEmpty() )
             altPinMap[ pin->GetNumber() ] = pin->GetAlt();
     }
@@ -292,10 +295,15 @@ void SCH_COMPONENT::UpdatePins()
 
         m_pins.push_back( std::make_unique<SCH_PIN>( libPin, this ) );
 
-        auto ii = altPinMap.find( libPin->GetNumber() );
+        auto ii = pinUuidMap.find( libPin->GetNumber() );
 
-        if( ii != altPinMap.end() )
-            m_pins.back()->SetAlt( ii->second );
+        if( ii != pinUuidMap.end() )
+            const_cast<KIID&>( m_pins.back()->m_Uuid ) = ii->second;
+
+        auto iii = altPinMap.find( libPin->GetNumber() );
+
+        if( iii != altPinMap.end() )
+            m_pins.back()->SetAlt( iii->second );
 
         m_pinMap[ libPin ] = i;
 
