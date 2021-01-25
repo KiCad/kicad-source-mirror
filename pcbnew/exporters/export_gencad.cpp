@@ -44,6 +44,8 @@
 #include <pgm_base.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 
+#include <wx/app.h>
+
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );
 static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb );

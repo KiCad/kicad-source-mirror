@@ -33,6 +33,8 @@
 #include <collectors.h>
 #include <panel_setup_layers.h>
 
+#include <wx/choicdlg.h>
+
 
 // some define to choose how copper layers widgets are shown
 

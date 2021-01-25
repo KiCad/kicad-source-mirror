@@ -36,6 +36,8 @@
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_actions.h>
 
+#include <wx/dcclient.h>
+
 // translate aLayer to its hotkey
 static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
 {

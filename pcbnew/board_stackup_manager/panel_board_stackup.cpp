@@ -41,6 +41,8 @@
 #include "dialog_dielectric_list_manager.h"
 #include <wx/wupdlock.h>
 #include <wx/richmsgdlg.h>
+#include <wx/choicdlg.h>
+#include <wx/dcclient.h>
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 256    // space between 2 ID type. Bigger than the layer count max

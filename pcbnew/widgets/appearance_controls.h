@@ -38,6 +38,8 @@ class ROW_ICON_PROVIDER;
 class GRID_BITMAP_TOGGLE_RENDERER;
 class WX_COLLAPSIBLE_PANE;
 class wxStaticLine;
+class wxSlider;
+class wxRadioButton;
 
 using KIGFX::COLOR4D;
 
