@@ -125,6 +125,22 @@ class TestBoardClass(unittest.TestCase):
         # ensure we can get to the ID via the STD name too
         self.assertEqual(pcb.GetLayerID(B_CU), b_cu_id)
 
+    def test_footprint_properties(self):
+        pcb = LoadBoard("data/custom_fields.kicad_pcb")
+        footprint = pcb.FindFootprintByReference('J1')
+        expected_properties = {
+            'Sheet file': 'custom_fields.kicad_sch',
+            'Sheet name': '',
+            'myfield': 'myvalue'
+        }
+        self.assertEquals(footprint.GetProperties(), expected_properties)
+        self.assertEquals(footprint.GetProperty('myfield'), 'myvalue')
+        self.assertEquals(footprint.HasProperty('myfield'), True)
+        self.assertEquals(footprint.HasProperty('abcd'), False)
+        footprint.SetProperty('abcd', 'efgh')
+        self.assertEquals(footprint.HasProperty('abcd'), True)
+        self.assertEquals(footprint.GetProperty('abcd'), 'efgh')
+
     #def test_interactive(self):
     # 	code.interact(local=locals())
 

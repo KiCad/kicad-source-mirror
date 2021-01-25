@@ -826,7 +826,7 @@ if( KICAD_SCRIPTING_MODULES )
     # Here is built the _pcbnew.{so,pyd} which is the native part of the pcbnew Python library
     # when Python is used from the command line.
 
-    if( MINGW )
+    if( MINGW OR VCPKG_TOOLCHAIN )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
         set( PYMOD_EXT "pyd" )
     elseif( APPLE )

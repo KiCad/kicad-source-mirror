@@ -493,6 +493,12 @@ public:
 
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
+    const wxString& GetProperty( const wxString& aKey) { return m_properties[ aKey ]; }
+    bool HasProperty( const wxString& aKey)
+    {
+        return m_properties.find( aKey ) != m_properties.end();
+    }
+    void SetProperty( const wxString& aKey, const wxString& aVal ) { m_properties[ aKey ] = aVal; }
 
     /**
      * Return a #PAD with a matching name.

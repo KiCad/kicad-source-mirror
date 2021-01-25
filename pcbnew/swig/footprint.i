@@ -29,6 +29,9 @@
  */
 
 
+%template(MAP_STRING_STRING) std::map<wxString, wxString>;
+%rename(GetPropertiesNative) FOOTPRINT::GetProperties;
+%rename(SetPropertiesNative) FOOTPRINT::SetProperties;
 %rename(MODULE_3D_SETTINGS_VECTOR3D) MODULE_3D_SETTINGS::VECTOR3D;
 %feature("flatnested");
 %include footprint.h
@@ -57,6 +60,19 @@
     # add function, clears the thisown to avoid python from deleting
     # the object in the garbage collector
     #
+
+    def GetProperties(self):
+      """ Returns footprint properties map. """
+      properties = self.GetPropertiesNative()
+      return {str(k): str(v) for k, v in properties.items()}
+
+    def SetProperties(self, properties):
+      """ Sets footprint properties map. """
+      wxproperties = MAP_STRING_STRING()
+      for k, v in properties.items():
+        wxproperties[k] = v
+      self.SetPropertiesNative(wxproperties)
+
     %}
 }
 
