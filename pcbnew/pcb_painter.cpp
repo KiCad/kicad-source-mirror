@@ -342,8 +342,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
         bool         isActive = m_highContrastLayers.count( aLayer );
 
-        // Items drawn on synthetic layers depend on crossing the primary layer for active
-        // state determination
+        // We currently add synthetic drawing layers (LAYER_VIA_THROUGH, LAYER_PAD_FR, etc.) to
+        // m_highContrastLayers, but it's not sufficiently fine-grained as it can't differentiate
+        // between (for instance) a via which is flashed on the primary layer and one that is not.
+        // So we need to refine isActive to be more discriminating for some items.
         if( primary != UNDEFINED_LAYER )
         {
             if( item->Type() == PCB_VIA_T )
@@ -356,7 +358,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             }
             else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {
-                // Track itself isn't on a synthetic layer, but its netname annotations are.
+                // Track itself isn't on a synthetic layer, but its netname annotations are, and
+                // we want to dim them based on whether or not the track is on the primary layer.
                 isActive = static_cast<const TRACK*>( item )->IsOnLayer( primary );
             }
         }
