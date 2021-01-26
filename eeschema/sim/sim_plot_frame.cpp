@@ -166,6 +166,12 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
 
+    // the settings dialog will be created later, on demand.
+    // if created in the ctor, for some obscure reason, there is an issue
+    // on Windows: when open it, the simulator frame is sent to the background.
+    // instead of being behind the dialog frame (as it does)
+    m_settingsDlg = nullptr;
+
     updateNetlistExporter();
 
     Connect( EVT_SIM_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onSimUpdate ), NULL, this );
@@ -209,12 +215,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_welcomePanel = new SIM_PANEL_BASE( wxEmptyString, m_plotNotebook, wxID_ANY );
     m_plotNotebook->AddPage( m_welcomePanel, _( "Welcome!" ), 1, true );
-
-    // the settings dialog will be created later, on demand.
-    // if created in the ctor, for some obscure reason, there is an issue
-    // on Windows: when open it, the simulator frame is sent to the background.
-    // instead of being behind the dialog frame (as it does)
-    m_settingsDlg = NULL;
 
     // resize the subwindows size. At least on Windows, calling wxSafeYield before
     // resizing the subwindows forces the wxSplitWindows size events automatically generated
@@ -677,6 +677,8 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName, bool aErase )
 void SIM_PLOT_FRAME::updateNetlistExporter()
 {
     m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( &m_schematicFrame->Schematic() ) );
+    if( m_settingsDlg )
+        m_settingsDlg->SetNetlistExporter( m_exporter.get() );
 }
 
 
@@ -1299,6 +1301,9 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
     SIM_PANEL_BASE* plotPanelWindow = currentPlotWindow();
 
+    if( !m_settingsDlg )
+        m_settingsDlg = new DIALOG_SIM_SETTINGS( this );
+
     // Initial processing is required to e.g. display a list of power sources
     updateNetlistExporter();
 
@@ -1308,13 +1313,8 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         return;
     }
 
-    if( !m_settingsDlg )
-        m_settingsDlg = new DIALOG_SIM_SETTINGS( this );
-
     if( plotPanelWindow != m_welcomePanel )
         m_settingsDlg->SetSimCommand( m_plots[plotPanelWindow].m_simCommand );
-
-    m_settingsDlg->SetNetlistExporter( m_exporter.get() );
 
     if( m_settingsDlg->ShowModal() == wxID_OK )
     {
