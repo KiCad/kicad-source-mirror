@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-25 16:33+0000\n"
+"PO-Revision-Date: 2021-01-26 08:00+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -32545,7 +32545,7 @@ msgstr "Добавить плату..."
 
 #: pcbnew/tools/pcb_actions.cpp:687
 msgid "Highlight the selected net"
-msgstr "Подсветить выбранные связи"
+msgstr "Подсветить выбранную цепь"
 
 #: pcbnew/tools/pcb_actions.cpp:692
 msgid "Toggle Last Net Highlight"
