@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-26 10:03+0000\n"
+"PO-Revision-Date: 2021-01-26 16:56+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4690,27 +4690,27 @@ msgstr "B.Cu."
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr "R. Kleber"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
-msgstr "V. Kleber"
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "R.Lotpaste"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "V.Lotpaste"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "R.Bestückungsdruck"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "V.Bestückungsdruck"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4722,35 +4722,35 @@ msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr "Nutzer.Zeichnungen"
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "Nutzer.Kommentare"
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
-msgstr "Nutzer.Eco1"
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
 msgid "User.Eco2"
-msgstr "Nutzer.Eco2"
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr "Platinenumriss"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:679
 msgid "Margin"
-msgstr "Außenabstand"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "V. Sperrbereiche"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "R. Sperrbereiche"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -23582,7 +23582,7 @@ msgstr "Edge Cuts (Platinenumriss)"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
-msgstr "Sperrbereiche"
+msgstr "Abstandsflächen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:207
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
@@ -26848,7 +26848,7 @@ msgstr "Benutzerdefinierte Lage hinzufügen"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:63
 msgid "If you want a courtyard layer for the front side of the board"
-msgstr "Wenn eine Courtyard-Lage für die Platinenoberseite benötigt wird"
+msgstr "Wenn eine Abstandsflächen-Lage für die Platinenoberseite benötigt wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 msgid "CrtYd_Front"
@@ -27278,7 +27278,7 @@ msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:653
 msgid "If you want a courtyard layer for the back side of the board"
-msgstr "Wenn eine Courtyard-Lage für die Platinenunterseite benötigt wird"
+msgstr "Wenn eine Abstandsflächen-Lage für die Platinenrückseite benötigt wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:657
 msgid "CrtYd_Back"
@@ -27675,37 +27675,37 @@ msgstr "Sperrbereich '%s''"
 #: pcbnew/drc/drc_engine.cpp:742 pcbnew/drc/drc_engine.cpp:752
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokale Überschreibung auf %s; Freigabe: %s."
+msgstr "Lokale Überschreibung auf %s; Abstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:775
 #, c-format
 msgid "Checking %s; clearance: %s."
-msgstr "Überprüfen %s; Räumung: %s."
+msgstr "Überprüfe %s; Abstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:782
 #, c-format
 msgid "Checking %s; courtyard clearance: %s."
-msgstr "Überprüfen %s; Hoffreigabe: %s."
+msgstr "Überprüfe %s; Abstandsflächenabstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:789
 #, c-format
 msgid "Checking %s; silk clearance: %s."
-msgstr "Überprüfen %s; Seidenräumung: %s."
+msgstr "Überprüfe %s; Bestückungsdruckabstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:796
 #, c-format
 msgid "Checking %s; hole clearance: %s."
-msgstr "Überprüfen %s; lochräumung: %s."
+msgstr "Überprüfe %s; Lochabstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:803
 #, c-format
 msgid "Checking %s; edge clearance: %s."
-msgstr "Überprüfen %s; Kantenabstand: %s."
+msgstr "Überprüfe %s; Kantenabstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:809
 #, c-format
 msgid "Checking %s."
-msgstr "%s wird geprüft."
+msgstr "Überprüfe %s."
 
 #: pcbnew/drc/drc_engine.cpp:816
 msgid "Board and netclass clearances apply only between copper items."
@@ -27721,7 +27721,7 @@ msgstr "Verbotseinschränkung nicht erfüllt."
 
 #: pcbnew/drc/drc_engine.cpp:871
 msgid "Keepout layer(s) not matched."
-msgstr "Keepout-Lage(n) nicht übereinstimmen."
+msgstr "Sperrflächen-Lage(n) stimmen nicht überein."
 
 #: pcbnew/drc/drc_engine.cpp:875 pcbnew/drc/drc_engine.cpp:896
 #, c-format
@@ -27738,7 +27738,7 @@ msgstr "Bedingungslose Einschränkung angewendet."
 
 #: pcbnew/drc/drc_engine.cpp:910
 msgid "Unconditional rule applied."
-msgstr "Unbedingte Regel angewendet."
+msgstr "Bedingungslose Regel angewendet."
 
 #: pcbnew/drc/drc_engine.cpp:923
 #, c-format
@@ -27764,7 +27764,7 @@ msgstr "Bedingung nicht erfüllt; Regel ignoriert."
 #: pcbnew/drc/drc_engine.cpp:983 pcbnew/drc/drc_engine.cpp:994
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Lokale Freigabe auf %s; Freigabe: %s."
+msgstr "Lokaler Abstand auf %s; Abstand: %s."
 
 #: pcbnew/drc/drc_item.cpp:42
 msgid "Electrical"
@@ -27820,7 +27820,7 @@ msgstr "DuKo ist nicht oder nur auf einer Lage verbunden"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
-msgstr "Spur hat nicht verbundenes Ende"
+msgstr "Leiterbahn hat nicht verbundenes Ende"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Hole clearance violation"
@@ -27856,23 +27856,23 @@ msgstr "Mikro-DuKo-Bohrung außerhalb des Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
-msgstr "Footprint Umriss Überschneidung"
+msgstr "Abstandsflächenüberschneidung"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Footprint has no courtyard defined"
-msgstr "Footprint hat keinen Sperrbereich definiert"
+msgstr "Footprint hat keine Abstandsfläche definiert"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Footprint has malformed courtyard"
-msgstr "Footprint hat fehlerhaften Sperrbereich"
+msgstr "Footprint hat fehlerhafte Abstandsfläche"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "PTH inside courtyard"
-msgstr "Metallisierte Bohrung innerhalb einer Sperrfläche"
+msgstr "Metallisierte Bohrung innerhalb Abstandsfläche"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "NPTH inside courtyard"
-msgstr "Mechanische Bohrung innerhalb einer Sperrfläche"
+msgstr "Mechanische Bohrung innerhalb Abstandsfläche"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Item on a disabled layer"
@@ -28097,11 +28097,11 @@ msgstr "(Netze %s und %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:80
 msgid "Checking footprint courtyard definitions..."
-msgstr "Prüfe Footprint-Sperrbereichsdefinitionen..."
+msgstr "Prüfe Footprint-Abstandsflächendefinitionen..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:130
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "Prüfe überlappende Footprint-Sperrbereiche..."
+msgstr "Prüfe überlappende Footprint-Abstandsflächen..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:341
 msgid "DPs evaluated:"
@@ -29944,15 +29944,16 @@ msgstr "Unbekannte Lage '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:273
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Footprint-Sperrbereich ist keine zusammenhängende geschlossene Kontur."
+msgstr ""
+"Footprint-Abstandsfläche ist keine zusammenhängende geschlossene Kontur."
 
 #: pcbnew/pcb_expr_evaluator.cpp:283
 msgid "Footprint has no front courtyard."
-msgstr "Footprint hat keinen Sperrbereich auf der Oberseite definiert."
+msgstr "Footprint hat keine Abstandsfläche auf der Oberseite definiert."
 
 #: pcbnew/pcb_expr_evaluator.cpp:298
 msgid "Footprint has no back courtyard."
-msgstr "Footprint hat keinen Sperrbereich auf der Rückseite definiert."
+msgstr "Footprint hat keine Abstandsfläche auf der Rückseite definiert."
 
 #: pcbnew/pcb_expr_evaluator.cpp:750
 msgid "must be mm, in, or mil"
@@ -31970,7 +31971,7 @@ msgstr "Sperrflächen-Lösung für:"
 #: pcbnew/tools/board_inspection_tool.cpp:634
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
-"Der Bericht ist möglicherweise unvollständig: Einige Footprint-Sperrbereiche "
+"Bericht ist möglicherweise unvollständig: Einige Footprint-Abstandsflächen "
 "sind fehlerhaft."
 
 #: pcbnew/tools/board_inspection_tool.cpp:635
@@ -34130,11 +34131,11 @@ msgstr "Abstände"
 
 #: pcbnew/widgets/appearance_controls.cpp:1504
 msgid "Footprint courtyards on board's front"
-msgstr "Footprint Sperrbereich auf Platinenoberseite"
+msgstr "Footprint-Abstandsflächen auf Platinenoberseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1505
 msgid "Footprint courtyards on board's back"
-msgstr "Footprint Sperrbereich auf Platinenunterseite"
+msgstr "Footprint-Abstandsflächen auf Platinenunterseite"
 
 #: pcbnew/widgets/appearance_controls.cpp:1506
 msgid "Footprint assembly on board's front"
