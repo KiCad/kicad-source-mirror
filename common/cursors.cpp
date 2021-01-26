@@ -254,7 +254,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_line_bus_xpm,
         { 32, 32 },
-        { 4, 4 },
+        { 5, 26 },
     },
     {
         KICURSOR::LINE_WIRE,
@@ -262,7 +262,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_line_wire_xpm,
         { 32, 32 },
-        { 4, 4 },
+        { 5, 26 },
     },
     {
         KICURSOR::LINE_WIRE_ADD,
@@ -270,7 +270,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_line_wire_add_xpm,
         { 32, 32 },
-        { 4, 4 },
+        { 5, 26 },
     },
     {
         KICURSOR::LINE_GRAPHIC,
@@ -278,7 +278,7 @@ static const std::vector<CURSOR_STORE::CURSOR_DEF> standard_cursors = {
         nullptr,
         cursor_line_graphic_xpm,
         { 32, 32 },
-        { 4, 4 },
+        { 5, 26 },
     },
     {
         KICURSOR::LABEL_HIER,
