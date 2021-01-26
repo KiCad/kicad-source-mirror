@@ -48,7 +48,6 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_maxErrorTitle;
 		wxTextCtrl* m_maxErrorCtrl;
 		wxStaticText* m_maxErrorUnits;
-		wxStaticBitmap* m_bitmapInfo;
 		wxStaticText* m_stCircleToPolyWarning;
 		wxBoxSizer* m_bSizerPolygonFillOption;
 		wxStaticLine* m_staticline1;

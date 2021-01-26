@@ -51,15 +51,19 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_stCircleToPolyWarning->SetFont( infoFont );
 }
 
 
 bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 {
-    wxString fmt = m_stCircleToPolyWarning->GetLabel();
-    m_stCircleToPolyWarning->SetLabel( wxString::Format( fmt,
-                                       StringFromValue( m_Frame->GetUserUnits(),
-                                       ARC_HIGH_DEF, true ) ) );
+    wxString msg;
+    msg.Printf( m_stCircleToPolyWarning->GetLabel(),
+                StringFromValue( m_Frame->GetUserUnits(), ARC_HIGH_DEF, true ) );
+    m_stCircleToPolyWarning->SetLabel( msg );
 
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
