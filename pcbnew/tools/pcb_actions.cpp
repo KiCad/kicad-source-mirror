@@ -1195,7 +1195,7 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0, "",
-        _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
+        _( "Filter Selected Items..." ), _( "Remove items from the selection by type" ),
         filter_xpm );
 
 
