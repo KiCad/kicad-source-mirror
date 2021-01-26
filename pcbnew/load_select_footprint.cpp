@@ -113,6 +113,9 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     newFootprint->ClearFlags();
     newFootprint->RunOnChildren( []( BOARD_ITEM* aItem )
                                  {
+                                     if( aItem->Type() == PCB_PAD_T )
+                                        aItem->SetLocked( false );
+
                                      aItem->ClearFlags();
                                  } );
 

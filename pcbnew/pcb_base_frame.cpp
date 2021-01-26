@@ -160,7 +160,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
     {
         GetBoard()->Add( aFootprint, ADD_MODE::APPEND );
 
-        aFootprint->SetFlags(IS_NEW );
+        aFootprint->SetFlags( IS_NEW );
         aFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
 
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
