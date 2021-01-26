@@ -1105,7 +1105,7 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
                          default:
                              Expecting( "input, output, bidirectional, tri_state, passive, "
                                         "unspecified, power_in, power_out, open_collector, "
-                                        "open_emitter, free or noconnect" );
+                                        "open_emitter, free or no_connect" );
                              return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
                          }
                      };
