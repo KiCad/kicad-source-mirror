@@ -286,7 +286,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 
     m_startItem = pickSingleItem( p, -1, -1, aIgnorePads );
 
-    if( m_startItem && !m_startItem->Layers().Overlaps( tl ) )
+    if( !m_gridHelper->GetUseGrid() && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
 
     m_startSnapPoint = snapToItem( m_startItem, p );
