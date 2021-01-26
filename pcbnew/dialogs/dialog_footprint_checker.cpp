@@ -47,6 +47,7 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
 
     m_sdbSizerOK->SetDefault();
+    m_sdbSizer->SetSizeHints( this );
     GetSizer()->SetSizeHints(this);
     Centre();
 }
