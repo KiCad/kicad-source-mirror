@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,8 +29,6 @@
 
 
 /**
- * CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL
- *
  * Selection tool for the footprint viewer in cvpcb.
  */
 class CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL : public TOOL_INTERACTIVE
@@ -46,8 +44,6 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function Main()
-     *
      * The main loop.
      */
     int Main( const TOOL_EVENT& aEvent );
@@ -69,7 +65,7 @@ public:
      */
     int UpdateMenu( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
 
 private:

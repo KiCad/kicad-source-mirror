@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,30 +47,35 @@ public:
 
 private:
     /**
-     * Parse a string describing a power source, so appropriate settings are checked in the dialog
+     * Parse a string describing a power source, so appropriate settings are checked in the dialog.
+     *
      * @param aModel contains the string to be parse (e.g. sin(0 1 10k))
      * @return True if the input string was parsed without errors.
      */
     bool parsePowerSource( const wxString& aModel );
 
     /**
-     * Generates a string to describe power source parameters, basing on the current selection.
+     * Generate a string to describe power source parameters, basing on the current selection.
+     *
      * If there are missing fields, it will not modify the target string.
+     *
      * @param aTarget is the destination for the generated string.
      * @return True if the string was saved successfully.
      */
     bool generatePowerSource( wxString& aTarget ) const;
 
     /**
-     * Loads a list of components (.model and .subckt) from a spice library
-     * file and adds them to a combo box.
+     * Load a list of components (.model and .subckt) from a spice library file and add them to
+     * a combo box.
+     *
      * @param aComboBox is the target combo box
      * @param aFilePath is path to the library file
      */
     void loadLibrary( const wxString& aFilePath );
 
     /**
-     * Returns or creates a field in the edited schematic fields vector.
+     * Return or create a field in the edited schematic fields vector.
+     *
      * @param aFieldType is an SPICE_FIELD enum value.
      * @return Requested field.
      */
@@ -76,7 +83,8 @@ private:
     LIB_FIELD& getLibField( int aFieldType );
 
     /**
-     * Adds a value to the PWL values list.
+     * Add a value to the PWL values list.
+     *
      * @param aTime is the time value.
      * @param aValue is the source value at the given time.
      * @return True if request has completed successfully, false if the data is invalid.
@@ -88,7 +96,7 @@ private:
 
     // The default dialog Validate() calls the validators of all widgets.
     // This is not what we want; We want only validators of the selected page
-    // of the notbooks. So disable the wxDialog::Validate(), and let our
+    // of the notebooks. So disable the wxDialog::Validate(), and let our
     // TransferDataFromWindow doing the job.
     virtual bool Validate() override
     {
@@ -105,7 +113,7 @@ private:
     }
 
     /**
-     * Initializes the internal settings
+     * Initialize the internal settings.
      */
     void Init();
 
@@ -122,26 +130,26 @@ private:
     void onRandomSourceType( wxCommandEvent& event ) override;
     void onTypeSelected( wxCommandEvent& event ) override;
 
-    ///> Edited component
+    ///< Edited component
     SCH_COMPONENT& m_component;
 
-    ///> Fields from the component properties dialog
+    ///< Fields from the component properties dialog
     std::vector<SCH_FIELD>* m_schfields;
     std::vector<LIB_FIELD>* m_libfields;
     bool m_useSchFields;
 
-    ///> Temporary field values
+    ///< Temporary field values
     std::map<int, wxString> m_fieldsTmp;
 
     struct MODEL
     {
-        ///> Line number in the library file
+        ///< Line number in the library file
         int line;
 
-        ///> Type of the device
+        ///< Type of the device
         SPICE_PRIMITIVE model;
 
-        ///> Convert string to model
+        ///< Convert string to model
         static SPICE_PRIMITIVE parseModelType( const wxString& aValue );
 
         MODEL( int aLine, enum SPICE_PRIMITIVE aModel )
@@ -150,10 +158,10 @@ private:
         }
     };
 
-    ///> Models available in the selected library file
+    ///< Models available in the selected library file
     std::map<wxString, MODEL> m_models;
 
-    ///> Column identifiers for PWL power source value list
+    ///< Column identifiers for PWL power source value list
     long m_pwlTimeCol, m_pwlValueCol;
 
     SPICE_VALIDATOR m_spiceValidator;

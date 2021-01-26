@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,10 +40,8 @@
 class EE_SELECTION;
 
 /**
- * EE_TOOL_BASE
- *
- * A foundation class for a tool operating on a schematic or symbol
-**/
+ * A foundation class for a tool operating on a schematic or symbol.
+ */
 
 
 template <class T>
@@ -51,9 +49,7 @@ class EE_TOOL_BASE : public TOOL_INTERACTIVE
 {
 public:
     /**
-     * Constructor
-     *
-     * Creates a tool with given name. The name must be unique.
+     * Create a tool with given name. The name must be unique.
      */
     EE_TOOL_BASE( const std::string& aName ) :
             TOOL_INTERACTIVE ( aName ),
@@ -72,8 +68,7 @@ public:
         m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
         m_isSymbolEditor = m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 
-        // A basic context manu.  Many (but not all) tools will choose to override this.
-
+        // A basic context menu.  Many (but not all) tools will choose to override this.
         auto& ctxMenu = m_menu.GetMenu();
 
         // cancel current tool goes in main context menu at the top if present
@@ -133,8 +128,8 @@ protected:
         }
     }
 
-    ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
-    ///> parents.
+    ///< Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
+    ///< parents.
     void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aType, bool aAppend = false )
     {
         KICAD_T itemType = aItem->Type();

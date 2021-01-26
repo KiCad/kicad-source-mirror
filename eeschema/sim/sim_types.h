@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +27,7 @@
 #ifndef SIM_TYPES_H
 #define SIM_TYPES_H
 
-///> Possible simulation types
+///< Possible simulation types
 enum SIM_TYPE
 {
     ST_UNKNOWN,
@@ -40,7 +42,7 @@ enum SIM_TYPE
     ST_TRANSIENT
 };
 
-///> Possible plot types
+///< Possible plot types
 enum SIM_PLOT_TYPE
 {
     // Y axis

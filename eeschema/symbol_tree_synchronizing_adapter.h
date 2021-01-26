@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,10 +42,10 @@ public:
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
     void Sync( bool aForce = false,
-               std::function<void(int, int, const wxString&)> aProgressCallback = [](int, int, const wxString&){} );
+               std::function<void( int, int, const wxString&)> aProgressCallback = [](int, int, const wxString&){} );
 
     int GetLibrariesCount() const override;
-    
+
     TOOL_INTERACTIVE* GetContextMenuTool() override;
 
 protected:
@@ -56,16 +58,17 @@ protected:
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
                   wxDataViewItemAttr& aAttr ) const override;
 
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr );
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDIT_FRAME* aParent,
+                                       SYMBOL_LIBRARY_MANAGER* aLibMgr );
 
 protected:
     SYMBOL_EDIT_FRAME*      m_frame;
     SYMBOL_LIBRARY_MANAGER* m_libMgr;
 
-    ///> Hashes to decide whether a library needs an update
+    ///< Hashes to decide whether a library needs an update.
     std::map<wxString, int> m_libHashes;
 
-    ///> SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization
+    ///< SYMBOL_LIBRARY_MANAGER hash value returned in the last synchronization.
     int                     m_lastSyncHash;
 };
 

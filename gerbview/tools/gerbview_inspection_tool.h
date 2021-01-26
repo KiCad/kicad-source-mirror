@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,16 +36,16 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Launches a tool to measure between points
+    ///< Launch a tool to measure between points
     int MeasureTool( const TOOL_EVENT& aEvent );
 
-    ///> Show a list of the DCodes
+    ///< Show a list of the DCodes
     int ShowDCodes( const TOOL_EVENT& aEvent );
 
-    ///> Show the source for the gerber file
+    ///< Show the source for the gerber file
     int ShowSource( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:

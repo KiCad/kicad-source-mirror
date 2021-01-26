@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,7 @@
 
 #include <reporter.h>
 /**
- * Class WX_STRING_REPORTER
- * is a wrapper for reporting to a wxString object.
+ * A wrapper for reporting to a wxString object.
  */
 class WX_STRING_REPORTER_FILTERED : public REPORTER
 {
@@ -43,8 +42,8 @@ public:
     bool      HasMessage() const override;
 };
 
-///> Backannotate the schematic with a netlist sent from PCBNew.
-///> Reply with a string consisting of errors or warnings. If empty no errors
+///< Backannotate the schematic with a netlist sent from Pcbnew.
+///< Reply with a string consisting of errors or warnings. If empty no errors
 void ReannotateFromPCBNew( SCH_EDIT_FRAME* aFrame, std::string& aNetlist );
 
 #endif /* EESCHEMA_TOOLS_REANNOTATE_H_ */

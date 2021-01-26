@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers
+ * Copyright (C) 1992-2021 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,8 @@ class PROJECT;
 
 /// Flags for Spice netlist generation (can be combined)
 enum SPICE_NETLIST_OPTIONS {
-    NET_ADJUST_INCLUDE_PATHS = 8,       // use full paths for included files (if they are in search path)
-    NET_ADJUST_PASSIVE_VALS = 16,       // reformat passive component values (e.g. 1M -> 1Meg)
+    NET_ADJUST_INCLUDE_PATHS = 8, // use full paths for included files (if they are in search path)
+    NET_ADJUST_PASSIVE_VALS = 16, // reformat passive component values (e.g. 1M -> 1Meg)
     NET_ALL_FLAGS = 0xffff
 };
 
@@ -48,7 +48,7 @@ enum SPICE_FIELD {
     SF_END     // sentinel
 };
 
-///> Basic Spice component primitives
+///< Basic Spice component primitives
 enum SPICE_PRIMITIVE {
     SP_UNKNOWN      = ' ',
     SP_RESISTOR     = 'R',
@@ -63,40 +63,40 @@ enum SPICE_PRIMITIVE {
     SP_ISOURCE      = 'I'
 };
 
-/// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog
+/// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist
+///       export dialog.
 
 /**
- * @brief Structure to represent a schematic component in the Spice simulation.
+ * Structure to represent a schematic component in the Spice simulation.
  */
 struct SPICE_ITEM
 {
-    ///> Schematic component represented by this SPICE_ITEM.
+    ///< Schematic component represented by this SPICE_ITEM.
     SCH_COMPONENT* m_parent;
 
-    ///> Spice primitive type (@see SPICE_PRIMITIVE).
+    ///< Spice primitive type (@see SPICE_PRIMITIVE).
     wxChar m_primitive;
 
-    ///> Library model (for semiconductors and subcircuits), component value (for passive components)
-    ///> or voltage/current (for sources).
+    ///< Library model (for semiconductors and subcircuits), component value (for passive
+    ///< components) or voltage/current (for sources).
     wxString m_model;
 
-    ///>
+    ///<
     wxString m_refName;
 
-    ///> Flag to indicate whether the component should be used in simulation.
+    ///< Flag to indicate whether the component should be used in simulation.
     bool m_enabled;
 
-    ///> Array containing Standard Pin Name
+    ///< Array containing Standard Pin Name
     std::vector<wxString> m_pins;
 
-    ///> Numeric indices into m_SortedComponentPinList
+    ///< Numeric indices into m_SortedComponentPinList
     std::vector<int> m_pinSequence;
 };
 
 
 /**
- * NETLIST_EXPORTER_PSPICE
- * generates a PSPICE compatible netlist
+ * Generate a PSPICE compatible netlist.
  */
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER_BASE
 {
@@ -112,11 +112,11 @@ public:
 
     typedef std::list<SPICE_ITEM> SPICE_ITEM_LIST;
 
-    ///> Net name to circuit node number mapping
+    ///< Net name to circuit node number mapping
     typedef std::map<wxString, int> NET_INDEX_MAP;
 
     /**
-     * @brief Returns list of items representing schematic components in the Spice world.
+     * Return list of items representing schematic components in the Spice world.
      */
     const SPICE_ITEM_LIST& GetSpiceItems() const
     {
@@ -124,7 +124,7 @@ public:
     }
 
     /**
-     * @brief Returns name of Spice device corresponding to a schematic component.
+     * Return name of Spice device corresponding to a schematic component.
      *
      * @param aComponent is the component reference.
      * @return Spice device name or empty string if there is no such component in the netlist. The
@@ -135,16 +135,15 @@ public:
     wxString GetSpiceDevice( const wxString& aComponent ) const;
 
     /**
-     * Function WriteNetlist
-     * writes to specified output file
+     * Write to specified output file
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
-    ///> @copydoc NETLIST_EXPORTER_BASE::Format()
+    ///< @copydoc NETLIST_EXPORTER_BASE::Format()
     bool Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl );
 
     /**
-     * @brief Processes the netlist to create net mapping and a list of SPICE_ITEMs.
+     * Process the netlist to create net mapping and a list of SPICE_ITEMs.
      * It is automatically called by WriteNetlist(), but might be used separately,
      * if only net mapping and the list of SPICE_ITEMs are required.
      * @return True if successful.
@@ -153,15 +152,14 @@ public:
 
 
     /**
-     * @brief some chars are not accepted in netnames in spice netlists.
-     * for instance '(' and ')'
-     * ReplaceForbiddenChars replace these chars by an underscore.
-     * @param aNetName = the netname to modify.
+     * Replace illegal spice net name characters with an underscore.
+     *
+     * @param aNetName is the net name to modify.
      */
      static void ReplaceForbiddenChars( wxString& aNetName );
 
     /**
-     * @brief Returns a map of circuit nodes to net names.
+     * Return a map of circuit nodes to net names.
      */
     const NET_INDEX_MAP& GetNetIndexMap() const
     {
@@ -169,7 +167,7 @@ public:
     }
 
     /**
-     * @brief Returns a vector of component field names related to Spice simulation.
+     * Return a vector of component field names related to Spice simulation.
      */
     static const std::vector<wxString>& GetSpiceFields()
     {
@@ -177,7 +175,7 @@ public:
     }
 
     /**
-     * @brief Returns a string used for a particular component field related to Spice simulation.
+     * Return a string used for a particular component field related to Spice simulation.
      */
     static const wxString& GetSpiceFieldName( SPICE_FIELD aField )
     {
@@ -185,22 +183,23 @@ public:
     }
 
     /**
-     * @brief Retrieves either the requested field value or the default value.
+     * Retrieve either the requested field value or the default value.
      */
     static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
 
     /**
-     * @brief Retrieves the default value for a given field.
+     * Retrieve the default value for a given field.
      */
-    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
+    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aComponent,
+                                         unsigned aCtl );
 
     /**
-     * Updates the vector of Spice directives placed in the schematics.
+     * Update the vector of Spice directives placed in the schematics.
      */
     void UpdateDirectives( unsigned aCtl );
 
     /**
-     * @brief Returnss a vector of Spice directives found in the schematics.
+     * Return a vector of Spice directives found in the schematics.
      */
     const std::vector<wxString> GetDirectives() const
     {
@@ -208,7 +207,7 @@ public:
     }
 
     /**
-     * @brief Convertes typical boolean string values (no/yes, true/false, 1/0) to a boolean value.
+     * Convert typical boolean string values (no/yes, true/false, 1/0) to a boolean value.
      */
     static bool StringToBool( const wxString& aStr )
     {
@@ -223,24 +222,24 @@ public:
 
 protected:
     /**
-     * @brief Saves the Spice directives.
+     * Save the Spice directives.
      */
     virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const;
 
 private:
-    ///> Spice simulation title found in the processed schematic sheet
+    ///< Spice simulation title found in the processed schematic sheet
     wxString m_title;
 
-    ///> Spice directives found in the processed schematic sheet
+    ///< Spice directives found in the processed schematic sheet
     std::vector<wxString> m_directives;
 
-    ///> Libraries used by the simulated circuit
+    ///< Libraries used by the simulated circuit
     std::set<wxString> m_libraries;
 
-    ///> Maps circuit nodes to net names
+    ///< Map circuit nodes to net names
     NET_INDEX_MAP m_netMap;
 
-    ///> List of items representing schematic components in the Spice world
+    ///< List of items representing schematic components in the Spice world
     SPICE_ITEM_LIST m_spiceItems;
 
     // Component fields that are processed during netlist export & simulation

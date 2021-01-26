@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,13 +55,11 @@ public:
     int Paste( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DoDelete()
-     *
-     * Deletes the selected items, or the item under the cursor.
+     * Delete the selected items, or the item under the cursor.
      */
     int DoDelete( const TOOL_EVENT& aEvent );
 
-    ///> Runs the deletion tool.
+    ///< Run the deletion tool.
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
@@ -70,10 +68,9 @@ private:
     void editFieldProperties( LIB_FIELD* aField );
     void editSymbolProperties();
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
     EDA_ITEM* m_pickerItem;
 };
 

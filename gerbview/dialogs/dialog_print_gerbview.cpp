@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -61,16 +61,16 @@ private:
     void onSelectAllClick( wxCommandEvent& event );
     void onDeselectAllClick( wxCommandEvent& event );
 
-    ///> (Un)check all items in a checklist box
+    ///< (Un)check all items in a checklist box
     void setListBoxValue( wxCheckListBox* aList, bool aValue );
 
-    ///> Check whether a layer is enabled in a listbox
+    ///< Check whether a layer is enabled in a listbox
     bool isLayerEnabled( unsigned int aLayer ) const;
 
-    ///> Enable/disable layer in a listbox
+    ///< Enable/disable layer in a listbox
     void enableLayer( unsigned int aLayer, bool aValue );
 
-    ///> Update layerset basing on the selected layers
+    ///< Update layerset basing on the selected layers
     int setLayerSetFromList();
 
     void saveSettings() override;
@@ -190,7 +190,8 @@ void DIALOG_PRINT_GERBVIEW::createLeftPanel()
 
     // Select/Unselect all buttons
     m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
-    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Deselect all" ) );
+    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                        _( "Deselect all" ) );
 
     m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler( DIALOG_PRINT_GERBVIEW::onSelectAllClick ), NULL, this );

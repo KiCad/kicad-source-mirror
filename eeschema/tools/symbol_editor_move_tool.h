@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,27 +45,24 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function Main()
-     *
-     * Runs an interactive move of the selected items, or the item under the cursor.
+     * Run an interactive move of the selected items, or the item under the cursor.
      */
     int Main( const TOOL_EVENT& aEvent );
 
 private:
     void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
-    ///> Flag determining if anything is being dragged right now
+    ///< Flag determining if anything is being dragged right now
     bool        m_moveInProgress;
 
-    ///> Used for chaining commands
+    ///< Used for chaining commands
     VECTOR2I    m_moveOffset;
 
-    ///> Last cursor position (needed for getModificationPoint() to avoid changes
-    ///> of edit reference point).
+    ///< Last cursor position (needed for getModificationPoint() to avoid changes
+    ///< of edit reference point).
     VECTOR2I    m_cursor;
     VECTOR2I    m_anchorPos;
 };

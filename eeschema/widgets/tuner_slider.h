@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,7 +37,7 @@ class SIM_PLOT_FRAME;
 class SCH_COMPONENT;
 
 /**
- * @brief Custom widget to handle quick component values modification and simulation on the fly.
+ * Custom widget to handle quick component values modification and simulation on the fly.
  */
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
@@ -88,7 +90,7 @@ private:
 
     wxString m_spiceName;
 
-    ///> Timer that restarts the simulation after the slider value has changed
+    ///< Timer that restarts the simulation after the slider value has changed
     wxTimer m_simTimer;
 
     SCH_COMPONENT* m_component;

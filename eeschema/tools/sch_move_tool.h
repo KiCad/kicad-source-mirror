@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,12 +50,13 @@ public:
     bool Init() override;
 
     /**
-     * Runs an interactive move of the selected items, or the item under the cursor.
+     * Run an interactive move of the selected items, or the item under the cursor.
      */
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Aligns selected elements to the grid
+     * Align selected elements to the grid.
+     *
      * @param aEvent current event that activated the tool
      * @return 0
      */
@@ -64,27 +65,27 @@ public:
 private:
     void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
-    ///> Finds additional items for a drag operation.
-    ///> Connected items with no wire are included (as there is no wire to adjust for the drag).
-    ///> Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
+    ///< Find additional items for a drag operation.
+    ///< Connected items with no wire are included (as there is no wire to adjust for the drag).
+    ///< Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
     void getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint, EDA_ITEMS& aList );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:
-    ///> Flag determining if anything is being dragged right now
+    ///< Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
     bool                  m_isDragOperation;
 
-    ///> Items (such as wires) which were added to the selection for a drag
+    ///< Items (such as wires) which were added to the selection for a drag
     EDA_ITEMS             m_dragAdditions;
 
-    ///> Used for chaining commands
+    ///< Used for chaining commands
     VECTOR2I              m_moveOffset;
 
-    ///> Last cursor position (needed for getModificationPoint() to avoid changes
-    ///> of edit reference point).
+    ///< Last cursor position (needed for getModificationPoint() to avoid changes
+    ///< of edit reference point).
     VECTOR2I              m_cursor;
 
     boost::optional<VECTOR2I> m_anchorPos;

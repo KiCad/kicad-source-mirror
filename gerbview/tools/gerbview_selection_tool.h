@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,9 +40,7 @@ namespace KIGFX
 
 
 /**
- * GERBVIEW_SELECTION_TOOL
- *
- * Selection tool for GerbView, based on the one in PcbNew
+ * Selection tool for GerbView, based on the one in Pcbnew
  */
 class GERBVIEW_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
@@ -60,16 +58,12 @@ public:
     int UpdateMenu( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Main()
-     *
      * The main loop.
      */
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Function GetSelection()
-     *
-     * Returns the set of currently selected items.
+     * Return the set of currently selected items.
      */
     GERBVIEW_SELECTION& GetSelection();
 
@@ -81,40 +75,37 @@ public:
     int UnselectItem( const TOOL_EVENT& aEvent );
     int UnselectItems( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
 
 private:
     /**
-     * Function selectPoint()
-     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * Select an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows one to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
      * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
-     * a menu is shown, otherise function finishes without selecting anything.
+     * a menu is shown, otherwise function finishes without selecting anything.
      * @return True if an item was selected, false otherwise.
      */
     bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false );
 
     /**
-     * Function selectCursor()
-     * Selects an item under the cursor unless there is something already selected or
-     * aSelectAlways is true.
+     * Select an item under the cursor unless there is something already selected or
+     * \a aSelectAlways is true.
+     *
      * @param aSelectAlways forces to select an item even if there is an item already selected.
      * @return true if eventually there is an item selected, false otherwise.
      */
     bool selectCursor( bool aSelectAlways = false );
 
     /**
-     * Function clearSelection()
-     * Clears the current selection.
+     * Clear the current selection.
      */
     void clearSelection();
 
     /**
-     * Function disambiguationMenu()
-     * Handles the menu that allows one to select one of many items in case
+     * Handle the menu that allows one to select one of many items in case
      * there is more than one item at the selected point (@see selectCursor()).
      *
      * @param aItems contains list of items that are displayed to the user.
@@ -122,39 +113,36 @@ private:
     EDA_ITEM* disambiguationMenu( GERBER_COLLECTOR* aItems );
 
     /**
-     * Function selectable()
-     * Checks conditions for an item to be selected.
+     * Check conditions for an item to be selected.
      *
      * @return True if the item fulfills conditions to be selected.
      */
     bool selectable( const EDA_ITEM* aItem ) const;
 
     /**
-     * Function select()
-     * Takes necessary action mark an item as selected.
+     * Take necessary action mark an item as selected.
      *
      * @param aItem is an item to be selected.
      */
     void select( EDA_ITEM* aItem );
 
     /**
-     * Function unselect()
-     * Takes necessary action mark an item as unselected.
+     * Take necessary action mark an item as unselected.
      *
      * @param aItem is an item to be unselected.
      */
     void unselect( EDA_ITEM* aItem );
 
     /**
-     * Function selectVisually()
-     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * Mark item as selected, but does not add it to the #ITEMS_PICKED_LIST.
+     *
      * @param aItem is an item to be be marked.
      */
     void selectVisually( EDA_ITEM* aItem );
 
     /**
-     * Function unselectVisually()
-     * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
+     * Mark item as selected, but does not add it to the #ITEMS_PICKED_LIST.
+     *
      * @param aItem is an item to be be marked.
      */
     void unselectVisually( EDA_ITEM* aItem );

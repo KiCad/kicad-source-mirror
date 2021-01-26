@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,35 +47,354 @@ class SELECTION;
 
 
 /**
- * GERBVIEW_FRAME
- * is the main window used in GerbView.
+ * The main window used in GerbView.
  */
 
 #define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
 
-class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
+class GERBVIEW_FRAME : public EDA_DRAW_FRAME
 {
-    GBR_LAYOUT*         m_gerberLayout;
-    int                 m_activeLayer;
-    wxPoint             m_grid_origin;
-    PAGE_INFO           m_paper;            // used only to show paper limits to screen
-    GBR_DISPLAY_OPTIONS m_DisplayOptions;
-    wxStaticText*       m_cmpText;          // a message on the auxiliary toolbar,
-                                            // relative to the m_SelComponentBox
-    wxStaticText*       m_netText;          // a message on the auxiliary toolbar,
-                                            // relative to the m_SelNetnameBox
-    wxStaticText*       m_apertText;        // a message on the auxiliary toolbar,
-                                            // relative to the m_SelAperAttributesBox
-    wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
-                                            // relative to the m_DCodeSelector
-
 public:
+    GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    ~GERBVIEW_FRAME();
+
+    void doCloseWindow() override;
+
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
+
+    /**
+     * Load a list of Gerber and NC drill files and updates the view based on them.
+     *
+     * @param aPath is the base path for the filenames if they are relative
+     * @param aFilenameList is a list of filenames to load
+     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
+     * if nullptr, files are expected Gerber type.
+     * @return true if every file loaded successfully
+     */
+    bool LoadListOfGerberAndDrillFiles( const wxString& aPath,
+                                        const wxArrayString& aFilenameList,
+                                        const std::vector<int>* aFileType = nullptr );
+
+    // Virtual basic functions:
+    void ReCreateHToolbar() override;
+    void ReCreateAuxiliaryToolbar() override;
+
+    /**
+     * Create or update the right vertical toolbar.
+     */
+    void ReCreateVToolbar() override;
+
+    /**
+     * Create or update the left vertical toolbar (option toolbar)
+     */
+    void ReCreateOptToolbar() override;
+
+    void ReCreateMenuBar() override;
+    void UpdateStatusBar() override;
+
+    /**
+     * @return 0 for fast mode (not fully compatible with negative objects)
+     *         1 for exact mode, write mode
+     *         2 for exact mode, OR mode (transparency mode)
+     */
+    int GetDisplayMode() { return m_displayMode; }
+
+    /**
+     * @param aMode =  0 for fast mode
+     *                 1 for exact mode, write mode
+     *                 2 for exact mode, OR mode (transparency mode)
+     */
+    void SetDisplayMode( int aMode ) { m_displayMode = aMode; }
+
+    /**
+     * Test whether a given element category is visible. Keep this as an inline function.
+     *
+     * @param aLayerID is an item id from the enum GERBVIEW_LAYER_ID
+     * @return bool - true if the element is visible.
+     */
+    bool IsElementVisible( int aLayerID ) const;
+
+    /**
+     * Change the visibility of an element category.
+     *
+     * @param aItemIdVisible is an item id from the enum GERBVIEW_LAYER_ID
+     * @param aNewState = The new visibility state of the element category
+     *  (see enum PCB)
+     */
+    void SetElementVisibility( int aLayerID, bool aNewState );
+
+    /**
+     * @param aVisible true if the grid must be shown.
+     */
+    void SetGridVisibility( bool aVisible ) override;
+
+    /**
+     * A proxy function that calls the correspondent function in m_BoardSettings.
+     *
+     * @return #LSET of the visible layers
+     */
+    LSET GetVisibleLayers() const;
+
+    /**
+     * A proxy function that calls the correspondent function in m_BoardSettings.
+     *
+     * @param aLayerMask The new set of visible layers
+     */
+    void SetVisibleLayers( LSET aLayerMask );
+
+    /**
+     * Test whether a given layer is visible.
+     *
+     * @param aLayer The layer to be tested (still 0-31!)
+     * @return true if the layer is visible.
+     */
+    bool IsLayerVisible( int aLayer ) const;
+
+    /**
+     * Return the color of a gerber visible element.
+     */
+    COLOR4D GetVisibleElementColor( int aLayerID );
+
+    void SetVisibleElementColor( int aLayerID, COLOR4D aColor );
+
+    COLOR4D GetLayerColor( int aLayer ) const;
+    void SetLayerColor( int aLayer, COLOR4D aColor );
+
+    /**
+     * This is usually the background color, but can be another color in order to see
+     * negative objects.
+     *
+     * @return the color of negative items.
+     */
+    COLOR4D GetNegativeItemsColor();
+
+    /**
+     * Change out all the layers in m_Layers; called upon loading new gerber files.
+     */
+    void ReFillLayerWidget();
+
+    /**
+     * change the currently active layer to \a aLayer and update the #GERBER_LAYER_WIDGET.
+     */
+    void SetActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
+
+    /**
+     * Return the active layer.
+     */
+    int GetActiveLayer() const { return m_activeLayer; }
+
+    /**
+     * Find the next empty layer starting at \a aLayer and returns it to the caller.
+     *
+     * If no empty layers are found, #NO_AVAILABLE_LAYERS is return.
+     *
+     * @param aLayer The first layer to search.
+     * @return The first empty layer found or #NO_AVAILABLE_LAYERS.
+     */
+    int getNextAvailableLayer( int aLayer = 0 ) const;
+
+    /**
+     * Update the currently "selected" layer within the #GERBER_LAYER_WIDGET.
+     * The currently active layer is defined by the return value of GetActiveLayer().
+     * <p>
+     * This function cannot be inline without including layer_widget.h in here and we do not
+     * want to do that.
+     */
+    void syncLayerWidget();
+
+    /**
+     * Update the currently "selected" layer within m_SelLayerBox.
+     * The currently active layer, as defined by the return value of GetActiveLayer().
+     *
+     * @param aRebuildLayerBox true to rebuild the layer box of false to just update the selection.
+     */
+    void syncLayerBox( bool aRebuildLayerBox = false );
+
+    /**
+     * Display the short filename (if exists) of the selected layer on the caption of the main
+     * GerbView window and some other parameters.
+     *
+     *  - Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
+     *  - Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
+     *    and other data in toolbar
+     */
+    void UpdateTitleAndInfo();
+
+    /**
+     * Display the current grid pane on the status bar.
+     */
+    void DisplayGridMsg() override;
+
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    void ToggleLayerManager();
+
+    void ShowChangedLanguage() override;
+
+    /// Handles the changing of the highlighted component/net/attribute
+    void OnSelectHighlightChoice( wxCommandEvent& event );
+
+    /**
+     * Select the active DCode for the current active layer.
+     * Items using this DCode are highlighted.
+     */
+    void OnSelectActiveDCode( wxCommandEvent& event );
+
+    /**
+     * Select the active layer:
+     *  - if a file is loaded, it is loaded in this layer
+     *  - this layer is displayed on top of other layers
+     */
+    void OnSelectActiveLayer( wxCommandEvent& event );
+
+    /**
+     * Called on a display mode selection.
+     *
+     * Mode selection can be fast display or exact mode with stacked images or with transparency.
+     */
+    void OnSelectDisplayMode( wxCommandEvent& event );
+
+    /**
+     * Called on request of application quit.
+     */
+    void OnQuit( wxCommandEvent& event );
+
+    void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
+    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Delete the current data and loads a Gerber file selected from history list on current layer.
+     */
+    void OnGbrFileHistory( wxCommandEvent& event );
+
+    /**
+     * Delete the current data and load a drill file in Excellon format selected from
+     * history list on current layer.
+     */
+    void OnDrlFileHistory( wxCommandEvent& event );
+
+    /**
+     * Delete the current data and load a zip archive file selected from the
+     * history list. The archive is expected containing a set of gerber and drill file
+     */
+    void OnZipFileHistory( wxCommandEvent& event );
+
+    /**
+     * Delete the current data and load a gerber job file selected from the history list.
+     */
+    void OnJobFileHistory( wxCommandEvent& event );
+
+    /**
+     * Extract gerber and drill files from the zip archive, and load them.
+     *
+     * @param aFullFileName is the full filename of the zip archive
+     * @param aReporter a REPORTER to collect warning and error messages
+     * @return true if OK, false if a file cannot be readable
+     */
+    bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
+
+    /**
+     * Load a photoplot (Gerber) file or many files.
+     *
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file. In this case one one file is loaded
+     *                    if void string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
+     */
+    bool LoadGerberFiles( const wxString& aFileName );
+    bool Read_GERBER_File( const wxString&   GERBER_FullFileName );
+
+    /**
+     * Load a drill (EXCELLON) file or many files.
+     *
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file. In this case one one file is loaded
+     *                    if empty string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
+     */
+    bool LoadExcellonFiles( const wxString& aFileName );
+    bool Read_EXCELLON_File( const wxString& aFullFileName );
+
+    /**
+     * Load a zipped archive file.
+     *
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file.
+     *                    if empty string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
+     */
+    bool LoadZipArchiveFile( const wxString& aFileName );
+
+
+    /**
+     * Load a Gerber job file, and load gerber files found in job files.
+     *
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file.
+     *                    if empty string: user will be prompted for filename(s)
+     * @return true if file(s) was opened successfully.
+     */
+    bool LoadGerberJobFile( const wxString& aFileName );
+
+    // PCB handling
+    bool Clear_DrawLayers( bool query );
+    void Erase_Current_DrawLayer( bool query );
+
+    void SortLayersByX2Attributes();
+
+    /**
+     * Update the display options and refreshes the view as needed.
+     *
+     * @param aOptions is the new options to apply
+     */
+    void UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
+
+    /*
+     * Do nothing in GerbView.
+     */
+    void SaveCopyInUndoList( GERBER_DRAW_ITEM* aItemToCopy,
+                             UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
+
+    /**
+     * Create a new entry in undo list of commands and add a list of pickers to handle a list
+     * of items.
+     *
+     * @param aItemsList = the list of items modified by the command to undo
+     * @param aTypeCommand = command type (see enum UNDO_REDO)
+     * @param aTransformPoint = the reference point of the transformation,
+     *                          for commands like move
+     */
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
+                             UNDO_REDO aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
+    {
+        // currently: do nothing in GerbView.
+    }
+
+    ///< @copydoc EDA_DRAW_FRAME::ActivateGalCanvas
+    void ActivateGalCanvas() override;
+
+    /**
+     * Allow Gerbview to install its preferences panels into the preferences dialog.
+     */
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
+
+    /**
+     * Called after the preferences dialog is run.
+     */
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+
+    SELECTION& GetCurrentSelection() override;
+
     const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_DisplayOptions; }
     void SetDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions ) { m_DisplayOptions = aOptions; }
 
     /**
-     * Function SetLayout
-     * sets the m_gerberLayout member in such as way as to ensure deleting any previous
+     * Set the m_gerberLayout member in such as way as to ensure deleting any previous
      * GBR_LAYOUT.
      * @param aLayout The GBR_LAYOUT to put into the frame.
      */
@@ -114,12 +433,8 @@ public:
     const TITLE_BLOCK&  GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
-    /** Install the dialog box for layer selection
-     * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
-     * @param aCopperLayerCount = number of copper layers
-     * @param aGerberName = Name of Gerber file to select KiCad layer for
-     * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
-     *                         or -1 if canceled
+    /**
+     * Show the dialog box for layer selection.
      *
      * Providing the option to also display a "(Deselect)" radiobutton makes the
      *  GerbView's "Export to Pcbnew" command) more "user friendly",
@@ -128,6 +443,12 @@ public:
      * necessary to first cancel the "Select Layer:" dialog box (invoked after a
      * different radiobutton is clicked on) prior to then clicking on the "Deselect"
      * button provided within the "Layer selection:" dialog box).
+     *
+     * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
+     * @param aCopperLayerCount = number of copper layers
+     * @param aGerberName = Name of Gerber file to select KiCad layer for
+     * @return new layer value (NB_PCB_LAYERS when "(Deselect)" radiobutton selected),
+     *                         or -1 if canceled
      */
     int SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, wxString aGerberName );
 
@@ -136,7 +457,7 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    ///> @copydoc EDA_DRAW_FRAME::SetGridColor()
+    ///< @copydoc EDA_DRAW_FRAME::SetGridColor()
     virtual void SetGridColor( COLOR4D aColor ) override;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
@@ -145,6 +466,43 @@ public:
         return m_gerberLayout->ViewBBox();
     }
 
+    DECLARE_EVENT_TABLE()
+
+protected:
+    void setupUIConditions() override;
+
+private:
+    void            updateComponentListSelectBox();
+    void            updateNetnameListSelectBox();
+    void            updateAperAttributesSelectBox();
+    void            updateDCodeSelectBox();
+    void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
+
+    void OnClearJobFileHistory( wxCommandEvent& aEvent );
+    void OnClearZipFileHistory( wxCommandEvent& aEvent );
+    void OnClearDrlFileHistory( wxCommandEvent& aEvent );
+    void OnClearGbrFileHistory( wxCommandEvent& aEvent );
+
+    // The Tool Framework initialization
+    void setupTools();
+
+    /// Updates the GAL with display settings changes
+    void applyDisplaySettingsToGAL();
+
+public:
+    wxChoice* m_SelComponentBox;                // a choice box to display and highlight component
+                                                // graphic items
+    wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist
+                                                // graphic items
+    wxChoice* m_SelAperAttributesBox;           // a choice box to display aperture attributes and
+                                                // highlight items
+    GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;      // The combobox to select the current active
+                                                // graphic layer
+                                                // (which is drawn on top on the other layers
+    DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
+    wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
+                                                // gerber data (format..)
+
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
@@ -152,19 +510,8 @@ protected:
     FILE_HISTORY            m_drillFileHistory;
     FILE_HISTORY            m_jobFileHistory;
 
-    wxString                m_lastFileName;     // The last filename chosen to be proposed to the user
-
-    void setupUIConditions() override;
-
-public:
-    wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
-    wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist graphic items
-    wxChoice* m_SelAperAttributesBox;           // a choice box to display aperture attributes and highlight items
-    GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;      // The combobox to select the current active graphic layer
-                                                // (which is drawn on top on the other layers
-    DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
-    wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
-                                                // gerber data (format..)
+    wxString                m_lastFileName;     // The last filename chosen to be proposed to the
+                                                // user.
 
 private:
     int             m_displayMode;      // Gerber images ("layers" in Gerbview) can be drawn:
@@ -177,381 +524,21 @@ private:
                                         // (transparency mode)
                                         // m_displayMode = 0, 1 or 2
 
-    bool            m_show_layer_manager_tools;
+    bool                m_show_layer_manager_tools;
 
-    void            updateComponentListSelectBox();
-    void            updateNetnameListSelectBox();
-    void            updateAperAttributesSelectBox();
-    void            updateDCodeSelectBox();
-    void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
-
-    void OnClearJobFileHistory( wxCommandEvent& aEvent );
-    void OnClearZipFileHistory( wxCommandEvent& aEvent );
-    void OnClearDrlFileHistory( wxCommandEvent& aEvent );
-    void OnClearGbrFileHistory( wxCommandEvent& aEvent );
-
-    // The Tool Framework initalization
-    void setupTools();
-
-    /// Updates the GAL with display settings changes
-    void applyDisplaySettingsToGAL();
-
-public:
-    GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~GERBVIEW_FRAME();
-
-    void doCloseWindow() override;
-
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
-
-    /**
-     * Loads a list of Gerber and NC drill files and updates the view based on them
-     *
-     * @param aPath is the base path for the filenames if they are relative
-     * @param aFilenameList is a list of filenames to load
-     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
-     * if nullptr, files are expected Gerber type.
-     * @return true if every file loaded successfully
-     */
-    bool LoadListOfGerberAndDrillFiles( const wxString& aPath,
-                                        const wxArrayString& aFilenameList,
-                                        const std::vector<int>* aFileType = nullptr );
-
-    // Virtual basic functions:
-    void ReCreateHToolbar() override;
-    void ReCreateAuxiliaryToolbar() override;
-
-    /**
-     * Function ReCreateVToolbar
-     * creates or updates the right vertical toolbar.
-     */
-    void ReCreateVToolbar() override;
-
-    /**
-     * Create or update the left vertical toolbar (option toolbar)
-     */
-    void ReCreateOptToolbar() override;
-
-    void ReCreateMenuBar() override;
-    void UpdateStatusBar() override;
-
-    /**
-     * Function GetDisplayMode
-     *  @return 0 for fast mode (not fully compatible with negative objects)
-     *          1 for exact mode, write mode
-     *          2 for exact mode, OR mode (transparency mode)
-     */
-    int GetDisplayMode() { return m_displayMode; }
-
-    /**
-     * Function SetDisplayMode
-     *  @param aMode =  0 for fast mode
-     *                  1 for exact mode, write mode
-     *                  2 for exact mode, OR mode (transparency mode)
-     */
-    void SetDisplayMode( int aMode ) { m_displayMode = aMode; }
-
-    /**
-     * Function IsElementVisible
-     * tests whether a given element category is visible. Keep this as an
-     * inline function.
-     * @param aLayerID is an item id from the enum GERBVIEW_LAYER_ID
-     * @return bool - true if the element is visible.
-     */
-    bool IsElementVisible( int aLayerID ) const;
-
-    /**
-     * Function SetElementVisibility
-     * changes the visibility of an element category
-     * @param aItemIdVisible is an item id from the enum GERBVIEW_LAYER_ID
-     * @param aNewState = The new visibility state of the element category
-     *  (see enum PCB)
-     */
-    void SetElementVisibility( int aLayerID, bool aNewState );
-
-    /**
-     * Function SetGridVisibility(), virtual from EDA_DRAW_FRAME
-     * It may be overloaded by derived classes
-     * @param aVisible = true if the grid must be shown
-     */
-    void SetGridVisibility( bool aVisible ) override;
-
-    /**
-     * Function GetVisibleLayers
-     * is a proxy function that calls the correspondent function in m_BoardSettings
-     * @return LSET of the visible layers
-     */
-    LSET GetVisibleLayers() const;
-
-    /**
-     * Function SetVisibleLayers
-     * is a proxy function that calls the correspondent function in m_BoardSettings
-     * @param aLayerMask = The new set of visible layers
-     */
-    void SetVisibleLayers( LSET aLayerMask );
-
-    /**
-     * Function IsLayerVisible
-     * tests whether a given layer is visible
-     * @param aLayer = The layer to be tested (still 0-31!)
-     * @return bool - true if the layer is visible.
-     */
-    bool IsLayerVisible( int aLayer ) const;
-
-    /**
-     * Function GetVisibleElementColor
-     * returns the color of a gerber visible element.
-     */
-    COLOR4D GetVisibleElementColor( int aLayerID );
-
-    void SetVisibleElementColor( int aLayerID, COLOR4D aColor );
-
-    COLOR4D GetLayerColor( int aLayer ) const;
-    void SetLayerColor( int aLayer, COLOR4D aColor );
-
-    /**
-     * Function GetNegativeItemsColor
-     * @return the color of negative items.
-     * This is usually the background color, but can be another color in order to see
-     * negative objects
-     */
-    COLOR4D GetNegativeItemsColor();
-
-    /**
-     * Function ReFillLayerWidget
-     * changes out all the layers in m_Layers; called upon loading new gerber files.
-     */
-    void ReFillLayerWidget();
-
-    /**
-     * Function SetActiveLayer
-     * will change the currently active layer to \a aLayer and update the GERBER_LAYER_WIDGET.
-     */
-    void SetActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
-
-    /**
-     * Function SetActiveLayer
-     * returns the active layer
-     */
-    int GetActiveLayer() const { return m_activeLayer; }
-
-    /**
-     * Function getNextAvailableLayer
-     * finds the next empty layer starting at \a aLayer and returns it to the caller.  If no
-     * empty layers are found, NO_AVAILABLE_LAYERS is return.
-     * @param aLayer The first layer to search.
-     * @return The first empty layer found or NO_AVAILABLE_LAYERS.
-     */
-    int getNextAvailableLayer( int aLayer = 0 ) const;
-
-    /**
-     * Function syncLayerWidget
-     * updates the currently "selected" layer within the GERBER_LAYER_WIDGET.
-     * The currently active layer is defined by the return value of GetActiveLayer().
-     * <p>
-     * This function cannot be inline without including layer_widget.h in here and we do not
-     * want to do that.
-     */
-    void syncLayerWidget();
-
-    /**
-     * Function syncLayerBox
-     * updates the currently "selected" layer within m_SelLayerBox
-     * The currently active layer, as defined by the return value of GetActiveLayer().
-     * @param aRebuildLayerBox = true to rebuild the layer box
-     *  false to just updates the selection.
-     */
-    void syncLayerBox( bool aRebuildLayerBox = false );
-
-    /**
-     * Function UpdateTitleAndInfo
-     * displays the short filename (if exists) of the selected layer on the caption of the main
-     * GerbView window and some other parameters
-     *    Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
-     *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
-     *    and other data in toolbar
-     */
-    void UpdateTitleAndInfo();
-
-    /**
-     * Function DisplayGridMsg()
-     *
-     * Display the current grid pane on the status bar.
-     */
-    void DisplayGridMsg() override;
-
-    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
-
-    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
-
-    void ToggleLayerManager();
-
-    void ShowChangedLanguage() override;
-
-    /// Handles the changing of the highlighted component/net/attribute
-    void OnSelectHighlightChoice( wxCommandEvent& event );
-
-    /**
-     * Function OnSelectActiveDCode
-     * Selects the active DCode for the current active layer.
-     * Items using this DCode are highlighted.
-     */
-    void OnSelectActiveDCode( wxCommandEvent& event );
-
-    /**
-     * Function OnSelectActiveLayer
-     * Selects the active layer:
-     *  - if a file is loaded, it is loaded in this layer
-     *  _ this layer is displayed on top of other layers
-     */
-    void OnSelectActiveLayer( wxCommandEvent& event );
-
-    /**
-     * Function OnSelectDisplayMode
-     * called on a display mode selection
-     * Mode selection can be fast display,
-     * or exact mode with stacked images or with transparency
-     */
-    void OnSelectDisplayMode( wxCommandEvent& event );
-
-    /**
-     * Function OnQuit
-     * called on request of application quit
-     */
-    void OnQuit( wxCommandEvent& event );
-
-    void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Function OnGbrFileHistory
-     * deletes the current data and loads a Gerber file selected from history list on
-     * current layer.
-     */
-    void OnGbrFileHistory( wxCommandEvent& event );
-
-    /**
-     * Function OnDrlFileHistory
-     * deletes the current data and load a drill file in Excellon format selected from
-     * history list on current layer.
-     */
-    void OnDrlFileHistory( wxCommandEvent& event );
-
-    /**
-     * Function OnZipFileHistory
-     * deletes the current data and load a zip archive file selected from the
-     * history list. The archive is expected coantaining a set of gerber and drill file
-     */
-    void OnZipFileHistory( wxCommandEvent& event );
-
-    /**
-     * deletes the current data and load a gerber job file selected from the
-     * history list.
-     */
-    void OnJobFileHistory( wxCommandEvent& event );
-
-    /**
-     * Extracts gerber and drill files from the zip archive, and load them
-     * @param aFullFileName is the full filename of the zip archive
-     * @param aReporter a REPORTER to collect warning and error messages
-     * @return true if OK, false if a file cannot be readable
-     */
-    bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
-
-    /**
-     * function LoadGerberFiles
-     * Load a photoplot (Gerber) file or many files.
-     * @param aFileName - void string or file name with full path to open or empty string to
-     *                    open a new file. In this case one one file is loaded
-     *                    if void string: user will be prompted for filename(s)
-     * @return true if file was opened successfully.
-     */
-    bool LoadGerberFiles( const wxString& aFileName );
-    bool Read_GERBER_File( const wxString&   GERBER_FullFileName );
-
-    /**
-     * function LoadExcellonFiles
-     * Load a drill (EXCELLON) file or many files.
-     * @param aFileName - void string or file name with full path to open or empty string to
-     *                    open a new file. In this case one one file is loaded
-     *                    if empty string: user will be prompted for filename(s)
-     * @return true if file was opened successfully.
-     */
-    bool LoadExcellonFiles( const wxString& aFileName );
-    bool Read_EXCELLON_File( const wxString& aFullFileName );
-
-    /**
-     * function LoadZipArchiveFileLoadZipArchiveFile
-     * Load a zipped archive file.
-     * @param aFileName - void string or file name with full path to open or empty string to
-     *                    open a new file.
-     *                    if empty string: user will be prompted for filename(s)
-     * @return true if file was opened successfully.
-     */
-    bool LoadZipArchiveFile( const wxString& aFileName );
-
-
-    /**
-     * Load a Gerber job file, and load gerber files found in job files.
-     * @param aFileName - void string or file name with full path to open or empty string to
-     *                    open a new file.
-     *                    if empty string: user will be prompted for filename(s)
-     * @return true if file(s) was opened successfully.
-     */
-    bool LoadGerberJobFile( const wxString& aFileName );
-
-    // PCB handling
-    bool Clear_DrawLayers( bool query );
-    void Erase_Current_DrawLayer( bool query );
-
-    void SortLayersByX2Attributes();
-
-    /**
-     * Updates the display options and refreshes the view as needed
-     * @param aOptions is the new options to apply
-     */
-    void UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
-
-    /* SaveCopyInUndoList() virtual
-     * currently: do nothing in GerbView.
-     */
-    void SaveCopyInUndoList( GERBER_DRAW_ITEM* aItemToCopy,
-                             UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
-                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
-
-    /**
-     * Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
-     */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                             UNDO_REDO aTypeCommand,
-                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
-    {
-        // currently: do nothing in GerbView.
-    }
-
-    ///> @copydoc EDA_DRAW_FRAME::ActivateGalCanvas
-    void ActivateGalCanvas() override;
-
-    /**
-     * Allows Gerbview to install its preferences panels into the preferences dialog.
-     */
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
-
-    /**
-     * Called after the preferences dialog is run.
-     */
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
-
-    SELECTION& GetCurrentSelection() override;
-
-    DECLARE_EVENT_TABLE()
+    GBR_LAYOUT*         m_gerberLayout;
+    int                 m_activeLayer;
+    wxPoint             m_grid_origin;
+    PAGE_INFO           m_paper;            // used only to show paper limits to screen
+    GBR_DISPLAY_OPTIONS m_DisplayOptions;
+    wxStaticText*       m_cmpText;          // a message on the auxiliary toolbar,
+                                            // relative to the m_SelComponentBox
+    wxStaticText*       m_netText;          // a message on the auxiliary toolbar,
+                                            // relative to the m_SelNetnameBox
+    wxStaticText*       m_apertText;        // a message on the auxiliary toolbar,
+                                            // relative to the m_SelAperAttributesBox
+    wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
+                                            // relative to the m_DCodeSelector
 };
 
 #endif /* WX_GERBER_STRUCT_H */

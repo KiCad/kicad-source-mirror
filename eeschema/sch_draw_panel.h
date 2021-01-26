@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,11 +54,11 @@ public:
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 
-    void setDefaultLayerOrder();    ///> Reassigns layer order to the initial settings.
-    void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
+    void setDefaultLayerOrder();    ///< Reassign layer order to the initial settings.
+    void setDefaultLayerDeps();     ///< Set rendering targets & dependencies for layers.
 };
 
 #endif // __SCH_DRAW_PANEL_H

@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -37,7 +38,7 @@ class SIM_PLOT_FRAME;
 class SIM_PLOT_PANEL;
 class TRACE;
 
-///> Cursor attached to a trace to follow its values:
+///< Cursor attached to a trace to follow its values:
 class CURSOR : public mpInfoLayer
 {
 public:
@@ -101,7 +102,8 @@ public:
     }
 
     /**
-     * @brief Assigns new data set for the trace. aX and aY need to have the same length.
+     * Assigns new data set for the trace. aX and aY need to have the same length.
+     *
      * @param aX are the X axis values.
      * @param aY are the Y axis values.
      */
@@ -174,7 +176,7 @@ public:
 
     virtual ~SIM_PLOT_PANEL();
 
-    ///> set the pointer to the sim plot frame
+    ///< set the pointer to the sim plot frame
     void SetMasterFrame( SIM_PLOT_FRAME* aFrame )
     {
         m_masterFrame = aFrame;
@@ -195,8 +197,8 @@ public:
         return m_axis_y2 ? m_axis_y2->GetName() : "";
     }
 
-    bool AddTrace( const wxString& aName, int aPoints,
-            const double* aX, const double* aY, SIM_PLOT_TYPE aFlags );
+    bool AddTrace( const wxString& aName, int aPoints, const double* aX,
+                   const double* aY, SIM_PLOT_TYPE aFlags );
 
     bool DeleteTrace( const wxString& aName );
 
@@ -264,16 +266,16 @@ public:
         return m_dotted_cp;
     }
 
-    ///> Returns true if the trace has cursor shown.
+    ///< Returns true if the trace has cursor shown.
     bool HasCursorEnabled( const wxString& aName ) const;
 
-    ///> Toggles cursor for a particular trace.
+    ///< Toggles cursor for a particular trace.
     void EnableCursor( const wxString& aName, bool aEnable );
 
-    ///> Resets scale ranges to fit the current traces
+    ///< Resets scale ranges to fit the current traces
     void ResetScales();
 
-    ///> Update trace line style
+    ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 
     /**
@@ -283,17 +285,17 @@ public:
      */
     wxColour GetPlotColor( int aIndex );
 
-    ///> Update plot colors
+    ///< Update plot colors
     void UpdatePlotColors();
 
-    ///> Getter for math plot window
+    ///< Getter for math plot window
     mpWindow* GetPlotWin() const
     {
         return m_plotWin;
     }
 
 private:
-    ///> @return a new color from the palette
+    ///< @return a new color from the palette
     wxColour generateColor();
 
     ///> @brief Constructs the plot axes for DC simulation plot

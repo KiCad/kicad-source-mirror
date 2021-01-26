@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,11 +34,11 @@
 #include <memory>
 
 /**
- * Class handling a Bill of Material output generator.
+ * Bill of material output generator.
+ *
  * A Material output generator is an external application called by Eeschema to create
- * a BOM from our intermediate xml netlist.
- * A generator can be a script or an executable that can read the intermediate xml netlist
- * file and generates a output (the BOM file)
+ * a BOM from our intermediate XML netlist.  A generator can be a script or an executable
+ * that can read the intermediate XML netlist file and generates a output (the BOM file)
  */
 class BOM_GENERATOR_HANDLER
 {
@@ -44,25 +46,24 @@ public:
     typedef std::unique_ptr<BOM_GENERATOR_HANDLER> PTR;
 
     /**
-     * Constructor.
      * @param aFile is path to the plugin file.
      */
     BOM_GENERATOR_HANDLER( const wxString& aFile );
 
     /**
-     * Returns true if the plugin is ready to work, i.e. if the plugin file
-     * is found an readable
+     * Return true if the plugin is ready to work, i.e. if the plugin file is found and readable.
      */
     bool IsOk() { return m_isOk; }
 
     /**
-     * Returns true if a file name matches a recognized plugin format.
+     * Return true if a file name matches a recognized plugin format.
+     *
      * @param aFile is path to the plugin file.
      */
     static bool IsValidGenerator( const wxString& aFile );
 
     /**
-     * Returns plugin description stored in the plugin header file (if available).
+     * Return plugin description stored in the plugin header file (if available).
      */
     const wxString& GetInfo() const
     {
@@ -70,7 +71,7 @@ public:
     }
 
     /**
-     * Returns the file name of the plugin.
+     * Return the file name of the plugin.
      */
     const wxFileName& GetFile() const
     {
@@ -78,7 +79,7 @@ public:
     }
 
     /**
-     * Returns the customisable plugin name.
+     * Return the customisable plugin name.
      */
     const wxString& GetName() const
     {
@@ -86,7 +87,8 @@ public:
     }
 
     /**
-     * Sets the customisable plugin name.
+     * Set the customisable plugin name.
+     *
      * @param aName is the new name.
      */
     void SetName( const wxString& aName )
@@ -95,7 +97,7 @@ public:
     }
 
     /**
-     * Returns the command to execute the plugin.
+     * Return the command to execute the plugin.
      */
     const wxString& GetCommand() const
     {
@@ -103,7 +105,7 @@ public:
     }
 
     /**
-     * Sets the command to execute the plugin.
+     * Set the command to execute the plugin.
      */
     void SetCommand( const wxString& aCommand )
     {
@@ -120,27 +122,28 @@ public:
 
 protected:
     /**
-     * Reads the plugin file header.
+     * Read the plugin file header.
+     *
      * @param aEndSection is a string marking end of the header.
      */
     wxString readHeader( const wxString& aEndSection );
 
-    ///> true if the plugin is working (i.e. if the plugin file exists and was read
+    ///< true if the plugin is working (i.e. if the plugin file exists and was read
     bool m_isOk;
 
-    ///> Path to the plugin
+    ///< Path to the plugin
     const wxFileName m_file;
 
-    ///> User customisable name
+    ///< User customisable name
     wxString m_name;
 
-    ///> Command to execute the plugin
+    ///< Command to execute the plugin
     wxString m_cmd;
 
-    ///> Description of the plugin (normally from the plugin header)
+    ///< Description of the plugin (normally from the plugin header)
     wxString m_info;
 
-    ///> Plugin specific options
+    ///< Plugin specific options
     wxArrayString m_options;
 };
 

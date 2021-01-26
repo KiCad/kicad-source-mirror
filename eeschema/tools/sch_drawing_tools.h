@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,7 @@ class EE_SELECTION_TOOL;
 
 
 /**
- * SCH_DRAWING_TOOLS
- *
- * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.)
+ * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.).
  */
 
 class SCH_DRAWING_TOOLS : public EE_TOOL_BASE<SCH_EDIT_FRAME>
@@ -60,7 +58,8 @@ public:
 
 private:
     /**
-     * Gets the next queued text item
+     * Get the next queued text item.
+     *
      * @return next SCH_TEXT* or nullptr if empty
      */
     SCH_TEXT* createNewText( const VECTOR2I& aPosition, int aType );
@@ -71,11 +70,9 @@ private:
 
     void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
-// History lists for PlaceComponent()
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;
 

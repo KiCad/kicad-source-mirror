@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 <Jean-Pierre Charras>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,60 +63,8 @@ enum Gbr_Basic_Shapes {
     GBR_LAST                // last value for this list
 };
 
-/***/
-
 class GERBER_DRAW_ITEM : public EDA_ITEM
 {
-    // make SetNext() and SetBack() private so that they may not be called from anywhere.
-    // list management is done on GERBER_DRAW_ITEMs using DLIST<GERBER_DRAW_ITEM> only.
-private:
-
-
-public:
-    bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
-                                            // only to calculate aperture macros shapes sizes
-    int                m_Shape;             // Shape and type of this gerber item
-    wxPoint            m_Start;             // Line or arc start point or position of the shape
-                                            // for flashed items
-    wxPoint            m_End;               // Line or arc end point
-    wxPoint            m_ArcCentre;         // for arcs only: Centre of arc
-    SHAPE_POLY_SET     m_Polygon;           // Polygon shape data (G36 to G37 coordinates)
-                                            // or for complex shapes which are converted to polygon
-    wxSize             m_Size;              // Flashed shapes: size of the shape
-                                            // Lines : m_Size.x = m_Size.y = line width
-    bool               m_Flashed;           // True for flashed items
-    int                m_DCode;             // DCode used to draw this item.
-                                            // Allowed values are >= 10. 0 when unknown
-                                            // values 0 to 9 can be used for special purposes
-                                            // Regions (polygons) doo not use DCode,
-                                            // so it is set to 0
-    wxString           m_AperFunction;      // the aperture function set by a %TA.AperFunction, xxx
-                                            // (stores thre xxx value).
-                                            // used for regions that do not have a attached DCode, but
-                                            // have a TA.AperFunction defined
-    GERBER_FILE_IMAGE* m_GerberImageFile;   /* Gerber file image source of this item
-                                             * Note: some params stored in this class are common
-                                             * to the whole gerber file (i.e) the whole graphic
-                                             * layer and some can change when reading the file,
-                                             * so they are stored inside this item if there is no
-                                             * redundancy for these parameters
-                                             */
-
-private:
-    // These values are used to draw this item, according to gerber layers parameters
-    // Because they can change inside a gerber image, they are stored here
-    // for each item
-    bool        m_LayerNegative;            // true = item in negative Layer
-    bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
-    bool        m_mirrorA;                  // true: mirror / axe A
-    bool        m_mirrorB;                  // true: mirror / axe B
-    wxRealPoint m_drawScale;                // A and B scaling factor
-    wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
-    double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
-    GBR_NETLIST_METADATA m_netAttributes;   ///< the string given by a %TO attribute set in aperture
-                                            ///< (dcode). Stored in each item, because %TO is
-                                            ///< a dynamic object attribute
-
 public:
     GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberparams );
     ~GERBER_DRAW_ITEM();
@@ -125,8 +73,7 @@ public:
     const GBR_NETLIST_METADATA& GetNetAttributes() const { return m_netAttributes; }
 
     /**
-     * Function GetLayer
-     * returns the layer this item is on.
+     * Return the layer this item is on.
      */
     int GetLayer() const;
 
@@ -136,7 +83,8 @@ public:
     }
 
     /**
-     * Returns the best size and orientation to display the D_Code on screen
+     * Return the best size and orientation to display the D_Code on screen.
+     *
      * @param aSize is a reference to return the text size
      * @param aPos is a reference to return the text position
      * @param aOrientation is a reference to return the text orientation
@@ -145,24 +93,21 @@ public:
     bool GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOrientation );
 
     /**
-     * Returns the best size and orientation to display the D_Code in GAL
-     * aOrientation is returned in radians
+     * Return the best size and orientation to display the D_Code in GAL
+     * aOrientation is returned in radians.
      */
     bool GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double& aOrientation );
 
     /**
-     * Function HasNegativeItems
+     * Optimize screen refresh (when no items are in background color refresh can be faster).
+     *
      * @return true if this item or at least one shape (when using aperture macros
-     *    must be drawn in background color
-     * used to optimize screen refresh (when no items are in background color
-     * refresh can be faster)
+     *         must be drawn in background color.
      */
     bool HasNegativeItems();
 
     /**
-     * Function SetLayerParameters
-     * Initialize parameters from Image and Layer parameters
-     * found in the gerber file:
+     * Initialize parameters from Image and Layer parameters found in the gerber file:
      *   m_UnitsMetric,
      *   m_MirrorA, m_MirrorB,
      *   m_DrawScale, m_DrawOffset
@@ -175,35 +120,37 @@ public:
     }
 
     /**
-     * Function MoveAB
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
+     * Move this object.
+     *
+     * @param aMoveVector the move vector for this object.
      */
     void MoveAB( const wxPoint& aMoveVector );
 
      /**
-     * Function MoveXY
-     * move this object.
-     * @param aMoveVector - the move vector for this object, in XY gerber axis.
-     */
+      * Move this object.
+      *
+      * @param aMoveVector the move vector for this object, in XY gerber axis.
+      */
     void MoveXY( const wxPoint& aMoveVector );
 
     /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return const wxPoint& - The position of this object.
+     * Return the position of this object.
+     *
      * This function exists mainly to satisfy the virtual GetPosition() in parent class
+     *
+     * @return The position of this object.
      */
     wxPoint GetPosition() const override                { return m_Start; }
     void SetPosition( const wxPoint& aPos ) override    {  m_Start = aPos; }
 
     /**
-     * Function GetABPosition
-     * returns the image position of aPosition for this object.
+     * Return the image position of aPosition for this object.
+     *
      * Image position is the value of aPosition, modified by image parameters:
      * offsets, axis selection, scale, rotation
-     * @param aXYPosition = position in X,Y gerber axis
-     * @return const wxPoint - The given position in plotter A,B axis.
+     *
+     * @param aXYPosition is position in X,Y gerber axis
+     * @return  The given position in plotter A,B axis.
      */
     wxPoint GetABPosition( const wxPoint& aXYPosition ) const;
 
@@ -213,19 +160,20 @@ public:
     }
 
     /**
-     * Function GetXYPosition
-     * returns the image position of aPosition for this object.
+     * Return the image position of aPosition for this object.
+     *
      * Image position is the value of aPosition, modified by image parameters:
      * offsets, axis selection, scale, rotation
+     *
      * @param aABPosition = position in A,B plotter axis
-     * @return const wxPoint - The given position in X,Y axis.
+     * @return The given position in X,Y axis.
      */
     wxPoint GetXYPosition( const wxPoint& aABPosition ) const;
 
     /**
-     * Function GetDcodeDescr
-     * returns the GetDcodeDescr of this object, or NULL.
-     * @return D_CODE* - a pointer to the DCode description (for flashed items).
+     * Return the GetDcodeDescr of this object, or NULL.
+     *
+     * @return a pointer to the DCode description (for flashed items).
      */
     D_CODE* GetDcodeDescr() const;
 
@@ -234,20 +182,18 @@ public:
     void Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
 
     /**
-     * Function ConvertSegmentToPolygon
-     * convert a line to an equivalent polygon.
+     * Convert a line to an equivalent polygon.
+     *
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
      */
     void ConvertSegmentToPolygon();
 
     /**
-     * Function PrintGerberPoly
-     * a helper function used to print the polygon stored in m_PolyCorners
+     * Print the polygon stored in m_PolyCorners.
      */
     void PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint& aOffset, bool aFilledShape );
 
-    /* divers */
     int Shape() const { return m_Shape; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
@@ -255,26 +201,25 @@ public:
     wxString ShowGBRShape() const;
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
+     * Test if the given wxPoint is within the bounds of this object.
+     *
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
     bool HitTest( const wxPoint& aRefPos, int aAccuracy = 0 ) const override;
 
     /**
-     * Function HitTest (overloaded)
-     * tests if the given wxRect intersect this object.
+     * Test if the given wxRect intersect this object.
+     *
      * For now, an ending point must be inside this rect.
+     *
      * @param aRefArea a wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return true if a hit, else false
      */
     bool HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
+     * @return the class name string.
      */
     wxString GetClass() const override
     {
@@ -294,14 +239,58 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLOD()
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    ///> @copydoc EDA_ITEM::Visit()
+    ///< @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
-    ///> @copydoc EDA_ITEM::GetSelectMenuText()
+    ///< @copydoc EDA_ITEM::GetSelectMenuText()
     virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    ///> @copydoc EDA_ITEM::GetMenuImage()
+    ///< @copydoc EDA_ITEM::GetMenuImage()
     BITMAP_DEF GetMenuImage() const override;
+
+    bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
+                                            // only to calculate aperture macros shapes sizes
+    int                m_Shape;             // Shape and type of this gerber item
+    wxPoint            m_Start;             // Line or arc start point or position of the shape
+                                            // for flashed items
+    wxPoint            m_End;               // Line or arc end point
+    wxPoint            m_ArcCentre;         // for arcs only: Center of arc
+    SHAPE_POLY_SET     m_Polygon;           // Polygon shape data (G36 to G37 coordinates)
+                                            // or for complex shapes which are converted to polygon
+    wxSize             m_Size;              // Flashed shapes: size of the shape
+                                            // Lines : m_Size.x = m_Size.y = line width
+    bool               m_Flashed;           // True for flashed items
+    int                m_DCode;             // DCode used to draw this item.
+                                            // Allowed values are >= 10. 0 when unknown
+                                            // values 0 to 9 can be used for special purposes
+                                            // Regions (polygons) do not use DCode,
+                                            // so it is set to 0
+    wxString           m_AperFunction;      // the aperture function set by a %TA.AperFunction, xxx
+                                            // (stores the xxx value). Used for regions that do
+                                            // not have a attached DCode, but
+                                            // have a TA.AperFunction defined
+    GERBER_FILE_IMAGE* m_GerberImageFile;   /* Gerber file image source of this item
+                                             * Note: some params stored in this class are common
+                                             * to the whole gerber file (i.e) the whole graphic
+                                             * layer and some can change when reading the file,
+                                             * so they are stored inside this item if there is no
+                                             * redundancy for these parameters
+                                             */
+
+private:
+    // These values are used to draw this item, according to gerber layers parameters
+    // Because they can change inside a gerber image, they are stored here
+    // for each item
+    bool        m_LayerNegative;            // true = item in negative Layer
+    bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
+    bool        m_mirrorA;                  // true: mirror / axis A
+    bool        m_mirrorB;                  // true: mirror / ax's B
+    wxRealPoint m_drawScale;                // A and B scaling factor
+    wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
+    double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
+    GBR_NETLIST_METADATA m_netAttributes;   ///< the string given by a %TO attribute set in aperture
+                                            ///< (dcode). Stored in each item, because %TO is
+                                            ///< a dynamic object attribute
 };
 
 

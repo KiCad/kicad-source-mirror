@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,10 +32,10 @@
 class TOOL_ACTION;
 
 /**
- * CVPCB_ACTIONS
+ * Gather all the actions that are shared by tools.
  *
- * Gathers all the actions that are shared by tools. The instance of CVPCB_ACTIONS is created
- * inside of ACTION_MANAGER object that registers the actions.
+ * The instance of CVPCB_ACTIONS is created inside of ACTION_MANAGER object that registers
+ * the actions.
  */
 class CVPCB_ACTIONS : public ACTIONS
 {
@@ -70,7 +70,7 @@ public:
     static TOOL_ACTION filterFPbyPin;
     static TOOL_ACTION FilterFPbyLibrary;
 
-    ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
+    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 

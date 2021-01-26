@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2017-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -66,7 +66,7 @@
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
-// Kicad schematic axes are aligned with x increasing left to right and Y increasing top to bottom.
+// KiCad schematic axes are aligned with x increasing left to right and Y increasing top to bottom.
 
 using namespace std;
 
@@ -87,7 +87,8 @@ static const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
 
 
 /**
- * Provides an easy access to the children of an XML node via their names.
+ * Provide an easy access to the children of an XML node via their names.
+ *
  * @param aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
  * @param aName the name of the specific child names to be counted.
  * @return number of children with the give node name.
@@ -113,7 +114,7 @@ static int countChildren( wxXmlNode* aCurrentNode, const wxString& aName )
 }
 
 
-///> Computes a bounding box for all items in a schematic sheet
+///< Compute a bounding box for all items in a schematic sheet
 static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
 {
     EDA_RECT bbox;
@@ -125,7 +126,7 @@ static EDA_RECT getSheetBbox( SCH_SHEET* aSheet )
 }
 
 
-///> Extracts the net name part from a pin name (e.g. return 'GND' for pin named 'GND@2')
+///< Extract the net name part from a pin name (e.g. return 'GND' for pin named 'GND@2')
 static inline wxString extractNetName( const wxString& aPinName )
 {
     return aPinName.BeforeFirst( '@' );
@@ -183,8 +184,8 @@ void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     for( const auto& elayer : eagleLayers )
     {
         /**
-         * Layers in Kicad schematics are not actually layers, but abstract groups mainly used to
-         * decide item colours.
+         * Layers in KiCad schematics are not actually layers, but abstract groups mainly used to
+         * decide item colors.
          *
          * <layers>
          *     <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -223,7 +224,7 @@ SCH_LAYER_ID SCH_EAGLE_PLUGIN::kiCadLayer( int aEagleLayer )
 }
 
 
-// Return the kicad component orientation based on eagle rotation degrees.
+// Return the KiCad component orientation based on eagle rotation degrees.
 static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
 {
     int roti = int( eagleDegrees );
@@ -464,7 +465,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
             libTable->Format( &formatter, 0 );
         }
 
-        // Relaod the symbol library table.
+        // Reload the symbol library table.
         m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
         m_schematic->Prj().SchSymbolLibTable();
     }
@@ -861,7 +862,7 @@ void SCH_EAGLE_PLUGIN::loadSegments(
     // wxCHECK( screen, [>void<] );
     while( currentSegment )
     {
-        bool      labelled = false; // has a label been added to this continously connected segment
+        bool      labelled = false; // has a label been added to this continuously connected segment
         NODE_MAP  segmentChildren = MapChildren( currentSegment );
         SCH_LINE* firstWire       = nullptr;
         m_segments.emplace_back();
@@ -941,7 +942,7 @@ void SCH_EAGLE_PLUGIN::loadSegments(
             segmentAttribute = segmentAttribute->GetNext();
         }
 
-        // Add a small label to the net segment if it hasn't been labelled already
+        // Add a small label to the net segment if it hasn't been labeled already
         // this preserves the named net feature of Eagle schematics.
         if( !labelled && firstWire )
         {
@@ -1028,7 +1029,8 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     if( elabel.rot )
     {
-        label->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) ( KiROUND( elabel.rot->degrees / 90 ) % 4 ) );
+        label->SetLabelSpinStyle(
+                (LABEL_SPIN_STYLE::SPIN) ( KiROUND( elabel.rot->degrees / 90 ) % 4 ) );
 
         if( elabel.rot->mirror )
         {
@@ -1095,7 +1097,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // Find the part in the list for the sheet.
     // Assign the component its value from the part entry
     // Calculate the unit number from the gate entry of the instance
-    // Assign the the LIB_ID from deviceset and device names
+    // Assign the the LIB_ID from device set and device names
 
     auto part_it = m_partlist.find( einstance.part.Upper() );
 
@@ -1319,7 +1321,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
         symbolNode                             = symbolNode->GetNext();
     }
 
-    // Loop through the devicesets and load each of them
+    // Loop through the device sets and load each of them
     wxXmlNode* devicesetNode = getChildrenNodes( libraryChildren, "devicesets" );
 
     while( devicesetNode )
@@ -1989,7 +1991,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
     // Add bus entry symbols
     // TODO: Cleanup this function and break into pieces
 
-    // for each wire segment, compare each end with all busess.
+    // for each wire segment, compare each end with all busses.
     // If the wire end is found to end on a bus segment, place a bus entry symbol.
 
     for( auto it1 = m_currentSheet->GetScreen()->Items().OfType( SCH_LINE_T ).begin();
@@ -2190,7 +2192,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         // If wire end is above the bus,
                         if( lineend.y < busstart.y )
                         {
-                            // Test for bus existance to the left of the wire
+                            // Test for bus existence to the left of the wire
                             if( TestSegmentHit(
                                         linestart + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
@@ -2222,7 +2224,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else // wire end is below the bus.
                         {
-                            // Test for bus existance to the left of the wire
+                            // Test for bus existence to the left of the wire
                             if( TestSegmentHit(
                                         linestart + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
@@ -2261,7 +2263,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                         if( linestart.y < busstart.y )
                         {
-                            // Test for bus existance to the left of the wire
+                            // Test for bus existence to the left of the wire
                             if( TestSegmentHit(
                                         lineend + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
@@ -2293,7 +2295,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else // wire end is below the bus.
                         {
-                            // Test for bus existance to the left of the wire
+                            // Test for bus existence to the left of the wire
                             if( TestSegmentHit(
                                         lineend + wxPoint( -100, 0 ), busstart, busend, 0 ) )
                             {
@@ -2520,7 +2522,8 @@ const SEG* SCH_EAGLE_PLUGIN::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) c
 }
 
 
-// TODO could be used to place junctions, instead of IsJunctionNeeded() (see SCH_EDIT_FRAME::importFile())
+// TODO could be used to place junctions, instead of IsJunctionNeeded()
+// (see SCH_EDIT_FRAME::importFile())
 bool SCH_EAGLE_PLUGIN::checkConnections(
         const SCH_COMPONENT* aComponent, const LIB_PIN* aPin ) const
 {

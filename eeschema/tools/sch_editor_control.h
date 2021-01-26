@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,7 @@
 class SCH_EDIT_FRAME;
 
 /**
- * SCH_EDITOR_CONTROL
- *
- * Handles actions specific to the schematic editor in eeschema.
+ * Handle actions specific to the schematic editor.
  */
 class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
@@ -80,11 +78,11 @@ public:
 
     int UpdateFind( const TOOL_EVENT& aEvent );
 
-    ///> Notifies pcbnew about the selected item.
+    ///< Notifies pcbnew about the selected item.
     int CrossProbeToPcb( const TOOL_EVENT& aEvent );
 
-    ///> Equivalent to the above, but initiated by the user.  We also do SCH_SHEETs on this
-    ///> one (they're too slow on big projects for the auto version above).
+    ///< Equivalent to the above, but initiated by the user.  We also do SCH_SHEETs on this
+    ///< one (they're too slow on big projects for the auto version above).
     int ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent );
 
 #ifdef KICAD_SPICE
@@ -92,16 +90,16 @@ public:
     int SimTune( const TOOL_EVENT& aEvent );
 #endif /* KICAD_SPICE */
 
-    ///> Highlights net under the cursor.
+    ///< Highlight net under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
-    ///> Removes any net highlighting
+    ///< Remove any net highlighting
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
-    ///> Updates net highlighting after an edit
+    ///< Update net highlighting after an edit
     int UpdateNetHighlighting( const TOOL_EVENT& aEvent );
 
-    ///> Launches a tool to highlight nets.
+    ///< Launch a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
     int AssignNetclass( const TOOL_EVENT& aEvent );
@@ -109,7 +107,7 @@ public:
     int Undo( const TOOL_EVENT& aEvent );
     int Redo( const TOOL_EVENT& aEvent );
 
-    ///> Clipboard support.
+    ///< Clipboard support.
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
@@ -140,7 +138,7 @@ public:
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**
-     * Finds a component in the schematic and an item in this component.
+     * Find a component in the schematic and an item in this component.
      *
      * @param aReference The component reference designator to find.
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
@@ -154,7 +152,7 @@ public:
                                     const wxString& aSearchText );
 
 private:
-    ///> copy selection to clipboard
+    ///< copy selection to clipboard
     bool doCopy();
 
     bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
@@ -190,11 +188,12 @@ private:
                                         bool            aForceVisibilityState,
                                         bool            aVisibilityState );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
     /**
-     * Advances the search and returns the next matching item after aAfter
+     * Advance the search and returns the next matching item after \a aAfter.
+     *
      * @param aScreen Pointer to the screen used for searching
      * @param aAfter Starting match to compare
      * @param aData Search data to compare against or NULL to match the first item found
@@ -204,7 +203,7 @@ private:
                          wxFindReplaceData* aData );
 
 private:
-    bool      m_probingPcbToSch; // Recursion guard when cross-probing to PCBNew
+    bool      m_probingPcbToSch; // Recursion guard when cross-probing to PcbNew
     EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up

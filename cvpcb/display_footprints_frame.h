@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,7 @@ class REPORTER;
 
 
 /**
- * DISPLAY_FOOTPRINTS_FRAME
- * is used to display footprints.
+ * Display footprints.
  */
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
@@ -54,18 +53,17 @@ public:
     void    ReCreateOptToolbar() override;
 
     /**
-     * Function InitDisplay
      * Refresh the full display for this frame:
      * Set the title, the status line and redraw the canvas
-     * Must be called after the footprint to display is modifed
+     * Must be called after the footprint to display is modified
      */
     void InitDisplay();
 
-    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     /**
-     * update the gal canvas (view, colors ...)
+     * Update the gal canvas (view, colors ...).
      */
     void updateView();
 
@@ -76,22 +74,20 @@ public:
 
     MAGNETIC_SETTINGS* GetMagneticItemsSettings() override;
 
-    ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
+    ///< @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 
     COLOR_SETTINGS* GetColorSettings() const override;
 
     /**
-     * Function GetGridColor() , virtual
-     * @return the color of the grid
+     * @return the color of the grid.
      */
     COLOR4D GetGridColor() override;
 
     FOOTPRINT* GetFootprint( const wxString& aFootprintName, REPORTER& aReporter );
 
-    /* SaveCopyInUndoList() virtual
-     * currently: do nothing in CvPcb.
-     * but but be defined because it is a pure virtual in PCB_BASE_FRAME
+    /**
+     * Does nothing in CvPcb but defined because it is a pure virtual in #PCB_BASE_FRAME.
      */
     void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand = UNDO_REDO::UNSPECIFIED,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
@@ -100,13 +96,14 @@ public:
 
 
     /**
-     * Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
+     * Create a new entry in undo list of commands.
+     *
+     * Add a list of pickers to handle a list of items.
+     *
+     * @param aItemsList is the list of items modified by the command to undo
+     * @param aTypeCommand is command type (see enum UNDO_REDO)
+     * @param aTransformPoint is the reference point of the transformation,
+     *                        for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override

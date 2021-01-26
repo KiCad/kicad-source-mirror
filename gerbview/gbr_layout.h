@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,8 +40,7 @@
 class GERBER_FILE_IMAGE_LIST;
 
 /**
- * GBR_LAYOUT
- * holds list of GERBER_DRAW_ITEM currently loaded.
+ * A list of #GERBER_DRAW_ITEM objects currently loaded.
  */
 class GBR_LAYOUT : public EDA_ITEM
 {
@@ -70,15 +69,12 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titles = aTitleBlock; }
 
     /**
-     * Function ComputeBoundingBox
-     * calculates the bounding box containing all Gerber items.
-     * @return EDA_RECT - the full item list bounding box
+     * Calculate the bounding box containing all Gerber items.
+     *
+     * @return the full item list bounding box.
      */
     EDA_RECT ComputeBoundingBox() const;
 
-    /**
-     * Function GetBoundingBox
-     */
     const EDA_RECT GetBoundingBox() const override
     {
         return ComputeBoundingBox();
@@ -86,7 +82,7 @@ public:
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
-    ///> @copydoc EDA_ITEM::Visit()
+    ///< @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
 #if defined(DEBUG)

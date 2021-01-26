@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,23 +40,23 @@ class SCH_EDIT_FRAME;
 
 
 /**
- * @brief Back annotation algorithm class used to recieve, check, and apply a \ref NETLIST from
- * PCBNEW.
+ * Back annotation algorithm class used to receive, check, and apply a \ref NETLIST from
+ * Pcbnew.
+ *
  * The following checks are made:
- * - Schematic symbol exists, but linked PCBnew footprint missing
- * - PCBnew footprint exists but no schematic symbol connected to
- * - PCBnew footprint is standalone
+ * - Schematic symbol exists, but linked Pcbnew footprint missing.
+ * - Pcbnew footprint exists but no schematic symbol connected to.
+ * - Pcbnew footprint is standalone.
  * - Schematic sheet is reused one or more times and user trying to change footprint or value
- * only for few of them.
- * - Schematic symbols share same path
- * - More than one PCBnew footprint linked to same path
-
+ *   only for few of them.
+ * - Schematic symbols share same path.
+ * - More than one Pcbnew footprint linked to same path.
  */
 class BACK_ANNOTATE
 {
 public:
     /**
-     * @brief Struct to hold PCBnew footprint data
+     * Struct to hold Pcbnew footprint data.
      */
     struct PCB_FP_DATA
     {
@@ -74,7 +74,7 @@ public:
         std::map<wxString, wxString> m_pinMap;
     };
 
-    ///> Map to hold NETLIST footprints data
+    ///< Map to hold NETLIST footprints data
     using PCB_FOOTPRINTS_MAP = std::map<wxString, std::shared_ptr<PCB_FP_DATA>>;
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>;
@@ -85,7 +85,8 @@ public:
     ~BACK_ANNOTATE();
 
     /**
-     * @brief Get netlist from the PCBnew.
+     * Get netlist from the Pcbnew.
+     *
      * @param aNetlist reference to where netlist will be stored
      * @return true if success
      */
@@ -94,14 +95,40 @@ public:
     void PushNewLinksToPCB();
 
     /**
-     * @brief Run back annotation algorithm. If any errors, back annotation doesn't run.
-     * only report
+     * Run back annotation algorithm. If any errors, back annotation doesn't run.
+     *
      * @param aNetlist netlist to run back annotation from
      * @return true if success
      */
     bool BackAnnotateSymbols( const std::string& aNetlist );
 
 private:
+    /**
+     * Parse netlist sent over KiWay express mail interface and fill \ref m_pcbModules.
+     *
+     * @param aPayload - netlist from Pcbnew
+     * @return number of errors during parsing
+     */
+    void getPcbModulesFromString( const std::string& aPayload );
+
+    ///< Create changelist
+    void getChangeList();
+
+    /**
+     * Check if some symbols are not represented in PCB footprints and vice versa.
+     * \ref m_refs must be sorted by path
+     */
+    void checkForUnusedSymbols();
+
+    /**
+     * Apply changelist to the schematic
+     */
+    void applyChangelist();
+
+    void processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
+                               const SCH_CONNECTION* aConnection, const wxString& aOldName,
+                               const wxString& aNewName );
+
     REPORTER&                    m_reporter;
 
     bool                         m_matchByReference;
@@ -119,31 +146,6 @@ private:
 
     int                          m_changesCount;    // Number of user-level changes
     bool                         m_appendUndo;
-
-    /**
-     * @brief Parse netlist sent over KiWay epress mail interface and fill \ref m_pcbModules
-     * @param aPayload - netlist from PCBnew
-     * @return number of errors during parsing
-     */
-    void getPcbModulesFromString( const std::string& aPayload );
-
-    ///> Create changelist
-    void getChangeList();
-
-    /**
-     * @brief Check if some symbols are not represented in PCB footprints and vice versa.
-     * \ref m_refs must be sorted by path
-     */
-    void checkForUnusedSymbols();
-
-    /**
-    * @brief Apply changelist to the schematic
-    */
-    void applyChangelist();
-
-    void processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
-                               const SCH_CONNECTION* aConnection, const wxString& aOldName,
-                               const wxString& aNewName );
 };
 
 #endif

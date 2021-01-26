@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,46 +40,46 @@ public:
     NGSPICE();
     virtual ~NGSPICE();
 
-    ///> @copydoc SPICE_SIMULATOR::Init()
+    ///< @copydoc SPICE_SIMULATOR::Init()
     void Init() override;
 
-    ///> @copydoc SPICE_SIMULATOR::LoadNetlist()
+    ///< @copydoc SPICE_SIMULATOR::LoadNetlist()
     bool LoadNetlist( const std::string& aNetlist ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::Run()
+    ///< @copydoc SPICE_SIMULATOR::Run()
     bool Run() override;
 
-    ///> @copydoc SPICE_SIMULATOR::Stop()
+    ///< @copydoc SPICE_SIMULATOR::Stop()
     bool Stop() override;
 
-    ///> @copydoc SPICE_SIMULATOR::IsRunning()
+    ///< @copydoc SPICE_SIMULATOR::IsRunning()
     bool IsRunning() override;
 
-    ///> @copydoc SPICE_SIMULATOR::Command()
+    ///< @copydoc SPICE_SIMULATOR::Command()
     bool Command( const std::string& aCmd ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetXAxis()
+    ///< @copydoc SPICE_SIMULATOR::GetXAxis()
     std::string GetXAxis( SIM_TYPE aType ) const override;
 
     ///> @copydoc SPICE_SIMULATOR::AllPlots()
     std::vector<std::string> AllPlots() const override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetPlot()
+    ///< @copydoc SPICE_SIMULATOR::GetPlot()
     std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetRealPlot()
+    ///< @copydoc SPICE_SIMULATOR::GetRealPlot()
     std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetImagPlot()
+    ///< @copydoc SPICE_SIMULATOR::GetImagPlot()
     std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetMagPlot()
+    ///< @copydoc SPICE_SIMULATOR::GetMagPlot()
     std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetPhasePlot()
+    ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
-    ///> @copydoc SPICE_SIMULATOR::GetNetlist()
+    ///< @copydoc SPICE_SIMULATOR::GetNetlist()
     virtual const std::string GetNetlist() const override;
 
 private:
@@ -97,7 +99,7 @@ private:
     typedef char** (*ngSpice_AllVecs)( char* plotname );
     typedef bool (*ngSpice_Running)( void );
 
-    ///> Handles to DLL functions
+    ///< Handle to DLL functions
     ngSpice_Init m_ngSpice_Init;
     ngSpice_Circ m_ngSpice_Circ;
     ngSpice_Command m_ngSpice_Command;
@@ -109,32 +111,32 @@ private:
 
     wxDynamicLibrary m_dll;
 
-    ///> Executes commands from a file
+    ///< Execute commands from a file
     bool loadSpinit( const std::string& aFileName );
 
-    ///> Checks a few different locations for codemodel files and returns one
-    ///> if it exists
+    ///< Check a few different locations for codemodel files and returns one if it exists.
     std::string findCmPath() const;
 
-    ///> Loads codemodel files from a directory
+    ///< Load codemodel files from a directory.
     bool loadCodemodels( const std::string& aPath );
 
     // Callback functions
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );
     static int cbBGThreadRunning( bool is_running, int id, void* user );
-    static int cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user );
+    static int cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id,
+                                 void* user );
 
-    // Assures ngspice is in a valid state and reinitializes it if need be
+    // Assure ngspice is in a valid state and reinitializes it if need be
     void validate();
 
-    ///> Error flag indicating that ngspice needs to be reloaded
+    ///< Error flag indicating that ngspice needs to be reloaded
     bool m_error;
 
-    ///> NGspice should be initialized only once
+    ///< NGspice should be initialized only once
     static bool m_initialized;
 
-    ///> current netlist
+    ///< current netlist
     std::string m_netlist;
 };
 

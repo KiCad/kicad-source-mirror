@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@ class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 
 /**
- * EE_POINT_EDITOR
- *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
 class EE_POINT_EDITOR : public EE_TOOL_BASE<SCH_BASE_FRAME>
@@ -51,28 +49,28 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Indicates the cursor is over an edit point.  Used to coordinate cursor shapes with
+     * Indicate the cursor is over an edit point.  Used to coordinate cursor shapes with
      * other tools.
      */
     bool HasPoint() { return m_editedPoint != nullptr; }
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:
-    ///> Updates item's points with edit points.
+    ///< Update item's points with edit points.
     void updateParentItem() const;
 
-    ///> Updates edit points with item's points.
+    ///< Update edit points with item's points.
     void updatePoints();
 
-    ///> Updates which point is being edited.
+    ///< Update which point is being edited.
     void updateEditedPoint( const TOOL_EVENT& aEvent );
 
-    ///> Sets the current point being edited. NULL means none.
+    ///< Set the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 
-    ///> Returns true if aPoint is the currently modified point.
+    ///< Return true if \a aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
     {
         return m_editedPoint == &aPoint;
@@ -101,10 +99,10 @@ private:
     void rollbackFromUndo();
 
 private:
-    ///> Currently edited point, NULL if there is none.
+    ///< Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 
-    ///> Currently available edit points.
+    ///< Currently available edit points.
     std::shared_ptr<EDIT_POINTS> m_editPoints;
 };
 

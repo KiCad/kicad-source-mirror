@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -52,19 +52,21 @@ public:
     }
 
     /**
-     * @brief Returns name of Spice dataset for a specific plot.
+     * Return name of Spice dataset for a specific plot.
+     *
      * @param aName is name of the measured net or device
      * @param aType describes the type of expected plot
      * @param aParam is an optional parameter for devices, if absent it will return current (only
-     * for passive devices).
+     *               for passive devices).
      * @return Empty string if query is invalid, otherwise a plot name that
-     * can be requested from the simulator.
+     *         can be requested from the simulator.
      */
     wxString ComponentToVector( const wxString& aName, SIM_PLOT_TYPE aType,
             const wxString& aParam = wxEmptyString ) const;
 
     /**
-     * @brief Returns name of Spice dataset for a specific plot.
+     * Return name of Spice dataset for a specific plot.
+     *
      * @param aVector is name of the vector produced by ngspice
      * @param [out] aSignal is output in form: V(R1), Ib(Q2), I(L8)
      * @return [SPT_VOLTAGE, SPT_CURRENT]. Otherwise SPT_UNKNOWN if vector is
@@ -73,12 +75,12 @@ public:
     SIM_PLOT_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
     /**
-     * @brief Returns a list of currents that can be probed in a Spice primitive.
+     * Return a list of currents that can be probed in a Spice primitive.
      */
     static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );
 
     /**
-     * @brief Overrides the simulation command directive.
+     * Override the simulation command directive.
      */
     void SetSimCommand( const wxString& aCmd )
     {
@@ -86,7 +88,7 @@ public:
     }
 
     /**
-     * @brief Returns the simulation command directive.
+     * Return the simulation command directive.
      */
     const wxString& GetSimCommand() const
     {
@@ -94,7 +96,7 @@ public:
     }
 
     /**
-     * @brief Clears the simulation command directive.
+     * Clear the simulation command directive.
      */
     void ClearSimCommand()
     {
@@ -102,25 +104,26 @@ public:
     }
 
     /**
-     * Returns the command directive that is in use (either from the sheet or from m_simCommand
+     * Return the command directive that is in use (either from the sheet or from m_simCommand
      * @return
      */
     wxString GetUsedSimCommand();
 
     /**
-     * @brief Returns simulation type basing on the simulation command directives.
+     * Return simulation type basing on the simulation command directives.
+     *
      * Simulation directives set using SetSimCommand() have priority over the ones placed in
      * schematic sheets.
      */
     SIM_TYPE GetSimType();
 
     /**
-     * @brief Returns simulation command directives placed in schematic sheets (if any).
+     * Return simulation command directives placed in schematic sheets (if any).
      */
     wxString GetSheetSimCommand();
 
     /**
-     * Parses a two-source .dc command directive into its components
+     * Parse a two-source .dc command directive into its components
      *
      * @param aCmd is the input command string
      * @return true if the command was parsed successfully
@@ -129,7 +132,7 @@ public:
                          SPICE_DC_PARAMS* aSource2 );
 
     /**
-     * @brief Determines if a directive is a simulation command.
+     * Determine if a directive is a simulation command.
      */
     static bool IsSimCommand( const wxString& aCmd )
     {
@@ -137,7 +140,7 @@ public:
     }
 
     /**
-     * @brief Returns simulation type basing on a simulation command directive.
+     * Return simulation type basing on a simulation command directive.
      */
     static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
@@ -146,7 +149,7 @@ protected:
 
 private:
 
-    ///> Custom simulation command (has priority over the schematic sheet simulation commands)
+    ///< Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;
 };
 

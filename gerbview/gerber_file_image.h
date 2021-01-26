@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,25 +42,26 @@ typedef std::vector<GERBER_DRAW_ITEM*> GERBER_DRAW_ITEMS;
 class GERBVIEW_FRAME;
 class D_CODE;
 
-/* gerber files have different parameters to define units and how items must be plotted.
- *  some are for the entire file, and other can change along a file.
- *  In Gerber world:
- *  an image is the entire gerber file and its "global" parameters
- *  a layer (that is very different from a board layer) is just a sub set of a file that
- *  have specific parameters
- *  if a Image parameter is set more than once, only the last value is used
- *  Some parameters can change along a file and are not layer specific: they are stored
- *  in GERBER_ITEM items, when instancied.
+/* Gerber files have different parameters to define units and how items must be plotted.
+ * some are for the entire file, and other can change along a file.
+ * In Gerber world:
+ * an image is the entire gerber file and its "global" parameters
+ * a layer (that is very different from a board layer) is just a sub set of a file that
+ * have specific parameters
+ * if a Image parameter is set more than once, only the last value is used
+ * Some parameters can change along a file and are not layer specific: they are stored
+ * in GERBER_ITEM items, when instanced.
  *
- *  In GerbView, to handle these parameters, there are 2 classes:
- *  GERBER_FILE_IMAGE : the main class containing most of parameters and data to plot a graphic layer
- *  Some of them can change along the file
- *  There is one GERBER_FILE_IMAGE per file and one graphic layer per file or GERBER_FILE_IMAGE
- *  GerbView does not read and merge 2 gerber file in one graphic layer:
- *  I believe this is not possible due to the constraints in Image parameters.
- *  GERBER_LAYER : containing the subset of parameters that is layer speficic
- *  A GERBER_FILE_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.
- *  But a GERBER_FILE_IMAGE can use more than one GERBER_LAYER.
+ * In GerbView, to handle these parameters, there are 2 classes:
+ * GERBER_FILE_IMAGE : the main class containing most of parameters and data to plot a
+ * graphic layer
+ * Some of them can change along the file
+ * There is one GERBER_FILE_IMAGE per file and one graphic layer per file or GERBER_FILE_IMAGE
+ * GerbView does not read and merge 2 gerber file in one graphic layer:
+ * I believe this is not possible due to the constraints in Image parameters.
+ * GERBER_LAYER : containing the subset of parameters that is layer specific
+ * A GERBER_FILE_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.
+ * But a GERBER_FILE_IMAGE can use more than one GERBER_LAYER.
  */
 
 class GERBER_FILE_IMAGE;
@@ -79,10 +80,16 @@ enum LAST_EXTRA_ARC_DATA_TYPE
 
 class GERBER_LAYER
 {
-    friend class GERBER_FILE_IMAGE;
 public:
+    GERBER_LAYER();
+    ~GERBER_LAYER();
 
-    // These parameters are layer specfic:
+private:
+    void ResetDefaultValues();
+    friend class GERBER_FILE_IMAGE;
+
+public:
+   // These parameters are layer specific:
     wxString    m_LayerName;            // Layer name, from LN <name>* command
     bool        m_LayerNegative;        // true = Negative Layer: command LP
     wxRealPoint m_StepForRepeat;        // X and Y offsets for Step and Repeat command
@@ -93,157 +100,15 @@ public:
                                         // gerber items can have coordinates
                                         // in different units than step parameters
                                         // and the actual coordinates calculation must handle this
-
-public:
-    GERBER_LAYER();
-    ~GERBER_LAYER();
-private:
-    void ResetDefaultValues();
 };
 
 /**
- * GERBER_FILE_IMAGE
- * holds the Image data and parameters for one gerber file
- * and layer parameters (TODO: move them in GERBER_LAYER class
+ * Hold the image data and parameters for one gerber file and layer parameters.
+ *
+ * @todo: Move them in #GERBER_LAYER class.
  */
 class GERBER_FILE_IMAGE : public EDA_ITEM
 {
-    D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer
-                                                            ///< (max TOOLS_MAX_COUNT: see dcode.h)
-    bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
-
-    GERBER_LAYER       m_GBRLayerParams;                    // hold params for the current gerber layer
-    GERBER_DRAW_ITEMS  m_drawings;                              // linked list of Gerber Items to draw
-
-public:
-    bool               m_InUse;                                 // true if this image is currently in use
-                                                                // (a file is loaded in it)
-    bool               m_IsVisible;                             // true if the draw layer is visible and must be drawn
-                                                                // false if it must be not drawn
-    COLOR4D            m_PositiveDrawColor;                     // The color used to draw positive items
-    wxString           m_FileName;                              // Full File Name for this layer
-    wxString           m_ImageName;                             // Image name, from IN <name>* command
-    bool               m_IsX2_file;                             // true if a X2 gerber attribute was found in file
-    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction;                  // file function parameters, found in a %TF command
-                                                                // or a G04
-    wxString           m_MD5_value;                             // MD5 value found in a %TF.MD5 command
-    wxString           m_PartString;                            // string found in a %TF.Part command
-    int                m_GraphicLayer;                          // Graphic layer Number
-    bool               m_ImageNegative;                         // true = Negative image
-    bool               m_ImageJustifyXCenter;                   // Image Justify Center on X axis (default = false)
-    bool               m_ImageJustifyYCenter;                   // Image Justify Center on Y axis (default = false)
-    wxPoint            m_ImageJustifyOffset;                    // Image Justify Offset on XY axis (default = 0,0)
-    bool               m_GerbMetric;                            // false = Inches, true = metric
-    bool               m_Relative;                              // false = absolute Coord, true = relative Coord
-    bool               m_NoTrailingZeros;                       // true: remove tailing zeros.
-    wxPoint            m_ImageOffset;                           // Coord Offset, from IO command
-    wxSize             m_FmtScale;                              // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
-    wxSize             m_FmtLen;                                // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
-    int                m_ImageRotation;                         // Image rotation (0, 90, 180, 270 only) in degrees
-    double             m_LocalRotation;                         // Local rotation, in degrees, added to m_ImageRotation
-                                                                //  Note this value is stored in 0.1 degrees
-    wxPoint            m_Offset;                                // Coord Offset, from OF command
-    wxRealPoint        m_Scale;                                 // scale (X and Y) of layer.
-    bool               m_SwapAxis;                              // false (default) if A = X and B = Y
-                                                                // true if A = Y, B = X
-    bool               m_MirrorA;                               // true: miror / axe A (X)
-    bool               m_MirrorB;                               // true: miror / axe B (Y)
-    int                m_Iterpolation;                          // Linear, 90 arc, Circ.
-    int                m_Current_Tool;                          // Current Tool (Dcode) number selected
-    int                m_Last_Pen_Command;                      // Current or last pen state (0..9, set by Dn option with n <10
-    int                m_CommandState;                          // state of gerber analysis command.
-    int                m_LineNum;                               // Line number of the gerber file while reading
-    wxPoint            m_CurrentPos;                            // current specified coord for plot
-    wxPoint            m_PreviousPos;                           // old current specified coord for plot
-    wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
-    bool               m_LastCoordIsIJPos;                      // true if a IJ coord was read (for arcs & circles )
-    int                m_ArcRadius;                             // A value ( = radius in circular routing in Excellon files )
-    LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;                 // Identifier for arc data type (IJ (center) or A## (radius))
-    FILE*              m_Current_File;                          // Current file to read
-
-    int                m_Selected_Tool;                         // For highlight: current selected Dcode
-    bool               m_Has_DCode;                             // true = DCodes in file
-                                                                // false = no DCode -> perhaps deprecated RS274D file
-    bool               m_Has_MissingDCode;                      // true = some DCodes in file are not defined
-                                                                // (broken file or deprecated RS274D file)
-    bool               m_360Arc_enbl;                           // Enbl 360 deg circular interpolation
-    bool               m_AsArcG74G75Cmd;                        // Set to true when a circular interpolation command
-                                                                // type is found. Mandatory before drawing an arc.
-    bool               m_PolygonFillMode;                       // Enable polygon mode (read coord as a polygon descr)
-    int                m_PolygonFillModeState;                  // In polygon mode: 0 = first segm, 1 = next segm
-
-    APERTURE_MACRO_SET m_aperture_macros;                       ///< a collection of APERTURE_MACROS, sorted by name
-
-    GBR_NETLIST_METADATA m_NetAttributeDict;                    // the net attributes set by a %TO.CN, %TO.C and/or %TO.N
-                                                                // add object attribute command.
-    wxString          m_AperFunction;                           // the aperture function set by a %TA.AperFunction, xxx
-                                                                // (stores thre xxx value).
-
-    std::map<wxString, int> m_ComponentsList;                   // list of components
-    std::map<wxString, int> m_NetnamesList;                     // list of net names
-
-private:
-    wxArrayString      m_messagesList;                          // A list of messages created when reading a file
-    int                m_hasNegativeItems;                      // true if the image is negative or has some negative items
-                                                                // Used to optimize drawing, because when there are no
-                                                                // negative items screen refresh does not need
-                                                                // to build an intermediate bitmap specfic to this image
-                                                                // -1 = negative items are
-                                                                // 0 = no negative items found
-                                                                // 1 = have negative items found
-    /**
-     * test for an end of line
-     * if a end of line is found:
-     *   read a new line
-     * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
-     * @param aText = pointer to the last useful char in aBuff
-     *          on return: points the beginning of the next line.
-     * @param aBuffSize = the size in bytes of aBuff
-     * @param aFile = the opened GERBER file to read
-     * @return a pointer to the beginning of the next line or NULL if end of file
-    */
-    char* GetNextLine( char *aBuff, unsigned int aBuffSize, char* aText, FILE* aFile );
-
-    bool GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* aGerberFile );
-
-    /**
-      * reads a single RS274X command terminated with a %
-     */
-    bool ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText );
-
-    /**
-     * executes a RS274X command
-     */
-    bool ExecuteRS274XCommand( int aCommand, char* aBuff,
-                               unsigned int aBuffSize, char*& aText );
-
-    /**
-     * reads two bytes of data and assembles them into an int with the first
-     * byte in the sequence put into the most significant part of a 16 bit value
-     * to build a RS274X command identifier.
-     * @param text A reference to a pointer to read bytes from and to advance as
-     *             they are read.
-     * @return a RS274X command identifier.
-     */
-    int ReadXCommandID( char*& text );
-
-    /**
-     * reads in an aperture macro and saves it in m_aperture_macros.
-     * @param aBuff a character buffer at least GERBER_BUFZ long that can be
-     *          used to read successive lines from the gerber file.
-     * @param text A reference to a character pointer which gives the initial
-     *              text to read from.
-     * @param aBuffSize is the size of aBuff
-     * @param gerber_file Which file to read from for continuation.
-     * @return bool - true if a macro was read in successfully, else false.
-     */
-    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
-                            char* & text, FILE * gerber_file );
-
-    // functions to execute G commands or D basic commands:
-    bool    Execute_G_Command( char*& text, int G_command );
-    bool    Execute_DCODE_Command( char*& text, int D_command );
-
 public:
     GERBER_FILE_IMAGE( int layer );
     virtual ~GERBER_FILE_IMAGE();
@@ -255,10 +120,11 @@ public:
 
     /**
      * Read and load a gerber file.
-     * @param aFullFileName = the full filename of the Gerber file
-     * when the file cannot be loaded
-     * Warning and info messages are stored in m_messagesList
-     * @return bool if OK, false if the gerber file was not loaded
+     *
+     * If the file cannot be loaded, warning and information messages are stored in m_messagesList.
+     *
+     * @param aFullFileName The full filename of the Gerber file.
+     * @return true if file loaded successfully, false if the gerber file was not loaded.
      */
     bool LoadGerberFile( const wxString& aFullFileName );
 
@@ -285,6 +151,7 @@ public:
 
     /**
      * Add a new GERBER_DRAW_ITEM item to the drawings list
+     *
      * @param aItem is the GERBER_DRAW_ITEM to add to list
      */
     void AddItemToList( GERBER_DRAW_ITEM* aItem )
@@ -301,8 +168,7 @@ public:
     }
 
     /**
-     * Function GetLayerParams
-     * @return the current layers params
+     * @return the current layers params.
      */
     GERBER_LAYER& GetLayerParams()
     {
@@ -310,121 +176,113 @@ public:
     }
 
     /**
-     * Function HasNegativeItems
-     * @return true if at least one item must be drawn in background color
-     * used to optimize screen refresh (when no items are in background color
-     * refresh can be faster)
+     * @return true if at least one item must be drawn in background color used to optimize
+     *         screen refresh (when no items are in background color refresh can be faster).
      */
     bool HasNegativeItems();
 
     /**
-     * Function ClearMessageList
-     * Clear the message list
+     * Clear the message list.
+     *
      * Call it before reading a Gerber file
      */
-    void    ClearMessageList()
+    void ClearMessageList()
     {
         m_messagesList.Clear();
     }
 
     /**
-     * Function AddMessageToList
      * Add a message to the message list
      */
-    void    AddMessageToList( const wxString& aMessage )
+    void AddMessageToList( const wxString& aMessage )
     {
         m_messagesList.Add( aMessage );
     }
 
-    /**
-     * Function InitToolTable
-     */
-    void    InitToolTable();
+    void InitToolTable();
 
     /**
-     * Function ReadXYCoord
-     * Returns the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm)
+     * Return the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm).
+     *
      * @param aText is a pointer to the text to parse.
      * @param aExcellonMode = true to parse a Excellon drill file.
-     * it force truncation of a digit string to a max len because the exact coordinate
-     * format is not always known
+     * it forces truncation of a digit string to a maximum length because the exact coordinate
+     * format is not always known.
      */
     wxPoint ReadXYCoord( char*& aText, bool aExcellonMode = false );
 
     /**
-     * Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
+     * Return the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
+     *
      * These coordinates are relative, so if coordinate is absent, it's value
      * defaults to 0
      */
     wxPoint ReadIJCoord( char*& Text );
 
     // functions to read G commands or D commands:
-    int     GCodeNumber( char*& Text );
-    int     DCodeNumber( char*& Text );
+    int GCodeNumber( char*& Text );
+    int DCodeNumber( char*& Text );
 
     /**
-     * Function GetDCODEOrCreate
-     * returns a pointer to the D_CODE within this GERBER for the given
-     * \a aDCODE.
+     * Return a pointer to the D_CODE within this GERBER for the given \a aDCODE.
+     *
      * @param aDCODE The numeric value of the D_CODE to look up.
      * @param aCreateIfNoExist If true, then create the D_CODE if it does not
      *                         exist in list.
-     * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
-     *            if the requested \a aDCODE is out of range.
+     * @return The one implied by the given \a aDCODE or NULL if the requested \a aDCODE is
+     *         out of range.
      */
-    D_CODE*         GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist = true );
+    D_CODE* GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist = true );
 
     /**
-     * Function GetDCODE
-     * returns a pointer to the D_CODE within this GERBER for the given
-     * \a aDCODE.
+     * Return a pointer to the D_CODE within this GERBER for the given \a aDCODE.
+     *
      * @param aDCODE The numeric value of the D_CODE to look up.
-     * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
-     *            if the requested \a aDCODE is out of range.
+     * @return The D code implied by the given \a aDCODE or NULL if the requested \a aDCODE is
+     *         out of range.
      */
-    D_CODE*         GetDCODE( int aDCODE ) const;
+    D_CODE* GetDCODE( int aDCODE ) const;
 
     /**
-     * Function FindApertureMacro
-     * looks up a previously read in aperture macro.
+     * Look up a previously read in aperture macro.
+     *
      * @param aLookup A dummy APERTURE_MACRO with [only] the name field set.
-     * @return APERTURE_MACRO* - the one with a matching name, or NULL if
-     *  not found.
+     * @return the aperture macro with a matching name or NULL if not found.
      */
     APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
 
     /**
-     * Function StepAndRepeatItem
-     * Gerber format has a command Step an Repeat
+     * Gerber format has a command Step an Repeat.
+     *
      * This function must be called when reading a gerber file and
      * after creating a new gerber item that must be repeated
      * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
+     *
      * @param aItem = the item to repeat
      */
-    void            StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
+    void StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
 
     /**
-     * Function DisplayImageInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Display info about Image Parameters.
-     * @param aMainFrame = the GERBVIEW_FRAME to display messages
+     * Display information about image parameters in the status bar.
+     *
+     * @param aMainFrame The #GERBVIEW_FRAME to display messages.
      */
     void DisplayImageInfo( GERBVIEW_FRAME* aMainFrame );
 
     /**
-     * Function RemoveAttribute.
      * Called when a %TD command is found the Gerber file
-     * @param aAttribute is the X2_ATTRIBUTE which stores the full command
+     *
      * Remove the attribute specified by the %TD command.
      * is no attribute, all current attributes specified by the %TO and the %TA
      * commands are cleared.
      * if a attribute name is specified (for instance %TD.CN*%) is specified,
      * only this attribute is cleared
+     *
+     * @param aAttribute is the X2_ATTRIBUTE which stores the full command
      */
     void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
 
-    ///> @copydoc EDA_ITEM::Visit()
+    ///< @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
 #if defined(DEBUG)
@@ -432,6 +290,193 @@ public:
     void    Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 
 #endif
+
+private:
+    /**
+     * Test for an end of line.
+     *
+     * If a end of line is found, read a new line.
+     *
+     * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
+     * @param aText = pointer to the last useful char in aBuff
+     *          on return: points the beginning of the next line.
+     * @param aBuffSize = the size in bytes of aBuff
+     * @param aFile = the opened GERBER file to read
+     * @return a pointer to the beginning of the next line or NULL if end of file
+    */
+    char* GetNextLine( char *aBuff, unsigned int aBuffSize, char* aText, FILE* aFile );
+
+    bool GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* aGerberFile );
+
+    /**
+     * Read a single RS274X command terminated with a %
+     */
+    bool ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText );
+
+    /**
+     * Execute a RS274X command
+     */
+    bool ExecuteRS274XCommand( int aCommand, char* aBuff, unsigned int aBuffSize, char*& aText );
+
+    /**
+     * Read two bytes of data and assembles them into an int with the first
+     * byte in the sequence put into the most significant part of a 16 bit value
+     * to build a RS274X command identifier.
+     *
+     * @param text A reference to a pointer to read bytes from and to advance as
+     *             they are read.
+     * @return a RS274X command identifier.
+     */
+    int ReadXCommandID( char*& text );
+
+    /**
+     * Read in an aperture macro and saves it in m_aperture_macros.
+     *
+     * @param aBuff a character buffer at least GERBER_BUFZ long that can be
+     *              used to read successive lines from the gerber file.
+     * @param text A reference to a character pointer which gives the initial
+     *             text to read from.
+     * @param aBuffSize is the size of aBuff
+     * @param gerber_file Which file to read from for continuation.
+     * @return true if a macro was read in successfully, else false.
+     */
+    bool ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
+                            char* & text, FILE * gerber_file );
+
+    // functions to execute G commands or D basic commands:
+    bool Execute_G_Command( char*& text, int G_command );
+    bool Execute_DCODE_Command( char*& text, int D_command );
+
+public:
+    bool               m_InUse;                          // true if this image is currently in use
+                                                         // (a file is loaded in it)
+
+    ///< True if the draw layer is visible and must be drawn.
+    bool               m_IsVisible;
+                                                         // false if it must be not drawn
+    COLOR4D            m_PositiveDrawColor;              // The color used to draw positive items
+    wxString           m_FileName;                       // Full File Name for this layer
+    wxString           m_ImageName;                      // Image name, from IN <name>* command
+
+    ///< True if a X2 gerber attribute was found in file.
+    bool               m_IsX2_file;
+    X2_ATTRIBUTE_FILEFUNCTION* m_FileFunction;           // file function parameters, found in a
+                                                         //  %TF command or a G04
+    wxString           m_MD5_value;                      // MD5 value found in a %TF.MD5 command
+    wxString           m_PartString;                     // string found in a %TF.Part command
+    int                m_GraphicLayer;                   // Graphic layer Number
+    bool               m_ImageNegative;                  // true = Negative image
+
+    ///< Image Justify Center on X axis (default = false).
+    bool               m_ImageJustifyXCenter;
+
+    ///< Image Justify Center on Y axis (default = false).
+    bool               m_ImageJustifyYCenter;
+
+    ///< Image Justify Offset on XY axis (default = 0,0).
+    wxPoint            m_ImageJustifyOffset;
+    bool               m_GerbMetric;                     // false = Inches, true = metric
+
+    ///< false = absolute Coord, true = relative Coord.
+    bool               m_Relative;
+    bool               m_NoTrailingZeros;                // true: remove tailing zeros.
+    wxPoint            m_ImageOffset;                    // Coord Offset, from IO command
+
+    ///< Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4.
+    wxSize             m_FmtScale;
+
+    ///< Nb chars per coord. ex fmt 2.3, m_FmtLen = 5.
+    wxSize             m_FmtLen;
+
+    ///< Image rotation (0, 90, 180, 270 only) in degrees.
+    int                m_ImageRotation;
+
+    ///< Local rotation in degrees added to m_ImageRotation.
+    ///< @note This value is stored in 0.1 degrees.
+    double             m_LocalRotation;
+    wxPoint            m_Offset;                         // Coord Offset, from OF command
+    wxRealPoint        m_Scale;                          // scale (X and Y) of layer.
+    bool               m_SwapAxis;                       // false (default) if A = X and B = Y
+                                                         // true if A = Y, B = X
+    bool               m_MirrorA;                        // true: mirror / axis A (X)
+    bool               m_MirrorB;                        // true: mirror / axis B (Y)
+    int                m_Iterpolation;                   // Linear, 90 arc, Circ.
+    int                m_Current_Tool;                   // Current Tool (Dcode) number selected
+
+    ///< Current or last pen state (0..9, set by Dn option with n < 10.
+    int                m_Last_Pen_Command;
+    int                m_CommandState;                   // state of gerber analysis command.
+
+    ///< Line number of the gerber file while reading.
+    int                m_LineNum;
+    wxPoint            m_CurrentPos;                     // current specified coord for plot
+    wxPoint            m_PreviousPos;                    // old current specified coord for plot
+    wxPoint            m_IJPos;                          // IJ coord (for arcs & circles )
+
+    ///< True if a IJ coord was read (for arcs & circles ).
+    bool               m_LastCoordIsIJPos;
+
+    ///< A value ( = radius in circular routing in Excellon files ).
+    int                m_ArcRadius;
+
+    ///< Identifier for arc data type (IJ (center) or A## (radius)).
+    LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;
+    FILE*              m_Current_File;                   // Current file to read
+
+    int                m_Selected_Tool;                  // For highlight: current selected Dcode
+
+    ///< True if has DCodes in file or false if no DCodes found.  Perhaps deprecated RS274D file.
+    bool               m_Has_DCode;
+
+    // true = some DCodes in file are not defined (broken file or deprecated RS274D file).
+    bool               m_Has_MissingDCode;
+    bool               m_360Arc_enbl;                    // Enable 360 deg circular interpolation
+
+    // Set to true when a circular interpolation command type is found. Mandatory before
+    // drawing an arc.
+    bool               m_AsArcG74G75Cmd;
+
+    // Enable polygon mode (read coord as a polygon descr)
+    bool               m_PolygonFillMode;
+
+    // In polygon mode: 0 = first segm, 1 = next segm
+    int                m_PolygonFillModeState;
+
+    ///< a collection of APERTURE_MACROS, sorted by name
+    APERTURE_MACRO_SET m_aperture_macros;
+
+    // the net attributes set by a %TO.CN, %TO.C and/or %TO.N add object attribute command.
+    GBR_NETLIST_METADATA m_NetAttributeDict;
+
+    // the aperture function set by a %TA.AperFunction, xxx (stores the xxx value).
+    wxString            m_AperFunction;
+
+    std::map<wxString, int> m_ComponentsList;            // list of components
+    std::map<wxString, int> m_NetnamesList;              // list of net names
+
+    ///< Dcode (Aperture) List for this layer (max TOOLS_MAX_COUNT: see dcode.h)
+    D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];
+
+    ///< Whether an aperture macro tool is flashed on or off.
+    bool               m_Exposure;
+
+    GERBER_LAYER       m_GBRLayerParams;                 // hold params for the current gerber layer
+    GERBER_DRAW_ITEMS  m_drawings;                       // linked list of Gerber Items to draw
+
+private:
+    wxArrayString      m_messagesList;         // A list of messages created when reading a file
+
+    /**
+     * True if the image is negative or has some negative items.
+     *
+     * Used to optimize drawing because when there are no negative items screen refresh does
+     * not need to build an intermediate bitmap specific to this image.
+     *
+     *  - -1 negative items are.
+     *  - 0 no negative items found.
+     *  - 1 have negative items found.
+     */
+    int                m_hasNegativeItems;
 };
 
 #endif  // ifndef GERBER_FILE_IMAGE_H

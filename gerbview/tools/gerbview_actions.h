@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,9 +29,7 @@ class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * GERBVIEW_ACTIONS
- *
- * Gathers all the actions that are shared by tools. The instance of GERBVIEW_ACTIONS is created
+ * Gather all the actions that are shared by tools. The instance of GERBVIEW_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
 class GERBVIEW_ACTIONS : public ACTIONS
@@ -44,7 +42,7 @@ public:
     /// Select a single item under the cursor position
     static TOOL_ACTION selectionCursor;
 
-    /// Clears the current selection
+    /// Clear the current selection
     static TOOL_ACTION selectionClear;
 
     /// Selects an item (specified as the event parameter).
@@ -93,7 +91,7 @@ public:
     static TOOL_ACTION highlightComponent;
     static TOOL_ACTION highlightAttribute;
 
-    ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
+    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 

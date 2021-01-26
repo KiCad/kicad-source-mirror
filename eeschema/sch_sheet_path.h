@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 
 /**
  * @file sch_sheet_path.h
- * @brief Definition of the SCH_SHEET_PATH and SCH_SHEET_LIST classes for Eeschema.
+ * Definition of the SCH_SHEET_PATH and SCH_SHEET_LIST classes for Eeschema.
  */
 
 #ifndef CLASS_DRAWSHEET_PATH_H
@@ -38,7 +38,7 @@
 
 
 /**
- * A simple container for schematic symbol instance infromation.
+ * A simple container for schematic symbol instance information.
  */
 struct SYMBOL_INSTANCE_REFERENCE
 {
@@ -55,7 +55,7 @@ struct SYMBOL_INSTANCE_REFERENCE
 
 
 /**
- * A simple container for sheet instance infromation.
+ * A simple container for sheet instance information.
  */
 struct SCH_SHEET_INSTANCE
 {
@@ -236,7 +236,7 @@ public:
     SCH_SCREEN* LastScreen();
 
 
-    ///> @copydoc SCH_SHEET_PATH::LastScreen()
+    ///< @copydoc SCH_SHEET_PATH::LastScreen()
     SCH_SCREEN* LastScreen() const;
 
     /**
@@ -263,7 +263,7 @@ public:
     KIID_PATH PathWithoutRootUuid() const;
 
     /**
-     * Return the sheet path in a human readable form made from thesheet names.
+     * Return the sheet path in a human readable form made from the sheet names.
      *
      * The the "normal" path instead uses the #KIID objects in the path that do not change
      * even when editing sheet parameters.
@@ -438,10 +438,10 @@ public:
      * Build the list of sheets and their sheet path from \a aSheet.
      *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
-     * 
+     *
      * The list will be ordered as per #SCH_SCREEN::GetSheets which results in sheets being ordered
      * in the legacy way of using the X and Y positions of the sheets.
-     * 
+     *
      * @see #SortByPageNumbers to sort by page numbers
      *
      * @param aSheet is the starting sheet from which the list is built, or NULL
@@ -449,10 +449,10 @@ public:
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
     void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
-    
+
     /**
      * Sorts the list of sheets by page number. This should be called after #BuildSheetList
-     * 
+     *
      * @param aUpdateVirtualPageNums If true, updates the virtual page numbers to match the new
      * ordering
      */
@@ -506,7 +506,7 @@ public:
      * Set initial sheet page numbers.
      *
      * The number scheme is base on the old psuedo sheet numbering algorithm prior to
-     * the implementation of user defineable sheet page numbers.
+     * the implementation of user definable sheet page numbers.
      */
     void SetInitialPageNumbers();
 };

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,9 +27,7 @@ class EDA_DRAW_PANEL_GAL;
 class GERBVIEW_FRAME;
 
 /**
- * GERBVIEW_CONTROL
- *
- * Handles actions that are shared between different frames in pcbnew.
+ * Handle actions that are shared between different frames in Pcbnew.
  */
 
 class GERBVIEW_CONTROL : public TOOL_INTERACTIVE
@@ -67,7 +65,7 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 protected:

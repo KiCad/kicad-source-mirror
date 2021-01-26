@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,31 +31,33 @@ namespace KIGFX
 class GERBVIEW_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
 public:
-    GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                        GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+    GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
+                             const wxPoint& aPosition, const wxSize& aSize,
+                             KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                             GAL_TYPE aGalType = GAL_TYPE_OPENGL );
 
     virtual ~GERBVIEW_DRAW_PANEL_GAL();
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
     BOX2I GetDefaultViewBBox() const override;
 
     /**
-     * Sets (or updates) worksheet used by the draw panel.
+     * Set or update worksheet used by the draw panel.
+     *
      * @param aWorksheet is the worksheet to be used.
      *        The object is then owned by GERBVIEW_DRAW_PANEL_GAL.
      */
@@ -67,10 +69,10 @@ public:
     KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
 
 protected:
-    ///> Sets rendering targets & dependencies for layers.
+    ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///> Currently used worksheet
+    ///< Currently used worksheet
     std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
 };
 

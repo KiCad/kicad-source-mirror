@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,8 +67,6 @@ struct DRAW_SEGMENT_EVENT_PARAMS
 };
 
 /**
- * SCH_LINE_DRAWING_TOOL
- *
  * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.)
  */
 
@@ -102,24 +100,24 @@ private:
     void finishSegments();
 
     /**
-     * Iterates over the wire list and removes the null segments and
-     * overlapping segments to create a simplified wirelist
+     * Iterate over the wire list and removes the null segments and
+     * overlapping segments to create a simplified wire list
      */
     void simplifyWireList();
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
     /**
-     * Searches for a sheet pin at a location
+     * Search for a sheet pin at a location.
+     *
      * @param aPosition grid point to search for existing sheet pin
      * @return Pointer to sheet pin or nullptr on failure
      */
     const SCH_SHEET_PIN* getSheetPin( const wxPoint& aPosition );
 
     /**
-     * Function ComputeBreakPoint
-     * computes the middle coordinate for 2 segments from the start point to \a aPosition
+     * Compute the middle coordinate for 2 segments from the start point to \a aPosition
      * with the segments kept in the horizontal or vertical axis only.
      *
      * @param aSegments A pair of pointers to a #SCH_LINE objects containing the first line

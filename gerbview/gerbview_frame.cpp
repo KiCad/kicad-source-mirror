@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -67,14 +67,14 @@
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
                 wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME ),
-          m_activeLayer( 0 ),
+          m_TextInfo( nullptr ),
           m_zipFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_ZIP_FILE1,
                   ID_GERBVIEW_ZIP_FILE_LIST_CLEAR, _( "Clear Recent Zip Files" ) ),
           m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1,
                   ID_GERBVIEW_DRILL_FILE_LIST_CLEAR, _( "Clear Recent Drill Files" ) ),
           m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1,
                   ID_GERBVIEW_JOB_FILE_LIST_CLEAR, _( "Clear Recent Job Files" ) ),
-          m_TextInfo( nullptr )
+          m_activeLayer( 0 )
 {
     m_maximizeByDefault = true;
     m_gerberLayout = nullptr;
@@ -147,13 +147,15 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
-
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
-    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
-                      .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top()
+                      .Layer(4) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom()
+                      .Layer( 6 ) );
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left()
+                      .Layer( 3 ) );
+    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right()
+                      .Layer( 3 ).Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
@@ -224,7 +226,7 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 {
     // Ensure the frame is shown when opening the file(s), to avoid issues (crash) on GAL
     // when trying to change the view if it is not fully initialized.
-    // It happens when starting Gerbview with a gerber job file to load
+    // It happens when starting GerbView with a gerber job file to load
     if( !IsShown() )
         Show();
 
@@ -257,7 +259,7 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             SetActiveLayer( layer );
 
             // Try to guess the type of file by its ext
-            // if it is .drl (Kicad files), .nc or .xnc it is a drill file
+            // if it is .drl (KiCad files), .nc or .xnc it is a drill file
             wxFileName fn( aFileSet[i] );
             wxString ext = fn.GetExt();
 
@@ -748,7 +750,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
 
     case LAYER_GERBVIEW_WORKSHEET:
         settings->SetColor( LAYER_GERBVIEW_WORKSHEET, aColor );
-        // LAYER_WORKSHEET color is alsu used to draw the worksheet
+        // LAYER_WORKSHEET color is also used to draw the worksheet
         // FIX ME: why LAYER_WORKSHEET must be set, although LAYER_GERBVIEW_WORKSHEET
         // is used to initialize the worksheet color layer.
         settings->SetColor( LAYER_WORKSHEET, aColor );
@@ -1040,21 +1042,28 @@ void GERBVIEW_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
-    mgr->SetConditions( ACTIONS::measureTool,         CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,
+                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,
+                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::measureTool,
+                        CHECK( cond.CurrentTool( ACTIONS::measureTool ) ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::togglePolarCoords,   CHECK( cond.PolarCoordinates() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
 
-    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,
+                        CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,
+                        CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
-    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
-
+    mgr->SetConditions( ACTIONS::acceleratedGraphics,
+                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,
+                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
     auto flashedDisplayOutlinesCond =
         [this] ( const SELECTION& )
@@ -1110,7 +1119,8 @@ void GERBVIEW_FRAME::setupUIConditions()
             return m_show_layer_manager_tools;
         };
 
-    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,  CHECK( flashedDisplayOutlinesCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::flashedDisplayOutlines,
+                        CHECK( flashedDisplayOutlinesCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::linesDisplayOutlines,    CHECK( linesFillCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::polygonsDisplayOutlines, CHECK( polygonsFilledCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::negativeObjectDisplay,   CHECK( negativeObjectsCond ) );
@@ -1118,7 +1128,8 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleDiffMode,          CHECK( diffModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
-    mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,      CHECK( layersManagerShownCondition ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,
+                        CHECK( layersManagerShownCondition ) );
 
 #undef CHECK
 #undef ENABLE
