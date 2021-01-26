@@ -250,7 +250,10 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     if( TestSegmentHit( aPosition, start, end, mindist ) )
         return true;
 
-    return false;
+    if( m_fill == FILL_TYPE::NO_FILL )
+        return false;
+
+    return GetBoundingBox().Contains( aPosition );
 }
 
 

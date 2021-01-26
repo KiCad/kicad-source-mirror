@@ -54,7 +54,10 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
     if( abs( dist - GetRadius() ) <= mindist )
         return true;
 
-    return false;
+    if( m_fill == FILL_TYPE::NO_FILL )
+        return false;
+
+    return dist <= GetRadius();
 }
 
 
