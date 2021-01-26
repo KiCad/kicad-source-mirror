@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-26 08:00+0000\n"
+"PO-Revision-Date: 2021-01-26 10:03+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -20784,7 +20784,7 @@ msgstr "Rückseiten-Präfix:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Optional prefix for solder side reference designations (i.e. B_)"
-msgstr "Optionales Präfix für lötseitige Referenzbezeichnungen (d. H. B_)"
+msgstr "Optionales Präfix für lötseitige Referenzbezeichnungen (z. B. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Exclude locked footprints"
