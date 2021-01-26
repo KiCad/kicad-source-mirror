@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 #include <wildcards_and_files_ext.h>
 #include <advanced_config.h>
 #include <base_units.h>
@@ -1311,7 +1310,8 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     m_out->Print( aNestLevel, "(pad %s %s %s",
                   m_out->Quotew( aPad->GetName() ).c_str(),
-                  type, shape );
+                  type,
+                  shape );
     m_out->Print( 0, " (at %s", FormatInternalUnits( aPad->GetPos0() ).c_str() );
 
     if( aPad->GetOrientation() != 0.0 )
@@ -1403,47 +1403,75 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 
     // Unconnected pad is default net so don't save it.
     if( !( m_ctl & CTL_OMIT_PAD_NETS ) && aPad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
+    {
         StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
+        }
 
-    // Add pinfunction, if exists.
-    // Pin function is closely related to nets, so if CTL_OMIT_NETS is set,
-    // omit also pin function (for instance when saved from library editor)
-    if( !( m_ctl & CTL_OMIT_PAD_NETS ) && !aPad->GetPinFunction().IsEmpty() )
-        StrPrintf( &output, " (pinfunction %s)",
-                   m_out->Quotew( aPad->GetPinFunction() ).c_str() );
+    // Pin functions and types are closely related to nets, so if CTL_OMIT_NETS is set, omit
+    // them as well (for instance when saved from library editor).
+    if( !( m_ctl & CTL_OMIT_PAD_NETS ) )
+    {
+        if( !aPad->GetPinFunction().IsEmpty() )
+        {
+            StrPrintf( &output, " (pinfunction %s)",
+                       m_out->Quotew( aPad->GetPinFunction() ).c_str() );
+        }
+
+        if( !aPad->GetPinType().IsEmpty() )
+        {
+            StrPrintf( &output, " (pintype %s)",
+                       m_out->Quotew( aPad->GetPinType() ).c_str() );
+        }
+    }
 
     if( aPad->GetPadToDieLength() != 0 )
+    {
         StrPrintf( &output, " (die_length %s)",
                    FormatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
+    }
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
+    {
         StrPrintf( &output, " (solder_mask_margin %s)",
                    FormatInternalUnits( aPad->GetLocalSolderMaskMargin() ).c_str() );
+    }
 
     if( aPad->GetLocalSolderPasteMargin() != 0 )
+    {
         StrPrintf( &output, " (solder_paste_margin %s)",
                    FormatInternalUnits( aPad->GetLocalSolderPasteMargin() ).c_str() );
+    }
 
     if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
+    {
         StrPrintf( &output, " (solder_paste_margin_ratio %s)",
                    Double2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+    }
 
     if( aPad->GetLocalClearance() != 0 )
+    {
         StrPrintf( &output, " (clearance %s)",
                    FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
+    }
 
     if( aPad->GetEffectiveZoneConnection() != ZONE_CONNECTION::INHERITED )
+    {
         StrPrintf( &output, " (zone_connect %d)",
                    static_cast<int>( aPad->GetEffectiveZoneConnection() ) );
+    }
 
     if( aPad->GetThermalSpokeWidth() != 0 )
+    {
         StrPrintf( &output, " (thermal_width %s)",
                    FormatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
+    }
 
     if( aPad->GetThermalGap() != 0 )
+    {
         StrPrintf( &output, " (thermal_gap %s)",
                    FormatInternalUnits( aPad->GetThermalGap() ).c_str() );
+    }
 
     if( output.size() )
     {

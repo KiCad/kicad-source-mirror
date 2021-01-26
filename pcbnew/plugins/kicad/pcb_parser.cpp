@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3773,6 +3773,12 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        case T_pintype:
+            NeedSYMBOLorNUMBER();
+            pad->SetPinType( FromUTF8() );
+            NeedRIGHT();
+            break;
+
         case T_die_length:
             pad->SetPadToDieLength( parseBoardUnits( T_die_length ) );
             NeedRIGHT();
@@ -4009,7 +4015,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             Expecting( "at, locked, drill, layers, net, die_length, roundrect_rratio, "
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
-                       "zone_connect, thermal_width, or thermal_gap" );
+                       "pinfunction, pintype, zone_connect, thermal_width, or thermal_gap" );
         }
     }
 

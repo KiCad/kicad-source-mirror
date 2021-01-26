@@ -214,6 +214,7 @@ pcb_text_size
 pcb_text_width
 pcbplotparams
 pinfunction
+pintype
 placed
 plus
 polygon

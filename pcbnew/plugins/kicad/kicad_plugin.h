@@ -93,7 +93,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20201115  // module -> footprint and change fill syntax.
 //#define SEXPR_BOARD_FILE_VERSION    20201116  // Write version and generator string in footprint files.
 //#define SEXPR_BOARD_FILE_VERSION    20201220  // Add free via token
-#define SEXPR_BOARD_FILE_VERSION      20210108  // Pad locking moved from footprint to pads
+//#define SEXPR_BOARD_FILE_VERSION    20210108  // Pad locking moved from footprint to pads
+#define SEXPR_BOARD_FILE_VERSION      20210126  // Store pintype alongside pinfunction (in pads).
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 
