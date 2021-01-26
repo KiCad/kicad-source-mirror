@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-25 16:33+0000\n"
+"PO-Revision-Date: 2021-01-26 08:00+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -9301,7 +9301,7 @@ msgstr "Einheiten"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:311
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
 msgid "General"
-msgstr "Generell"
+msgstr "Allgemein"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:280
 msgid "Footprint filters:"
@@ -16304,7 +16304,7 @@ msgstr "Nicht exportieren"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:227
 msgid "Gerbers with known layers: "
-msgstr "Gerber mit bekannten Schichten: "
+msgstr "Gerber mit bekannten Lagen: "
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:229
 msgid "Automatic Layer Assignment"
@@ -20108,7 +20108,7 @@ msgstr "Platinenoberfläche"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:145
 msgid "Has castellated pads"
-msgstr "Besitzt 'Castelled Pads'"
+msgstr "Besitzt Halbloch-Pads"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Plated board edge"
@@ -20273,7 +20273,7 @@ msgstr "Leiterbahnen entfernen, die nicht an beiden Enden verbunden sind"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "Entfernen Sie über verbunden auf weniger als zwei Schichten"
+msgstr "DoKus entfernen, die auf weniger als zwei Lagen verbunden sind"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -20674,8 +20674,8 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"Die Komponentenposition wird gerundet\n"
-"zu diesem Raster vor dem Sortieren.\n"
+"Die Komponentenposition wird vor dem\n"
+"Sortieren auf dieses Raster gerundet.\n"
 "Dies hilft bei falsch ausgerichteten Teilen."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
@@ -20745,7 +20745,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:236
 msgid "Remove front prefix"
-msgstr "Präfix Vorderseite entfernen"
+msgstr "Vorderseiten-Präfix entfernen"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid ""
@@ -20757,7 +20757,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:241
 msgid "Remove back prefix"
-msgstr "Präfix Rückseite entfernen"
+msgstr "Rückseiten-Präfix entfernen"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid ""
@@ -20812,7 +20812,7 @@ msgstr "Referenzbezeichner"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 msgid "Geographical Reannotation"
-msgstr "Geografische Neuanmerkung"
+msgstr "Geografische Reannotation"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:44
 msgid "Board Setup"
@@ -22897,7 +22897,7 @@ msgstr "Inklusive &Platinenumrisslage"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "Inklusive &DuKo's"
+msgstr "Inklusive &DuKos"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
@@ -23691,7 +23691,7 @@ msgstr "Benutze Werte der Netzklasse:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:73
 msgid "Set Track and Via Properties"
-msgstr "Eigenschaften Leiterbahn und DuKo's"
+msgstr "Eigenschaften Leiterbahn und DuKos"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -24352,7 +24352,7 @@ msgstr "Alle Kupferlagen"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:915
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr "%s, %s und verbundene Schichten"
+msgstr "%s, %s und verbundene Lagen"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
 msgid "Connected layers only"
@@ -24451,8 +24451,7 @@ msgstr "Warnung: Wärmeabführung ist auf mechanischen Bohrungen sinnlos."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
 msgid "Warning: Castellated property is for PTH pads."
 msgstr ""
-"Warnung: Castellated-Eigenschaft ist für metallisierte "
-"Durchkontaktierungspads."
+"Warnung: Halbloch-Eigenschaft ist für metallisierte Durchkontaktierungspads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: BGA property is for SMD pads."
@@ -24525,7 +24524,7 @@ msgstr "NPTH, mechanisch"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "SMD Aperture"
-msgstr "SMD-Öffnung"
+msgstr "Lotpasten-Öffnung"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
@@ -24686,7 +24685,7 @@ msgstr "Lochgröße X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
-msgstr "Versetzte Form vom Loch"
+msgstr "Versatz zwischen Pad und Loch"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
@@ -24764,9 +24763,8 @@ msgstr ""
 "Passermarke global ist eine Referenz für das gesamte Board\n"
 "Testpad ist nützlich, um Testpunkte in Gerber-Dateien anzugeben\n"
 "Kühlkörperpad gibt ein Thermopad an\n"
-"Castellated spezifiziert castellated mittels Durchkontaktierungspads an "
-"einer Platinenkante \\ n\n"
-"Diese Eigenschaft wird in Gerber X2-Dateien angegeben."
+"Halbloch-Pads spezifiziert castellated Pads an einer Platinenkante\n"
+"Diese Eigenschaften werden in Gerber X2-Dateien definiert."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1418
 msgid "BGA pad"
@@ -24790,7 +24788,7 @@ msgstr "Wärmeabführungspad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Castellated pad (through hole only)"
-msgstr "Castellated pad (nur Durchsteckvariante)"
+msgstr "Halbloch-Pad (castellated, nur durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -25468,7 +25466,7 @@ msgstr "DRC Verletzung: Hindernis hervorheben"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC Verletzung: Schieben von Leiterbahnen und DuKo's"
+msgstr "DRC Verletzung: Schieben von Leiterbahnen und DuKos"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -25517,8 +25515,8 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Wenn ausgeschaltet werden DuKo's als \"Nicht bewegbar\" behandelt und nicht "
-"geschoben."
+"Wenn ausgeschaltet werden DuKos als unverschiebbare Objekte behandelt statt "
+"verschoben zu werden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
@@ -25559,7 +25557,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Wenn eingeschaltet versucht der Router Pads/DuKo's auf eine saubere Art "
+"Wenn eingeschaltet versucht der Router Pads/DuKos auf eine saubere Art "
 "auszubrechen und große Winkel und unförmige Leiterbahnen zu vermeiden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
@@ -26032,7 +26030,7 @@ msgstr "Endlage:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:113
 msgid "Track & Via Properties"
-msgstr "Eigenschaften Leiterbahn und DuKo's"
+msgstr "Leiterbahn- & DuKo-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size has to be smaller than via diameter"
@@ -26731,11 +26729,11 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Importierte Einstellungen haben weniger Kupferschichten als die aktuelle "
-"Karte (%i anstelle von %i).\n"
+"Importierte Einstellungen haben weniger Kupferlagen als die aktuelle Karte ("
+"%i anstelle von %i).\n"
 "\n"
-"Fahren Sie fort und löschen Sie die zusätzlichen inneren Kupferschichten von "
-"der aktuellen Platine?"
+"Fortfahren und die zusätzlichen inneren Kupferlagen von der aktuellen "
+"Platine löschen?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:868
 msgid "Inner Layers To Be Deleted"
@@ -28291,7 +28289,7 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/edit_track_width.cpp:176 pcbnew/edit_track_width.cpp:196
 msgid "Tracks & Vias"
-msgstr "Leiterbahnen und DuKo's"
+msgstr "Leiterbahnen & DuKos"
 
 #: pcbnew/edit_zone_helpers.cpp:85 pcbnew/edit_zone_helpers.cpp:143
 msgid "Modify zone properties"
@@ -31539,7 +31537,7 @@ msgid ""
 "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene DuKo's müssen in 'Platine/Board einrichten... > Design-"
+"Blinde/vergrabene DuKos müssen in 'Platine/Board einrichten... > Design-"
 "Regeln > Beschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:804
@@ -32635,7 +32633,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Edit Track & Via Properties..."
-msgstr "Bearbeiten Eigenschaften Leiterbahnen und DuKo's..."
+msgstr "Leiterbahn- & DuKo-Eigenschaften bearbeiten..."
 
 #: pcbnew/tools/pcb_actions.cpp:434
 msgid "Edit Text and graphics properties globally across board"
@@ -33071,7 +33069,7 @@ msgstr "DuKo skizzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Show vias in outline mode"
-msgstr "DuKo's als Umriss darstellen"
+msgstr "DuKos als Umriss darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Sketch Graphic Items"
@@ -33318,11 +33316,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Geographical Reannotate..."
-msgstr "Geografische Neunotierung ..."
+msgstr "Geografische Reannotation..."
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Reannotate PCB in geographical order"
-msgstr "PCB in geografischer Reihenfolge neu notieren"
+msgstr "PCB in geografischer Reihenfolge neu annotieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1059
 msgid "Repair Board"
@@ -33962,7 +33960,7 @@ msgstr "Schrift dimmen"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
-msgstr "Nicht aktive Schichten werden abgeblendet"
+msgstr "Nicht aktive Lagen werden abgeblendet"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
