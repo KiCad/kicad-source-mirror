@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-18 07:28+0000\n"
+"PO-Revision-Date: 2021-01-26 16:56+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -526,9 +526,8 @@ msgid "Other Options"
 msgstr "Opsi Lain"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-alias"
+msgstr "Anti-alias:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -552,9 +551,8 @@ msgstr ""
 "Penampil 3D harus ditutup dan dibuka kembali untuk menerapkan pengaturan ini"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "Warna pilihan"
+msgstr "Warna pilihan:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -1168,7 +1166,7 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:406
 #: pagelayout_editor/pl_editor_frame.cpp:829
 msgid "Image Files"
-msgstr ""
+msgstr "Berkas Gambar"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:695
 msgid "Unable to export to the Clipboard"
@@ -1176,7 +1174,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui.cpp:730
 msgid "Create Logo File"
-msgstr ""
+msgstr "Buat Berkas Logo"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:748
 #: bitmap2component/bitmap2cmp_gui.cpp:788
@@ -1184,11 +1182,11 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui.cpp:866
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr ""
+msgstr "Berkas \"%s\" tidak dapat dibuat."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:768
 msgid "Create PostScript File"
-msgstr ""
+msgstr "Buat Berkas PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:808
 msgid "Create Symbol Library"
@@ -1284,7 +1282,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr ""
+msgstr "Ekspor ke Berkas"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
@@ -1293,19 +1291,19 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Eeschema (.lib file)"
-msgstr ""
+msgstr "Eeschema (berkas .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Pcbnew (.kicad_mod file)"
-msgstr ""
+msgstr "Pcbnew (berkas .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "Postscript (berkas .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
-msgstr ""
+msgstr "Logo untuk blok judul (berkas .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
@@ -1829,7 +1827,7 @@ msgstr ""
 
 #: common/dialogs/dialog_configure_paths.cpp:494
 msgid "File Browser..."
-msgstr ""
+msgstr "Peramban Berkas..."
 
 #: common/dialogs/dialog_configure_paths.cpp:497
 #: common/widgets/grid_text_button_helpers.cpp:378
@@ -1935,6 +1933,7 @@ msgstr ""
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
+"Pilih opsi ini untuk menyalin sebuah berkas tabel pustaka %s selain bawaan"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
@@ -1950,7 +1949,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr ""
+msgstr "Pilih berkas tabel pustaka %s global:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2026,7 +2025,7 @@ msgstr ""
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr ""
+msgstr "Pilih sebuah berkas"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
@@ -2305,7 +2304,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings.cpp:463
 #, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr ""
+msgstr "Berkas deskripsi tata letak halaman \"%s\" tidak ditemukan."
 
 #: common/dialogs/dialog_page_settings.cpp:535
 msgid "the translation for paper size must preserve original spellings"
@@ -2318,7 +2317,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:779
 msgid "Select Page Layout Description File"
-msgstr ""
+msgstr "Pilih Berkas Deskripsi Tata Letak Halaman"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 #, c-format
@@ -2329,6 +2328,11 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
+"Nama berkas deskripsi tata letak halaman telah berubah.\n"
+"Apakah Anda ingin menggunakan path relatif:\n"
+"\"%s\"\n"
+"daripada\n"
+"\"%s\"?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -2533,7 +2537,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Page layout description file"
-msgstr ""
+msgstr "Berkas deskripsi tata letak halaman"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -2779,7 +2783,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings.cpp:283
 msgid "Executable files ("
-msgstr ""
+msgstr "Berkas dapat dieksekusi ("
 
 #: common/dialogs/panel_common_settings.cpp:288
 msgid "Select Preferred PDF Browser"
@@ -2794,6 +2798,9 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
+"Jeda setelah perubahan pertama untuk membuat sebuah berkas cadangan papan "
+"sirkuit ke diska.\n"
+"Jika disetel ke 0, pencadangan otomatis dinonaktifkan"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:260
@@ -2802,13 +2809,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr ""
+msgstr "Ukuran riwayat berkas:"
 
 #: common/dialogs/panel_common_settings_base.cpp:57
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"Berkas tembolok 3D yang lebih lama daripada ini akan dihapus.\n"
+"Jika disetel ke 0, pembersihan tembolok dinonaktifkan"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
@@ -2857,7 +2866,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:89
 msgid "3D cache file duration:"
-msgstr ""
+msgstr "Durasi berkas tembolok 3D:"
 
 #: common/dialogs/panel_common_settings_base.cpp:99
 msgid "Helper Applications"
@@ -2931,6 +2940,8 @@ msgstr ""
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"Buat arsip cadangan dari proyek saat ini secara otomatis ketika menyimpan "
+"berkas"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "Create backups when auto save occurs"
@@ -2941,6 +2952,8 @@ msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Buat cadangan saat fitur simpan otomatis diaktifkan.  Jika tidak dicentang, "
+"cadangan hanya akan dibuat saat Anda menyimpan berkas secara manual."
 
 #: common/dialogs/panel_common_settings_base.cpp:233
 msgid "Maximum backups to keep:"
@@ -2949,6 +2962,8 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:235
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
+"Berapa banyak total berkas cadangan yang harus disimpan (setel ke 0 untuk "
+"tanpa batas)"
 
 #: common/dialogs/panel_common_settings_base.cpp:242
 msgid "Maximum backups per day:"
@@ -2957,6 +2972,8 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Berapa banyak berkas cadangan yang harus disimpan setiap hari (setel ke 0 "
+"untuk tanpa batas)"
 
 #: common/dialogs/panel_common_settings_base.cpp:251
 msgid "Minimum time between backups:"
@@ -2977,6 +2994,8 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Jika ukuran total berkas cadangan bertumbuh di atas batas ini, cadangan lama "
+"akan dihapus (setel ke 0 untuk tanpa batas)"
 
 #: common/dialogs/panel_common_settings_base.cpp:273
 msgid "MB"
@@ -2988,13 +3007,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Ingat berkas yang dibuka untuk peluncuran proyek berikutnya"
 
 #: common/dialogs/panel_common_settings_base.cpp:288
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"Jika dicentang, meluncurkan sebuah proyek juga akan meluncurkan alat-alat "
+"seperti eeschema dan pcbnew dengan berkas yang sebelumnya dibuka"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
@@ -3016,10 +3037,12 @@ msgstr ""
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
+"Impor definisi tombol cepat dari sebuah berkas eksternal, menggantikan nilai "
+"saat ini"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:175
 msgid "Import Hotkeys File:"
-msgstr ""
+msgstr "Impor Berkas Tombol Cepat:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -3399,16 +3422,16 @@ msgstr ""
 #: common/dialogs/wx_html_report_panel.cpp:328
 #: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:615
 msgid "Save Report to File"
-msgstr ""
+msgstr "Simpan Laporan ke Berkas"
 
 #: common/dialogs/wx_html_report_panel.cpp:345
 #, c-format
 msgid "Cannot write report to file \"%s\"."
-msgstr ""
+msgstr "Tidak dapat menulis laporan ke berkas \"%s\"."
 
 #: common/dialogs/wx_html_report_panel.cpp:347
 msgid "File save error"
-msgstr ""
+msgstr "Kesalahan penyimpanan berkas"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 msgid "Output Messages"
@@ -3510,7 +3533,7 @@ msgstr ""
 #: common/eda_base_frame.cpp:802
 #, c-format
 msgid "File \"%s\" was not found."
-msgstr ""
+msgstr "Berkas \"%s\" tidak ditemukan."
 
 #: common/eda_base_frame.cpp:847
 msgid "Preferences"
@@ -3538,11 +3561,13 @@ msgstr ""
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 msgstr ""
+"Anda tidak memiliki izin menulis untuk menyimpan berkas \"%s\" ke folder \"%"
+"s\"."
 
 #: common/eda_base_frame.cpp:909 pcbnew/plugins/altium/altium_pcb.cpp:1168
 #, c-format
 msgid "You do not have write permissions to save file \"%s\"."
-msgstr ""
+msgstr "Anda tidak memiliki izin menulis untuk menyimpan berkas \"%s\"."
 
 #: common/eda_base_frame.cpp:939
 #, c-format
@@ -3553,24 +3578,31 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
+"Nah, ini mungkin memalukan!\n"
+"Tampaknya terakhir kali Anda menyunting berkas\n"
+"\"%s\"\n"
+"berkas ini tidak tersimpan dengan benar.  Apakah Anda ingin mengembalikan "
+"hasil penyuntingan terakhir yang Anda buat?"
 
 #: common/eda_base_frame.cpp:954
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
+"Berkas penyimpanan otomatis tidak dapat diubah namanya menjadi nama berkas "
+"papan sirkuit."
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
-msgstr ""
+msgstr "Berkas Doc"
 
 #: common/eda_doc.cpp:158
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr ""
+msgstr "Berkas Doc \"%s\" tidak ditemukan"
 
 #: common/eda_doc.cpp:201
 #, c-format
 msgid "Unknown MIME type for doc file \"%s\""
-msgstr ""
+msgstr "Tipe MIME tidak diketahui untuk berkas doc \"%s\""
 
 #: common/eda_draw_frame.cpp:131 common/tool/actions.cpp:481
 #: pagelayout_editor/pl_editor_frame.cpp:154
@@ -4108,7 +4140,7 @@ msgstr ""
 
 #: common/filehistory.cpp:155
 msgid "No Files"
-msgstr ""
+msgstr "Tidak Ada Berkas"
 
 #: common/filename_resolver.cpp:453
 msgid "The given path does not exist"
@@ -4145,11 +4177,11 @@ msgstr ""
 
 #: common/filename_resolver.cpp:637
 msgid "Could not open configuration file"
-msgstr ""
+msgstr "Tidak dapat membuka berkas konfigurasi"
 
 #: common/filename_resolver.cpp:664
 msgid "Problems writing configuration file"
-msgstr ""
+msgstr "Permasalahan saat menulis berkas konfigurasi"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:858
 msgid "Load Error"
@@ -4169,7 +4201,7 @@ msgstr ""
 #: common/fp_lib_table.cpp:300
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr ""
+msgstr "Berkas fp-lib-table tidak berisi pustaka bernama '%s'."
 
 #: common/fp_lib_table.cpp:490 eeschema/symbol_lib_table.cpp:497
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -4201,13 +4233,16 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
+"Tidak dapat mencetak '%s\".\n"
+"\n"
+"Tipe berkas tidak diketahui."
 
 #: common/gestfich.cpp:372 eeschema/eeschema.cpp:401 eeschema/eeschema.cpp:433
 #: gerbview/gerbview.cpp:230 kicad/project_template.cpp:243
 #: pcbnew/pcbnew.cpp:473
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr ""
+msgstr "Tidak dapat menyalin berkas \"%s\"."
 
 #: common/grid_tricks.cpp:240 common/tool/actions.cpp:152
 #: eeschema/tools/ee_actions.cpp:146 pcbnew/tools/edit_tool.cpp:1805
@@ -4326,6 +4361,9 @@ msgid ""
 "\"%s\"\n"
 "could not be loaded\n"
 msgstr ""
+"Kutu Instalasi Fatal. Berkas:\n"
+"\"%s\"\n"
+"tidak dapat dimuat\n"
 
 #: common/kiway.cpp:276
 msgid "It is missing.\n"
@@ -4333,7 +4371,7 @@ msgstr ""
 
 #: common/kiway.cpp:278
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
+msgstr "Mungkin sebuah berkas pustaka bersama (.dll atau .so) hilang.\n"
 
 #: common/kiway.cpp:280
 msgid ""
@@ -4921,7 +4959,7 @@ msgstr ""
 #: common/page_layout/page_layout_reader.cpp:854
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr ""
+msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 
 #: common/page_layout/ws_data_model_io.cpp:101
 #: common/page_layout/ws_data_model_io.cpp:129
