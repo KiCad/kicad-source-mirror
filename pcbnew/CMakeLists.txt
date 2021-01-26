@@ -161,10 +161,10 @@ set( PCBNEW_DIALOGS
     dialogs/panel_pcbnew_color_settings.cpp
     dialogs/panel_pcbnew_display_origin.cpp
     dialogs/panel_pcbnew_display_origin_base.cpp
+    dialogs/panel_setup_constraints.cpp
+    dialogs/panel_setup_constraints_base.cpp
     dialogs/panel_setup_mask_and_paste.cpp
     dialogs/panel_setup_mask_and_paste_base.cpp
-    dialogs/panel_setup_feature_constraints.cpp
-    dialogs/panel_setup_feature_constraints_base.cpp
     dialogs/panel_setup_layers.cpp
     dialogs/panel_setup_layers_base.cpp
     dialogs/panel_setup_rules.cpp

@@ -24,7 +24,7 @@
 #include <widgets/paged_dialog.h>
 
 class PCB_EDIT_FRAME;
-class PANEL_SETUP_FEATURE_CONSTRAINTS;
+class PANEL_SETUP_CONSTRAINTS;
 class PANEL_SETUP_LAYERS;
 class PANEL_SETUP_TEXT_AND_GRAPHICS;
 class PANEL_SETUP_NETCLASSES;
@@ -47,7 +47,7 @@ protected:
 
     PCB_EDIT_FRAME*                  m_frame;
 
-    PANEL_SETUP_FEATURE_CONSTRAINTS* m_constraints;
+    PANEL_SETUP_CONSTRAINTS*         m_constraints;
     PANEL_SETUP_LAYERS*              m_layers;
     PANEL_SETUP_TEXT_AND_GRAPHICS*   m_textAndGraphics;
     PANEL_SETUP_NETCLASSES*          m_netclasses;

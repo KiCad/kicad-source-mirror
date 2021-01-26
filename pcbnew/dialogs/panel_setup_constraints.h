@@ -22,11 +22,11 @@
  */
 
 
-#ifndef PANEL_SETUP_FEATURE_CONSTRAINTS_H
-#define PANEL_SETUP_FEATURE_CONSTRAINTS_H
+#ifndef PANEL_SETUP_CONSTRAINTS_H
+#define PANEL_SETUP_CONSTRAINTS_H
 
 #include <widgets/unit_binder.h>
-#include <panel_setup_feature_constraints_base.h>
+#include <panel_setup_constraints_base.h>
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
@@ -35,7 +35,7 @@ class PCB_EDIT_FRAME;
 class wxCommandEvent;
 
 
-class PANEL_SETUP_FEATURE_CONSTRAINTS : public PANEL_SETUP_FEATURE_CONSTRAINTS_BASE
+class PANEL_SETUP_CONSTRAINTS : public PANEL_SETUP_CONSTRAINTS_BASE
 {
 private:
     PCB_EDIT_FRAME*         m_Frame;
@@ -56,8 +56,8 @@ public:
     UNIT_BINDER             m_maxError;
 
 public:
-    PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
-    ~PANEL_SETUP_FEATURE_CONSTRAINTS( ) override { };
+    PANEL_SETUP_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    ~PANEL_SETUP_CONSTRAINTS( ) override { };
 
     void ImportSettingsFrom( BOARD* aBoard );
 
@@ -69,4 +69,4 @@ private:
     void onChangeOutlineOpt( wxCommandEvent& event ) override;
 };
 
-#endif //PANEL_SETUP_FEATURE_CONSTRAINTS_H
+#endif //PANEL_SETUP_CONSTRAINTS_H

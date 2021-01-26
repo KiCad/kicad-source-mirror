@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_setup_feature_constraints_base.h"
+#include "panel_setup_constraints_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -409,14 +409,14 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_rbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_rbOutlinePolygonFastest->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonFastest->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 }
 
-PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::~PANEL_SETUP_FEATURE_CONSTRAINTS_BASE()
+PANEL_SETUP_CONSTRAINTS_BASE::~PANEL_SETUP_CONSTRAINTS_BASE()
 {
 	// Disconnect Events
-	m_rbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
-	m_rbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_rbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_SETUP_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 
 }

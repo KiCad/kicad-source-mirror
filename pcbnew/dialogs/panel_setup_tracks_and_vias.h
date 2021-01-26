@@ -30,7 +30,7 @@
 #include <widgets/paged_dialog.h>
 
 #include <panel_setup_tracks_and_vias_base.h>
-#include "panel_setup_feature_constraints.h"
+#include "panel_setup_constraints.h"
 
 class PCB_EDIT_FRAME;
 class BOARD_DESIGN_SETTINGS;
@@ -39,14 +39,14 @@ class BOARD_DESIGN_SETTINGS;
 class PANEL_SETUP_TRACKS_AND_VIAS : public PANEL_SETUP_TRACKS_AND_VIAS_BASE
 {
 private:
-    PAGED_DIALOG*           m_Parent;
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD*                  m_Pcb;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    PAGED_DIALOG*            m_Parent;
+    PCB_EDIT_FRAME*          m_Frame;
+    BOARD*                   m_Pcb;
+    BOARD_DESIGN_SETTINGS*   m_BrdSettings;
 
     // We must validate against the current m_BrdSettings as they may have been
     // changed but not yet committed.  Fetch them from the constraints panel.
-    PANEL_SETUP_FEATURE_CONSTRAINTS* m_ConstraintsPanel;
+    PANEL_SETUP_CONSTRAINTS* m_ConstraintsPanel;
 
     bool validateData();
 
@@ -64,7 +64,7 @@ protected:
 
 public:
     PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
-                                 PANEL_SETUP_FEATURE_CONSTRAINTS* aConstraintsPanel );
+                                 PANEL_SETUP_CONSTRAINTS* aConstraintsPanel );
     ~PANEL_SETUP_TRACKS_AND_VIAS() override;
 
     bool TransferDataToWindow() override;

@@ -19,7 +19,7 @@
 #include <pcb_edit_frame.h>
 #include <panel_setup_layers.h>
 #include <panel_setup_text_and_graphics.h>
-#include <panel_setup_feature_constraints.h>
+#include <panel_setup_constraints.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
@@ -50,7 +50,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     m_layers = new PANEL_SETUP_LAYERS( this, aFrame );
     m_textAndGraphics = new PANEL_SETUP_TEXT_AND_GRAPHICS( this, aFrame );
-    m_constraints = new PANEL_SETUP_FEATURE_CONSTRAINTS( this, aFrame );
+    m_constraints = new PANEL_SETUP_CONSTRAINTS( this, aFrame );
     m_rules = new PANEL_SETUP_RULES( this, aFrame );
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
