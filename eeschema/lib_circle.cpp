@@ -40,7 +40,7 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Width      = 0;
-    m_Fill       = FILL_TYPE::NO_FILL;
+    m_fill       = FILL_TYPE::NO_FILL;
     m_isFillable = true;
 }
 
@@ -164,13 +164,13 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 {
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
-    if( aFill && m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+    if( aFill && m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Circle( pos, GetRadius() * 2, FILL_TYPE::FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
-    bool already_filled = m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
+    bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
     int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
@@ -178,8 +178,8 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->Circle(
-                pos, GetRadius() * 2, already_filled ? FILL_TYPE::NO_FILL : m_Fill, pen_size );
+        aPlotter->Circle( pos, GetRadius() * 2, already_filled ? FILL_TYPE::NO_FILL : m_fill,
+                          pen_size );
     }
 }
 
@@ -200,14 +200,14 @@ void LIB_CIRCLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();
 
-    if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
+    if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     wxDC*   DC       = aSettings->GetPrintDC();
     wxPoint pos1     = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     COLOR4D color    = aSettings->GetLayerColor( LAYER_DEVICE );
 
-    if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
+    if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
@@ -215,7 +215,7 @@ void LIB_CIRCLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
     }
     else
     {
-        if( m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+        if( m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         GRFilledCircle( nullptr, DC, pos1.x, pos1.y, GetRadius(), 0, color, color );

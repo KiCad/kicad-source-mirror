@@ -39,7 +39,7 @@
 LIB_POLYLINE::LIB_POLYLINE( LIB_PART* aParent ) :
     LIB_ITEM( LIB_POLYLINE_T, aParent )
 {
-    m_Fill  = FILL_TYPE::NO_FILL;
+    m_fill  = FILL_TYPE::NO_FILL;
     m_Width = 0;
     m_isFillable = true;
 }
@@ -132,13 +132,13 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         cornerList.push_back( pos );
     }
 
-    if( aFill && m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+    if( aFill && m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILL_TYPE::FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
-    bool already_filled = m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
+    bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
     int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
@@ -146,7 +146,7 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->PlotPoly( cornerList, already_filled ? FILL_TYPE::NO_FILL : m_Fill, pen_size );
+        aPlotter->PlotPoly( cornerList, already_filled ? FILL_TYPE::NO_FILL : m_fill, pen_size );
     }
 }
 
@@ -199,7 +199,7 @@ void LIB_POLYLINE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffs
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();
 
-    if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
+    if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     wxDC*    DC      = aSettings->GetPrintDC();
@@ -209,7 +209,7 @@ void LIB_POLYLINE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffs
     for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
         buffer[ii] = aTransform.TransformCoordinate( m_PolyPoints[ii] ) + aOffset;
 
-    if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
+    if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
@@ -217,7 +217,7 @@ void LIB_POLYLINE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffs
     }
     else
     {
-        if( m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+        if( m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         GRPoly( nullptr, DC, m_PolyPoints.size(), buffer, true, penWidth, color, color );
@@ -235,7 +235,7 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     for( wxPoint pt : m_PolyPoints )
         shape.Append( DefaultTransform.TransformCoordinate( pt ) );
 
-    if( m_Fill != FILL_TYPE::NO_FILL && m_PolyPoints.size() > 2 )
+    if( m_fill != FILL_TYPE::NO_FILL && m_PolyPoints.size() > 2 )
     {
         shape.SetClosed( true );
         return shape.PointInside( aPosition, delta );
@@ -266,7 +266,7 @@ bool LIB_POLYLINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
     sel.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     // Only test closing segment if the polyline is filled
-    int count = m_Fill == FILL_TYPE::NO_FILL ? m_PolyPoints.size() - 1 : m_PolyPoints.size();
+    int count = m_fill == FILL_TYPE::NO_FILL ? m_PolyPoints.size() - 1 : m_PolyPoints.size();
 
     for( int ii = 0; ii < count; ii++ )
     {

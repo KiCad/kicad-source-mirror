@@ -255,12 +255,12 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
     aComponent->SetConvert( aComponent->GetConvert() + 1 );
 
-    // ensure m_Convert = 1 or 2
+    // ensure m_convert = 1 or 2
     // 1 = shape 1 = not converted
     // 2 = shape 2 = first converted shape
     // > 2 is not used but could be used for more shapes
     // like multiple shapes for a programmable component
-    // When m_Convert = val max, return to the first shape
+    // When m_convert = val max, return to the first shape
     if( aComponent->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
         aComponent->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 

@@ -447,21 +447,21 @@ void LIB_PART::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     {
         for( LIB_ITEM& drawItem : m_drawings )
         {
-            if( drawItem.m_Fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+            if( drawItem.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
                 continue;
 
             // Do not draw items not attached to the current part
-            if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
+            if( aMulti && drawItem.m_unit && ( drawItem.m_unit != aMulti ) )
                 continue;
 
-            if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
+            if( aConvert && drawItem.m_convert && ( drawItem.m_convert != aConvert ) )
                 continue;
 
             if( drawItem.Type() == LIB_FIELD_T )
                 continue;
 
             // Now, draw only the background for items with
-            // m_Fill == FILLED_WITH_BG_BODYCOLOR:
+            // m_fill == FILLED_WITH_BG_BODYCOLOR:
             drawItem.Print( aSettings, aOffset, (void*) false, aOpts.transform );
         }
     }
@@ -469,10 +469,10 @@ void LIB_PART::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     for( LIB_ITEM& drawItem : m_drawings )
     {
         // Do not draw items not attached to the current part
-        if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
+        if( aMulti && drawItem.m_unit && ( drawItem.m_unit != aMulti ) )
             continue;
 
-        if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
+        if( aConvert && drawItem.m_convert && ( drawItem.m_convert != aConvert ) )
             continue;
 
         if( drawItem.Type() == LIB_FIELD_T )
@@ -496,7 +496,7 @@ void LIB_PART::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         }
         else
         {
-            bool forceNoFill = drawItem.m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
+            bool forceNoFill = drawItem.m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
             drawItem.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
         }
     }
@@ -520,13 +520,13 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& 
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        if( item.m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+        if( item.m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             item.Plot( aPlotter, aOffset, fill, aTransform );
     }
 
@@ -537,13 +537,13 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& 
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ),
+        item.Plot( aPlotter, aOffset, fill && ( item.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ),
                    aTransform );
     }
 }
@@ -562,10 +562,10 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( item.Type() != LIB_FIELD_T )
             continue;
 
-        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
         LIB_FIELD& field = (LIB_FIELD&) item;
@@ -655,17 +655,17 @@ void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
     /* Notes:
      * when aUnit == 0: no unit filtering
      * when aConvert == 0: no convert (shape selection) filtering
-     * when .m_Unit == 0, the body item is common to units
-     * when .m_Convert == 0, the body item is common to shapes
+     * when m_unit == 0, the body item is common to units
+     * when m_convert == 0, the body item is common to shapes
      */
     for( LIB_ITEM& item : m_drawings[ LIB_PIN_T ] )
     {
         // Unit filtering:
-        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
              continue;
 
         // Shape filtering:
-        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
+        if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
         aList.push_back( (LIB_PIN*) &item );
@@ -765,11 +765,15 @@ const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
 
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
-                                     && ( aUnit != item.m_Unit ) ) )
+        if( item.m_unit > 0
+                && m_unitCount > 1
+                && aUnit > 0
+                && aUnit != item.m_unit )
+        {
             continue;
+        }
 
-        if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
+        if( item.m_convert > 0 && aConvert > 0 && aConvert != item.m_convert )
             continue;
 
         if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
@@ -806,11 +810,15 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
-                                     && ( aUnit != item.m_Unit ) ) )
+        if( item.m_unit > 0
+                && m_unitCount > 1
+                && aUnit > 0
+                && aUnit != item.m_unit )
+        {
             continue;
+        }
 
-        if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
+        if( item.m_convert > 0 && aConvert > 0 && aConvert != item.m_convert )
             continue;
 
         if( item.Type() == LIB_FIELD_T )
@@ -971,7 +979,7 @@ bool LIB_PART::HasConversion() const
 {
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( item.m_Convert > LIB_ITEM::LIB_CONVERT::BASE )
+        if( item.m_convert > LIB_ITEM::LIB_CONVERT::BASE )
             return true;
     }
 
@@ -979,7 +987,7 @@ bool LIB_PART::HasConversion() const
     {
         for( const LIB_ITEM& item : parent->GetDrawItems() )
         {
-            if( item.m_Convert > LIB_ITEM::LIB_CONVERT::BASE )
+            if( item.m_convert > LIB_ITEM::LIB_CONVERT::BASE )
                 return true;
         }
     }
@@ -1007,10 +1015,12 @@ LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
 {
     for( LIB_ITEM& item : m_drawings )
     {
-        if( ( aUnit && item.m_Unit && ( aUnit != item.m_Unit) )
-            || ( aConvert && item.m_Convert && ( aConvert != item.m_Convert ) )
-            || ( ( item.Type() != aType ) && ( aType != TYPE_NOT_INIT ) ) )
+        if( ( aUnit && item.m_unit && aUnit != item.m_unit )
+                || ( aConvert && item.m_convert && aConvert != item.m_convert )
+                || ( item.Type() != aType && aType != TYPE_NOT_INIT ) )
+        {
             continue;
+        }
 
         if( item.HitTest( aPoint ) )
             return &item;
@@ -1068,7 +1078,7 @@ void LIB_PART::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
         while( i != m_drawings.end() )
         {
-            if( i->m_Unit > aCount )
+            if( i->m_unit > aCount )
                 i = m_drawings.erase( i );
             else
                 ++i;
@@ -1085,13 +1095,13 @@ void LIB_PART::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
         for( LIB_ITEM& item : m_drawings )
         {
-            if( item.m_Unit != 1 )
+            if( item.m_unit != 1 )
                 continue;
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
                 LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-                newItem->m_Unit = j;
+                newItem->m_unit = j;
                 tmp.push_back( newItem );
             }
         }
@@ -1131,10 +1141,10 @@ void LIB_PART::SetConversion( bool aSetConvert, bool aDuplicatePins )
                 if( item.Type() != LIB_PIN_T )
                     continue;
 
-                if( item.m_Convert == 1 )
+                if( item.m_convert == 1 )
                 {
                     LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-                    newItem->m_Convert = 2;
+                    newItem->m_convert = 2;
                     tmp.push_back( newItem );
                 }
             }
@@ -1152,7 +1162,7 @@ void LIB_PART::SetConversion( bool aSetConvert, bool aDuplicatePins )
 
         while( i != m_drawings.end() )
         {
-            if( i->m_Convert > 1 )
+            if( i->m_convert > 1 )
                 i = m_drawings.erase( i );
             else
                 ++i;

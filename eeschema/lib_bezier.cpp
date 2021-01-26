@@ -38,7 +38,7 @@
 LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
     LIB_ITEM( LIB_BEZIER_T, aParent )
 {
-    m_Fill       = FILL_TYPE::NO_FILL;
+    m_fill       = FILL_TYPE::NO_FILL;
     m_Width      = 0;
     m_isFillable = true;
 }
@@ -173,13 +173,13 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         cornerList.push_back( pos );
     }
 
-    if( aFill && m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+    if( aFill && m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILL_TYPE::FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
-    bool already_filled = m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
+    bool already_filled = m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR;
     int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
@@ -187,7 +187,7 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->PlotPoly( cornerList, already_filled ? FILL_TYPE::NO_FILL : m_Fill, pen_size );
+        aPlotter->PlotPoly( cornerList, already_filled ? FILL_TYPE::NO_FILL : m_fill, pen_size );
     }
 }
 
@@ -208,7 +208,7 @@ void LIB_BEZIER::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();
 
-    if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
+    if( forceNoFill && m_fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
     std::vector<wxPoint> PolyPointsTraslated;
@@ -223,7 +223,7 @@ void LIB_BEZIER::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
     for( wxPoint& point : m_PolyPoints )
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( point ) + aOffset );
 
-    if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
+    if( forceNoFill || m_fill == FILL_TYPE::NO_FILL )
     {
         penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
@@ -232,7 +232,7 @@ void LIB_BEZIER::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
     }
     else
     {
-        if( m_Fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
+        if( m_fill == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
             color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,

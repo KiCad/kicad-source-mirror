@@ -36,12 +36,12 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
                     LIB_PART*      aComponent,
                     int            aUnit,
                     int            aConvert,
-                    FILL_TYPE         aFillType ) :
+                    FILL_TYPE      aFillType ) :
     EDA_ITEM( aType )
 {
-    m_Unit              = aUnit;
-    m_Convert           = aConvert;
-    m_Fill              = aFillType;
+    m_unit              = aUnit;
+    m_convert           = aConvert;
+    m_fill              = aFillType;
     m_parent            = (EDA_ITEM*) aComponent;
     m_isFillable        = false;
 }
@@ -53,16 +53,16 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), GetTypeName() ) );
 
-    if( m_Unit == 0 )
+    if( m_unit == 0 )
         msg = _( "All" );
     else
-        msg.Printf( wxT( "%d" ), m_Unit );
+        msg.Printf( wxT( "%d" ), m_unit );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg ) );
 
-    if( m_Convert == LIB_ITEM::LIB_CONVERT::BASE )
+    if( m_convert == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
-    else if( m_Convert == LIB_ITEM::LIB_CONVERT::DEMORGAN )
+    else if( m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
@@ -77,14 +77,14 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
         return Type() - aOther.Type();
 
     // When comparing unit LIB_ITEM objects, we ignore the unit number.
-    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_Unit != aOther.m_Unit )
-        return m_Unit - aOther.m_Unit;
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_unit != aOther.m_unit )
+        return m_unit - aOther.m_unit;
 
-    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_Convert != aOther.m_Convert )
-       return m_Convert - m_Convert;
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_convert != aOther.m_convert )
+       return m_convert - m_convert;
 
-    if( m_Fill != aOther.m_Fill )
-        return static_cast<int>( m_Fill ) - static_cast<int>( aOther.m_Fill );
+    if( m_fill != aOther.m_fill )
+        return static_cast<int>( m_fill ) - static_cast<int>( aOther.m_fill );
 
     return 0;
 }
@@ -98,12 +98,12 @@ bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 
 bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 {
-    int result = m_Convert - aOther.m_Convert;
+    int result = m_convert - aOther.m_convert;
 
     if( result != 0 )
         return result < 0;
 
-    result = m_Unit - aOther.m_Unit;
+    result = m_unit - aOther.m_unit;
 
     if( result != 0 )
         return result < 0;
