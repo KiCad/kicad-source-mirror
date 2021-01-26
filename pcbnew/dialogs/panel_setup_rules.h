@@ -58,6 +58,7 @@ private:
     void OnSyntaxHelp( wxHyperlinkEvent& aEvent ) override;
     void OnCompile( wxCommandEvent& event ) override;
     void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
+    void onCharHook( wxKeyEvent& aEvent );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
