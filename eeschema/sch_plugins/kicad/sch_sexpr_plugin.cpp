@@ -970,13 +970,13 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aShee
         {
             m_out->Print( aNestLevel + 1, "(pin %s (uuid %s))\n",
                           m_out->Quotew( pin->GetNumber() ).c_str(),
-                          TO_UTF8( aSymbol->m_Uuid.AsString() ) );
+                          TO_UTF8( pin->m_Uuid.AsString() ) );
         }
         else
         {
             m_out->Print( aNestLevel + 1, "(pin %s (uuid %s) (alternate %s))\n",
                           m_out->Quotew( pin->GetNumber() ).c_str(),
-                          TO_UTF8( aSymbol->m_Uuid.AsString() ),
+                          TO_UTF8( pin->m_Uuid.AsString() ),
                           m_out->Quotew( pin->GetAlt() ).c_str() );
         }
     }

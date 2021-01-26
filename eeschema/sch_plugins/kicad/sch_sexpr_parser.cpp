@@ -2339,7 +2339,12 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
                 case T_uuid:
                     NeedSYMBOL();
-                    uuid = KIID( FromUTF8() );
+
+                    // First version to write out pin uuids accidentally wrote out the symbol's
+                    // uuid for each pin, so ignore uuids coming from that version.
+                    if( m_requiredVersion >= 20210126 )
+                        uuid = KIID( FromUTF8() );
+
                     NeedRIGHT();
                     break;
 
