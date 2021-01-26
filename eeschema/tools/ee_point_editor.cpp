@@ -319,13 +319,17 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             updateParentItem();
             updatePoints();
         }
-
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
+            if( modified )
+            {
+                m_frame->OnModify();
+                modified = false;
+            }
+
             controls->SetAutoPan( false );
             inDrag = false;
         }
-
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
@@ -336,14 +340,17 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 break;
             }
             else if( evt->IsCancelInteractive() )
+            {
                 break;
+            }
 
             if( evt->IsActivate() )
                 break;
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         controls->SetAutoPan( inDrag );
         controls->CaptureCursor( inDrag );
