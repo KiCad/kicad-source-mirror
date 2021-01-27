@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-11 19:47+0000\n"
+"PO-Revision-Date: 2021-01-28 01:55+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -450,7 +450,7 @@ msgstr "Kullanıcı Katmanları (gerçekçi modda gösterilmez)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
-msgstr "Yorumları ve çizim katmanlarını göster"
+msgstr "Yorumlar ve çizimler katmanlarını göster"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show ECO layers"
@@ -7412,9 +7412,8 @@ msgid "Update/reset field positions"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "3B modelleri güncelle/sıfırla"
+msgstr "Sembol özniteliklerini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -14831,9 +14830,8 @@ msgid "Align Elements to Grid"
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "Uyarı"
+msgstr "Sembol Uyarıları"
 
 #: eeschema/tools/ee_inspection_tool.cpp:232
 #, c-format
@@ -16659,18 +16657,17 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:424
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:166
 msgid "Text width:"
-msgstr ""
+msgstr "Metin genişliği:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:136
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:438
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 msgid "Text height:"
-msgstr ""
+msgstr "Metin yüksekliği:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:147
-#, fuzzy
 msgid "Max width:"
-msgstr "Yol genişliği:"
+msgstr "Azami genişlik:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:149
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
@@ -16679,7 +16676,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max height:"
-msgstr ""
+msgstr "Azami yükseklik:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Set to 0 to use default values"
@@ -16713,9 +16710,8 @@ msgid "Bitmap DPI:"
 msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:338
-#, fuzzy
 msgid "Repeat Parameters"
-msgstr "Çıktı Parametreleri"
+msgstr "Tekrarlama Parametreleri"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:346
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
@@ -31410,7 +31406,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show copper zones"
-msgstr ""
+msgstr "Bakır bölgeleri göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Front"
@@ -31438,23 +31434,23 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprint values"
-msgstr ""
+msgstr "İz düşümü değerlerini göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "References"
-msgstr ""
+msgstr "Referanslar"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show footprint references"
-msgstr ""
+msgstr "İz düşümü referanslarını göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show all footprint text"
-msgstr ""
+msgstr "Tüm iz düşümü metnini göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Hidden Text"
-msgstr ""
+msgstr "Gizli Metin"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint text marked as invisible"
@@ -31502,24 +31498,24 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
-msgstr ""
+msgstr "Katman Yok"
 
 #: pcbnew/widgets/appearance_controls.cpp:375
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "All Layers"
-msgstr ""
+msgstr "Tüm Katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:377
 msgid "All Copper Layers"
-msgstr ""
+msgstr "Tüm Bakır Katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:380
 msgid "Inner Copper Layers"
-msgstr ""
+msgstr "İç Bakır Katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:383
 msgid "Front Layers"
-msgstr ""
+msgstr "Ön Katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:386
 msgid "Front Assembly View"
@@ -31527,7 +31523,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:389
 msgid "Back Layers"
-msgstr ""
+msgstr "Arka Katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:392
 msgid "Back Assembly View"
@@ -31539,15 +31535,15 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:565
 msgid "Layer Display Options"
-msgstr ""
+msgstr "Katman Görüntüleme Seçenekleri"
 
 #: pcbnew/widgets/appearance_controls.cpp:575
 msgid "Non-active layers:"
-msgstr ""
+msgstr "Etkin olmayan katmanlar:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Non-active layers will be shown in full color"
-msgstr ""
+msgstr "Etkin olmayan katmanlar tam renkli gösterilecek"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
@@ -31559,7 +31555,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
-msgstr ""
+msgstr "Gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
 msgid "Non-active layers will be hidden"
@@ -31575,15 +31571,15 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:640
 msgid "Net colors:"
-msgstr ""
+msgstr "Ağ renkleri:"
 
 #: pcbnew/widgets/appearance_controls.cpp:643
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "Ağ ve ağ sınıfı renklerinin ne zaman gösterileceğini seç"
 
 #: pcbnew/widgets/appearance_controls.cpp:651
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
+msgstr "Ağ ve ağ sınıfı renkleri tüm bakır ögelerde gösterilir"
 
 #: pcbnew/widgets/appearance_controls.cpp:658
 msgid "Net and netclass colors are shown on the ratsnest only"
@@ -31591,7 +31587,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "Ağ ve ağ sınıfı renkleri gösterilmez"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Ratsnest display:"
@@ -31607,7 +31603,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:688
 msgid "Visible layers"
-msgstr ""
+msgstr "Görünen katmanlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:690
 msgid "Ratsnest lines are shown to items on visible layers"
@@ -31615,7 +31611,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:831
 msgid "Set net color"
-msgstr ""
+msgstr "Ağ rengini ayarla"
 
 #: pcbnew/widgets/appearance_controls.cpp:833
 #, c-format
@@ -31636,7 +31632,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:847
 msgid "Hide all other nets"
-msgstr ""
+msgstr "Diğer tüm ağları gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:880
 #, c-format
@@ -31654,19 +31650,19 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1382
 msgid "Show or hide this layer"
-msgstr ""
+msgstr "Bu katmanı göster veya gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1462
 msgid "Front copper layer"
-msgstr ""
+msgstr "Ön bakır katman"
 
 #: pcbnew/widgets/appearance_controls.cpp:1463
 msgid "Back copper layer"
-msgstr ""
+msgstr "Arka bakır katman"
 
 #: pcbnew/widgets/appearance_controls.cpp:1464
 msgid "Inner copper layer"
-msgstr ""
+msgstr "İç bakır katman"
 
 #: pcbnew/widgets/appearance_controls.cpp:1490
 msgid "Adhesive on board's front"
@@ -31702,16 +31698,16 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1498
 msgid "Explanatory drawings"
-msgstr ""
+msgstr "Açıklayıcı çizimler"
 
 #: pcbnew/widgets/appearance_controls.cpp:1499
 msgid "Explanatory comments"
-msgstr ""
+msgstr "Açıklayıcı yorumlar"
 
 #: pcbnew/widgets/appearance_controls.cpp:1500
 #: pcbnew/widgets/appearance_controls.cpp:1501
 msgid "User defined meaning"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan anlam"
 
 #: pcbnew/widgets/appearance_controls.cpp:1502
 msgid "Board's perimeter definition"
@@ -31739,55 +31735,55 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1508
 msgid "User defined layer 1"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1509
 msgid "User defined layer 2"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
 msgid "User defined layer 3"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1511
 msgid "User defined layer 4"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
 msgid "User defined layer 5"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1513
 msgid "User defined layer 6"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
 msgid "User defined layer 7"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
 msgid "User defined layer 8"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "User defined layer 9"
-msgstr ""
+msgstr "Kullanıcı tarafından tanımlanan katman 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1554
 msgid "Show All Copper Layers"
-msgstr ""
+msgstr "Tüm Bakır Katmanları Göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:1557
 msgid "Hide All Copper Layers"
-msgstr ""
+msgstr "Tüm Bakır Katmanları Gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1568
 msgid "Show All Non Copper Layers"
-msgstr ""
+msgstr "Tüm Bakır Olmayan Katmanları Göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:1571
 msgid "Hide All Non Copper Layers"
-msgstr ""
+msgstr "Tüm Bakır Olmayan Katmanları Gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1585
 msgid "Show Only Front Assembly Layers"
@@ -31826,7 +31822,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2128
 msgid "Set netclass color"
-msgstr ""
+msgstr "Ağ sınıfı rengini ayarla"
 
 #: pcbnew/widgets/appearance_controls.cpp:2133
 #, c-format
@@ -31835,11 +31831,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2147
 msgid "Show all netclasses"
-msgstr ""
+msgstr "Tüm ağ sınıflarını göster"
 
 #: pcbnew/widgets/appearance_controls.cpp:2150
 msgid "Hide all other netclasses"
-msgstr ""
+msgstr "Diğer tüm ağ sınıflarını gizle"
 
 #: pcbnew/widgets/appearance_controls.cpp:2204
 msgid "Save preset..."
@@ -31881,7 +31877,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
 msgid "Objects"
-msgstr ""
+msgstr "Nesneler"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
 msgid "Show the Net Inspector"
@@ -31897,7 +31893,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "(unsaved)"
@@ -32072,12 +32068,12 @@ msgstr ""
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
 msgid "KiCad"
-msgstr ""
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "EDA Paketi"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
@@ -32085,91 +32081,89 @@ msgid ""
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
 msgstr ""
+"KiCad, Çapraz Platform ve Açık Kaynaklı bir Elektronik Tasarım Otomasyon "
+"Paketidir. Gerber çıktısı ile Şema Yakalama ve PCB Düzeni için programları "
+"içerir."
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
-msgstr ""
+msgstr "Eeschema Şema Düzenleyicisi"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
 msgid "PcbNew PCB Layout"
-msgstr ""
+msgstr "PcbNew PCB Düzeni"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
 msgid "PcbNew 3D Viewer"
-msgstr "3B Görüntüleyici"
+msgstr "PcbNew 3B Görüntüleyici"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Geliştiriciler"
+msgstr "KiCad Geliştiricileri"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "KiCad ile kullanmak için bir bitmap'ten bir bileşen oluşturun"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
-#, fuzzy
 msgid "Eeschema (Standalone)"
-msgstr "Eeschema (.lib dosyası)"
+msgstr "Eeschema (Bağımsız)"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
 msgid "Electronic schematic capture"
-msgstr ""
+msgstr "Elektronik şema yakalama"
 
 #: resources/linux/launchers/eeschema.desktop.in:12
 msgid "KiCad electronic schematic design (standalone)"
-msgstr ""
+msgstr "KiCad elektronik şema tasarımı (bağımsız)"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
 msgid "Gerber File Viewer"
-msgstr ""
+msgstr "Gerber Dosyası Görüntüleyici"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
 msgid "View Gerber files"
-msgstr ""
+msgstr "Gerber dosyalarını görüntüleyin"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr ""
+msgstr "Elektronik Tasarım Otomasyon paketi"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Elektronikle ilgili çeşitli hesaplamalar için hesap makinesi"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
-#, fuzzy
 msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew (.kicad_mod dosyası)"
+msgstr "Pcbnew (Bağımsız)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
 msgid "PCB layout"
-msgstr ""
+msgstr "PCB düzeni"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
 msgid "KiCad printed circuit board layout (standalone)"
-msgstr ""
+msgstr "KiCad baskılı devre kartı düzeni (bağımsız)"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
-msgstr "Katman Filtresi"
+msgstr "Gerber Dosyası"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
 msgid "Excellon drill file"
-msgstr ""
+msgstr "Excellon matkap dosyası"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
-msgstr ""
+msgstr "KiCad Projesi"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
 msgid "KiCad Schematic"
-msgstr ""
+msgstr "KiCad Şeması"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
 msgid "KiCad Printed Circuit Board"
-msgstr ""
+msgstr "KiCad Baskılı Devre Kartı"
 
 #~ msgid "no such file"
 #~ msgstr "böyle bir dosya yok"
