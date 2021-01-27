@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-26 16:56+0000\n"
+"PO-Revision-Date: 2021-01-28 01:55+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8310,7 +8310,7 @@ msgstr "Passend"
 
 #: eeschema/dialogs/dialog_erc.cpp:506 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "Remove exclusion for this violation"
-msgstr "Diesen Ausschluss für die Verletzung entfernen"
+msgstr "Ausschluss für die Verletzung entfernen"
 
 #: eeschema/dialogs/dialog_erc.cpp:507 pcbnew/dialogs/dialog_drc.cpp:436
 #, c-format
@@ -8319,7 +8319,7 @@ msgstr "Es wird wieder in die %s Liste aufgenommen"
 
 #: eeschema/dialogs/dialog_erc.cpp:511 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "Exclude this violation"
-msgstr "Diese Verletzung ausschließen"
+msgstr "Verletzung ausschließen"
 
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:441
 #, c-format
@@ -22036,7 +22036,7 @@ msgstr "Ausschlüsse löschen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:939
 msgid "not run"
-msgstr "nicht starten"
+msgstr "nicht gestartet"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
