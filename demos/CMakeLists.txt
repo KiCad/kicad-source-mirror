@@ -11,6 +11,7 @@ install( DIRECTORY
     python_scripts_examples
     simulation
     "sonde xilinx"
+    stickhub
     test_pads_inside_pads
     test_xil_95108
     video
