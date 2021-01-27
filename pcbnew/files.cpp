@@ -251,6 +251,8 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
 
     if( wxWindow* extraControl = dlg.GetExtraControl() )
         *aCreateProject = static_cast<CREATE_PROJECT_CHECKBOX*>( extraControl )->GetValue();
+    else if( Kiface().IsSingle() && !aParent->Prj().IsNullProject() )
+        *aCreateProject = true;
 
     return true;
 }
