@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-26 16:56+0000\n"
+"PO-Revision-Date: 2021-01-28 01:55+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -4090,6 +4090,12 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
+"Didefinisikan secara internal oleh KiCad (tidak dapat disunting) dan diatur "
+"ke path absolut dari berkas proyek yang sedang dimuat. Variabel lingkungan "
+"ini dapat digunakan untuk mendefinisikan berkas dan path relatif proyek yang "
+"sedang dimuat.  Misalnya, ${KIPRJMOD]/libs/footprints.pretty dapat "
+"didefinisikan sebagai sebuah folder yang berisi pustaka footprint khusus "
+"proyek bernama footprints.pretty."
 
 #: common/env_vars.cpp:88
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -4126,7 +4132,7 @@ msgid "%s in \"%s\", line %d, offset %d"
 msgstr ""
 
 #: common/exceptions.cpp:109
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "KiCad was unable to open this file, as it was created with a more\n"
 "recent version than the one you are running.\n"
@@ -4137,6 +4143,14 @@ msgid ""
 "Full error text:\n"
 "%s"
 msgstr ""
+"KiCad tidak dapat membuka berkas ini, karena dibuat dengan versi yang lebih "
+"baru dari yang Anda jalankan.\n"
+"Untuk membukanya, Anda perlu memperbarui KiCad ke versi yang lebih baru.\n"
+"\n"
+"Tanggal versi KiCad yang diperlukan (atau lebih baru): %s\n"
+"\n"
+"Teks kesalahan lengkap:\n"
+"%s"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4197,6 +4211,8 @@ msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
 msgstr ""
+"Nama panggilan pustaka \"%s\" ditemukan di berkas tabel pustaka footprint "
+"baris %d"
 
 #: common/fp_lib_table.cpp:300
 #, c-format
@@ -4964,7 +4980,7 @@ msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 #: common/page_layout/ws_data_model_io.cpp:101
 #: common/page_layout/ws_data_model_io.cpp:129
 msgid "Error writing page layout design file"
-msgstr ""
+msgstr "Kesalahan menulis berkas desain tata letak halaman"
 
 #: common/page_layout/ws_draw_item.cpp:114 eeschema/pin_type.cpp:74
 #: gerbview/gerber_draw_item.cpp:230 pcbnew/board_item.cpp:35
@@ -5037,11 +5053,11 @@ msgstr ""
 
 #: common/pgm_base.cpp:194
 msgid "Executable file (*.exe)|*.exe"
-msgstr ""
+msgstr "Berkas dapat dieksekusi (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:196
 msgid "Executable file (*)|*"
-msgstr ""
+msgstr "Berkas dapat dieksekusi (*)|*"
 
 #: common/pgm_base.cpp:206
 msgid "Select Preferred Editor"
@@ -5062,14 +5078,14 @@ msgstr ""
 
 #: common/pgm_base.cpp:676 common/pgm_base.cpp:714
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "Berkas bahasa KiCad untuk bahasa ini belum terpasang."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2204
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:240
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr ""
+msgstr "Tidak dapat membuka berkas '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2220
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2238
@@ -5077,7 +5093,7 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2260
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2266
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Berkas yang dipilih tidak valid atau mungkin rusak!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #, c-format
@@ -5125,35 +5141,35 @@ msgstr ""
 
 #: common/project/project_archiver.cpp:90
 msgid "Could not open archive file\n"
-msgstr ""
+msgstr "Tidak dapat membuka berkas arsip\n"
 
 #: common/project/project_archiver.cpp:99
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "Format berkas arsip tidak valid\n"
 
 #: common/project/project_archiver.cpp:110
 #, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr ""
+msgstr "Mengekstrak berkas \"%s\"\n"
 
 #: common/project/project_archiver.cpp:146
 msgid "Error extracting file!\n"
-msgstr ""
+msgstr "Terjadi kesalahan saat mengekstrak berkas!\n"
 
 #: common/project/project_archiver.cpp:195
 #, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr ""
+msgstr "Tidak dapat membuat berkas arsip \"%s\"\n"
 
 #: common/project/project_archiver.cpp:235
 #, c-format
 msgid "Archive file \"%s\"\n"
-msgstr ""
+msgstr "Berkas arsip \"%s\"\n"
 
 #: common/project/project_archiver.cpp:245
 #, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr ""
+msgstr "Berkas arsip \"%s\": Gagal!\n"
 
 #: common/project/project_archiver.cpp:271
 #, c-format
@@ -5175,7 +5191,7 @@ msgstr ""
 #: common/richio.cpp:171
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr ""
+msgstr "Tidak dapat membuka nama berkas \"%s\" untuk dibaca"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
@@ -5857,11 +5873,15 @@ msgid ""
 "or\n"
 "%s could not be found."
 msgstr ""
+"Berkas bantuan html atau pdf \n"
+"%s\n"
+"atau\n"
+"%s tidak dapat ditemukan."
 
 #: common/tool/common_control.cpp:211
 #, c-format
 msgid "Help file \"%s\" could not be found."
-msgstr ""
+msgstr "Berkas bantuan \"%s\" tidak dapat ditemukan."
 
 #: common/tool/common_control.cpp:234
 #, c-format
@@ -6019,7 +6039,7 @@ msgstr ""
 
 #: common/widgets/grid_text_button_helpers.cpp:352
 msgid "Select a File"
-msgstr ""
+msgstr "Pilih sebuah Berkas"
 
 #: common/widgets/mathplot.cpp:1760
 msgid "Center plot view to this position"
@@ -6130,108 +6150,108 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:175
 msgid "All files"
-msgstr ""
+msgstr "Semua berkas"
 
 #: common/wildcards_and_files_ext.cpp:181
 msgid "KiCad drawing symbol files"
-msgstr ""
+msgstr "Berkas simbol gambar KiCad"
 
 #: common/wildcards_and_files_ext.cpp:187
 msgid "KiCad symbol library files"
-msgstr ""
+msgstr "Berkas pustaka simbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:193
 msgid "KiCad legacy symbol library files"
-msgstr ""
+msgstr "Berkas pustaka simbol KiCad versi lama"
 
 #: common/wildcards_and_files_ext.cpp:199
 msgid "All KiCad symbol library files"
-msgstr ""
+msgstr "Semua berkas pustaka simbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:205
 msgid "KiCad project files"
-msgstr ""
+msgstr "Berkas proyek Kicad"
 
 #: common/wildcards_and_files_ext.cpp:211
 msgid "KiCad legacy project files"
-msgstr ""
+msgstr "Berkas proyek KiCad versi lama"
 
 #: common/wildcards_and_files_ext.cpp:217
 msgid "All KiCad project files"
-msgstr ""
+msgstr "Semua berkas proyek KiCad"
 
 #: common/wildcards_and_files_ext.cpp:223
 msgid "KiCad legacy schematic files"
-msgstr ""
+msgstr "Berkas skematik KiCad versi lama"
 
 #: common/wildcards_and_files_ext.cpp:229
 msgid "KiCad s-expression schematic files"
-msgstr ""
+msgstr "Berkas skematik s-expression KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "Altium schematic files"
-msgstr ""
+msgstr "Berkas skematik Altium"
 
 #: common/wildcards_and_files_ext.cpp:241
 msgid "CADSTAR Schematic Archive files"
-msgstr ""
+msgstr "Berkas Arsip Skematik CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:247
 msgid "CADSTAR Archive files"
-msgstr ""
+msgstr "Berkas Arsip CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:253
 msgid "Eagle XML schematic files"
-msgstr ""
+msgstr "Berkas skematik XML Eagle"
 
 #: common/wildcards_and_files_ext.cpp:259
 msgid "Eagle XML files"
-msgstr ""
+msgstr "Berkas XML Eagle"
 
 #: common/wildcards_and_files_ext.cpp:265
 msgid "KiCad netlist files"
-msgstr ""
+msgstr "Berkas netlist KiCad"
 
 #: common/wildcards_and_files_ext.cpp:271 gerbview/files.cpp:47
 msgid "Gerber files"
-msgstr ""
+msgstr "Berkas Gerber"
 
 #: common/wildcards_and_files_ext.cpp:277
 #: common/wildcards_and_files_ext.cpp:318
 msgid "KiCad printed circuit board files"
-msgstr ""
+msgstr "Berkas papan sirkuit tercetak KiCad"
 
 #: common/wildcards_and_files_ext.cpp:283
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "Berkas PCB XML Eagle ver. 6.x"
 
 #: common/wildcards_and_files_ext.cpp:288
 msgid "CADSTAR PCB Archive files"
-msgstr ""
+msgstr "Berkas Arsip PCB CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "Berkas PCB ASCII P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Berkas PCB Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:303
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Berkas PCB Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Berkas PCB Altium Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:313
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Berkas PCB Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint files"
-msgstr ""
+msgstr "Berkas footprint KiCad"
 
 #: common/wildcards_and_files_ext.cpp:330
 msgid "KiCad footprint library paths"
@@ -6239,127 +6259,127 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:336
 msgid "Legacy footprint library files"
-msgstr ""
+msgstr "Berkas pustaka footprint versi lama"
 
 #: common/wildcards_and_files_ext.cpp:342
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "Berkas pustaka XML Eagle ver. 6.x"
 
 #: common/wildcards_and_files_ext.cpp:348
 msgid "Geda PCB footprint library files"
-msgstr ""
+msgstr "Berkas pustaka footprint Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:354
 msgid "Page layout design files"
-msgstr ""
+msgstr "Berkas desain tata letak halaman"
 
 #: common/wildcards_and_files_ext.cpp:361
 msgid "KiCad symbol footprint link files"
-msgstr ""
+msgstr "Berkas tautan footprint simbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:368 gerbview/files.cpp:66
 msgid "Drill files"
-msgstr ""
+msgstr "Berkas Drill"
 
 #: common/wildcards_and_files_ext.cpp:374
 msgid "SVG files"
-msgstr ""
+msgstr "Berkas SVG"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "HTML files"
-msgstr ""
+msgstr "Berkas HTML"
 
 #: common/wildcards_and_files_ext.cpp:386
 msgid "CSV Files"
-msgstr ""
+msgstr "Berkas CSV"
 
 #: common/wildcards_and_files_ext.cpp:392
 msgid "Portable document format files"
-msgstr ""
+msgstr "Berkas PDF"
 
 #: common/wildcards_and_files_ext.cpp:398
 msgid "PostScript files"
-msgstr ""
+msgstr "Berkas PostScript"
 
 #: common/wildcards_and_files_ext.cpp:404
 msgid "Report files"
-msgstr ""
+msgstr "Berkas laporan"
 
 #: common/wildcards_and_files_ext.cpp:410
 msgid "Footprint place files"
-msgstr ""
+msgstr "Berkas letak footprint"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "Berkas VRML dan X3D"
 
 #: common/wildcards_and_files_ext.cpp:422
 msgid "IDFv3 footprint files"
-msgstr ""
+msgstr "Berkas footprint IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:428
 msgid "Text files"
-msgstr ""
+msgstr "Berkas teks"
 
 #: common/wildcards_and_files_ext.cpp:434
 msgid "Legacy footprint export files"
-msgstr ""
+msgstr "Berkas ekspor footprint versi lama"
 
 #: common/wildcards_and_files_ext.cpp:440
 msgid "Electrical rule check file"
-msgstr ""
+msgstr "Berkas pemeriksaan aturan elektrikal (ERC)"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
-msgstr ""
+msgstr "Berkas pustaka Spice"
 
 #: common/wildcards_and_files_ext.cpp:452
 msgid "SPICE netlist file"
-msgstr ""
+msgstr "Berkas netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:458
 msgid "CadStar netlist file"
-msgstr ""
+msgstr "Berkas netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:464
 msgid "Symbol footprint association files"
-msgstr ""
+msgstr "Berkas asosiasi footprint simbol"
 
 #: common/wildcards_and_files_ext.cpp:470
 msgid "Zip file"
-msgstr ""
+msgstr "Berkas Zip"
 
 #: common/wildcards_and_files_ext.cpp:476
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "berkas papan sirkuit GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:482
 msgid "DXF Files"
-msgstr ""
+msgstr "Berkas DXF"
 
 #: common/wildcards_and_files_ext.cpp:488
 msgid "Gerber job file"
-msgstr ""
+msgstr "Berkas pekerjaan Gerber"
 
 #: common/wildcards_and_files_ext.cpp:494
 msgid "Specctra DSN file"
-msgstr ""
+msgstr "Berkas Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:500
 msgid "IPC-D-356 Test Files"
-msgstr ""
+msgstr "Berkas Tes IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:506
 msgid "Workbook file"
-msgstr ""
+msgstr "Berkas Workbook"
 
 #: common/wildcards_and_files_ext.cpp:512
 msgid "PNG file"
-msgstr ""
+msgstr "Berkas PNG"
 
 #: common/wildcards_and_files_ext.cpp:518
 msgid "Jpeg file"
-msgstr ""
+msgstr "Berkas Jpeg"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
