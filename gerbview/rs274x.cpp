@@ -383,7 +383,6 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case FILE_ATTRIBUTE:    // Command %TF ...
-        m_IsX2_file = true;
     {
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, aBuff, aBuffSize, aText, m_LineNum );
@@ -392,6 +391,10 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         {
             delete m_FileFunction;
             m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
+
+            // Don't set this until we get a file function; other code expects m_IsX2_file == true
+            // to mean that we have a valid m_FileFunction
+            m_IsX2_file = true;
         }
         else if( dummy.IsFileMD5() )
         {

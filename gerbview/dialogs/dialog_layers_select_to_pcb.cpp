@@ -788,6 +788,8 @@ int LAYERS_MAP_DIALOG::findNumX2GerbersLoaded( std::vector<int>& aGerber2KicadMa
 
             if( images->GetGbrImage( ii )->m_IsX2_file )
             {
+                wxCHECK( x2, numKicadMatches );
+
                 if( x2->IsCopper() )
                 {
                     // This is a copper layer, so figure out which one
