@@ -45,7 +45,7 @@ TOOL_ACTION ACTIONS::newLibrary( "common.Control.newLibrary",
         AS_GLOBAL,
         0, "",
         _( "New Library..." ), _( "Create a new library folder" ),
-        new_generic_xpm );
+        new_library_xpm );
 
 TOOL_ACTION ACTIONS::addLibrary( "common.Control.addLibrary",
         AS_GLOBAL,

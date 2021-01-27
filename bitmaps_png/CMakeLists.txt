@@ -338,6 +338,7 @@ set( BMAPS_MID
     new_component
     new_footprint
     new_generic
+    new_library
     new_project
     new_project_with_template
     noconn
