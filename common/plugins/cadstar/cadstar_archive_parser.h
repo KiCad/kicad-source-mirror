@@ -104,6 +104,7 @@ public:
     typedef wxString NET_ID;
     typedef wxString NETELEMENT_ID;
     typedef wxString DOCUMENTATION_SYMBOL_ID;
+    typedef wxString COLOR_ID;
 
     static const long UNDEFINED_VALUE = -1;
 
@@ -1217,6 +1218,34 @@ public:
     };
 
 
+    struct DFLTSETTINGS : PARSER
+    {
+        COLOR_ID Color;
+        bool     IsVisible = true;
+
+        void     Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+    };
+
+
+    struct ATTRCOL : PARSER
+    {
+        ATTRIBUTE_ID AttributeID;
+        COLOR_ID     Color;
+        bool         IsVisible = true;
+
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+    };
+
+
+    struct ATTRCOLORS : PARSER
+    {
+        DFLTSETTINGS DefaultSettings;
+        std::map<ATTRIBUTE_ID, ATTRCOL> AttributeColors;
+
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+    };
+
+
     ///////////////////////
     // HELPER FUNCTIONS: //
     ///////////////////////
@@ -1335,6 +1364,13 @@ public:
      * @param aKiCadTextItem a Kicad item to correct
      */
     static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem );
+
+    static wxString generateLibName( const wxString& aRefName, const wxString& aAlternateName )
+    {
+        return aRefName
+               + ( ( aAlternateName.size() > 0 ) ? ( wxT( " (" ) + aAlternateName + wxT( ")" ) )
+                                                 : wxT( "" ) );
+    }
 
 }; // class CADSTAR_ARCHIVE_PARSER
 

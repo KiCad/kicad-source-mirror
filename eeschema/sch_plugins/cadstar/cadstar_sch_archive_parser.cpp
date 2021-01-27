@@ -82,9 +82,25 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
-            // No design information here (no need to parse)
-            // Contains CADSTAR Display settings such as layer/element colours and visibility.
-            // In the future these settings could be converted to KiCad
+            // For now only interested in Attribute visibilities, in order to set field visibilities
+            // in the importer desing
+
+            XNODE* subNode = cNode->GetChildren();
+
+            for( ; subNode; subNode = subNode->GetNext() )
+            {
+                if( subNode->GetName() == wxT( "ATTRCOLORS" ) )
+                {
+                    AttrColors.Parse( subNode, &mContext );
+                }
+                else
+                {
+                    // No design information here
+                    // Contains CADSTAR Display settings such as layer/element colours and visibility.
+                    // In the future these settings could be converted to KiCad
+                }
+            }
+
         }
         else
         {
@@ -1171,7 +1187,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode, PAR
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
-    
+
 }
 
 

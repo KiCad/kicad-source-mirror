@@ -129,7 +129,7 @@ private:
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
             wxPoint aSymbolOrigin, LIB_PART* aPart, int aGateNumber );
 
-    void loadLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
+    void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
@@ -137,7 +137,8 @@ private:
             double& aComponentOrientationDeciDeg );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-            const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
+                                   const double& aComponentOrientationDeciDeg, bool aIsMirrored,
+                                   SCH_FIELD* aKiCadField );
 
     int getComponentOrientation( double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg );
 
@@ -173,8 +174,8 @@ private:
 
     //Helper Functions for obtaining CADSTAR elements from the parsed structures
     SYMDEF_ID getSymDefFromName( const wxString& aSymdefName, const wxString& aSymDefAlternate );
+    bool      isAttributeVisible( const ATTRIBUTE_ID& aCadstarAttributeID );
 
-    wxString       generateSymDefName( const SYMDEF_ID& aSymdefID );
     int            getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
     PLOT_DASH_TYPE getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
     PART           getPart( const PART_ID& aCadstarPartID );
@@ -191,7 +192,7 @@ private:
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
     LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );
-
+    SCH_FIELD*       getFieldByName( SCH_COMPONENT* aComponent );
 
     //General Graphical manipulation functions
     std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );

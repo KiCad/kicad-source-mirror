@@ -2166,6 +2166,83 @@ void CADSTAR_ARCHIVE_PARSER::DOCUMENTATION_SYMBOL::Parse( XNODE* aNode, PARSER_C
 }
 
 
+void CADSTAR_ARCHIVE_PARSER::DFLTSETTINGS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+{
+    wxASSERT( aNode->GetName() == wxT( "DFLTSETTINGS" ) );
+
+    Color = GetXmlAttributeIDString( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "INVISIBLE" ) )
+        {
+            IsVisible = false;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::ATTRCOL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+{
+    wxASSERT( aNode->GetName() == wxT( "ATTRCOL" ) );
+
+    AttributeID = GetXmlAttributeIDString( aNode, 0 );
+    Color = GetXmlAttributeIDString( aNode, 1 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "INVISIBLE" ) )
+        {
+            IsVisible = false;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::ATTRCOLORS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+{
+    wxASSERT( aNode->GetName() == wxT( "ATTRCOLORS" ) );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "DFLTSETTINGS" ) )
+        {
+            DefaultSettings.Parse( cNode, aContext );
+        }
+        else if( cNodeName == wxT( "ATTRCOL" ) )
+        {
+            ATTRCOL attrcol;
+            attrcol.Parse( cNode, aContext );
+            AttributeColors.insert( { attrcol.AttributeID, attrcol } );
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
 void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
 {
     wxString result;

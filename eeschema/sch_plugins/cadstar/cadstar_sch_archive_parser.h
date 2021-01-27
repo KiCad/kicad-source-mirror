@@ -445,6 +445,7 @@ public:
     PARTS           Parts;
     SHEETS          Sheets;
     SCHEMATIC       Schematic;
+    ATTRCOLORS      AttrColors;
 
     double KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
 
