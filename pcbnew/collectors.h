@@ -309,6 +309,11 @@ public:
     static const KICAD_T Dimensions[];
 
     /**
+     * A scan list for items that can be dragged
+     */
+    static const KICAD_T DraggableItems[];
+
+    /**
      * Constructor GENERALCOLLECTOR
      */
     GENERAL_COLLECTOR()

@@ -1459,7 +1459,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 }
 
 
-bool ROUTER_TOOL::CanInlineDrag()
+bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
@@ -1468,11 +1468,17 @@ bool ROUTER_TOOL::CanInlineDrag()
     {
         const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-        if( item->Type() == PCB_TRACE_T
-             || item->Type() == PCB_VIA_T
-             || item->Type() == PCB_FOOTPRINT_T )
+        // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
+        // DragArcTrack(), so PCB_ARC_T should never occur here.
+        if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
         {
-            return true;
+            static const KICAD_T footprints[] = { PCB_FOOTPRINT_T, EOT };
+
+            // Footprints cannot be dragged freely.
+            if( item->IsType( footprints ) )
+                return !( aDragMode & PNS::DM_FREE_ANGLE );
+            else
+                return true;
         }
     }
 

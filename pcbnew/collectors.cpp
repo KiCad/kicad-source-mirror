@@ -145,6 +145,13 @@ const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
 };
 
 
+const KICAD_T GENERAL_COLLECTOR::DraggableItems[] = {
+    PCB_TRACE_T,
+    PCB_VIA_T,
+    PCB_FOOTPRINT_T,
+    PCB_ARC_T,
+    EOT
+};
 
 
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )

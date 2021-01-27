@@ -37,7 +37,7 @@ public:
     int MainLoop( const TOOL_EVENT& aEvent );
 
     int InlineBreakTrack( const TOOL_EVENT& aEvent );
-    bool CanInlineDrag();
+    bool CanInlineDrag( int aDragMode );
     int InlineDrag( const TOOL_EVENT& aEvent );
 
     int SelectCopperLayerPair( const TOOL_EVENT& aEvent );
