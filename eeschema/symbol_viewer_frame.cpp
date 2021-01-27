@@ -24,7 +24,6 @@
  */
 
 #include <bitmaps.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <confirm.h>
 #include <dialog_helpers.h>

@@ -32,7 +32,7 @@ class SCH_COMPONENT;
 #include <eda_rect.h>
 #include <lib_item.h>
 #include <pin_type.h>
-#include <class_libentry.h>
+#include <lib_part.h>
 
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   Mils2iu( 15 )

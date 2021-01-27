@@ -24,7 +24,6 @@
 
 #include <sch_plugins/eagle/sch_eagle_plugin.h>
 
-#include <kiway.h>
 #include <locale_io.h>
 #include <properties.h>
 
@@ -33,10 +32,8 @@
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
 
-#include <class_libentry.h>
 #include <class_library.h>
 #include <plugins/eagle/eagle_parser.h>
-#include <gr_text.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_id.h>
@@ -45,7 +42,6 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
-#include <macros.h>
 #include <project.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
@@ -60,7 +56,6 @@
 #include <sch_text.h>
 #include <schematic.h>
 #include <symbol_lib_table.h>
-#include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <page_layout/ws_draw_item.h>
 

@@ -26,16 +26,13 @@
 #ifndef _SCH_REFERENCE_LIST_H_
 #define _SCH_REFERENCE_LIST_H_
 
+#include <map>
 
-#include <macros.h>
-
-#include <class_libentry.h>
+#include <lib_part.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_text.h>
 #include <erc_settings.h>
-
-#include <map>
 
 /**
  * A helper to define a symbol's reference designator in a schematic.

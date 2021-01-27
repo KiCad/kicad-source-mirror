@@ -31,7 +31,6 @@
 
 #include <unit_test_utils/unit_test_utils.h>
 
-#include <class_libentry.h>
 #include <template_fieldnames.h>
 
 

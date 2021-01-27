@@ -26,7 +26,6 @@
 #include <symbol_tree_synchronizing_adapter.h>
 #include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
-#include <class_libentry.h>
 #include <tools/symbol_editor_control.h>
 
 

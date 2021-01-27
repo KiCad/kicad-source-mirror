@@ -26,11 +26,7 @@
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <base_units.h>
-#include <widgets/msgpanel.h>
-#include <general.h>
 #include <symbol_edit_frame.h>
-#include <class_libentry.h>
 #include <lib_pin.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>

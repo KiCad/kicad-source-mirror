@@ -26,7 +26,6 @@
 #include <confirm.h>
 #include <symbol_lib_table.h>
 #include <symbol_edit_frame.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_library_manager.h>

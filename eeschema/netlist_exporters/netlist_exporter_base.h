@@ -26,7 +26,6 @@
 #ifndef NETLIST_EXPORTER_H
 #define NETLIST_EXPORTER_H
 
-#include <class_libentry.h>
 #include <lib_pin.h>
 #include <sch_component.h>
 #include <sch_text.h>

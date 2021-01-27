@@ -23,7 +23,6 @@
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
-#include <class_libentry.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <panel_setup_formatting.h>

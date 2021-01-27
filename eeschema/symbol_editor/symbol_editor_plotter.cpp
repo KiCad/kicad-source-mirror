@@ -25,8 +25,6 @@
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
 #include <locale_io.h>
-#include <class_libentry.h>
-#include <class_library.h>
 #include <plotters_specific.h>
 
 void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )

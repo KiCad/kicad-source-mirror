@@ -30,7 +30,6 @@
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>
 #include <sch_component.h>
-#include <class_libentry.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
 #include <class_library.h>

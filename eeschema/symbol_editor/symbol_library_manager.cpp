@@ -24,7 +24,6 @@
  */
 
 #include <symbol_library_manager.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <symbol_edit_frame.h>
 #include <env_paths.h>

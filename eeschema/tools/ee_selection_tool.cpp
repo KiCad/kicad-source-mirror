@@ -23,7 +23,6 @@
  */
 
 
-#include <class_libentry.h>
 #include <core/typeinfo.h>
 #include <ee_actions.h>
 #include <ee_collectors.h>

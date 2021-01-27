@@ -23,7 +23,6 @@
  */
 
 #include <algorithm>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <dialog_choose_symbol.h>
 #include <eeschema_settings.h>

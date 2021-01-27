@@ -29,7 +29,6 @@
 #include <unit_test_utils/unit_test_utils.h>
 
 // Code under test
-#include <class_libentry.h>
 #include <lib_rectangle.h>
 #include <lib_arc.h>
 #include <lib_pin.h>

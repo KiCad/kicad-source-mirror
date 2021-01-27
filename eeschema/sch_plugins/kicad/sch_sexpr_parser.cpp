@@ -31,10 +31,7 @@
 #include <wx/mstream.h>
 #include <wx/tokenzr.h>
 
-#include <common.h>
 #include <lib_id.h>
-
-#include <class_libentry.h>
 #include <lib_arc.h>
 #include <lib_bezier.h>
 #include <lib_circle.h>

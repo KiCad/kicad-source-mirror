@@ -30,7 +30,6 @@
  */
 
 #include <eda_rect.h>
-//#include <gr_text.h>
 #include <id.h>
 #include <kicad_string.h>
 #include <kiway.h>
@@ -43,7 +42,6 @@
 #include <sch_item.h>
 
 #include <class_library.h>
-#include <class_libentry.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
 #include <sch_component.h>

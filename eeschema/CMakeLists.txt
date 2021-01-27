@@ -162,7 +162,7 @@ set( EESCHEMA_SRCS
     autoplace_fields.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
-    class_libentry.cpp
+    lib_part.cpp
     class_library.cpp
     cmp_library_lexer.cpp
     component_references_lister.cpp

@@ -42,7 +42,6 @@
 #include <schematic.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_screen.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <lib_arc.h>
 #include <lib_bezier.h>

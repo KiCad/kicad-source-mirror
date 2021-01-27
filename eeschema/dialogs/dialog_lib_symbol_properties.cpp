@@ -22,7 +22,6 @@
  */
 
 #include <bitmaps.h>
-#include <class_libentry.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
 #include <kiway.h>

@@ -30,7 +30,7 @@
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <symbol_lib_table.h>
-#include <class_libentry.h>
+#include <lib_part.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 

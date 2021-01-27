@@ -24,11 +24,8 @@
 
 #include <ee_actions.h>
 #include <symbol_edit_frame.h>
-#include <view/view_controls.h>
-#include <tool/tool_manager.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
-#include <class_libentry.h>
 #include <bitmaps.h>
 #include <lib_text.h>
 #include <dialogs/dialog_lib_edit_text.h>

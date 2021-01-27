@@ -28,7 +28,6 @@
 #include <lib_table_base.h>
 #include <sch_io_mgr.h>
 #include <lib_id.h>
-#include <class_libentry.h>
 
 //class LIB_PART;
 class SYMBOL_LIB_TABLE_GRID;

@@ -25,7 +25,6 @@
 #include <bitmaps.h>
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
-#include <class_libentry.h>
 #include <lib_pin.h>
 #include <dialog_pin_properties.h>
 #include <confirm.h>

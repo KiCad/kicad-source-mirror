@@ -22,7 +22,6 @@
  */
 
 #include <class_draw_panel_gal.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <dialog_rescue_each_base.h>
 #include <eeschema_settings.h>

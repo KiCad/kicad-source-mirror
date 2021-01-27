@@ -30,7 +30,6 @@
 #include <dialog_lib_edit_text_base.h>
 #include <widgets/unit_binder.h>
 #include <lib_field.h>
-#include <class_libentry.h>
 #include <template_fieldnames.h>
 
 class SCH_BASE_FRAME;

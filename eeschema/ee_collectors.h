@@ -26,7 +26,7 @@
 #ifndef EE_COLLECTORS_H
 #define EE_COLLECTORS_H
 
-#include <class_libentry.h>
+#include <lib_part.h>
 #include <collector.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <sch_item.h>

@@ -23,7 +23,6 @@
  */
 
 #include <pgm_base.h>
-#include <common.h>
 #include <eda_item.h>
 #include <gr_text.h>
 #include <kicad_string.h>
@@ -35,7 +34,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <general.h>
-#include <class_libentry.h>
+#include <lib_part.h>
 #include <transform.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>

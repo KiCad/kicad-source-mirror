@@ -18,12 +18,8 @@
  */
 
 #include "symbol_preview_widget.h"
-#include <wx/stattext.h>
-#include <wx/sizer.h>
-#include <kiway.h>
 #include <sch_view.h>
 #include <gal/gal_display_options.h>
-#include <class_libentry.h>
 #include <symbol_lib_table.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>

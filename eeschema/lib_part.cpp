@@ -23,17 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kicad_string.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
 #include <sch_screen.h>
 #include <richio.h>
-#include <trace_helpers.h>
 #include <general.h>
 #include <template_fieldnames.h>
 #include <transform.h>
 #include <class_library.h>
-#include <class_libentry.h>
 #include <lib_pin.h>
 #include <lib_arc.h>
 #include <settings/color_settings.h>

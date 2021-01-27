@@ -28,7 +28,6 @@
 #include <sch_item.h>
 
 #include <bezier_curves.h>
-#include <class_libentry.h>
 #include <class_library.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>

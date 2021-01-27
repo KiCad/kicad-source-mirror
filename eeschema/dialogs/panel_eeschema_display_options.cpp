@@ -24,7 +24,6 @@
 
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
-#include <class_libentry.h>
 #include <panel_eeschema_display_options.h>
 #include <widgets/gal_options_panel.h>
 #include <sch_junction.h>

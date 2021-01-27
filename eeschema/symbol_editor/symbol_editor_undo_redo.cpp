@@ -23,7 +23,6 @@
  */
 
 #include <symbol_edit_frame.h>
-#include <class_libentry.h>
 #include <symbol_library_manager.h>
 #include <widgets/lib_tree.h>
 #include <symbol_tree_pane.h>
