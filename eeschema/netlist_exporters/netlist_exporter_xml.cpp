@@ -295,14 +295,14 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
             {
                 xcomp->AddChild( xproperty = node( "property" ) );
-                xproperty->AddAttribute( "name", fields[jj].GetName() );
+                xproperty->AddAttribute( "name", fields[jj].GetCanonicalName() );
                 xproperty->AddAttribute( "value", fields[jj].GetText() );
             }
 
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
             {
                 xcomp->AddChild( xproperty = node( "property" ) );
-                xproperty->AddAttribute( "name", sheetField.GetName() );
+                xproperty->AddAttribute( "name", sheetField.GetCanonicalName() );
                 xproperty->AddAttribute( "value", sheetField.GetText() );
             }
 
