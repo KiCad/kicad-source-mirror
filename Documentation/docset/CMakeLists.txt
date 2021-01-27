@@ -63,7 +63,7 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
             -DDOCSET_DOXYFILE=${DOCSET_DOXYFILE}
             -DOUTPUT_DIRECTORY="${CMAKE_CURRENT_BINARY_DIR}/doxygen"
             -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
-            -P ${CMAKE_MODULE_PATH}/CreateDocsetDoxyfile.cmake
+            -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateDocsetDoxyfile.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
         OUTPUT ${DOCSET_DOXYFILE}
         DEPENDS ${CMAKE_BINARY_DIR}/kicad_build_version.h

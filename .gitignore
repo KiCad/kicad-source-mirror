@@ -119,3 +119,4 @@ i18n_status.csv
 
 # Don't actually ignore any of these files, since we need them in the tree
 !resources/linux/icons/hicolor/**/**/*
+!CMakeModules/**/*

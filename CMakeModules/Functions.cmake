@@ -40,13 +40,13 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
             -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}
             -DoutHeaderFile=${CMAKE_CURRENT_BINARY_DIR}/${outHeaderFile}
             -DoutCppFile=${CMAKE_CURRENT_BINARY_DIR}/${outCppFile}
-            -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+            -P ${CMAKE_MODULE_PATH}/BuildSteps/TokenList2DsnLexer.cmake
         COMMENT "TokenList2DsnLexer.cmake creating:
            ${outHeaderFile} and
            ${outCppFile} from
            ${inputFile}"
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}
-                ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+                ${CMAKE_MODULE_PATH}/BuildSteps/TokenList2DsnLexer.cmake
         )
 
     target_sources( ${outputTarget} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${outCppFile} )
@@ -84,7 +84,7 @@ function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
             -DLEMON_TEMPLATE=${LEMON_TEMPLATE}
             -DGRAMMAR_FILE=${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_FILE}
             -DGRAMMAR_DIR=${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}
-            -P ${CMAKE_MODULE_PATH}/LemonParserGenerator.cmake
+            -P ${CMAKE_MODULE_PATH}/BuildSteps/LemonParserGenerator.cmake
         COMMENT "Running Lemon on ${GRAMMAR_FILE} to generate ${GRAMMAR_DIR}/${GRAMMAR_BASE}.c"
         DEPENDS lemon
                 ${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_FILE}

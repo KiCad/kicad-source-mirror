@@ -647,9 +647,9 @@ function( png2cpp inputFile outFile )
         OUTPUT  ${outFile}
 
         COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutCppFile=${outFile}
-            -P ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
+            -P ${CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
 
-        DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
+        DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
         COMMENT "Creating ${outFile}"
         )
 endfunction()
