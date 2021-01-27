@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
 
 #include <pgm_base.h>
 #include <settings/common_settings.h>
-#include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/tools_holder.h>
@@ -43,15 +42,7 @@ TOOLS_HOLDER::TOOLS_HOLDER() :
 // TODO: Implement an RAII mechanism for the stack PushTool/PopTool pairs
 void TOOLS_HOLDER::PushTool( const std::string& actionName )
 {
-    if( m_toolStack.size() && m_toolStack.back() == actionName )
-    {
-        // Tool already on the stack; we don't need to push again.  (Happens when one tool is
-        // popped due to the activation of the same tool that is underneath it on the stack.)
-    }
-    else
-    {
-        m_toolStack.push_back( actionName );
-    }
+    m_toolStack.push_back( actionName );
 
     // Human cognitive stacking is very shallow; deeper tool stacks just get annoying
     if( m_toolStack.size() > 3 )

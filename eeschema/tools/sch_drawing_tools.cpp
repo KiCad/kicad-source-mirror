@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,12 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_lastTextOrientation( LABEL_SPIN_STYLE::LEFT ),
         m_lastTextBold( false ),
-        m_lastTextItalic( false )
+        m_lastTextItalic( false ),
+        m_inPlaceComponent( false ),
+        m_inPlaceImage( false ),
+        m_inSingleClickPlace( false ),
+        m_inTwoClickPlace( false ),
+        m_inDrawSheet( false )
 {
 }
 
@@ -83,6 +88,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     SCH_COMPONENT*              component = aEvent.Parameter<SCH_COMPONENT*>();
     SCHLIB_FILTER               filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
+
+    if( m_inPlaceComponent )
+        return 0;
+    else
+        m_inPlaceComponent = true;
 
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
     {
@@ -305,6 +315,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inPlaceComponent = false;
     return 0;
 }
 
@@ -314,6 +325,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
     bool        immediateMode = image;
     VECTOR2I    cursorPos = getViewControls()->GetCursorPosition();
+
+    if( m_inPlaceImage )
+        return 0;
+    else
+        m_inPlaceImage = true;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -479,6 +495,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inPlaceImage = false;
     return 0;
 }
 
@@ -487,6 +504,11 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
     wxPoint   cursorPos;
     KICAD_T   type = aEvent.Parameter<KICAD_T>();
+
+    if( m_inSingleClickPlace )
+        return 0;
+    else
+        m_inSingleClickPlace = true;
 
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
@@ -689,6 +711,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     m_view->ClearPreview();
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inSingleClickPlace = false;
     return 0;
 }
 
@@ -810,6 +833,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             item = nullptr;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
+
+    if( m_inTwoClickPlace )
+        return 0;
+    else
+        m_inTwoClickPlace = true;
 
     bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
@@ -1033,6 +1061,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inTwoClickPlace = false;
     return 0;
 }
 
@@ -1040,6 +1069,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     SCH_SHEET* sheet = nullptr;
+
+    if( m_inDrawSheet )
+        return 0;
+    else
+        m_inDrawSheet = true;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -1178,6 +1212,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_inDrawSheet = false;
     return 0;
 }
 

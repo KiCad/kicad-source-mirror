@@ -82,6 +82,13 @@ private:
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
 
+    ///< Re-entrancy guards
+    bool                       m_inPlaceComponent;
+    bool                       m_inPlaceImage;
+    bool                       m_inSingleClickPlace;
+    bool                       m_inTwoClickPlace;
+    bool                       m_inDrawSheet;
+
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 
