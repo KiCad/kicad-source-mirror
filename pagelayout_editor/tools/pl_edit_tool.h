@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,37 +58,35 @@ public:
     int ImportWorksheetContent( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DoDelete()
-     *
-     * Deletes the selected items, or the item under the cursor.
+     * Delete the selected items, or the item under the cursor.
      */
     int DoDelete( const TOOL_EVENT& aEvent );
 
-    ///> Runs the deletion tool.
+    ///< Run the deletion tool.
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
     void moveItem( WS_DATA_ITEM* aItem, VECTOR2I aDelta );
 
-    ///> Returns the right modification point (e.g. for rotation), depending on the number of
-    ///> selected items.
+    ///< Return the right modification point (e.g. for rotation), depending on the number of
+    ///< selected items.
     bool updateModificationPoint( PL_SELECTION& aSelection );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:
     PL_EDITOR_FRAME*   m_frame;
     PL_SELECTION_TOOL* m_selectionTool;
 
-    ///> Flag determining if anything is being dragged right now
+    ///< Flag determining if anything is being dragged right now.
     bool               m_moveInProgress;
 
-    ///> Used for chaining commands
+    ///< Used for chaining commands.
     VECTOR2I           m_moveOffset;
 
-    ///> Last cursor position (needed for getModificationPoint() to avoid changes
-    ///> of edit reference point).
+    ///< Last cursor position (needed for getModificationPoint() to avoid changes
+    ///< of edit reference point).
     VECTOR2I           m_cursor;
 
     EDA_ITEM*          m_pickerItem;

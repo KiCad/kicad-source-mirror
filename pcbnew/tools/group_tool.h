@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,32 +47,29 @@ public:
     int GroupProperties( const TOOL_EVENT& aEvent );
 
     /**
-     * Function SelectNewMember()
-     *
-     * Invokes the picker tool to select a new member of the group.
+     * Invoke the picker tool to select a new member of the group.
      */
     int PickNewMember( const TOOL_EVENT& aEvent  );
 
-    ///> Groups selected items.
+    ///< Group selected items.
     int Group( const TOOL_EVENT& aEvent );
 
-    ///> Ungroups selected items.
+    ///< Ungroup selected items.
     int Ungroup( const TOOL_EVENT& aEvent );
 
-    ///> Remove selection from group.
+    ///< Remove selection from group.
     int RemoveFromGroup( const TOOL_EVENT& aEvent );
 
-    ///> Restrict seletion to only member of the group.
+    ///< Restrict selection to only member of the group.
     int EnterGroup( const TOOL_EVENT& aEvent );
 
-    ///> Leave the current group (deselect its members and select the group as a whole)
+    ///< Leave the current group (deselect its members and select the group as a whole).
     int LeaveGroup( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
     PCB_BASE_EDIT_FRAME*          m_frame;
     DIALOG_GROUP_PROPERTIES*      m_propertiesDialog;
     PCB_SELECTION_TOOL*           m_selectionTool;

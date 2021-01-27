@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2020  KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -91,25 +91,25 @@ public:
         return ( m_pos - aSecond.Pos() ).EuclideanNorm();
     }
 
-    /// Returns tag, common identifier for connected nodes
+    ///< Return tag, common identifier for connected nodes.
     inline int GetTag() const
     {
         return m_tag;
     }
 
-    /// Sets tag, common identifier for connected nodes
+    ///< Set tag, common identifier for connected nodes.
     inline void SetTag( int aTag )
     {
         m_tag = aTag;
     }
 
-    /// Decides whether this node can be a ratsnest line target
+    ///< Decide whether this node can be a ratsnest line target.
     inline void SetNoLine( bool aEnable )
     {
         m_noline = aEnable;
     }
 
-    /// Returns true if this node can be a target for ratsnest lines
+    ///< Return true if this node can be a target for ratsnest lines.
     inline const bool& GetNoLine() const
     {
         return m_noline;
@@ -126,18 +126,16 @@ public:
     }
 
     /**
-     * has meaning only for tracks and vias.
-     * @return true if this anchor is dangling
-     * The anchor point is dangling if the parent is a track
-     * and this anchor point is not connected to another item
-     * ( track, vas pad or zone) or if the parent is a via and this anchor point
-     * is connected to only one track and not to another item
+     * The anchor point is dangling if the parent is a track and this anchor point is not
+     * connected to another item ( track, vas pad or zone) or if the parent is a via and
+     * this anchor point is connected to only one track and not to another item.
+     *
+     * @return true if this anchor is dangling.
      */
     bool IsDangling() const;
 
     /**
-     * has meaning only for tracks and vias.
-     * @return the count of items connected to this anchor
+     * @return the count of tracks and vias connected to this anchor.
      */
     int ConnectedItemsCount() const;
 
@@ -145,19 +143,19 @@ public:
     static const int TAG_UNCONNECTED = -1;
 
 private:
-    /// Position of the anchor
+    ///< Position of the anchor.
     VECTOR2I m_pos;
 
-    /// Item owning the anchor
+    ///< Item owning the anchor.
     CN_ITEM* m_item = nullptr;
 
-    /// Tag for quick connection resolution
+    ///< Tag for quick connection resolution.
     int m_tag = -1;
 
-    /// Whether it the node can be a target for ratsnest lines
+    ///< Whether it the node can be a target for ratsnest lines.
     bool m_noline = false;
 
-    /// Cluster to which the anchor belongs
+    ///< Cluster to which the anchor belongs.
     std::shared_ptr<CN_CLUSTER> m_cluster;
 };
 
@@ -172,26 +170,6 @@ class CN_ITEM
 public:
     using CONNECTED_ITEMS = std::vector<CN_ITEM*>;
 
-private:
-    BOARD_CONNECTED_ITEM* m_parent;
-
-    CONNECTED_ITEMS m_connected;      ///> list of items physically connected (touching)
-    CN_ANCHORS      m_anchors;
-
-    bool            m_canChangeNet;  ///> can the net propagator modify the netcode?
-
-    bool            m_visited;       ///> visited flag for the BFS scan
-    bool            m_valid;         ///> used to identify garbage items (we use lazy removal)
-
-    std::mutex      m_listLock;      ///> mutex protecting this item's connected_items set to
-                                     ///> allow parallel connection threads
-protected:
-    bool            m_dirty;         ///> used to identify recently added item not yet
-                                     ///> scanned into the connectivity search
-    LAYER_RANGE     m_layers;        ///> layer range over which the item exists
-    BOX2I           m_bbox;          ///> bounding box for the item
-
-public:
     void Dump();
 
     CN_ITEM( BOARD_CONNECTED_ITEM* aParent, bool aCanChangeNet, int aAnchorCount = 2 )
@@ -222,9 +200,7 @@ public:
     bool Dirty() const { return m_dirty;  }
 
     /**
-     * Function SetLayers()
-     *
-     * Sets the layers spanned by the item to aLayers.
+     * Set the layers spanned by the item to aLayers.
      */
     void SetLayers( const LAYER_RANGE& aLayers )
     {
@@ -232,9 +208,7 @@ public:
     }
 
     /**
-     * Function SetLayer()
-     *
-     * Sets the layers spanned by the item to a single layer aLayer.
+     * Set the layers spanned by the item to a single layer aLayer.
      */
     void SetLayer( int aLayer )
     {
@@ -242,9 +216,7 @@ public:
     }
 
     /**
-     * Function Layers()
-     *
-     * Returns the contiguous set of layers spanned by the item.
+     * Return the contiguous set of layers spanned by the item.
      */
     const LAYER_RANGE& Layers() const
     {
@@ -252,9 +224,7 @@ public:
     }
 
     /**
-     * Function Layer()
-     *
-     * Returns the item's layer, for single-layered items only.
+     * Return the item's layer, for single-layered items only.
      */
     virtual int Layer() const
     {
@@ -305,6 +275,25 @@ public:
     {
         return ( !m_parent || !m_valid ) ? -1 : m_parent->GetNetCode();
     }
+                                     ///< allow parallel connection threads
+protected:
+    bool            m_dirty;         ///< used to identify recently added item not yet
+                                     ///< scanned into the connectivity search
+    LAYER_RANGE     m_layers;        ///< layer range over which the item exists
+    BOX2I           m_bbox;          ///< bounding box for the item
+
+private:
+    BOARD_CONNECTED_ITEM* m_parent;
+
+    CONNECTED_ITEMS m_connected;     ///< list of items physically connected (touching)
+    CN_ANCHORS      m_anchors;
+
+    bool            m_canChangeNet;  ///< can the net propagator modify the netcode?
+
+    bool            m_visited;       ///< visited flag for the BFS scan
+    bool            m_valid;         ///< used to identify garbage items (we use lazy removal)
+
+    std::mutex      m_listLock;      ///< mutex protecting this item's connected_items set to
 };
 
 typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
@@ -366,12 +355,6 @@ private:
 
 class CN_LIST
 {
-private:
-    bool                  m_dirty;
-    bool                  m_hasInvalid;
-
-    CN_RTREE<CN_ITEM*>    m_index;
-
 protected:
     std::vector<CN_ITEM*> m_items;
 
@@ -457,14 +440,20 @@ public:
     CN_ITEM* Add( VIA* via );
 
     const std::vector<CN_ITEM*> Add( ZONE* zone, PCB_LAYER_ID aLayer );
+
+private:
+    bool                  m_dirty;
+    bool                  m_hasInvalid;
+
+    CN_RTREE<CN_ITEM*>    m_index;
 };
 
 class CN_CLUSTER
 {
 private:
-    bool                  m_conflicting = false;
-    int                   m_originNet = 0;
-    CN_ITEM*              m_originPad = nullptr;
+    bool                  m_conflicting;
+    int                   m_originNet;
+    CN_ITEM*              m_originPad;
     std::vector<CN_ITEM*> m_items;
 
 public:
@@ -476,9 +465,9 @@ public:
 
     wxString OriginNetName() const;
 
-    bool    Contains( const CN_ITEM* aItem );
-    bool    Contains( const BOARD_CONNECTED_ITEM* aItem );
-    void    Dump();
+    bool Contains( const CN_ITEM* aItem );
+    bool Contains( const BOARD_CONNECTED_ITEM* aItem );
+    void Dump();
 
     int Size() const { return m_items.size(); }
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,29 +37,16 @@ namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
-    friend struct PCB::IFACE;
-
-    FOOTPRINT_TREE_PANE*        m_treePane;
-
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
-
-    std::unique_ptr<FOOTPRINT>  m_revertModule;
-    wxString                    m_footprintNameWhenLoaded;
-
-    int                         m_defaultLibWidth;
-
 public:
-
     ~FOOTPRINT_EDIT_FRAME();
 
     /**
-     * Function GetFootprintEditorFrameName (static)
-     * @return the frame name used when creating the frame
-     * used to get a reference to this frame, if exists
+     * @return the frame name used when creating the frame used to get a reference to this
+     *         frame, if exists
      */
     static const wxChar* GetFootprintEditorFrameName();
 
-    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
     SELECTION&            GetCurrentSelection() override;
 
@@ -96,14 +83,15 @@ public:
     void OnExitKiCad( wxCommandEvent& aEvent );
 
     /**
-     * switches currently used canvas (Cairo / OpenGL).
-     * It also reinit the layers manager that slightly changes with canvases
+     * Switch the currently used canvas (Cairo / OpenGL).
+     *
+     * It also reinitializes the layer manager that slightly changes with canvases.
      */
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /**
-     * Update the layer manager and other widgets from the board setup
-     * (layer and items visibility, colors ...)
+     * Update the layer manager and other widgets from the board setup (layer and items
+     * visibility, colors ...).
      */
     void UpdateUserInterface();
 
@@ -126,11 +114,12 @@ public:
     void ReCreateMenuBar() override;
 
     /**
-     * Re create the layer Box by clearing the old list, and building
-     * le new one, from the new layers names and cole layers
-     * @param aForceResizeToolbar = true to resize the parent toolbar
-     * false if not needed (mainly in parent toolbar creation,
-     * or when the layers names are not modified)
+     * Re create the layer Box by clearing the old list, and building a new one from the new
+     * layers names and layer colors..
+     *
+     * @param aForceResizeToolbar true to resize the parent toolbar or false if not needed
+     *                            (mainly in parent toolbar creation or when the layers names
+     *                            are not modified).
      */
     void ReCreateLayerBox( bool aForceResizeToolbar = true );
 
@@ -138,7 +127,7 @@ public:
 
     void SelectLayer( wxCommandEvent& event );
 
-    // The Tool Framework initalization, for GAL mode
+    // The Tool Framework initialization, for GAL mode
     void setupTools();
 
     void OnSaveFootprintAsPng( wxCommandEvent& event );
@@ -149,8 +138,9 @@ public:
     /**
      * Save a library to a new name and/or library type.
      *
+     * @see #PLUGIN::FootprintSave and #PLUGIN::FootprintLibCreate
+     *
      * @note Saving as a new library type requires the plug-in to support saving libraries
-     * @see PLUGIN::FootprintSave and PLUGIN::FootprintLibCreate
      */
     bool SaveLibraryAs( const wxString& aLibraryPath );
 
@@ -158,7 +148,7 @@ public:
     void OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent );
 
-    ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
+    ///< @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
 
     /**
@@ -171,7 +161,7 @@ public:
     void LoadFootprintFromLibrary( LIB_ID aFPID );
 
     /**
-     * Returns the adapter object that provides the stored data.
+     * Return the adapter object that provides the stored data.
      */
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetLibTreeAdapter() { return m_adapter; }
 
@@ -188,14 +178,12 @@ public:
     bool RevertFootprint();
 
     /**
-     * Must be called after a footprint change
-     * in order to set the "modify" flag of the current screen
-     * and prepare, if needed the refresh of the 3D frame showing the footprint
-     * do not forget to call the basic OnModify function to update auxiliary info
+     * Must be called after a footprint change in order to set the "modify" flag of the
+     * current screen and prepare, if needed the refresh of the 3D frame showing the footprint.
+     *
+     * Do not forget to call the basic OnModify function to update auxiliary info.
      */
     void OnModify() override;
-
-    // BOARD handling
 
     /**
      * Delete all and reinitialize the current board.
@@ -218,7 +206,6 @@ public:
 
     void ClearModify();
 
-    // importing / exporting Footprint
     /**
      * Create a file containing only one footprint.
      */
@@ -230,7 +217,7 @@ public:
      * The import function can also read gpcb footprint file, in Newlib format.
      * (One footprint per file, Newlib files have no special ext.)
      */
-    FOOTPRINT* ImportFootprint( const wxString& aName = wxT( "") );
+    FOOTPRINT* ImportFootprint( const wxString& aName = wxT( "" ) );
 
     /**
      * Load a footprint from the main board into the Footprint Editor.
@@ -258,25 +245,25 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
+    ///< @copydoc PCB_BASE_FRAME::SetActiveLayer()
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
-    ///> @copydoc PCB_BASE_FRAME::OnUpdateLayerAlpha()
+    ///< @copydoc PCB_BASE_FRAME::OnUpdateLayerAlpha()
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
 
     void OnDisplayOptionsChanged() override;
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
+    ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 
     /**
      * Load a KiCad board (.kicad_pcb) from \a aFileName.
      *
-     * @param aFileSet - hold the BOARD file to load, a vector of one element.
-     * @param aCtl      - KICTL_ bits, one to indicate that an append of the board file
-     *                      aFileName to the currently loaded file is desired.
-     *                    @see #KIWAY_PLAYER for bit defines.
-     * @return bool - false if file load fails, otherwise true.
+     * @param aFileSet is the BOARD file to load, a vector of one element.
+     * @param aCtl is the KICTL_ bits, one to indicate that an append of the board file
+     *             \a  aFileName to the currently loaded file is desired.  @see #KIWAY_PLAYER
+     *             for bit defines.
+     * @return false if file load fails, otherwise true.
      */
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
@@ -287,7 +274,7 @@ public:
     void AddFootprintToBoard( FOOTPRINT* aFootprint ) override;
 
     /**
-     * Allows Footprint Editor to install its preferences panel into the preferences dialog.
+     * Allow footprint editor to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
@@ -304,7 +291,6 @@ public:
     /**
      * Synchronize the footprint library tree to the current state of the footprint library
      * table.
-     * @param aProgress
      */
     void SyncLibraryTree( bool aProgress );
 
@@ -316,7 +302,7 @@ public:
 
     void RefreshLibraryTree();
 
-    /// Reloads displayed items and sets view.
+    ///< Reload displayed items and sets view.
     void UpdateView();
 
     void FocusOnLibID( const LIB_ID& aLibID );
@@ -353,6 +339,19 @@ protected:
     void editFootprintProperties( FOOTPRINT* aFootprint );
 
     void setupUIConditions() override;
+
+private:
+    friend struct PCB::IFACE;
+
+    FOOTPRINT_TREE_PANE*        m_treePane;
+
+    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
+
+    std::unique_ptr<FOOTPRINT>  m_revertModule;
+    wxString                    m_footprintNameWhenLoaded;
+
+    int                         m_defaultLibWidth;
+
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

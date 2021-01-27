@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,8 +42,6 @@ namespace PNS {
 class ROUTER;
 
 /**
- * DP_MEANDER_PLACER
- *
  * Differential Pair length-matching/meandering tool.
  */
 
@@ -53,30 +52,24 @@ public:
     ~DP_MEANDER_PLACER();
 
     /**
-     * Function Start()
-     *
-     * Starts routing a single track at point aP, taking item aStartItem as anchor
+     * Start routing a single track at point \a aP, taking item \a aStartItem as anchor
      * (unless NULL).
      */
     bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /**
-     * Function Move()
-     *
-     * Moves the end of the currently routed trace to the point aP, taking
-     * aEndItem as anchor (if not NULL).
-     * (unless NULL).
+     * Move the end of the currently routed trace to the point \a aP, taking \a aEndItem as
+     * anchor (if not NULL).
      */
     bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /**
-     * Function FixRoute()
+     * Commit the currently routed track to the parent node, taking \a aP as the final end
+     * point and \a aEndItem as the final anchor (if provided).
      *
-     * Commits the currently routed track to the parent node, taking
-     * aP as the final end point and aEndItem as the final anchor (if provided).
-     * @return true, if route has been commited. May return false if the routing
-     * result is violating design rules - in such case, the track is only committed
-     * if Settings.CanViolateDRC() is on.
+     * @return true if route has been committed.  May return false if the routing result is
+     *         violating design rules.  In such cases, the track is only committed if
+     *         Settings.CanViolateDRC() is on.
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) override;
 
@@ -92,9 +85,7 @@ public:
     const LINE Trace() const;
 
     /**
-     * Function CurrentNode()
-     *
-     * Returns the most recent world state.
+     * Return the most recent world state.
      */
     NODE* CurrentNode( bool aLoopsRemoved = false ) const override;
 
@@ -125,16 +116,16 @@ private:
 
     const SEG baselineSegment( const DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs );
     bool pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPair );
-    
+
     void setWorld( NODE* aWorld );
     void release();
 
     long long int origPathLength() const;
 
-    ///> current routing start point (end of tail, beginning of head)
+    ///< Current routing start point (end of tail, beginning of head).
     VECTOR2I m_currentStart;
 
-    ///> Current world state
+    ///< Current world state.
     NODE* m_currentNode;
 
     DIFF_PAIR m_originPair;

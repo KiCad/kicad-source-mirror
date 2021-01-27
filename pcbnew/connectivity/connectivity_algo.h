@@ -2,7 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -68,9 +69,10 @@ public:
     {}
 
     /**
-     * This sort operator provides a sort-by-weight for the ratsnest operation
-     * @param aOther Other edge to compare
-     * @return true if our weight is smaller than the other weight
+     * This sort operator provides a sort-by-weight for the ratsnest operation.
+     *
+     * @param aOther the other edge to compare.
+     * @return true if our weight is smaller than the other weight.
      */
     bool operator<( CN_EDGE aOther ) const
     {
@@ -155,7 +157,6 @@ public:
     };
 
 private:
-
     CN_LIST m_itemList;
 
     std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
@@ -180,7 +181,6 @@ private:
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
 public:
-
     CN_CONNECTIVITY_ALGO() {}
     ~CN_CONNECTIVITY_ALGO() { Clear(); }
 
@@ -281,13 +281,9 @@ public:
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 };
 
-/**
- * Struct CN_VISTOR
- **/
-class CN_VISITOR {
-
+class CN_VISITOR
+{
 public:
-
     CN_VISITOR( CN_ITEM* aItem ) :
         m_item( aItem )
     {}
@@ -295,12 +291,11 @@ public:
     bool operator()( CN_ITEM* aCandidate );
 
 protected:
-
     void checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aItem );
 
     void checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB );
 
-    ///> the item we are looking for connections to
+    ///< The item we are looking for connections to.
     CN_ITEM* m_item;
 };
 

@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,38 @@ typedef NET_MAP::const_iterator         NET_MAP_CITER;
 /// subset of eagle.drawing.board.designrules in the XML document
 struct ERULES
 {
+    ERULES() :
+        psElongationLong    ( 100 ),
+        psElongationOffset  ( 0 ),
+
+        mvStopFrame         ( 1.0 ),
+        mvCreamFrame        ( 0.0 ),
+        mlMinStopFrame      ( Mils2iu( 4.0 ) ),
+        mlMaxStopFrame      ( Mils2iu( 4.0 ) ),
+        mlMinCreamFrame     ( Mils2iu( 0.0 ) ),
+        mlMaxCreamFrame     ( Mils2iu( 0.0 ) ),
+
+        psTop               ( EPAD::UNDEF ),
+        psBottom            ( EPAD::UNDEF ),
+        psFirst             ( EPAD::UNDEF ),
+
+        srRoundness         ( 0.0 ),
+        srMinRoundness      ( Mils2iu( 0.0 ) ),
+        srMaxRoundness      ( Mils2iu( 0.0 ) ),
+
+        rvPadTop            ( 0.25 ),
+        // rvPadBottom      ( 0.25 ),
+        rlMinPadTop         ( Mils2iu( 10 ) ),
+        rlMaxPadTop         ( Mils2iu( 20 ) ),
+
+        rvViaOuter          ( 0.25 ),
+        rlMinViaOuter       ( Mils2iu( 10 ) ),
+        rlMaxViaOuter       ( Mils2iu( 20 ) ),
+        mdWireWire          ( 0 )
+    {}
+
+    void parse( wxXmlNode* aRules );
+
     ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
     ///< Goes into making a scaling factor for "long" pads.
     int    psElongationLong;
@@ -85,39 +117,6 @@ struct ERULES
     double rlMinViaOuter;       ///< minimum copper annulus on via
     double rlMaxViaOuter;       ///< maximum copper annulus on via
     double mdWireWire;          ///< wire to wire spacing I presume.
-
-
-    ERULES() :
-        psElongationLong    ( 100 ),
-        psElongationOffset  ( 0 ),
-
-        mvStopFrame         ( 1.0 ),
-        mvCreamFrame        ( 0.0 ),
-        mlMinStopFrame      ( Mils2iu( 4.0 ) ),
-        mlMaxStopFrame      ( Mils2iu( 4.0 ) ),
-        mlMinCreamFrame     ( Mils2iu( 0.0 ) ),
-        mlMaxCreamFrame     ( Mils2iu( 0.0 ) ),
-
-        psTop               ( EPAD::UNDEF ),
-        psBottom            ( EPAD::UNDEF ),
-        psFirst             ( EPAD::UNDEF ),
-
-        srRoundness         ( 0.0 ),
-        srMinRoundness      ( Mils2iu( 0.0 ) ),
-        srMaxRoundness      ( Mils2iu( 0.0 ) ),
-
-        rvPadTop            ( 0.25 ),
-        // rvPadBottom      ( 0.25 ),
-        rlMinPadTop         ( Mils2iu( 10 ) ),
-        rlMaxPadTop         ( Mils2iu( 20 ) ),
-
-        rvViaOuter          ( 0.25 ),
-        rlMinViaOuter       ( Mils2iu( 10 ) ),
-        rlMaxViaOuter       ( Mils2iu( 20 ) ),
-        mdWireWire          ( 0 )
-    {}
-
-    void parse( wxXmlNode* aRules );
 };
 
 
@@ -172,38 +171,6 @@ public:
             const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
-    typedef std::vector<ELAYER>     ELAYERS;
-    typedef ELAYERS::const_iterator EITER;
-
-    int                              m_cu_map[17];     ///< map eagle to KiCad, cu layers only.
-    std::map<int, ELAYER>            m_eagleLayers;    ///< Eagle layer data stored by layer number
-    std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
-    std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
-
-    ERULES*       m_rules;          ///< Eagle design rules.
-    XPATH*        m_xpath;          ///< keeps track of what we are working on within
-                                    ///< XML document during a Load().
-
-    int           m_hole_count;     ///< generates unique footprint names from eagle "hole"s.
-
-    NET_MAP       m_pads_to_nets;   ///< net list
-
-    FOOTPRINT_MAP m_templates;      ///< is part of a FOOTPRINT factory that operates using copy
-                                    ///< construction.
-                                    ///< lookup key is either libname.packagename or simply
-                                    ///< packagename if FootprintLoad() or FootprintEnumberate()
-
-    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
-    BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
-
-    int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
-    int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
-    int         m_min_via;          ///< smallest via we find on Load(), in BIU.
-    int         m_min_annulus;      ///< smallest via annulus we find on Load(), in BIU.
-
-    wxString    m_lib_path;
-    wxDateTime  m_mod_time;
-
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( const PROPERTIES* aProperties );
 
@@ -216,13 +183,13 @@ private:
     /// create a font size (fontz) from an eagle font size scalar and KiCad font thickness
     wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
 
-    /// Generate mapping between Eagle na KiCAD layers
+    /// Generate mapping between Eagle na KiCad layers
     void mapEagleLayersToKicad();
 
     /// Convert an Eagle layer to a KiCad layer.
     PCB_LAYER_ID kicad_layer( int aLayer ) const;
 
-    /// Get default KiCAD layer corresponding to an Eagle layer of the board,
+    /// Get default KiCad layer corresponding to an Eagle layer of the board,
     /// a set of sensible layer mapping options and required flag
     std::tuple<PCB_LAYER_ID, LSET, bool> defaultKicadLayer( int aEagleLayer ) const;
 
@@ -298,11 +265,43 @@ private:
     void packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
     void packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
 
-    ///> Handles common pad properties
+    ///< Handles common pad properties
     void transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const;
 
-    ///> Deletes the footprint templates list
+    ///< Deletes the footprint templates list
     void deleteTemplates();
+
+    typedef std::vector<ELAYER>     ELAYERS;
+    typedef ELAYERS::const_iterator EITER;
+
+    int                              m_cu_map[17];     ///< map eagle to KiCad, cu layers only.
+    std::map<int, ELAYER>            m_eagleLayers;    ///< Eagle layer data stored by layer number
+    std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
+    std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
+
+    ERULES*       m_rules;          ///< Eagle design rules.
+    XPATH*        m_xpath;          ///< keeps track of what we are working on within
+                                    ///< XML document during a Load().
+
+    int           m_hole_count;     ///< generates unique footprint names from eagle "hole"s.
+
+    NET_MAP       m_pads_to_nets;   ///< net list
+
+    FOOTPRINT_MAP m_templates;      ///< is part of a FOOTPRINT factory that operates using copy
+                                    ///< construction.
+                                    ///< lookup key is either libname.packagename or simply
+                                    ///< packagename if FootprintLoad() or FootprintEnumberate()
+
+    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
+    BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
+
+    int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
+    int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
+    int         m_min_via;          ///< smallest via we find on Load(), in BIU.
+    int         m_min_annulus;      ///< smallest via annulus we find on Load(), in BIU.
+
+    wxString    m_lib_path;
+    wxDateTime  m_mod_time;
 };
 
 #endif  // EAGLE_PLUGIN_H_

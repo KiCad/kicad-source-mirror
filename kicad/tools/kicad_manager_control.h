@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,11 +33,8 @@ class KICAD_MANAGER_FRAME;
 
 
 /**
- * KICAD_MANAGER_CONTROL
- *
- * Handles actions in the kicad manager frame.
+ * Handle actions in the kicad manager frame.
  */
-
 class KICAD_MANAGER_CONTROL : public TOOL_INTERACTIVE
 {
 public:
@@ -59,11 +56,11 @@ public:
     int ShowPlayer( const TOOL_EVENT& aEvent );
     int Execute( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:
-    ///> Pointer to the currently used edit/draw frame.
+    ///< Pointer to the currently used edit/draw frame.
     KICAD_MANAGER_FRAME* m_frame;
 
     // Mutex to allow only a single KiFace to load at one time (released when loaded)

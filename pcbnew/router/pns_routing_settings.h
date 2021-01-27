@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,16 +34,16 @@ class TOOL_SETTINGS;
 
 namespace PNS {
 
-///> Routing modes
+///< Routing modes
 enum PNS_MODE
 {
-    RM_MarkObstacles = 0,   ///> Ignore collisions, mark obstacles
-    RM_Shove,               ///> Only shove
-    RM_Walkaround,          ///> Only walkaround
-    RM_Smart                ///> Guess what's better, try to make least mess on the PCB
+    RM_MarkObstacles = 0,   ///< Ignore collisions, mark obstacles
+    RM_Shove,               ///< Only shove
+    RM_Walkaround,          ///< Only walk around
+    RM_Smart                ///< Guess what's better, try to make least mess on the PCB
 };
 
-///> Optimization effort
+///< Optimization effort.
 enum PNS_OPTIMIZATION_EFFORT
 {
     OE_LOW = 0,
@@ -50,7 +51,7 @@ enum PNS_OPTIMIZATION_EFFORT
     OE_FULL = 2
 };
 
-///> What kind of corners to create in the line placers
+///< What kind of corners to create in the line placers.
 enum class CORNER_MODE
 {
     MITERED_90,     ///< H/V only (90-degree corners) (not yet implemented)
@@ -60,9 +61,7 @@ enum class CORNER_MODE
 };
 
 /**
- * ROUTING_SETTINGS
- *
- * Contains all persistent settings of the router, such as the mode, optimization effort, etc.
+ * Contain all persistent settings of the router, such as the mode, optimization effort, etc.
  */
 
 class ROUTING_SETTINGS : public NESTED_SETTINGS
@@ -70,59 +69,62 @@ class ROUTING_SETTINGS : public NESTED_SETTINGS
 public:
     ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
-    ///> Returns the routing mode.
+    ///< Return the routing mode.
     PNS_MODE Mode() const { return m_routingMode; }
 
-    ///> Sets the routing mode.
+    ///< Set the routing mode.
     void SetMode( PNS_MODE aMode ) { m_routingMode = aMode; }
 
-    ///> Returns the optimizer effort. Bigger means cleaner traces, but slower routing.
+    ///< Return the optimizer effort. Bigger means cleaner traces, but slower routing.
     PNS_OPTIMIZATION_EFFORT OptimizerEffort() const { return m_optimizerEffort; }
 
-    ///> Sets the optimizer effort. Bigger means cleaner traces, but slower routing.
+    ///< Set the optimizer effort. Bigger means cleaner traces, but slower routing.
     void SetOptimizerEffort( PNS_OPTIMIZATION_EFFORT aEffort ) { m_optimizerEffort = aEffort; }
 
-    ///> Returns true if shoving vias is enbled.
+    ///< Return true if shoving vias is enabled.
     bool ShoveVias() const { return m_shoveVias; }
 
-    ///> Enables/disables shoving vias.
+    ///< Enable/disable shoving vias.
     void SetShoveVias( bool aShoveVias ) { m_shoveVias = aShoveVias; }
 
-    ///> Returns true if loop (redundant track) removal is on.
+    ///< Return true if loop (redundant track) removal is on.
     bool RemoveLoops() const { return m_removeLoops; }
 
-    ///> Enables/disables loop (redundant track) removal.
+    ///< Enable/disable loop (redundant track) removal.
     void SetRemoveLoops( bool aRemoveLoops ) { m_removeLoops = aRemoveLoops; }
 
-    ///> Returns true if suggesting the finish of currently placed track is on.
+    ///< Return true if suggesting the finish of currently placed track is on.
     bool SuggestFinish() { return m_suggestFinish; }
 
-    ///> Enables displaying suggestions for finishing the currently placed track.
+    ///< Enable displaying suggestions for finishing the currently placed track.
     void SetSuggestFinish( bool aSuggestFinish ) { m_suggestFinish = aSuggestFinish; }
 
-    ///> Returns true if Smart Pads (optimized connections) is enabled.
+    ///< Return true if Smart Pads (optimized connections) is enabled.
     bool SmartPads() const { return m_smartPads; }
 
-    ///> Enables/disables Smart Pads (optimized connections).
+    ///< Enable/disable Smart Pads (optimized connections).
     void SetSmartPads( bool aSmartPads ) { m_smartPads = aSmartPads; }
 
-    ///> Returns true if follow mouse mode is active (permanently on for the moment).
+    ///< Return true if follow mouse mode is active (permanently on for the moment).
     bool FollowMouse() const
     {
         return m_followMouse && !( Mode() == RM_MarkObstacles );
     }
 
-    ///> Returns true if smoothing segments durign dragging is enabled.
+    ///< Return true if smoothing segments during dragging is enabled.
     bool SmoothDraggedSegments() const { return m_smoothDraggedSegments; }
 
-    ///> Enables/disabled smoothing segments during dragging.
+    ///< Enable/disable smoothing segments during dragging.
     void SetSmoothDraggedSegments( bool aSmooth ) { m_smoothDraggedSegments = aSmooth; }
 
-    ///> Returns true if jumping over unmovable obstacles is on.
+    ///< Return true if jumping over unmovable obstacles is on.
     bool JumpOverObstacles() const { return m_jumpOverObstacles; }
 
-    ///> Enables/disables jumping over unmovable obstacles.
-    void SetJumpOverObstacles( bool aJumpOverObstacles ) { m_jumpOverObstacles = aJumpOverObstacles; }
+    ///< Enable/disable jumping over unmovable obstacles.
+    void SetJumpOverObstacles( bool aJumpOverObstacles )
+    {
+        m_jumpOverObstacles = aJumpOverObstacles;
+    }
 
     void SetStartDiagonal( bool aStartDiagonal ) { m_startDiagonal = aStartDiagonal; }
 

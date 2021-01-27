@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,7 @@
 class ACTION_MENU;
 
 /**
- * PAD_TOOL
- *
- * Tools relating to pads and pad settings
+ * Tool relating to pads and pad settings.
  */
 class PAD_TOOL : public PCB_TOOL_BASE
 {
@@ -40,26 +38,24 @@ public:
     PAD_TOOL();
     ~PAD_TOOL();
 
-    ///> React to model/view changes
+    ///< React to model/view changes
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Basic initalization
+    ///< Basic initialization
     bool Init() override;
 
     /**
-     * Function EnumeratePads()
      * Tool for quick pad enumeration.
      */
     int EnumeratePads( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlacePad()
-     * Places a pad in footprint editor.
+     * Place a pad in footprint editor.
      */
     int PlacePad( const TOOL_EVENT& aEvent );
 
     /**
-     * Enters/exits WYSIWYG pad shape editing
+     * Enter/exit WYSIWYG pad shape editing.
      */
     int EditPad( const TOOL_EVENT& aEvent );
 
@@ -67,22 +63,21 @@ public:
     void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
 
 private:
-    ///> Bind handlers to corresponding TOOL_ACTIONs
+    ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
-    ///> Apply pad settings from board design settings to a pad
+    ///< Apply pad settings from board design settings to a pad.
     int pastePadProperties( const TOOL_EVENT& aEvent );
 
-    ///> Copy pad settings from a pad to the board design settings
+    ///< Copy pad settings from a pad to the board design settings.
     int copyPadSettings( const TOOL_EVENT& aEvent );
 
-    ///> Push pad settings from a pad to other pads on board or footprint
+    ///< Push pad settings from a pad to other pads on board or footprint.
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
     PCB_LAYER_ID explodePad( PAD* aPad );
     void recombinePad( PAD* aPad );
 
-private:
     wxString       m_lastPadName;
     bool           m_padCopied;    // Indicates there are valid settings in the Master Pad object
 

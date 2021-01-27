@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,7 @@ class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * PL_ACTIONS
- *
- * Gathers all the actions that are shared by tools. The instance of PL_ACTIONS is created
+ * Gather all the actions that are shared by tools. The instance of PL_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
 class PL_ACTIONS : public ACTIONS
@@ -45,18 +43,18 @@ public:
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
-    /// Clears the current selection
+    /// Clear the current selection
     static TOOL_ACTION clearSelection;
 
-    /// Selects an item (specified as the event parameter).
+    /// Select an item (specified as the event parameter).
     static TOOL_ACTION addItemToSel;
     static TOOL_ACTION removeItemFromSel;
 
-    /// Selects a list of items (specified as the event parameter)
+    /// Select a list of items (specified as the event parameter)
     static TOOL_ACTION addItemsToSel;
     static TOOL_ACTION removeItemsFromSel;
 
-    /// Runs a selection menu to select from a list of items
+    /// Run a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
     // Tools
@@ -78,7 +76,7 @@ public:
     static TOOL_ACTION showInspector;
     static TOOL_ACTION previewSettings;
 
-    ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
+    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 

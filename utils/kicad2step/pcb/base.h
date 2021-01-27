@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +24,7 @@
 
 /**
  * @file base.h
- * provides declarations of items which are basic to all
- * kicad2mcad code.
+ * Provide declarations of items which are basic to all kicad2mcad code.
  */
 
 #ifndef KICADBASE_H
@@ -34,7 +34,7 @@
 
 #include <ostream>
 
-///> Default minimum distance between points to treat them as separate ones (mm)
+///< Default minimum distance between points to treat them as separate ones (mm)
 static constexpr double MIN_DISTANCE = 0.01;
 
 namespace SEXPR
@@ -53,9 +53,9 @@ enum CURVE_TYPE
 
 /*
  * Layers of importance to MCAD export:
- * LAYER_TOP: specifies that a footprint is on the top of the PCB
- * LAYER_BOTTOM: specifies that a footprint is on the bottom of the PCB
- * LAYER_EDGE: specifies that a Curve is associated with the PCB edge
+ *  - LAYER_TOP: specifies that a footprint is on the top of the PCB
+ *  - LAYER_BOTTOM: specifies that a footprint is on the bottom of the PCB
+ *  - LAYER_EDGE: specifies that a Curve is associated with the PCB edge
  */
 enum LAYERS
 {
@@ -99,13 +99,12 @@ bool Get3DCoordinate( const SEXPR::SEXPR* data, TRIPLET& aCoordinate );
 bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation );
 
 /**
- * Get the layer name from a layer element, if the layer is syntactically
- * valid.
+ * Get the layer name from a layer element, if the layer is syntactically valid.
  *
  * E.g. (layer "Edge.Cuts") -> "Edge.Cuts"
  *
- * @param  aLayerElem the s-expr element to get the name from
- * @return            the layer name if valid, else empty
+ * @param aLayerElem the s-expr element to get the name from.
+ * @return the layer name if valid, else empty.
  */
 OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
 

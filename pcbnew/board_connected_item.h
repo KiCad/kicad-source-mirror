@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,8 @@ class TRACK;
 class PAD;
 
 /**
- * BOARD_CONNECTED_ITEM
- * is a base class derived from BOARD_ITEM for items that can be connected
- * and have a net, a netname, a clearance ...
- * mainly: tracks, pads and zones
- * Handle connection info
+ * A base class derived from #BOARD_ITEM for items that can be connected and have a net, a
+ * netname, a clearance ...
  */
 class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
@@ -68,15 +65,14 @@ public:
         }
     }
 
-    ///> @copydoc BOARD_ITEM::IsConnected()
+    ///< @copydoc BOARD_ITEM::IsConnected()
     bool IsConnected() const override
     {
         return true;
     }
 
     /**
-     * Function GetNet
-     * Returns NET_INFO object for a given item.
+     * Return #NET_INFO object for a given item.
      */
     NETINFO_ITEM* GetNet() const
     {
@@ -84,8 +80,7 @@ public:
     }
 
     /**
-     * Function SetNet
-     * Sets a NET_INFO object for the item.
+     * Set a NET_INFO object for the item.
      */
     void SetNet( NETINFO_ITEM* aNetInfo )
     {
@@ -93,8 +88,7 @@ public:
     }
 
     /**
-     * Function GetNetCode
-     * @return int - the net code.
+     * @return the net code.
      */
     int GetNetCode() const
     {
@@ -102,13 +96,15 @@ public:
     }
 
     /**
-     * Sets net using a net code.
-     * @param aNetCode is a net code for the new net. It has to exist in NETINFO_LIST held by BOARD.
-     * @param aNoAssert if true, do not assert that the net exists.
-     * Otherwise, item is assigned to the unconnected net.
+     * Set net using a net code.
+     *
+     * @note Pads not on copper layers will have their net code always set to 0 (not connected).
+     *
+     * @param aNetCode is a net code for the new net. It has to exist in #NETINFO_LIST held
+     *                 by #BOARD.
+     * @param aNoAssert if true, do not assert that the net exists.  Otherwise, item is assigned
+     *                  to the unconnected net.
      * @return true on success, false if the net did not exist
-     * Note also items (in fact pads) not on copper layers will have
-     * their net code always set to 0 (not connected)
      */
     bool SetNetCode( int aNetCode, bool aNoAssert );
 
@@ -118,8 +114,7 @@ public:
     }
 
     /**
-     * Function GetNetname
-     * @return wxString - the full netname
+     * @return the full netname.
      */
     wxString GetNetname() const
     {
@@ -127,15 +122,13 @@ public:
     }
 
     /**
-     * Function GetNetnameMsg
-     * @return wxString - the full netname or "<no net>" in square braces, followed by
-     * "(Not Found)" if the netcode is undefined.
+     * @return the full netname or "<no net>" in square braces, followed by "(Not Found)" if the
+     *         netcode is undefined.
      */
     wxString GetNetnameMsg() const;
 
     /**
-     * Function GetShortNetname
-     * @return wxString - the short netname
+     * @return the short netname.
      */
     wxString GetShortNetname() const
     {
@@ -143,56 +136,54 @@ public:
     }
 
     /**
-     * Function GetClearance
-     * returns an item's "own" clearance in internal units.
-     * @param aLayer the layer in question
-     * @param aSource [out] optionally reports the source as a user-readable string
-     * @return int - the clearance in internal units.
+     * Return an item's "own" clearance in internal units.
+     *
+     * @param aLayer the layer in question.
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
      */
     virtual int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const;
 
     /**
-     * Function GetLocalClearanceOverrides
-     * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
-     * @param aSource [out] optionally reports the source as a user-readable string
-     * @return int - the clearance in internal units.
+     * Return any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     *
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
      */
     virtual int GetLocalClearanceOverrides( wxString* aSource ) const { return 0; }
 
     /**
-     * Function GetLocalClearance
-     * returns any local clearances set in the "classic" (ie: pre-rule) system.  These are
-     * things like zone clearance which are NOT an override.
-     * @param aSource [out] optionally reports the source as a user-readable string
-     * @return int - the clearance in internal units.
+     * Return any local clearances set in the "classic" (ie: pre-rule) system.  These are
+     * things like zone clearance which are **not** an override.
+     *
+     * @param aSource [out] optionally reports the source as a user readable string.
+     * @return the clearance in internal units.
      */
     virtual int GetLocalClearance( wxString* aSource ) const { return 0; }
 
     /**
-     * Function GetNetClassPtr
-     * returns the NETCLASS for this item.
+     * Return the #NETCLASS for this item.
      *
-     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
-     * std::shared_ptr stuff shows up large in performance profiling.
+     * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     *       std::shared_ptr stuff shows up large in performance profiling.
      */
     virtual NETCLASS* GetNetClass() const;
 
     /**
-     * Function GetEffectiveNetclass
-     * returns the NETCLASS for this item, or the default netclass if none is defined.
+     * Return the NETCLASS for this item, or the default netclass if none is defined.
      *
-     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
-     * std::shared_ptr stuff shows up large in performance profiling.
+     * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     *       std::shared_ptr stuff shows up large in performance profiling.
      */
     virtual NETCLASS* GetEffectiveNetclass() const;
 
     /**
-     * Function GetNetClassName
-     * returns a pointer to the netclass of the zone.
-     * If the net is not found (can happen when a netlist is reread,
-     * and the net name does not exist, return the default net class
-     * (should not return a null pointer).
-     * @return the Net Class name of this item
+     * Returns the netclass of the zone.
+     *
+     * If the net is not found (can happen when a netlist is reread) and the net name does not
+     * exist, return the default net class (should not return a null pointer).
+     *
+     * @return the net class name of this item.
      */
     virtual wxString GetNetClassName() const;
 
@@ -207,11 +198,10 @@ public:
     }
 
 protected:
-    /// Stores all informations about the net that item belongs to
+    /// Store all information about the net that item belongs to.
     NETINFO_ITEM* m_netinfo;
 
 private:
-
     bool m_localRatsnestVisible;
 };
 

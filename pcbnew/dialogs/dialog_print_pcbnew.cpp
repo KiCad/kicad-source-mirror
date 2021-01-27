@@ -2,9 +2,10 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
- * Author: Maciej Suminski <maciej.suminski@cern.ch>
+ *
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +38,7 @@
 #include <dialogs/dialog_print_generic.h>
 #include <pcbnew_printout.h>
 
+
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
 {
 public:
@@ -61,16 +63,16 @@ private:
     void onUseThemeChecked( wxCommandEvent& event );
     void onColorModeChanged( wxCommandEvent& event );
 
-    ///> (Un)checks all items in a checklist box
+    ///< (Un)check all items in a checklist box.
     void setListBoxValue( wxCheckListBox* aList, bool aValue );
 
-    ///> Check whether a layer is enabled in a listbox
+    ///< Check whether a layer is enabled in a listbox.
     bool isLayerEnabled( unsigned int aLayer ) const;
 
-    ///> Enable/disable layer in a listbox
+    ///< Enable/disable layer in a listbox.
     void enableLayer( unsigned int aLayer, bool aValue );
 
-    ///> Update layerset basing on the selected layers
+    ///< Update layerset basing on the selected layers.
     int setLayerSetFromList();
 
     void saveSettings() override;

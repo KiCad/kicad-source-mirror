@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +30,10 @@
 class PCB_BASE_FRAME;
 
 /**
- * PCB_VIEWER_TOOLS
+ * Tool useful for viewing footprints.
  *
- * Tools useful for viewing footprints.
- * This tool is designed to be lighter-weight so that it doesn't
- * bring in as many pcbnew dependencies (since it is used in cvpcb).
+ * This tool is designed to be lighter-weight so that it doesn't bring in as many PcbNew
+ * dependencies (since it is used in cvpcb).
  */
 class PCB_VIEWER_TOOLS : public TOOL_INTERACTIVE
 {
@@ -51,7 +50,7 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Launches a tool to measure between points
+    ///< Launch a tool to measure between points.
     int MeasureTool( const TOOL_EVENT& aEvent );
 
     // Display modes
@@ -64,12 +63,15 @@ public:
     /// Show the 3D viewer
     int Show3DViewer( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
     /**
-     * Toggles edit footprint mode. When enabled, one may select parts of footprints individually
-     * (graphics, pads, etc.), so they can be modified.
+     * Toggle edit footprint mode.
+     *
+     * When enabled, one may select parts of footprints individually (graphics, pads, etc.),
+     * so they can be modified.
+     *
      * @param aEnabled decides if the mode should be enabled.
      */
     void SetFootprintFrame( bool aIsFrame )
@@ -83,8 +85,6 @@ public:
     }
 
 protected:
-    bool m_footprintFrame;  ///< Is this tool associated with a footprint frame
-
     PCB_BASE_FRAME* frame() const
     {
         return getEditFrame<PCB_BASE_FRAME>();
@@ -114,6 +114,8 @@ protected:
     {
         return board()->GetFirstFootprint();
     }
+
+    bool m_footprintFrame;  ///< Is this tool associated with a footprint frame
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,8 +51,6 @@ protected:
 
 
 /**
- * BOARD_INSPECTION_TOOL
- *
  * Tool for pcb inspection.
  */
 class BOARD_INSPECTION_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
@@ -67,63 +65,61 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function ShowStatisticDialog()
-     *
-     * Shows dialog with board statistics
+     * Show dialog with board statistics.
      */
     int ShowStatisticsDialog( const TOOL_EVENT& aEvent );
 
-    ///> Notifies eeschema about the selected item.
+    ///< Notify Eeschema about the selected item.
     int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
 
-    ///> Highlights net belonging to the item under the cursor.
+    ///< Highlight net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
-    ///> Clears all board highlights
+    ///< Clear all board highlights
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
-    ///> Launches a tool to pick the item whose net is going to be highlighted.
+    ///< Launch a tool to pick the item whose net is going to be highlighted.
     int HighlightNetTool( const TOOL_EVENT& aEvent );
 
-    ///> Performs the appropriate action in response to an eeschema cross-probe.
+    ///< Perform the appropriate action in response to an Eeschema cross-probe.
     int HighlightItem( const TOOL_EVENT& aEvent );
 
-    ///> Updates ratsnest for selected items.
+    ///< Update ratsnest for selected items.
     int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
 
-    ///> Hides ratsnest for selected items. Called when there are no items selected.
+    ///< Hide ratsnest for selected items. Called when there are no items selected.
     int HideDynamicRatsnest( const TOOL_EVENT& aEvent );
 
-    ///> Shows local ratsnest of a component
+    ///< Show local ratsnest of a component.
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
 
     int ListNets( const TOOL_EVENT& aEvent );
 
-    ///> Hide the ratsnest for a given net
+    ///< Hide the ratsnest for a given net.
     int HideNet( const TOOL_EVENT& aEvent );
 
-    ///> Show the ratsnest for a given net
+    ///< Show the ratsnest for a given net.
     int ShowNet( const TOOL_EVENT& aEvent );
 
-    ///> Show the clearance resolution for two selected items
+    ///< Show the clearance resolution for two selected items.
     int InspectClearance( const TOOL_EVENT& aEvent );
 
     int InspectConstraints( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Event handler to recalculate dynamic ratsnest
+    ///< Event handler to recalculate dynamic ratsnest.
     void ratsnestTimer( wxTimerEvent& aEvent );
 
-    ///> Recalculates dynamic ratsnest for the current selection
+    ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
 
     void doHideNet( int aNetCode, bool aHide );
 
-    ///> Bind handlers to corresponding TOOL_ACTIONs
+    ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
     void onListNetsDialogClosed( wxCommandEvent& aEvent );
@@ -140,7 +136,7 @@ private:
 private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
 
-    bool m_probingSchToPcb;     // Recursion guard when cross-probing to EESchema
+    bool m_probingSchToPcb;     // Recursion guard when cross-probing to Eeschema
     int  m_lastNetcode;         // Used for toggling between last two highlighted nets
 
     CONNECTIVITY_DATA* m_dynamicData;      // Cached connectivity data from the selection

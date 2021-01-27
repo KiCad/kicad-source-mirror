@@ -1,7 +1,8 @@
 /*
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
- * Author: Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -77,9 +78,9 @@ private:
 
 
 namespace KIGFX {
+
 /**
- * Special flavor of PCB_PAINTER that contains
- * modifications to handle printing options.
+ * Special flavor of PCB_PAINTER that contains modifications to handle printing options.
  */
 class PCB_PRINT_PAINTER : public PCB_PAINTER
 {
@@ -88,8 +89,9 @@ public:
 
     /**
      * Set drill marks visibility and options.
+     *
      * @param aRealSize when enabled, drill marks represent actual holes. Otherwise aSize
-     * parameter is used.
+     *                  parameter is used.
      * @param aSize is drill mark size (internal units), valid only when aRealSize == false.
      */
     void SetDrillMarks( bool aRealSize, unsigned int aSize = 0 )
@@ -105,10 +107,10 @@ protected:
 
     int getDrillSize( const VIA* aVia ) const override;
 
-    ///> Flag deciding whether use the actual hole size or user-specified size for drill marks
+    ///< Flag deciding whether use the actual hole size or user-specified size for drill marks
     bool m_drillMarkReal;
 
-    ///> User-specified size for drill marks (expressed in internal units)
+    ///< User-specified size for drill marks (expressed in internal units)
     int m_drillMarkSize;
 };
 

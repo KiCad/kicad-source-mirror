@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,20 +34,18 @@
 namespace PNS {
 
 /**
- * JOINT
+ * Represents a 2D point on a given set of layers and belonging to a certain net, that links
+ * together a number of board items.
  *
- * Represents a 2D point on a given set of layers and belonging to a certain
- * net, that links together a number of board items.
- * A hash table of joints is used by the router to follow connectivity between
- * the items.
+ * A hash table of joints is used by the router to follow connectivity between the items.
  **/
 class JOINT : public ITEM
 {
 public:
     typedef ITEM_SET::ENTRIES LINKED_ITEMS;
 
-    ///> Joints are hashed by their position, layers and net.
-    ///  Linked items are, obviously, not hashed
+    ///< Joints are hashed by their position, layers and net.
+    ///<  Linked items are, obviously, not hashed.
     struct HASH_TAG
     {
         VECTOR2I pos;
@@ -96,8 +95,8 @@ public:
         return NULL;
     }
 
-    ///> Returns true if the joint is a trivial line corner, connecting two
-    /// segments of the same net, on the same layer.
+    ///< Return true if the joint is a trivial line corner, connecting two
+    ///< segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
         if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T | ARC_T ) != 2 )
@@ -138,7 +137,7 @@ public:
         return seg1->Width() != seg2->Width();
     }
 
-    ///> Links the joint to a given board item (when it's added to the NODE)
+    ///< Link the joint to a given board item (when it's added to the NODE).
     void Link( ITEM* aItem )
     {
         if( m_linkedItems.Contains( aItem ) )
@@ -147,16 +146,16 @@ public:
         m_linkedItems.Add( aItem );
     }
 
-    ///> Unlinks a given board item from the joint (upon its removal from a NODE)
-    ///> Returns true if the joint became dangling after unlinking.
+    ///< Unlink a given board item from the joint (upon its removal from a NODE)
+    ///< @return true if the joint became dangling after unlinking.
     bool Unlink( ITEM* aItem )
     {
         m_linkedItems.Erase( aItem );
         return m_linkedItems.Size() == 0;
     }
 
-    ///> For trivial joints, returns the segment adjacent to (aCurrent). For non-trival ones, returns
-    ///> NULL, indicating the end of line.
+    ///< For trivial joints, return the segment adjacent to (aCurrent). For non-trival ones,
+    ///< return NULL, indicating the end of line.
     LINKED_ITEM* NextSegment( ITEM* aCurrent ) const
     {
         if( !IsLineCorner() )
@@ -253,13 +252,13 @@ public:
     }
 
 private:
-    ///> hash tag for unordered_multimap
+    ///< hash tag for unordered_multimap
     HASH_TAG m_tag;
 
-    ///> list of items linked to this joint
+    ///< list of items linked to this joint
     ITEM_SET m_linkedItems;
 
-    ///> locked (non-movable) flag
+    ///< locked (non-movable) flag
     bool m_locked;
 };
 

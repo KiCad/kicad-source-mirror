@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,7 +32,7 @@
 class PCB_EDIT_FRAME;
 class wxFilePickerCtrl;
 
-///> Settings for GenCAD exporter
+///< Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT
 {
     FLIP_BOTTOM_PADS,       // flip bottom components padstacks geometry
@@ -47,19 +49,19 @@ public:
     DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aPath );
     ~DIALOG_GENCAD_EXPORT_OPTIONS();
 
-    ///> Checks whether an option has been selected
+    ///< Check whether an option has been selected.
     bool GetOption( GENCAD_EXPORT_OPT aOption ) const;
 
-    ///> Returns all export settings
+    ///< Return all export settings.
     std::map<GENCAD_EXPORT_OPT, bool> GetAllOptions() const;
 
-    ///> Returns the selected file path
+    ///< Return the selected file path.
     wxString GetFileName() const;
 
 protected:
     bool TransferDataFromWindow() override;
 
-    ///> Creates checkboxes for GenCAD export options
+    ///< Create checkboxes for GenCAD export options.
     void createOptCheckboxes();
 
     std::map<GENCAD_EXPORT_OPT, wxCheckBox*> m_options;

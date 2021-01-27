@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013-2020 CERN
  * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -54,10 +55,10 @@ public:
 };
 
 /**
- * EDIT_TOOL
+ * The interactive edit tool.
  *
- * The interactive edit tool. Allows one to move, rotate, flip and change properties of items s
- * elected using the pcbnew.InteractiveSelection tool.
+ * Allows one to move, rotate, flip and change properties of items selected using the
+ * pcbnew.InteractiveSelection tool.
  */
 
 class EDIT_TOOL : public PCB_TOOL_BASE
@@ -71,99 +72,85 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    ///> Find an item and start moving.
+    ///< Find an item and start moving.
     int GetAndPlace( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Move()
      * Main loop in which events are handled.
      */
     int Move( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Drag()
      * Invoke the PNS router to drag tracks or do an offline resizing of an arc track
-     * if a single arc track is selected
+     * if a single arc track is selected.
      */
     int Drag( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DragArcTrack()
-     * Drag-resize an arc (and change end points of connected straight segments)
+     * Drag-resize an arc (and change end points of connected straight segments).
      */
     int DragArcTrack( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Properties()
-     * Displays properties window for the selected object.
+     * Display properties window for the selected object.
      */
     int Properties( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Rotate()
-     * Rotates currently selected items.
+     * Rotate currently selected items.
      */
     int Rotate( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Flip()
-     * Rotates currently selected items. The rotation point is the current cursor position.
+     * Rotate currently selected items. The rotation point is the current cursor position.
      */
     int Flip( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Mirror
-     * Mirrors the current selection. The mirror axis passes through the current point.
+     * Mirror the current selection. The mirror axis passes through the current point.
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
     int ChangeTrackWidth( const TOOL_EVENT& aEvent );
 
     /**
-     * Function FilletTracks()
-     * Fillets (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
+     * Fillet (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius.
      */
     int FilletTracks( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Remove()
-     * Deletes currently selected items. The rotation point is the current cursor position.
+     * Delete currently selected items.
      */
     int Remove( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Duplicate()
-     * Duplicates the current selection and starts a move action.
+     * Duplicate the current selection and starts a move action.
      */
     int Duplicate( const TOOL_EVENT& aEvent );
 
     /**
-     * Function MoveExact()
-     * Invokes a dialog box to allow moving of the item by an exact amount.
+     * Invoke a dialog box to allow moving of the item by an exact amount.
      */
     int MoveExact( const TOOL_EVENT& aEvent );
 
     /**
-     * Moves an item but with a reference point selected first
+     * Move an item but with a reference point selected first
      */
     int MoveWithReference( const TOOL_EVENT& aEvent );
 
     /**
-     * Function CreateArray()
-     * Creates an array of the selected items, invoking the array editor dialog to set the options.
+     * Create an array of the selected items, invoking the array editor dialog to set the options.
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
     /**
-     * Function FootprintFilter()
-     * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T
+     * A selection filter which prunes the selection to contain only items of type #PCB_MODULE_T.
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                                  PCB_SELECTION_TOOL* sTool );
 
     /**
-     * Function PadFilter()
-     * A selection filter which prunes the selection to contain only items of type PCB_PAD_T
+     * A selection filter which prunes the selection to contain only items of type #PCB_PAD_T.
      */
     static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                            PCB_SELECTION_TOOL* sTool );
@@ -171,25 +158,23 @@ public:
     BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
     /**
-     * Function copyToClipboard()
-     * Sends the current selection to the clipboard by formatting it as a fake pcb
-     * see AppendBoardFromClipboard for importing
+     * Send the current selection to the clipboard by formatting it as a fake pcb
+     * see #AppendBoardFromClipboard for importing.
      */
     int copyToClipboard( const TOOL_EVENT& aEvent );
 
     /**
-     * Function cutToClipboard()
-     * Cuts the current selection to the clipboard by formatting it as a fake pcb
-     * see AppendBoardFromClipboard for importing
+     * Cut the current selection to the clipboard by formatting it as a fake pcb
+     * see #AppendBoardFromClipboard for importing.
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
 
-    ///> Returns the right modification point (e.g. for rotation), depending on the number of
-    ///> selected items.
+    ///< Return the right modification point (e.g. for rotation), depending on the number of
+    ///< selected items.
     bool updateModificationPoint( PCB_SELECTION& aSelection );
 
     bool invokeInlineRouter( int aDragMode );

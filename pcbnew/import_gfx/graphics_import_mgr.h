@@ -2,8 +2,9 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,12 +34,12 @@ class GRAPHICS_IMPORT_PLUGIN;
 class wxString;
 
 /**
- * @brief Class to manage vector graphics importers.
+ * Manage vector graphics importers.
  */
 class GRAPHICS_IMPORT_MGR
 {
 public:
-    ///> List of handled file types.
+    ///< List of handled file types.
     enum GFX_FILE_T
     {
         DXF,
@@ -54,16 +55,16 @@ public:
      */
     GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist );
 
-    ///> Vector containing all GFX_FILE_T values that can be imported.
+    ///< Vector containing all GFX_FILE_T values that can be imported.
     TYPE_LIST GetImportableFileTypes() const
     {
         return m_importableTypes;
     }
 
-    ///> Returns a plugin that handles a specific file extension.
+    ///< Returns a plugin that handles a specific file extension.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPluginByExt( const wxString& aExtension ) const;
 
-    ///> Returns a plugin instance for a specific file type.
+    ///< Returns a plugin instance for a specific file type.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPlugin( GFX_FILE_T aType ) const;
 
 private:

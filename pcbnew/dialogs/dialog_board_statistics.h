@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin, jasuramme@gmail.com
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,15 +39,13 @@
 #include <wx/datetime.h>
 
 /**
- * DIALOG_BOARD_STATISTIC
- *
  * Dialog to show common board info.
  */
 class DIALOG_BOARD_STATISTICS : public DIALOG_BOARD_STATISTICS_BASE
 {
 public:
     /**
-     * Struct to hold type information, which will be shown in dialog.
+     * Type information, which will be shown in dialog.
      */
     template <typename T>
     struct typeContainer_t
@@ -58,6 +56,7 @@ public:
                   qty( 0 )
         {
         }
+
         T          attribute;
         wxString   title;
         int        qty;
@@ -67,9 +66,8 @@ public:
     using viasType_t = typeContainer_t<VIATYPE>;
 
     /**
-     * Struct holds information about component type (such as SMD, THT,
-     * Virtual and so on), which will be shown in the dialog. Holds both
-     * front and bottom components quantities
+     * Footprint attributes (such as SMD, THT, Virtual and so on), which will be shown in the
+     * dialog. Holds both front and bottom components quantities.
      */
     struct componentsType_t
     {
@@ -80,6 +78,7 @@ public:
                   backSideQty( 0 )
         {
         }
+
         FOOTPRINT_ATTR_T attribute;
         wxString         title;
         int              frontSideQty;
@@ -99,6 +98,7 @@ public:
             COL_START_LAYER,
             COL_STOP_LAYER
         };
+
         drillType_t( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated, bool aIsPad,
                 PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer, int aQty = 0 )
                 : xSize( aXSize ),
@@ -111,12 +111,14 @@ public:
                   qty( aQty )
         {
         }
+
         bool operator==( const drillType_t& other )
         {
             return xSize == other.xSize && ySize == other.ySize && shape == other.shape
                    && isPlated == other.isPlated && isPad == other.isPad
                    && startLayer == other.startLayer && stopLayer == other.stopLayer;
         }
+
         struct COMPARE
         {
             COMPARE( COL_ID aColId, bool aAscending ) : colId( aColId ), ascending( aAscending )
@@ -146,13 +148,16 @@ public:
 
                 return false;
             }
+
             bool compareDrillParameters( int aLeft, int aRight )
             {
                 return ascending ? aLeft < aRight : aLeft > aRight;
             }
+
             COL_ID colId;
             bool   ascending;
         };
+
         int               xSize;
         int               ySize;
         PAD_DRILL_SHAPE_T shape;
@@ -171,44 +176,24 @@ public:
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
     ~DIALOG_BOARD_STATISTICS();
 
-    ///> Get data from the PCB board and print it to dialog
+    ///< Get data from the PCB board and print it to dialog
     bool TransferDataToWindow() override;
 
 private:
-    PCB_EDIT_FRAME* m_parentFrame;
 
-    int             m_boardWidth;
-    int             m_boardHeight;
-    double          m_boardArea;
-
-    ///> Shows if board outline properly defined
-    bool m_hasOutline;
-
-    ///> Holds all components types to be shown in the dialog
-    componentsTypeList_t m_componentsTypes;
-
-    ///> Holds all pads types to be shown in the dialog
-    padsTypeList_t  m_padsTypes;
-
-    ///> Holds all vias types to be shown in the dialog
-    viasTypeList_t m_viasTypes;
-
-    ///> Holds all drill hole types to be shown in the dialog
-    drillTypeList_t m_drillTypes;
-
-    ///> Function to fill up all items types to be shown in the dialog.
+    ///< Function to fill up all items types to be shown in the dialog.
     void refreshItemsTypes();
 
-    ///> Gets data from board
+    ///< Get data from board.
     void getDataFromPCB();
 
-    ///> Applies data to dialog widgets
+    ///< Apply data to dialog widgets.
     void updateWidets();
 
-    ///> Updates drills grid
+    ///< Update drills grid.
     void updateDrillGrid();
 
-    ///> Prints grid to string in tabular format
+    ///< Print grid to string in tabular format.
     void printGridToStringAsTable( wxGrid* aGrid, wxString& aStr, bool aUseRowLabels,
             bool aUseColLabels, bool aUseFirstColAsLabel );
 
@@ -216,12 +201,33 @@ private:
 
     void checkboxClicked( wxCommandEvent& aEvent ) override;
 
-    ///> Save board statistics to a file
+    ///< Save board statistics to a file
     void saveReportClicked( wxCommandEvent& aEvent ) override;
 
     void drillGridSize( wxSizeEvent& aEvent ) override;
 
     void drillGridSort( wxGridEvent& aEvent );
+
+    PCB_EDIT_FRAME* m_parentFrame;
+
+    int             m_boardWidth;
+    int             m_boardHeight;
+    double          m_boardArea;
+
+    ///< Show if board outline properly defined.
+    bool m_hasOutline;
+
+    ///< Hold all components types to be shown in the dialog.
+    componentsTypeList_t m_componentsTypes;
+
+    ///< Hold all pads types to be shown in the dialog.
+    padsTypeList_t  m_padsTypes;
+
+    ///< Hold all vias types to be shown in the dialog.
+    viasTypeList_t m_viasTypes;
+
+    ///< Hold all drill hole types to be shown in the dialog.
+    drillTypeList_t m_drillTypes;
 };
 
 #endif // __DIALOG_BOARD_STATISTICS_H

@@ -11,7 +11,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,8 +44,7 @@ class PCB_EDIT_FRAME;
 #include <board_commit.h>
 
 /**
- * BOARD_NETLIST_UPDATER
- * updates the #BOARD with a new netlist.
+ * Update the #BOARD with a new netlist.
  *
  * The changes are made to the board are as follows they are not disabled in the status
  * settings in the #NETLIST:
@@ -76,53 +75,53 @@ public:
     ~BOARD_NETLIST_UPDATER();
 
     /**
-     * Function UpdateNetlist()
+     * Update the board's components according to the new netlist.
      *
-     * Updates the board's components according to the new netlist.
-     * See BOARD_NETLIST_UPDATER class description for the details of the process.
+     * See #BOARD_NETLIST_UPDATER class description for the details of the process.
+     *
      * @param aNetlist the new netlist
      * @return true if process was completed successfully
      */
     bool UpdateNetlist( NETLIST& aNetlist );
 
-    ///> Sets the reporter object
+    ///< Set the reporter object.
     void SetReporter( REPORTER* aReporter )
     {
         m_reporter = aReporter;
     }
 
-    ///> Enables "delete single pad nets" option
+    ///< Enable "delete single pad nets" option.
     void SetDeleteSinglePadNets( bool aEnabled )
     {
         m_deleteSinglePadNets = aEnabled;
     }
 
-    ///> Enables warning option if a connectable pad is not found in netlist
-    ///> connectable = pad with a name and on a copper layer
+    ///< Enable warning option if a connectable pad is not found in netlist
+    ///< connectable = pad with a name and on a copper layer.
     void SetWarnPadNoNetInNetlist( bool aEnabled )
     {
         m_warnForNoNetPads = aEnabled;
     }
 
-    ///> Enables dry run mode (just report, no changes to PCB)
+    ///< Enable dry run mode (just report, no changes to PCB).
     void SetIsDryRun( bool aEnabled )
     {
         m_isDryRun = aEnabled;
     }
 
-    ///> Enables replacing footprints with new ones
+    ///< Enable replacing footprints with new ones.
     void SetReplaceFootprints( bool aEnabled )
     {
         m_replaceFootprints = aEnabled;
     }
 
-    ///> Enables removing unused components
+    ///< Enable removing unused components.
     void SetDeleteUnusedComponents( bool aEnabled )
     {
         m_deleteUnusedComponents = aEnabled;
     }
 
-    ///> Enables component lookup by timestamp instead of reference
+    ///< Enable component lookup by timestamp instead of reference.
     void SetLookupByTimestamp( bool aEnabled )
     {
         m_lookupByTimestamp = aEnabled;
@@ -178,7 +177,7 @@ private:
     bool m_isDryRun;
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;
-    bool m_warnForNoNetPads;    //Warn if a connectable pad has no net in netlist (not found).
+    bool m_warnForNoNetPads;    // Warn if a connectable pad has no net in netlist (not found).
 
     int m_warningCount;
     int m_errorCount;

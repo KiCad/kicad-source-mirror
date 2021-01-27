@@ -2,8 +2,9 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,13 +324,14 @@ public:
 
     void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) override;
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+                 double aWidth ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double aWidth, double aThickness, double aOrientation,
-            EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
+                  double aHeight, double aWidth, double aThickness, double aOrientation,
+                  EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
                     const VECTOR2D& BezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
@@ -343,7 +345,7 @@ public:
     }
 
 protected:
-    ///> List of imported shapes
+    ///< List of imported shapes
     std::list< std::unique_ptr< IMPORTED_SHAPE > > m_shapes;
 };
 

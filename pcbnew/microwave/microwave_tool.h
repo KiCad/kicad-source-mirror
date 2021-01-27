@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,8 +51,6 @@ public:
 
 
 /**
- * MICROWAVE_TOOL
- *
  * Tool responsible for adding microwave features to PCBs
  */
 class MICROWAVE_TOOL : public PCB_TOOL_BASE
@@ -61,39 +59,41 @@ public:
     MICROWAVE_TOOL();
     ~MICROWAVE_TOOL();
 
-    ///> React to model/view changes
+    ///< React to model/view changes
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Bind handlers to corresponding TOOL_ACTIONs
+    ///< Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
 private:
-    ///> Main interactive tool
+    ///< Main interactive tool
     int addMicrowaveFootprint( const TOOL_EVENT& aEvent );
 
-    ///> Create an inductor between the two points
+    ///< Create an inductor between the two points
     void createInductorBetween( const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
-    ///> Draw a microwave inductor interactively
+    ///< Draw a microwave inductor interactively
     int drawMicrowaveInductor( const TOOL_EVENT& aEvent );
 
     /**
-     * Creates a footprint "GAP" or "STUB" used in micro wave designs.
-     *  This footprint has 2 pads:
-     *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
-     *  the "gap" is isolation created between this 2 pads
+     * Create a footprint "GAP" or "STUB" used in micro wave designs.
      *
-     * @param aComponentShape is the component to create
-     * @return the new footprint
+     * This footprint has 2 pads:
+     * PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
+     * the "gap" is isolation created between this 2 pads
+     *
+     * @param aComponentShape is the component to create.
+     * @return the new footprint.
      */
     FOOTPRINT* createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape );
 
     FOOTPRINT* createPolygonShape();
 
     /**
-     * Creates an S-shaped coil footprint for microwave applications.
+     * Create an S-shaped coil footprint for microwave applications.
      */
-    FOOTPRINT* createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aPattern, wxString& aErrorMessage );
+    FOOTPRINT* createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aPattern,
+                                        wxString& aErrorMessage );
 
     /**
      * Create a basic footprint for micro wave applications.
@@ -101,10 +101,10 @@ private:
      * The default pad settings are:
      *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
      *
-     * @param aValue is the text value
-     * @param aTextSize is the size of ref and value texts ( <= 0 to use board default values )
-     * @param aPadCount is number of pads
-     * @return the new footprint
+     * @param aValue is the text value.
+     * @param aTextSize is the size of ref and value texts ( <= 0 to use board default values ).
+     * @param aPadCount is number of pads.
+     * @return the new footprint.
      */
     FOOTPRINT* createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
 };

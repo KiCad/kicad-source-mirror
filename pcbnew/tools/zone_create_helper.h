@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,38 +35,37 @@ class VIEW;
 }
 
 /**
- * This class is an adjuct helper to the DRAWING_TOOL interactive tool, which handles incoming
- * geometry changes from a POLYGON_GEOM_MANAGER and translates that into a ZONE based on given
- * parameters
+ * An adjunct helper to the DRAWING_TOOL interactive tool, which handles incoming geometry
+ * changes from a #POLYGON_GEOM_MANAGER and translates that into a ZONE based on given
+ * parameters.
  */
 class ZONE_CREATE_HELPER : public POLYGON_GEOM_MANAGER::CLIENT
 {
 public:
-
     /**
      * Parameters used to fully describe a zone creation process
      */
     struct PARAMS
     {
-        ///> Should create a keepout zone?
+        ///< Should create a keepout zone?
         bool m_keepout;
 
-        ///> Layer to begin drawing
+        ///< Layer to begin drawing
         PCB_LAYER_ID m_layer;
 
-        ///> The zone mode to operate in
+        ///< The zone mode to operate in
         ZONE_MODE m_mode;
 
-        ///> Zone settings source (for similar and cutout zones)
+        ///< Zone settings source (for similar and cutout zones)
         ZONE* m_sourceZone;
 
-        ///> Zone leader mode
+        ///< Zone leader mode
         POLYGON_GEOM_MANAGER::LEADER_MODE m_leaderMode;
     };
 
     /**
-     * @param aTool the DRAWING_TOOL to provide the zone tool to
-     * @param aParams the parameters to use to guide the zone creation
+     * @param aTool the #DRAWING_TOOL to provide the zone tool to.
+     * @param aParams the parameters to use to guide the zone creation.
      */
     ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams );
 
@@ -75,9 +74,8 @@ public:
     ZONE* GetZone() const { return m_zone.get(); }
 
     /*
-     * Interface for receiving POLYGON_GEOM_MANAGER update
+     * Interface for receiving #POLYGON_GEOM_MANAGER update
      */
-
     void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) override;
 
     bool OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr ) override;
@@ -85,10 +83,7 @@ public:
     void OnComplete( const POLYGON_GEOM_MANAGER& aMgr ) override;
 
     /**
-     * Function createNewZone()
-     *
-     * Prompt the user for new zone settings, and create a new zone with
-     * those settings
+     * Prompt the user for new zone settings, and create a new zone with those settings.
      *
      * @param aKeepout should the zone be a keepout
      * @return the new zone, can be null if the user aborted
@@ -96,9 +91,7 @@ public:
     std::unique_ptr<ZONE> createNewZone( bool aKeepout );
 
     /**
-     * Function createZoneFromExisting
-     *
-     * Create a new zone with the settings from an existing zone
+     * Create a new zone with the settings from an existing zone.
      *
      * @param aSrcZone the zone to copy settings from
      * @return the new zone
@@ -106,10 +99,7 @@ public:
     std::unique_ptr<ZONE> createZoneFromExisting( const ZONE& aSrcZone );
 
     /**
-     * Function performZoneCutout()
-     *
-     * Cut one zone out of another one (i.e. subtraction) and
-     * update the zone.
+     * Cut one zone out of another one (i.e. subtraction) and update the zone..
      *
      * @param aZone the zone to removed area from
      * @param aCutout the area to remove
@@ -117,28 +107,28 @@ public:
     void performZoneCutout( ZONE& aZone, ZONE& aCutout );
 
     /**
-     * Commit the current zone-in-progress to the BOARD. This might
-     * be adding a new zone, or modifying an existing zone with a
-     * cutout, depending on parameters.
+     * Commit the current zone-in-progress to the BOARD.
      *
-     * @param aZone - the drawn zone outline to commit
+     * This might be adding a new zone, or modifying an existing zone with a cutout, depending
+     * on parameters.
+     *
+     * @param aZone is the drawn zone outline to commit.
      */
     void commitZone( std::unique_ptr<ZONE> aZone );
 
 private:
-
     DRAWING_TOOL& m_tool;
 
-    ///> Parameters of the zone to be drawn
+    ///< Parameters of the zone to be drawn
     PARAMS& m_params;
 
-    ///> The preview item to display
+    ///< The preview item to display
     KIGFX::PREVIEW::POLYGON_ITEM m_previewItem;
 
-    ///> view that show the preview item
+    ///< view that show the preview item
     KIGFX::VIEW& m_parentView;
 
-    ///> The zone-in-progress
+    ///< The zone-in-progress
     std::unique_ptr<ZONE> m_zone;
 };
 

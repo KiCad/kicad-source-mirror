@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@
 
 
 /**
- * AUTOPLACE_TOOL
- *
  * Tool responsible for automagic placement of components.
  */
 class AUTOPLACE_TOOL : public PCB_TOOL_BASE
@@ -38,7 +36,7 @@ public:
     AUTOPLACE_TOOL();
     ~AUTOPLACE_TOOL();
 
-    ///> Bind handlers to corresponding TOOL_ACTIONs
+    ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
 private:

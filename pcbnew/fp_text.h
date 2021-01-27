@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,8 +102,8 @@ public:
     void KeepUpright( double aOldOrientation, double aNewOrientation );
 
     /**
-     * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text is not easy to read
-     * if false, the text rotation is free.
+     * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text
+     *         is not easy to read if false, the text rotation is free.
      */
     bool IsKeepUpright() const
     {
@@ -139,8 +139,7 @@ public:
     TEXT_TYPE GetType() const           { return m_Type; }
 
     /**
-     * Function SetEffects
-     * sets the text effects from another instance.
+     * Set the text effects from another instance.
      */
     void SetEffects( const FP_TEXT& aSrc )
     {
@@ -150,8 +149,7 @@ public:
     }
 
     /**
-     * Function SwapEffects
-     * swaps the text effects of the two involved instances.
+     * Swap the text effects of the two involved instances.
      */
     void SwapEffects( FP_TEXT& aTradingPartner )
     {
@@ -161,15 +159,15 @@ public:
         // std::swap( m_Type, aTradingPartner.m_Type );
     }
 
-    // The Pos0 accessors are for footprint-relative coordinates
+    // The Pos0 accessors are for footprint-relative coordinates.
     void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
     const wxPoint& GetPos0() const      { return m_Pos0; }
 
     int GetLength() const;        // text length
 
     /**
-     * @return the text rotation for drawings and plotting
-     * the footprint rotation is taken in account
+     * @return the text rotation for drawings and plotting the footprint rotation is taken
+     *         in account.
      */
     virtual double GetDrawRotation() const override;
     double GetDrawRotationRadians() const { return GetDrawRotation() * M_PI/1800; }
@@ -177,10 +175,10 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    ///> Set absolute coordinates.
+    ///< Set absolute coordinates.
     void SetDrawCoord();
 
-    ///> Set relative coordinates.
+    ///< Set relative coordinates.
     void SetLocalCoord();
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

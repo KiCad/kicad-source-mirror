@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,7 @@ public:
 
     virtual ~PL_DRAW_PANEL_GAL();
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
@@ -46,17 +46,17 @@ public:
      */
     void DisplayWorksheet();
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer
     virtual void SetTopLayer( int aLayer ) override;
 
 protected:
-    ///> Sets rendering targets & dependencies for layers.
+    ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///> Currently used worksheet
+    ///< Currently used worksheet
     std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
 
     std::unique_ptr<WS_DRAW_ITEM_PAGE> m_pageDrawItem;

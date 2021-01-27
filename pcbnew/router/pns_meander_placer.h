@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,8 +42,6 @@ class SHOVE;
 class OPTIMIZER;
 
 /**
- * MEANDER_PLACER
- *
  * Single track length matching/meandering tool.
  */
 class MEANDER_PLACER : public MEANDER_PLACER_BASE
@@ -104,10 +103,10 @@ protected:
 
     virtual long long int origPathLength() const;
 
-    ///> current routing start point (end of tail, beginning of head)
+    ///< current routing start point (end of tail, beginning of head)
     VECTOR2I m_currentStart;
 
-    ///> Current world state
+    ///< Current world state
     NODE* m_currentNode;
 
     LINE     m_originLine;

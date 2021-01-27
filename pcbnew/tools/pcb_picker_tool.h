@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +31,7 @@
 #include <tools/pcb_tool_base.h>
 
 /**
- * @brief Generic tool for picking an item.
+ *Generic tool for picking an item.
  */
 class PCB_PICKER_TOOL : public PCB_TOOL_BASE
 {
@@ -37,7 +39,7 @@ public:
     PCB_PICKER_TOOL();
     ~PCB_PICKER_TOOL() override { }
 
-    ///> Event handler types.
+    ///< Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
     typedef std::function<void(const VECTOR2D&)> MOTION_HANDLER;
     typedef std::function<void(void)> CANCEL_HANDLER;
@@ -52,15 +54,14 @@ public:
         EXCEPTION_CANCEL
     };
 
-    ///> @copydoc TOOL_INTERACTIVE::Reset()
+    ///< @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
 
-    ///> Main event loop.
+    ///< Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Function SetLayerSet()
-     * Sets the tool's snap layer set
+     * Set the tool's snap layer set.
      */
     inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
 
@@ -68,8 +69,7 @@ public:
 
     inline void SetSnapping( bool aSnap ) { m_snap = aSnap; }
     /**
-     * Function SetClickHandler()
-     * Sets a handler for mouse click event. Handler may decide to receive further click by
+     * Set a handler for mouse click event. Handler may decide to receive further click by
      * returning true.
      */
     inline void SetClickHandler( CLICK_HANDLER aHandler )
@@ -79,8 +79,7 @@ public:
     }
 
     /**
-     * Function SetMotionHandler()
-     * Sets a handler for mouse motion.  Used for roll-over highlighting.
+     * Set a handler for mouse motion.  Used for roll-over highlighting.
      */
     inline void SetMotionHandler( MOTION_HANDLER aHandler )
     {
@@ -89,8 +88,7 @@ public:
     }
 
     /**
-     * Function SetCancelHandler()
-     * Sets a handler for cancel events (ESC or context-menu Cancel).
+     * Set a handler for cancel events (ESC or context-menu Cancel).
      */
     inline void SetCancelHandler( CANCEL_HANDLER aHandler )
     {
@@ -99,8 +97,7 @@ public:
     }
 
     /**
-     * Function SetFinalizeHandler()
-     * Sets a handler for the finalize event. Takes the state of the exit from the Main loop
+     * Set a handler for the finalize event. Takes the state of the exit from the Main loop.
      */
     inline void SetFinalizeHandler( FINALIZE_HANDLER aHandler )
     {
@@ -108,18 +105,17 @@ public:
         m_finalizeHandler = aHandler;
     }
 
-private:
-    ///> @copydoc TOOL_INTERACTIVE::setTransitions();
+    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
-    ///> Reinitializes tool to its initial state.
+    ///< Reinitialize tool to its initial state.
     void reset();
 
-    ///> Applies the requested VIEW_CONTROLS settings.
+    ///< Apply the requested VIEW_CONTROLS settings.
     void setControls();
 
 private:
-    ///> The layer set to use for optional snapping
+    ///< The layer set to use for optional snapping.
     LSET                  m_layerMask;
     KICURSOR              m_cursor;
     bool                  m_snap;

@@ -2,7 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -55,26 +56,23 @@ struct CN_PTR_CMP
 };
 
 /**
- * RN_NET
- * Describes ratsnest for a single net.
+ * Describe ratsnest for a single net.
  */
 class RN_NET
 {
 public:
-    ///> Default constructor.
     RN_NET();
 
     /**
-     * Function SetVisible()
-     * Sets state of the visibility flag.
+     * Set state of the visibility flag.
+     *
      * @param aEnabled is new state. True if ratsnest for a given net is meant to be displayed,
-     * false otherwise.
+     *                 false otherwise.
      */
     void SetVisible( bool aEnabled );
 
     /**
-     * Function MarkDirty()
-     * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
+     * Mark ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
     void MarkDirty()
     {
@@ -82,9 +80,9 @@ public:
     }
 
     /**
-     * Function IsDirty()
-     * Returns state of the 'dirty' flag, indicating that ratsnest for a given net is invalid
+     * Return state of the 'dirty' flag, indicating that ratsnest for a given net is invalid
      * and requires an update.
+     *
      * @return True if ratsnest requires recomputation, false otherwise.
      */
     bool IsDirty() const
@@ -93,8 +91,8 @@ public:
     }
 
     /**
-     * Function GetUnconnected()
-     * Returns pointer to a vector of edges that makes ratsnest for a given net.
+     * Return pointer to a vector of edges that makes ratsnest for a given net.
+     *
      * @return Pointer to a vector of edges that makes ratsnest for a given net.
      */
     const std::vector<CN_EDGE> GetUnconnected() const
@@ -103,8 +101,7 @@ public:
     }
 
     /**
-     * Function Update()
-     * Recomputes ratsnest for a net.
+     * Recompute ratsnest for a net.
      */
     void Update();
     void Clear();
@@ -117,8 +114,8 @@ public:
     }
 
     /**
-     * Function GetNodes()
-     * Returns list of nodes that are associated with a given item.
+     * Return list of nodes that are associated with a given item.
+     *
      * @param aItem is an item for which the list is generated.
      * @return List of associated nodes.
      */
@@ -130,39 +127,40 @@ public:
     }
 
     /**
-     * Function GetAllItems()
-     * Adds all stored items to a list.
+     * Add all stored items to a list.
+     *
      * @param aOutput is the list that will have items added.
      * @param aTypes determines the type of added items.
      */
     void GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, const KICAD_T aTypes[] ) const;
 
     /**
-     * Function GetClosestNode()
-     * Returns a single node that lies in the shortest distance from a specific node.
+     * Return a single node that lies in the shortest distance from a specific node.
+     *
      * @param aNode is the node for which the closest node is searched.
      */
     const CN_ANCHOR_PTR GetClosestNode( const CN_ANCHOR_PTR& aNode ) const;
 
-    bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1, CN_ANCHOR_PTR& aNode2 ) const;
+    bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
+                               CN_ANCHOR_PTR& aNode2 ) const;
 
 protected:
-    ///> Recomputes ratsnest from scratch.
+    ///< Recompute ratsnest from scratch.
     void compute();
 
-    ///> Compute the minimum spanning tree using Kruskal's algorithm
+    ///< Compute the minimum spanning tree using Kruskal's algorithm
     void kruskalMST( const std::vector<CN_EDGE> &aEdges );
 
-    ///> Vector of nodes
+    ///< Vector of nodes
     std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_nodes;
 
-    ///> Vector of edges that make pre-defined connections
+    ///< Vector of edges that make pre-defined connections
     std::vector<CN_EDGE> m_boardEdges;
 
-    ///> Vector of edges that makes ratsnest for a given net.
+    ///< Vector of edges that makes ratsnest for a given net.
     std::vector<CN_EDGE> m_rnEdges;
 
-    ///> Flag indicating necessity of recalculation of ratsnest for a net.
+    ///< Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
 
     class TRIANGULATOR_STATE;

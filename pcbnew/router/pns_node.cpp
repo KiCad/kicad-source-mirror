@@ -3,7 +3,8 @@
  *
  * Copyright (C) 2013-2019 CERN
  * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -132,7 +133,7 @@ NODE* NODE::Branch()
     child->m_root = isRoot() ? this : m_root;
     child->m_maxClearance = m_maxClearance;
 
-    // Immmediate offspring of the root branch needs not copy anything. For the rest, deep-copy
+    // Immediate offspring of the root branch needs not copy anything. For the rest, deep-copy
     // joints, overridden item maps and pointers to stored items.
     if( !isRoot() )
     {
@@ -183,7 +184,7 @@ void OBSTACLE_VISITOR::SetWorld( const NODE* aNode, const NODE* aOverride )
 
 bool OBSTACLE_VISITOR::visit( ITEM* aCandidate )
 {
-    // check if there is a more recent branch with a newer (possibily modified) version of this
+    // check if there is a more recent branch with a newer (possibly modified) version of this
     // item.
     if( m_override && m_override->Overrides( aCandidate ) )
         return true;
@@ -197,7 +198,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 {
     OBSTACLES& m_tab;
 
-    int        m_kindMask;          ///>  (solids, vias, segments, etc...)
+    int        m_kindMask;          ///<  (solids, vias, segments, etc...)
     int        m_limitCount;
     int        m_matchCount;
     int        m_extraClearance;
@@ -714,6 +715,7 @@ void NODE::rebuildJoint( JOINT* aJoint, ITEM* aItem )
     tag.pos = aJoint->Pos();
 
     bool split;
+
     do
     {
         split = false;
@@ -736,7 +738,7 @@ void NODE::rebuildJoint( JOINT* aJoint, ITEM* aItem )
     } while( split );
 
     // and re-link them, using the former via's link list
-    for(ITEM* link : links)
+    for( ITEM* link : links )
     {
         if( link != aItem )
             linkJoint( tag.pos, link->Layers(), net, link );
@@ -844,7 +846,7 @@ void NODE::Remove( ITEM* aItem )
 
 void NODE::Remove( LINE& aLine )
 {
-    // LINE does not have a seperate remover, as LINEs are never truly a member of the tree
+    // LINE does not have a separate remover, as LINEs are never truly a member of the tree
     std::vector<LINKED_ITEM*>& segRefs = aLine.Links();
 
     for( LINKED_ITEM* li : segRefs )
@@ -1162,10 +1164,11 @@ void NODE::Dump( bool aLong )
     JOINT_MAP::iterator j;
 
     if( aLong )
+    {
         for( j = m_joints.begin(); j != m_joints.end(); ++j )
         {
             wxLogTrace( "PNS", "joint : %s, links : %d\n",
-                    j->second.GetPos().Format().c_str(), j->second.LinkCount() );
+                        j->second.GetPos().Format().c_str(), j->second.LinkCount() );
             JOINT::LINKED_ITEMS::const_iterator k;
 
             for( k = j->second.GetLinkList().begin(); k != j->second.GetLinkList().end(); ++k )
@@ -1187,7 +1190,7 @@ void NODE::Dump( bool aLong )
                 }
             }
         }
-
+    }
 
     int lines_count = 0;
 

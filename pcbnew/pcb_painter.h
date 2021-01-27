@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -58,15 +59,14 @@ namespace KIGFX
 class GAL;
 
 /**
- * PCB_RENDER_SETTINGS
- * Stores PCB specific render settings.
+ * PCB specific render settings.
  */
 class PCB_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
     friend class PCB_PAINTER;
 
-    ///> Flags to control clearance lines visibility
+    ///< Flags to control clearance lines visibility
     enum CLEARANCE_MODE
     {
         CL_NONE             = 0x00,
@@ -85,9 +85,9 @@ public:
     PCB_RENDER_SETTINGS();
 
     /**
-     * Function LoadDisplayOptions
-     * Loads settings related to display options (high-contrast mode, full or outline modes
+     * Load settings related to display options (high-contrast mode, full or outline modes
      * for vias/pads/tracks and so on).
+     *
      * @param aOptions are settings that you want to use for displaying items.
      */
     void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aShowPageLimits );
@@ -98,11 +98,11 @@ public:
     virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
     /**
-     * Function SetSketchMode
-     * Turns on/off sketch mode for given item layer.
+     * Turn on/off sketch mode for given item layer.
+     *
      * @param aItemLayer is the item layer that is changed.
      * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
-     * false for filled mode).
+     *                 false for filled mode).
      */
     inline void SetSketchMode( int aItemLayer, bool aEnabled )
     {
@@ -110,8 +110,8 @@ public:
     }
 
     /**
-     * Function GetSketchMode
-     * Returns sketch mode setting for a given item layer.
+     * Return sketch mode setting for a given item layer.
+     *
      * @param aItemLayer is the item layer that is changed.
      */
     inline bool GetSketchMode( int aItemLayer ) const
@@ -120,9 +120,10 @@ public:
     }
 
     /**
-     * Turns on/off sketch mode for graphic items (DRAWSEGMENTs, texts).
+     * Turn on/off sketch mode for graphic items (DRAWSEGMENTs, texts).
+     *
      * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
-     * false for filled mode).
+     *                 false for filled mode).
      */
     inline void SetSketchModeGraphicItems( bool aEnabled )
     {
@@ -130,7 +131,7 @@ public:
     }
 
     /**
-     * Turns on/off drawing outline and hatched lines for zones.
+     * Turn on/off drawing outline and hatched lines for zones.
      */
     void EnableZoneOutlines( bool aEnabled )
     {
@@ -155,12 +156,14 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
-    /** Switch the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
+    /**
+     * Switch the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
      * to control how the non active layers are shown
      */
     void SetContrastModeDisplay( HIGH_CONTRAST_MODE aMode ) { m_contrastModeDisplay = aMode; }
 
-    /** return the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
+    /**
+     * @return the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN ).
      */
     HIGH_CONTRAST_MODE GetContrastModeDisplay() { return m_contrastModeDisplay; }
 
@@ -187,7 +190,7 @@ public:
     void SetZoneDisplayMode( ZONE_DISPLAY_MODE mode ) { m_zoneDisplayMode = mode; }
 
 protected:
-    ///> Maximum font size for netnames (and other dynamically shown strings)
+    ///< Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 
     bool               m_sketchMode[GAL_LAYER_ID_END];
@@ -212,16 +215,16 @@ protected:
 
     int                m_clearanceDisplayFlags;
 
-    ///> How to display nets and netclasses with color overrides
+    ///< How to display nets and netclasses with color overrides
     NET_COLOR_MODE m_netColorMode;
 
-    ///> Overrides for specific netclass colors
+    ///< Overrides for specific netclass colors
     std::map<wxString, KIGFX::COLOR4D> m_netclassColors;
 
-    ///> Overrides for specific net colors, stored as netcodes for the ratsnest to access easily
+    ///< Overrides for specific net colors, stored as netcodes for the ratsnest to access easily
     std::map<int, KIGFX::COLOR4D> m_netColors;
 
-    ///> Set of net codes that should not have their ratsnest displayed
+    ///< Set of net codes that should not have their ratsnest displayed
     std::set<int> m_hiddenNets;
 
     // These opacity overrides multiply with any opacity in the base layer color
@@ -233,7 +236,6 @@ protected:
 
 
 /**
- * PCB_PAINTER
  * Contains methods for drawing PCB-specific items.
  */
 class PCB_PAINTER : public PAINTER
@@ -273,9 +275,8 @@ protected:
     void draw( const PCB_MARKER* aMarker, int aLayer );
 
     /**
-     * Function getLineThickness()
-     * Get the thickness to draw for a line (e.g. 0 thickness lines
-     * get a minimum value).
+     * Get the thickness to draw for a line (e.g. 0 thickness lines get a minimum value).
+     *
      * @param aActualThickness line own thickness
      * @return the thickness to draw
      */

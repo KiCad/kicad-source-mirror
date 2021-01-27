@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,7 @@ class PL_EDITOR_FRAME;
 
 
 /**
- * PL_EDITOR_CONTROL
- *
- * Handles actions specific to the schematic editor in eeschema.
+ * Handle actions specific to the page layout editor.
  */
 class PL_EDITOR_CONTROL : public wxEvtHandler, public TOOL_INTERACTIVE
 {
@@ -70,7 +68,7 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:

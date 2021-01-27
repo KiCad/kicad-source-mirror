@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -46,53 +46,57 @@ public:
     bool Init() override;
 
     /**
-     * Converts selected lines to a polygon, if possible
+     * Convert selected lines to a polygon, if possible.
      */
     int LinesToPoly( const TOOL_EVENT& aEvent );
 
     /**
-     * Converts selected polygon-like object to graphic lines, if possible
+     * Convert selected polygon-like object to graphic lines, if possible.
      */
     int PolyToLines( const TOOL_EVENT& aEvent );
 
     /**
-     * Converts selected segment (graphic or track) to an arc of the same type
+     * Convert selected segment (graphic or track) to an arc of the same type
      */
     int SegmentToArc( const TOOL_EVENT& aEvent );
 
-    ///> @copydoc TOOL_INTERACTIVE::setTransitions()
+    ///< @copydoc TOOL_INTERACTIVE::setTransitions()
     void setTransitions() override;
 
 private:
-
     /**
-     * Retrieves the start and end points for a generic item
-     * @param aItem is an item that has a start and end point
-     * @return a segment from start to end, or NULLOPT if invalid
+     * Retrieve the start and end points for a generic item.
+     *
+     * @param aItem is an item that has a start and end point.
+     * @return a segment from start to end, or NULLOPT if invalid.
      */
     static OPT<SEG> getStartEndPoints( EDA_ITEM* aItem );
 
     /**
-     * Tries to make polygons from segments in the selected items.
+     * Try to make polygons from segments in the selected items.
+     *
      * Polygons are formed from chains of lines/arcs.  Each set containing two or more lines/arcs
-     * that are connected will be added to the return SHAPE_POLY_SET as an outline.
-     * No attempt is made to guess at holes.
-     * @param aItems is a list of items to process
-     * @return a SHAPE_POLY_SET containing any polygons that were created
+     * that are connected will be added to the return SHAPE_POLY_SET as an outline.  No attempt
+     * is made to guess at holes.
+     *
+     * @param aItems is a list of items to process.
+     * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
     static SHAPE_POLY_SET makePolysFromSegs( const std::deque<EDA_ITEM*>& aItems );
 
     /**
-     * Tries to make polygons from rects
-     * @param aItems is a list of rect shapes to process
-     * @return a SHAPE_POLY_SET containing any polygons that were created
+     * Try to make polygons from rectangles.
+     *
+     * @param aItems is a list of rect shapes to process.
+     * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
     static SHAPE_POLY_SET makePolysFromRects( const std::deque<EDA_ITEM*>& aItems );
 
     /**
-     * Tries to make polygons from circles
-     * @param aItems is a list of circle shapes to process
-     * @return a SHAPE_POLY_SET containing any polygons that were created
+     * Try to make polygons from circles.
+     *
+     * @param aItems is a list of circle shapes to process.
+     * @return a #SHAPE_POLY_SET containing any polygons that were created.
      */
     static SHAPE_POLY_SET makePolysFromCircles( const std::deque<EDA_ITEM*>& aItems );
 

@@ -298,7 +298,7 @@ private:
     ///< @return a new color from the palette
     wxColour generateColor();
 
-    ///> @brief Constructs the plot axes for DC simulation plot
+    ///< @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes();
 
     // Color index to get a new color from the palette

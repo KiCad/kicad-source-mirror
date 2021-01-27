@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,9 +37,7 @@ namespace KIGFX {
 class PCB_EDIT_FRAME;
 
 /**
- * BOARD_EDITOR_CONTROL
- *
- * Handles actions specific to the board editor in pcbnew.
+ * Handle actions specific to the board editor in PcbNew.
  */
 class BOARD_EDITOR_CONTROL : public PCB_TOOL_BASE
 {
@@ -83,56 +83,53 @@ public:
     // Zone actions
     int ZoneMerge( const TOOL_EVENT& aEvent );
 
-    ///> Duplicates a zone onto a layer (prompts for new layer)
+    ///< Duplicate a zone onto a layer (prompts for new layer)
     int ZoneDuplicate( const TOOL_EVENT& aEvent );
 
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceTarget()
-     * Allows user to place a layer alignment target.
+     * Allow user to place a layer alignment target.
      */
     int PlaceTarget( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceFootprint()
-     * Displays a dialog to select a footprint to be added and allows the user to set its position.
+     * Display a dialog to select a footprint to be added and allows the user to set its position.
      */
     int PlaceFootprint( const TOOL_EVENT& aEvent );
 
-    ///> Toggles 'lock' property for selected items.
+    ///< Toggle 'lock' property for selected items.
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
 
-    ///> Locks selected items.
+    ///< Lock selected items.
     int LockSelected( const TOOL_EVENT& aEvent );
 
-    ///> Unlocks selected items.
+    ///< Unlock selected items.
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
-    ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
+    ///< Run the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 
-    ///> Low-level access (below undo) to setting the drill origin
+    ///< Low-level access (below undo) to setting the drill origin.
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   EDA_ITEM* aItem, const VECTOR2D& aPoint );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );
 
 private:
-    ///> How to modify a property for selected items.
+    ///< How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };
 
     int modifyLockSelected( MODIFY_MODE aMode );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
-    PCB_EDIT_FRAME* m_frame;     ///> Pointer to the currently used edit frame.
+    PCB_EDIT_FRAME* m_frame;     ///< Pointer to the currently used edit frame.
 
-    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///> Place & drill origin marker
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///< Place & drill origin marker
 
-    static const int WIDTH_STEP; ///> How does line width change after one -/+ key press.
+    static const int WIDTH_STEP; ///< How does line width change after one -/+ key press.
 };
 
 #endif

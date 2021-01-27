@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,8 +38,6 @@ class PCB_SELECTION_TOOL;
 class SHAPE_POLY_SET;
 
 /**
- * PCB_POINT_EDITOR
- *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
 class PCB_POINT_EDITOR : public PCB_TOOL_BASE
@@ -52,46 +52,46 @@ public:
     bool Init() override;
 
     /**
-     * Function OnSelected()
-     *
      * Change selection event handler.
      */
     int OnSelectionChange( const TOOL_EVENT& aEvent );
 
     /**
-     * Indicates the cursor is over an edit point.  Used to coordinate cursor shapes with
-     * other tools.
+     * Indicate the cursor is over an edit point.
+     *
+     * Used to coordinate cursor shapes with other tools.
      */
     bool HasPoint() { return m_editedPoint != nullptr; }
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
     void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points, const SHAPE_POLY_SET* aOutline );
 
     std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
 
-    ///> Updates item's points with edit points.
+    ///< Update item's points with edit points.
     void updateItem() const;
 
-    ///> Applies the last changes to the edited item.
+    ///< Apply the last changes to the edited item.
     void finishItem();
 
     /**
-     * Validates a polygon and displays a popup warning if invalid.
+     * Validate a polygon and displays a popup warning if invalid.
+     *
      * @param aModified is the polygon to be checked.
      * @return True if polygon is valid.
      */
     bool validatePolygon( SHAPE_POLY_SET& aModified ) const;
 
-    ///> Updates edit points with item's points.
+    ///< Update edit points with item's points.
     void updatePoints();
 
-    ///> Updates which point is being edited.
+    ///< Update which point is being edited.
     void updateEditedPoint( const TOOL_EVENT& aEvent );
 
-    ///> Sets the current point being edited. NULL means none.
+    ///< Set the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 
     inline int getEditedPointIndex() const
@@ -105,25 +105,25 @@ private:
         return wxNOT_FOUND;
     }
 
-    ///> Returns true if aPoint is the currently modified point.
+    ///< Return true if aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
     {
         return m_editedPoint == &aPoint;
     }
 
-    ///> Sets up an alternative constraint (typically enabled upon a modifier key being pressed).
+    ///< Set up an alternative constraint (typically enabled upon a modifier key being pressed).
     void setAltConstraint( bool aEnabled );
 
-    ///> Returns a point that should be used as a constrainer for 45 degrees mode.
+    ///< Return a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
 
-    ///> Condition to display "Create corner" context menu entry.
+    ///< Condition to display "Create corner" context menu entry.
     static bool addCornerCondition( const SELECTION& aSelection );
 
-    ///> Determine if the tool can currently add a corner to the given item
+    ///< Determine if the tool can currently add a corner to the given item
     static bool canAddCorner( const EDA_ITEM& aItem );
 
-    ///> Condition to display "Remove corner" context menu entry.
+    ///< Condition to display "Remove corner" context menu entry.
     bool removeCornerCondition( const SELECTION& aSelection );
 
     /// TOOL_ACTION handlers
@@ -155,10 +155,9 @@ private:
     void editArcMidKeepCenter( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart, VECTOR2I aMid,
                                VECTOR2I aEnd, const VECTOR2I aCursor ) const;
 
-    ///> Change the edit method to an alternative method ( currently, arcs only )
+    ///< Change the edit method to an alternative method ( currently, arcs only )
     int changeEditMethod( const TOOL_EVENT& aEvent );
 
-private:
     PCB_SELECTION_TOOL*                m_selectionTool;
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
     std::shared_ptr<EDIT_POINTS>       m_editPoints;
@@ -166,7 +165,7 @@ private:
     EDIT_POINT*         m_editedPoint;
     EDIT_POINT*         m_hoveredPoint;
 
-    EDIT_POINT          m_original;        ///> Original position for the current drag point.
+    EDIT_POINT          m_original;        ///< Original position for the current drag point.
 
     bool                m_refill;
     bool                m_altEditMethod;

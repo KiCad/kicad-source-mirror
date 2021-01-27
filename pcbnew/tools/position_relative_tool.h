@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,10 @@ class PCB_SELECTION_TOOL;
 class DIALOG_POSITION_RELATIVE;
 
 /**
- * POSITION_RELATIVE_TOOL
+ * The interactive edit tool.
  *
- * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected
- * using the pcbnew.InteractiveSelection tool.
+ * Allows one to move, rotate, flip and change properties of items selected using the
+ * pcbnew.InteractiveSelection tool.
  */
 
 class POSITION_RELATIVE_TOOL : public PCB_TOOL_BASE
@@ -53,37 +53,28 @@ public:
     bool Init() override;
 
     /**
-     * Function PositionRelative()
-     *
-     * Invokes a dialog box to allow positioning of the item relative to another by an exact amount.
+     * Invoke a dialog box to allow positioning of the item relative to another by an exact amount.
      */
     int PositionRelative( const TOOL_EVENT& aEvent );
 
     /**
-     * Function SelectPositionRelativeItem()
-     *
-     * Invokes the picker tool to select the item to which the previous selection will be placed
+     * Invoke the picker tool to select the item to which the previous selection will be placed
      * relative to.
      */
     int SelectPositionRelativeItem( const TOOL_EVENT& aEvent  );
 
     /**
-     * Function GetSelectionAnchorPosition()
-     *
-     * Returns the postion of the selected item(s)
-     *
+     * Return the position of the selected item(s)
      */
     wxPoint GetSelectionAnchorPosition() const { return m_selectionAnchor; }
 
     /**
-     * Function RelativeItemSelectionMove()
-     *
-     * Positions the m_position_relative_selection selection relative to anchorpostion using
+     * Position the m_position_relative_selection selection relative to anchor position using
      * the given translation.
      */
     int RelativeItemSelectionMove( wxPoint anchor, wxPoint translation );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:

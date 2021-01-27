@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,26 +59,10 @@ class PCB_BASE_FRAME;
 DECL_VEC_FOR_SWIG( PADS_VEC, PAD* )
 
 /**
- * NETINFO_ITEM
- * handles the data for a net
+ * Handle the data for a net.
  */
 class NETINFO_ITEM : public BOARD_ITEM
 {
-    friend class NETINFO_LIST;
-
-private:
-    int         m_netCode;         ///< A number equivalent to the net name.
-    wxString    m_netname;         ///< Full net name like /sheet/subsheet/vout used by Eeschema.
-    wxString    m_shortNetname;    ///< short net name, like vout from /sheet/subsheet/vout.
-
-    NETCLASSPTR m_netClass;
-
-    bool        m_isCurrent;       ///< Indicates the net is currently in use.  We still store
-                                   ///< those that are not during a session for undo/redo and to
-                                   ///< keep netclass membership information.
-
-    BOARD*      m_parent;          ///< The parent board the net belongs to.
-
 public:
 
     NETINFO_ITEM( BOARD* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = -1 );
@@ -113,10 +97,8 @@ public:
     void SetNetClass( const NETCLASSPTR& aNetClass );
 
     /**
-     * Function GetNetClass
-     *
-     * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
-     * std::shared_ptr stuff shows up large in performance profiling.
+     * @note Do **not** return a std::shared_ptr from this.  It is used heavily in DRC, and the
+     *       std::shared_ptr stuff shows up large in performance profiling.
      */
     NETCLASS* GetNetClass()
     {
@@ -132,20 +114,17 @@ public:
     void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }
 
     /**
-     * Function GetNetname
-     * @return const wxString&, a reference to the full netname
+     * @return the full netname.
      */
     const wxString& GetNetname() const { return m_netname; }
 
     /**
-     * Function GetShortNetname
-     * @return const wxString &, a reference to the short netname
+     * @return the short netname.
      */
     const wxString& GetShortNetname() const { return m_shortNetname; }
 
     /**
-     * Function SetNetname
-     * Sets the long netname to \a aNetName, and the short netname to the last token in
+     * Set the long netname to \a aNetName, and the short netname to the last token in
      * the long netname's path.
      */
     void SetNetname( const wxString& aNewName )
@@ -162,8 +141,7 @@ public:
     void SetIsCurrent( bool isCurrent ) { m_isCurrent = isCurrent; }
 
     /**
-     * Function GetMsgPanelInfo
-     * returns the information about the #NETINFO_ITEM in \a aList to display in the
+     * Return the information about the #NETINFO_ITEM in \a aList to display in the
      * message panel.
      *
      * @param aList is the list in which to place the  status information.
@@ -171,8 +149,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
-     * Function Clear
-     * sets all fields to their defaults values.
+     * Set all fields to their default values.
      */
     void Clear()
     {
@@ -183,6 +160,21 @@ public:
     {
         return m_parent;
     }
+
+private:
+    friend class NETINFO_LIST;
+
+    int         m_netCode;         ///< A number equivalent to the net name.
+    wxString    m_netname;         ///< Full net name like /sheet/subsheet/vout used by Eeschema.
+    wxString    m_shortNetname;    ///< short net name, like vout from /sheet/subsheet/vout.
+
+    NETCLASSPTR m_netClass;
+
+    bool        m_isCurrent;       ///< Indicates the net is currently in use.  We still store
+                                   ///< those that are not during a session for undo/redo and to
+                                   ///< keep netclass membership information.
+
+    BOARD*      m_parent;          ///< The parent board the net belongs to.
 };
 
 
@@ -196,8 +188,7 @@ public:
 
 
     /**
-     * Function SetBoard
-     * Sets a BOARD object that is used to prepare the net code map.
+     * Set a BOARD object that is used to prepare the net code map.
      */
     void SetBoard( const BOARD* aBoard )
     {
@@ -206,23 +197,24 @@ public:
     }
 
     /**
-     * Function Update
-     * Prepares a mapping for net codes so they can be saved as consecutive numbers.
+     * Prepare a mapping for net codes so they can be saved as consecutive numbers.
+     *
      * To retrieve a mapped net code, use translateNet() function after calling this.
      */
     void Update();
 
     /**
-     * Function Translate
-     * Translates net number according to the map prepared by Update() function. It
-     * allows one to have items stored with consecutive net codes.
+     * Translate net number according to the map prepared by Update() function.
+     *
+     * It allows one to have items stored with consecutive net codes.
+     *
      * @param aNetCode is an old net code.
      * @return Net code that follows the mapping.
      */
     int Translate( int aNetCode ) const;
 
-    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    ///< Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///< std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
     {
     public:
@@ -268,10 +260,10 @@ public:
     };
 
     /**
-     * Function begin()
-     * Returns iterator to the first entry in the mapping.
-     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
-     * not mapped net code.
+     * Return iterator to the first entry in the mapping.
+     *
+     * @note The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     *       not mapped net code.
      */
     iterator begin() const
     {
@@ -279,10 +271,10 @@ public:
     }
 
     /**
-     * Function end()
-     * Returns iterator to the last entry in the mapping.
-     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
-     * not mapped net code.
+     * Return iterator to the last entry in the mapping.
+     *
+     * @note The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     *       not mapped net code.
      */
     iterator end() const
     {
@@ -290,7 +282,6 @@ public:
     }
 
     /**
-     * Function GetSize
      * @return Number of mapped nets (i.e. not empty nets for a given BOARD object).
      */
     int GetSize() const
@@ -299,9 +290,9 @@ public:
     }
 
 private:
-    const BOARD*       m_board;         ///> Board for which mapping is prepared
-    std::map<int, int> m_netMapping;    ///> Map that allows saving net codes with consecutive
-                                        ///> numbers (for compatibility reasons)
+    const BOARD*       m_board;         ///< Board for which mapping is prepared
+    std::map<int, int> m_netMapping;    ///< Map that allows saving net codes with consecutive
+                                        ///< numbers (for compatibility reasons)
 };
 
 
@@ -319,9 +310,7 @@ DECL_MAP_FOR_SWIG( NETCODES_MAP, int,       NETINFO_ITEM* )
 #endif
 
 /**
- * NETINFO_LIST
- * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
- * this class a container for the nets.
+ * Container for #NETINFO_ITEM elements, which are the nets.
  */
 class NETINFO_LIST
 {
@@ -332,43 +321,37 @@ public:
     ~NETINFO_LIST();
 
     /**
-     * Function GetItem
-     * @param aNetCode = netcode to identify a given NETINFO_ITEM
-     * @return NETINFO_ITEM* - by \a aNetCode, or NULL if not found
+     * @param aNetCode netcode to identify a given #NETINFO_ITEM.
+     * @return net item by \a aNetCode, or NULL if not found.
      */
     NETINFO_ITEM* GetNetItem( int aNetCode ) const;
 
     /**
-     * Function GetItem
-     * @param aNetName = net name to identify a given NETINFO_ITEM
-     * @return NETINFO_ITEM* - by \a aNetName, or NULL if not found
+     * @param aNetName net name to identify a given #NETINFO_ITEM.
+     * @return net item by \a aNetName, or NULL if not found.
      */
     NETINFO_ITEM* GetNetItem( const wxString& aNetName ) const;
 
     /**
-     * Function GetNetCount
-     * @return the number of nets ( always >= 1 )
-     * because the first net is the "not connected" net and always exists
+     * @return the number of nets ( always >= 1 ) because the first net is the "not connected"
+     *         net and always exists
      */
     unsigned GetNetCount() const { return m_netNames.size(); }
 
     /**
-     * Function AppendNet
-     * adds \a aNewElement to the end of the net list. Negative net code means it is going to be
+     * Add \a aNewElement to the end of the net list. Negative net code means it is going to be
      * auto-assigned.
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
     /**
-     * Function RemoveNet
-     * Removes a new from the net list.
+     * Remove a net from the net list.
      */
     void RemoveNet( NETINFO_ITEM* aNet );
     void RemoveUnusedNets();
 
     /**
-     * Function GetPadCount
-     * @return the number of pads in board
+     * @return the number of pads in board.
      */
 
     /// Return the name map, at least for python.
@@ -377,16 +360,16 @@ public:
     /// Return the netcode map, at least for python.
     const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
 
-    ///> Constant that holds the "unconnected net" number (typically 0)
-    ///> all items "connected" to this net are actually not connected items
+    ///< Constant that holds the "unconnected net" number (typically 0)
+    ///< all items "connected" to this net are actually not connected items
     static const int UNCONNECTED;
 
-    ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
-    ///> (typically -1) when calling SetNetCode od board connected items
+    ///< Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
+    ///< (typically -1) when calling SetNetCode on board connected items.
     static const int ORPHANED;
 
-    ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
-    ///> board storing net list available.
+    ///< NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
+    ///< board storing net list available.
     static NETINFO_ITEM* OrphanedItem()
     {
         static NETINFO_ITEM* g_orphanedItem;
@@ -402,8 +385,8 @@ public:
 #endif
 
 #ifndef SWIG
-    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    ///< Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///< std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
     {
     public:
@@ -468,25 +451,22 @@ public:
 
 private:
     /**
-     * Function clear
-     * deletes the list of nets (and free memory)
+     * Delete the list of nets (and free memory).
      */
     void clear();
 
     /**
-     * Function buildListOfNets
-     * builds or rebuilds the list of NETINFO_ITEMs
+     * Rebuild the list of NETINFO_ITEMs
+     *
      * The list is sorted by names.
      */
     void buildListOfNets();
 
     /**
-     * Function getFreeNetCode
-     * returns the first available net code that is not used by any other net.
+     * Return the first available net code that is not used by any other net.
      */
     int getFreeNetCode();
 
-private:
     BOARD*       m_parent;
 
     NETNAMES_MAP m_netNames;        ///< map of <wxString, NETINFO_ITEM*>, is NETINFO_ITEM owner

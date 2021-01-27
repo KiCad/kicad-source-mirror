@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,35 +54,29 @@ public:
     int UpdateMenu( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Main()
-     *
      * The main loop.
      */
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Function GetSelection()
-     *
-     * Returns the set of currently selected items.
+     * Return the set of currently selected items.
      */
     PL_SELECTION& GetSelection();
 
     /**
-     * Function RequestSelection()
-     *
-     * Returns either an existing selection (filtered), or the selection at the current
+     * Return either an existing selection (filtered), or the selection at the current
      * cursor if the existing selection is empty.
      */
     PL_SELECTION& RequestSelection();
 
     /**
-     * Function selectPoint()
-     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * Select an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows one to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
-     * was cancelled (for instance, by clicking outside of the disambiguation menu).
+     *                                was canceled (for instance, by clicking outside of the
+     *                                disambiguation menu).
      */
     void SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCancelledFlag = nullptr );
 
@@ -109,21 +103,18 @@ public:
     void RebuildSelection();
 
     /**
-     * Function SelectionMenu()
      * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
      * item.
      *
-     * NOTE: this routine DOES NOT modify the selection.
+     * @note This routine **does not** modify the selection.
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
 private:
     /**
-     * Function selectMultiple()
-     * Handles drawing a selection box that allows one to select many items at
-     * the same time.
+     * Handle drawing a selection box that allows one to select many items at the same time.
      *
-     * @return true if the function was cancelled (i.e. CancelEvent was received).
+     * @return true if the function was canceled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
 
@@ -134,15 +125,15 @@ private:
     void guessSelectionCandidates( COLLECTOR& collector, const VECTOR2I& aWhere );
 
     /**
-     * Allows the selection of a single item from a list via pop-up menu.  The items are
+     * Allow the selection of a single item from a list via pop-up menu.  The items are
      * highlighted on the canvas when hovered in the menu.  The collector is trimmed to
      * the picked item.
-     * @return true if an item was picked
+     *
+     * @return true if an item was picked.
      */
     bool doSelectionMenu( COLLECTOR* aItems );
 
     /**
-     * Function select()
      * Takes necessary action mark an item as selected.
      *
      * @param aItem is an item to be selected.
@@ -150,16 +141,15 @@ private:
     void select( EDA_ITEM* aItem );
 
     /**
-     * Function unselect()
-     * Takes necessary action mark an item as unselected.
+     * Take necessary action mark an item as unselected.
      *
      * @param aItem is an item to be unselected.
      */
     void unselect( EDA_ITEM* aItem );
 
     /**
-     * Function highlight()
-     * Highlights the item visually.
+     * Highlight the item visually.
+     *
      * @param aItem is an item to be be highlighted.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
@@ -167,8 +157,8 @@ private:
     void highlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
 
     /**
-     * Function unhighlight()
-     * Unhighlights the item visually.
+     * Unhighlight the item visually.
+     *
      * @param aItem is an item to be be highlighted.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
@@ -176,12 +166,11 @@ private:
     void unhighlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
 
     /**
-     * Function selectionContains()
      * @return True if the given point is contained in any of selected items' bounding box.
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:

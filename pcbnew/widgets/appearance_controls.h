@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -201,7 +201,7 @@ public:
 
     wxSize GetBestSize() const;
 
-    ///> Updates the panel contents from the application and board models
+    ///< Update the panel contents from the application and board models.
     void OnBoardChanged();
 
     void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
@@ -218,26 +218,26 @@ public:
 
     void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
 
-    ///> Updates the colors on all the widgets from the new chosen color theme
+    ///< Update the colors on all the widgets from the new chosen color theme.
     void OnColorThemeChanged();
 
-    ///> Updates the widget when the active board layer is changed
+    ///< Update the widget when the active board layer is changed.
     void OnLayerChanged();
 
-    ///> Manually update visibility for a given layer
+    ///< Manually update visibility for a given layer
     void SetLayerVisible( LAYER_NUM aLayer, bool isVisible );
 
     void SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible = true );
 
-    ///> Updates the manual layer alpha overrides
+    ///< Update the manual layer alpha overrides.
     void OnLayerAlphaChanged();
 
     void UpdateDisplayOptions();
 
-    ///> Returns a list of the layer presets created by the user
+    ///< Return a list of the layer presets created by the user.
     std::vector<LAYER_PRESET> GetUserLayerPresets() const;
 
-    ///> Updates the current layer presets from those saved in the project file
+    ///< Update the current layer presets from those saved in the project file.
     void SetUserLayerPresets( std::vector<LAYER_PRESET>& aPresetList );
 
     void ApplyLayerPreset( const wxString& aPresetName );
@@ -261,14 +261,13 @@ public:
 
     void OnLayerContextMenu( wxCommandEvent& aEvent );
 
-    ///> Returns the index of the current tab (0-2)
+    ///< Return the index of the current tab (0-2).
     int GetTabIndex() const;
 
-    ///> Sets the current notebook tab
+    ///< Set the current notebook tab.
     void SetTabIndex( int aTab );
 
 protected:
-
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
 
     void OnSetFocus( wxFocusEvent& aEvent ) override;
@@ -284,122 +283,6 @@ protected:
     void OnNetGridMouseEvent( wxMouseEvent& aEvent );
 
 private:
-    PCB_BASE_FRAME* m_frame;
-
-    wxWindow* m_focusOwner;
-
-    static const APPEARANCE_SETTING s_objectSettings[];
-
-    ROW_ICON_PROVIDER* m_iconProvider;
-
-    BOARD* m_board;
-
-    bool m_isFpEditor;
-
-    // Nets grid view
-    NET_GRID_TABLE* m_netsTable;
-
-    GRID_BITMAP_TOGGLE_RENDERER* m_toggleGridRenderer;
-
-    /// Grid cell that is being hovered over, for tooltips
-    wxGridCellCoords m_hoveredCell;
-
-    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
-
-    std::map<PCB_LAYER_ID, APPEARANCE_SETTING*> m_layerSettingsMap;
-
-    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_objectSettings;
-
-    std::map<GAL_LAYER_ID, APPEARANCE_SETTING*> m_objectSettingsMap;
-
-    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_netclassSettings;
-
-    std::map<wxString, APPEARANCE_SETTING*> m_netclassSettingsMap;
-
-    // TODO(JE) Move preset storage to the PCB_CONTROL tool
-
-    // Storage for all layer presets
-    std::map<wxString, LAYER_PRESET> m_layerPresets;
-
-    LAYER_PRESET* m_currentPreset;
-
-    /// The last user (non-read-only) preset selected by the user
-    LAYER_PRESET* m_lastSelectedUserPreset;
-
-    wxArrayString m_presetMRU;
-
-    wxMenu* m_layerContextMenu;
-
-    /// Stores wxIDs for each netclass for control event mapping
-    std::map<int, wxString> m_netclassIdMap;
-
-    /// The name of the netclass that was right-clicked
-    wxString m_contextMenuNetclass;
-
-    wxBoxSizer* m_layersOuterSizer;
-    wxBoxSizer* m_objectsOuterSizer;
-
-    // The built-in layer presets
-
-    static LAYER_PRESET presetNoLayers;
-    static LAYER_PRESET presetAllLayers;
-    static LAYER_PRESET presetAllCopper;
-    static LAYER_PRESET presetInnerCopper;
-    static LAYER_PRESET presetFront;
-    static LAYER_PRESET presetFrontAssembly;
-    static LAYER_PRESET presetBack;
-    static LAYER_PRESET presetBackAssembly;
-
-    int m_pointSize;
-
-    wxColour m_layerPanelColour;
-
-    // Layer display options controls
-
-    WX_COLLAPSIBLE_PANE* m_paneLayerDisplayOptions;
-    wxStaticText*        m_staticTextContrastModeTitle;
-    wxRadioButton*       m_rbHighContrastNormal;
-    wxRadioButton*       m_rbHighContrastDim;
-    wxRadioButton*       m_rbHighContrastOff;
-    wxStaticLine*        m_layerDisplaySeparator;
-    wxCheckBox*          m_cbFlipBoard;
-
-    // Net display options controls
-
-    WX_COLLAPSIBLE_PANE* m_paneNetDisplayOptions;
-    wxStaticText*        m_txtNetDisplayTitle;
-    wxRadioButton*       m_rbNetColorAll;
-    wxRadioButton*       m_rbNetColorRatsnest;
-    wxRadioButton*       m_rbNetColorOff;
-    wxStaticText*        m_txtRatsnestVisibility;
-    wxRadioButton*       m_rbRatsnestAllLayers;
-    wxRadioButton*       m_rbRatsnestVisibleLayers;
-
-    enum POPUP_ID
-    {
-        ID_CHANGE_COLOR = wxID_HIGHEST,
-        ID_SET_NET_COLOR,
-        ID_CLEAR_NET_COLOR,
-        ID_SHOW_ALL_NETS,
-        ID_HIDE_OTHER_NETS,
-        ID_HIGHLIGHT_NET,
-        ID_SELECT_NET,
-        ID_DESELECT_NET,
-        ID_SHOW_ALL_COPPER_LAYERS,
-        ID_HIDE_ALL_COPPER_LAYERS,
-        ID_HIDE_ALL_BUT_ACTIVE,
-        ID_PRESET_NO_LAYERS,
-        ID_PRESET_ALL_LAYERS,
-        ID_PRESET_FRONT,
-        ID_PRESET_FRONT_ASSEMBLY,
-        ID_PRESET_INNER_COPPER,
-        ID_PRESET_BACK,
-        ID_PRESET_BACK_ASSEMBLY,
-        ID_HIDE_ALL_NON_COPPER,
-        ID_SHOW_ALL_NON_COPPER,
-        ID_LAST_VALUE
-    };
-
     void createControls();
 
     void rebuildLayers();
@@ -469,6 +352,119 @@ private:
     bool doesBoardItemNeedRebuild( BOARD_ITEM* aBoardItem );
 
     bool doesBoardItemNeedRebuild( std::vector<BOARD_ITEM*>& aBoardItems );
+
+    PCB_BASE_FRAME* m_frame;
+
+    wxWindow* m_focusOwner;
+
+    static const APPEARANCE_SETTING s_objectSettings[];
+
+    ROW_ICON_PROVIDER* m_iconProvider;
+
+    BOARD* m_board;
+
+    bool m_isFpEditor;
+
+    // Nets grid view
+    NET_GRID_TABLE* m_netsTable;
+
+    GRID_BITMAP_TOGGLE_RENDERER* m_toggleGridRenderer;
+
+    /// Grid cell that is being hovered over, for tooltips
+    wxGridCellCoords m_hoveredCell;
+
+    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_layerSettings;
+
+    std::map<PCB_LAYER_ID, APPEARANCE_SETTING*> m_layerSettingsMap;
+
+    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_objectSettings;
+
+    std::map<GAL_LAYER_ID, APPEARANCE_SETTING*> m_objectSettingsMap;
+
+    std::vector<std::unique_ptr<APPEARANCE_SETTING>> m_netclassSettings;
+
+    std::map<wxString, APPEARANCE_SETTING*> m_netclassSettingsMap;
+
+    // TODO(JE) Move preset storage to the PCB_CONTROL tool
+
+    // Storage for all layer presets
+    std::map<wxString, LAYER_PRESET> m_layerPresets;
+
+    LAYER_PRESET* m_currentPreset;
+
+    /// The last user (non-read-only) preset selected by the user
+    LAYER_PRESET* m_lastSelectedUserPreset;
+
+    wxArrayString m_presetMRU;
+
+    wxMenu* m_layerContextMenu;
+
+    /// Stores wxIDs for each netclass for control event mapping
+    std::map<int, wxString> m_netclassIdMap;
+
+    /// The name of the netclass that was right-clicked
+    wxString m_contextMenuNetclass;
+
+    wxBoxSizer* m_layersOuterSizer;
+    wxBoxSizer* m_objectsOuterSizer;
+
+    // The built-in layer presets
+    static LAYER_PRESET presetNoLayers;
+    static LAYER_PRESET presetAllLayers;
+    static LAYER_PRESET presetAllCopper;
+    static LAYER_PRESET presetInnerCopper;
+    static LAYER_PRESET presetFront;
+    static LAYER_PRESET presetFrontAssembly;
+    static LAYER_PRESET presetBack;
+    static LAYER_PRESET presetBackAssembly;
+
+    int m_pointSize;
+
+    wxColour m_layerPanelColour;
+
+    // Layer display options controls
+    WX_COLLAPSIBLE_PANE* m_paneLayerDisplayOptions;
+    wxStaticText*        m_staticTextContrastModeTitle;
+    wxRadioButton*       m_rbHighContrastNormal;
+    wxRadioButton*       m_rbHighContrastDim;
+    wxRadioButton*       m_rbHighContrastOff;
+    wxStaticLine*        m_layerDisplaySeparator;
+    wxCheckBox*          m_cbFlipBoard;
+
+    // Net display options controls
+    WX_COLLAPSIBLE_PANE* m_paneNetDisplayOptions;
+    wxStaticText*        m_txtNetDisplayTitle;
+    wxRadioButton*       m_rbNetColorAll;
+    wxRadioButton*       m_rbNetColorRatsnest;
+    wxRadioButton*       m_rbNetColorOff;
+    wxStaticText*        m_txtRatsnestVisibility;
+    wxRadioButton*       m_rbRatsnestAllLayers;
+    wxRadioButton*       m_rbRatsnestVisibleLayers;
+
+    enum POPUP_ID
+    {
+        ID_CHANGE_COLOR = wxID_HIGHEST,
+        ID_SET_NET_COLOR,
+        ID_CLEAR_NET_COLOR,
+        ID_SHOW_ALL_NETS,
+        ID_HIDE_OTHER_NETS,
+        ID_HIGHLIGHT_NET,
+        ID_SELECT_NET,
+        ID_DESELECT_NET,
+        ID_SHOW_ALL_COPPER_LAYERS,
+        ID_HIDE_ALL_COPPER_LAYERS,
+        ID_HIDE_ALL_BUT_ACTIVE,
+        ID_PRESET_NO_LAYERS,
+        ID_PRESET_ALL_LAYERS,
+        ID_PRESET_FRONT,
+        ID_PRESET_FRONT_ASSEMBLY,
+        ID_PRESET_INNER_COPPER,
+        ID_PRESET_BACK,
+        ID_PRESET_BACK_ASSEMBLY,
+        ID_HIDE_ALL_NON_COPPER,
+        ID_SHOW_ALL_NON_COPPER,
+        ID_LAST_VALUE
+    };
 };
 
 #endif

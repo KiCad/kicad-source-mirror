@@ -2,7 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -109,7 +110,7 @@ public:
     }
 
     /**
-     * Sets the line width for the imported outlines (in mm).
+     * Set the line width for the imported outlines (in mm).
      */
     void SetLineWidthMM( double aWidth )
     {
@@ -117,7 +118,7 @@ public:
     }
 
     /**
-     * Returns the line width used for importing the outlines (in mm).
+     * Return the line width used for importing the outlines (in mm).
      */
     double GetLineWidthMM() const
     {
@@ -133,8 +134,7 @@ public:
     }
 
     /**
-     * @return the offset to add to coordinates when importing graphic items.
-     * The offset is always in mm
+     * @return the offset in millimeters to add to coordinates when importing graphic items.
      */
     const VECTOR2D& GetImportOffsetMM() const
     {
@@ -142,8 +142,7 @@ public:
     }
 
     /**
-     * Set the offset to add to coordinates when importing graphic items.
-     * The offset is always in mm
+     * Set the offset in millimeters to add to coordinates when importing graphic items.
      */
     void SetImportOffsetMM( const VECTOR2D& aOffset )
     {
@@ -152,7 +151,8 @@ public:
 
     /**
      * Set the scale factor affecting the imported shapes.
-     * it allows conversion between imported shapes units and mm
+     *
+     * This allows conversion between imported shapes units and millimeters.
      */
     void SetScale( double aScale )
     {
@@ -183,10 +183,8 @@ public:
         return m_items;
     }
 
-    ///> Default line thickness (in mm)
+    ///< Default line thickness (in mm)
     static constexpr unsigned int DEFAULT_LINE_WIDTH_DFX = 1;
-
-    // Methods to be implemented by derived graphics importers
 
     /**
      * Create an object representing a line segment.
@@ -204,7 +202,8 @@ public:
      * @param aRadius is the circle radius expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
+                            bool aFilled ) = 0;
 
     /**
      * Create an object representing an arc.
@@ -250,23 +249,23 @@ public:
                             double aWidth ) = 0;
 
 protected:
-    ///> Adds an item to the imported shapes list.
+    ///< Add an item to the imported shapes list.
     void addItem( std::unique_ptr<EDA_ITEM> aItem )
     {
         m_items.emplace_back( std::move( aItem ) );
     }
 
 private:
-    ///> List of imported items
+    ///< List of imported items
     std::list<std::unique_ptr<EDA_ITEM>> m_items;
 
-    ///> Plugin used to load a file
+    ///< Plugin used to load a file
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> m_plugin;
 
-    ///> Total image width
+    ///< Total image width
     double m_originalWidth;
 
-    ///> Total image Height;
+    ///< Total image Height;
     double m_originalHeight;
 
     /**
@@ -276,14 +275,14 @@ private:
      */
     double m_scale;
 
-    ///> Default line thickness for the imported graphics
+    ///< Default line thickness for the imported graphics
     double m_lineWidth;
 
 protected:
-    ///> factor to convert millimeters to Internal Units
+    ///< factor to convert millimeters to Internal Units
     double m_millimeterToIu;
 
-    ///> Offset (in mm) for imported coordinates
+    ///< Offset (in mm) for imported coordinates
     VECTOR2D m_offsetCoordmm;
 };
 

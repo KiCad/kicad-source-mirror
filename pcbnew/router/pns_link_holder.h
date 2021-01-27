@@ -2,6 +2,8 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2019 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * Author: Seth Hillbrand <hillbrand@ucdavis.edu>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.h>
  *
@@ -36,14 +38,14 @@ public:
     LINK_HOLDER( PnsKind aKind ) : ITEM( aKind )
     {}
 
-    ///> Adds a reference to an item registered in a NODE that is a part of this line.
+    ///< Add a reference to an item registered in a #NODE that is a part of this line.
     void Link( LINKED_ITEM* aLink )
     {
         m_links.push_back( aLink );
     }
 
-    ///> Returns the list of links from the owning node that constitute this
-    ///> line (or NULL if the line is not linked)
+    ///< Return the list of links from the owning node that constitute this
+    ///< line (or NULL if the line is not linked).
     LINKS& Links() { return m_links; }
     const LINKS& Links() const { return m_links; }
 
@@ -52,7 +54,7 @@ public:
         return m_links.size() != 0;
     }
 
-    ///> Checks if the segment aLink is a part of the line.
+    ///< Check if the segment aLink is a part of the line.
     bool ContainsLink( const LINKED_ITEM* aItem ) const
     {
         return alg::contains( m_links, aItem );
@@ -63,13 +65,13 @@ public:
         return m_links[aIndex];
     }
 
-    ///> Erases the linking information. Used to detach the line from the owning node.
+    ///< Erase the linking information. Used to detach the line from the owning node.
     virtual void ClearLinks()
     {
         m_links.clear();
     }
 
-    ///> Returns the number of segments that were assembled together to form this line.
+    ///< Return the number of segments that were assembled together to form this line.
     int LinkCount() const
     {
         return m_links.size();
@@ -77,7 +79,7 @@ public:
 
     void ShowLinks() const
     {
-        #if 0 // fixme: move outside header
+#if 0 /// @todo move outside header.
         if( !IsLinked() )
         {
             wxLogTrace( "PNS", "item %p: no links", this );
@@ -88,18 +90,18 @@ public:
 
         for( int i = 0; i < (int) m_links.size(); i++ )
             wxLogTrace( "PNS", "item %d: %p\n", i, m_links[i] );
-        #endif
+#endif
     }
 
 protected:
-    ///> Copies m_links from the line aParent.
+    ///< Copy m_links from the line \a aParent.
     void copyLinks( const LINK_HOLDER* aParent )
     {
         m_links = aParent->m_links;
     }
 
-    ///> List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
-    ///> if the line is not a part of any node.
+    ///< List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
+    ///< if the line is not a part of any node.
     LINKS m_links;
 };
 

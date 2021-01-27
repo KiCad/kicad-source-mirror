@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 /**
  * @file kicadcurve.h
- * declares the Curve (glyph) object.
+ * Declare the Curve (glyph) object.
  */
 
 #ifndef KICADCURVE_H
@@ -47,7 +48,7 @@ public:
         return m_layer;
     }
 
-    ///> Returns human-readable description of the curve.
+    ///< Return human-readable description of the curve.
     std::string Describe() const;
 
     CURVE_TYPE m_form;          // form of curve: line, arc, circle

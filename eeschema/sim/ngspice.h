@@ -61,7 +61,7 @@ public:
     ///< @copydoc SPICE_SIMULATOR::GetXAxis()
     std::string GetXAxis( SIM_TYPE aType ) const override;
 
-    ///> @copydoc SPICE_SIMULATOR::AllPlots()
+    ///< @copydoc SPICE_SIMULATOR::AllPlots()
     std::vector<std::string> AllPlots() const override;
 
     ///< @copydoc SPICE_SIMULATOR::GetPlot()

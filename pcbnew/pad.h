@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,9 +69,10 @@ public:
 
     /*
      * Default layers used for pads, according to the pad type.
-     * this is default values only, they can be changed for a given pad
+     *
+     * This is default values only, they can be changed for a given pad.
      */
-    static LSET PTHMask();     ///< layer set for a through hole pad
+    static LSET PTHMask();          ///< layer set for a through hole pad
     static LSET SMDMask();          ///< layer set for a SMD pad on Front layer
     static LSET ConnSMDMask();      ///< layer set for a SMD pad on Front layer
                                     ///< used for edge board connectors
@@ -109,22 +110,22 @@ public:
     bool IsLocked() const override;
 
     /**
-     * Imports the pad settings from aMasterPad.
-     * The result is "this" has the same settinds (sizes, shapes ... )
-     * as aMasterPad
-     * @param aMasterPad = the template pad
+     * Import the pad settings from \a aMasterPad.
+     *
+     * The result is "this" has the same settings (sizes, shapes ... ) as \a aMasterPad.
+     *
+     * @param aMasterPad the template pad.
      */
     void ImportSettingsFrom( const PAD& aMasterPad );
 
     /**
-     * @return true if the pad has a footprint parent flipped
-     * (on the back/bottom layer)
+     * @return true if the pad has a footprint parent flipped on the back/bottom layer.
      */
     bool IsFlipped() const;
 
     /**
-     * Set the pad name (sometimes called pad number, although
-     * it can be an array reference like AA12).
+     * Set the pad name (sometimes called pad number, although it can be an array reference
+     * like AA12).
      */
     void SetName( const wxString& aName ) { m_name = aName; }
     const wxString& GetName() const { return m_name; }
@@ -144,8 +145,6 @@ public:
     /**
      * Before we had custom pad shapes it was common to have multiple overlapping pads to
      * represent a more complex shape.
-     * @param other
-     * @return
      */
     bool SameLogicalPadAs( const PAD* other ) const
     {
@@ -176,14 +175,12 @@ public:
     wxPoint GetPosition() const override { return m_pos; }
 
     /**
-     * Function GetAnchorPadShape
      * @return the shape of the anchor pad shape, for custom shaped pads.
      */
     PAD_SHAPE_T GetAnchorPadShape() const       { return m_anchorPadShape; }
 
     /**
-     * @return the option for the custom pad shape to use as clearance area
-     * in copper zones
+     * @return the option for the custom pad shape to use as clearance area in copper zones.
      */
     CUST_PAD_SHAPE_IN_ZONE GetCustomShapeInZoneOpt() const
     {
@@ -191,8 +188,8 @@ public:
     }
 
     /**
-     * Set the option for the custom pad shape to use as clearance area
-     * in copper zones
+     * Set the option for the custom pad shape to use as clearance area in copper zones.
+     *
      * @param aOption is the clearance area shape CUST_PAD_SHAPE_IN_ZONE option
      */
     void SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE aOption )
@@ -201,10 +198,10 @@ public:
     }
 
     /**
-     * Function SetAnchorPadShape
-     * Set the shape of the anchor pad for custm shped pads.
-     * @param the shape of the anchor pad shape( currently, only
-     * PAD_SHAPE_RECT or PAD_SHAPE_CIRCLE.
+     * Set the shape of the anchor pad for custom shaped pads.
+     *
+     * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE_RECT or
+     *               #PAD_SHAPE_CIRCLE.
      */
     void SetAnchorPadShape( PAD_SHAPE_T aShape )
     {
@@ -214,8 +211,6 @@ public:
 
     /**
      * @return true if the pad is on any copper layer, false otherwise.
-     * pads can be only on tech layers to build special pads.
-     * they are therefore not always on a copper layer
      */
     bool IsOnCopperLayer() const override
     {
@@ -257,12 +252,12 @@ public:
      * Has meaning only for custom shape pads.
      * add a free shape to the shape list.
      * the shape can be
-     *   a polygon (outline can have a thickness)
-     *   a thick segment
-     *   a filled circle (thickness == 0) or ring
-     *   a filled rect (thickness == 0) or rectangular outline
-     *   a arc
-     *   a bezier curve
+     *  - a polygon (outline can have a thickness)
+     *  - a thick segment
+     *  - a filled circle (thickness == 0) or ring
+     *  - a filled rect (thickness == 0) or rectangular outline
+     *  - a arc
+     *  - a bezier curve
      */
     void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled );
     void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, bool aFilled );
@@ -279,13 +274,14 @@ public:
     bool GetBestAnchorPosition( VECTOR2I& aPos );
 
     /**
-     * Merge all basic shapes to a SHAPE_POLY_SET
-     * Note: The results are relative to the pad position, orientation 0.
+     * Merge all basic shapes to a #SHAPE_POLY_SET.
+     *
+     * @note The results are relative to the pad position, orientation 0.
      */
     void MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const;
 
     /**
-     * clear the basic shapes list
+     * Clear the basic shapes list.
      */
     void DeletePrimitivesList();
 
@@ -301,7 +297,7 @@ public:
 
     /**
      * Flip (mirror) the primitives left to right or top to bottom, around the anchor position
-     * in custom pads
+     * in custom pads.
      */
     void FlipPrimitives( bool aFlipLeftRight );
 
@@ -312,7 +308,7 @@ public:
     void ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
 
     /**
-     * Import a custom shape primites list (composed of basic shapes) and add items to the
+     * Import a custom shape primitive list (composed of basic shapes) and add items to the
      * current list.  Copies the input, which is not altered.
      */
     void AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList );
@@ -323,10 +319,11 @@ public:
     void AddPrimitive( PCB_SHAPE* aPrimitive );
 
     /**
-     * Function SetOrientation
-     * sets the rotation angle of the pad.
-     * @param aAngle in tenths of degrees.  If it is outside of 0 - 3600, then it will be
-     * normalized before being saved.
+     * Set the rotation angle of the pad.
+     *
+     * If \a aAngle is outside of 0 - 3600, then it will be normalized.
+     *
+     * @param aAngle in tenths of degrees.
      */
     void SetOrientation( double aAngle );
 
@@ -336,8 +333,7 @@ public:
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
 
     /**
-     * Function GetOrientation
-     * returns the rotation angle of the pad in a variety of units (the basic call returns
+     * Return the rotation angle of the pad in a variety of units (the basic call returns
      * tenths of degrees).
      */
     double GetOrientation() const { return m_orient; }
@@ -369,7 +365,10 @@ public:
 
     // We don't currently have an attribute for APERTURE, and adding one will change the file
     // format, so for now just infer a copper-less pad to be an APERTURE pad.
-    bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
+    bool IsAperturePad() const
+    {
+        return ( m_layerMask & LSET::AllCuMask() ).none();
+    }
 
     void SetPadToDieLength( int aLength )       { m_lengthPadToDie = aLength; }
     int GetPadToDieLength() const               { return m_lengthPadToDie; }
@@ -388,13 +387,13 @@ public:
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
 
     /**
-     * Function TransformShapeWithClearanceToPolygon
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
-     * @param aMaxError = maximum error from true when converting arcs
-     * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
-     * @param ignoreLineWidth = used for edge cuts where the line width is only for visualization
+     *
+     * @param aCornerBuffer a buffer to store the polygon.
+     * @param aClearanceValue the clearance around the pad.
+     * @param aMaxError maximum error from true when converting arcs.
+     * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
+     * @param ignoreLineWidth used for edge cuts where the line width is only for visualization.
      */
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                PCB_LAYER_ID aLayer, int aClearanceValue,
@@ -402,13 +401,13 @@ public:
                                                bool ignoreLineWidth = false ) const override;
 
     /**
-     * Function TransformHoleWithClearanceToPolygon
-     * Build the Corner list of the polygonal drill shape in the board coordinate system.
-     * @param aCornerBuffer = a buffer to fill.
-     * @param aInflateValue = the clearance or margin value.
-     * @param aError = maximum deviation of an arc from the polygon approximation
+     * Build the corner list of the polygonal drill shape in the board coordinate system.
+     *
+     * @param aCornerBuffer a buffer to fill.
+     * @param aInflateValue the clearance or margin value.
+     * @param aError maximum deviation of an arc from the polygon approximation.
      * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
-     * @return false if the pad has no hole, true otherwise
+     * @return false if the pad has no hole, true otherwise.
      */
     bool TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
                                               int aError, ERROR_LOC aErrorLoc ) const;
@@ -419,54 +418,47 @@ public:
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
 
     /**
-     * Function GetEffectiveHoleShape
-     * Returns a SHAPE object representing the pad's hole.
+     * Return a SHAPE object representing the pad's hole.
      */
     const SHAPE_SEGMENT* GetEffectiveHoleShape() const;
 
     /**
-     * Function GetBoundingRadius
-     * returns the radius of a minimum sized circle which fully encloses this pad.
+     * Return the radius of a minimum sized circle which fully encloses this pad.
+     *
      * The center is the pad position NOT THE SHAPE POS!
      */
     int GetBoundingRadius() const;
 
     /**
-     * Function GetLocalClearanceOverrides
-     * returns any local clearance overrides set in the "classic" (ie: pre-rule) system.
-     * @param aSource [out] optionally reports the source as a user-readable string
-     * @return int - the clearance in internal units.
+     * Return any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     *
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
      */
     int GetLocalClearanceOverrides( wxString* aSource ) const override;
 
-   // Mask margins handling:
-
     /**
-     * Function GetSolderMaskMargin
      * @return the margin for the solder mask layer
-     * usually > 0 (mask shape bigger than pad)
-     * For pads also on copper layers, the value (used to build a default shape) is
-     * 1 - the local value
-     * 2 - if 0, the parent footprint value
-     * 3 - if 0, the global value
-     * For pads NOT on copper layers, the value is the local value because there is no default
-     * shape to build
+     *
+     * Usually > 0 (mask shape bigger than pad).  For pads **not** on copper layers, the value
+     * is the local value because there is no default shape to build.  For pads also on copper
+     * layers, the value (used to build a default shape) is:
+     *  1 the local value
+     *  2 if 0, the parent footprint value
+     *  3 if 0, the global value
      */
     int GetSolderMaskMargin() const;
 
     /**
-     * Function GetSolderPasteMargin
-     * @return the margin for the solder mask layer
-     * usually < 0 (mask shape smaller than pad)
-     * because the margin can be dependent on the pad size, the margin has a x and a y value
+     * Usually < 0 (mask shape smaller than pad)because the margin can be dependent on the pad
+     * size, the margin has a x and a y value.  For pads **not** on copper layers, the value is
+     * the local value because there is no default shape to build.  For pads also on copper
+     * layers, the value (used to build a default shape) is:
+     *  1 the local value
+     *  2 if 0, the parent footprint value
+     *  3 if 0, the global value
      *
-     * For pads also on copper layers, the value (used to build a default shape) is
-     * 1 - the local value
-     * 2 - if 0, the parent footprint value
-     * 3 - if 0, the global value
-     *
-     * For pads NOT on copper layers, the value is the local value because there is
-     * no default shape to build
+     * @return the margin for the solder mask layer.
     */
     wxSize GetSolderPasteMargin() const;
 
@@ -476,6 +468,7 @@ public:
     /**
      * Return the zone connection in effect (either locally overridden or overridden in the
      * parent footprint).
+     *
      * Optionally reports on the source of the property (pad, parent footprint or zone).
      */
     ZONE_CONNECTION GetEffectiveZoneConnection( wxString* aSource = nullptr ) const;
@@ -483,7 +476,6 @@ public:
     /**
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
      * override similar settings in the parent footprint and zone.
-     * @param aWidth
      */
     void SetThermalSpokeWidth( int aWidth ) { m_thermalWidth = aWidth; }
     int GetThermalSpokeWidth() const { return m_thermalWidth; }
@@ -502,8 +494,8 @@ public:
     int GetEffectiveThermalGap( wxString* aSource = nullptr ) const;
 
     /**
-     * Function SetRoundRectCornerRadius
-     * has meaning only for rounded rect pads
+     * Has meaning only for rounded rectangle pads.
+     *
      * @return The radius of the rounded corners for this pad.
      */
     void SetRoundRectCornerRadius( double aRadius );
@@ -512,7 +504,8 @@ public:
     wxPoint ShapePos() const;
 
     /**
-     * has meaning only for rounded rect pads
+     * Has meaning only for rounded rectangle pads.
+     *
      * Set the ratio between the smaller X or Y size and the rounded corner radius.
      * Cannot be > 0.5; the normalized IPC-7351C value is 0.25
      */
@@ -520,7 +513,8 @@ public:
     double GetRoundRectRadiusRatio() const { return m_roundedCornerScale; }
 
     /**
-     * has meaning only for chamfered rect pads
+     * Has meaning only for chamfered rectangular pads.
+     *
      * Set the ratio between the smaller X or Y size and chamfered corner size.
      * Cannot be < 0.5.
      */
@@ -528,30 +522,32 @@ public:
     double GetChamferRectRatio() const { return m_chamferScale; }
 
     /**
-     * has meaning only for chamfered rect pads
-     * set the position of the chamfers for orientation 0.
-     * @param aPositions a bit-set of RECT_CHAMFER_POSITIONS
+     * Has meaning only for chamfered rectangular pads.
+     *
+     * Set the position of the chamfers for orientation 0.
+     *
+     * @param aPositions a bit-set of #RECT_CHAMFER_POSITIONS.
      */
     void SetChamferPositions( int aPositions ) { m_chamferPositions = aPositions; }
     int GetChamferPositions() const { return m_chamferPositions; }
 
     /**
-     * Function GetSubRatsnest
-     * @return int - the netcode
+     * @return the netcode.
      */
     int GetSubRatsnest() const                  { return m_subRatsnest; }
     void SetSubRatsnest( int aSubRatsnest )     { m_subRatsnest = aSubRatsnest; }
 
     /**
-     * Sets the unconnected removal property.  If true, the copper is removed on zone fill
-     * or when specifically requested when the pad is not connected on a layer.  This requires
-     * that there be a through hole.
+     * Set the unconnected removal property.
+     *
+     * If true, the copper is removed on zone fill or when specifically requested when the pad
+     * is not connected on a layer.  This requires that there be a through hole.
      */
     void SetRemoveUnconnected( bool aSet )      { m_removeUnconnectedLayer = aSet; }
     bool GetRemoveUnconnected() const           { return m_removeUnconnectedLayer; }
 
     /**
-     * Sets whether we keep the top and bottom connections even if they are not connected
+     * Set whether we keep the top and bottom connections even if they are not connected.
      */
     void SetKeepTopBottom( bool aSet )      { m_keepTopBottomLayer = aSet; }
     bool GetKeepTopBottom() const           { return m_keepTopBottomLayer; }
@@ -564,7 +560,8 @@ public:
     }
 
     /**
-     * Checks to see whether the pad should be flashed on the specific layer
+     * Check to see whether the pad should be flashed on the specific layer.
+     *
      * @param aLayer Layer to check for connectivity
      * @param aIncludeZones We include zones in potentially connected elements when drawing
      * @return true if connected by pad or track (or optionally zone)
@@ -572,10 +569,12 @@ public:
     bool FlashLayer( int aLayer, bool aIncludeZones = false  ) const;
 
     /**
-     * Checks to see if the pad should be flashed to any of the layers in the set
+     * Check to see if the pad should be flashed to any of the layers in the set.
+     *
      * @param aLayers set of layers to check the via against
      * @param aIncludeZones We include zones in potentially connected elements when drawing
-     * @return true if connected by pad or track (or optionally zone) on any of the associated layers
+     * @return true if connected by pad or track (or optionally zone) on any of the associated
+     *         layers
      */
     bool FlashLayer( LSET aLayers, bool aIncludeZones = false  ) const;
 
@@ -588,22 +587,22 @@ public:
     }
 
     /**
-     * Function GetBoundingBox
      * The bounding box is cached, so this will be efficient most of the time.
      */
     const EDA_RECT GetBoundingBox() const override;
 
-    ///> Set absolute coordinates.
+    ///< Set absolute coordinates.
     void SetDrawCoord();
 
     //todo: Remove SetLocalCoord along with m_pos
-    ///> Set relative coordinates.
+    ///< Set relative coordinates.
     void SetLocalCoord();
 
     /**
-     * Function Compare
-     * compares two pads and return 0 if they are equal.
-     * @return int - <0 if left less than right, 0 if equal, >0 if left greater than right.
+     * Compare two pads and return 0 if they are equal.
+     *
+     * @return less than 0 if left less than right, 0 if equal, or greater than 0 if left
+     *         greater than right.
      */
     static int Compare( const PAD* padref, const PAD* padcmp );
 
@@ -621,13 +620,11 @@ public:
     BITMAP_DEF GetMenuImage() const override;
 
     /**
-     * Function ShowPadShape
-     * @return the GUI-appropriate name of the shape
+     * @return the GUI-appropriate name of the shape.
      */
     wxString ShowPadShape() const;
 
     /**
-     * Function ShowPadAttr
      * @return the GUI-appropriate description of the pad type (attribute) : Std, SMD ...
      */
     wxString ShowPadAttr() const;
@@ -635,7 +632,8 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
-     * same as Clone, but returns a PAD item.
+     * Same as Clone, but returns a PAD item.
+     *
      * Useful mainly for python scripts, because Clone returns an EDA_ITEM.
      */
     PAD* ClonePad() const
@@ -644,7 +642,7 @@ public:
     }
 
     /**
-     * Rebuilds the effective shape cache (and bounding box and radius) for the pad and clears
+     * Rebuild the effective shape cache (and bounding box and radius) for the pad and clears
      * the dirty bit.
      */
     void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
@@ -710,7 +708,7 @@ private:
 
     PAD_DRILL_SHAPE_T m_drillShape;         // PAD_DRILL_SHAPE_CIRCLE, PAD_DRILL_SHAPE_OBLONG
 
-    double            m_roundedCornerScale; // Scaling factor of min(width, hieght) to corner
+    double            m_roundedCornerScale; // Scaling factor of min(width, height) to corner
                                             //   radius, default 0.25
     double            m_chamferScale;       // Scaling factor of min(width, height) to chamfer
                                             //   size, default 0.25
@@ -746,11 +744,14 @@ private:
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
-    bool        m_removeUnconnectedLayer;  // If true, the pad copper is removed for layers that are not connected
-    bool        m_keepTopBottomLayer;      // When removing unconnected pads, keep the top and bottom pads
+    ///< If true, the pad copper is removed for layers that are not connected.
+    bool        m_removeUnconnectedLayer;
+
+    ///< When removing unconnected pads, keep the top and bottom pads.
+    bool        m_keepTopBottomLayer;
 
     /*
-     * Pad clearances, margins, etc. exist in a hiearchy.  If a given level is specified then
+     * Pad clearances, margins, etc. exist in a hierarchy.  If a given level is specified then
      * the remaining levels are NOT consulted.
      *
      * LEVEL 1: (highest priority) local overrides (pad, footprint, etc.)

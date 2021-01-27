@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -48,62 +50,58 @@ public:
     bool Init() override;
 
     /**
-     * Function AlignTop()
-     * Sets Y coordinate of the selected items to the value of the top-most selected item Y coordinate.
+     * Set Y coordinate of the selected items to the value of the top-most selected item Y
+     * coordinate.
      */
     int AlignTop( const TOOL_EVENT& aEvent );
 
     /**
-     * Function AlignBottom()
-     * Sets Y coordinate of the selected items to the value of the bottom-most selected item Y coordinate.
+     * Sets Y coordinate of the selected items to the value of the bottom-most selected item Y
+     * coordinate.
      */
     int AlignBottom( const TOOL_EVENT& aEvent );
 
     /**
-     * Function AlignLeft()
-     * Sets X coordinate of the selected items to the value of the left-most selected item X coordinate.
+     * Sets X coordinate of the selected items to the value of the left-most selected item X
+     * coordinate.
      */
     int AlignLeft( const TOOL_EVENT& aEvent );
 
     /**
-     * Function AlignRight()
-     * Sets X coordinate of the selected items to the value of the right-most selected item X coordinate.
+     * Sets X coordinate of the selected items to the value of the right-most selected item X
+     * coordinate.
      */
     int AlignRight( const TOOL_EVENT& aEvent );
 
     /**
-     * Function AlignCenterX()
-     * Sets the x coordinate of the midpoint of each of the selected items to
-     * the value of the x coordinate of the center of the middle selected item.
+     * Set the x coordinate of the midpoint of each of the selected items to the value of the
+     * x coordinate of the center of the middle selected item.
      */
     int AlignCenterX( const TOOL_EVENT& aEvent );
 
     /**
-     * Function AlignCenterX()
-     * Sets the y coordinate of the midpoint of each of the selected items to
-     * the value of the y coordinate of the center of the middle selected item.
+     * Set the y coordinate of the midpoint of each of the selected items to the value of the
+     * y coordinate of the center of the middle selected item.
      */
     int AlignCenterY( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DistributeHorizontally()
-     * Distributes the selected items along the X axis.
+     * Distribute the selected items along the X axis.
      */
     int DistributeHorizontally( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DistributeVertically()
-     * Distributes the selected items along the Y axis.
+     * Distribute the selected items along the Y axis.
      */
     int DistributeVertically( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:
     /**
-     * Function GetSelections()
-     * Populates two vectors with the sorted selection and sorted locked items
+     * Populate two vectors with the sorted selection and sorted locked items.
+     *
      * Returns the size of aItemsToAlign()
      */
     template< typename T >
@@ -114,56 +112,61 @@ private:
     int selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aGetValue );
 
     /**
-     * Sets X coordinate of the selected items to the value of the left-most selected item X coordinate.
+     * Sets X coordinate of the selected items to the value of the left-most selected item
+     * X coordinate.
      *
-     * NOTE: Uses the bounding box of items, which do not get mirrored even when
-     * the view is mirrored!
+     * @note Uses the bounding box of items, which do not get mirrored even when
+     *       the view is mirrored!
      */
     int doAlignLeft();
 
     /**
-     * Aligns selected items using the right edge of their bounding boxes to the right-most item
+     * Align selected items using the right edge of their bounding boxes to the right-most item.
      *
-     * NOTE: Uses the bounding box of items, which do not get mirrored even when
-     * the view is mirrored!
+     * @note Uses the bounding box of items, which do not get mirrored even when
+     *       the view is mirrored!
      */
     int doAlignRight();
 
     /**
-     * Distributes selected items using an even spacing between the centers of their bounding boxes
+     * Distribute selected items using an even spacing between the centers of their bounding
+     * boxes.
      *
-     * NOTE: Using the centers of bounding box of items can give unsatisfactory visual results since
-     * items of differing widths will be placed with different gaps. Is only used if items overlap
+     * @note Using the centers of bounding box of items can give unsatisfactory visual results
+     * since items of differing widths will be placed with different gaps. Is only used if
+     * items overlap.
      */
-    void doDistributeCentersHorizontally( ALIGNMENT_RECTS &itemsToDistribute,
+    void doDistributeCentersHorizontally( ALIGNMENT_RECTS& itemsToDistribute,
                                           BOARD_COMMIT& aCommit ) const;
 
     /**
-     * Distributes selected items using an even spacing between the centers of their bounding boxes
+     * Distribute selected items using an even spacing between the centers of their bounding
+     * boxes.
      *
-     * NOTE: Using the centers of bounding box of items can give unsatisfactory visual results since
-     * items of differing widths will be placed with different gaps. Is only used if items overlap
+     * @note Using the centers of bounding box of items can give unsatisfactory visual results
+     *       since items of differing widths will be placed with different gaps. Is only used
+     *       if items overlap
      */
-    void doDistributeCentersVertically( ALIGNMENT_RECTS &itemsToDistribute,
+    void doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute,
                                         BOARD_COMMIT& aCommit ) const;
 
     /**
      * Distributes selected items using an even spacing between their bounding boxes
      *
-     * NOTE: Using the edges of bounding box of items is only possible if there is enough space
-     * between them. If this is not the case, use the center spacing method
+     * @note Using the edges of bounding box of items is only possible if there is enough space
+     *       between them. If this is not the case, use the center spacing method
      */
-    void doDistributeGapsHorizontally( ALIGNMENT_RECTS &itemsToDistribute, BOARD_COMMIT& aCommit,
-                                       const BOARD_ITEM *lastItem, int totalGap ) const;
+    void doDistributeGapsHorizontally( ALIGNMENT_RECTS& itemsToDistribute, BOARD_COMMIT& aCommit,
+                                       const BOARD_ITEM* lastItem, int totalGap ) const;
 
     /**
      * Distributes selected items using an even spacing between their bounding boxes
      *
-     * NOTE: Using the edges of bounding box of items is only possible if there is enough space
-     * between them. If this is not the case, use the center spacing method
+     * @note Using the edges of bounding box of items is only possible if there is enough space
+     *       between them. If this is not the case, use the center spacing method
      */
-    void doDistributeGapsVertically( ALIGNMENT_RECTS &itemsToDistribute, BOARD_COMMIT& aCommit,
-                                     const BOARD_ITEM *lastItem, int totalGap ) const;
+    void doDistributeGapsVertically( ALIGNMENT_RECTS& itemsToDistribute, BOARD_COMMIT& aCommit,
+                                     const BOARD_ITEM* lastItem, int totalGap ) const;
 
 private:
     PCB_SELECTION_TOOL*  m_selectionTool;

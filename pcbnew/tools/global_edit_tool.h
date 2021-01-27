@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,10 +47,10 @@ public:
     bool Init() override;
 
     /**
-     * Function ExchangeFootprints()
-     *
      * Invoke the dialog used to update or exchange the footprint definitions used for
-     * footprints.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
+     * footprints.
+     *
+     * The mode depends on the #PCB_ACTIONS held by the #TOOL_EVENT.
      */
     int ExchangeFootprints( const TOOL_EVENT& aEvent );
 
@@ -66,7 +66,7 @@ public:
 private:
     bool swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* aLayerMap );
 
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
 private:

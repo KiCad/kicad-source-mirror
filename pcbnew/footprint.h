@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,8 +59,7 @@ enum INCLUDE_NPTH_T
 };
 
 /**
- * Enum FOOTPRINT_ATTR_T
- * is the set of attributes allowed within a FOOTPRINT, using FOOTPRINT::SetAttributes()
+ * The set of attributes allowed within a FOOTPRINT, using FOOTPRINT::SetAttributes()
  * and FOOTPRINT::GetAttributes().  These are to be ORed together when calling
  * FOOTPRINT::SetAttributes()
  */
@@ -125,53 +124,56 @@ public:
         return aItem && aItem->Type() == PCB_FOOTPRINT_T;
     }
 
-    ///> @copydoc BOARD_ITEM_CONTAINER::Add()
+    ///< @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
-    ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
+    ///< @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
 
     /**
-     * Function ClearAllNets
      * Clear (i.e. force the ORPHANED dummy net info) the net info which
      * depends on a given board for all pads of the footprint.
+     *
      * This is needed when a footprint is copied between the fp editor and
      * the board editor for instance, because net info become fully broken
      */
     void ClearAllNets();
 
     /**
-     * Function CalculateBoundingBox
-     * calculates the bounding box in board coordinates.
+     * Calculate the bounding box in board coordinates.
      */
     void CalculateBoundingBox();
 
     /**
-     * Function GetFootprintRect()
      * Build and returns the boundary box of the footprint excluding any text.
-     * @return EDA_RECT - The rectangle containing the footprint.
+     *
+     * @return The rectangle containing the footprint.
      */
     EDA_RECT GetFootprintRect() const;
 
     /**
-     * Returns the last calculated bounding box of the footprint (does not recalculate it).
-     * (call CalculateBoundingBox() to recalculate it)
-     * @return EDA_RECT - The rectangle containing the footprint
+     * Return the last calculated bounding box of the footprint (does not recalculate it).
+     * (call CalculateBoundingBox() to recalculate it).
+     *
+     * @return The rectangle containing the footprint.
      */
     EDA_RECT GetBoundingBoxBase() const { return m_boundingBox; }
 
     /**
-     * Returns the bounding box containing pads when the footprint
-     * is on the front side, orientation 0, position 0,0.
-     * mainly used in Gerber place file to draw a fp outline when the coutyard
-     * is missing or broken
-     * @return EDA_RECT - The rectangle containing the pads for the normalized footprint.
+     * Return the bounding box containing pads when the footprint is on the front side,
+     * orientation 0, position 0,0.
+     *
+     * Mainly used in Gerber place file to draw a footprint outline when the courtyard
+     * is missing or broken.
+     *
+     * @return The rectangle containing the pads for the normalized footprint.
      */
     EDA_RECT GetFpPadsLocalBbox() const;
 
     /**
-     * Returns a bounding polygon for the shapes and pads in the footprint
-     * This operation is slower but more accurate than calculating a bounding box
+     * Return a bounding polygon for the shapes and pads in the footprint.
+     *
+     * This operation is slower but more accurate than calculating a bounding box.
      */
     SHAPE_POLY_SET GetBoundingHull() const;
 
@@ -263,8 +265,8 @@ public:
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
-     * Function MoveAnchorPosition
-     * Move the reference point of the footprint
+     * Move the reference point of the footprint.
+     *
      * It looks like a move footprint:
      * the footprints elements (pads, outlines, edges .. ) are moved
      * However:
@@ -276,7 +278,6 @@ public:
     void MoveAnchorPosition( const wxPoint& aMoveVector );
 
     /**
-     * function IsFlipped
      * @return true if the footprint is flipped, i.e. on the back side of the board
      */
     bool IsFlipped() const { return GetLayer() == B_Cu; }
@@ -301,9 +302,9 @@ public:
     }
 
     /**
-     * Function SetLocked
-     * sets the MODULE_is_LOCKED bit in the m_ModuleStatus
-     * @param isLocked When true means turn on locked status, else unlock
+     * Set the #MODULE_is_LOCKED bit in the m_ModuleStatus.
+     *
+     * @param isLocked true means turn on locked status, else unlock
      */
     void SetLocked( bool isLocked ) override
     {
@@ -347,25 +348,25 @@ public:
     void SetLastEditTime() { m_lastEditTime = time( NULL ); }
     timestamp_t GetLastEditTime() const { return m_lastEditTime; }
 
-    /* drawing functions */
-
     /**
-     * function TransformPadsShapesWithClearanceToPolygon
-     * generate pads shapes on layer aLayer as polygons and adds these polygons to aCornerBuffer
+     * Generate pads shapes on layer \a aLayer as polygons and adds these polygons to
+     * \a aCornerBuffer.
+     *
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
-     * when a full polygonal approach is needed
-     * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
-     * @param aCornerBuffer = the buffer to store polygons
-     * @param aClearance = an additionnal size to add to pad shapes
-     * @param aMaxError = Maximum deviation from true for arcs
-     * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape, if the shape has
+     * when a full polygonal approach is needed.
+     *
+     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all layers.
+     * @param aCornerBuffer i the buffer to store polygons.
+     * @param aClearance is an additional size to add to pad shapes.
+     * @param aMaxError is the maximum deviation from true for arcs.
+     * @param aSkipNPTHPadsWihNoCopper if true, do not add a NPTH pad shape, if the shape has
      *          same size and position as the hole. Usually, these pads are not drawn on copper
      *          layers, because there is actually no copper
      *          Due to diff between layers and holes, these pads must be skipped to be sure
      *          there is no copper left on the board (for instance when creating Gerber Files or
      *          3D shapes).  Defaults to false.
-     * @param aSkipPlatedPads = used on 3D-Viewer to extract plated and nontplated pads.
-     * @param aSkipNonPlatedPads = used on 3D-Viewer to extract plated and plated pads.
+     * @param aSkipPlatedPads is used on 3D-Viewer to extract plated and non-plated pads.
+     * @param aSkipNonPlatedPads is used on 3D-Viewer to extract plated and plated pads.
      */
     void TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                               PCB_LAYER_ID aLayer, int aClearance,
@@ -375,17 +376,18 @@ public:
                                               bool aSkipNonPlatedPads = false ) const;
 
     /**
-     * function TransformFPShapesWithClearanceToPolygon
-     * generate shapes of graphic items (outlines) on layer aLayer as polygons and adds these
-     * polygons to aCornerBuffer
+     * Generate shapes of graphic items (outlines) on layer \a aLayer as polygons and adds these
+     * polygons to \a aCornerBuffer.
+     *
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
-     * when a full polygonal approach is needed
-     * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
-     * @param aCornerBuffer = the buffer to store polygons
-     * @param aClearance = a value to inflate shapes
-     * @param aError = Maximum error between true arc and polygon approx
-     * @param aIncludeText = True to transform text shapes
-     * @param aIncludeShapes = True to transform footprint shapes
+     * when a full polygonal approach is needed.
+     *
+     * @param aLayer is the layer to consider, or #UNDEFINED_LAYER to consider all.
+     * @param aCornerBuffer is the buffer to store polygons.
+     * @param aClearance is a value to inflate shapes.
+     * @param aError is the maximum error between true arc and polygon approximation.
+     * @param aIncludeText set to true to transform text shapes.
+     * @param aIncludeShapes set to true to transform footprint shapes.
      */
     void TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                   PCB_LAYER_ID aLayer, int aClearance,
@@ -394,9 +396,8 @@ public:
                                                   bool aIncludeShapes = true ) const;
 
     /**
-     * @brief TransformFPTextWithClearanceToPolygonSet
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
-     * but only generate text
+     * but only generate text.
      */
     void TransformFPTextWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
                                                    PCB_LAYER_ID aLayer, int aClearance,
@@ -413,20 +414,21 @@ public:
 
     /**
      * Resolve any references to system tokens supported by the component.
+     *
      * @param aDepth a counter to limit recursion and circular references.
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
 
-    ///> @copydoc EDA_ITEM::GetMsgPanelInfo
+    ///< @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     /**
-     * Tests if a point is inside the bounding polygon of the footprint
+     * Test if a point is inside the bounding polygon of the footprint.
      *
-     * The other hit test methods are just checking the bounding box, which
-     * can be quite inaccurate for rotated or oddly-shaped footprints.
+     * The other hit test methods are just checking the bounding box, which can be quite
+     * inaccurate for rotated or oddly-shaped footprints.
      *
      * @param aPosition is the point to test
      * @return true if aPosition is inside the bounding polygon
@@ -436,8 +438,7 @@ public:
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
-     * Function GetReference
-     * @return const wxString& - the reference designator text.
+     * @return reference designator text.
      */
     const wxString GetReference() const
     {
@@ -445,7 +446,6 @@ public:
     }
 
     /**
-     * Function SetReference
      * @param aReference A reference to a wxString object containing the reference designator
      *                   text.
      */
@@ -455,14 +455,12 @@ public:
     }
 
     /**
-     * Function IncrementReference
-     * Bumps the current reference by aDelta.
+     * Bump the current reference by \a aDelta.
      */
     void IncrementReference( int aDelta );
 
     /**
-     * Function GetValue
-     * @return const wxString& - the value text.
+     * @return the value text.
      */
     const wxString GetValue() const
     {
@@ -470,7 +468,6 @@ public:
     }
 
     /**
-     * Function SetValue
      * @param aValue A reference to a wxString object containing the value text.
      */
     void SetValue( const wxString& aValue )
@@ -490,29 +487,30 @@ public:
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
 
     /**
-     * Function FindPadByName
-     * returns a PAD* with a matching name.  Note that names may not be
-     * unique, depending on how the foot print was created.
-     * @param aPadName the pad name to find
-     * @return PAD* - The first matching name is returned, or NULL if not found.
+     * Return a #PAD with a matching name.
+     *
+     * @note Names may not be unique depending on how the footprint was created.
+     *
+     * @param aPadName the pad name to find.
+     * @return the first matching named #PAD is returned or NULL if not found.
      */
     PAD* FindPadByName( const wxString& aPadName ) const;
 
     /**
-     * Function GetPad
-     * get a pad at \a aPosition on \a aLayerMask in the footprint.
+     * Get a pad at \a aPosition on \a aLayerMask in the footprint.
      *
      * @param aPosition A wxPoint object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A pointer to a PAD object if found otherwise NULL.
+     * @return A pointer to a #PAD object if found otherwise NULL.
      */
     PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
     PAD* GetTopLeftPad();
 
     /**
-     * Gets the first pad in the list or NULL if none
-     * @return first pad or null pointer
+     * Get the first pad in the list or NULL if none.
+     *
+     * @return first pad or null pointer.
      */
     PAD* GetFirstPad() const
     {
@@ -520,8 +518,7 @@ public:
     }
 
     /**
-     * GetPadCount
-     * returns the number of pads.
+     * Return the number of pads.
      *
      * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
      *                     non-plated through holes when false.
@@ -530,12 +527,10 @@ public:
     unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
 
     /**
-     * GetUniquePadCount
-     * returns the number of unique pads.
-     * A complex pad can be built with many pads having the same pad name
-     * to create a complex shape or fragmented solder paste areas.
+     * Return the number of unique non-blank pads.
      *
-     * GetUniquePadCount calculate the count of not blank pad names
+     * A complex pad can be built with many pads having the same pad name to create a complex
+     * shape or fragmented solder paste areas.
      *
      * @param aIncludeNPTH includes non-plated through holes when true.  Does not include
      *                     non-plated through holes when false.
@@ -544,8 +539,7 @@ public:
     unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
 
     /**
-     * Function GetNextPadName
-     * returns the next available pad name in the footprint
+     * Return the next available pad name in the footprint.
      *
      * @param aFillSequenceGaps true if the numbering should "fill in" gaps in the sequence,
      *                          else return the highest value + 1
@@ -567,15 +561,14 @@ public:
     BOARD_ITEM* Duplicate() const override;
 
     /**
-     * Function DuplicateItem
-     * Duplicate a given item within the footprint, optionally adding it to the board
-     * @return the new item, or NULL if the item could not be duplicated
+     * Duplicate a given item within the footprint, optionally adding it to the board.
+     *
+     * @return the new item, or NULL if the item could not be duplicated.
      */
     BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint = false );
 
     /**
-     * Function Add3DModel
-     * adds \a a3DModel definition to the end of the 3D model list.
+     * Add \a a3DModel definition to the end of the 3D model list.
      *
      * @param a3DModel A pointer to a #FP_3DMODEL to add to the list.
      */
@@ -595,20 +588,20 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
-     * Function RunOnChildren
+     * Invoke a function on all BOARD_ITEMs that belong to the footprint (pads, drawings, texts).
      *
-     * Invokes a function on all BOARD_ITEMs that belong to the footprint (pads, drawings, texts).
-     * Note that this function should not add or remove items to the footprint
+     * @note This function should not add or remove items to the footprint.
+     *
      * @param aFunction is the function to be invoked.
      */
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const;
 
     /**
-     * Returns a set of all layers that this footprint has drawings on similar to ViewGetLayers()
+     * Return a set of all layers that this footprint has drawings on similar to ViewGetLayers().
      *
-     * @param aLayers is an array to store layer ids
-     * @param aCount is the number of layers stored in the array
-     * @param aIncludePads controls whether to also include pad layers
+     * @param aLayers is an array to store layer ids.
+     * @param aCount is the number of layers stored in the array.
+     * @param aIncludePads controls whether to also include pad layers.
      */
     void GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads = true ) const;
 
@@ -619,35 +612,36 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     /**
-     * static function IsLibNameValid
      * Test for validity of a name of a footprint to be used in a footprint library
-     * ( no spaces, dir separators ... )
-     * @param aName = the name in library to validate
+     * ( no spaces, dir separators ... ).
+     *
+     * @param aName is the name in library to validate.
      * @return true if the given name is valid
      */
     static bool IsLibNameValid( const wxString& aName );
 
     /**
-     * static function StringLibNameInvalidChars
-     * Test for validity of the name in a library of the footprint
-     * ( no spaces, dir separators ... )
-     * @param aUserReadable = false to get the list of invalid chars
-     *        true to get a readable form (i.e ' ' = 'space' '\\t'= 'tab')
-     * @return a constant std::string giving the list of invalid chars in lib name
+     * Test for validity of the name in a library of the footprint ( no spaces, dir
+     * separators ... ).
+     *
+     * @param aUserReadable set to false to get the list of invalid characters or  true to get
+     *                      a readable form (i.e ' ' = 'space' '\\t'= 'tab').
+     *
+     * @return the list of invalid chars in the library name.
      */
     static const wxChar* StringLibNameInvalidChars( bool aUserReadable );
 
     /**
-     * Function SetInitialComments
-     * takes ownership of caller's heap allocated aInitialComments block.  The comments
-     * are single line strings already containing the s-expression comments with optional
-     * leading whitespace and then a '#' character followed by optional single line text
-     * (text with no line endings, not even one).
-     * This block of single line comments will be output upfront of any generated
-     * s-expression text in the PCBIO::Format() function.
-     * <p>
-     * Note that a block of single line comments constitutes a multiline block of single
-     * line comments.  That is, the block is made of consecutive single line comments.
+     * Take ownership of caller's heap allocated aInitialComments block.
+     *
+     * The comments are single line strings already containing the s-expression comments with
+     * optional leading whitespace and then a '#' character followed by optional single line
+     * text (text with no line endings, not even one).  This block of single line comments
+     * will be output upfront of any generated s-expression text in the PCBIO::Format() function.
+     *
+     * @note A block of single line comments constitutes a multiline block of single line
+     *       comments.  That is, the block is made of consecutive single line comments.
+     *
      * @param aInitialComments is a heap allocated wxArrayString or NULL, which the caller
      *                         gives up ownership of over to this FOOTPRINT.
      */
@@ -658,28 +652,31 @@ public:
     }
 
     /**
-     * Function CoverageRatio
-     * Calculates the ratio of total area of the footprint pads and graphical items
-     * to the area of the footprint. Used by selection tool heuristics.
-     * @return the ratio
+     * Calculate the ratio of total area of the footprint pads and graphical items to the
+     * area of the footprint. Used by selection tool heuristics.
+     *
+     * @return the ratio.
      */
     double CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const;
 
     static double GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLECTOR& aCollector );
 
-    /// Return the initial comments block or NULL if none, without transfer of ownership.
+    ///< Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 
-    /** Used in DRC to test the courtyard area (a complex polygon)
-     * @return the courtyard polygon
+    /**
+     * Used in DRC to test the courtyard area (a complex polygon).
+     *
+     * @return the courtyard polygon.
      */
     SHAPE_POLY_SET& GetPolyCourtyardFront() { return m_poly_courtyard_front; }
     SHAPE_POLY_SET& GetPolyCourtyardBack() { return m_poly_courtyard_back; }
 
     /**
-     * Builds complex polygons of the courtyard areas from graphic items on the courtyard layers
-     * @remark sets the MALFORMED_F_COURTYARD and MALFORMED_B_COURTYARD status flags if the given
-     *         courtyard layer does not contain a (single) closed shape
+     * Build complex polygons of the courtyard areas from graphic items on the courtyard layers.
+     *
+     * @note Set the #MALFORMED_F_COURTYARD and #MALFORMED_B_COURTYARD status flags if the given
+     *       courtyard layer does not contain a (single) closed shape.
      */
     void BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 

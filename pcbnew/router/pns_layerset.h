@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,9 +26,7 @@
 #include <algorithm>
 
 /**
- * LAYER_RANGE
- *
- * Represents a contiguous set of PCB layers.
+ * Represent a contiguous set of PCB layers.
  */
 class LAYER_RANGE
 {
@@ -106,7 +105,7 @@ public:
             m_end = aOther.m_end;
     }
 
-    ///> Shortcut for comparisons/overlap tests
+    ///< Shortcut for comparisons/overlap tests
     static LAYER_RANGE All()
     {
         return LAYER_RANGE( 0, 256 ); // fixme: use layer IDs header

@@ -2,7 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -121,7 +122,7 @@ public:
     const virtual std::string& GetMessages() const = 0;
 
 protected:
-    ///> Importer used to create objects representing the imported shapes.
+    ///< Importer used to create objects representing the imported shapes.
     GRAPHICS_IMPORTER* m_importer;
 };
 

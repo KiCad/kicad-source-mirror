@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 /**
  * @file panel_kicad2step.h
- * declares the main PCB object
+ * Declare the main PCB object.
  */
 
 #ifndef PANEL_KICAD2STEP_H
@@ -38,10 +39,9 @@ class KICAD2MCAD_PRMS       // A small class to handle parameters of conversion
 public:
     KICAD2MCAD_PRMS();
 
-    ///> Returns file extension for the selected output format
+    ///< Return file extension for the selected output format
     wxString getOutputExt() const;
 
-public:
 #ifdef SUPPORTS_IGES
     bool     m_fmtIGES;
 #endif
@@ -61,14 +61,17 @@ class PANEL_KICAD2STEP: public wxPanel
 {
 public:
 	PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ),
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxSize( 500,300 ),
                       long style = wxTAB_TRAVERSAL );
 
-    /** Run the Kicad to STEP converter
+    /**
+     * Run the KiCad to STEP converter.
      */
     int RunConverter();
 
-    /** Add a message to m_tcMessages
+    /**
+     * Add a message to m_tcMessages.
      */
     void AppendMessage( const wxString& aMessage );
 

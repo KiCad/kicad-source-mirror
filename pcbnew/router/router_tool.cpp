@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -63,12 +64,12 @@ enum VIA_ACTION_FLAGS
 {
     // Via type
     VIA_MASK     = 0x03,
-    VIA          = 0x00,     ///> Normal via
-    BLIND_VIA    = 0x01,     ///> blind/buried via
-    MICROVIA     = 0x02,     ///> Microvia
+    VIA          = 0x00,     ///< Normal via
+    BLIND_VIA    = 0x01,     ///< blind/buried via
+    MICROVIA     = 0x02,     ///< Microvia
 
     // Select layer
-    SELECT_LAYER = VIA_MASK + 1,    ///> Ask user to select layer before adding via
+    SELECT_LAYER = VIA_MASK + 1,    ///< Ask user to select layer before adding via
 };
 
 
@@ -502,6 +503,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
             for( auto evt : events)
             {
                 wxString id = "null";
+
                 if( evt.item && evt.item->Parent() )
                     id = evt.item->Parent()->m_Uuid.AsString();
 
@@ -972,7 +974,7 @@ bool ROUTER_TOOL::prepareInteractive()
         // It would make more sense to leave the net highlighted as the higher-contrast mode
         // makes the router clearances more visible.  However, since we just started routing
         // the conversion of the screen from low contrast to high contrast is a bit jarring and
-        // makes the infobar coming up less noticable.
+        // makes the infobar coming up less noticeable.
         highlightNet( false );
 
         frame()->ShowInfoBarError( m_router->FailureReason(), true,
@@ -1562,7 +1564,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         // We tweak the mouse position using the value from above, and then use that as the
         // start position to prevent the footprint from jumping when we start dragging.
-        // First we move the visual crosshair cursor...
+        // First we move the visual cross hair cursor...
         controls()->ForceCursorPosition( true, tweakedMousePos );
         controls()->SetCursorPosition( tweakedMousePos ); // ...then the mouse pointer
 
@@ -1713,7 +1715,8 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+    const BOARD_CONNECTED_ITEM* item =
+            static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     if( item->Type() != PCB_TRACE_T )
         return 0;

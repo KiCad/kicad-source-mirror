@@ -2,8 +2,9 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +43,8 @@ public:
     GRAPHICS_IMPORTER_PCBNEW();
 
     /**
-     * @brief Sets the target layer for the imported shapes.
+     * Set the target layer for the imported shapes.
+     *
      * @param aLayer is the layer to be used by the imported shapes.
      */
     void SetLayer( PCB_LAYER_ID aLayer )
@@ -51,7 +53,7 @@ public:
     }
 
     /**
-     * @brief Returns the target layer for the imported shapes.
+     * Return the target layer for the imported shapes.
      */
     PCB_LAYER_ID GetLayer() const
     {
@@ -72,30 +74,34 @@ public:
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
+                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                    double aWidth ) override;
 
-    /** convert a imported coordinate to a board coordinate, according to
-     * the internal units, the user scale and offset
-     * @param aCoordinate is the imported coordinate in mm
+    /**
+     * Convert an imported coordinate to a board coordinate, according to the internal units,
+     * user scale and offset
+     *
+     * @param aCoordinate is the imported coordinate in mm.
      */
     wxPoint MapCoordinate( const VECTOR2D& aCoordinate );
 
-    /** @return a line thickness in a board Iu value, according to
-     * the internal units.
-     * if aLineWidth < 0, the default ine thickness value is returned
-     * @param aLineWidth is the line thickness in mm to convert
+    /**
+     * If aLineWidth < 0, the default line thickness value is returned.
+     *
+     * @param aLineWidth is the line thickness in mm to convert.
+     * @return a line thickness in a board Iu value, according to the internal units.
      */
     int MapLineWidth( double aLineWidth );
 
 protected:
-    ///> Create an object representing a graphical shape.
+    ///< Create an object representing a graphical shape.
     virtual std::unique_ptr<PCB_SHAPE> createDrawing() = 0;
 
-    ///> Create an object representing a text. Both pointers point to different parts of the
-    ///> same object, the EDA_TEXT pointer is simply for convenience.
+    ///< Create an object representing a text. Both pointers point to different parts of the
+    ///< same object, the EDA_TEXT pointer is simply for convenience.
     virtual std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() = 0;
 
-    ///> Target layer for the imported shapes.
+    ///< Target layer for the imported shapes.
     PCB_LAYER_ID m_layer;
 };
 

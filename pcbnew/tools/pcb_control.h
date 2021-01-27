@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,10 +37,9 @@ namespace KIGFX {
 
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
+
 /**
- * PCB_CONTROL
- *
- * Handles actions that are shared between different frames in pcbnew.
+ * Handle actions that are shared between different frames in PcbNew.
  */
 
 class PCB_CONTROL : public PCB_TOOL_BASE
@@ -92,12 +93,13 @@ public:
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
 
 private:
     /**
      * Add and select or just select for move/place command a list of board items.
+     *
      * @param aItems is the list of items
      * @param aIsNew = true to add items to the current board, false to just select if
      *               items are already managed by the current board
@@ -108,10 +110,10 @@ private:
 
     int placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin );
 
-    ///> Pointer to the currently used edit frame.
+    ///< Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
 
-    ///> Grid origin marker.
+    ///< Grid origin marker.
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
     BOARD_ITEM* m_pickerItem;

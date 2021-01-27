@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,29 +51,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-private:
-    PCB_EDIT_FRAME*  m_editFrame;        // The pcb frame editor which owns the board
-    BOARD*           m_pcb;
-    DIALOG_DRC*      m_drcDialog;
-    bool             m_drcRunning;
-
-    std::shared_ptr<DRC_ENGINE>            m_drcEngine;
-
-    std::vector<std::shared_ptr<DRC_ITEM>> m_unconnected;      // list of unconnected pads
-    std::vector<std::shared_ptr<DRC_ITEM>> m_footprints;       // list of footprint warnings
-
-private:
-    ///> Sets up handlers for various events.
-    void setTransitions() override;
-
-    /**
-     * Update needed pointers from the one pointer which is known not to change.
-     */
-    void updatePointers();
-
-    EDA_UNITS userUnits() const { return m_editFrame->GetUserUnits(); }
-
-public:
     /**
      * Open a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
@@ -106,7 +83,7 @@ public:
     bool IsDRCRunning() const { return m_drcRunning; }
 
     /**
-     * Closes and frees the DRC dialog.
+     * Close and free the DRC dialog.
      */
     void DestroyDRCDialog();
 
@@ -121,6 +98,27 @@ public:
     int PrevMarker( const TOOL_EVENT& aEvent );
     int NextMarker( const TOOL_EVENT& aEvent );
     int ExcludeMarker( const TOOL_EVENT& aEvent );
+
+private:
+    ///< Set up handlers for various events.
+    void setTransitions() override;
+
+    /**
+     * Update needed pointers from the one pointer which is known not to change.
+     */
+    void updatePointers();
+
+    EDA_UNITS userUnits() const { return m_editFrame->GetUserUnits(); }
+
+    PCB_EDIT_FRAME*  m_editFrame;        // The pcb frame editor which owns the board
+    BOARD*           m_pcb;
+    DIALOG_DRC*      m_drcDialog;
+    bool             m_drcRunning;
+
+    std::shared_ptr<DRC_ENGINE>            m_drcEngine;
+
+    std::vector<std::shared_ptr<DRC_ITEM>> m_unconnected;      // list of unconnected pads
+    std::vector<std::shared_ptr<DRC_ITEM>> m_footprints;       // list of footprint warnings
 };
 
 

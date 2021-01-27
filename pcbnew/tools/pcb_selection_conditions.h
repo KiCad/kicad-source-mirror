@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,35 +36,39 @@ class PCB_SELECTION_CONDITIONS : public SELECTION_CONDITIONS
 {
 public:
     /**
-     * Function OnlyConnectedItems
-     * Tests if selection contains exclusively connected items (pads, tracks, vias, zones).
+     * Test if selection contains exclusively connected items (pads, tracks, vias, zones).
+     *
      * @param aSelection is the selection to be tested.
      * @return True if there are only connected items connected.
      */
     static bool OnlyConnectedItems( const SELECTION& aSelection );
 
     /**
-     * Function SameNet
-     * Creates a functor that tests if selection contains items belonging to the same net or are
+     * Create a functor that tests if selection contains items belonging to the same net or are
      * unconnected if aAllowUnconnected == true.
+     *
      * @param aAllowUnconnected determines if unconnected items (with no net code assigned) should
-     * be treated as connected to the same net.
+     *                          be treated as connected to the same net.
      * @return Functor testing if selected items are belonging to the same net.
      */
     static SELECTION_CONDITION SameNet( bool aAllowUnconnected = false );
 
     /**
-     * Function SameLayer
      * Creates a functor that tests if selection contains items that belong exclusively to the same
-     * layer. In case of items belonging to multiple layers, it is enough to have a single common
-     * layer with other items.
+     * layer.
+     *
+     * In case of items belonging to multiple layers, it is enough to have a single common layer
+     * with other items.
+     *
      * @return Functor testing if selected items share at least one common layer.
      */
     static SELECTION_CONDITION SameLayer();
 
     /**
-     * Creates a functor that tests if the selection contains PCB_SHAPE* items of certain shapes
-     * This implicitly includes an OnlyType( PCB_SHAPE_T ) as part of the test
+     * Create a functor that tests if the selection contains PCB_SHAPE* items of certain shapes.
+     *
+     * This implicitly includes an OnlyType( PCB_SHAPE_T ) as part of the test.
+     *
      * @param aTypes is a list of allowed PCB_SHAPE shapes (@see PCB_SHAPE_TYPE_T)
      * @return functor testing if selected items match the given list of allowed shapes
      */
@@ -70,13 +76,13 @@ public:
 
 
 private:
-    ///> Helper function used by SameNet()
+    ///< Helper function used by SameNet()
     static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );
 
-    ///> Helper function used by SameLayer()
+    ///< Helper function used by SameLayer()
     static bool sameLayerFunc( const SELECTION& aSelection );
 
-    ///> Helper function used by OnlyGraphicShapeTypes()
+    ///< Helper function used by OnlyGraphicShapeTypes()
     static bool onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
                                            const std::set<PCB_SHAPE_TYPE_T> aTypes );
 };

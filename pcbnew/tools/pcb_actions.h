@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,10 +44,10 @@ enum class ZONE_MODE
 
 
 /**
- * PCB_ACTIONS
+ * Gather all the actions that are shared by tools.
  *
- * Gathers all the actions that are shared by tools. The instance of PCB_ACTIONS is created
- * inside of ACTION_MANAGER object that registers the actions.
+ * The instance of PCB_ACTIONS is created inside of #ACTION_MANAGER object that registers
+ * the actions.
  */
 class PCB_ACTIONS : public ACTIONS
 {
@@ -58,37 +59,37 @@ public:
     /// Select a single item under the cursor position
     static TOOL_ACTION selectionCursor;
 
-    /// Clears the current selection
+    /// Clear the current selection
     static TOOL_ACTION selectionClear;
 
-    /// Selects an item (specified as the event parameter).
+    /// Select an item (specified as the event parameter).
     static TOOL_ACTION selectItem;
     static TOOL_ACTION unselectItem;
 
-    /// Selects a list of items (specified as the event parameter)
+    /// Select a list of items (specified as the event parameter)
     static TOOL_ACTION selectItems;
     static TOOL_ACTION unselectItems;
 
-    /// Runs a selection menu to select from a list of items
+    /// Run a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
-    /// Selects tracks between junctions or expands an existing selection to pads or the
+    /// Select tracks between junctions or expands an existing selection to pads or the
     /// entire connection.
     static TOOL_ACTION selectConnection;
 
-    /// Selects all connections belonging to a single net.
+    /// Select all connections belonging to a single net.
     static TOOL_ACTION selectNet;
 
-    /// Removes all connections belonging to a single net from the active selection
+    /// Remove all connections belonging to a single net from the active selection
     static TOOL_ACTION deselectNet;
 
-    /// Selects all components on sheet from Eeschema crossprobing.
+    /// Select all components on sheet from Eeschema crossprobing.
     static TOOL_ACTION selectOnSheetFromEeschema;
 
-    /// Selects all components on the same sheet as the selected footprint.
+    /// Select all components on the same sheet as the selected footprint.
     static TOOL_ACTION selectSameSheet;
 
-    /// Filters the items in the current selection (invokes dialog)
+    /// Filter the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
     /// move or drag an item
@@ -110,10 +111,10 @@ public:
     /// Mirroring of selected items
     static TOOL_ACTION mirror;
 
-    /// Updates selected tracks & vias to the current track & via dimensions
+    /// Update selected tracks & vias to the current track & via dimensions
     static TOOL_ACTION changeTrackWidth;
 
-    /// Fillets (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
+    /// Fillet (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
     static TOOL_ACTION filletTracks;
 
     /// Activation of the edit tool
@@ -469,7 +470,7 @@ public:
     static TOOL_ACTION convertToArc;
     static TOOL_ACTION convertToTracks;
 
-    ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
+    ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 };
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ class BOARD_DESIGN_SETTINGS;
 
 
 /**
- * Holds the 3 UI control pointers for a single board layer.
+ * The 3 UI control pointers for a single board layer.
  */
 struct PANEL_SETUP_LAYERS_CTLs
 {
@@ -65,17 +65,17 @@ public:
      * This function warns users if they are going to delete inner copper layers because
      * they're importing settings from a board with less copper layers than the board
      * already loaded.
-     * @param aWorkingBoard = Currently loaded PCB
-     * @param aImportedBoard = PCB imported to get settings from
      *
-     * @return bool - Approval to delete inner copper if needed
+     * @param aWorkingBoard is the currently loaded PCB
+     * @param aImportedBoard is the PCB imported to get settings from.
+     * @return Approval to delete inner copper if needed.
      */
     bool CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard );
 
-    ///> @return the selected layer mask within the UI checkboxes
+    ///< @return the selected layer mask within the UI checkboxes
     LSET GetUILayerMask();
 
-    ///> @return the layer name within the UI wxTextCtrl
+    ///< @return the layer name within the UI wxTextCtrl
     wxString GetLayerName( LAYER_NUM layer );
 
 private:

@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -63,8 +65,10 @@ public:
     void Show( int x, std::ostream& st ) const override { }
 #endif
 
-    /** Get class name
-     * @return  string "RATSNEST_VIEWITEM"
+    /**
+     * Get class name.
+     *
+     * @return string "RATSNEST_VIEWITEM"
      */
     virtual wxString GetClass() const override
     {
@@ -72,7 +76,7 @@ public:
     }
 
 protected:
-    ///> Object containing ratsnest data.
+    ///< Object containing ratsnest data.
     std::shared_ptr<CONNECTIVITY_DATA> m_data;
 };
 

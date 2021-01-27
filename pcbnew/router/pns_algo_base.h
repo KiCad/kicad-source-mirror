@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,32 +32,32 @@ class LOGGER;
 class DEBUG_DECORATOR;
 
 /**
- * ALGO_BASE
+ * Base class for all P&S algorithms (shoving, walkaround, line placement, dragging, etc.).
  *
- * Base class for all P&S algorithms (shoving, walkaround, line placement, dragging, etc.)
- * Holds a bunch of objects commonly used by all algorithms (P&S settings, parent router instance, logging)
+ * Holds a bunch of objects commonly used by all algorithms (P&S settings, parent router
+ * instance, logging).
  */
 class ALGO_BASE
 {
 public:
     ALGO_BASE( ROUTER* aRouter ) :
-        m_debugDecorator( nullptr ), 
+        m_debugDecorator( nullptr ),
         m_router( aRouter ),
         m_logger( nullptr )
     {}
 
     virtual ~ALGO_BASE() {}
 
-    ///> Returns the instance of our router
+    ///< Return the instance of our router
     ROUTER* Router() const
     {
         return m_router;
     }
 
-    ///> Returns current router settings
+    ///< Return current router settings
     ROUTING_SETTINGS& Settings() const;
 
-    ///> Returns the logger object, allowing to dump geometry to a file.
+    ///< Return the logger object, allowing to dump geometry to a file.
     virtual LOGGER* Logger();
 
     void SetLogger( LOGGER* aLogger )
@@ -65,10 +66,8 @@ public:
     }
 
     /**
-    * Function SetDebugDecorator
-    *
-    * Assign a debug decorator allowing this algo to draw extra graphics for visual debugging
-    */
+     * Assign a debug decorator allowing this algo to draw extra graphics for visual debugging.
+     */
     void SetDebugDecorator( DEBUG_DECORATOR* aDecorator )
     {
         m_debugDecorator = aDecorator;

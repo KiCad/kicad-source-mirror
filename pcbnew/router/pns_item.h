@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -46,17 +47,17 @@ enum LineMarker {
 
 
 /**
- * ITEM
+ * Base class for PNS router board items.
  *
- * Base class for PNS router board items. Implements the shared properties of all PCB items -
- * net, spanned layers, geometric shape & refererence to owning model.
+ * Implements the shared properties of all PCB items  net, spanned layers, geometric shape and
+ * reference to owning model.
  */
 class ITEM
 {
 public:
     static const int UnusedNet = INT_MAX;
 
-    ///> Supported item types
+    ///< Supported item types
     enum PnsKind
     {
         SOLID_T     =    1,
@@ -97,17 +98,13 @@ public:
     virtual ~ITEM();
 
     /**
-     * Function Clone()
-     *
-     * Returns a deep copy of the item
+     * Return a deep copy of the item.
      */
     virtual ITEM* Clone() const = 0;
 
     /*
-     * Function Hull()
+     * Returns a convex polygon "hull" of a the item, that is used as the walk-around path.
      *
-     * Returns a convex polygon "hull" of a the item, that is used as the walk-around
-     * path.
      * @param aClearance defines how far from the body of the item the hull should be,
      * @param aWalkaroundThickness is the width of the line that walks around this hull.
      */
@@ -124,9 +121,7 @@ public:
     }
 
     /**
-     * Function Kind()
-     *
-     * Returns the type (kind) of the item
+     * Return the type (kind) of the item.
      */
     PnsKind Kind() const
     {
@@ -134,9 +129,7 @@ public:
     }
 
     /**
-     * Function OfKind()
-     *
-     * Returns true if the item's type matches the mask aKindMask.
+     * Return true if the item's type matches the mask \a aKindMask.
      */
     bool OfKind( int aKindMask ) const
     {
@@ -144,8 +137,6 @@ public:
     }
 
     /**
-     * Function KindStr()
-     *
      * Returns the kind of the item, as string
      */
     std::string KindStr() const;
@@ -163,10 +154,7 @@ public:
     virtual int Layer() const { return Layers().Start(); }
 
     /**
-     * Function LayersOverlap()
-     *
-     * Returns true if the set of layers spanned by aOther overlaps our
-     * layers.
+     * Return true if the set of layers spanned by aOther overlaps our layers.
      */
     bool LayersOverlap( const ITEM* aOther ) const
     {
@@ -174,22 +162,16 @@ public:
     }
 
     /**
-     * Function Owner()
-     *
-     * Returns the owner of this item, or NULL if there's none.
+     * Return the owner of this item, or NULL if there's none.
      */
     NODE* Owner() const { return m_owner; }
 
     /**
-     * Functon SetOwner()
-     *
-     * Sets the node that owns this item. An item can belong to a single NODE or be unowned.
+     * Set the node that owns this item. An item can belong to a single NODE or be unowned.
      */
     void SetOwner( NODE* aOwner ) { m_owner = aOwner; }
 
     /**
-     * Function BelongsTo()
-     *
      * @return true if the item is owned by the node aNode.
      */
     bool BelongsTo( NODE* aNode ) const
@@ -198,21 +180,18 @@ public:
     }
 
     /**
-     * Function Collide()
+     * Check for a collision (clearance violation) with between us and item \a aOther.
      *
-     * Checks for a collision (clearance violation) with between us and item aOther.
-     * Collision checking takes all PCB stuff into accound (layers, nets, DRC rules).
+     * Collision checking takes all PCB stuff into account (layers, nets, DRC rules).
      * Optionally returns a minimum translation vector for force propagation algorithm.
      *
-     * @param aOther item to check collision against
+     * @param aOther is the item to check collision against.
      * @return true, if a collision was found.
      */
     bool Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly = true ) const;
 
     /**
-     * Function Shape()
-     *
-     * Returns the geometrical shape of the item. Used for collision detection & spatial indexing.
+     * Return the geometrical shape of the item. Used for collision detection and spatial indexing.
      */
     virtual const SHAPE* Shape() const
     {

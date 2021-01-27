@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ struct LP_CACHE;
 
 /**
  * A #PLUGIN derivation which could possibly be put into a DLL/DSO.
+ *
  * As with any PLUGIN, there is no UI, i.e. windowing calls allowed.
  */
 class LEGACY_PLUGIN : public PLUGIN
@@ -101,8 +102,8 @@ public:
     static LSET leg_mask2new( int cu_count, unsigned aMask );
 
 protected:
-    ///> Converts net code using the mapping table if available,
-    ///> otherwise returns unchanged net code
+    ///< Converts net code using the mapping table if available,
+    ///< otherwise returns unchanged net code
     inline int getNetCode( int aNetCode )
     {
         if( (unsigned int) aNetCode < m_netCodes.size() )
@@ -115,7 +116,7 @@ protected:
      * Parse an ASCII decimal floating point value and scales it into a BIU according to the
      * current value of diskToBui.
      *
-     * This fuction is the complement of #fmtBIU().  One has to know what the other is doing.
+     * This function is the complement of #fmtBIU().  One has to know what the other is doing.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
      * @param nptrptr may be NULL, but if not, then it tells where to put a pointer to the

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,7 +33,8 @@
 #include <gestfich.h>
 #include <wx/dir.h>
 
-///> Helper widget to select whether a new directory should be created for a project
+
+///< Helper widget to select whether a new directory should be created for a project.
 class DIR_CHECKBOX : public wxPanel
 {
 public:
@@ -94,8 +95,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     // wxFileName automatically extracts an extension.  But if it isn't
     // a .pro extension, we should keep it as part of the filename
-    if( !pro.GetExt().IsEmpty()
-        && pro.GetExt().ToStdString() != ProjectFileExtension )
+    if( !pro.GetExt().IsEmpty() && pro.GetExt().ToStdString() != ProjectFileExtension )
         pro.SetName( pro.GetName() + wxT( "." ) + pro.GetExt() );
 
     pro.SetExt( ProjectFileExtension );     // enforce extension
@@ -322,17 +322,6 @@ int KICAD_MANAGER_CONTROL::CloseProject( const TOOL_EVENT& aEvent )
 
 class SAVE_AS_TRAVERSER : public wxDirTraverser
 {
-private:
-    KICAD_MANAGER_FRAME* m_frame;
-
-    wxString             m_projectDirPath;
-    wxString             m_projectName;
-    wxString             m_newProjectDirPath;
-    wxString             m_newProjectName;
-
-    wxFileName           m_newProjectFile;
-    wxString             m_errors;
-
 public:
     SAVE_AS_TRAVERSER( KICAD_MANAGER_FRAME* aFrame,
                        const wxString& aSrcProjectDirPath,
@@ -380,27 +369,27 @@ public:
             KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
         else if( ext == "kicad_sch"
-                 || ext == "kicad_sch-bak"
-                 || ext == "sch"
-                 || ext == "sch-bak"
-                 || ext == "sym"
-                 || ext == "lib"
-                 || ext == "dcm"
-                 || ext == "kicad_sym"
-                 || ext == "net"
-                 || destFile.GetName() == "sym-lib-table" )
+               || ext == "kicad_sch-bak"
+               || ext == "sch"
+               || ext == "sch-bak"
+               || ext == "sym"
+               || ext == "lib"
+               || ext == "dcm"
+               || ext == "kicad_sym"
+               || ext == "net"
+               || destFile.GetName() == "sym-lib-table" )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
         else if( ext == "kicad_pcb"
-              || ext == "kicad_pcb-bak"
-              || ext == "brd"
-              || ext == "kicad_mod"
-              || ext == "mod"
-              || ext == "cmp"
-              || destFile.GetName() == "fp-lib-table" )
+               || ext == "kicad_pcb-bak"
+               || ext == "brd"
+               || ext == "kicad_mod"
+               || ext == "mod"
+               || ext == "cmp"
+               || destFile.GetName() == "fp-lib-table" )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -413,9 +402,9 @@ public:
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
         else if( ext == "gbr"
-              || ext == "gbrjob"
-              || ext == "drl"
-              || IsProtelExtension( ext ) )
+               || ext == "gbrjob"
+               || ext == "drl"
+               || IsProtelExtension( ext ) )
         {
             KIFACE* gerbview = m_frame->Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
             gerbview->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -487,6 +476,17 @@ public:
     wxString GetErrors() { return m_errors; }
 
     wxFileName GetNewProjectFile() { return m_newProjectFile; }
+
+private:
+    KICAD_MANAGER_FRAME* m_frame;
+
+    wxString             m_projectDirPath;
+    wxString             m_projectName;
+    wxString             m_newProjectDirPath;
+    wxString             m_newProjectName;
+
+    wxFileName           m_newProjectFile;
+    wxString             m_errors;
 };
 
 
@@ -648,7 +648,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         // Show the frame (and update widgets to set valid sizes),
         // after creating player and before calling OpenProjectFiles().
         // Useful because loading a complex board and building its internal data can be
-        // time consumming
+        // time consuming
         player->Show( true );
         wxSafeYield();
 
@@ -676,9 +676,6 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
 class TERMINATE_HANDLER : public wxProcess
 {
-private:
-    wxString m_appName;
-
 public:
     TERMINATE_HANDLER( const wxString& appName ) :
             m_appName( appName )
@@ -686,9 +683,7 @@ public:
 
     void OnTerminate( int pid, int status ) override
     {
-        wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
-                                         m_appName,
-                                         pid );
+        wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ), m_appName, pid );
 
         wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 
@@ -704,6 +699,9 @@ public:
 
         delete this;
     }
+
+private:
+    wxString m_appName;
 };
 
 
@@ -734,7 +732,8 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
     if( aEvent.Parameter<wxString*>() )
         params = *aEvent.Parameter<wxString*>();
-    else if( ( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) ) && m_frame->IsProjectActive() )
+    else if( ( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) )
+           && m_frame->IsProjectActive() )
         params = m_frame->Prj().GetProjectPath();
 
     if( !params.empty() )
@@ -746,10 +745,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
     if( pid > 0 )
     {
-        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ),
-                                         execFile,
-                                         params,
-                                         pid );
+        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ), execFile, params, pid );
         m_frame->PrintMsg( msg );
 
 #ifdef __WXMAC__
@@ -769,7 +765,8 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 void KICAD_MANAGER_CONTROL::setTransitions()
 {
     Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewFromTemplate,
+        KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,     KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::CloseProject,    KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,   ACTIONS::saveAs.MakeEvent() );
@@ -780,12 +777,15 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editSchematic.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editPCB.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,      KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,
+        KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::convertImage.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,
+        KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editWorksheet.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,
+        KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );

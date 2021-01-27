@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,8 +34,6 @@ class FOOTPRINT_EDIT_FRAME;
 class DIALOG_FOOTPRINT_CHECKER;
 
 /**
- * FOOTPRINT_EDITOR_CONTROL
- *
  * Module editor specific tools.
  */
 class FOOTPRINT_EDITOR_CONTROL : public PCB_TOOL_BASE
@@ -50,7 +50,7 @@ public:
 
     int NewFootprint( const TOOL_EVENT& aEvent );
     int CreateFootprint( const TOOL_EVENT& aEvent );
-    
+
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );
@@ -78,10 +78,9 @@ public:
     int DefaultPadProperties( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Sets up handlers for various events.
+    ///< Set up handlers for various events.
     void setTransitions() override;
 
-private:
     FOOTPRINT_EDIT_FRAME*      m_frame;
     DIALOG_FOOTPRINT_CHECKER*  m_checkerDialog;
 

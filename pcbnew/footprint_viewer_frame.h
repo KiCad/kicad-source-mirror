@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jap.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,20 +43,10 @@ namespace PCB { struct IFACE; }
  */
 class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
 {
-    friend struct PCB::IFACE;       // constructor called from here only
-
-protected:
-    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
-
-    MAGNETIC_SETTINGS m_magneticItems;
-
-    void setupUIConditions() override;
-
-
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     SELECTION& GetCurrentSelection() override;
@@ -72,22 +62,20 @@ public:
     }
 
     /**
-     * Function ReCreateLibraryList
+     * Create or recreate the list of current loaded libraries.
      *
-     * Creates or recreates the list of current loaded libraries.
      * This list is sorted, with the library cache always at end of the list
      */
     void ReCreateLibraryList();
 
     /**
-     * Update the ID_ADD_FOOTPRINT_TO_BOARD tool state in main toolbar
+     * Update the ID_ADD_FOOTPRINT_TO_BOARD tool state in main toolbar.
      */
     void OnUpdateFootprintButton(  wxUpdateUIEvent& aEvent );
 
     /**
-     * Function ShowModal
+     * Run the footprint viewer as a modal dialog.
      *
-     * Runs the Footprint Viewer as a modal dialog.
      * @param aFootprint an optional FPID string to initialize the viewer with and to
      *                   return a selected footprint through.
      */
@@ -95,15 +83,14 @@ public:
 
     COLOR_SETTINGS* GetColorSettings() const override;
 
+protected:
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
+
+    MAGNETIC_SETTINGS m_magneticItems;
+
+    void setupUIConditions() override;
+
 private:
-    wxTextCtrl*         m_libFilter;
-    wxListBox*          m_libList;        // The list of libs names
-    wxTextCtrl*         m_fpFilter;
-    wxListBox*          m_fpList;         // The list of footprint names
-
-    bool                m_autoZoom;
-    double              m_lastZoom;
-
     const wxString      getCurNickname();
     void                setCurNickname( const wxString& aNickname );
 
@@ -116,8 +103,7 @@ private:
     void OnIterateFootprintList( wxCommandEvent& event );
 
     /**
-     * Function UpdateTitle
-     * updates the window title with current library information.
+     * Update the window title with current library information.
      */
     void UpdateTitle();
 
@@ -148,45 +134,51 @@ private:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
-     * Function OnActivate
-     * is called when the frame frame is activate to reload the libraries and component lists
+     * Called when the frame frame is activate to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.
      */
     void OnActivate( wxActivateEvent& event );
 
     /**
-     * Function AddFootprintToPCB
-     * exports the current footprint name and close the library browser.
+     * Export the current footprint name and close the library browser.
      */
     void AddFootprintToPCB( wxCommandEvent& aEvent );
 
     /**
-     * Function SelectAndViewFootprint
-     * Select and load the next or the previous footprint
-     * if no current footprint, Rebuild the list of footprints available in a given footprint
-     * library
-     * @param aMode = NEXT_PART or PREVIOUS_PART
+     * Select and load the next or the previous footprint.
+     *
+     * If no current footprint, rebuild the list of footprints available in a given footprint
+     * library.
+     *
+     * @param aMode #NEXT_PART or #PREVIOUS_PART.
      */
     void SelectAndViewFootprint( int aMode );
 
     /**
-     * Function Update3DView
-     * must be called after a footprint selection
      * Updates the 3D view and 3D frame title.
-     * @param aForceReload = true to reload data immediately
+     *
+     * Must be called after a footprint selection.
+     *
+     * @param aForceReload true to reload data immediately.
      */
     void Update3DView( bool aForceReload, const wxString* aTitle = nullptr ) override;
 
-    /*
-     * Virtual functions, not used here, but needed by PCB_BASE_FRAME
-     * (virtual pure functions )
-     */
     void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO, const wxPoint& ) override {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO, const wxPoint &) override {}
 
     void updateView();
 
     DECLARE_EVENT_TABLE()
+
+    friend struct PCB::IFACE;       // constructor called from here only
+
+    wxTextCtrl*         m_libFilter;
+    wxListBox*          m_libList;        // The list of library names.
+    wxTextCtrl*         m_fpFilter;
+    wxListBox*          m_fpList;         // The list of footprint names.
+
+    bool                m_autoZoom;
+    double              m_lastZoom;
 };
 
 #endif  // FOOTPRINT_VIEWER_FRAME_H

@@ -2,8 +2,9 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,12 +40,11 @@ class LINE;
 class DIFF_PAIR;
 class ITEM;
 class JOINT;
+class OPT_CONSTRAINT;
 
 /**
- * COST_ESTIMATOR
- *
- * Calculates the cost of a given line, taking corner angles and total length into account.
- **/
+ * Calculate the cost of a given line, taking corner angles and total length into account.
+ */
 class COST_ESTIMATOR
 {
 public:
@@ -79,19 +79,18 @@ private:
     int m_cornerCost;
 };
 
-class OPT_CONSTRAINT;
 
 /**
- * OPTIMIZER
+ * Perform various optimizations of the lines being routed, attempting to make the lines shorter
+ * and less cornery.
  *
- * Performs various optimizations of the lines being routed, attempting to make the lines shorter
- * and less cornery. There are 3 kinds of optimizations so far:
- * - Merging obtuse segments (MERGE_OBTUSE): tries to join together as many
- *   obtuse segments as possible without causing collisions
- * - Rerouting path between pair of line corners with a 2-segment "\__" line and iteratively repeating
- *   the procedure as long as the total cost of the line keeps decreasing
+ * There are 3 kinds of optimizations so far:
+ * - Merging obtuse segments (MERGE_OBTUSE): tries to join together as many  obtuse segments
+ *   as possible without causing collisions.
+ * - Rerouting path between pair of line corners with a 2-segment "\__" line and iteratively
+ *   repeating the procedure as long as the total cost of the line keeps decreasing.
  * - "Smart Pads" - that is, rerouting pad/via exits to make them look nice (SMART_PADS).
- **/
+ */
 class OPTIMIZER
 {
 public:
@@ -110,10 +109,10 @@ public:
     OPTIMIZER( NODE* aWorld );
     ~OPTIMIZER();
 
-    ///> a quick shortcut to optmize a line without creating and setting up an optimizer
+    ///< A quick shortcut to optimize a line without creating and setting up an optimizer.
     static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld,
                           const VECTOR2I aV = VECTOR2I(0, 0) );
-    
+
     bool Optimize( LINE* aLine, LINE* aResult = NULL );
     bool Optimize( DIFF_PAIR* aPair );
 
@@ -207,6 +206,7 @@ private:
     std::pair<int, int> m_restrictedVertexRange;
     BOX2I               m_restrictArea;
 };
+
 
 class OPT_CONSTRAINT
 {

@@ -3,7 +3,8 @@
  *
  * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -85,7 +86,7 @@ public:
 
     void SetTolerance( int toll ) { m_tolerance = toll; }
 
-    void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir ) 
+    void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir )
     {
         m_direction        = aInitDirection;
         m_lastSegDirection = aLastSegDir;
@@ -96,7 +97,7 @@ public:
     void FlipPosture();
 
     /**
-     * Disables the mouse-trail portion of the posture solver; leaving only the manual posture
+     * Disable the mouse-trail portion of the posture solver; leaving only the manual posture
      * switch and the previous-segment posture algorithm
      */
     void SetMouseDisabled( bool aDisabled = true ) { m_disableMouse = aDisabled; }
@@ -114,10 +115,9 @@ private:
 };
 
 /**
- * LINE_PLACER
+ * Single track placement algorithm.
  *
- * Single track placement algorithm. Interactively routes a track.
- * Applies shove and walkaround algorithms when needed.
+ * Interactively routes a track and applies shove and walk around algorithms when needed.
  */
 
 class LINE_PLACER : public PLACEMENT_ALGO
@@ -127,29 +127,23 @@ public:
     ~LINE_PLACER();
 
     /**
-     * Function Start()
-     *
-     * Starts routing a single track at point aP, taking item aStartItem as anchor
-     * (unless NULL).
+     * Start routing a single track at point aP, taking item aStartItem as anchor (unless NULL).
      */
     bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /**
-     * Function Move()
-     *
-     * Moves the end of the currently routed trace to the point aP, taking
-     * aEndItem as anchor (if not NULL).
-     * (unless NULL).
+     * Move the end of the currently routed trace to the point \a aP, taking \a aEndItem as
+     * anchor (if not NULL).
      */
     bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /**
-     * Function FixRoute()
+     * Commit the currently routed track to the parent node taking \a aP as the final end point
+     * and \a aEndItem as the final anchor (if provided).
      *
-     * Commits the currently routed track to the parent node, taking aP as the final end point
-     * and aEndItem as the final anchor (if provided).
-     * @return true, if route has been commited. May return false if the routing result is
-     * violating design rules - in such case, the track is only committed if CanViolateDRC() is on.
+     * @return true if route has been committed. May return false if the routing result is
+     *         violating design rules.  In such cases, the track is only committed if
+     *         CanViolateDRC() is on.
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
@@ -162,54 +156,40 @@ public:
     bool HasPlacedAnything() const override;
 
     /**
-     * Function ToggleVia()
-     *
-     * Enables/disables a via at the end of currently routed trace.
+     * Enable/disable a via at the end of currently routed trace.
      */
     bool ToggleVia( bool aEnabled ) override;
 
     /**
-     * Function SetLayer()
-     *
-     * Sets the current routing layer.
+     * Set the current routing layer.
      */
     bool SetLayer( int aLayer ) override;
 
     /**
-     * Function Head()
-     *
-     * Returns the "head" of the line being placed, that is the volatile part that has not been
+     * Return the "head" of the line being placed, that is the volatile part that has not been
      * "fixed" yet.
      */
     const LINE& Head() const { return m_head; }
 
     /**
-     * Function Tail()
-     *
-     * Returns the "tail" of the line being placed, the part which has already wrapped around
+     * Return the "tail" of the line being placed, the part which has already wrapped around
      * and shoved some obstacles.
      */
     const LINE& Tail() const { return m_tail; }
 
     /**
-     * Function Trace()
-     *
-     * Returns the complete routed line.
+     * Return the complete routed line.
      */
     const LINE Trace() const;
 
     /**
-     * Function Traces()
-     *
-     * Returns the complete routed line, as a single-member ITEM_SET.
+     * Return the complete routed line, as a single-member ITEM_SET.
      */
     const ITEM_SET Traces() override;
 
     /**
-     * Function CurrentEnd()
-     *
-     * Returns the current end of the line being placed. It may not be equal
-     * to the cursor position due to collisions.
+     * Return the current end of the line being placed. It may not be equal to the cursor
+     * position due to collisions.
      */
     const VECTOR2I& CurrentEnd() const override
     {
@@ -217,9 +197,7 @@ public:
     }
 
     /**
-     * Function CurrentNet()
-     *
-     * Returns the net code of currently routed track.
+     * Return the net code of currently routed track.
      */
     const std::vector<int> CurrentNets() const override
     {
@@ -227,9 +205,7 @@ public:
     }
 
     /**
-     * Function CurrentLayer()
-     *
-     * Returns the layer of currently routed track.
+     * Return the layer of currently routed track.
      */
     int CurrentLayer() const override
     {
@@ -237,23 +213,18 @@ public:
     }
 
     /**
-     * Function CurrentNode()
-     *
-     * Returns the most recent world state.
+     * Return the most recent world state.
      */
     NODE* CurrentNode( bool aLoopsRemoved = false ) const override;
 
     /**
-     * Function FlipPosture()
-     *
-     * Toggles the current posture (straight/diagonal) of the trace head.
+     * Toggle the current posture (straight/diagonal) of the trace head.
      */
     void FlipPosture() override;
 
     /**
-     * Function UpdateSizes()
+     * Perform on-the-fly update of the width, via diameter & drill size from a settings class.
      *
-     * Performs on-the-fly update of the width, via diameter & drill size from a settings class.
      * Used to dynamically change these parameters as the track is routed.
      */
     void UpdateSizes( const SIZES_SETTINGS& aSizes ) override;
@@ -265,145 +236,123 @@ public:
     void GetModifiedNets( std::vector<int>& aNets ) const override;
 
     /**
-     * Function SplitAdjacentSegments()
-     *
-     * Checks if point aP lies on segment aSeg. If so, splits the segment in two, forming a
-     * joint at aP and stores updated topology in node aNode.
+     * Check if point \a aP lies on segment \a aSeg. If so, splits the segment in two, forming a
+     * joint at \a aP and stores updated topology in node \a aNode.
      */
     bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
 
 
 private:
     /**
-     * Function route()
-     *
-     * Re-routes the current track to point aP. Returns true, when routing has completed
-     * successfully (i.e. the trace end has reached point aP), and false if the trace was
+     * Re-route the current track to point aP. Returns true, when routing has completed
+     * successfully (i.e. the trace end has reached point \a aP), and false if the trace was
      * stuck somewhere on the way. May call routeStep() repetitively due to mouse smoothing.
+     *
      * @param aP ending point of current route.
      * @return true, if the routing is complete.
      */
     bool route( const VECTOR2I& aP );
 
     /**
-     * Function updateLeadingRatLine()
-     *
-     * Draws the "leading" ratsnest line, which connects the end of currently routed track and
+     * Draw the "leading" rats nest line, which connects the end of currently routed track and
      * the nearest yet unrouted item. If the routing for current net is complete, draws nothing.
      */
     void updateLeadingRatLine();
 
     /**
-     * Function setWorld()
-     *
-     * Sets the board to route.
+     * Set the board to route.
      */
     void setWorld( NODE* aWorld );
 
     /**
-     * Function startPlacement()
-     *
-     * Initializes placement of a new line with given parameters.
+     * Initialize placement of a new line with given parameters.
      */
     void initPlacement();
 
     /**
-     * Function setInitialDirection()
-     *
-     * Sets preferred direction of the very first track segment to be laid.
+     * Set preferred direction of the very first track segment to be laid.
      * Used by posture switching mechanism.
      */
     void setInitialDirection( const DIRECTION_45& aDirection );
 
     /**
-     * Function removeLoops()
-     *
      * Searches aNode for traces concurrent to aLatest and removes them. Updated
      * topology is stored in aNode.
      */
     void removeLoops( NODE* aNode, LINE& aLatest );
 
     /**
-     * Assembles a line starting from segment or arc aLatest, removes collinear segments
-     * and redundant vertexes. If a simplification bhas been found, replaces the
-     * old line with the simplified one in aNode.
+     * Assemble a line starting from segment or arc aLatest, removes collinear segments
+     * and redundant vertexes.  If a simplification has been found, replaces the old line
+     * with the simplified one in \a aNode.
      */
     void simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest );
 
     /**
-     * Function handleSelfIntersections()
+     * Check if the head of the track intersects its tail. If so, cuts the tail up to the
+     * intersecting segment and fixes the head direction to match the last segment before
+     * the cut.
      *
-     * Checks if the head of the track intersects its tail. If so, cuts the
-     * tail up to the intersecting segment and fixes the head direction to match
-     * the last segment before the cut.
      * @return true if the line has been changed.
      */
     bool handleSelfIntersections();
 
     /**
-     * Function handlePullback()
+     * Deal with pull-back: reduces the tail if head trace is moved backwards wrs to the
+     * current tail direction.
      *
-     * Deals with pull-back: reduces the tail if head trace is moved backwards
-     * wrs to the current tail direction.
      * @return true if the line has been changed.
      */
     bool handlePullback();
 
     /**
-     * Function mergeHead()
+     * Moves "established" segments from the head to the tail if certain conditions are met.
      *
-     * Moves "estabished" segments from the head to the tail if certain
-     * conditions are met.
      * @return true, if the line has been changed.
      */
     bool mergeHead();
 
     /**
-     * Function reduceTail()
+     * Attempt to reduce the number of segments in the tail by trying to replace a certain
+     * number of latest tail segments with a direct trace leading to \a aEnd that does not
+     * collide with anything.
      *
-     * Attempts to reduce the numer of segments in the tail by trying to replace a
-     * certain number of latest tail segments with a direct trace leading to aEnd
-     * that does not collide with anything.
-     * @param aEnd: current routing destination point.
+     * @param aEnd is the current routing destination point.
      * @return true if the line has been changed.
      */
     bool reduceTail( const VECTOR2I& aEnd );
 
     /**
-     * Function optimizeTailHeadTransition()
+     * Try to reduce the corner count of the most recent part of tail/head by merging
+     * obtuse/collinear segments.
      *
-     * Tries to reduce the corner count of the most recent part of tail/head by
-     * merging obtuse/collinear segments.
-     * @return true, if the line has been changed.
+     * @return true if the line has been changed.
      */
     bool optimizeTailHeadTransition();
 
     /**
-     * Function routeHead()
-     *
-     * Computes the head trace between the current start point (m_p_start) and
-     * point aP, starting with direction defined in m_direction. The trace walks
-     * around all colliding solid or non-movable items. Movable segments are
-     * ignored, as they'll be handled later by the shove algorithm.
+     * Compute the head trace between the current start point (m_p_start) and point \a aP,
+     * starting with direction defined in m_direction.  The trace walks around all
+     * colliding solid or non-movable items.  Movable segments are ignored, as they'll be
+     * handled later by the shove algorithm.
      */
-    bool routeHead( const VECTOR2I& aP, LINE& aNewHead);
+    bool routeHead( const VECTOR2I& aP, LINE& aNewHead );
 
     /**
-     * Function routeStep()
+     * Perform a single routing algorithm step, for the end point \a aP.
      *
-     * Performs a single routing alorithm step, for the end point aP.
-     * @param aP ending point of current route
-     * @return true, if the line has been changed.
+     * @param aP is the  ending point of current route.
+     * @return true if the line has been changed.
      */
     void routeStep( const VECTOR2I& aP );
 
-    ///> route step, walkaround mode
-    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead);
+    ///< Route step walk around mode.
+    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead );
 
-    ///> route step, shove mode
-    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead);
+    ///< Route step shove mode.
+    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead );
 
-    ///> route step, mark obstacles mode
+    ///< Route step mark obstacles mode.
     bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead );
 
     const VIA makeVia( const VECTOR2I& aP );
@@ -411,23 +360,23 @@ private:
     bool buildInitialLine( const VECTOR2I& aP, LINE& aHead );
 
 
-    DIRECTION_45   m_direction;         ///> current routing direction
-    DIRECTION_45   m_initial_direction; ///> routing direction for new traces
+    DIRECTION_45   m_direction;         ///< current routing direction
+    DIRECTION_45   m_initial_direction; ///< routing direction for new traces
 
-    LINE           m_head;          ///> the volatile part of the track from the previously
-                                    ///> analyzed point to the current routing destination
+    LINE           m_head;          ///< the volatile part of the track from the previously
+                                    ///< analyzed point to the current routing destination
 
-    LINE           m_tail;          ///> routing "tail": part of the track that has been already
-                                    ///> fixed due to collisions with obstacles
+    LINE           m_tail;          ///< routing "tail": part of the track that has been already
+                                    ///< fixed due to collisions with obstacles
 
-    NODE*          m_world;         ///> pointer to world to search colliding items
-    VECTOR2I       m_p_start;       ///> current routing start (end of tail, beginning of head)
+    NODE*          m_world;         ///< pointer to world to search colliding items
+    VECTOR2I       m_p_start;       ///< current routing start (end of tail, beginning of head)
 
-    std::unique_ptr<SHOVE> m_shove; ///> The shove engine
+    std::unique_ptr<SHOVE> m_shove; ///< The shove engine
 
-    NODE*          m_currentNode;   ///> Current world state
-    NODE*          m_lastNode;      ///> Postprocessed world state (including marked collisions &
-                                    ///> removed loops)
+    NODE*          m_currentNode;   ///< Current world state
+    NODE*          m_lastNode;      ///< Postprocessed world state (including marked collisions &
+                                    ///< removed loops)
 
     SIZES_SETTINGS m_sizes;
 

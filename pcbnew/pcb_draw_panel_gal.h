@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,17 +47,17 @@ public:
     virtual ~PCB_DRAW_PANEL_GAL();
 
     /**
-     * Function DisplayBoard
-     * adds all items from the current board to the VIEW, so they can be displayed by GAL.
+     * Add all items from the current board to the VIEW, so they can be displayed by GAL.
+     *
      * @param aBoard is the PCB to be loaded.
      */
     void DisplayBoard( BOARD* aBoard );
 
     /**
-     * Function SetWorksheet
-     * Sets (or updates) worksheet used by the draw panel.
-     * @param aWorksheet is the worksheet to be used.
-     *        The object is then owned by PCB_DRAW_PANEL_GAL.
+     * Set (or updates) worksheet used by the draw panel.
+     *
+     * @param aWorksheet is the worksheet to be used.  The object is then owned by
+     *                   #PCB_DRAW_PANEL_GAL.
      */
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
@@ -63,63 +65,62 @@ public:
 
     // TODO(JE) Look at optimizing this out
     /**
-     * Updates the color settings in the painter and GAL
+     * Update the color settings in the painter and GAL.
      */
     void UpdateColors();
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override
     {
         SetHighContrastLayer( static_cast< PCB_LAYER_ID >( aLayer ) );
     }
 
-    ///> SetHighContrastLayer(), with some extra smarts for PCB
+    ///< SetHighContrastLayer(), with some extra smarts for PCB.
     void SetHighContrastLayer( PCB_LAYER_ID aLayer );
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
     virtual void SetTopLayer( int aLayer ) override
     {
         SetTopLayer( static_cast< PCB_LAYER_ID >( aLayer ) );
     }
 
-    ///> SetTopLayer(), with some extra smarts for PCB
+    ///< SetTopLayer(), with some extra smarts for PCB.
     void SetTopLayer( PCB_LAYER_ID aLayer );
 
     /**
-     * Function SyncLayersVisibility
-     * Updates "visibility" property of each layer of a given BOARD.
+     * Update "visibility" property of each layer of a given #BOARD.
+     *
      * @param aBoard contains layers visibility settings to be applied.
      */
     void SyncLayersVisibility( const BOARD* aBoard );
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    ///> Forces refresh of the ratsnest visual representation
+    ///< Force refresh of the ratsnest visual representation.
     void RedrawRatsnest();
 
-    ///> @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
+    ///< @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
     BOX2I GetDefaultViewBBox() const override;
 
     virtual KIGFX::PCB_VIEW* GetView() const override;
 
 protected:
-
-    ///> Reassigns layer order to the initial settings.
+    ///< Reassign layer order to the initial settings.
     void setDefaultLayerOrder();
 
-    ///> Sets rendering targets & dependencies for layers.
+    ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///> Currently used worksheet
+    ///< Currently used worksheet.
     std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
 
-    ///> Ratsnest view item
+    ///< Ratsnest view item
     std::unique_ptr<KIGFX::RATSNEST_VIEWITEM> m_ratsnest;
 };
 

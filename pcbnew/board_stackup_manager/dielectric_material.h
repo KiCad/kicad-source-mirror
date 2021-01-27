@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <wx/string.h>
 
 
-// A class to handle substrates prms in gerber job file and dialog
+// A class to handle substrates prms in gerber job file and dialog.
 struct DIELECTRIC_SUBSTRATE
 {
     wxString m_Name;            // the name (in job file) of material
@@ -44,10 +44,10 @@ struct DIELECTRIC_SUBSTRATE
 };
 
 
-// A struct to handle a list of substrates prms in gerber job file and dialogs
+// Handle a list of substrates prms in gerber job file and dialogs
 class DIELECTRIC_SUBSTRATE_LIST
 {
-    ///> The list of available substrates. It contians at least predefined substrates
+    ///< The list of available substrates. It contains at least predefined substrates
     std::vector<DIELECTRIC_SUBSTRATE> m_substrateList;
 
 public:
@@ -58,10 +58,9 @@ public:
         DL_MATERIAL_SILKSCREEN
     };
 
-    /** Ctor
-     * @param aForDielectric =
-     * DL_MATERIAL_DIELECTRIC to build a dielectric material list
-     * DL_MATERIAL_SOLDERMASK to build a solder mask material list
+    /**
+     * @param aForDielectric set to #DL_MATERIAL_DIELECTRIC to build a dielectric material list
+     *                       or #DL_MATERIAL_SOLDERMASK to build a solder mask material list.
      */
     DIELECTRIC_SUBSTRATE_LIST( DL_MATERIAL_LIST_TYPE aListType);
 
@@ -71,38 +70,45 @@ public:
     int GetCount() { return (int)m_substrateList.size(); }
 
     /**
-     * @return the substrate in list of index aIdx
-     *  if incorrect return nullptr
+     * @return the substrate in list of index \a aIdx if incorrect return nullptr.
+     *
      * @param aIdx is the index in substrate list.
      */
     DIELECTRIC_SUBSTRATE* GetSubstrate( int aIdx );
 
     /**
-     * @return the substrate in list of name aName
-     *  if not found return nullptr
+     * The comparison is case insensitive.
+     *
      * @param aName is the name of the substrate in substrate list.
-     * the comparison is case insensitve
+     * @return the substrate in list of name \a aName if not found return nullptr.
      */
     DIELECTRIC_SUBSTRATE* GetSubstrate( const wxString& aName );
 
-    /** Find a item in list similar to aItem
-     * @param aItem is the item to match
-     * @return the index of similar item in list or -1 if not found
-     * the comparison is for the name case insensitive, and EpsilonR and LossTg must match
+    /**
+     * Find a item in list similar to \a aItem.
+     *
+     * The comparison is for the name case insensitive, and EpsilonR and LossTg must match.
+     *
+     * @param aItem is the item to match.
+     * @return the index of similar item in list or -1 if not found.
      */
     int FindSubstrate( DIELECTRIC_SUBSTRATE* aItem );
 
-    /** Find a item in list having the sapme parameters
-     * @param aName is the name to match (case insensitive)
-     * @param aEpsilonR is the Repaltive Permeatbility to match
-     * @param aLossTg is the loss tangent to match
-     * @return the index of similar item in list or -1 if not found
+    /**
+     * Find a item in list having the same parameters.
+     *
+     * @param aName is the name to match (case insensitive).
+     * @param aEpsilonR is the relative permeability to match.
+     * @param aLossTg is the loss tangent to match.
+     * @return the index of similar item in list or -1 if not found.
      */
     int FindSubstrate( const wxString& aName, double aEpsilonR, double aLossTg );
 
-    /** Append a item in list similar to aItem
-     * @param aItem is the item to append
-     * @return the index of the new item in list
+    /**
+     * Append a item in list similar to \a aItem.
+     *
+     * @param aItem is the item to append.
+     * @return the index of the new item in list.
      */
     int AppendSubstrate( DIELECTRIC_SUBSTRATE& aItem )
     {
