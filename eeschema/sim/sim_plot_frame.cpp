@@ -190,7 +190,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
             KiBitmap( sim_tune_xpm ), _( "Tune component values" ), wxITEM_NORMAL );
     m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
-            KiBitmap( sim_settings_xpm ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
+            KiBitmap( config_xpm ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
 
     Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
              wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
@@ -313,7 +313,7 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
         { ID_MENU_PROBE_SIGNALS, sim_probe_xpm},
         { ID_MENU_TUNE_SIGNALS, sim_tune_xpm},
         { ID_MENU_SHOW_NETLIST, netlist_xpm},
-        { ID_MENU_SET_SIMUL, sim_settings_xpm},
+        { ID_MENU_SET_SIMUL, config_xpm},
 
         // View menu
         { wxID_ZOOM_IN, zoom_in_xpm},

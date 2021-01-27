@@ -551,6 +551,5 @@ EXTERN_BITMAP( sim_stop_xpm )
 EXTERN_BITMAP( sim_tune_xpm )
 EXTERN_BITMAP( sim_probe_xpm )
 EXTERN_BITMAP( sim_add_signal_xpm )
-EXTERN_BITMAP( sim_settings_xpm )
 
 #endif // BITMAPS_PNG_BITMAPS_LIST__H
