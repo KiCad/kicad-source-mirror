@@ -346,21 +346,27 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         // m_highContrastLayers, but it's not sufficiently fine-grained as it can't differentiate
         // between (for instance) a via which is flashed on the primary layer and one that is not.
         // So we need to refine isActive to be more discriminating for some items.
-        if( primary != UNDEFINED_LAYER )
+        if( primary != UNDEFINED_LAYER && IsCopperLayer( primary ) )
         {
-            if( item->Type() == PCB_VIA_T )
-            {
-                isActive = static_cast<const VIA*>( item )->FlashLayer( primary, true );
-            }
-            else if( item->Type() == PCB_PAD_T )
-            {
-                isActive = static_cast<const PAD*>( item )->FlashLayer( primary, true );
-            }
-            else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+            if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {
                 // Track itself isn't on a synthetic layer, but its netname annotations are, and
                 // we want to dim them based on whether or not the track is on the primary layer.
                 isActive = static_cast<const TRACK*>( item )->IsOnLayer( primary );
+            }
+            else
+            {
+                bool flashed = true;
+
+                if( item->Type() == PCB_VIA_T )
+                    flashed = static_cast<const VIA*>( item )->FlashLayer( primary, true );
+                else if( item->Type() == PCB_PAD_T )
+                    flashed = static_cast<const PAD*>( item )->FlashLayer( primary, true );
+
+                // For pads and vias, we only want to override the active state for copper layers
+                // (this includes synthetic layers)
+                if( !IsNonCopperLayer( aLayer ) )
+                    isActive = flashed;
             }
         }
 
