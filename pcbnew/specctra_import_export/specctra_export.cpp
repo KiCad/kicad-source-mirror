@@ -1332,7 +1332,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
         {
             if( i->GetNetCode() > 0 )
-                m_nets[ i->GetNetCode() ] = new NET( m_pcb->network );
+                m_nets[i->GetNetCode()]->net_id = TO_UTF8( i->GetNetname() );
         }
 
         items.Collect( aBoard, scanMODULEs );
