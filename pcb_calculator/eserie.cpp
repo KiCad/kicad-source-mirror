@@ -3,7 +3,7 @@
  * is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 <janvi@veith.net>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -338,7 +338,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     {
         if( std::abs( error ) < 0.01 )
         {
-            es.Printf( "<0.01" );
+            es.Printf( "<%.2f", 0.01 );
         }
         else
         {
@@ -347,7 +347,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     }
     else
     {
-        es = "Exact";
+        es = _( "Exact" );
     }
 
     m_ESeriesError2R->SetValue( es );            // anyway show 2R error string
@@ -361,7 +361,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
         {
             if( std::abs( err3 ) < 0.01 )
             {
-                es.Printf( "<0.01" );
+                es.Printf( "<%.2f", 0.01 );
             }
             else
             {
@@ -370,7 +370,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
         }
         else
         {
-            es = "Exact";
+            es = _( "Exact" );
         }
 
         m_ESeriesError3R->SetValue( es );         // show 3R error string
@@ -379,7 +379,7 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     }
     else                                         // nothing better than 2R found
     {
-        fs = "Not worth using";
+        fs = _( "Not worth using" );
         m_ESeries_Sol3R->SetValue( fs );
         m_ESeriesError3R->SetValue( wxEmptyString );
     }
@@ -399,14 +399,14 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
         }
         else
         {
-            es = "Exact";
+            es = _( "Exact" );
         }
 
         m_ESeriesError4R->SetValue( es );
     }
     else                                          // no 4R solution
     {
-        fs = "Not worth using";
+        fs = _( "Not worth using" );
         es = wxEmptyString;
         m_ESeriesError4R->SetValue( es );
     }
