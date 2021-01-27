@@ -346,7 +346,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         // m_highContrastLayers, but it's not sufficiently fine-grained as it can't differentiate
         // between (for instance) a via which is flashed on the primary layer and one that is not.
         // So we need to refine isActive to be more discriminating for some items.
-        if( primary != UNDEFINED_LAYER && IsCopperLayer( primary ) )
+        if( IsCopperLayer( primary ) )
         {
             if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {
@@ -364,8 +364,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
                     flashed = static_cast<const PAD*>( item )->FlashLayer( primary, true );
 
                 // For pads and vias, we only want to override the active state for copper layers
-                // (this includes synthetic layers)
-                if( !IsNonCopperLayer( aLayer ) )
+                // (both board copper layers such as F_Cu *and* synthetic copper layers such as
+                // LAYER_VIA_THROUGH).
+                if( IsCopperLayer( aLayer, true ) )
                     isActive = flashed;
             }
         }

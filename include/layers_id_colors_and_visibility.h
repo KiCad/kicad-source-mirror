@@ -784,6 +784,22 @@ inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
 }
 
 /**
+ * Tests whether a layer is a copper layer, optionally including synthetic copper layers such
+ * as LAYER_VIA_THROUGH, LAYER_PAD_FR, etc.
+ *
+ * @param aLayerId
+ * @param aIncludeSyntheticCopperLayers
+ * @return
+ */
+inline bool IsCopperLayer( LAYER_NUM aLayerId, bool aIncludeSyntheticCopperLayers )
+{
+    if( aIncludeSyntheticCopperLayers )
+        return !IsNonCopperLayer( aLayerId );
+    else
+        return IsCopperLayer( aLayerId );
+}
+
+/**
  * Test whether a layer is a non copper and a non tech layer.
  *
  * @param aLayerId = Layer to test
