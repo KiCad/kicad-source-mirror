@@ -133,6 +133,7 @@ function( translate_language LANG OUT_FILE)
 
     add_custom_command(
         OUTPUT ${OUT_FILE}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pofiles/${LANG}.po
         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
                 ${CMAKE_CURRENT_SOURCE_DIR}/pofiles/${LANG}.po
                 -o ${OUT_FILE}
@@ -176,11 +177,23 @@ macro( linux_metadata_translation SRC_FILE OUT_FILE PO_DIR )
         set( OPT_TYPE "--xml" )
     endif ()
 
+
+    # Find all the po files to setup the dependency chain
+    file( STRINGS ${PO_DIR}/LINGUAS LANG_ARRAY REGEX "^[^#].*" )
+
+    set( LANG_FILES "" )
+
+    foreach( LANG ${LANG_ARRAY} )
+        # Keep a list of the language files that are created to add to the target
+        list( APPEND LANG_FILES "${PO_DIR}/${LANG}.po" )
+    endforeach()
+
+
     # Add the command to translate the file
     if( KICAD_BUILD_I18N )
         add_custom_command(
             OUTPUT ${OUT_FILE}
-            DEPENDS ${SRC_FILE}
+            DEPENDS ${SRC_FILE} ${LANG_FILES}
             COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
                     ${OPT_TYPE} --template=${SRC_FILE}
                     -d ${PO_DIR}
