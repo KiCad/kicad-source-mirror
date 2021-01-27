@@ -151,8 +151,9 @@ void BOARD::SetProject( PROJECT* aProject )
         // Link the design settings object to the project file
         project.m_BoardSettings = &GetDesignSettings();
 
-        // Set parent, which also will load the values from JSON stored in the project
-        project.m_BoardSettings->SetParent( &project );
+        // Set parent, which also will load the values from JSON stored in the project if we don't
+        // have legacy design settings loaded already
+        project.m_BoardSettings->SetParent( &project, !m_LegacyDesignSettingsLoaded );
 
         // The DesignSettings' netclasses pointer will be pointing to its internal netclasses
         // list at this point. If we loaded anything into it from a legacy board file then we

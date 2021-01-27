@@ -152,7 +152,7 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
-void NESTED_SETTINGS::SetParent( JSON_SETTINGS* aParent )
+void NESTED_SETTINGS::SetParent( JSON_SETTINGS* aParent, bool aLoadFromFile )
 {
     m_parent = aParent;
 
@@ -161,6 +161,7 @@ void NESTED_SETTINGS::SetParent( JSON_SETTINGS* aParent )
         m_parent->AddNestedSettings( this );
 
         // In case we were created after the parent's ctor
-        LoadFromFile();
+        if( aLoadFromFile )
+            LoadFromFile();
     }
 }

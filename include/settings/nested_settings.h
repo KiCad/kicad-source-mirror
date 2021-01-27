@@ -49,7 +49,7 @@ public:
      */
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
-    void SetParent( JSON_SETTINGS* aParent );
+    void SetParent( JSON_SETTINGS* aParent, bool aLoadFromFile = true );
 
     JSON_SETTINGS* GetParent()
     {
