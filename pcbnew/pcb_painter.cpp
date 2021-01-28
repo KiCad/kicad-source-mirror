@@ -618,7 +618,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
             for( unsigned int layer : m_pcbSettings.GetHighContrastLayers() )
             {
-                if( aVia->FlashLayer( static_cast<PCB_LAYER_ID>( layer ), true ) )
+                if( aVia->FlashLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
                 {
                     draw = true;
                     break;

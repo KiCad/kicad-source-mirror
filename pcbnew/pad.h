@@ -563,20 +563,18 @@ public:
      * Check to see whether the pad should be flashed on the specific layer.
      *
      * @param aLayer Layer to check for connectivity
-     * @param aIncludeZones We include zones in potentially connected elements when drawing
      * @return true if connected by pad or track (or optionally zone)
      */
-    bool FlashLayer( int aLayer, bool aIncludeZones = false  ) const;
+    bool FlashLayer( int aLayer ) const;
 
     /**
      * Check to see if the pad should be flashed to any of the layers in the set.
      *
      * @param aLayers set of layers to check the via against
-     * @param aIncludeZones We include zones in potentially connected elements when drawing
      * @return true if connected by pad or track (or optionally zone) on any of the associated
      *         layers
      */
-    bool FlashLayer( LSET aLayers, bool aIncludeZones = false  ) const;
+    bool FlashLayer( LSET aLayers ) const;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

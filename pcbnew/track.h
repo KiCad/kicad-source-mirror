@@ -456,18 +456,16 @@ public:
     /**
      * Checks to see whether the via should have a pad on the specific layer
      * @param aLayer Layer to check for connectivity
-     * @param aIncludeZones We include zones in potentially connected elements when drawing
      * @return true if connected by pad or track (or optionally zone)
      */
-    bool FlashLayer( int aLayer, bool aIncludeZones = false ) const;
+    bool FlashLayer( int aLayer ) const;
 
     /**
      * Checks to see if the via is present on any of the layers in the set
      * @param aLayers set of layers to check the via against
-     * @param aIncludeZones We include zones in potentially connected elements when drawing
      * @return true if connected by pad or track (or optionally zone) on any of the associated layers
      */
-    bool FlashLayer( LSET aLayers, bool aIncludeZones = false ) const;
+    bool FlashLayer( LSET aLayers ) const;
 
     /**
      * Function SetDrill

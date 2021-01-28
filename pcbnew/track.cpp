@@ -467,7 +467,7 @@ void VIA::SanitizeLayers()
 }
 
 
-bool VIA::FlashLayer( LSET aLayers, bool aIncludeZones ) const
+bool VIA::FlashLayer( LSET aLayers ) const
 {
     for( auto layer : aLayers.Seq() )
     {
@@ -479,20 +479,10 @@ bool VIA::FlashLayer( LSET aLayers, bool aIncludeZones ) const
 }
 
 
-bool VIA::FlashLayer( int aLayer, bool aIncludeZones ) const
+bool VIA::FlashLayer( int aLayer ) const
 {
-    std::vector<KICAD_T> types{ PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T };
-
-    /**
-     * Normally, we don't need to include zones in our flash check because the
-     * zones will fill over the hole.  But, when we are drawing the via in
-     * pcbnew, it is helpful to show the annular ring where the via is connected
-     */
-    if( aIncludeZones )
-    {
-        types.push_back( PCB_ZONE_T );
-        types.push_back( PCB_FP_ZONE_T );
-    }
+    std::vector<KICAD_T> types
+    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
 
     // Return the "normal" shape if the caller doesn't specify a particular layer
     if( aLayer == UNDEFINED_LAYER )

@@ -618,7 +618,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             // If the pad isn't on the current layer but has a hole, knock out a thermal relief
             // for the hole.
-            if( !pad->FlashLayer( aLayer ) )
+            if( !pad->FlashLayer( aLayer ) && pad->GetNetCode() != aZone->GetNetCode() )
             {
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
@@ -696,8 +696,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     gap += extra_margin;
 
                     // If the pad isn't on the current layer but has a hole, knock out the
-                    // hole.
-                    if( !aPad->FlashLayer( aLayer ) )
+                    // hole.  If the zone and the pad are the same layer, we still need the annular ring knockout
+                    if( !aPad->FlashLayer( aLayer ) && aPad->GetNetCode() != aZone->GetNetCode() )
                     {
                         if( aPad->GetDrillSize().x == 0 && aPad->GetDrillSize().y == 0 )
                             return;
@@ -748,7 +748,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     {
                         VIA* via = static_cast<VIA*>( aTrack );
 
-                        if( !via->FlashLayer( aLayer ) )
+                        if( !via->FlashLayer( aLayer ) && via->GetNetCode() != aZone->GetNetCode() )
                         {
                             int radius = via->GetDrillValue() / 2 + bds.GetHolePlatingThickness();
                             TransformCircleToPolygon( aHoles, via->GetPosition(), radius + gap,
