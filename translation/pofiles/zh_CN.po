@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-26 08:00+0000\n"
+"PO-Revision-Date: 2021-01-28 01:54+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -17471,7 +17471,7 @@ msgstr "步骤文本："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
-msgstr "每重复一次，文本应该步进的字符或数字位数。"
+msgstr "每次重复时要按其步进文本的字符数或位数。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
 msgid "Step X:"
@@ -17479,7 +17479,7 @@ msgstr "步骤 X:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr "每重复一次，X 轴上的步进距离。"
+msgstr "X 轴上每次重复步长的距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
@@ -17487,7 +17487,7 @@ msgstr "步距 Y："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr "每重复一次，Y 轴上的步进距离。"
+msgstr "每次重复在 Y 轴上步长的距离。"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -29710,7 +29710,7 @@ msgstr "无法读取文件 "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
-msgstr "J 行 %zu 中的行大小无效。预计有 11 个元素，但发现了 %zu"
+msgstr "J 行 %zu 中的行大小无效。  预计有 11 个元素，但发现了 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
@@ -29754,7 +29754,7 @@ msgstr "行 %zu 上无效的焊盘尺寸"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr "期望焊盘偏移值，但找到了%s：%s，位于行 %zu"
+msgstr "期望焊盘偏移值，但找到了%s : %s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, c-format
@@ -29764,7 +29764,7 @@ msgstr "未知的焊盘形状名 %s，位于行 %zu"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:885
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
-msgstr "id 字符串 \"%s\" 格式无效，该字符串位于自定义焊盘列 %zu"
+msgstr "ID 字符串 \"%s\" 的格式无效在自定义填充行 %zu 中"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:922
 #, c-format
@@ -29780,7 +29780,7 @@ msgstr "无效的令牌计数。预期为 8，但找到了 %zu"
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Geometric definition row %zu"
-msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于几何定义行 %zu"
+msgstr "record_tag 字符串 \"%s\" 的格式无效位于几何定义行 %zu中"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1172
 #, c-format
@@ -29791,7 +29791,7 @@ msgstr "未处理的图形项'%s'，位于几何定义行 %zu"
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Traces definition row %zu"
-msgstr "record_tag 字符串 \"%s\" 格式无效，此字符串位于 traces 定义行 %zu"
+msgstr "record_tag 字符串 \"%s\" 的格式无效位于布线定义行 %zu 中"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1356
 #, c-format
@@ -29803,12 +29803,12 @@ msgstr "未处理图形项 '%s'，位于 Traces 定义行 %zu"
 #, c-format
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
-msgstr "ID %d 和 序列 %d 项目重复， 重复项目位于 Traces 定义行 %zu \n"
+msgstr "ID %d 和序列 %d 的重复项位于布线定义行 %zu 中 \n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2317
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr "期望在铜层上找到蚀刻数据。找到了 Row， 位于层 '%s'"
+msgstr "期望蚀刻数据在铜层上。在图层 \"%s\" 上找到行"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -33400,16 +33400,14 @@ msgstr "KiCad"
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr "EDA 套装"
+msgstr "EDA 工具箱"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
-msgstr ""
-"KiCad 是一款跨平台和开源电子设计自动化套件。该程序可处理原理图捕获和带 "
-"Gerber 输出的 PCB 布局。"
+msgstr "KiCad 是一款跨平台和开源电子设计自动化工具箱。该程序可处理原理图设计和 Gerber 输出的 PCB 布局。"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
@@ -33429,7 +33427,7 @@ msgstr "KiCad 开发者们"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr "从位图创建一个组件以与 KiCad 一起使用"
+msgstr "从位图创建用于 KiCad 的元件"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
 msgid "Eeschema (Standalone)"
