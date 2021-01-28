@@ -962,7 +962,8 @@ const BOX2I PCB_SHAPE::ViewBBox() const
     }
 
     BOX2I return_box = EDA_ITEM::ViewBBox();
-    return_box.Inflate( m_width );
+    return_box.Inflate( m_width );    // Technically m_width / 2, but it never hurts to be a
+                                      // bit large to account for selection shadows, etc.
 
     return return_box;
 }
