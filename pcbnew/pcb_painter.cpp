@@ -338,6 +338,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             if( !static_cast<const TRACK*>( item )->IsOnLayer( primary ) )
                 isActive = false;
         }
+        else if( item->Type() == PCB_PAD_T )
+        {
+            if( !static_cast<const PAD*>( item )->FlashLayer( primary ) )
+                isActive = false;
+        }
 
         if( !isActive )
         {

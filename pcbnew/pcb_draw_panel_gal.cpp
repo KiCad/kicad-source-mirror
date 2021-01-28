@@ -277,7 +277,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ),
+                GetNetnameLayer( aLayer ), LAYER_VIAS_NETNAMES,
+                LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PADS_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
                 LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
                 LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA,
