@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
 "PO-Revision-Date: 2021-01-30 10:25+0000\n"
-"Last-Translator: Liu Guang <l.g110@163.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3312,7 +3312,7 @@ msgstr "微孔外径"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Hole"
-msgstr "U形辅助孔"
+msgstr "U 形辅助孔"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -25877,7 +25877,7 @@ msgstr "最小微孔外径："
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:362
 msgid "Minimum uVia hole:"
-msgstr "最小U形导通孔："
+msgstr "最小 U 形导通孔："
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:385
 msgid "Silkscreen"
@@ -33432,7 +33432,7 @@ msgstr "从位图创建用于 KiCad 的元件"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
 msgid "Eeschema (Standalone)"
-msgstr "Eeschema（独立式）"
+msgstr "Eeschema (独立版)"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
 msgid "Electronic schematic capture"
@@ -33440,7 +33440,7 @@ msgstr "电子原理图捕获"
 
 #: resources/linux/launchers/eeschema.desktop.in:12
 msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad 电子原理图设计（独立版）"
+msgstr "KiCad 电子原理图设计 (独立版)"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -33460,7 +33460,7 @@ msgstr "用于各种电子相关计算的计算器"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
 msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew （独立式）"
+msgstr "Pcbnew (独立版)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
 msgid "PCB layout"
@@ -33468,7 +33468,7 @@ msgstr "PCB 布局"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
 msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad 印刷电路板布局（独立式）"
+msgstr "KiCad PCB 布局 (独立版)"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber File"
