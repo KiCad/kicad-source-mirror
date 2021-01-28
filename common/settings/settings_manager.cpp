@@ -31,6 +31,7 @@
 #include <kiplatform/environment.h>
 #include <kiway.h>
 #include <macros.h>
+#include <paths.h>
 #include <project.h>
 #include <project/project_archiver.h>
 #include <project/project_file.h>
@@ -54,6 +55,8 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
         m_migration_source(),
         m_migrateLibraryTables( true )
 {
+    PATHS::EnsureUserPathsExist();
+
     // Check if the settings directory already exists, and if not, perform a migration if possible
     if( !MigrateIfNeeded() )
     {

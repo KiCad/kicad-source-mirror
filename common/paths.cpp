@@ -34,16 +34,23 @@
 #define KICAD_PATH_STR "kicad"
 #endif
 
+
+void PATHS::getUserDocumentPath( wxFileName& aPath )
+{
+    aPath.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
+    aPath.AppendDir( KICAD_PATH_STR );
+    aPath.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
+}
+
+
 wxString PATHS::GetUserPluginsPath()
 {
     wxFileName tmp;
+    getUserDocumentPath( tmp );
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
-    tmp.AppendDir( KICAD_PATH_STR );
-    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "plugins" );
 
-    return tmp.GetFullPath();
+    return tmp.GetPath();
 }
 
 
@@ -54,46 +61,73 @@ wxString PATHS::GetUserPlugins3DPath()
     tmp.AssignDir( PATHS::GetUserPluginsPath() );
     tmp.AppendDir( "3d" );
 
-    return tmp.GetFullPath();
+    return tmp.GetPath();
 }
 
 
 wxString PATHS::GetUserScriptingPath()
 {
     wxFileName tmp;
+    getUserDocumentPath( tmp );
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
-    tmp.AppendDir( KICAD_PATH_STR );
-    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "scripting" );
 
-    return tmp.GetFullPath();
+    return tmp.GetPath();
 }
 
 
 wxString PATHS::GetUserTemplatesPath()
 {
     wxFileName tmp;
+    getUserDocumentPath( tmp );
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
-    tmp.AppendDir( KICAD_PATH_STR );
-    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "template" );
 
-    return tmp.GetFullPath();
+    return tmp.GetPath();
+}
+
+
+wxString PATHS::GetDefaultUserSymbolsPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( "symbols" );
+
+    return tmp.GetPath();
+}
+
+
+wxString PATHS::GetDefaultUserFootprintsPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( "footprints" );
+
+    return tmp.GetPath();
+}
+
+
+wxString PATHS::GetDefaultUser3DModelsPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( "3dmodels" );
+
+    return tmp.GetPath();
 }
 
 
 wxString PATHS::GetDefaultUserProjectsPath()
 {
     wxFileName tmp;
+    getUserDocumentPath( tmp );
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
-    tmp.AppendDir( KICAD_PATH_STR );
-    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "projects" );
 
-    return tmp.GetFullPath();
+    return tmp.GetPath();
 }
 
 
@@ -165,4 +199,36 @@ wxString PATHS::GetUserCachePath()
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
 
     return tmp.GetPathWithSep();
+}
+
+
+bool PATHS::EnsurePathExists( const wxString& aPath )
+{
+    wxFileName path( aPath );
+    if( !path.Normalize() )
+    {
+        return false;
+    }
+
+    if( !wxFileName::DirExists( aPath ) )
+    {
+        if( !wxFileName::Mkdir( aPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+void PATHS::EnsureUserPathsExist()
+{
+    EnsurePathExists( GetUserPluginsPath() );
+    EnsurePathExists( GetUserPlugins3DPath() );
+    EnsurePathExists( GetUserScriptingPath() );
+    EnsurePathExists( GetDefaultUserProjectsPath() );
+    EnsurePathExists( GetDefaultUserSymbolsPath() );
+    EnsurePathExists( GetDefaultUserFootprintsPath() );
+    EnsurePathExists( GetDefaultUser3DModelsPath() );
 }

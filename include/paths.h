@@ -26,6 +26,7 @@
 class PATHS
 {
 public:
+
     /**
      * Gets the user path for python scripts
      */
@@ -52,6 +53,21 @@ public:
     static wxString GetDefaultUserProjectsPath();
 
     /**
+     * Gets the default path we point users to create projects
+     */
+    static wxString GetDefaultUserSymbolsPath();
+
+    /**
+     * Gets the default path we point users to create projects
+     */
+    static wxString GetDefaultUserFootprintsPath();
+
+    /**
+     * Gets the default path we point users to create projects
+     */
+    static wxString GetDefaultUser3DModelsPath();
+
+    /**
      * Gets the stock (install) scripting path
      */
     static wxString GetStockScriptingPath();
@@ -71,9 +87,26 @@ public:
      */
     static wxString GetUserCachePath();
 
+    /**
+     * Attempts to create a given path if it does not exist
+     */
+    static bool EnsurePathExists( const wxString& aPath );
+
+    /**
+     * Ensures/creates user default paths
+     */
+    static void EnsureUserPathsExist();
+
 private:
     // we are a static helper
     PATHS() {}
+
+    /**
+     * Gets the user path for the current kicad version which acts as the root for other user paths
+     *
+     * @param aPath Variable to receive the path
+     */
+    static void getUserDocumentPath( wxFileName& aPath );
 };
 
 #endif
