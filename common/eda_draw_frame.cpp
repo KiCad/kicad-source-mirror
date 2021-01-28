@@ -35,6 +35,7 @@
 #include <lockfile.h>
 #include <macros.h>
 #include <page_info.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <render_settings.h>
 #include <settings/app_settings.h>
@@ -887,13 +888,21 @@ wxString EDA_DRAW_FRAME::GetScreenDesc() const
 
 bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
                                          const wxString& wildcard, const wxString& ext,
-                                         bool isDirectory )
+                                         bool isDirectory, bool aIsGlobal )
 {
     wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );
 
+    wxString dir = PATHS::GetDefaultUserSymbolsPath();
+
+
     if( isDirectory && doOpen )
     {
+        if( !aIsGlobal )
+        {
+            dir = Prj().GetProjectPath();
+        }
+
         wxDirDialog dlg( this, prompt, Prj().GetProjectPath(),
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
@@ -909,7 +918,10 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
         if( aFilename.GetName().empty() )
             aFilename.SetName( "Library" );
 
-        wxString dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
+        if( !aIsGlobal )
+        {
+            dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
+        }
 
         wxFileDialog dlg( this, prompt, dir, aFilename.GetFullName(),
                           wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST

@@ -793,10 +793,17 @@ bool SYMBOL_EDIT_FRAME::SynchronizePins()
 
 bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
+    // Select the target library table (global/project)
+    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
+
+    if( !libTable )
+        return false;
+
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
     if( !LibraryFileBrowser( !aCreateNew, fn, KiCadSymbolLibFileWildcard(),
-                             KiCadSymbolLibFileExtension, false ) )
+                             KiCadSymbolLibFileExtension, false,
+                             ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ) ) )
     {
         return false;
     }
@@ -811,12 +818,6 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
         DisplayError( this, wxString::Format( _( "Library \"%s\" already exists" ), libName ) );
         return false;
     }
-
-    // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
-
-    if( !libTable )
-        return false;
 
     if( aCreateNew )
     {

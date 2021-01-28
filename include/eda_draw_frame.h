@@ -166,7 +166,8 @@ public:
      * @return true for OK; false for Cancel.
      */
     bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename, const wxString& wildcard,
-                             const wxString& ext, bool isDirectory = false );
+                             const wxString& ext, bool isDirectory = false,
+                             bool aIsGlobal = false );
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
