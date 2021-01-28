@@ -38,6 +38,7 @@
 #include <symbol_library_manager.h>
 #include <lib_text.h>
 #include <symbol_editor_settings.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <sch_painter.h>
@@ -803,7 +804,8 @@ bool SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     if( !LibraryFileBrowser( !aCreateNew, fn, KiCadSymbolLibFileWildcard(),
                              KiCadSymbolLibFileExtension, false,
-                             ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ) ) )
+                             ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
+                             PATHS::GetDefaultUserSymbolsPath() ) )
     {
         return false;
     }
