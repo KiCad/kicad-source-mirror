@@ -88,6 +88,7 @@ function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
         COMMENT "Running Lemon on ${GRAMMAR_FILE} to generate ${GRAMMAR_DIR}/${GRAMMAR_BASE}.c"
         DEPENDS lemon
                 ${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_FILE}
+                ${CMAKE_MODULE_PATH}/BuildSteps/LemonParserGenerator.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_DIR}
     )
 

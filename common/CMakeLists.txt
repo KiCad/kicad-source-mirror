@@ -149,6 +149,7 @@ add_custom_target(
         -P ${CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
+    DEPENDS ${CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
     COMMENT "Generating version string header"
     )
 

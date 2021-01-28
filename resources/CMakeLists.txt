@@ -13,6 +13,7 @@ elseif( UNIX )
             -DBUILD_PATH=${PROJECT_BINARY_DIR}
             -DCMAKE_MODULE_PATH=${PROJECT_SOURCE_DIR}/CMakeModules
             -P ${CMAKE_MODULE_PATH}/BuildSteps/WritePlatformMetadata_linux.cmake
+        DEPENDS ${CMAKE_MODULE_PATH}/BuildSteps/WritePlatformMetadata_linux.cmake
         COMMENT "Configuring Linux appdata"
         )
 
