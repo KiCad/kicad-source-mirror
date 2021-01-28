@@ -125,6 +125,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 
+    Compile_Ratsnest( true );
+
     GetCanvas()->Refresh();
 }
 
