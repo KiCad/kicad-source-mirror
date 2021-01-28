@@ -206,8 +206,9 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 const BOX2I EDA_ITEM::ViewBBox() const
 {
     // Basic fallback
-    return BOX2I( VECTOR2I( GetBoundingBox().GetOrigin() ),
-                  VECTOR2I( GetBoundingBox().GetSize() ) );
+    EDA_RECT bbox = GetBoundingBox();
+
+    return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
 }
 
 

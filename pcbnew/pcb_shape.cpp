@@ -958,14 +958,11 @@ const BOX2I PCB_SHAPE::ViewBBox() const
         EDA_RECT bbox;
         bbox.SetOrigin( m_end );
         computeArcBBox( bbox );
-        BOX2I return_box( bbox.GetOrigin(), bbox.GetSize() );
-
-        return_box.Inflate( 2 * m_width );
-        return return_box;
+        return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
     }
 
     BOX2I return_box = EDA_ITEM::ViewBBox();
-    return_box.Inflate( 2 * m_width );
+    return_box.Inflate( m_width );
 
     return return_box;
 }
@@ -1055,9 +1052,9 @@ void PCB_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
     {
         switch( quarter )
         {
-        case 0: aBBox.Merge( wxPoint( m_start.x, m_start.y + radius ) ); break;  // down
+        case 0: aBBox.Merge( wxPoint( m_start.x,          m_start.y + radius ) ); break;  // down
         case 1: aBBox.Merge( wxPoint( m_start.x - radius, m_start.y          ) ); break;  // left
-        case 2: aBBox.Merge( wxPoint( m_start.x, m_start.y - radius ) ); break;  // up
+        case 2: aBBox.Merge( wxPoint( m_start.x,          m_start.y - radius ) ); break;  // up
         case 3: aBBox.Merge( wxPoint( m_start.x + radius, m_start.y          ) ); break;  // right
         }
 
@@ -1069,6 +1066,10 @@ void PCB_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
         quarter %= 4;
         angle -= 900;
     }
+
+    aBBox.Inflate( m_width );   // Technically m_width / 2, but it doesn't hurt to have the
+                                // bounding box a bit large to account for drawing clearances,
+                                // etc.
 }
 
 
