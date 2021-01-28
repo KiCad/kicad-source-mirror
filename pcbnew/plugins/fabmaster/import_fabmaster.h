@@ -214,6 +214,12 @@ private:
             bool operator()(const std::unique_ptr<GRAPHIC_ITEM>& lhs,
                     const std::unique_ptr<GRAPHIC_ITEM>& rhs) const
             {
+                if( lhs->refdes != rhs->refdes )
+                    return lhs->refdes < rhs->refdes;
+
+                if( lhs->layer != rhs->layer )
+                    return lhs->layer < rhs->layer;
+
                 return lhs->seq < rhs->seq;
             }
         };

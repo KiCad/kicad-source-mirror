@@ -832,7 +832,6 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
-        size_t rownum = aRow + offset;
         auto row = rows[rownum];
 
         if( row.size() != header.size() )
@@ -889,11 +888,14 @@ size_t FABMASTER::processCustomPads( size_t aRow )
         }
 
         auto name = pad_shape_name.substr( prefix.length() );
+        name += "_" + pad_refdes + "_" + pad_pin_num;
         auto ret = pad_shapes.emplace( name, PAD_SHAPE{} );
 
         auto& custom_pad = ret.first->second;
 
-        if( !ret.second )
+        // If we were able to insert the pad name, then we need to initialize the
+        // record
+        if( ret.second )
         {
             custom_pad.name = name;
             custom_pad.padstack = pad_stack_name;
@@ -912,10 +914,17 @@ size_t FABMASTER::processCustomPads( size_t aRow )
             gr_item->layer = pad_layer;
             gr_item->refdes = pad_refdes;
             gr_item->seq = seq;
+            gr_item->subseq = 0;
 
             /// emplace may fail here, in which case, it returns the correct position to use for the existing map
             auto pad_it = custom_pad.elements.emplace( id, graphic_element{} );
-            pad_it.first->second.emplace( std::move(gr_item ) );
+            auto retval = pad_it.first->second.insert( std::move(gr_item ) );
+
+            if( !retval.second )
+            {
+                wxLogError( wxString::Format( _( "Could not insert graphical item %d into padstack \"%s\"" ),
+                        seq, pad_stack_name.c_str() ) );
+            }
         }
         else
         {
@@ -1932,7 +1941,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         line->SetLocalCoord();
 
                         if( lsrc->width == 0 )
-                            ds.GetLineThickness( line->GetLayer() );
+                            line->SetWidth( ds.GetLineThickness( line->GetLayer() ) );
 
                         fp->Add( line, ADD_MODE::APPEND );
                         break;
@@ -1962,7 +1971,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         arc->SetLocalCoord();
 
                         if( lsrc->width == 0 )
-                            ds.GetLineThickness( arc->GetLayer() );
+                            arc->SetWidth( ds.GetLineThickness( arc->GetLayer() ) );
 
                         fp->Add( arc, ADD_MODE::APPEND );
                         break;
@@ -2018,6 +2027,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         txt->SetTextWidth( lsrc->width );
                         txt->SetHorizJustify( lsrc->orient );
                         txt->SetLocalCoord();
+
+                        // FABMASTER doesn't have visibility flags but layers that are not silk should be hidden
+                        // by default to prevent clutter.
+                        if( txt->GetLayer() != F_SilkS && txt->GetLayer() != B_SilkS )
+                            txt->SetVisible( false );
 
                         fp->Add( txt, ADD_MODE::APPEND );
                         break;
@@ -2075,14 +2089,15 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         {
                             newpad->SetSize( wxSize( pad.width / 2, pad.height / 2 ) );
 
-                            auto custom_it = pad_shapes.find( pad.custom_name );
+                            std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" + pin->pin_number;
+                            auto custom_it = pad_shapes.find( custom_name );
 
                             if( custom_it != pad_shapes.end() )
                             {
 
                                 SHAPE_POLY_SET poly_outline;
                                 int last_subseq = 0;
-                                int hole_idx = 0;
+                                int hole_idx = -1;
 
                                 poly_outline.NewOutline();
 
@@ -2090,6 +2105,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 // that are a list of graphical polygons
                                 for( const auto& el : (*custom_it).second.elements )
                                 {
+                                    // For now, we are only processing the custom pad for the top layer
+                                    // TODO: Use full padstacks when implementing in KiCad
+                                    if( getLayer( ( *( el.second.begin() ) )->layer ) != F_Cu )
+                                        continue;
+
                                     for( const auto& seg : el.second )
                                     {
                                         if( seg->subseq > 0 || seg->subseq != last_subseq )
@@ -2118,8 +2138,14 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 }
                                 poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-                                newpad->AddPrimitivePoly( poly_outline, 0, true );
+                                poly_outline.Move( -newpad->GetPosition() );
 
+                                if( src->mirror )
+                                    poly_outline.Rotate( ( -src->rotate + pin->rotation ) * M_PI / 180.0 );
+                                else
+                                    poly_outline.Rotate( ( src->rotate - pin->rotation ) * M_PI / 180.0 );
+
+                                newpad->AddPrimitivePoly( poly_outline, 0, true );
                             }
                         }
                         else
@@ -2332,9 +2358,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     int last_subseq = 0;
     int hole_idx = -1;
     SHAPE_POLY_SET poly_outline;
-    PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
 
-    new_poly->SetShape( S_POLYGON );
     poly_outline.NewOutline();
 
     auto new_layer = getLayer( aLine->layer );
@@ -2367,6 +2391,12 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
+    if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
+        return false;
+
+    PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
+
+    new_poly->SetShape( S_POLYGON );
     new_poly->SetLayer( layer );
     new_poly->SetPolyShape( poly_outline );
     aBoard->Add( new_poly, ADD_MODE::APPEND );
@@ -2394,49 +2424,27 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     if( IsValidLayer( new_layer ) )
         layer = new_layer;
 
-    auto store_zone = [&]()
-    {
-        if( zone && zone_outline )
-        {
-            if( zone_outline->Outline( 0 ).PointCount() >= 3 )
-            {
-                zone->SetOutline( zone_outline );
-                aBoard->Add( zone, ADD_MODE::APPEND );
-            }
-            else
-            {
-                delete( zone_outline );
-                delete( zone );
-            }
-        }
-    };
+    zone = new ZONE( aBoard );
+    zone_outline = new SHAPE_POLY_SET;
 
-    auto new_zone = [&]()
-    {
+    if( net_it != netinfo.end() )
+        zone->SetNet( net_it->second );
 
-        zone = new ZONE( aBoard );
-        zone_outline = new SHAPE_POLY_SET;
+    zone->SetLayer( layer );
 
-        if( net_it != netinfo.end() )
-            zone->SetNet( net_it->second );
+    zone->SetIsRuleArea( false );
+    zone->SetDoNotAllowTracks( false );
+    zone->SetDoNotAllowVias( false );
+    zone->SetDoNotAllowPads( false );
+    zone->SetDoNotAllowFootprints( false );
+    zone->SetDoNotAllowCopperPour( false );
 
-        zone->SetLayer( layer );
+    zone->SetPriority( 50 );
+    zone->SetLocalClearance( 0 );
+    zone->SetPadConnection( ZONE_CONNECTION::FULL );
 
-        zone->SetIsRuleArea( false );
-        zone->SetDoNotAllowTracks( false );
-        zone->SetDoNotAllowVias( false );
-        zone->SetDoNotAllowPads( false );
-        zone->SetDoNotAllowFootprints( false );
-        zone->SetDoNotAllowCopperPour( false );
+    zone_outline->NewOutline();
 
-        zone->SetPriority( 50 );
-        zone->SetLocalClearance( 0 );
-        zone->SetPadConnection( ZONE_CONNECTION::FULL );
-
-        zone_outline->NewOutline();
-    };
-
-    new_zone();
 
     for( const auto& seg : aLine->segment )
     {
@@ -2467,7 +2475,19 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
         }
     }
 
-    store_zone();
+    if( zone && zone_outline )
+    {
+        if( zone_outline->Outline( 0 ).PointCount() >= 3 )
+        {
+            zone->SetOutline( zone_outline );
+            aBoard->Add( zone, ADD_MODE::APPEND );
+        }
+        else
+        {
+            delete( zone_outline );
+            delete( zone );
+        }
+    }
 
     return true;
 }
