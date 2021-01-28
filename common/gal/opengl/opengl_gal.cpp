@@ -332,13 +332,15 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
     wxFrame* testFrame = new wxFrame( NULL, wxID_ANY, wxT( "" ), wxDefaultPosition, wxSize( 1, 1 ),
                                       wxFRAME_TOOL_WINDOW | wxNO_BORDER );
 
-    KIGFX::OPENGL_GAL* opengl_gal = new KIGFX::OPENGL_GAL( aOptions, testFrame );
-
-    testFrame->Raise();
-    testFrame->Show();
+    KIGFX::OPENGL_GAL* opengl_gal = nullptr;
 
     try
     {
+        opengl_gal = new KIGFX::OPENGL_GAL( aOptions, testFrame );
+
+        testFrame->Raise();
+        testFrame->Show();
+
         GAL_CONTEXT_LOCKER lock( opengl_gal );
         opengl_gal->init();
     }
