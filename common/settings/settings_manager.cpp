@@ -613,7 +613,7 @@ wxString SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool aUs
     }
     else
     {
-        cfgpath.AssignDir( KIPLATFORM::ENV::GetUserConfigDir() );
+        cfgpath.AssignDir( KIPLATFORM::ENV::GetUserConfigPath() );
 
         cfgpath.AppendDir( TO_STR( KICAD_CONFIG_DIR ) );
     }

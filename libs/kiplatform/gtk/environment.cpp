@@ -48,19 +48,19 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 }
 
 
-wxString KIPLATFORM::ENV::GetDocumentsDir()
+wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
     return g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
 }
 
 
-wxString KIPLATFORM::ENV::GetUserConfigDir()
+wxString KIPLATFORM::ENV::GetUserConfigPath()
 {
     return g_get_user_config_dir();
 }
 
 
-wxString KIPLATFORM::ENV::GetUserCacheDir()
+wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     return g_get_user_cache_dir();
 }

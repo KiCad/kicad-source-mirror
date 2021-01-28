@@ -53,19 +53,19 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 }
 
 
-wxString KIPLATFORM::ENV::GetDocumentsDir()
+wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
     return wxStandardPaths::Get().GetDocumentsDir();
 }
 
 
-wxString KIPLATFORM::ENV::GetUserConfigDir()
+wxString KIPLATFORM::ENV::GetUserConfigPath()
 {
     return wxStandardPaths::Get().GetUserConfigDir();
 }
 
 
-wxString KIPLATFORM::ENV::GetUserCacheDir()
+wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     NSURL* url = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory
                                                  inDomain:NSUserDomainMask

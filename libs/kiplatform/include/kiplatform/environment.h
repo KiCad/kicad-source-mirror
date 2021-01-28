@@ -46,16 +46,24 @@ namespace KIPLATFORM
 
 
         /**
-         * Retrieves the operating system specific path for a given path type
+         * Retrieves the operating system specific path for a user's documents
          *
-         * @param aType is the type of path
-         *
-         * @return Path for the given aPath
+         * @return User documents path
          */
-        wxString GetDocumentsDir();
+        wxString GetDocumentsPath();
 
-        wxString GetUserConfigDir();
+        /**
+         * Retrieves the operating system specific path for a user's configuration store
+         *
+         * @return User config path
+         */
+        wxString GetUserConfigPath();
 
-        wxString GetUserCacheDir();
+        /**
+         * Retrieves the operating system specific path for user's application cache
+         *
+         * @return User cache path
+         */
+        wxString GetUserCachePath();
     }
 }

@@ -38,7 +38,7 @@ wxString PATHS::GetUserPluginsPath()
 {
     wxFileName tmp;
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
+    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "plugins" );
@@ -62,7 +62,7 @@ wxString PATHS::GetUserScriptingPath()
 {
     wxFileName tmp;
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
+    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "scripting" );
@@ -75,7 +75,7 @@ wxString PATHS::GetUserTemplatesPath()
 {
     wxFileName tmp;
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
+    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "template" );
@@ -88,7 +88,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
 {
     wxFileName tmp;
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsDir() );
+    tmp.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
     tmp.AppendDir( "projects" );
@@ -160,7 +160,7 @@ wxString PATHS::GetUserCachePath()
 {
     wxFileName tmp;
 
-    tmp.AssignDir( KIPLATFORM::ENV::GetUserCacheDir() );
+    tmp.AssignDir( KIPLATFORM::ENV::GetUserCachePath() );
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
 
