@@ -958,10 +958,16 @@ const BOX2I PCB_SHAPE::ViewBBox() const
         EDA_RECT bbox;
         bbox.SetOrigin( m_end );
         computeArcBBox( bbox );
-        return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
+        BOX2I return_box( bbox.GetOrigin(), bbox.GetSize() );
+
+        return_box.Inflate( 2 * m_width );
+        return return_box;
     }
 
-    return EDA_ITEM::ViewBBox();
+    BOX2I return_box = EDA_ITEM::ViewBBox();
+    return_box.Inflate( 2 * m_width );
+
+    return return_box;
 }
 
 
