@@ -167,16 +167,6 @@ macro( linux_metadata_translation SRC_FILE OUT_FILE PO_DIR )
 
     file( MAKE_DIRECTORY ${OUT_DIR} )
 
-    # Figure out the type of file we are translating
-    set( OPT_TYPE "" )
-    set( SED_CMD "" )
-
-    if( ${SRC_FILE} MATCHES ".*\.desktop\.in" )
-        set( OPT_TYPE "--desktop" )
-    elseif( ${SRC_FILE} MATCHES ".*\.xml\.in" )
-        set( OPT_TYPE "--xml" )
-    endif ()
-
 
     # Find all the po files to setup the dependency chain
     file( STRINGS ${PO_DIR}/LINGUAS LANG_ARRAY REGEX "^[^#].*" )
@@ -193,11 +183,15 @@ macro( linux_metadata_translation SRC_FILE OUT_FILE PO_DIR )
     if( KICAD_BUILD_I18N )
         add_custom_command(
             OUTPUT ${OUT_FILE}
-            DEPENDS ${SRC_FILE} ${LANG_FILES}
-            COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
-                    ${OPT_TYPE} --template=${SRC_FILE}
-                    -d ${PO_DIR}
-                    -o ${OUT_FILE}
+            DEPENDS ${SRC_FILE}
+                    ${LANG_FILES}
+                    ${CMAKE_MODULE_PATH}/BuildSteps/TranslatePlatformMetadata_linux.cmake
+            COMMAND ${CMAKE_COMMAND}
+                    -DMSGFMT_EXE="${GETTEXT_MSGFMT_EXECUTABLE}"
+                    -DPO_DIR="${PO_DIR}"
+                    -DSRC_FILE="${SRC_FILE}"
+                    -DDEST_FILE="${OUT_FILE}"
+                    -P ${CMAKE_MODULE_PATH}/BuildSteps/TranslatePlatformMetadata_linux.cmake
             COMMENT "Translating file ${OUT_FNAME}"
             )
     else()
