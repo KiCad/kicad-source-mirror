@@ -565,8 +565,8 @@ TOOL_ACTION PCB_ACTIONS::generateDrillFiles( "pcbnew.EditorControl.generateDrill
 
 TOOL_ACTION PCB_ACTIONS::generatePosFile( "pcbnew.EditorControl.generatePosFile",
         AS_GLOBAL, 0, "",
-        _( "Footprint Positions (.pos)..." ),
-        _( "Generate footprint position file for pick and place" ),
+        _( "Component Placement (.pos)..." ),
+        _( "Generate component placement file(s) for pick and place" ),
         post_compo_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateReportFile( "pcbnew.EditorControl.generateReportFile",
@@ -634,7 +634,7 @@ TOOL_ACTION PCB_ACTIONS::placeFootprint( "pcbnew.EditorControl.placeFootprint",
 TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0, "",
         _( "Drill/Place File Origin" ),
-        _( "Place origin point for drill files and footprint position files" ),
+        _( "Place origin point for drill files and component placement files" ),
         set_origin_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",

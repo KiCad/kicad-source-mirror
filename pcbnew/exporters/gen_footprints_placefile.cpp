@@ -272,7 +272,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
         return false;
     }
 
-    msg.Printf( _( "Front side (top side) place file: \"%s\"." ), filename );
+    msg.Printf( _( "Front (top side) placement file: \"%s\"." ), filename );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
@@ -294,7 +294,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     }
 
     // Display results
-    msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), filename );
+    msg.Printf( _( "Back (bottom side) placement file: \"%s\"." ), filename );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
@@ -305,7 +305,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     msg.Printf( _( "Full component count: %d\n" ), fullcount );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-    m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
+    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
 
     return true;
 }
@@ -386,9 +386,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     if( singleFile  )
-        msg.Printf( _( "Place file: \"%s\"." ), fn.GetFullPath() );
+        msg.Printf( _( "Placement file: \"%s\"." ), fn.GetFullPath() );
     else
-        msg.Printf( _( "Front side (top side) place file: \"%s\"." ),
+        msg.Printf( _( "Front (top side) placement file: \"%s\"." ),
                     fn.GetFullPath() );
     m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
@@ -397,7 +397,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
+        m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
         return true;
     }
 
@@ -431,7 +431,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), fn.GetFullPath() );
+        msg.Printf( _( "Back (bottom side) placement file: \"%s\"." ), fn.GetFullPath() );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
@@ -446,7 +446,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
-    m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
+    m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_ACTION );
 
     return true;
 }

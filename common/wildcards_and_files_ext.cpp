@@ -407,7 +407,7 @@ wxString ReportFileWildcard()
 
 wxString FootprintPlaceFileWildcard()
 {
-    return _( "Footprint place files" ) + AddFileExtListToFilter( { "pos" } );
+    return _( "Component placement files" ) + AddFileExtListToFilter( { "pos" } );
 }
 
 
