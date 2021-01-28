@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -878,6 +878,32 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFl
 
     if( m_nameTextSize != tmp->m_nameTextSize )
         return m_nameTextSize - tmp->m_nameTextSize;
+
+    if( m_alternates.size() != tmp->m_alternates.size() )
+        return m_alternates.size() - tmp->m_alternates.size();
+
+    auto lhsItem = m_alternates.begin();
+    auto rhsItem = tmp->m_alternates.begin();
+
+    while( lhsItem != m_alternates.end() )
+    {
+        const ALT& lhsAlt = lhsItem->second;
+        const ALT& rhsAlt = rhsItem->second;
+
+        retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
+
+        if( retv )
+            return retv;
+
+        if( lhsAlt.m_Type != rhsAlt.m_Type )
+            return static_cast<int>( lhsAlt.m_Type ) - static_cast<int>( rhsAlt.m_Type );
+
+        if( lhsAlt.m_Shape != rhsAlt.m_Shape )
+            return static_cast<int>( lhsAlt.m_Shape ) - static_cast<int>( rhsAlt.m_Shape );
+
+        ++lhsItem;
+        ++rhsItem;
+    }
 
     return 0;
 }

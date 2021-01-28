@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <kicad_string.h>
 #include <menus_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
 #include <ee_collectors.h>
@@ -109,7 +110,7 @@ public:
                     choices.push_back( alt.first );
 
                 attr = new wxGridCellAttr();
-                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+                attr->SetEditor( new GRID_CELL_COMBOBOX( choices ) );
             }
 
             m_nameAttrs.push_back( attr );
@@ -195,7 +196,7 @@ public:
         switch( aCol )
         {
         case COL_ALT_NAME:
-            if( aValue == at( aRow ).GetName() )
+            if( aValue == at( aRow ).GetLibPin()->GetName() )
                 at( aRow ).SetAlt( wxEmptyString );
             else
                 at( aRow ).SetAlt( aValue );
