@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,7 +24,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
 
@@ -204,7 +204,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextPosXUnits = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPosXUnits->Wrap( -1 );
-	fgSizer3->Add( m_TextPosXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer3->Add( m_TextPosXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextPosY = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosY->Wrap( -1 );
@@ -229,16 +229,16 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerPos->SetSelection( 2 );
 	m_comboBoxCornerPos->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer3->Add( m_comboBoxCornerPos, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer3->Add( m_comboBoxCornerPos, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	sbSizerPos->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM, 3 );
+	sbSizerPos->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	m_SizerItemProperties->Add( sbSizerPos, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( sbSizerPos, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_sbSizerEndPosition = new wxStaticBoxSizer( new wxStaticBox( m_swItemProperties, wxID_ANY, _("End Position") ), wxVERTICAL );
 
@@ -257,7 +257,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextEndXUnits = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextEndXUnits->Wrap( -1 );
-	fgSizer4->Add( m_TextEndXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer4->Add( m_TextEndXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextEndY = new wxStaticText( m_sbSizerEndPosition->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextEndY->Wrap( -1 );
@@ -282,16 +282,16 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerEnd->SetSelection( 3 );
 	m_comboBoxCornerEnd->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	m_sbSizerEndPosition->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM, 3 );
+	m_sbSizerEndPosition->Add( fgSizer4, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
-	m_SizerItemProperties->Add( m_sbSizerEndPosition, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_sbSizerEndPosition, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* sizerMisc;
 	sizerMisc = new wxBoxSizer( wxHORIZONTAL );
@@ -303,7 +303,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Line width:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_staticTextThickness->Wrap( -1 );
-	gbSizer1->Add( m_staticTextThickness, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+	gbSizer1->Add( m_staticTextThickness, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_textCtrlThickness, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -314,14 +314,14 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextRot = new wxStaticText( m_swItemProperties, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRot->Wrap( -1 );
-	gbSizer1->Add( m_staticTextRot, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 3 );
+	gbSizer1->Add( m_staticTextRot, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 
 	m_textCtrlRotation = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_textCtrlRotation, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
 
 	m_staticTextBitmapDPI = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBitmapDPI->Wrap( -1 );
-	gbSizer1->Add( m_staticTextBitmapDPI, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 3 );
+	gbSizer1->Add( m_staticTextBitmapDPI, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 
 	m_textCtrlBitmapDPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_textCtrlBitmapDPI, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
@@ -376,7 +376,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextStepXUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextStepXUnits->Wrap( -1 );
-	fgSizer8->Add( m_TextStepXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer8->Add( m_TextStepXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextStepY = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("Step Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextStepY->Wrap( -1 );
@@ -392,10 +392,10 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer8->Add( m_TextStepYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 
-	m_sbStep->Add( fgSizer8, 0, wxEXPAND|wxBOTTOM, 3 );
+	m_sbStep->Add( fgSizer8, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	m_SizerItemProperties->Add( m_sbStep, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_sbStep, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
 
