@@ -222,24 +222,43 @@ void SCH_CONNECTION::Reset()
 void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
 {
     m_graph = aOther.m_graph;
-    m_type = aOther.Type();
     // Note: m_lastDriver is not cloned as it needs to be the last driver of *this* connection
     m_driver = aOther.Driver();
-    m_sheet = aOther.Sheet();
-    m_name = aOther.m_name;
-    // Note: m_local_name is not cloned
-    m_prefix = aOther.Prefix();
-    m_bus_prefix = aOther.BusPrefix();
-    m_suffix = aOther.Suffix();
-    m_members = aOther.Members();
-    m_net_code = aOther.NetCode();
-    m_bus_code = aOther.BusCode();
+    m_sheet  = aOther.Sheet();
+    m_name   = aOther.m_name;
+    // Note: m_local_name is not cloned if not set yet
+    if( m_local_name.IsEmpty() )
+        m_local_name = aOther.LocalName();
+
+    m_prefix       = aOther.Prefix();
+    m_bus_prefix   = aOther.BusPrefix();
+    m_suffix       = aOther.Suffix();
+    m_net_code     = aOther.NetCode();
+    m_bus_code     = aOther.BusCode();
     m_vector_start = aOther.VectorStart();
-    m_vector_end = aOther.VectorEnd();
+    m_vector_end   = aOther.VectorEnd();
     // Note: m_vector_index is not cloned
     m_vector_prefix = aOther.VectorPrefix();
 
     // Note: subgraph code isn't cloned, it should remain with the original object
+
+    // Handle vector bus members: make sure local names are preserved where possible
+    std::vector<std::shared_ptr<SCH_CONNECTION>>& otherMembers = aOther.Members();
+
+    if( m_type == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS &&
+        m_members.size() == otherMembers.size() )
+    {
+        for( size_t i = 0; i < m_members.size(); ++i )
+        {
+            m_members[i]->Clone( *otherMembers[i] );
+        }
+    }
+    else
+    {
+        m_members = otherMembers;
+    }
+
+    m_type = aOther.Type();
 
     recacheName();
 }
