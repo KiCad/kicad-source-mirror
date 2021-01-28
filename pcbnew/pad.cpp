@@ -1252,10 +1252,6 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     {
         LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
-        // Only draw the pad if at least one of the layers it crosses is being displayed
-        if( !FlashLayer( visible ) )
-            return HIDE;
-
         // Don't draw the copper ring of a PTH if none of the copper layers are visible
         if( aLayer == LAYER_PADS_TH && ( LSET::AllCuMask() & GetLayerSet() & visible ).none() )
             return HIDE;

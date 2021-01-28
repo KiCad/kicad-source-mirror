@@ -235,38 +235,27 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( !item )
         return m_layerColors[aLayer];
 
-    // Pad hole color is pad-type-specific: the background color for PTHs (which are assumed
-    // to have an annular ring) and the pad color for NPTHs (which are assumed *not* to have
-    // an annular ring).
-    // However, this means a PTH pad with *no* annular ring won't get drawn, so we need to
-    // special-case that.
-    // We have the opposite issue when printing in B&W: both a PTH hole and its annular ring
-    // will normally get assigned black, so we need to special-case that too.
-    if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
+    if( aLayer == LAYER_PADS_PLATEDHOLES
+            || aLayer == LAYER_NON_PLATEDHOLES
+            || aLayer == LAYER_VIAS_HOLES )
     {
-        const PAD* pad = static_cast<const PAD*>( item );
-        bool       hasAnnularRing = pad->GetSizeX() > pad->GetDrillSizeX()
-                                        && pad->GetSizeY() > pad->GetDrillSizeY();
-
-        if( !hasAnnularRing && m_layerColors[ aLayer ] == m_layerColors[ LAYER_PCB_BACKGROUND ] )
-            aLayer = LAYER_MOD_TEXT_INVISIBLE;
-
-        if( hasAnnularRing && m_layerColors[ aLayer ] == m_layerColors[ LAYER_PADS_TH ] )
-            aLayer = LAYER_PCB_BACKGROUND;
-    }
-    else if( aLayer == LAYER_VIAS_HOLES )
-    {
-        const VIA* via = static_cast<const VIA*>( item );
+        // Careful that we don't end up with the same colour for the annular ring and the hole
+        // when printing in B&W.
+        const PAD* pad = dynamic_cast<const PAD*>( item );
+        const VIA* via = dynamic_cast<const VIA*>( item );
+        int        holeLayer = aLayer;
         int        annularRingLayer;
 
-        if( via->GetViaType() == VIATYPE::MICROVIA )
+        if( pad )
+            annularRingLayer = LAYER_PADS_TH;
+        else if( via->GetViaType() == VIATYPE::MICROVIA )
             annularRingLayer = LAYER_VIA_MICROVIA;
         else if( via->GetViaType() == VIATYPE::BLIND_BURIED )
             annularRingLayer = LAYER_VIA_BBLIND;
         else
             annularRingLayer = LAYER_VIA_THROUGH;
 
-        if( m_layerColors[ aLayer ] == m_layerColors[ annularRingLayer ] )
+        if( m_layerColors[ holeLayer ] == m_layerColors[ annularRingLayer ] )
             aLayer = LAYER_PCB_BACKGROUND;
     }
 
@@ -342,33 +331,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         PCB_LAYER_ID primary = GetPrimaryHighContrastLayer();
         bool         isActive = m_highContrastLayers.count( aLayer );
 
-        // We currently add synthetic drawing layers (LAYER_VIA_THROUGH, LAYER_PAD_FR, etc.) to
-        // m_highContrastLayers, but it's not sufficiently fine-grained as it can't differentiate
-        // between (for instance) a via which is flashed on the primary layer and one that is not.
-        // So we need to refine isActive to be more discriminating for some items.
-        if( IsCopperLayer( primary ) )
+        // Track annotations are drawn on synthetic layers, but we only want them drawn if the
+        // track itself is on the primary layer.
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
         {
-            if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-            {
-                // Track itself isn't on a synthetic layer, but its netname annotations are, and
-                // we want to dim them based on whether or not the track is on the primary layer.
-                isActive = static_cast<const TRACK*>( item )->IsOnLayer( primary );
-            }
-            else
-            {
-                bool flashed = true;
-
-                if( item->Type() == PCB_VIA_T )
-                    flashed = static_cast<const VIA*>( item )->FlashLayer( primary, true );
-                else if( item->Type() == PCB_PAD_T )
-                    flashed = static_cast<const PAD*>( item )->FlashLayer( primary, true );
-
-                // For pads and vias, we only want to override the active state for copper layers
-                // (both board copper layers such as F_Cu *and* synthetic copper layers such as
-                // LAYER_VIA_THROUGH).
-                if( IsCopperLayer( aLayer, true ) )
-                    isActive = flashed;
-            }
+            if( !static_cast<const TRACK*>( item )->IsOnLayer( primary ) )
+                isActive = false;
         }
 
         if( !isActive )
@@ -709,13 +677,10 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         return;
     }
 
-    /// Vias not connected to copper are optionally not drawn
-    /// We draw instead the hole size to ensure we show the proper clearance
-    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer, true ) )
-        radius = getDrillSize( aVia ) / 2.0 ;
-
-    bool sketchMode = false;
-    COLOR4D color = m_pcbSettings.GetColor( aVia, aLayer );
+    bool                   sketchMode = false;
+    BOARD*                 board = aVia->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    COLOR4D                color = m_pcbSettings.GetColor( aVia, aLayer );
 
     if( color == COLOR4D::CLEAR )
         return;
@@ -743,8 +708,11 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    if( ( aVia->GetViaType() == VIATYPE::BLIND_BURIED || aVia->GetViaType() == VIATYPE::MICROVIA )
-            && aLayer != LAYER_VIAS_HOLES
+    if( aLayer == LAYER_VIAS_HOLES )
+    {
+        m_gal->DrawCircle( center, radius );
+    }
+    else if( ( aVia->GetViaType() == VIATYPE::BLIND_BURIED || aVia->GetViaType() == VIATYPE::MICROVIA )
             && !m_pcbSettings.GetDrawIndividualViaLayers() )
     {
         // Outer circles of blind/buried and micro-vias are drawn in a special way to indicate the
@@ -774,7 +742,30 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     }
     else
     {
-        // Draw the outer circles of normal vias and the holes for all vias
+        bool drawHoleWallOnly = false;
+
+        if( m_pcbSettings.m_hiContrastEnabled && !aVia->IsSelected() )
+        {
+            if( !aVia->FlashLayer( m_pcbSettings.GetPrimaryHighContrastLayer() ) )
+                drawHoleWallOnly = true;
+        }
+        else
+        {
+            LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+            if( !aVia->FlashLayer( visible ) )
+                drawHoleWallOnly = true;
+        }
+
+        if( drawHoleWallOnly )
+        {
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->SetLineWidth( bds.GetHolePlatingThickness() * 2 );
+            radius = getDrillSize( aVia ) / 2.0 ;
+        }
+
         m_gal->DrawCircle( center, radius );
     }
 
@@ -917,7 +908,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
 
     // Pad drawing
-    BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
+    BOARD*                 board = aPad->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
     COLOR4D                color = m_pcbSettings.GetColor( aPad, aLayer );
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
@@ -936,9 +928,34 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    // Choose drawing settings depending on if we are drawing a pad itself or a hole
+    auto drawHoleWallCylinder =
+            [&]( const PAD* aPad )
+            {
+                if( aPad->GetAttribute() != PAD_ATTRIB_PTH )
+                    return false;
+
+                if( m_pcbSettings.m_hiContrastEnabled && !aPad->IsSelected() )
+                {
+                    if( !aPad->FlashLayer( m_pcbSettings.GetPrimaryHighContrastLayer() ) )
+                        return true;
+                }
+                else
+                {
+                    LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+                    if( !aPad->FlashLayer( visible ) )
+                        return true;
+                }
+
+                return aPad->GetShape() != PAD_SHAPE_CUSTOM
+                        && aPad->GetSizeX() <= aPad->GetDrillSizeX()
+                        && aPad->GetSizeY() <= aPad->GetDrillSizeY();
+            };
+
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
+        // Drawing the hole ------------------------------------------------------
+
         const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
 
         if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
@@ -946,15 +963,36 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         else
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
     }
-    else if( aLayer == LAYER_PADS_TH
-            && aPad->GetShape() != PAD_SHAPE_CUSTOM
-            && aPad->GetSizeX() <= aPad->GetDrillSizeX()
-            && aPad->GetSizeY() <= aPad->GetDrillSizeY() )
+    else if( drawHoleWallCylinder( aPad ) )
     {
-        // no annular ring to draw
+        // Drawing only the hole wall --------------------------------------------
+
+        bool draw = true;
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
+
+        if( aLayer == LAYER_PADS_TH )
+            m_gal->SetLineWidth( bds.GetHolePlatingThickness() * 2 );
+        else if( aLayer == F_Mask || aLayer == B_Mask )
+            m_gal->SetLineWidth( ( bds.GetHolePlatingThickness() + aPad->GetSolderMaskMargin() ) * 2 );
+        else
+            draw = false;
+
+        if( draw )
+        {
+            const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
+
+            if( seg->GetSeg().A == seg->GetSeg().B )    // Circular hole
+                m_gal->DrawCircle( seg->GetSeg().A, getDrillSize( aPad ).x / 2 );
+            else
+                m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
+        }
     }
     else
     {
+        // Drawing the pad -------------------------------------------------------
+
         wxSize pad_size = aPad->GetSize();
         wxSize margin;
 
