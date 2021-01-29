@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -323,7 +323,8 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
     }
 
     // Clear all layers
-    m_toolMgr->RunAction( GERBVIEW_ACTIONS::clearAllLayers, true );
+    m_frame->Clear_DrawLayers( false );
+    m_frame->ClearMsgPanel();
 
     // Load the layers from stored paths
     wxBusyCursor wait;
