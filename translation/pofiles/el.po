@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-13 14:21+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-01-30 10:25+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -630,9 +630,8 @@ msgid "Recursion Level"
 msgstr "Αναδρομικό Επίπεδο"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "Σκιές"
+msgstr "Σκιές:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -649,9 +648,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Συντελεστής τυχαίας κατεύθυνσης των ακτίνων"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "Αντανακλάσεις"
+msgstr "Αντανακλάσεις:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -667,9 +665,8 @@ msgstr ""
 "επιπέδων βελτιώνει τα αποτελέσματα, ειδικά σε πολύ διαφανείς πίνακες)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "Διαθλάσεις"
+msgstr "Διαθλάσεις:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -713,44 +710,36 @@ msgid "Azimuth (degrees)"
 msgstr "Αζιμούθιο (μοίρες)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1:1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "R2:"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -1760,7 +1749,7 @@ msgstr "Αντιγραφή πληοροφριών έκδοσης στο πρόχ
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "&Αναφορά Bug"
+msgstr "&Αναφορά Σφάλματος"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:642
 msgid "Report a problem with KiCad"
@@ -2884,7 +2873,7 @@ msgstr ""
 "Χρήση αυτόματης τιμής για την κλίμακα του χώρου σχεδίασης.\n"
 "\n"
 "Σε ορισμένες πλατφόρμες, η αυτόματη τιμή είναι λανθασμένη και πρέπει να "
-"οριστεί με μη αυτόματο τρόπο."
+"οριστεί χειροκίνητα."
 
 #: common/dialogs/panel_common_settings.cpp:283
 msgid "Executable files ("
@@ -3219,13 +3208,12 @@ msgstr ""
 "άκρη της οθόνης"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Χειρονομίες"
+msgstr "Χειρονομίες Συρσίματος"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr ""
+msgstr "Σύρσιμο αριστερού κουμπιού:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 #, fuzzy
@@ -3235,6 +3223,7 @@ msgstr "Σχεδιάστε ορθογώνιο"
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr ""
+"Σύρσιμο επιλεγμένων αντικειμένων. Αλλιώς, σχεδιάστε ένα ορθογώνιο επιλογής"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 #, fuzzy
@@ -3243,7 +3232,7 @@ msgstr "Σύρσιμο επιλεγμένων αντικειμένων"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr ""
+msgstr "Σύρσιμο μεσαίου κουμπιού:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3279,7 +3268,7 @@ msgstr "Κανένα"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr ""
+msgstr "Σύρσιμο δεξιού κουμπιού:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 #, fuzzy
@@ -3340,6 +3329,8 @@ msgstr ""
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
+"Μετακινήστε τον καμβά αριστερά και δεξιά κατά την κύλιση από τα αριστερά "
+"προς τα δεξιά στην επιφάνεια αφής"
 
 #: common/dialogs/panel_setup_netclasses.cpp:81
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -5395,6 +5386,8 @@ msgstr "Classic"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"Τα Windows 7 και παλαιότερα δεν υποστηρίζονται πλέον από το KiCad και τις "
+"εξαρτήσεις του."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 #, fuzzy
@@ -6042,7 +6035,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:641
 msgid "Report Bug"
-msgstr "Αναφορά Προβλήματος"
+msgstr "Αναφορά Σφάλματος"
 
 #: common/tool/common_control.cpp:197
 #, c-format
@@ -12757,8 +12750,8 @@ msgstr "Μη Σύνδεση"
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
-"Ενεργοποίηση <b>debug</b> καταγραφής για συναρτήσεις Symbol*() σε αυτό το "
-"SCH_PLUGIN."
+"Ενεργοποίηση καταγραφής <b>εκσφαλμάτωσης</b> για συναρτήσεις Symbol*() σε "
+"αυτό το SCH_PLUGIN."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
@@ -12876,6 +12869,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"Το αναγνωριστικό συμβόλου '%s' αναφέρεται στο σύμβολο βιβλιοθήκης '%s' που "
+"δεν βρέθηκε στη βιβλιοθήκη Εξαγάγατε όλα τα στοιχεία του σχεδίου;"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:369
 #, c-format
@@ -12890,6 +12885,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"Το σύμβολο ταυτότητας «%s» είναι άγνωστου τύπου Δεν είναι ούτε συστατικό "
+"στοιχείο ούτε καθαρή ισχύς / σύμβολο. Το σύμβολο δεν φορτώθηκε."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:463
 #, c-format
@@ -12898,6 +12895,9 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"Το σύμβολο «%s» κλιμακώνεται στο αρχικό σχήμα CADSTAR, αλλά αυτό δεν "
+"υποστηρίζεται στο KiCad. Το σύμβολο φορτώθηκε με κλίμακα 1: 1 και ενδέχεται "
+"να απαιτεί χειροκίνητη διόρθωση."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:884
 #, c-format
@@ -12905,6 +12905,8 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"Το σύμβολο τεκμηρίωσης «%s» αναφέρεται στο αναγνωριστικό ορισμού συμβόλων "
+"«%s» που δεν υπάρχει στη βιβλιοθήκη. Το σύμβολο δεν φορτώθηκε."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
@@ -12919,6 +12921,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Το σύμβολο «%s» περιστρέφεται κατά γωνία %.1f μοίρες στην αρχική σχεδίαση "
+"CADSTAR, αλλά το KiCad υποστηρίζει μόνο πολλαπλές γωνίες περιστροφής 90 "
+"μοιρών. Τα καλώδια σύνδεσης θα χρειαστούν χειροκίνητη στερέωση."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1240
 #, c-format
@@ -19961,7 +19966,7 @@ msgstr "Διαγραφή που συνδέουν δύο δίκτυα"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr ""
+msgstr "Κατάργηση μέσω σύνδεσης σε λιγότερα από δύο επίπεδα"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -20003,7 +20008,7 @@ msgstr "Το πολύγωνο δεν πρέπει να τέμνει τον εα�
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:573
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:818
 msgid "(not a closed shape)"
-msgstr ""
+msgstr "(μη κλειστό σχήμα)"
 
 #: pcbnew/cross-probing.cpp:165
 #, c-format
@@ -22904,7 +22909,7 @@ msgstr "Προβολή Ίχνους"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
-msgstr "Ανανέωση Προγραμμάτων Python"
+msgstr "Ενημέρωση Δομοστοιχείων Python"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:66
 msgid "Footprint Generators"
@@ -26065,19 +26070,21 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:84
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Εντολές Ποντικιού με Αριστερό Κλικ"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
+"Οι ενέργειες αριστερού κλικ (και συρσίματος) εξαρτώνται από 3 πλήκτρα "
+"τροποποίησης:\n"
+"Το Alt, το Shift και το Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
-#, fuzzy
 msgid "No modifier"
-msgstr "Προσθήκη εξαρτημάτων"
+msgstr "Δεν υπάρχει τροποποιητής"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:105
 #: pcbnew/dialogs/panel_edit_options_base.cpp:186
@@ -26090,9 +26097,8 @@ msgid "Add item(s) to selection."
 msgstr "Προσθήκη στην Επιλογή"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:120
-#, fuzzy
 msgid "Shift+Alt"
-msgstr "Shift"
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 #: pcbnew/dialogs/panel_edit_options_base.cpp:206
@@ -26101,20 +26107,17 @@ msgstr "Αφαίρεση από την Επιλογή"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
-#, fuzzy
 msgid "Toggle selected state of item(s)."
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Εναλλαγή επιλεγμένης κατάστασης στοιχείου,-ων."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:226
-#, fuzzy
 msgid "Clarify selection from menu."
-msgstr "Διευκρίνηση Επιλογής"
+msgstr "Διευκρίνηση επιλογής από των κατάλογο επιλογών."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:150
-#, fuzzy
 msgid "Ctrl+Shift"
-msgstr "Shift"
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:236
@@ -26127,15 +26130,17 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
+"Οι ενέργειες αριστερού κλικ (και συρσίματος) εξαρτώνται από 3 πλήκτρα "
+"τροποποίησης:\n"
+"Το Alt, το Shift και το Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:201
-#, fuzzy
 msgid "Shift+Cmd"
-msgstr "Shift"
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:231
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:259
 msgid "Magnetic Points"
@@ -26194,6 +26199,8 @@ msgstr "Συμπεριφορά συρσίματος ποντικιού:"
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr ""
+"Επιλέξτε την ενέργεια που θα εκτελεστεί κατά τη μεταφορά ενός τμήματος "
+"κομματιού με το ποντίκι"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:349
 msgid "Moves the track segment without moving connected tracks"
@@ -26264,9 +26271,9 @@ msgid "Edit options"
 msgstr "Επεξεργασία επιλογών"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Απαγορευμένος χαρακτήρας '%c' στο Ψευδώνυμο: \"%s\""
+msgstr "Απαγορευμένος χαρακτήρας «%c» στο ψευδώνυμο «%s»."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:780
 #, c-format
@@ -26282,9 +26289,8 @@ msgid "Failed to open directories to look for libraries"
 msgstr "Αποτυχία ανοίγματος διαδρομών καταλόγου για την εύρεση βιβλιοθηκών"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:845
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Προειδοποίηση: Διπλό Ψευδώνυμο"
+msgstr "Προειδοποίηση: Διπλότυπα Ψευδώνυμα"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Add Existing"
@@ -26312,29 +26318,25 @@ msgid "Open Plugin Directory"
 msgstr "Άνοιγμα Καταλόγου Plugin"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:80
-#, fuzzy
 msgid "Reload Plugins"
-msgstr "Αφαίρεση Πρόσθετου"
+msgstr "Επαναφόρτωση Προσθέτων"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Ιδιότητες Πρόσθετου"
+msgstr "Εμφάνιση Σφαλμάτων Προσθέτου"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
-msgstr "Περιθώρια Σελίδας:"
+msgstr "Προέλευση σελίδας"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
-#, fuzzy
 msgid "Display Origin"
-msgstr "Αρχή Διάτρησης"
+msgstr "Εμφάνιση Προέλευσης"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
-#, fuzzy
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr "Επιλογή βιβλιοθήκης προς προβολή"
+msgstr ""
+"Επιλέξτε ποια προέλευση χρησιμοποιείται για την εμφάνιση συντεταγμένων X,Y."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 #, fuzzy
@@ -27584,7 +27586,7 @@ msgstr "Εφαρμογή κανόνα; παρακάμπτει τους προη�
 
 #: pcbnew/drc/drc_engine.cpp:937
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "Η ιδιότητα μέλους δεν ικανοποιήθηκε λόγω αγνόησης του περιορισμού."
 
 #: pcbnew/drc/drc_engine.cpp:938
 msgid "Condition not satisfied; rule ignored."
@@ -29902,8 +29904,8 @@ msgstr "Πολλαπλά Επίπεδα"
 #: pcbnew/plugin.cpp:146
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr ""
-"Ενεργοποίηση <b>debug</b> καταγραφής για συναρτήσεις Footprint*() σε αυτό το "
-"ΠΡΟΣΘΕΤΟ."
+"Ενεργοποίηση καταγραφής <b>εκσφαλμάτωσης</b> για συναρτήσεις Footprint*() σε "
+"αυτό το ΠΡΟΣΘΕΤΟ."
 
 #: pcbnew/plugin.cpp:150
 msgid "Regular expression <b>footprint name</b> filter."
@@ -30265,6 +30267,9 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Το πρότυπο CADSTAR «%s» έχει ενεργοποιημένη τη ρύθμιση «Να επιτρέπεται σε "
+"περιοχές χωρίς δρομολόγηση». Δεν υπάρχει αντίστοιχη ρύθμιση στο KiCad, "
+"επομένως αγνοήθηκε."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
 #, fuzzy, c-format
@@ -30291,6 +30296,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"Το πρότυπο CADSTAR «%s» έχει μη μηδενική τιμή καθορισμένηγια τη ρύθμιση «"
+"Sliver Width». Δεν υπάρχει αντίστοιχη ρύθμιση στο KiCad, επομένως αγνοήθηκε."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1591
 #, c-format
@@ -30643,6 +30650,10 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"Παρακαλώ αναφέρετε αυτό το σφάλμα. Σφάλμα κατά την επικύρωση της δομής της "
+"ομάδας: %s\n"
+"\n"
+"Αποθήκευση ούτως ή άλλως;"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:338
 msgid "Internal group data structure corrupt"
@@ -31607,6 +31618,7 @@ msgstr "Διάκενο:"
 #: pcbnew/tools/board_inspection_tool.cpp:626
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr ""
+"Ημιτελής αναφορά: αποτυχία κατάρτισης προσαρμοσμένων κανόνων σχεδίασης.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:252
 #, fuzzy, c-format
@@ -32438,7 +32450,7 @@ msgstr "Εκκαθάριση Δρόμων και Via..."
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr ""
+msgstr "Καθαρισμός περιττών αντικειμένων, αντικειμένων βραχυκυκλώματος κ.λπ."
 
 #: pcbnew/tools/pcb_actions.cpp:451
 #, fuzzy
@@ -33766,28 +33778,24 @@ msgid "Front Assembly View"
 msgstr "Μπροστινή Όψη\tY"
 
 #: pcbnew/widgets/appearance_controls.cpp:389
-#, fuzzy
 msgid "Back Layers"
-msgstr "Πίσω επίπεδο"
+msgstr "Πίσω Επίπεδα"
 
 #: pcbnew/widgets/appearance_controls.cpp:392
 msgid "Back Assembly View"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:432
-#, fuzzy
 msgid "Filter nets"
-msgstr "Φιλτράρισμα Δικτύων"
+msgstr "Φιλτράρισμα δικτύων"
 
 #: pcbnew/widgets/appearance_controls.cpp:565
-#, fuzzy
 msgid "Layer Display Options"
-msgstr "Επιλογές Εμφάνισης"
+msgstr "Επιλογές Εμφάνισης Επιπέδου"
 
 #: pcbnew/widgets/appearance_controls.cpp:575
-#, fuzzy
 msgid "Non-active layers:"
-msgstr "Επίπεδα Χαλκού:"
+msgstr "Μη ενεργά επίπεδα:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Non-active layers will be shown in full color"
@@ -33802,9 +33810,8 @@ msgid "Non-active layers will be dimmed"
 msgstr "Τα μη ενεργά επίπεδα θα μειωθούν"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
-#, fuzzy
 msgid "Hide"
-msgstr "Απόκρυψη πλέγματος"
+msgstr "Απόκρυψη"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
 msgid "Non-active layers will be hidden"
@@ -33993,49 +34000,40 @@ msgid "Footprint assembly on board's back"
 msgstr "Συναρμολόγηση αποτυπώματος στην πίσω πλευρά της πλακέτας"
 
 #: pcbnew/widgets/appearance_controls.cpp:1508
-#, fuzzy
 msgid "User defined layer 1"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 1 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1509
-#, fuzzy
 msgid "User defined layer 2"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 2 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1510
-#, fuzzy
 msgid "User defined layer 3"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 3 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1511
-#, fuzzy
 msgid "User defined layer 4"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 4 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1512
-#, fuzzy
 msgid "User defined layer 5"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 5 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1513
-#, fuzzy
 msgid "User defined layer 6"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 6 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1514
-#, fuzzy
 msgid "User defined layer 7"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 7 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1515
-#, fuzzy
 msgid "User defined layer 8"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 8 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
-#, fuzzy
 msgid "User defined layer 9"
-msgstr "Μη ορισμένα επίπεδα:"
+msgstr "Επίπεδο 9 καθορισμένο από τον χρήστη"
 
 #: pcbnew/widgets/appearance_controls.cpp:1554
 msgid "Show All Copper Layers"
@@ -34081,17 +34079,17 @@ msgstr "Προβολή Όλων των Πίσω Επιπέδων"
 #: pcbnew/widgets/appearance_controls.cpp:1903
 #, fuzzy, c-format
 msgid "Show or hide %s"
-msgstr "Προβολή ή απόκρυψη των ονομάτων ακροδεκτών"
+msgstr "Προβολή ή απόκρυψη %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1944
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "Ορισμός αδιαφάνειας %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2097
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Προβολή ή απόκρυψη των ονομάτων ακροδεκτών"
+msgstr "Προβολή ή απόκρυψη του ratsnest για δίκτυα σε %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2128
 #, fuzzy
@@ -34119,9 +34117,8 @@ msgid "Save preset..."
 msgstr "Αποθήκευση Ως..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2205
-#, fuzzy
 msgid "Delete preset..."
-msgstr "Διαγραφή Φύλλου"
+msgstr "Διαγραφή προεπιλογής..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2283
 #, fuzzy
@@ -34129,9 +34126,8 @@ msgid "Layer preset name:"
 msgstr "Επιλογή επιπέδου:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2283
-#, fuzzy
 msgid "Save Layer Preset"
-msgstr "Ορισμός Ζεύγους Επιπέδων..."
+msgstr "Αποθήκευση Προεπιλεγμένης Ρύθμισης Επιπέδου"
 
 #: pcbnew/widgets/appearance_controls.cpp:2318
 #, fuzzy
@@ -34144,9 +34140,8 @@ msgid "Delete Preset"
 msgstr "Διαγραφή Φύλλου"
 
 #: pcbnew/widgets/appearance_controls.cpp:2331
-#, fuzzy
 msgid "Select preset:"
-msgstr "Επιλογή φωλιάς συνδέσεων"
+msgstr "Επιλογή προεπιλογής:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2790
 #, fuzzy
@@ -34177,9 +34172,8 @@ msgid "Configure net classes"
 msgstr "Ρύθμιση Διαδρομών"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
-#, fuzzy
 msgid "Presets:"
-msgstr "Επαναφορά"
+msgstr "Προεπιλογές:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
@@ -34191,9 +34185,8 @@ msgid "(unsaved)"
 msgstr "[Μη σωσμένο]"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:184
-#, fuzzy
 msgid "Layer presets"
-msgstr "Επιλογή επιπέδου:"
+msgstr "Προεπιλογές επιπέδου"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
@@ -34318,9 +34311,9 @@ msgid "Rule Area on %s"
 msgstr "Περιοχή Κανόνων"
 
 #: pcbnew/zone.cpp:881
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s on %s"
-msgstr "Ζώνη (%08lX) [%s] στο %s"
+msgstr "Ζώνη %s στο %s"
 
 #: pcbnew/zone.cpp:1393
 msgid "Inherited"
@@ -34376,14 +34369,13 @@ msgstr "Αποτυχία φόρτωσης [INFO]: η γραμμή εισαγωγ
 
 #: resources/linux/appdata/kicad.appdata.xml.in:6
 #: resources/linux/launchers/kicad.desktop.in:10
-#, fuzzy
 msgid "KiCad"
-msgstr "Έξοδος από KiCad"
+msgstr "KiCad"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr ""
+msgstr "Σουίτα EDA"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
@@ -34391,6 +34383,9 @@ msgid ""
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
 msgstr ""
+"Το KiCad είναι μία Διαπλατυβαθρική και Ανοιχτού Κώδικα Σουίτα Αυτοματισμού "
+"Σχεδίασης Ηλεκτρονικών. Τα προγράμματα διαχειρίζονται Σχηματική Καταγραφή, "
+"και τη Διάταξη PCB με έξοδο Gerber."
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
 #, fuzzy
@@ -34408,9 +34403,8 @@ msgid "PcbNew 3D Viewer"
 msgstr "3Δ Προβολή"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Προγραμματιστές"
+msgstr "Οι προγραμματιστές του KiCad"
 
 #: resources/linux/launchers/bitmap2component.desktop.in:11
 #, fuzzy
@@ -34438,17 +34432,17 @@ msgid "Gerber File Viewer"
 msgstr "Αρχεία Gerber"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
 msgstr "Προβολή Αρχείων Gerber"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr ""
+msgstr "Σουίτα Αυτοματοποίησης Σχεδίασης Ηλεκτρονικών"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr ""
+"Αριθμομηχανή για διάφορους υπολογισμούς σχετιζόμενους με την ηλεκτρονική"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
 #, fuzzy
@@ -34486,9 +34480,8 @@ msgid "KiCad Schematic"
 msgstr "Επεξεργασία Σχηματικού"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "&Σχεδίαση Πλακέτας Τυπωμένου Κυκλώματος"
+msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
 
 #~ msgid "Other..."
 #~ msgstr "Άλλο..."
