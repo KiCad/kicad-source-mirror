@@ -448,10 +448,6 @@ const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
     auto*    bitmap = static_cast<const WS_DATA_ITEM_BITMAP*>( m_peer );
     wxSize bm_size = bitmap->m_ImageBitmap->GetSize();
 
-    // bm_size is in Eeschema unit (100nm), convert to iu (0.001 mm)
-    bm_size.x /= 10;
-    bm_size.y /= 10;
-
     EDA_RECT bbox;
     bbox.SetSize( bm_size );
     bbox.SetOrigin( m_pos.x - bm_size.x/2, m_pos.y - bm_size.y/2 );

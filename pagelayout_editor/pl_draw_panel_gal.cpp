@@ -107,6 +107,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
     dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
     dummy.SetProject( &m_edaFrame->Prj() );
+    dummy.SetMilsToIUfactor( IU_PER_MILS );
 
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( &dummy, m_view );

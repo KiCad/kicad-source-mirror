@@ -850,7 +850,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
         }
 
         // Set the scale factor for pl_editor (it is set for eeschema by default)
-        image->SetPixelSizeIu( 25400.0 / image->GetPPI() );
+        image->SetPixelSizeIu( IU_PER_MILS * 1000.0 / image->GetPPI() );
         item = new WS_DATA_ITEM_BITMAP( image );
     }
     break;
