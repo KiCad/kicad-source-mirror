@@ -58,8 +58,8 @@
 /**
  * Initialize the Python engine inside pcbnew.
  */
-bool        pcbnewInitPythonScripting( const char * aUserScriptingPath );
-void        pcbnewFinishPythonScripting();
+bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath );
+void pcbnewFinishPythonScripting();
 
 /**
  * Collect the list of python scripts which could not be loaded.

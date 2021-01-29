@@ -158,7 +158,7 @@ PyThreadState* g_PythonMainTState;
  *
  * This initializes all the wxPython interface and returns the python thread control structure
  */
-bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
+bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath )
 {
     int  retv;
     char cmd[1024];
@@ -242,7 +242,8 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
         snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
                   "sys.path.append(\".\")\n"
                   "import pcbnew\n"
-                  "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
+                  "pcbnew.LoadPlugins(\"%s\", \"%s\")",
+                  aStockScriptingPath, aUserScriptingPath );
         retv = PyRun_SimpleString( cmd );
 
         if( retv != 0 )

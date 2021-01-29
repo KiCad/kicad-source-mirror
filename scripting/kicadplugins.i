@@ -137,7 +137,7 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
         FULL_BACK_TRACE += traceback.format_exc()
 
 
-def LoadPlugins(bundlepath=None):
+def LoadPlugins(bundlepath=None, userpath=None):
     """
     Initialise Scripting/Plugin python environment and load plugins.
 
@@ -191,6 +191,9 @@ def LoadPlugins(bundlepath=None):
         plugin_directories.append(os.path.join(config_path, 'scripting'))
         plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
 
+    if userpath:
+        plugin_directories.append(userpath)
+        plugin_directories.append(os.path.join(userpath, 'plugins'))
 
     global PLUGIN_DIRECTORIES_SEARCH
     PLUGIN_DIRECTORIES_SEARCH=""
