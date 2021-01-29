@@ -84,6 +84,8 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
     if( !fpid.IsValid() )
         return 0;
 
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) );
@@ -118,20 +120,24 @@ int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
         return 0;
 
     // Save it to the clipboard
-    if( wxTheClipboard->Open() )
     {
-        if( !wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) ) )
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
         {
+            if( !wxTheClipboard->SetData( new wxTextDataObject( fpid.GetUniStringLibId() ) ) )
+            {
+                wxTheClipboard->Close();
+                return 0;
+            }
+
+            wxTheClipboard->Flush();
             wxTheClipboard->Close();
+        }
+        else
+        {
             return 0;
         }
-
-        wxTheClipboard->Flush();
-        wxTheClipboard->Close();
-    }
-    else
-    {
-        return 0;
     }
 
     // Remove the association
@@ -153,14 +159,18 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
     LIB_ID           fpid;
     wxTextDataObject data;
 
-    if( wxTheClipboard->Open() )
     {
-        wxTheClipboard->GetData( data );
-        wxTheClipboard->Close();
-    }
-    else
-    {
-        return 0;
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->GetData( data );
+            wxTheClipboard->Close();
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     if( fpid.Parse( data.GetText() ) >= 0 )

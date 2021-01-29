@@ -471,6 +471,8 @@ void DIALOG_ABOUT::onHtmlLinkClicked( wxHtmlLinkEvent& event )
 
 void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 {
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( !wxTheClipboard->Open() )
     {
         wxMessageBox( _( "Could not open clipboard to write version information." ),

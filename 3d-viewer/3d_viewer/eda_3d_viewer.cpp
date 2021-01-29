@@ -866,6 +866,8 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
     {
         wxBitmap bitmap( screenshotImage );
 
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
         if( wxTheClipboard->Open() )
         {
             wxBitmapDataObject* dobjBmp = new wxBitmapDataObject( bitmap );

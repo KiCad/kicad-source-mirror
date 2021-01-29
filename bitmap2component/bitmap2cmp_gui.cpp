@@ -683,6 +683,8 @@ void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
     std::string buffer;
     ExportToBuffer( buffer, format );
 
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     // Write buffer to the clipboard
     if (wxTheClipboard->Open())
     {

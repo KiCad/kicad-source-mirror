@@ -975,6 +975,8 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
 
 bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
 {
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         // Store the UTF8 string as unicode string in clipboard:
@@ -992,6 +994,8 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
 std::string TOOL_MANAGER::GetClipboardUTF8() const
 {
     std::string result;
+
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
 
     if( wxTheClipboard->Open() )
     {

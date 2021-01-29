@@ -162,6 +162,8 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
             m_te->DeleteBack();
 
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
         if( wxTheClipboard->Open() )
         {
             if( wxTheClipboard->IsSupported( wxDF_TEXT ) )

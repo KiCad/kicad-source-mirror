@@ -230,6 +230,8 @@ void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
 {
     if( event.GetId() == wxID_COPY )
     {
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
         if( wxTheClipboard->Open() )
         {
             bool primarySelection = wxTheClipboard->IsUsingPrimarySelection();

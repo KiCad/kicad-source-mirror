@@ -281,6 +281,8 @@ void PANEL_SETUP_BOARD_STACKUP::onExportToClipboard( wxCommandEvent& event )
     // Build a ascii representation of stackup and copy it in the clipboard
     wxString report = BuildStackupReport( m_stackup, m_units );
 
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         // This data objects are held by the clipboard,

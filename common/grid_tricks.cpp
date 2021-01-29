@@ -25,6 +25,7 @@
 #include <grid_tricks.h>
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
+#include <wx/log.h>
 #include <widgets/grid_readonly_text_helpers.h>
 
 
@@ -253,6 +254,8 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu )
 
     menu.Enable( GRIDTRICKS_ID_PASTE, false );
 
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
@@ -470,6 +473,8 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
 
 void GRID_TRICKS::paste_clipboard()
 {
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
@@ -585,6 +590,8 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
 void GRID_TRICKS::cutcopy( bool doCut )
 {
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     if( wxTheClipboard->Open() )
     {
         wxGridTableBase*    tbl = m_grid->GetTable();

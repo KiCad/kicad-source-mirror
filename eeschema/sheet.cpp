@@ -528,12 +528,16 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     PrintPage( GetRenderSettings() );
 
-    if( wxTheClipboard->Open() )
     {
-        // This data objects are held by the clipboard, so do not delete them in the app.
-        wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
-        wxTheClipboard->SetData( clipbrd_data );
-        wxTheClipboard->Close();
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            // This data objects are held by the clipboard, so do not delete them in the app.
+            wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
+            wxTheClipboard->SetData( clipbrd_data );
+            wxTheClipboard->Close();
+        }
     }
 
     // Deselect Bitmap from DC in order to delete the MemoryDC

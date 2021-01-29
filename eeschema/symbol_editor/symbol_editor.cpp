@@ -761,6 +761,8 @@ void SYMBOL_EDIT_FRAME::CopyPartToClipboard()
     STRING_FORMATTER formatter;
     SCH_SEXPR_PLUGIN::FormatPart( tmp.get(), formatter );
 
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+
     auto clipboard = wxTheClipboard;
     wxClipboardLocker clipboardLock( clipboard );
 
@@ -788,6 +790,8 @@ void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 
     if( aFromClipboard )
     {
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
         auto clipboard = wxTheClipboard;
         wxClipboardLocker clipboardLock( clipboard );
 

@@ -325,6 +325,7 @@ void DIALOG_CHOOSE_SYMBOL::OnCharHook( wxKeyEvent& e )
         !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
     {
         wxString txt = m_details->SelectionToText();
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
 
         if( wxTheClipboard->Open() )
         {
