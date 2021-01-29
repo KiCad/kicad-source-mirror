@@ -1177,7 +1177,8 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
     EE_COLLECTOR collector;
 
     //TODO(snh): Reimplement after exposing KNN interface
-    int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    int thresholdMax = KiROUND(
+            m_toolMgr->GetView()->GetGAL()->GetGridSize().EuclideanNorm() );
 
     for( int threshold : { 0, thresholdMax/2, thresholdMax } )
     {
