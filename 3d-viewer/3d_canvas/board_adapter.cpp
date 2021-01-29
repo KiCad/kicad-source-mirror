@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,6 +151,9 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
+    if( !m_board->IsLayerEnabled( aLayer ) )
+        return false;
+
     DISPLAY3D_FLG flg;
 
     // see if layer needs to be shown
@@ -159,66 +162,54 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
     {
     case B_Adhes:
     case F_Adhes:
-        flg = FL_ADHESIVE;
-        break;
+        return GetFlag( FL_ADHESIVE );
 
     case B_Paste:
     case F_Paste:
-        flg = FL_SOLDERPASTE;
-        break;
+        return GetFlag( FL_SOLDERPASTE );
 
     case B_SilkS:
     case F_SilkS:
-        flg = FL_SILKSCREEN;
-        break;
+        return GetFlag( FL_SILKSCREEN );
 
     case B_Mask:
     case F_Mask:
-        flg = FL_SOLDERMASK;
-        break;
+        return GetFlag( FL_SOLDERMASK );
 
     case Dwgs_User:
     case Cmts_User:
         if( GetFlag( FL_USE_REALISTIC_MODE ) )
             return false;
 
-        flg = FL_COMMENTS;
-        break;
+        return GetFlag( FL_COMMENTS );
 
     case Eco1_User:
     case Eco2_User:
         if( GetFlag( FL_USE_REALISTIC_MODE ) )
             return false;
 
-        flg = FL_ECO;
-        break;
+        return GetFlag( FL_ECO );
 
     case Edge_Cuts:
         if( GetFlag( FL_SHOW_BOARD_BODY ) || GetFlag( FL_USE_REALISTIC_MODE ) )
             return false;
 
         return true;
-        break;
 
     case Margin:
         if( GetFlag( FL_USE_REALISTIC_MODE ) )
             return false;
 
         return true;
-        break;
 
     case B_Cu:
     case F_Cu:
         return m_board->IsLayerVisible( aLayer ) || GetFlag( FL_USE_REALISTIC_MODE );
-        break;
 
     default:
         // the layer is an internal copper layer, used the visibility
         return m_board->IsLayerVisible( aLayer );
     }
-
-    // The layer has a flag, return the flag
-    return GetFlag( flg );
 }
 
 
