@@ -229,6 +229,16 @@ const EDA_RECT TRACK::GetBoundingBox() const
         ymin = m_Start.y;
         xmin = m_Start.x;
     }
+    else if( Type() == PCB_ARC_T )
+    {
+        std::shared_ptr<SHAPE> arc = GetEffectiveShape();
+        auto bbox = arc->BBox();
+
+        xmin = bbox.GetLeft();
+        xmax = bbox.GetRight();
+        ymin = bbox.GetTop();
+        ymax = bbox.GetBottom();
+    }
     else
     {
         ymax = std::max( m_Start.y, m_End.y );
