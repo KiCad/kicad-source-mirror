@@ -2,21 +2,22 @@
 # Kliment <kliment@0xfb.com>, 2020.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020.
+# Riku Viitanen <riku.viitanen@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-06 18:00+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2021-01-30 10:25+0000\n"
+"Last-Translator: Riku Viitanen <riku.viitanen@protonmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -495,11 +496,12 @@ msgstr "Leikkaa silkkipaino via rengas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Käytä päällystetyn kuparin väriä päällystämättömälle kuparille"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
+"Käytä eri värejä päällystetylle ja päällystämättömälle kuparille. (Hidas)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -546,7 +548,7 @@ msgstr "Muut asetukset"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
 #, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-aliasing"
+msgstr "Antialiasointi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -5412,6 +5414,7 @@ msgstr "KiCad Classic"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"KiCad ja sen riippuvuudet eivät enää tue Windows 7: ää ja sitä vanhempia."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 #, fuzzy
@@ -9528,6 +9531,7 @@ msgstr "Vaihtoehtoinen PIN-nimi"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
+"Vaihtoehtoisia nastojen määrityksiä ei ole saatavana DeMorgan-komponenteille."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9823,19 +9827,19 @@ msgstr "Sijainti X:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Vasen alaosa, piirturiyksiköt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Keskitetty, piirturiyksiköt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Sivun sovitus, käyttäjäyksiköt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Sovita sisältö, käyttäjäyksiköt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -17940,7 +17944,7 @@ msgstr "Vaihe Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:373
 msgid "Distance on the X axis to step for each repeat."
-msgstr ""
+msgstr "Askeleen etäisyys X-akselilla jokaista toistoa varten."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:381
 msgid "Step Y:"
@@ -17948,7 +17952,7 @@ msgstr "Vaihe Y:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:386
 msgid "Distance to step on Y axis for each repeat."
-msgstr ""
+msgstr "Askeleen etäisyys Y-akselilla jokaista toistoa varten."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -22895,12 +22899,17 @@ msgid ""
 "the footprint's pads are unlocked and can be moved with respect to the "
 "footprint."
 msgstr ""
+"Jalanjälkeä voidaan vapaasti siirtää ja suunnata kankaalla. Ainakin osa "
+"jalanjäljen tyynyistä on lukitsemattomia ja niitä voidaan siirtää "
+"jalanjäljen suhteen."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:328
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
 msgstr ""
+"Jalanjälkeä voidaan vapaasti siirtää ja suunnata kankaalle, mutta kaikki sen "
+"tyynyt ovat lukittu suhteessa niiden sijaintiin jalanjälkessä."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
 #, fuzzy
@@ -24442,7 +24451,7 @@ msgstr "Anturan numero:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
-msgstr ""
+msgstr "Älä anna muuttaa tyynyn sijaintia suhteessa vanhemman jalanjälkeen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -26122,6 +26131,8 @@ msgstr "L & jäljitä graafisia viivoja H-, V- ja 45 astetta"
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
 msgstr ""
+"Piirrettäessä graafisia viivoja pakota ne vaaka-, pysty- tai 45 asteen "
+"suuntaiseksi."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -27317,6 +27328,8 @@ msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Pienin etäisyys juotosmaskissa olevien aukkojen välillä. Tätä etäisyyttä "
+"lähemmät tyynyaukot piirretään yhtenä aukkona."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -27350,7 +27363,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Lisäväli prosentteina tyynyn koosta."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid ""
@@ -30509,10 +30522,12 @@ msgstr "Tiedostoa \"%s\" ei voitu luoda."
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
+"Virheellinen rivikoko J-rivillä %z u. Odotettavissa 11 elementtiä, mutta "
+"löydetty %z u"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:228
 msgid "Could not find units value, defaulting to Mils"
-msgstr ""
+msgstr "Yksikköarvoa ei löytynyt, oletusarvo on Mils"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:253
 #, fuzzy, c-format
@@ -30533,6 +30548,8 @@ msgstr "Kirjastotiedostoa ei löydy %s"
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
 msgstr ""
+"Virheellinen rivikoko rivillä %z u. Odotetaan %z u elementtiä, mutta "
+"löydetään %z u"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:428
 #, c-format
@@ -30542,7 +30559,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:474
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Odotetaan tyynyjen koon arvoja, mutta löydetään %s: %s rivillä %z u"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
 #, fuzzy, c-format
@@ -30552,7 +30569,7 @@ msgstr "Virheellinen koko %ll d: liian suuri"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:529
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Odotetaan tyynysiirtoarvoja, mutta löydettiin %s: %s riviltä %z u"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:568
 #, fuzzy, c-format
