@@ -4,13 +4,14 @@
 # taotieren <admin@taotieren.com>,2019-2020, 2021.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
+# Liu Guang <l.g110@163.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-28 01:54+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-01-30 10:25+0000\n"
+"Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -31745,11 +31746,11 @@ msgstr "导入布线器会话(*.ses)文件"
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Specctra DSN..."
-msgstr "光绘 DSN..."
+msgstr "自动布线 DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Export Specctra DSN routing info"
-msgstr "导出光绘 DSN 路线信息"
+msgstr "导出自动布线 DSN 布线信息"
 
 #: pcbnew/tools/pcb_actions.cpp:558
 msgid "Gerbers (.gbr)..."
