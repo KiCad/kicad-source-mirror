@@ -1304,7 +1304,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() );
+
+        // The first point in a circle should be able to snap to items on all layers because it doesn't
+        // overlap the graphical line
+        if( !started && graphic && shape == S_CIRCLE )
+            cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
+        else
+            cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_frame->GetActiveLayer() );
+
         m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
@@ -1607,7 +1614,15 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
+        VECTOR2I cursorPos;
+
+        // The first point in an arc should be able to snap to items on all layers because it doesn't
+        // overlap the graphical line
+        if( firstPoint )
+            cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
+        else
+            cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
+
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup =

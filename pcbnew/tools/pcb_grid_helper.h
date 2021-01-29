@@ -60,7 +60,15 @@ public:
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
+    /**
+     * Chooses the "best" snap anchor around the given point, optionally taking layers from
+     * the reference item.  The reference item will not be snapped to (it is being dragged or
+     * created) and we choose the layers that can be snapped based on the reference item layer
+     * @param aOrigin Point we want to snap from
+     * @param aReferenceItem Reference item for layer/type special casing
+     * @return snapped screen point
+     */
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                              const std::vector<BOARD_ITEM*>& aSkip = {} );
 

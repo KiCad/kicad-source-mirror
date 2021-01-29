@@ -189,15 +189,15 @@ VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
 }
 
 
-VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem )
+VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem )
 {
     LSET layers;
     std::vector<BOARD_ITEM*> item;
 
-    if( aDraggedItem )
+    if( aReferenceItem )
     {
-        layers = aDraggedItem->GetLayerSet();
-        item.push_back( aDraggedItem );
+        layers = aReferenceItem->GetLayerSet();
+        item.push_back( aReferenceItem );
     }
     else
         layers = LSET::AllLayersMask();
