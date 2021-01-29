@@ -69,7 +69,7 @@ public:
      * @param aFileName the library to add; a file open dialog will be displayed if empty.
      * @return true if successfully added.
      */
-    bool AddLibrary(const wxString& aLibName = wxEmptyString);
+    bool AddLibrary( const wxString& aLibName = wxEmptyString, FP_LIB_TABLE* aTable = nullptr );
 
     /**
      * Install the corresponding dialog editor for the given item.
@@ -224,6 +224,13 @@ protected:
 
     /// AUI panel for controlling layer and object visibility and appearance
     APPEARANCE_CONTROLS* m_appearancePanel;
+
+    /**
+     * Prompts a user to select global or project library tables
+     *
+     * @return Pointer to library table selected or nullptr if none selected/canceled
+     */
+    FP_LIB_TABLE* selectLibTable( bool aOptional = false );
 };
 
 #endif

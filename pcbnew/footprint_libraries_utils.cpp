@@ -42,6 +42,7 @@
 #include <plugins/kicad/kicad_plugin.h>
 #include <plugins/legacy/legacy_plugin.h>
 #include <env_paths.h>
+#include <paths.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
@@ -375,16 +376,25 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
     // because the legacy format cannot handle current features.
     // The footprint library is actually a directory
 
+    FP_LIB_TABLE* table  = selectLibTable();
+
+    if( table == nullptr )
+    {
+        return wxEmptyString;
+    }
+
     wxString initialPath = aProposedName.IsEmpty() ? Prj().GetProjectPath() : aProposedName;
     wxFileName fn;
     bool       doAdd = false;
+    bool       isGlobal = ( table == &GFootprintTable );
 
     if( aLibName.IsEmpty() )
     {
         fn = initialPath;
 
-        if( !LibraryFileBrowser( false, fn,
-                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
+        if( !LibraryFileBrowser( false, fn, KiCadFootprintLibPathWildcard(),
+                                 KiCadFootprintLibPathExtension, false, isGlobal,
+                                 PATHS::GetDefaultUserFootprintsPath() ) )
         {
             return wxEmptyString;
         }
@@ -455,21 +465,77 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary( const wxString& aLibName,
     }
 
     if( doAdd )
-        AddLibrary( libPath );
+        AddLibrary( libPath, table );
 
     return libPath;
 }
 
 
-bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
+FP_LIB_TABLE* PCB_BASE_EDIT_FRAME::selectLibTable( bool aOptional )
 {
+    // If no project is loaded, always work with the global table
+    if( Prj().IsNullProject() )
+    {
+        FP_LIB_TABLE* ret = &GFootprintTable;
+
+        if( aOptional )
+        {
+            wxMessageDialog dlg( this, _( "Add the library to the global library table?" ),
+                                 _( "Add To Global Library Table" ), wxYES_NO );
+
+            if( dlg.ShowModal() != wxID_OK )
+                ret = nullptr;
+        }
+
+        return ret;
+    }
+
+    wxArrayString libTableNames;
+    libTableNames.Add( _( "Global" ) );
+    libTableNames.Add( _( "Project" ) );
+
+    wxSingleChoiceDialog dlg( this, _( "Choose the Library Table to add the library to:" ),
+                              _( "Add To Library Table" ), libTableNames );
+
+    if( aOptional )
+    {
+        dlg.FindWindow( wxID_CANCEL )->SetLabel( _( "Skip" ) );
+        dlg.FindWindow( wxID_OK )->SetLabel( _( "Add" ) );
+    }
+
+    if( dlg.ShowModal() != wxID_OK )
+        return nullptr;
+
+    switch( dlg.GetSelection() )
+    {
+    case 0: return &GFootprintTable;
+    case 1: return Prj().PcbFootprintLibs();
+    default: return nullptr;
+    }
+}
+
+
+bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* aTable )
+{
+    if( aTable  == nullptr )
+    {
+        aTable = selectLibTable();
+
+        if( aTable == nullptr )
+        {
+            return wxEmptyString;
+        }
+    }
+
+    bool isGlobal = ( aTable == &GFootprintTable );
+
     wxFileName fn( aFilename );
 
     if( aFilename.IsEmpty() )
     {
-        if( !LibraryFileBrowser( true, fn,
-                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension,
-                                 true ) )
+        if( !LibraryFileBrowser( true, fn, KiCadFootprintLibPathWildcard(),
+                                 KiCadFootprintLibPathExtension, true, isGlobal,
+                                 PATHS::GetDefaultUserFootprintsPath() ) )
         {
             return false;
         }
@@ -481,28 +547,6 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
     if( libName.IsEmpty() )
         return false;
 
-    bool saveInGlobalTable = false;
-    bool saveInProjectTable = false;
-
-    if( Prj().IsNullProject() )
-    {
-        saveInGlobalTable = true;
-    }
-    else
-    {
-        wxArrayString libTableNames;
-
-        libTableNames.Add( _( "Global" ) );
-        libTableNames.Add( _( "Project" ) );
-
-        switch( SelectSingleOption( this, _( "Select Library Table" ),
-                _( "Choose the Library Table to add the library to:" ), libTableNames ) )
-        {
-        case 0:  saveInGlobalTable  = true;  break;
-        case 1:  saveInProjectTable = true;  break;
-        default: return false;
-        }
-    }
 
     wxString type = IO_MGR::ShowType( IO_MGR::GuessPluginTypeFromLibPath( libPath ) );
 
@@ -514,16 +558,15 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
 
     try
     {
-        if( saveInGlobalTable )
+        auto row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
+        aTable->InsertRow( row );
+
+        if( isGlobal )
         {
-            auto row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
-            GFootprintTable.InsertRow( row );
             GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
         }
-        else if( saveInProjectTable )
+        else
         {
-            auto row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
-            Prj().PcbFootprintLibs()->InsertRow( row );
             Prj().PcbFootprintLibs()->Save( Prj().FootprintLibTblName() );
         }
     }
