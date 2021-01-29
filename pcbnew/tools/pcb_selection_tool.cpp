@@ -2374,10 +2374,13 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 
     // Prune sloppier items
 
-    for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
+    if( minSlop < INT_MAX )
     {
-        if( pair.second > minSlop + pixel )
-            aCollector.Transfer( pair.first );
+        for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
+        {
+            if( pair.second > minSlop + pixel )
+                aCollector.Transfer( pair.first );
+        }
     }
 
     // If the user clicked on a small item within a much larger one then it's pretty clear
