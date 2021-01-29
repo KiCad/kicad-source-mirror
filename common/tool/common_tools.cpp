@@ -595,6 +595,7 @@ int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
     else
         wxFAIL_MSG( "Unknown canvas type" );
 
+    m_frame->HardRedraw();
     return 0;
 }
 
