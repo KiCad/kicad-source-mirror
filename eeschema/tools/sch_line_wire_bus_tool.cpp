@@ -905,7 +905,12 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Correct and remove segments that need to be merged.
     m_frame->SchematicCleanUp();
 
+    std::vector<SCH_ITEM*> components;
+
     for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        components.push_back( item );
+
+    for( SCH_ITEM* item : components )
     {
         std::vector<wxPoint> pts = item->GetConnectionPoints();
 
