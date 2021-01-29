@@ -282,16 +282,17 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 {
     DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
 
-    if( aEvent.HasPosition() )
-        getViewControls()->WarpCursor( aEvent.Position(), true );
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( aEvent.HasPosition() )
     {
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+        EE_GRID_HELPER   grid( m_toolMgr );
+        grid.SetSnap( !aEvent.Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !aEvent.Modifier( MD_ALT ) );
+
+        VECTOR2D cursorPos = grid.BestSnapAnchor( aEvent.Position(), LAYER_CONNECTABLE, nullptr );
         startSegments( params->layer, cursorPos );
     }
 

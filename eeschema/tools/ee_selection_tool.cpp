@@ -363,8 +363,12 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         newParams->quitOnDraw = true;
                         newEvt->SetParameter( newParams );
 
+
+                        getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                         newEvt->SetMousePosition( snappedCursorPos );
+                        newEvt->SetHasPosition( true );
                         m_toolMgr->ProcessEvent( *newEvt );
+
                         continueSelect = false;
                     }
                     else if( collector[0]->IsHypertext() )
@@ -526,6 +530,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         displayWireCursor = true;
+                        getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                     }
                     else if( collector[0]->IsHypertext()
                                 && !collector[0]->IsSelected()
@@ -534,6 +539,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         rolloverItem = collector[0]->m_Uuid;
                     }
                 }
+            }
+            else
+            {
+                getViewControls()->ForceCursorPosition( false );
             }
         }
         else
