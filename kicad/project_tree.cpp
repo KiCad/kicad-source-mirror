@@ -77,6 +77,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( module_xpm ) );                 // TREE_FOOTPRINT_FILE
     m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SCHEMATIC_LIBFILE
     m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
+    m_imageList->Add( KiBitmap( editor_xpm ) );                 // DESIGN_RULES
 
     SetImageList( m_imageList );
 }

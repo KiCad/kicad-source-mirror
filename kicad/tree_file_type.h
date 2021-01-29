@@ -58,6 +58,7 @@ enum class TREE_FILE_TYPE
     FOOTPRINT_FILE,        // footprint file (.kicad_mod)
     SCHEMATIC_LIBFILE,     // schematic library file (.lib)
     SEXPR_SYMBOL_LIB_FILE, // s-expression symbol library file (.kicad_sym)
+    DESIGN_RULES,          // design rules (.kicad_dru)
     MAX
 };
 
