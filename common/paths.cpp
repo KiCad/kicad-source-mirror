@@ -165,7 +165,7 @@ wxString PATHS::GetStockPluginsPath()
     fn.AppendDir( wxT( "Contents" ) );
     fn.AppendDir( wxT( "PlugIns" ) );
 #elif defined( __WXMSW__ )
-    fn.Assign( Pgm().GetExecutablePath() + wxT( "../plugins/" ) );
+    fn.Assign( Pgm().GetExecutablePath() + wxT( "/plugins/" ) );
 #else
     // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
