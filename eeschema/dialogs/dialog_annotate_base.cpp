@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/infobar.h"
 #include "wx_html_report_panel.h"
 
 #include "dialog_annotate_base.h"
@@ -18,15 +19,15 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bmainSizer;
 	bmainSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
+	m_infoBar->Hide();
+
+	bmainSizer->Add( m_infoBar, 0, wxEXPAND|wxBOTTOM, 5 );
+
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_userMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_userMessage->Wrap( 1 );
-	m_userMessage->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	m_userMessage->Hide();
-
-	bupperSizer->Add( m_userMessage, 0, wxALL|wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 2, 2, 0, 0 );

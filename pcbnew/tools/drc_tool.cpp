@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,8 +154,11 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
 
     if( aTestFootprints && !Kiface().IsSingle() )
     {
-        if( m_editFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG ) )
+        if( m_editFrame->FetchNetlistFromSchematic( netlist, _( "Schematic parity tests require a "
+                                                                "fully annotated schematic." ) ) )
+        {
             netlistFetched = true;
+        }
 
         if( m_drcDialog )
             m_drcDialog->Raise();

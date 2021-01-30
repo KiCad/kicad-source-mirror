@@ -541,7 +541,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         try
         {
             NETLIST netlist;
-            FetchNetlistFromSchematic( netlist, NO_ANNOTATION );
+            FetchNetlistFromSchematic( netlist, wxEmptyString );
 
             BOARD_NETLIST_UPDATER updater( this, GetBoard() );
             updater.SetLookupByTimestamp( false );

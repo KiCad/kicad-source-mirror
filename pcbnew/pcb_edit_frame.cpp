@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1355,7 +1355,7 @@ bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
 }
 
 
-bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxString& aAnnotateMessage )
 {
     if( !TestStandalone() )
     {
@@ -1366,12 +1366,8 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
     }
 
     Raise();                //Show
-    std::string payload;
 
-    if( aMode == NO_ANNOTATION )
-        payload = "no-annotate";
-    else if( aMode == QUIET_ANNOTATION )
-        payload = "quiet-annotate";
+    std::string payload( aAnnotateMessage );
 
     Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, this );
 

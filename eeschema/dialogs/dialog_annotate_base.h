@@ -11,14 +11,15 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class WX_HTML_REPORT_PANEL;
+class WX_INFOBAR;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/radiobut.h>
 #include <wx/bitmap.h>
@@ -50,7 +51,7 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_userMessage;
+		WX_INFOBAR* m_infoBar;
 		wxRadioBox* m_rbScope;
 		wxRadioButton* m_rbSortBy_X_Position;
 		wxStaticBitmap* annotate_down_right_bitmap;

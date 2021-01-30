@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -565,17 +565,12 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_SCH_GET_NETLIST:
     {
-        if( payload.find( "quiet-annotate" ) != std::string::npos )
+        if( !payload.empty() )
         {
-            Schematic().GetSheets().AnnotatePowerSymbols();
-            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
-                                NULL_REPORTER::GetInstance() );
-        }
+            wxString annotationMessage( payload );
 
-        if( payload.find( "no-annotate" ) == std::string::npos )
-        {
             // Ensure schematic is OK for netlist creation (especially that it is fully annotated):
-            if( !ReadyToNetlist() )
+            if( !ReadyToNetlist( annotationMessage ) )
                 return;
         }
 

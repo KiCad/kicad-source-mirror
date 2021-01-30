@@ -1027,7 +1027,7 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
     wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
     fn.SetExt( NetlistFileExtension );
 
-    if( !ReadyToNetlist() )
+    if( !ReadyToNetlist( _( "Assigning footprints requires a fully annotated schematic." ) ) )
         return;
 
     try

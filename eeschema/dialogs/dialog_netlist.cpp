@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,15 +338,11 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
     wxString commandLine = simulatorCommand;
     commandLine.Replace( "%I", fn.GetFullPath(), true );
 
-    if( m_Parent->ReadyToNetlist( false, false ) )
-        m_Parent->WriteNetListFile( NET_TYPE_SPICE, fn.GetFullPath(), netlist_opt, nullptr );
-    else
+    if( m_Parent->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
     {
-        wxMessageBox( _( "Schematic netlist not available" ) );
-        return;
+        m_Parent->WriteNetListFile( NET_TYPE_SPICE, fn.GetFullPath(), netlist_opt, nullptr );
+        wxExecute( commandLine, wxEXEC_ASYNC );
     }
-
-     wxExecute( commandLine, wxEXEC_ASYNC );
 }
 
 
@@ -578,10 +574,8 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    if( m_Parent->ReadyToNetlist( false, false ) )
+    if( m_Parent->ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         m_Parent->WriteNetListFile( currPage->m_IdNetType, fullpath, netlist_opt, nullptr );
-    else
-        wxMessageBox( _( "Schematic netlist not available" ) );
 
     WriteCurrentNetlistSetup();
 

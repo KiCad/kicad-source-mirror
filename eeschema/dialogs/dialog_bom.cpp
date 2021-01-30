@@ -485,7 +485,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
         m_parent->SetExecFlags( wxEXEC_SHOW_CONSOLE );
 #endif
 
-    if( m_parent->ReadyToNetlist( false, false ) )
+    if( m_parent->ReadyToNetlist( _( "Generating BOM requires a fully annotated schematic." ) ) )
         m_parent->WriteNetListFile( -1, fullfilename, GNL_OPT_BOM, &reporter );
 
     m_Messages->SetValue( reportmsg );

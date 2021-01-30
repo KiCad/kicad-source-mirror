@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 jean-pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
+#include <widgets/infobar.h>
 #include <wx_html_report_panel.h>
 
 // A window name for the annotate dialog to retrieve is if not destroyed
@@ -88,8 +89,8 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 
     if( !message.IsEmpty() )
     {
-        m_userMessage->SetLabelText( message );
-        m_userMessage->Show( true );
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->ShowMessage( message );
 
         m_rbScope->Enable( false );
     }
@@ -195,7 +196,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     if( reporter.HasMessage() )
         return;
 
-    if( m_userMessage->IsShown() )
+    if( m_infoBar->IsShown() )
     {
         // Close the dialog by calling the default handler for a wxID_OK event
         event.SetId( wxID_OK );

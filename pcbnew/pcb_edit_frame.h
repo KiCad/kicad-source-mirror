@@ -743,10 +743,11 @@ public:
 
     /**
      * @param aNetlist a #NETLIST owned by the caller.  This function fills it in.
+     * @param aAnnotateMessage a message to be shown if annotation must be performed.  If empty,
+     *                         annotation will be skipped.
      * @return true if a netlist was fetched.
      */
-    enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
-    bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
+    bool FetchNetlistFromSchematic( NETLIST& aNetlist, const wxString& aAnnotateMessage );
 
     /**
      * Send a command to Eeschema to re-annotate the schematic.

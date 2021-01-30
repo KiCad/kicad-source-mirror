@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -299,11 +299,10 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         ++i;
     }
 
-    if( m_matchByReference && !m_frame->ReadyToNetlist() )
+    if( m_matchByReference && !m_frame->ReadyToNetlist( _( "Re-linking footprints requires a fully "
+                                                           "annotated schematic." ) ) )
     {
-        m_reporter.ReportTail( _( "Cannot relink footprints because schematic is not fully "
-                                  "annotated." ),
-                               RPT_SEVERITY_ERROR );
+        m_reporter.ReportTail( _( "Footprint re-linking cancelled by user." ), RPT_SEVERITY_ERROR );
     }
 }
 

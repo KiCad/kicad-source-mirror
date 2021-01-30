@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     // Ensure the netlist data is up to date:
     RecalculateConnections( NO_CLEANUP );
 
-    if( !ReadyToNetlist( false ) )
+    if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
 
     bool res = true;
@@ -160,7 +160,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 }
 
 
-bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
+bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
 {
     // Ensure all power symbols have a valid reference
     Schematic().GetSheets().AnnotatePowerSymbols();
@@ -168,24 +168,11 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
     // Components must be annotated
     if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
     {
-        if( aSilentAnnotate )
-        {
-            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
-                                NULL_REPORTER::GetInstance() );
-        }
-        else
-        {
-            if( aSilent )
-                return false;
+        // Schematic must be annotated: call Annotate dialog and tell the user why.
+        ModalAnnotate( aAnnotateMessage );
 
-            // Schematic must be annotated: call Annotate dialog and tell the user why.
-            ModalAnnotate( _( "Exporting netlist requires a completely annotated schematic." ) );
-
-            if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
-            {
-                return false;
-            }
-        }
+        if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
+            return false;
     }
 
     // Test duplicate sheet names:
@@ -193,7 +180,7 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( bool aSilent, bool aSilentAnnotate )
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
     {
-        if( aSilent || !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
+        if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return false;
     }
 
