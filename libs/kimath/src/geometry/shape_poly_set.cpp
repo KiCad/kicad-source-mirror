@@ -2141,7 +2141,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
     }
 
     m_triangulatedPolys.clear();
-    m_triangulationValid = true;
+    m_triangulationValid = false;
 
     while( tmpSet.OutlineCount() > 0 )
     {

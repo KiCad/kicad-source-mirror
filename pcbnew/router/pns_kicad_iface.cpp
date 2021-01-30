@@ -963,7 +963,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 
 bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline )
 {
-    SHAPE_POLY_SET poly;
+    SHAPE_POLY_SET* poly;
 
     if( !aZone->GetIsRuleArea() && aZone->GetZoneName().IsEmpty() )
         return false;
@@ -979,32 +979,32 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
     LSET      layers = aZone->GetLayerSet();
     EDA_UNITS units = EDA_UNITS::MILLIMETRES;       // TODO: get real units
 
+    poly = aZone->Outline();
+    poly->CacheTriangulation( false );
+
+    if( !poly->IsTriangulationUpToDate() )
+    {
+        KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
+                                                 aZone->GetSelectMenuText( units ) ),
+                      KIDIALOG::KD_WARNING );
+        dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the track "
+                                                   "layout tool.\n"
+                                                   "Please verify it is not a "
+                                                   "self-intersecting polygon." ) ) );
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+        dlg.ShowModal();
+
+        return false;
+    }
+
     for( int layer = F_Cu; layer <= B_Cu; layer++ )
     {
-        if( ! layers[ layer ] )
+        if( !layers[ layer ] )
             continue;
 
-        aZone->BuildSmoothedPoly( poly, ToLAYER_ID( layer ), aBoardOutline );
-        poly.CacheTriangulation();
-
-        if( !poly.IsTriangulationUpToDate() )
+        for( int outline = 0; outline < poly->OutlineCount(); outline++ )
         {
-            KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
-                                                     aZone->GetSelectMenuText( units ) ),
-                          KIDIALOG::KD_WARNING );
-            dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the track "
-                                                       "layout tool.\n"
-                                                       "Please verify it is not a "
-                                                       "self-intersecting polygon." ) ) );
-            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-            dlg.ShowModal();
-
-            return false;
-        }
-
-        for( int outline = 0; outline < poly.OutlineCount(); outline++ )
-        {
-            const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = poly.TriangulatedPolygon( outline );
+            const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = poly->TriangulatedPolygon( outline );
 
             for( size_t i = 0; i < tri->GetTriangleCount(); i++)
             {
