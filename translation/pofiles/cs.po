@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-24 22:53+0000\n"
+"PO-Revision-Date: 2021-01-30 23:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26885,14 +26885,12 @@ msgstr ""
 "Nechte to na 0, pokud nevíte, co děláte."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
-"Minimální vzdálenost mezi dvěma oblastmi plošky.\n"
-"Dvě oblasti plošek, které jsou blíže něž tato hodnota, budou sloučeny při "
-"vykreslování"
+"Minimální vzdálenost mezi otvory pájecí masky. Otvory podložky blíže než "
+"tato vzdálenost budou vykresleny jako jeden otvor."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
@@ -26914,17 +26912,16 @@ msgstr ""
 "Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
-#, fuzzy
 msgid ""
 "Global clearance ratio in percent between pads and the solder paste.\n"
 "A value of 10 means the clearance value is 10 percent of the pad size.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a maskou\n"
-"pro toto pouzdro\n"
-"Tato hodnota může být nahrazena místní hodnotou plošky.\n"
-"Pokud je hodnota 0, je použita globální hodnota"
+"Globální poměr vzdáleností v procentech mezi ploškami a pájecí pastou.\n"
+"Hodnota 10 znamená, že vzdálenost je 10 procent velikosti plošky.\n"
+"Tuto hodnotu lze přepsat místními hodnotami pouzdra nebo plošky.\n"
+"Konečná hodnota mezery je součtem této hodnoty a hodnoty izolační mezery."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Additional clearance as a percentage of the pad size."
@@ -27573,9 +27570,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Kontrola definice pole pouzdra..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:130
-#, fuzzy
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "Pouzdra osazena na dolní straně desek"
+msgstr "Kontrola pouzder pro obnovu obsazených oblastí..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:341
 #, fuzzy
@@ -27729,9 +27725,8 @@ msgid "Checking text variables..."
 msgstr "Textové proměnné..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:104
-#, fuzzy
 msgid "Checking silkscreen for overlapping items..."
-msgstr "Min. izolační mezera"
+msgstr "Kontrola překrývajících se položek na potisku..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:212
 #, c-format
@@ -30981,14 +30976,12 @@ msgid "Insert footprint in board"
 msgstr "Vložit pouzdro na desku"
 
 #: pcbnew/toolbars_pcb_editor.cpp:510
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Automatická šířka spojů: začínají-li na již existujícím spoji, použít jeho "
-"šířku\n"
-"Jinak použít nastavenou šířku"
+"Při směrování z existujícího spoje použijte jeho šířku místo aktuálního "
+"nastavení šířky"
 
 #: pcbnew/toolbars_pcb_editor.cpp:580
 #, fuzzy
