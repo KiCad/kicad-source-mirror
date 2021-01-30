@@ -610,6 +610,11 @@ private:
     void UpdateTitle();
 
     /**
+     * Initialize the zoom value of the current screen and mark the screen as zoom-initialized.
+     */
+    void initScreenZoom();
+
+    /**
      * Verify that the symbol library links \a aSheet and all of it's child sheets have
      * been remapped to the symbol library table.
      *

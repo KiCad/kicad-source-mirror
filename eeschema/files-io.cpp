@@ -535,13 +535,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         RecalculateConnections( GLOBAL_CLEANUP );
         ClearUndoRedoList();
-        GetScreen()->m_Initialized = true;
     }
 
     // Load any exclusions from the project file
     ResolveERCExclusions();
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    initScreenZoom();
     SetSheetNumberAndCount();
 
     RecomputeIntersheetRefs();
@@ -600,7 +599,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), fullFileName ) )
         return false;
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    initScreenZoom();
     SetSheetNumberAndCount();
 
     SyncView();
@@ -961,8 +960,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             SCH_SCREENS schematic( Schematic().Root() );
             schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
 
-            GetScreen()->m_Initialized = true;
-
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
             {
                 for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
@@ -988,7 +985,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             ClearUndoRedoList();
 
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+            initScreenZoom();
             SetSheetNumberAndCount();
             SyncView();
             UpdateTitle();

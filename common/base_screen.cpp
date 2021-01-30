@@ -35,7 +35,6 @@ wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layou
 BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_Initialized       = false;
     m_virtualPageNumber = 1;
     m_pageCount         = 1;         // Hierarchy: Root: ScreenNumber = 1
     m_Center            = true;

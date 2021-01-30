@@ -274,7 +274,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     resolveCanvasType();
     SwitchCanvas( m_canvasType );
 
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    initScreenZoom();
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
@@ -1260,6 +1260,13 @@ void SCH_EDIT_FRAME::UpdateTitle()
     }
 
     SetTitle( title );
+}
+
+
+void SCH_EDIT_FRAME::initScreenZoom()
+{
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    GetScreen()->m_zoomInitialized = true;
 }
 
 

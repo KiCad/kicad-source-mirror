@@ -116,7 +116,10 @@ private:
     int         m_modification_sync; // inequality with PART_LIBS::GetModificationHash() will
                                      //   trigger ResolveAll().
 
-    /// List of bus aliases stored in this screen
+    /// Set to true once the zoom value is initialized with `InitZoom()`.
+    bool m_zoomInitialized;
+
+    /// List of bus aliases stored in this screen.
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
 
     /// Library symbols required for this schematic.

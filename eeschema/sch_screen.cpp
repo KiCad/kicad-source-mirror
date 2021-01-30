@@ -68,6 +68,7 @@ SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
 {
     m_modification_sync = 0;
     m_refCount = 0;
+    m_zoomInitialized = false;
     m_LastZoomLevel = 1.0;
 
     // Suitable for schematic only. For symbol_editor and viewlib, must be set to true

@@ -103,8 +103,6 @@ public:
 
     VECTOR2D    m_ScrollCenter;     ///< Current scroll center point in logical units.
 
-    bool        m_Initialized;
-
 protected:
     /**
      * The number of #BASE_SCREEN objects in this design.

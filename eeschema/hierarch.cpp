@@ -300,10 +300,9 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
-    if( !screen->m_Initialized )
+    if( !screen->m_zoomInitialized )
     {
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-        screen->m_Initialized = true;
+        initScreenZoom();
     }
     else
     {
