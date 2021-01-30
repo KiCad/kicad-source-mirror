@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,6 +39,7 @@
 
 #include <gbr_metadata.h>
 
+
 // if GBR_USE_MACROS is defined, pads having a shape that is not a Gerber primitive
 // will use a macro when possible
 // Old code will be removed only after many tests
@@ -52,13 +53,41 @@
 #define GBR_USE_MACROS_FOR_TRAPEZOID
 #define GBR_USE_MACROS_FOR_ROTATED_OVAL
 #define GBR_USE_MACROS_FOR_ROTATED_RECT
-//#define GBR_USE_MACROS_FOR_CUSTOM_PAD     // work in progress
+#define GBR_USE_MACROS_FOR_CUSTOM_PAD
 
 // max count of corners to create a aperture macro for a custom shape.
 // provided just in case a aperture macro type free polygon creates issues
 // when the number of corners is too high.
 // (1 corner = up to 24 chars)
-#define GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT 100000
+// Gerber doc say max corners 5000. We use a slightly smaller value.
+// if a custom shape needs more than GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT, it
+// will be plot using a region.
+#define GBR_MACRO_FOR_CUSTOM_PAD_MAX_CORNER_COUNT 4990
+#define AM_FREEPOLY_BASENAME "FreePoly"
+
+// A helper function to compare 2 polygons: polygons are similar if they havve the same
+// number of vertices and each vertex coordinate are similar, i.e. if the difference
+// between coordinates is small ( <= margin to accept rounding issues coming from polygon
+// geometric transforms like rotation
+static bool polyCompare( const std::vector<wxPoint>& aPolygon,
+                         const std::vector<wxPoint>& aTestPolygon )
+{
+    // fast test: polygon sizes must be the same:
+    if( aTestPolygon.size() != aPolygon.size() )
+        return false;
+
+    const int margin = 2;
+
+    for( size_t jj = 0; jj < aPolygon.size(); jj++ )
+    {
+        if( std::abs( aPolygon[jj].x - aTestPolygon[jj].x ) > margin ||
+            std::abs( aPolygon[jj].y - aTestPolygon[jj].y ) > margin )
+            return false;
+    }
+
+    return true;
+}
+
 
 GERBER_PLOTTER::GERBER_PLOTTER()
 {
@@ -212,6 +241,7 @@ bool GERBER_PLOTTER::StartPlot()
     m_hasApertureRotRect = false;       // true is at least one rect. rotated aperture is in use
     m_hasApertureOutline4P = false;     // true is at least one rotated rect/trapezoid aperture is in use
     m_hasApertureChamferedRect = false; // true is at least one chamfered rect is in use
+    m_am_freepoly_list.ClearList();
 
     wxASSERT( m_outputFile );
 
@@ -309,7 +339,7 @@ bool GERBER_PLOTTER::EndPlot()
             // Add aperture list macro:
             if( m_hasApertureRoundRect | m_hasApertureRotOval ||
                 m_hasApertureOutline4P || m_hasApertureRotRect ||
-                m_hasApertureChamferedRect )
+                m_hasApertureChamferedRect || m_am_freepoly_list.AmCount() )
             {
                 fputs( "G04 Aperture macros list*\n", m_outputFile );
 
@@ -331,6 +361,18 @@ bool GERBER_PLOTTER::EndPlot()
                     fputs( APER_MACRO_OUTLINE6P_HEADER, m_outputFile );
                     fputs( APER_MACRO_OUTLINE7P_HEADER, m_outputFile );
                     fputs( APER_MACRO_OUTLINE8P_HEADER, m_outputFile );
+                }
+
+                if( m_am_freepoly_list.AmCount() )
+                {
+                    // apertude sizes are in inch or mm, regardless the
+                    // coordinates format
+                    double fscale = 0.0001 * m_plotScale / m_IUsPerDecimil; // inches
+
+                    if(! m_gerberUnitInch )
+                        fscale *= 25.4;     // size in mm
+
+                    m_am_freepoly_list.Format( m_outputFile, fscale );
                 }
 
                 fputs( "G04 Aperture macros list end*\n", m_outputFile );
@@ -404,6 +446,17 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
 {
     int last_D_code = 9;
 
+    // For APERTURE::AM_FREE_POLYGON aperture macros, we need to create the macro
+    // on the fly, because due to the fact the vertice count is not a constant we
+    // cannot create a static definition.
+    if( APERTURE::AM_FREE_POLYGON == aType )
+    {
+        int idx = m_am_freepoly_list.FindAm( aCorners );
+
+        if( idx < 0 )
+            m_am_freepoly_list.Append( aCorners );
+    }
+
     // Search an existing aperture
     for( int idx = 0; idx < (int)m_apertures.size(); ++idx )
     {
@@ -416,17 +469,8 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
             (tool->m_Rotation == aRotDegree) &&
             (tool->m_ApertureAttribute == aApertureAttribute) )
         {
-            // A candidate is found. the corner lists must be the same
-            bool is_same = true;
-
-            for( size_t ii = 0; ii < aCorners.size(); ii++ )
-            {
-                if( aCorners[ii] != tool->m_Corners[ii] )
-                {
-                    is_same = false;
-                    break;
-                }
-            }
+            // A candidate is found. the corner lists must be similar
+            bool is_same = polyCompare( tool->m_Corners, aCorners );
 
             if( is_same )
                 return idx;
@@ -693,39 +737,13 @@ void GERBER_PLOTTER::writeApertureList()
 
             case APERTURE::AM_FREE_POLYGON:
             {
-                // Write aperture header
-                fprintf( m_outputFile, "%%%s%d*\n", "AMFp", tool.m_DCode );
-                fprintf( m_outputFile, "4,1,%d,", (int)tool.m_Corners.size() );
+                // Find the aperture macro name in the list of aperture macro
+                // created on the fly for this polygon:
+                int idx = m_am_freepoly_list.FindAm( tool.m_Corners );
 
-                // Insert a newline after curr_line_count_max coordiantes.
-                int curr_line_corner_count = 0;
-                const int curr_line_count_max = 50;     // <= 0 to disable newlines
-
-                for( size_t ii = 0; ii <= tool.m_Corners.size(); ii++ )
-                {
-                    int jj = ii;
-
-                    if( ii >= tool.m_Corners.size() )
-                        jj = 0;
-
-                    fprintf( m_outputFile, "%#f,%#f,",
-                             tool.m_Corners[jj].x * fscale, -tool.m_Corners[jj].y * fscale );
-                    if( curr_line_count_max >= 0
-                            && ++curr_line_corner_count >= curr_line_count_max )
-                    {
-                        fprintf( m_outputFile, "\n" );
-                        curr_line_corner_count = 0;
-                    }
-                }
-                // output rotation parameter
-                fputs( "$1*%\n", m_outputFile );
-
-                // Create specialized macro
-                sprintf( cbuf, "%s%d,", "Fp", tool.m_DCode );
-                buffer += cbuf;
-
-                // close outline and output rotation
-                sprintf( cbuf, "%#f*%%\n", tool.m_Rotation );
+                // Write DCODE id ( "%ADDxx" is already in buffer) and rotation
+                // the full line is something like :%ADD12FreePoly1,45.000000*%
+                sprintf( cbuf, "%s%d,%#f*%%\n", AM_FREEPOLY_BASENAME, idx, tool.m_Rotation );
             }
             break;
         }
@@ -1758,4 +1776,69 @@ void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
         fprintf( m_outputFile, "%%LPD*%%\n" );
     else
         fprintf( m_outputFile, "%%LPC*%%\n" );
+}
+
+
+bool APER_MACRO_FREEPOLY::IsSamePoly( const std::vector<wxPoint>& aPolygon ) const
+{
+    return polyCompare( m_Corners, aPolygon );
+}
+
+
+void APER_MACRO_FREEPOLY::Format( FILE * aOutput, double aIu2GbrMacroUnit )
+{
+   // Write aperture header
+    fprintf( aOutput, "%%AM%s%d*\n", AM_FREEPOLY_BASENAME, m_Id );
+    fprintf( aOutput, "4,1,%d,", (int)m_Corners.size() );
+
+    // Insert a newline after curr_line_count_max coordinates.
+    int curr_line_corner_count = 0;
+    const int curr_line_count_max = 20;     // <= 0 to disable newlines
+
+    for( size_t ii = 0; ii <= m_Corners.size(); ii++ )
+    {
+        int jj = ii;
+
+        if( ii >= m_Corners.size() )
+            jj = 0;
+
+        // Note: parameter values are always mm or inches
+        fprintf( aOutput, "%#f,%#f,",
+                 m_Corners[jj].x * aIu2GbrMacroUnit, -m_Corners[jj].y * aIu2GbrMacroUnit );
+
+        if( curr_line_count_max >= 0
+                && ++curr_line_corner_count >= curr_line_count_max )
+        {
+            fprintf( aOutput, "\n" );
+            curr_line_corner_count = 0;
+        }
+    }
+
+    // output rotation parameter
+    fputs( "$1*%\n", aOutput );
+}
+
+
+void APER_MACRO_FREEPOLY_LIST::Format( FILE * aOutput, double aIu2GbrMacroUnit )
+{
+    for( int idx = 0; idx < AmCount(); idx++ )
+        m_AMList[idx].Format( aOutput, aIu2GbrMacroUnit );
+}
+
+
+void APER_MACRO_FREEPOLY_LIST::Append( const std::vector<wxPoint>& aPolygon )
+{
+    m_AMList.emplace_back( aPolygon, AmCount() );
+}
+
+
+int APER_MACRO_FREEPOLY_LIST::FindAm( const std::vector<wxPoint>& aPolygon ) const
+{
+    for( int idx = 0; idx < AmCount(); idx++ )
+    {
+        if( m_AMList[idx].IsSamePoly( aPolygon ) )
+            return idx;
+    }
+
+    return -1;
 }

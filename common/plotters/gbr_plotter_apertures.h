@@ -149,3 +149,72 @@ public:
     // 0 = no specific aperture attribute
     int           m_ApertureAttribute;
 };
+
+
+/** A class to define an aperture macros based on a free polygon, i.e. using a
+ * primitive 4 to describe a free polygon with a rotation.
+ * the aperture macro has only one parameter: rotation and is defined on the fly
+ * for  aGerber file
+ */
+class APER_MACRO_FREEPOLY
+{
+public:
+    APER_MACRO_FREEPOLY( const std::vector<wxPoint>& aPolygon, int aId )
+    {
+        m_Corners = aPolygon;
+        m_Id = aId;
+    }
+
+    /**
+     * @return true if aPolygon is the same as this, i.e. if the
+     * aPolygon is the same as m_Corners
+     * @param aOther is the candidate to compare
+     */
+    bool IsSamePoly( const std::vector<wxPoint>& aPolygon ) const;
+
+    /**
+     * print the aperture macro definition to aOutput
+     * @param aOutput is the FILE to write
+     * @param aIu2GbrMacroUnit is the scaling factor from coordinates value to
+     * the Gerber file macros units (always mm or inches)
+     */
+    void Format( FILE * aOutput, double aIu2GbrMacroUnit );
+
+    int CornersCount() const { return (int)m_Corners.size(); }
+
+    std::vector<wxPoint> m_Corners;
+    int m_Id;
+};
+
+
+class APER_MACRO_FREEPOLY_LIST
+{
+public:
+    APER_MACRO_FREEPOLY_LIST() {}
+
+    void ClearList() { m_AMList.clear(); }
+
+    int AmCount() const { return (int)m_AMList.size(); }
+
+    /**
+     * append a new APER_MACRO_FREEPOLY containing the polygon aPolygon to the current list
+     */
+    void Append( const std::vector<wxPoint>& aPolygon );
+
+    /**
+     * @return the index in m_AMList of the APER_MACRO_FREEPOLY having the
+     * same polygon as aPolygon, or -1
+     * @param aCandidate is the polygon candidate to compare
+     */
+    int FindAm( const std::vector<wxPoint>& aPolygon ) const;
+
+    /**
+     * print the aperture macro list to aOutput
+     * @param aOutput is the FILE to write
+     * @param aIu2GbrMacroUnit is the scaling factor from coordinates value to
+     * the Gerber file macros units (always mm or inches)
+     */
+    void Format( FILE * aOutput, double aIu2GbrMacroUnit );
+
+    std::vector<APER_MACRO_FREEPOLY> m_AMList;
+};

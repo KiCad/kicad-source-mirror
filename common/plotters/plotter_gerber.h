@@ -355,4 +355,10 @@ protected:
     bool    m_useNetAttributes;        // In recent gerber files, netlist info can be added.
                                        // It will be added if this param is true, using X2 or
                                        // X1 format
+
+    // A list of aperture macros defined "on the fly" because the number of parameters is not
+    // defined: this is the case of the macro using the primitive 4 to create a polygon.
+    // The number of vertices is not known for free polygonal shapes, and an aperture macro
+    // must be created for each specific polygon
+    APER_MACRO_FREEPOLY_LIST m_am_freepoly_list;
 };
