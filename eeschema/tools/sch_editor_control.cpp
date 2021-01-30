@@ -830,8 +830,8 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            SCH_ITEM*      item = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
-            SCH_COMPONENT* symbol = nullptr;
+            SCH_ITEM*      item   = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
+            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
 
             if( item )
             {
