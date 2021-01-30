@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,6 +189,10 @@ wxString SYMBOL_EDIT_FRAME::SelectLibraryFromList()
     for( const wxString& name : libNicknames )
     {
         wxArrayString item;
+
+        // Exclude read only libraries.
+        if( m_libMgr->IsLibraryReadOnly( name ) )
+            continue;
 
         item.Add( name );
         itemsToDisplay.push_back( item );

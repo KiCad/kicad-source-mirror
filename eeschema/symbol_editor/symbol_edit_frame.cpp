@@ -357,6 +357,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return !getTargetLibId().GetLibNickname().empty();
         };
 
+    auto canEditLib =
+            [this] ( const SELECTION& sel )
+            {
+                return !getTargetLibId().GetLibNickname().empty() &&
+                       !m_libMgr->IsLibraryReadOnly( getTargetLibId().GetLibNickname() );
+            };
+
     mgr->SetConditions( ACTIONS::saveAll,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
@@ -365,6 +372,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                         ENABLE( schematicModifiedCond ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs, ENABLE( libSelectedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::newSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
+    mgr->SetConditions( EE_ACTIONS::importSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
 
     mgr->SetConditions( ACTIONS::undo,
                         ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
