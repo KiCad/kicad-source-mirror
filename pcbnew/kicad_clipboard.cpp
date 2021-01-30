@@ -252,7 +252,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
     clipboard->Flush();
 
-#ifndef __WXOSX__ )
+    #ifndef __WXOSX__
     // This section exists to return the clipboard data, ensuring it has fully
     // been processed by the system clipboard.  This appears to be needed for
     // extremely large clipboard copies on asynchronous linux clipboard managers
@@ -264,9 +264,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     {
         wxTextDataObject data;
         clipboard->GetData( data );
-        (void) data.GetText(); // Keep unused variable
+        ( void )data.GetText(); // Keep unused variable
     }
-#endif
+    #endif
 }
 
 
