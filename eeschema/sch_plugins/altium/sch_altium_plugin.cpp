@@ -713,7 +713,6 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_TEXT* text = new SCH_TEXT( elem.location + m_sheetOffset, elem.text );
-        text->SetMirrored( elem.isMirrored );
 
         SetEdaTextJustification( text, elem.justification );
 
@@ -751,7 +750,6 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 
         text->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, component ) );
         text->SetText( elem.text );
-
         SetEdaTextJustification( text, elem.justification );
 
         size_t fontId = static_cast<int>( elem.fontId );
@@ -2076,33 +2074,38 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         const auto& component = m_components.at( symbol->first );
 
-        int fieldIdx = component->GetFieldCount() + 1;
-
         // TODO: location not correct?
-        SCH_FIELD field( elem.location + m_sheetOffset, fieldIdx, component, elem.name );
-        field.SetText( elem.text );
-        field.SetVisible( !elem.isHidden );
-        field.SetMirrored( elem.isMirrored );
-        field.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
+        const wxPoint position = elem.location + m_sheetOffset;
+
+        SCH_FIELD* field = nullptr;
+        if( elem.name == "Value" )
+        {
+            field = component->GetField( VALUE_FIELD );
+            field->SetPosition( position );
+        }
+        else
+        {
+            int fieldIdx = component->GetFieldCount();
+            field = component->AddField( { position, fieldIdx, component, elem.name } );
+        }
+
+        // TODO: improve text replacement (https://gitlab.com/kicad/code/kicad/-/issues/6256)
+        if( elem.text == "=Value" && field->GetId() != VALUE_FIELD )
+            field->SetText( "${VALUE}" );
+        else
+            field->SetText( elem.text );
+
+        field->SetVisible( !elem.isHidden );
+        field->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
 
         switch( elem.orientation )
         {
-        case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-            field.SetTextAngle( 0 );
-            break;
-        case ASCH_RECORD_ORIENTATION::UPWARDS:
-            field.SetTextAngle( 90 );
-            break;
-        case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-            field.SetTextAngle( 180 );
-            break;
-        case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-            field.SetTextAngle( 270 );
-            break;
+        case ASCH_RECORD_ORIENTATION::RIGHTWARDS: field->SetTextAngle( 0 ); break;
+        case ASCH_RECORD_ORIENTATION::UPWARDS: field->SetTextAngle( 90 ); break;
+        case ASCH_RECORD_ORIENTATION::LEFTWARDS: field->SetTextAngle( 180 ); break;
+        case ASCH_RECORD_ORIENTATION::DOWNWARDS: field->SetTextAngle( 270 ); break;
         default:
             break;
         }
-
-        component->AddField( field );
     }
 }
