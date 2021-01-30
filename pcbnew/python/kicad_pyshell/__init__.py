@@ -86,10 +86,10 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
         self.autoSaveHistory = False
         self.LoadSettings()
 
-        # in case of wxPhoenix we need to create a wxApp first and store it
-        # to prevent removal by gabage collector
+        # in case of wxPhoenix we may need to create a wxApp first and store it
+        # to prevent removal by garbage collector
         if 'phoenix' in wx.PlatformInfo:
-            self.theApp = wx.App()
+            self.theApp = wx.GetApp() or wx.App()
 
         self.crust = crust.Crust(parent=self.notebook,
                                  intro=intro, locals=namespace,
