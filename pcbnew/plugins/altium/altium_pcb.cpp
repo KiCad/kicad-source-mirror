@@ -457,6 +457,20 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         zone.second->SetPriority( 0 );
     }
 
+    // center board
+    EDA_RECT bbbox = m_board->GetBoardEdgesBoundingBox();
+
+    int w = m_board->GetPageSettings().GetWidthIU();
+    int h = m_board->GetPageSettings().GetHeightIU();
+
+    int desired_x = ( w - bbbox.GetWidth() ) / 2;
+    int desired_y = ( h - bbbox.GetHeight() ) / 2;
+
+    wxPoint movementVector( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() );
+    m_board->Move( movementVector );
+    m_board->GetDesignSettings().m_AuxOrigin += movementVector;
+    m_board->GetDesignSettings().m_GridOrigin += movementVector;
+
     // Finish Board by recalculating footprint boundingboxes
     for( FOOTPRINT* footprint : m_board->Footprints() )
         footprint->CalculateBoundingBox();
