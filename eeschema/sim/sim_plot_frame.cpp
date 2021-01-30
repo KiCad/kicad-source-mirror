@@ -437,7 +437,8 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     if( aSimCommand.IsEmpty() )
     {
         SIM_PANEL_BASE* plotPanel = currentPlotWindow();
-        if( plotPanel )
+        
+        if( plotPanel && m_plots.count( plotPanel ) != 0 )
             m_exporter->SetSimCommand( m_plots[plotPanel].m_simCommand );
     }
     else
