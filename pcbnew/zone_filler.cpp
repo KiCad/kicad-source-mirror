@@ -616,10 +616,16 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             int gap = aZone->GetThermalReliefGap( pad );
 
-            // If the pad isn't on the current layer but has a hole, knock out a thermal relief
-            // for the hole.
-            if( !pad->FlashLayer( aLayer ) && pad->GetNetCode() != aZone->GetNetCode() )
+            // If the pad is flashed to the current layer, or is on the same layer and shares a netcode, then
+            // we need to knock out the thermal relief.
+            if( pad->FlashLayer( aLayer ) || ( pad->IsOnLayer( aLayer ) && pad->GetNetCode() == aZone->GetNetCode() ) )
             {
+                addKnockout( pad, aLayer, gap, holes );
+            }
+            else
+            {
+                // If the pad isn't on the current layer but has a hole, knock out a thermal relief
+                // for the hole.
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
 
@@ -629,10 +635,6 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                     gap += pad->GetBoard()->GetDesignSettings().GetHolePlatingThickness();
 
                 pad->TransformHoleWithClearanceToPolygon( holes, gap, m_maxError, ERROR_OUTSIDE );
-            }
-            else
-            {
-                addKnockout( pad, aLayer, gap, holes );
             }
         }
     }
@@ -695,9 +697,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                     gap += extra_margin;
 
-                    // If the pad isn't on the current layer but has a hole, knock out the
-                    // hole.  If the zone and the pad are the same layer, we still need the annular ring knockout
-                    if( !aPad->FlashLayer( aLayer ) && aPad->GetNetCode() != aZone->GetNetCode() )
+                    // If the pad isn't on the current layer but has a hole, knock out the hole.
+                    if( !aPad->FlashLayer( aLayer ) )
                     {
                         if( aPad->GetDrillSize().x == 0 && aPad->GetDrillSize().y == 0 )
                             return;
