@@ -11,10 +11,10 @@
    viewBox="0 0 48 48"
    version="1.1"
    id="svg5496"
-   sodipodi:docname="icon_kicad.svg"
+   sodipodi:docname="kicad.svg"
    width="48"
    height="48"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <metadata
      id="metadata5500">
     <rdf:RDF>
@@ -53,17 +53,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1718"
-     inkscape:window-height="1100"
+     inkscape:window-width="2906"
+     inkscape:window-height="1573"
      id="namedview5498"
      showgrid="true"
      inkscape:zoom="16"
-     inkscape:cx="21.65412"
-     inkscape:cy="20.498278"
+     inkscape:cx="23.433936"
+     inkscape:cy="29.386935"
      inkscape:window-x="4301"
      inkscape:window-y="97"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g5494">
+     inkscape:current-layer="g5494"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid6065"
@@ -73,30 +74,25 @@
   </sodipodi:namedview>
   <defs
      id="defs5435">
+    <linearGradient
+       id="linearGradient1095"
+       x1="50.0093"
+       x2="50.0093"
+       y2="100"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0068402,0,0,1.0083645,-0.44546096,2.6506114)">
+      <stop
+         offset="0"
+         stop-color="#2b4bb7"
+         id="stop1091" />
+      <stop
+         offset="1"
+         stop-color="#2b2fb7"
+         id="stop1093"
+         style="stop-color:#263abb;stop-opacity:1" />
+    </linearGradient>
     <style
        id="style5390">.cls-1{fill:none;}.cls-2{isolation:isolate;}.cls-15,.cls-3{mix-blend-mode:overlay;}.cls-4{clip-path:url(#clip-path);}.cls-16,.cls-5{opacity:0.75;}.cls-5,.cls-7{mix-blend-mode:multiply;}.cls-6{clip-path:url(#clip-path-2);}.cls-7{opacity:0.6;}.cls-8{fill:url(#Безымянный_градиент_10);}.cls-9{mix-blend-mode:saturation;fill:url(#Безымянный_градиент_28);}.cls-10{clip-path:url(#clip-path-3);}.cls-11,.cls-16{fill:#fff;}.cls-12{fill:url(#Безымянный_градиент_114);}.cls-13{fill:url(#Безымянный_градиент_104);}.cls-14{fill:#ff6d00;}.cls-15{opacity:0.5;}</style>
-    <clipPath
-       id="clip-path">
-      <rect
-         class="cls-1"
-         y="123.3231"
-         width="94"
-         height="94"
-         rx="20.888901"
-         id="rect5392"
-         x="0" />
-    </clipPath>
-    <clipPath
-       id="clip-path-2">
-      <rect
-         class="cls-1"
-         x="119.6252"
-         width="100"
-         height="100"
-         rx="22.2222"
-         id="rect5395"
-         y="0" />
-    </clipPath>
     <linearGradient
        id="Безымянный_градиент_10"
        x1="50.0093"
@@ -113,22 +109,6 @@
          stop-color="#2b2fb7"
          id="stop5400" />
     </linearGradient>
-    <radialGradient
-       id="Безымянный_градиент_28"
-       cx="50.0093"
-       cy="23.271601"
-       r="28.023199"
-       gradientTransform="matrix(0,-1.0083645,1.795196,0,8.128387,76.544472)"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         offset="0"
-         stop-color="#2b4bed"
-         id="stop5403" />
-      <stop
-         offset="1"
-         stop-color="#2b2fb7"
-         id="stop5405" />
-    </radialGradient>
     <clipPath
        id="clip-path-3">
       <rect
@@ -177,34 +157,6 @@
          stop-opacity="0.6"
          id="stop5421" />
     </radialGradient>
-    <linearGradient
-       id="Безымянный_градиент_104"
-       x1="76.367302"
-       y1="17.9571"
-       x2="76.367302"
-       y2="33.4328"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         offset="0"
-         stop-color="#ff6d00"
-         id="stop5424" />
-      <stop
-         offset="0.3523"
-         stop-color="#ff8a33"
-         id="stop5426" />
-      <stop
-         offset="0.8443"
-         stop-color="#ff5c00"
-         id="stop5428" />
-      <stop
-         offset="0.9688"
-         stop-color="#ff4800"
-         id="stop5430" />
-      <stop
-         offset="1"
-         stop-color="#ff5c00"
-         id="stop5432" />
-    </linearGradient>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#Безымянный_градиент_114"
@@ -223,6 +175,17 @@
        cy="53.197102"
        r="38.302299"
        gradientTransform="matrix(1.0068402,0,0,1.0083645,-0.44546096,2.6506114)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1095"
+       id="radialGradient1089"
+       cx="49.905914"
+       cy="53.06884"
+       fx="49.905914"
+       fy="53.06884"
+       r="50.34201"
+       gradientTransform="matrix(1,0,0,1.001514,0,-0.08034606)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <title
      id="title5437">app_icon</title>
@@ -248,7 +211,7 @@
        rx="22.374205"
        id="rect5461"
        y="2.6506116"
-       style="fill:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_28);stroke-width:2.19392" />
+       style="fill:url(#radialGradient1089);fill-opacity:1.0;fill-rule:evenodd;stroke-width:2.19392" />
     <g
        class="cls-3"
        id="g5469"
