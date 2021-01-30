@@ -56,22 +56,31 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
     LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
-    LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
-    Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
+    LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
+    Dwgs_User,
+    Cmts_User,
+    Eco1_User, Eco2_User,
+    Edge_Cuts,
 
-    User_1, ZONE_LAYER_FOR( User_1 ), User_2, ZONE_LAYER_FOR( User_2 ),
-    User_3, ZONE_LAYER_FOR( User_3 ), User_4, ZONE_LAYER_FOR( User_4 ),
-    User_5, ZONE_LAYER_FOR( User_5 ), User_6, ZONE_LAYER_FOR( User_6 ),
-    User_7, ZONE_LAYER_FOR( User_7 ), User_8, ZONE_LAYER_FOR( User_8 ),
+    User_1, ZONE_LAYER_FOR( User_1 ),
+    User_2, ZONE_LAYER_FOR( User_2 ),
+    User_3, ZONE_LAYER_FOR( User_3 ),
+    User_4, ZONE_LAYER_FOR( User_4 ),
+    User_5, ZONE_LAYER_FOR( User_5 ),
+    User_6, ZONE_LAYER_FOR( User_6 ),
+    User_7, ZONE_LAYER_FOR( User_7 ),
+    User_8, ZONE_LAYER_FOR( User_8 ),
     User_9, ZONE_LAYER_FOR( User_9 ),
 
     LAYER_MOD_TEXT_FR,
     LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
 
-    LAYER_RATSNEST, LAYER_ANCHOR,
-    LAYER_VIAS_HOLES, LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-    LAYER_VIA_THROUGH, LAYER_VIA_BBLIND,
-    LAYER_VIA_MICROVIA, LAYER_PADS_TH,
+    LAYER_RATSNEST,
+    LAYER_ANCHOR,
+    LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
+    LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
+    LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA,
+    LAYER_PADS_TH,
 
     LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
     NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, ZONE_LAYER_FOR( F_Cu ),
@@ -277,11 +286,11 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), LAYER_VIAS_NETNAMES,
-                LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PADS_NETNAMES,
+                GetNetnameLayer( aLayer ), LAYER_VIA_NETNAMES,
+                LAYER_PAD_FR_NETNAMES, LAYER_PAD_BK_NETNAMES, LAYER_PAD_NETNAMES,
                 ZONE_LAYER_FOR( aLayer ),
-                LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-                LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIAS_HOLES,
+                LAYER_PADS_TH, LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
+                LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
                 LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
                 LAYER_RATSNEST, LAYER_CURSOR, LAYER_ANCHOR
@@ -315,9 +324,10 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Layers that should always have on-top attribute enabled
     const std::vector<LAYER_NUM> layers = {
-            LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIAS_HOLES,
-            LAYER_VIAS_NETNAMES,
-            LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES, LAYER_NON_PLATEDHOLES,
+            LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA, LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
+            LAYER_VIA_NETNAMES,
+            LAYER_PADS_TH, LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES,
+            LAYER_PAD_NETNAMES,
             LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
             LAYER_RATSNEST,
             LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS
@@ -364,9 +374,9 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
             // Fix up pad and via netnames to be below.  This is hacky, we need a rethink
             // of layer ordering...
-            m_view->SetLayerOrder( LAYER_PADS_NETNAMES,
+            m_view->SetLayerOrder( LAYER_PAD_NETNAMES,
                                    m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 3 );
-            m_view->SetLayerOrder( LAYER_VIAS_NETNAMES,
+            m_view->SetLayerOrder( LAYER_VIA_NETNAMES,
                                    m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
         }
     }
@@ -412,8 +422,10 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
         m_view->SetLayerVisible( i, true );
 
     // Enable some layers that are GAL specific
-    m_view->SetLayerVisible( LAYER_PADS_PLATEDHOLES, true );
-    m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
+    m_view->SetLayerVisible( LAYER_PAD_PLATEDHOLES, true );
+    m_view->SetLayerVisible( LAYER_PAD_HOLEWALLS, true );
+    m_view->SetLayerVisible( LAYER_VIA_HOLES, true );
+    m_view->SetLayerVisible( LAYER_VIA_HOLEWALLS, true );
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_RATSNEST, true );
@@ -559,12 +571,14 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 
     // Some more required layers settings
-    m_view->SetRequired( LAYER_VIAS_NETNAMES, LAYER_VIAS );
-    m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS );
+    m_view->SetRequired( LAYER_VIA_NETNAMES, LAYER_VIAS );
+    m_view->SetRequired( LAYER_PAD_NETNAMES, LAYER_PADS );
 
     // Holes can be independent of their host objects (cf: printing drill marks)
-    m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIAS );
-    m_view->SetRequired( LAYER_PADS_PLATEDHOLES, LAYER_PADS );
+    m_view->SetRequired( LAYER_VIA_HOLES, LAYER_VIAS );
+    m_view->SetRequired( LAYER_VIA_HOLEWALLS, LAYER_VIAS );
+    m_view->SetRequired( LAYER_PAD_PLATEDHOLES, LAYER_PADS );
+    m_view->SetRequired( LAYER_PAD_HOLEWALLS, LAYER_PADS );
     m_view->SetRequired( LAYER_NON_PLATEDHOLES, LAYER_PADS );
 
     // Via visibility

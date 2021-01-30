@@ -43,8 +43,12 @@
 #include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <widgets/msgpanel.h>
+#include <pcb_painter.h>
 
 #include <memory>
+
+using KIGFX::PCB_PAINTER;
+using KIGFX::PCB_RENDER_SETTINGS;
 
 PAD::PAD( FOOTPRINT* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
@@ -1141,7 +1145,10 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
     // These 2 types of pads contain a hole
     if( m_attribute == PAD_ATTRIB_PTH )
-        aLayers[aCount++] = LAYER_PADS_PLATEDHOLES;
+    {
+        aLayers[aCount++] = LAYER_PAD_PLATEDHOLES;
+        aLayers[aCount++] = LAYER_PAD_HOLEWALLS;
+    }
 
     if( m_attribute == PAD_ATTRIB_NPTH )
         aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
@@ -1150,7 +1157,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     {
         // Multi layer pad
         aLayers[aCount++] = LAYER_PADS_TH;
-        aLayers[aCount++] = LAYER_PADS_NETNAMES;
+        aLayers[aCount++] = LAYER_PAD_NETNAMES;
     }
     else if( IsOnLayer( F_Cu ) )
     {
@@ -1159,7 +1166,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
         if( m_attribute == PAD_ATTRIB_PTH )
-            aLayers[aCount++] = LAYER_PADS_NETNAMES;
+            aLayers[aCount++] = LAYER_PAD_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_FR_NETNAMES;
     }
@@ -1170,7 +1177,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
         if( m_attribute == PAD_ATTRIB_PTH )
-            aLayers[aCount++] = LAYER_PADS_NETNAMES;
+            aLayers[aCount++] = LAYER_PAD_NETNAMES;
         else
             aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
     }
@@ -1211,11 +1218,22 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
 double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    constexpr double HIDE = std::numeric_limits<double>::max();
+
+    PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
+    PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+    BOARD*               board = GetBoard();
+
+    if( board && aLayer == LAYER_PADS_TH )
+    {
+        LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+        if( !FlashLayer( visible ) )
+            return HIDE;
+    }
+
     if( aView->GetPrintMode() > 0 )  // In printing mode the pad is always drawable
         return 0.0;
-
-    constexpr double HIDE = std::numeric_limits<double>::max();
-    BOARD* board = GetBoard();
 
     // Meta control for hiding all pads
     if( !aView->IsLayerVisible( LAYER_PADS ) )
@@ -1224,7 +1242,9 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB_PTH || GetAttribute() == PAD_ATTRIB_NPTH )
          && !aView->IsLayerVisible( LAYER_PADS_TH ) )
+    {
         return HIDE;
+    }
 
     if( !IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_FR ) )
         return HIDE;
@@ -1238,18 +1258,16 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
 
-    if( board )
-    {
-        LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
-
-        // Don't draw the copper ring of a PTH if none of the copper layers are visible
-        if( aLayer == LAYER_PADS_TH && ( LSET::AllCuMask() & GetLayerSet() & visible ).none() )
-            return HIDE;
-    }
-
-    // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
+        // Hide netnames unless pad is flashed to a high-contrast layer
+        if( renderSettings->GetHighContrast() )
+        {
+            if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
+                return HIDE;
+        }
+
+        // Netnames will be shown only if zoom is appropriate
         int divisor = std::min( GetBoundingBox().GetWidth(), GetBoundingBox().GetHeight() );
 
         // Pad sizes can be zero briefly when someone is typing a number like "0.5"
@@ -1260,7 +1278,16 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return ( double ) Millimeter2iu( 5 ) / divisor;
     }
 
-    // Other layers are shown without any conditions
+    if( aLayer == LAYER_PADS_TH
+            && GetShape() != PAD_SHAPE_CUSTOM
+            && GetSizeX() <= GetDrillSizeX()
+            && GetSizeY() <= GetDrillSizeY() )
+    {
+        // Don't tweak the drawing code with a degenerate pad
+        return HIDE;
+    }
+
+    // Passed all tests; show.
     return 0.0;
 }
 

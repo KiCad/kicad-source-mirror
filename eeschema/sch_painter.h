@@ -138,13 +138,7 @@ public:
     /// @copydoc PAINTER::Draw()
     virtual bool Draw( const VIEW_ITEM*, int ) override;
 
-    /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) override
-    {
-        m_schSettings = *static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
-    }
-
-    /// @copydoc PAINTER::GetAdapter()
+    /// @copydoc PAINTER::GetSettings()
     virtual SCH_RENDER_SETTINGS* GetSettings() override
     {
         return &m_schSettings;

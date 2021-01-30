@@ -160,7 +160,8 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             switch( layer )
             {
             case LAYER_PADS_TH:
-            case LAYER_PADS_PLATEDHOLES:
+            case LAYER_PAD_PLATEDHOLES:
+            case LAYER_PAD_HOLEWALLS:
             case LAYER_PAD_FR:
             case LAYER_PAD_BK:
                 draw = true;

@@ -216,8 +216,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
     {
         // Enable hole layers to draw drill marks
-        for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-                                        LAYER_VIAS_HOLES } )
+        for( GAL_LAYER_ID holeLayer : { LAYER_PAD_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
+                                        LAYER_VIA_HOLES } )
         {
             aView.SetLayerVisible( holeLayer, true );
             aView.SetTopLayer( holeLayer, true );
@@ -241,17 +241,17 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
     case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
         painter.SetDrillMarks( false, Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) );
 
-        painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_PAD_PLATEDHOLES, COLOR4D::BLACK );
         painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );
-        painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_VIA_HOLES, COLOR4D::BLACK );
         break;
 
     case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
         painter.SetDrillMarks( true );
 
-        painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_PAD_PLATEDHOLES, COLOR4D::BLACK );
         painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::BLACK );
-        painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::BLACK );
+        painter.GetSettings()->SetLayerColor( LAYER_VIA_HOLES, COLOR4D::BLACK );
         break;
     }
 

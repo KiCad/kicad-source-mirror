@@ -39,6 +39,10 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
 #include <drc/drc_engine.h>
+#include <pcb_painter.h>
+
+using KIGFX::PCB_PAINTER;
+using KIGFX::PCB_RENDER_SETTINGS;
 
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
@@ -530,12 +534,22 @@ double TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
+    PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
+    PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
     if( !aView->IsLayerVisible( LAYER_TRACKS ) )
         return HIDE;
 
-    // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
+        // Hide netnames on dimmed tracks
+        if( renderSettings->GetHighContrast() )
+        {
+            if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
+                return HIDE;
+        }
+
+        // Netnames will be shown only if zoom is appropriate
         return ( double ) Millimeter2iu( 4 ) / ( m_Width + 1 );
     }
 
@@ -559,18 +573,20 @@ const BOX2I TRACK::ViewBBox() const
 
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aLayers[0] = LAYER_VIAS_HOLES;
-    aLayers[1] = LAYER_VIAS_NETNAMES;
-    aCount = 3;
+    aLayers[0] = LAYER_VIA_HOLES;
+    aLayers[1] = LAYER_VIA_HOLEWALLS;
+    aLayers[2] = LAYER_VIA_NETNAMES;
 
     // Just show it on common via & via holes layers
     switch( GetViaType() )
     {
-    case VIATYPE::THROUGH:      aLayers[2] = LAYER_VIA_THROUGH;  break;
-    case VIATYPE::BLIND_BURIED: aLayers[2] = LAYER_VIA_BBLIND;   break;
-    case VIATYPE::MICROVIA:     aLayers[2] = LAYER_VIA_MICROVIA; break;
-    default:                    aLayers[2] = LAYER_GP_OVERLAY;   break;
+    case VIATYPE::THROUGH:      aLayers[3] = LAYER_VIA_THROUGH;  break;
+    case VIATYPE::BLIND_BURIED: aLayers[3] = LAYER_VIA_BBLIND;   break;
+    case VIATYPE::MICROVIA:     aLayers[3] = LAYER_VIA_MICROVIA; break;
+    default:                    aLayers[3] = LAYER_GP_OVERLAY;   break;
     }
+
+    aCount = 4;
 }
 
 
@@ -578,9 +594,21 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = (double)std::numeric_limits<double>::max();
 
-    // Netnames will be shown only if zoom is appropriate
+    PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
+    PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
     if( IsNetnameLayer( aLayer ) )
+    {
+        // Show netnames only if via is flashed to a high-contrast layer
+        if( renderSettings->GetHighContrast() )
+        {
+            if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
+                return HIDE;
+        }
+
+        // Netnames will be shown only if zoom is appropriate
         return m_Width == 0 ? HIDE : ( (double)Millimeter2iu( 10 ) / m_Width );
+    }
 
     bool onVisibleLayer = false;
 

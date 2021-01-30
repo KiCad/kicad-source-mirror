@@ -164,8 +164,8 @@ enum NETNAMES_LAYER_ID: int
 
     LAYER_PAD_FR_NETNAMES,
     LAYER_PAD_BK_NETNAMES,
-    LAYER_PADS_NETNAMES,
-    LAYER_VIAS_NETNAMES,
+    LAYER_PAD_NETNAMES,
+    LAYER_VIA_NETNAMES,
 
     NETNAMES_LAYER_ID_END
 };
@@ -200,8 +200,10 @@ enum GAL_LAYER_ID: int
     LAYER_MOD_REFERENCES,       ///< show footprints references (when texts are visibles)
     LAYER_TRACKS,
     LAYER_PADS_TH,              ///< multilayer pads, usually with holes
-    LAYER_PADS_PLATEDHOLES,     ///< to draw pad holes (plated)
-    LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
+    LAYER_PAD_PLATEDHOLES,      ///< to draw pad holes (plated)
+    LAYER_PAD_HOLEWALLS,
+    LAYER_VIA_HOLES,            ///< to draw via holes (pad holes do not use this layer)
+    LAYER_VIA_HOLEWALLS,
     LAYER_DRC_ERROR,            ///< layer for drc markers with SEVERITY_ERROR
     LAYER_DRC_WARNING,          ///< layer for drc markers with SEVERITY_WARNING
     LAYER_DRC_EXCLUSION,        ///< layer for drc markers which have been individually excluded
@@ -215,7 +217,6 @@ enum GAL_LAYER_ID: int
     LAYER_DRAW_BITMAPS,         ///< to handle and draw images bitmaps
 
     /// This is the end of the layers used for visibility bit masks in Pcbnew
-    /// There can be at most 32 layers above here.
     GAL_LAYER_ID_BITMASK_END,
 
     LAYER_WORKSHEET_PAGE1,      ///< for pageLayout editor previewing
@@ -422,11 +423,13 @@ wxString LayerName( int aLayer );
 // from a dialog, but have a visibility control flag.
 // Here is a mask to set them visible, to be sure they are displayed
 // after loading a board for instance
-#define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_RATSNEST ) ) )
+#define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PAD_PLATEDHOLES ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_PAD_HOLEWALLS ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_VIA_HOLES ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_VIA_HOLEWALLS ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) +\
+                                 ( 1 << GAL_LAYER_INDEX( LAYER_RATSNEST ) ) )
 
 
 /// A sequence of layers, a sequence provides a certain order.
@@ -901,13 +904,13 @@ inline int GetNetnameLayer( int aLayer )
     if( IsCopperLayer( aLayer ) )
         return NETNAMES_LAYER_INDEX( aLayer );
     else if( aLayer == LAYER_PADS_TH )
-        return LAYER_PADS_NETNAMES;
+        return LAYER_PAD_NETNAMES;
     else if( aLayer == LAYER_PAD_FR )
         return LAYER_PAD_FR_NETNAMES;
     else if( aLayer == LAYER_PAD_BK )
         return LAYER_PAD_BK_NETNAMES;
     else if( aLayer >= LAYER_VIA_MICROVIA && aLayer <= LAYER_VIA_THROUGH )
-        return LAYER_VIAS_NETNAMES;
+        return LAYER_VIA_NETNAMES;
 
     // Fallback
     return Cmts_User;
@@ -949,12 +952,14 @@ inline bool IsNetCopperLayer( LAYER_NUM aLayer )
 {
     static std::set<LAYER_NUM> netCopperLayers =
             {
-                LAYER_PAD_FR,
-                LAYER_PAD_BK,
-                LAYER_PADS_TH,
-                LAYER_VIA_THROUGH,
-                LAYER_VIA_BBLIND,
-                LAYER_VIA_MICROVIA
+                    LAYER_PAD_FR,
+                    LAYER_PAD_BK,
+                    LAYER_PADS_TH,
+                    LAYER_PAD_HOLEWALLS,
+                    LAYER_VIA_THROUGH,
+                    LAYER_VIA_BBLIND,
+                    LAYER_VIA_MICROVIA,
+                    LAYER_VIA_HOLEWALLS
             };
 
     return IsCopperLayer( aLayer ) || netCopperLayers.count( aLayer );

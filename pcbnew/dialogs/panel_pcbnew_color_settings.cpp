@@ -354,6 +354,7 @@ std::string g_previewBoard =
 std::set<int> g_excludedLayers =
         {
             LAYER_VIAS,
+            LAYER_VIA_HOLEWALLS,
             LAYER_MOD_FR,
             LAYER_MOD_BK,
             LAYER_MOD_VALUES,
@@ -361,7 +362,8 @@ std::set<int> g_excludedLayers =
             LAYER_TRACKS,
             LAYER_MOD_TEXT_FR,
             LAYER_MOD_TEXT_BK,
-            LAYER_PADS_PLATEDHOLES,
+            LAYER_PAD_PLATEDHOLES,
+            LAYER_PAD_HOLEWALLS,
             LAYER_GP_OVERLAY,
             LAYER_DRAW_BITMAPS,
             LAYER_MARKER_SHADOWS

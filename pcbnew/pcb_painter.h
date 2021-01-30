@@ -243,13 +243,7 @@ class PCB_PAINTER : public PAINTER
 public:
     PCB_PAINTER( GAL* aGal );
 
-    /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) override
-    {
-        m_pcbSettings = *static_cast<const PCB_RENDER_SETTINGS*>( aSettings );
-    }
-
-    /// @copydoc PAINTER::GetAdapter()
+    /// @copydoc PAINTER::GetSettings()
     virtual PCB_RENDER_SETTINGS* GetSettings() override
     {
         return &m_pcbSettings;

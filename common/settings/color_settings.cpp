@@ -134,12 +134,12 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.no_connect",               LAYER_NO_CONNECTS        );
     CLR( "board.pad_back",                 LAYER_PAD_BK             );
     CLR( "board.pad_front",                LAYER_PAD_FR             );
-    CLR( "board.pad_plated_hole",          LAYER_PADS_PLATEDHOLES   );
+    CLR( "board.pad_plated_hole",          LAYER_PAD_PLATEDHOLES    );
     CLR( "board.pad_through_hole",         LAYER_PADS_TH            );
     CLR( "board.plated_hole",              LAYER_NON_PLATEDHOLES    );
     CLR( "board.ratsnest",                 LAYER_RATSNEST           );
     CLR( "board.via_blind_buried",         LAYER_VIA_BBLIND         );
-    CLR( "board.via_hole",                 LAYER_VIAS_HOLES         );
+    CLR( "board.via_hole",                 LAYER_VIA_HOLES          );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
     CLR( "board.via_through",              LAYER_VIA_THROUGH        );
     CLR( "board.worksheet",                LAYER_WORKSHEET          );
@@ -220,7 +220,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     registerMigration( 1, 2,
             [&]()
             {
-                // Fix LAYER_VIAS_HOLES color - before version 2, this setting had no effect
+                // Fix LAYER_VIA_HOLES color - before version 2, this setting had no effect
                 nlohmann::json::json_pointer ptr( "/board/via_hole");
 
                 ( *this )[ptr] = COLOR4D( 0.5, 0.4, 0, 0.8 ).ToWxString( wxC2S_CSS_SYNTAX );

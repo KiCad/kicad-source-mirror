@@ -65,8 +65,10 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_F
     for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
     {
         if( id == LAYER_VIAS
-         || id == LAYER_PADS_PLATEDHOLES
-         || id == LAYER_VIAS_HOLES )
+         || id == LAYER_VIA_HOLES
+         || id == LAYER_VIA_HOLEWALLS
+         || id == LAYER_PAD_PLATEDHOLES
+         || id == LAYER_PAD_HOLEWALLS )
         {
             continue;
         }

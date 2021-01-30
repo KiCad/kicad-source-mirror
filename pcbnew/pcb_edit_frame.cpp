@@ -977,33 +977,21 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
-    // Pads and vias on a restricted layer set must be redrawn when the active layer is changed
     GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-            []( KIGFX::VIEW_ITEM* aItem ) -> bool
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
                 if( VIA* via = dynamic_cast<VIA*>( aItem ) )
                 {
+                    // Vias on a restricted layer set must be redrawn when the active layer
+                    // is changed
                     return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
                              via->GetViaType() == VIATYPE::MICROVIA );
                 }
                 else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
                 {
-                    // TODO: this could be optimized if the pad painter is changed
-                    // See https://gitlab.com/kicad/code/kicad/-/issues/6912
-                    return !!pad;
-                }
-
-                return false;
-            } );
-
-    // Clearances could be layer-dependent so redraw them when the active layer is changed
-
-    if( GetDisplayOptions().m_DisplayPadIsol )
-    {
-        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
-                {
-                    if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                    // Clearances could be layer-dependent so redraw them when the active layer
+                    // is changed
+                    if( GetDisplayOptions().m_DisplayPadIsol )
                     {
                         // Round-corner rects are expensive to draw, but are mostly found on
                         // SMD pads which only need redrawing on an active-to-not-active
@@ -1019,26 +1007,20 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
                         return true;
                     }
-
-                    return false;
-                } );
-    }
-
-    if( GetDisplayOptions().m_ShowTrackClearanceMode )
-    {
-        GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                }
+                else if( TRACK* track = dynamic_cast<TRACK*>( aItem ) )
                 {
-                    if( TRACK* track = dynamic_cast<TRACK*>( aItem ) )
+                    // Clearances could be layer-dependent so redraw them when the active layer
+                    // is changed
+                    if( GetDisplayOptions().m_ShowTrackClearanceMode )
                     {
-                        // Tracks aren't particularly expensive to draw, but it's an easy
-                        // check.
+                        // Tracks aren't particularly expensive to draw, but it's an easy check.
                         return track->IsOnLayer( oldLayer ) || track->IsOnLayer( aLayer );
                     }
+                }
 
-                    return false;
-                } );
-    }
+                return false;
+            } );
 
     GetCanvas()->Refresh();
 }

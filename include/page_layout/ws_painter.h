@@ -107,13 +107,7 @@ public:
 
     void DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const;
 
-    /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) override
-    {
-        m_renderSettings = *static_cast<const WS_RENDER_SETTINGS*>( aSettings );
-    }
-
-    /// @copydoc PAINTER::GetAdapter()
+    /// @copydoc PAINTER::GetSettings()
     virtual RENDER_SETTINGS* GetSettings() override { return &m_renderSettings; }
 
 private:

@@ -169,13 +169,7 @@ class GERBVIEW_PAINTER : public PAINTER
 public:
     GERBVIEW_PAINTER( GAL* aGal );
 
-    /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) override
-    {
-        m_gerbviewSettings = *static_cast<const GERBVIEW_RENDER_SETTINGS*>( aSettings );
-    }
-
-    /// @copydoc PAINTER::GetAdapter()
+    /// @copydoc PAINTER::GetSettings()
     virtual GERBVIEW_RENDER_SETTINGS* GetSettings() override
     {
         return &m_gerbviewSettings;
