@@ -123,9 +123,9 @@ public:
 
     static int32_t ConvertToKicadUnit( const double aValue )
     {
-        double int_limit = std::numeric_limits<int>::max() * 0.7071;    // 0.7071 = roughly 1/sqrt(2)
+        const double int_limit = ( std::numeric_limits<int>::max() - 1 ) / 2.54;
 
-        return KiROUND( Clamp<double>( -int_limit, aValue * 2.54, int_limit ) );
+        return KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
     }
 
     static int PropertiesReadInt(

@@ -156,48 +156,21 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
 {
     const wxString& value = PropertiesReadString( aProperties, aKey, aDefault );
 
-    size_t decimal_point = value.find( '.' );
-    size_t value_end     = value.find_first_not_of( "+-0123456789." );
-
-    wxString before_decimal_str   = value.Left( decimal_point );
-    int      before_decimal       = wxAtoi( before_decimal_str );
-    int      after_decimal        = 0;
-    size_t   after_decimal_digits = 0;
-    if( decimal_point != wxString::npos )
+    wxString prefix;
+    if( !value.EndsWith( "mil", &prefix ) )
     {
-        if( value_end != wxString::npos )
-        {
-            after_decimal_digits = value_end - ( decimal_point + 1 );
-        }
-        else
-        {
-            after_decimal_digits = value.size() - ( decimal_point + 1 ); // TODO: correct?
-        }
-        wxString after_decimal_str = value.Mid( decimal_point + 1, after_decimal_digits );
-        after_decimal              = wxAtoi( after_decimal_str );
+        wxLogError( wxString::Format( "Unit '%s' does not end with mil", value ) );
+        return 0;
     }
 
-    if( value.length() > 3 && value.compare( value.length() - 3, 3, "mil" ) == 0 )
+    double mils;
+    if( !prefix.ToCDouble( &mils ) )
     {
-        // ensure after_decimal is formatted to base 1000
-        int after_decimal_1000;
-        if( after_decimal_digits <= 4 )
-        {
-            after_decimal_1000 =
-                    static_cast<int>( after_decimal * std::pow( 10, 4 - after_decimal_digits ) );
-        }
-        else
-        {
-            after_decimal_1000 =
-                    static_cast<int>( after_decimal / std::pow( 10, after_decimal_digits - 4 ) );
-        }
-
-        int32_t mils = before_decimal * 10000 + after_decimal_1000;
-        return ConvertToKicadUnit( mils );
+        wxLogError( wxString::Format( "Cannot convert '%s' into double", prefix ) );
+        return 0;
     }
 
-    wxLogError( wxString::Format( "Unit '%s' does not end with mils" ), value );
-    return 0;
+    return ConvertToKicadUnit( mils * 10000 );
 }
 
 wxString ALTIUM_PARSER::PropertiesReadString( const std::map<wxString, wxString>& aProperties,
