@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -99,7 +99,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard, ::PROJECT* aProject )
     loadTemplates();
     loadCoppers();
     loadNets();
-    loadTextVariables();    
+    loadTextVariables();
 
     if( Layout.Trunks.size() > 0 )
     {
@@ -200,7 +200,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     {
         LAYER cadstarLayer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
 
-        if( cadstarLayer.Type == LAYER_TYPE::JUMPERLAYER || 
+        if( cadstarLayer.Type == LAYER_TYPE::JUMPERLAYER ||
             cadstarLayer.Type == LAYER_TYPE::POWER ||
             cadstarLayer.Type == LAYER_TYPE::ELEC )
         {
@@ -275,7 +275,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     stackup.BuildDefaultStackupList( &mBoard->GetDesignSettings(), totalCopperLayers );
 
     size_t stackIndex = 0;
-    
+
     for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
     {
         if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER )
@@ -349,7 +349,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
                     if( copperLayer.Embedding == EMBEDDING::ABOVE )
                         item->SetTypeName( KEY_CORE );
-                    else 
+                    else
                         item->SetTypeName( KEY_PREPREG );
                 }
                 else
@@ -377,10 +377,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             for( LAYER_ID constructionLaID : layerBlock.ConstructionLayers )
             {
                 LAYER dielectricLayer = Assignments.Layerdefs.Layers.at( constructionLaID );
-                
+
                 if( dielectricSublayer )
                     item->AddDielectricPrms( dielectricSublayer );
-                
+
                 initStackupItem( dielectricLayer, item, dielectricSublayer );
                 mBoard->SetLayerName( item->GetBrdLayerId(), item->GetLayerName() );
                 mLayermap.insert( { dielectricLayer.ID, item->GetBrdLayerId() } );
@@ -406,8 +406,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             WARN
         };
 
-        auto selectLayerID = 
-            [&]( PCB_LAYER_ID aFront, PCB_LAYER_ID aBack, LOG_LEVEL aLogType ) 
+        auto selectLayerID =
+            [&]( PCB_LAYER_ID aFront, PCB_LAYER_ID aBack, LOG_LEVEL aLogType )
             {
                 if( numElecAndPowerLayers > 0 )
                     kicadLayerID = aBack;
@@ -443,7 +443,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
         case LAYER_TYPE::JUMPERLAYER:
         case LAYER_TYPE::ELEC:
-        case LAYER_TYPE::POWER: 
+        case LAYER_TYPE::POWER:
             ++numElecAndPowerLayers;
             KI_FALLTHROUGH;
         case LAYER_TYPE::CONSTRUCTION:
@@ -467,7 +467,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
                 // Generic Non-electrical layer (older CADSTAR versions).
-                // Attempt to detect technical layers by string matching.                
+                // Attempt to detect technical layers by string matching.
                 if( layerName.Contains( "glue" ) || layerName.Contains( "adhesive" ) )
                 {
                     selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes, LOG_LEVEL::MSG );
@@ -1135,7 +1135,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
 
                 mBoard->Add( dimension, ADD_MODE::APPEND );
                 applyDimensionSettings( csDim, dimension );
-                
+
                 dimension->SetExtensionHeight(
                         getKiCadLength( csDim.ExtensionLineParams.Overshoot ) );
 
@@ -1203,21 +1203,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
 
                 /*
                  * In CADSTAR, the resulting shape orientation of the leader dimension depends on
-                 * on the positions of the #Start (S) and #End (E) points as shown below. In the 
+                 * on the positions of the #Start (S) and #End (E) points as shown below. In the
                  * diagrams below, the leader angle (angRad) is represented by HEV
-                 * 
-                 * Orientation 1: (orientX = -1,  |     Orientation 2: (orientX = 1, 
+                 *
+                 * Orientation 1: (orientX = -1,  |     Orientation 2: (orientX = 1,
                  *                 orientY = 1)   |                     orientY = 1)
                  *                                |
                  * --------V                      |               V----------
-                 *          \                     |              / 
-                 *           \                    |             / 
+                 *          \                     |              /
+                 *           \                    |             /
                  * H         _E/                  |           \E_           H
-                 *                                | 
+                 *                                |
                  *                     S          |     S
                  *                                |
-                 *                               
-                 * Orientation 3: (orientX = -1,  |     Orientation 4: (orientX = 1, 
+                 *
+                 * Orientation 3: (orientX = -1,  |     Orientation 4: (orientX = 1,
                  *                 orientY = -1)  |                     orientY = -1)
                  *                                |
                  *                     S          |     S
@@ -1227,16 +1227,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                  *            /                   |             \
                  * ----------V                    |              V-----------
                  *                                |
-                 * 
+                 *
                  * Corner cases:
-                 * 
+                 *
                  * It is not possible to generate a leader object with start and end point being
                  * identical. Assume Orientation 2 if start and end points are identical.
-                 * 
+                 *
                  * If start and end points are aligned vertically (i.e. S.x == E.x):
                  * - If E.y > S.y - Orientation 2
                  * - If E.y < S.y - Orientation 4
-                 * 
+                 *
                  * If start and end points are aligned horitontally (i.e. S.y == E.y):
                  * - If E.x > S.x - Orientation 2
                  * - If E.x < S.x - Orientation 1
@@ -1826,10 +1826,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
 {
-    auto findAndReplaceTextField = 
-        [&]( TEXT_FIELD_NAME aField, wxString aValue ) 
+    auto findAndReplaceTextField =
+        [&]( TEXT_FIELD_NAME aField, wxString aValue )
         {
-            if( mContext.TextFieldToValuesMap.find( aField ) != 
+            if( mContext.TextFieldToValuesMap.find( aField ) !=
                 mContext.TextFieldToValuesMap.end() )
             {
                 if( mContext.TextFieldToValuesMap.at( aField ) != aValue )
@@ -1841,7 +1841,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
             }
             else
             {
-                mContext.TextFieldToValuesMap.insert( { aField, aValue } );                
+                mContext.TextFieldToValuesMap.insert( { aField, aValue } );
             }
 
             return true;
@@ -3007,7 +3007,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
                                            "applied instead." ),
                                         aCadstarDim.ID ) );
         KI_FALLTHROUGH;
-    case UNITS::MM: 
+    case UNITS::MM:
         aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
         break;
 
