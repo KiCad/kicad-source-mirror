@@ -119,7 +119,7 @@ public:
     void SetEndY( int aY ) { m_End.y = aY; }
 
     int GetEndX() const { return m_End.x; }
-    int GetEndY() const { return m_End.x; }
+    int GetEndY() const { return m_End.y; }
 
     /// Return the selected endpoint (start or end)
     const wxPoint& GetEndPoint( ENDPOINT_T aEndPoint ) const
