@@ -199,7 +199,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::copy );
     editMenu->Add( ACTIONS::paste );
     editMenu->Add( ACTIONS::doDelete );
-    editMenu->Add( ACTIONS::duplicate );
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::selectAll );

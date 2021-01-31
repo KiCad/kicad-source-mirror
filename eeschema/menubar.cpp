@@ -140,7 +140,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::paste );
     editMenu->Add( ACTIONS::pasteSpecial );
     editMenu->Add( ACTIONS::doDelete );
-    editMenu->Add( ACTIONS::duplicate );
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::selectAll );

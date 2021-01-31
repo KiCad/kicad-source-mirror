@@ -657,8 +657,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
     mgr->SetConditions( PCB_ACTIONS::deselectNet,
                         ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
-    mgr->SetConditions( PCB_ACTIONS::selectConnection,
-                        ENABLE( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,
                         ENABLE( SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T ) ) );
 
