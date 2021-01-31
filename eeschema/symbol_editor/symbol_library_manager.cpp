@@ -45,18 +45,13 @@ SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
 }
 
 
-void SYMBOL_LIBRARY_MANAGER::Sync( bool aForce,
+void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
                                    std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     m_logger.Activate();
     {
-        int libTableHash = symTable()->GetModifyHash();
-
-        if( aForce || m_syncHash != libTableHash )
-        {
-            getAdapter()->Sync( aForce, aProgressCallback );
-            m_syncHash = libTableHash;
-        }
+        getAdapter()->Sync( aForceRefresh, aProgressCallback );
+        m_syncHash = symTable()->GetModifyHash();
     }
     m_logger.Deactivate();
 }

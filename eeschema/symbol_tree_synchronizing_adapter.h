@@ -41,8 +41,8 @@ public:
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
-    void Sync( bool aForce = false,
-               std::function<void( int, int, const wxString&)> aProgressCallback = [](int, int, const wxString&){} );
+    void Sync( const wxString& aForceRefresh,
+               std::function<void( int, int, const wxString&)> aProgressCallback );
 
     int GetLibrariesCount() const override;
 

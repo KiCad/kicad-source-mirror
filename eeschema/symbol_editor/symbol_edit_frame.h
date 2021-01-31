@@ -292,7 +292,7 @@ public:
      * Synchronize the library manager to the symbol library table, and then the symbol tree
      * to the library manager.  Optionally displays a progress dialog.
      */
-    void SyncLibraries( bool aShowProgress );
+    void SyncLibraries( bool aShowProgress, const wxString& aForceRefresh = wxEmptyString );
 
     /**
      * Filter, sort, and redisplay the library tree.

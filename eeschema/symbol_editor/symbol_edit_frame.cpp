@@ -900,7 +900,7 @@ wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 }
 
 
-void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress )
+void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForceRefresh )
 {
     LIB_ID selected;
 
@@ -912,15 +912,19 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress )
         APP_PROGRESS_DIALOG progressDlg( _( "Loading Symbol Libraries" ), wxEmptyString,
                                          m_libMgr->GetAdapter()->GetLibrariesCount(), this );
 
-        m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName )
-        {
-            progressDlg.Update( progress, wxString::Format( _( "Loading library \"%s\"" ),
-                                                            libName ) );
-        } );
+        m_libMgr->Sync( aForceRefresh,
+                [&]( int progress, int max, const wxString& libName )
+                {
+                    progressDlg.Update( progress,
+                                        wxString::Format( _( "Loading library '%s'" ), libName ) );
+                } );
     }
     else
     {
-        m_libMgr->Sync( true );
+        m_libMgr->Sync( aForceRefresh,
+                [&]( int progress, int max, const wxString& libName )
+                {
+                } );
     }
 
     if( m_treePane )
@@ -1355,9 +1359,8 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg;
-        msg.Printf( _( "Error saving %s symbol library table." ),
-                    ( aScope == GLOBAL_LIB_TABLE ) ? _( "global" ) : _( "project" ) );
+        wxString msg = aScope == GLOBAL_LIB_TABLE ? _( "Error saving global library table." )
+                                                  : _( "Error saving project library table." );
 
         wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         dlg.SetExtendedMessage( ioe.What() );
@@ -1411,9 +1414,8 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg;
-        msg.Printf( _( "Error saving %s symbol library table." ),
-                    ( isGlobalTable ) ? _( "global" ) : _( "project" ) );
+        wxString msg = isGlobalTable ? _( "Error saving global library table." )
+                                     : _( "Error saving project library table." );
 
         wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         dlg.SetExtendedMessage( ioe.What() );

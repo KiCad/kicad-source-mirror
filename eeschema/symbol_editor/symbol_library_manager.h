@@ -105,11 +105,8 @@ public:
     /**
      * Updates the #SYMBOL_LIBRARY_MANAGER data to synchronize with Symbol Library Table.
      */
-    void Sync( bool aForce = false,
-               std::function<void( int, int, const wxString& )> aProgressCallback
-                    = []( int, int, const wxString& )
-                      {
-                      } );
+    void Sync( const wxString& aForceRefresh,
+               std::function<void( int, int, const wxString& )> aProgressCallback );
 
     int GetHash() const;
 

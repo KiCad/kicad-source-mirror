@@ -553,6 +553,7 @@ void SYMBOL_EDIT_FRAME::SaveLibraryAs()
     m_treePane->GetLibTree()->RefreshLibTree();
 }
 
+
 void SYMBOL_EDIT_FRAME::SaveSymbolAs()
 {
     wxCHECK( getTargetLibId().IsValid(), /* void */ );
@@ -1033,11 +1034,13 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     {
         bool resyncLibTree = false;
         wxString originalLibNickname = getTargetLib();
+        wxString forceRefresh;
 
         switch( type )
         {
         case SAVE_AS_HELPER::SAH_TYPE::REPLACE_TABLE_ENTRY:
             resyncLibTree = replaceLibTableEntry( originalLibNickname, fn.GetFullPath() );
+            forceRefresh = originalLibNickname;
             break;
 
         case SAVE_AS_HELPER::SAH_TYPE::ADD_GLOBAL_TABLE_ENTRY:
@@ -1056,7 +1059,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         if( resyncLibTree )
         {
             FreezeSearchTree();
-            SyncLibraries( true );
+            SyncLibraries( true, forceRefresh );
             ThawSearchTree();
         }
     }

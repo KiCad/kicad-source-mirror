@@ -63,17 +63,12 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem
 
 #define PROGRESS_INTERVAL_MILLIS 120
 
-void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
-        std::function<void( int, int, const wxString& )> aProgressCallback )
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
+                                              std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     wxLongLong nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
-    int libMgrHash = m_libMgr->GetHash();
-
-    if( !aForce && m_lastSyncHash == libMgrHash )
-        return;
-
-    m_lastSyncHash = libMgrHash;
+    m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();
 
     // Process already stored libraries
@@ -87,18 +82,19 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
-        // There is a bug in SYMBOL_LIBRARY_MANAGER::LibraryExists() that uses the buffered modified
-        // libraries before the symbol library table which prevents the library from being
-        // removed from the tree control.
+        // There is a bug in SYMBOL_LIBRARY_MANAGER::LibraryExists() that uses the buffered
+        // modified libraries before the symbol library table which prevents the library from
+        // being removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )
-          || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true )
-          || ( m_frame->Prj().SchSymbolLibTable()->FindRow( name, true ) !=
-               m_frame->Prj().SchSymbolLibTable()->FindRow( name, false ) ) )
+              || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true )
+              || m_frame->Prj().SchSymbolLibTable()->FindRow( name, true ) !=
+                                    m_frame->Prj().SchSymbolLibTable()->FindRow( name, false )
+              || name == aForceRefresh )
         {
             it = deleteLibrary( it );
             continue;
         }
-        else if( aForce || m_libMgr->GetLibraryHash( name ) != m_libHashes[name] )
+        else
         {
             updateLibrary( *(LIB_TREE_NODE_LIB*) it->get() );
         }
