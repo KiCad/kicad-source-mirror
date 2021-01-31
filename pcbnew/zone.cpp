@@ -1008,25 +1008,19 @@ void ZONE::HatchBorder()
         // Iterate through all vertices
         for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
         {
-            double  x, y, x2, y2;
-            int     ok;
+            double  x, y;
+            bool    ok;
 
             SEG segment = *iterator;
 
             ok = FindLineSegmentIntersection( a, slope,
                                               segment.A.x, segment.A.y,
                                               segment.B.x, segment.B.y,
-                                              &x, &y, &x2, &y2 );
+                                              x, y );
 
               if( ok )
               {
                   VECTOR2I point( KiROUND( x ), KiROUND( y ) );
-                  pointbuffer.push_back( point );
-              }
-
-              if( ok == 2 )
-              {
-                  VECTOR2I point( KiROUND( x2 ), KiROUND( y2 ) );
                   pointbuffer.push_back( point );
               }
 

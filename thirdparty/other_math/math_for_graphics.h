@@ -6,11 +6,11 @@
  * find intersection between line y = a + bx and line segment (xi,yi) to (xf,yf)
  * if b > DBL_MAX/10, assume vertical line at x = a
  * return false if no intersection or true if intersect
- * return coords of intersections in *x1, *y1, *x2, *y2
+ * return coords of intersections in x1, y1
  * if no intersection, returns min distance in dist
  */
 bool FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf,
-                double * x1, double * y1, double * x2, double * y2, double * dist=NULL );
+                double& x1, double& y1, double * dist=NULL );
 
 /* Function FindSegmentIntersections
  * find intersections between line segment (xi,yi) to (xf,yf)
