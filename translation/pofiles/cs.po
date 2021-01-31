@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-30 23:50+0000\n"
+"PO-Revision-Date: 2021-01-31 10:16+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -11097,9 +11097,8 @@ msgid "Selection"
 msgstr "Výběr"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
-#, fuzzy
 msgid "Draw selected text items as box"
-msgstr "Kreslení &vybraných položek při přesunu"
+msgstr "Nakreslit vybrané textové prvky jako obdélník"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
@@ -11136,9 +11135,8 @@ msgstr "Zvětšit na velikost pouzdra"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
-#, fuzzy
 msgid "Highlight cross-probed nets"
-msgstr "Zvýrazněná síť: %s"
+msgstr "Zvýrazněte sítě v křížovém výběru"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
