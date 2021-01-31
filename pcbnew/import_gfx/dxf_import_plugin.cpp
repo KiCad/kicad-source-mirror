@@ -1061,7 +1061,7 @@ wxString DXF_IMPORT_PLUGIN::toDxfString( const wxString& aStr )
                 break;
 
                 // diameter:
-#ifdef __WINDOWS_
+#ifdef _WIN32
             // windows, as always, is special.
             case 0x00D8:
 #else
