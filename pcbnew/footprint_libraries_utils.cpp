@@ -862,12 +862,27 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     BOARD_COMMIT commit( pcbframe );
 
-    // Create the "new" footprint
-    FOOTPRINT* newFootprint = new FOOTPRINT( *editorFootprint );
-    const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
-
+    // Create a copy for the board, first using Clone() to keep existing Uuids, and then either
+    // resetting the uuids to the board values or assigning new Uuids.
+    FOOTPRINT* newFootprint = static_cast<FOOTPRINT*>( editorFootprint->Clone() );
     newFootprint->SetParent( mainpcb );
     newFootprint->SetLink( niluuid );
+
+    auto fixUuid =
+            [&]( KIID& aUuid )
+            {
+                if( editorFootprint->GetLink() != niluuid && m_boardFootprintUuids.count( aUuid ) )
+                    aUuid = m_boardFootprintUuids[ aUuid ];
+                else
+                    aUuid = KIID();
+            };
+
+    fixUuid( const_cast<KIID&>( newFootprint->m_Uuid ) );
+    newFootprint->RunOnChildren(
+            [&]( BOARD_ITEM* aChild )
+            {
+                fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
+            } );
 
     if( sourceFootprint )         // this is an update command
     {
@@ -875,7 +890,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // connections and properties are kept) and the sourceFootprint (old footprint) is
         // deleted
         pcbframe->ExchangeFootprint( sourceFootprint, newFootprint, commit );
-        const_cast<KIID&>( newFootprint->m_Uuid ) = editorFootprint->GetLink();
         commit.Push( wxT( "Update footprint" ) );
     }
     else        // This is an insert command

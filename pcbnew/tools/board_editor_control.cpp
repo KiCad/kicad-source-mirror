@@ -1399,7 +1399,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
 
     // Placing tools
     Go( &BOARD_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::PlaceFootprint, PCB_ACTIONS::placeFootprint.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::PlaceFootprint,         PCB_ACTIONS::placeFootprint.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
 
     Go( &BOARD_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editFpInFpEditor.MakeEvent() );

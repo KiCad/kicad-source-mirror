@@ -106,18 +106,31 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     if( !Clear_Pcb( true ) )
         return false;
 
-    newFootprint = (FOOTPRINT*) aFootprint->Duplicate();
+    m_boardFootprintUuids.clear();
+
+    auto recordAndUpdateUuid =
+            [&]( BOARD_ITEM* aItem )
+            {
+                KIID newId;
+                m_boardFootprintUuids[ newId ] = aItem->m_Uuid;
+                const_cast<KIID&>( aItem->m_Uuid ) = newId;
+            };
+
+    newFootprint = (FOOTPRINT*) aFootprint->Clone();    // Keep existing uuids
     newFootprint->SetParent( GetBoard() );
     newFootprint->SetLink( aFootprint->m_Uuid );
 
     newFootprint->ClearFlags();
-    newFootprint->RunOnChildren( []( BOARD_ITEM* aItem )
-                                 {
-                                     if( aItem->Type() == PCB_PAD_T )
-                                        aItem->SetLocked( false );
+    recordAndUpdateUuid( newFootprint );
+    newFootprint->RunOnChildren(
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( aItem->Type() == PCB_PAD_T )
+                    aItem->SetLocked( false );
 
-                                     aItem->ClearFlags();
-                                 } );
+                aItem->ClearFlags();
+                recordAndUpdateUuid( aItem );
+            } );
 
     AddFootprintToBoard( newFootprint );
 

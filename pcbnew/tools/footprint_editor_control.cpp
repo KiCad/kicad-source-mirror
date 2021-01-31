@@ -357,6 +357,8 @@ int FOOTPRINT_EDITOR_CONTROL::DeleteFootprint( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
 {
+    bool is_last_fp_from_brd = m_frame->IsCurrentFPFromBoard();
+
     if( !m_frame->Clear_Pcb( true ) )
         return -1;                  // this command is aborted
 
@@ -367,6 +369,13 @@ int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
         m_frame->GetBoard()->GetFirstFootprint()->ClearFlags();
 
     frame()->ClearUndoRedoList();
+
+    // Update the save items if needed.
+    if( is_last_fp_from_brd )
+    {
+        m_frame->ReCreateMenuBar();
+        m_frame->ReCreateHToolbar();
+    }
 
     m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
     m_frame->OnModify();

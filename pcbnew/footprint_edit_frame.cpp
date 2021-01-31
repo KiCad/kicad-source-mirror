@@ -520,7 +520,6 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GetDesignSettings() = cfg->m_DesignSettings;
 
     m_displayOptions  = cfg->m_Display;
-    m_defaultLibWidth = cfg->m_LibWidth;
 
     GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );

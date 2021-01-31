@@ -46,7 +46,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID)
+void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
@@ -243,8 +243,8 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
 bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    if( ! Clear_Pcb( true ) )
-        return false;                  // //this command is aborted
+    if( !Clear_Pcb( true ) )
+        return false;                  // this command is aborted
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     ImportFootprint( aFileSet[ 0 ] );

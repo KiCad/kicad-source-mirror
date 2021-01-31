@@ -349,9 +349,7 @@ private:
 
     std::unique_ptr<FOOTPRINT>  m_revertModule;
     wxString                    m_footprintNameWhenLoaded;
-
-    int                         m_defaultLibWidth;
-
+    std::map<KIID, KIID>        m_boardFootprintUuids;
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H
