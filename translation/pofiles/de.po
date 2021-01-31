@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-28 01:55+0000\n"
+"PO-Revision-Date: 2021-01-31 14:30+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8977,11 +8977,11 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Aktivieren Sie diese Option, damit Symbole mit mehreren Einheiten "
-"unterschiedlich sein können\n"
-"Elemente. Deaktivieren Sie diese Option, wenn alle Symboleinheiten außer "
-"identisch sind\n"
-"für PIN-Nummern."
+"Aktivieren Sie diese Option um für das Bauteil mehrere verschiedene "
+"Einheiten\n"
+"zu erlauben. Deaktivieren Sie die Option wenn alle Bauteileinheiten bis auf "
+"die\n"
+"Pin-Nummern identisch sind."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
@@ -8989,18 +8989,18 @@ msgstr "Bauteil mit alternativer Darstellungsform (De Morgan) erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Bauteil als Spannungsquellensymbol erstellen"
+msgstr "Als Spannungsquellen-Bauteil erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Exclude from schematic bill of materials"
-msgstr "Entnehme die Stückliste (BOM) nicht aus dem Schaltplan"
+msgstr "Nicht in Stückliste (BOM)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Exclude from board"
-msgstr "Nicht von der Platine entnehmen"
+msgstr "Nicht auf Platine"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:103
 msgid "Pin name position offset:"
@@ -9025,7 +9025,7 @@ msgstr "Neues Bauteil"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:232
 #: eeschema/dialogs/dialog_symbol_properties.cpp:550
 msgid "References must start with a letter."
-msgstr "Eine Referenz muss mit einem Buchstaben anfangen."
+msgstr "Referenzen müssen mit einem Buchstaben anfangen."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:252
 #: eeschema/dialogs/dialog_sheet_properties.cpp:200
