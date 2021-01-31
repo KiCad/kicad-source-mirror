@@ -24,6 +24,8 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_picker_tool.h>
+#include <pcb_base_edit_frame.h>
+#include <pcb_group.h>
 #include <status_popup.h>
 #include <board_commit.h>
 #include <bitmaps.h>

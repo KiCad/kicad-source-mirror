@@ -28,11 +28,30 @@
 #include <eda_draw_frame.h>
 
 
+void PICKER_TOOL_BASE::reset()
+{
+    m_cursor = KICURSOR::ARROW;
+    m_snap   = true;
+
+    m_picked = NULLOPT;
+    m_clickHandler = NULLOPT;
+    m_motionHandler = NULLOPT;
+    m_cancelHandler = NULLOPT;
+    m_finalizeHandler = NULLOPT;
+}
+
+
+PICKER_TOOL::PICKER_TOOL( const std::string& aName ) :
+        TOOL_INTERACTIVE( aName ),
+        PICKER_TOOL_BASE()
+{
+}
+
+
 PICKER_TOOL::PICKER_TOOL() :
         TOOL_INTERACTIVE( "common.InteractivePicker" ),
-        m_frame( nullptr )
+        PICKER_TOOL_BASE()
 {
-    resetPicker();
 }
 
 
@@ -76,7 +95,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        VECTOR2D cursorPos = controls->GetCursorPosition( m_frame->IsGridVisible() );
+        VECTOR2D cursorPos = controls->GetCursorPosition( m_snap && m_frame->IsGridVisible() );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -173,7 +192,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
     }
 
-    resetPicker();
+    reset();
     controls->ForceCursorPosition( false );
     m_frame->PopTool( tool );
     return 0;
@@ -183,18 +202,6 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 void PICKER_TOOL::setTransitions()
 {
     Go( &PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
-}
-
-
-void PICKER_TOOL::resetPicker()
-{
-    m_cursor = KICURSOR::ARROW;
-
-    m_picked = NULLOPT;
-    m_clickHandler = NULLOPT;
-    m_motionHandler = NULLOPT;
-    m_cancelHandler = NULLOPT;
-    m_finalizeHandler = NULLOPT;
 }
 
 

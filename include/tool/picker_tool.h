@@ -33,18 +33,9 @@
 class EDA_DRAW_FRAME;
 
 
-class PICKER_TOOL : public TOOL_INTERACTIVE
+class PICKER_TOOL_BASE
 {
 public:
-    PICKER_TOOL();
-    ~PICKER_TOOL() {}
-
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override { }
-
     ///< Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
     typedef std::function<void(const VECTOR2D&)> MOTION_HANDLER;
@@ -60,10 +51,15 @@ public:
         EXCEPTION_CANCEL
     };
 
-    ///< Main event loop.
-    int Main( const TOOL_EVENT& aEvent );
+    PICKER_TOOL_BASE() :
+            m_frame( nullptr )
+    {
+        reset();
+    }
 
     inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
+
+    inline void SetSnapping( bool aSnap ) { m_snap = aSnap; }
 
     /**
      * Set a handler for mouse click event.
@@ -107,19 +103,13 @@ public:
         m_finalizeHandler = aHandler;
     }
 
-private:
+protected:
     ///< Reinitializes tool to its initial state.
-    void resetPicker();
+    virtual void reset();
 
-    ///< Applies the requested VIEW_CONTROLS settings.
-    void setControls();
-
-    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
-    void setTransitions() override;
-
-private:
     EDA_DRAW_FRAME* m_frame;
     KICURSOR        m_cursor;
+    bool            m_snap;
 
     OPT<CLICK_HANDLER>    m_clickHandler;
     OPT<MOTION_HANDLER>   m_motionHandler;
@@ -127,6 +117,33 @@ private:
     OPT<FINALIZE_HANDLER> m_finalizeHandler;
 
     OPT<VECTOR2D>         m_picked;
+};
+
+
+class PICKER_TOOL : public TOOL_INTERACTIVE, public PICKER_TOOL_BASE
+{
+public:
+    PICKER_TOOL();
+
+    PICKER_TOOL( const std::string& aName );
+
+    virtual ~PICKER_TOOL() = default;
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override { }
+
+    ///< Main event loop.
+    int Main( const TOOL_EVENT& aEvent );
+
+protected:
+    ///< Applies the requested VIEW_CONTROLS settings.
+    void setControls();
+
+    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
+    void setTransitions() override;
 };
 
 #endif /* PICKER_TOOL_H */

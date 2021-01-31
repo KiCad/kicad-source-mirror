@@ -31,18 +31,18 @@
 #include "pcb_selection_tool.h"
 
 
-PCB_PICKER_TOOL::PCB_PICKER_TOOL()
-    : PCB_TOOL_BASE( "pcbnew.InteractivePicker" )
+PCB_PICKER_TOOL::PCB_PICKER_TOOL() :
+        PCB_TOOL_BASE( "pcbnew.InteractivePicker" ),
+        PICKER_TOOL_BASE()
 {
-    reset();
 }
 
 
 int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    PCB_BASE_FRAME*       frame = getEditFrame<PCB_BASE_FRAME>();
-    PCB_GRID_HELPER           grid( m_toolMgr, frame->GetMagneticItemsSettings() );
+    PCB_BASE_FRAME*       frame    = getEditFrame<PCB_BASE_FRAME>();
+    PCB_GRID_HELPER       grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
     std::string tool = *aEvent.Parameter<std::string*>();
@@ -185,14 +185,7 @@ void PCB_PICKER_TOOL::setTransitions()
 void PCB_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
-    m_cursor    = KICURSOR::ARROW;
-    m_snap      = true;
-
-    m_picked = NULLOPT;
-    m_clickHandler = NULLOPT;
-    m_motionHandler = NULLOPT;
-    m_cancelHandler = NULLOPT;
-    m_finalizeHandler = NULLOPT;
+    PICKER_TOOL_BASE::reset();
 }
 
 

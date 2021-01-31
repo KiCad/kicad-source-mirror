@@ -1088,6 +1088,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetCursor( KICURSOR::REMOVE );
+    picker->SetSnapping( false );
 
     picker->SetClickHandler(
             [this]( const VECTOR2D& aPosition ) -> bool
