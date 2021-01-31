@@ -59,6 +59,7 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
 #include <settings/settings_manager.h>
+#include <paths.h>
 
 // clang-format off
 
@@ -387,7 +388,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     if( cfg->m_lastFootprintLibDir.IsEmpty() )
-        cfg->m_lastFootprintLibDir = m_projectBasePath;
+        cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
+
+    m_lastProjectLibDir = m_projectBasePath;
 
     auto setupGrid =
             [&]( WX_GRID* aGrid )
@@ -779,9 +782,15 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     title.Printf( _( "Select %s Library" ), fileType.m_Description );
 
+    wxString openDir = cfg->m_lastFootprintLibDir;
+    if( m_cur_grid == m_project_grid )
+    {
+        openDir = m_lastProjectLibDir;
+    }
+
     if( fileType.m_IsFile )
     {
-        wxFileDialog dlg( this, title, cfg->m_lastFootprintLibDir, wxEmptyString,
+        wxFileDialog dlg( this, title, openDir, wxEmptyString,
                           fileType.m_FileFilter,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
@@ -796,7 +805,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
-        wxDirDialog dlg( nullptr, title, cfg->m_lastFootprintLibDir,
+        wxDirDialog dlg( nullptr, title, openDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         int result = dlg.ShowModal();
@@ -832,7 +841,14 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             files.Add( dlg.GetPath() );
         }
 
-        cfg->m_lastFootprintLibDir = dlg.GetPath();
+        if( m_cur_grid == m_global_grid )
+        {
+            cfg->m_lastFootprintLibDir = dlg.GetPath();
+        }
+        else
+        {
+            m_lastProjectLibDir = dlg.GetPath();
+        }
     }
 
     // Drop the last directory if the path is a .pretty folder

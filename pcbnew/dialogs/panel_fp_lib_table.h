@@ -88,6 +88,8 @@ private:
 
     WX_GRID*         m_cur_grid;      // changed based on tab choice
     static size_t    m_pageNdx;       // Remember last notebook page selected during a session
+
+    wxString         m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a project level library
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H
