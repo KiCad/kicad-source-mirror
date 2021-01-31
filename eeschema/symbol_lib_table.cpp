@@ -384,6 +384,9 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, SAVE_SKIPPED );
 
+    if( !row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) ) )
+        return SAVE_SKIPPED;
+
     if( !aOverwrite )
     {
         // Try loading the footprint to see if it already exists, caller wants overwrite
@@ -399,7 +402,14 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
             return SAVE_SKIPPED;
     }
 
-    row->plugin->SaveSymbol( row->GetFullURI( true ), aSymbol, row->GetProperties() );
+    try
+    {
+        row->plugin->SaveSymbol( row->GetFullURI( true ), aSymbol, row->GetProperties() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        return SAVE_SKIPPED;
+    }
 
     return SAVE_OK;
 }
