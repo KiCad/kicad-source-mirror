@@ -122,7 +122,18 @@ public:
         }
         else
         {
-            for( int layer : aItem->GetLayerSet().Seq() )
+            LSET layers = aItem->GetLayerSet();
+
+            // Special-case pad holes which pierce all the copper layers
+            if( aItem->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( aItem );
+
+                if( pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0 )
+                    layers |= LSET::AllCuMask();
+            }
+
+            for( int layer : layers.Seq() )
                 addLayer( (PCB_LAYER_ID) layer );
         }
     }

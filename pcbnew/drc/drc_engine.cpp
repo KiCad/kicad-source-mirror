@@ -729,7 +729,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
     bool                  implicit = false;
 
     // Local overrides take precedence
-    if( aConstraintId == CLEARANCE_CONSTRAINT )
+    if( aConstraintId == CLEARANCE_CONSTRAINT || aConstraintId == HOLE_CLEARANCE_CONSTRAINT )
     {
         int overrideA = 0;
         int overrideB = 0;
@@ -756,7 +756,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
 
         if( overrideA || overrideB )
         {
-            DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT, m_msg );
+            DRC_CONSTRAINT constraint( aConstraintId, m_msg );
             constraint.m_Value.SetMin( std::max( overrideA, overrideB ) );
             return constraint;
         }

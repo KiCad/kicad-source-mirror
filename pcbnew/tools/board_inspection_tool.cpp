@@ -282,6 +282,13 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
 
+    auto hasHole =
+            []( BOARD_ITEM* aItem )
+            {
+                PAD* pad = dynamic_cast<PAD*>( aItem );
+                return pad && pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0;
+            };
+
     wxCHECK( a && b, 0 );
 
     if( a->Type() == PCB_GROUP_T )
@@ -322,16 +329,16 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     {
         PAD* pad = static_cast<PAD*>( a );
 
-        if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
+        if( pad->IsOnLayer( F_Cu ) )
             layer = F_Cu;
         else
             layer = B_Cu;
     }
-    else if( b->Type() == PCB_PAD_T )
+    else if( b->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
     {
         PAD* pad = static_cast<PAD*>( b );
 
-        if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
+        if( pad->IsOnLayer( F_Cu ) )
             layer = F_Cu;
         else
             layer = B_Cu;
@@ -356,15 +363,45 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     }
     else if( !( a->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
     {
-        r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
-                                     a->GetSelectMenuText( r->GetUnits() ),
-                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
+        if( hasHole( a ) )
+        {
+            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
+
+            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                         _( "Layer" ),
+                                         EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                         EscapeHTML( getItemDescription( a ) ),
+                                         EscapeHTML( getItemDescription( b ) ) ) );
+
+            reportClearance( HOLE_CLEARANCE_CONSTRAINT, layer, a, b, r );
+        }
+        else
+        {
+            r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
+                                         a->GetSelectMenuText( r->GetUnits() ),
+                                         m_frame->GetBoard()->GetLayerName( layer ) ) );
+        }
     }
     else if( !( b->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
     {
-        r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
-                                     b->GetSelectMenuText( r->GetUnits() ),
-                                     m_frame->GetBoard()->GetLayerName( layer ) ) );
+        if( hasHole( b ) )
+        {
+            r->Report( "<h7>" + _( "Hole clearance resolution for:" ) + "</h7>" );
+
+            r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
+                                         _( "Layer" ),
+                                         EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                         EscapeHTML( getItemDescription( b ) ),
+                                         EscapeHTML( getItemDescription( a ) ) ) );
+
+            reportClearance( HOLE_CLEARANCE_CONSTRAINT, layer, b, a, r );
+        }
+        else
+        {
+            r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
+                                         b->GetSelectMenuText( r->GetUnits() ),
+                                         m_frame->GetBoard()->GetLayerName( layer ) ) );
+        }
     }
     else if( a->GetLayer() == Edge_Cuts || a->GetLayer() == Margin
                 || b->GetLayer() == Edge_Cuts || b->GetLayer() == Margin )
