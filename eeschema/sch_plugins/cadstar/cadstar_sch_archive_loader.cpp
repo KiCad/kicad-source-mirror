@@ -1393,7 +1393,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute(
 SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
         const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart, double& aComponentOrientationDeciDeg )
 {
-    SCH_COMPONENT* component = new SCH_COMPONENT();
+    LIB_ID  libId( mLibraryFileName.GetName(), aKiCadPart->GetName() );
+    int     unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
+
+    SCH_SHEET_PATH sheetpath;
+    SCH_SHEET* kiSheet = mSheetMap.at( aCadstarSymbol.LayerID );
+    mRootSheet->LocatePathOfScreen( kiSheet->GetScreen(), &sheetpath );
+
+    SCH_COMPONENT* component = new SCH_COMPONENT( *aKiCadPart, libId, &sheetpath, unit );
 
     component->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
@@ -1419,10 +1426,6 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
     }
 
     component->SetOrientation( compOrientation );
-    LIB_ID libId( mLibraryFileName.GetName(), aKiCadPart->GetName() );
-    component->SetLibId( libId );
-    component->SetLibSymbol( aKiCadPart->Duplicate() );
-    component->SetUnit( getKiCadUnitNumberFromGate( aCadstarSymbol.GateID ) );
 
     if( mSheetMap.find( aCadstarSymbol.LayerID ) == mSheetMap.end() )
     {
@@ -1435,11 +1438,6 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
         return nullptr;
     }
 
-
-    SCH_SHEET* kiSheet = mSheetMap.at( aCadstarSymbol.LayerID );
-
-    SCH_SHEET_PATH sheetpath;
-    mRootSheet->LocatePathOfScreen( kiSheet->GetScreen(), &sheetpath );
     wxString currentSheetPath = sheetpath.PathAsString() + component->m_Uuid.AsString();
 
     if( aCadstarSymbol.IsComponent )
