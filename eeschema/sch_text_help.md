@@ -85,16 +85,16 @@
     <tr>
         <td><br></td>
     </tr>
-    <tr><samp>
-            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>
-            <td></td>
-            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>
+    <tr>
+		<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>
+		<td></td>
+		<td>&nbsp;<br><samp>net1, net2, ...</samp></td>
     </tr>
     <tr>
         <td>&nbsp;<br><samp>{SCL SDA}</samp></td>
         <td></td>
         <td>&nbsp;<br><samp>SCL, SDA</samp></td>
-    </tr></samp>
+    </tr>
     <tr>
         <td><br></td>
     </tr>
