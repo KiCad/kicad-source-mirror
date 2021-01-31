@@ -41,6 +41,103 @@ struct ALTIUM_PARSER_FIXTURE
  */
 BOOST_FIXTURE_TEST_SUITE( AltiumParser, ALTIUM_PARSER_FIXTURE )
 
+struct ALTIUM_TO_KICAD_UNIT_CASE
+{
+    int input;
+    int exp_result;
+};
+
+/**
+ * A list of valid internal unit conversation factors
+ */
+static const std::vector<ALTIUM_TO_KICAD_UNIT_CASE> altium_to_kicad_unit = {
+    // Some simple values
+    { 0, 0 },
+    { 1, 3 },
+    { 2, 5 },
+    { 3, 8 },
+    { 10, 25 },
+    { 20, 51 },
+    { 30, 76 },
+    // Edge Cases
+    { 845466002, 2147483645 },
+    { -845466002, -2147483645 },
+    // Clamp bigger values
+    { 845466003, 2147483646 },
+    { -845466003, -2147483646 },
+    { 1000000000, 2147483646 },
+    { -1000000000, -2147483646 },
+    // imperial rounded units as input
+    { 100, 254 },
+    { 200, 508 },
+    { 300, 762 },
+    { 400, 1016 },
+    { 500, 1270 },
+    { 600, 1524 },
+    { 700, 1778 },
+    { 800, 2032 },
+    { 900, 2286 },
+    { 1000, 2540 },
+    // metric rounded units as input
+    { 394, 1000 },
+    { 787, 2000 },
+    { 1181, 3000 },
+    { 1575, 4000 },
+    { 1969, 5000 },
+    { 2362, 6000 },
+    { 2756, 7000 },
+    { 3150, 8000 },
+    { 3543, 9000 },
+    { 3937, 10000 },
+    { 39370, 100000 },
+    { 78740, 200000 },
+    { 118110, 300000 },
+    { 157480, 400000 },
+    { 196850, 500000 },
+    { 236220, 600000 },
+    { 275591, 700000 },
+    { 314961, 800000 },
+    { 354331, 900000 },
+    { 393701, 1000000 },
+    { -394, -1000 },
+    { -787, -2000 },
+    { -1181, -3000 },
+    { -1575, -4000 },
+    { -1969, -5000 },
+    { -2362, -6000 },
+    { -2756, -7000 },
+    { -3150, -8000 },
+    { -3543, -9000 },
+    { -3937, -10000 },
+    { -39370, -100000 },
+    { -78740, -200000 },
+    { -118110, -300000 },
+    { -157480, -400000 },
+    { -196850, -500000 },
+    { -236220, -600000 },
+    { -275591, -700000 },
+    { -314961, -800000 },
+    { -354331, -900000 },
+    { -393701, -1000000 },
+};
+
+/**
+ * Test conversation from Altium internal units into KiCad internal units
+ */
+BOOST_AUTO_TEST_CASE( ConvertToKicadUnit )
+{
+    for( const auto& c : altium_to_kicad_unit )
+    {
+        BOOST_TEST_CONTEXT( wxString::Format( wxT( "%i -> %i" ), c.input, c.exp_result ) )
+        {
+            int result = ALTIUM_PARSER::ConvertToKicadUnit( c.input );
+
+            // These are all valid
+            BOOST_CHECK_EQUAL( result, c.exp_result );
+        }
+    }
+}
+
 struct READ_KICAD_UNIT_CASE
 {
     wxString input;
@@ -69,8 +166,6 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
     { "-0.0001mil", -3 },
     { "0.00001mil", 0 },
     { "-0.00001mil", -0 },
-    { "0.00002mil", 1 },
-    { "-0.00002mil", -1 },
     // Big Numbers
     { "10mil", 254000 },
     { "-10mil", -254000 },
@@ -102,9 +197,9 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
 
 
 /**
- * Run through a set of test strings, clearing in between
+ * Test conversation from Unit property into KiCad internal units
  */
-BOOST_AUTO_TEST_CASE( Results )
+BOOST_AUTO_TEST_CASE( PropertiesReadKicadUnit )
 {
     for( const auto& c : read_kicad_unit_property )
     {
