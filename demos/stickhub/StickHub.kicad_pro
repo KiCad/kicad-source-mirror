@@ -100,7 +100,7 @@
       "rules": {
         "allow_blind_buried_vias": false,
         "allow_microvias": false,
-        "max_error": 0.001,
+        "max_error": 0.005,
         "min_clearance": 0.15,
         "min_copper_edge_clearance": 0.0,
         "min_hole_clearance": 0.0,
@@ -116,7 +116,7 @@
         "solder_mask_clearance": 0.0,
         "solder_mask_min_width": 0.0,
         "solder_paste_clearance": 0.0,
-        "solder_paste_margin_ratio": 0.0
+        "solder_paste_margin_ratio": -0.0
       },
       "track_widths": [
         0.0,
@@ -433,7 +433,7 @@
   },
   "sheets": [
     [
-      "2a44c388-3c66-4c25-87a2-38991169127d",
+      "85187be3-3759-4ec2-8bb2-1d809a19dc0b",
       ""
     ]
   ],
