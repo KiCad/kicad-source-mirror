@@ -1439,6 +1439,12 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
         m_gal->SetLineWidth( bboxThickness );
         EDA_RECT rect = aFootprint->GetBoundingBoxBase();
         m_gal->DrawRectangle( VECTOR2D( rect.GetOrigin() ), VECTOR2D( rect.GetEnd() ) );
+
+        double bboxThickness = 3.0 / m_gal->GetWorldScale();
+        m_gal->SetLineWidth( bboxThickness );
+        SHAPE_POLY_SET convex = aFootprint->GetBoundingHull();
+
+        m_gal->DrawPolyline( convex.COutline( 0 ) );
 #endif
     }
 }

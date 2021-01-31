@@ -613,6 +613,7 @@ void PCB_FOOTPRINT::AddToBoard()
     }
 
     footprint->CalculateBoundingBox();
+    footprint->UpdateBoundingHull();
 }
 
 

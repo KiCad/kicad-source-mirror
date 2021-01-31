@@ -51,6 +51,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_layer        = F_Cu;
     m_orient       = 0;
     m_fpStatus     = FP_PADS_are_LOCKED;
+    m_hullDirty    = true;
     m_arflag       = 0;
     m_rot90Cost    = m_rot180Cost = 0;
     m_link         = 0;
@@ -68,6 +69,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
 
     m_3D_Drawings.clear();
+
+    UpdateBoundingHull();
 }
 
 
@@ -80,6 +83,8 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_fpStatus     = aFootprint.m_fpStatus;
     m_orient       = aFootprint.m_orient;
     m_boundingBox  = aFootprint.m_boundingBox;
+    m_hullDirty    = aFootprint.m_hullDirty;
+    m_hull         = aFootprint.m_hull;
     m_rot90Cost    = aFootprint.m_rot90Cost;
     m_rot180Cost   = aFootprint.m_rot180Cost;
     m_lastEditTime = aFootprint.m_lastEditTime;
@@ -165,6 +170,9 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     m_initial_comments = aFootprint.m_initial_comments ?
                          new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;
+
+    if( m_hullDirty )
+        UpdateBoundingHull();
 }
 
 
@@ -214,6 +222,8 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
     m_boundingBox   = aOther.m_boundingBox;
+    m_hull          = aOther.m_hull;
+    m_hullDirty     = aOther.m_hullDirty;
     m_rot90Cost     = aOther.m_rot90Cost;
     m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
@@ -284,6 +294,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
+    UpdateBoundingHull();
 
     m_initial_comments = aOther.m_initial_comments;
 
@@ -309,6 +320,8 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
     m_boundingBox   = aOther.m_boundingBox;
+    m_hull          = aOther.m_hull;
+    m_hullDirty     = aOther.m_hullDirty;
     m_rot90Cost     = aOther.m_rot90Cost;
     m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
@@ -390,6 +403,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
+    UpdateBoundingHull();
 
     m_initial_comments = aOther.m_initial_comments ?
                             new wxArrayString( *aOther.m_initial_comments ) : nullptr;
@@ -490,6 +504,9 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
     }
 
+    if( aBoardItem->Type() != PCB_FP_TEXT_T )
+        m_hullDirty = true;
+
     aBoardItem->ClearEditFlags();
     aBoardItem->SetParent( this );
 }
@@ -565,6 +582,9 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
     if( aBoardItem->GetParentGroup() )
         aBoardItem->GetParentGroup()->RemoveItem( aBoardItem );
+
+    if( aBoardItem->Type() != PCB_FP_TEXT_T )
+        m_hullDirty = true;
 }
 
 
@@ -680,9 +700,16 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeInvisibleText ) const
 }
 
 
-SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
+void FOOTPRINT::UpdateBoundingHull()
+{
+    m_hull = CalculateBoundingHull();
+    m_hullDirty = false;
+}
+
+SHAPE_POLY_SET FOOTPRINT::CalculateBoundingHull() const
 {
     SHAPE_POLY_SET rawPolys;
+    SHAPE_POLY_SET hull;
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -741,6 +768,27 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         hullPoly.Append( pt );
 
     return hullPoly;
+}
+
+
+SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
+{
+    if( m_hullDirty )
+        return CalculateBoundingHull();
+
+    return m_hull;
+}
+
+
+SHAPE_POLY_SET FOOTPRINT::GetBoundingHull()
+{
+    if( m_hullDirty )
+    {
+        m_hull = CalculateBoundingHull();
+        m_hullDirty = false;
+    }
+
+    return m_hull;
 }
 
 
@@ -1292,8 +1340,6 @@ void FOOTPRINT::Rotate( const wxPoint& aRotCentre, double aAngle )
         if( item->Type() == PCB_FP_TEXT_T )
             static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
     }
-
-    CalculateBoundingBox();
 }
 
 
@@ -1359,6 +1405,11 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         Rotate( aCentre, 1800.0 );
 
     CalculateBoundingBox();
+
+    if( m_hullDirty )
+        UpdateBoundingHull();
+    else
+        m_hull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
 }
 
 
@@ -1402,6 +1453,11 @@ void FOOTPRINT::SetPosition( const wxPoint& aPos )
     }
 
     m_boundingBox.Move( delta );
+
+    if( m_hullDirty )
+        UpdateBoundingHull();
+    else
+        m_hull.Move( delta );
 }
 
 
@@ -1459,6 +1515,7 @@ void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
     }
 
     CalculateBoundingBox();
+    m_hull.Move( moveVector );
 }
 
 
@@ -1497,6 +1554,9 @@ void FOOTPRINT::SetOrientation( double aNewAngle )
             static_cast<FP_TEXT*>( item )->SetDrawCoord();
         }
     }
+
+    CalculateBoundingBox();
+    m_hull.Rotate( -DECIDEG2RAD( angleChange ), GetPosition() );
 }
 
 

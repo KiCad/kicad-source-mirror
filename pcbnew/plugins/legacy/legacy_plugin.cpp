@@ -1371,6 +1371,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
         else if( TESTLINE( "$EndMODULE" ) )
         {
             aFootprint->CalculateBoundingBox();
+            aFootprint->UpdateBoundingHull();
 
             return;     // preferred exit
         }

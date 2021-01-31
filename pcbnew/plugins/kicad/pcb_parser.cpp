@@ -3191,6 +3191,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             || reader->GetSource().Contains( "clipboard" ) )
     {
         footprint->CalculateBoundingBox();
+        footprint->UpdateBoundingHull();
     }
 
     return footprint.release();

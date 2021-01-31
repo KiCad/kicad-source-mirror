@@ -175,7 +175,15 @@ public:
      *
      * This operation is slower but more accurate than calculating a bounding box.
      */
+    SHAPE_POLY_SET GetBoundingHull();
     SHAPE_POLY_SET GetBoundingHull() const;
+
+    /**
+     * Update the cached bounding Hull with current data
+     */
+    SHAPE_POLY_SET CalculateBoundingHull() const;
+
+    void UpdateBoundingHull();
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
@@ -703,6 +711,10 @@ private:
     int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     EDA_RECT        m_boundingBox;       // Bounding box : coordinates on board, real orientation.
+
+
+    mutable bool    m_hullDirty;         // If the hull needs to be re-calculated
+    SHAPE_POLY_SET  m_hull;              // Convex wrapping hull of the footprint
 
     ZONE_CONNECTION m_zoneConnection;
     int             m_thermalWidth;

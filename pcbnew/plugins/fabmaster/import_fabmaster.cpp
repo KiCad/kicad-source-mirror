@@ -2226,7 +2226,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                 fp->Flip( fp->GetPosition(), true );
             }
 
-            fp->BuildPolyCourtyards();
+            fp->CalculateBoundingBox();
+            fp->UpdateBoundingHull();
 
             aBoard->Add( fp, ADD_MODE::APPEND );
         }

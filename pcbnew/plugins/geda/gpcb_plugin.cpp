@@ -689,6 +689,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     // Recalculate the bounding box
     footprint->CalculateBoundingBox();
+    footprint->UpdateBoundingHull();
     return footprint.release();
 }
 

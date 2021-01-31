@@ -1224,6 +1224,10 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         footprint->Reference().SetLocalCoord();
         footprint->Value().SetLocalCoord();
 
+        // Calculate the bounding boxes
+        footprint->CalculateBoundingBox();
+        footprint->UpdateBoundingHull();
+
         // Get next element
         element = element->GetNext();
     }
