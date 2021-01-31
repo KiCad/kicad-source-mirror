@@ -392,13 +392,41 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             // right click? if there is any object - show the context menu
             bool selectionCancelled = false;
 
-            if( m_selection.Empty() ||
-                    !m_selection.GetBoundingBox().Contains( (wxPoint) evt->Position() ) )
+            if( m_selection.Empty() )
             {
                 ClearSelection();
                 SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr,
                              &selectionCancelled );
                 m_selection.SetIsHover( true );
+            }
+            // If the cursor has moved off the bounding box of the selection by more than
+            // a grid square, check to see if there is another item available for selection
+            // under the cursor.  If there is, the user likely meant to get the context menu
+            // for that item.  If there is no new item, then keep the original selection and
+            // show the context menu for it.
+            else if( !m_selection.GetBoundingBox().Inflate(
+                        grid.GetGrid().x, grid.GetGrid().y ).Contains(
+                                (wxPoint) evt->Position() ) )
+            {
+                EE_SELECTION saved_selection = m_selection;
+
+                for( auto item : m_selection )
+                    RemoveItemFromSel( item, true );
+
+                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr,
+                             &selectionCancelled );
+
+                if( m_selection.Empty() )
+                {
+                    m_selection.SetIsHover( false );
+
+                    for( auto item : saved_selection )
+                        AddItemToSel( item,  true);
+                }
+                else
+                {
+                    m_selection.SetIsHover( true );
+                }
             }
 
             if( !selectionCancelled )
