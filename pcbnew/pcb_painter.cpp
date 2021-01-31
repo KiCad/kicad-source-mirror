@@ -246,9 +246,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         if( pad )
             annularRingLayer = LAYER_PADS_TH;
-        else if( via->GetViaType() == VIATYPE::MICROVIA )
+        else if( via && via->GetViaType() == VIATYPE::MICROVIA )
             annularRingLayer = LAYER_VIA_MICROVIA;
-        else if( via->GetViaType() == VIATYPE::BLIND_BURIED )
+        else if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
             annularRingLayer = LAYER_VIA_BBLIND;
         else
             annularRingLayer = LAYER_VIA_THROUGH;
