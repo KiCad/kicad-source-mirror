@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-31 14:29+0000\n"
+"PO-Revision-Date: 2021-01-31 23:25+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -681,7 +681,7 @@ msgstr "右下"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
 msgid "Elevation (degrees)"
-msgstr "仰角 (度)"
+msgstr "仰角(度)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:434
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:451
@@ -5699,7 +5699,7 @@ msgstr "合わせてズーム"
 
 #: common/tool/actions.cpp:283
 msgid "Zoom to Objects"
-msgstr "オブジェクトがありまs年"
+msgstr "オブジェクトに合わせてズーム"
 
 #: common/tool/actions.cpp:294
 msgid "Zoom In at Cursor"
@@ -7831,7 +7831,7 @@ msgstr "フィールドの可視性を更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update field sizes and styles"
-msgstr "フィールドのテキスト サイズとスタイルを更新"
+msgstr "フィールドのサイズとスタイルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field positions"
@@ -7851,22 +7851,22 @@ msgstr "更新"
 #: eeschema/dialogs/dialog_change_symbols.cpp:493
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "シンボル %s を %s から %s へ更新します"
+msgstr "シンボル %s を '%s' から '%s' へ更新します"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:500
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "シンボル %s を %s から %s へ更新します"
+msgstr "シンボル %s を '%s' から '%s' へ更新します"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:510
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "シンボル %s を %s から %s に変更します"
+msgstr "シンボル %s を '%s' から '%s' に変更します"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:517
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "シンボル %s を %s から %s に変更します"
+msgstr "シンボル %s を '%s' から '%s' に変更します"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:528
 msgid "*** symbol not found ***"
