@@ -38,6 +38,7 @@
 #include <symbol_viewer_frame.h>
 #include <sch_edit_frame.h>
 #include <kiway.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <widgets/grid_readonly_text_helpers.h>
@@ -197,9 +198,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     if( cfg->m_lastSymbolLibDir.IsEmpty() )
-    {
-        cfg->m_lastSymbolLibDir = m_project->GetProjectPath();
-    }
+        cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+
+    m_lastProjectLibDir = m_project->GetProjectPath();
 
     auto setupGrid =
             [&]( WX_GRID* aGrid )
@@ -447,8 +448,15 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                             + "|" + LegacySymbolLibFileWildcard();
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+    wxString openDir = cfg->m_lastSymbolLibDir;
+    if( m_cur_grid == m_project_grid )
+    {
+        openDir = m_lastProjectLibDir;
+    }
+
     wxFileDialog dlg( this, _( "Select Library" ),
-                      cfg->m_lastSymbolLibDir, wxEmptyString, wildcards,
+                      openDir, wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     auto result = dlg.ShowModal();
@@ -456,7 +464,14 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( result == wxID_CANCEL )
         return;
 
-    cfg->m_lastSymbolLibDir = dlg.GetDirectory();
+    if( m_cur_grid == m_global_grid )
+    {
+        cfg->m_lastSymbolLibDir = dlg.GetPath();
+    }
+    else
+    {
+        m_lastProjectLibDir = dlg.GetPath();
+    }
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
