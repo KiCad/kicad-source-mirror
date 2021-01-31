@@ -685,24 +685,21 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, wxPoint& aPinPos, int aPinOrient,
         {
             if( aDrawPinName )
             {
+                EDA_TEXT_HJUSTIFY_T hjustify;
                 if( aPinOrient == PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
-                    aPlotter->Text( wxPoint( x, y1 ), nameColor, m_name, TEXT_ANGLE_HORIZ,
-                                    pinNameSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                    namePenWidth, false, false );
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
                 }
                 else    // orient == PIN_LEFT
                 {
                     x = x1 - aTextInside;
-
-                    if( aDrawPinName )
-                    {
-                        aPlotter->Text( wxPoint( x, y1 ), nameColor, m_name, TEXT_ANGLE_HORIZ,
-                                        pinNameSize, GR_TEXT_HJUSTIFY_RIGHT,
-                                        GR_TEXT_VJUSTIFY_CENTER, namePenWidth, false, false );
-                    }
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
                 }
+
+                aPlotter->Text( wxPoint( x, y1 ), nameColor, m_name, TEXT_ANGLE_HORIZ, pinNameSize,
+                                hjustify, GR_TEXT_VJUSTIFY_CENTER, namePenWidth,
+                                false, false );
             }
             if( aDrawPinNum )
             {
