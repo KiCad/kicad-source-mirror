@@ -761,6 +761,90 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                        "It will be converted to the new format when saved." ),
                                     wxICON_WARNING );
         }
+
+        // Import footprints into a project-specific library
+        //==================================================
+        // TODO: This should be refactored out of here into somewhere specific to the Project Import
+        // E.g. KICAD_MANAGER_FRAME::ImportNonKiCadProject
+        if( aCtl & KICTL_IMPORT_LIB )
+        {
+            wxFileName loadedBoardFn( fullFileName );
+            wxString   libNickName = loadedBoardFn.GetName();
+
+            // Extract a footprint library from the design and add it to the fp-lib-table
+            // The footprints are saved in a new .pretty library.
+            // If this library already exists, all previous footprints will be deleted
+            std::vector<FOOTPRINT*> loadedFootprints = pi->GetImportedCachedLibraryFootprints();
+            wxString                newLibPath = CreateNewLibrary( libNickName );
+
+            // Only create the new library if CreateNewLibrary succeeded (note that this fails if
+            // the library already exists and the user aborts after seeing the warning message
+            // which prompts the user to continue with overwrite or abort)
+            if( newLibPath.Length() > 0 )
+            {
+                PLUGIN::RELEASER piSexpr( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+
+                for( FOOTPRINT* footprint : loadedFootprints )
+                {
+                    try
+                    {
+                        if( !footprint->GetFPID().GetLibItemName().empty() ) // Handle old boards.
+                        {
+                            footprint->SetReference( "REF**" );
+                            piSexpr->FootprintSave( newLibPath, footprint );
+                            delete footprint;
+                        }
+                    }
+                    catch( const IO_ERROR& ioe )
+                    {
+                        wxLogError( wxString::Format( _( "Error occurred when saving footprint "
+                                                         "'%s' to the project specific footprint "
+                                                         "library: %s" ),
+                                                         footprint->GetFPID().GetUniStringLibItemName(),
+                                                         ioe.What() ) );
+                    }
+                }
+
+                FP_LIB_TABLE*   prjlibtable = Prj().PcbFootprintLibs();
+                const wxString& project_env = PROJECT_VAR_NAME;
+                wxString        rel_path, env_path;
+
+                wxASSERT_MSG( wxGetEnv( project_env, &env_path ), "There is no project variable?" );
+
+                wxString result( newLibPath );
+                rel_path = result.Replace( env_path, wxString( "$(" + project_env + ")" ) ) ? result
+                                                                                            : "";
+
+                FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( libNickName, rel_path,
+                                                              wxT( "KiCad" ), wxEmptyString );
+                prjlibtable->InsertRow( row );
+
+                wxString tblName = Prj().FootprintLibTblName();
+
+                try
+                {
+                    Prj().PcbFootprintLibs()->Save( tblName );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxLogError( wxString::Format( _( "Error occurred saving the project specific "
+                                                     "footprint library table: %s" ),
+                                                     ioe.What() ) );
+                }
+
+                // Update footprint LIB_IDs to point to the just imported library
+                for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+                {
+                    LIB_ID libId = footprint->GetFPID();
+
+                    if( libId.GetLibItemName().empty() )
+                        continue;
+
+                    libId.SetLibNickname( libNickName );
+                    footprint->SetFPID( libId );
+                }
+            }
+        }
     }
 
     {
@@ -1101,76 +1185,8 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     {
     case IO_MGR::CADSTAR_PCB_ARCHIVE:
     case IO_MGR::EAGLE:
-        if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_EAGLE_BRD ) )
-        {
-            wxString projectpath = Kiway().Prj().GetProjectPath();
-            wxFileName newfilename;
-
-            newfilename.SetPath( Prj().GetProjectPath() );
-            newfilename.SetName( Prj().GetProjectName() );
-            newfilename.SetExt( KiCadPcbFileExtension );
-
-            GetBoard()->SetFileName( newfilename.GetFullPath() );
-            UpdateTitle();
-            OnModify();
-
-            // Extract a footprint library from the design and add it to the fp-lib-table
-            wxString newLibPath;
-            ExportFootprintsToLibrary( true, newfilename.GetName(), &newLibPath );
-
-            if( newLibPath.Length() > 0 )
-            {
-                FP_LIB_TABLE* prjlibtable = Prj().PcbFootprintLibs();
-                const wxString& project_env = PROJECT_VAR_NAME;
-                wxString rel_path, env_path;
-
-                wxGetEnv( project_env, &env_path );
-
-                wxString result( newLibPath );
-                rel_path =  result.Replace( env_path,
-                                            wxString( "$(" + project_env + ")" ) ) ? result : "" ;
-
-                if( !rel_path.IsEmpty() )
-                    newLibPath = rel_path;
-
-                FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( newfilename.GetName(),
-                        newLibPath, wxT( "KiCad" ), wxEmptyString );
-                prjlibtable->InsertRow( row );
-            }
-
-            if( !GetBoard()->GetFileName().IsEmpty() )
-            {
-                wxString tblName = Prj().FootprintLibTblName();
-
-                try
-                {
-                    Prj().PcbFootprintLibs()->Save( tblName );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxString msg = wxString::Format( _(
-                                    "Error occurred saving project specific footprint library "
-                                    "table:\n\n%s" ), ioe.What() );
-                    wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-                }
-            }
-
-            // Update footprint LIB_IDs to point to the just imported library
-            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
-            {
-                LIB_ID libId = footprint->GetFPID();
-
-                if( libId.GetLibItemName().empty() )
-                    continue;
-
-                libId.SetLibNickname( newfilename.GetName() );
-                footprint->SetFPID( libId );
-            }
-
-            return true;
-        }
-
-        return false;
+        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
+                                 KICTL_EAGLE_BRD | KICTL_IMPORT_LIB );
 
     default:
         return false;

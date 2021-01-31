@@ -49,6 +49,8 @@ public:
         return 0;
     }
 
+    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+
     /**
      * Return the automapped layers.
      *
@@ -69,9 +71,12 @@ public:
     ~CADSTAR_PCB_ARCHIVE_PLUGIN();
 
 private:
-    const PROPERTIES*     m_props;
-    BOARD*                m_board;
-    bool                  m_show_layer_mapping_warnings;
+    void clearLoadedFootprints();
+
+    const PROPERTIES*       m_props;
+    BOARD*                  m_board;
+    std::vector<FOOTPRINT*> m_loaded_footprints;
+    bool                    m_show_layer_mapping_warnings;
 };
 
 #endif // CADSTAR_ARCHIVE_PLUGIN_H_

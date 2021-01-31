@@ -71,6 +71,11 @@ public:
      */
     void Load( ::BOARD* aBoard, ::PROJECT* aProject );
 
+    /**
+     * @brief Return a copy of the loaded library footprints (caller owns the objects)
+     * @return Container with all the footprint definitions that were loaded
+     */
+    std::vector<FOOTPRINT*> GetLoadedLibraryFootpints() const;
 
 private:
     LAYER_MAPPING_HANDLER            mLayerMappingHandler; ///< Callback to get layer mapping

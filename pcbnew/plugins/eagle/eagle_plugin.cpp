@@ -402,6 +402,19 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 }
 
 
+std::vector<FOOTPRINT*> EAGLE_PLUGIN::GetImportedCachedLibraryFootprints()
+{
+    std::vector<FOOTPRINT*> retval;
+
+    for( std::pair<wxString, FOOTPRINT*> fp : m_templates )
+    {
+        retval.push_back( static_cast<FOOTPRINT*>( fp.second->Clone() ) );
+    }
+
+    return retval;
+}
+
+
 void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_hole_count  = 0;

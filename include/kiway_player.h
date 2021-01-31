@@ -77,6 +77,7 @@ public:
     // For the aCtl argument of OpenProjectFiles()
 #define KICTL_EAGLE_BRD         (1<<0)   ///< chosen *.brd file is Eagle according to user.
 #define KICTL_CREATE            (1<<1)   ///< caller thinks requested project files may not exist.
+#define KICTL_IMPORT_LIB        (1<<2)   ///< import all footprints into a project library.
 
     /**
      * Open a project or set of files given by @a aFileList.

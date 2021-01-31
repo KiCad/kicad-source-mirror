@@ -128,6 +128,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard, ::PROJECT* aProject )
                "Please review the import errors and warnings (if any)." ) );
 }
 
+std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_LOADER::GetLoadedLibraryFootpints() const
+{
+    std::vector<FOOTPRINT*> retval;
+
+    for( std::pair<SYMDEF_ID, FOOTPRINT*> fpPair : mLibraryMap )
+    {
+        retval.push_back( static_cast<FOOTPRINT*>( fpPair.second->Clone() ) );
+    }
+
+    return retval;
+}
+
 
 void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
         const wxString& aCadstarLayerName,

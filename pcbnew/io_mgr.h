@@ -307,6 +307,16 @@ public:
                          const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr );
 
     /**
+     * Return a container with the cached library footprints generated in the last call to
+     * #Load. This function is intended to be used ONLY by the non-KiCad board importers for the
+     * purpose of obtaining the footprint library of the design and creating a project-specific
+     * library.
+     *
+     * @return Footprints (caller owns the objects)
+     */
+    virtual std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints();
+
+    /**
      * Write @a aBoard to a storage file in a format that this PLUGIN implementation knows
      * about or it can be used to write a portion of \a aBoard to a special kind of export
      * file.

@@ -51,6 +51,12 @@ BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
 }
 
 
+std::vector<FOOTPRINT*> PLUGIN::GetImportedCachedLibraryFootprints()
+{
+    not_implemented( this, __FUNCTION__ );
+    return std::vector<FOOTPRINT*>();
+}
+
 void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.

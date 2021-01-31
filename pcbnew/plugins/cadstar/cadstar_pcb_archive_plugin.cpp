@@ -27,6 +27,7 @@
 #include <cadstar_pcb_archive_loader.h>
 #include <cadstar_pcb_archive_plugin.h>
 #include <board.h>
+#include <footprint.h>
 #include <properties.h>
 
 
@@ -68,6 +69,17 @@ CADSTAR_PCB_ARCHIVE_PLUGIN::~CADSTAR_PCB_ARCHIVE_PLUGIN()
 }
 
 
+void CADSTAR_PCB_ARCHIVE_PLUGIN::clearLoadedFootprints()
+{
+    for( FOOTPRINT* fp : m_loaded_footprints )
+    {
+        delete fp;
+    }
+
+    m_loaded_footprints.clear();
+}
+
+
 const wxString CADSTAR_PCB_ARCHIVE_PLUGIN::PluginName() const
 {
     return wxT( "CADSTAR PCB Archive" );
@@ -80,11 +92,25 @@ const wxString CADSTAR_PCB_ARCHIVE_PLUGIN::GetFileExtension() const
 }
 
 
+std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_PLUGIN::GetImportedCachedLibraryFootprints()
+{
+    std::vector<FOOTPRINT*> retval;
+
+    for( FOOTPRINT* fp : m_loaded_footprints )
+    {
+        retval.push_back( static_cast<FOOTPRINT*>( fp->Clone() ) );
+    }
+
+    return retval;
+}
+
+
 BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
                                          const PROPERTIES* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
+    clearLoadedFootprints();
 
     CADSTAR_PCB_ARCHIVE_LOADER tempPCB(
             aFileName, m_layer_mapping_handler, m_show_layer_mapping_warnings );
@@ -110,6 +136,8 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
             m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
         }
     }
+
+    m_loaded_footprints = tempPCB.GetLoadedLibraryFootpints();
 
     return m_board;
 }
