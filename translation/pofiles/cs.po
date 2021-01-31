@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-31 10:16+0000\n"
+"PO-Revision-Date: 2021-01-31 14:30+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -492,7 +492,7 @@ msgstr "Pro nepokovenou měď použijte barvu holé mědi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Pro pokovenou a nepokovovanou měď použít různé barvy. (Pomalý)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -2239,7 +2239,7 @@ msgstr "Vyberte jinou cestu"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Vybraná cesta neobsahuje platné nastavení KiCadu!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
@@ -2250,6 +2250,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Je-li zaškrtnuto, do této verze se importují tabulky knihoven symbolů a "
+"pouzder z předchozí verze"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -3182,7 +3184,7 @@ msgstr "Nakreslit obdélník výběru"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Přetáhněte vybrané objekty; jinak nakreslete obdélník výběru"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
@@ -5301,7 +5303,7 @@ msgstr "KiCad klasik"
 #: common/single_top.cpp:175 kicad/kicad.cpp:279
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
+msgstr "KiCad a jeho závislosti již nepodporují Windows 7 a starší verze."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 #, fuzzy
@@ -9374,7 +9376,7 @@ msgstr "Alternativní název vývodu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:189
 #: eeschema/dialogs/dialog_symbol_properties.cpp:331
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr ""
+msgstr "Alternativní definice vývodů nejsou u komponent DeMorgan k dispozici."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
 msgid "Alternate pin definitions must have a name."
@@ -9668,19 +9670,19 @@ msgstr "Pozice a jednotky:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Vlevo dole, jednotky plotru"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Střed, jednotky plotru"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Přizpůsobit stránce, uživatelské jednotky"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Přizpůsobit obsahu, uživatelské jednotky"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -11155,9 +11157,8 @@ msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "Pokud není zaškrtnuto, tažení myší provede operaci přesunu (M)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
-#, fuzzy
 msgid "Automatically start wires on unconnected pins"
-msgstr "&Posouvání při pohybu objektů"
+msgstr "Automaticky spusťte vodiče na nepřipojených pinech"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid ""
@@ -11235,14 +11236,12 @@ msgid "Dialog Preferences"
 msgstr "Dialog Předvolby"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
-#, fuzzy
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "Zobrazit plošky jako obrys"
+msgstr "Zobrazit náhled pouzdra při výběru symbolu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:159
-#, fuzzy
 msgid "Keep hierarchy navigator open"
-msgstr "Zobrazit &Hierarchickou navigaci"
+msgstr "Nechat otevřený navigátor hierarchie"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
 msgid "Global field name templates:"
@@ -11272,9 +11271,8 @@ msgid "Annotations"
 msgstr "Očíslování"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:26
-#, fuzzy
 msgid "Symbol unit notation:"
-msgstr "Symboly k aktualizaci:"
+msgstr "Zápis pro jednotku:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid ".A"
@@ -11328,9 +11326,8 @@ msgid "Connections"
 msgstr "Připojení"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "Velikost propojení:"
+msgstr "Velikost spojovací tečky:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Smallest"
@@ -12791,12 +12788,16 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
+"Schéma CADSTAR obsahuje varianty, které nemají ekvivalent KiCadu. Byla "
+"načtena pouze hlavní varianta ('%s')."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:107
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
+"Projekt CADSTAR obsahuje seskupené položky, které nemají ekvivalent KiCadu. "
+"Všechny seskupené položky byli neseskupeny."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:114
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:122
