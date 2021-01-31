@@ -502,8 +502,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
-    wxPoint   cursorPos;
-    KICAD_T   type = aEvent.Parameter<KICAD_T>();
+    wxPoint         cursorPos;
+    KICAD_T         type = aEvent.Parameter<KICAD_T>();
+    EE_GRID_HELPER  grid( m_toolMgr );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     if( m_inSingleClickPlace )
         return 0;
@@ -526,6 +529,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
+
+    cursorPos = aEvent.IsPrime() ? (wxPoint) aEvent.Position()
+                                 : (wxPoint) controls->GetMousePosition();
 
     SCH_ITEM* previewItem;
     switch( type )
@@ -572,7 +578,14 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+
+        cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
+                                   : (wxPoint) controls->GetMousePosition();
+
+        cursorPos = wxPoint( grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr ) );
+        controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
         {
