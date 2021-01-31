@@ -317,7 +317,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     // point that changes both endpoints.  In the worst case, this is twice as far.
     // We cannot adjust radius or center based on the other because this causes the
     // whole arc to change position/size
-    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 1 );
+    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 2 );
 
     auto mid = roundp( xform( aCenterPoint ) );
 
@@ -366,7 +366,7 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
     // point that changes both endpoints.  In the worst case, this is twice as far.
     // We cannot adjust radius or center based on the other because this causes the
     // whole arc to change position/size
-    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 1 );
+    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 2 );
 
     auto mid = roundp( xform( aCenterPoint ) );
     double width = xform( aWidth / 2.0 );
