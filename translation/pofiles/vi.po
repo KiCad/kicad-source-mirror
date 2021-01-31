@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-18 07:28+0000\n"
+"PO-Revision-Date: 2021-01-31 14:30+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5572,6 +5572,8 @@ msgstr "KiCad cổ điển"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"Windows 7 và củ hơn không còn được hỗ trợ bởi KiCad và các thành phần phụ "
+"thuộc của nó."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 #, fuzzy
@@ -7980,119 +7982,121 @@ msgstr "Thay đổi Symbols"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:75
 msgid "Change selected Symbol"
-msgstr ""
+msgstr "Thay đổi Symbol đã chọn"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
+#, fuzzy
 msgid "Change symbols matching reference designator:"
-msgstr ""
+msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching value:"
-msgstr ""
+msgstr "Thay đổi Symbol phù hợp với giá trị:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching library identifier:"
-msgstr ""
+msgstr "Thay đổi các symbol(ký hiệu) khớp với mã định danh thư viện:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:130
 msgid "Update Fields"
-msgstr ""
+msgstr "Cập nhật các trường"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:131
 msgid "Remove fields if not in new symbol"
-msgstr ""
+msgstr "Xóa các trường nếu không có trong Symbol mới"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Reset fields if empty in new symbol"
-msgstr ""
+msgstr "Đặt lại trường nếu trống trong symbol mới"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
+#, fuzzy
 msgid "Update field visibilities"
-msgstr ""
+msgstr "Cập nhật trường nhìn thấy"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update field sizes and styles"
-msgstr ""
+msgstr "Cập nhật kích thước và kiểu trường"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field positions"
-msgstr ""
+msgstr "Cập nhật vị trí trường"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:154
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
 msgid "Change"
-msgstr ""
+msgstr "Thay đổi"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:159
 msgid "Update"
-msgstr ""
+msgstr "Cập Nhật"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:493
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "Cập nhật symbol(ký hiệu) %s từ '%s' thành '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:500
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "Cập nhật symbol(ký hiệu) %s từ '%s' thành '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:510
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:517
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:528
 msgid "*** symbol not found ***"
-msgstr ""
+msgstr "*** không tìm thấy symbol ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** Symbol mới có quá ít đơn vị ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr ""
+msgstr "Cập nhật tất cả các symbol trong sơ đồ"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol"
-msgstr ""
+msgstr "Cập nhật symbol đã chọn"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr ""
+msgstr "Cập nhật symbol phù hợp với tên chỉ định tham chiếu:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr ""
+msgstr "Thay đổi Symbol phù hợp với giá trị:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr ""
+msgstr "Thay đổi các symbol(ký hiệu) khớp với mã định danh thư viện:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr ""
+msgstr "Mã định danh thư viện mới:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 msgid "Update/reset Fields"
-msgstr ""
+msgstr "Cập nhật / đặt lại các trường"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
-msgstr ""
+msgstr "Chọn Không có"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:117
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:94
 msgid "Update Options"
-msgstr ""
+msgstr "Cập nhật các tùy chọn"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
