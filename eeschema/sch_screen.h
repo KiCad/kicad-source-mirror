@@ -94,10 +94,10 @@ class SCH_SCREEN : public BASE_SCREEN
 {
 private:
 
-    wxString    m_fileName;          // File used to load the screen.
-
-    int         m_refCount;          // Number of sheets referencing this screen.
-                                     // Delete when it goes to zero.
+    wxString    m_fileName;                 // File used to load the screen.
+    int         m_fileFormatVersionAtLoad;
+    int         m_refCount;                 // Number of sheets referencing this screen.
+                                            // Delete when it goes to zero.
     /**
      * The list of sheet paths sharing this screen.  Used in some annotation calculations to
      * update alternate references.
@@ -108,16 +108,16 @@ private:
     std::vector<SCH_SHEET_PATH> m_clientSheetPathList;
 
 
-    PAGE_INFO   m_paper;             // The size of the paper to print or plot on
+    PAGE_INFO   m_paper;                    // The size of the paper to print or plot on
     TITLE_BLOCK m_titles;
-    wxPoint     m_aux_origin;        // Origin used for drill & place files by PCBNew
+    wxPoint     m_aux_origin;               // Origin used for drill & place files by PCBNew
     EE_RTREE    m_rtree;
 
-    int         m_modification_sync; // inequality with PART_LIBS::GetModificationHash() will
-                                     //   trigger ResolveAll().
+    int         m_modification_sync;        // inequality with PART_LIBS::GetModificationHash()
+                                            //   will trigger ResolveAll().
 
-    /// Set to true once the zoom value is initialized with `InitZoom()`.
-    bool m_zoomInitialized;
+    bool        m_zoomInitialized;          // Set to true once the zoom value is initialized with
+                                            // `InitZoom()`.
 
     /// List of bus aliases stored in this screen.
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
@@ -180,6 +180,9 @@ public:
     {
         return wxT( "SCH_SCREEN" );
     }
+
+    void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
+    int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }

@@ -54,9 +54,7 @@
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 
-#include <thread>
 #include <algorithm>
-#include <future>
 
 // TODO(JE) Debugging only
 #include <profile.h>
@@ -64,7 +62,8 @@
 
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
-    m_paper( wxT( "A4" ) )
+    m_paper( wxT( "A4" ) ),
+    m_fileFormatVersionAtLoad( 0 )
 {
     m_modification_sync = 0;
     m_refCount = 0;

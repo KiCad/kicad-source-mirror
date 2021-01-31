@@ -1981,6 +1981,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
     }
 
+    screen->SetFileFormatVersionAtLoad( m_requiredVersion );
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( aIsCopyableOnly && token == T_EOF )

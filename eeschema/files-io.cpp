@@ -44,6 +44,7 @@
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_file_versions.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
@@ -291,6 +292,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     SetStatusText( wxEmptyString );
+    m_infoBar->Dismiss();
 
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
 
@@ -483,24 +485,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Update all symbol library links for all sheets.
             schematic.UpdateSymbolLinks();
 
-            if( !cfg || cfg->m_Appearance.show_sexpr_file_convert_warning )
-            {
-                wxRichMessageDialog newFileFormatDlg(
-                        this,
-                        _( "The schematic file will be converted to the new file format on save." ),
-                        _( "Project Load Warning" ),
-                        wxOK | wxCENTER | wxICON_EXCLAMATION );
-                newFileFormatDlg.ShowDetailedText(
-                        _( "This schematic was saved in the legacy file format which is no "
-                           "longer supported and will be saved using the new file format.\n\nThe "
-                           "new file format cannot be opened with previous versions of KiCad." ) );
-                newFileFormatDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
-                newFileFormatDlg.ShowModal();
-
-                if( cfg )
-                    cfg->m_Appearance.show_sexpr_file_convert_warning =
-                            !newFileFormatDlg.IsCheckBoxChecked();
-            }
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
+                                       "It will be converted to the new format when saved." ),
+                                    wxICON_WARNING );
 
             // Legacy schematic can have duplicate time stamps so fix that before converting
             // to the s-expression format.
@@ -511,6 +500,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         else  // S-expression schematic.
         {
+            if( schematic.GetFirst()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
+            {
+                m_infoBar->RemoveAllButtons();
+                m_infoBar->AddCloseButton();
+                m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
+                                           "It will be converted to the new format when saved." ),
+                                        wxICON_WARNING );
+            }
+
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->UpdateLocalLibSymbolLinks();
 
@@ -557,7 +555,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     UpdateTitle();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
-    m_infoBar->Dismiss();
 
     if( fn.FileExists() && !fn.IsFileWritable() )
     {
