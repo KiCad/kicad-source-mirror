@@ -48,6 +48,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         m_FieldEditorPanel(),
         m_LibViewPanel(),
         m_NetlistPanel(),
+        m_PlotPanel(),
         m_SymChooserPanel(),
         m_Selection(),
         m_Simulator(),
