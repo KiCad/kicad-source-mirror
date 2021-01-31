@@ -189,8 +189,8 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
             KiBitmap( sim_probe_xpm ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
     m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
             KiBitmap( sim_tune_xpm ), _( "Tune component values" ), wxITEM_NORMAL );
-    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Settings" ),
-            KiBitmap( sim_settings_xpm ), _( "Simulation settings" ), wxITEM_NORMAL );
+    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
+            KiBitmap( sim_settings_xpm ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
 
     Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
              wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
@@ -437,7 +437,7 @@ void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
     if( aSimCommand.IsEmpty() )
     {
         SIM_PANEL_BASE* plotPanel = currentPlotWindow();
-        
+
         if( plotPanel && m_plots.count( plotPanel ) != 0 )
             m_exporter->SetSimCommand( m_plots[plotPanel].m_simCommand );
     }
@@ -1325,7 +1325,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
         // If it is a new simulation type, open a new plot
         // For the DC sim, check if sweep source type has changed (char 4 will contain 'v', 'i', 'r' or 't'
-        if( !plotPanelWindow 
+        if( !plotPanelWindow
             || ( plotPanelWindow && plotPanelWindow->GetType() != newSimType )
             || ( newSimType == ST_DC
                  && oldCommand.Lower().GetChar( 4 ) != newCommand.Lower().GetChar( 4 ) ) )
