@@ -213,7 +213,7 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::UNKNOWN:           return UNDEFINED_LAYER;
 
     case ALTIUM_LAYER::TOP_LAYER:         return F_Cu;
-    case ALTIUM_LAYER::MID_LAYER_1:       return In1_Cu; // TODO: stackup same as in KiCad?
+    case ALTIUM_LAYER::MID_LAYER_1:       return In1_Cu;
     case ALTIUM_LAYER::MID_LAYER_2:       return In2_Cu;
     case ALTIUM_LAYER::MID_LAYER_3:       return In3_Cu;
     case ALTIUM_LAYER::MID_LAYER_4:       return In4_Cu;
@@ -272,18 +272,18 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::DRILL_GUIDE:       return Dwgs_User;
     case ALTIUM_LAYER::KEEP_OUT_LAYER:    return Margin;
 
-    case ALTIUM_LAYER::MECHANICAL_1:      return Dwgs_User; //Edge_Cuts;
-    case ALTIUM_LAYER::MECHANICAL_2:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_3:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_4:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_5:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_6:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_7:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_8:      return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_9:      return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_1:      return User_1; //Edge_Cuts;
+    case ALTIUM_LAYER::MECHANICAL_2:      return User_2;
+    case ALTIUM_LAYER::MECHANICAL_3:      return User_3;
+    case ALTIUM_LAYER::MECHANICAL_4:      return User_4;
+    case ALTIUM_LAYER::MECHANICAL_5:      return User_5;
+    case ALTIUM_LAYER::MECHANICAL_6:      return User_6;
+    case ALTIUM_LAYER::MECHANICAL_7:      return User_7;
+    case ALTIUM_LAYER::MECHANICAL_8:      return User_8;
+    case ALTIUM_LAYER::MECHANICAL_9:      return User_9;
     case ALTIUM_LAYER::MECHANICAL_10:     return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_11:     return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_12:     return Dwgs_User;
+    case ALTIUM_LAYER::MECHANICAL_11:     return Eco1_User;
+    case ALTIUM_LAYER::MECHANICAL_12:     return Eco2_User;
     case ALTIUM_LAYER::MECHANICAL_13:     return F_Fab;
     case ALTIUM_LAYER::MECHANICAL_14:     return B_Fab;
     case ALTIUM_LAYER::MECHANICAL_15:     return F_CrtYd;
@@ -659,6 +659,31 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         ( *it )->SetEpsilonR( layer.dielectricconst, 0 );
 
         ++it;
+    }
+
+    // Set name of all non-cu layers
+    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::TOP_OVERLAY );
+         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::BOTTOM_SOLDER ); altiumLayerId++ )
+    {
+        // array starts with 0, but stackup with 1
+        ABOARD6_LAYER_STACKUP& layer = elem.stackup.at( altiumLayerId - 1 );
+
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
+        PCB_LAYER_ID klayer = GetKicadLayer( alayer );
+
+        m_board->SetLayerName( klayer, layer.name );
+    }
+
+    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_1 );
+         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_16 ); altiumLayerId++ )
+    {
+        // array starts with 0, but stackup with 1
+        ABOARD6_LAYER_STACKUP& layer = elem.stackup.at( altiumLayerId - 1 );
+
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
+        PCB_LAYER_ID klayer = GetKicadLayer( alayer );
+
+        m_board->SetLayerName( klayer, layer.name );
     }
 
     HelperCreateBoardOutline( elem.board_vertices );
