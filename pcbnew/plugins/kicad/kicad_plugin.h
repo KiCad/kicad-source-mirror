@@ -185,7 +185,7 @@ public:
 
     PCB_IO( int aControlFlags = CTL_FOR_BOARD );
 
-    ~PCB_IO();
+    virtual ~PCB_IO();
 
     /**
      * Output \a aItem to \a aFormatter in s-expression format.

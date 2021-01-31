@@ -39,8 +39,7 @@
 
 CLIPBOARD_IO::CLIPBOARD_IO():
     PCB_IO( CTL_FOR_CLIPBOARD ),
-    m_formatter(),
-    m_parser( new PCB_PARSER() )
+    m_formatter()
 {
     m_out = &m_formatter;
 }
@@ -48,7 +47,6 @@ CLIPBOARD_IO::CLIPBOARD_IO():
 
 CLIPBOARD_IO::~CLIPBOARD_IO()
 {
-    delete m_parser;
 }
 
 

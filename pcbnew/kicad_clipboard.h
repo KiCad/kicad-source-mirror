@@ -65,7 +65,6 @@ public:
 
 private:
     STRING_FORMATTER m_formatter;
-    PCB_PARSER*      m_parser;
 };
 
 
