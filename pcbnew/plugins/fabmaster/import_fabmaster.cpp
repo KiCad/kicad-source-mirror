@@ -198,7 +198,7 @@ double FABMASTER::processScaleFactor( size_t aRow )
 {
     double retval = 0.0;
 
-    if( rows.size() < aRow )
+    if( aRow >= rows.size() )
         return -1.0;
 
     if( rows[aRow].size() < 11 )
@@ -270,7 +270,7 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -346,7 +346,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -580,7 +580,7 @@ size_t FABMASTER::processSimpleLayers( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-     if( rows.size() < rownum )
+     if( rownum >= rows.size() )
          return -1;
 
      auto header = rows[aRow];
@@ -722,7 +722,7 @@ size_t FABMASTER::processLayers( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     auto header = rows[aRow];
@@ -794,9 +794,8 @@ size_t FABMASTER::processLayers( size_t aRow )
 size_t FABMASTER::processCustomPads( size_t aRow )
 {
     size_t rownum = aRow + 2;
-    size_t offset = 2;
 
-    if( rows.size() < aRow + offset)
+    if( rownum >= rows.size() )
         return -1;
 
     auto header = rows[aRow];
@@ -839,7 +838,6 @@ size_t FABMASTER::processCustomPads( size_t aRow )
             wxLogError( wxString::Format( _( "Invalid row size in row %zu.  "
                     "Expecting %zu elements but found %zu" ), rownum, header.size(), row.size() ) );
 
-            ++offset;
             continue;
         }
 
@@ -870,7 +868,6 @@ size_t FABMASTER::processCustomPads( size_t aRow )
 
         if( !std::equal( prefix.begin(), prefix.end(), pad_shape_name.begin() ) )
         {
-            ++offset;
             continue;
         }
 
@@ -1100,7 +1097,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -1235,7 +1232,7 @@ size_t FABMASTER::processVias( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -1288,7 +1285,7 @@ size_t FABMASTER::processTraces( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -1444,7 +1441,7 @@ size_t FABMASTER::processFootprints( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -1527,7 +1524,7 @@ size_t FABMASTER::processPins( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
@@ -1597,7 +1594,7 @@ size_t FABMASTER::processNets( size_t aRow )
 {
     size_t rownum = aRow + 2;
 
-    if( rows.size() < rownum )
+    if( rownum >= rows.size() )
         return -1;
 
     const auto header = rows[aRow];
