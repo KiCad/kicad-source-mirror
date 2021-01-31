@@ -56,6 +56,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
         || m_parent->IsType( FRAME_SIMULATOR ) )
     {
         m_book->SetSelection( 1 );
+        m_buttonReset->Hide();              // Eeschema and friends don't use grid origin
     }
     else
     {
