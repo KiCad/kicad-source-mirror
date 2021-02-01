@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-30 10:25+0000\n"
+"PO-Revision-Date: 2021-02-01 13:55+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -488,7 +488,7 @@ msgstr "对非电镀的铜使用裸铜色"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "对镀铜和非镀铜使用不同的颜色。 (慢)"
+msgstr "对镀铜和非镀铜使用不同的颜色。 (慢速)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -4005,7 +4005,7 @@ msgstr "向右"
 #: eeschema/fields_grid_table.cpp:492
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Top"
-msgstr "上对齐"
+msgstr "向上对齐"
 
 #: common/eda_text.cpp:654
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
@@ -4014,7 +4014,7 @@ msgstr "上对齐"
 #: eeschema/fields_grid_table.cpp:496
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 msgid "Bottom"
-msgstr "下对齐"
+msgstr "向下对齐"
 
 #: common/eda_text.cpp:658 common/page_layout/ws_draw_item.cpp:123
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:43 eeschema/lib_text.h:59
@@ -8397,7 +8397,7 @@ msgstr "..."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 msgid "H Alignment (fields only):"
-msgstr "水平对齐(仅限字段)："
+msgstr "水平对齐 (仅限字段)："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:236
 msgid "Visible (fields only)"
@@ -8405,7 +8405,7 @@ msgstr "可见(仅限字段)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 msgid "V Alignment (fields only):"
-msgstr "垂直对齐(仅限字段)："
+msgstr "垂直对齐 (仅限字段)："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:282
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:25
@@ -29428,9 +29428,7 @@ msgstr "该文件似乎已损坏。无法在组映射中查找子组 %s（父组
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
-"尺度 ID %s 是一个角度尺寸，KiCad中没有与之等效的东西。取而代之的是一个对齐的"
-"尺度。"
+msgstr "尺度 ID %s 是一个角度尺寸，KiCad 中没有与之等效的东西。取而代之的是一个对齐的尺度。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -32267,7 +32265,7 @@ msgstr "运行各种诊断程序并尝试修复电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:1068
 msgid "Align to Top"
-msgstr "顶部对齐"
+msgstr "向上对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "Aligns selected items to the top edge"
@@ -32275,7 +32273,7 @@ msgstr "对齐选择的项到顶边"
 
 #: pcbnew/tools/pcb_actions.cpp:1073
 msgid "Align to Bottom"
-msgstr "底部对齐"
+msgstr "向下对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1074
 msgid "Aligns selected items to the bottom edge"
@@ -32283,7 +32281,7 @@ msgstr "对齐选择的项到底边"
 
 #: pcbnew/tools/pcb_actions.cpp:1078
 msgid "Align to Left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
 msgid "Aligns selected items to the left edge"
@@ -32291,7 +32289,7 @@ msgstr "对齐选择的项到左边"
 
 #: pcbnew/tools/pcb_actions.cpp:1083
 msgid "Align to Right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1084
 msgid "Aligns selected items to the right edge"
@@ -32559,19 +32557,19 @@ msgstr "对齐/分布"
 
 #: pcbnew/tools/placement_tool.cpp:227
 msgid "Align to top"
-msgstr "顶部对齐"
+msgstr "向上对齐"
 
 #: pcbnew/tools/placement_tool.cpp:269
 msgid "Align to bottom"
-msgstr "底部对齐"
+msgstr "向下对齐"
 
 #: pcbnew/tools/placement_tool.cpp:326
 msgid "Align to left"
-msgstr "左对齐"
+msgstr "向左对齐"
 
 #: pcbnew/tools/placement_tool.cpp:383
 msgid "Align to right"
-msgstr "右对齐"
+msgstr "向右对齐"
 
 #: pcbnew/tools/placement_tool.cpp:425
 msgid "Align to middle"
