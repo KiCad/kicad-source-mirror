@@ -508,16 +508,6 @@ public:
     PAD* GetTopLeftPad();
 
     /**
-     * Get the first pad in the list or NULL if none.
-     *
-     * @return first pad or null pointer.
-     */
-    PAD* GetFirstPad() const
-    {
-        return m_pads.empty() ? nullptr : m_pads.front();
-    }
-
-    /**
      * Return the number of pads.
      *
      * @param aIncludeNPTH includes non-plated through holes when true.  Does not include

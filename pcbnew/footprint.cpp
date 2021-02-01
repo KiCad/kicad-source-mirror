@@ -913,7 +913,7 @@ PAD* FOOTPRINT::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 
 PAD* FOOTPRINT::GetTopLeftPad()
 {
-    PAD* topLeftPad = GetFirstPad();
+    PAD* topLeftPad = m_pads.front();
 
     for( PAD* p : m_pads )
     {
