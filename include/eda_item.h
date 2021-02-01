@@ -188,7 +188,7 @@ public:
         return m_status & type;
     }
 
-    void SetState( int type, int state )
+    void SetState( int type, bool state )
     {
         if( state )
             m_status |= type; // state = ON or OFF

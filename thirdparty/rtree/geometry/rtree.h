@@ -499,7 +499,7 @@ protected:
         int             m_partition[MAXNODES + 1];
         int             m_total;
         int             m_minFill;
-        int             m_taken[MAXNODES + 1];
+        bool            m_taken[MAXNODES + 1];
         int             m_count[2];
         Rect            m_cover[2];
         ELEMTYPEREAL    m_area[2];
@@ -1333,7 +1333,7 @@ typename RTREE_QUAL::Rect RTREE_QUAL::NodeCover( Node* a_node ) const
 {
     ASSERT( a_node );
 
-    int     firstTime = true;
+    bool     firstTime = true;
     Rect    rect;
     InitRect( &rect );
 

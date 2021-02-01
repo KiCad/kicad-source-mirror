@@ -1174,7 +1174,7 @@ static int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
 }
 
 
-int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN )
+bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN )
 {
     wxString refName = aNet->GetNetname();
     wxString dummy, coupledNetName;

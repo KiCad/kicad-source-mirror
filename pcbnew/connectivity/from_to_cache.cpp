@@ -76,7 +76,7 @@ static PATH_STATUS uniquePathBetweenNodes( CN_ITEM* u, CN_ITEM* v, std::vector<C
     std::deque<Path> Q;
 
     Path pInit;
-    int  pathFound = false;
+    bool pathFound = false;
     pInit.push_back( u );
     Q.push_back( pInit );
 
