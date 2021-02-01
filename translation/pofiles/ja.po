@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 15:03+0000\n"
+"PO-Revision-Date: 2021-02-01 23:06+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -4501,283 +4501,239 @@ msgstr "言語設定"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr ""
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr ""
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr ""
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr ""
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr ""
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr ""
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr ""
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr ""
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr ""
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
-#, fuzzy
 msgid "In10.Cu"
-msgstr "In10"
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
-#, fuzzy
 msgid "In11.Cu"
-msgstr "In11"
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
-#, fuzzy
 msgid "In12.Cu"
-msgstr "In12"
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
-#, fuzzy
 msgid "In13.Cu"
-msgstr "In13"
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
-#, fuzzy
 msgid "In14.Cu"
-msgstr "In14"
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
-#, fuzzy
 msgid "In15.Cu"
-msgstr "In15"
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
-#, fuzzy
 msgid "In16.Cu"
-msgstr "In16"
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
-#, fuzzy
 msgid "In17.Cu"
-msgstr "In17"
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
-#, fuzzy
 msgid "In18.Cu"
-msgstr "In18"
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
-#, fuzzy
 msgid "In19.Cu"
-msgstr "In19"
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
-#, fuzzy
 msgid "In20.Cu"
-msgstr "In20"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
-#, fuzzy
 msgid "In21.Cu"
-msgstr "In21"
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
-#, fuzzy
 msgid "In22.Cu"
-msgstr "In22"
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
-#, fuzzy
 msgid "In23.Cu"
-msgstr "In23"
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
-#, fuzzy
 msgid "In24.Cu"
-msgstr "In24"
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
-#, fuzzy
 msgid "In25.Cu"
-msgstr "In25"
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
-#, fuzzy
 msgid "In26.Cu"
-msgstr "In26"
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
-#, fuzzy
 msgid "In27.Cu"
-msgstr "In27"
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
-#, fuzzy
 msgid "In28.Cu"
-msgstr "In28"
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
-#, fuzzy
 msgid "In29.Cu"
-msgstr "In29"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:62
-#, fuzzy
 msgid "In30.Cu"
-msgstr "In30"
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
-#, fuzzy
 msgid "B.Adhesive"
-msgstr "裏面の接着剤層"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
-#, fuzzy
 msgid "F.Adhesive"
-msgstr "表面の接着剤層"
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
-#, fuzzy
 msgid "B.Paste"
-msgstr "貼り付け"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
-#, fuzzy
 msgid "F.Paste"
-msgstr "貼り付け"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "シルク"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "シルク"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
-#, fuzzy
 msgid "User.Drawings"
-msgstr "線画"
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
-#, fuzzy
 msgid "User.Comments"
-msgstr "コメント"
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
-#, fuzzy
 msgid "User.Eco1"
-msgstr "ユーザー レイヤー Eco1"
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
-#, fuzzy
 msgid "User.Eco2"
-msgstr "ユーザー レイヤー Eco2"
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Edge.Cuts"
-msgstr "基板外形"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:679
-#, fuzzy
 msgid "Margin"
-msgstr "Margin_layer"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
-#, fuzzy
 msgid "F.Courtyard"
-msgstr "コートヤード"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "B.Courtyard"
-msgstr "コートヤード"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr ""
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr ""
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
-#, fuzzy
 msgid "User.1"
-msgstr "ユーザー"
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
-#, fuzzy
 msgid "User.2"
-msgstr "ユーザー"
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
-#, fuzzy
 msgid "User.3"
-msgstr "ユーザー"
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "User.4"
-msgstr "ユーザー"
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "User.5"
-msgstr "ユーザー"
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "User.6"
-msgstr "ユーザー"
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "User.7"
-msgstr "ユーザー"
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "User.8"
-msgstr "ユーザー"
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
-#, fuzzy
 msgid "User.9"
-msgstr "ユーザー"
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Rescue"
@@ -21471,19 +21427,17 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
 msgid "0.000"
-msgstr ""
+msgstr "0.000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
-#, fuzzy
 msgid "0.0000"
-msgstr "0000"
+msgstr "0.0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
-#, fuzzy
 msgid "0.00000"
-msgstr "0000"
+msgstr "0.00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:178
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:148
@@ -25884,9 +25838,8 @@ msgid "Add item(s) to selection."
 msgstr "選択に追加"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:120
-#, fuzzy
 msgid "Shift+Alt"
-msgstr "Shift"
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 #: pcbnew/dialogs/panel_edit_options_base.cpp:206
@@ -25907,9 +25860,8 @@ msgid "Clarify selection from menu."
 msgstr "明示的な選択"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:150
-#, fuzzy
 msgid "Ctrl+Shift"
-msgstr "Shift"
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:236
@@ -25924,13 +25876,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:201
-#, fuzzy
 msgid "Shift+Cmd"
-msgstr "Shift"
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:231
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:259
 msgid "Magnetic Points"
@@ -26459,9 +26410,8 @@ msgid "If you want a courtyard layer for the front side of the board"
 msgstr "基板表面にコートヤード レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
-#, fuzzy
 msgid "CrtYd_Front"
-msgstr "CrtYd_Front_layer"
+msgstr "CrtYd_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:70
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:660
@@ -26473,9 +26423,8 @@ msgid "If you want a fabrication layer for the front side of the board"
 msgstr "基板表面に基板製造用 (Fab) レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:81
-#, fuzzy
 msgid "Fab_Front"
-msgstr "Fab_Front_layer"
+msgstr "Fab_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:84
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
@@ -26487,9 +26436,8 @@ msgid "If you want an adhesive template for the front side of the board"
 msgstr "基板表面に実装用ボンドのテンプレートを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:93
-#, fuzzy
 msgid "Adhes_Front"
-msgstr "Adhes_Front_layer"
+msgstr "Adhes_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:96
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:108
@@ -26507,27 +26455,24 @@ msgid "If you want a solder paster layer for front side of the board"
 msgstr "基板表面にハンダ ペースト レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:105
-#, fuzzy
 msgid "SoldP_Front"
-msgstr "SoldP_Front_layer"
+msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:113
 msgid "If you want a silk screen layer for the front side of the board"
 msgstr "基板表面にシルク スクリーン レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:117
-#, fuzzy
 msgid "SilkS_Front"
-msgstr "SilkS_Front_layer"
+msgstr "SilkS_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:125
 msgid "If you want a solder mask layer for the front of the board"
 msgstr "基板表面にハンダ マスク レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:129
-#, fuzzy
 msgid "Mask_Front"
-msgstr "Mask_Front_layer"
+msgstr "Mask_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:137
 msgid "If you want a front copper layer"
@@ -26853,54 +26798,48 @@ msgid "If you want a solder mask layer for the back side of the board"
 msgstr "基板裏面にハンダ マスク レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:597
-#, fuzzy
 msgid "SoldM_Back"
-msgstr "SoldP_Back_layer"
+msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 msgid "If you want a silk screen layer for the back side of the board"
 msgstr "基板裏面にシルク スクリーン レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:609
-#, fuzzy
 msgid "SilkS_Back"
-msgstr "SilkS_Back_layer"
+msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:617
 msgid "If you want a solder paste layer for the back side of the board"
 msgstr "基板裏面にハンダ ペースト レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:621
-#, fuzzy
 msgid "SoldP_Back"
-msgstr "SoldP_Back_layer"
+msgstr "SoldP_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:629
 msgid "If you want an adhesive layer for the back side of the board"
 msgstr "基板裏面に実装用ボンド レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:633
-#, fuzzy
 msgid "Adhes_Back"
-msgstr "Adhes_Back_layer"
+msgstr "Adhes_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:641
 msgid "If you want a fabrication layer for the back side of the board"
 msgstr "基板裏面に基板製造用 (Fab) レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:645
-#, fuzzy
 msgid "Fab_Back"
-msgstr "Fab_Back_layer"
+msgstr "Fab_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:653
 msgid "If you want a courtyard layer for the back side of the board"
 msgstr "基板裏面にコートヤード レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:657
-#, fuzzy
 msgid "CrtYd_Back"
-msgstr "CrtYd_Back_layer"
+msgstr "CrtYd_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "If you want a board perimeter layer"
@@ -26951,9 +26890,8 @@ msgid "Drawings"
 msgstr "線画"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:733
-#, fuzzy
 msgid "User1"
-msgstr "ユーザー"
+msgstr "User1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:736
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:746
@@ -26968,44 +26906,36 @@ msgid "User defined layer"
 msgstr "ユーザー定義レイヤー"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:743
-#, fuzzy
 msgid "User2"
-msgstr "ユーザー"
+msgstr "User2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:753
-#, fuzzy
 msgid "User3"
-msgstr "ユーザー"
+msgstr "User3"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:763
-#, fuzzy
 msgid "User4"
-msgstr "ユーザー"
+msgstr "User4"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:773
-#, fuzzy
 msgid "User5"
-msgstr "ユーザー"
+msgstr "User5"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:783
-#, fuzzy
 msgid "User6"
-msgstr "ユーザー"
+msgstr "User6"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:793
-#, fuzzy
 msgid "User7"
-msgstr "ユーザー"
+msgstr "User7"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:803
-#, fuzzy
 msgid "User8"
-msgstr "ユーザー"
+msgstr "User8"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:813
-#, fuzzy
 msgid "User9"
-msgstr "ユーザー"
+msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
 msgid ""
