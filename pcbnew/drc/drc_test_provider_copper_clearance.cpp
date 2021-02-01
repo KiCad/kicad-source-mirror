@@ -310,28 +310,26 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
                 return m_drcEngine->GetReportAllTrackErrors();
             }
         }
-        else
+
+        std::shared_ptr<SHAPE> otherShape = getShape( other, layer );
+
+        if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
         {
-            std::shared_ptr<SHAPE> otherShape = getShape( other, layer );
+            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 
-            if( trackShape->Collide( otherShape.get(), clearance - m_drcEpsilon, &actual, &pos ) )
-            {
-                std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+            m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), clearance ),
+                          MessageTextFromValue( userUnits(), actual ) );
 
-                m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
-                              constraint.GetName(),
-                              MessageTextFromValue( userUnits(), clearance ),
-                              MessageTextFromValue( userUnits(), actual ) );
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+            drce->SetItems( track, other );
+            drce->SetViolatingRule( constraint.GetParentRule() );
 
-                drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
-                drce->SetItems( track, other );
-                drce->SetViolatingRule( constraint.GetParentRule() );
+            reportViolation( drce, (wxPoint) pos );
 
-                reportViolation( drce, (wxPoint) pos );
-
-                if( !m_drcEngine->GetReportAllTrackErrors() )
-                    return false;
-            }
+            if( !m_drcEngine->GetReportAllTrackErrors() )
+                return false;
         }
     }
 
