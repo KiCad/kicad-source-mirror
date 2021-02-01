@@ -911,7 +911,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_EAGLE:
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),
-                      wxT( "Import eagle schematic caller didn't send full filename" ) );
+                      wxT( "Import schematic caller didn't send full filename" ) );
 
         if( !LockFile( aFileName ) )
         {
@@ -943,7 +943,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             newfilename.SetPath( Prj().GetProjectPath() );
             newfilename.SetName( Prj().GetProjectName() );
-            newfilename.SetExt( LegacySchematicFileExtension );
+            newfilename.SetExt( KiCadSchematicFileExtension );
 
             SetScreen( GetCurrentSheet().LastScreen() );
 
