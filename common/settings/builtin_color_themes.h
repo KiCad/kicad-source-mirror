@@ -243,7 +243,6 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_VIA_BBLIND,           COLOR4D( BROWN ) },
             { LAYER_VIA_HOLES,            COLOR4D( 0.5, 0.4, 0, 0.8 ) },
             { LAYER_VIA_MICROVIA,         COLOR4D( CYAN ) },
-            { LAYER_VIA_THROUGH,          COLOR4D( LIGHTGRAY ) },
             { LAYER_WORKSHEET,            COLOR4D( DARKRED ) },
 
             { F_Cu,                       COLOR4D( RED ) },
