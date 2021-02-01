@@ -48,15 +48,10 @@
           "min_clearance": 0.508
         }
       },
-      "diff_pair_dimensions": [
-        {
-          "gap": 0.0,
-          "via_gap": 0.0,
-          "width": 0.0
-        }
-      ],
+      "diff_pair_dimensions": [],
       "drc_exclusions": [],
       "meta": {
+        "filename": "board_design_settings.json",
         "version": 1
       },
       "rule_severities": {
@@ -117,15 +112,8 @@
         "solder_paste_clearance": 0.0,
         "solder_paste_margin_ratio": 0.0
       },
-      "track_widths": [
-        0.25
-      ],
-      "via_dimensions": [
-        {
-          "diameter": 0.8,
-          "drill": 0.4
-        }
-      ],
+      "track_widths": [],
+      "via_dimensions": [],
       "zones_allow_external_fillets": false,
       "zones_use_no_outline": true
     },

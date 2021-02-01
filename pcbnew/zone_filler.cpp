@@ -817,8 +817,27 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
+        bool skipFootprint = false;
+
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
+
+        // Don't knock out holes in zones that share a net
+        // with a nettie footprint
+        if( footprint->IsNetTie() )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( aZone->GetNetCode() == pad->GetNetCode() )
+                {
+                    skipFootprint = true;
+                    break;
+                }
+            }
+        }
+
+        if( skipFootprint )
+            continue;
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
