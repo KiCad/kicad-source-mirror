@@ -523,13 +523,12 @@ TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
         cursor_shape_xpm );
 
 TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
-        AS_GLOBAL,
-        MD_CTRL + 'H', LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
+        AS_GLOBAL, 0, LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
         _( "Single Layer View Mode" ), _( "Toggle inactive layers between normal and dimmed" ),
         contrast_mode_xpm );
 
 TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycle",
-        AS_GLOBAL, 0, "",  _( "Single Layer View Mode (3-state)" ),
+        AS_GLOBAL, MD_CTRL + 'H', "",  _( "Single Layer View Mode (3-state)" ),
         _( "Toggle inactive layers between normal, dimmed, and hidden" ), contrast_mode_xpm );
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
