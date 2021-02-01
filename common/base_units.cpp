@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
  */
 
 /**
- * @author Wayne Stambaugh <stambaughw@verizon.net>
+ * @author Wayne Stambaugh <stambaughw@gmail.com>
  * @file base_units.cpp
  * @brief Code to handle objects that require both schematic and board internal units.
  * @note This file is an ugly hack to solve the problem of formatting the base units
@@ -109,7 +109,9 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue )
     }
 }
 
-/* Convert a value to a string using double notation.
+/**
+ * Convert a value to a string using double notation.
+ *
  * For readability, the mantissa has 0, 1, 3 or 4 digits, depending on units
  * for unit = inch the mantissa has 3 digits (Eeschema) or 4 digits
  * for unit = mil the mantissa has 0 digits (Eeschema) or 1 digits
@@ -208,7 +210,9 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
 }
 
 
-/* Convert a value to a string using double notation.
+/**
+ * Convert a value to a string using double notation.
+ *
  * For readability, the mantissa has 3 or more digits,
  * the trailing 0 are removed if the mantissa has more than 3 digits
  * and some trailing 0
@@ -218,7 +222,8 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, EDA_DATA_TYPE aType )
+wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol,
+                          EDA_DATA_TYPE aType )
 {
     double  value_to_print = aValue;
 
@@ -240,8 +245,7 @@ wxString StringFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitSymbol, 
 #if defined( EESCHEMA )
     wxString    stringValue = wxString::Format( wxT( "%.3f" ), value_to_print );
 
-    // Strip trailing zeros. However, keep at least 3 digits in mantissa
-    // For readability
+    // Strip trailing zeros. However, keep at least 3 digits in mantissa for readability.
     StripTrailingZeros( stringValue, 3 );
 
 #else
@@ -368,7 +372,8 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
-    if( aUnits == EDA_UNITS::MILLIMETRES || aUnits == EDA_UNITS::MILS || aUnits == EDA_UNITS::INCHES )
+    if( aUnits == EDA_UNITS::MILLIMETRES || aUnits == EDA_UNITS::MILS
+      || aUnits == EDA_UNITS::INCHES )
     {
         if( unit == wxT( "mm" ) )
         {
@@ -451,15 +456,13 @@ long long int ValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA
 
 
 /**
- * Function AngleToStringDegrees
- * is a helper to convert the \a double \a aAngle (in internal unit)
- * to a string in degrees
+ * A helper to convert \a aAngle in deci-degrees to a string in degrees.
  */
 wxString AngleToStringDegrees( double aAngle )
 {
     wxString text;
 
-    text.Printf( wxT( "%.3f" ), aAngle/10.0 );
+    text.Printf( wxT( "%.3f" ), aAngle / 10.0 );
     StripTrailingZeros( text, 1 );
 
     return text;
@@ -539,6 +542,9 @@ std::string FormatInternalUnits( int aValue )
     {
         len = snprintf( buf, sizeof(buf), "%.10f", engUnits );
 
+        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == NULL, std::string( "" ) );
+
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
 
@@ -550,6 +556,9 @@ std::string FormatInternalUnits( int aValue )
     else
     {
         len = snprintf( buf, sizeof(buf), "%.10g", engUnits );
+
+        // Make sure snprintf() didn't fail and the locale numeric separator is correct.
+        wxCHECK( len >= 0 && len < 50 && strchr( buf, ',' ) == NULL , std::string( "" ) );
     }
 
     return std::string( buf, len );

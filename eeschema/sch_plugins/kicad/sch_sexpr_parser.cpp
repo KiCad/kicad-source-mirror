@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -393,6 +394,17 @@ LIB_ITEM* SCH_SEXPR_PARSER::ParseDrawItem()
 double SCH_SEXPR_PARSER::parseDouble()
 {
     char* tmp;
+    wxString error;
+
+    // In case the file got saved with the wrong locale.
+    if( strchr( CurText(), ',' ) != NULL )
+    {
+        error.Printf( _( "Floating point number with incorrect local in\nfile: \"%s\"\n"
+                         "line: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+
+        THROW_IO_ERROR( error );
+    }
 
     errno = 0;
 
@@ -400,7 +412,6 @@ double SCH_SEXPR_PARSER::parseDouble()
 
     if( errno )
     {
-        wxString error;
         error.Printf( _( "Invalid floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       CurSource().c_str(), CurLineNumber(), CurOffset() );
 
@@ -409,7 +420,6 @@ double SCH_SEXPR_PARSER::parseDouble()
 
     if( CurText() == tmp )
     {
-        wxString error;
         error.Printf( _( "Missing floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       CurSource().c_str(), CurLineNumber(), CurOffset() );
 
