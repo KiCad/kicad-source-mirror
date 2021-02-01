@@ -103,7 +103,7 @@ public:
     bool empty()                                const   { return m_s.empty(); }
 
     std::string::size_type find( char c )       const   { return m_s.find( c ); }
-    std::string::size_type find( char c, size_t& s )     const   { return m_s.find( c, s ); }
+    std::string::size_type find( char c, size_t s )     const   { return m_s.find( c, s ); }
 
     void clear()                                        { m_s.clear(); }
     std::string::size_type length()             const   { return m_s.length(); }
