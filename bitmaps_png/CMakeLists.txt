@@ -340,7 +340,6 @@ set( BMAPS_MID
     new_generic
     new_library
     new_project
-    new_project_with_template
     noconn
     normal
     open_project
