@@ -1211,15 +1211,15 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 
 void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 {
-    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-
-    m_world = aWorld;
-
     if( !m_board )
     {
         wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
     }
+
+    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
+
+    m_world = aWorld;
 
     for( BOARD_ITEM* gitem : m_board->Drawings() )
     {
