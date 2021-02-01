@@ -404,6 +404,10 @@ public:
     inline bool IsLayerVisible( int aLayer ) const
     {
         wxCHECK( aLayer < (int) m_layers.size(), false );
+
+        if( GetPrintMode() > 0 )
+            return true;
+
         return m_layers.at( aLayer ).visible;
     }
 
@@ -683,7 +687,7 @@ public:
 
      * @return the printing mode.
      */
-    int GetPrintMode() { return m_printMode; }
+    int GetPrintMode() const { return m_printMode; }
 
     /**
      * Set the printing mode.

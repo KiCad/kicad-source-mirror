@@ -650,6 +650,12 @@ public:
     static LSET UserMask();
 
     /**
+     * Return a mask holding all layers which are physically realized.  Equivalent to the copper
+     * layers + the board tech mask.
+     */
+    static LSET PhysicalLayersMask();
+
+    /**
      * Return a mask with all of the allowable user defined layers.
      */
     static LSET UserDefinedLayers();
@@ -802,6 +808,22 @@ inline bool IsCopperLayer( LAYER_NUM aLayerId, bool aIncludeSyntheticCopperLayer
         return IsCopperLayer( aLayerId );
 }
 
+inline bool IsViaPadLayer( LAYER_NUM aLayer )
+{
+    return aLayer == LAYER_VIA_THROUGH
+            || aLayer == LAYER_VIA_MICROVIA
+            || aLayer == LAYER_VIA_BBLIND;
+}
+
+inline bool IsHoleLayer( LAYER_NUM aLayer )
+{
+    return aLayer == LAYER_VIA_HOLES
+            || aLayer == LAYER_VIA_HOLEWALLS
+            || aLayer == LAYER_PAD_PLATEDHOLES
+            || aLayer == LAYER_PAD_HOLEWALLS
+            || aLayer == LAYER_NON_PLATEDHOLES;
+}
+
 /**
  * Test whether a layer is a non copper and a non tech layer.
  *
@@ -909,7 +931,7 @@ inline int GetNetnameLayer( int aLayer )
         return LAYER_PAD_FR_NETNAMES;
     else if( aLayer == LAYER_PAD_BK )
         return LAYER_PAD_BK_NETNAMES;
-    else if( aLayer >= LAYER_VIA_MICROVIA && aLayer <= LAYER_VIA_THROUGH )
+    else if( IsViaPadLayer( aLayer ) )
         return LAYER_VIA_NETNAMES;
 
     // Fallback

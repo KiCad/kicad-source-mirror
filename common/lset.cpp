@@ -846,6 +846,13 @@ LSET LSET::UserMask()
 }
 
 
+LSET LSET::PhysicalLayersMask()
+{
+    static const LSET saved = AllBoardTechMask() | AllCuMask();
+    return saved;
+}
+
+
 LSET LSET::UserDefinedLayers()
 {
     static const LSET saved( 9,

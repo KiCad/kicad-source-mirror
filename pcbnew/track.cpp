@@ -596,13 +596,39 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+    BOARD*               board = GetBoard();
+    LSET                 visible = LSET::AllLayersMask();
 
-    if( IsNetnameLayer( aLayer ) )
+    // Meta control for hiding all vias
+    if( !aView->IsLayerVisible( LAYER_VIAS ) )
+        return HIDE;
+
+    // Handle board visibility (unless printing)
+    if( board && !aView->GetPrintMode() )
+        visible = board->GetVisibleLayers() & board->GetEnabledLayers();
+
+    if( IsViaPadLayer( aLayer ) )
     {
-        // Show netnames only if via is flashed to a high-contrast layer
+        if( !FlashLayer( visible ) )
+            return HIDE;
+    }
+    else if( IsHoleLayer( aLayer ) )
+    {
+        if( !( visible & LSET::PhysicalLayersMask() ).any() )
+            return HIDE;
+    }
+    else if( IsNetnameLayer( aLayer ) )
+    {
         if( renderSettings->GetHighContrast() )
         {
+            // Hide netnames unless via is flashed to a high-contrast layer
             if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
+                return HIDE;
+        }
+        else
+        {
+            // Hide netnames unless pad is flashed to a visible layer
+            if( !FlashLayer( visible ) )
                 return HIDE;
         }
 
@@ -610,32 +636,8 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return m_Width == 0 ? HIDE : ( (double)Millimeter2iu( 10 ) / m_Width );
     }
 
-    bool onVisibleLayer = false;
-
-    PCB_LAYER_ID top;
-    PCB_LAYER_ID bottom;
-    LayerPair( &top, &bottom );
-
-    for( int layer = top; layer <= bottom; ++layer )
-    {
-        if( aView->IsLayerVisible( layer ) )
-        {
-            onVisibleLayer = true;
-            break;
-        }
-    }
-
-    // Draw through vias unconditionally if the vias control is turned on.
-    // Draw blind/buried/microvias only if at least one of the layers crossed is enabeld.
-    if( aView->IsLayerVisible( LAYER_VIAS ) )
-    {
-        if( !onVisibleLayer && m_viaType != VIATYPE::THROUGH )
-            return HIDE;
-
-        return aView->IsLayerVisible( LAYER_VIAS ) ? 0.0 : HIDE;
-    }
-
-    return HIDE;
+    // Passed all tests; show.
+    return 0.0;
 }
 
 

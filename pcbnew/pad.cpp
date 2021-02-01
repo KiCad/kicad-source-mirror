@@ -1223,21 +1223,15 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
     BOARD*               board = GetBoard();
-
-    if( board && aLayer == LAYER_PADS_TH )
-    {
-        LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();
-
-        if( !FlashLayer( visible ) )
-            return HIDE;
-    }
-
-    if( aView->GetPrintMode() > 0 )  // In printing mode the pad is always drawable
-        return 0.0;
+    LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all pads
     if( !aView->IsLayerVisible( LAYER_PADS ) )
         return HIDE;
+
+    // Handle board visibility (unless printing)
+    if( board && !aView->GetPrintMode() )
+        visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
     // Handle Render tab switches
     if( ( GetAttribute() == PAD_ATTRIB_PTH || GetAttribute() == PAD_ATTRIB_NPTH )
@@ -1258,12 +1252,28 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
         return HIDE;
 
-    if( IsNetnameLayer( aLayer ) )
+    if( aLayer == LAYER_PADS_TH )
     {
-        // Hide netnames unless pad is flashed to a high-contrast layer
+        if( !FlashLayer( visible ) )
+            return HIDE;
+    }
+    else if( IsHoleLayer( aLayer ) )
+    {
+        if( !( visible & LSET::PhysicalLayersMask() ).any() )
+            return HIDE;
+    }
+    else if( IsNetnameLayer( aLayer ) )
+    {
         if( renderSettings->GetHighContrast() )
         {
+            // Hide netnames unless pad is flashed to a high-contrast layer
             if( !FlashLayer( renderSettings->GetPrimaryHighContrastLayer() ) )
+                return HIDE;
+        }
+        else
+        {
+            // Hide netnames unless pad is flashed to a visible layer
+            if( !FlashLayer( visible ) )
                 return HIDE;
         }
 
