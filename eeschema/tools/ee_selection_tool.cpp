@@ -37,6 +37,7 @@
 #include <preview_items/selection_area.h>
 #include <sch_base_frame.h>
 #include <sch_component.h>
+#include <sch_field.h>
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 #include <sch_line.h>
@@ -1105,13 +1106,15 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> sheetPins;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> children;
 
             // Filter the view items based on the selection box
             BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
-            // Sheet pins aren't in the view; add them by hand
+            // Some children aren't in the view; add them by hand.
+            // DO NOT add them directly to selectedItems.  If we add enough to cause the vector
+            // to grow it will re-allocate and invalidate the top-level for-loop iterator.
             for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
             {
                 SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
@@ -1121,11 +1124,21 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     int layer = pair.second;
 
                     for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                        sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
+                        children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
+                }
+
+                SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( pair.first );
+
+                if( symbol )
+                {
+                    int layer = pair.second;
+
+                    for( SCH_FIELD& field : symbol->GetFields() )
+                        children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &field, layer ) );
                 }
             }
 
-            selectedItems.insert( selectedItems.end(), sheetPins.begin(), sheetPins.end() );
+            selectedItems.insert( selectedItems.end(), children.begin(), children.end() );
 
             int height = area.GetEnd().y - area.GetOrigin().y;
 
