@@ -30,13 +30,15 @@
 
 bool KIPLATFORM::APP::RegisterApplicationRestart( const wxString& aCommandLine )
 {
-    HRESULT hr = S_OK; // not if registering for recovery and restart fails.
-    WCHAR   wsCommandLine[RESTART_MAX_CMD_LINE];
-    RtlZeroMemory( wsCommandLine, sizeof( wsCommandLine ) );
+    // Ensure we don't exceed the maximum allowable size
+    if( aCommandLine.length() > RESTART_MAX_CMD_LINE - 1 )
+    {
+        return false;
+    }
 
-    StringCchCopyW( wsCommandLine, sizeof( wsCommandLine ), aCommandLine.wc_str() );
+    HRESULT hr = S_OK;
 
-    hr = ::RegisterApplicationRestart( wsCommandLine, RESTART_NO_PATCH );
+    hr = ::RegisterApplicationRestart( aCommandLine.wc_str(), RESTART_NO_PATCH );
 
     return SUCCEEDED( hr );
 }
