@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-30 10:26+0000\n"
+"PO-Revision-Date: 2021-02-01 13:55+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -15612,11 +15612,11 @@ msgstr "<b>Tidak dapat membuat berkas sementara \"%s\"</b>\n"
 #: gerbview/files.cpp:578
 #, c-format
 msgid "<b>unzipped file %s read error</b>\n"
-msgstr ""
+msgstr "<b>kesalahan pembacaan berkas unzip %s</b>\n"
 
 #: gerbview/files.cpp:613
 msgid "Open Zip File"
-msgstr ""
+msgstr "Buka Berkas Zip"
 
 #: gerbview/gerber_draw_item.cpp:672
 msgid "Attribute"
@@ -15714,15 +15714,15 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:127
 msgid "Clear Recent Zip Files"
-msgstr ""
+msgstr "Bersihkan Berkas Zip Baru-baru Ini"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:89
 msgid "Clear Recent Drill Files"
-msgstr ""
+msgstr "Bersihkan Berkas Drill Baru-baru Ini"
 
 #: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:108
 msgid "Clear Recent Job Files"
-msgstr ""
+msgstr "Bersihkan Berkas Job Baru-baru Ini"
 
 #: gerbview/gerbview_frame.cpp:156
 msgid "Layers Manager"
@@ -15757,62 +15757,66 @@ msgstr ""
 
 #: gerbview/job_file_reader.cpp:155
 msgid "This job file uses an outdated format. Please recreate it."
-msgstr ""
+msgstr "Berkas job ini menggunakan format yang sudah usang. Harap buat ulang."
 
 #: gerbview/job_file_reader.cpp:191
 msgid "Open Gerber Job File"
-msgstr ""
+msgstr "Buka Berkas Job Gerber"
 
 #: gerbview/menubar.cpp:66
 msgid "Open Recent Gerber File"
-msgstr ""
+msgstr "Buka Berkas Gerber Baru-baru Ini"
 
 #: gerbview/menubar.cpp:70
 msgid "Clear Recent Gerber Files"
-msgstr ""
+msgstr "Bersihkan Berkas Gerber Baru-baru Ini"
 
 #: gerbview/menubar.cpp:85
 msgid "Open Recent Drill File"
-msgstr ""
+msgstr "Buka Berkas Drill Baru-baru Ini"
 
 #: gerbview/menubar.cpp:104
 msgid "Open Recent Job File"
-msgstr ""
+msgstr "Buka Berkas Job Baru-baru Ini"
 
 #: gerbview/menubar.cpp:123
 msgid "Open Recent Zip File"
-msgstr ""
+msgstr "Buka Berkas Zip Baru-baru Ini"
 
 #: gerbview/readgerb.cpp:62 pcbnew/footprint_libraries_utils.cpp:242
 #, c-format
 msgid "File \"%s\" not found"
-msgstr ""
+msgstr "Berkas \"%s\" tidak ditemukan"
 
 #: gerbview/readgerb.cpp:85
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"Peringatan: berkas ini tidak memiliki definisi D-Code\n"
+"Oleh karena itu ukuran beberapa item tak didefinisikan"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
+"Peringatan: berkas ini tidak memiliki beberapa definisi D-Code\n"
+"Oleh karena itu ukuran beberapa item tidak didefinisikan"
 
 #: gerbview/rs274d.cpp:645
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr ""
+msgstr "Berkas Gerber tidak valid: perintah arc G74 atau G75 tidak ada"
 
 #: gerbview/rs274x.cpp:229
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr ""
+msgstr "RS274X: Perintah format GERBER tidak valid '%c' pada baris %d: \"%s\""
 
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr ""
+msgstr "Berkas GERBER \"%s\" mungkin tidak tampil sebagaimana mestinya."
 
 #: gerbview/rs274x.cpp:537
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -15848,38 +15852,41 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr ""
+msgstr "Buka Berkas Plot Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
 msgstr ""
+"Buka berkas plot Gerber pada lapisan saat ini. Data sebelumnya akan dihapus"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
-msgstr ""
+msgstr "Buka Berkas Drill Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
 msgstr ""
+"Buka berkas drill Excellon pada lapisan saat ini. Data sebelumnya akan "
+"dihapus"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
-msgstr ""
+msgstr "Buka Berkas Job Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr ""
+msgstr "Buka berkas job Gerber dan berkas plot gerber yang terkait"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Zip Archive File..."
-msgstr ""
+msgstr "Buka Berkas Arsip Zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr ""
+msgstr "Buka berkas arsip zip (Gerber dan Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
@@ -15895,7 +15902,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "List D-codes defined in Gerber files"
-msgstr ""
+msgstr "Buat daftar D-code yang didefinisikan dalam berkas Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "Show Source..."
@@ -15903,7 +15910,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
-msgstr ""
+msgstr "Tampilkan berkas sumber untuk lapisan saat ini"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to Pcbnew..."
@@ -16019,7 +16026,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_control.cpp:117
 msgid "Board File Name"
-msgstr ""
+msgstr "Nama Berkas Papan Sirkuit"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:144
 msgid "D Codes"
@@ -16028,7 +16035,7 @@ msgstr ""
 #: gerbview/tools/gerbview_inspection_tool.cpp:172
 #, c-format
 msgid "Source file \"%s\" is not available"
-msgstr ""
+msgstr "Berkas sumber \"%s\" tidak tersedia"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:182
 msgid "No editor defined. Please select one"
@@ -16037,7 +16044,7 @@ msgstr ""
 #: gerbview/tools/gerbview_inspection_tool.cpp:188
 #, c-format
 msgid "No file loaded on the active layer %d"
-msgstr ""
+msgstr "Tidak ada berkas yang dimuat pada lapisan aktif %d"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:52
 msgid "Highlight"
@@ -16161,11 +16168,11 @@ msgstr ""
 
 #: include/filehistory.h:54
 msgid "Clear Recent Files"
-msgstr ""
+msgstr "Bersihkan Berkas Baru-baru Ini"
 
 #: include/kiway_player.h:221
 msgid "This file is already open."
-msgstr ""
+msgstr "Berkas ini sudah terbuka."
 
 #: include/lib_table_grid.h:184
 msgid "Library Path"
@@ -16226,7 +16233,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:42
 msgid "KiCad project file"
-msgstr ""
+msgstr "Berkas proyek KiCad"
 
 #: kicad/files-io.cpp:62
 msgid "Unzip Project"
@@ -16250,7 +16257,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:113
 msgid "Archive Project Files"
-msgstr ""
+msgstr "Arsipkan Berkas-berkas Proyek"
 
 #: kicad/import_project.cpp:74
 msgid "KiCad Project Destination"
@@ -16272,15 +16279,15 @@ msgstr ""
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
-msgstr ""
+msgstr "Impor Berkas Proyek Arsip CADSTAR"
 
 #: kicad/import_project.cpp:204
 msgid "Import Eagle Project Files"
-msgstr ""
+msgstr "Impor Berkas Proyek Eagle"
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
-msgstr ""
+msgstr "Muat Berkas untuk Disunting"
 
 #: kicad/kicad_manager_frame.cpp:668
 #, c-format
@@ -16328,7 +16335,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:108
 msgid "Archive all needed project files into zip archive"
-msgstr ""
+msgstr "Arsipkan semua berkas proyek yang diperlukan ke dalam arsip zip"
 
 #: kicad/menubar.cpp:112
 msgid "&Unarchive Project..."
@@ -16336,27 +16343,27 @@ msgstr ""
 
 #: kicad/menubar.cpp:113 kicad/menubar.cpp:215
 msgid "Unarchive project files from zip archive"
-msgstr ""
+msgstr "Ekstrak berkas-berkas proyek dari arsip zip"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
-msgstr ""
+msgstr "Ramban Berkas-berkas Proyek"
 
 #: kicad/menubar.cpp:129
 msgid "Open project directory in file browser"
-msgstr ""
+msgstr "Buka direktori proyek di peramban berkas"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
-msgstr ""
+msgstr "Sunting Berkas Lokal..."
 
 #: kicad/menubar.cpp:155
 msgid "Edit local file in text editor"
-msgstr ""
+msgstr "Sunting berkas lokal di penyunting teks"
 
 #: kicad/menubar.cpp:211
 msgid "Archive all project files"
-msgstr ""
+msgstr "Arsipkan semua berkas proyek"
 
 #: kicad/menubar.cpp:224
 msgid "Reveal project folder in Finder"
@@ -16364,7 +16371,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:226
 msgid "Open project directory in file explorer"
-msgstr ""
+msgstr "Buka direktori proyek di penjelajah berkas"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -16376,7 +16383,7 @@ msgstr ""
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr ""
+msgstr "Tidak dapat menemukan berkas informasi meta HTML untuk templat ini!"
 
 #: kicad/project_template.cpp:224
 #, c-format
@@ -16388,14 +16395,16 @@ msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
+"Mengubah ekstensi berkas akan mengubah tipe berkas.\n"
+"Apakah Anda ingin melanjutkan?"
 
 #: kicad/project_tree_item.cpp:112
 msgid "Rename File"
-msgstr ""
+msgstr "Ganti Nama Berkas"
 
 #: kicad/project_tree_item.cpp:120
 msgid "Unable to rename file ... "
-msgstr ""
+msgstr "Tidak dapat mengganti nama berkas ... "
 
 #: kicad/project_tree_item.cpp:120
 msgid "Permission error?"
@@ -16440,11 +16449,11 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:717
 msgid "Open Directory in File Explorer"
-msgstr ""
+msgstr "Buka Direktori di Penjelajah Berkas"
 
 #: kicad/project_tree_pane.cpp:718 pcbnew/menubar_pcb_editor.cpp:420
 msgid "Opens the directory in the default system file manager"
-msgstr ""
+msgstr "Membuka direktori di pengelola berkas sistem baku"
 
 #: kicad/project_tree_pane.cpp:725
 msgid "Reveals the directories in a Finder window"
@@ -16452,19 +16461,19 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:727
 msgid "Open Directories in File Explorer"
-msgstr ""
+msgstr "Buka Direktori di Penjelajah Berkas"
 
 #: kicad/project_tree_pane.cpp:728
 msgid "Opens the directories in the default system file manager"
-msgstr ""
+msgstr "Membuka direktori di pengelola berkas sistem baku"
 
 #: kicad/project_tree_pane.cpp:739
 msgid "Open the file in a Text Editor"
-msgstr ""
+msgstr "Buka berkas di Penyunting Teks"
 
 #: kicad/project_tree_pane.cpp:741
 msgid "Open files in a Text Editor"
-msgstr ""
+msgstr "Buka berkas-berkas di Penyunting Teks"
 
 #: kicad/project_tree_pane.cpp:743
 msgid "Edit in a Text Editor"
@@ -16472,31 +16481,31 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:751
 msgid "Rename File..."
-msgstr ""
+msgstr "Ganti Nama Berkas..."
 
 #: kicad/project_tree_pane.cpp:752
 msgid "Rename file"
-msgstr ""
+msgstr "Ganti nama berkas"
 
 #: kicad/project_tree_pane.cpp:756
 msgid "Rename Files..."
-msgstr ""
+msgstr "Ganti Nama Berkas..."
 
 #: kicad/project_tree_pane.cpp:757
 msgid "Rename files"
-msgstr ""
+msgstr "Ganti nama berkas"
 
 #: kicad/project_tree_pane.cpp:766
 msgid "Delete the file and its content"
-msgstr ""
+msgstr "Hapus berkas dan isinya"
 
 #: kicad/project_tree_pane.cpp:768
 msgid "Delete the files and their contents"
-msgstr ""
+msgstr "Hapus berkas-berkas dan isinya"
 
 #: kicad/project_tree_pane.cpp:792
 msgid "Print the contents of the file"
-msgstr ""
+msgstr "Cetak isi berkas"
 
 #: kicad/project_tree_pane.cpp:834
 msgid "Delete Directory"
@@ -17045,7 +17054,7 @@ msgstr "Tak dapat membuat \"%s\""
 
 #: pagelayout_editor/files.cpp:235
 msgid "Layout file is read only."
-msgstr ""
+msgstr "Berkas tata letak hanya bisa dibaca."
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -17252,7 +17261,7 @@ msgstr ""
 
 #: pcb_calculator/datafile_read_write.cpp:73
 msgid "Data file error."
-msgstr ""
+msgstr "Kesalahan berkas data."
 
 #: pcb_calculator/dialogs/dialog_regulator_form.cpp:33
 #: pcb_calculator/regulators_funct.cpp:174
@@ -18121,6 +18130,9 @@ msgid ""
 "Data modified, and no data filename to save modifications\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
+"Data dimodifikasi, dan tidak ada nama berkas data untuk menyimpan "
+"modifikasi\n"
+"Apakah Anda ingin keluar dan membatalkan perubahan?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:139
 msgid "Regulator list change"
@@ -18132,28 +18144,31 @@ msgid ""
 "Unable to write file \"%s\"\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
+"Tidak dapat menulis berkas \"%s\"\n"
+"Apakah Anda ingin keluar dan membatalkan perubahan?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:154
 msgid "Write Data File Error"
-msgstr ""
+msgstr "Kesalahan Menulis Berkas Data"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
-msgstr ""
+msgstr "Berkas data Kalkulator PCB (*.%s)|*.%s"
 
 #: pcb_calculator/regulators_funct.cpp:130
 msgid "Select PCB Calculator Data File"
-msgstr ""
+msgstr "Pilih Berkas Data Kalkulator PCB"
 
 #: pcb_calculator/regulators_funct.cpp:145
 msgid "Do you want to load this file and replace current regulator list?"
 msgstr ""
+"Apakah Anda ingin memuat berkas ini dan mengganti daftar regulator saat ini?"
 
 #: pcb_calculator/regulators_funct.cpp:161
 #, c-format
 msgid "Unable to read data file \"%s\""
-msgstr ""
+msgstr "Tidak dapat membaca berkas data \"%s\""
 
 #: pcb_calculator/regulators_funct.cpp:193
 msgid "This regulator is already in list. Aborted"
@@ -18992,7 +19007,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml.cpp:257
 #, c-format
 msgid "Unable to create file \"%s\""
-msgstr ""
+msgstr "Tidak dapat membuat berkas \"%s\""
 
 #: pcbnew/build_BOM_from_board.cpp:107
 msgid "Designator"
@@ -19571,6 +19586,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"Terjadi kesalahan saat mengimpor pengaturan dari papan sirkuit:\n"
+"Berkas proyek terkait %s tidak dapat dimuat"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:187 pcbnew/files.cpp:680
 #, c-format
@@ -19578,6 +19595,8 @@ msgid ""
 "Error loading board file:\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat memuat berkas papan sirkuit:\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:89
 #: pcbnew/dialogs/dialog_board_statistics.cpp:684
@@ -19675,7 +19694,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:626
 msgid "Save Report File"
-msgstr ""
+msgstr "Simpan Berkas Laporan"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:647
 msgid ""
@@ -19712,7 +19731,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:725
 #, c-format
 msgid "Error writing to file \"%s\""
-msgstr ""
+msgstr "Terjadi kesalahan saat menulis ke berkas \"%s\""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 msgid "Board Size"
@@ -19757,7 +19776,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
 msgid "Generate Report File..."
-msgstr ""
+msgstr "Buat Berkas Laporan..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
 msgid "Board Statistics"
@@ -20659,12 +20678,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:634
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr ""
+msgstr "Berkas laporan '%s' telah dibuat<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
 msgid "Unable to create report file '%s'<br>"
-msgstr ""
+msgstr "Tidak dapat membuat berkas laporan '%s'<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:865
 msgid "Do you wish to delete excluded markers as well?"
@@ -20738,7 +20757,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:472
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr "Nama berkas tidak valid: %s"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:528
 msgid "Footprint must have a name."
@@ -20860,7 +20879,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:199
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 msgid "Exclude from position files"
-msgstr ""
+msgstr "Kecualikan dari berkas posisi"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
@@ -21147,7 +21166,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #, c-format
 msgid "File %s already exists."
-msgstr ""
+msgstr "Berkas %s sudah ada."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
@@ -21158,11 +21177,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File name:"
-msgstr ""
+msgstr "Nama berkas:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "Select an IDF export filename"
-msgstr ""
+msgstr "Pilih nama berkas ekspor IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
@@ -21212,7 +21231,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr ""
+msgstr "Berkas '%s' sudah ada. Apakah Anda ingin menimpa berkas ini?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP Export"
@@ -21220,11 +21239,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "Select a STEP export filename"
-msgstr ""
+msgstr "Pilih nama berkas ekspor STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr ""
+msgstr "Berkas STEP (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:37
 msgid "Coordinate origin options:"
@@ -21261,7 +21280,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:139
 msgid "Overwrite old file"
-msgstr ""
+msgstr "Timpa berkas lama"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 msgid "Board outline builder:"
@@ -21302,6 +21321,8 @@ msgstr ""
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
+"Tidak dapat membuat path relatif (volume target berbeda dari volume berkas "
+"papan sirkuit)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:263
 #, c-format
@@ -21313,13 +21334,15 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:425
 #, c-format
 msgid "Unable to create file \"%s\"."
-msgstr ""
+msgstr "Tidak dapat membuat berkas \"%s\"."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"Masukkan nama jika Anda tidak ingin menggunakan nama berkas baku\n"
+"Hanya dapat digunakan saat mencetak lembar kerja saat ini"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:501
@@ -21386,11 +21409,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:124
 msgid "One file per layer"
-msgstr ""
+msgstr "Satu berkas per lapisan"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:124
 msgid "All layers in a single file"
-msgstr ""
+msgstr "Semua lapisan dalam satu berkas"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:126
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:241
@@ -21399,11 +21422,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:73
 msgid "Export SVG File"
-msgstr ""
+msgstr "Ekspor Berkas SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:180
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr ""
+msgstr "Apakah Anda yakin ingin menimpa berkas yang sudah ada?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:248
 #, c-format
@@ -21412,7 +21435,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
-msgstr ""
+msgstr "Simpan Berkas Papan Sirkuit VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
@@ -21432,15 +21455,18 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:128
 msgid "Copy 3D model files to 3D model path"
-msgstr ""
+msgstr "Salin berkas model 3D ke path model 3D"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:132
 msgid "Use relative paths to model files in board VRML file"
 msgstr ""
+"Gunakan path relatif ke berkas-berkas model pada berkas VRML papan sirkuit"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:133
 msgid "Use paths for model files in board VRML file relative to the vrml file"
 msgstr ""
+"Gunakan path untuk berkas-berkas model pada berkas VRML papan sirkuit "
+"relatif terhadap berkas vrml"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:137
 msgid "Plain PCB (no copper or silk)"
@@ -21727,21 +21753,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Separate files for front, back"
-msgstr ""
+msgstr "Berkas terpisah untuk depan, belakang"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 msgid "Single file for board"
-msgstr ""
+msgstr "Berkas tunggal untuk papan sirkuit"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
 msgid "Files"
-msgstr ""
+msgstr "Berkas"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:64
 msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
+"Membuat 2 berkas: satu untuk setiap sisi papan sirkuit atau\n"
+"Membuat hanya satu berkas yang berisi semua footprint\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
 msgid "Exclude all footprints with through hole pads"
@@ -21753,7 +21781,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
 msgid "Generate Footprint Position Files"
-msgstr ""
+msgstr "Buat Berkas Posisi Footprint"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -21761,7 +21789,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:48
 msgid "Select a GenCAD export filename"
-msgstr ""
+msgstr "Pilih nama berkas ekspor GenCAD"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Flip bottom footprint padstacks"
@@ -21785,11 +21813,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:72
 msgid "Generate Drill File"
-msgstr ""
+msgstr "Buat Berkas Drill"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:73
 msgid "Generate Map File"
-msgstr ""
+msgstr "Buat Berkas Map"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid "Cannot make path relative (target volume different from file volume)!"
@@ -21798,11 +21826,11 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:378
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
-msgstr ""
+msgstr "Tidak dapat menulis berkas drill dan/atau map ke folder \"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:427
 msgid "Save Drill Report File"
-msgstr ""
+msgstr "Simpan Berkas Laporan Drill"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:453
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:120
@@ -21815,7 +21843,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:458
 #, c-format
 msgid "Report file %s created\n"
-msgstr ""
+msgstr "Berkas laporan %s telah dibuat\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 msgid "Output folder:"
@@ -21823,7 +21851,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr ""
+msgstr "Format Berkas Drill"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
@@ -21851,7 +21879,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
-msgstr ""
+msgstr "PTH dan NPTH dalam satu berkas tunggal"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -21859,6 +21887,9 @@ msgid ""
 "Only use for board houses which ask for merged PTH and NPTH into a single "
 "file."
 msgstr ""
+"Tidak direkomendasikan.\n"
+"Hanya gunakan untuk produsen papan sirkuit yang meminta PTH dan NPTH "
+"digabungkan menjadi satu berkas."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
@@ -21891,7 +21922,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr ""
+msgstr "Format Berkas Map"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
@@ -21962,7 +21993,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr ""
+msgstr "Buat Berkas Drill"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:66
@@ -22221,15 +22252,18 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat menulis berkas tabel pustaka footprint kosong.\n"
+"\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:74
 msgid "Please select a footprint library table file."
-msgstr ""
+msgstr "Pilih sebuah berkas tabel pustaka footprint."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:84
 #, c-format
 msgid "File \"%s\" not found."
-msgstr ""
+msgstr "Berkas \"%s\" tidak ditemukan."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:98
 #, c-format
@@ -22238,6 +22272,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Berkas \"%s\" bukan berkas tabel pustaka footprint yang valid.\n"
+"\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:118
 #, c-format
@@ -22250,6 +22287,13 @@ msgid ""
 "\n"
 "\"%s\"."
 msgstr ""
+"Tidak dapat menyalin berkas tabel pustaka footprint global:\n"
+"\n"
+" \"%s\"\n"
+"\n"
+":to:\n"
+"\n"
+"\"%s\"."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:135
 #, c-format
@@ -22578,7 +22622,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1968
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1969
 msgid "Report file"
-msgstr ""
+msgstr "Berkas laporan"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
@@ -22624,11 +22668,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149
 msgid "Please, choose a valid netlist file."
-msgstr ""
+msgstr "Silakan pilih berkas netlist yang valid."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:155 pcbnew/dialogs/dialog_netlist.cpp:190
 msgid "The netlist file does not exist."
-msgstr ""
+msgstr "Berkas netlist tidak ada."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:140
@@ -22638,7 +22682,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist.cpp:233
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr ""
+msgstr "Membaca berkas netlist \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:237
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -22650,7 +22694,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
-msgstr ""
+msgstr "Berkas netlist:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using component tstamps (unique ids)"
@@ -23374,7 +23418,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:62
 msgid "Generate Drill Files..."
-msgstr ""
+msgstr "Buat Berkas Drill..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:668
 msgid "HPGL pen size constrained."
@@ -23410,7 +23454,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot.cpp:895
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr ""
+msgstr "Berkas plot \"%s\" telah dibuat."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
@@ -23543,7 +23587,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:202
 msgid "Use Protel filename extensions"
-msgstr ""
+msgstr "Gunakan ekstensi nama berkas Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:203
 msgid ""
@@ -23553,13 +23597,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid "Generate Gerber job file"
-msgstr ""
+msgstr "Buat berkas job Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"Buat sebuah berkas job Gerber yang berisi info tentang papan sirkuit,\n"
+"dan daftar berkas plot gerber yang dibuat"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:215
 msgid "Remove silkscreen from areas without soldermask"
@@ -23675,7 +23721,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:360
 msgid "The units to use for the exported DXF file"
-msgstr ""
+msgstr "Satuan yang digunakan untuk berkas DXF yang diekspor"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:370
 msgid "SVG Options"
@@ -26521,16 +26567,16 @@ msgstr ""
 
 #: pcbnew/exporters/export_d356.cpp:373
 msgid "Export D-356 Test File"
-msgstr ""
+msgstr "Ekspor Berkas Tes D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:70
 msgid "Save Footprint Association File"
-msgstr ""
+msgstr "Simpan Berkas Asosiasi Footprint"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:80
 #, c-format
 msgid "Could not create file \"%s\"."
-msgstr ""
+msgstr "Tidak dapat membuat berkas \"%s\"."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:187
 msgid ""
@@ -26556,7 +26602,7 @@ msgstr ""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:65
 msgid "Generate Position File"
-msgstr ""
+msgstr "Buat Berkas Posisi"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:269
 #: pcbnew/exporters/gen_footprints_placefile.cpp:382
@@ -26594,7 +26640,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
 msgid "Component Placement File generation OK."
-msgstr ""
+msgstr "Pembuatan Berkas Penempatan Komponen OK."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
@@ -26611,6 +26657,8 @@ msgid ""
 "Footprint report file created:\n"
 "\"%s\""
 msgstr ""
+"Berkas laporan footprint telah dibuat:\n"
+"\"%s\""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:521
 msgid "Footprint Report"
