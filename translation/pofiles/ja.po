@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 23:06+0000\n"
+"PO-Revision-Date: 2021-02-01 23:31+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3105,9 +3105,8 @@ msgstr "インポートするホットキー ファイル:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
-#, fuzzy
 msgid "Cmd"
-msgstr "コマンド"
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3543,7 +3542,7 @@ msgstr "OpenGL を使用できないため、ソフトウェア レンダリン�
 
 #: common/draw_panel_gal.cpp:244 common/draw_panel_gal.cpp:427
 msgid "Could not use OpenGL"
-msgstr "CvPcb を開くことができません"
+msgstr "OpenGL を使用できません"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -4191,19 +4190,16 @@ msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "KICAD_TEMPLATE_DIR の推奨されないバージョン。"
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "KICAD_TEMPLATE_DIR の推奨されないバージョン。"
+msgstr "KICAD6_3DMODEL_DIR の推奨されないバージョン。"
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "KICAD_TEMPLATE_DIR の推奨されないバージョン。"
+msgstr "KICAD6_FOOTPRINT_DIR の推奨されないバージョン。"
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "KICAD_TEMPLATE_DIR の推奨されないバージョン。"
+msgstr "KICAD_SYMBOL_DIR の推奨されないバージョン。"
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -22042,9 +22038,8 @@ msgid "Change all footprints on board"
 msgstr "%s 基板上の全フットプリント"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
-#, fuzzy
 msgid "Change selected footprint"
-msgstr "選択されたフットプリントを表示"
+msgstr "選択されたフットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 #, fuzzy
@@ -22062,24 +22057,20 @@ msgid "Change footprints with library id:"
 msgstr "%s 個のライブラリ ID 付フットプリント:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
-#, fuzzy
 msgid "Update text layers and visibilities"
-msgstr "テキストのレイヤーと可視性をリセット"
+msgstr "テキストのレイヤーと可視性を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Update text sizes, styles and positions"
-msgstr "テキスト サイズ、スタイルと位置をリセット"
+msgstr "テキスト サイズ、スタイルと位置を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Update fabrication attributes"
-msgstr "基板製造用の属性"
+msgstr "基板製造用の属性を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Update 3D models"
-msgstr "3D モデルをリセット"
+msgstr "3D モデルを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:84
 msgid ""
@@ -22109,9 +22100,8 @@ msgid "Update all footprints on board"
 msgstr "基板のフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint"
-msgstr "選択されたフットプリントを表示"
+msgstr "選択されたフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 #, fuzzy
@@ -22137,24 +22127,20 @@ msgid "Remove text items which are not in library footprint"
 msgstr "ライブラリー フットプリントにないテキスト アイテムを削除"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Update/reset text layers and visibilities"
-msgstr "テキストのレイヤーと可視性をリセット"
+msgstr "テキストのレイヤーと可視性を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Update/reset text sizes, styles and positions"
-msgstr "テキスト サイズ、スタイルと位置をリセット"
+msgstr "テキスト サイズ、スタイルと位置を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "基板製造用の属性"
+msgstr "基板製造用の属性を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "3D モデルをリセット"
+msgstr "3D モデルを更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -22167,9 +22153,9 @@ msgid "File %s already exists."
 msgstr "ファイル %s は既に存在します。"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create %s"
-msgstr "\"%s\" を作成できません"
+msgstr "%s を作成できません"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_step_base.cpp:21
@@ -23393,7 +23379,6 @@ msgid "The radius cannot be zero."
 msgstr "円弧の角度は０にできません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:425
-#, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "矩形は空にすることができません。"
 
@@ -23511,10 +23496,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
-#, fuzzy
 msgid "Remove selected layers from matched layers list."
 msgstr "ライブラリーから選択されたシンボルを削除"
 
@@ -23748,7 +23732,6 @@ msgid "Reading netlist file \"%s\".\n"
 msgstr "ネットリストファイル \"%s\"を読み込んでいます。\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:237
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr "コンポーネントとフットプリントの関連付けにレファレンス指定子を使用\n"
 
@@ -24011,7 +23994,6 @@ msgstr ""
 "ません"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
-#, fuzzy
 msgid "Too large value for pad delta size."
 msgstr "パッドの デルタ サイズが大きすぎます"
 
@@ -25496,9 +25478,8 @@ msgid "Leave Nets Unchanged"
 msgstr "-- 未変更を維持 --"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "ビアのドリル サイズはビアの直径より小さくなければなりません"
+msgstr "ビア穴のサイズはビアの直径より小さくなければなりません"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:397
 msgid "Via start layer and end layer cannot be the same"
@@ -26954,20 +26935,16 @@ msgstr ""
 "この値は、フットプリントやパッドのローカル値で置き換えられます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
-"正のクリアランスはパッドより大きな領域を意味します。(通常はマスクのクリアラン"
-"ス)"
+msgstr "正のクリアランスはパッドより大きな領域を意味します。(通常はマスクのクリアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 msgid "Solder mask minimum bridge width:"
 msgstr "ハンダ マスク最小ブリッジ幅:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:64
-#, fuzzy
 msgid ""
 "Min. dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
@@ -26976,8 +26953,7 @@ msgid ""
 msgstr ""
 "２つのパッド領域間の最小距離。\n"
 "この値より近い２つのパッド領域はプロット中にマージされます。\n"
-"このパラメーターはハンダ マスク レイヤーをプロットするためにのみ使用されま"
-"す。\n"
+"このパラメーターはハンダ マスク レイヤーをプロットするためにのみ使用されます。\n"
 "何をしているか知らないなら、０のままにしておいて下さい。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
@@ -26998,13 +26974,10 @@ msgstr ""
 "最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:93
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアラ"
-"ンス)"
+msgstr "負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 #, fuzzy
@@ -27026,13 +26999,10 @@ msgid "Additional clearance as a percentage of the pad size."
 msgstr "正のクリアランスはパッドより大きな領域を意味します。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
-#, fuzzy
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
-"注: ハンダ ペーストのクリアランス (絶対および相対) は最終的なクリアランスを決"
-"めるために加算されます。"
+msgstr "注: ハンダ ペーストのクリアランス (絶対および相対) は最終的なクリアランスを決めるために加算されます。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:334
 msgid "DRC rules"
@@ -33455,9 +33425,8 @@ msgid "Click to show ratsnest for %s"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1375
-#, fuzzy
 msgid "Double click or middle click for color change, right click for menu"
-msgstr "左ダブルクリックまたは中クリックで色の変更、右クリックでメニュー"
+msgstr "ダブルクリックまたは中クリックで色の変更、右クリックでメニュー"
 
 #: pcbnew/widgets/appearance_controls.cpp:1382
 msgid "Show or hide this layer"
@@ -33892,14 +33861,12 @@ msgid "EDA Suite"
 msgstr "EDA Suite"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
-#, fuzzy
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
 "output."
 msgstr ""
-"クロス プラットホームでオープン ソースな設計自動化支援ツール。このプログラム"
-"は、回路図の作成と基板レイアウトのガーバー出力を扱います。"
+"KiCad はクロスプラットホームでオープンソースの電子設計自動化ツールです。このプログラムは、回路図の作成と基板レイアウトのガーバー出力を扱います。"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
