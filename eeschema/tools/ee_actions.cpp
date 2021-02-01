@@ -124,12 +124,12 @@ TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
 
 TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
         AS_GLOBAL, 0, "",
-        _( "Edit" ), _( "Show selected symbol on editor canvas" ),
+        _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
         edit_xpm );
 
 TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicateSymbol",
         AS_GLOBAL, 0, "",
-        _( "Duplicate" ), _( "Make a copy of the selected symbol" ),
+        _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
         duplicate_xpm );
 
 TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
@@ -138,7 +138,7 @@ TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolA
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",
-        _( "Delete" ), _( "Remove the selected symbol from its library" ),
+        _( "Delete Symbol" ), _( "Remove the selected symbol from its library" ),
         trash_xpm );
 
 TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
