@@ -131,7 +131,6 @@ private:
     bool                     m_update;
     int                      m_max_items;
     wxString                 m_default_footprint;
-    int                      m_last_item;
 
     FOOTPRINT_LIST*          m_fp_list;
     FOOTPRINT_FILTER         m_fp_filter;

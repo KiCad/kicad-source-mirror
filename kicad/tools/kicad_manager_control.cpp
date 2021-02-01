@@ -596,6 +596,19 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
     KIWAY_PLAYER* player;
 
+    if( playerType == FRAME_SCH && !m_frame->IsProjectActive() )
+    {
+        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a schematic." ),
+                            wxEmptyString );
+        return -1;
+    }
+    else if( playerType == FRAME_PCB_EDITOR && !m_frame->IsProjectActive() )
+    {
+        DisplayInfoMessage( m_frame, _( "Create (or open) a project to edit a pcb." ),
+                            wxEmptyString );
+        return -1;
+    }
+
     // Prevent multiple KIWAY_PLAYER loading at one time
     if( !m_loading.try_lock() )
         return -1;

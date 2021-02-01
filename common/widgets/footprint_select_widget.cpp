@@ -38,7 +38,6 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWind
           m_kiway( nullptr ),
           m_update( aUpdate ),
           m_max_items( aMaxItems ),
-          m_last_item( 0 ),
           m_fp_list( aFpList )
 {
     m_zero_filter = true;
