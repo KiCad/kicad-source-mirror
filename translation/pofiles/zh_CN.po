@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 13:55+0000\n"
+"PO-Revision-Date: 2021-02-01 23:06+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -33450,7 +33450,7 @@ msgstr "查看 Gerber 文件"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
-msgstr "电子设计自动化套件"
+msgstr "电子设计自动化工具箱"
 
 #: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
