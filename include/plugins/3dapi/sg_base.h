@@ -75,9 +75,9 @@ public:
     SGPOINT();
     SGPOINT( double aXVal, double aYVal, double aZVal ) noexcept;
 
-    void GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept;
-    void GetPoint( SGPOINT& aPoint ) noexcept;
-    void GetPoint( SGPOINT* aPoint ) noexcept;
+    void GetPoint( const double& aXVal, const double& aYVal, const double& aZVal ) noexcept;
+    void GetPoint( const SGPOINT& aPoint ) noexcept;
+    void GetPoint( const SGPOINT* aPoint ) noexcept;
 
     void SetPoint( double aXVal, double aYVal, double aZVal ) noexcept;
     void SetPoint( const SGPOINT& aPoint ) noexcept;

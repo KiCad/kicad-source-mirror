@@ -163,7 +163,7 @@ SGPOINT::SGPOINT( double aXVal, double aYVal, double aZVal ) noexcept
 }
 
 
-void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept
+void SGPOINT::GetPoint( const double& aXVal, const double& aYVal, const double& aZVal ) noexcept
 {
     x = aXVal;
     y = aYVal;
@@ -171,7 +171,7 @@ void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept
 }
 
 
-void SGPOINT::GetPoint( SGPOINT& aPoint ) noexcept
+void SGPOINT::GetPoint( const SGPOINT& aPoint ) noexcept
 {
     x = aPoint.x;
     y = aPoint.y;
@@ -179,7 +179,7 @@ void SGPOINT::GetPoint( SGPOINT& aPoint ) noexcept
 }
 
 
-void SGPOINT::GetPoint( SGPOINT* aPoint ) noexcept
+void SGPOINT::GetPoint( const SGPOINT* aPoint ) noexcept
 {
     wxCHECK_MSG( aPoint, /* void */, "NULL pointer passed for aPoint" );
 
