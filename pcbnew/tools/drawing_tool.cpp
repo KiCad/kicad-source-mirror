@@ -26,7 +26,6 @@
 #include <pcb_edit_frame.h>
 #include <confirm.h>
 #include <import_gfx/dialog_import_gfx.h>
-#include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -36,6 +35,7 @@
 #include <tools/zone_create_helper.h>
 #include <tools/drawing_tool.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_segment.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
 #include <bitmaps.h>
@@ -55,6 +55,7 @@
 #include <pcbnew_id.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <kicad_string.h>
+#include <widgets/infobar.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -146,8 +147,11 @@ protected:
 
 DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL_BASE( "pcbnew.InteractiveDrawing" ),
-    m_view( nullptr ), m_controls( nullptr ),
-    m_board( nullptr ), m_frame( nullptr ), m_mode( MODE::NONE ),
+    m_view( nullptr ),
+    m_controls( nullptr ),
+    m_board( nullptr ),
+    m_frame( nullptr ),
+    m_mode( MODE::NONE ),
     m_lineWidth( 1 )
 {
 }
@@ -2067,11 +2071,43 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
     struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        PCB_GRID_HELPER m_gridHelper;
+        PCB_BASE_EDIT_FRAME*        m_frame;
+        PCB_GRID_HELPER             m_gridHelper;
+        std::shared_ptr<DRC_ENGINE> m_drcEngine;
+        int                         m_drcEpsilon;
+        int                         m_worstClearance;
+        bool                        m_flaggedDRC;
 
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
-            m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() )
-        {}
+            m_frame( aFrame ),
+            m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() ),
+            m_drcEngine( aFrame->GetBoard()->GetDesignSettings().m_DRCEngine ),
+            m_drcEpsilon( aFrame->GetBoard()->GetDesignSettings().GetDRCEpsilon() ),
+            m_worstClearance( 0 ),
+            m_flaggedDRC( false )
+        {
+            try
+            {
+                m_drcEngine->InitEngine( aFrame->GetDesignRulesPath() );
+
+                DRC_CONSTRAINT constraint;
+
+                if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, constraint ) )
+                    m_worstClearance = constraint.GetValue().Min();
+
+                if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, constraint ) )
+                    m_worstClearance = std::max( m_worstClearance, constraint.GetValue().Min() );
+
+                for( FOOTPRINT* footprint : aFrame->GetBoard()->Footprints() )
+                {
+                    for( PAD* pad : footprint->Pads() )
+                        m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
+                }
+            }
+            catch( PARSE_ERROR& pe )
+            {
+            }
+        }
 
         virtual ~VIA_PLACER()
         {
@@ -2096,7 +2132,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !(item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( auto track = dyn_cast<TRACK*>( item ) )
+                if( TRACK* track = dyn_cast<TRACK*>( item ) )
                 {
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
@@ -2106,10 +2142,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             TRACK* return_track = nullptr;
             int min_d = std::numeric_limits<int>::max();
-            for( auto track : possible_tracks )
+
+            for( TRACK* track : possible_tracks )
             {
                 SEG test( track->GetStart(), track->GetEnd() );
-                auto dist = ( test.NearestPoint( position ) - position ).EuclideanNorm();
+                int dist = ( test.NearestPoint( position ) - position ).EuclideanNorm();
 
                 if( dist < min_d )
                 {
@@ -2121,85 +2158,64 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return return_track;
         }
 
-
-        bool hasDRCViolation( VIA* aVia )
+        bool hasDRCViolation( VIA* aVia, BOARD_ITEM* aOther )
         {
-            const LSET lset = aVia->GetLayerSet();
-            wxPoint position = aVia->GetPosition();
-            int drillRadius = aVia->GetDrillValue() / 2;
-            BOX2I bbox = aVia->GetBoundingBox();
+            // It would really be better to know what particular nets a nettie should allow,
+            // but for now it is what it is.
+            if( DRC_ENGINE::IsNetTie( aOther ) )
+                return false;
 
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            int net = 0;
-            int clearance = 0;
-            auto view = m_frame->GetCanvas()->GetView();
-            int holeToHoleMin = m_frame->GetBoard()->GetDesignSettings().m_HoleToHoleMin;
+            BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aOther );
 
-            view->Query( bbox, items );
+            if( cItem && cItem->GetNetCode() == aVia->GetNetCode() )
+                return false;
 
-            for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
+            for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT,
+                                                                            aVia, aOther, layer );
+                int clearance = constraint.GetValue().Min();
 
-                if( !(item->GetLayerSet() & lset ).any() )
-                    continue;
-
-                if( TRACK* track = dyn_cast<TRACK*>( item ) )
+                if( clearance >= 0 )
                 {
-                    int max_clearance = std::max( clearance,
-                                                  track->GetOwnClearance( track->GetLayer() ) );
+                    std::shared_ptr<SHAPE> viaShape = DRC_ENGINE::GetShape( aVia, layer );
+                    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( aOther, layer );
 
-                    if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
-                            ( track->GetWidth() + aVia->GetWidth() ) / 2  + max_clearance ) )
-                    {
-                        if( net && track->GetNetCode() != net )
-                            return true;
-
-                        net = track->GetNetCode();
-                        clearance = track->GetOwnClearance( track->GetLayer() );
-                    }
-                }
-
-                if( VIA* via = dyn_cast<VIA*>( item ) )
-                {
-                    int dist = KiROUND( GetLineLength( position, via->GetPosition() ) );
-
-                    if( dist < drillRadius + via->GetDrillValue() / 2 + holeToHoleMin )
+                    if( viaShape->Collide( otherShape.get(), clearance - m_drcEpsilon ) )
                         return true;
-                }
-
-                if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
-                {
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
-                        {
-                            int max_clearance = std::max( clearance, pad->GetOwnClearance( layer ) );
-
-                            if( pad->HitTest( aVia->GetBoundingBox(), false, max_clearance ) )
-                            {
-                                if( net && pad->GetNetCode() != net )
-                                    return true;
-
-                                net = pad->GetNetCode();
-                                clearance = pad->GetOwnClearance( layer );
-                            }
-
-                            if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-                            {
-                                int dist = KiROUND( GetLineLength( position, pad->GetPosition() ) );
-
-                                if( dist < drillRadius + pad->GetDrillSize().x / 2 + holeToHoleMin )
-                                    return true;
-                            }
-                        }
-                    }
                 }
             }
 
             return false;
         }
 
+        bool hasDRCViolation( VIA* aVia )
+        {
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+            std::set<BOARD_ITEM*> handled;
+            BOX2I bbox = aVia->GetBoundingBox();
+
+            bbox.Inflate( m_worstClearance );
+            m_frame->GetCanvas()->GetView()->Query( bbox, items );
+
+            for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
+            {
+                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( it.first );
+
+                if( !item || item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                    continue;
+
+                if( handled.count( item ) )
+                    continue;
+
+                if( hasDRCViolation( aVia, item ) )
+                    return true;
+
+                handled.insert( item );
+            }
+
+            return false;
+        }
 
         int findStitchedZoneNet( VIA* aVia )
         {
@@ -2270,7 +2286,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             TRACK*  track = findTrack( via );
 
             if( hasDRCViolation( via ) )
+            {
+                m_frame->ShowInfoBarError( _( "Via location violates DRC." ) );
+                m_flaggedDRC = true;
                 return false;
+            }
+            else if( m_flaggedDRC )
+            {
+                m_frame->GetInfoBar()->Dismiss();
+            }
 
             if( track )
             {

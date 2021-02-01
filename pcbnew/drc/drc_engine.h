@@ -28,6 +28,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include <geometry/shape.h>
+
 #include <drc/drc_rule.h>
 
 
@@ -165,6 +167,10 @@ public:
     DRC_TEST_PROVIDER* GetTestProvider( const wxString& name ) const;
 
     static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
+
+    static bool IsNetTie( BOARD_ITEM* aItem );
+
+    static std::shared_ptr<SHAPE> GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
 private:
     void addRule( DRC_RULE* rule )
