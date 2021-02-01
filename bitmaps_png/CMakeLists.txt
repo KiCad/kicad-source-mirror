@@ -491,6 +491,8 @@ set( BMAPS_24
     icon_bitmap2component_24
     icon_eeschema_24
     icon_gerbview_24
+    icon_libedit_24
+    icon_modedit_24
     icon_pagelayout_editor_24
     icon_pcbcalculator_24
     icon_pcbnew_24

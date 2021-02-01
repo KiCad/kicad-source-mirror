@@ -68,7 +68,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
         AS_GLOBAL,
         MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
         _( "Edit Schematic Symbols" ), _( "Edit Schematic Symbols" ),
-        libedit_xpm, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
+        icon_libedit_24_xpm, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,
@@ -80,7 +80,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints
         AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
         _( "Edit PCB Footprints" ), _( "Edit PCB Footprints" ),
-        module_editor_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
+        icon_modedit_24_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
         AS_GLOBAL,
