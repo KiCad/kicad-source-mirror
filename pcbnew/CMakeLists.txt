@@ -576,19 +576,19 @@ endif()
 
 # Create a C++ compilable string initializer containing markdown text into a *.h file:
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
     COMMAND ${CMAKE_COMMAND}
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
-        -DoutputFile=${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
         -P ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
     DEPENDS ${CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md
-    COMMENT "creating ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
        from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help.md"
     )
 
 set_source_files_properties( dialogs/panel_setup_rules.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/dialogs/panel_setup_rules_help_md.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/panel_setup_rules_help_md.h
     )
 
 if( APPLE )
