@@ -485,7 +485,16 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             }
 
             // if the cursor is not over a pad, then drag the footprint by its origin
-            addAnchor( footprint->GetPosition(), ORIGIN | SNAPPABLE, footprint );
+            VECTOR2I position = footprint->GetPosition();
+            addAnchor( position, ORIGIN | SNAPPABLE, footprint );
+
+            // Add the footprint center point if it is markedly different from the origin
+            VECTOR2I center = footprint->GetFootprintRect().Centre();
+            VECTOR2I grid( GetGrid() );
+
+            if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
+                addAnchor( footprint->GetFootprintRect().Centre(), ORIGIN | SNAPPABLE, footprint );
+
             break;
         }
 
