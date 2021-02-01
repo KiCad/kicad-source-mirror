@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <page_layout/ws_data_model.h>
+#include <paths.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 
@@ -177,8 +178,10 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case wxID_SAVEAS:
     {
-         wxFileDialog openFileDialog( this, _( "Save As" ), wxEmptyString, wxEmptyString,
-                                      PageLayoutDescrFileWildcard(), wxFD_SAVE );
+        wxString dir = PATHS::GetUserTemplatesPath();
+        wxFileDialog openFileDialog( this, _( "Save As" ), dir, wxEmptyString,
+                                     PageLayoutDescrFileWildcard(),
+                                     wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
             return;

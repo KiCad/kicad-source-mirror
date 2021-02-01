@@ -83,7 +83,7 @@ wxString PATHS::GetUserTemplatesPath()
 
     tmp.AppendDir( "template" );
 
-    return tmp.GetPath();
+    return tmp.GetPathWithSep();
 }
 
 
@@ -227,6 +227,7 @@ void PATHS::EnsureUserPathsExist()
     EnsurePathExists( GetUserPluginsPath() );
     EnsurePathExists( GetUserPlugins3DPath() );
     EnsurePathExists( GetUserScriptingPath() );
+    EnsurePathExists( GetUserTemplatesPath() );
     EnsurePathExists( GetDefaultUserProjectsPath() );
     EnsurePathExists( GetDefaultUserSymbolsPath() );
     EnsurePathExists( GetDefaultUserFootprintsPath() );
