@@ -1705,14 +1705,14 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 
     // Don't paint shadows for invisible markers.
     // It would be nice to do this through layer dependencies but we can't do an "or" there today
-    if( isShadow && aMarker->GetBoard() &&
-        !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+    if( isShadow && aMarker->GetBoard()
+            && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
+    {
         return;
+    }
 
     SHAPE_LINE_CHAIN polygon;
     aMarker->ShapeToPolygon( polygon );
-
-
 
     COLOR4D color = m_pcbSettings.GetColor( aMarker, isShadow ? LAYER_MARKER_SHADOWS
                                                               : aMarker->GetColorLayer() );

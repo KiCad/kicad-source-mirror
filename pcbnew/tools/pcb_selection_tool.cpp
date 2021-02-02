@@ -2014,30 +2014,31 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
                 return false;
         }
 
-        if( aItem->Type() == PCB_PAD_T )
+        const PAD* pad = static_cast<const PAD*>( aItem );
+
+        switch( pad->GetAttribute() )
         {
-            const PAD* pad = static_cast<const PAD*>( aItem );
-
+        case PAD_ATTRIB_PTH:
+        case PAD_ATTRIB_NPTH:
             // Check render mode (from the Items tab) first
-            switch( pad->GetAttribute() )
-            {
-            case PAD_ATTRIB_PTH:
-            case PAD_ATTRIB_NPTH:
-                if( !board()->IsElementVisible( LAYER_PADS_TH ) )
-                    return false;
-                break;
+            if( !board()->IsElementVisible( LAYER_PADS_TH ) )
+                return false;
+            else
+                return ( pad->GetLayerSet() & LSET::PhysicalLayersMask() ).any();
 
-            case PAD_ATTRIB_CONN:
-            case PAD_ATTRIB_SMD:
-                if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
-                    return false;
-                else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
-                    return false;
-                break;
-            }
+            break;
 
-            // Otherwise, pads are selectable if any draw layer is visible
-            return ( pad->GetLayerSet() & board()->GetVisibleLayers() ).any();
+        case PAD_ATTRIB_CONN:
+        case PAD_ATTRIB_SMD:
+            // Check render mode (from the Items tab) first
+            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
+                return false;
+            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
+                return false;
+            else
+                return ( pad->GetLayerSet() & board()->GetVisibleLayers() ).any();
+
+            break;
         }
 
         break;
