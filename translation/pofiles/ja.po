@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 04:42+0000\n"
+"PO-Revision-Date: 2021-02-02 13:07+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -341,7 +341,7 @@ msgstr "3D グリッド"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:208
 msgid "Reset to Default Settings"
-msgstr "デフォルト値にリセット"
+msgstr "デフォルト設定にリセット"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:211 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:269
