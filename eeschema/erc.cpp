@@ -683,7 +683,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxCHECK2( symbol, continue );
 
-            wxString  libIdStr = symbol->GetLibId().GetUniStringLibId();
+            wxString  libIdStr = symbol->GetSchSymbolLibraryName();
             LIB_PART* libSymbolInSchematic = screen->GetLibSymbols()[ libIdStr ];
 
             wxCHECK2( libSymbolInSchematic, continue );
