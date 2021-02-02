@@ -1326,7 +1326,7 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     // Mirror zones to other side of board.
     for( ZONE* zone : m_fp_zones )
-        zone->Flip( m_pos, aFlipLeftRight );
+        zone->Flip( m_pos, false );
 
     // Mirror reference and value.
     m_reference->Flip( m_pos, false );
