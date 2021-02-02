@@ -139,7 +139,7 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
             {
                 auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
-                if( it == m_libSymbols.end() )
+                if( it == m_libSymbols.end() || !it->second )
                 {
                     m_libSymbols[symbol->GetSchSymbolLibraryName()] =
                             new LIB_PART( *symbol->GetPartRef() );
