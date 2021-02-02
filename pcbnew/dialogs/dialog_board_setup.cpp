@@ -161,7 +161,7 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
-    BOARD* otherBoard = new BOARD();
+    BOARD* otherBoard = nullptr;
 
     try
     {
