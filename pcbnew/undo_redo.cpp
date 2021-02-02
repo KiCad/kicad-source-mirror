@@ -165,7 +165,7 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     // which does not do a deep copy.
     // So we have to use the current values of these parameters.
 
-    wxASSERT( aItem->m_Uuid == aItem->m_Uuid );
+    wxASSERT( aItem->m_Uuid == aImage->m_Uuid );
 
     EDA_ITEM* parent = aItem->GetParent();
 
