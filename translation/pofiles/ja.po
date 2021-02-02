@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 13:30+0000\n"
+"PO-Revision-Date: 2021-02-02 13:59+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7131,7 +7131,7 @@ msgstr "アノテーション メッセージ:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:101
 msgid "Annotate"
-msgstr "アノテーション"
+msgstr "アノテート"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Entire schematic"
@@ -19490,11 +19490,11 @@ msgstr "レイヤーなし"
 
 #: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1035 pcbnew/track.cpp:1052
 msgid "Position X"
-msgstr "X 位置"
+msgstr "位置 X"
 
 #: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1038 pcbnew/track.cpp:1055
 msgid "Position Y"
-msgstr "Y 位置"
+msgstr "位置 Y"
 
 #: pcbnew/board_item.cpp:187
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
@@ -20597,7 +20597,7 @@ msgstr "基板名"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:653
 msgid "Board"
-msgstr "基板上"
+msgstr "基板"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:659
 #: pcbnew/dialogs/dialog_board_statistics.cpp:666
@@ -24654,7 +24654,7 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
-msgstr "出力モード:"
+msgstr "プロット モード:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Filled"
@@ -26930,7 +26930,7 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr "正のクリアランスはパッドより大きな領域を意味します。(通常はマスクのクリアランス)"
+msgstr "正のクリアランスはパッドより大きな領域を意味します。(通常はハンダ マスクのクリアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 msgid "Solder mask minimum bridge width:"
@@ -26968,7 +26968,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr "負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアランス)"
+msgstr "負のクリアランスはパッドより小さな領域を意味します。(通常はハンダ ペーストのクリアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -28385,7 +28385,7 @@ msgstr "フットプリント '%s' はライブラリー '%s' から削除され
 
 #: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Enter footprint name:"
-msgstr "フットプリント名:"
+msgstr "フットプリント名を入力:"
 
 #: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "New Footprint"
