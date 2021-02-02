@@ -191,6 +191,9 @@ public:
     bool GetShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
 
+    bool IsPrinting() const { return m_isPrinting; }
+    void SetIsPrinting( bool isPrinting ) { m_isPrinting = isPrinting; }
+
     /**
      * Return current background color settings.
      */
@@ -292,6 +295,7 @@ protected:
     int           m_minPenWidth;          // Some clients (such as PDF) don't like ultra-thin
                                           // lines.  This sets an absolute minimum.
     bool          m_showPageLimits;
+    bool          m_isPrinting;
 
     wxDC*         m_printDC;              // This can go away once the worksheet is moved to
                                           // Cairo-based printing.

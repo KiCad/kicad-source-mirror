@@ -497,6 +497,8 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
                                   wxEmptyString );
     }
 
+    renderSettings.SetIsPrinting( true );
+
     aScreen->Print( &renderSettings );
 
     m_parent->SetDrawBgColor( savedBgColor );

@@ -77,9 +77,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
-    {
         m_sketchMode[i] = false;
-    }
 
     update();
 }
@@ -233,7 +231,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     if( aLayer == LAYER_MARKER_SHADOWS )
         return m_backgroundColor.WithAlpha( 0.6 );
 
-    if( IsHoleLayer( aLayer ) )
+    if( IsHoleLayer( aLayer ) && m_isPrinting )
     {
         // Careful that we don't end up with the same colour for the annular ring and the hole
         // when printing in B&W.

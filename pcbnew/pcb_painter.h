@@ -292,7 +292,7 @@ protected:
     virtual int getDrillSize( const VIA* aVia ) const;
 
 protected:
-        PCB_RENDER_SETTINGS m_pcbSettings;
+    PCB_RENDER_SETTINGS m_pcbSettings;
 };
 } // namespace KIGFX
 

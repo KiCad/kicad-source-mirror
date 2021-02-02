@@ -107,7 +107,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
 
     // Set the color scheme
-    auto dstSettings = view->GetPainter()->GetSettings();
+    RENDER_SETTINGS* dstSettings = view->GetPainter()->GetSettings();
     dstSettings->LoadColors( m_settings.m_colorSettings );
 
     if( m_settings.m_blackWhite )
@@ -125,6 +125,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
             dstSettings->SetLayerColor( i, dstSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
         }
     }
+
+    dstSettings->SetIsPrinting( true );
 
     setupViewLayers( *view, m_settings.m_LayerSet );
     setupPainter( *painter );

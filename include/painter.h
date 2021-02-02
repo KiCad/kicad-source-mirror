@@ -99,9 +99,6 @@ protected:
     /// Instance of graphic abstraction layer that gives an interface to call
     /// commands used to draw (eg. DrawLine, DrawCircle, etc.)
     GAL* m_gal;
-
-    /// Color of brightened item frame
-    COLOR4D m_brightenedColor;
 };
 
 } // namespace KIGFX
