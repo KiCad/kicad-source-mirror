@@ -1246,6 +1246,14 @@ public:
     };
 
 
+    struct PARTNAMECOL : PARSER
+    {
+        COLOR_ID     Color;
+        bool         IsVisible = true;
+
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+    };
+
     ///////////////////////
     // HELPER FUNCTIONS: //
     ///////////////////////

@@ -83,8 +83,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
             // For now only interested in Attribute visibilities, in order to set field visibilities
-            // in the importer desing
-
+            // in the imported design
             XNODE* subNode = cNode->GetChildren();
 
             for( ; subNode; subNode = subNode->GetNext() )
@@ -92,6 +91,24 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
                 if( subNode->GetName() == wxT( "ATTRCOLORS" ) )
                 {
                     AttrColors.Parse( subNode, &mContext );
+                }
+                else if( subNode->GetName() == wxT( "SCMITEMCOLORS" ) )
+                {
+                    XNODE* sub2Node = subNode->GetChildren();
+
+                    for( ; sub2Node; sub2Node = sub2Node->GetNext() )
+                    {
+                        if( sub2Node->GetName() == wxT( "SYMCOL" ) )
+                        {
+                            XNODE* sub3Node = sub2Node->GetChildren();
+
+                            for( ; sub3Node; sub3Node = sub3Node->GetNext() )
+                            {
+                                if( sub3Node->GetName() == wxT( "PARTNAMECOL" ) )
+                                    SymbolPartNameColor.Parse( sub3Node, &mContext );
+                            }
+                        }
+                    }
                 }
                 else
                 {

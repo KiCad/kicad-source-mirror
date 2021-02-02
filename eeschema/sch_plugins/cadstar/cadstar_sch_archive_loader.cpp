@@ -376,6 +376,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                 loadSymbolFieldAttribute( sym.PartRef.AttrLoc, symOrientDeciDeg,
                                           sym.Mirror, partField );
+
+                partField->SetVisible( SymbolPartNameColor.IsVisible );
             }
 
             int fieldIdx = FIELD1;
@@ -456,9 +458,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                                 symbolDef.TextLocations.at( SIGNALNAME_ORIGIN_ATTRID );
                         kiPart->GetValueField().SetPosition(
                                 getKiCadLibraryPoint( signameOrigin.Position, symbolDef.Origin ) );
+                        kiPart->GetValueField().SetVisible( true );
+                    }
+                    else
+                    {
+                        kiPart->GetValueField().SetVisible( false );
                     }
 
                     kiPart->GetReferenceField().SetText( "#PWR" );
+                    kiPart->GetReferenceField().SetVisible( false );
                     ( *mPlugin )->SaveSymbol( mLibraryFileName.GetFullPath(), kiPart );
                     mPowerSymLibMap.insert( { symID, kiPart } );
                 }
@@ -1142,6 +1150,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         field->SetUnit( gateNumber );
     }
 
+    // Hide the value field for now (it might get unhidden if an attribute exists in the cadstar
+    // design with the text "Value"
+    aPart->GetValueField().SetVisible( false );
+
     if( symbol.TextLocations.find( PART_NAME_ATTRID ) != symbol.TextLocations.end() )
     {
         TEXT_LOCATION textLoc = symbol.TextLocations.at( PART_NAME_ATTRID );
@@ -1166,6 +1178,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         }
 
         field->SetUnit( gateNumber );
+        field->SetVisible( SymbolPartNameColor.IsVisible );
     }
 
     if( aCadstarPart )
@@ -1402,6 +1415,11 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
     SCH_COMPONENT* component = new SCH_COMPONENT( *aKiCadPart, libId, &sheetpath, unit );
 
+    if( aCadstarSymbol.IsComponent )
+    {
+        component->SetRef( &sheetpath, aCadstarSymbol.ComponentRef.Designator );
+    }
+
     component->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
     double compAngleDeciDeg = getAngleTenthDegree( aCadstarSymbol.OrientAngle );
@@ -1436,15 +1454,6 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
         delete component;
         return nullptr;
-    }
-
-    wxString currentSheetPath = sheetpath.PathAsString() + component->m_Uuid.AsString();
-
-    if( aCadstarSymbol.IsComponent )
-    {
-        component->AddHierarchicalReference( currentSheetPath,
-                aCadstarSymbol.ComponentRef.Designator,
-                getKiCadUnitNumberFromGate( aCadstarSymbol.GateID ) );
     }
 
     kiSheet->GetScreen()->Append( component );

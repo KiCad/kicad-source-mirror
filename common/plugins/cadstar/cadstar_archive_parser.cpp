@@ -2243,6 +2243,30 @@ void CADSTAR_ARCHIVE_PARSER::ATTRCOLORS::Parse( XNODE* aNode, PARSER_CONTEXT* aC
 }
 
 
+void CADSTAR_ARCHIVE_PARSER::PARTNAMECOL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+{
+    wxASSERT( aNode->GetName() == wxT( "PARTNAMECOL" ) );
+
+    Color = GetXmlAttributeIDString( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        wxString cNodeName = cNode->GetName();
+
+        if( cNodeName == wxT( "INVISIBLE" ) )
+        {
+            IsVisible = false;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+        }
+    }
+}
+
+
 void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
 {
     wxString result;
