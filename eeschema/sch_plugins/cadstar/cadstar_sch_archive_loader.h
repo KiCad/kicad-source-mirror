@@ -30,6 +30,7 @@
 
 #include <layers_id_colors_and_visibility.h> // SCH_LAYER_ID
 #include <plotter.h>                         // PLOT_DASH_TYPE
+#include <pin_type.h>                        // ELECTRICAL_PINTYPE
 #include <sch_io_mgr.h>
 #include <wx/filename.h>
 
@@ -189,6 +190,8 @@ private:
             const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID );
 
     //Helper Functions for obtaining individual elements as KiCad elements:
+    ELECTRICAL_PINTYPE getKiCadPinType( const PART::PIN_TYPE& aPinType );
+
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
     LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );

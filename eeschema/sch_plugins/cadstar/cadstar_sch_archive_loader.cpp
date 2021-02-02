@@ -1083,6 +1083,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         TERMINAL term    = termPair.second;
         wxString pinNum  = wxString::Format( "%ld", term.ID );
         wxString pinName = wxEmptyString;
+        LIB_PIN* pin = new LIB_PIN( aPart );
 
         if( aCadstarPart )
         {
@@ -1100,16 +1101,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
                 else
                     pinNum = wxString::Format( "%ld", csPin.ID );
             }
-        }
 
-        LIB_PIN* pin = new LIB_PIN( aPart );
+            pin->SetType( getKiCadPinType( csPin.Type ) );
+        }
+        else
+        {
+            // If no part is defined, we don't know the pin type. Assume passive pin
+            pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+        }
 
         pin->SetPosition( getKiCadLibraryPoint( term.Position, symbol.Origin ) );
         pin->SetLength( 0 ); //CADSTAR Pins are just a point (have no length)
         pin->SetShape( GRAPHIC_PINSHAPE::LINE );
         pin->SetUnit( gateNumber );
         pin->SetNumber( pinNum );
-
         pin->SetName( pinName );
 
         int oDeg = (int) NormalizeAngle180( getAngleTenthDegree( term.OrientAngle ) );
@@ -2093,6 +2098,25 @@ CADSTAR_SCH_ARCHIVE_LOADER::PART::DEFINITION::PIN CADSTAR_SCH_ARCHIVE_LOADER::ge
     return PART::DEFINITION::PIN();
 }
 
+
+ELECTRICAL_PINTYPE CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPinType( const PART::PIN_TYPE& aPinType )
+{
+    switch( aPinType )
+    {
+    case PART::PIN_TYPE::UNCOMMITTED:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
+    case PART::PIN_TYPE::INPUT:              return ELECTRICAL_PINTYPE::PT_INPUT;
+    case PART::PIN_TYPE::OUTPUT_OR:          return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
+    case PART::PIN_TYPE::OUTPUT_NOT_OR:      return ELECTRICAL_PINTYPE::PT_OUTPUT;
+    case PART::PIN_TYPE::OUTPUT_NOT_NORM_OR: return ELECTRICAL_PINTYPE::PT_OUTPUT;
+    case PART::PIN_TYPE::POWER:              return ELECTRICAL_PINTYPE::PT_POWER_IN;
+    case PART::PIN_TYPE::GROUND:             return ELECTRICAL_PINTYPE::PT_POWER_IN;
+    case PART::PIN_TYPE::TRISTATE_BIDIR:     return ELECTRICAL_PINTYPE::PT_BIDI;
+    case PART::PIN_TYPE::TRISTATE_INPUT:     return ELECTRICAL_PINTYPE::PT_INPUT;
+    case PART::PIN_TYPE::TRISTATE_DRIVER:    return ELECTRICAL_PINTYPE::PT_OUTPUT;
+    }
+
+    return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+}
 
 int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID )
 {
