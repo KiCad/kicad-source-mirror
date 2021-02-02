@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 14:38+0000\n"
+"PO-Revision-Date: 2021-02-02 15:24+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6797,17 +6797,14 @@ msgid "Lib: %s"
 msgstr "ライブラリー: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like Kicad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"配置されたフットプリントのいくつかは、(ライブラリーのニックネームがない)古い"
-"形式です。CvPcb を使って新しく必要な LIB_ID フォーマットへの変換を試みます"
-"か？ (ノーを選択した場合、これらの配置は消去され、各々のフットプリントを手動"
-"で再配置する必要があります。)"
+"割り当てられフットプリントのいくつかは、ライブラリー名がない古い形式です。KiCadで必要な新しい LIB_ID "
+"フォーマットへの変換を試しますか？(いいえを選択した場合、これらの割り当ては消去され、手動で各々のフットプリントの再割り当てをする必要があります。)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -11868,11 +11865,8 @@ msgstr ""
 "異なるフットプリントが同じコンポーネントの別ユニットに割り当てられました"
 
 #: eeschema/erc_item.cpp:98
-#, fuzzy
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr ""
-"異なるネットが同じコンポーネントの別ユニットにある共有ピンに割り当てられまし"
-"た"
+msgstr "異なるネットが同じシンボルの別ユニットにある共有ピンに割り当てられました"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -14627,12 +14621,10 @@ msgstr ""
 "追加または削除を行うにはシンボル ライブラリー管理ダイアログを使用して下さい。"
 
 #: eeschema/symbol_lib_table.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-msgstr ""
-"重複したライブラリーの別名 \"%s\" がシンボル ライブラリー テーブル ファイルの"
-"行 %d に見つかりました"
+msgstr "重複したライブラリーの別名 '%s' がシンボル ライブラリー テーブル ファイルの行 %d に見つかりました"
 
 #: eeschema/symbol_tree_model_adapter.cpp:112
 #, c-format
@@ -22286,12 +22278,9 @@ msgid "Loose (0.1 mm)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined."
-msgstr ""
-"許容誤差は接続されたと見做される２点間の距離を規定します。標準は 0.001mm で"
-"す。"
+msgstr "許容誤差は接続されたと見做される２点間の距離を規定します。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
@@ -22965,11 +22954,10 @@ msgid "Drill Origin"
 msgstr "ドリル原点"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
-#, fuzzy
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
-msgstr "座標原点の選択: 絶対位置または補助座標からの相対位置"
+msgstr "座標原点の選択: 絶対位置またはドリル/配置ファイルの原点からの相対位置"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
 msgid "Drill Units"
@@ -30922,13 +30910,10 @@ msgid "Only through vias are allowed on 2 layer boards."
 msgstr "貫通穴のみが2層基板で有効です。"
 
 #: pcbnew/router/router_tool.cpp:821
-#, fuzzy
 msgid ""
 "Microvias can only be placed between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
-msgstr ""
-"マイクロ ビアは外層レイヤー (F.Cu/B.Cu) の内側にだけ配置でき、隣接するレイ"
-"ヤーを直結させるものです。"
+msgstr "マイクロ ビアは、外層レイヤー (F.Cu/B.Cu) とその隣接するレイヤーの間のみに配置できます。"
 
 #: pcbnew/router/router_tool.cpp:948
 msgid "Tracks on Copper layers only"
