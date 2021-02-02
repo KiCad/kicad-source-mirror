@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 15:52+0000\n"
+"PO-Revision-Date: 2021-02-02 22:49+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -130,9 +130,8 @@ msgid "Reload board and 3D models"
 msgstr "基板と 3D モデルをリロード"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:284
-#, fuzzy
 msgid "Build board outline"
-msgstr "基板外形"
+msgstr "基板外形を作成"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:446
 msgid "Create layers"
@@ -2225,9 +2224,8 @@ msgid "Import settings from a previous version at:"
 msgstr "以前のバージョンから設定をインポート:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "差動ペアの遅延(スキュー)調整"
+msgstr "異なるパスを選択"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -4482,9 +4480,9 @@ msgid "Error loading editor"
 msgstr "エディターをロード中のエラー"
 
 #: common/kiway.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "\"%s\" を書き込めません"
+msgstr "%s に言語を切り替えられません"
 
 #: common/languages_menu.cpp:49
 msgid "Set Language"
@@ -5148,9 +5146,8 @@ msgid "Select Preferred Editor"
 msgstr "優先するエディターを選択"
 
 #: common/pgm_base.cpp:222
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "環境変数 \"%s\" はリネームできません。"
+msgstr "環境変数 HOME が空です。継続できません。"
 
 #: common/pgm_base.cpp:233
 #, c-format
@@ -5558,18 +5555,16 @@ msgid "Previous Marker"
 msgstr "前のマーカー"
 
 #: common/tool/actions.cpp:243
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "デザイン ルール チェッカー ウィンドウを表示"
+msgstr "チェッカー ウィンドウの前のマーカーに移動"
 
 #: common/tool/actions.cpp:249
 msgid "Next Marker"
 msgstr "次のマーカー"
 
 #: common/tool/actions.cpp:249
-#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "デザイン ルール チェッカー ウィンドウを表示"
+msgstr "チェッカー ウィンドウの次のマーカーに移動"
 
 #: common/tool/actions.cpp:255
 msgid "Exclude Marker"
@@ -8437,9 +8432,8 @@ msgid "Group symbols"
 msgstr "シンボルをグループ化"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
-#, fuzzy
 msgid "Group symbols together based on common properties"
-msgstr "共通のプロパティに基づいたコンポーネントをまとめてグループ化する"
+msgstr "共通のプロパティに基づいたシンボルをまとめてグループ化する"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
@@ -10866,15 +10860,13 @@ msgstr ""
 "部品表 (BOM) にのみエクスポートしたいシンボルを追加するのに便利です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "ライブラリーからフィールドを更新..."
+msgstr "ライブラリーからシンボルを更新..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:427
-#, fuzzy
 msgid "Change Symbol..."
-msgstr "新規シンボル..."
+msgstr "シンボルを変更..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 msgid "Edit Symbol..."
@@ -22777,9 +22769,8 @@ msgstr ""
 "各フットプリントのインスタンス用に新しい形状を生成 (形状を再利用しない)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
-#, fuzzy
 msgid "Use drill/place file origin as origin"
-msgstr "ドリル/配置ファイルの原点"
+msgstr "ドリル/配置ファイルの原点を原点に使用"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Save the origin coordinates in the file"
@@ -23030,7 +23021,6 @@ msgid "Footprints"
 msgstr "フットプリント"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
 msgstr "配線とビア"
 
@@ -31756,7 +31746,6 @@ msgid "Moves the selected item(s) with a specified starting point"
 msgstr "指定された開始位置で選択されたアイテムを移動"
 
 #: pcbnew/tools/pcb_actions.cpp:251
-#, fuzzy
 msgid "Copy with Reference"
 msgstr "リファレンスで移動"
 
@@ -32742,18 +32731,16 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "同じネットに属する全ての配線とビアを選択します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1188
-#, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "回路図にある全てのモジュールと配線を選択"
+msgstr "回路図にある全てのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1193
 msgid "Items in Same Hierarchical Sheet"
 msgstr "同じ階層シートにあるアイテム"
 
 #: pcbnew/tools/pcb_actions.cpp:1194
-#, fuzzy
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "同じ回路図に含まれる全てのモジュールと配線を選択"
+msgstr "同じ回路図に含まれる全てのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1199
 msgid "Filter Selection..."
@@ -32974,9 +32961,8 @@ msgid "Position Relative"
 msgstr "相対位置"
 
 #: pcbnew/tools/position_relative_tool.cpp:169
-#, fuzzy
 msgid "Click on reference item..."
-msgstr "リファレンス アイテムを選択..."
+msgstr "クリックしてリファレンス アイテムを選択..."
 
 #: pcbnew/tools/zone_create_helper.cpp:181
 msgid "Add a zone cutout"
@@ -33270,9 +33256,8 @@ msgid "Hide"
 msgstr "非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
-#, fuzzy
 msgid "Non-active layers will be hidden"
-msgstr "非アクティブ レイヤーをノーマル、薄消し、非表示にトグルで切り替える"
+msgstr "非アクティブ レイヤーを非表示にする"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Flip board view"
@@ -33316,9 +33301,8 @@ msgid "Ratsnest lines are shown to items on all layers"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:688
-#, fuzzy
 msgid "Visible layers"
-msgstr "表示"
+msgstr "表示レイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:690
 #, fuzzy
@@ -33326,9 +33310,8 @@ msgid "Ratsnest lines are shown to items on visible layers"
 msgstr "非表示レイヤーのアイテムを含む (&i)"
 
 #: pcbnew/widgets/appearance_controls.cpp:831
-#, fuzzy
 msgid "Set net color"
-msgstr "カラーをペースト"
+msgstr "ネットの色を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:833
 #, fuzzy, c-format
@@ -33348,9 +33331,8 @@ msgid "Deselect tracks and vias in %s"
 msgstr "%s の配線とビアの選択を解除"
 
 #: pcbnew/widgets/appearance_controls.cpp:847
-#, fuzzy
 msgid "Hide all other nets"
-msgstr "導体レイヤーを全て非表示"
+msgstr "他の全てのネットを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:880
 #, c-format
@@ -33539,9 +33521,8 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "選択されたネットのラッツネストを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2128
-#, fuzzy
 msgid "Set netclass color"
-msgstr "ネットクラスを選択"
+msgstr "ネットクラスをの色を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:2133
 #, fuzzy, c-format
@@ -33636,9 +33617,8 @@ msgid "Locked items"
 msgstr "ロックされたアイテム"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "ロックされたアイテムを取り除くには削除を再実行"
+msgstr "ロックされたアイテムの選択を許可"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
 msgid "Rule Areas"
@@ -33689,9 +33669,8 @@ msgid "No footprints"
 msgstr "フットプリントなし"
 
 #: pcbnew/zone.cpp:582
-#, fuzzy
 msgid "Restrictions"
-msgstr "屈折"
+msgstr "制限"
 
 #: pcbnew/zone.cpp:591 pcbnew/zone.cpp:1402
 msgid "Priority"
@@ -33871,9 +33850,8 @@ msgid "Gerber File"
 msgstr "ガーバー ファイル"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "excellon ドリル ファイルをロードします"
+msgstr "Excellon ドリル ファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 #, fuzzy
