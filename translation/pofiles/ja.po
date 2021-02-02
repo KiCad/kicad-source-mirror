@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 23:31+0000\n"
+"PO-Revision-Date: 2021-02-02 04:42+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -4212,7 +4212,7 @@ msgid "%s in \"%s\", line %d, offset %d"
 msgstr "%s ソース \"%s\", 行 %d, オフセット %d"
 
 #: common/exceptions.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file, as it was created with a more\n"
 "recent version than the one you are running.\n"
@@ -4223,8 +4223,7 @@ msgid ""
 "Full error text:\n"
 "%s"
 msgstr ""
-"KiCad は現在使っているバージョンより新しいバージョンで作られたこのファイル"
-"を\n"
+"KiCad は現在使っているバージョンより新しいバージョンで作られたこのファイルを\n"
 "開くことができません。このファイルを開くためには KiCad を新しいバージョンへ\n"
 "アップグレードする必要があります。\n"
 "\n"
@@ -24322,7 +24321,6 @@ msgid "Fabrication Property:"
 msgstr "基板製造用プロパティ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:556
-#, fuzzy
 msgid ""
 "Optional property to specify a special purpose or constraint in fabrication "
 "files:\n"
@@ -24334,7 +24332,7 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
-"特別な用途での指定、または製造用ファイルに含まれる、オプションのプロパティ:\n"
+"製造用ファイルで特別な用途や制約を指定するオプションのプロパティ:\n"
 "BGA 属性は BGA フットプリントのパッド用です\n"
 "ローカル基準は親フットプリント用の基準です\n"
 "グローバル基準はボード全体の基準です\n"
@@ -24809,7 +24807,6 @@ msgid "Track width correction:"
 msgstr "配線幅の補正:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:310
-#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -24818,10 +24815,8 @@ msgid ""
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
 "正確な幅で postscript 出力をするためのグローバル補正幅を設定します。\n"
-"これらの補正幅は配線幅やパッドとビアのサイズの誤差を補正するためのもので"
-"す。\n"
-"妥当な幅の補正値は次の範囲でなければなりません。 [-(最小配線幅-1), +(最小クリ"
-"アランス-1)] (0.1 mil 単位)"
+"これらの補正幅は配線幅やパッドとビアのサイズの誤差を補正するためのものです。\n"
+"妥当な幅の補正値は次の範囲でなければなりません。 [-(最小配線幅-1), +(最小クリアランス-1)] (0.1 mil 単位)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:321
 msgid "Force A4 output"
@@ -26926,7 +26921,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
@@ -26963,7 +26957,6 @@ msgid ""
 msgstr "ハンダ マスクの開口部間の最小距離。この値より近い パッドの開口部は、一つの開口部としてプロットされます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder paste.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
@@ -26971,7 +26964,7 @@ msgid ""
 msgstr ""
 "これはパッドとハンダ ペースト間のグローバル クリアランスです。\n"
 "この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになります。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:93
 msgid ""
@@ -26980,18 +26973,16 @@ msgid ""
 msgstr "負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアランス)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
-#, fuzzy
 msgid ""
 "Global clearance ratio in percent between pads and the solder paste.\n"
 "A value of 10 means the clearance value is 10 percent of the pad size.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"これはパッドとハンダ ペースト間のパーセント指定したグローバル クリアランス比"
-"率です。\n"
+"これはパッドとハンダ ペースト間のパーセント指定したグローバル クリアランス比率です。\n"
 "値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
 "この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
-"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 #, fuzzy
