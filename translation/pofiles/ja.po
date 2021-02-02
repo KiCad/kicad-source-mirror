@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 13:07+0000\n"
+"PO-Revision-Date: 2021-02-02 13:12+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1794,7 +1794,7 @@ msgstr "不透明度:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr "プレビュー (旧 / 新):"
+msgstr "プレビュー (旧/新):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -3456,7 +3456,7 @@ msgstr "ピン競合マップから"
 #: common/dialogs/panel_text_variables.cpp:114
 #: common/dialogs/panel_text_variables.cpp:142
 msgid "Variable name cannot be empty."
-msgstr "環境変数名は空欄にできません。"
+msgstr "変数名は空欄にできません。"
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
@@ -6546,7 +6546,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:60 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr "フットプリントを関連付け"
+msgstr "フットプリントを割り当て"
 
 #: cvpcb/cvpcb_mainframe.cpp:99 pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 msgid "Footprint Libraries"
@@ -8144,7 +8144,7 @@ msgstr "値は空ではないかも知れません。"
 
 #: eeschema/dialogs/dialog_erc.cpp:79
 msgid "Run ERC"
-msgstr "DRC を実行"
+msgstr "ERC を実行"
 
 #: eeschema/dialogs/dialog_erc.cpp:92
 msgid "Show Annotation dialog"
@@ -14077,7 +14077,7 @@ msgstr "シミュレーション"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:93
 msgid "Show &Grid"
-msgstr "グリッドを表示"
+msgstr "グリッドを表示 (&G)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:97
 msgid "Show &Legend"
@@ -14255,7 +14255,7 @@ msgstr "ライブラリーをグローバル ライブラリー テーブルを�
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:970
 msgid "Add To Global Library Table"
-msgstr "ライブラリー テーブルへ追加"
+msgstr "グローバル ライブラリー テーブルへ追加"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:980
 #: pcbnew/footprint_libraries_utils.cpp:495
@@ -15249,7 +15249,7 @@ msgstr "ライブラリーから別のフットプリントを割り付け"
 
 #: eeschema/tools/ee_actions.cpp:421
 msgid "Update Symbols from Library..."
-msgstr "ライブラリーからフィールドを更新..."
+msgstr "ライブラリーからシンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:422
 #, fuzzy
@@ -17142,7 +17142,7 @@ msgstr "\"%s\" の作成に失敗しました"
 
 #: kicad/project_tree_pane.cpp:247
 msgid "Directory name:"
-msgstr "向き:"
+msgstr "ディレクトリー名:"
 
 #: kicad/project_tree_pane.cpp:247
 msgid "Create New Directory"
@@ -22839,9 +22839,7 @@ msgstr "マップ ファイルを生成"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr ""
-"パスの関連付けを作成できません (ターゲット ボリュームが基板ファイルのボリュー"
-"ムと異なります)！"
+msgstr "パスの関連付けを作成できません (ターゲット ボリュームがファイルのボリュームと異なります)！"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:378
 #, c-format
@@ -23499,7 +23497,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr "ライブラリーから選択されたシンボルを削除"
+msgstr "一致したレイヤーのリストから選択されたレイヤーを削除"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
