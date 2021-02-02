@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 15:24+0000\n"
+"PO-Revision-Date: 2021-02-02 15:52+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -525,9 +525,8 @@ msgid "Show copper thickness"
 msgstr "銅箔の厚みを表示"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
-#, fuzzy
 msgid "Other Options"
-msgstr "その他オプション:"
+msgstr "その他オプション"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
 msgid "Anti-aliasing:"
@@ -1591,7 +1590,6 @@ msgid "Report or examine bugs - "
 msgstr "バグを調査または報告する - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
-#, fuzzy
 msgid "KiCad users group and community"
 msgstr "KiCad ユーザー グループとコミュニティ"
 
@@ -2247,9 +2245,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "デフォルト値にリセット"
+msgstr "デフォルト設定を使って開始する"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
@@ -3761,9 +3758,8 @@ msgid "Pad"
 msgstr "パッド"
 
 #: common/eda_item.cpp:263 common/eda_item.cpp:266
-#, fuzzy
 msgid "Graphic Shape"
-msgstr "グラフィック スタイル"
+msgstr "グラフィック形状"
 
 #: common/eda_item.cpp:264
 msgid "Board Text"
@@ -4325,7 +4321,7 @@ msgid "Unable to find a PDF viewer for \"%s\""
 msgstr "\"%s\" を開くための PDF ビューアーが見つかりませんでした"
 
 #: common/gestfich.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot print '%s'.\n"
 "\n"
@@ -4785,12 +4781,10 @@ msgid "Symbol fields"
 msgstr "シンボルのフィールド"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
 msgstr "シンボルの外形線"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
 msgstr "シンボルの塗潰し"
 
@@ -5118,9 +5112,9 @@ msgid "Comment"
 msgstr "コメント"
 
 #: common/page_layout/ws_draw_item.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Text '%s'"
-msgstr "予期されない '%s'"
+msgstr "テキスト '%s'"
 
 #: common/page_layout/ws_draw_item.cpp:395 eeschema/lib_rectangle.cpp:276
 #, c-format
@@ -5133,9 +5127,8 @@ msgid "Line, length %s"
 msgstr "線, 長さ %s"
 
 #: common/page_layout/ws_draw_item.cpp:486
-#, fuzzy
 msgid "Page Limits"
-msgstr "ページの境界を表示:"
+msgstr "ページ境界"
 
 #: common/pgm_base.cpp:174
 msgid "No default editor found, you must choose it"
@@ -5315,9 +5308,8 @@ msgid ""
 msgstr ""
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "サポートされていないビア形状: %s"
+msgstr "サポートされていないオペレーティングシステム"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -5464,14 +5456,12 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "選択されたアイテムをクリップボードにコピー"
 
 #: common/tool/actions.cpp:164
-#, fuzzy
 msgid "Paste items(s) from clipboard"
 msgstr "クリップボードからアイテムを貼り付け"
 
 #: common/tool/actions.cpp:170
-#, fuzzy
 msgid "Select all items on screen"
-msgstr "保存するライブラリーを選択"
+msgstr "画面上の全てのアイテムを選択"
 
 #: common/tool/actions.cpp:174
 msgid "Paste Special..."
@@ -6501,9 +6491,9 @@ msgid "Equivalence File Load Error"
 msgstr "等価ファイルのロード エラー"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu 等価なフットプリント/コンポーネント が見つかりました。"
+msgstr "%lu 等価なフットプリント/シンボルが見つかりました。"
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6887,14 +6877,12 @@ msgstr ""
 "回路図シンボルのフットプリント フィールドへフットプリントの関連付けを保存"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next unassigned symbol"
-msgstr "次の関連付けされていないシンボルを選択"
+msgstr "次の割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "既存のシンボルとフットプリントの関連付けを保持"
+msgstr "次のフットプリントが割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 #, fuzzy
@@ -6902,29 +6890,24 @@ msgid "Select previous unassigned symbol"
 msgstr "前の関連付けされていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "変更されたフットプリントの割り付けでシンボルのフットプリントを置換え"
+msgstr "前のフットプリントが割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint"
-msgstr "フットプリントを関連付け"
+msgstr "フットプリントを割り当て"
 
 #: cvpcb/tools/cvpcb_actions.cpp:110
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "回路図シンボルへ PCB フットプリントを関連付けする"
+msgstr "フットプリントを選択されたシンボルに割り当てる"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
-#, fuzzy
 msgid "Automatically assign footprints"
-msgstr "自動的にフットプリントを関連付け"
+msgstr "自動的にフットプリントを割り当て"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
-#, fuzzy
 msgid "Perform automatic footprint assignment"
-msgstr "フットプリントの関連付けを自動的に実行"
+msgstr "フットプリントの割り当てを自動的に実行"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
 msgid "Delete association"
@@ -7760,14 +7743,12 @@ msgid "*** new symbol has too few units ***"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
-#, fuzzy
 msgid "Update all symbols in schematic"
-msgstr "回路図にシンボルを挿入"
+msgstr "回路図の全てのシンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol"
-msgstr "シンボルを選択"
+msgstr "選択されたシンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -8013,9 +7994,8 @@ msgstr "構文ヘルプ"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "コンソール ウィンドウを表示"
+msgstr "文法のヘルプ ウィンドウを表示"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8597,14 +8577,13 @@ msgid "symbol"
 msgstr "シンボル"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"空のシンボル ライブラリー テーブル ファイルを書き込もうとしたところ、エラーが"
-"発生しました。\n"
+"空のシンボル ライブラリー テーブル ファイルを書き込もうとしたところ、エラーが発生しました。\n"
 "\n"
 "%s"
 
@@ -8613,26 +8592,25 @@ msgid "Please select a symbol library table file."
 msgstr "シンボル ライブラリー テーブル ファイルを選択してください。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "ファイル %s が見つかりません"
+msgstr "ファイル '%s' が見つかりません"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is not a valid symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"ファイル \"%s\" は有効なシンボル ライブラリー テーブル ファイルではありませ"
-"ん。\n"
+"ファイル \"%s\" は有効なシンボル ライブラリー テーブル ファイルではありません。\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "グローバル ライブラリー テーブルのパス \"%s\" が生成できません。"
+msgstr "グローバル ライブラリー テーブルのパス '%s' が生成できません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
 #, c-format
@@ -8640,14 +8618,13 @@ msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr "グローバル シンボル ライブラリー テーブル ファイル '%s' を '%s' にコピーできません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"グローバル シンボル ライブラリー テーブルをロードしようとしたところ、エラーが"
-"発生しました:\n"
+"グローバル シンボル ライブラリー テーブルをロードしようとしたところ、エラーが発生しました:\n"
 "\n"
 "%s"
 
@@ -8663,9 +8640,8 @@ msgstr "ジャンクション プロパティ"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:496
 #: eeschema/dialogs/dialog_lib_edit_text.cpp:58
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:92
-#, fuzzy
 msgid "Read Only"
-msgstr "[読み取り専用]"
+msgstr "読み取り専用"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -9432,9 +9408,8 @@ msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:275
-#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr "フットプリントは名前を持たなければなりません。"
+msgstr "代替ピン定義は名前を持たなければなりません。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:295
 #, c-format
@@ -9505,9 +9480,8 @@ msgid "Preview:"
 msgstr "プレビュー:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:179
-#, fuzzy
 msgid "Alternate pin definitions"
-msgstr "バス定義を管理"
+msgstr "代替ピン定義"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:101
 msgid "Pin Properties"
@@ -11383,9 +11357,8 @@ msgid "Connections"
 msgstr "接続"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
-#, fuzzy
 msgid "Junction dot size:"
-msgstr "ジャンクション サイズ:"
+msgstr "ジャンクションの点のサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Smallest"
@@ -11507,9 +11480,8 @@ msgstr "不正な文字 '%c' のあるニックネーム: \"%s\""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:387
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:590
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "ライブラリーのニックネーム"
+msgstr "ライブラリーのニックネームのエラー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:375
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
@@ -11536,9 +11508,9 @@ msgstr "警告: 重複したニックネーム"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "ニックネーム \"%s\" のライブラリーは既に存在します。"
+msgstr "ニックネーム '%s' のライブラリーは既に存在します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:466
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:847
@@ -11578,9 +11550,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "ライブラリー \"%s\" が見つかりません。"
+msgstr "ライブラリー '%s' が見つかりません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:743
 #, c-format
@@ -11833,9 +11805,8 @@ msgid "Conflict problem between pins"
 msgstr "ピン間の衝突問題"
 
 #: eeschema/erc_item.cpp:70
-#, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "階層ラベルとピンシート間のミスマッチ"
+msgstr "階層ラベルとシートピンのミスマッチ"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
@@ -11859,10 +11830,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "同様のラベルです (大文字/小文字だけ相違)"
 
 #: eeschema/erc_item.cpp:94
-#, fuzzy
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr ""
-"異なるフットプリントが同じコンポーネントの別ユニットに割り当てられました"
+msgstr "異なるフットプリントが同じシンボルの別ユニットに割り当てられました"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
@@ -12038,9 +12007,8 @@ msgstr ""
 "新しいファイル フォーマットは以前のバージョンの KiCad で開くことができません。"
 
 #: eeschema/files-io.cpp:566
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "この回路図ファイル \"%s\" は既に開かれています。"
+msgstr "回路図ファイルは読み込み専用です。"
 
 #: eeschema/files-io.cpp:591
 msgid "Append Schematic"
@@ -13213,14 +13181,14 @@ msgstr ""
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid alternate pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正なシート ピン名：\n"
+"不正な代替ピン名：\n"
 "ファイル: \"%s\"\n"
 "行: %d\n"
 "オフセット: %d"
@@ -14182,9 +14150,8 @@ msgid "Library changes are unsaved"
 msgstr "ライブラリーの変更は保存されていません"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:506
-#, fuzzy
 msgid "Save changes to schematic before closing?"
-msgstr "閉じる前に \"%s\" へ変更を保存しますか?"
+msgstr "閉じる前に回路図の変更を保存しますか?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:555
 #: eeschema/tools/sch_edit_tool.cpp:113
@@ -23941,13 +23908,10 @@ msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances are not supported for custom pad "
 "shapes."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアラ"
-"ンス)"
+msgstr "警告: 負のハンダ マスクのクリアランスはカスタム形状のパッドではサポートされていません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1276
 msgid ""
