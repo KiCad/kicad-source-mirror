@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 13:12+0000\n"
+"PO-Revision-Date: 2021-02-02 13:30+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6114,7 +6114,7 @@ msgstr "グリッド表示時のみ"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:286
 #: pcbnew/dialogs/panel_edit_options_base.cpp:300
 msgid "Never"
-msgstr "非表示"
+msgstr "しない"
 
 #: common/widgets/gal_options_panel.cpp:164
 msgid "Cursor Options"
@@ -8059,7 +8059,7 @@ msgstr "下へ"
 #: pcbnew/footprint.cpp:1934 pcbnew/pad.cpp:1443
 #: pcbnew/text_mod_grid_table.cpp:96
 msgid "Orientation"
-msgstr "角度"
+msgstr "向き"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
