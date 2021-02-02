@@ -78,7 +78,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_stCircleToPolyWarning = new wxStaticText( this, wxID_ANY, _("Note: zone filling can be slow when < %s."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stCircleToPolyWarning->Wrap( -1 );
-	bSizerArcToPoly->Add( m_stCircleToPolyWarning, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerArcToPoly->Add( m_stCircleToPolyWarning, 0, wxLEFT|wxRIGHT, 5 );
 
 
 	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND|wxTOP, 5 );

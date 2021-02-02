@@ -142,7 +142,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="CustomControl" expanded="1">
                                         <property name="BottomDockable">1</property>
