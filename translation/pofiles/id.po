@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 13:55+0000\n"
+"PO-Revision-Date: 2021-02-02 13:08+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -1170,7 +1170,7 @@ msgstr "Berkas Gambar"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:695
 msgid "Unable to export to the Clipboard"
-msgstr ""
+msgstr "Tidak dapat mengekspor ke Papan Klip"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:730
 msgid "Create Logo File"
@@ -1190,7 +1190,7 @@ msgstr "Buat Berkas PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:808
 msgid "Create Symbol Library"
-msgstr ""
+msgstr "Buat Pustaka Simbol"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:847
 msgid "Create Footprint Library"
@@ -1207,15 +1207,15 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1065
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
 msgid "Errors"
-msgstr ""
+msgstr "Galat"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr ""
+msgstr "Gambar Asli"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr ""
+msgstr "Gambar Abu-abu"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
@@ -2198,6 +2198,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Jika dicentang, tabel pustaka simbol dan footprint dari versi sebelumnya "
+"akan diimpor ke versi ini"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 #, fuzzy
@@ -3821,7 +3823,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
 #: eeschema/symbol_editor/symbol_editor.cpp:1181
 msgid "Symbol"
-msgstr ""
+msgstr "Simbol"
 
 #: common/eda_item.cpp:306 eeschema/lib_arc.h:70
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/board_item.cpp:37
@@ -3841,7 +3843,7 @@ msgstr ""
 
 #: common/eda_item.cpp:308
 msgid "Symbol Text"
-msgstr ""
+msgstr "Teks Simbol"
 
 #: common/eda_item.cpp:309 common/page_layout/ws_draw_item.cpp:118
 #: eeschema/lib_rectangle.h:54
@@ -3867,7 +3869,7 @@ msgstr ""
 
 #: common/eda_item.cpp:313
 msgid "Symbol Field"
-msgstr ""
+msgstr "Bidang Simbol"
 
 #: common/eda_item.cpp:315
 msgid "Gerber Layout"
@@ -4070,7 +4072,7 @@ msgstr ""
 
 #: common/env_vars.cpp:75
 msgid "The base path of the locally installed symbol libraries."
-msgstr ""
+msgstr "Path dasar untuk pustaka simbol yang dipasang secara lokal."
 
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
@@ -4119,7 +4121,7 @@ msgstr ""
 
 #: common/env_vars.cpp:100
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr ""
+msgstr "Versi KICAD_SYMBOL_DIR yang tidak digunakan lagi."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -4688,23 +4690,23 @@ msgstr ""
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr ""
+msgstr "Referensi simbol"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr ""
+msgstr "Nilai simbol"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
-msgstr ""
+msgstr "Bidang simbol"
 
 #: common/layer_id.cpp:117
 msgid "Symbol body outlines"
-msgstr ""
+msgstr "Garis luar tubuh simbol"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
-msgstr ""
+msgstr "Isian tubuh simbol"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
@@ -4745,7 +4747,7 @@ msgstr ""
 
 #: common/layer_id.cpp:128
 msgid "No-connect symbols"
-msgstr ""
+msgstr "Simbol tak-hubung"
 
 #: common/layer_id.cpp:129
 msgid "ERC warnings"
@@ -5735,21 +5737,21 @@ msgstr ""
 #: common/tool/actions.cpp:558 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:896
 msgid "Symbol Library Browser"
-msgstr ""
+msgstr "Peramban Pustaka Simbol"
 
 #: common/tool/actions.cpp:558
 msgid "Browse symbol libraries"
-msgstr ""
+msgstr "Ramban pustaka simbol"
 
 #: common/tool/actions.cpp:563 eeschema/eeschema_config.cpp:219
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:108
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "Symbol Editor"
-msgstr ""
+msgstr "Penyunting Simbol"
 
 #: common/tool/actions.cpp:563
 msgid "Create, delete and edit symbols"
-msgstr ""
+msgstr "Buat, hapus dan sunting simbol"
 
 #: common/tool/actions.cpp:568 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1012
@@ -5814,11 +5816,11 @@ msgstr ""
 
 #: common/tool/actions.cpp:604
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "Kelola Pustaka Simbol..."
 
 #: common/tool/actions.cpp:605
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "Sunting daftar pustaka simbol global dan proyek"
 
 #: common/tool/actions.cpp:610
 msgid "Manage Footprint Libraries..."
@@ -6398,7 +6400,7 @@ msgstr "Kesalahan Memuat Berkas Ekuivalen"
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr ""
+msgstr "%lu persamaan footprint/simbol ditemukan."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6437,7 +6439,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:103
 msgid "Symbol : Footprint Assignments"
-msgstr ""
+msgstr "Simbol: Penetapan Footprint"
 
 #: cvpcb/cvpcb_mainframe.cpp:106
 msgid "Filtered Footprints"
@@ -6450,11 +6452,11 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:210
 msgid "Symbol to footprint changes are unsaved"
-msgstr ""
+msgstr "Perubahan simbol ke footprint tidak disimpan"
 
 #: cvpcb/cvpcb_mainframe.cpp:387
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
+msgstr "Tautan Simbol ke Footprint telah dimodifikasi. Simpan perubahan?"
 
 #: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:218
 #, c-format
@@ -6750,23 +6752,23 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:69
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr ""
+msgstr "Simpan asosiasi footprint di bidang footprint simbol skematik"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next unassigned symbol"
-msgstr ""
+msgstr "Pilih simbol yang belum ditetapkan berikutnya"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
 msgid "Select next symbol with no footprint assignment"
-msgstr ""
+msgstr "Pilih simbol tanpa penetapan footprint berikutnya"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous unassigned symbol"
-msgstr ""
+msgstr "Pilih simbol yang belum ditetapkan sebelumnya"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
 msgid "Select previous symbol with no footprint assignment"
-msgstr ""
+msgstr "Pilih simbol tanpa penetapan footprint sebelumnya"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint"
@@ -6774,7 +6776,7 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:110
 msgid "Assign footprint to selected symbols"
-msgstr ""
+msgstr "Tetapkan footprint ke simbol yang dipilih"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Automatically assign footprints"
@@ -6798,11 +6800,13 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Use symbol footprint filters"
-msgstr ""
+msgstr "Gunakan filter footprint simbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:137
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
+"Filter daftar footprint dengan filter footprint yang didefinisikan pada "
+"simbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter by pin count"
@@ -6876,7 +6880,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:899
 #: eeschema/symbol_tree_model_adapter.cpp:65
 msgid "Loading Symbol Libraries"
-msgstr ""
+msgstr "Memuat Pustaka Simbol"
 
 #: eeschema/class_library.cpp:513
 msgid "Loading "
@@ -6888,6 +6892,8 @@ msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
+"Pustaka simbol \"%s\" gagal dimuat. Kesalahan:\n"
+" %s"
 
 #: eeschema/class_library.cpp:580
 #, c-format
@@ -6895,6 +6901,8 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
+"Pustaka simbol \"%s\" gagal dimuat.\n"
+"Kesalahan: %s"
 
 #: eeschema/component_references_lister.cpp:527
 #, c-format
@@ -6910,6 +6918,8 @@ msgstr ""
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
 msgstr ""
+"Galat: simbol %s%s satuan %d dan simbol hanya memiliki %d satuan yang "
+"didefinisikan\n"
 
 #: eeschema/component_references_lister.cpp:593
 #: eeschema/component_references_lister.cpp:623
@@ -7332,15 +7342,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
 msgid "Change all symbols in schematic"
-msgstr ""
+msgstr "Ganti semua simbol di skematik"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change Symbols"
-msgstr ""
+msgstr "Ganti Simbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:75
 msgid "Change selected Symbol"
-msgstr ""
+msgstr "Ganti Simbol yang dipilih"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
 msgid "Change symbols matching reference designator:"
@@ -12801,7 +12811,7 @@ msgstr ""
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr ""
-"Pengguna tidak memiliki izin untuk membaca berkas dokumen pustaka \"%s\""
+"pengguna tidak memiliki izin untuk membaca berkas dokumen pustaka \"%s\""
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2672
 msgid "symbol document library file is empty"
@@ -26669,17 +26679,17 @@ msgstr ""
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:109
 #, c-format
 msgid "Create file %s\n"
-msgstr ""
+msgstr "Buat berkas %s\n"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:150
 #, c-format
 msgid "Unable to create job file \"%s\""
-msgstr ""
+msgstr "Tidak dapat membuat berkas job \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:156
 #, c-format
 msgid "Create Gerber job file \"%s\""
-msgstr ""
+msgstr "Buat berkas job Gerber \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:573
 msgid ""
@@ -26689,15 +26699,15 @@ msgstr ""
 
 #: pcbnew/files.cpp:123
 msgid "All KiCad Board Files"
-msgstr ""
+msgstr "Semua Berkas Papan Sirkuit KiCad"
 
 #: pcbnew/files.cpp:161
 msgid "Open Board File"
-msgstr ""
+msgstr "Buka Berkas Papan Sirkuit"
 
 #: pcbnew/files.cpp:161
 msgid "Import Non KiCad Board File"
-msgstr ""
+msgstr "Impor Berkas Papan Sirkuit Non KiCad"
 
 #: pcbnew/files.cpp:187
 msgid "Create a new project for this board"
@@ -26711,7 +26721,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:231
 msgid "Save Board File As"
-msgstr ""
+msgstr "Simpan Berkas Papan Sirkuit Sebagai"
 
 #: pcbnew/files.cpp:261
 msgid "Printed circuit board"
@@ -26720,12 +26730,12 @@ msgstr ""
 #: pcbnew/files.cpp:325
 #, c-format
 msgid "Recovery file \"%s\" not found."
-msgstr ""
+msgstr "Berkas pemulihan \"%s\" tidak ditemukan."
 
 #: pcbnew/files.cpp:330
 #, c-format
 msgid "OK to load recovery file \"%s\""
-msgstr ""
+msgstr "Oke untuk memuat berkas pemulihan \"%s\""
 
 #: pcbnew/files.cpp:353
 #, c-format
@@ -26755,7 +26765,7 @@ msgstr ""
 #: pcbnew/files.cpp:553
 #, c-format
 msgid "PCB file \"%s\" is already open."
-msgstr ""
+msgstr "Berkas PCB \"%s\" sudah terbuka."
 
 #: pcbnew/files.cpp:560
 msgid "The current PCB has been modified.  Save changes?"
@@ -26771,11 +26781,13 @@ msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
+"Berkas ini dibuat dengan KiCad versi lama. Berkas ini akan dikonversi ke "
+"format baru saat disimpan."
 
 #: pcbnew/files.cpp:821 pcbnew/files.cpp:963
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr ""
+msgstr "Tidak ada hak akses untuk menulis ke berkas \"%s\""
 
 #: pcbnew/files.cpp:885 pcbnew/files.cpp:983
 #, c-format
@@ -26783,6 +26795,8 @@ msgid ""
 "Error saving board file \"%s\".\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat menyimpan berkas papan sirkuit \"%s\".\n"
+"%s"
 
 #: pcbnew/files.cpp:904
 #, c-format
@@ -26790,6 +26804,8 @@ msgid ""
 "Error saving board file \"%s\".\n"
 "Failed to rename temporary file \"%s\""
 msgstr ""
+"Terjadi kesalahan saat menyimpan berkas papan sirkuit \"%s\".\n"
+"Gagal mengganti nama berkas sementara \"%s\""
 
 #: pcbnew/files.cpp:1021
 #, c-format
@@ -26833,7 +26849,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:790
 msgid "exclude from pos files"
-msgstr ""
+msgstr "kecualikan dari berkas pos"
 
 #: pcbnew/footprint.cpp:793
 msgid "exclude from BOM"
@@ -26932,7 +26948,7 @@ msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:1112
 msgid "Footprint Image File Name"
-msgstr ""
+msgstr "Nama Berkas Gambar Footprint"
 
 #: pcbnew/footprint_editor_utils.cpp:208
 msgid "Edit Zone"
@@ -26983,6 +26999,10 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
+"Mengubah pustaka lama (berkas .mod) tidak diperbolehkan\n"
+"Harap simpan pustaka saat ini dengan format .pretty yang baru\n"
+"dan perbarui tabel pustaka footprint Anda\n"
+"sebelum menghapus sebuah footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:81
 msgid "Import Footprint"
@@ -26990,7 +27010,7 @@ msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:254
 msgid "Not a footprint file"
-msgstr ""
+msgstr "Bukan sebuah berkas footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:266
 #, c-format
@@ -27004,12 +27024,12 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:352
 #, c-format
 msgid "Unable to create or write file \"%s\""
-msgstr ""
+msgstr "Tidak dapat membuat atau menulis berkas \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:366
 #, c-format
 msgid "Footprint exported to file \"%s\""
-msgstr ""
+msgstr "Footprint diekspor ke berkas \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:431
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2383
@@ -27224,11 +27244,11 @@ msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
-msgstr ""
+msgstr "Buka Berkas"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:275
 msgid "No file selected!"
-msgstr ""
+msgstr "Tidak ada berkas yang dipilih!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
@@ -27236,11 +27256,11 @@ msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:335
 msgid "Items in the imported file could not be handled properly."
-msgstr ""
+msgstr "Item dalam berkas yang diimpor tidak dapat ditangani dengan benar."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:343
 msgid "There is no plugin to handle this file type."
-msgstr ""
+msgstr "Tidak ada plugin untuk menangani tipe berkas ini."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
@@ -27301,7 +27321,7 @@ msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
 msgid "Import Vector Graphics File"
-msgstr ""
+msgstr "Impor Berkas Grafik Vektor"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
@@ -27347,7 +27367,7 @@ msgstr ""
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "Import 2D Drawing file to Footprint Editor on Drawings layer"
-msgstr ""
+msgstr "Impor berkas Gambar 2D ke Penyunting Footprint pada lapisan Gambar"
 
 #: pcbnew/menubar_footprint_editor.cpp:89
 msgid "Export View as &PNG..."
@@ -27355,7 +27375,7 @@ msgstr ""
 
 #: pcbnew/menubar_footprint_editor.cpp:90
 msgid "Create a PNG file from the current view"
-msgstr ""
+msgstr "Buat sebuah berkas PNG dari tampilan saat ini"
 
 #: pcbnew/menubar_footprint_editor.cpp:161 pcbnew/menubar_pcb_editor.cpp:264
 msgid "&Drawing Mode"
@@ -27388,6 +27408,8 @@ msgstr ""
 #: pcbnew/menubar_pcb_editor.cpp:104
 msgid "Clear board and get last rescue file automatically saved by Pcbnew"
 msgstr ""
+"Bersihkan papan sirkuit dan dapatkan berkas penyelamatan terakhir yang "
+"secara otomatis disimpan oleh Pcbnew"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -27395,15 +27417,15 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Import 2D drawing file"
-msgstr ""
+msgstr "Impor berkas gambar 2D"
 
 #: pcbnew/menubar_pcb_editor.cpp:121
 msgid "Non-KiCad Board File..."
-msgstr ""
+msgstr "Berkas Papan Sirkuit Non-KiCad..."
 
 #: pcbnew/menubar_pcb_editor.cpp:122
 msgid "Import board file from other applications"
-msgstr ""
+msgstr "Impor berkas papan sirkuit dari aplikasi lain"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "GenCAD..."
@@ -27447,11 +27469,11 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:146
 msgid "Footprint Association (.cmp) File..."
-msgstr ""
+msgstr "Berkas Asosiasi Footprint (.cmp)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:147
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr ""
+msgstr "Ekspor berkas asosiasi footprint (*.cmp) untuk anotasi balik skematik"
 
 #: pcbnew/menubar_pcb_editor.cpp:149
 msgid "Hyperlynx..."
@@ -27568,7 +27590,7 @@ msgstr ""
 
 #: pcbnew/microwave/microwave_polygon.cpp:129
 msgid "Read Shape Description File..."
-msgstr ""
+msgstr "Baca Berkas Deskripsi Bentuk..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:132
 msgid "Symmetrical"
@@ -27584,7 +27606,7 @@ msgstr ""
 
 #: pcbnew/microwave/microwave_polygon.cpp:183
 msgid "File not found"
-msgstr ""
+msgstr "Berkas tidak ditemukan"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
 msgid "Shape has a null size!"
@@ -27769,6 +27791,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"ID footprint tidak valid pada\n"
+"berkas: \"%s\"\n"
+"baris: %d\n"
+"ofset: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -27802,7 +27828,7 @@ msgstr ""
 #: pcbnew/netlist_reader/netlist.cpp:66
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr ""
+msgstr "Tidak dapat membuka berkas netlist \"%s\"."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 msgid "Netlist Load Error."
@@ -27849,6 +27875,9 @@ msgid ""
 "file: \"%s\"\n"
 "line: %d"
 msgstr ""
+"ID footprint tidak valid pada\n"
+"berkas: \"%s\"\n"
+"baris: %d"
 
 #: pcbnew/pad.cpp:695
 #, c-format
@@ -28029,20 +28058,20 @@ msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:327
 msgid "New PCB file is unsaved"
-msgstr ""
+msgstr "Berkas PCB baru tidak disimpan"
 
 #: pcbnew/pcb_edit_frame.cpp:841
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
-msgstr ""
+msgstr "Berkas simpan otomatis \"%s\" tidak dapat dihapus!"
 
 #: pcbnew/pcb_edit_frame.cpp:1070
 msgid "Board file is read only."
-msgstr ""
+msgstr "Berkas papan sirkuit hanya bisa dibaca."
 
 #: pcbnew/pcb_edit_frame.cpp:1101
 msgid "PCB file changes are unsaved"
-msgstr ""
+msgstr "Perubahan berkas PCB tidak disimpan"
 
 #: pcbnew/pcb_edit_frame.cpp:1346
 msgid "The schematic for this board cannot be found."
@@ -28062,7 +28091,7 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:1439
 #, c-format
 msgid "Schematic file \"%s\" not found."
-msgstr ""
+msgstr "Berkas skematik \"%s\" tidak ditemukan."
 
 #: pcbnew/pcb_edit_frame.cpp:1470
 msgid "Eeschema failed to load:\n"
@@ -28214,7 +28243,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:429
 #, c-format
 msgid "File not found: '%s'"
-msgstr ""
+msgstr "Berkas tidak ditemukan: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:741
 #, c-format
@@ -28425,6 +28454,7 @@ msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
 msgstr ""
+"Tampaknya berkas rusak. Tidak dapat menemukan ID grup %s dalam definisi grup."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1029
 #, c-format
@@ -28432,6 +28462,8 @@ msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
 "(parent group ID=%s, Name=%s)."
 msgstr ""
+"Tampaknya berkas rusak. Tidak dapat menemukan sub grup %s dalam peta grup ("
+"ID grup induk=%s, Nama=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
 #, c-format
@@ -28674,7 +28706,7 @@ msgstr ""
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
 msgid "Could not read file "
-msgstr ""
+msgstr "Tidak dapat membaca berkas "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:206
 #, c-format
@@ -28826,6 +28858,7 @@ msgstr ""
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
 msgstr ""
+"berkas \"%s\" yang tidak diharapkan telah ditemukan di path pustaka \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #, c-format
@@ -28846,6 +28879,8 @@ msgstr ""
 #, c-format
 msgid "Cannot rename temporary file \"%s\" to footprint library file \"%s\""
 msgstr ""
+"Tidak dapat mengganti nama berkas sementara \"%s\" menjadi berkas pustaka "
+"footprint \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:235
 #, c-format
@@ -28885,7 +28920,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2142
 msgid "this file does not contain a PCB"
-msgstr ""
+msgstr "berkas ini tidak berisi PCB"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2285
 #, c-format
@@ -28901,12 +28936,12 @@ msgstr ""
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2328
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
-msgstr ""
+msgstr "Nama berkas footprint \"%s\" tidak valid."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2334
 #, c-format
 msgid "No write permissions to delete file \"%s\""
-msgstr ""
+msgstr "Tidak ada izin menulis untuk menghapus berkas \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2402
 #, c-format
@@ -28927,6 +28962,7 @@ msgstr ""
 #, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
 msgstr ""
+"Berkas \"%s\" yang tidak diharapkan telah ditemukan di path pustaka \"%s\"."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2470
 #, c-format
@@ -28955,9 +28991,11 @@ msgid "Undefined layers:"
 msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1441
-#, c-format
+#, c-format, fuzzy
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
 msgstr ""
+"Lapisan \"%s\" dalam berkas \"%s\" pada baris %d, tidak berada dalam hash "
+"lapisan tetap"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1480
 #, c-format
@@ -28983,6 +29021,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"ID net tidak valid pada\n"
+"berkas: '%s'\n"
+"baris: %d\n"
+"ofset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3758
 #, c-format
@@ -28992,6 +29034,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Nama net tidak cocok dengan ID net pada\n"
+"berkas: '%s'\n"
+"baris: %d\n"
+"ofset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4199
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4270
@@ -29003,6 +29049,10 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"ID net tidak valid pada\n"
+"berkas: \"%s\"\n"
+"baris: %d\n"
+"ofset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4576
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2573
@@ -29019,7 +29069,7 @@ msgstr ""
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:543
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Berkas '%s' memiliki versi yang tidak dikenal: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:697
 #, c-format
@@ -29069,6 +29119,8 @@ msgid ""
 "invalid float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
+"angka float tidak valid pada berkas: \"%s\"\n"
+"baris: %d, ofset: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2935
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2971
@@ -29077,16 +29129,18 @@ msgid ""
 "missing float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
+"angka float tidak ada pada berkas: \"%s\"\n"
+"baris: %d, ofset: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3113
 #, c-format
 msgid "File '%s' is empty."
-msgstr ""
+msgstr "Berkas '%s' kosong."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3116
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr ""
+msgstr "Berkas '%s' bukan pustaka versi lama."
 
 #: pcbnew/plugins/pcad/pcb.cpp:49 pcbnew/plugins/pcad/pcb.cpp:59
 #: pcbnew/plugins/pcad/pcb.cpp:69
@@ -29519,13 +29573,13 @@ msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:92
 msgid "Session file imported and merged OK."
-msgstr ""
+msgstr "Berkas sesi diimpor dan digabung OK."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:167
 #: pcbnew/specctra_import_export/specctra_import.cpp:278
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr ""
+msgstr "Berkas sesi menggunakan id lapisan yang tidak valid \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:218
 msgid "Session via padstack has no shapes"
@@ -29540,15 +29594,15 @@ msgstr ""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:324
 msgid "Session file is missing the \"session\" section"
-msgstr ""
+msgstr "Berkas sesi tidak memiliki bagian \"session\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:327
 msgid "Session file is missing the \"routes\" section"
-msgstr ""
+msgstr "Berkas sesi tidak memiliki bagian \"routes\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:330
 msgid "Session file is missing the \"library_out\" section"
-msgstr ""
+msgstr "Berkas sesi tidak memiliki bagian \"libary_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:357
 #, c-format
@@ -29637,11 +29691,11 @@ msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:322
 msgid "Merge Specctra Session file:"
-msgstr ""
+msgstr "Gabungkan berkas Sesi Specctra:"
 
 #: pcbnew/tools/board_editor_control.cpp:345
 msgid "Specctra DSN File"
-msgstr ""
+msgstr "Berkas Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:411
 #, c-format
@@ -29930,7 +29984,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_tool.cpp:1021
 msgid "No graphic items found in file to import"
-msgstr ""
+msgstr "Tidak ditemukan item grafis dalam berkas untuk diimpor"
 
 #: pcbnew/tools/drawing_tool.cpp:1071 pcbnew/tools/drawing_tool.cpp:1142
 msgid "Place a DXF_SVG drawing"
@@ -30686,19 +30740,20 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Drill Files (.drl)..."
-msgstr ""
+msgstr "Berkas Drill (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Generate Excellon drill file(s)"
-msgstr ""
+msgstr "Buat berkas drill Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Footprint Positions (.pos)..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:569
+#, fuzzy
 msgid "Generate footprint position file for pick and place"
-msgstr ""
+msgstr "Buat berkas posisi footprint untuk \"pick and place\""
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Footprint Report (.rpt)..."
@@ -30710,11 +30765,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:580
 msgid "IPC-D-356 Netlist File..."
-msgstr ""
+msgstr "Berkas Netlist IPC-D-356..."
 
 #: pcbnew/tools/pcb_actions.cpp:580
 msgid "Generate IPC-D-356 netlist file"
-msgstr ""
+msgstr "Buat berkas netlist IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:585
 msgid "BOM..."
@@ -32368,14 +32423,12 @@ msgid "KiCad electronic schematic design (standalone)"
 msgstr ""
 
 #: resources/linux/launchers/gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Lihat Berkas Gerber"
+msgstr "Penampil Berkas Gerber"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
-msgstr "Lihat Berkas Gerber"
+msgstr "Tampilkan berkas Gerber"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
@@ -32399,13 +32452,12 @@ msgid "KiCad printed circuit board layout (standalone)"
 msgstr ""
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
-msgstr "Lihat Berkas Gerber"
+msgstr "Berkas Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
 msgid "Excellon drill file"
-msgstr ""
+msgstr "Berkas drill Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 #, fuzzy
