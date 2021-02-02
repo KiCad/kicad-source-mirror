@@ -508,13 +508,23 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetMask( GRID_HELPER::ALL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+
+        if( segment )
+        {
+            if( segment->GetStartPoint().x == segment->GetEndPoint().x )
+                grid.ClearMaskFlag( GRID_HELPER::VERTICAL );
+
+            if( segment->GetStartPoint().y == segment->GetEndPoint().y )
+                grid.ClearMaskFlag( GRID_HELPER::HORIZONTAL );
+        }
 
         wxPoint cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
                                            : (wxPoint) controls->GetMousePosition();
 
-        cursorPos = (wxPoint) grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr );
+        cursorPos = (wxPoint) grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, segment );
         controls->ForceCursorPosition( true, cursorPos );
 
         bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;

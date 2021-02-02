@@ -35,6 +35,7 @@ using namespace std::placeholders;
 GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
     m_toolMgr( aToolMgr )
 {
+    m_maskTypes = ALL;
     m_enableSnap = true;
     m_enableSnapLine = true;
     m_enableGrid = true;

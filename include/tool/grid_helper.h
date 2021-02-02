@@ -36,7 +36,7 @@ class GRID_HELPER
 {
 public:
     GRID_HELPER( TOOL_MANAGER* aToolMgr );
-    ~GRID_HELPER();
+    virtual ~GRID_HELPER();
 
     VECTOR2I GetGrid() const;
     VECTOR2I GetOrigin() const;
@@ -68,15 +68,21 @@ public:
 
     void SetSnapLine( bool aSnap ) { m_enableSnapLine = aSnap; }
 
-protected:
+    void SetMask( int aMask ) { m_maskTypes = aMask; }
+    void SetMaskFlag( int aFlag ) { m_maskTypes |= aFlag; }
+    void ClearMaskFlag( int aFlag ) { m_maskTypes = m_maskTypes & ~aFlag; }
+
     enum ANCHOR_FLAGS {
         CORNER = 1,
         OUTLINE = 2,
         SNAPPABLE = 4,
         ORIGIN = 8,
         VERTICAL = 16,
-        HORIZONTAL = 32
+        HORIZONTAL = 32,
+        ALL = CORNER | OUTLINE | SNAPPABLE | ORIGIN | VERTICAL | HORIZONTAL
     };
+
+protected:
 
     struct ANCHOR
     {
@@ -98,7 +104,8 @@ protected:
 
     void addAnchor( const VECTOR2I& aPos, int aFlags, EDA_ITEM* aItem )
     {
-        m_anchors.emplace_back( ANCHOR( aPos, aFlags, aItem ) );
+        if( ( aFlags & m_maskTypes ) == aFlags )
+            m_anchors.emplace_back( ANCHOR( aPos, aFlags, aItem ) );
     }
 
     void clearAnchors()
@@ -111,6 +118,8 @@ protected:
 
     TOOL_MANAGER*          m_toolMgr;
     OPT<VECTOR2I>          m_auxAxis;
+
+    int                    m_maskTypes;      // Mask of allowed snap types
 
     bool                   m_enableSnap;     // Allow snapping to other items on the layers
     bool                   m_enableGrid;     // If true, allow snapping to grid
