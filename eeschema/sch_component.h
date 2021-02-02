@@ -133,11 +133,11 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* aSheet,
+    SCH_COMPONENT( const LIB_PART& aPart, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ) );
 
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, PICKED_SYMBOL& aSel,
+    SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
                    const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
      * Clones \a aComponent into a new schematic symbol object.
