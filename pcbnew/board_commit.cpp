@@ -193,12 +193,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 switch( boardItem->Type() )
                 {
-                // Module items
+                // Footprint items
                 case PCB_PAD_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_ZONE_T:
-                    // This level can only handle footprint children when editing footprints
+                    // This level can only handle footprint children in the footprint editor as
+                    // only in that case has the entire footprint (and all its children) already
+                    // been saved for undo.
                     wxASSERT( m_isFootprintEditor );
 
                     if( boardItem->Type() == PCB_FP_TEXT_T )
@@ -209,6 +211,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
                             break;
                     }
+
+                    if( boardItem->GetParentGroup() )
+                        boardItem->GetParentGroup()->RemoveItem( boardItem );
 
                     view->Remove( boardItem );
 

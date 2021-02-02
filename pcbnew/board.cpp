@@ -738,6 +738,9 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
     }
 
+    if( aBoardItem->GetParentGroup() )
+        aBoardItem->GetParentGroup()->RemoveItem( aBoardItem );
+
     m_connectivity->Remove( aBoardItem );
 
     if( aRemoveMode != REMOVE_MODE::BULK )
@@ -2011,7 +2014,9 @@ wxString BOARD::GroupsSanityCheck( bool repair )
 {
     if( repair )
     {
-        while( GroupsSanityCheckInternal( repair ) != wxEmptyString );
+        while( GroupsSanityCheckInternal( repair ) != wxEmptyString )
+        {};
+
         return wxEmptyString;
     }
     return GroupsSanityCheckInternal( repair );

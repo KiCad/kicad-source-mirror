@@ -562,6 +562,9 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         wxFAIL_MSG( msg );
     }
     }
+
+    if( aBoardItem->GetParentGroup() )
+        aBoardItem->GetParentGroup()->RemoveItem( aBoardItem );
 }
 
 
