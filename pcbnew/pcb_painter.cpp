@@ -93,7 +93,6 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         m_layerColors[i] = aSettings->GetColor( i );
 
         // Guard: if the alpah channel is too small, the layer is not visible.
-        // clamp it to 0.2
         if( m_layerColors[i].a < 0.2 )
             m_layerColors[i].a = 0.2;
     }
@@ -102,23 +101,19 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetColor( i );
 
-    // Default colors for specific layers (not really board layers).
+    // Colors for layers that aren't theme-able
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIA_NETNAMES]    = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
     m_layerColors[LAYER_PAD_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_FR_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_BK_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
 
-    // LAYER_PADS_TH, LAYER_NON_PLATEDHOLES, LAYER_ANCHOR ,LAYER_RATSNEST,
-    // LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
-    // are initialized from aSettings
-
     // Netnames for copper layers
     for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
         const COLOR4D lightLabel( 0.8, 0.8, 0.8, 0.7 );
         const COLOR4D darkLabel = lightLabel.Inverted();
-        PCB_LAYER_ID layer = *cu;
+        PCB_LAYER_ID  layer = *cu;
 
         if( m_layerColors[layer].GetBrightness() > 0.5 )
             m_layerColors[GetNetnameLayer( layer )] = darkLabel;
