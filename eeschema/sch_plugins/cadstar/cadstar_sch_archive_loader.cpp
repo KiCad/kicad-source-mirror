@@ -1095,6 +1095,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             {
                 if( !csPin.Identifier.IsEmpty() )
                     pinNum = csPin.Identifier;
+                else if( csPin.ID == UNDEFINED_VALUE )
+                    pinNum = wxString::Format( "%ld", term.ID );
                 else
                     pinNum = wxString::Format( "%ld", csPin.ID );
             }

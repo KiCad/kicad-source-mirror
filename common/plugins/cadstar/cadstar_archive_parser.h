@@ -970,7 +970,7 @@ public:
                     BOTTOM_RIGHT = 3
                 };
 
-                PART_DEFINITION_PIN_ID ID;
+                PART_DEFINITION_PIN_ID ID = UNDEFINED_VALUE;
 
                 wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
                                                           ///< in the component footprint
