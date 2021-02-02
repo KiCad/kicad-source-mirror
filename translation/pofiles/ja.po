@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 22:49+0000\n"
+"PO-Revision-Date: 2021-02-02 23:30+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -21474,9 +21474,8 @@ msgid "Justification:"
 msgstr "位置合わせ:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:321
-#, fuzzy
 msgid "Position mode:"
-msgstr "位置オフセット:"
+msgstr "位置モード:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
@@ -21494,9 +21493,8 @@ msgid "Manual"
 msgstr "手動"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
-#, fuzzy
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "シンボルのアンカー位置を原点とするテキストのY座標"
+msgstr "文字を寸法線に対してどのように配置するかを選択します"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 msgid "Dimension Line"
@@ -21545,9 +21543,8 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:560
 #: pcbnew/tools/board_inspection_tool.cpp:598
 #: pcbnew/tools/board_inspection_tool.cpp:627
-#, fuzzy
 msgid "Show design rules."
-msgstr "デザイン ルール"
+msgstr "デザイン ルールを表示します。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "-------- DRC cancelled by user.<br><br>"
@@ -21586,9 +21583,8 @@ msgid "Refill all zones before performing DRC"
 msgstr "DRC 実行前に全てのゾーンを再塗り潰し"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
-#, fuzzy
 msgid "Report all errors for each track"
-msgstr "配線のエラーを全てレポート (遅い)"
+msgstr "配線のエラーを全てレポート"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -21605,9 +21601,8 @@ msgstr ""
 "されます。"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
-#, fuzzy
 msgid "Test for parity between PCB and schematic"
-msgstr "回路図のフットプリントをテスト"
+msgstr "基板と回路図の等価性をテスト"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
@@ -21624,9 +21619,9 @@ msgid "Unconnected Items (%d)"
 msgstr "未配線アイテム (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "回路図フィールド"
+msgstr "回路図の等価性 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 msgid "Delete Marker"
@@ -21666,9 +21661,8 @@ msgstr "テキスト アイテムは内容を持っていなければなりま�
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:714
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:780
-#, fuzzy
 msgid "Modify footprint properties"
-msgstr "フットプリントのプロパティを編集"
+msgstr "フットプリントのプロパティを変更"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:785
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:832
@@ -21765,21 +21759,18 @@ msgstr "その他"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:196
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
-#, fuzzy
 msgid "Not in schematic"
-msgstr "回路図をプロット"
+msgstr "回路図にない"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:199
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
-#, fuzzy
 msgid "Exclude from position files"
-msgstr "部品表 (BOM) から除外"
+msgstr "位置ファイルから除外"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
-#, fuzzy
 msgid "Exclude from BOM"
-msgstr "基板から除外"
+msgstr "部品表 (BOM) から除外"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:221
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
@@ -21983,28 +21974,24 @@ msgid "Change Footprints"
 msgstr "フットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
-#, fuzzy
 msgid "Change all footprints on board"
-msgstr "%s 基板上の全フットプリント"
+msgstr "基板の全フットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
 msgid "Change selected footprint"
 msgstr "選択されたフットプリントを変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Change footprints matching reference designator:"
-msgstr "リファレンス指定子と一致した %s 個のフットプリント:"
+msgstr "リファレンス指定子が一致するフットプリントを変更:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Change footprints matching value:"
-msgstr "%s フットプリントと一致した値:"
+msgstr "値の一致するフットプリントを変更:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Change footprints with library id:"
-msgstr "%s 個のライブラリ ID 付フットプリント:"
+msgstr "指定のライブラリーIDのフットプリントを変更:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Update text layers and visibilities"
@@ -22045,28 +22032,24 @@ msgid "*** footprint not found ***"
 msgstr "*** フットプリントが見つかりません ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
-#, fuzzy
 msgid "Update all footprints on board"
-msgstr "基板のフットプリントを更新"
+msgstr "基板の全てのフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint"
 msgstr "選択されたフットプリントを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
-#, fuzzy
 msgid "Update footprints matching reference designator:"
-msgstr "リファレンス指定子と一致した %s 個のフットプリント:"
+msgstr "リファレンス指定子と一致するフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "%s フットプリントと一致した値:"
+msgstr "値の一致するフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "%s 個のライブラリ ID 付フットプリント:"
+msgstr "指定のライブラリーIDのフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -22488,19 +22471,16 @@ msgid "Wrap"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "フットプリントのリファレンス指定子を表示"
+msgstr "フットプリントのリファレンス指定子を検索"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "フットプリント定数を表示"
+msgstr "フットプリントの値を検索"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "その他のフットプリント テキスト アイテム"
+msgstr "他のテキスト アイテムを検索"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
@@ -22515,9 +22495,8 @@ msgid "Restart Search"
 msgstr "検索を再開"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
-#, fuzzy
 msgid "Run Checks"
-msgstr "CvPcb を実行します"
+msgstr "チェックを実行します"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:388
@@ -23664,7 +23643,6 @@ msgstr "ネットリスト ファイルがありません。"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:140
-#, fuzzy
 msgid "Changes Applied to PCB"
 msgstr "基板への変更を適用"
 
@@ -24418,7 +24396,6 @@ msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:982
-#, fuzzy
 msgid "Preview pad in sketch mode"
 msgstr "スケッチモードでパッドを表示"
 
@@ -24727,20 +24704,16 @@ msgid "X scale factor:"
 msgstr "X 拡大率:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:286
-#, fuzzy
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr ""
-"正確なスケールでPostscript出力をするためグローバルXスケールを設定します。"
+msgstr "正確なスケールでPostScript出力をするためグローバルXスケールを設定します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:293
 msgid "Y scale factor:"
 msgstr "Y 拡大率:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:298
-#, fuzzy
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr ""
-"正確なスケールでPostscript出力をするためグローバルYスケールを設定します。"
+msgstr "正確なスケールでPostScript出力をするためグローバルYスケールを設定します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:305
 msgid "Track width correction:"
@@ -24754,7 +24727,7 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
-"正確な幅で postscript 出力をするためのグローバル補正幅を設定します。\n"
+"正確な幅で PostScript 出力をするためのグローバル補正幅を設定します。\n"
 "これらの補正幅は配線幅やパッドとビアのサイズの誤差を補正するためのものです。\n"
 "妥当な幅の補正値は次の範囲でなければなりません。 [-(最小配線幅-1), +(最小クリアランス-1)] (0.1 mil 単位)"
 
@@ -25095,9 +25068,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
-#, fuzzy
 msgid "Fix all segments on click"
-msgstr "回路図の全シートを保存"
+msgstr "クリック時に全ての配線セグメントを固定する"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25403,9 +25375,8 @@ msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "プットプリント %s パッド %s のネットを %s から %s に変更しています。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
-#, fuzzy
 msgid "Change Nets"
-msgstr "タイプを変更"
+msgstr "ネットを変更"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 #, fuzzy
@@ -25429,9 +25400,8 @@ msgid "Updating nets"
 msgstr "ネットを更新"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
-msgstr "ネットを自動配線"
+msgstr "ビアとネットを自動的に更新"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -25542,29 +25512,24 @@ msgid "&Pads"
 msgstr "パッド"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "&Remove unused layers"
-msgstr "未使用の %s を削除します。"
+msgstr "未使用のレイヤーを削除します。(&R)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
-#, fuzzy
 msgid "Res&tore unused layers"
-msgstr "未使用の %s を削除します。"
+msgstr "未使用のレイヤーを復元します。(&t)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
-#, fuzzy
 msgid "&Selection only"
-msgstr "選択"
+msgstr "選択のみ(&S)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
-#, fuzzy
 msgid "Keep &outside layers"
-msgstr "キープアウト (禁止) エリア レイヤー:"
+msgstr "外側のレイヤーを維持(&o)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Remove Unused Pads"
-msgstr "未使用の %s を削除します。"
+msgstr "未使用のパッドを削除します。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -25691,9 +25656,8 @@ msgid "Magnetic graphics"
 msgstr "マグネティック配線"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
-#, fuzzy
 msgid "Lock pads of newly added footprints"
-msgstr "ロックされているフットプリント"
+msgstr "新しく配置されたフットプリントのパッドをロック"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
 #, fuzzy
@@ -25749,9 +25713,8 @@ msgstr "アイテムを選択"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:115
 #: pcbnew/dialogs/panel_edit_options_base.cpp:196
-#, fuzzy
 msgid "Add item(s) to selection."
-msgstr "選択に追加"
+msgstr "アイテムを選択に追加"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:120
 msgid "Shift+Alt"
@@ -25759,21 +25722,18 @@ msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 #: pcbnew/dialogs/panel_edit_options_base.cpp:206
-#, fuzzy
 msgid "Remove item(s) from selection."
-msgstr "選択から除外"
+msgstr "選択からアイテムを除外"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
-#, fuzzy
 msgid "Toggle selected state of item(s)."
-msgstr "選択したアイテムを回転"
+msgstr "アイテムの選択状態を切り替え"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:226
-#, fuzzy
 msgid "Clarify selection from menu."
-msgstr "明示的な選択"
+msgstr "明示的にメニューから選択"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:150
 msgid "Ctrl+Shift"
@@ -25852,9 +25812,8 @@ msgid "Track Editing"
 msgstr "配線の編集"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:339
-#, fuzzy
 msgid "Mouse drag track behavior:"
-msgstr "ドラッグ中のマウスモード:"
+msgstr "ドラッグ中の配線の動き:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 msgid ""
@@ -25887,9 +25846,8 @@ msgid ""
 msgstr "配線の角度を制限することなく最も近い接続点に配線をドラッグします。"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:129
-#, fuzzy
 msgid "Internal Layers"
-msgstr "内層配線"
+msgstr "内層レイヤー"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:321
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
@@ -25974,34 +25932,28 @@ msgid "Reload Plugins"
 msgstr "プラグインをリロード"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "ブラウザー内に表示"
+msgstr "プラグインのエラーを表示"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
-msgstr "ページ余白"
+msgstr "ページの原点"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
-#, fuzzy
 msgid "Display Origin"
-msgstr "ドリル原点"
+msgstr "原点を表示"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
-#, fuzzy
 msgid "Select which origin is used for X,Y coordinate display."
-msgstr "表示される単位を選択"
+msgstr "X,Y座標を表示するために使う原点を選択します。"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases right"
-msgstr "間隔を広げる"
+msgstr "右方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases left"
-msgstr "線幅を太く"
+msgstr "左方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
@@ -26012,14 +25964,12 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases up"
-msgstr "間隔を広げる"
+msgstr "上方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases down"
-msgstr "間隔を広げる"
+msgstr "下方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
@@ -26317,9 +26267,8 @@ msgid "32"
 msgstr "32"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:45
-#, fuzzy
 msgid "Add User Defined Layer"
-msgstr "ユーザー定義グリッド"
+msgstr "ユーザー定義レイヤーを追加"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:63
 msgid "If you want a courtyard layer for the front side of the board"
@@ -27080,9 +27029,8 @@ msgid "Prefix"
 msgstr ""
 
 #: pcbnew/dimension.cpp:309
-#, fuzzy
 msgid "Override Text"
-msgstr "非表示テキスト"
+msgstr "テキストを上書き"
 
 #: pcbnew/dimension.cpp:319
 msgid "Suffix"
@@ -27226,9 +27174,8 @@ msgid "Design For Manufacturing"
 msgstr "製造のための設計"
 
 #: pcbnew/drc/drc_item.cpp:44
-#, fuzzy
 msgid "Schematic Parity"
-msgstr "回路図フィールド"
+msgstr "回路図の等価性"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
@@ -27484,9 +27431,8 @@ msgid "Missing max value."
 msgstr "最大値がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
-#, fuzzy
 msgid "Missing opt value."
-msgstr "親なし"
+msgstr "最適値がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
@@ -27616,11 +27562,11 @@ msgstr "(%s 最小 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:76
 msgid "Checking pad holes..."
-msgstr "ラベルをチェック..."
+msgstr "パッドの穴をチェック..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:95
 msgid "Checking via holes..."
-msgstr "ラベルをチェック..."
+msgstr "ビアの穴をチェック..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:155
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:219
@@ -27698,9 +27644,8 @@ msgid "<unconstrained>"
 msgstr "制限なし"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:113
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "基板外形レイヤーには文字列を配置できません"
+msgstr "(Edge.Cutsのレイヤーに基板外形がありません)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:140
 #, c-format
@@ -28717,9 +28662,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:153
-#, fuzzy
 msgid "Export Footprints to Library..."
-msgstr "ライブラリーからフットプリントを更新..."
+msgstr "フットプリントをライブラリーにエクスポート..."
 
 #: pcbnew/menubar_pcb_editor.cpp:154
 msgid ""
@@ -28763,14 +28707,12 @@ msgid "Reload all python plugins and refresh plugin menus"
 msgstr "全ての python プラグインをリロードしてプラグイン メニューを更新"
 
 #: pcbnew/menubar_pcb_editor.cpp:414
-#, fuzzy
 msgid "Reveal Plugin Folder in Finder"
-msgstr "ファインダーにプロジェクト フォルダーを表示"
+msgstr "ファインダーにプラグイン フォルダーを表示"
 
 #: pcbnew/menubar_pcb_editor.cpp:415
-#, fuzzy
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "ファインダー ウィンドウにディレクトリーを表示"
+msgstr "ファインダー ウィンドウにプラグイン フォルダーを表示"
 
 #: pcbnew/menubar_pcb_editor.cpp:462
 msgid "Ro&ute"
@@ -29269,9 +29211,8 @@ msgid "Castellated pad"
 msgstr "端面スルーホール"
 
 #: pcbnew/pad.cpp:1429
-#, fuzzy
 msgid "Pad Type"
-msgstr "パッド形状:"
+msgstr "パッド形状"
 
 #: pcbnew/pad.cpp:1437
 msgid "Pad Number"
