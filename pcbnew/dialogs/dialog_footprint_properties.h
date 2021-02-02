@@ -29,7 +29,7 @@
 
 #include <dialog_footprint_properties_base.h>
 #include <wx/valnum.h>
-#include <text_mod_grid_table.h>
+#include <fp_text_grid_table.h>
 #include <footprint.h>
 #include <widgets/unit_binder.h>
 
@@ -58,7 +58,7 @@ private:
 
     static int                       m_page;       // remember the last open page during session
 
-    TEXT_MOD_GRID_TABLE*             m_texts;
+    FP_TEXT_GRID_TABLE*             m_texts;
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
     wxFloatingPointValidator<double> m_OrientValidator;

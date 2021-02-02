@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef TEXT_MOD_GRID_TABLE_H
-#define TEXT_MOD_GRID_TABLE_H
+#ifndef FP_TEXT_GRID_TABLE_H
+#define FP_TEXT_GRID_TABLE_H
 
 #include <base_units.h>
 #include <wx/grid.h>
@@ -33,32 +33,32 @@
 class FOOTPRINT;
 class PCB_BASE_FRAME;
 
-enum TEXT_MOD_COL_ORDER
+enum FP_TEXT_COL_ORDER
 {
-    TMC_TEXT,
-    TMC_SHOWN,
-    TMC_WIDTH,
-    TMC_HEIGHT,
-    TMC_THICKNESS,
-    TMC_ITALIC,
-    TMC_LAYER,
-    TMC_ORIENTATION,
-    TMC_UPRIGHT,       // keep text upright when viewed from bottom or right of board
-    TMC_XOFFSET,
-    TMC_YOFFSET,
+    FPT_TEXT,
+    FPT_SHOWN,
+    FPT_WIDTH,
+    FPT_HEIGHT,
+    FPT_THICKNESS,
+    FPT_ITALIC,
+    FPT_LAYER,
+    FPT_ORIENTATION,
+    FPT_UPRIGHT,       // keep text upright when viewed from bottom or right of board
+    FPT_XOFFSET,
+    FPT_YOFFSET,
 
-    TMC_COUNT          // keep as last
+    FPT_COUNT          // keep as last
 };
 
 
-class TEXT_MOD_GRID_TABLE : public wxGridTableBase, public std::vector<FP_TEXT>
+class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<FP_TEXT>
 {
 public:
-    TEXT_MOD_GRID_TABLE( EDA_UNITS userUnits, PCB_BASE_FRAME* aFrame );
-    ~TEXT_MOD_GRID_TABLE();
+    FP_TEXT_GRID_TABLE( EDA_UNITS userUnits, PCB_BASE_FRAME* aFrame );
+    ~FP_TEXT_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }
-    int GetNumberCols() override { return TMC_COUNT; }
+    int GetNumberCols() override { return FPT_COUNT; }
 
     wxString GetColLabelValue( int aCol ) override;
     wxString GetRowLabelValue( int aRow ) override;
@@ -91,4 +91,4 @@ private:
 };
 
 
-#endif  // TEXT_MOD_GRID_TABLE_H
+#endif  // FP_TEXT_GRID_TABLE_H

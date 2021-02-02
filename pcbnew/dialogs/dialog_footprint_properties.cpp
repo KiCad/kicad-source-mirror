@@ -73,7 +73,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
    	    m_macHack.push_back( true );
 
-    m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
+    m_texts = new FP_TEXT_GRID_TABLE( m_units, m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
@@ -628,7 +628,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
 
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = _( "Text items must have some content." );
-            m_delayedFocusColumn = TMC_TEXT;
+            m_delayedFocusColumn = FPT_TEXT;
             m_delayedFocusRow = i;
 
             return false;

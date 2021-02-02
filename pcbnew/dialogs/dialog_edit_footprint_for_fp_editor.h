@@ -26,7 +26,7 @@
 #define DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
 
 #include <vector>
-#include <text_mod_grid_table.h>
+#include <fp_text_grid_table.h>
 #include <widgets/unit_binder.h>
 #include <footprint.h>
 #include <dialog_edit_footprint_for_fp_editor_base.h>
@@ -44,7 +44,7 @@ private:
 
     static int               m_page;       // remember the last open page during session
 
-    TEXT_MOD_GRID_TABLE*     m_texts;
+    FP_TEXT_GRID_TABLE*     m_texts;
 
     UNIT_BINDER              m_netClearance;
     UNIT_BINDER              m_solderMask;

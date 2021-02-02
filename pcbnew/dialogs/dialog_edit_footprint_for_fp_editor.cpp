@@ -64,7 +64,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_frame = aParent;
     m_footprint = aFootprint;
 
-    m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
+    m_texts = new FP_TEXT_GRID_TABLE( m_units, m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusCtrl = nullptr;
@@ -573,7 +573,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
 
             m_delayedErrorMessage = _( "Text items must have some content." );
             m_delayedFocusGrid = m_itemsGrid;
-            m_delayedFocusColumn = TMC_TEXT;
+            m_delayedFocusColumn = FPT_TEXT;
             m_delayedFocusRow = i;
 
             return false;

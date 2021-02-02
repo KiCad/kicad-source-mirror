@@ -23,7 +23,7 @@
 
 #include <kiway.h>
 #include <kiway_player.h>
-#include <text_mod_grid_table.h>
+#include <fp_text_grid_table.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <trigo.h>
@@ -39,7 +39,7 @@ enum
 wxArrayString g_menuOrientations;
 
 
-TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aFrame )
+FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aFrame )
         : m_userUnits( aUserUnits ), m_frame( aFrame )
 {
     // Build the column attributes.
@@ -73,7 +73,7 @@ TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* 
 }
 
 
-TEXT_MOD_GRID_TABLE::~TEXT_MOD_GRID_TABLE()
+FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
 {
     m_readOnlyAttr->DecRef();
     m_boolColAttr->DecRef();
@@ -82,27 +82,27 @@ TEXT_MOD_GRID_TABLE::~TEXT_MOD_GRID_TABLE()
 }
 
 
-wxString TEXT_MOD_GRID_TABLE::GetColLabelValue( int aCol )
+wxString FP_TEXT_GRID_TABLE::GetColLabelValue( int aCol )
 {
     switch( aCol )
     {
-    case TMC_TEXT:        return _( "Text Items" );
-    case TMC_SHOWN:       return _( "Show" );
-    case TMC_WIDTH:       return _( "Width" );
-    case TMC_HEIGHT:      return _( "Height" );
-    case TMC_THICKNESS:   return _( "Thickness" );
-    case TMC_ITALIC:      return _( "Italic" );
-    case TMC_LAYER:       return _( "Layer" );
-    case TMC_ORIENTATION: return _( "Orientation" );
-    case TMC_UPRIGHT:     return _( "Keep Upright" );
-    case TMC_XOFFSET:     return _( "X Offset" );
-    case TMC_YOFFSET:     return _( "Y Offset" );
+    case FPT_TEXT:        return _( "Text Items" );
+    case FPT_SHOWN:       return _( "Show" );
+    case FPT_WIDTH:       return _( "Width" );
+    case FPT_HEIGHT:      return _( "Height" );
+    case FPT_THICKNESS:   return _( "Thickness" );
+    case FPT_ITALIC:      return _( "Italic" );
+    case FPT_LAYER:       return _( "Layer" );
+    case FPT_ORIENTATION: return _( "Orientation" );
+    case FPT_UPRIGHT:     return _( "Keep Upright" );
+    case FPT_XOFFSET:     return _( "X Offset" );
+    case FPT_YOFFSET:     return _( "Y Offset" );
     default:              wxFAIL; return wxEmptyString;
     }
 }
 
 
-wxString TEXT_MOD_GRID_TABLE::GetRowLabelValue( int aRow )
+wxString FP_TEXT_GRID_TABLE::GetRowLabelValue( int aRow )
 {
     switch( aRow )
     {
@@ -113,25 +113,25 @@ wxString TEXT_MOD_GRID_TABLE::GetRowLabelValue( int aRow )
 }
 
 
-bool TEXT_MOD_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool FP_TEXT_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     switch( aCol )
     {
-    case TMC_TEXT:
-    case TMC_WIDTH:
-    case TMC_HEIGHT:
-    case TMC_THICKNESS:
-    case TMC_ORIENTATION:
-    case TMC_XOFFSET:
-    case TMC_YOFFSET:
+    case FPT_TEXT:
+    case FPT_WIDTH:
+    case FPT_HEIGHT:
+    case FPT_THICKNESS:
+    case FPT_ORIENTATION:
+    case FPT_XOFFSET:
+    case FPT_YOFFSET:
         return aTypeName == wxGRID_VALUE_STRING;
 
-    case TMC_SHOWN:
-    case TMC_ITALIC:
-    case TMC_UPRIGHT:
+    case FPT_SHOWN:
+    case FPT_ITALIC:
+    case FPT_UPRIGHT:
         return aTypeName == wxGRID_VALUE_BOOL;
 
-    case TMC_LAYER:
+    case FPT_LAYER:
         return aTypeName == wxGRID_VALUE_NUMBER;
 
     default:
@@ -141,35 +141,35 @@ bool TEXT_MOD_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTy
 }
 
 
-bool TEXT_MOD_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool FP_TEXT_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     return CanGetValueAs( aRow, aCol, aTypeName );
 }
 
 
-wxGridCellAttr* TEXT_MOD_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
+wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
     switch( aCol )
     {
-    case TMC_TEXT:
-    case TMC_WIDTH:
-    case TMC_HEIGHT:
-    case TMC_THICKNESS:
-    case TMC_XOFFSET:
-    case TMC_YOFFSET:
+    case FPT_TEXT:
+    case FPT_WIDTH:
+    case FPT_HEIGHT:
+    case FPT_THICKNESS:
+    case FPT_XOFFSET:
+    case FPT_YOFFSET:
         return nullptr;
 
-    case TMC_SHOWN:
-    case TMC_ITALIC:
-    case TMC_UPRIGHT:
+    case FPT_SHOWN:
+    case FPT_ITALIC:
+    case FPT_UPRIGHT:
         m_boolColAttr->IncRef();
         return m_boolColAttr;
 
-    case TMC_LAYER:
+    case FPT_LAYER:
         m_layerColAttr->IncRef();
         return m_layerColAttr;
 
-    case TMC_ORIENTATION:
+    case FPT_ORIENTATION:
         m_orientationColAttr->IncRef();
         return m_orientationColAttr;
 
@@ -180,35 +180,35 @@ wxGridCellAttr* TEXT_MOD_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr
 }
 
 
-wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
+wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
     const FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
-    case TMC_TEXT:
+    case FPT_TEXT:
         return text.GetText();
 
-    case TMC_WIDTH:
+    case FPT_WIDTH:
         return StringFromValue( m_userUnits, text.GetTextWidth() );
 
-    case TMC_HEIGHT:
+    case FPT_HEIGHT:
         return StringFromValue( m_userUnits, text.GetTextHeight() );
 
-    case TMC_THICKNESS:
+    case FPT_THICKNESS:
         return StringFromValue( m_userUnits, text.GetTextThickness() );
 
-    case TMC_LAYER:
+    case FPT_LAYER:
         return text.GetLayerName();
 
-    case TMC_ORIENTATION:
+    case FPT_ORIENTATION:
         return StringFromValue( EDA_UNITS::DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ),
                                 true );
 
-    case TMC_XOFFSET:
+    case FPT_XOFFSET:
         return StringFromValue( m_userUnits, text.GetPos0().x );
 
-    case TMC_YOFFSET:
+    case FPT_YOFFSET:
         return StringFromValue( m_userUnits, text.GetPos0().y );
 
     default:
@@ -219,15 +219,15 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
 }
 
 
-bool TEXT_MOD_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
+bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
     FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
-    case TMC_SHOWN:    return text.IsVisible();
-    case TMC_ITALIC:   return text.IsItalic();
-    case TMC_UPRIGHT:  return text.IsKeepUpright();
+    case FPT_SHOWN:    return text.IsVisible();
+    case FPT_ITALIC:   return text.IsItalic();
+    case FPT_UPRIGHT:  return text.IsKeepUpright();
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         return false;
@@ -235,13 +235,13 @@ bool TEXT_MOD_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 }
 
 
-long TEXT_MOD_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
+long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
     FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
-    case TMC_LAYER:    return text.GetLayer();
+    case FPT_LAYER:    return text.GetLayer();
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a long value" ), aCol ) );
         return 0;
@@ -249,38 +249,38 @@ long TEXT_MOD_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 }
 
 
-void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
+void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     FP_TEXT& text = this->at((size_t) aRow );
     wxPoint  pos;
 
     switch( aCol )
     {
-    case TMC_TEXT:
+    case FPT_TEXT:
         text.SetText( aValue );
         break;
 
-    case TMC_WIDTH:
+    case FPT_WIDTH:
         text.SetTextWidth( ValueFromString( m_userUnits, aValue ) );
         break;
 
-    case TMC_HEIGHT:
+    case FPT_HEIGHT:
         text.SetTextHeight( ValueFromString( m_userUnits, aValue ) );
         break;
 
-    case TMC_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ) );
+    case FPT_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ) );
         break;
 
-    case TMC_ORIENTATION:
+    case FPT_ORIENTATION:
         text.SetTextAngle( DoubleValueFromString( EDA_UNITS::DEGREES, aValue ) );
         text.SetDrawCoord();
         break;
 
-    case TMC_XOFFSET:
-    case TMC_YOFFSET:
+    case FPT_XOFFSET:
+    case FPT_YOFFSET:
         pos = text.GetPos0();
 
-        if( aCol == TMC_XOFFSET )
+        if( aCol == FPT_XOFFSET )
             pos.x = ValueFromString( m_userUnits, aValue );
         else
             pos.y = ValueFromString( m_userUnits, aValue );
@@ -298,21 +298,21 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 }
 
 
-void TEXT_MOD_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
+void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
     FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
-    case TMC_SHOWN:
+    case FPT_SHOWN:
         text.SetVisible( aValue );
         break;
 
-    case TMC_ITALIC:
+    case FPT_ITALIC:
         text.SetItalic( aValue );
         break;
 
-    case TMC_UPRIGHT:text.SetKeepUpright( aValue );
+    case FPT_UPRIGHT:text.SetKeepUpright( aValue );
         break;
 
     default:
@@ -322,13 +322,13 @@ void TEXT_MOD_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 }
 
 
-void TEXT_MOD_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
+void FP_TEXT_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
     FP_TEXT& text = this->at((size_t) aRow );
 
     switch( aCol )
     {
-    case TMC_LAYER:
+    case FPT_LAYER:
         text.SetLayer( ToLAYER_ID( (int) aValue ) );
         text.SetMirrored( IsBackLayer( text.GetLayer() ) );
         break;

@@ -312,7 +312,7 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp
-    text_mod_grid_table.cpp
+    fp_text_grid_table.cpp
     toolbars_footprint_editor.cpp
     toolbars_footprint_viewer.cpp
     toolbars_pcb_editor.cpp
