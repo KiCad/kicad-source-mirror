@@ -266,6 +266,11 @@ public:
      */
     inline void PostEvent( const TOOL_EVENT& aEvent )
     {
+        // Horrific hack, but it's a crash bug.  Don't let inter-frame commands stack up
+        // waiting to be processed.
+        if( aEvent.IsSimulator() && m_eventQueue.back().IsSimulator() )
+            m_eventQueue.pop_back();
+
         m_eventQueue.push_back( aEvent );
     }
 

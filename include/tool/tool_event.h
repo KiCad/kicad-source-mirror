@@ -419,6 +419,11 @@ public:
     bool IsMoveTool() const;
 
     /**
+     * Indicate if the event is from the simulator.
+     */
+    bool IsSimulator() const;
+
+    /**
      * Return a non-standard parameter assigned to the event. Its meaning depends on the
      * target tool.
      */

@@ -219,3 +219,10 @@ bool TOOL_EVENT::IsMoveTool() const
     return( m_commandStr.is_initialized()
                 && m_commandStr.get().find( "InteractiveMove" ) != GetCommandStr()->npos );
 }
+
+
+bool TOOL_EVENT::IsSimulator() const
+{
+    return( m_commandStr.is_initialized()
+                && m_commandStr.get().find( "Simulation" ) != GetCommandStr()->npos );
+}
