@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-31 14:30+0000\n"
+"PO-Revision-Date: 2021-02-02 15:52+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -5833,7 +5833,7 @@ msgstr "Polarkoordinaten"
 
 #: common/tool/actions.cpp:505
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Umschalten polaren und kartesischen Koordinatensystemen"
+msgstr "Umschalten zwischen polaren und kartesischen Koordinatensystemen"
 
 #: common/tool/actions.cpp:511
 msgid "Reset Local Coordinates"
@@ -8367,7 +8367,7 @@ msgstr "Den Einstellung Schaltplan... Dialog öffnen"
 #: eeschema/dialogs/dialog_erc.cpp:640
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr "Pin Konfliktkarte"
+msgstr "Pin-Konfliktkarte"
 
 #: eeschema/dialogs/dialog_erc.cpp:644
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -20871,7 +20871,7 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
-"Fehler beim Importieren der Einstellungen von der Karte:\n"
+"Fehler beim Importieren der Einstellungen von Platine:\n"
 "Die zugehörige Projektdatei %s konnte nicht geladen werden"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:187 pcbnew/files.cpp:680
@@ -26729,8 +26729,8 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Importierte Einstellungen haben weniger Kupferlagen als die aktuelle Karte ("
-"%i anstelle von %i).\n"
+"Importierte Einstellungen haben weniger Kupferlagen als die aktuelle Platine "
+"(%i anstelle von %i).\n"
 "\n"
 "Fortfahren und die zusätzlichen inneren Kupferlagen von der aktuellen "
 "Platine löschen?"
@@ -28677,7 +28677,8 @@ msgstr "Footprintänderungen sind nicht gespeichert"
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
-"Bearbeiten %s von der Tafel. Beim Speichern wird nur die Karte aktualisiert."
+"Bearbeite %s auf der Platine. Beim Speichern wird nur die Platine "
+"aktualisiert."
 
 #: pcbnew/footprint_edit_frame.cpp:752
 #, c-format
@@ -33330,8 +33331,7 @@ msgstr "Platine reparieren"
 #: pcbnew/tools/pcb_actions.cpp:1060
 msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
-"Führen Sie verschiedene Diagnosen durch und versuchen Sie, die Karte zu "
-"reparieren"
+"Verschiedene Diagnosen durchführen und versuchen, die Platine zu reparieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1068
 msgid "Align to Top"
@@ -33957,7 +33957,7 @@ msgstr "Nicht aktive Lagen werden in Farbe angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
-msgstr "Schrift dimmen"
+msgstr "Dimmen"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
