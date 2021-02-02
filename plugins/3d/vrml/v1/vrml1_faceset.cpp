@@ -491,7 +491,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
                 if( matIndex.empty() )
                 {
-                    pc1 = SGCOLOR( 1.0f, 0.41f, 0.705f );   //pink to indicate no material
+                    m_current.mat->GetColor( &pc1, idx );
                 }
                 else
                 {
