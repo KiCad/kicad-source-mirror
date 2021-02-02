@@ -189,7 +189,10 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
     if( row1 == "LAYERSORT" )
         return EXTRACT_FULL_LAYERS;
 
-    std::cout << "UNKNOWN Columns " << row1 << " : " << row2 << std::endl;
+    wxLogError
+    (
+            wxString::Format( _( "Unknown FABMASTER section %s:%s at row %zu." ), row1.c_str(),
+                    row2.c_str(), aOffset ) );
     return UNKNOWN_EXTRACT;
 
 }
@@ -546,6 +549,10 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             {
                 pad->shape = PAD_SHAPE_RECT;
             }
+            else if( pad_shape == "ROUNDED_RECT" )
+            {
+                pad->shape = PAD_SHAPE_ROUNDRECT;
+            }
             else if( pad_shape == "SQUARE" )
             {
                 pad->shape = PAD_SHAPE_RECT;
@@ -565,8 +572,8 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             }
             else
             {
-                wxLogError( wxString::Format( _( "Unknown pad shape name %s at line %zu" ),
-                        pad_shapename.c_str(), rownum ) );
+                wxLogError( wxString::Format( _( "Unknown pad shape name '%s' on layer '%s' at line %zu" ),
+                        pad_shape.c_str(), pad_layer.c_str(), rownum ) );
                 continue;
             }
         }
@@ -2084,7 +2091,11 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         if( pad.shape == PAD_SHAPE_CUSTOM )
                         {
-                            newpad->SetSize( wxSize( pad.width / 2, pad.height / 2 ) );
+                            // Choose the smaller dimension to ensure the base pad
+                            // is fully hidden by the custom pad
+                            int pad_size = std::min( pad.width, pad.height );
+
+                            newpad->SetSize( wxSize( pad_size / 2, pad_size / 2 ) );
 
                             std::string custom_name = pad.custom_name + "_" + pin->refdes + "_" + pin->pin_number;
                             auto custom_it = pad_shapes.find( custom_name );
@@ -2104,7 +2115,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 {
                                     // For now, we are only processing the custom pad for the top layer
                                     // TODO: Use full padstacks when implementing in KiCad
-                                    if( getLayer( ( *( el.second.begin() ) )->layer ) != F_Cu )
+                                    PCB_LAYER_ID primary_layer = src->mirror ? B_Cu : F_Cu;
+
+                                    if( getLayer( ( *( el.second.begin() ) )->layer ) != primary_layer )
                                         continue;
 
                                     for( const auto& seg : el.second )
@@ -2133,16 +2146,33 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                         }
                                     }
                                 }
-                                poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-                                poly_outline.Move( -newpad->GetPosition() );
-
-                                if( src->mirror )
-                                    poly_outline.Rotate( ( -src->rotate + pin->rotation ) * M_PI / 180.0 );
+                                if( poly_outline.OutlineCount() < 1
+                                        || poly_outline.Outline( 0 ).PointCount() < 3 )
+                                {
+                                    wxLogError( wxString::Format(
+                                            _( "Invalid custom pad named '%s'.  Replacing with circlular pad." ),
+                                            custom_name.c_str() ) );
+                                    newpad->SetShape( PAD_SHAPE_CIRCLE );
+                                }
                                 else
-                                    poly_outline.Rotate( ( src->rotate - pin->rotation ) * M_PI / 180.0 );
+                                {
+                                    poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
-                                newpad->AddPrimitivePoly( poly_outline, 0, true );
+                                    poly_outline.Move( -newpad->GetPosition() );
+
+                                    if( src->mirror )
+                                        poly_outline.Rotate( ( -src->rotate + pin->rotation ) * M_PI / 180.0 );
+                                    else
+                                        poly_outline.Rotate( ( src->rotate - pin->rotation ) * M_PI / 180.0 );
+
+                                    newpad->AddPrimitivePoly( poly_outline, 0, true );
+                                }
+                            }
+                            else
+                            {
+                                wxLogError( wxString::Format( _( "Could not find custom pad named %s" ),
+                                        custom_name.c_str() ) );
                             }
                         }
                         else
