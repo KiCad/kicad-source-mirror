@@ -1976,13 +1976,17 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
 CADSTAR_SCH_ARCHIVE_LOADER::SYMDEF_ID CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName(
         const wxString& aSymdefName, const wxString& aSymDefAlternate )
 {
+    // Do a case-insensitive comparison
     for( std::pair<SYMDEF_ID, SYMDEF_SCM> symPair : Library.SymbolDefinitions )
     {
         SYMDEF_ID  id     = symPair.first;
         SYMDEF_SCM symdef = symPair.second;
 
-        if( symdef.ReferenceName == aSymdefName && symdef.Alternate == aSymDefAlternate )
+        if( symdef.ReferenceName.Lower() == aSymdefName.Lower()
+            && symdef.Alternate.Lower() == aSymDefAlternate.Lower() )
+        {
             return id;
+        }
     }
 
     return SYMDEF_ID();
