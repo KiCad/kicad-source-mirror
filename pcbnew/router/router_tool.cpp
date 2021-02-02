@@ -750,13 +750,16 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         // ask the user for a target layer
         if( selectLayer )
         {
-            wxPoint dlgPosition = wxGetMousePosition();
+            wxPoint endPoint = (wxPoint) view()->ToScreen( m_endSnapPoint );
+            endPoint = frame()->GetCanvas()->ClientToScreen( endPoint );
+
+            controls()->WarpCursor( endPoint );
 
             targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
-                                                LSET::AllNonCuMask(), dlgPosition );
+                                                LSET::AllNonCuMask(), endPoint );
 
-            // Reset the cursor to the position where the event occurred
-            controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
+            // Reset the cursor to the end of the track
+            controls()->SetCursorPosition( m_endSnapPoint );
         }
     }
 
