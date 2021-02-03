@@ -745,7 +745,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->SetTable( m_dataModel, true );
 
     // must be done after SetTable(), which appears to re-set it
-    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
