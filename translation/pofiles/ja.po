@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 22:53+0000\n"
+"PO-Revision-Date: 2021-02-03 23:06+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11168,15 +11168,14 @@ msgid "If unchecked, mouse drag will perform move (M) operation"
 msgstr "チェックされていない場合、マウス ドラッグは移動 (M) を実行"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
-#, fuzzy
 msgid "Automatically start wires on unconnected pins"
-msgstr "オブジェクト移動中は自動的にパン"
+msgstr "未接続ピンの配線を自動的に開始"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
-msgstr ""
+msgstr "有効の場合、配線ツールがアクティブでない状態で、未接続ピンをクリックして配線が開始できます"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -19920,7 +19919,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"裏面のフットプリントを %s から開始します。"
+"裏面のフットプリントを %s から開始"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, fuzzy
@@ -23345,7 +23344,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr "一致したレイヤーのリストから選択されたレイヤーを削除します。"
+msgstr "一致したレイヤーのリストから選択されたレイヤーを削除"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
@@ -24932,8 +24931,8 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"ルーティング中に重複部分を削除します（例: 新しい配線が既存の配線と同じ接続であることが確実な場合、古い配線は削除されます）\n"
-"重複の削除は局所的に行われます （現在ルーティング中の配線の始点と終点の間にあるものだけが対象です）。"
+"ルーティング中に重複部分を削除します。（例: 新しい配線が既存の配線と同じ接続であることが確実な場合、古い配線は削除されます）\n"
+"重複の削除は局所的に行われます。（現在ルーティング中の配線の始点と終点の間にあるものだけが対象です）"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize pad connections"
@@ -24955,7 +24954,7 @@ msgstr "セグメントをスムーズに移動"
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
-msgstr "有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージしようと試みます (ドラッグモード)。"
+msgstr "有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージしようと試みます。（ドラッグモード）"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Allow DRC violations"
@@ -28723,7 +28722,7 @@ msgstr "パッケージ内"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "%s を追加できません (関連付けられたフットプリントがありません)。"
+msgstr "%s を追加できません。(関連付けられたフットプリントがありません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:158
 #, c-format
@@ -28738,12 +28737,12 @@ msgstr "%s を追加 (フットプリント \"%s\")"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:203
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr "%s をアップデートできません (関連付けられたフットプリントがありません)。"
+msgstr "%s をアップデートできません。(関連付けられたフットプリントがありません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:215
 #, c-format
 msgid "Cannot update %s (footprint \"%s\" not found)."
-msgstr "%s をアップデートできません (フットプリント \"%s\" が見つかりません)。"
+msgstr "%s をアップデートできません。(フットプリント \"%s\" が見つかりません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:223
 #, c-format
@@ -28848,7 +28847,7 @@ msgstr "重複したフットプリントが \"%s\" に見つかりました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:882
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr "未使用のフットプリント %s を削除することができません (ロックされています)。"
+msgstr "未使用のフットプリント %s を削除することができません。(ロックされています)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, c-format
@@ -31758,7 +31757,7 @@ msgstr "レイヤーから別のレイヤーへ配線または線画を移動"
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Edit Track & Via Properties..."
-msgstr "配線 & ビアのプロパティを編集..."
+msgstr "配線とビアのプロパティを編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:434
 msgid "Edit Text and graphics properties globally across board"
