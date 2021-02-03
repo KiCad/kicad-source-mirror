@@ -1165,11 +1165,18 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations will not like it ...
         return false;
 
+    int zoneClearance = m_ZoneClearance;
+
     if( GetIsRuleArea() )
     {
         // We like keepouts just the way they are....
         aSmoothedPoly = *m_Poly;
         return true;
+    }
+    else if( !IsOnCopperLayer() )
+    {
+        // Non-copper zones don't have electrical clearances
+        zoneClearance = 0;
     }
 
     BOARD* board = GetBoard();
@@ -1229,21 +1236,21 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     for( ZONE* zone : interactingZones )
         aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
-    if( !GetIsRuleArea() && aBoardOutline )
+    if( aBoardOutline )
     {
-        SHAPE_POLY_SET bufferedOutline = *aBoardOutline;
-        bufferedOutline.Deflate( std::max( m_ZoneClearance, edgeClearance ), 16 );
-        aSmoothedPoly.BooleanIntersection( bufferedOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        SHAPE_POLY_SET poly = *aBoardOutline;
+        poly.Deflate( std::max( zoneClearance, edgeClearance ), 16 );
+        aSmoothedPoly.BooleanIntersection( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 
     smooth( aSmoothedPoly );
 
     if( aSmoothedPolyWithApron )
     {
-        SHAPE_POLY_SET bufferedExtents = *maxExtents;
-        bufferedExtents.Inflate( m_ZoneMinThickness, 16 );
+        SHAPE_POLY_SET poly = *maxExtents;
+        poly.Inflate( m_ZoneMinThickness, 16 );
         *aSmoothedPolyWithApron = aSmoothedPoly;
-        aSmoothedPolyWithApron->BooleanIntersection( bufferedExtents, SHAPE_POLY_SET::PM_FAST );
+        aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
     }
 
     aSmoothedPoly.BooleanIntersection( *maxExtents, SHAPE_POLY_SET::PM_FAST );

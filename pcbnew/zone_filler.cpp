@@ -1193,11 +1193,6 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
         aLayer = F_Cu;
     }
 
-    /*
-     * convert outlines + holes to outlines without holes (adding extra segments if necessary)
-     * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
-     * this zone
-     */
     if ( !aZone->BuildSmoothedPoly( maxExtents, aLayer, boardOutline, &smoothedPoly ) )
         return false;
 
@@ -1234,7 +1229,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
         }
         else if( half_min_width - epsilon > epsilon )
         {
-            smoothedPoly.Deflate( -( half_min_width - epsilon ), numSegs );
+            smoothedPoly.Inflate( half_min_width - epsilon, numSegs );
         }
 
         aRawPolys = smoothedPoly;
