@@ -406,6 +406,9 @@ public:
     void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 
+    void MirrorY( int aYaxis_position ) override;
+    void MirrorX( int aXaxis_position ) override;
+
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;

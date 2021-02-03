@@ -1057,6 +1057,36 @@ void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
 }
 
 
+void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
+{
+    wxPoint old_pos = GetPosition();
+    SCH_TEXT::MirrorY( aYaxis_position );
+
+    if( m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+       m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+    else
+       m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+    wxPoint pos = m_intersheetRefsField.GetTextPos();
+    wxPoint delta = old_pos - pos;
+    pos.x = GetPosition().x + delta.x;
+
+    m_intersheetRefsField.SetPosition( pos );
+}
+
+
+void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
+{
+    wxPoint old_pos = GetPosition();
+    SCH_TEXT::MirrorX( aXaxis_position );
+    wxPoint pos = m_intersheetRefsField.GetTextPos();
+    wxPoint delta = old_pos - pos;
+    pos.y = GetPosition().y + delta.y;
+
+    m_intersheetRefsField.SetPosition( pos );
+}
+
+
 void SCH_GLOBALLABEL::UpdateIntersheetRefProps()
 {
     m_intersheetRefsField.SetTextSize( GetTextSize() );
