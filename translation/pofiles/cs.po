@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-31 14:30+0000\n"
+"PO-Revision-Date: 2021-02-03 22:53+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -5306,9 +5306,8 @@ msgid ""
 msgstr "KiCad a jeho závislosti již nepodporují Windows 7 a starší verze."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Nepodporovaný tvar prokovu: %s"
+msgstr "Nepodporovaný operační systém"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -11120,9 +11119,8 @@ msgstr "(barvu zvýraznění lze upravit na stránce „Barvy“)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
-#, fuzzy
 msgid "Cross-probing"
-msgstr "Post-processing"
+msgstr "Křížové sondování"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
@@ -11449,9 +11447,8 @@ msgstr "Nedovolený znak '%c' v logickém názvu '%s'"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:387
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:590
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Editor knihoven"
+msgstr "Chyba aliasu knihovny"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:375
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
@@ -11478,15 +11475,14 @@ msgstr "Varování: Zdvojené jméno"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Knihovna s názvem \"%s\" již existuje."
+msgstr "Knihovna s názvem '%s' již existuje."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:466
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:847
-#, fuzzy
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "Po přidání této knihovny změňte přezdívku knihovny."
+msgstr "Po přidání této knihovny bude třeba změnit jeden z aliasů knihovny."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:485
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
@@ -11724,9 +11720,8 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Různé pouzdra přiřazené k %s a %s"
 
 #: eeschema/erc.cpp:426
-#, fuzzy
 msgid "Pins with \"no connection\" type are connected"
-msgstr "Je zapojen vývod s příznakem \"Nezapojeno\""
+msgstr "Vývody s příznakem \"nepřipojeno\" jsou připojeny"
 
 #: eeschema/erc.cpp:536
 #, c-format
@@ -11765,10 +11760,8 @@ msgid "Pin not connected"
 msgstr "Vývod není připojen"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input pin not driven by any Output pins"
-msgstr ""
-"Vývod připojený k některým jiným vývodům, ale žádný vývod k jeho řízení"
+msgstr "Vstupní vývod není řízen žádným výstupním vývodem"
 
 #: eeschema/erc_item.cpp:58
 #, fuzzy
