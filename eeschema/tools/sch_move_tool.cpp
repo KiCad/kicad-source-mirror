@@ -183,7 +183,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &EE_ACTIONS::moveActivate )
                 || evt->IsAction( &EE_ACTIONS::restartMove )
