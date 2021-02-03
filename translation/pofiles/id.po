@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 13:08+0000\n"
+"PO-Revision-Date: 2021-02-03 13:29+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
 "master-source/id/>\n"
@@ -7342,15 +7342,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
 msgid "Change all symbols in schematic"
-msgstr "Ganti semua simbol di skematik"
+msgstr "Ubah semua simbol di skematik"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change Symbols"
-msgstr "Ganti Simbol"
+msgstr "Ubah Simbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:75
 msgid "Change selected Symbol"
-msgstr "Ganti Simbol yang dipilih"
+msgstr "Ubah Simbol yang dipilih"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
 msgid "Change symbols matching reference designator:"
@@ -7370,11 +7370,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:131
 msgid "Remove fields if not in new symbol"
-msgstr ""
+msgstr "Hapus bidang jika tidak di simbol baru"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Reset fields if empty in new symbol"
-msgstr ""
+msgstr "Setel ulang bidang jika kosong di simbol baru"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Update field visibilities"
@@ -7402,38 +7402,38 @@ msgstr ""
 #: eeschema/dialogs/dialog_change_symbols.cpp:493
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:500
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "Perbarui simbol-simbol %s dari '%s' ke '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:510
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr ""
+msgstr "Ubah simbol %s dari '%s' ke '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:517
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr ""
+msgstr "Ubah simbol-simbol %s dari '%s' ke '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:528
 msgid "*** symbol not found ***"
-msgstr ""
+msgstr "*** simbol tidak ditemukan ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** simbol baru memiliki terlalu sedikit unit ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
-msgstr ""
+msgstr "Perbarui semua simbol di skematik"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol"
-msgstr ""
+msgstr "Perbarui simbol yang dipilih"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
@@ -7466,7 +7466,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
 msgid "Remove fields if not in library symbol"
-msgstr ""
+msgstr "Hapus bidang jika tidak di simbol baru"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
@@ -7475,7 +7475,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr ""
+msgstr "Setel ulang bidang jika kosong di simbol baru"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 msgid "Update/reset field visibilities"
@@ -7491,11 +7491,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
 msgid "Update/reset symbol attributes"
-msgstr ""
+msgstr "Perbarui/setel ulang atribut simbol"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
-msgstr ""
+msgstr "Perbarui Simbol dari Pustaka"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:139
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
@@ -7516,7 +7516,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:149
 msgid "Sequentially place all units of the symbol."
-msgstr ""
+msgstr "Tempatkan semua unit simbol secara berurutan."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:401
 #: eeschema/widgets/symbol_preview_widget.cpp:182
@@ -7526,6 +7526,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat memuat simbol %s dari pustaka %s.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:424
 msgid "No footprint specified"
@@ -7544,15 +7547,18 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat memuat simbol %s dari pustaka %s.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:522
 msgid "No symbol selected"
-msgstr ""
+msgstr "Tidak ada simbol yang dipilih"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:549
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid."
-msgstr ""
+msgstr "Pengenal pustaka simbol \"%s\" tidak valid."
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:645
 #, c-format
@@ -7576,12 +7582,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:694
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "Pengenal pustaka simbol tidak valid"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:82
 msgid "Symbols"
-msgstr ""
+msgstr "Simbol"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:38
 msgid "Current Library Reference"
@@ -7604,7 +7610,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:55
 msgid "Symbol Library References"
-msgstr ""
+msgstr "Referensi Pustaka Simbol"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:58
 msgid "Global Label Properties"
@@ -7864,7 +7870,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:418
 msgid "Checking for library symbol issues..."
-msgstr ""
+msgstr "Memeriksa permasalahan simbol pustaka..."
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "errors"
@@ -8089,12 +8095,14 @@ msgid "Save changes?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:31
+#, fuzzy
 msgid "Group symbols"
-msgstr ""
+msgstr "Kelompokkan simbol"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
+#, fuzzy
 msgid "Group symbols together based on common properties"
-msgstr ""
+msgstr "Kelompokkan simbol bersama berdasarkan properti umum"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
@@ -8102,11 +8110,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.h:76
 msgid "Symbol Fields"
-msgstr ""
+msgstr "Bidang Simbol"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
-msgstr ""
+msgstr "Bidang simbol yang lain"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
@@ -8229,7 +8237,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
-msgstr ""
+msgstr "simbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
 #, c-format
@@ -8238,6 +8246,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat menulis tabel pustaka simbol kosong.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
@@ -8255,6 +8266,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"'%s' bukan tabel pustaka simbol yang valid.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
 #, c-format
@@ -8273,6 +8287,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terjadi kesalahan saat memuat tabel pustaka simbol global.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 msgid "Diameter:"
@@ -8477,13 +8494,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:123
 msgid "Symbol name:"
-msgstr ""
+msgstr "Nama simbol:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:35
 msgid ""
 "This is the symbol name in library,\n"
 "and also the default component value when loaded in the schematic."
 msgstr ""
+"Ini adalah nama simbol pada pustaka,\n"
+"dan juga nilai komponen baku saat dimuat ke dalam skematik."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -8526,7 +8545,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr ""
+msgstr "Buat simbol sebagai simbol daya"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -8557,7 +8576,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.h:74
 msgid "New Symbol"
-msgstr ""
+msgstr "Simbol Baru"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:232
 #: eeschema/dialogs/dialog_symbol_properties.cpp:550
@@ -8576,7 +8595,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:277
 msgid "Delete extra units from symbol?"
-msgstr ""
+msgstr "Hapus unit ekstra dari simbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:283
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
