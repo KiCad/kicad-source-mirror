@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 13:29+0000\n"
+"PO-Revision-Date: 2021-02-03 14:01+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7762,7 +7762,7 @@ msgstr "新しいライブラリー識別子:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 msgid "Update/reset Fields"
-msgstr "フィールド値を更新"
+msgstr "フィールドを更新"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
@@ -7789,24 +7789,20 @@ msgid "Reset fields if empty in library symbol"
 msgstr "ライブラリー内で空のフィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "フィールドの可視性をリセット"
+msgstr "フィールドの可視性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
-#, fuzzy
 msgid "Update/reset field sizes and styles"
-msgstr "フィールドのテキスト サイズとスタイルをリセット"
+msgstr "フィールドのサイズとスタイルを更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "フィールドの位置をリセット"
+msgstr "フィールドの位置を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:142
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "基板製造用の属性"
+msgstr "シンボルの属性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:97
 msgid "Update Symbols from Library"
@@ -15778,9 +15774,9 @@ msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "このシートから参照されていないピンを削除してよろしいですか?"
 
 #: eeschema/tools/sch_edit_tool.cpp:1761
-#, fuzzy, c-format
+#, c-format
 msgid "Enter page number for sheet path%s"
-msgstr "'%s' には番号が必要です"
+msgstr "シートパス %s のページ番号を入力します"
 
 #: eeschema/tools/sch_edit_tool.cpp:1764
 msgid "Edit Page Number"
@@ -15803,7 +15799,6 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "エラー: 現在のシートにサブシート名の重複が見つかりました。"
 
 #: eeschema/tools/sch_editor_control.cpp:917
-#, fuzzy
 msgid "Net must be labeled to assign a netclass."
 msgstr "ネットクラスを割り当てるには、ネットへのラベル付けが必要です。"
 
@@ -16092,14 +16087,13 @@ msgid "Visibles"
 msgstr "表示"
 
 #: gerbview/excellon_read_drill_file.cpp:263
-#, fuzzy, c-format
+#, c-format
 msgid "File %s not found."
-msgstr "ファイル %s が見つかりません"
+msgstr "ファイル %s が見つかりません。"
 
 #: gerbview/excellon_read_drill_file.cpp:273
-#, fuzzy
 msgid "No empty layers to load file into."
-msgstr "ファイルをロードできません"
+msgstr "ファイルを読み込める空のレイヤーがありません。"
 
 #: gerbview/excellon_read_drill_file.cpp:280
 msgid "Error reading EXCELLON drill file"
@@ -16780,14 +16774,12 @@ msgid "Sort Layers if X2 Mode"
 msgstr "X2 モードならレイヤーをソートする"
 
 #: gerbview/widgets/layer_widget.cpp:130
-#, fuzzy
 msgid "Change Layer Color for"
-msgstr "レイヤー色を変更 "
+msgstr "レイヤー色を変更:"
 
 #: gerbview/widgets/layer_widget.cpp:180
-#, fuzzy
 msgid "Change Render Color for"
-msgstr "レンダリング色を変更 "
+msgstr "レンダリング色を変更:"
 
 #: gerbview/widgets/layer_widget.cpp:337
 #: pcbnew/widgets/appearance_controls.cpp:887
@@ -16935,9 +16927,8 @@ msgid ""
 msgstr ""
 
 #: kicad/import_project.cpp:196
-#, fuzzy
 msgid "Import CADSTAR Archive Project Files"
-msgstr "プロジェクト ファイルをアーカイブ"
+msgstr "CADSTAR アーカイブ プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:204
 msgid "Import Eagle Project Files"
@@ -17710,9 +17701,8 @@ msgid "Unable to create \"%s\""
 msgstr "\"%s\" を作成できません"
 
 #: pagelayout_editor/files.cpp:235
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "ライブラリー \"%s\" は読み込み専用です。"
+msgstr "レイアウト ファイルは読み込み専用です。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -17837,9 +17827,8 @@ msgid "Edit preview data for page size and title block"
 msgstr "用紙サイズとタイトル ブロックのプレビュー データを編集"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
-#, fuzzy
 msgid "Show title block in preview mode"
-msgstr "外形をラインモードで表示"
+msgstr "タイトル ブロックをプレビューモードで表示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
@@ -17850,9 +17839,8 @@ msgstr ""
 "テキスト領域はプレビュー データで置き換えられます。"
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
-#, fuzzy
 msgid "Show title block in edit mode"
-msgstr "スケッチモードで配線を表示"
+msgstr "タイトル ブロックを編集モードで表示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
@@ -18197,7 +18185,6 @@ msgid "E-Series Resistor Calculator"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:446
-#, fuzzy
 msgid "Inputs"
 msgstr "入力"
 
@@ -18217,24 +18204,20 @@ msgid "Exclude Value 2:"
 msgstr "フィールド値:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
-#, fuzzy
 msgid "E1"
-msgstr "E"
+msgstr "E1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
-#, fuzzy
 msgid "E3"
-msgstr "E"
+msgstr "E3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
-#, fuzzy
 msgid "E6"
-msgstr "E"
+msgstr "E6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
-#, fuzzy
 msgid "E12"
-msgstr "12"
+msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:489
 #, fuzzy
@@ -18335,9 +18318,8 @@ msgid "Twisted Pair"
 msgstr "ツイスト ペア"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:680
-#, fuzzy
 msgid "Transmission Line Type"
-msgstr "伝送線路のタイプ:"
+msgstr "伝送線路のタイプ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:697
 msgid "Substrate Parameters"
@@ -18386,9 +18368,8 @@ msgid "mu Rel C:"
 msgstr "μ (導体の比透磁率):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:816
-#, fuzzy
 msgid "Component Parameters"
-msgstr "コンポーネント パラメーター:"
+msgstr "コンポーネント パラメーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:854
 msgid "Zdiff = Zodd * 2"
@@ -18411,9 +18392,8 @@ msgid "Synthesize"
 msgstr "合成"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:969
-#, fuzzy
 msgid "Electrical Parameters"
-msgstr "電気的パラメーター:"
+msgstr "電気的パラメーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:989
@@ -18428,9 +18408,8 @@ msgstr "角度"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1020
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1274
-#, fuzzy
 msgid "Results"
-msgstr "結果:"
+msgstr "結果"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1100
 msgid "TransLine"
@@ -18652,7 +18631,6 @@ msgid "Ohm-meter"
 msgstr "電気抵抗計"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1509
-#, fuzzy
 msgid "External Layer Traces"
 msgstr "外層配線"
 
@@ -18677,9 +18655,8 @@ msgid "mm ^ 2"
 msgstr "mm^2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1607
-#, fuzzy
 msgid "Internal Layer Traces"
-msgstr "内層配線:"
+msgstr "内層配線"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1721
 msgid "Voltage > 500V:"
@@ -19767,10 +19744,8 @@ msgid "Not specified"
 msgstr "指定なし"
 
 #: pcbnew/build_BOM_from_board.cpp:77
-#, fuzzy
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
-"部品表 (BOM) をエクスポートできません：基板にフットプリントがありません"
+msgstr "部品表 (BOM) をエクスポートできません：基板にフットプリントがありません"
 
 #: pcbnew/build_BOM_from_board.cpp:87
 msgid "Save Bill of Materials"
@@ -19812,9 +19787,8 @@ msgid "Remove track shorting two nets"
 msgstr "２つのネットを短絡する配線を削除"
 
 #: pcbnew/cleanup_item.cpp:48
-#, fuzzy
 msgid "Remove via shorting two nets"
-msgstr "２つのネットを短絡する配線を削除"
+msgstr "２つのネットを短絡するビアを削除"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
@@ -19829,9 +19803,8 @@ msgid "Merge co-linear tracks"
 msgstr "共線の配線をマージ"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove track not connected at both ends"
-msgstr "２つのネットを短絡する配線を削除"
+msgstr "両端が接続されていない配線を削除"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
@@ -19893,9 +19866,8 @@ msgid "Only back"
 msgstr "裏面のみ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
-#, fuzzy
 msgid "Only selected"
-msgstr "ファイルが未選択です"
+msgstr "選択対象のみ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:92
 msgid "Empty"
@@ -20127,9 +20099,8 @@ msgstr ""
 "再アノテートが失敗!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
-#, fuzzy
 msgid "Aborted: too many errors"
-msgstr "ユーザーによる中断"
+msgstr "中断: 大量のエラーのため"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
 msgid ""
@@ -20156,9 +20127,8 @@ msgid "Footprint not found in changelist"
 msgstr "変更リスト中にシンボルが見つかりません"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
-#, fuzzy
 msgid "Footprint Order"
-msgstr "フットプリント レイヤー"
+msgstr "フットプリントの順序"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
@@ -20214,14 +20184,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
-#, fuzzy
 msgid "Reannotation Scope"
-msgstr "アノテーション完了。"
+msgstr "再アノテートの範囲"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
-#, fuzzy
 msgid "Reannotate:"
-msgstr "回転:"
+msgstr "再アノテート:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -20238,9 +20206,8 @@ msgid "Front reference start:"
 msgstr "表面の開始リファレンス番号:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
-#, fuzzy
 msgid "Starting reference designation for front."
-msgstr "%s リファレンス指定子を %s へ変更します。"
+msgstr "表面のリファレンス指定子の開始番号"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:218
 #: pcbnew/dialogs/dialog_create_array_base.cpp:93
@@ -20278,9 +20245,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:236
-#, fuzzy
 msgid "Remove front prefix"
-msgstr "フットプリント %s を削除します。"
+msgstr "表面のリファレンス接頭辞を削除"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid ""
@@ -20289,9 +20255,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:241
-#, fuzzy
 msgid "Remove back prefix"
-msgstr "選択されたパスの接頭辞を削除"
+msgstr "裏面のリファレンス接頭辞を削除"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid ""
@@ -20319,9 +20284,8 @@ msgid "Optional prefix for solder side reference designations (i.e. B_)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
-#, fuzzy
 msgid "Exclude locked footprints"
-msgstr "ロックされているフットプリントを含む (&l)"
+msgstr "ロックされているフットプリントを除外する"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 msgid "Locked footprints will not be reannotated"
@@ -20388,9 +20352,8 @@ msgid "Constraints"
 msgstr "制限設定"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
-#, fuzzy
 msgid "Pre-defined Sizes"
-msgstr "定義されているサイズ:"
+msgstr "定義済みのサイズ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
@@ -20663,9 +20626,8 @@ msgid "remove vias on through hole pads and superimposed vias"
 msgstr "スルーホールのパッド上の穴と重なった穴を削除"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
-#, fuzzy
 msgid "Delete vias connected on only one layer"
-msgstr "単独のパッドしか含まないネットを削除"
+msgstr "一つのレイヤーにしか接続されていないビアを削除"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
@@ -20685,9 +20647,8 @@ msgid "delete tracks having at least one dangling end"
 msgstr "少なくとも１つの浮いている終端を持つ配線を削除"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Delete tracks fully inside pads"
-msgstr "パッドに含まれている配線を削除"
+msgstr "完全にパッドの中に入っている配線を削除"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
@@ -32602,14 +32563,12 @@ msgid "Selects all tracks & vias belonging to the same net."
 msgstr "同じネットに属する全ての配線とビアを選択します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1182
-#, fuzzy
 msgid "Deselect All Tracks in Net"
-msgstr "ネット内の全配線を選択"
+msgstr "ネット内の全配線を選択を解除"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
-#, fuzzy
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "同じネットに属する全ての配線とビアを選択します。"
+msgstr "同じネットに属する全ての配線とビアを選択を解除します。"
 
 #: pcbnew/tools/pcb_actions.cpp:1188
 msgid "Selects all footprints and tracks in the schematic sheet"
