@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 23:06+0000\n"
+"PO-Revision-Date: 2021-02-03 23:31+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2874,7 +2874,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr ""
+msgstr "日"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3060,7 +3060,7 @@ msgstr "セッション"
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "次のプロジェクト起動のため、開いているファイルを記憶する"
 
 #: common/dialogs/panel_common_settings_base.cpp:288
 msgid ""
@@ -4790,7 +4790,7 @@ msgstr "ネット名"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr ""
+msgstr "ピン"
 
 #: common/layer_id.cpp:122
 msgid "Sheet borders"
@@ -5566,7 +5566,7 @@ msgstr "マーカーを除外"
 
 #: common/tool/actions.cpp:255
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "チェッカー ウィンドウの違反を除外としてマークする"
 
 #: common/tool/actions.cpp:267
 msgid "Refresh"
@@ -11385,8 +11385,9 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
+#, fuzzy
 msgid "Suffix:"
-msgstr ""
+msgstr "接尾辞"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
 msgid "]"
@@ -18000,7 +18001,7 @@ msgstr "R1:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:483
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kOhm"
-msgstr ""
+msgstr "kΩ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:102
 msgid "R2:"
@@ -18168,7 +18169,7 @@ msgstr "RFアッテネーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:427
 msgid "E-Series Resistor Calculator"
-msgstr ""
+msgstr "E系列 抵抗計算機"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:446
 msgid "Inputs"
@@ -19877,7 +19878,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB and schematic successfully reannotated"
-msgstr ""
+msgstr "基板と回路図の再アノテートが成功しました"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -21267,7 +21268,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "寸法の値のあとに表示するテキスト"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
@@ -21292,7 +21293,7 @@ msgstr "0.0"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
 msgid "0.00"
-msgstr ""
+msgstr "0.00"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
@@ -21403,12 +21404,12 @@ msgstr "位置モード:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
 msgid "Outside"
-msgstr ""
+msgstr "外側"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
 msgid "Inline"
-msgstr ""
+msgstr "インライン"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
@@ -21425,7 +21426,7 @@ msgstr "寸法線"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "寸法線の太さ"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:137
@@ -25876,7 +25877,7 @@ msgstr "左方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
-msgstr ""
+msgstr "X軸"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
@@ -25892,7 +25893,7 @@ msgstr "下方向に増加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
-msgstr ""
+msgstr "Y軸"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
@@ -25912,7 +25913,7 @@ msgstr "マイクロ ビア (uVias) を許可"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:53
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "円弧/円を線分で近似する"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:68
 msgid "Maximum deviation:"
@@ -25940,7 +25941,7 @@ msgstr "ゾーン塗り潰し方法"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:122
 msgid "Mimic legacy behavior"
-msgstr ""
+msgstr "以前の動作を模倣する"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:123
 msgid ""
@@ -27218,9 +27219,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "パッドのネットが回路図と不一致"
 
 #: pcbnew/drc/drc_item.cpp:169
-#, fuzzy
 msgid "Silkscreen clipped by solder mask"
-msgstr "基板裏面のシルクスクリーン"
+msgstr "ハンダ マスクでシルクスクリーンが切り取られている"
 
 #: pcbnew/drc/drc_item.cpp:173
 msgid "Silkscreen overlap"
@@ -27232,7 +27232,7 @@ msgstr "配線長が許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:181
 msgid "Skew between traces out of range"
-msgstr ""
+msgstr "配線間の遅延が許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Too many vias on a connection"
