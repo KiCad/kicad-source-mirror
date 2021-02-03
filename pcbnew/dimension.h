@@ -241,6 +241,10 @@ public:
 
     const BOX2I ViewBBox() const override;
 
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                               bool aIgnoreLineWidth ) const override;
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

@@ -27,6 +27,7 @@
 #include <trigo.h>
 #include <board.h>
 #include <pad.h>
+#include <dimension.h>
 #include <track.h>
 #include <kicad_string.h>
 #include <pcb_shape.h>
@@ -37,6 +38,9 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
+#include <geometry/shape_rect.h>
+#include <geometry/shape_line_chain.h>
 
 
 // A helper struct for the callback function
@@ -777,9 +781,9 @@ bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, in
 
 void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                  PCB_LAYER_ID aLayer, int aClearance, int aError,
-                                                 ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+                                                 ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
-    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
+    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
 
     if( !m_FilledPolysList.count( aLayer ) )
         return;
@@ -790,3 +794,36 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     aCornerBuffer.Inflate( aClearance, numSegs );
     aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 }
+
+
+void DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                           PCB_LAYER_ID aLayer, int aClearance,
+                                                           int aError, ERROR_LOC aErrorLoc,
+                                                           bool aIgnoreLineWidth ) const
+{
+    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for dimensions." );
+
+    for( const std::shared_ptr<SHAPE>& shape : m_shapes )
+    {
+        const SHAPE_CIRCLE*  circle = dynamic_cast<const SHAPE_CIRCLE*>( shape.get() );
+        const SHAPE_SEGMENT* seg    = dynamic_cast<const SHAPE_SEGMENT*>( shape.get() );
+
+        if( circle )
+        {
+            TransformCircleToPolygon( aCornerBuffer, (wxPoint) circle->GetCenter(),
+                                      circle->GetRadius() + m_lineThickness / 2 + aClearance,
+                                      aError, aErrorLoc );
+        }
+        else if( seg )
+        {
+            TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A,
+                                    (wxPoint) seg->GetSeg().B, m_lineThickness + 2 * aClearance,
+                                    aError, aErrorLoc );
+        }
+        else
+        {
+            wxFAIL_MSG( "DIMENSION::TransformShapeWithClearanceToPolygon unexpected shape type." );
+        }
+    }
+}
+

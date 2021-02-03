@@ -66,8 +66,8 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
      *                A
      *             A   \
      *            /     \
-     *           / , * , \ segB
-     *          /*       *\
+     *           /  . .  \ segB
+     *          /.       .\
      *   segA  /     c     \
      *        /             B
      *       /
