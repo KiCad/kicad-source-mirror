@@ -42,6 +42,7 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     m_defaultPenWidth    = 0;
     m_minPenWidth        = 0;
     m_showPageLimits     = false;
+    m_isPrinting         = false;
 }
 
 
