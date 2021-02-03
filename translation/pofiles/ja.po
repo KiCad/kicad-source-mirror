@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 14:44+0000\n"
+"PO-Revision-Date: 2021-02-03 15:04+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1734,9 +1734,8 @@ msgid "Report"
 msgstr "レポート"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "導体の色"
+msgstr "色をクリアー"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2180,17 +2179,15 @@ msgstr "選択対象に%d個のロックされたアイテムが含まれてい�
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "ロックを無視しなければ、これらのアイテムをスキップします。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "再表示しない"
+msgstr "再表示しません。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
-#, fuzzy
 msgid "Override Locks"
-msgstr "非表示テキスト"
+msgstr "ロックを無視"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
@@ -2231,9 +2228,8 @@ msgid "The selected path does not contain valid KiCad settings!"
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "(見つかっていない) 以前のバージョンから設定をインポート"
+msgstr "以前のバージョンからライブラリーの設定をインポート"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -3258,9 +3254,8 @@ msgid "Pan left/right:"
 msgstr "パン 左／右:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr "水平方向タッチパッドまたはスクロール ホイールの移動でパン 左／右"
+msgstr "水平方向の移動でパン 左／右"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 msgid ""
@@ -7081,7 +7076,7 @@ msgstr "%s ピン %s が見つかりました"
 #: eeschema/cross-probing.cpp:258
 #, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s が見つかりましたが %s が見つかりません"
+msgstr "%s が見つかりましたが、ピン %s が見つかりません"
 
 #: eeschema/cross-probing.cpp:262 pcbnew/cross-probing.cpp:180
 #, c-format
@@ -30879,7 +30874,7 @@ msgstr "ビア: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:109
 msgid "Locking"
-msgstr "ロック中"
+msgstr "ロック"
 
 #: pcbnew/tools/board_editor_control.cpp:322
 msgid "Merge Specctra Session file:"
@@ -30924,7 +30919,7 @@ msgstr "フットプリントを配置"
 
 #: pcbnew/tools/board_editor_control.cpp:1028 pcbnew/tools/pcb_actions.cpp:648
 msgid "Lock"
-msgstr "ロック"
+msgstr "ロックする"
 
 #: pcbnew/tools/board_editor_control.cpp:1028 pcbnew/tools/pcb_actions.cpp:653
 msgid "Unlock"
@@ -31362,9 +31357,8 @@ msgid "Convert to Rule Area"
 msgstr "線分をルールエリアに変換"
 
 #: pcbnew/tools/pcb_actions.cpp:67
-#, fuzzy
 msgid "Creates a rule area from the selection"
-msgstr "プロジェクト用に新しいディレクトリーを作成"
+msgstr "選択対象からルールエリアを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:70
 msgid "Convert to Lines"
@@ -31423,7 +31417,6 @@ msgid "Add Aligned Dimension"
 msgstr "寸法線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:122
-#, fuzzy
 msgid "Add an aligned linear dimension"
 msgstr "寸法線を追加"
 
@@ -31432,27 +31425,24 @@ msgid "Add Center Dimension"
 msgstr "中心マークを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:127
-#, fuzzy
 msgid "Add a center dimension"
-msgstr "寸法線を追加"
+msgstr "中心マークを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:132
 msgid "Add Orthogonal Dimension"
 msgstr "直交寸法線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:132
-#, fuzzy
 msgid "Add an orthogonal dimension"
-msgstr "寸法線を追加"
+msgstr "直交寸法線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:137
 msgid "Add Leader"
 msgstr "引出線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:137
-#, fuzzy
 msgid "Add a leader dimension"
-msgstr "寸法線を追加"
+msgstr "引出線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:148
 msgid "Add Filled Zone"
@@ -31475,9 +31465,8 @@ msgid "Add Rule Area"
 msgstr "ルールエリアを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:160
-#, fuzzy
 msgid "Add a rule area (keepout)"
-msgstr "キープアウト(禁止)を追加"
+msgstr "ルールエリア(キープアウト)を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid "Add a Zone Cutout"
@@ -31504,9 +31493,8 @@ msgid "Place the Footprint Anchor"
 msgstr "フットプリントのアンカー(基準点)を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr "グリッドの原点をセット"
+msgstr "フットプリントの座標原点(アンカー)をセット"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Increase Line Width"
@@ -32852,9 +32840,8 @@ msgid "Via %s on %s"
 msgstr "ビア %s (%s 上)"
 
 #: pcbnew/track.cpp:144
-#, fuzzy
 msgid "removed annular ring"
-msgstr "未接続のビアを削除"
+msgstr "削除されたアニュラーリング"
 
 #: pcbnew/track.cpp:646
 msgid "Full Length"
