@@ -585,9 +585,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter, VECTOR2I aStart,
-                                               VECTOR2I aMid, VECTOR2I aEnd,
-                                               const VECTOR2I aCursor ) const
+void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter,
+                                                   VECTOR2I aStart, VECTOR2I aMid, VECTOR2I aEnd,
+                                                   const VECTOR2I aCursor ) const
 {
     VECTOR2D startLine = aStart - aCenter;
     VECTOR2D endLine   = aEnd - aCenter;
@@ -608,13 +608,17 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCe
         p3          = &aMid;
         movingStart = true;
     }
-    else
+    else if( aEnd != aArc->GetArcEnd() )
     {
         aEnd        = aCursor;
         p1          = &aStart;
         p2          = &aEnd;
         p3          = &aMid;
         movingStart = false;
+    }
+    else
+    {
+        return;
     }
 
     VECTOR2D v1, v2, v3, v4;
