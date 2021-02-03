@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 23:31+0000\n"
+"PO-Revision-Date: 2021-02-03 23:55+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11385,9 +11385,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
-#, fuzzy
 msgid "Suffix:"
-msgstr "接尾辞"
+msgstr "接尾辞:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
 msgid "]"
