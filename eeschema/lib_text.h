@@ -65,7 +65,20 @@ public:
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
-        return TextHitTest( aRect, aContained, aAccuracy );
+        if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+            return false;
+
+        EDA_RECT rect = aRect;
+
+        rect.Inflate( aAccuracy );
+
+        EDA_RECT textBox = GetTextBox();
+        textBox.RevertYAxis();
+
+        if( aContained )
+            return rect.Contains( textBox );
+
+        return rect.Intersects( textBox, GetTextAngle() );
     }
 
     int GetPenWidth() const override;

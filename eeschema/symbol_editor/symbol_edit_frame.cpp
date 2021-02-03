@@ -361,9 +361,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto canEditLib =
             [this] ( const SELECTION& sel )
             {
-                return !getTargetLibId().GetLibNickname().empty()
-                       && m_libMgr->LibraryExists( getTargetLibId().GetLibNickname() )
-                       && !m_libMgr->IsLibraryReadOnly( getTargetLibId().GetLibNickname() );
+                const wxString libName = getTargetLibId().GetLibNickname();
+
+                return !libName.empty() && m_libMgr->LibraryExists( libName )
+                       && !m_libMgr->IsLibraryReadOnly( libName );
             };
 
     mgr->SetConditions( ACTIONS::saveAll,
