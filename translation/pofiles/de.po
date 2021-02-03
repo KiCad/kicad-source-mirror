@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 15:52+0000\n"
+"PO-Revision-Date: 2021-02-03 22:53+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3476,7 +3476,7 @@ msgstr "Filter hinzufügen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:151
 msgid "Assign Net Class"
-msgstr "Zuweisen Netzklasse"
+msgstr "Netzklasse zuweisen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:156
 msgid "New net class:"
@@ -3544,7 +3544,7 @@ msgstr "Hinweis:"
 #: common/dialogs/wx_html_report_panel.cpp:328
 #: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:615
 msgid "Save Report to File"
-msgstr "Speichere in Protokolldatei"
+msgstr "Speichere Protokoll in Datei"
 
 #: common/dialogs/wx_html_report_panel.cpp:345
 #, c-format
