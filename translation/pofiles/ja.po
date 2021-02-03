@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 23:55+0000\n"
+"PO-Revision-Date: 2021-02-04 12:58+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -178,7 +178,7 @@ msgstr "機構穴とビアで BVH (ブラインド ビア ホール) をビル�
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:412
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "サポートされていないOpenGLのバージョンです。最低限必要なバージョンは1.5です"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
 #, c-format
@@ -608,11 +608,11 @@ msgstr "パッドの数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:283
 msgid "Spread Factor %"
-msgstr ""
+msgstr "拡散係数 %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
 msgid "Recursion Level"
-msgstr ""
+msgstr "再帰レベル"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "Shadows:"
@@ -2764,7 +2764,7 @@ msgstr "新しいテーマ..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr ""
+msgstr "(読み取り専用)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 msgid "Copy color"
@@ -3795,7 +3795,7 @@ msgstr "現在のテキストの寸法"
 
 #: common/eda_item.cpp:274 pcbnew/dimension.cpp:963
 msgid "Leader"
-msgstr ""
+msgstr "引出線"
 
 #: common/eda_item.cpp:275 pcbnew/pcb_target.cpp:123
 msgid "Target"
@@ -5150,11 +5150,11 @@ msgstr "%s は既に実行中です。続けますか？"
 
 #: common/pgm_base.cpp:625
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "この言語はオペレーティングシステムでサポートされていません。"
 
 #: common/pgm_base.cpp:676 common/pgm_base.cpp:714
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "この言語向けのKiCadの言語ファイルがインストールされていません。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2204
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:240
@@ -5169,7 +5169,7 @@ msgstr "ファイル '%s' を開くことができません"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2260
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2266
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "選択されたファイルは不正であるか、壊れています!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #, c-format
@@ -8146,12 +8146,12 @@ msgstr "アノテーションの順番"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- ERC はユーザーによってキャンセルされました。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "完了。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -9305,7 +9305,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:389
 msgid "Create Netlist and Run Simulator Command"
-msgstr ""
+msgstr "ネットリストを作成して、シミュレーターのコマンドを実行"
 
 #: eeschema/dialogs/dialog_netlist.cpp:440
 msgid "Netlist command:"
@@ -9978,7 +9978,7 @@ msgstr "テキスト変数"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:97
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr ""
+msgstr "プロジェクトが存在しないか読み取り専用です。変更は保存されません。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:148
 #, c-format
@@ -11381,7 +11381,7 @@ msgstr "接頭辞:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
@@ -11390,7 +11390,7 @@ msgstr "接尾辞:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:166
 msgid "No error or warning"
@@ -11751,7 +11751,7 @@ msgstr "現在の設定には '%s' のライブラリーは含まれません。
 #: eeschema/erc.cpp:719
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "ライブラリー '%s' は現在の設定では有効化されていません。"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -17177,11 +17177,11 @@ msgstr "ファイル名変更"
 
 #: kicad/project_tree_pane.cpp:1191
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "ネットワークパス: フォルダーの変更を監視しません"
 
 #: kicad/project_tree_pane.cpp:1196
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "ローカルパス: フォルダーの変更を監視します"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -27453,9 +27453,8 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "禁止と不許可の制限をチェック..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:130
-#, fuzzy
 msgid "Checking board edge clearances..."
-msgstr "導体端クリアランス"
+msgstr "基板端クリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:157
 #, fuzzy
@@ -28392,7 +28391,7 @@ msgstr "補助アイテム"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr ""
+msgstr "全てのインポートされたアイテムを新しいグループに追加"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 msgid "DXF Parameters"
@@ -30667,7 +30666,7 @@ msgstr "幅 %s, ビア ギャップ %s"
 #: pcbnew/router/router_tool.cpp:358
 #, c-format
 msgid "Width %s, gap %s"
-msgstr ""
+msgstr "幅 %s, ギャップ %s"
 
 #: pcbnew/router/router_tool.cpp:364
 #, c-format
@@ -30889,7 +30888,7 @@ msgstr "%d 重複したタイムスタンプが見つかり、置き換えられ
 #: pcbnew/tools/board_editor_control.cpp:483
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d 個の潜在的な問題が修復されました。"
 
 #: pcbnew/tools/board_editor_control.cpp:488
 msgid "No board problems found."
@@ -32039,7 +32038,7 @@ msgstr "数値を指定して選択中のアイテムを移動"
 
 #: pcbnew/tools/pcb_actions.cpp:663
 msgid "Ungroup"
-msgstr ""
+msgstr "グループ解除"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Remove Items"
@@ -32051,7 +32050,7 @@ msgstr "グループからアイテムを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 msgid "Enter Group"
-msgstr ""
+msgstr "グループに入る"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 #, fuzzy
@@ -32060,7 +32059,7 @@ msgstr "レポートファイル名を入力"
 
 #: pcbnew/tools/pcb_actions.cpp:678
 msgid "Leave Group"
-msgstr ""
+msgstr "グループを出る"
 
 #: pcbnew/tools/pcb_actions.cpp:678
 msgid "Leave the current group"
@@ -33049,7 +33048,7 @@ msgstr "非アクティブ レイヤー:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Non-active layers will be shown in full color"
-msgstr ""
+msgstr "非アクティブ レイヤーをフルカラーで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 #, fuzzy
@@ -33102,7 +33101,7 @@ msgstr "ラッツネスト表示:"
 
 #: pcbnew/widgets/appearance_controls.cpp:675
 msgid "Choose what ratsnest lines to display"
-msgstr ""
+msgstr "どのラッツネストの線を表示するかを選択"
 
 #: pcbnew/widgets/appearance_controls.cpp:683
 msgid "Ratsnest lines are shown to items on all layers"
@@ -33320,7 +33319,7 @@ msgstr "%s の表示/非表示"
 #: pcbnew/widgets/appearance_controls.cpp:1944
 #, c-format
 msgid "Set opacity of %s"
-msgstr ""
+msgstr "%s の不透明度を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:2097
 #, c-format
@@ -33400,7 +33399,7 @@ msgstr "プリセット:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "(unsaved)"
