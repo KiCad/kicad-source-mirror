@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 14:01+0000\n"
+"PO-Revision-Date: 2021-02-03 14:44+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6872,16 +6872,15 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next unassigned symbol"
-msgstr "次の割り当てられていないシンボルを選択"
+msgstr "次の未割り当てのシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
 msgid "Select next symbol with no footprint assignment"
 msgstr "次のフットプリントが割り当てられていないシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous unassigned symbol"
-msgstr "前の関連付けされていないシンボルを選択"
+msgstr "前の未割り当てのシンボルを選択"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
 msgid "Select previous symbol with no footprint assignment"
@@ -7080,7 +7079,7 @@ msgid "%s pin %s found"
 msgstr "%s ピン %s が見つかりました"
 
 #: eeschema/cross-probing.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
 msgstr "%s が見つかりましたが %s が見つかりません"
 
@@ -8118,9 +8117,8 @@ msgid "Show Annotation dialog"
 msgstr "アノテーション ダイアログを表示"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
-#, fuzzy
 msgid "Annotation is incomplete. ERC cannot be run."
-msgstr "アノテーション完了。"
+msgstr "アノテーションが未完了です。 ERCは実行できません。"
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -11459,9 +11457,9 @@ msgid "50"
 msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "不正な文字 '%c' のあるニックネーム: \"%s\""
+msgstr "不正な文字 '%c' のあるニックネーム: '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:345
 #: eeschema/dialogs/panel_sym_lib_table.cpp:387
@@ -11804,9 +11802,8 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "接続されていない未接続フラグ"
 
 #: eeschema/erc_item.cpp:82
-#, fuzzy
 msgid "Label not connected to anything"
-msgstr "ラベルがアイテムに接続されていません"
+msgstr "ラベルがどこにも接続されていません"
 
 #: eeschema/erc_item.cpp:86
 msgid "Global label not connected anywhere else in the schematic"
@@ -11854,9 +11851,8 @@ msgid "Unresolved text variable"
 msgstr "未解決のテキスト変数"
 
 #: eeschema/erc_item.cpp:130
-#, fuzzy
 msgid "Wires not connected to anything"
-msgstr "未接続マーカーがどこにも接続されていません"
+msgstr "配線がどこにも接続されていません"
 
 #: eeschema/erc_item.cpp:134
 #, fuzzy
@@ -14125,7 +14121,7 @@ msgstr "\"%s\" は有効な Spice 定数ではありません"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:94
 msgid "Library Editor"
-msgstr "コンポーネント ライブラリー エディター"
+msgstr "ライブラリー エディター"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:166
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:718
@@ -14279,9 +14275,8 @@ msgid "Do not perform any additional operations after saving library."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "テーブルからライブラリーを削除"
+msgstr "ライブラリー テーブルのエントリーを置換"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid ""
@@ -14291,9 +14286,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "ライブラリー テーブルへ追加"
+msgstr "グローバル ライブラリー テーブルの新しいエントリーを追加"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid ""
@@ -14316,9 +14310,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "%s from schematic"
-msgstr "回路図からプローブ"
+msgstr "回路図の %s"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:150
 msgid "[Read Only Library]"
@@ -14627,7 +14621,7 @@ msgstr "シンボル ビューワー"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
-msgstr "コンポーネント フットプリント リンク ファイルをロード"
+msgstr "シンボル フットプリント リンク ファイルをロード"
 
 #: eeschema/tools/assign_footprints.cpp:215
 msgid "Keep existing footprint field visibility"
@@ -14671,19 +14665,19 @@ msgstr ""
 "せん。"
 
 #: eeschema/tools/backannotate.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "フットプリント \"%s\" は関連付けされたシンボルを持っていません。"
+msgstr "フットプリント '%s' はシンボルに割り当てられていません。"
 
 #: eeschema/tools/backannotate.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Pcb フットプリント \"%s\" と \"%s\" が同じシンボルにリンクされています"
+msgstr "フットプリント '%s' と '%s' が同じシンボルにリンクされています"
 
 #: eeschema/tools/backannotate.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "\"%s\" フットプリントのシンボルが見つかりません"
+msgstr "フットプリント '%s' のシンボルが見つかりません"
 
 #: eeschema/tools/backannotate.cpp:289
 #, c-format
@@ -14693,10 +14687,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:304
-#, fuzzy
 msgid "Cannot relink footprints because schematic is not fully annotated."
-msgstr ""
-"回路図が完全にアノテートされていないため、フットプリントを再リンクできません"
+msgstr "回路図が完全にアノテートされていないため、フットプリントを再リンクできません"
 
 #: eeschema/tools/backannotate.cpp:329
 #, fuzzy, c-format
@@ -15371,7 +15363,7 @@ msgstr "回路図シンボルとライブラリー シンボル間のリンク�
 
 #: eeschema/tools/ee_actions.cpp:556
 msgid "Assign Footprints..."
-msgstr "フットプリントを関連付け..."
+msgstr "フットプリントを割り当て..."
 
 #: eeschema/tools/ee_actions.cpp:556
 msgid "Run footprint assignment tool"
@@ -19882,9 +19874,8 @@ msgid "Excluded"
 msgstr "除外"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:118
-#, fuzzy
 msgid "Reannotate PCB"
-msgstr "アノテーション"
+msgstr "基板を再アノテート"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
@@ -23591,11 +23582,11 @@ msgstr "ネットリストファイル \"%s\"を読み込んでいます。\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:237
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "コンポーネントとフットプリントの関連付けにレファレンス指定子を使用\n"
+msgstr "シンボルとフットプリントの関連付けにレファレンス指定子を使用\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:239
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "コンポーネントとフットプリントの関連付けに tstamp (固有 ID) を使用します。\n"
+msgstr "シンボルとフットプリントの関連付けに tstamp (固有 ID) を使用します。\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
