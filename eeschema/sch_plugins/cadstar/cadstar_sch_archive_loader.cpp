@@ -340,10 +340,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 continue;
             }
 
-            LIB_PART* kiPart                     = mPartMap.at( sym.PartRef.RefID );
+            LIB_PART* kiPart = mPartMap.at( sym.PartRef.RefID );
             double    symOrientDeciDeg = 0.0;
 
-            SCH_COMPONENT* component = loadSchematicSymbol( sym, kiPart, symOrientDeciDeg );
+            SCH_COMPONENT* component = loadSchematicSymbol( sym, *kiPart, symOrientDeciDeg );
 
             SCH_FIELD* refField = component->GetField( REFERENCE_FIELD );
 
@@ -478,7 +478,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 double compOrientationTenthDegree = 0.0;
 
                 SCH_COMPONENT* component =
-                        loadSchematicSymbol( sym, kiPart, compOrientationTenthDegree );
+                        loadSchematicSymbol( sym, *kiPart, compOrientationTenthDegree );
 
                 mPowerSymMap.insert( { sym.ID, component } );
             }
@@ -1078,6 +1078,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         }
     }
 
+    TERMINAL_TO_PINNUM_MAP pinNumMap;
+
     for( std::pair<TERMINAL_ID, TERMINAL> termPair : symbol.Terminals )
     {
         TERMINAL term    = termPair.second;
@@ -1103,6 +1105,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             }
 
             pin->SetType( getKiCadPinType( csPin.Type ) );
+
+            pinNumMap.insert( { term.ID, pinNum } );
         }
         else
         {
@@ -1137,6 +1141,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
         aPart->AddDrawItem( pin );
     }
+
+    if(aCadstarPart)
+        mPinNumsMap.insert( { aCadstarPart->ID + aGateID, pinNumMap } );
 
     for( std::pair<TEXT_ID, TEXT> textPair : symbol.Texts )
     {
@@ -1411,16 +1418,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute(
 
 
 SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
-        const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart, double& aComponentOrientationDeciDeg )
+        const SYMBOL& aCadstarSymbol, const LIB_PART& aKiCadPart, double& aComponentOrientationDeciDeg )
 {
-    LIB_ID  libId( mLibraryFileName.GetName(), aKiCadPart->GetName() );
+    LIB_ID  libId( mLibraryFileName.GetName(), aKiCadPart.GetName() );
     int     unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
 
     SCH_SHEET_PATH sheetpath;
     SCH_SHEET* kiSheet = mSheetMap.at( aCadstarSymbol.LayerID );
     mRootSheet->LocatePathOfScreen( kiSheet->GetScreen(), &sheetpath );
 
-    SCH_COMPONENT* component = new SCH_COMPONENT( *aKiCadPart, libId, &sheetpath, unit );
+    SCH_COMPONENT* component = new SCH_COMPONENT( aKiCadPart, libId, &sheetpath, unit );
 
     if( aCadstarSymbol.IsComponent )
     {
@@ -1461,6 +1468,50 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
         delete component;
         return nullptr;
+    }
+
+    wxString gate = ( aCadstarSymbol.GateID.IsEmpty() ) ? wxT( "A" ) : aCadstarSymbol.GateID;
+    wxString partGateIndex = aCadstarSymbol.PartRef.RefID + gate;
+
+    //Handle pin swaps
+    if( mPinNumsMap.find( partGateIndex ) != mPinNumsMap.end() )
+    {
+        TERMINAL_TO_PINNUM_MAP termNumMap = mPinNumsMap.at( partGateIndex );
+
+        std::map<wxString, LIB_PIN*> pinNumToLibPinMap;
+
+        for( auto& term : termNumMap )
+        {
+            wxString pinNum = term.second;
+            pinNumToLibPinMap.insert( { pinNum, component->GetPartRef()->GetPin( term.second ) } );
+        }
+
+        auto replacePinNumber = [&]( wxString aOldPinNum, wxString aNewPinNum )
+                                {
+                                    if( aOldPinNum == aNewPinNum )
+                                        return;
+
+                                    LIB_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
+                                    libpin->SetNumber( aNewPinNum );
+                                };
+
+        //Older versions of Cadstar used pin numbers
+        for( auto& pinPair : aCadstarSymbol.PinNumbers )
+        {
+            SYMBOL::PIN_NUM pin = pinPair.second;
+
+            replacePinNumber( termNumMap.at( pin.TerminalID ),
+                              wxString::Format( "%ld", pin.PinNum ) );
+        }
+
+        //Newer versions of Cadstar use pin names
+        for( auto& pinPair : aCadstarSymbol.PinNames )
+        {
+            SYMPINNAME_LABEL pin = pinPair.second;
+            replacePinNumber( termNumMap.at( pin.TerminalID ), pin.NameOrLabel );
+        }
+
+        component->UpdatePins();
     }
 
     kiSheet->GetScreen()->Append( component );

@@ -78,6 +78,7 @@ public:
 
 private:
     typedef std::pair<BLOCK_ID, TERMINAL_ID> BLOCK_PIN_ID;
+    typedef std::map<TERMINAL_ID, wxString>  TERMINAL_TO_PINNUM_MAP;
 
     ::SCHEMATIC*                     mSchematic;
     ::SCH_SHEET*                     mRootSheet;
@@ -92,6 +93,7 @@ private:
     std::map<BLOCK_PIN_ID, SCH_HIERLABEL*>
                                  mSheetPinMap; ///< Map between Cadstar and KiCad Sheets Pins
     std::map<PART_ID, LIB_PART*> mPartMap;     ///< Map between Cadstar and KiCad Parts
+    std::map<PART_ID, TERMINAL_TO_PINNUM_MAP> mPinNumsMap;  ///< Map of pin numbers
     std::map<SYMDEF_ID, LIB_PART*>
             mPowerSymLibMap; ///< Map between Cadstar and KiCad Power Symbol Library items
     std::map<SYMBOL_ID, SCH_COMPONENT*>
@@ -134,7 +136,7 @@ private:
             wxPoint aSymbolOrigin, LIB_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
-    SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, LIB_PART* aKiCadPart,
+    SCH_COMPONENT* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_PART& aKiCadPart,
             double& aComponentOrientationDeciDeg );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
