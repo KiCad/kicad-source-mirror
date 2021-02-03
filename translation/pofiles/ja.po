@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 23:30+0000\n"
+"PO-Revision-Date: 2021-02-03 13:29+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1354,9 +1354,8 @@ msgid "User layer Eco2"
 msgstr "ユーザー レイヤー Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "使用するレイヤー:"
+msgstr "使用するレイヤー"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -5726,7 +5725,7 @@ msgstr "inch 単位を使用"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Mils"
-msgstr "Mil"
+msgstr "mil"
 
 #: common/tool/actions.cpp:486
 msgid "Use mils"
@@ -14749,9 +14748,8 @@ msgid "Symbol Checker"
 msgstr "シンボル チェッカー"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Show the symbol checker window"
-msgstr "デザイン ルール チェッカー ウィンドウを表示"
+msgstr "シンボル チェッカー ウィンドウを表示"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -14802,9 +14800,8 @@ msgid "Save Library As..."
 msgstr "名前を付けてライブラリーを保存..."
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save the current library to a new file."
-msgstr "新しい名前で現在のライブラリーを保存"
+msgstr "現在のライブラリーを新しいファイルに保存"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -14831,9 +14828,8 @@ msgid "Save Symbol As..."
 msgstr "名前を付けてシンボルを保存..."
 
 #: eeschema/tools/ee_actions.cpp:137
-#, fuzzy
 msgid "Save the current symbol to a different library."
-msgstr "現在アクティブなライブラリーを保存"
+msgstr "現在のシンボルを別のライブラリーに保存します。"
 
 #: eeschema/tools/ee_actions.cpp:141
 msgid "Remove the selected symbol from its library"
@@ -15185,41 +15181,36 @@ msgid "Autoplace Fields"
 msgstr "フィールドを自動配置"
 
 #: eeschema/tools/ee_actions.cpp:410
-#, fuzzy
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
-msgstr "シンボル フィールドで自動配置アルゴリズムを実行"
+msgstr "シンボルやシートのフィールドに自動配置アルゴリズムを実行"
 
 #: eeschema/tools/ee_actions.cpp:415
 msgid "Change Symbols..."
 msgstr "シンボルを変更..."
 
 #: eeschema/tools/ee_actions.cpp:416
-#, fuzzy
 msgid "Assign different symbols from the library"
-msgstr "ライブラリーから別のフットプリントを割り付け"
+msgstr "ライブラリーから別のシンボルを割り当て"
 
 #: eeschema/tools/ee_actions.cpp:421
 msgid "Update Symbols from Library..."
 msgstr "ライブラリーからシンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:422
-#, fuzzy
 msgid "Update symbols to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからフットプリントを更新"
+msgstr "全ての変更を適用するためにライブラリーからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:428
-#, fuzzy
 msgid "Assign a different symbol from the library"
-msgstr "ライブラリーから別のフットプリントを割り付け"
+msgstr "ライブラリーから別のシンボルを割り当て"
 
 #: eeschema/tools/ee_actions.cpp:433
 msgid "Update Symbol..."
 msgstr "シンボルを更新..."
 
 #: eeschema/tools/ee_actions.cpp:434
-#, fuzzy
 msgid "Update symbol to include any changes from the library"
-msgstr "全ての変更を適用するためにライブラリーからフットプリントを更新"
+msgstr "全ての変更を適用するためにライブラリーからシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:439
 msgid "Assign Netclass..."
@@ -15387,9 +15378,8 @@ msgid "Assign Footprints..."
 msgstr "フットプリントを関連付け..."
 
 #: eeschema/tools/ee_actions.cpp:556
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "フットプリント割り当て"
+msgstr "フットプリント割り当てツールを実行"
 
 #: eeschema/tools/ee_actions.cpp:561
 msgid "Import Footprint Assignments..."
@@ -15424,9 +15414,8 @@ msgid "Edit Page Number..."
 msgstr "ページ番号を編集..."
 
 #: eeschema/tools/ee_actions.cpp:579
-#, fuzzy
 msgid "Edit the page number of the current or selected sheet"
-msgstr "現在選択中のフィールドのテキスト (または値)"
+msgstr "現在のシート、もしくは選択したシートのページ番号を編集"
 
 #: eeschema/tools/ee_actions.cpp:584
 msgid "Rescue Symbols..."
@@ -15472,9 +15461,8 @@ msgid "Switch to PCB Editor"
 msgstr "基板エディターに切替"
 
 #: eeschema/tools/ee_actions.cpp:606
-#, fuzzy
 msgid "Open PCB in board editor"
-msgstr "基板 (PCB) エディターを開く"
+msgstr "基板 (PCB) を基板エディターを開く"
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Export Netlist..."
@@ -15499,27 +15487,24 @@ msgid "Highlight on PCB"
 msgstr "基板 (PCB) 上でハイライト"
 
 #: eeschema/tools/ee_actions.cpp:621
-#, fuzzy
 msgid "Highlight corresponding items in board editor"
-msgstr "PCBNew で対応するアイテムをハイライト表示"
+msgstr "基板エディターで対応するアイテムをハイライト表示"
 
 #: eeschema/tools/ee_actions.cpp:626
 msgid "Show Hidden Pins"
 msgstr "非表示ピンを表示"
 
 #: eeschema/tools/ee_actions.cpp:626
-#, fuzzy
 msgid "Toggle display of hidden pins"
-msgstr "全画面十字線の表示を切り替え"
+msgstr "非表示ピンの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Show Hidden Fields"
 msgstr "非表示フィールドを表示"
 
 #: eeschema/tools/ee_actions.cpp:631
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "ハンダ ペースト レイヤーの表示を切替"
+msgstr "非表示テキスト フィールドの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:636
 msgid "Force H/V Wires and Buses"
@@ -15551,9 +15536,8 @@ msgid "Hierarchy Navigator"
 msgstr "階層ナビゲーター"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "回路図の階層ナビゲータを表示"
+msgstr "回路図の階層を表示"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Navigate to page"
@@ -19385,7 +19369,7 @@ msgstr "パッド"
 #: pcbnew/widgets/appearance_controls.cpp:334
 #: pcbnew/widgets/panel_selection_filter_base.cpp:43
 msgid "Vias"
-msgstr "ビア数"
+msgstr "ビア"
 
 #: pcbnew/board.cpp:1104 pcbnew/pcb_draw_panel_gal.cpp:445
 msgid "Track Segments"
@@ -21242,19 +21226,16 @@ msgstr ""
 "最初に見つかった許容されているレイヤーへと移動されています。"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:281
-#, fuzzy
 msgid "Change dimension properties"
 msgstr "寸法線のプロパティを変更"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
-#, fuzzy
 msgid "Leader Format"
-msgstr "ゼロの扱い"
+msgstr "引出線のフォーマット"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
-#, fuzzy
 msgid "Text frame:"
-msgstr "ネット名:"
+msgstr "テキストの枠:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
@@ -21274,9 +21255,8 @@ msgstr "レイヤー:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:87
-#, fuzzy
 msgid "Dimension Format"
-msgstr "寸法線のプロパティ"
+msgstr "寸法線のフォーマット"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
@@ -21284,9 +21264,8 @@ msgid "Measured value of this dimension"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
-#, fuzzy
 msgid "Override value"
-msgstr "ファイルを上書き"
+msgstr "値を上書き"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:107
 msgid ""
@@ -21316,9 +21295,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:110
-#, fuzzy
 msgid "Units format:"
-msgstr "出力フォーマット:"
+msgstr "単位のフォーマット:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:149
@@ -21455,9 +21433,8 @@ msgid "180.0"
 msgstr "180.0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:301
-#, fuzzy
 msgid "Keep aligned with dimension"
-msgstr "グリッドの寸法を設定"
+msgstr "寸法線に沿って配置"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
@@ -25521,7 +25498,7 @@ msgstr "未使用のレイヤーを復元します。(&t)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
-msgstr "選択のみ(&S)"
+msgstr "選択対象のみ(&S)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
@@ -27186,9 +27163,8 @@ msgid "Unconnected items"
 msgstr "未配線アイテム"
 
 #: pcbnew/drc/drc_item.cpp:53
-#, fuzzy
 msgid "Items shorting two nets"
-msgstr "２つのネットを短絡する配線を削除"
+msgstr "２つのネットを短絡するアイテム"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items not allowed"
@@ -27215,18 +27191,16 @@ msgid "Copper zone net has no pads"
 msgstr "導体ゾーンのネットはパッドへの接続がありません"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "単独のパッドしか含まないネットを削除"
+msgstr "ビアがレイヤーに接続されていないか、単一のレイヤーにのみ接続されています"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
 msgstr "配線は未接続で終わっています"
 
 #: pcbnew/drc/drc_item.cpp:89
-#, fuzzy
 msgid "Hole clearance violation"
-msgstr "クリアランス違反"
+msgstr "穴のクリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Drilled holes too close together"
@@ -27242,22 +27216,20 @@ msgid "Annular width"
 msgstr "ネット クラスの幅"
 
 #: pcbnew/drc/drc_item.cpp:105
-#, fuzzy
 msgid "Drill out of range"
-msgstr "配線長の調整"
+msgstr "ドリルが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
-msgstr "ビア"
+msgstr "ビア直径"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
 msgstr "パッドスタックは無効です"
 
 #: pcbnew/drc/drc_item.cpp:117
-#, fuzzy
 msgid "Micro via drill out of range"
-msgstr "マイクロ ビアのドリルが小さすぎます"
+msgstr "マイクロ ビアのドリルが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -27300,9 +27272,8 @@ msgid "Extra footprint"
 msgstr "追加のフットプリント"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Pad net doesn't match schematic"
-msgstr "回路図から指令をロード"
+msgstr "パッドのネットが回路図と不一致"
 
 #: pcbnew/drc/drc_item.cpp:169
 #, fuzzy
@@ -27310,38 +27281,33 @@ msgid "Silkscreen clipped by solder mask"
 msgstr "基板裏面のシルクスクリーン"
 
 #: pcbnew/drc/drc_item.cpp:173
-#, fuzzy
 msgid "Silkscreen overlap"
-msgstr "シルクの色"
+msgstr "シルクスクリーンのオーバーラップ"
 
 #: pcbnew/drc/drc_item.cpp:177
-#, fuzzy
 msgid "Trace length out of range"
-msgstr "配線長の調整"
+msgstr "配線長が許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:181
 msgid "Skew between traces out of range"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Too many vias on a connection"
-msgstr "バスが接続されていません"
+msgstr "接続上のビアが多すぎます"
 
 #: pcbnew/drc/drc_item.cpp:189
-#, fuzzy
 msgid "Differential pair gap out of range"
-msgstr "差動ペアのギャップは負の値にできません。"
+msgstr "差動ペアのギャップが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:193
-#, fuzzy
 msgid "Differential uncoupled length too long"
-msgstr "差動ペア長の調整"
+msgstr "差動の非結合長が長すぎます"
 
 #: pcbnew/drc/drc_rule.h:134
-#, fuzzy, c-format
+#, c-format
 msgid "rule %s"
-msgstr "角度 %s"
+msgstr "ルール %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -27991,14 +27957,12 @@ msgid "locked"
 msgstr "ロック"
 
 #: pcbnew/footprint.cpp:784
-#, fuzzy
 msgid "autoplaced"
-msgstr "自動配置 (&A)"
+msgstr "自動配置"
 
 #: pcbnew/footprint.cpp:787
-#, fuzzy
 msgid "not in schematic"
-msgstr "全回路図"
+msgstr "回路図にない"
 
 #: pcbnew/footprint.cpp:790
 #, fuzzy
@@ -28006,9 +27970,8 @@ msgid "exclude from pos files"
 msgstr "部品表 (BOM) から除外"
 
 #: pcbnew/footprint.cpp:793
-#, fuzzy
 msgid "exclude from BOM"
-msgstr "基板から除外"
+msgstr "部品表(BOM)から除外"
 
 #: pcbnew/footprint.cpp:795
 msgid "Status: "
@@ -28261,14 +28224,14 @@ msgid "Footprint %s already exists in %s."
 msgstr "フットプリント %s は既に %s 内に既に存在します。"
 
 #: pcbnew/footprint_libraries_utils.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "フットプリント '%s' はライブラリー '%s' から削除されました"
+msgstr "フットプリント '%s' は '%s' で置き換えられました"
 
 #: pcbnew/footprint_libraries_utils.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "フットプリント '%s' はライブラリー '%s' から削除されました"
+msgstr "フットプリント '%s' を '%s' に追加しました"
 
 #: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Enter footprint name:"
@@ -28470,9 +28433,8 @@ msgid "Select PCB grid units"
 msgstr "基板グリッドの単位を選択"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
-#, fuzzy
 msgid "Import Parameters"
-msgstr "パラメーター インポート:"
+msgstr "インポート パラメーター:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
@@ -28678,12 +28640,11 @@ msgid "Export Footprints to New Library..."
 msgstr "新規ライブラリーへフットプリントをエクスポート..."
 
 #: pcbnew/menubar_pcb_editor.cpp:159
-#, fuzzy
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"新しいライブラリーに全てのフットプリントをアーカイブ\n"
+"基板で使われているフットプリントを含む、新しいライブラリーを作成します\n"
 "(ライブラリーが既に存在していた場合は置き換えられます)"
 
 #: pcbnew/menubar_pcb_editor.cpp:168
@@ -28883,9 +28844,9 @@ msgid "Disconnect %s pin %s."
 msgstr "%s ピン %s の接続を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "No net for symbol %s pin %s."
-msgstr "コンポーネント %s ピン %s に対するネットがありません。"
+msgstr "シンボル %s ピン %s に対するネットがありません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:454
 #, c-format
@@ -28968,11 +28929,9 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "合計警告数: %d、エラー数: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr ""
-"リファレンス \"%s\" のコンポーネントは、ネットリストから見つかりませんでし"
-"た。"
+msgstr "リファレンス '%s' のコンポーネントは、ネットリストから見つかりませんでした。"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:433
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2873
@@ -29088,9 +29047,8 @@ msgid "pad %s"
 msgstr "パッド %s"
 
 #: pcbnew/pad.cpp:805 pcbnew/pad.cpp:826 pcbnew/pad.cpp:845
-#, fuzzy
 msgid "parent footprint"
-msgstr "親のフットプリントから"
+msgstr "親のフットプリント"
 
 #: pcbnew/pad.cpp:812 pcbnew/pad.cpp:832 pcbnew/pad.cpp:851
 msgid "pad"
@@ -29336,14 +29294,12 @@ msgstr ""
 "フットプリントは不正なコートヤードを持っています (閉じられていない形状)"
 
 #: pcbnew/pcb_expr_evaluator.cpp:283
-#, fuzzy
 msgid "Footprint has no front courtyard."
-msgstr "フットプリントのコートヤードが異常な形状です"
+msgstr "フットプリントに表面のコートヤードがありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:298
-#, fuzzy
 msgid "Footprint has no back courtyard."
-msgstr "フットプリントは定義されたコートヤードを持っていません"
+msgstr "フットプリントに裏面のコートヤードがありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:750
 msgid "must be mm, in, or mil"
@@ -30237,7 +30193,6 @@ msgid "Unknown token \"%s\""
 msgstr "未知のトークン \"%s\""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:668
-#, fuzzy
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
@@ -30601,7 +30556,6 @@ msgid "The routing start point violates DRC."
 msgstr ""
 
 #: pcbnew/router/pns_router.cpp:277
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "無効な場所のため、差動ペア配線を開始することが出来ませんでした。"
 
@@ -31103,9 +31057,8 @@ msgid "Select two items for a clearance resolution report."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:271
-#, fuzzy
 msgid "Clearance Report"
-msgstr "クリアランス"
+msgstr "クリアランス レポート"
 
 #: pcbnew/tools/board_inspection_tool.cpp:293
 #: pcbnew/tools/board_inspection_tool.cpp:306
@@ -31203,7 +31156,6 @@ msgid "Hole constraint: min %s."
 msgstr "穴の制限: 最小 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:617
-#, fuzzy
 msgid "Keepouts"
 msgstr "キープアウト(禁止)"
 
@@ -31240,14 +31192,12 @@ msgid "Convert polygons to lines"
 msgstr "ポリゴンを線に変換"
 
 #: pcbnew/tools/convert_tool.cpp:662
-#, fuzzy
 msgid "Create arc from line segment"
-msgstr "線セグメントを描画"
+msgstr "線セグメントから円弧を作成"
 
 #: pcbnew/tools/drawing_tool.cpp:69
-#, fuzzy
 msgid "Select Via Size"
-msgstr "ファイルを選択"
+msgstr "ビアサイズを選択"
 
 #: pcbnew/tools/drawing_tool.cpp:264 pcbnew/tools/drawing_tool.cpp:1446
 msgid "Draw a line segment"
@@ -31323,14 +31273,12 @@ msgid "Edit track width/via size"
 msgstr "配線幅/ビアのサイズを編集"
 
 #: pcbnew/tools/edit_tool.cpp:1027
-#, fuzzy
 msgid "At least two straight track segments must be selected."
-msgstr "プロジェクト ファイルのいくつかはバックアップされませんでした。"
+msgstr "少なくとも2つの直線の配線セグメントを選択する必要があります。"
 
 #: pcbnew/tools/edit_tool.cpp:1031
-#, fuzzy
 msgid "Enter fillet radius:"
-msgstr "フィレット半径:"
+msgstr "フィレット半径を入力:"
 
 #: pcbnew/tools/edit_tool.cpp:1031 pcbnew/tools/edit_tool.cpp:1194
 #: pcbnew/tools/pcb_actions.cpp:303
@@ -31350,14 +31298,12 @@ msgid "Unable to fillet the selected track segments."
 msgstr "セグメントをドラッグできません: ２つの直線セグメントが重なっています"
 
 #: pcbnew/tools/edit_tool.cpp:1203
-#, fuzzy
 msgid "Some of the track segments could not be filleted."
-msgstr "プロジェクト ファイルのいくつかはバックアップされませんでした。"
+msgstr "いくつかの配線セグメントにフィレットをかけられません。"
 
 #: pcbnew/tools/edit_tool.cpp:1593 pcbnew/tools/pcb_actions.cpp:289
-#, fuzzy
 msgid "Change Side / Flip"
-msgstr "ビア サイズとドリルを変更"
+msgstr "配置面を変更/反転"
 
 #: pcbnew/tools/edit_tool.cpp:1733 pcbnew/tools/zone_filler_tool.cpp:174
 msgid "Fill Zone"
@@ -31448,18 +31394,16 @@ msgid "Convert to Polygon"
 msgstr "ポリゴンに変換"
 
 #: pcbnew/tools/pcb_actions.cpp:59
-#, fuzzy
 msgid "Creates a graphic polygon from the selection"
-msgstr "図形ポリゴンを描画"
+msgstr "選択対象から図形ポリゴンを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:62
 msgid "Convert to Zone"
 msgstr "ゾーンに変換"
 
 #: pcbnew/tools/pcb_actions.cpp:62
-#, fuzzy
 msgid "Creates a copper zone from the selection"
-msgstr "導体ゾーンをネット %s から %s へ更新しています。"
+msgstr "選択対象から導体ゾーン作成"
 
 #: pcbnew/tools/pcb_actions.cpp:66
 msgid "Convert to Rule Area"
@@ -31475,28 +31419,24 @@ msgid "Convert to Lines"
 msgstr "線に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:70
-#, fuzzy
 msgid "Creates graphic lines from the selection"
-msgstr "現在選択中のグラフィック レイヤーを消去する"
+msgstr "選択対象から図形ラインを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:74
-#, fuzzy
 msgid "Convert to Arc"
-msgstr "シンボル変換"
+msgstr "円弧に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:74
-#, fuzzy
 msgid "Converts selected line segment to an arc"
-msgstr "選択した内容を切り取ってクリップボードへ送る"
+msgstr "選択された線セグメントを円弧に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:78
 msgid "Convert to Tracks"
 msgstr "配線に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:79
-#, fuzzy
 msgid "Converts selected graphic lines to tracks"
-msgstr "選択されたグラフィック レイヤーをクリアー"
+msgstr "選択された図形ラインを配線に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:87
 msgid "Draw Line"
@@ -31864,7 +31804,7 @@ msgstr "スルーホールのパッド上の穴と重なった穴を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:413
 msgid "Assign a different footprint from the library"
-msgstr "ライブラリーから別のフットプリントを割り付け"
+msgstr "ライブラリーから別のフットプリントを割り当て"
 
 #: pcbnew/tools/pcb_actions.cpp:418
 msgid "Change Footprints..."
@@ -31872,7 +31812,7 @@ msgstr "フットプリントを変更..."
 
 #: pcbnew/tools/pcb_actions.cpp:418
 msgid "Assign different footprints from the library"
-msgstr "ライブラリーから別のフットプリントを割り付け"
+msgstr "ライブラリーから別のフットプリントを割り当て"
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Swap Layers..."
@@ -33126,9 +33066,8 @@ msgid "DRC Exclusions"
 msgstr "DRC 除外"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "DRC violations which have been individually excluded"
-msgstr "深刻度を警告で DRC 違反"
+msgstr "個別に除外された DRC 違反"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show footprint and text origins as a cross"
@@ -33209,25 +33148,24 @@ msgid "Net Display Options"
 msgstr "ネット表示オプション"
 
 #: pcbnew/widgets/appearance_controls.cpp:640
-#, fuzzy
 msgid "Net colors:"
-msgstr "線のカラー:"
+msgstr "ネットのカラー表示:"
 
 #: pcbnew/widgets/appearance_controls.cpp:643
 msgid "Choose when to show net and netclass colors"
-msgstr ""
+msgstr "ネットとネットクラスのカラー表示を行う条件を選択"
 
 #: pcbnew/widgets/appearance_controls.cpp:651
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
+msgstr "全ての導体アイテムのネットとネットクラスをカラー表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:658
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr ""
+msgstr "ラッツネストのみネットとネットクラスをカラー表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "ネットとネットクラスのカラー表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Ratsnest display:"
@@ -33239,25 +33177,24 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:683
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr ""
+msgstr "全てのレイヤーのアイテムへのラッツネストの線を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:688
 msgid "Visible layers"
 msgstr "表示レイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:690
-#, fuzzy
 msgid "Ratsnest lines are shown to items on visible layers"
-msgstr "非表示レイヤーのアイテムを含む (&i)"
+msgstr "表示レイヤーのアイテムへのラッツネストの線を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:831
 msgid "Set net color"
 msgstr "ネットの色を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight %s"
-msgstr "ハイライト"
+msgstr "%s をハイライト"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2136
@@ -33278,12 +33215,12 @@ msgstr "他の全てのネットを非表示"
 #: pcbnew/widgets/appearance_controls.cpp:880
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "クリックで %s のラッツネストを非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "クリックで %s のラッツネストを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1375
 msgid "Double click or middle click for color change, right click for menu"
@@ -33447,9 +33384,9 @@ msgid "Show Only Back Assembly Layers"
 msgstr "裏面組立てレイヤーのみ表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1903
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Dコードの表示/非表示"
+msgstr "%s の表示/非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:1944
 #, c-format
@@ -33457,18 +33394,18 @@ msgid "Set opacity of %s"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2097
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "選択されたネットのラッツネストを表示"
+msgstr "%s のネットのラッツネストを表示/非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:2128
 msgid "Set netclass color"
 msgstr "ネットクラスをの色を設定"
 
 #: pcbnew/widgets/appearance_controls.cpp:2133
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight nets in %s"
-msgstr "ハイライトされたネット: %s"
+msgstr "%s のネットをハイライト"
 
 #: pcbnew/widgets/appearance_controls.cpp:2147
 msgid "Show all netclasses"
@@ -33684,7 +33621,6 @@ msgid "Building zone fills..."
 msgstr "ゾーンの塗り潰しを実行中..."
 
 #: pcbnew/zone_filler.cpp:308
-#, fuzzy
 msgid "Removing isolated copper islands..."
 msgstr "孤立した導体部分を削除中..."
 
