@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-03 15:04+0000\n"
+"PO-Revision-Date: 2021-02-03 22:53+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1461,7 +1461,7 @@ msgstr "出力ディレクトリー \"%s\" を作成できませんでした。\
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
-msgstr "再表示しません。"
+msgstr "再表示しません"
 
 #: common/confirm.cpp:128
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:248
@@ -6031,7 +6031,7 @@ msgstr "Y軸でのミラーリングは未だサポートされていません"
 
 #: common/widgets/footprint_preview_widget.cpp:98
 msgid "Footprint not found."
-msgstr "フットプリントが見つかりません"
+msgstr "フットプリントが見つかりません。"
 
 #: common/widgets/footprint_select_widget.cpp:135
 msgid "No default footprint"
@@ -8576,7 +8576,7 @@ msgstr "シンボル ライブラリー テーブル ファイルを選択して
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #, c-format
 msgid "File '%s' not found."
-msgstr "ファイル '%s' が見つかりません"
+msgstr "ファイル '%s' が見つかりません。"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
 #, c-format
@@ -11057,7 +11057,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "PCB エディターで置き換えられたシンボルの定数を更新"
+msgstr "PCB エディターで置き換えられたシンボルの定数を更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
@@ -11735,9 +11735,9 @@ msgid "Pins with \"no connection\" type are connected"
 msgstr "\"未接続\" タイプのピンが接続されています"
 
 #: eeschema/erc.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "ピン %s (コンポーネント %s) が接続されていません。"
+msgstr "ピン %s (コンポーネント %s) が接続されていません"
 
 #: eeschema/erc.cpp:602
 #, c-format
@@ -14519,7 +14519,7 @@ msgstr "シンボル ライブラリー \"%s\" の作成エラー"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:193
 #, c-format
 msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr "シンボル \"%s\" をライブラリー \"%s\" へ保存しました。"
+msgstr "シンボル \"%s\" をライブラリー \"%s\" へ保存しました"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:125
 #, c-format
@@ -14667,12 +14667,12 @@ msgstr "フットプリント '%s' はシンボルに割り当てられていま
 #: eeschema/tools/backannotate.cpp:195
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "フットプリント '%s' と '%s' が同じシンボルにリンクされています"
+msgstr "フットプリント '%s' と '%s' が同じシンボルにリンクされています。"
 
 #: eeschema/tools/backannotate.cpp:260
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "フットプリント '%s' のシンボルが見つかりません"
+msgstr "フットプリント '%s' のシンボルが見つかりません。"
 
 #: eeschema/tools/backannotate.cpp:289
 #, c-format
@@ -14683,7 +14683,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:304
 msgid "Cannot relink footprints because schematic is not fully annotated."
-msgstr "回路図が完全にアノテートされていないため、フットプリントを再リンクできません"
+msgstr "回路図が完全にアノテートされていないため、フットプリントを再リンクできません。"
 
 #: eeschema/tools/backannotate.cpp:329
 #, fuzzy, c-format
@@ -19525,7 +19525,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1005
 msgid "A layer thickness is < 0. Fix it"
-msgstr "レイヤーの厚さが負の値です。修正して下さい。"
+msgstr "レイヤーの厚さが負の値です。修正して下さい"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1049
 #, c-format
@@ -19732,7 +19732,7 @@ msgstr "指定なし"
 
 #: pcbnew/build_BOM_from_board.cpp:77
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr "部品表 (BOM) をエクスポートできません：基板にフットプリントがありません"
+msgstr "部品表 (BOM) をエクスポートできません：基板にフットプリントがありません。"
 
 #: pcbnew/build_BOM_from_board.cpp:87
 msgid "Save Bill of Materials"
@@ -19743,7 +19743,7 @@ msgstr "部品表を保存"
 #: pcbnew/dialogs/dialog_export_vrml.cpp:257
 #, c-format
 msgid "Unable to create file \"%s\""
-msgstr "ファイル \"%s\" を作成できません。"
+msgstr "ファイル \"%s\" を作成できません"
 
 #: pcbnew/build_BOM_from_board.cpp:107
 msgid "Designator"
@@ -19902,7 +19902,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"ロックされたフットプリントは再アノテートされません。"
+"ロックされたフットプリントは再アノテートされません"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 #, c-format
@@ -19920,7 +19920,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"裏面のフットプリントを %s から開始"
+"裏面のフットプリントを %s から開始します。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, fuzzy
@@ -23345,7 +23345,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr "一致したレイヤーのリストから選択されたレイヤーを削除"
+msgstr "一致したレイヤーのリストから選択されたレイヤーを削除します。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
@@ -23836,7 +23836,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
 msgid "Too large value for pad delta size."
-msgstr "パッドの デルタ サイズが大きすぎます"
+msgstr "パッドの デルタ サイズが大きすぎます。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1323
 #, fuzzy
@@ -24932,10 +24932,8 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"ルーティング中に重複部分を削除します。（例: 新しい配線が既存の配線と同じ接続"
-"であることが確実な場合、古い配線は削除されます）\n"
-"重複の削除は局所的に行われます。（現在ルーティング中の配線の始点と終点の間に"
-"あるものだけが対象です）"
+"ルーティング中に重複部分を削除します（例: 新しい配線が既存の配線と同じ接続であることが確実な場合、古い配線は削除されます）\n"
+"重複の削除は局所的に行われます （現在ルーティング中の配線の始点と終点の間にあるものだけが対象です）。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize pad connections"
@@ -24957,9 +24955,7 @@ msgstr "セグメントをスムーズに移動"
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
-msgstr ""
-"有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージ"
-"しようと試みます。（ドラッグモード）"
+msgstr "有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージしようと試みます (ドラッグモード)。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Allow DRC violations"
@@ -25453,7 +25449,7 @@ msgstr "外側のレイヤーを維持(&o)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
-msgstr "未使用のパッドを削除します。"
+msgstr "未使用のパッドを削除"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -25647,17 +25643,17 @@ msgstr "Shift+Alt"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 #: pcbnew/dialogs/panel_edit_options_base.cpp:206
 msgid "Remove item(s) from selection."
-msgstr "選択からアイテムを除外"
+msgstr "選択からアイテムを除外します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:135
 #: pcbnew/dialogs/panel_edit_options_base.cpp:216
 msgid "Toggle selected state of item(s)."
-msgstr "アイテムの選択状態を切り替え"
+msgstr "アイテムの選択状態を切り替えます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:226
 msgid "Clarify selection from menu."
-msgstr "明示的にメニューから選択"
+msgstr "明示的にメニューから選択します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:150
 msgid "Ctrl+Shift"
@@ -25789,7 +25785,7 @@ msgstr "新規フットプリントのテキスト アイテム デフォルト�
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
-msgstr "注: 空白のリファレンス指定子または定数はフットプリント名を使用します"
+msgstr "注: 空白のリファレンス指定子または定数はフットプリント名を使用します。"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -27756,7 +27752,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:123
 msgid "All KiCad Board Files"
-msgstr "全ての KiCad 基板ファイル..."
+msgstr "全ての KiCad 基板ファイル"
 
 #: pcbnew/files.cpp:161
 msgid "Open Board File"
@@ -28727,7 +28723,7 @@ msgstr "パッケージ内"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "%s を追加できません。(関連付けられたフットプリントがありません)"
+msgstr "%s を追加できません (関連付けられたフットプリントがありません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:158
 #, c-format
@@ -28742,13 +28738,12 @@ msgstr "%s を追加 (フットプリント \"%s\")"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:203
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr ""
-"%s をアップデートできません。(関連付けられたフットプリントがありません)"
+msgstr "%s をアップデートできません (関連付けられたフットプリントがありません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:215
 #, c-format
 msgid "Cannot update %s (footprint \"%s\" not found)."
-msgstr "%s をアップデートできません。(フットプリント \"%s\" が見つかりません)"
+msgstr "%s をアップデートできません (フットプリント \"%s\" が見つかりません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:223
 #, c-format
@@ -28853,8 +28848,7 @@ msgstr "重複したフットプリントが \"%s\" に見つかりました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:882
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr ""
-"未使用のフットプリント %s を削除することができません。(ロックされています)"
+msgstr "未使用のフットプリント %s を削除することができません (ロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, c-format
@@ -30313,7 +30307,7 @@ msgstr "不明な PCad レイヤー %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:747
 msgid "KiCad only supports 32 signal layers"
-msgstr "KiCad は 32 の信号層だけをサポートします。"
+msgstr "KiCad は 32 の信号層だけをサポートします"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "New Track"
@@ -30848,7 +30842,7 @@ msgstr "基板へフットプリントを挿入"
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
-msgstr "既に配線がある場合には、現在の設定の代わりにその配線幅を使用します。"
+msgstr "既に配線がある場合には、現在の設定の代わりにその配線幅を使用します"
 
 #: pcbnew/toolbars_pcb_editor.cpp:580
 msgid "Track: use netclass width"
@@ -31784,7 +31778,7 @@ msgstr "配線 & ビアをクリーンアップ..."
 
 #: pcbnew/tools/pcb_actions.cpp:446
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "冗長なアイテム、不足したアイテムなどをクリーンアップします"
+msgstr "冗長なアイテム、不足したアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:451
 msgid "Cleanup Graphics..."
@@ -31792,7 +31786,7 @@ msgstr "グラフィックスをクリーンアップ..."
 
 #: pcbnew/tools/pcb_actions.cpp:452
 msgid "Cleanup redundant items, etc."
-msgstr "冗長なアイテムなどをクリーンアップします"
+msgstr "冗長なアイテムなどをクリーンアップします。"
 
 #: pcbnew/tools/pcb_actions.cpp:459
 msgid "Add Microwave Gap"
