@@ -750,8 +750,9 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );
 
-            m_cur_grid->SetCellValue( row, COL_URI, relPath );
-            m_cur_grid->SetCellValue( row, COL_TYPE, kicadType );
+            auto model = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_cur_grid->GetTable() );
+            model->SetValue( row, COL_URI, relPath );
+            model->SetValue( row, COL_TYPE, kicadType );
         }
         else
         {
