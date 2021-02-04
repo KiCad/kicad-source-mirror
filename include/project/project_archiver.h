@@ -41,10 +41,11 @@ public:
      * @param aDestFile is the full path to the zip file to be created
      * @param aReporter is used to report status
      * @param aVerbose controls the verbosity of reported status messages
+     * @param aIncludeExtraFiles if true will archive legacy and output files
      * @return true if the archive was created successfully
      */
     bool Archive( const wxString& aSrcDir, const wxString& aDestFile, REPORTER& aReporter,
-                  bool aVerbose = true );
+                  bool aVerbose = true, bool aIncludeExtraFiles = false );
 
     /**
      * Extracts an archive of the current project over existing files

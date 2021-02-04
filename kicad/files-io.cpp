@@ -129,5 +129,5 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     PROJECT_ARCHIVER archiver;
 
-    archiver.Archive( currdirname, zipFile.GetFullPath(), reporter );
+    archiver.Archive( currdirname, zipFile.GetFullPath(), reporter, true, true );
 }
