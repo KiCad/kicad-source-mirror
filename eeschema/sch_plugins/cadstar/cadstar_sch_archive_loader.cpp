@@ -749,19 +749,19 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             if( conn.LayerID == wxT( "NO_SHEET" ) )
                 continue; // No point loading virtual connections. KiCad handles that internally
 
-            if( conn.Path.size() < 2 )
-            {
-                //Implied straight line connection between the two elements
-                POINT start = getLocationOfNetElement( net, conn.StartNode );
-                POINT end   = getLocationOfNetElement( net, conn.EndNode );
+            POINT start = getLocationOfNetElement( net, conn.StartNode );
+            POINT end = getLocationOfNetElement( net, conn.EndNode );
 
-                if( start.x == UNDEFINED_VALUE || end.x == UNDEFINED_VALUE )
-                    continue;
+            if( start.x == UNDEFINED_VALUE || end.x == UNDEFINED_VALUE )
+                continue;
 
-                conn.Path.clear();
-                conn.Path.push_back( start );
+            // Connections in CADSTAR are always implied between components even if the route
+            // doesn't start and end exactly at the connection points
+            if( conn.Path.size() < 1 || conn.Path.front() != start )
+                conn.Path.insert( conn.Path.begin(), start );
+
+            if( conn.Path.size() < 2 || conn.Path.back() != end )
                 conn.Path.push_back( end );
-            }
 
             bool      firstPt  = true;
             bool      secondPt = false;
