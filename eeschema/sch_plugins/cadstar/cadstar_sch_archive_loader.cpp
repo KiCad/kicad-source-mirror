@@ -125,33 +125,55 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
         EDA_RECT sheetBoundingBox;
 
         for( auto item : sheet->GetScreen()->Items() )
-            sheetBoundingBox.Merge( item->GetBoundingBox() );
+        {
+            EDA_RECT bbox;
 
+            // Don't use the fields of the components to calculate their bounding box
+            // (hidden fields could be very long and artificially enlarge the sheet bounding box)
+            if( item->Type() == SCH_COMPONENT_T )
+                bbox = static_cast<SCH_COMPONENT*>( item )->GetBodyBoundingBox();
+            else
+                bbox = item->GetBoundingBox();
+
+            sheetBoundingBox.Merge( bbox );
+        }
+
+        auto roundToNearest100mil =
+            []( int aNumber ) -> int
+            {
+                int error = aNumber % Mils2iu( 100 );
+
+                if( abs( error ) > Mils2iu( 50 ) )
+                 return aNumber + ( sign(error) * Mils2iu( 100 ) ) - error;
+                else
+                  return aNumber - error;
+            };
+
+        // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
+        // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
+        // the margin to the nearest 100mil, ensuring all items remain on the grid
         wxSize targetSheetSize = sheetBoundingBox.GetSize();
-        targetSheetSize.IncBy( Mils2iu( 400 ), Mils2iu( 400 ) );
+        int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
+        int    margin = ( (double) longestSide * 0.03);
+        margin = roundToNearest100mil( margin );
+        targetSheetSize.IncBy( margin * 2, margin * 2 );
 
-        // Get current Eeschema sheet size.
-        wxSize    pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
+        // Update page size always
         PAGE_INFO pageInfo   = sheet->GetScreen()->GetPageSettings();
-
-        // Increase if necessary
-        if( pageSizeIU.x < targetSheetSize.x )
-            pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
-
-        if( pageSizeIU.y < targetSheetSize.y )
-            pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
+        pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
+        pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
 
         // Set the new sheet size.
         sheet->GetScreen()->SetPageSettings( pageInfo );
 
-        pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
+        wxSize  pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
         wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
         wxPoint itemsCentre = sheetBoundingBox.Centre();
 
         // round the translation to nearest 100mil to place it on the grid.
         wxPoint translation = sheetcentre - itemsCentre;
-        translation.x       = translation.x - translation.x % Mils2iu( 100 );
-        translation.y       = translation.y - translation.y % Mils2iu( 100 );
+        translation.x = roundToNearest100mil( translation.x );
+        translation.y = roundToNearest100mil( translation.y );
 
         // Translate the items.
         std::vector<SCH_ITEM*> allItems;
