@@ -2151,7 +2151,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                         || poly_outline.Outline( 0 ).PointCount() < 3 )
                                 {
                                     wxLogError( wxString::Format(
-                                            _( "Invalid custom pad named '%s'.  Replacing with circlular pad." ),
+                                            _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
                                             custom_name.c_str() ) );
                                     newpad->SetShape( PAD_SHAPE_CIRCLE );
                                 }
