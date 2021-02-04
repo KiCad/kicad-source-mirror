@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-04 13:23+0000\n"
+"PO-Revision-Date: 2021-02-04 21:22+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -146,11 +146,11 @@ msgstr "フットプリントがロードされていません。"
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr ""
+msgstr "フットプリントのアウトラインが欠落しているか、不正な形式です。完全な分析のためにフットプリント チェッカーを実行します。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:493
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "ボードのアウトラインが欠落しているか、不正な形式です。完全な分析のためにDRCを実行します。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -7770,9 +7770,8 @@ msgid "Update Options"
 msgstr "更新オプション"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr "ライブラリーにないフィールドを削除"
+msgstr "ライブラリーのシンボルにないフィールドを削除"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
@@ -7780,9 +7779,8 @@ msgid "Removes fields that do not occur in the original library symbols"
 msgstr "オリジナル ライブラリー シンボルに存在しないフィールドを削除します"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "ライブラリー内で空のフィールドをリセット"
+msgstr "ライブラリーのシンボルにない場合、フィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 msgid "Update/reset field visibilities"
@@ -8000,13 +7998,13 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/pin_type.cpp:124
 msgid "Up"
-msgstr "上へ"
+msgstr "上"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/pin_type.cpp:125
 msgid "Down"
-msgstr "下へ"
+msgstr "下"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
@@ -8473,7 +8471,7 @@ msgstr "名前でフィールドをフィルター:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
 msgid "Filter items by parent reference designator:"
-msgstr "親のリファレンス指定子でフィルターされたアイテム:"
+msgstr "親のリファレンス指定子でアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
@@ -8481,7 +8479,7 @@ msgstr "親シンボル ライブラリー IDでアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr "親のシンボル タイプでフィルターされたアイテム:"
+msgstr "親のシンボル タイプでアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8498,7 +8496,7 @@ msgstr "ネットでアイテムをフィルター:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:145
 msgid "Set To"
-msgstr "セット"
+msgstr "セットする値"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:158
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
@@ -15617,9 +15615,8 @@ msgid "Symbol Move Activate"
 msgstr "シンボル移動のアクティベート"
 
 #: eeschema/tools/ee_actions.cpp:742
-#, fuzzy
 msgid "Align Elements to Grid"
-msgstr "右端を揃える"
+msgstr "グリッドに揃える"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
 #, fuzzy
