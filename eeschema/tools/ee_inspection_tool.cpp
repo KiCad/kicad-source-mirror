@@ -204,7 +204,6 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 
     std::vector<wxString> messages;
     wxString              msg;
-    int                   dup_error = 0;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
@@ -223,15 +222,13 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
             nextName = " '" + next->GetName() + "'";
 
-        dup_error++;
-
         if( part->HasConversion() && next->GetConvert() )
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
-                               " of converted" ),
+                               " of converted." ),
                             next->GetNumber(),
                             nextName,
                             next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
@@ -241,9 +238,9 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
-                               " in units %c and %c of converted" ),
+                               " in units %c and %c of converted." ),
                             next->GetNumber(),
                             nextName,
                             next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
@@ -258,8 +255,8 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         {
             if( part->GetUnitCount() <= 1 )
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>" ),
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>." ),
                             next->GetNumber(),
                             nextName,
                             next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
@@ -269,9 +266,9 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
                                " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
-                               " in units %c and %c" ),
+                               " in units %c and %c." ),
                             next->GetNumber(),
                             nextName,
                             next->GetPosition().x / 1000.0, -next->GetPosition().y / 1000.0,
@@ -283,24 +280,12 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
             }
         }
 
-        msg += wxT( ".<br><br>" );
+        msg += wxT( "<br><br>" );
         messages.push_back( msg );
     }
 
-    // Test for off grid pins:
-    int offgrid_error = 0;
-
     for( LIB_PIN* pin : pinList )
     {
-        if( ( (pin->GetPosition().x % clamped_grid_size) == 0 )
-                && ( (pin->GetPosition().y % clamped_grid_size) == 0 ) )
-        {
-            continue;
-        }
-
-        // "pin" is off grid here.
-        offgrid_error++;
-
         wxString pinName = pin->GetName();
 
         if( pinName.IsEmpty() || pinName == "~" )
@@ -308,52 +293,110 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
         else
             pinName = "'" + pinName + "'";
 
-        if( part->HasConversion() && pin->GetConvert() )
+        if( !part->IsPower()
+                && pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+                && !pin->IsVisible() )
         {
-            if( part->GetUnitCount() <= 1 )
+            // hidden power pin
+            if( part->HasConversion() && pin->GetConvert() )
             {
-                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-                               " of converted" ),
-                            pin->GetNumber(),
-                            pinName,
-                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                if( part->GetUnitCount() <= 1 )
+                {
+                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " of converted." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                }
+                else
+                {
+                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " in unit %c of converted." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                'A' + pin->GetUnit() - 1 );
+                }
             }
             else
             {
-                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-                               " in symbol %c of converted" ),
-                            pin->GetNumber(),
-                            pinName,
-                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                            'A' + pin->GetUnit() - 1 );
+                if( part->GetUnitCount() <= 1 )
+                {
+                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                }
+                else
+                {
+                    msg.Printf( _( "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " in unit %c." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                'A' + pin->GetUnit() - 1 );
+                }
             }
-        }
-        else
-        {
-            if( part->GetUnitCount() <= 1 )
-            {
-                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>" ),
-                            pin->GetNumber(),
-                            pinName,
-                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
-            }
-            else
-            {
-                msg.Printf( _( "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-                               " in symbol %c" ),
-                            pin->GetNumber(),
-                            pinName,
-                            pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
-                            'A' + pin->GetUnit() - 1 );
-            }
+
+            msg += wxT( "<br>" );
+            msg += _( "(Hidden power pins will drive their pin names on to any connected nets.)" );
+            msg += wxT( "<br><br>" );
+            messages.push_back( msg );
         }
 
-        msg += wxT( ".<br><br>" );
-        messages.push_back( msg );
+        if( ( (pin->GetPosition().x % clamped_grid_size) != 0 )
+                || ( (pin->GetPosition().y % clamped_grid_size) != 0 ) )
+        {
+            // pin is off grid
+            if( part->HasConversion() && pin->GetConvert() )
+            {
+                if( part->GetUnitCount() <= 1 )
+                {
+                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " of converted." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                }
+                else
+                {
+                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " in unit %c of converted." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                'A' + pin->GetUnit() - 1 );
+                }
+            }
+            else
+            {
+                if( part->GetUnitCount() <= 1 )
+                {
+                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0 );
+                }
+                else
+                {
+                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
+                                   " in unit %c." ),
+                                pin->GetNumber(),
+                                pinName,
+                                pin->GetPosition().x / 1000.0, -pin->GetPosition().y / 1000.0,
+                                'A' + pin->GetUnit() - 1 );
+                }
+            }
+
+            msg += wxT( "<br><br>" );
+            messages.push_back( msg );
+        }
     }
 
-    if( !dup_error && !offgrid_error )
-        DisplayInfoMessage( m_frame, _( "No off grid or duplicate pins were found." ) );
+    if( messages.empty() )
+    {
+        DisplayInfoMessage( m_frame, _( "No symbol issues found." ) );
+    }
     else
     {
         wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
