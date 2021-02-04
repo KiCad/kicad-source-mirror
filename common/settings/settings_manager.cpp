@@ -1017,8 +1017,10 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
                 return dt;
             };
 
-    // Project not saved yet
-    if( Prj().GetProjectPath().empty() )
+    wxFileName projectPath( Prj().GetProjectPath() );
+
+    // Skip backup if project path isn't valid or writeable
+    if( !projectPath.IsOk() || !projectPath.Exists() || !projectPath.IsDirWritable() )
         return true;
 
     wxString backupPath = GetProjectBackupsPath();
