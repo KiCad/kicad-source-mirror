@@ -1101,6 +1101,8 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
         setting->ctl_visibility->SetValue( isVisible );
     }
 
+    m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
+
     m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
     m_frame->GetCanvas()->Refresh();
 }
