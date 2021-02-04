@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-04 21:22+0000\n"
+"PO-Revision-Date: 2021-02-04 22:37+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -1546,12 +1546,12 @@ msgstr "Επαναφορά"
 #: pcbnew/dialogs/dialog_drc.cpp:241 pcbnew/microwave/microwave_polygon.cpp:125
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Cancel"
-msgstr "Άκυρο"
+msgstr "Ακύρωση"
 
 #: common/confirm.cpp:229 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
 msgid "OK"
-msgstr "OK"
+msgstr "Εντάξει"
 
 #: common/confirm.cpp:286
 msgid "Info"
