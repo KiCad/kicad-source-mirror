@@ -77,6 +77,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
                     if( pin )
                     {
+                        // Get pin position in true schematic coordinate
                         pos = pin->GetPosition();
                         foundItem = pin;
                         break;
@@ -105,11 +106,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
             m_frame->Schematic().SetCurrentSheet( *sheetWithComponentFound );
             m_frame->DisplayCurrentSheet();
         }
-
-        wxPoint delta;
-        pos -= component->GetPosition();
-        delta = component->GetTransform().TransformCoordinate( pos );
-        pos   = delta + component->GetPosition();
 
         if( crossProbingSettings.center_on_items )
         {
