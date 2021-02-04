@@ -595,6 +595,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
     }
 
+    // Get rid of any existing warnings about the old board
+    GetInfoBar()->Dismiss();
+
     // Loading a complex project and build data can be time
     // consuming, so display a busy cursor
     wxBusyCursor dummy;

@@ -131,6 +131,9 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 backed_up = true;
         }
 
+        // Silence popups if legacy file is read-only
+        wxLogNull doNotLog;
+
         wxConfigBase::DontCreateOnDemand();
         auto cfg = std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), aPath.GetFullPath() );
 
