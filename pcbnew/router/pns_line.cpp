@@ -449,7 +449,13 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
     int i;
     int d = 2;
 
-    if( aOrigin.SegmentCount() == 1)
+    wxASSERT( aOrigin.PointCount() > 0 );
+
+    if( aOrigin.PointCount() == 1 )
+    {
+        return DIRECTION_45().BuildInitialTrace( aOrigin.CPoint( 0 ), aP );
+    }
+    else if( aOrigin.SegmentCount() == 1 )
     {
         DIRECTION_45 dir( aOrigin.CPoint( 0 ) - aOrigin.CPoint( 1 ) );
 
