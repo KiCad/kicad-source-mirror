@@ -2045,6 +2045,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     wxSize unscaledTextSize;
     unscaledTextSize.x = getKiCadLength( tc.Width );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
+    // to work well for most fonts.
+    if( unscaledTextSize.x == 0 )
+        unscaledTextSize.x = getKiCadLength( tc.Height );
+
     unscaledTextSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
     txt->SetTextSize( unscaledTextSize );
 
@@ -2109,8 +2115,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
     if( aScalingFactor != 1.0 )
     {
         wxSize scaledTextSize;
-        scaledTextSize.x = KiROUND( (double) getKiCadLength( tc.Width ) * aScalingFactor );
-        scaledTextSize.y = KiROUND( (double) getKiCadLength( tc.Height ) * aScalingFactor );
+        scaledTextSize.x = KiROUND( (double) unscaledTextSize.x * aScalingFactor );
+        scaledTextSize.y = KiROUND( (double) unscaledTextSize.y * aScalingFactor );
         txt->SetTextSize( scaledTextSize );
         txt->SetTextThickness(
                 KiROUND( (double) getKiCadLength( tc.LineWidth ) * aScalingFactor ) );
@@ -2669,6 +2675,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
 
     wxSize txtSize;
     txtSize.x = getKiCadLength( tc.Width );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
+    // to work well for most fonts.
+    if( txtSize.x == 0 )
+        txtSize.x = getKiCadLength( tc.Height );
+
     txtSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
     txt->SetTextSize( txtSize );
     txt->SetKeepUpright( false ); //Keeping it upright seems to result in incorrect orientation

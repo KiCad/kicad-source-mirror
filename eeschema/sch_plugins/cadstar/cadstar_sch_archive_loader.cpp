@@ -2252,7 +2252,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarT
 {
     TEXTCODE textCode = getTextCode( aCadstarTextCodeID );
     int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
-    aKiCadTextItem->SetTextWidth( getKiCadLength( textCode.Width ) );
+    int      textWidth = getKiCadLength( textCode.Width );
+
+    // The width is zero for all non-cadstar fonts. Using a width equal to the height seems
+    // to work well for most fonts.
+    if( textWidth == 0 )
+        textWidth = getKiCadLength( textCode.Height );
+
+    aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
 
