@@ -227,6 +227,15 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     localSettings.m_SelectionFilter = filterOpts;
 
-    if( !Prj().IsNullProject() )
+    /**
+     * The below automatically saves the project on exit, which is what we want to do if the project
+     * already exists.  If the project doesn't already exist, we don't want to create it through
+     * this function call, because this will happen automatically when the user exits even if they
+     * didn't save a new board with a valid filename (usually an imported board).
+     *
+     * The explicit save action in PCB_EDIT_FRAME::SavePcbFile will call SaveProject directly,
+     * so if the user does choose to save the board, the project file will get created then.
+     */
+    if( !Prj().IsNullProject() && fn.Exists() )
         GetSettingsManager()->SaveProject();
 }

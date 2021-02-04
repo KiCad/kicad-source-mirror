@@ -62,15 +62,17 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 void PCB_BASE_EDIT_FRAME::doCloseWindow()
 {
     SETTINGS_MANAGER* mgr = GetSettingsManager();
+    wxFileName projectName( Prj().GetProjectFullName() );
 
-    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( projectName.GetPath() )
+            && projectName.Exists() )
     {
         GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + "fp-info-cache" );
     }
 
     // Close the project if we are standalone, so it gets cleaned up properly
     if( mgr->IsProjectOpen() && Kiface().IsSingle() )
-        mgr->UnloadProject( &Prj() );
+        mgr->UnloadProject( &Prj(), false );
 }
 
 
