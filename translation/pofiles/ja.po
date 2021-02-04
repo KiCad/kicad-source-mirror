@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-04 22:37+0000\n"
+"PO-Revision-Date: 2021-02-04 23:29+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3335,7 +3335,7 @@ msgstr "uVia サイズ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Hole"
-msgstr "穴"
+msgstr "uVia穴"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -5777,9 +5777,8 @@ msgid "Single Layer View Mode"
 msgstr "単一レイヤー表示モード"
 
 #: common/tool/actions.cpp:528
-#, fuzzy
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "非アクティブ レイヤーをノーマル、薄消し、非表示にトグルで切り替える"
+msgstr "非アクティブ レイヤーを標準と非表示で切り替える"
 
 #: common/tool/actions.cpp:532
 msgid "Single Layer View Mode (3-state)"
@@ -5787,7 +5786,7 @@ msgstr "単一レイヤー表示モード (3 状態)"
 
 #: common/tool/actions.cpp:533
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr "非アクティブ レイヤーをノーマル、薄消し、非表示にトグルで切り替える"
+msgstr "非アクティブ レイヤーを標準、ぼかし、非表示で切り替える"
 
 #: common/tool/actions.cpp:537
 msgid "Select item(s)"
@@ -25953,9 +25952,8 @@ msgid "Minimum track width:"
 msgstr "最小配線幅:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:214
-#, fuzzy
 msgid "Minimum annular width:"
-msgstr "最小幅:"
+msgstr "最小アニュラー幅:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:228
 msgid "Minimum via diameter:"
@@ -25991,9 +25989,8 @@ msgid "Minimum uVia diameter:"
 msgstr "最小 uVia 直径:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:362
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "最小 uVia サイズ:"
+msgstr "最小 uVia 穴:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:385
 msgid "Silkscreen"
@@ -27240,12 +27237,12 @@ msgstr ""
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "エラー: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "エラー: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
@@ -27554,7 +27551,7 @@ msgstr "テキストの値をチェック..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:104
 msgid "Checking silkscreen for overlapping items..."
-msgstr ""
+msgstr "シルクスクリーンのオーバーラップしたアイテムをチェック..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:212
 #, c-format
@@ -27563,7 +27560,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr ""
+msgstr "シルクスクリーンがハンダ マスクに切り取られる可能性をチェック..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:171
 #, c-format
@@ -30407,7 +30404,7 @@ msgstr "?"
 #: pcbnew/router/pns_kicad_iface.cpp:992
 #, c-format
 msgid "%s is malformed."
-msgstr ""
+msgstr "%s は不正です。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:995
 msgid ""
@@ -33027,13 +33024,12 @@ msgid "Non-active layers will be shown in full color"
 msgstr "非アクティブ レイヤーをフルカラーで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
-#, fuzzy
 msgid "Dim"
-msgstr "Din"
+msgstr "ぼかし"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
-msgstr ""
+msgstr "非アクティブ レイヤーをぼかしで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
