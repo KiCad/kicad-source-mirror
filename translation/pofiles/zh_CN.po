@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-01 23:06+0000\n"
+"PO-Revision-Date: 2021-02-04 12:58+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -451,7 +451,7 @@ msgstr "显示胶粘层"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
-msgstr "用户图层（在真实渲染模式中不显示）"
+msgstr "用户图层 (在真实渲染模式中不显示)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
@@ -681,12 +681,12 @@ msgstr "底部光："
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
 msgid "Elevation (degrees)"
-msgstr "海拔（度）"
+msgstr "海拔 (度)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:434
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:451
 msgid "Azimuth (degrees)"
-msgstr "方位角（度）"
+msgstr "方位角 (度)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
 msgid "1:"
@@ -789,7 +789,7 @@ msgstr "中心轴旋转"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "中心轴旋转（点击鼠标中键）"
+msgstr "中心轴旋转 (点击鼠标中键)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -961,7 +961,7 @@ msgstr "过程纹理"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:237
 msgid "Apply procedural textures to materials (slow)"
-msgstr "将过程纹理应用于材质（慢）"
+msgstr "将过程纹理应用于材质 (慢)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Add Floor"
@@ -977,7 +977,7 @@ msgstr "折射"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Render materials with refractive properties on final render (slow)"
-msgstr "在最终渲染中渲染具有折射属性的材质（慢）"
+msgstr "在最终渲染中渲染具有折射属性的材质 (慢)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Reflections"
@@ -985,7 +985,7 @@ msgstr "反射"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Render materials with reflective properties on final render (slow)"
-msgstr "在最终渲染中渲染具有反射属性的材质（慢）"
+msgstr "在最终渲染中渲染具有反射属性的材质 (慢)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
