@@ -238,11 +238,17 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     auto insideZone =
             [&]( ZONE* zone ) -> bool
             {
-                if( !zone )
+                if( !zone || zone == item )
                     return false;
 
                 if( !zone->GetCachedBoundingBox().Intersects( itemBBox ) )
                     return false;
+
+                // Collisions include touching, so we need to deflate outline by enough to
+                // exclude touching.  This is particularly important for detecting copper fills
+                // as they will be exactly touching along the entire border.
+                SHAPE_POLY_SET zoneOutline = *zone->Outline();
+                zoneOutline.Deflate( Millimeter2iu( 0.001 ), 4 );
 
                 if( item->GetFlags() & HOLE_PROXY )
                 {
@@ -251,14 +257,14 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         PAD*                 pad = static_cast<PAD*>( item );
                         const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
 
-                        return zone->Outline()->Collide( holeShape );
+                        return zoneOutline.Collide( holeShape );
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
                         VIA*               via = static_cast<VIA*>( item );
                         const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
 
-                        return zone->Outline()->Collide( &holeShape );
+                        return zoneOutline.Collide( &holeShape );
                     }
 
                     return false;
@@ -285,7 +291,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         }
                         else
                         {
-                            return zone->Outline()->Collide( &courtyard.Outline( 0 ) );
+                            return zoneOutline.Collide( &courtyard.Outline( 0 ) );
                         }
                     }
 
@@ -300,7 +306,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                         }
                         else
                         {
-                            return zone->Outline()->Collide( &courtyard.Outline( 0 ) );
+                            return zoneOutline.Collide( &courtyard.Outline( 0 ) );
                         }
                     }
 
@@ -311,23 +317,25 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     ZONE* testZone = static_cast<ZONE*>( item );
 
-                    if( !zone->GetCachedBoundingBox().Contains( itemBBox ) )
-                        return false;
-
-                    for( auto i = testZone->Outline()->CIterate( 0 ); i; i++ )
+                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                     {
-                        if( !zone->Outline()->Contains( *i ) )
-                            return false;
+                        if( testZone->IsOnLayer( layer ) )
+                        {
+                            const SHAPE_POLY_SET& fill = testZone->GetFilledPolysList( layer );
+
+                            if( zoneOutline.Collide( &fill ) )
+                                return true;
+                        }
                     }
 
-                    return true;
+                    return false;
                 }
                 else
                 {
                     if( !shape )
                         shape = item->GetEffectiveShape( context->GetLayer() );
 
-                    return zone->Outline()->Collide( shape.get() );
+                    return zoneOutline.Collide( shape.get() );
                 }
             };
 
