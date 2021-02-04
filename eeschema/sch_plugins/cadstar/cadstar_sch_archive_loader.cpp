@@ -507,8 +507,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
             {
                 // There should only be one pin and we'll use that to set the position
-                TERMINAL& symbolTerminal    = libSymDef.Terminals.begin()->second;
+                TERMINAL& symbolTerminal = libSymDef.Terminals.begin()->second;
                 wxPoint   terminalPosOffset = symbolTerminal.Position - libSymDef.Origin;
+                double    rotateDeciDegree = getAngleTenthDegree( sym.OrientAngle );
+
+                if( sym.Mirror )
+                    rotateDeciDegree += 1800.0;
+
+                RotatePoint( &terminalPosOffset, -rotateDeciDegree );
 
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( sym.Origin + terminalPosOffset ) );
@@ -2230,11 +2236,11 @@ LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyleDeciDeg(
     if( oDeg >= -450 && oDeg <= 450 )
         spinStyle = LABEL_SPIN_STYLE::RIGHT; // 0deg
     else if( oDeg >= 450 && oDeg <= 1350 )
-        spinStyle = LABEL_SPIN_STYLE::BOTTOM; // 90deg
+        spinStyle = LABEL_SPIN_STYLE::UP; // 90deg
     else if( oDeg >= 1350 || oDeg <= -1350 )
         spinStyle = LABEL_SPIN_STYLE::LEFT; // 180deg
     else
-        spinStyle = LABEL_SPIN_STYLE::UP; // 270deg
+        spinStyle = LABEL_SPIN_STYLE::BOTTOM; // 270deg
 
     return spinStyle;
 }
