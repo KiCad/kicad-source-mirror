@@ -293,7 +293,6 @@ public:
 
     void SetPosition( const wxPoint& aPos ) override
     {
-        printf("Setting the arc position\n");
         m_Start = aPos;
     }
 
