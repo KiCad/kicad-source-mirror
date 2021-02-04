@@ -22,7 +22,7 @@
  */
 
 /**
- * @file test_altium_parserr.cpp
+ * @file test_altium_parser.cpp
  * Test suite for #ALTIUM_PARSER
  */
 

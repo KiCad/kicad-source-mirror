@@ -48,6 +48,8 @@ set( QA_EESCHEMA_SRCS
     ${CMAKE_SOURCE_DIR}/qa/common/test_format_units.cpp
     ${CMAKE_SOURCE_DIR}/qa/common/test_array_options.cpp
 
+    sch_plugins/altium/test_altium_parser_sch.cpp
+
     test_eagle_plugin.cpp
     test_lib_arc.cpp
     test_lib_part.cpp
