@@ -561,6 +561,17 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     pin->Rotate( sheet->GetBoundingBox().GetCenter() );
                 }
             }
+            else if( item->Type() == SCH_FIELD_T )
+            {
+                if( item->GetParent()->IsSelected() )
+                {
+                    // parent will rotate us
+                }
+                else
+                {
+                    item->Rotate( rotPoint );
+                }
+            }
             else
             {
                 item->Rotate( rotPoint );
