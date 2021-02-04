@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-04 21:22+0000\n"
+"PO-Revision-Date: 2021-02-04 22:37+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -491,7 +491,7 @@ msgstr "カメラ オプション"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
 msgid "Rotation Increment:"
-msgstr "回転増加:"
+msgstr "回転の増分:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:522 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -594,7 +594,7 @@ msgstr "床面を追加"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr "アンチ-エイリアス"
+msgstr "アンチエイリアス"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:264
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -602,9 +602,8 @@ msgid "Post-processing"
 msgstr "後処理"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:279
-#, fuzzy
 msgid "Number of Samples"
-msgstr "パッドの数"
+msgstr "サンプル数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:283
 msgid "Spread Factor %"
@@ -658,23 +657,20 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "既存のホットキー設定ファイルをロード"
+msgstr "光源の設定"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
 msgid "Ambient camera light:"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "右上"
+msgstr "トップライト:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "右下"
+msgstr "ボトムライト:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -2357,7 +2353,7 @@ msgid "Select Page Layout Description File"
 msgstr "ページ レイアウト記述ファイルを選択"
 
 #: common/dialogs/dialog_page_settings.cpp:795
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The page layout description file name has changed.\n"
 "Do you want to use the relative path:\n"
@@ -2366,10 +2362,10 @@ msgid ""
 "\"%s\"?"
 msgstr ""
 "ページ レイアウト記述ファイルの名前は変更されています。\n"
-"\n"
-"\"%2$s\"\n"
-"の代わりに相対パス\n"
-"\"%1$s\" を使用しますか?"
+"相対パス:\n"
+"\"%s\" を\n"
+"\"%s\"\n"
+"の代わりに使用しますか?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -3062,7 +3058,7 @@ msgstr "セッション"
 
 #: common/dialogs/panel_common_settings_base.cpp:286
 msgid "Remember open files for next project launch"
-msgstr "次のプロジェクト起動のため、開いているファイルを記憶する"
+msgstr "次のプロジェクト起動のために開いているファイルを記憶"
 
 #: common/dialogs/panel_common_settings_base.cpp:288
 msgid ""
@@ -3161,18 +3157,16 @@ msgid "Left button drag:"
 msgstr "左ボタン ドラッグ:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "矩形を描画"
+msgstr "選択の矩形を描画"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "選択したオブジェクトをドラッグ、選択中でなければ選択の矩形を描画"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "選択されたアイテムをドラッグ"
+msgstr "任意のオブジェクトをドラッグ (選択中であるかにかかわらず)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -5461,9 +5455,8 @@ msgid "Paste Special..."
 msgstr "特殊な貼り付け..."
 
 #: common/tool/actions.cpp:174
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "クリップボードからアイテムを貼り付け"
+msgstr "オプションを指定してクリップボードからアイテムを貼り付け"
 
 #: common/tool/actions.cpp:179 eeschema/tools/ee_actions.cpp:132
 msgid "Duplicate"
@@ -7808,14 +7801,12 @@ msgid "Select with Browser"
 msgstr "ブラウザーで選択"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "選択されたフットプリントを配置"
+msgstr "繰り返しコピーを配置"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:145
-#, fuzzy
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "保存するシンボルが選択されていません。"
+msgstr "以降のクリックのためにシンボルを選択したままにします。"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place all units"
@@ -8135,14 +8126,12 @@ msgid "Errors, Warnings and Exclusions"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:274 eeschema/dialogs/dialog_erc.cpp:346
-#, fuzzy
 msgid "Annotation not complete. ERC cannot be run."
-msgstr "アノテーション完了。"
+msgstr "アノテーションは未完了です。ERCは実行できません。"
 
 #: eeschema/dialogs/dialog_erc.cpp:276 eeschema/dialogs/dialog_erc.cpp:348
-#, fuzzy
 msgid "Show Annotation dialog."
-msgstr "アノテーションの順番"
+msgstr "アノテーション ダイアログを表示します。"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -10751,9 +10740,8 @@ msgstr "テーブル名"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:136
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
-#, fuzzy
 msgid "Alternate Assignment"
-msgstr "自動的にレイヤーを配置"
+msgstr "代替割り当て"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -11493,10 +11481,8 @@ msgstr "ニックネーム '%s' のライブラリーは既に存在します。
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:466
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:847
-#, fuzzy
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr ""
-"このライブラリーを追加した後でライブラリーのニックネームを変更して下さい。"
+msgstr "このライブラリを追加した後、ニックネームの1つを変更する必要があります。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:485
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
@@ -11770,14 +11756,12 @@ msgid "Pin not connected"
 msgstr "ピン未接続"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input pin not driven by any Output pins"
-msgstr "ピンは他のピンに接続されていますが、駆動するピンがありません"
+msgstr "入力ピンが出力ピンによって駆動されていない"
 
 #: eeschema/erc_item.cpp:58
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "ピンは他のピンに接続されていますが、駆動するピンがありません"
+msgstr "電源入力ピンが電源出力ピンによって駆動されていない"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
@@ -14597,9 +14581,8 @@ msgid "no library selected"
 msgstr "ライブラリーが未選択です"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
-#, fuzzy
 msgid "Choose symbol"
-msgstr "電源シンボル"
+msgstr "シンボルを選択"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
@@ -14685,19 +14668,19 @@ msgid "Cannot relink footprints because schematic is not fully annotated."
 msgstr "回路図が完全にアノテートされていないため、フットプリントを再リンクできません。"
 
 #: eeschema/tools/backannotate.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "%s リファレンス指定子を %s へ変更します。"
+msgstr "'%s' リファレンス指定子を '%s' へ変更します。"
 
 #: eeschema/tools/backannotate.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "%s のフットプリントを \"%s\" から \"%s\" へ変更します。"
+msgstr "%s のフットプリントを '%s' から '%s' へ変更します。"
 
 #: eeschema/tools/backannotate.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "%s の定数を %s から %s に変更します。"
+msgstr "%s の定数を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:389
 #, fuzzy, c-format
@@ -14707,7 +14690,7 @@ msgstr "ネットリスト ファイル \"%s\" を開くことができません
 #: eeschema/tools/backannotate.cpp:532
 #, fuzzy, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "%s のフットプリントを \"%s\" から \"%s\" へ変更します。"
+msgstr "%s のネットのラベルを '%s' から '%s' へ変更します。"
 
 #: eeschema/tools/backannotate.cpp:557
 #, fuzzy, c-format
@@ -25218,7 +25201,7 @@ msgstr "移動先レイヤー:"
 
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 msgid "Swap Layers"
-msgstr "レイヤーを入替"
+msgstr "レイヤーを入れ替え"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:111
 msgid "Modified alignment target"
@@ -29311,9 +29294,9 @@ msgid "PCB Text"
 msgstr "PCBテキスト"
 
 #: pcbnew/pcb_text.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text '%s' on %s"
-msgstr "基板上のテキスト \"%s\" (%s)"
+msgstr "基板上のテキスト '%s' ( %s 上)"
 
 #: pcbnew/pcbnew.cpp:366
 msgid ""
@@ -30465,9 +30448,8 @@ msgid "Tuned: skew "
 msgstr "調整済: 遅延(スキュー) "
 
 #: pcbnew/router/pns_router.cpp:195
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr "禁止エリア内または基板外形で配線を開始することはできません。"
+msgstr "メッキなし穴から配線を開始することはできません。"
 
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
@@ -30479,14 +30461,12 @@ msgid "Rule area disallows tracks."
 msgstr ""
 
 #: pcbnew/router/pns_router.cpp:218
-#, fuzzy
 msgid "Cannot start routing from a text item."
-msgstr "禁止エリア内または基板外形で配線を開始することはできません。"
+msgstr "テキストアイテムから配線を開始することはできません。"
 
 #: pcbnew/router/pns_router.cpp:223
-#, fuzzy
 msgid "Cannot start routing from a graphic."
-msgstr "禁止エリア内または基板外形で配線を開始することはできません。"
+msgstr "図形から配線を開始することはできません。"
 
 #: pcbnew/router/pns_router.cpp:269 pcbnew/router/pns_router.cpp:325
 msgid "The routing start point violates DRC."
@@ -31066,9 +31046,8 @@ msgid "Diameter constraints: min %s max %s."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:550
-#, fuzzy
 msgid "Via Annular Width"
-msgstr "ネット クラスの幅"
+msgstr "ビアのアニュラー幅"
 
 #: pcbnew/tools/board_inspection_tool.cpp:552
 msgid "Via annular width resolution for:"
@@ -31561,9 +31540,8 @@ msgid "Copy with Reference"
 msgstr "リファレンスで移動"
 
 #: pcbnew/tools/pcb_actions.cpp:252
-#, fuzzy
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "指定された開始位置で選択されたアイテムを移動"
+msgstr "指定された開始位置で選択されたアイテムをクリップボードにコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 msgid "Duplicate and Increment"
@@ -32381,9 +32359,8 @@ msgid "Toggle Layer"
 msgstr "レイヤーを切替"
 
 #: pcbnew/tools/pcb_actions.cpp:1011
-#, fuzzy
 msgid "Switch between layers in active layer pair"
-msgstr "アクティブなレイヤー ペアを変更"
+msgstr "アクティブなレイヤーペアの間でレイヤーを切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1018
 msgid "Increase Layer Opacity"
@@ -32859,9 +32836,9 @@ msgid "Drill"
 msgstr "ドリル"
 
 #: pcbnew/track.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Min Annular Width: %s"
-msgstr "最小幅: %s"
+msgstr "最小アニュラー幅: %s"
 
 #: pcbnew/track.cpp:721
 msgid "NetCode"
@@ -33519,9 +33496,9 @@ msgid "Rule Area on %s"
 msgstr "ルールエリア ( %s 上)"
 
 #: pcbnew/zone.cpp:881
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s on %s"
-msgstr "ゾーン [%s] ( %s 上)"
+msgstr "ゾーン %s ( %s 上)"
 
 #: pcbnew/zone.cpp:1393
 msgid "Inherited"
