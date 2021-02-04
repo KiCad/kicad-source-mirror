@@ -199,14 +199,18 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch, bool a
 
         // This collapse is required before the call to "Freeze()" below.  Once Freeze()
         // is called, GetParent() will return nullptr.  While this works for some calls, it
-        // segfaults when we have our first library expanded.
+        // segfaults when we have any expanded elements b/c the sub units in the tree don't
+        // have explicit references that are maintained over a search
         // The tree will be expanded again below when we get our matches
         //
         // Also note that this cannot happen when we have deleted a symbol as GTK will also
         // iterate over the tree in this case and find a symbol that has an invalid link
         // and crash https://gitlab.com/kicad/code/kicad/-/issues/6910
         if( !aState && !aSearch.IsNull() && m_tree.m_Children.size() )
-            m_widget->Collapse( wxDataViewItem( &*m_tree.m_Children[0] ) );
+        {
+            for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.m_Children )
+                m_widget->Collapse( wxDataViewItem( &*child ) );
+        }
 
         // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
         // that tells it when it shouldn't trust any of the data in the model. When set, it will
