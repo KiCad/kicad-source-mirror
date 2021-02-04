@@ -1,23 +1,23 @@
 # Lithuanian translation of kicad.po
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
-# WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020.
+# WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-01-13 14:21+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"PO-Revision-Date: 2021-02-04 12:58+0000\n"
+"Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -456,7 +456,7 @@ msgstr "Rodyti šilkografikos sluoksnius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:48
 msgid "Show solder mask layers"
-msgstr "Rodyti lydmetalio šablonų sluoksnius"
+msgstr "Rodyti litavimo kaukės sluoksnius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
 msgid "Show solder paste layers"
@@ -501,11 +501,11 @@ msgstr "Nuimti šilkografiją nuo metalizuotų skylių"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Naudoti vario spalvą neapdorotam variui"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Naudoti skirtingas spalvas apdorotam ir neapdorotam variui. (Lėta)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -2247,7 +2247,7 @@ msgstr "Pasirinkite „Nustatymų kelias“"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Kaip norėtumėte sukonfigūruoti KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2261,7 +2261,7 @@ msgstr "Sureguliuokite diferencialinės poros kreivumą"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Pasirinktas aplankas neturi tinkamų KiCad nustatymų!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -5356,7 +5356,7 @@ msgstr "„KiCad Classic“"
 #: common/single_top.cpp:175 kicad/kicad.cpp:279
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
+msgstr "Windows 7 KiCad nebepalaiko."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 #, fuzzy
@@ -9736,19 +9736,19 @@ msgstr "Pozicijos X:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Dešinė apačia, spauzdintuvo mat. vnt."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Centruota, spausdintuvo mat. vnt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Talpinti lapą, vartotojo mat. vnt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Talpinti turinį, vartotojo mat. vnt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
