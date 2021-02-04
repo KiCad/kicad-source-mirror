@@ -101,7 +101,6 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     if( libName.IsEmpty() )
         libName = "noname";
 
-    libName += "-cadstar-import";
     libName = LIB_ID::FixIllegalChars( libName, true );
 
     wxFileName libFileName(
