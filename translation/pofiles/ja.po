@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-04 12:58+0000\n"
+"PO-Revision-Date: 2021-02-04 13:23+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2225,7 +2225,7 @@ msgstr "異なるパスを選択"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "選択したパスに有効なKiCadの設定が含まれていません！"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
@@ -2235,7 +2235,7 @@ msgstr "以前のバージョンからライブラリーの設定をインポー
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
-msgstr ""
+msgstr "オンにすると、前のバージョンのシンボルおよびフットプリントライブラリテーブルがこのバージョンにインポートされます"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -2871,6 +2871,8 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
+"これより古い3Dキャッシュファイルは削除されます。\n"
+"0に設定すると、キャッシュのクリアが無効になります"
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
@@ -33379,7 +33381,7 @@ msgstr "設定を開く"
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
-msgstr ""
+msgstr "現在のカラーテーマは読み取り専用です。設定で新しいテーマを作成して、色の編集を有効にします。"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
 msgid "Objects"
