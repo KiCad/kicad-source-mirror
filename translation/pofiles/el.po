@@ -1,12 +1,13 @@
 # aris-kimi <aris_kimi@hotmail.com>, 2020, 2021.
 # fresh <fresh190@protonmail.com>, 2021.
+# Michalis <michalisntovas@yahoo.gr>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-24 14:54-0800\n"
-"PO-Revision-Date: 2021-02-02 22:49+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-02-04 21:22+0000\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -1823,7 +1824,7 @@ msgstr "Προεπισκόπηση (παλιά/νέα):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr "Επαναφορά σε Προκαθορισμένες Τιμές"
+msgstr "Επαναφορά προεπιλογών"
 
 #: common/dialogs/dialog_configure_paths.cpp:249
 #: common/dialogs/dialog_configure_paths.cpp:319
