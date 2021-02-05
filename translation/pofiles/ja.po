@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-04 23:59+0000\n"
+"PO-Revision-Date: 2021-02-05 09:29+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7051,21 +7051,19 @@ msgstr "アノテートされなかったアイテム: %s%s\n"
 #: eeschema/component_references_lister.cpp:552
 #, fuzzy, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr ""
-"エラー: シンボル %s%s ユニット %d とシンボルは %d ユニットの定義しか持ってい"
-"ません\n"
+msgstr "エラー: シンボル %s%s%s (ユニット %d) は定義されたユニット数を超えています\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "複数アイテム %s%s\n"
+msgstr "重複したアイテム %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "複数アイテム %s%s\n"
+msgstr "重複したアイテム %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
@@ -7193,9 +7191,8 @@ msgid "Generate"
 msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "部品表(BOM)の生成には回路図の完全なアノテーションが必要です。"
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -8150,9 +8147,8 @@ msgid "Delete All Markers"
 msgstr "全マーカーを削除"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "エラー:パッドにレイヤー情報がありません"
+msgstr "エラーと警告のみ"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors, Warnings and Exclusions"
@@ -9106,9 +9102,8 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "複数ユニットを含むシンボルの場合、ユニット数を入力してください"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "複数ユニットでのユニット交換不可"
+msgstr "複数ユニットでのユニット交換可能"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
@@ -9341,7 +9336,6 @@ msgstr "エクスポート %s"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
 
@@ -10136,9 +10130,8 @@ msgid "Add signal by name:"
 msgstr "名前で信号を追加:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "DC ソース (スイープ 1) を選択する必要があります"
+msgstr "DC ソース を選択する必要があります"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10155,9 +10148,8 @@ msgid "Volts"
 msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "ジャンパー"
+msgstr "A"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
@@ -10226,15 +10218,13 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "パイ型"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10259,23 +10249,20 @@ msgid "DC source:"
 msgstr "DC ソース:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "開始電圧:"
+msgstr "開始値:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "初期振幅値:"
+msgstr "最終値:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "増分幅:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "DC ソース"
+msgstr "ソースを入れ替え"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11756,9 +11743,8 @@ msgid "Passive Pin"
 msgstr "パッシブ ピン"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "ピンを作成"
+msgstr "フリー ピン"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -11917,29 +11903,24 @@ msgid "Wires not connected to anything"
 msgstr "配線がどこにも接続されていません"
 
 #: eeschema/erc_item.cpp:134
-#, fuzzy
 msgid "Library symbol issue"
-msgstr "ライブラリー シンボル:"
+msgstr "ライブラリー シンボルの問題"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "シンボル ユニットの表記方法:"
+msgstr "シンボルはアノテーションされていません"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "シンボルのフットプリントへの変更は保存されていません"
+msgstr "シンボルが定義しているよりも多くのユニットがあります"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "異なったレイヤーを持つパッドを変更しない"
+msgstr "同じシンボルのユニットが異なる値を持っています"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "リファレンス指定子を更新"
+msgstr "重複したリファレンス指定子"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -12670,9 +12651,8 @@ msgid "Open Schematic"
 msgstr "回路図を開く"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "フットプリントの割り当てには回路図の完全なアノテーションが必要です。"
 
 #: eeschema/sch_edit_frame.cpp:1049
 msgid "Could not open CvPcb"
@@ -13951,14 +13931,12 @@ msgid "Tune component values"
 msgstr "コンポーネント定数を調整"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
 msgstr "パラメーター"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "シミュレーションの設定"
+msgstr "シミュレーションのパラメーターと設定"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14287,9 +14265,9 @@ msgid "Could not open the library file."
 msgstr "ライブラリー ファイルを開くことができません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "ライブラリー \"%s\" をロード中"
+msgstr "ライブラリー '%s' をロード中"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:486
@@ -14799,14 +14777,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:302
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "フットプリントの再リンクには回路図の完全なアノテーションが必要です。"
 
 #: eeschema/tools/backannotate.cpp:305
-#, fuzzy
 msgid "Footprint re-linking cancelled by user."
-msgstr "不完全なロード; ユーザーによるキャンセル。"
+msgstr "フットプリントの再リンクはユーザーによってキャンセルされました。"
 
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
@@ -15840,9 +15816,8 @@ msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "シンボルが見つかりません。"
+msgstr "シンボルの問題は見つかりません。"
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -21657,9 +21632,8 @@ msgid "Unable to create report file '%s'<br>"
 msgstr "レポート ファイル '%s' を作成できません<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:865
-#, fuzzy
 msgid "Do you wish to delete excluded markers as well?"
-msgstr "このシートから参照されていないピンを削除してよろしいですか?"
+msgstr "除外されたマーカーも同様に削除してよろしいですか?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:868
 #, fuzzy
@@ -22115,9 +22089,9 @@ msgid "Update footprint %s from '%s' to '%s'"
 msgstr "%s を更新 %s から %s へ"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "フットプリント \"%s\" の値を \"%s\" から \"%s\" に変更"
+msgstr "フットプリント %s を '%s' から '%s' に変更"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:387
 msgid "*** footprint not found ***"
@@ -22303,9 +22277,8 @@ msgid "Tight (0.001 mm)"
 msgstr "テキスト高さ (mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "標準"
+msgstr "標準 (0.01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
@@ -22520,9 +22493,8 @@ msgid "Include &zones"
 msgstr "ゾーンを含む (&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "選択されたアイテム"
+msgstr "選択されたアイテムをフィルター"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -22807,9 +22779,8 @@ msgstr ""
 "配置するための全てのフットプリントを含んだ1つのファイルを生成します\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Exclude all footprints with through hole pads"
-msgstr "シンボルを持たないフットプリントを削除"
+msgstr "スルーホールのあるフットプリントを全て除外する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Include board edge layer"
@@ -23391,9 +23362,8 @@ msgid "The arc angle cannot be zero."
 msgstr "円弧の角度は０にできません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:419
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "円弧の角度は０にできません。"
+msgstr "半径は0にできません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:425
 msgid "The rectangle cannot be empty."
@@ -23880,9 +23850,9 @@ msgid "Select a corner to delete."
 msgstr "削除する角を選択する。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "フットプリント %s (%s) %s, %s, 回転 %g 度"
+msgstr "フットプリント %s (%s), %s, 回転 %g 度"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:483
 #: pcbnew/dialogs/dialog_text_properties.cpp:277
@@ -23947,9 +23917,8 @@ msgid "%s, %s and connected layers"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
-#, fuzzy
 msgid "Connected layers only"
-msgstr "現在のレイヤーのみ"
+msgstr "接続されたレイヤーのみ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:923
 #, fuzzy, c-format
@@ -24031,29 +24000,24 @@ msgid "Warning: SMD pad has no outer layers."
 msgstr "エラー:パッドにレイヤー情報がありません"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1349
-#, fuzzy
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "プロパティには NPTH をセットできません"
+msgstr "警告: 基準点のプロパティはNPTHパッドに対しては意味がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1355
-#, fuzzy
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "プロパティには NPTH をセットできません"
+msgstr "警告: テストポイントのプロパティはNPTHパッドに対しては意味がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
-#, fuzzy
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "プロパティには NPTH をセットできません"
+msgstr "警告: ヒートシンクのプロパティはNPTHパッドに対しては意味がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "端面スルーホールのプロパティには PTH のみセットできます。"
+msgstr "警告: 端面スルーホールのプロパティは PTH だけです。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
-msgstr "BGA のプロパティには SMD パッドのみセットできます"
+msgstr "警告: BGAのプロパティは SMDパッドのみセットできます。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
@@ -24785,9 +24749,8 @@ msgstr ""
 "CAM ツールとガーバー ビューワーで接続をチェックするために使用されます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:239
-#, fuzzy
 msgid "Disable aperture macros (non recommended)"
-msgstr "route コマンドを使用 (推奨)"
+msgstr "アパーチャ マクロを無効化 (非推奨)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:240
 msgid ""
@@ -25985,9 +25948,9 @@ msgid "Edit options"
 msgstr "編集オプション"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "不正な文字 '%c' のあるニックネーム: \"%s\""
+msgstr "不正な文字 '%c' のあるニックネーム: '%s'"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:783
 #, c-format
@@ -26100,9 +26063,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "円弧/円を線分で近似する"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:63
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "最大偏差:"
+msgstr "最大許容偏差:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:65
 msgid ""
@@ -26813,9 +26775,8 @@ msgid "If you want a board perimeter layer"
 msgstr "基板外周レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:669
-#, fuzzy
 msgid "Pcb_Edges"
-msgstr "エッジを配置"
+msgstr "基板外形"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:672
 msgid "Board contour"
@@ -26985,9 +26946,8 @@ msgstr ""
 "最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
-#, fuzzy
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "正のクリアランスはパッドより大きな領域を意味します。"
+msgstr "追加のクリアランスをパッドサイズに対するパーセンテージで指定します。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid ""
@@ -26998,9 +26958,8 @@ msgstr ""
 "めるために加算されます。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "変更を保存"
+msgstr "変更をキャンセルしますか?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -27041,9 +27000,8 @@ msgid "Where to position the dimension text relative to the dimension line"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:120
-#, fuzzy
 msgid "Keep text aligned"
-msgstr "テキストの直立をキープ"
+msgstr "寸法線に沿ってテキストを配置"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:121
 msgid "When checked, dimension text will be kept aligned with dimension lines"
@@ -27155,9 +27113,9 @@ msgid "Suffix"
 msgstr ""
 
 #: pcbnew/dimension.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid "Dimension '%s' on %s"
-msgstr "寸法 \"%s\" - %s"
+msgstr "寸法 \"%s\" (%s 上)"
 
 #: pcbnew/drc/drc_engine.cpp:139 pcbnew/drc/drc_engine.cpp:181
 #: pcbnew/drc/drc_engine.cpp:211
@@ -27354,9 +27312,8 @@ msgid "Track width"
 msgstr "配線幅"
 
 #: pcbnew/drc/drc_item.cpp:101
-#, fuzzy
 msgid "Annular width"
-msgstr "ネット クラスの幅"
+msgstr "アニュラー幅"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drill out of range"
@@ -27556,14 +27513,14 @@ msgid "Checking via annular rings..."
 msgstr "ビア、アニュラーリングをチェック..."
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr " (%s クリアランス %s; 現状 %s)"
+msgstr "(%s 最小アニュラー幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr " (%s クリアランス %s; 現状 %s)"
+msgstr "(%s 最大アニュラー幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:74
 msgid "Checking pad, via and zone connections..."
@@ -27574,9 +27531,8 @@ msgid "Checking net connections..."
 msgstr "ネットの接続をチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:178
-#, fuzzy
 msgid "Gathering copper items..."
-msgstr "グリッド プロパティ..."
+msgstr "導体のアイテムを収集しています..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:190
 #, fuzzy
@@ -27898,9 +27854,8 @@ msgstr "全体のフットプリント数: %d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
-#, fuzzy
 msgid "File generation successful."
-msgstr "STEP ファイルが作成されました。"
+msgstr "ファイルの生成に成功しました。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
@@ -28090,7 +28045,6 @@ msgstr "裏面 (裏返し)"
 
 #: pcbnew/footprint.cpp:832 pcbnew/fp_text.cpp:291 pcbnew/pcb_shape.cpp:498
 #: pcbnew/pcb_text.cpp:114
-#, fuzzy
 msgid "locked"
 msgstr "ロック"
 
@@ -28103,9 +28057,8 @@ msgid "not in schematic"
 msgstr "回路図にない"
 
 #: pcbnew/footprint.cpp:841
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "部品表 (BOM) から除外"
+msgstr "posファイルから除外"
 
 #: pcbnew/footprint.cpp:844
 msgid "exclude from BOM"
@@ -31122,9 +31075,8 @@ msgid "No board problems found."
 msgstr "基板に問題はありません。"
 
 #: pcbnew/tools/board_editor_control.cpp:499
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "基板の更新には回路図の完全なアノテーションが必要です。"
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -31432,9 +31384,8 @@ msgid "Refilling all zones..."
 msgstr "全てのゾーンを再塗り潰し..."
 
 #: pcbnew/tools/drc_tool.cpp:157
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "ネットリストのエクスポートには回路図の完全なアノテーションが必要です。"
+msgstr "回路図の等価性のテストには回路図の完全なアノテーションが必要です。"
 
 #: pcbnew/tools/drc_tool.cpp:205
 msgid "DRC"
@@ -32801,14 +32752,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "同じ回路図に含まれる全てのフットプリントと配線を選択"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "フィルター選択..."
+msgstr "選択アイテムをフィルター..."
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "選択からアイテムを除外します。"
+msgstr "選択対象から指定のタイプのアイテムを除外"
 
 #: pcbnew/tools/pcb_actions.cpp:1206
 msgid "Fill zone(s)"
