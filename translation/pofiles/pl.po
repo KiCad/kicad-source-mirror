@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-01-25 16:33+0000\n"
+"PO-Revision-Date: 2021-02-05 09:29+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4971,19 +4971,16 @@ msgid "Via holes"
 msgstr "Otwory przelotek"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Otwory przelotek"
+msgstr "Ścianki przelotek"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "Otwory niepowlekane"
+msgstr "Otwory powlekane"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "Otwory niepowlekane"
+msgstr "Ścianki otworów powlekanych"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -6436,9 +6433,8 @@ msgid "Report files"
 msgstr "Plik raportu"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "Parametry komponentów"
+msgstr "Pliki położeń komponentów"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -7084,21 +7080,22 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Element nie ma numeracji: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr "Błąd: symbol %s%s część %d oraz symbol posiada tylko %d elementów\n"
+msgstr ""
+"Błąd: symbol %s%s%s (część %d) przekracza ilość zdefiniowanych części (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Element wielokrotny %s%s\n"
+msgstr "Element wielokrotny %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Element wielokrotny %s%s\n"
+msgstr "Elementy zduplikowane %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
@@ -7232,11 +7229,10 @@ msgid "Generate"
 msgstr "Utwórz listę"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
-"ponumerowane."
+"Generowanie plików materiałowych wymaga by elementy na schemacie zostały w "
+"pełni ponumerowane."
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -8182,6 +8178,8 @@ msgstr "Pokazuje okno dialogowe numeracji"
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Schemat nie został w pełni ponumerowany. Wyniki działania kontroli ERC będą "
+"niekompletne."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9343,11 +9341,8 @@ msgid "Export Netlist"
 msgstr "Eksportuj listę sieci"
 
 #: eeschema/dialogs/dialog_netlist.cpp:341
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
-"ponumerowane."
+msgstr "Symulator wymaga by elementy na schemacie zostały w pełni ponumerowane."
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
 msgid "Reformat passive symbol values"
@@ -9391,7 +9386,6 @@ msgstr "%s Eksportuj"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
@@ -10186,9 +10180,8 @@ msgid "Add signal by name:"
 msgstr "Dodaj sygnał na podstawie nazwy:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "Należy wybrać źródło DC (sweep 1)"
+msgstr "Należy wybrać źródło DC"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10205,9 +10198,8 @@ msgid "Volts"
 msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "zworek"
+msgstr "Ampery"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
@@ -10265,7 +10257,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "Włącz drugie źródło"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10276,20 +10268,18 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "Typu Pi"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -10309,23 +10299,20 @@ msgid "DC source:"
 msgstr "Źródło DC:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Napięcie początkowe:"
+msgstr "Wartość początkowa:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "Wartość początkowa:"
+msgstr "Wartość końcowa:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "Krok:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "Źródło"
+msgstr "Źródła zmienne"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11816,9 +11803,8 @@ msgid "Passive Pin"
 msgstr "Pasywny"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "Pin arkusza"
+msgstr "Pin wolny"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -11989,24 +11975,20 @@ msgid "Library symbol issue"
 msgstr "Problem z biblioteką symboli"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Notacja symboli składowych:"
+msgstr "Symbol nie jest ponumerowany"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Zmiany w łączach pomiędzy symbolami a footprintami nie są zapisane"
+msgstr "Symbol posiada więcej jednostek niż zostało zdefiniowane"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Nie zmieniaj pól umieszczonych na innych warstwach"
+msgstr "Jednostki składowe symbolu posiadają różne wartości"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Rysuj oznaczenia"
+msgstr "Powielone oznaczenia"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -12736,10 +12718,9 @@ msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
+"Przypisywanie footprintów wymaga by elementy na schemacie zostały w pełni "
 "ponumerowane."
 
 #: eeschema/sch_edit_frame.cpp:1049
@@ -13238,14 +13219,14 @@ msgstr ""
 "przesunięcie: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nieprawidłowa liczba w\n"
+"Nieprawidłowa liczba ułamkowa w\n"
 "plik: \"%s\"\n"
 "linia: %d\n"
 "przesunięcie: %d"
@@ -13667,7 +13648,6 @@ msgid "Syntax Help"
 msgstr "Pomoc dotycząca składni"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13816,8 +13796,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>Płytka sterownika^{Rewizja A}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Płytka sterownika<sup>Rewizja A</sup></samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>Płytka sterownika<sup>Rewizja A</sup></samp></td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -13862,8 +13842,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${oznaczenie:pole}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>wartość pola</i> symbolu <i>oznaczenie</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>wartość pola</i> symbolu "
+"<i>oznaczenie</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -13878,8 +13858,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definicje magistral</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Sieci wynikowe</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -13929,10 +13909,11 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> "
+"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>"
+"\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -14201,14 +14182,12 @@ msgid "Tune component values"
 msgstr "Dostrajanie wartości komponentów"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Parametry"
+msgstr "Parametry symulacji"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Ustawienia symulacji"
+msgstr "Parametry oraz ustawienia symulacji"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14409,22 +14388,19 @@ msgstr "Czas"
 
 #: eeschema/sim/sim_plot_panel.cpp:390
 msgid "Voltage (swept)"
-msgstr "Napięcie (zmienne)"
+msgstr "Przyrost napięcia"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Bieżący skrót:"
+msgstr "Przyrost prądu"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Rezystancja:"
+msgstr "Przyrost rezystancji"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Przyrost temperatury:"
+msgstr "Przyrost temperatury"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -14541,9 +14517,9 @@ msgid "Could not open the library file."
 msgstr "Nie można otworzyć pliku biblioteki."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "Wczytywanie biblioteki \"%s\""
+msgstr "Wczytywanie biblioteki '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:486
@@ -14607,21 +14583,13 @@ msgstr "Biblioteka symboli nie jest aktywna."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Błąd zapisu globalnej tablicy bibliotek footprintów:\n"
-"\n"
-"%s"
+msgstr "Błąd podczas zapisu globalnej tablicy bibliotek."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Błąd zapisu lokalnej tablicy bibliotek footprintów:\n"
-"\n"
-"%s"
+msgstr "Błąd podczas zapisu lokalnej tablicy bibliotek."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -15058,15 +15026,14 @@ msgstr ""
 "zostać ręcznie usunięte (jeśli trzeba)."
 
 #: eeschema/tools/backannotate.cpp:302
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
-"ponumerowane."
+"Ponowne przypisywanie footprintów wymaga by elementy na schemacie zostały w "
+"pełni ponumerowane."
 
 #: eeschema/tools/backannotate.cpp:305
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "Ponowne przypisanie footprintu zostało anulowane przez użytkownika."
 
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
@@ -15178,9 +15145,8 @@ msgid "Create a new symbol"
 msgstr "Utwórz nowy symbol"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Edytuj symbol..."
+msgstr "Edycja symbolu"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -16010,107 +15976,109 @@ msgid "Symbol Warnings"
 msgstr "Ostrzeżenia symboli"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w symbolu skonwertowanym"
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w symbolu skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
 "z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostce %c oraz "
-"skonwertowanej %c"
+"skonwertowanej %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b>"
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>Zdublowany pin %s</b>%s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
-"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostkach %c oraz %c"
+"<b>Zdublowany pin %s</b> %s na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie "
+"z pinem %s%s na pozycji <b>(%.3f, %.3f)</b> w jednostkach %c oraz %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
-"skonwertowanym"
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin poza siatką %s</b>%sna pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
-"skonwertowanym"
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"%c skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b>"
+msgstr "<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c"
+"<b>Ukryty pin zasilający %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w "
+"jednostce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Ukryte piny zasilania będą przenosić ich nazwy do wszystkich podłączonych "
+"sieci.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
-"skonwertowanym"
+"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu "
+"skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin poza siatką %s</b>%sna pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
-"skonwertowanym"
+"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c "
+"skonwertowanym."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Pin poza siatką %s</b>%s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c"
+"<b>Pin poza siatką %s</b> %s na pozycji <b>(%.3f, %.3f)</b> w symbolu %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Symbolu nie znaleziono."
+msgstr "Nie znaleziono błędów w symbolu."
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -17802,14 +17770,12 @@ msgid "Save Project To"
 msgstr "Zapisz plik projektu do"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Tworzy nowy projekt na podstawie szablonu"
+msgstr "Tworzy (lub otwiera) projekt w celu edycji schematu."
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Tworzenie nowego projektu na dla tej płytki"
+msgstr "Tworzy (lub otwiera) projektu w celu edycji obwodu drukowanego."
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -19237,11 +19203,11 @@ msgstr "Kalkulator PCB"
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 #: pcb_calculator/eserie.cpp:402
 msgid "Exact"
-msgstr ""
+msgstr "Dokładnie"
 
 #: pcb_calculator/eserie.cpp:382 pcb_calculator/eserie.cpp:409
 msgid "Not worth using"
-msgstr ""
+msgstr "Nie warte użycia"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -22890,9 +22856,8 @@ msgid "Include &zones"
 msgstr "Uwzględnij strefy"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Wybrane elementy"
+msgstr "Filtrowanie zaznaczonych elementów"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -23200,9 +23165,8 @@ msgid "Include board edge layer"
 msgstr "Uwzględnij warstwę krawędzi płytki"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Generuj mapę wierceń"
+msgstr "Generuj pliki położeń elementów"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -26179,13 +26143,12 @@ msgid "Lock pads of newly added footprints"
 msgstr "Zablokuj pola lutownicze w nowo dodanych footprintach"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, its pads will be locked "
 "and not movable with respect to the footprint."
 msgstr ""
 "Jeśli zaznaczone, to podczas dodawania footprintu na płytkę pola lutownicze "
-"będzie można przesuwać."
+"będą zablokowane i można ich będzie przesuwać względem footprintu."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
 msgid "Flip board items L/R (default is T/B)"
@@ -26530,9 +26493,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "Łuk/okrąg przybliżany segmentami"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:63
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Maksymalna odchyłka:"
+msgstr "Maksymalna dopuszczalna odchyłka:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:65
 msgid ""
@@ -26547,7 +26509,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Uwaga: wypełnianie strefy może być powolne, gdy < %s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
@@ -27449,9 +27411,8 @@ msgstr ""
 "celu określenia prześwitu końcowego."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Zapisz zmiany"
+msgstr "Anulować zmiany?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -27758,9 +27719,8 @@ msgid "Signal Integrity"
 msgstr "Integracja sygnałów"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Nieprawidłowe połączenie pomiędzy magistralą a siecią"
+msgstr "Nieprawidłowe połączenie pomiędzy elementami"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -28326,9 +28286,9 @@ msgstr "Nie można utworzyć \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:275
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: \"%s\"."
-msgstr "Plik położeń na stronie górnej: \"%s\"."
+msgstr "Plik położeń (na stronie górnej): \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
@@ -28340,9 +28300,9 @@ msgstr "Liczba komponentów: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:297
 #: pcbnew/exporters/gen_footprints_placefile.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
-msgstr "Plik położeń na stronie dolnej: \"%s\"."
+msgstr "Plik położeń (na stronie dolnej): \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:305
 #: pcbnew/exporters/gen_footprints_placefile.cpp:445
@@ -28353,18 +28313,17 @@ msgstr "Liczba komponentów w sumie: %d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
-#, fuzzy
 msgid "File generation successful."
-msgstr "Plik STEP został poprawnie utworzony."
+msgstr "Plik został prawidłowo utworzony."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
 msgstr "Brak footprintów do automatycznego rozmieszczenia."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: \"%s\"."
-msgstr "Umieszczenie pliku \"%s\"."
+msgstr "Plik położeń: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:520
 #, c-format
@@ -30609,7 +30568,7 @@ msgstr "Nie można odczytać pliku "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:194
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Nieznana sekcja FABMASTER %s:%s w wierszu %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:209
 #, c-format
@@ -30671,9 +30630,9 @@ msgstr ""
 "%zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Nieznany kształt pola %s w linii %zu"
+msgstr "Nieznany kształt pola o nazwie '%s' na warstwie '%s' w linii %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
@@ -30685,7 +30644,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr ""
+msgstr "Nie można wprowadzić elementu graficznego %d do stosu warstw \"%s\""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
 #, c-format
@@ -30737,11 +30696,12 @@ msgstr ""
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
 msgstr ""
+"Nieprawidłowe niestandardowe pole o nazwie '%s'. Zamieniam na pole okrągłe."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "Nie można odnaleźć etykiety kolumny %s"
+msgstr "Nie można odnaleźć pola zdefiniowanego przez użytkownika %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
@@ -31699,11 +31659,10 @@ msgid "No board problems found."
 msgstr "Nie znaleziono żadnych problemów z płytką."
 
 #: pcbnew/tools/board_editor_control.cpp:499
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
 msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
-"ponumerowane."
+"Aktualizacja obwodu drukowanego wymaga by elementy na schemacie zostały w "
+"pełni ponumerowane."
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -31820,9 +31779,8 @@ msgstr "Analiza prześwitu warstwy opisowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:389
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Analiza prześwitu dla krawędzi:"
+msgstr "Analiza prześwitu dla otworów:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:380
 #: pcbnew/tools/board_inspection_tool.cpp:401
@@ -31998,9 +31956,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Strefy nachodzące na siebie nie są dopuszczalne"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Punkt rozpoczęcia trasowania narusza DRC."
+msgstr "Położenie przelotki narusza DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -32011,10 +31968,9 @@ msgid "Refilling all zones..."
 msgstr "Wypełniam wszystkie strefy..."
 
 #: pcbnew/tools/drc_tool.cpp:157
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
-"Eksport listy sieci wymaga by elementy na schemacie zostały w pełni "
+"Test zgodności schematu wymaga by elementy na schemacie zostały w pełni "
 "ponumerowane."
 
 #: pcbnew/tools/drc_tool.cpp:205
@@ -32771,14 +32727,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Tworzenie plików wierceń w formacie Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Parametry komponentów"
+msgstr "Plik położeń komponentów (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Generuj plik położeń footprintów dla automatów montujących"
+msgstr "Generuje pliki położeń footprintów dla automatów montujących"
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Footprint Report (.rpt)..."
@@ -32857,7 +32811,6 @@ msgid "Drill/Place File Origin"
 msgstr "Punkt bazowy wierceń/położeń"
 
 #: pcbnew/tools/pcb_actions.cpp:637
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
 msgstr "Umieszcza bazowy punkt odniesienia dla wierceń oraz plików położeń"
 
@@ -33390,14 +33343,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Wybiera wszystkie footprinty i ścieżki na tym samym arkuszu schematu"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Filter Selected Items..."
 msgstr "Wybór filtra..."
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Usuń element(y) z zaznaczenia."
+msgstr "Usuwa element(y) z zaznaczenia na podstawie typu"
 
 #: pcbnew/tools/pcb_actions.cpp:1206
 msgid "Fill zone(s)"
