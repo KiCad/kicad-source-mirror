@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 09:49+0000\n"
+"PO-Revision-Date: 2021-02-05 11:18+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -484,11 +484,11 @@ msgstr "シルクスクリーンをビア円環で切り抜く"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "メッキされていない導体には裸の銅の色を使用します"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "メッキされた導体とメッキされていない導体で色を使い分けます。(遅い)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -2215,7 +2215,7 @@ msgstr "設定パスを選択"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "KiCad をどのように設定しますか?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
@@ -3072,7 +3072,7 @@ msgstr "次のプロジェクト起動のために開いているファイルを
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
-msgstr ""
+msgstr "チェックした場合、プロジェクトを起動すると、以前に開いたファイルでeeschemaやpcbnewなどのツールも起動します"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
@@ -5316,7 +5316,7 @@ msgstr "KiCad クラシック"
 #: common/single_top.cpp:175 kicad/kicad.cpp:279
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
+msgstr "Windows 7 以前のバージョンは、KiCad とその依存関係でサポートされなくなりました。"
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:280
 msgid "Unsupported Operating System"
@@ -7752,7 +7752,7 @@ msgstr "*** シンボルが見つかりません ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** new symbol has too few units ***"
-msgstr ""
+msgstr "*** 新しいシンボルのユニットが少なすぎます ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
@@ -8133,7 +8133,7 @@ msgstr "アノテーション ダイアログを表示"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "回路図は完全にアノテーションされていません。ERCの結果は不完全なものになります。"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9405,7 +9405,7 @@ msgstr "代替ピン名:"
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
 #: eeschema/dialogs/dialog_symbol_properties.cpp:332
 msgid "Alternate pin assignments are not available for DeMorgan components."
-msgstr ""
+msgstr "ド・モルガンのコンポーネントでは、代替ピンの割り当ては使用できません。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -10206,7 +10206,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "2番目のソースを有効化"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -11516,7 +11516,7 @@ msgstr "ライブラリーのニックネームのエラー"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:581
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "複数のライブラリが同じニックネーム（ '%s'）を共有することはできません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:421
 #, c-format
@@ -11569,14 +11569,14 @@ msgstr ""
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
-msgstr ""
+msgstr "'%s' を現在の形式（* .kicad_sym）として保存し、テーブルの以前の形式のエントリーと置き換えますか？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:722
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
-msgstr ""
+msgstr "以前の形式のライブラリー '%s' を現在の形式（* .kicad_sym）として保存し、テーブルのエントリーと置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:740
 #, c-format
@@ -12813,7 +12813,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1573
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "電源シンボルは '%s' という名前のグローバル ラベルを作成します"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:66
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:63
@@ -14232,7 +14232,7 @@ msgstr "シンボル ライブラリーを管理"
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
-msgstr ""
+msgstr "以前の形式のライブラリーのシンボルは編集できません。 現在の形式に移行するには、 シンボル ライブラリーの管理を使用します。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:760
 #, c-format
@@ -15515,7 +15515,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:590
 msgid "Remap Legacy Library Symbols..."
-msgstr "以前の形式のシンボルをリマップ..."
+msgstr "以前の形式のライブラリーのシンボルをリマップ..."
 
 #: eeschema/tools/ee_actions.cpp:591
 #, fuzzy
@@ -23978,9 +23978,8 @@ msgid "Too large value for pad delta size."
 msgstr "パッドの デルタ サイズが大きすぎます。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1323
-#, fuzzy
 msgid "Warning: Through hole pad has no hole."
-msgstr "エラー: スルーホール パッド: ドリル直径に０が設定されています"
+msgstr "警告: スルーホール パッドに穴がありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1330
 msgid ""
@@ -24017,12 +24016,11 @@ msgstr "警告: BGAのプロパティは SMDパッドのみセットできます
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "エラー: コーナーのサイズが数値ではありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1390
-#, fuzzy
 msgid "Error: Negative corner size."
-msgstr "不正な (負の) コーナー サイズ 値"
+msgstr "エラー: コーナーのサイズが負の値です。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1392
 msgid "Warning: Corner size will make pad circular."
@@ -24753,6 +24751,8 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"ガーバーファイルのアパーチャ マクロを無効化します\n"
+"壊れたガーバー ビューアー*のみ*に対して使用します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:271
 msgid "Postscript Options"
@@ -27230,7 +27230,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:941
 msgid "Condition not satisfied; rule ignored."
-msgstr ""
+msgstr "条件を満たしません; ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:986 pcbnew/drc/drc_engine.cpp:997
 #, fuzzy, c-format
@@ -27589,12 +27589,12 @@ msgstr "(%s 最大非結合長 %s; 現状 %s)"
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:481
 #, c-format
 msgid "minimum gap: %s; "
-msgstr "最小ギャップ: %s: "
+msgstr "最小ギャップ: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:485
 #, c-format
 msgid "maximum gap: %s; "
-msgstr ""
+msgstr "最大ギャップ: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:488
 #, c-format
@@ -27800,7 +27800,7 @@ msgstr ""
 #: pcbnew/exporters/export_vrml.cpp:865
 #: pcbnew/specctra_import_export/specctra_export.cpp:841
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "基板外形が不正です。完全な解析のためにDRCを実行してください。"
 
 #: pcbnew/exporters/export_idf.cpp:639 pcbnew/exporters/export_idf.cpp:648
 #: pcbnew/exporters/export_idf.cpp:656 pcbnew/exporters/export_vrml.cpp:1730
@@ -29400,7 +29400,7 @@ msgstr "名前なしグループ, %zu メンバー"
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr ""
+msgstr "グループ \"%s\", %zu メンバー"
 
 #: pcbnew/pcb_group.cpp:305
 msgid "<unnamed>"
@@ -30051,9 +30051,9 @@ msgid "Expecting pad size values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "不正なサイズ %lld: 大きすぎます"
+msgstr "不正なパッドサイズ : %zu行目"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:532
 #, c-format
@@ -30120,9 +30120,9 @@ msgid "Invalid custom pad named '%s'. Replacing with circular pad."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "ライブラリー ファイル %s が見つかりません"
+msgstr "%s という名前のカスタムパッドが見つかりません"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
@@ -30647,11 +30647,11 @@ msgstr "メッキなし穴から配線を開始することはできません。
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "ルールエリア '%s' は配線を許可しません。"
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "ルールエリアは配線を許可しません。"
 
 #: pcbnew/router/pns_router.cpp:218
 msgid "Cannot start routing from a text item."
@@ -31161,7 +31161,7 @@ msgstr "クリアランス: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:634
 #: pcbnew/tools/board_inspection_tool.cpp:663
 msgid "Report incomplete: could not compile custom design rules.  "
-msgstr ""
+msgstr "不完全なレポート：カスタムデザインルールをコンパイルできませんでした。  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:252
 #, c-format
@@ -31207,7 +31207,7 @@ msgstr "クリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:443
 msgid "Items belong to the same net. Clearance is 0."
-msgstr ""
+msgstr "アイテムは同じネットに属しています。 クリアランスは0です。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:468
 msgid "Select an item for a constraints resolution report."
@@ -31235,7 +31235,7 @@ msgstr "未定義"
 #: pcbnew/tools/board_inspection_tool.cpp:543
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr ""
+msgstr "幅の制限: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:553
 msgid "Via Diameter"
@@ -31248,7 +31248,7 @@ msgstr "ビアの直径の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:580
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "直径の制限: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:587
 msgid "Via Annular Width"
@@ -31261,7 +31261,7 @@ msgstr "ビアのアニュラー幅の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:614
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr ""
+msgstr "アニュラー幅の制限: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:625
 msgid "Hole Size"
@@ -31286,19 +31286,19 @@ msgstr "キープアウトの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:671
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
+msgstr "レポートは不完全かもしれません: いくつかのフットプリントのコートヤードが不正です。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:672
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "完全な解析のためDRCを実行します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:681
 msgid "Item <b>disallowed</b> at current location."
-msgstr ""
+msgstr "アイテムはこの場所で<b>許可されていません</b>。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:683
 msgid "Item allowed at current location."
-msgstr ""
+msgstr "アイテムはこの場所で許可されています。"
 
 #: pcbnew/tools/convert_tool.cpp:196
 msgid "Convert shapes to polygon"
@@ -31470,7 +31470,7 @@ msgstr "グループ化"
 
 #: pcbnew/tools/group_tool.cpp:63
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "グループが不整合状態です:"
 
 #: pcbnew/tools/group_tool.cpp:146
 msgid "Click on new member..."
@@ -32629,7 +32629,7 @@ msgstr "基板を修復"
 
 #: pcbnew/tools/pcb_actions.cpp:1059
 msgid "Run various diagnostics and attempt to repair board"
-msgstr ""
+msgstr "さまざまな診断を実行し、ボードの修復を試みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1067
 msgid "Align to Top"
@@ -32992,7 +32992,7 @@ msgstr "DRC ルールを表示"
 
 #: pcbnew/tools/zone_filler_tool.cpp:122
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr ""
+msgstr "ゾーンの塗りつぶしが不正確である可能性があります。 DRC ルールにエラーが含まれています。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:129
 msgid "Fill All Zones"
