@@ -750,6 +750,11 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );
 
+            // Do not use the project path in the global library table.  This will almost
+            // assuredly be wrong for a different project.
+            if( relPath.IsEmpty() || (m_cur_grid == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) ) )
+                relPath = newLib.GetFullPath();
+
             auto model = static_cast<SYMBOL_LIB_TABLE_GRID*>( m_cur_grid->GetTable() );
             model->SetValue( row, COL_URI, relPath );
             model->SetValue( row, COL_TYPE, kicadType );
