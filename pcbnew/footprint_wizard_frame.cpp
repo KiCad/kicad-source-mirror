@@ -609,8 +609,10 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                             KiBitmap( lib_next_xpm ),
                             _( "Select next parameters page" ) );
 
+#if 0   // Currently: the 3D viewer is not useful
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
+#endif
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
