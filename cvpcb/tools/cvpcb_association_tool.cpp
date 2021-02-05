@@ -48,43 +48,20 @@ CVPCB_ASSOCIATION_TOOL::CVPCB_ASSOCIATION_TOOL() :
 
 int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
 {
-    COMPONENT* comp;
-    LIB_ID     fpid;
+    LIB_ID fpid;
 
-    // Default to using the component control as the source of the copy
-    CVPCB_MAINFRAME::CONTROL_TYPE copyControl = CVPCB_MAINFRAME::CONTROL_COMPONENT;
-
-    // If using the keyboard to copy, find out what control we are in and use that.
-    if( aEvent.HasPosition() )
-        copyControl = m_frame->GetFocusedControl();
-
-    switch( copyControl )
-    {
-    case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
+    if( m_frame->GetFocusedControl() == CVPCB_MAINFRAME::CONTROL_FOOTPRINT )
         fpid.Parse( m_frame->GetSelectedFootprint() );
-        break;
-
-    case CVPCB_MAINFRAME::CONTROL_COMPONENT:
-        // Get the selection
-        comp = m_frame->GetSelectedComponent();
-
-        if( !comp )
-            return 0;
-
-        // Get the fpid and save it to the clipboard
-        fpid = comp->GetFPID();
-        break;
-
-    default:
-        // Do nothing
-        break;
-    }
+    else if( m_frame->GetSelectedComponent() )
+        fpid = m_frame->GetSelectedComponent()->GetFPID();
+    else
+        return 0;
 
     // if no valid fpid, then skip
     if( !fpid.IsValid() )
         return 0;
 
-    wxLogNull doNotLog; // disable logging of failed clipboard actions
+    wxLogNull raiiDoNotLog; // disable logging of failed clipboard actions
 
     if( wxTheClipboard->Open() )
     {
@@ -100,9 +77,11 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
 int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
 {
     // If using the keyboard, only cut in the component frame
-    if( aEvent.HasPosition()
-            && ( m_frame->GetFocusedControl() != CVPCB_MAINFRAME::CONTROL_COMPONENT ) )
+    if( m_frame->GetFocusedControl()
+            && m_frame->GetFocusedControl() != CVPCB_MAINFRAME::CONTROL_COMPONENT )
+    {
         return 0;
+    }
 
     // Get the selection, but only use the first one
     COMPONENT*                comp = m_frame->GetSelectedComponent();
