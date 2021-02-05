@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 09:29+0000\n"
+"PO-Revision-Date: 2021-02-05 12:17+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -17703,9 +17703,8 @@ msgid "Create (or open) a project to edit a schematic."
 msgstr "Создайте (или откройте) проект для редактирования схемы."
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Создать новый проект для этой платы"
+msgstr "Создайте (или откройте) проект для редактирования платы."
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -19131,11 +19130,11 @@ msgstr "PCB Calculator"
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 #: pcb_calculator/eserie.cpp:402
 msgid "Exact"
-msgstr ""
+msgstr "Точно"
 
 #: pcb_calculator/eserie.cpp:382 pcb_calculator/eserie.cpp:409
 msgid "Not worth using"
-msgstr ""
+msgstr "Не стоит использовать"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -22781,9 +22780,8 @@ msgid "Include &zones"
 msgstr "Включить зоны"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Выбранные элементы"
+msgstr "Фильтр выбранных элементов"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -23083,9 +23081,8 @@ msgid "Include board edge layer"
 msgstr "Включить слой контура платы"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Создать файл карты"
+msgstr "Создание файлов размещения"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -26048,13 +26045,12 @@ msgid "Lock pads of newly added footprints"
 msgstr "Блокировать конт.пл. у новых посад.мест"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, its pads will be locked "
 "and not movable with respect to the footprint."
 msgstr ""
-"Если отмечено, после добавления посад.места на плату его конт.пл. можно "
-"свободно перемещать."
+"Если отмечено, после добавления посад.места на плату его конт.пл. будут "
+"заблокированы, их нельзя будет перемещать по отношению к посад.месту."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
 msgid "Flip board items L/R (default is T/B)"
@@ -26390,9 +26386,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "Дуги/окружности из сегментов"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:63
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Максимальное отклонение:"
+msgstr "Макс. допустимое отклонение:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:65
 msgid ""
@@ -26406,7 +26401,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Примечание: значение < %s замедлит заполнение зон."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
@@ -27301,9 +27296,8 @@ msgstr ""
 "и относительного значений."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Сохранить изменения?"
+msgstr "Отменить изменения?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -27602,9 +27596,8 @@ msgid "Signal Integrity"
 msgstr "Целостность сигналов"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Некорректное соединение шины и проводника"
+msgstr "Отсутствует соединение между элементами"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -27668,7 +27661,7 @@ msgstr "Диаметр перех.отв."
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
-msgstr "Неверная конструкция перех.отв."
+msgstr "Неверная стопка перех.отв."
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Micro via drill out of range"
@@ -28169,7 +28162,7 @@ msgstr "Не удаётся создать \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:275
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: \"%s\"."
 msgstr "Файл размещения на верхней стороне: \"%s\"."
 
@@ -28183,7 +28176,7 @@ msgstr "Кол-во компонентов: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:297
 #: pcbnew/exporters/gen_footprints_placefile.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
 msgstr "Файл размещения на нижней стороне: \"%s\"."
 
@@ -28196,16 +28189,15 @@ msgstr "Всего компонентов: %d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
-#, fuzzy
 msgid "File generation successful."
-msgstr "STEP файл был успешно создан."
+msgstr "Файл успешно сформирован."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
 msgstr "Нет посад.мест для автоматического размещения."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: \"%s\"."
 msgstr "Файл размещения: \"%s\"."
 
@@ -30437,7 +30429,7 @@ msgstr "Не удалось прочитать файл "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:194
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Неизвестный раздел FABMASTER %s:%s в строке %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:209
 #, c-format
@@ -30490,9 +30482,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr "Ожидается смещение конт.пл., но найдено %s : %s в строке %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Неизвестное имя формы конт.пл. %s в строке %zu"
+msgstr "Неизвестное имя формы конт.пл. '%s' на слое '%s' в строке %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
@@ -30504,7 +30496,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr ""
+msgstr "Не удалось вставить графический элемент %d в стопку кон.пл. \"%s\""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
 #, c-format
@@ -30553,11 +30545,12 @@ msgstr ""
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
 msgstr ""
+"Неверная форма конт.пл. с именем '%s'. Замена на конт.пл. круглой формы."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "Не удалось найти метку столбца %s"
+msgstr "Не удалось найти конт.пл. сложной формы с именем %s"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
@@ -31372,7 +31365,7 @@ msgstr "Файл сессии использует неверный иденти
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:218
 msgid "Session via padstack has no shapes"
-msgstr "Стек площадок перех.отв. сессии не имеет формы"
+msgstr "Стопка площадок перех.отв. сессии не имеет формы"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #: pcbnew/specctra_import_export/specctra_import.cpp:244
@@ -31401,7 +31394,7 @@ msgstr "Обозначение '%s' не найдено."
 #: pcbnew/specctra_import_export/specctra_import.cpp:499
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "Ссылки wire_via не содержат стека площадок \"%s\""
+msgstr "wire_via ссылается на несуществующую стопку конт.пл. \"%s\""
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:67
 msgid "Exception on python action plugin code"
@@ -31508,10 +31501,8 @@ msgid "No board problems found."
 msgstr "Проблем на плате не обнаружено."
 
 #: pcbnew/tools/board_editor_control.cpp:499
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+msgstr "Для обновления печатной платы требуется полностью обозначенная схема."
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -31630,9 +31621,8 @@ msgstr "Разрешённый зазор шёлкографии для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:389
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Разрешённый зазор у края платы для:"
+msgstr "Разрешённый зазор между отверстиями:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:380
 #: pcbnew/tools/board_inspection_tool.cpp:401
@@ -31809,9 +31799,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Полигоны, пересекающие сами себя, не допустимы"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Начало трассировки нарушает DRC."
+msgstr "Расположение перех.отв. нарушает DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -31822,10 +31811,9 @@ msgid "Refilling all zones..."
 msgstr "Перезаливаются все зоны..."
 
 #: pcbnew/tools/drc_tool.cpp:157
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+"Для проверки на соответствие схеме требуется полностью обозначенная схема."
 
 #: pcbnew/tools/drc_tool.cpp:205
 msgid "DRC"
@@ -32579,12 +32567,10 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Сформировать файл(ы) сверловки в формате Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Параметры компонента"
+msgstr "Расположение компонентов (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
 msgstr ""
 "Сформировать файл позиций посад.мест для установок автоматического монтажа"
@@ -32666,7 +32652,6 @@ msgid "Drill/Place File Origin"
 msgstr "Начало координат сверловки/размещения"
 
 #: pcbnew/tools/pcb_actions.cpp:637
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
 msgstr ""
 "Разместить точку начала координат в файлах сверловки и файлах размещения"
@@ -33196,14 +33181,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Выделить все посад.места и дорожки с того же самого листа схемы"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Filter Selected Items..."
 msgstr "Фильтр выделенного..."
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Убрать из выделенного."
+msgstr "Убрать элементы из выделенного по их типу"
 
 #: pcbnew/tools/pcb_actions.cpp:1206
 msgid "Fill zone(s)"
