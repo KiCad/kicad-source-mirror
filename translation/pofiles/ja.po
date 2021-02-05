@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 13:53+0000\n"
+"PO-Revision-Date: 2021-02-05 14:51+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -18296,19 +18296,16 @@ msgid "Inputs"
 msgstr "入力"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Required Resistance:"
-msgstr "抵抗:"
+msgstr "要求する抵抗値:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude Value 1:"
-msgstr "フィールド値:"
+msgstr "除外する値 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:476
-#, fuzzy
 msgid "Exclude Value 2:"
-msgstr "フィールド値:"
+msgstr "除外する値 2:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
 msgid "E1"
@@ -18327,29 +18324,24 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:489
-#, fuzzy
 msgid "Available Values"
-msgstr "有効なパス:"
+msgstr "利用できる値"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:500
-#, fuzzy
 msgid "Solutions"
-msgstr "解像度:"
+msgstr "解"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:508
-#, fuzzy
 msgid "Simple Solution:"
-msgstr "解像度:"
+msgstr "シンプルな解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:528
-#, fuzzy
 msgid "3R Solution:"
-msgstr "解像度:"
+msgstr "抵抗3本の解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:548
-#, fuzzy
 msgid "4R Solution:"
-msgstr "解像度:"
+msgstr "抵抗4本の解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:605
 msgid "E-Series"
@@ -18926,7 +18918,7 @@ msgstr "PCB 電卓"
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 #: pcb_calculator/eserie.cpp:402
 msgid "Exact"
-msgstr ""
+msgstr "正確"
 
 #: pcb_calculator/eserie.cpp:382 pcb_calculator/eserie.cpp:409
 msgid "Not worth using"
@@ -18959,6 +18951,27 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"IEC 60063で定義されているE系列は、広く受け入れられている電子部品に好ましい値のシステムです。\n"
+"利用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
+"\n"
+"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけます。\n"
+"0,0025Ωから4000 kΩまで必要な抵抗値を入力できます。\n"
+"\n"
+"最大4つまでの部品を使用する解が提供されます。\n"
+"デフォルトでは、要求する抵抗値は常に解答のセットから除外されます。\n"
+"また、これらの部品の値が利用できない場合は、\n"
+"2つまで解から除外する値を追加で指定することも可能です。\n"
+"\n"
+"解は以下のフォーマットで与えられます。\n"
+"\n"
+"\tR1 + R2 + ... + Rn\t直列接続の抵抗\n"
+"\tR1 | R2 | ... | Rn\t\t並列接続の抵抗\n"
+"\tR1 + (R2|R3)...\t\t上記の任意の組み合わせ\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:137
 msgid ""
