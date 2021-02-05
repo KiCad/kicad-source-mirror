@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 23:39+0000\n"
+"PO-Revision-Date: 2021-02-06 00:27+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -31801,9 +31801,8 @@ msgid "Updates selected track & via sizes"
 msgstr "選択された配線とビアのサイズを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:303
-#, fuzzy
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "選択されたシートにシート ピンを追加"
+msgstr "選択した直線の配線セグメントに接する円弧を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Delete Full Track"
