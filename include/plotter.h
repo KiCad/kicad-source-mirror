@@ -113,16 +113,6 @@ enum class PLOT_DASH_TYPE
 };
 
 /**
- * Convert KiCad line plot styles to wxWidgets device context styles.
- *
- * @param aType The KiCad line plot style to convert.
- *
- * @return The equivalent wxPenStyle of \a aType.
- */
-wxPenStyle GetwxPenStyle( PLOT_DASH_TYPE aType );
-
-
-/**
  * Base plotter engine class. General rule: all the interface with the caller
  * is done in IU, the IU size is specified with SetViewport. Internal and
  * output processing is usually done in decimils (or whatever unit the

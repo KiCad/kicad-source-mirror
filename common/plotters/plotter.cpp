@@ -609,23 +609,3 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_TYPE aFill,
 
     PlotPoly( cornerList, aFill, aWidth, aData );
 }
-
-
-wxPenStyle GetwxPenStyle( PLOT_DASH_TYPE aType )
-{
-    switch( aType )
-    {
-    case PLOT_DASH_TYPE::DEFAULT:
-    case PLOT_DASH_TYPE::SOLID:
-        return wxPENSTYLE_SOLID;
-    case PLOT_DASH_TYPE::DASH:
-        return wxPENSTYLE_SHORT_DASH;
-    case PLOT_DASH_TYPE::DOT:
-        return wxPENSTYLE_DOT;
-    case PLOT_DASH_TYPE::DASHDOT:
-        return wxPENSTYLE_DOT_DASH;
-    default:
-        wxFAIL_MSG( "Unhandled PlotDashType" );
-        return wxPENSTYLE_SOLID;
-    }
-}

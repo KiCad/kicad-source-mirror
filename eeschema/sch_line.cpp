@@ -32,7 +32,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <trigo.h>
-
+#include <board_item.h>
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
@@ -323,12 +323,57 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( GetLayer() );
 
-    wxPoint start = m_start;
-    wxPoint end = m_end;
-    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    wxPoint        start = m_start;
+    wxPoint        end = m_end;
+    PLOT_DASH_TYPE lineStyle = GetEffectiveLineStyle();
+    int            penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color,
-            GetwxPenStyle( GetEffectiveLineStyle() ) );
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    {
+        GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color );
+    }
+    else
+    {
+        EDA_RECT clip( (wxPoint) start, wxSize( end.x - start.x, end.y - start.y ) );
+        clip.Normalize();
+
+        double theta = atan2( end.y - start.y, end.x - start.x );
+        double strokes[] = { 1.0, DASH_GAP_LEN( penWidth ), 1.0, DASH_GAP_LEN( penWidth ) };
+
+        switch( lineStyle )
+        {
+        default:
+        case PLOT_DASH_TYPE::DASH:
+            strokes[0] = strokes[2] = DASH_MARK_LEN( penWidth );
+            break;
+        case PLOT_DASH_TYPE::DOT:
+            strokes[0] = strokes[2] = DOT_MARK_LEN( penWidth );
+            break;
+        case PLOT_DASH_TYPE::DASHDOT:
+            strokes[0] = DASH_MARK_LEN( penWidth );
+            strokes[2] = DOT_MARK_LEN( penWidth );
+            break;
+        }
+
+        for( size_t i = 0; i < 10000; ++i )
+        {
+            // Calculations MUST be done in doubles to keep from accumulating rounding
+            // errors as we go.
+            wxPoint next( start.x + strokes[ i % 4 ] * cos( theta ),
+                          start.y + strokes[ i % 4 ] * sin( theta ) );
+
+            // Drawing each segment can be done rounded to ints.
+            wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
+            wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
+
+            if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
+                break;
+            else if( i % 2 == 0 )
+                GRLine( nullptr, DC, segStart.x, segStart.y, segEnd.x, segEnd.y, penWidth, color );
+
+            start = next;
+        }
+    }
 }
 
 
