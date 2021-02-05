@@ -521,14 +521,28 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     {
         wxLogTrace( kicadTraceToolStack, "ACTION_MENU::OnMenuEvent %s", evt->Format() );
 
-        // Pass the position the menu was opened from into the generated event if it is a select event
-        if( type == wxEVT_COMMAND_MENU_SELECTED )
-            evt->SetMousePosition( g_menu_open_position );
-        else
-            evt->SetMousePosition( getToolManager()->GetMousePosition() );
+        // WARNING: if you're squeamish, look away.
+        // What follows is a series of egregious hacks necessitated by a lack of information from
+        // wxWidgets on where context-menu-commands and command-key-events originated.
 
-        if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
+        // If it's a context menu then fetch the mouse position from our context-menu-position
+        // hack.
+        if( m_isContextMenu )
+        {
+            evt->SetMousePosition( g_menu_open_position );
+        }
+        // Otherwise, if g_last_menu_highlighted_id matches then it's a menubar menu event and has
+        // no position.
+        else if( g_last_menu_highlighted_id == aEvent.GetId() )
+        {
             evt->SetHasPosition( false );
+        }
+        // Otherwise it's a command-key-event and we need to get the mouse position from the tool
+        // manager so that immediate actions work.
+        else
+        {
+            evt->SetMousePosition( getToolManager()->GetMousePosition() );
+        }
 
         if( m_tool->GetManager() )
             m_tool->GetManager()->ProcessEvent( *evt );
