@@ -537,6 +537,14 @@ private:
     bool assignLayers();
 
     /**
+     * Reads the double/integer value from a std string independent of the user locale
+     * @param aStr string to generate value from
+     * @return 0 if value cannot be created
+     */
+    double readDouble( const std::string aStr ) const;
+    int readInt( const std::string aStr ) const;
+
+    /**
      * Sets zone priorities based on zone BB size.  Larger bounding boxes get smaller priorities
      * so smaller zones can knock out areas where they overlap.
      * @param aBoard

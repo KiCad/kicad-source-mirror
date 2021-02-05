@@ -54,6 +54,28 @@
 #include <wx/filename.h>
 
 
+double FABMASTER::readDouble( const std::string aStr ) const
+{
+    std::istringstream istr( aStr );
+    istr.imbue( std::locale( "C" ) );
+
+    double doubleValue;
+    istr >> doubleValue;
+    return doubleValue;
+}
+
+
+int FABMASTER::readInt( const std::string aStr ) const
+{
+    std::istringstream istr( aStr );
+    istr.imbue( std::locale( "C" ) );
+
+    int intValue;
+    istr >> intValue;
+    return intValue;
+}
+
+
 bool FABMASTER::Read( const std::string& aFile )
 {
 
@@ -330,7 +352,7 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
         if( layer.id == 0 )
         {
             layer.name = pad_layer;
-            layer.id = std::stoi( pad_num );
+            layer.id = readInt( pad_num );
             layer.conductive = true;
         }
     }
@@ -400,7 +422,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
         if( pad_layer == "INTERNAL_PAD_DEF" || pad_layer == "internal_pad_def" )
             continue;
 
-        int recnum = KiROUND( stod( pad_num ) );
+        int recnum = KiROUND( readDouble( pad_num ) );
 
         auto new_pad = pads.find( pad_name );
 
@@ -422,9 +444,9 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
             try
             {
-                drill_hit = KiROUND( std::fabs( stod( pad_shape ) * scale_factor ) );
-                drill_x = KiROUND( std::fabs( stod( pad_width ) * scale_factor ) );
-                drill_y = KiROUND( std::fabs( stod( pad_height ) * scale_factor ) );
+                drill_hit = KiROUND( std::fabs( readDouble( pad_shape ) * scale_factor ) );
+                drill_x = KiROUND( std::fabs( readDouble( pad_width ) * scale_factor ) );
+                drill_y = KiROUND( std::fabs( readDouble( pad_height ) * scale_factor ) );
             }
             catch( ... )
             {
@@ -469,8 +491,8 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
         try
         {
-            w = std::stod( pad_width ) * scale_factor;
-            h = std::stod( pad_height ) * scale_factor;
+            w = readDouble( pad_width ) * scale_factor;
+            h = readDouble( pad_height ) * scale_factor;
         }
         catch( ... )
         {
@@ -524,8 +546,8 @@ size_t FABMASTER::processPadStacks( size_t aRow )
 
         try
         {
-            pad->x_offset = KiROUND( std::stod( pad_xoff ) * scale_factor );
-            pad->y_offset = -KiROUND( std::stod( pad_yoff ) * scale_factor );
+            pad->x_offset = KiROUND( readDouble( pad_xoff ) * scale_factor );
+            pad->y_offset = -KiROUND( readDouble( pad_yoff ) * scale_factor );
         }
         catch( ... )
         {
@@ -1272,8 +1294,8 @@ size_t FABMASTER::processVias( size_t aRow )
         vias.emplace_back( std::make_unique<FM_VIA>() );
         auto& via = vias.back();
 
-        via->x = KiROUND( std::stod( row[viax_col] ) * scale_factor );
-        via->y = -KiROUND( std::stod( row[viay_col] ) * scale_factor );
+        via->x = KiROUND( readDouble( row[viax_col] ) * scale_factor );
+        via->y = -KiROUND( readDouble( row[viay_col] ) * scale_factor );
         via->padstack = row[padstack_name_col];
         via->net = row[net_name_col];
         via->test_point = ( row[test_point_col] == "YES" );
@@ -1501,9 +1523,9 @@ size_t FABMASTER::processFootprints( size_t aRow )
         cmp->type = parseSymType( row[symtype_col] );
         cmp->name = row[symname_col];
         cmp->mirror = ( row[symmirror_col] == "YES" );
-        cmp->rotate = std::stod( row[symrotate_col] );
-        cmp->x = KiROUND( std::stod( row[symx_col] ) * scale_factor );
-        cmp->y = -KiROUND( std::stod( row[symy_col] ) * scale_factor );
+        cmp->rotate = readDouble( row[symrotate_col] );
+        cmp->x = KiROUND( readDouble( row[symx_col] ) * scale_factor );
+        cmp->y = -KiROUND( readDouble( row[symy_col] ) * scale_factor );
         cmp->value = row[compvalue_col];
         cmp->tol = row[comptol_col];
         cmp->voltage = row[compvolt_col];
@@ -1573,11 +1595,11 @@ size_t FABMASTER::processPins( size_t aRow )
         pin->mirror = ( row[symmirror_col] == "YES" );
         pin->pin_name = row[pinname_col];
         pin->pin_number = row[pinnum_col];
-        pin->pin_x = KiROUND( std::stod( row[pinx_col] ) * scale_factor );
-        pin->pin_y = -KiROUND( std::stod( row[piny_col] ) * scale_factor );
+        pin->pin_x = KiROUND( readDouble( row[pinx_col] ) * scale_factor );
+        pin->pin_y = -KiROUND( readDouble( row[piny_col] ) * scale_factor );
         pin->padstack = row[padstack_col];
         pin->refdes = row[refdes_col];
-        pin->rotation = std::stod( row[pinrot_col] );
+        pin->rotation = readDouble( row[pinrot_col] );
 
         auto map_it = pins.find( pin->refdes );
 
