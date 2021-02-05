@@ -959,15 +959,25 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_selectionTool->AddItemToSel( newItem );
 
     if( performDrag )
+    {
         m_toolMgr->RunAction( EE_ACTIONS::move, true );
+
+        SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
+
+        // We cannot proceed until the move tool has ended (by placement or cancel) otherwise,
+        // we risk breaking out of the tool by activating another
+        while( moveTool->IsToolActive() )
+            Wait();
+    }
 
     newItem->ClearFlags();
 
     if( newItem->IsConnectable() )
     {
-        auto selection = m_selectionTool->GetSelection();
+        EE_SELECTION new_sel = m_selectionTool->GetSelection();
+        new_sel.Add( newItem );
 
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
+        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
     }
