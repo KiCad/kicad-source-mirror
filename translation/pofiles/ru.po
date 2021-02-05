@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-01-26 08:00+0000\n"
+"PO-Revision-Date: 2021-02-05 09:29+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5001,19 +5001,16 @@ msgid "Via holes"
 msgstr "Перех.отв."
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Перех.отв."
+msgstr "Стенки перех.отв."
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "Неметал. отв."
+msgstr "Метал. отв."
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "Неметал. отв."
+msgstr "Стенки метал. отв."
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -6458,9 +6455,8 @@ msgid "Report files"
 msgstr "Файлы отчёта"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "Параметры компонента"
+msgstr "Файлы расположения компонентов"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -7094,21 +7090,22 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Элемент не обозначен: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr "Ошибка: символ %s%s часть %d, но символ имеет только %d частей\n"
+msgstr ""
+"Ошибка: символ %s%s%s (часть %d) превышает количество указанных частей (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Составной элемент %s%s\n"
+msgstr "Дублирование элементов %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Составной элемент %s%s\n"
+msgstr "Дублирование элементов %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
@@ -7238,10 +7235,9 @@ msgid "Generate"
 msgstr "Сформировать"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+"Для формирования перечня элементов требуется полностью обозначенная схема."
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -8181,7 +8177,7 @@ msgstr "Обозначить компоненты"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "Схема обозначена не полностью. Отчёт об ошибках ERC будет неполным."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9334,10 +9330,8 @@ msgid "Export Netlist"
 msgstr "Экспорт списка цепей"
 
 #: eeschema/dialogs/dialog_netlist.cpp:341
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+msgstr "Для симуляции требуется полностью обозначенная схема."
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
 msgid "Reformat passive symbol values"
@@ -9380,10 +9374,8 @@ msgstr "%s экспорт"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+msgstr "Для формирования списка цепей требуется полностью обозначенная схема."
 
 #: eeschema/dialogs/dialog_netlist.cpp:702
 msgid "This plugin already exists."
@@ -10179,9 +10171,8 @@ msgid "Add signal by name:"
 msgstr "Добавить сигнал с именем:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "Необходимо выбрать источник постоянного тока (развёртка 1)"
+msgstr "Необходимо выбрать источник постоянного тока"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10198,9 +10189,8 @@ msgid "Volts"
 msgstr "В"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "соединительный"
+msgstr "А"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
@@ -10258,31 +10248,29 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "Включить второй источник"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:123
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:139
 msgid "V"
-msgstr "В"
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "П-образный"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -10302,23 +10290,20 @@ msgid "DC source:"
 msgstr "Источник DC:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Начальное напряжение:"
+msgstr "Начальное значение:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "Начальное значение:"
+msgstr "Конечное значение:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "Шаг приращения:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "Источник"
+msgstr "Поменять источники местами"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11800,9 +11785,8 @@ msgid "Passive Pin"
 msgstr "Пассивный"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "Вывод листа"
+msgstr "Свободный вывод"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -11963,24 +11947,20 @@ msgid "Library symbol issue"
 msgstr "Проблема с библиотекой символов"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Обозначение части символа:"
+msgstr "Символ не обозначен"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Изменения связей символов с посад.местами не сохранены"
+msgstr "Символ содержит больше частей, чем указано"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Не изменять конт.пл. на других слоях"
+msgstr "Части одного и того же символа имеют разные значения"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Чертить обозначения"
+msgstr "Дублирование обозначения"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -12709,10 +12689,8 @@ msgid "Open Schematic"
 msgstr "Открыть схему"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+msgstr "Для назначения посад.мест требуется полностью обозначенная схема."
 
 #: eeschema/sch_edit_frame.cpp:1049
 msgid "Could not open CvPcb"
@@ -13201,14 +13179,14 @@ msgstr ""
 "позиция: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Неверное число с плавающей точкой в\n"
+"Число с плавающей точкой с неверными региональными настройками (local) в\n"
 "файле: \"%s\"\n"
 "строка: %d\n"
 "позиция: %d"
@@ -13629,7 +13607,6 @@ msgid "Syntax Help"
 msgstr "Справка по синтаксису"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13823,8 +13800,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -13839,8 +13816,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Определения шин</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Результирующие цепи</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -13856,16 +13833,16 @@ msgstr ""
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
-"    <tr><samp>\n"
-"            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"            <td></td>\n"
-"            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-"    </tr></samp>\n"
+"    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
@@ -13890,10 +13867,11 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> "
+"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>"
+"\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -14158,14 +14136,12 @@ msgid "Tune component values"
 msgstr "Подстроить значения компонентов"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Настройки"
+msgstr "Настройки симулятора"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Настройки симулятора"
+msgstr "Параметры и настройки симулятора"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14365,22 +14341,19 @@ msgstr "Время"
 
 #: eeschema/sim/sim_plot_panel.cpp:390
 msgid "Voltage (swept)"
-msgstr "Напряжение (развёртки)"
+msgstr "Напряжение (развёртка)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Текущая клавиша:"
+msgstr "Ток (развёртка)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Сопротивление:"
+msgstr "Сопротивление (развёртка)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Повышение температуры:"
+msgstr "Температура (развёртка)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -14497,9 +14470,9 @@ msgid "Could not open the library file."
 msgstr "Не удалось открыть файл библиотеки."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "Загрузка библиотеки \"%s\""
+msgstr "Загрузка библиотеки '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:486
@@ -14563,21 +14536,13 @@ msgstr "Библиотека символов не задействована."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Ошибка при сохранении глобальной таблицы библиотек:\n"
-"\n"
-"%s"
+msgstr "Ошибка при сохранении глобальной таблицы библиотек."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Ошибка при сохранении таблицы библиотек проекта:\n"
-"\n"
-"%s"
+msgstr "Ошибка при сохранении таблицы библиотек проекта."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -15011,14 +14976,12 @@ msgstr ""
 "вручную (если потребуется)."
 
 #: eeschema/tools/backannotate.cpp:302
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr ""
-"Для экспортирования списка цепей требуется полностью обозначенная схема."
+msgstr "Для переопределения посад.мест требуется полностью обозначенная схема."
 
 #: eeschema/tools/backannotate.cpp:305
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "Переопределение посад.мест отменено пользователем."
 
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
@@ -15129,9 +15092,8 @@ msgid "Create a new symbol"
 msgstr "Создать новый символ"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Править символ..."
+msgstr "Править символ"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -15958,106 +15920,108 @@ msgid "Symbol Warnings"
 msgstr "Проблемы символа"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Вывод-дубликат %s</b>%s с координатами <b>(%.3f, %.3f)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%.3f, %.3f)</b> в доп.обозначении"
+"<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
+"с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в доп.обозначении."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Вывод-дубликат %s</b>%s с координатами <b>(%.3f, %.3f)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %c и %c доп.обозначения"
+"<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
+"с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %c и %c доп."
+"обозначения."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>Вывод-дубликат %s</b>%s с координатами <b>(%.3f, %.3f)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%.3f, %.3f)</b>"
+"<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
+"с выводом %s%s, координаты <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>Вывод-дубликат %s</b>%s с координатами <b>(%.3f, %.3f)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %c и %c"
+"<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, конфликтует "
+"с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в частях %c и %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в доп."
-"обозначении"
+"<b>Скрытый вывод питания %s</b> %s с координатами <b>(%.3f, %.3f)</b> в доп."
+"обозначении."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в доп."
-"обозначении символа %c"
+"<b>Скрытый вывод питания %s</b> %s с координатами <b>(%.3f, %.3f)</b> в "
+"доп.обозначении части %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b>"
+msgstr "<b>Скрытый вывод питания %s</b> %s с координатами <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в символе %c"
+"<b>Скрытый вывод питания %s</b> %s с координатами <b>(%.3f, %.3f)</b> в "
+"части %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Имена скрытых выводов питания будут указаны на любых подключенных цепях.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в доп."
-"обозначении"
+"<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3f, %.3f)</b> в доп."
+"обозначении."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в доп."
-"обозначении символа %c"
+"<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3f, %.3f)</b> в "
+"доп.обозначении части %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b>"
+msgstr "<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Вывод %s не по сетке</b>%s с координатами <b>(%.3f, %.3f)</b> в символе %c"
+"<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3f, %.3f)</b> в части %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Символ не найден."
+msgstr "Проблемы с символами не найдены."
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -17735,9 +17699,8 @@ msgid "Save Project To"
 msgstr "Сохранение проекта"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Создать новый проект из шаблона"
+msgstr "Создайте (или откройте) проект для редактирования схемы."
 
 #: kicad/tools/kicad_manager_control.cpp:607
 #, fuzzy
