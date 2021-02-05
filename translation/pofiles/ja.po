@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 09:29+0000\n"
+"PO-Revision-Date: 2021-02-05 09:49+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6407,9 +6407,8 @@ msgid "Report files"
 msgstr "レポート ファイル"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "コンポーネント パラメーター"
+msgstr "部品配置ファイル"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -18252,9 +18251,8 @@ msgid "Resistive Splitter"
 msgstr "抵抗分割型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:269
-#, fuzzy
 msgid "Attenuators"
-msgstr "アッテネーター:"
+msgstr "アッテネーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:283
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1106
@@ -20767,9 +20765,8 @@ msgid "merge aligned track segments, and remove null segments"
 msgstr "一直線上の配線セグメントをマージし、空のセグメントを削除"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
-#, fuzzy
 msgid "Delete tracks unconnected at one end"
-msgstr "配線は未接続で終わっています"
+msgstr "一方の終端が未接続の配線を削除します"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
@@ -22787,9 +22784,8 @@ msgid "Include board edge layer"
 msgstr "基板外形レイヤーを含む"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "マップ ファイルを生成"
+msgstr "部品配置ファイルを生成"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -27827,9 +27823,9 @@ msgstr "\"%s\" を作成できません。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:275
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: \"%s\"."
-msgstr "部品面 (表面) に配置されたファイル: \"%s\"."
+msgstr "表面(上面)の部品配置ファイル: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
@@ -27841,9 +27837,9 @@ msgstr "コンポーネントの数: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:297
 #: pcbnew/exporters/gen_footprints_placefile.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
-msgstr "半田面 (裏面) に配置されたファイル: \"%s\"."
+msgstr "裏面(底面)の部品配置ファイル: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:305
 #: pcbnew/exporters/gen_footprints_placefile.cpp:445
@@ -27862,9 +27858,9 @@ msgid "No footprint for automated placement."
 msgstr "自動配置するフットプリントがありません。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: \"%s\"."
-msgstr "ファイルの配置: \"%s\"."
+msgstr "部品配置ファイル: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:520
 #, c-format
@@ -28058,7 +28054,7 @@ msgstr "回路図にない"
 
 #: pcbnew/footprint.cpp:841
 msgid "exclude from pos files"
-msgstr "posファイルから除外"
+msgstr "部品配置ファイルから除外"
 
 #: pcbnew/footprint.cpp:844
 msgid "exclude from BOM"
@@ -29625,11 +29621,9 @@ msgstr ""
 "Eco1_User 上に配置して下さい"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1966
-#, fuzzy, c-format
+#, c-format
 msgid "Non-Copper Pad '%s' has a hole. This should not happen"
-msgstr ""
-"非銅箔パッド '%s' は積み重なった複合パッド (種類 %d) を使用しています。あり得"
-"ません"
+msgstr "非銅箔パッド '%s' には穴があります。あり得ません"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1972
 #, c-format
@@ -32142,9 +32136,8 @@ msgid "Component Placement (.pos)..."
 msgstr "コンポーネント パラメーター"
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "部品実装用のフットプリント座標ファイルを生成"
+msgstr "ピックアンドプレースのための部品配置ファイルを生成"
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Footprint Report (.rpt)..."
@@ -32223,9 +32216,8 @@ msgid "Drill/Place File Origin"
 msgstr "ドリル/配置ファイルの原点"
 
 #: pcbnew/tools/pcb_actions.cpp:637
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "ドリル ファイルとフットプリント位置ファイルへ原点位置を配置"
+msgstr "ドリル ファイルと部品配置ファイルへ原点位置を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Toggle Lock"
@@ -33860,17 +33852,14 @@ msgid "Excellon drill file"
 msgstr "Excellon ドリル ファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
 msgstr "Kicad プロジェクト ファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "回路図をロード"
+msgstr "KiCad 回路図ファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad プリント基板ファイル"
 
