@@ -87,7 +87,7 @@ public:
     SELECTION_CONDITION ViaFillDisplay();
 
     /**
-     * Create a functor that tests if the frame fills vias
+     * Create a functor that tests if the frame fills tracks
      *
      * @return Functor returning true if tracks are filled
      */
@@ -100,6 +100,13 @@ public:
      * @return Functor returning true if the frame is using the specified mode
      */
     SELECTION_CONDITION ZoneDisplayMode( ZONE_DISPLAY_MODE aMode );
+
+    /**
+     * Create a functor that tests whether only 45 degree graphic lines should be drawn
+     *
+     * @return Functor returning true if only 45 degree graphic lines should be drawn
+     */
+    SELECTION_CONDITION Line45degMode();
 
 protected:
     ///< Helper function used by HasItems()
@@ -126,6 +133,9 @@ protected:
     ///< Helper function used by ZoneDisplayMode()
     static bool zoneDisplayModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame,
                                      ZONE_DISPLAY_MODE aMode );
+
+    ///< Helper function used by Line45degMode()
+    static bool line45degModeFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame );
 };
 
 #endif /* PCB_EDITOR_CONDITIONS_H_ */

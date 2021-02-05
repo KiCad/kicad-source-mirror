@@ -455,6 +455,10 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     zoneMenu->Add( PCB_ACTIONS::zoneUnfillAll );
     m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawZone, std::move( zoneMenu ) );
 
+    std::unique_ptr<ACTION_MENU> lineMenu = std::make_unique<ACTION_MENU>( false, selTool );
+    lineMenu->Add( PCB_ACTIONS::toggleLine45degMode, ACTION_MENU::CHECK );
+    m_drawToolBar->AddToolContextMenu( PCB_ACTIONS::drawLine, std::move( lineMenu ) );
+
     m_drawToolBar->KiRealize();
 }
 
