@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-24 14:54-0800\n"
+"POT-Creation-Date: 2021-02-04 15:59-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3154,6 +3154,15 @@ msgstr "Micro-vias"
 msgid "Via holes"
 msgstr "Via holes"
 
+msgid "Via hole walls"
+msgstr "Via hole walls"
+
+msgid "Plated holes"
+msgstr "Plated holes"
+
+msgid "Plated hole walls"
+msgstr "Plated hole walls"
+
 msgid "Non-plated holes"
 msgstr "Non-plated holes"
 
@@ -4192,8 +4201,8 @@ msgstr "PostScript files"
 msgid "Report files"
 msgstr "Report files"
 
-msgid "Footprint place files"
-msgstr "Footprint place files"
+msgid "Component placement files"
+msgstr "Component placement files"
 
 msgid "VRML and X3D files"
 msgstr "VRML and X3D files"
@@ -4667,16 +4676,16 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Item not annotated: %s%s\n"
 
 #, c-format
-msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
+msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
+msgstr "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 
 #, c-format
-msgid "Multiple item %s%s (unit %d)\n"
-msgstr "Multiple item %s%s (unit %d)\n"
+msgid "Duplicate items %s%s%s\n"
+msgstr "Duplicate items %s%s%s\n"
 
 #, c-format
-msgid "Multiple item %s%s\n"
-msgstr "Multiple item %s%s\n"
+msgid "Duplicate items %s%s\n"
+msgstr "Duplicate items %s%s\n"
 
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
@@ -4770,6 +4779,9 @@ msgstr "Annotate Schematic"
 
 msgid "Generate"
 msgstr "Generate"
+
+msgid "Generating BOM requires a fully annotated schematic."
+msgstr "Generating BOM requires a fully annotated schematic."
 
 msgid "Generator nickname:"
 msgstr "Generator nickname:"
@@ -5528,8 +5540,8 @@ msgstr "Run ERC"
 msgid "Show Annotation dialog"
 msgstr "Show Annotation dialog"
 
-msgid "Annotation is incomplete. ERC cannot be run."
-msgstr "Annotation is incomplete. ERC cannot be run."
+msgid "Schematic is not fully annotated. ERC results will be incomplete."
+msgstr "Schematic is not fully annotated. ERC results will be incomplete."
 
 msgid "Delete exclusions too?"
 msgstr "Delete exclusions too?"
@@ -5542,12 +5554,6 @@ msgstr "Errors and Warnings Only"
 
 msgid "Errors, Warnings and Exclusions"
 msgstr "Errors, Warnings and Exclusions"
-
-msgid "Annotation not complete. ERC cannot be run."
-msgstr "Annotation not complete. ERC cannot be run."
-
-msgid "Show Annotation dialog."
-msgstr "Show Annotation dialog."
 
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC cancelled by user.<br><br>"
@@ -6283,8 +6289,8 @@ msgstr "Default format"
 msgid "Export Netlist"
 msgstr "Export Netlist"
 
-msgid "Schematic netlist not available"
-msgstr "Schematic netlist not available"
+msgid "Simulator requires a fully annotated schematic."
+msgstr "Simulator requires a fully annotated schematic."
 
 msgid "Reformat passive symbol values"
 msgstr "Reformat passive symbol values"
@@ -6316,6 +6322,9 @@ msgstr "Save Netlist File"
 #, c-format
 msgid "%s Export"
 msgstr "%s Export"
+
+msgid "Exporting netlist requires a fully annotated schematic."
+msgstr "Exporting netlist requires a fully annotated schematic."
 
 msgid "This plugin already exists."
 msgstr "This plugin already exists."
@@ -6869,17 +6878,20 @@ msgstr "Sheet Properties"
 msgid "Add signal by name:"
 msgstr "Add signal by name:"
 
-msgid "You need to enable at least one source"
-msgstr "You need to enable at least one source"
-
-msgid "You need to select DC source (sweep 1)"
-msgstr "You need to select DC source (sweep 1)"
-
-msgid "You need to select DC source (sweep 2)"
-msgstr "You need to select DC source (sweep 2)"
+msgid "You need to select DC source"
+msgstr "You need to select DC source"
 
 msgid "Source 1 and Source 2 must be different"
 msgstr "Source 1 and Source 2 must be different"
+
+msgid "Volts"
+msgstr "Volts"
+
+msgid "Amperes"
+msgstr "Amperes"
+
+msgid "Ohms"
+msgstr "Ω"
 
 msgid "Decade"
 msgstr "Decade"
@@ -6908,29 +6920,38 @@ msgstr "Stop frequency:"
 msgid "AC"
 msgstr "AC"
 
-msgid "DC Sweep Source 1"
-msgstr "DC Sweep Source 1"
+msgid "Enable second source"
+msgstr "Enable second source"
 
-msgid "Enable"
-msgstr "Enable"
+msgid "V"
+msgstr "V"
+
+msgid "I"
+msgstr "I"
+
+msgid "R"
+msgstr "R"
+
+msgid "TEMP"
+msgstr "TEMP"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "DC source:"
 msgstr "DC source:"
 
-msgid "Starting voltage:"
-msgstr "Starting voltage:"
+msgid "Starting value:"
+msgstr "Starting value:"
 
-msgid "Volts"
-msgstr "Volts"
-
-msgid "Final voltage:"
-msgstr "Final voltage:"
+msgid "Final value:"
+msgstr "Final value:"
 
 msgid "Increment step:"
 msgstr "Increment step:"
 
-msgid "DC Sweep Source 2"
-msgstr "DC Sweep Source 2"
+msgid "Swap sources"
+msgstr "Swap sources"
 
 msgid "DC Transfer"
 msgstr "DC Transfer"
@@ -7959,6 +7980,9 @@ msgstr "Tri-State Pin"
 msgid "Passive Pin"
 msgstr "Passive Pin"
 
+msgid "Free Pin"
+msgstr "Free Pin"
+
 msgid "Unspecified Pin"
 msgstr "Unspecified Pin"
 
@@ -8079,6 +8103,18 @@ msgstr "Wires not connected to anything"
 msgid "Library symbol issue"
 msgstr "Library symbol issue"
 
+msgid "Symbol is not annotated"
+msgstr "Symbol is not annotated"
+
+msgid "Symbol has more units than are defined"
+msgstr "Symbol has more units than are defined"
+
+msgid "Units of same symbol have different values"
+msgstr "Units of same symbol have different values"
+
+msgid "Duplicate reference designators"
+msgstr "Duplicate reference designators"
+
 msgid "Schematic Files"
 msgstr "Schematic Files"
 
@@ -8174,19 +8210,12 @@ msgstr ""
 msgid "Do not show this dialog again."
 msgstr "Do not show this dialog again."
 
-msgid "The schematic file will be converted to the new file format on save."
-msgstr "The schematic file will be converted to the new file format on save."
-
 msgid ""
-"This schematic was saved in the legacy file format which is no longer "
-"supported and will be saved using the new file format.\n"
-"\n"
-"The new file format cannot be opened with previous versions of KiCad."
+"This file was created by an older version of KiCad. It will be converted to "
+"the new format when saved."
 msgstr ""
-"This schematic was saved in the legacy file format which is no longer "
-"supported and will be saved using the new file format.\n"
-"\n"
-"The new file format cannot be opened with previous versions of KiCad."
+"This file was created by an older version of KiCad. It will be converted to "
+"the new format when saved."
 
 msgid "Schematic file is read only."
 msgstr "Schematic file is read only."
@@ -8295,9 +8324,6 @@ msgstr "Radius"
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Circle, radius %s"
-
-msgid "Type"
-msgstr "Type"
 
 msgid "no"
 msgstr "no"
@@ -8421,9 +8447,6 @@ msgstr "Info messages:"
 
 msgid "Error messages:"
 msgstr "Error messages:"
-
-msgid "Exporting the netlist requires a completely annotated schematic."
-msgstr "Exporting the netlist requires a completely annotated schematic."
 
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: duplicate sheet names. Continue?"
@@ -8622,6 +8645,9 @@ msgstr "Schematic file “%s” already exists."
 
 msgid "Open Schematic"
 msgstr "Open Schematic"
+
+msgid "Assigning footprints requires a fully annotated schematic."
+msgstr "Assigning footprints requires a fully annotated schematic."
 
 msgid "Could not open CvPcb"
 msgstr "Could not open CvPcb"
@@ -9023,6 +9049,18 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Invalid symbol convert number %s in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+
+#, c-format
+msgid ""
+"Floating point number with incorrect local in\n"
+"file: \"%s\"\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
@@ -9447,16 +9485,16 @@ msgid ""
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
-"    <tr><samp>\n"
-"            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"            <td></td>\n"
-"            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-"    </tr></samp>\n"
+"    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
@@ -9580,16 +9618,16 @@ msgstr ""
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
-"    <tr><samp>\n"
-"            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-"            <td></td>\n"
-"            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-"    </tr></samp>\n"
+"    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
 "    </tr>\n"
@@ -9832,8 +9870,11 @@ msgstr "Tune"
 msgid "Tune component values"
 msgstr "Tune component values"
 
-msgid "Settings"
-msgstr "Settings"
+msgid "Sim Parameters"
+msgstr "Sim Parameters"
+
+msgid "Simulation parameters and settings"
+msgstr "Simulation parameters and settings"
 
 msgid "Welcome!"
 msgstr "Welcome!"
@@ -9976,17 +10017,26 @@ msgstr "Gain"
 msgid "Phase"
 msgstr "Phase"
 
-msgid "Voltage (swept)"
-msgstr "Voltage (swept)"
-
-msgid "Voltage (measured)"
-msgstr "Voltage (measured)"
-
 msgid "noise [(V or A)^2/Hz]"
 msgstr "noise [(V or A)^2/Hz]"
 
 msgid "Time"
 msgstr "Time"
+
+msgid "Voltage (swept)"
+msgstr "Voltage (swept)"
+
+msgid "Current (swept)"
+msgstr "Current (swept)"
+
+msgid "Resistance (swept)"
+msgstr "Resistance (swept)"
+
+msgid "Temperature (swept)"
+msgstr "Temperature (swept)"
+
+msgid "Voltage (measured)"
+msgstr "Voltage (measured)"
 
 msgid "DC Sweep"
 msgstr "DC Sweep"
@@ -10072,8 +10122,8 @@ msgid "Could not open the library file."
 msgstr "Could not open the library file."
 
 #, c-format
-msgid "Loading library \"%s\""
-msgstr "Loading library “%s”"
+msgid "Loading library '%s'"
+msgstr "Loading library '%s'"
 
 msgid "Add the library to the global library table?"
 msgstr "Add the library to the global library table?"
@@ -10116,15 +10166,11 @@ msgstr ""
 msgid "Symbol library not enabled."
 msgstr "Symbol library not enabled."
 
-#, c-format
-msgid "Error saving %s symbol library table."
-msgstr "Error saving %s symbol library table."
+msgid "Error saving global library table."
+msgstr "Error saving global library table."
 
-msgid "global"
-msgstr "global"
-
-msgid "project"
-msgstr "project"
+msgid "Error saving project library table."
+msgstr "Error saving project library table."
 
 msgid "Normal save as operation"
 msgstr "Normal save as operation"
@@ -10367,6 +10413,10 @@ msgstr ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 
 #, c-format
+msgid "Loading library \"%s\""
+msgstr "Loading library “%s”"
+
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -10453,8 +10503,11 @@ msgstr ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 
-msgid "Cannot relink footprints because schematic is not fully annotated."
-msgstr "Cannot relink footprints because schematic is not fully annotated."
+msgid "Re-linking footprints requires a fully annotated schematic."
+msgstr "Re-linking footprints requires a fully annotated schematic."
+
+msgid "Footprint re-linking cancelled by user."
+msgstr "Footprint re-linking cancelled by user."
 
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
@@ -10538,11 +10591,14 @@ msgstr "New Symbol..."
 msgid "Create a new symbol"
 msgstr "Create a new symbol"
 
-msgid "Edit"
-msgstr "Edit"
+msgid "Edit Symbol"
+msgstr "Edit Symbol"
 
 msgid "Show selected symbol on editor canvas"
 msgstr "Show selected symbol on editor canvas"
+
+msgid "Duplicate Symbol"
+msgstr "Duplicate Symbol"
 
 msgid "Make a copy of the selected symbol"
 msgstr "Make a copy of the selected symbol"
@@ -11150,58 +11206,88 @@ msgstr "Symbol Warnings"
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> of converted"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> of converted"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b>"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b>"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b>."
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with pin "
-"%s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
-
-#, c-format
-msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
-msgstr "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
+"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+"pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 
 #, c-format
 msgid ""
-"<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
-"converted"
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
-"converted"
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 
 #, c-format
-msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+msgid ""
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"converted."
+msgstr ""
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"converted."
 
 #, c-format
-msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
-msgstr "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
+msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+msgstr "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
 
-msgid "No off grid or duplicate pins were found."
-msgstr "No off grid or duplicate pins were found."
+#, c-format
+msgid ""
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+msgstr ""
+"<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+
+msgid ""
+"(Hidden power pins will drive their pin names on to any connected nets.)"
+msgstr ""
+"(Hidden power pins will drive their pin names on to any connected nets.)"
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+msgstr ""
+"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
+
+#, c-format
+msgid ""
+"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"converted."
+msgstr ""
+"<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
+"converted."
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
+
+#, c-format
+msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+msgstr "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
+
+msgid "No symbol issues found."
+msgstr "No symbol issues found."
 
 msgid "Select &All\tA"
 msgstr "Select &All\tA"
@@ -12438,6 +12524,12 @@ msgstr "Cannot copy folder \"%s\"."
 msgid "Save Project To"
 msgstr "Save Project To"
 
+msgid "Create (or open) a project to edit a schematic."
+msgstr "Create (or open) a project to edit a schematic."
+
+msgid "Create (or open) a project to edit a pcb."
+msgstr "Create (or open) a project to edit a pcb."
+
 msgid "Application failed to load:\n"
 msgstr "Application failed to load:\n"
 
@@ -12913,9 +13005,6 @@ msgstr "R2:"
 msgid "Vout:"
 msgstr "Vout:"
 
-msgid "V"
-msgstr "V"
-
 msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
@@ -13002,9 +13091,6 @@ msgstr "dB"
 
 msgid "Zin"
 msgstr "Zin"
-
-msgid "Ohms"
-msgstr "Ω"
 
 msgid "Zout"
 msgstr "Zout"
@@ -13481,6 +13567,12 @@ msgstr "Board Classes"
 
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
+
+msgid "Exact"
+msgstr "Exact"
+
+msgid "Not worth using"
+msgstr "Not worth using"
 
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
@@ -16064,8 +16156,8 @@ msgstr "Include &vias"
 msgid "Include &zones"
 msgstr "Include &zones"
 
-msgid "Filter Selection"
-msgstr "Filter Selection"
+msgid "Filter Selected Items"
+msgstr "Filter Selected Items"
 
 msgid "Searching..."
 msgstr "Searching..."
@@ -16305,8 +16397,8 @@ msgstr "Exclude all footprints with through hole pads"
 msgid "Include board edge layer"
 msgstr "Include board edge layer"
 
-msgid "Generate Footprint Position Files"
-msgstr "Generate Footprint Position Files"
+msgid "Generate Placement Files"
+msgstr "Generate Placement Files"
 
 msgid "Export to GenCAD settings"
 msgstr "Export to GenCAD settings"
@@ -18516,11 +18608,11 @@ msgid "Lock pads of newly added footprints"
 msgstr "Lock pads of newly added footprints"
 
 msgid ""
-"If checked, when a footprint is added to the board, the pads will be freely "
-"moveable."
+"If checked, when a footprint is added to the board, its pads will be locked "
+"and not movable with respect to the footprint."
 msgstr ""
-"If checked, when a footprint is added to the board, the pads will be freely "
-"moveable."
+"If checked, when a footprint is added to the board, its pads will be locked "
+"and not movable with respect to the footprint."
 
 msgid "Flip board items L/R (default is T/B)"
 msgstr "Flip board items L/R (default is T/B)"
@@ -18762,8 +18854,8 @@ msgstr "Allow micro vias (µVias)"
 msgid "Arc/circle approximated by segments"
 msgstr "Arc/circle approximated by segments"
 
-msgid "Maximum deviation:"
-msgstr "Maximum deviation:"
+msgid "Max allowed deviation:"
+msgstr "Max allowed deviation:"
 
 msgid ""
 "This is the maximum distance between a circle and the polygonal shape that "
@@ -18775,12 +18867,8 @@ msgstr ""
 "The error max defines the number of segments of this polygon."
 
 #, c-format
-msgid ""
-"Value < %s  can be time consuming when \n"
-"filling zones."
-msgstr ""
-"Value < %s  can be time consuming when \n"
-"filling zones."
+msgid "Note: zone filling can be slow when < %s."
+msgstr "Note: zone filling can be slow when < %s."
 
 msgid "Zone fill strategy"
 msgstr "Zone fill strategy"
@@ -19329,6 +19417,9 @@ msgstr ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 
+msgid "Cancel Changes?"
+msgstr "Cancel Changes?"
+
 msgid "DRC rules"
 msgstr "DRC rules"
 
@@ -19550,8 +19641,8 @@ msgstr "Schematic Parity"
 msgid "Signal Integrity"
 msgstr "Signal Integrity"
 
-msgid "Unconnected items"
-msgstr "Unconnected items"
+msgid "Missing connection between items"
+msgstr "Missing connection between items"
 
 msgid "Items shorting two nets"
 msgstr "Items shorting two nets"
@@ -19962,30 +20053,30 @@ msgid "Unable to create \"%s\"."
 msgstr "Unable to create “%s”."
 
 #, c-format
-msgid "Front side (top side) place file: \"%s\"."
-msgstr "Front side (top side) place file: “%s”."
+msgid "Front (top side) placement file: \"%s\"."
+msgstr "Front (top side) placement file: \"%s\"."
 
 #, c-format
 msgid "Component count: %d."
 msgstr "Component count: %d."
 
 #, c-format
-msgid "Back side (bottom side) place file: \"%s\"."
-msgstr "Back side (bottom side) place file: “%s”."
+msgid "Back (bottom side) placement file: \"%s\"."
+msgstr "Back (bottom side) placement file: \"%s\"."
 
 #, c-format
 msgid "Full component count: %d\n"
 msgstr "Full component count: %d\n"
 
-msgid "Component Placement File generation OK."
-msgstr "Component Placement File generation OK."
+msgid "File generation successful."
+msgstr "File generation successful."
 
 msgid "No footprint for automated placement."
 msgstr "No footprint for automated placement."
 
 #, c-format
-msgid "Place file: \"%s\"."
-msgstr "Place file: “%s”."
+msgid "Placement file: \"%s\"."
+msgstr "Placement file: \"%s\"."
 
 #, c-format
 msgid ""
@@ -20085,13 +20176,6 @@ msgstr "The current PCB has been modified.  Save changes?"
 #, c-format
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB “%s” does not exist.  Do you wish to create it?"
-
-msgid ""
-"This file was created by an older version of KiCad. It will be converted to "
-"the new format when saved."
-msgstr ""
-"This file was created by an older version of KiCad. It will be converted to "
-"the new format when saved."
 
 #, c-format
 msgid "No access rights to write to file \"%s\""
@@ -20309,9 +20393,6 @@ msgstr "Library \"%s\" is read only."
 #, c-format
 msgid "Library %s already exists."
 msgstr "Library %s already exists."
-
-msgid "Select Library Table"
-msgstr "Select Library Table"
 
 #, c-format
 msgid "Library '%s' is read only."
@@ -21770,6 +21851,10 @@ msgid "Could not read file "
 msgstr "Could not read file "
 
 #, c-format
+msgid "Unknown FABMASTER section %s:%s at row %zu."
+msgstr "Unknown FABMASTER section %s:%s at row %zu."
+
+#, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 
@@ -21801,12 +21886,16 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr "Expecting pad offset values but found %s : %s at line %zu"
 
 #, c-format
-msgid "Unknown pad shape name %s at line %zu"
-msgstr "Unknown pad shape name %s at line %zu"
+msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
+msgstr "Unknown pad shape name '%s' on layer '%s' at line %zu"
 
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
 msgstr "Invalid format for id string \"%s\" in custom pad row %zu"
+
+#, c-format
+msgid "Could not insert graphical item %d into padstack \"%s\""
+msgstr "Could not insert graphical item %d into padstack \"%s\""
 
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
@@ -21841,6 +21930,14 @@ msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
 msgstr ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
+
+#, c-format
+msgid "Invalid custom pad named '%s'. Replacing with circular pad."
+msgstr "Invalid custom pad named '%s'. Replacing with circular pad."
+
+#, c-format
+msgid "Could not find custom pad named %s"
+msgstr "Could not find custom pad named %s"
 
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
@@ -22569,6 +22666,9 @@ msgstr "%d potential problems repaired."
 msgid "No board problems found."
 msgstr "No board problems found."
 
+msgid "Updating PCB requires a fully annotated schematic."
+msgstr "Updating PCB requires a fully annotated schematic."
+
 msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -22650,6 +22750,9 @@ msgstr "Cannot generate clearance report on empty group."
 
 msgid "Silkscreen clearance resolution for:"
 msgstr "Silkscreen clearance resolution for:"
+
+msgid "Hole clearance resolution for:"
+msgstr "Hole clearance resolution for:"
 
 #, c-format
 msgid "%s not present on layer %s.  No clearance defined."
@@ -22776,11 +22879,17 @@ msgstr "Move the footprint reference anchor"
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Self-intersecting polygons are not allowed"
 
+msgid "Via location violates DRC."
+msgstr "Via location violates DRC."
+
 msgid "Place via"
 msgstr "Place via"
 
 msgid "Refilling all zones..."
 msgstr "Refilling all zones..."
+
+msgid "Schematic parity tests require a fully annotated schematic."
+msgstr "Schematic parity tests require a fully annotated schematic."
 
 msgid "DRC"
 msgstr "DRC"
@@ -23346,11 +23455,11 @@ msgstr "Drill Files (.drl)..."
 msgid "Generate Excellon drill file(s)"
 msgstr "Generate Excellon drill file(s)"
 
-msgid "Footprint Positions (.pos)..."
-msgstr "Footprint Positions (.pos)..."
+msgid "Component Placement (.pos)..."
+msgstr "Component Placement (.pos)..."
 
-msgid "Generate footprint position file for pick and place"
-msgstr "Generate footprint position file for pick and place"
+msgid "Generate component placement file(s) for pick and place"
+msgstr "Generate component placement file(s) for pick and place"
 
 msgid "Footprint Report (.rpt)..."
 msgstr "Footprint Report (.rpt)..."
@@ -23409,8 +23518,8 @@ msgstr "Add a footprint"
 msgid "Drill/Place File Origin"
 msgstr "Drill/Place File Origin"
 
-msgid "Place origin point for drill files and footprint position files"
-msgstr "Place origin point for drill files and footprint position files"
+msgid "Place origin point for drill files and component placement files"
+msgstr "Place origin point for drill files and component placement files"
 
 msgid "Toggle Lock"
 msgstr "Toggle Lock"
@@ -23806,11 +23915,11 @@ msgstr "Items in Same Hierarchical Sheet"
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Selects all footprints and tracks in the same schematic sheet"
 
-msgid "Filter Selection..."
-msgstr "Filter Selection…"
+msgid "Filter Selected Items..."
+msgstr "Filter Selected Items..."
 
-msgid "Filter the types of items in the selection"
-msgstr "Filter the types of items in the selection"
+msgid "Remove items from the selection by type"
+msgstr "Remove items from the selection by type"
 
 msgid "Fill zone(s)"
 msgstr "Fill zone(s)"
@@ -24650,6 +24759,486 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Footprint place files"
+#~ msgstr "Footprint place files"
+
+#, c-format
+#~ msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
+#~ msgstr "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
+
+#, c-format
+#~ msgid "Multiple item %s%s (unit %d)\n"
+#~ msgstr "Multiple item %s%s (unit %d)\n"
+
+#, c-format
+#~ msgid "Multiple item %s%s\n"
+#~ msgstr "Multiple item %s%s\n"
+
+#~ msgid "Annotation is incomplete. ERC cannot be run."
+#~ msgstr "Annotation is incomplete. ERC cannot be run."
+
+#~ msgid "Annotation not complete. ERC cannot be run."
+#~ msgstr "Annotation not complete. ERC cannot be run."
+
+#~ msgid "Show Annotation dialog."
+#~ msgstr "Show Annotation dialog."
+
+#~ msgid "Schematic netlist not available"
+#~ msgstr "Schematic netlist not available"
+
+#~ msgid "You need to enable at least one source"
+#~ msgstr "You need to enable at least one source"
+
+#~ msgid "You need to select DC source (sweep 1)"
+#~ msgstr "You need to select DC source (sweep 1)"
+
+#~ msgid "You need to select DC source (sweep 2)"
+#~ msgstr "You need to select DC source (sweep 2)"
+
+#~ msgid "DC Sweep Source 1"
+#~ msgstr "DC Sweep Source 1"
+
+#~ msgid "Enable"
+#~ msgstr "Enable"
+
+#~ msgid "Starting voltage:"
+#~ msgstr "Starting voltage:"
+
+#~ msgid "Final voltage:"
+#~ msgstr "Final voltage:"
+
+#~ msgid "DC Sweep Source 2"
+#~ msgstr "DC Sweep Source 2"
+
+#~ msgid "The schematic file will be converted to the new file format on save."
+#~ msgstr ""
+#~ "The schematic file will be converted to the new file format on save."
+
+#~ msgid ""
+#~ "This schematic was saved in the legacy file format which is no longer "
+#~ "supported and will be saved using the new file format.\n"
+#~ "\n"
+#~ "The new file format cannot be opened with previous versions of KiCad."
+#~ msgstr ""
+#~ "This schematic was saved in the legacy file format which is no longer "
+#~ "supported and will be saved using the new file format.\n"
+#~ "\n"
+#~ "The new file format cannot be opened with previous versions of KiCad."
+
+#~ msgid "Exporting the netlist requires a completely annotated schematic."
+#~ msgstr "Exporting the netlist requires a completely annotated schematic."
+
+#~ msgid ""
+#~ "<table>\n"
+#~ "    <tr>\n"
+#~ "        <th>Markup</th>\n"
+#~ "        <th></th>\n"
+#~ "        <th>Result</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+#~ "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
+#~ "td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+#~ "samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <th>Bus Definition</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>Resultant Nets</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr><samp>\n"
+#~ "            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+#~ "            <td></td>\n"
+#~ "            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+#~ "    </tr></samp>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, "
+#~ "MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "</table>\n"
+#~ msgstr ""
+#~ "<table>\n"
+#~ "    <tr>\n"
+#~ "        <th>Markup</th>\n"
+#~ "        <th></th>\n"
+#~ "        <th>Result</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+#~ "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
+#~ "td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+#~ "samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <th>Bus Definition</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>Resultant Nets</th>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr><samp>\n"
+#~ "            <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+#~ "            <td></td>\n"
+#~ "            <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+#~ "    </tr></samp>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td><br></td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "    <tr>\n"
+#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+#~ "        <td></td>\n"
+#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, "
+#~ "MEM.LATCH</samp> </td>\n"
+#~ "    </tr>\n"
+#~ "</table>\n"
+
+#~ msgid "Settings"
+#~ msgstr "Settings"
+
+#, c-format
+#~ msgid "Error saving %s symbol library table."
+#~ msgstr "Error saving %s symbol library table."
+
+#~ msgid "global"
+#~ msgstr "global"
+
+#~ msgid "project"
+#~ msgstr "project"
+
+#~ msgid "Cannot relink footprints because schematic is not fully annotated."
+#~ msgstr "Cannot relink footprints because schematic is not fully annotated."
+
+#~ msgid "Edit"
+#~ msgstr "Edit"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted"
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b>"
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b>"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b>%s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> of converted"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
+#~ "converted"
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c of "
+#~ "converted"
+
+#, c-format
+#~ msgid "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+#~ msgstr "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b>"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b>%s at location <b>(%.3f, %.3f)</b> in symbol %c"
+
+#~ msgid "No off grid or duplicate pins were found."
+#~ msgstr "No off grid or duplicate pins were found."
+
+#~ msgid "Filter Selection"
+#~ msgstr "Filter Selection"
+
+#~ msgid "Generate Footprint Position Files"
+#~ msgstr "Generate Footprint Position Files"
+
+#~ msgid ""
+#~ "If checked, when a footprint is added to the board, the pads will be "
+#~ "freely moveable."
+#~ msgstr ""
+#~ "If checked, when a footprint is added to the board, the pads will be "
+#~ "freely moveable."
+
+#~ msgid "Maximum deviation:"
+#~ msgstr "Maximum deviation:"
+
+#, c-format
+#~ msgid ""
+#~ "Value < %s  can be time consuming when \n"
+#~ "filling zones."
+#~ msgstr ""
+#~ "Value < %s  can be time consuming when \n"
+#~ "filling zones."
+
+#~ msgid "Unconnected items"
+#~ msgstr "Unconnected items"
+
+#, c-format
+#~ msgid "Front side (top side) place file: \"%s\"."
+#~ msgstr "Front side (top side) place file: “%s”."
+
+#, c-format
+#~ msgid "Back side (bottom side) place file: \"%s\"."
+#~ msgstr "Back side (bottom side) place file: “%s”."
+
+#~ msgid "Component Placement File generation OK."
+#~ msgstr "Component Placement File generation OK."
+
+#, c-format
+#~ msgid "Place file: \"%s\"."
+#~ msgstr "Place file: “%s”."
+
+#~ msgid "Select Library Table"
+#~ msgstr "Select Library Table"
+
+#, c-format
+#~ msgid "Unknown pad shape name %s at line %zu"
+#~ msgstr "Unknown pad shape name %s at line %zu"
+
+#~ msgid "Footprint Positions (.pos)..."
+#~ msgstr "Footprint Positions (.pos)..."
+
+#~ msgid "Generate footprint position file for pick and place"
+#~ msgstr "Generate footprint position file for pick and place"
+
+#~ msgid "Place origin point for drill files and footprint position files"
+#~ msgstr "Place origin point for drill files and footprint position files"
+
+#~ msgid "Filter Selection..."
+#~ msgstr "Filter Selection…"
+
+#~ msgid "Filter the types of items in the selection"
+#~ msgstr "Filter the types of items in the selection"
 
 #~ msgid "Other..."
 #~ msgstr "Other…"
