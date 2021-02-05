@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 14:51+0000\n"
+"PO-Revision-Date: 2021-02-05 23:39+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1511,7 +1511,7 @@ msgstr "あなたの現在の変更は完全に失われます。"
 
 #: common/confirm.cpp:202 common/tool/actions.cpp:89
 msgid "Revert"
-msgstr "元に戻す"
+msgstr "変更を破棄"
 
 #: common/confirm.cpp:202 common/confirm.cpp:232 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:277
@@ -14883,9 +14883,8 @@ msgid "Create a new symbol"
 msgstr "新しいシンボルを作成"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "シンボルを編集 (&E)"
+msgstr "シンボルを編集"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
