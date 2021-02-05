@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 12:17+0000\n"
+"PO-Revision-Date: 2021-02-05 13:53+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11849,24 +11849,23 @@ msgstr "接続されていない未接続フラグ"
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
-msgstr "ラベルがどこにも接続されていません"
+msgstr "ラベルがどこにも接続されていない"
 
 #: eeschema/erc_item.cpp:86
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "グローバル ラベルは回路図中のどこにも接続されていません"
+msgstr "グローバル ラベルは回路図中のどこにも接続されていない"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "同様のラベルです (大文字/小文字だけ相違)"
+msgstr "同様のラベル (大文字/小文字だけ相違)"
 
 #: eeschema/erc_item.cpp:94
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr "異なるフットプリントが同じシンボルの別ユニットに割り当てられました"
+msgstr "異なるフットプリントが同じシンボルの別ユニットに割り当てられている"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr ""
-"異なるネットが同じシンボルの別ユニットにある共有ピンに割り当てられました"
+msgstr "異なるネットが同じシンボルの別ユニットにある共有ピンに割り当てられている"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -11878,16 +11877,15 @@ msgstr "このバスまたはネットに与えられた複数の名前"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr ""
-"ネットは図形的にはバスに接続されていますが、バスのメンバーではありません"
+msgstr "ネットは図形的にはバスに接続されているが、バスのメンバーではない"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr "バスに付けられたラベルは、バスを表していません"
+msgstr "バスに付けられたラベルは、バスを表していない"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
-msgstr "バスは図形的には接続されていますが、バス メンバーを共有していません"
+msgstr "バスは図形的には接続されているが、バス メンバーを共有していない"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
@@ -11899,7 +11897,7 @@ msgstr "未解決のテキスト変数"
 
 #: eeschema/erc_item.cpp:130
 msgid "Wires not connected to anything"
-msgstr "配線がどこにも接続されていません"
+msgstr "配線がどこにも接続されていない"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
@@ -11907,15 +11905,15 @@ msgstr "ライブラリー シンボルの問題"
 
 #: eeschema/erc_item.cpp:138
 msgid "Symbol is not annotated"
-msgstr "シンボルはアノテーションされていません"
+msgstr "シンボルがアノテーションされていない"
 
 #: eeschema/erc_item.cpp:142
 msgid "Symbol has more units than are defined"
-msgstr "シンボルが定義しているよりも多くのユニットがあります"
+msgstr "シンボルが定義しているよりも多くのユニットがある"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
-msgstr "同じシンボルのユニットが異なる値を持っています"
+msgstr "同じシンボルのユニットが異なる値"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
@@ -13392,7 +13390,7 @@ msgstr "シンボル ドキュメント ライブラリー ファイルが空で
 #: eeschema/sch_screen.cpp:589
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
-msgstr "回路図シンボル '%s %s' ライブラリー識別子を '%s' へセット"
+msgstr "回路図シンボル '%s %s' のライブラリー識別子を '%s' へセットします。 "
 
 #: eeschema/sch_screen.cpp:606
 #, c-format
@@ -14330,21 +14328,13 @@ msgstr "シンボル ライブラリーが有効になっていません。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"グローバル ライブラリー テーブル保存中のエラー:\n"
-"\n"
-"%s"
+msgstr "グローバル ライブラリー テーブルの保存中にエラーが発生しました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"プロジェクト固有ライブラリー テーブル保存中のエラー:\n"
-"\n"
-"%s"
+msgstr "プロジェクト ライブラリー テーブルの保存中にエラーが発生しました。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -14882,7 +14872,7 @@ msgstr "名前を付けてライブラリーを保存..."
 
 #: eeschema/tools/ee_actions.cpp:118
 msgid "Save the current library to a new file."
-msgstr "現在のライブラリーを新しいファイルに保存"
+msgstr "現在のライブラリーを新しいファイルに保存します。"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -20061,7 +20051,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"裏面のフットプリントを %s から開始"
+"裏面のフットプリントを %s から開始します。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, fuzzy
@@ -20168,11 +20158,13 @@ msgstr ""
 "フットプリントなし"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "*********** Sort on %s ***********"
 msgstr ""
+"\n"
+"*********** %sで並べ替え***********"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:572
 msgid "Footprint Coordinates"
@@ -20259,35 +20251,35 @@ msgstr "フットプリントの順序"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:45
 msgid "Horizontally: top left to bottom right"
-msgstr ""
+msgstr "水平方向: 左上から右下"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:56
 msgid "Horizontally: top right to bottom left"
-msgstr ""
+msgstr "水平方向: 右上から左下"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:67
 msgid "Horizontally: bottom left to top right"
-msgstr ""
+msgstr "水平方向: 左下から右上"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "水平方向: 右下から左上"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "垂直方向: 左上から右下"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "垂直方向: 右上から左下"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "垂直方向: 左下から右上"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "垂直方向: 右下から左上"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 msgid "Based on location of:"
@@ -20298,9 +20290,8 @@ msgid "Reference Designator"
 msgstr "リファレンス指定子"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
-#, fuzzy
 msgid "Round locations to:"
-msgstr "円形の半径比"
+msgstr "位置揃え:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:144
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:151
@@ -20393,7 +20384,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:246
 msgid "Front prefix:"
-msgstr "表面の接頭辞:"
+msgstr "表面のリファレンス接頭辞:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
@@ -20403,7 +20394,7 @@ msgstr "コンポーネントのリファレンス記号の置換 (&t)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
-msgstr "裏面の接頭辞:"
+msgstr "裏面のリファレンス接頭辞:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
@@ -23483,7 +23474,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
-msgstr "一致したレイヤーのリストから選択されたレイヤーを削除"
+msgstr "一致したレイヤーのリストから選択されたレイヤーを削除します。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
 msgid "<<"
@@ -23917,9 +23908,9 @@ msgid "Connected layers only"
 msgstr "接続されたレイヤーのみ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr "%s と %d ほか"
+msgstr "%s と %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1218
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1223
@@ -23985,9 +23976,7 @@ msgstr "警告: スルーホール パッドに穴がありません。"
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
-msgstr ""
-"警告: 通常、コネクターのパッドにはハンダ ペーストはありません。代わりにSMD"
-"パッドを使用してください"
+msgstr "警告: 通常、コネクターのパッドにはハンダ ペーストはありません。代わりにSMDパッドを使用してください。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 #, fuzzy
@@ -24323,9 +24312,7 @@ msgstr "BGA パッド"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1443
 msgid "Fiducial, local to footprint"
-msgstr ""
-"フットプリント\n"
-"のローカル基準"
+msgstr "フットプリントのローカル基準"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1442
 msgid "Fiducial, global to board"
@@ -24427,7 +24414,7 @@ msgstr "基本要素リスト:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "注: 座標はアンカー パッドへの相対で、方向は 0"
+msgstr "注: 座標はアンカー パッドへの相対で、方向は0です。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Edit Primitive"
@@ -25172,11 +25159,11 @@ msgstr "インタラクティブ ルーターの設定"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:164
 msgid "Reset to the current distance from the reference position."
-msgstr "基準位置から現在の距離にリセット"
+msgstr "基準位置から現在の距離にリセットします。"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:165
 msgid "Reset to the current angle from the reference position."
-msgstr "基準位置から現在の角度にリセット"
+msgstr "基準位置から現在の角度にリセットします。"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:169
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
@@ -25190,11 +25177,11 @@ msgstr "オフセット Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:172
 msgid "Reset to the current X offset from the reference position."
-msgstr "基準位置から現在の X オフセットにリセット"
+msgstr "基準位置から現在の X オフセットにリセットします。"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:173
 msgid "Reset to the current Y offset from the reference position."
-msgstr "基準位置から現在の Y オフセットにリセット"
+msgstr "基準位置から現在の Y オフセットにリセットします。"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:239
 msgid "Reference location: grid origin"
@@ -25568,19 +25555,19 @@ msgstr "パッドのプロパティをプッシュ"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr "ビア"
+msgstr "ビア(&V)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr "パッド"
+msgstr "パッド(&P)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
-msgstr "未使用のレイヤーを削除します。(&R)"
+msgstr "未使用のレイヤーを削除(&R)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "Res&tore unused layers"
-msgstr "未使用のレイヤーを復元します。(&t)"
+msgstr "未使用のレイヤーを復元(&t)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
@@ -25723,12 +25710,10 @@ msgid "Lock pads of newly added footprints"
 msgstr "新しく配置されたフットプリントのパッドをロック"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, its pads will be locked "
 "and not movable with respect to the footprint."
-msgstr ""
-"基板内側のロックしていないフットプリントは移動されます。よろしいですか？"
+msgstr "チェックすると、フットプリントが基板に追加されたときに、そのパッドがロックされ、フットプリントに対して移動できなくなります。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
 msgid "Flip board items L/R (default is T/B)"
@@ -27254,9 +27239,8 @@ msgid "Signal Integrity"
 msgstr "信号品質"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "バスとネット間の無効な接続"
+msgstr "アイテム間の接続が見つからない"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -27272,7 +27256,7 @@ msgstr "クリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Tracks crossing"
-msgstr "配線が交差しています"
+msgstr "配線の交差"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Board edge clearance violation"
@@ -27280,20 +27264,19 @@ msgstr "基板端クリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Copper areas intersect"
-msgstr "交差した導体エリアです"
+msgstr "導体エリアの交差"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Copper zone net has no pads"
-msgstr "導体ゾーンのネットはパッドへの接続がありません"
+msgstr "導体ゾーンのネットにパッドへの接続がない"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Via is not connected or connected on only one layer"
-msgstr ""
-"ビアがレイヤーに接続されていないか、単一のレイヤーにのみ接続されています"
+msgstr "ビアがレイヤーに未接続か、単一のレイヤーにのみ接続"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
-msgstr "配線は未接続で終わっています"
+msgstr "配線が未接続"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Hole clearance violation"
@@ -27301,7 +27284,7 @@ msgstr "穴のクリアランス違反"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Drilled holes too close together"
-msgstr "ドリル穴の間隔が近過ぎます"
+msgstr "ドリル穴が近過ぎる"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track width"
@@ -27321,7 +27304,7 @@ msgstr "ビア直径"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
-msgstr "パッドスタックは無効です"
+msgstr "パッドスタックが無効"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Micro via drill out of range"
@@ -27333,19 +27316,19 @@ msgstr "コートヤードのオーバーラップ"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Footprint has no courtyard defined"
-msgstr "フットプリントは定義されたコートヤードを持っていません"
+msgstr "フットプリントにコートヤードの定義がない"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Footprint has malformed courtyard"
-msgstr "フットプリントのコートヤードが異常な形状です"
+msgstr "フットプリントのコートヤードの形状が異常"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "PTH inside courtyard"
-msgstr "コートヤード内部の PTH"
+msgstr "コートヤード内部に PTH がある"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "NPTH inside courtyard"
-msgstr "コートヤード内部の NPTH"
+msgstr "コートヤード内部に NPTH がある"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Item on a disabled layer"
@@ -27353,7 +27336,7 @@ msgstr "無効なレイヤー上のアイテム"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Board has malformed outline"
-msgstr "基板外形が異常な形状です"
+msgstr "基板外形が異常な形状"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Duplicate footprints"
@@ -27361,11 +27344,11 @@ msgstr "重複したフットプリント"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "Missing footprint"
-msgstr "失われたフットプリント"
+msgstr "見つからないフットプリント"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "Extra footprint"
-msgstr "追加のフットプリント"
+msgstr "余計なフットプリント"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Pad net doesn't match schematic"
@@ -27389,7 +27372,7 @@ msgstr "配線間の遅延が許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Too many vias on a connection"
-msgstr "接続上のビアが多すぎます"
+msgstr "接続上のビアが多すぎる"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Differential pair gap out of range"
@@ -27397,7 +27380,7 @@ msgstr "差動ペアのギャップが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Differential uncoupled length too long"
-msgstr "差動の非結合長が長すぎます"
+msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_rule.h:134
 #, c-format
@@ -27531,9 +27514,8 @@ msgid "Gathering copper items..."
 msgstr "導体のアイテムを収集しています..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:190
-#, fuzzy
 msgid "Tessellating copper zones..."
-msgstr "ゾーンとゾーンのクリアランス...\n"
+msgstr "導体ゾーンをテッセレーションしています..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
 msgid "Checking track & via clearances..."
