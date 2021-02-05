@@ -118,10 +118,6 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
         normalizedFullPath += aFilePath.GetFullName();
     }
-    else
-    {
-        normalizedFullPath = aFilePath.GetFullPath();
-    }
 
     return normalizedFullPath;
 }
