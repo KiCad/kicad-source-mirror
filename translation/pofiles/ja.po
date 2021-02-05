@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 11:18+0000\n"
+"PO-Revision-Date: 2021-02-05 12:17+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11563,7 +11563,7 @@ msgstr "強制的に追加"
 msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
-msgstr ""
+msgstr "現在の形式 (*.kicad_sym) として保存する以前の形式のライブラリーを含む 1 つまたは複数の行を選択します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:716
 #, c-format
@@ -14222,7 +14222,7 @@ msgstr "ユニット %s"
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
-msgstr ""
+msgstr "回路図のシンボル %s を編集します。保存すると、回路図のみが更新されます。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:739
 msgid "Manage symbol libraries"
@@ -14352,7 +14352,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "ライブラリを保存した後は、追加の操作を実行しないでください。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
 msgid "Replace library table entry"
@@ -14773,7 +14773,7 @@ msgstr "フットプリント '%s' のシンボルが見つかりません。"
 msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
-msgstr ""
+msgstr "フットプリント '%s' はPCBに存在しません。回路図の対応するシンボルは、手動で削除する必要があります。(必要な場合)"
 
 #: eeschema/tools/backannotate.cpp:302
 msgid "Re-linking footprints requires a fully annotated schematic."
@@ -17044,7 +17044,7 @@ msgstr ""
 msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
-msgstr ""
+msgstr "新しいディレクトリーの作成中にエラーが発生しました。別のパスを試してください。プロジェクトはインポートされませんでした。"
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -17069,7 +17069,7 @@ msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:701
 msgid "Restoring session"
-msgstr ""
+msgstr "セッションの復元"
 
 #: kicad/kicad_manager_frame.cpp:711
 #, fuzzy, c-format
@@ -19630,7 +19630,7 @@ msgstr "レイヤー \"%s\" (サブレイヤー %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:187
 msgid "Select dielectric layer to add to board stack up."
-msgstr ""
+msgstr "基板のスタックアップに追加する誘電体層を選択します。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
 msgid "Dielectric Layers List"
@@ -19638,7 +19638,7 @@ msgstr "絶縁体レイヤーリスト"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:237
 msgid "Select dielectric layer to remove from board stack up."
-msgstr ""
+msgstr "基板のスタックアップから削除する誘電体層を選択します。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:238
 msgid "Dielectric Layers"
@@ -20015,7 +20015,7 @@ msgstr "基板を再アノテート"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "再アノテーションするPCBがありません!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB and schematic successfully reannotated"
@@ -27647,8 +27647,9 @@ msgid "Missing footprint %s (%s)"
 msgstr "見つからないフットプリント %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:139
+#, fuzzy
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "回路図に対応するピンが見つかりません。"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:148
 #, c-format
