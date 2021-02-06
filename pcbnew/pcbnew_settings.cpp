@@ -70,7 +70,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_AddUnlockedPads( false ),
           m_PolarCoords( false ),
           m_RotationAngle( 900 ),
-          m_PlotLineWidth( 0.1 ),
           m_ShowPageLimits( true ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerAutoZoom( false ),
@@ -188,9 +187,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.origin_invert_y_axis",
             &m_Display.m_DisplayInvertYAxis, false ) );
 
-    m_params.emplace_back( new PARAM<double>( "plot.line_width",
-            &m_PlotLineWidth, 0.1, 0.01, 5.0 ) );
-
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
             &m_Cleanup.cleanup_vias, true ) );
 
@@ -291,6 +287,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<wxString>( "export_svg.output_dir",
             &m_ExportSvg.output_dir, "" ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_svg.line_width",
+            &m_ExportSvg.line_width, DEFAULT_LINE_WIDTH ) );
 
     m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers",
             &m_ExportSvg.layers, {} ) );

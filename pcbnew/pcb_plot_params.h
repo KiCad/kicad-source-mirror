@@ -347,11 +347,4 @@ public:
 };
 
 
-/**
- * Default line thickness in PCnew units used to draw or plot items having a
- * default thickness line value (Frame references) (i.e. = 0 ).
- * 0 = single pixel line width.
- */
-extern int g_DrawDefaultLineThickness;
-
 #endif // PCB_PLOT_PARAMS_H_

@@ -918,7 +918,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         m_rotationAngle            = cfg->m_RotationAngle;
-        g_DrawDefaultLineThickness = Millimeter2iu( cfg->m_PlotLineWidth );
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
         m_showPageLimits           = cfg->m_ShowPageLimits;
     }
@@ -935,7 +934,6 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         cfg->m_RotationAngle                  = m_rotationAngle;
-        cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();

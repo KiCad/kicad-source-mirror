@@ -46,12 +46,6 @@
 #define SVG_PRECISION_DEFAULT     6
 
 
-/**
- * Default line thickness in internal units used to draw or plot items using a
- * default thickness line value (Frame references)
- */
-int g_DrawDefaultLineThickness = PLOT_LINEWIDTH_DEFAULT;
-
 // default trailing digits in Gerber coordinates, when units are mm
 // This is also the max usable precision (i.e. internal Pcbnew Units)
 static const int gbrDefaultPrecision = 6;

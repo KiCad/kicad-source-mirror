@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,9 +50,6 @@ class DIALOG_EXPORT_SVG_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_CopperLayersList;
 		wxStaticText* m_staticTextTechLayers;
 		wxCheckListBox* m_TechnicalLayersList;
-		wxStaticText* m_penWidthLabel;
-		wxTextCtrl* m_penWidthCtrl;
-		wxStaticText* m_penWidthUnits;
 		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_rbSvgPageSizeOpt;
 		wxCheckBox* m_PrintBoardEdgesCtrl;
@@ -63,7 +60,7 @@ class DIALOG_EXPORT_SVG_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPlot( wxCommandEvent& event ) { event.Skip(); }
 

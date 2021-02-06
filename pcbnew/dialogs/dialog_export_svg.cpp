@@ -56,7 +56,6 @@ private:
     wxString          m_outputDirectory;
     bool              m_printMirror;
     bool              m_oneFileOnly;
-    UNIT_BINDER       m_lineWidth;
 
     void initDialog();
 
@@ -80,8 +79,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
         m_parent( aParent ),
         m_printBW( false ),
         m_printMirror( false ),
-        m_oneFileOnly( false ),
-        m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
+        m_oneFileOnly( false )
 {
     m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
 
@@ -99,7 +97,6 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
 
 DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 {
-    g_DrawDefaultLineThickness = m_lineWidth.GetValue();
     m_printBW = m_ModeColorOption->GetSelection();
     m_oneFileOnly = m_rbFileOpt->GetSelection() == 1;
     m_outputDirectory = m_outputDirectoryName->GetValue();
@@ -144,8 +141,6 @@ void DIALOG_EXPORT_SVG::initDialog()
     m_ModeColorOption->SetSelection( m_printBW ? 1 : 0 );
     m_printMirrorOpt->SetValue( m_printMirror );
     m_rbFileOpt->SetSelection( m_oneFileOnly ? 1 : 0 );
-
-    m_lineWidth.SetValue( g_DrawDefaultLineThickness );
 
     for( LSEQ seq = m_board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
@@ -240,7 +235,6 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
     m_printMirror = m_printMirrorOpt->GetValue();
     m_printBW = m_ModeColorOption->GetSelection();
-    g_DrawDefaultLineThickness = m_lineWidth.GetValue();
 
     LSET all_selected = getCheckBoxSelectedLayers();
 

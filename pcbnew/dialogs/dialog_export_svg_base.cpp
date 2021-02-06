@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,25 +76,6 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
-
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_penWidthLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penWidthLabel->Wrap( -1 );
-	m_penWidthLabel->SetToolTip( _("Selection of the pen size used to draw items which have no pen size specified.") );
-
-	bSizer8->Add( m_penWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_penWidthCtrl = new wxTextCtrl( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_penWidthCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-	m_penWidthUnits = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_penWidthUnits->Wrap( -1 );
-	bSizer8->Add( m_penWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
-
-
-	sbOptionsSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
