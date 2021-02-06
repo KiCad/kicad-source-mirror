@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-06 01:41+0000\n"
+"PO-Revision-Date: 2021-02-06 23:00+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -14792,14 +14792,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "%s の定数を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "ネットリスト ファイル \"%s\" を開くことができません。"
+msgstr "%s のピン '%s' が見つかりません。"
 
 #: eeschema/tools/backannotate.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "%s のネットのラベルを '%s' から '%s' へ変更します。"
+msgstr "%s のピン %s のネットのラベルを '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:556
 #, c-format
@@ -25427,9 +25427,9 @@ msgid "Changing the net will also update %s pad %s to %s."
 msgstr "ネットを変更すると、%s のパッド %s も %s に更新されます。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "プットプリント %s パッド %s のネットを %s から %s に変更しています。"
+msgstr "ネットを変更すると、%s のパッド %s と、 %s のパッド %s も %s に更新されます。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:361
 #, c-format
