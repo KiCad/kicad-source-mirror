@@ -135,7 +135,8 @@ TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicat
 
 TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
         AS_GLOBAL, 0, "",
-        _( "Save As..." ),  _( "Save the current symbol to a different library." ) );
+        _( "Save As..." ),  _( "Save the current symbol to a different library." ),
+        save_as_xpm );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",
