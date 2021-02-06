@@ -1283,6 +1283,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
         m_board->Add( zone, ADD_MODE::APPEND );
         m_polygons.emplace_back( zone );
 
+        zone->SetFillVersion( 6 );
         zone->SetNetCode( GetNetCode( elem.net ) );
         zone->SetLayer( klayer );
         zone->SetPosition( elem.vertices.at( 0 ).position );
@@ -1303,7 +1304,6 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
 
-        zone->SetMinThickness( IU_PER_MILS ); // TODO: workaround until proper min thickness is set
         if( polygonConnectRule != nullptr )
         {
             switch( polygonConnectRule->polygonconnectStyle )
@@ -1451,6 +1451,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
             ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
+            zone->SetFillVersion( 6 );
             zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
@@ -1591,7 +1592,8 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                 rawPolys.AddHole( hole_linechain );
             }
 
-            rawPolys.Deflate( zone->GetMinThickness() / 2, 32 );
+            if( zone->GetFilledPolysUseThickness() )
+                rawPolys.Deflate( zone->GetMinThickness() / 2, 32 );
 
             if( zone->HasFilledPolysForLayer( klayer ) )
                 rawPolys.BooleanAdd( zone->RawPolysList( klayer ),
@@ -1657,6 +1659,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
             ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
+            zone->SetFillVersion( 6 );
             zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
@@ -2242,6 +2245,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
             ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
+            zone->SetFillVersion( 6 );
             zone->SetIsRuleArea( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
@@ -2526,6 +2530,7 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
             ZONE* zone = new ZONE( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
+            zone->SetFillVersion( 6 );
             zone->SetNetCode( GetNetCode( elem.net ) );
             zone->SetLayer( klayer );
             zone->SetPosition( elem.pos1 );
