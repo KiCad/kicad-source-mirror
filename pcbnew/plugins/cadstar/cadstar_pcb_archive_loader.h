@@ -100,6 +100,7 @@ private:
     std::map<ROUTECODE_ID, NETCLASSPTR>   mNetClassMap;  ///< Map between Cadstar and KiCad classes
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
                                                          ///< CADSTAR Layer IDs
+    std::map<TEMPLATE_ID, ZONE*> mLoadedTemplates;       ///< Map between Cadstar and KiCad zones
     std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as
                                                          ///< power plane in CADSTAR. This is used
                                                          ///< by "loadtemplates"
@@ -153,6 +154,11 @@ private:
     void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     void applyDimensionSettings( const DIMENSION& aCadstarDim, ::DIMENSION_BASE* aKiCadDim );
+
+    /**
+     * @brief Tries to make a best guess as to the zone priorities based on the pour status.
+     */
+    void calculateZonePriorities();
 
     //Helper functions for drawing /loading objects onto screen:
 

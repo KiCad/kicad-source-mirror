@@ -98,6 +98,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard, ::PROJECT* aProject )
     loadDocumentationSymbols();
     loadTemplates();
     loadCoppers();
+    calculateZonePriorities();
     loadNets();
     loadTextVariables();
 
@@ -1558,13 +1559,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
     {
         TEMPLATE& csTemplate = tempPair.second;
 
-        ZONE* zone = getZoneFromCadstarShape( csTemplate.Shape,
-                                              getLineThickness( csTemplate.LineCodeID ), mBoard );
+        int zonelinethickness = 0; // The line thickness in CADSTAR is only for display purposes but
+                                   // does not affect the end copper result.
+        ZONE* zone = getZoneFromCadstarShape( csTemplate.Shape, zonelinethickness, mBoard );
 
         mBoard->Add( zone, ADD_MODE::APPEND );
 
         zone->SetZoneName( csTemplate.Name );
         zone->SetLayer( getKiCadLayer( csTemplate.LayerID ) );
+        zone->SetPriority( 1 ); // initially 1, we will increase in calculateZonePriorities
 
         if( !( csTemplate.NetID.IsEmpty() || csTemplate.NetID == wxT( "NONE" ) ) )
             zone->SetNet( getKiCadNet( csTemplate.NetID ) );
@@ -1645,6 +1648,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         }
         else
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
+
+        mLoadedTemplates.insert( { csTemplate.ID, zone } );
     }
 
     //Now create power plane layers:
@@ -1693,6 +1698,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
                 zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                 zone->SetPadConnection( ZONE_CONNECTION::FULL );
                 zone->SetMinIslandArea( -1 );
+                zone->SetPriority( 0 ); // Priority always 0 (lowest priority) for implied power planes.
                 zone->SetNet( getKiCadNet( netid ) );
             }
         }
@@ -1707,7 +1713,33 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
         COPPER& csCopper = copPair.second;
 
         if( !csCopper.PouredTemplateID.IsEmpty() )
-            continue; //ignore copper related to a template as we've already loaded it!
+        {
+            ZONE* pouredZone = mLoadedTemplates.at( csCopper.PouredTemplateID );
+
+            SHAPE_POLY_SET rawPolys = getPolySetFromCadstarShape( csCopper.Shape, -1 );
+
+            int copperWidth = getKiCadLength( getCopperCode( csCopper.CopperCodeID ).CopperWidth );
+            int zoneWidth = pouredZone->GetMinThickness();
+
+            if( zoneWidth > copperWidth )
+                rawPolys.Deflate( ( zoneWidth - copperWidth ) / 2, 32 );
+            else
+                rawPolys.Inflate( ( copperWidth - zoneWidth ) / 2, 32 );
+
+            if( pouredZone->HasFilledPolysForLayer( getKiCadLayer( csCopper.LayerID ) ) )
+                rawPolys.BooleanAdd( pouredZone->RawPolysList( getKiCadLayer( csCopper.LayerID )),
+                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+
+            SHAPE_POLY_SET finalPolys = rawPolys;
+            finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            pouredZone->SetRawPolysList( getKiCadLayer( csCopper.LayerID ), rawPolys );
+            pouredZone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), finalPolys );
+            pouredZone->SetIsFilled( true );
+            pouredZone->SetNeedRefill( false );
+            continue;
+        }
 
         // For now we are going to load coppers to a KiCad zone however this isn't perfect
         //TODO: Load onto a graphical polygon with a net (when KiCad has this feature)
@@ -1776,6 +1808,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
 
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
             zone->SetNet( getKiCadNet( csCopper.NetRef.NetID ) );
+            zone->SetPriority( mLoadedTemplates.size() + 1 ); // Highest priority (always fill first)
+            zone->SetRawPolysList( getKiCadLayer( csCopper.LayerID ), *zone->Outline() );
+
+            SHAPE_POLY_SET fillePolys( *zone->Outline() );
+            fillePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+
+            zone->SetFilledPolysList( getKiCadLayer( csCopper.LayerID ), fillePolys );
         }
     }
 }
@@ -2210,8 +2249,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         }
 
         shape->SetFilled( true );
-        shape->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,
-                             aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
+
+        SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape(
+                aCadstarShape, -1, aContainer, aMoveVector, aRotationAngle, aScalingFactor,
+                aTransformCentre, aMirrorInvert );
+
+        shapePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+
+        shape->SetPolyShape( shapePolys );
         shape->SetWidth( aLineThickness );
         shape->SetLayer( aKiCadLayer );
         aContainer->Add( shape, ADD_MODE::APPEND );
@@ -2467,10 +2512,6 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 
     if( aLineThickness > 0 )
         polySet.Inflate( aLineThickness / 2, 32, SHAPE_POLY_SET::CORNER_STRATEGY::ROUND_ALL_CORNERS );
-
-    //Make a new polyset with no holes
-    //TODO: Using strictly simple to be safe, but need to find out if PM_FAST works okay
-    polySet.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
 #ifdef DEBUG
     for( int i = 0; i < polySet.OutlineCount(); ++i )
@@ -3047,6 +3088,120 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
         wxFAIL_MSG( "We should have handled design units before coming here!" );
         break;
     }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities()
+{
+    std::map<TEMPLATE_ID, std::set<TEMPLATE_ID>> winningOverlaps;
+
+    // Calculate the intesection between aPolygon and the outline of aZone
+    auto intersectionArea = []( SHAPE_POLY_SET aPolygon, ZONE* aZone ) -> double
+                            {
+                                SHAPE_POLY_SET intersectShape( *aZone->Outline() );
+
+                                intersectShape.BooleanIntersection( aPolygon,
+                                                                    SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                                double intersectionArea = 0.0;
+
+                                for( int i = 0; i < intersectShape.OutlineCount(); i++ )
+                                {
+                                    intersectionArea += intersectShape.Outline( i ).Area();
+
+                                    for( int j = 0; j < intersectShape.HoleCount( i ); j++ )
+                                        intersectionArea -= intersectShape.Hole( i, j ).Area();
+                                }
+
+                                return intersectionArea;
+                            };
+
+    for( std::map<TEMPLATE_ID, ZONE*>::iterator it1 = mLoadedTemplates.begin();
+         it1 != mLoadedTemplates.end(); ++it1 )
+    {
+        TEMPLATE     thisTemplate = Layout.Templates.at( it1->first );
+        PCB_LAYER_ID thisLayer = getKiCadLayer( thisTemplate.LayerID );
+        ZONE*        thisZone = it1->second;
+
+        for( std::map<TEMPLATE_ID, ZONE*>::iterator it2 = it1;
+            it2 != mLoadedTemplates.end(); ++it2 )
+        {
+            TEMPLATE     otherTemplate = Layout.Templates.at( it2->first );
+            PCB_LAYER_ID otherLayer = getKiCadLayer( otherTemplate.LayerID );
+            ZONE*        otherZone = it2->second;
+
+            if( thisTemplate.ID == otherTemplate.ID )
+                continue;
+
+            if( thisLayer != otherLayer )
+                continue;
+
+            // Intersect the filled polygons of thisZone with the *outline* of otherZone
+            SHAPE_POLY_SET thisZonePolyFill = thisZone->GetFilledPolysList( thisLayer );
+            double         areaThis = intersectionArea( thisZonePolyFill, otherZone );
+
+            // Viceversa
+            SHAPE_POLY_SET otherZonePolyFill = otherZone->GetFilledPolysList( otherLayer );
+            double         areaOther = intersectionArea( otherZonePolyFill, thisZone );
+
+            // Best effort: Compare Areas
+            // If thisZone's fill polygons overlap otherZone's outline *and* the opposite
+            // is true: otherZone's fill polygons overlap thisZone's outline then compare the
+            // intersection areas to decide which of the two zones should have higher priority
+            if( areaThis > areaOther )
+                winningOverlaps[thisTemplate.ID].insert( otherTemplate.ID );
+            else if( areaOther > 0 )
+                winningOverlaps[otherTemplate.ID].insert( thisTemplate.ID );
+        }
+    }
+
+    // Build a set of unique TEMPLATE_IDs of all the zones that intersect with another one
+    std::set<TEMPLATE_ID> intersectingIDs;
+
+    for( const std::pair<TEMPLATE_ID, std::set<TEMPLATE_ID>>& idPair : winningOverlaps )
+    {
+        intersectingIDs.insert( idPair.first );
+        intersectingIDs.insert( idPair.second.begin(), idPair.second.end() );
+    }
+
+    // Now store them in a vector
+    std::vector<TEMPLATE_ID> sortedIDs;
+
+    for( const TEMPLATE_ID& id : intersectingIDs )
+    {
+        sortedIDs.push_back( id );
+    }
+
+    // Lambda to determine if the zone with template ID 'a' is lower priority than 'b'
+    auto isLowerPriority = [&]( const TEMPLATE_ID& a, const TEMPLATE_ID& b ) -> bool
+                         {
+                             return winningOverlaps[b].count( a ) > 0;
+                         };
+
+    // sort by priority
+    std::sort( sortedIDs.begin(), sortedIDs.end(), isLowerPriority );
+
+    TEMPLATE_ID prevID = wxEmptyString;
+
+    for( const TEMPLATE_ID& id : sortedIDs )
+    {
+        if( prevID.IsEmpty() )
+        {
+            prevID = id;
+            continue;
+        }
+
+        wxASSERT( !isLowerPriority( id, prevID ) );
+
+        int newPriority = mLoadedTemplates.at( prevID )->GetPriority();
+
+        // Only increase priority of the current zone
+        if( isLowerPriority( prevID, id ) )
+            newPriority++;
+
+        mLoadedTemplates.at( id )->SetPriority( newPriority );
+        prevID = id;
+    }
+
 }
 
 
