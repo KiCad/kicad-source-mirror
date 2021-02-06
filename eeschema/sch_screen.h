@@ -390,7 +390,7 @@ public:
      * @param aPosition The position to test.
      * @return The sheet label object if found otherwise NULL.
      */
-    SCH_SHEET_PIN* GetSheetLabel( const wxPoint& aPosition );
+    SCH_SHEET_PIN* GetSheetPin( const wxPoint& aPosition );
 
     /**
      * Clear the annotation for the components in \a aSheetPath on the screen.

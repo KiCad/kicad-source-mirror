@@ -485,38 +485,40 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
     wxCHECK_MSG( aLayer == LAYER_NOTES || aLayer == LAYER_BUS || aLayer == LAYER_WIRE, false,
                  wxT( "Invalid layer type passed to SCH_SCREEN::IsTerminalPoint()." ) );
 
-    SCH_SHEET_PIN* label;
-    SCH_TEXT*      text;
-    SCH_CONNECTION conn;
-
     switch( aLayer )
     {
     case LAYER_BUS:
-
+    {
         if( GetBus( aPosition ) )
             return true;
 
-        label = GetSheetLabel( aPosition );
+        SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
-        if( label && conn.MightBeBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
+        if( sheetPin && SCH_CONNECTION::MightBeBusLabel( sheetPin->GetText() )
+                && sheetPin->IsConnected( aPosition ) )
+        {
             return true;
+        }
 
-        text = GetLabel( aPosition );
+        SCH_TEXT* label = GetLabel( aPosition );
 
-        if( text && conn.MightBeBusLabel( text->GetText() ) && text->IsConnected( aPosition )
-            && (text->Type() != SCH_LABEL_T) )
+        if( label && SCH_CONNECTION::MightBeBusLabel( label->GetText() )
+                && label->IsConnected( aPosition ) && label->Type() != SCH_LABEL_T )
+        {
             return true;
-
+        }
+    }
         break;
 
     case LAYER_NOTES:
-
+    {
         if( GetLine( aPosition ) )
             return true;
-
+    }
         break;
 
     case LAYER_WIRE:
+    {
         if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_WIRE_ENTRY_T) )
             return true;
 
@@ -532,16 +534,22 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         if( GetWire( aPosition ) )
             return true;
 
-        text = GetLabel( aPosition );
+        SCH_TEXT* label = GetLabel( aPosition );
 
-        if( text && text->IsConnected( aPosition ) && !conn.MightBeBusLabel( text->GetText() ) )
+        if( label && !SCH_CONNECTION::MightBeBusLabel( label->GetText() )
+                && label->IsConnected( aPosition ) && label->Type() != SCH_LABEL_T )
+        {
             return true;
+        }
 
-        label = GetSheetLabel( aPosition );
+        SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
-        if( label && label->IsConnected( aPosition ) && !conn.MightBeBusLabel( label->GetText() ) )
+        if( sheetPin && sheetPin->IsConnected( aPosition )
+            && !SCH_CONNECTION::MightBeBusLabel( sheetPin->GetText() ) )
+        {
             return true;
-
+        }
+    }
         break;
 
     default:
@@ -892,7 +900,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
 }
 
 
-SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
+SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition )
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
 

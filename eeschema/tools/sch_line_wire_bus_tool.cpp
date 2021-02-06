@@ -628,10 +628,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             // Create a new segment if we're out of previously-created ones
             else if( !segment->IsNull() || ( forceHV && !m_wires[ m_wires.size() - 2 ]->IsNull() ) )
             {
-                // Terminate the command if the end point is on a pin, junction, or another
+                // Terminate the command if the end point is on a pin, junction, label, or another
                 // wire or bus.
-                if( !m_busUnfold.in_progress
-                        && screen->IsTerminalPoint( cursorPos, segment->GetLayer() ) )
+                if( screen->IsTerminalPoint( cursorPos, segment->GetLayer() ) )
                 {
                     finishSegments();
                     segment = nullptr;
