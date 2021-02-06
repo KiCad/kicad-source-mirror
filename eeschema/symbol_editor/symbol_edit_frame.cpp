@@ -367,6 +367,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                        && !m_libMgr->IsLibraryReadOnly( libName );
             };
 
+    auto canEditProperties =
+            [this] ( const SELECTION& sel )
+            {
+                return m_my_part && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
+            };
+
     mgr->SetConditions( ACTIONS::saveAll,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
@@ -470,7 +476,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
         };
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::symbolProperties,
+                        ENABLE( canEditProperties && haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
 
