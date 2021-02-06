@@ -412,8 +412,6 @@ set( BMAPS_MID
     rotate_ccw_z
     rotate_cw_z
     save_as
-    save_symbol_to_schematic
-    save_fp_to_board
     save
     select_layer_pair
     select_w_layer
