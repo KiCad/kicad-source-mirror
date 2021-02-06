@@ -74,6 +74,8 @@ set( BMAPS_SMALL
     icon_pagelayout_editor_16
     icon_pcbcalculator_16
     icon_pcbnew_16
+    list_nets_16
+    options_generic_16
     pinorient_right
     pinorient_left
     pinorient_up
