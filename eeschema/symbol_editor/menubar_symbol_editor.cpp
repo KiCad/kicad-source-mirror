@@ -57,8 +57,6 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     if( !IsSymbolFromSchematic() )
         fileMenu->Add( ACTIONS::saveAll );
-    else
-        fileMenu->Add( EE_ACTIONS::saveInSchematic );
 
     fileMenu->Add( ACTIONS::revert );
 

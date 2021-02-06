@@ -480,38 +480,6 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
-{
-    wxCHECK( m_isSymbolEditor, 0 );
-
-    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-
-    wxCHECK( editFrame, 0 );
-
-    LIB_PART* currentPart = editFrame->GetCurPart();
-
-    wxCHECK( currentPart, 0 );
-
-    SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH, false );
-
-    if( !schframe )      // happens when the schematic editor is not active (or closed)
-    {
-        DisplayErrorMessage( m_frame, _( "No schematic currently open." ) );
-        return 0;
-    }
-
-    schframe->UpdateSymbolFromEditor( *currentPart );
-
-    SCH_SCREEN* currentScreen = editFrame->GetScreen();
-
-    wxCHECK( currentScreen, 0 );
-
-    currentScreen->ClrModify();
-
-    return 0;
-}
-
-
 void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -525,7 +493,6 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::UpdateSymbolInSchematic, EE_ACTIONS::saveInSchematic.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );

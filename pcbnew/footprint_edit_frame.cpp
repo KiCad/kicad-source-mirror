@@ -986,8 +986,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
     mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( PCB_ACTIONS::saveToBoard,        ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( PCB_ACTIONS::saveToLibrary,      ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::save,                   ENABLE( cond.ContentModified() ) );
 
     mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );

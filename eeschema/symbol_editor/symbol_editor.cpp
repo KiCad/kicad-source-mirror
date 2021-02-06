@@ -508,7 +508,11 @@ void SYMBOL_EDIT_FRAME::Save()
         {
             SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
-            if( schframe )
+            if( !schframe )      // happens when the schematic editor is not active (or closed)
+            {
+                DisplayErrorMessage( this, _( "No schematic currently open." ) );
+            }
+            else
             {
                 schframe->UpdateSymbolFromEditor( *m_my_part );
                 GetScreen()->ClrModify();
@@ -590,7 +594,7 @@ void SYMBOL_EDIT_FRAME::savePartAs()
             itemsToDisplay.push_back( item );
         }
 
-        EDA_LIST_DIALOG dlg( this, _( "Save Copy of Symbol" ), headers, itemsToDisplay, old_lib );
+        EDA_LIST_DIALOG dlg( this, _( "Save Symbol As" ), headers, itemsToDisplay, old_lib );
         dlg.SetListLabel( _( "Save in library:" ) );
         dlg.SetOKLabel( _( "Save" ) );
 

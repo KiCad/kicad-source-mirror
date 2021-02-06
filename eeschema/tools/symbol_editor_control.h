@@ -59,7 +59,6 @@ public:
     int ExportView( const TOOL_EVENT& aEvent );
     int ExportSymbolAsSVG( const TOOL_EVENT& aEvent );
     int AddSymbolToSchematic( const TOOL_EVENT& aEvent );
-    int UpdateSymbolInSchematic( const TOOL_EVENT& aEvent );
 
     int OnDeMorgan( const TOOL_EVENT& aEvent );
 

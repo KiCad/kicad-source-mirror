@@ -502,8 +502,6 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 ACTIONS::save.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 PCB_ACTIONS::saveToBoard.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 PCB_ACTIONS::saveToLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveAs.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Revert,               ACTIONS::revert.MakeEvent() );

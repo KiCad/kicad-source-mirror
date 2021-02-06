@@ -59,11 +59,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #ifdef KICAD_SCRIPTING
     m_mainToolBar->Add( PCB_ACTIONS::createFootprint );
 #endif
-
-    if( IsCurrentFPFromBoard() )
-        m_mainToolBar->Add( PCB_ACTIONS::saveToBoard );
-    else
-        m_mainToolBar->Add( PCB_ACTIONS::saveToLibrary );
+    m_mainToolBar->Add( ACTIONS::save );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::print );

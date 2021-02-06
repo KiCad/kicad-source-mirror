@@ -946,7 +946,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, _( "Save Footprint" ), headers, itemsToDisplay, libraryName );
+    EDA_LIST_DIALOG dlg( this, _( "Save Footprint As" ), headers, itemsToDisplay, libraryName );
     dlg.SetListLabel( _( "Save in library:" ) );
     dlg.SetOKLabel( _( "Save" ) );
 

@@ -113,12 +113,13 @@ TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSele
 // SYMBOL_EDITOR_CONTROL
 //
 TOOL_ACTION EE_ACTIONS::saveLibraryAs( "eeschema.SymbolLibraryControl.saveLibraryAs",
-        AS_GLOBAL, MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
-        _( "Save Library As..." ),
-        _( "Save the current library to a new file." ) );
+        AS_GLOBAL,
+        MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
+        _( "Save Library As..." ), _( "Save the current library to a new file." ) );
 
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
-        AS_GLOBAL, 0, "",
+        AS_GLOBAL,
+        'N', "",
         _( "New Symbol..." ), _( "Create a new symbol" ),
         new_component_xpm );
 
@@ -133,8 +134,8 @@ TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicat
         duplicate_xpm );
 
 TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
-        AS_GLOBAL, 0, "", _( "Save Symbol As..." ),
-        _( "Save the current symbol to a different library." ) );
+        AS_GLOBAL, 0, "",
+        _( "Save As..." ),  _( "Save the current symbol to a different library." ) );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",
@@ -198,11 +199,6 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.tog
            "When enabled propagates all changes (except pin numbers) to other units.\n"
            "Enabled by default for multiunit parts with interchangeable units." ),
         pin2pin_xpm );
-
-TOOL_ACTION EE_ACTIONS::saveInSchematic( "eeschema.SymbolLibraryControl.saveInSchematic",
-        AS_GLOBAL, 0, "",
-        _( "Save In Schematic" ), _( "Save the current symbol in the schematic" ),
-        save_symbol_to_schematic_xpm );
 
 
 // SYMBOL_EDITOR_DRAWING_TOOLS

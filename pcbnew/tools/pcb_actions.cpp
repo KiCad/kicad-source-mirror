@@ -333,16 +333,6 @@ TOOL_ACTION PCB_ACTIONS::createFootprint( "pcbnew.ModuleEditor.createFootprint",
         _( "Create Footprint..." ), _( "Create a new footprint using the Footprint Wizard" ),
         module_wizard_xpm );
 
-TOOL_ACTION PCB_ACTIONS::saveToBoard( "pcbnew.ModuleEditor.saveToBoard",
-        AS_GLOBAL, 0, "",
-        _( "Save to Board" ), _( "Update footprint on board" ),
-        save_fp_to_board_xpm );
-
-TOOL_ACTION PCB_ACTIONS::saveToLibrary( "pcbnew.ModuleEditor.saveToLibrary",
-        AS_GLOBAL, 0, "",
-        _( "Save to Library" ), _( "Save changes to library" ),
-        save_xpm );
-
 TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
         AS_GLOBAL, 0, "",
         _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),

@@ -58,11 +58,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    if( IsCurrentFPFromBoard() )
-        fileMenu->Add( PCB_ACTIONS::saveToBoard );
-    else
-        fileMenu->Add( PCB_ACTIONS::saveToLibrary );
-
+    fileMenu->Add( ACTIONS::save );
     fileMenu->Add( ACTIONS::saveAs );
     fileMenu->Add( ACTIONS::revert );
 

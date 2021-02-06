@@ -177,9 +177,6 @@ public:
     static TOOL_ACTION importSymbol;
     static TOOL_ACTION exportSymbol;
 
-    // Library editor tool actions
-    static TOOL_ACTION saveInSchematic;
-
     // Hierarchy navigation
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;

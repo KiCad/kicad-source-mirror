@@ -90,7 +90,7 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     if( !IsSymbolFromSchematic() )
         m_mainToolBar->Add( ACTIONS::saveAll );
     else
-        m_mainToolBar->Add( EE_ACTIONS::saveInSchematic );
+        m_mainToolBar->Add( ACTIONS::save );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::undo );

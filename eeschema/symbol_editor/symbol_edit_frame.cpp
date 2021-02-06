@@ -377,8 +377,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveInSchematic,
-                        ENABLE( schematicModifiedCond ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs, ENABLE( libSelectedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::newSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
