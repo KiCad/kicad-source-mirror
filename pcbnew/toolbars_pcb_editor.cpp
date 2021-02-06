@@ -48,9 +48,7 @@
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
 
-#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
-#endif
 
 
 /* Data to build the layer pair indicator button */
@@ -296,17 +294,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
     // Access to the scripting console
-#if defined(KICAD_SCRIPTING_WXPYTHON)
     if( IsWxPythonLoaded() )
     {
         m_mainToolBar->AddScaledSeparator( this );
         m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
-
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
         AddActionPluginTools();
-#endif
     }
-#endif
 
     // Go through and ensure the comboboxes are the correct size, since the strings in the
     // box could have changed widths.

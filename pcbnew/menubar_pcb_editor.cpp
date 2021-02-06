@@ -406,13 +406,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
     update->Enable( !Kiface().IsSingle() );
 
-
-#if defined(KICAD_SCRIPTING_WXPYTHON)
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
-#endif
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
@@ -439,8 +435,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( submenuActionPlugins );
-#endif
-
 
     //-- Preferences menu ----------------------------------------------------
     //

@@ -189,8 +189,6 @@ bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUs
     Py_Initialize();
     PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
-
 #if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
     PyEval_InitThreads();
 #endif      // if PY_VERSION_HEX < 0x03070000
@@ -232,8 +230,6 @@ bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUs
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
     g_PythonMainTState = PyEval_SaveThread();
-
-#endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
     // Load pcbnew inside Python and load all the user plugins and package-based plugins
     {
@@ -364,9 +360,7 @@ void pcbnewGetWizardsBackTrace( wxString& aTrace )
 
 void pcbnewFinishPythonScripting()
 {
-#ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_RestoreThread( g_PythonMainTState );
-#endif
     Py_Finalize();
 }
 
@@ -419,8 +413,6 @@ void pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
         wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
 }
 
-
-#if defined( KICAD_SCRIPTING_WXPYTHON )
 void RedirectStdio()
 {
     // This is a helpful little tidbit to help debugging and such.  It
@@ -536,7 +528,6 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
 
     return window;
 }
-#endif
 
 
 wxString PyStringToWx( PyObject* aString )

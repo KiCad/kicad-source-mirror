@@ -51,10 +51,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::newLibrary );
     fileMenu->Add( ACTIONS::addLibrary );
     fileMenu->Add( PCB_ACTIONS::newFootprint );
-
-#ifdef KICAD_SCRIPTING
     fileMenu->Add( PCB_ACTIONS::createFootprint );
-#endif
 
     fileMenu->AppendSeparator();
 

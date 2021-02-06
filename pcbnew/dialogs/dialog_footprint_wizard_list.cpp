@@ -36,14 +36,7 @@
 #include <dialog_footprint_wizard_list.h>
 #include <footprint_wizard_frame.h>
 
-#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
-#else
-// Dummy functions, actually defined in python_scripting.h when KICAD_SCRIPTING is enabled
-static void pcbnewGetWizardsBackTrace( wxString& aText ) {}
-static void pcbnewGetScriptsSearchPaths( wxString& aText ) {}
-static void pcbnewGetUnloadableScriptNames( wxString& aText ) {}
-#endif
 
 enum FPGeneratorRowNames
 {
@@ -156,12 +149,10 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::onUpdatePythonModulesClick( wxCommandEvent& event )
 {
-#if defined(KICAD_SCRIPTING)
     FOOTPRINT_WIZARD_FRAME* fpw_frame = static_cast<FOOTPRINT_WIZARD_FRAME*>( GetParent() );
     fpw_frame->PythonPluginsReload();
 
     initLists();
-#endif
 }
 
 

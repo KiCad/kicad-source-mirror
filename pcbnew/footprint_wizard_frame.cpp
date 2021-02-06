@@ -638,7 +638,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
     // Currently, there is no vertical toolbar
 }
 
-#if defined(KICAD_SCRIPTING)
 void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
 {
     // Reload the Python plugins
@@ -652,6 +651,3 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     else
         PythonPluginsReloadBase();
 }
-#endif
-
-

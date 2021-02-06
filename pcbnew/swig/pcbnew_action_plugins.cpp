@@ -189,8 +189,6 @@ void PYTHON_ACTION_PLUGINS::deregister_action( PyObject* aPyAction )
 }
 
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-
 void PCB_EDIT_FRAME::OnActionPluginMenu( wxCommandEvent& aEvent )
 {
     ACTION_PLUGIN* actionPlugin = ACTION_PLUGINS::GetActionByMenu( aEvent.GetId() );
@@ -471,6 +469,3 @@ bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, 
     // Plugin is not in settings, return default.
     return  aPluginDefault;
 }
-
-
-#endif

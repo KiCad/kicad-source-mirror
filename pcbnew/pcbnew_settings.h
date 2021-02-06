@@ -57,9 +57,7 @@ enum class TRACK_DRAG_ACTION
     DRAG_FREE_ANGLE
 };
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 typedef std::vector<std::pair<wxString, bool>> ACTION_PLUGIN_SETTINGS_LIST;
-#endif
 
 
 class PCBNEW_SETTINGS : public APP_SETTINGS_BASE
@@ -305,9 +303,7 @@ public:
 
     wxString m_lastFootprint3dDir;
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
-#endif
 
 protected:
 

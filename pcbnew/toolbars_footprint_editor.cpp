@@ -56,9 +56,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     // Set up toolbar
     m_mainToolBar->Add( PCB_ACTIONS::newFootprint );
-#ifdef KICAD_SCRIPTING
     m_mainToolBar->Add( PCB_ACTIONS::createFootprint );
-#endif
     m_mainToolBar->Add( ACTIONS::save );
 
     m_mainToolBar->AddScaledSeparator( this );

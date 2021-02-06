@@ -54,29 +54,13 @@ cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller 
 # so that build option settings can be included in bug reports.
 #
 
-option( KICAD_SCRIPTING
-    "Build the Python scripting support inside KiCad binaries (default ON)."
-    ON )
-
-option( KICAD_SCRIPTING_MODULES
-    "Build native portion of the pcbnew Python module: _pcbnew.{pyd,so} for OS command line use of Python."
-    ON )
-
 option( KICAD_SCRIPTING_PYTHON3
     "Build for Python 3 instead of 2 (default OFF)."
     OFF )
 
-option( KICAD_SCRIPTING_WXPYTHON
-    "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
-    ON )
-
 option( KICAD_SCRIPTING_WXPYTHON_PHOENIX
     "Use new wxPython binding (default OFF)."
     OFF )
-
-option( KICAD_SCRIPTING_ACTION_MENU
-    "Build a tools menu with registered python plugins: actions plugins (default ON)."
-    ON )
 
 option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default ON)"
@@ -160,31 +144,6 @@ option( KICAD_DRC_PROTO
 option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
-
-# when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
-# PYTHON_EXECUTABLE can be defined when invoking cmake
-# ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
-# when not defined by user, the default is python.exe under Windows and python2 for others
-# python binary file should be in exec path.
-
-# KICAD_SCRIPTING controls the entire python scripting system. If it is off, no other scripting
-# functions are available.
-if ( NOT KICAD_SCRIPTING )
-    message( STATUS "KICAD_SCRIPTING is OFF: Disabling all python scripting support" )
-    set( KICAD_SCRIPTING_MODULES OFF )
-    set( KICAD_SCRIPTING_ACTION_MENU OFF )
-    set( KICAD_SCRIPTING_PYTHON3 OFF )
-    set( KICAD_SCRIPTING_WXPYTHON OFF )
-    set( KICAD_SCRIPTING_WXPYTHON_PHOENIX OFF)
-endif()
-
-# KICAD_SCRIPTING_WXPYTHON_PHOENIX requires enabling the KICAD_SCRIPTING_WXPYTHON flag
-# so that the wxWidgets library is properly versioned
-if ( KICAD_SCRIPTING AND NOT KICAD_SCRIPTING_WXPYTHON AND KICAD_SCRIPTING_WXPYTHON_PHOENIX )
-    message( STATUS
-        "KICAD_SCRIPTING_WXPYTHON_PHOENIX has been requested, setting KICAD_SCRIPTING_WXPYTHON to ON")
-    set( KICAD_SCRIPTING_WXPYTHON ON)
-endif()
 
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )

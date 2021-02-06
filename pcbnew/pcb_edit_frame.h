@@ -96,25 +96,21 @@ public:
     /**
      * Reload the Python plugins if they are newer than the already loaded, and load new
      * plugins if any.
-     * Do nothing if KICAD_SCRIPTING is not defined.
      */
     void PythonPluginsReload();
 
     /**
      * Open the plugins folder in the default system file browser.
-     * Do nothing if KICAD_SCRIPTING is not defined.
      */
     void PythonPluginsShowFolder();
 
     /**
      * Synchronize the environment variables from KiCad's environment into the Python interpreter.
-     * Do nothing if KICAD_SCRIPTING is not defined.
      */
     void PythonSyncEnvironmentVariables();
 
     /**
      * Synchronize the project name from KiCad's environment into the Python interpreter.
-     * Do nothing if KICAD_SCRIPTING is not defined.
      */
     void PythonSyncProjectName();
 
@@ -173,8 +169,6 @@ public:
     // Configurations:
     void Process_Config( wxCommandEvent& event );
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-
     /**
      * Return true if button visibility action plugin setting was set to true
      * or it is unset and plugin defaults to true.
@@ -186,8 +180,6 @@ public:
      * in settings
      */
     std::vector<ACTION_PLUGIN*> GetOrderedActionPlugins();
-
-#endif
 
     /**
      * Save changes to the project settings to the project (.pro) file.
@@ -613,12 +605,10 @@ public:
      */
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
-#if defined( KICAD_SCRIPTING_WXPYTHON )
     /**
      * Enable or disable the scripting console.
      */
     void ScriptingConsoleEnableDisable();
-#endif
 
     /**
      * Send a message to the schematic editor so that it may move its cursor
@@ -705,7 +695,6 @@ protected:
      */
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
      * Fill action menu with all registered action plugins
      */
@@ -756,7 +745,6 @@ protected:
     {
        PythonPluginsShowFolder();
     }
-#endif
 
     /**
      * Has meaning only if KICAD_SCRIPTING_WXPYTHON option is not defined.

@@ -30,12 +30,7 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 
-#if defined( KICAD_SCRIPTING ) || defined( KICAD_SCRIPTING_WXPYTHON )
 #include <python_scripting.h>
-#else
-// Dummy functions, actually defined in python_scripting.h when KICAD_SCRIPTING is enabled
-static void pcbnewGetWizardsBackTrace( wxString& aText ) {}
-#endif
 
 #define GRID_CELL_MARGIN 4
 

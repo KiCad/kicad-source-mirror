@@ -92,18 +92,12 @@
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 #include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <kiplatform/app.h>
 
-
-#include <widgets/infobar.h>
-
-#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
-#if defined(KICAD_SCRIPTING_ACTION_MENU)
 #include <action_plugin.h>
-#endif
-#endif
 
 
 using namespace std::placeholders;
@@ -152,11 +146,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
-
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, PCB_EDIT_FRAME::OnActionPluginRefresh )
     EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, PCB_EDIT_FRAME::OnActionPluginShowFolder )
-#endif
 
     // Tracks and vias sizes general options
     EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE, ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
@@ -555,8 +546,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::viaDisplayMode, CHECK( !cond.ViaFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::trackDisplayMode, CHECK( !cond.TrackFillDisplay() ) );
 
-
-#if defined( KICAD_SCRIPTING_WXPYTHON )
     auto pythonConsoleCond =
         [] ( const SELECTION& )
         {
@@ -570,7 +559,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
         };
 
     mgr->SetConditions( PCB_ACTIONS::showPythonConsole,  CHECK( pythonConsoleCond ) );
-#endif
 
     auto enableZoneControlConition =
         [this] ( const SELECTION& )
@@ -1302,8 +1290,6 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 }
 
 
-#if defined( KICAD_SCRIPTING_WXPYTHON )
-
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
 {
     wxWindow * pythonPanelFrame = findPythonConsole();
@@ -1319,7 +1305,6 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
     else
         wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
 }
-#endif
 
 
 void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
@@ -1532,29 +1517,22 @@ void PCB_EDIT_FRAME::RunEeschema()
 void PCB_EDIT_FRAME::PythonPluginsReload()
 {
     // Reload Python plugins if they are newer than the already loaded, and load new plugins
-#if defined(KICAD_SCRIPTING)
-#if defined(KICAD_SCRIPTING_ACTION_MENU)
     // Remove all action plugins so that we don't keep references to old versions
     ACTION_PLUGINS::UnloadAll();
-#endif
 
     // Reload plugin list: reload Python plugins if they are newer than the already loaded,
     // and load new plugins
     PythonPluginsReloadBase();
 
-#if defined(KICAD_SCRIPTING_ACTION_MENU)
     // Action plugins can be modified, therefore the plugins menu must be updated:
     ReCreateMenuBar();
     // Recreate top toolbar to add action plugin buttons
     ReCreateHToolbar();
-#endif
-#endif
 }
 
 
 void PCB_EDIT_FRAME::PythonPluginsShowFolder()
 {
-#if defined(KICAD_SCRIPTING)
 #ifdef __WXMAC__
     wxString msg;
 
@@ -1570,13 +1548,11 @@ void PCB_EDIT_FRAME::PythonPluginsShowFolder()
 
     wxLaunchDefaultApplication( pypath );
 #endif
-#endif
 }
 
 
 void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
 {
-#if defined( KICAD_SCRIPTING )
     const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
 
     // Set the environment variables for python scripts
@@ -1588,13 +1564,11 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
     // regenerate them (in Unicode) for our normal environment
     for( auto& var : vars )
         wxSetEnv( var.first, var.second.GetValue() );
-#endif
 }
 
 
 void PCB_EDIT_FRAME::PythonSyncProjectName()
 {
-#if defined( KICAD_SCRIPTING )
     wxString evValue;
     wxGetEnv( PROJECT_VAR_NAME, &evValue );
     pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
@@ -1602,7 +1576,6 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
     // Because PROJECT_VAR_NAME can be modified by the python scripts (rewritten in UTF8),
     // regenerate it (in Unicode) for our normal environment
     wxSetEnv( PROJECT_VAR_NAME, evValue );
-#endif
 }
 
 

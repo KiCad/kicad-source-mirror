@@ -28,10 +28,8 @@
  * @brief Pcbnew main program.
  */
 
-#ifdef KICAD_SCRIPTING
- #include <python_scripting.h>
- #include <pcbnew_scripting_helpers.h>
-#endif
+#include <python_scripting.h>
+#include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <kiface_ids.h>
@@ -82,10 +80,8 @@ static struct IFACE : public KIFACE_I
         {
             auto frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
-#if defined( KICAD_SCRIPTING )
             // give the scripting helpers access to our frame
             ScriptingSetPcbEditFrame( frame );
-#endif
 
             if( Kiface().IsSingle() )
             {
@@ -209,14 +205,11 @@ PGM_BASE* PgmOrNull()
 {
     return process;
 }
-
 #endif
 
 
-#if defined( KICAD_SCRIPTING )
 static bool scriptingSetup()
 {
-
 #if defined( __WINDOWS__ )
     // If our python.exe (in kicad/bin) exists, force our kicad python environment
     wxString kipython = FindKicadFile( "python.exe" );
@@ -304,12 +297,10 @@ static bool scriptingSetup()
 
     return true;
 }
-#endif  // KICAD_SCRIPTING
 
 
 void PythonPluginsReloadBase()
 {
-#if defined( KICAD_SCRIPTING )
     // Reload plugin list: reload Python plugins if they are newer than the already loaded,
     // and load new plugins
     char cmd[1024];
@@ -324,7 +315,6 @@ void PythonPluginsReloadBase()
 
     if( retv != 0 )
         wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-#endif
 }
 
 
@@ -381,9 +371,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         }
     }
 
-#if defined( KICAD_SCRIPTING )
     scriptingSetup();
-#endif
 
     return true;
 }
@@ -391,14 +379,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
 void IFACE::OnKifaceEnd()
 {
-#if defined( KICAD_SCRIPTING_WXPYTHON )
     // Restore the thread state and tell Python to cleanup after itself.
     // wxPython will do its own cleanup as part of that process.
     // This should only be called if python was setup correctly.
 
     if( IsWxPythonLoaded() )
         pcbnewFinishPythonScripting();
-#endif
 
     end_common();
 }

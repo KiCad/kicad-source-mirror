@@ -69,10 +69,8 @@
 #define WXPYTHON_VERSION                "@WXPYTHON_VERSION@"
 #endif
 
-#if defined( KICAD_SCRIPTING )
 #define PYTHON_VERSION_MAJOR             @PYTHON_VERSION_MAJOR@
 #define PYTHON_VERSION_MINOR             @PYTHON_VERSION_MINOR@
-#endif
 
 /// A file extension with a leading '.' is a suffix, and this one is used on
 /// top level program modules which implement the KIFACE.

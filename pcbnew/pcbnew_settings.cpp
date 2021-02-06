@@ -21,6 +21,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
+#include <pybind11/pybind11.h>
+
 #include <common.h>
 #include <footprint_editor_settings.h>
 #include <layers_id_colors_and_visibility.h>
@@ -455,7 +457,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_report_file_name",
             &m_Reannotate.report_file_name, "" ) );
 
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json
             {
@@ -488,7 +489,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
                 }
             },
             nlohmann::json::array() ) );
-#endif
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
@@ -795,3 +795,17 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     return ret;
 }
+
+//namespace py = pybind11;
+//
+//PYBIND11_MODULE( pcbnew, m )
+//{
+//    py::class_<PCBNEW_SETTINGS>( m, "settings" )
+//            .def_readwrite( "Use45DegreeGraphicSegments", &PCBNEW_SETTINGS::m_Use45DegreeGraphicSegments )
+//            .def_readwrite( "FlipLeftRight", &PCBNEW_SETTINGS::m_FlipLeftRight )
+//            .def_readwrite( "AddUnlockedPads", &PCBNEW_SETTINGS::m_AddUnlockedPads)
+//            .def_readwrite( "UsePolarCoords", &PCBNEW_SETTINGS::m_PolarCoords)
+//            .def_readwrite( "RotationAngle", &PCBNEW_SETTINGS::m_RotationAngle)
+//            .def_readwrite( "ShowPageLimits", &PCBNEW_SETTINGS::m_ShowPageLimits)
+//            ;
+//}

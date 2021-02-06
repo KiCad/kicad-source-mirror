@@ -110,9 +110,7 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::newFootprint,      libSelectedCondition );
-#ifdef KICAD_SCRIPTING
     ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   libSelectedCondition );
-#endif
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition || libInferredCondition );

@@ -662,9 +662,7 @@ int BOARD_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 {
-#if defined( KICAD_SCRIPTING_WXPYTHON )
     m_frame->ScriptingConsoleEnableDisable();
-#endif
     return 0;
 }
 

@@ -63,6 +63,9 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
+#include <wx/snglinst.h>
+#include <wx/fdrepdlg.h>
+
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
 

@@ -129,8 +129,8 @@ void SYMBOL_EDIT_FRAME::ExportPart()
     fn.MakeAbsolute();
 
     LIB_PART* old_part = NULL;
-
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     if( fn.FileExists() )
     {

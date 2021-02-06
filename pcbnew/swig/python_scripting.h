@@ -41,14 +41,10 @@
 #include <Python.h>
 #undef HAVE_CLOCK_GETTIME
 
-#ifndef NO_WXPYTHON_EXTENSION_HEADERS
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    #ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
-        #include <wx/window.h>
-    #else
-        #include <wx/wxPython/wxPython.h>
-    #endif
-#endif
+#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
+    #include <wx/window.h>
+#else
+    #include <wx/wxPython/wxPython.h>
 #endif
 
 #include <wx/string.h>
@@ -90,28 +86,11 @@ void        pcbnewGetWizardsBackTrace( wxString& aNames );
  */
 void        pcbnewUpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
 
-
-#ifdef KICAD_SCRIPTING_WXPYTHON
 void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
-#endif
 
 bool IsWxPythonLoaded();
 
-#if 0 && defined (KICAD_SCRIPTING_WXPYTHON)
-// This definition of PyLOCK crashed Pcbnew under some conditions (JPC),
-// especially reloading plugins
-class PyLOCK
-{
-    wxPyBlock_t b;
-public:
-
-    // @todo, find out why these are wxPython specific.  We need the GIL regardless.
-    // Should never assume python will only have one thread calling it.
-    PyLOCK()    { b = wxPyBeginBlockThreads(); }
-    ~PyLOCK()   { wxPyEndBlockThreads( b ); }
-};
-#else
 class PyLOCK
 {
     PyGILState_STATE gil_state;
@@ -119,7 +98,6 @@ public:
     PyLOCK()      { gil_state = PyGILState_Ensure(); }
     ~PyLOCK()     { PyGILState_Release( gil_state ); }
 };
-#endif
 
 wxString        PyStringToWx( PyObject* str );
 wxArrayString   PyArrayStringToWx( PyObject* arr );

@@ -174,10 +174,7 @@ struct APP_SINGLE_TOP : public wxApp
 
     int  OnExit() override
     {
-        // Fixes segfault when wxPython scripting is enabled.
-#if defined( KICAD_SCRIPTING_WXPYTHON )
         program.OnPgmExit();
-#endif
         return wxApp::OnExit();
     }
 
@@ -203,10 +200,6 @@ struct APP_SINGLE_TOP : public wxApp
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
 
-        // Works properly when wxPython scripting is disabled.
-#if !defined( KICAD_SCRIPTING_WXPYTHON )
-        program.OnPgmExit();
-#endif
         return ret;
     }
 

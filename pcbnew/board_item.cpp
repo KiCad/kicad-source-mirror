@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pybind11/pybind11.h>
+
 #include <wx/debug.h>
 #include <i18n_utility.h>
 #include <board.h>
