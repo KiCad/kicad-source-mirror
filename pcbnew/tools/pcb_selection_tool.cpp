@@ -1909,46 +1909,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             return false;
     }
 
-    switch( aItem->Type() )
-    {
-    case PCB_ZONE_T:
-    case PCB_FP_ZONE_T:
-    {
-        if( !board()->IsElementVisible( LAYER_ZONES ) )
-            return false;
-
-        const ZONE* zone = static_cast<const ZONE*>( aItem );
-
-        // Check to see if this keepout is part of a footprint
-        // If it is, and we are not editing the footprint, it should not be selectable
-        bool zoneInFootprint = zone->GetParent() && zone->GetParent()->Type() == PCB_FOOTPRINT_T;
-
-        if( zoneInFootprint && !m_isFootprintEditor && !checkVisibilityOnly )
-            return false;
-
-        // zones can exist on multiple layers!
-        return ( zone->GetLayerSet() & board()->GetVisibleLayers() ).any();
-    }
-        break;
-
-    case PCB_TRACE_T:
-    case PCB_ARC_T:
-        if( !board()->IsElementVisible( LAYER_TRACKS ) )
-            return false;
-        break;
-
-    case PCB_VIA_T:
-    {
-        if( !board()->IsElementVisible( LAYER_VIAS ) )
-            return false;
-
-        const VIA* via = static_cast<const VIA*>( aItem );
-
-        // For vias it is enough if only one of its layers is visible
-        return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
-    }
-
-    case PCB_FOOTPRINT_T:
+    if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         // In footprint editor, we do not want to select the footprint itself.
         if( m_isFootprintEditor )
@@ -1956,21 +1917,21 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         // Allow selection of footprints if some part of the footprint is visible.
 
-        FOOTPRINT* footprint = const_cast<FOOTPRINT*>( static_cast<const FOOTPRINT*>( aItem ) );
+        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
 
-        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        for( const BOARD_ITEM* item : footprint->GraphicalItems() )
         {
             if( Selectable( item, true ) )
                 return true;
         }
 
-        for( PAD* pad : footprint->Pads() )
+        for( const PAD* pad : footprint->Pads() )
         {
             if( Selectable( pad, true ) )
                 return true;
         }
 
-        for( ZONE* zone : footprint->Zones() )
+        for( const ZONE* zone : footprint->Zones() )
         {
             if( Selectable( zone, true ) )
                 return true;
@@ -1978,73 +1939,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         return false;
     }
-
-    case PCB_FP_TEXT_T:
-        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
-        // select footprint subparts one by one, rather than with a drag selection.  This is so
-        // you can pick up items under an (unlocked) footprint without also moving the
-        // footprint's sub-parts.
-        if( !m_isFootprintEditor && !checkVisibilityOnly )
-        {
-            if( m_multiple && !settings->GetHighContrast() )
-                return false;
-        }
-
-        if( !m_isFootprintEditor && !view()->IsVisible( aItem ) )
-            return false;
-
-        break;
-
-    case PCB_FP_SHAPE_T:
-        // Footprint shape selections are only allowed in footprint editor mode.
-        if( !m_isFootprintEditor && !checkVisibilityOnly )
-            return false;
-
-        break;
-
-    case PCB_PAD_T:
-    {
-        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
-        // select footprint subparts one by one, rather than with a drag selection.  This is so
-        // you can pick up items under an (unlocked) footprint without also moving the
-        // footprint's sub-parts.
-        if( !m_isFootprintEditor && !checkVisibilityOnly )
-        {
-            if( m_multiple )
-                return false;
-        }
-
-        const PAD* pad = static_cast<const PAD*>( aItem );
-
-        switch( pad->GetAttribute() )
-        {
-        case PAD_ATTRIB_PTH:
-        case PAD_ATTRIB_NPTH:
-            // Check render mode (from the Items tab) first
-            if( !board()->IsElementVisible( LAYER_PADS_TH ) )
-                return false;
-            else
-                return ( pad->GetLayerSet() & LSET::PhysicalLayersMask() ).any();
-
-            break;
-
-        case PAD_ATTRIB_CONN:
-        case PAD_ATTRIB_SMD:
-            // Check render mode (from the Items tab) first
-            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
-                return false;
-            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
-                return false;
-            else
-                return ( pad->GetLayerSet() & board()->GetVisibleLayers() ).any();
-
-            break;
-        }
-
-        break;
-    }
-
-    case PCB_GROUP_T:
+    else if( aItem->Type() == PCB_GROUP_T )
     {
         PCB_GROUP* group = const_cast<PCB_GROUP*>( static_cast<const PCB_GROUP*>( aItem ) );
 
@@ -2059,8 +1954,143 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         return false;
     }
 
-    case PCB_MARKER_T:  // Always selectable
-        return true;
+    const ZONE* zone = nullptr;
+    const VIA*  via = nullptr;
+    const PAD*  pad = nullptr;
+
+    switch( aItem->Type() )
+    {
+    case PCB_ZONE_T:
+    case PCB_FP_ZONE_T:
+        if( !board()->IsElementVisible( LAYER_ZONES ) )
+            return false;
+
+        zone = static_cast<const ZONE*>( aItem );
+
+        // A footprint zone is only selectable within the footprint editor
+        if( zone->GetParent()
+                && zone->GetParent()->Type() == PCB_FOOTPRINT_T
+                && !m_isFootprintEditor
+                && !checkVisibilityOnly )
+        {
+            return false;
+        }
+
+        // zones can exist on multiple layers!
+        if( !( zone->GetLayerSet() & board()->GetVisibleLayers() ).any() )
+            return false;
+
+        break;
+
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+        if( !board()->IsElementVisible( LAYER_TRACKS ) )
+            return false;
+
+        if( m_isFootprintEditor )
+        {
+            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+        else
+        {
+            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+
+        break;
+
+    case PCB_VIA_T:
+        if( !board()->IsElementVisible( LAYER_VIAS ) )
+            return false;
+
+        via = static_cast<const VIA*>( aItem );
+
+        // For vias it is enough if only one of its layers is visible
+        if( !( board()->GetVisibleLayers() & via->GetLayerSet() ).any() )
+            return false;
+
+        break;
+
+    case PCB_FP_TEXT_T:
+        if( m_isFootprintEditor )
+        {
+            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+        else
+        {
+            // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have
+            // to select footprint subparts one by one, rather than with a drag selection.  This
+            // is so you can pick up items under an (unlocked) footprint without also moving the
+            // footprint's sub-parts.
+            if( !checkVisibilityOnly && m_multiple && !settings->GetHighContrast() )
+                    return false;
+
+            if( !view()->IsVisible( aItem ) )
+                return false;
+
+            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+
+        break;
+
+    case PCB_FP_SHAPE_T:
+        if( m_isFootprintEditor )
+        {
+            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+        else
+        {
+            // Footprint shape selections are only allowed in footprint editor mode.
+            if( !checkVisibilityOnly )
+                return false;
+
+            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+
+        break;
+
+    case PCB_PAD_T:
+        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
+        // select footprint subparts one by one, rather than with a drag selection.  This is so
+        // you can pick up items under an (unlocked) footprint without also moving the
+        // footprint's sub-parts.
+        if( !m_isFootprintEditor && !checkVisibilityOnly )
+        {
+            if( m_multiple )
+                return false;
+        }
+
+        pad = static_cast<const PAD*>( aItem );
+
+        if( pad->GetAttribute() == PAD_ATTRIB_PTH || pad->GetAttribute() == PAD_ATTRIB_NPTH )
+        {
+            // Check render mode (from the Items tab) first
+            if( !board()->IsElementVisible( LAYER_PADS_TH ) )
+                return false;
+
+            // A pad's hole is visible on every layer the pad is visible on plus many layers the
+            // pad is not visible on -- so we only need to check for any visible hole layers.
+            if( !( board()->GetVisibleLayers() & LSET::PhysicalLayersMask() ).any() )
+                return false;
+        }
+        else
+        {
+            // Check render mode (from the Items tab) first
+            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
+                return false;
+            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
+                return false;
+
+            if( !( pad->GetLayerSet() & board()->GetVisibleLayers() ).any() )
+                return false;
+        }
+
+        break;
 
     // These are not selectable
     case PCB_NETINFO_T:
@@ -2070,18 +2100,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     default:    // Suppress warnings
         break;
-    }
-
-    // All other items are selected only if the layer on which they exist is visible
-    if( m_isFootprintEditor )
-    {
-        if( !view()->IsLayerVisible( aItem->GetLayer() ) )
-            return false;
-    }
-    else
-    {
-        if( !board()->IsLayerVisible( aItem->GetLayer() ) )
-            return false;
     }
 
     return aItem->ViewGetLOD( aItem->GetLayer(), view() ) < view()->GetScale();
