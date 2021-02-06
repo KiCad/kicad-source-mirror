@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-01-31 13:40+0100\n"
+"POT-Creation-Date: 2021-02-06 14:37+0100\n"
+"PO-Revision-Date: 2021-02-06 14:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1395,8 +1395,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/bitmap2component.desktop:9
+#: resources/linux/launchers/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -3416,7 +3416,7 @@ msgid "Bus Thickness"
 msgstr "Épaisseur de Bus"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:827
+#: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:872
 msgid "Line Style"
 msgstr "Style de Ligne"
 
@@ -6642,7 +6642,7 @@ msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
 "Les liens symboles/empreintes ont été modifiés. Sauver les changements?"
 
-#: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:228
+#: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
 msgid "\"%s\" is not a valid footprint."
 msgstr "\"%s\" n’est pas une empreinte valide."
@@ -6742,7 +6742,7 @@ msgstr "Fichiers Association Symboles/Empreintes (*.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
 #: eeschema/dialogs/dialog_bus_manager.cpp:111
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1008
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1015
 #: pcbnew/footprint_libraries_utils.cpp:506
 msgid "Add"
 msgstr "Ajouter"
@@ -7030,7 +7030,7 @@ msgstr "Filtrer par librairie"
 msgid "Filter footprint list by library"
 msgstr "Filtrer la liste des empreintes par la librairie"
 
-#: cvpcb/tools/cvpcb_association_tool.cpp:277
+#: cvpcb/tools/cvpcb_association_tool.cpp:256
 msgid "Delete all associations?"
 msgstr "Supprimer toutes les associations ?"
 
@@ -7086,7 +7086,7 @@ msgstr ""
 "dans une schématique."
 
 #: eeschema/class_library.cpp:495
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:914
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:921
 #: eeschema/symbol_tree_model_adapter.cpp:64
 msgid "Loading Symbol Libraries"
 msgstr "Chargement des Librairies de Symboles"
@@ -10099,7 +10099,7 @@ msgid "Electrical Rules"
 msgstr "Règles Electriques"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/dialogs/dialog_board_statistics.cpp:649
 #: pcbnew/footprint_libraries_utils.cpp:498
 msgid "Project"
@@ -11684,7 +11684,7 @@ msgstr ""
 "librairie."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:500
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1014
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:505
 msgid "Skip"
@@ -11725,12 +11725,12 @@ msgstr ""
 msgid "Library '%s' not found."
 msgstr "Librairie \"%s\" non trouvée."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:759
+#: eeschema/dialogs/panel_sym_lib_table.cpp:763
 #, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Impossible de sauver la librairie de symboles \"%s\"."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:967
+#: eeschema/dialogs/panel_sym_lib_table.cpp:971
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
@@ -11741,11 +11741,11 @@ msgstr ""
 "Les modifications doivent être sauvegardées ou rejetées avant que la table "
 "de librairies de symboles puisse être modifiée."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:981
+#: eeschema/dialogs/panel_sym_lib_table.cpp:985
 msgid "Symbol Libraries"
 msgstr "Librairies de Symboles"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1002
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1006
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1069
 #, c-format
 msgid ""
@@ -11757,17 +11757,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1003
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1016
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1007
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1020
 #: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:234
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1367
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1422
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1374
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1429
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1070
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1083 pcbnew/files.cpp:1154
 msgid "File Save Error"
 msgstr "Erreur Écriture  Fichier"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1015
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1019
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1082
 #, c-format
 msgid ""
@@ -12699,23 +12699,23 @@ msgstr ""
 "spécifique au projet:\n"
 "%s"
 
-#: eeschema/sch_bus_entry.cpp:347
+#: eeschema/sch_bus_entry.cpp:393
 msgid "Bus to Wire Entry"
 msgstr "Entrée de Bus (Bus vers Fil)"
 
-#: eeschema/sch_bus_entry.cpp:353
+#: eeschema/sch_bus_entry.cpp:399
 msgid "Bus to Bus Entry"
 msgstr "Entrée de Bus (Bus vers Bus)"
 
-#: eeschema/sch_bus_entry.cpp:417 eeschema/sch_line.cpp:815
+#: eeschema/sch_bus_entry.cpp:463 eeschema/sch_line.cpp:860
 msgid "Wire"
 msgstr "Fil"
 
-#: eeschema/sch_bus_entry.cpp:418 eeschema/sch_line.cpp:816
+#: eeschema/sch_bus_entry.cpp:464 eeschema/sch_line.cpp:861
 msgid "Bus"
 msgstr "Bus"
 
-#: eeschema/sch_bus_entry.cpp:421
+#: eeschema/sch_bus_entry.cpp:467
 msgid "Bus Entry Type"
 msgstr "Type Entrée de Bus"
 
@@ -12867,64 +12867,64 @@ msgstr "Plugin type \"%s\" non trouvé."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 
-#: eeschema/sch_line.cpp:654
+#: eeschema/sch_line.cpp:699
 #, c-format
 msgid "Vertical Wire, length %s"
 msgstr "Fil Vertical, longueur %s"
 
-#: eeschema/sch_line.cpp:655
+#: eeschema/sch_line.cpp:700
 #, c-format
 msgid "Vertical Bus, length %s"
 msgstr "Bus Vertical, longueur %s"
 
-#: eeschema/sch_line.cpp:656
+#: eeschema/sch_line.cpp:701
 #, c-format
 msgid "Vertical Graphic Line, length %s"
 msgstr "Ligne Graphique Verticale, longueur %s"
 
-#: eeschema/sch_line.cpp:663
+#: eeschema/sch_line.cpp:708
 #, c-format
 msgid "Horizontal Wire, length %s"
 msgstr "Fil Horizontal, longueur %s"
 
-#: eeschema/sch_line.cpp:664
+#: eeschema/sch_line.cpp:709
 #, c-format
 msgid "Horizontal Bus, length %s"
 msgstr "Bus Horizontal, longueur %s"
 
-#: eeschema/sch_line.cpp:665
+#: eeschema/sch_line.cpp:710
 #, c-format
 msgid "Horizontal Graphic Line, length %s"
 msgstr "Ligne Graphique Horizontale, longueur %s"
 
-#: eeschema/sch_line.cpp:672
+#: eeschema/sch_line.cpp:717
 #, c-format
 msgid "Wire, length %s"
 msgstr "Fil, longueur %s"
 
-#: eeschema/sch_line.cpp:673
+#: eeschema/sch_line.cpp:718
 #, c-format
 msgid "Bus, length %s"
 msgstr "Bus, longueur %s"
 
-#: eeschema/sch_line.cpp:674
+#: eeschema/sch_line.cpp:719
 #, c-format
 msgid "Graphic Line, length %s"
 msgstr "Ligne Graphique, longueur %s"
 
-#: eeschema/sch_line.cpp:817
+#: eeschema/sch_line.cpp:862
 msgid "Graphical"
 msgstr "Graphique"
 
-#: eeschema/sch_line.cpp:820
+#: eeschema/sch_line.cpp:865
 msgid "Line Type"
 msgstr "Type de Ligne"
 
-#: eeschema/sch_line.cpp:823
+#: eeschema/sch_line.cpp:868
 msgid "from netclass"
 msgstr "de netclasse"
 
-#: eeschema/sch_line.cpp:844 eeschema/sch_text.cpp:711
+#: eeschema/sch_line.cpp:889 eeschema/sch_text.cpp:711
 msgid "Assigned Netclass"
 msgstr "NetClasses Assignées"
 
@@ -13311,15 +13311,15 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nombre flottant invalide dans le fichier:\n"
-"fichier \"%s\"\n"
+"Nombre flottant avec séparateur incorrect dans\n"
+"fichier: « %s »\n"
 "ligne: %d\n"
 "offset: %d"
 
@@ -13728,22 +13728,21 @@ msgstr "Taille"
 msgid "Label '%s'"
 msgstr "Label '%s'"
 
-#: eeschema/sch_text.cpp:1311
+#: eeschema/sch_text.cpp:1341
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Label Global '%s'"
 
-#: eeschema/sch_text.cpp:1497
+#: eeschema/sch_text.cpp:1527
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Label Hiérarchique '%s'"
 
-#: eeschema/sch_text.cpp:1513 pcbnew/dialogs/panel_setup_rules.cpp:472
+#: eeschema/sch_text.cpp:1543 pcbnew/dialogs/panel_setup_rules.cpp:472
 msgid "Syntax Help"
 msgstr "Aide Syntaxe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13878,55 +13877,138 @@ msgid ""
 "    </tr>\n"
 "</table>\n"
 msgstr ""
-"<table>   <tr>      <th>Markup</th>      <th></th>      <th>Result</th>   </"
-"tr>   <tr>      <td>&nbsp;<br><samp>^{superscript}</samp></td>      <td></"
-"td>      <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>   </"
-"tr>   <tr>      <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>      "
-"<td></td>      <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></"
-"td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;"
-"<br><samp>_{subscript}</samp></td>      <td></td>      <td>&nbsp;"
-"<br><samp><sub>subscript</sub>&nbsp;</samp></td>   </tr>   <tr>      "
-"<td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>      <td></td>      <td>&nbsp;"
-"<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>   </tr>   <tr><td></"
-"td></tr>   <tr>      <td>         &nbsp;<br><samp>~overbar</"
-"samp><br>         &nbsp;<br><samp>~CLK</samp><br>         &nbsp;"
-"<br><samp>~~</samp>      </td>      <td></td>      <td>         "
-"<samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>         "
-"<samp>overbar</samp><br>         <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br>         <samp>CLK</samp><br>         <samp>&nbsp;</"
-"samp><br>         <samp>~</samp>      </td>   </tr>   <tr><td><br></td></"
-"tr>   <tr>      <td>&nbsp;<br><samp>${variable}</samp></td>      <td></"
-"td>      <td>&nbsp;<br><samp><i>variable_value</i></samp></td>   </tr>   "
-"<tr>      <td>&nbsp;<br><samp>${REVISION}</samp></td>      <td></td>      "
-"<td>&nbsp;<br><samp>2020.1</samp></td>   </tr>   <tr><td><br></td></tr>   "
-"<tr>      <td>&nbsp;<br><samp>${refdes:field}</samp></td>      <td></"
-"td>      <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>${R3:VALUE}</samp></"
-"td>      <td></td>      <td>&nbsp;<br><samp>150K</samp></td>   </tr>   "
-"<tr><td><br></td></tr>   <tr><td><br></td></tr>   <tr>      <th>Bus "
-"Definition</th>      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>      <th>Resultant Nets</th>   </tr>   "
-"<tr>      <td>&nbsp;<br><samp>prefix[m..n]</samp></td>      <td></td>      "
-"<td>&nbsp;<br><samp>prefixm to prefixn</samp></td>   </tr>   <tr>      "
-"<td>&nbsp;<br><samp>D[0..7]</samp></td>      <td></td>      <td>&nbsp;"
-"<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>   </tr>   <tr><td><br></"
-"td></tr>   <tr><samp>      <td>&nbsp;<br><samp>{net1 net2 ...}</samp></"
-"td>      <td></td>      <td>&nbsp;<br><samp>net1, net2, ...</samp></td>   </"
-"tr>   <tr>      <td>&nbsp;<br><samp>{SCL SDA}</samp></td>      <td></"
-"td>      <td>&nbsp;<br><samp>SCL, SDA</samp></td>   </tr></samp>   "
-"<tr><td><br></td></tr>   <tr>      <td>&nbsp;<br><samp>prefix{net1 net2 ...}"
-"</samp></td>      <td></td>      <td>&nbsp;<br><samp>prefix.net1, prefix."
-"net2, ...</samp></td>   </tr>   <tr>      <td>&nbsp;<br><samp>USB1{DP DM}</"
-"samp></td>      <td></td>      <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></"
-"td>   </tr>   <tr><td><br></td></tr>   <tr>      <td>&nbsp;"
-"<br><samp>MEM{D[1..2] LATCH}</samp></td>      <td></td>      <td>&nbsp;"
-"<br>         <samp>MEM.D1, MEM.D2, MEM.LATCH</samp>      </td>   </tr>   "
-"<tr>      <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>      <td></"
-"td>      <td>         <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br>         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp>      </td>   </tr></table>\n"
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp> </td>\n"
+"    </tr>\n"
+"</table>\n"
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14476,17 +14558,17 @@ msgstr "Librairies"
 msgid "Library changes are unsaved"
 msgstr "Les modifications de la librairie ne sont pas sauvées."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:519
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:526
 msgid "Save changes to schematic before closing?"
 msgstr "Sauver les changements en schématique avant de fermer?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:568
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:575
 #: eeschema/tools/sch_edit_tool.cpp:113
 #, c-format
 msgid "Unit %s"
 msgstr "Unité %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:730
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:737
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
@@ -14494,11 +14576,11 @@ msgstr ""
 "Modification du symbole %s à partir du schéma.  L’enregistrement mettra à "
 "jour le schéma uniquement."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:739
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:746
 msgid "Manage symbol libraries"
 msgstr "Configurer les librairies de symboles"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:750
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:757
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -14507,24 +14589,24 @@ msgstr ""
 "Utilisez gérer les bibliothèques de symboles pour migrer vers le format "
 "actuel."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:760
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:767
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 "Le symbole %s est dérivé de %s.  Les graphiques du symbole ne seront pas "
 "modifiables."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:764
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:771
 #, c-format
 msgid "Open %s"
 msgstr "Ouvrir %s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:832
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:839
 #, c-format
 msgid "Library \"%s\" already exists"
 msgstr "La librairie \"%s\" existe déjà"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:840
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:847
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -14533,47 +14615,47 @@ msgstr ""
 "Impossible de créer le fichier librairie \"%s\".\n"
 "Vérifier l’autorisation d’écriture."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:850
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:857
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:202
 msgid "Could not open the library file."
 msgstr "Le fichier librairie n'a pas pu être ouvert."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:928
+#, c-format
 msgid "Loading library '%s'"
 msgstr "Chargement librairie  \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:988
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:995
 #: pcbnew/footprint_libraries_utils.cpp:486
 msgid "Add the library to the global library table?"
 msgstr "Ajouter la librairie à la table de librairie globale ?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:989
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:996
 #: pcbnew/footprint_libraries_utils.cpp:487
 msgid "Add To Global Library Table"
 msgstr "Ajouter à Table Globale des Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:999
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1006
 #: pcbnew/footprint_libraries_utils.cpp:497
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1009
 #: pcbnew/footprint_libraries_utils.cpp:500
 msgid "Choose the Library Table to add the library to:"
 msgstr "Choisissez la Table des Librairies où ajouter la librairie:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1010
 #: pcbnew/footprint_libraries_utils.cpp:501
 msgid "Add To Library Table"
 msgstr "Ajouter à Table des Librairies"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1042
 #, c-format
 msgid "Failed to save backup to \"%s\""
 msgstr "Échec de l’enregistrement de la sauvegarde \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1179
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1186
 #: eeschema/symbol_viewer_frame.cpp:388
 #, c-format
 msgid ""
@@ -14583,12 +14665,12 @@ msgstr ""
 "La configuration actuelle n'inclut pas la librairie \"%s\".\n"
 "Utilisez Gérer les Librairies de symboles pour modifier la configuration."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1182
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1189
 #: eeschema/symbol_viewer_frame.cpp:391
 msgid "Library not found in symbol library table."
 msgstr "Librairie non trouvée dans la table des librairies de symboles."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1190
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1197
 #: eeschema/symbol_viewer_frame.cpp:395
 #, c-format
 msgid ""
@@ -14598,29 +14680,21 @@ msgstr ""
 "La librairie \"%s\" n'est pas activée dans la configuration actuelle.\n"
 " Utilisez Gérer les Librairies de Symboles pour modifier la configuration."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1193
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1200
 #: eeschema/symbol_viewer_frame.cpp:398
 msgid "Symbol library not enabled."
 msgstr "Librairie de symboles non activée."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1371
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1426
 msgid "Error saving global library table."
-msgstr ""
-"Erreur en enregistrant la table globale de librairie de symboles:\n"
-"\n"
-"%s"
+msgstr "Erreur en sauvant la table globale de librairie de symboles."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1372
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1427
 msgid "Error saving project library table."
 msgstr ""
-"Erreur lors de la sauvegarde de la table spécifique au projet des librairie "
-"de symboles:\n"
-"\n"
-"%s"
+"Erreur en sauvant de la table spécifique au projet des librairie de symboles."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -15187,9 +15261,8 @@ msgid "Create a new symbol"
 msgstr "Créer un nouveau symbole"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Editer Symbole.."
+msgstr "Editer Symbole"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -16022,106 +16095,109 @@ msgid "Symbol Warnings"
 msgstr "Avertissements de Symboles"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
-"pin %s%s en position <b>(%.3f, %.3f)</b> de converti"
+"pin %s%s en position <b>(%.3f, %.3f)</b> de converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
-"pin %s %s en position <b>(%.3f, %.3f)</b> unité %c et %c de converti"
+"pin %s %s en position <b>(%.3f, %.3f)</b> unité %c et %c de converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
-"pin %s%s en position <b>(%.3f, %.3f)</b>"
+"pin %s%s en position <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
-"pin %s%s en position <b>(%.3f, %.3f)</b> unité %c et %c"
+"pin %s%s en position <b>(%.3f, %.3f)</b> unité %c et %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> de converti"
+"<b>Pin power invisible \"%s\" </b>%s en position <b>(%.3f, %.3f)</b> de "
+"converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> dans "
-"symbole %c de converti"
+"<b>Pin power invisible \"%s\" </b>%s en position <b>(%.3f, %.3f)</b> dans "
+"unité %c de converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin power invisible \"%s\" </b>%s en position <b>(%.3f, %.3f)</b."
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> dans "
-"symbole %c"
+"<b>Pin power invisible \"%s\" </b>%s en position <b>(%.3f, %.3f)</b> dans "
+"unité %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Les pins d’alimentation invisibles donneront leurs noms  a toutes les "
+"équipotentielles connectées.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> de converti"
+"<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> de "
+"converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
 "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> dans "
-"symbole %c de converti"
+"symbole %c de converti."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
 "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b> dans "
-"symbole %c"
+"symbole %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Symbole non trouvé."
+msgstr "Aucun problème de symbole trouvé."
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -16177,31 +16253,31 @@ msgstr "le symbole n'est pas multi-unité"
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1114 pcbnew/tools/pcb_control.cpp:479
+#: eeschema/tools/sch_edit_tool.cpp:1124 pcbnew/tools/pcb_control.cpp:479
 msgid "Item locked."
 msgstr "Elément  verrouillé."
 
-#: eeschema/tools/sch_edit_tool.cpp:1176
+#: eeschema/tools/sch_edit_tool.cpp:1186
 #: eeschema/tools/symbol_editor_edit_tool.cpp:526
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1712
+#: eeschema/tools/sch_edit_tool.cpp:1722
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
 
-#: eeschema/tools/sch_edit_tool.cpp:1716
+#: eeschema/tools/sch_edit_tool.cpp:1726
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1776
+#: eeschema/tools/sch_edit_tool.cpp:1786
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1779
+#: eeschema/tools/sch_edit_tool.cpp:1789
 msgid "Edit Page Number"
 msgstr "Editer Numéro de Page"
 
@@ -16802,7 +16878,7 @@ msgid "Drawing layer %d not in use"
 msgstr "Couche de dessin %d non utilisée"
 
 #: gerbview/gerbview_frame.cpp:616 gerbview/menubar.cpp:148
-#: resources/linux/launchers/gerbview.desktop.in:10
+#: resources/linux/launchers/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -17815,14 +17891,12 @@ msgid "Save Project To"
 msgstr "Sauver Projet vers"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Créer un nouveau projet à partir d'un modèle"
+msgstr "Créer (ou ouvrir) un projet pour modifier un schéma."
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Créer un nouveau projet pour ce PCB"
+msgstr "Créer (ou ouvrir) un projet pour modifier un pcb."
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -17847,11 +17921,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:49
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19252,8 +19321,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:416
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/pcbcalculator.desktop:9
+#: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -27798,9 +27867,8 @@ msgid "Signal Integrity"
 msgstr "Intégrité de Signal"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Connexion non valide entre le bus et éléments de net"
+msgstr "Connexion manquante entre les éléments"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -28932,7 +29000,7 @@ msgstr ""
 "Utilisez Gérer les Librairies d'Empreintes pour modifier la configuration."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
-#: pcbnew/footprint_wizard_frame_functions.cpp:78
+#: pcbnew/footprint_wizard_frame_functions.cpp:83
 msgid "Footprint Wizard"
 msgstr "Assistant pour Empreinte"
 
@@ -28961,15 +29029,15 @@ msgstr "Sélectionnez la page de paramètres précédente"
 msgid "Select next parameters page"
 msgstr "Sélectionnez prochaine page de paramètres"
 
-#: pcbnew/footprint_wizard_frame.cpp:625
+#: pcbnew/footprint_wizard_frame.cpp:627
 msgid "Export footprint to editor"
 msgstr "Exporter l'empreinte vers l'éditeur"
 
-#: pcbnew/footprint_wizard_frame_functions.cpp:84
+#: pcbnew/footprint_wizard_frame_functions.cpp:89
 msgid "no wizard selected"
 msgstr "pas d'assistant Sélectionné"
 
-#: pcbnew/footprint_wizard_frame_functions.cpp:136
+#: pcbnew/footprint_wizard_frame_functions.cpp:141
 msgid "Couldn't reload footprint wizard"
 msgstr "Ne peut recharger l'assistant"
 
@@ -30668,94 +30736,94 @@ msgstr ""
 msgid "Could not read file "
 msgstr "Impossible de lire le fichier "
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:194
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:216
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Section FABMASTER inconnue %s: %s ligne %zu."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:209
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:231
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
 "Taille de ligne invalide dans la ligne J %zu.  Attendandu 11 éléments, mais "
 "%zu trouvés"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:231
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:253
 msgid "Could not find units value, defaulting to Mils"
 msgstr "Ne peut pas trouver la valeur des unités, utilise par défaut Mils"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:256
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:278
 #, c-format
 msgid "Could not find column label %s"
 msgstr "Ne peut trouver l’étiquette de colonne %s"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:300
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:381
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:611
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:760
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:845
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1145
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1267
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1332
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1488
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1565
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1630
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:322
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:403
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:633
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:782
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:867
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1167
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1289
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1354
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1510
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1587
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1652
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
 msgstr ""
 "Taille invalide de ligne dans la ligne %zu.  Attendu %zu éléments, mais %zu "
 "trouvés"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:431
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:453
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
 msgstr ""
 "Attendu valeur de la taille de perçage, mais trouvé %s!%s!%s à la ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:477
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:499
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
 msgstr "Attendu valeurs de taille de pad mais trouvé %s : %s à la ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:497
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:519
 #, c-format
 msgid "Invalid pad size on line %zu"
 msgstr "Taille de pad non valide en ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:532
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:554
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr "Attendu valeurs d'offset pad mais trouvé  %s:%s en ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:597
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Nom de forme de pad %s non valide en ligne %zu"
+msgstr "Forme de pad inconnue '%s' sur la couche '%s' à la ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:910
 #, c-format
 msgid "Invalid format for id string \"%s\" in custom pad row %zu"
 msgstr ""
 "Format invalide pour chaîne d’identification \"%s\" dans la ligne de pad "
 "personnalisée %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:951
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
 msgstr ""
 "Ne peut pas insérer l'élément graphique %d dans l'empilement de pad \"%s\""
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:957
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
 msgstr "Forme de primitive de forme non reconnue \"%s\" en ligne %zu."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1041
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1063
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
 msgstr "Nombre de mots clé invalide. Attendu 8 mais trouvé %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1175
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1197
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Geometric definition row %zu"
@@ -30763,13 +30831,13 @@ msgstr ""
 "Format invalide pour chaîne record_tag \"%s\" en définition géométrique "
 "ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1185
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1207
 #, c-format
 msgid "Unhandled graphic item '%s' in Geometric definition row %zu"
 msgstr ""
 "Élément graphique non supporté '%s' dans la définition géométrique ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1359
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1381
 #, c-format
 msgid ""
 "Invalid format for record_tag string \"%s\" in Traces definition row %zu"
@@ -30777,14 +30845,14 @@ msgstr ""
 "Format invalide pour chaîne record_tag \"%s\" en définition de Pistes ligne "
 "%zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1369
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1391
 #, c-format
 msgid "Unhandled graphic item '%s' in Traces definition row %zu"
 msgstr ""
 "Élément graphique non supporté '%s' dans la définition de Pistes  ligne %zu"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1393
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1406
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1415
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1428
 #, c-format
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
@@ -30792,17 +30860,17 @@ msgstr ""
 "Élément dupliqué pour l'ID %d et séquence %d dans la définition de Traces "
 "ligne%zu \n"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2154
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2176
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "Pad utilisateur nommé \"%s\" invalide. Remplacé par pad circulaire."
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2196
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "Ne peut trouver l’étiquette de colonne %s"
+msgstr "Ne peut pas trouver le pad utilisateur nommé %s"
 
-#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
+#: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2393
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
@@ -32057,9 +32125,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Les polygones auto intersectants ne sont pas autorisés"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Le point de départ du routage viole le DRC."
+msgstr "La position de la via viole le DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -34491,21 +34558,17 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/launchers/kicad.desktop:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
+#: resources/linux/appdata/kicad.appdata.xml:13
+#: resources/linux/launchers/kicad.desktop:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:37
+#: resources/linux/appdata/kicad.appdata.xml:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -34515,92 +34578,76 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml.in:49
+#: resources/linux/appdata/kicad.appdata.xml:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:54
+#: resources/linux/appdata/kicad.appdata.xml:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:59
+#: resources/linux/appdata/kicad.appdata.xml:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:71
+#: resources/linux/appdata/kicad.appdata.xml:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/bitmap2component.desktop:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/eeschema.desktop:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/eeschema.desktop:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/eeschema.desktop:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/gerbview.desktop:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/gerbview.desktop:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop.in:12
+#: resources/linux/launchers/kicad.desktop:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/pcbcalculator.desktop:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/pcbnew.desktop:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/pcbnew.desktop:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
-msgid "Gerber File"
-msgstr "Fichiers Gerber"
+#~ msgid "No off grid or duplicate pins were found."
+#~ msgstr "Pas de  pins doublées ou hors grille trouvées."
 
-#: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
-msgid "Excellon drill file"
-msgstr "Créer Fichier(s) de perçage Excellon"
+#~ msgid "Unconnected items"
+#~ msgstr "Items non connectés"
 
-#: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
-msgid "KiCad Project"
-msgstr "Fichier projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
-msgid "KiCad Schematic"
-msgstr "Editer la Schématique"
-
-#: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichiers circuits imprimés KiCad"
+#~ msgid "Edit"
+#~ msgstr "Éditer"
 
 #~ msgid "The schematic file will be converted to the new file format on save."
 #~ msgstr ""
@@ -34628,15 +34675,6 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "project"
 #~ msgstr "projet"
-
-#~ msgid "Edit"
-#~ msgstr "Éditer"
-
-#~ msgid "No off grid or duplicate pins were found."
-#~ msgstr "Pas de  pins doublées ou hors grille trouvées."
-
-#~ msgid "Unconnected items"
-#~ msgstr "Items non connectés"
 
 #~ msgid "Settings"
 #~ msgstr "Caractéristiques"
@@ -34931,6 +34969,10 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
