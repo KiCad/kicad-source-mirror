@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-06 00:27+0000\n"
+"PO-Revision-Date: 2021-02-06 01:41+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5194,32 +5194,32 @@ msgstr "選択されたファイルは不正であるか、壊れています!"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2365
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "'%s のポイントが期待されていない数です。%d 個見つかりましたが、期待されている数は %d 個です 。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
-#, fuzzy, c-format
+#, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "見つからないフットプリント %s (%s)"
+msgstr "見つからないノード '%s' ( '%s' 中)"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "未知のトークン \"%s\""
+msgstr "未知のノード '%s' ( '%s' 中)"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "見つからないパラメーター '%s' ( '%s' 中)"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "未知のパラメーター '%s' ( '%s' 中)"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "フットプリント '%s' を '%s' からロードできません"
+msgstr "'%s' をパース出来ません ('%s' 中)"
 
 #: common/plugins/eagle/eagle_parser.cpp:115
 #, c-format
@@ -7048,9 +7048,9 @@ msgid "Item not annotated: %s%s\n"
 msgstr "アノテートされなかったアイテム: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr "エラー: シンボル %s%s%s (ユニット %d) は定義されたユニット数を超えています\n"
+msgstr "エラー: シンボル %s%s%s (ユニット %d) は定義されたユニット数 %d を超えています\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
@@ -7078,10 +7078,10 @@ msgstr ""
 "て選択されました"
 
 #: eeschema/connection_graph.cpp:2451
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "%s (%s) は %s (%s) に接続されていますが、バスのメンバーがありません"
+msgstr "表示上はネット %s はバス %s に接続されていますが、バスのメンバーではありません"
 
 #: eeschema/connection_graph.cpp:2849
 #, c-format
@@ -9315,6 +9315,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"spice を実行するコマンドラインを入力します。\n"
+"通常 <spiceのバイナリへのパス> %I\n"
+"%l は実際のspiceネットリスト名に置き換えられます"
 
 #: eeschema/dialogs/dialog_netlist.cpp:385
 msgid "Create Netlist and Run Simulator Command"
@@ -14799,16 +14802,14 @@ msgid "Change %s pin %s net label from '%s' to '%s'."
 msgstr "%s のネットのラベルを '%s' から '%s' へ変更します。"
 
 #: eeschema/tools/backannotate.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s cannot be changed to '%s' because it is driven by a power pin."
-msgstr ""
-"パワー ピンで駆動されているため、ネット \"%s\" は \"%s\" に変更することができ"
-"ません。"
+msgstr "電源ピンで駆動されているため、ネット '%s' は '%s に変更することができません。"
 
 #: eeschema/tools/backannotate.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "ラベル \"%s\" をネット \"%s\" に追加します。"
+msgstr "ラベル '%s' を %s のピン %s のネットに追加します。"
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -15717,64 +15718,63 @@ msgid "Symbol Warnings"
 msgstr "シンボル エイリアス:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s \"%s\" 位置 "
-"<b>(%.3f, %.3f)</b>"
+"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</"
+"b> (変換シンボル)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s \"%s\" 位置 "
-"<b>(%.3f, %.3f)</b>"
+"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</"
+"b> (変換シンボルのユニット %c と %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s \"%s\" 位置 "
-"<b>(%.3f, %.3f)</b>"
+"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s \"%s\" 位置 "
-"<b>(%.3f, %.3f)</b>"
+"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</"
+"b> (ユニット %c と %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボル)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボルのユニット %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (ユニット %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
@@ -15782,26 +15782,26 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> (変換シンボル)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (変換シンボルのユニット %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
-msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> (ユニット %c)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
 msgid "No symbol issues found."
@@ -22084,9 +22084,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr "%s を更新 %s から %s へ"
+msgstr "%s のフットプリントを '%s' から '%s' に更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:377
 #, c-format
@@ -25422,9 +25422,9 @@ msgid "Parent footprint description"
 msgstr "親フットプリントの説明"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "プットプリント %s パッド %s のネットを %s から %s に変更しています。"
+msgstr "ネットを変更すると、%s のパッド %s も %s に更新されます。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, fuzzy, c-format
@@ -25432,9 +25432,9 @@ msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr "プットプリント %s パッド %s のネットを %s から %s に変更しています。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "プットプリント %s パッド %s のネットを %s から %s に変更しています。"
+msgstr "ネットを変更すると、接続された %lu 個のパッドも %s に更新されます。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 msgid "Change Nets"
@@ -27189,9 +27189,9 @@ msgid "Keepout layer(s) not matched."
 msgstr "ルール \"%s\" が見つかりません。"
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "ルール \"%s\" が見つかりません。"
+msgstr "ルールレイヤー '%s' が一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/drc/drc_engine.cpp:904
 #, fuzzy
@@ -31122,7 +31122,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:164
 #, c-format
 msgid "Pad is not a PTH pad; connection will be: %s."
-msgstr ""
+msgstr "パッドはPTHパッドではありません。接続は %s になります。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:176
 #, c-format
