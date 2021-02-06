@@ -33,7 +33,7 @@ add_executable( qa_sexpr ${SEXPR_SRCS} )
 
 target_link_libraries( qa_sexpr
     sexpr
-    unit_test_utils
+    qa_utils
     ${wxWidgets_LIBRARIES}
 )
 

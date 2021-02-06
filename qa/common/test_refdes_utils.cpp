@@ -26,7 +26,7 @@
  * Test suite for refdes functions
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <refdes_utils.h>

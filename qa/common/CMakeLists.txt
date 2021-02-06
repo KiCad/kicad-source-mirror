@@ -55,7 +55,6 @@ set( common_libs
     common
     gal
     qa_utils
-    unit_test_utils
     ${wxWidgets_LIBRARIES}
 )
 

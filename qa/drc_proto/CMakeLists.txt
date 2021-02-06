@@ -98,7 +98,6 @@ target_link_libraries( drc_proto
     tinyspline_lib
     nanosvg
     idf3
-    unit_test_utils
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

@@ -90,7 +90,6 @@ target_link_libraries( qa_eeschema
     pcbcommon
     kimath
     qa_utils
-    unit_test_utils
     markdown_lib
     ${GDI_PLUS_LIBRARIES}
     ${Boost_LIBRARIES}

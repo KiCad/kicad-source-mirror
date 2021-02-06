@@ -47,7 +47,6 @@ add_executable( qa_kimath ${KIMATH_SRCS} )
 target_link_libraries( qa_kimath
     qa_utils
     kimath
-    unit_test_utils
     ${wxWidgets_LIBRARIES}
 )
 

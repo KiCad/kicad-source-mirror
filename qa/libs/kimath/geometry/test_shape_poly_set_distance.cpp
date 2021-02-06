@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <convert_to_biu.h>
 
@@ -31,7 +31,7 @@
 #include <qa_utils/geometry/poly_set_construction.h>
 #include <qa_utils/geometry/seg_construction.h>
 
-#include <unit_test_utils/geometry.h>
+#include <qa_utils/geometry/geometry.h>
 
 /// Mock up a conversion function
 constexpr static double IU_PER_MM = 1e3;

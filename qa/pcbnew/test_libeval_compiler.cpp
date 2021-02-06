@@ -23,7 +23,7 @@
 
 #include <wx/wx.h>
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <pcbnew/pcb_expr_evaluator.h>

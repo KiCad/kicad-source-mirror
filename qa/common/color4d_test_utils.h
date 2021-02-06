@@ -31,7 +31,7 @@
 
 #include <gal/color4d.h>
 
-#include <unit_test_utils/numeric.h>
+#include <qa_utils/numeric.h>
 
 namespace KI_TEST
 {

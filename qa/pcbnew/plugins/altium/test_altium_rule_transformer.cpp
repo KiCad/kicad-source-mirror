@@ -26,7 +26,7 @@
  * Test suite for #ALTIUM_RULE_TOKENIZER
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/plugins/altium/altium_rule_transformer.h>
 

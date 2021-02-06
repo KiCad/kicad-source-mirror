@@ -25,7 +25,7 @@
 
 #include "color4d_test_utils.h"
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <gal/color4d.h>
 

@@ -23,7 +23,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>

@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 #include <wx/init.h>
 
-#include <unit_test_utils/wx_assert.h>
+#include <qa_utils/wx_utils/wx_assert.h>
 
 /*
  * Simple function to handle a WX assertion and throw a real exception.

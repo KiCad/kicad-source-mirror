@@ -29,7 +29,7 @@
 #ifndef QA_EESCHEMA_LIB_FIELD_TEST_UTILS__H
 #define QA_EESCHEMA_LIB_FIELD_TEST_UTILS__H
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <template_fieldnames.h>
 

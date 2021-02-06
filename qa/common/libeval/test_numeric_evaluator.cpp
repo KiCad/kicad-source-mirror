@@ -26,7 +26,7 @@
  * Test suite for #NUMERIC_EVALUATOR
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <libeval/numeric_evaluator.h>
 

@@ -26,7 +26,7 @@
  * Test suite for LIB_PART
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <lib_rectangle.h>

@@ -27,7 +27,7 @@
  * Test suite for schematic base internal units (1 = 100nm).
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <convert_to_biu.h>
 

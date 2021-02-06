@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <unit_test_utils/unit_test_utils.h>
-#include <unit_test_utils/wx_assert.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/wx_assert.h>
 
 // Code under test
 #include <sch_pin.h>

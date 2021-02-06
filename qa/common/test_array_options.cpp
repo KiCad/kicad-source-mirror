@@ -26,8 +26,8 @@
  * Test suite for #ARRAY_OPTIONS
  */
 
-#include <unit_test_utils/geometry.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/geometry/geometry.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <base_units.h>
 #include <trigo.h>

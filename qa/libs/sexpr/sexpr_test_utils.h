@@ -26,7 +26,7 @@
 
 #include <sexpr/sexpr.h>
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 namespace KI_TEST
 {

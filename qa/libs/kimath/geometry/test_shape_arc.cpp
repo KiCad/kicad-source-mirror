@@ -25,9 +25,9 @@
 
 #include <geometry/shape_line_chain.h>
 
-#include <unit_test_utils/geometry.h>
-#include <unit_test_utils/numeric.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/geometry/geometry.h>
+#include <qa_utils/numeric.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include "geom_test_utils.h"
 

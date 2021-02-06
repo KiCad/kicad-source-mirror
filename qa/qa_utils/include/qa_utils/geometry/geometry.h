@@ -24,8 +24,8 @@
 #ifndef QA_UNIT_TEST_UTILS_GEOM__H
 #define QA_UNIT_TEST_UTILS_GEOM__H
 
-#include <unit_test_utils/numeric.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/numeric.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <math/box2.h>
 #include <math/vector2d.h>

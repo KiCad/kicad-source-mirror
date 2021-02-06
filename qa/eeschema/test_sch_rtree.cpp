@@ -29,14 +29,14 @@
 #include <convert_to_biu.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <sch_rtree.h>
 
 #include "uuid_test_utils.h"
 
-#include <unit_test_utils/wx_assert.h>
+#include <qa_utils/wx_utils/wx_assert.h>
 
 class TEST_SCH_RTREE_FIXTURE
 {

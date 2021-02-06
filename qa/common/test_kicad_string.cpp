@@ -26,7 +26,7 @@
  * Test suite for general string functions
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <kicad_string.h>

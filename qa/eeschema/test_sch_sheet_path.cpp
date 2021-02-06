@@ -26,7 +26,7 @@
  * Test suite for #SCH_SHEET_PATH and #SCH_SHEET_LIST
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <sch_sheet_path.h>

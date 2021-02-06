@@ -26,7 +26,7 @@
  * Test suite for LIB_ARC
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <trigo.h>
 #include <convert_to_biu.h>
 

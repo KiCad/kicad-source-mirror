@@ -28,7 +28,7 @@
  */
 
 #include <string.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <vector>
 #include <wx/string.h>
 

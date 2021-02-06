@@ -26,7 +26,7 @@
  * Test suite for #ALTIUM_PARSER_SCH
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eeschema/sch_plugins/altium/altium_parser_sch.h>
 

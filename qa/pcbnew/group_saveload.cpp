@@ -32,7 +32,7 @@
 #include <common.h>
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 BOOST_AUTO_TEST_SUITE( GroupSaveLoad )
 

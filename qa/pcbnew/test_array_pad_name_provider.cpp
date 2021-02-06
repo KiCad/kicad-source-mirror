@@ -26,7 +26,7 @@
  * Test suite for the #ARRAY_PAD_NAME_PROVIDER class
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <array_pad_name_provider.h> // UUT
 

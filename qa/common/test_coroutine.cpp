@@ -29,7 +29,7 @@
  * test utility.
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <tool/coroutine.h>
 

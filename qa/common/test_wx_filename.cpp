@@ -26,7 +26,7 @@
  * Test suite for WX_FILNAME
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
 #include <wx_filename.h>

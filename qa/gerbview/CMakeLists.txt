@@ -57,7 +57,6 @@ target_link_libraries( qa_gerbview
     common
     gal
     qa_utils
-    unit_test_utils
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <unit_test_utils/unit_test_utils.h>
+#include <qa_utils/wx_utils/wx_assert.h>
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
-{
+#include <sstream>
 
-void print_log_value<wxPoint>::operator()( std::ostream& os, wxPoint const& aPt )
+namespace KI_TEST
 {
-    os << "WXPOINT[ x=\"" << aPt.x << "\" y=\"" << aPt.y << "\" ]";
+WX_ASSERT_ERROR::WX_ASSERT_ERROR( const wxString& aFile, int aLine, const wxString& aFunc,
+        const wxString& aCond, const wxString& aMsg )
+        : m_file( aFile ), m_line( aLine ), m_func( aFunc ), m_cond( aCond ), m_msg( aMsg )
+{
+    std::ostringstream ss;
+
+    ss << "WX assertion in " << m_file << ":" << m_line << "\n"
+       << "in function " << m_func << "\n"
+       << "failed condition: " << m_cond;
+
+    if( m_msg.size() )
+        ss << "\n"
+           << "with message: " << m_msg;
+
+    m_format_msg = ss.str();
 }
 
+const char* WX_ASSERT_ERROR::what() const noexcept
+{
+    return m_format_msg.c_str();
 }
-BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
+} // namespace KI_TEST
