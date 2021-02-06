@@ -1432,18 +1432,18 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
 
         if( elem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
         {
-            HelperCreateBoardOutline( elem.vertices );
+            HelperCreateBoardOutline( elem.outline );
         }
         else if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || elem.is_keepout )
         {
             SHAPE_LINE_CHAIN linechain;
-            HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+            HelperShapeLineChainFromAltiumVertices( linechain, elem.outline );
 
             if( linechain.PointCount() < 2 )
             {
                 wxLogError( wxString::Format(
                         _( "ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 points are required." ),
-                        linechain.PointCount(), elem.vertices.size() ) );
+                        linechain.PointCount(), elem.outline.size() ) );
                 continue;
             }
 
@@ -1457,7 +1457,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
             zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
 
-            zone->SetPosition( elem.vertices.at( 0 ).position );
+            zone->SetPosition( elem.outline.at( 0 ).position );
             zone->Outline()->AddOutline( linechain );
 
             if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
@@ -1495,14 +1495,13 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
                 }
 
                 SHAPE_LINE_CHAIN linechain;
-                HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
+                HelperShapeLineChainFromAltiumVertices( linechain, elem.outline );
 
                 if( linechain.PointCount() < 2 )
                 {
                     wxLogError( wxString::Format( _( "Polygon has only %d point extracted from %ld "
                                                      "vertices. At least 2 points are required." ),
-                                                  linechain.PointCount(),
-                                                  elem.vertices.size() ) );
+                                                  linechain.PointCount(), elem.outline.size() ) );
                     continue;
                 }
 
@@ -1546,7 +1545,6 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
     {
         AREGION6 elem( reader, false );
 
-#if 0 // TODO: it seems this code has multiple issues right now, and we can manually fill anyways
         if( elem.subpolyindex != ALTIUM_POLYGON_NONE )
         {
             if( m_polygons.size() <= elem.subpolyindex )
@@ -1563,22 +1561,50 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                 continue; // we know the zone id, but because we do not know the layer we did not add it!
             }
 
+            PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+            if( klayer == UNDEFINED_LAYER )
+            {
+                continue; // Just skip it for now. Users cann fill it themself.
+            }
+
             SHAPE_LINE_CHAIN linechain;
-            for( auto& vertice : elem.vertices )
+            for( const ALTIUM_VERTICE& vertice : elem.outline )
             {
                 linechain.Append( vertice.position );
             }
-            linechain.Append( elem.vertices.at( 0 ).position );
+            linechain.Append( elem.outline.at( 0 ).position );
             linechain.SetClosed( true );
 
-            SHAPE_POLY_SET polyset;
-            polyset.AddOutline( linechain );
-            polyset.BooleanAdd( zone->GetFilledPolysList(), SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
+            SHAPE_POLY_SET rawPolys;
+            rawPolys.AddOutline( linechain );
 
-            zone->SetFilledPolysList( polyset );
+            for( const std::vector<ALTIUM_VERTICE>& hole : elem.holes )
+            {
+                SHAPE_LINE_CHAIN hole_linechain;
+                for( const ALTIUM_VERTICE& vertice : hole )
+                {
+                    hole_linechain.Append( vertice.position );
+                }
+                hole_linechain.Append( hole.at( 0 ).position );
+                hole_linechain.SetClosed( true );
+                rawPolys.AddHole( hole_linechain );
+            }
+
+            // The calculation -2 ensures we do not accidentially remove thermal spokes for now.
+            rawPolys.Deflate( zone->GetMinThickness() / 2 - 2, 32 );
+
+            if( zone->HasFilledPolysForLayer( klayer ) )
+                rawPolys.BooleanAdd( zone->RawPolysList( klayer ),
+                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            SHAPE_POLY_SET finalPolys = rawPolys;
+            finalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            zone->SetRawPolysList( klayer, rawPolys );
+            zone->SetFilledPolysList( klayer, finalPolys );
             zone->SetIsFilled( true );
+            zone->SetNeedRefill( false );
         }
-#endif
     }
 
     if( reader.GetRemainingBytes() != 0 )

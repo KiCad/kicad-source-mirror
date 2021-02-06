@@ -578,7 +578,8 @@ types:
       type: u1  # KEEPOUT = 2
     - id: net
       type: u2
-    - size: 2
+    - id: subpolyindex
+      type: u2
     - id: component
       type: u2
     - size: 5
@@ -590,16 +591,29 @@ types:
     - id: properties
       size: propterties_len
       type: str
+    # region1 type
+    - id: outline
+      type: region1_part
+    - id: holes
+      type: region1_part
+      repeat-expr: holecount
+      repeat: expr
+    # TODO
+    #- id: vertices_num
+    #  type: u4
+    #- id: vertices2 # region2 type
+    #  repeat: expr
+    #  repeat-expr: vertices_num+1
+    #  type: xyf2
+
+  region1_part:
+    seq:
     - id: vertices_num
       type: u4
     - id: vertices  # region1 type
       repeat: expr
       repeat-expr: vertices_num
       type: xyf
-    #- id: vertices2 # region2 type
-    #  repeat: expr
-    #  repeat-expr: vertices_num+1
-    #  type: xyf2
 
   componentbody:
     seq:

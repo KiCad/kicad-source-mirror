@@ -493,10 +493,12 @@ struct AREGION6
     uint16_t     net;
     uint16_t     component;
     uint16_t     subpolyindex;
+    uint16_t     holecount;
 
     ALTIUM_REGION_KIND kind; // I assume this means if normal or keepout?
 
-    std::vector<ALTIUM_VERTICE> vertices;
+    std::vector<ALTIUM_VERTICE>              outline;
+    std::vector<std::vector<ALTIUM_VERTICE>> holes;
 
     explicit AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices );
 };

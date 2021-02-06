@@ -990,9 +990,11 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     is_keepout     = flags2 == 2;
 
     net = aReader.Read<uint16_t>();
-    aReader.Skip( 2 );
+    subpolyindex = aReader.Read<uint16_t>();
     component = aReader.Read<uint16_t>();
-    aReader.Skip( 9 );
+    aReader.Skip( 5 );
+    holecount = aReader.Read<uint16_t>();
+    aReader.Skip( 2 );
 
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
@@ -1005,8 +1007,9 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
 
     is_shapebased = ALTIUM_PARSER::PropertiesReadBool( properties, "ISSHAPEBASED", false );
 
-    subpolyindex = static_cast<uint16_t>(
-            ALTIUM_PARSER::PropertiesReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
+    // TODO: this can differ from the other subpolyindex?!
+    //subpolyindex = static_cast<uint16_t>(
+    //        ALTIUM_PARSER::PropertiesReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
 
     switch( pkind )
     {
@@ -1037,9 +1040,9 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
         break;
     }
 
-    uint32_t num_vertices = aReader.Read<uint32_t>();
+    uint32_t num_outline_vertices = aReader.Read<uint32_t>();
 
-    for( uint32_t i = 0; i < num_vertices; i++ )
+    for( uint32_t i = 0; i < num_outline_vertices; i++ )
     {
         if( aExtendedVertices )
         {
@@ -1049,14 +1052,32 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
             int32_t radius   = aReader.ReadKicadUnit();
             double  angle1   = aReader.Read<double>();
             double  angle2   = aReader.Read<double>();
-            vertices.emplace_back( isRound, radius, angle1, angle2, position, center );
+            outline.emplace_back( isRound, radius, angle1, angle2, position, center );
         }
         else
         {
             // For some regions the coordinates are stored as double and not as int32_t
             int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
             int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
-            vertices.emplace_back( wxPoint( x, y ) );
+            outline.emplace_back( wxPoint( x, y ) );
+        }
+    }
+
+    // TODO: for now we only support holes in regions where there are stored as double
+    if( !aExtendedVertices )
+    {
+        holes.resize( holecount );
+        for( uint16_t k = 0; k < holecount; k++ )
+        {
+            uint32_t num_hole_vertices = aReader.Read<uint32_t>();
+            holes.at( k ).reserve( num_hole_vertices );
+
+            for( uint32_t i = 0; i < num_hole_vertices; i++ )
+            {
+                int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
+                int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
+                holes.at( k ).emplace_back( wxPoint( x, y ) );
+            }
         }
     }
 
