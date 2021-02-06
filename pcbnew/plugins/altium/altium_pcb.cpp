@@ -1303,6 +1303,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
 
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
 
+        zone->SetMinThickness( IU_PER_MILS ); // TODO: workaround until proper min thickness is set
         if( polygonConnectRule != nullptr )
         {
             switch( polygonConnectRule->polygonconnectStyle )
@@ -1590,8 +1591,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
                 rawPolys.AddHole( hole_linechain );
             }
 
-            // The calculation -2 ensures we do not accidentially remove thermal spokes for now.
-            rawPolys.Deflate( zone->GetMinThickness() / 2 - 2, 32 );
+            rawPolys.Deflate( zone->GetMinThickness() / 2, 32 );
 
             if( zone->HasFilledPolysForLayer( klayer ) )
                 rawPolys.BooleanAdd( zone->RawPolysList( klayer ),
