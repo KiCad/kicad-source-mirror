@@ -83,10 +83,18 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
     std::map<wxString, wxString> kv;
 
     uint32_t length = Read<uint32_t>();
-    if( length > GetRemainingBytes() || m_pos[length - 1] != '\0' )
+    if( length > GetRemainingBytes() )
     {
         m_error = true;
         return kv;
+    }
+
+    // There is one case by kliment where Board6 ends with "|NEARDISTANCE=1000mi".
+    // Both the 'l' and the null-byte are missing, which looks like Altium swallowed two bytes.
+    if( m_pos[length - 1] != '\0' )
+    {
+        wxLogError( "For Altium import, we assumes a null byte at the end of a list of properties. "
+                    "Because this is missing, imported data might be malformed or missing." );
     }
 
     //we use std::string because std::string can handle NULL-bytes
