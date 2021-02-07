@@ -594,6 +594,14 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
 
     aClipFootprint->GraphicalItems().clear();
 
+    for( FP_ZONE* zone : aClipFootprint->Zones() )
+    {
+        zone->SetParent( editorFootprint );
+        aPastedItems.push_back( zone );
+    }
+
+    aClipFootprint->Zones().clear();
+
     for( PCB_GROUP* group : aClipFootprint->Groups() )
     {
         group->SetParent( editorFootprint );
