@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-04 12:58+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-02-07 23:02+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4896,19 +4896,16 @@ msgid "Via holes"
 msgstr "过孔钻孔"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "过孔钻孔"
+msgstr "过孔壁"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "无镀铜孔"
+msgstr "镀通孔"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "无镀铜孔"
+msgstr "镀通孔壁"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -6346,9 +6343,8 @@ msgid "Report files"
 msgstr "报告文件"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "元件参数"
+msgstr "元件放置文件"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -6966,21 +6962,21 @@ msgid "Item not annotated: %s%s\n"
 msgstr "未批注项目： %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
-msgstr "错误：符号 %s%s 单元 %d 且符号仅定义了 %d 个单元\n"
+msgstr "错误：符号 %s%s%s(单元 %d) 超出定义的单元 (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "多重项目 %s%s\n"
+msgstr "重复项目 %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "多重项目 %s%s\n"
+msgstr "重复项目 %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
@@ -7106,9 +7102,8 @@ msgid "Generate"
 msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "生成材料表 (BOM) 需要一张完全注释的原理图。"
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -8015,7 +8010,7 @@ msgstr "显示标注对话框"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "原理图未完全标注。 ERC 结果将不完整。"
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9162,9 +9157,8 @@ msgid "Export Netlist"
 msgstr "导出网表"
 
 #: eeschema/dialogs/dialog_netlist.cpp:341
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "模拟器需要一张完整批注的原理图。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
 msgid "Reformat passive symbol values"
@@ -9207,9 +9201,8 @@ msgstr "导出 %s"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "导出网表需要一张完整批注的原理图。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:702
 msgid "This plugin already exists."
@@ -9992,9 +9985,8 @@ msgid "Add signal by name:"
 msgstr "按名称添加信号："
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "你需要选择直流源(扫描1)"
+msgstr "你需要选择 DC 源"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10011,9 +10003,8 @@ msgid "Volts"
 msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "跳线"
+msgstr "安培"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
@@ -10071,7 +10062,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "启用第二个源"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10082,20 +10073,18 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "PI（π）"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "温度"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -10115,23 +10104,20 @@ msgid "DC source:"
 msgstr "直流源："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "开始电压："
+msgstr "起始值："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "初始值："
+msgstr "终值："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "步长增量："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "源"
+msgstr "交换源"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11586,9 +11572,8 @@ msgid "Passive Pin"
 msgstr "无源引脚"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "新建引脚"
+msgstr "自由引脚"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -11749,24 +11734,20 @@ msgid "Library symbol issue"
 msgstr "库符号问题"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "符号单元表示法："
+msgstr "符号没有注解"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "封装更改的符号未保存"
+msgstr "符号的单元比定义的要多"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "不修改不同层的焊盘"
+msgstr "同一符号的单元的值不同"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "更新参考标识符"
+msgstr "重复参考标识符"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -12482,9 +12463,8 @@ msgid "Open Schematic"
 msgstr "打开原理图"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "分配封装需要一张完整批注的原理图。"
 
 #: eeschema/sch_edit_frame.cpp:1049
 msgid "Could not open CvPcb"
@@ -12946,14 +12926,14 @@ msgstr ""
 "位移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"无效的小数在\n"
+"带不正确 local 的浮点数，位于：\n"
 "文件：\"%s\"\n"
 "行：%d\n"
 "位移：%d"
@@ -13887,14 +13867,12 @@ msgid "Tune component values"
 msgstr "调整元件的值"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "参数"
+msgstr "模拟参数"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "仿真设置"
+msgstr "仿真参数和设置"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14096,19 +14074,16 @@ msgid "Voltage (swept)"
 msgstr "电压（扫描）"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "当前快捷键："
+msgstr "电流 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "阻抗："
+msgstr "电阻 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "温升："
+msgstr "温度 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -14221,9 +14196,9 @@ msgid "Could not open the library file."
 msgstr "无法打开库文件。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "加载库 \"%s\""
+msgstr "正在加载库 '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #: pcbnew/footprint_libraries_utils.cpp:486
@@ -14287,21 +14262,13 @@ msgstr "符号库未启用。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"保存全局库表时发生错误：\n"
-"\n"
-"%s"
+msgstr "保存全局库表时发生错误。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"保存工程特定库表时出错:\n"
-"\n"
-"%s"
+msgstr "保存工程库表时出错。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -14727,13 +14694,12 @@ msgid ""
 msgstr "封装 '%s'未在PCB上呈现。原理图中的相应符号必须手动删除（如果需要）。"
 
 #: eeschema/tools/backannotate.cpp:302
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "重新连接封装需要一张完整批注的原理图。"
 
 #: eeschema/tools/backannotate.cpp:305
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "用户取消了封装重新链接。"
 
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
@@ -14843,9 +14809,8 @@ msgid "Create a new symbol"
 msgstr "创建一个新符号"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "编辑符号..."
+msgstr "编辑符号"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -15665,98 +15630,94 @@ msgid "Symbol Warnings"
 msgstr "符号警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重复引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于转换"
-"后的坐标 <b>(%.3f, %.3f)</b>"
+"<b>重复引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于转换后的坐标 <b>(%.3f, %."
+"3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>, 冲突区域在转换后的单元 %c 和 %c"
+"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，与引脚 %s%s 冲突，后者位于 <b>(%.3f, %.3f)</b>, "
+"冲突区域在转换后的单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>"
+"<b>重复引脚%s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>重复引脚 %s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 "
-"<b>(%.3f, %.3f)</b>，冲突区域在单元 %c 和 %c"
+"<b>重复引脚 %s</b>%s，位置 <b>(%.3f, %.3f)</b>，和引脚 %s%s冲突，后者位于 <b>(%.3f, %.3f)</b>，"
+"冲突区域在单元 %c 和 %c。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>隐藏的电源引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在转换后的符号 %c 中"
+msgstr "<b>隐藏的电源引脚%s</b>%s，位于 <b>(%.3f, %.3f)</b>，此坐标在转换后的符号 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>网格外引脚 %s</b> %s 在位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>隐藏的电源引脚 %s</b> %s 在位置 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
-msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在符号 %c 中"
+msgstr "<b>隐藏的电源引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在符号 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr ""
+msgstr "（隐藏的电源引脚会将其引脚名称驱动到任何连接的网上。）"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>网格外引脚 %s</b>%s 位于转换的位置 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
-msgstr ""
-"<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在转换后的符号 %c 中"
+msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在转换后的单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>网格外引脚 %s</b> %s 在位置 <b>(%.3f, %.3f)</b>"
+msgstr "<b>网格外引脚 %s</b> %s，位于 <b>(%.3f, %.3f)</b>。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
-msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在符号 %c 中"
+msgstr "<b>网格外引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此坐标在单元 %c 中。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "没有找到符号。"
+msgstr "没有找到符号问题。"
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -17422,14 +17383,12 @@ msgid "Save Project To"
 msgstr "将工程保存到"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "从模板新建工程"
+msgstr "创建(或打开)一个项目来编辑原理图。"
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "为此板创建新工程"
+msgstr "创建(或打开)一个项目来编辑印刷电路板。"
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -18850,11 +18809,11 @@ msgstr "PCB 计算器"
 #: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
 #: pcb_calculator/eserie.cpp:402
 msgid "Exact"
-msgstr ""
+msgstr "精确"
 
 #: pcb_calculator/eserie.cpp:382 pcb_calculator/eserie.cpp:409
 msgid "Not worth using"
-msgstr ""
+msgstr "不值得使用"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -22433,9 +22392,8 @@ msgid "Include &zones"
 msgstr "包含覆铜 (&Z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "选中项"
+msgstr "过滤选中项"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -22725,9 +22683,8 @@ msgid "Include board edge layer"
 msgstr "包括电路板边缘层"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "生成图文件"
+msgstr "生成放置文件"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -25607,11 +25564,10 @@ msgid "Lock pads of newly added footprints"
 msgstr "锁定新添加封装的焊盘"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, its pads will be locked "
 "and not movable with respect to the footprint."
-msgstr "若选中，当添加一个封装到电路板时, 焊盘将可自由移动。"
+msgstr "若选中，当添加一个封装到电路板时，焊盘将被锁定且相对该封装无法移动。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
 msgid "Flip board items L/R (default is T/B)"
@@ -25940,9 +25896,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "圆弧/圆近似于线段"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:63
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "最大偏差："
+msgstr "最大允许偏差："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:65
 msgid ""
@@ -25956,7 +25911,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "注：< %s 时区域填充可能会变慢。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
@@ -26832,9 +26787,8 @@ msgid ""
 msgstr "注意：添加锡膏间隙（绝对和相对）以确定最终间隙。"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "保存更改"
+msgstr "取消更改吗？"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -27127,9 +27081,8 @@ msgid "Signal Integrity"
 msgstr "信号完整性"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "总线和净项目之间的连接无效"
+msgstr "项目之间的连接缺失"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -27691,9 +27644,9 @@ msgstr "无法创建 \"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:275
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: \"%s\"."
-msgstr "前面 (顶面) 放置文件：\"%s\"。"
+msgstr "前面 (正面) 放置文件：\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:278
 #: pcbnew/exporters/gen_footprints_placefile.cpp:300
@@ -27705,9 +27658,9 @@ msgstr "元件计数：%d。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:297
 #: pcbnew/exporters/gen_footprints_placefile.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
-msgstr "背面 (底部放置) 放置文件：\"%s\"。"
+msgstr "背面 (底部) 放置文件：\"%s\"。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:305
 #: pcbnew/exporters/gen_footprints_placefile.cpp:445
@@ -27718,16 +27671,15 @@ msgstr "全部元件数量：%d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
-#, fuzzy
 msgid "File generation successful."
-msgstr "STEP 文件已经成功创建。"
+msgstr "文件已经成功创建。"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
 msgstr "没有封装被自动放置."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: \"%s\"."
 msgstr "放置文件：\"%s\"。"
 
@@ -29865,7 +29817,7 @@ msgstr "无法读取文件 "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:194
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "未知 FABMASTER 部分 %s:%s，位于行 %zu。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:209
 #, c-format
@@ -29917,9 +29869,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr "期望焊盘偏移值，但找到了%s : %s，位于行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "未知的焊盘形状名 %s，位于行 %zu"
+msgstr "未知的焊盘形状名 %s，位于层'%s '的行 %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
@@ -29929,7 +29881,7 @@ msgstr "ID 字符串 \"%s\" 的格式无效在自定义填充行 %zu 中"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr ""
+msgstr "无法将图形项目%d插入焊盘叠\"%s\""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
 #, c-format
@@ -29973,12 +29925,12 @@ msgstr "ID %d 和序列 %d 的重复项位于布线定义行 %zu 中 \n"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2154
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "无效的自定义焊盘命名为' %s'。正用圆形盘代替。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "无法找到列标签 %s"
+msgstr "无法找到名为 %s 的自定义焊盘"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
@@ -30907,9 +30859,8 @@ msgid "No board problems found."
 msgstr "未发现电路板问题。"
 
 #: pcbnew/tools/board_editor_control.cpp:499
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "更新印刷电路板需要一张完整批注的原理图。"
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -31025,9 +30976,8 @@ msgstr "丝印层间隙解析适用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:389
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "边缘间隙解析解像度，用于:"
+msgstr "孔间隙解像度，用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:380
 #: pcbnew/tools/board_inspection_tool.cpp:401
@@ -31202,9 +31152,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "不允许自相交多边形"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "布线起点违反 DRC。"
+msgstr "通孔位置违反 DRC。"
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -31215,9 +31164,8 @@ msgid "Refilling all zones..."
 msgstr "重新填充所有覆铜区域..."
 
 #: pcbnew/tools/drc_tool.cpp:157
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "导出网表需要一个完整批注的原理图。"
+msgstr "原理图奇偶校验测试需要一张完整批注的原理图。"
 
 #: pcbnew/tools/drc_tool.cpp:205
 msgid "DRC"
@@ -31964,14 +31912,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr "生成出色的钻取文件"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "元件参数"
+msgstr "元件放置文件 (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成封装拾取和放置位置的文件"
+msgstr "生成用于贴装的元件放置文件"
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Footprint Report (.rpt)..."
@@ -32050,9 +31996,8 @@ msgid "Drill/Place File Origin"
 msgstr "钻孔/放置文件原点"
 
 #: pcbnew/tools/pcb_actions.cpp:637
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "放置钻孔文件和封装位置文件的原点"
+msgstr "放置钻孔文件和原件放置文件的起始点"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Toggle Lock"
@@ -32574,14 +32519,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "选择同一原理图中的所有封装和布线"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "筛选器选择..."
+msgstr "过滤所选项目..."
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "从选区删除项目。"
+msgstr "按类型从选区删除项目"
 
 #: pcbnew/tools/pcb_actions.cpp:1206
 msgid "Fill zone(s)"
