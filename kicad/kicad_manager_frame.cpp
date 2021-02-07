@@ -38,6 +38,7 @@
 #include <panel_hotkeys_editor.h>
 #include <reporter.h>
 #include <project/project_local_settings.h>
+#include <sch_file_versions.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
@@ -507,9 +508,10 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
             wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
-                file.Write( wxT( "(kicad_sch (version 20200310) (host eeschema \"unknown\")\n"
-                                 "(  page \"A4\")\n  (lib_symbols)\n"
-                                 "  (symbol_instances)\n)\n" ) );
+                file.Write( wxString::Format( "(kicad_sch (version %d) (generator eeschema)\n"
+                                              "  (paper \"A4\")\n  (lib_symbols)\n"
+                                              "  (symbol_instances)\n)\n",
+                                              SEXPR_SCHEMATIC_FILE_VERSION ) );
 
 
             // wxFFile dtor will close the file
@@ -527,7 +529,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
 
             if( file.IsOpened() )
                 // Create a small dummy file as a stub for pcbnew:
-                file.Write( wxString::Format( "(kicad_pcb (version %d) (host pcbnew)\n)",
+                file.Write( wxString::Format( "(kicad_pcb (version %d) (generator pcbnew)\n)",
                                               SEXPR_BOARD_FILE_VERSION ) );
 
             // wxFFile dtor will close the file
