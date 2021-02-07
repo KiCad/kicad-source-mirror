@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-05 23:39+0000\n"
+"PO-Revision-Date: 2021-02-07 23:02+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3408,7 +3408,7 @@ msgstr "Micro DuKo Größe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Hole"
-msgstr "Mikro-DuKo-Bohrung"
+msgstr "µVia-Bohrung"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "DP Width"
@@ -5021,19 +5021,16 @@ msgid "Via holes"
 msgstr "Durchkontaktierungsbohrungen"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Durchkontaktierungsbohrungen"
+msgstr "Via-Lochwände"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "Nicht metallisierte Bohrungen"
+msgstr "Metallisierte Löcher"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "Nicht metallisierte Bohrungen"
+msgstr "Metallisierte Lochwände"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -6482,9 +6479,8 @@ msgid "Report files"
 msgstr "Protokolldateien"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "Bauteilparameter"
+msgstr "Bauteilplatzierungsdateien"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -7132,10 +7128,10 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Element ist nicht annotiert: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Fehler: Bauteil %s%s Einheit %d und Bauteil hat nur %d Einheiten definiert\n"
+"Fehler: Bauteil %s%s%s (Einheit %d) überschreitet definierte Einheiten (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
@@ -7247,7 +7243,8 @@ msgstr "Bestehende Annotationen ersetzen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:81
 msgid "Reset, but keep order of multi-unit parts"
-msgstr "Ersetzen, vorhandene Multi-Einheiten jedoch nicht tauschen"
+msgstr ""
+"Zurücksetzen, aber Reihenfolge von Teilen mit mehreren Einheiten beibehalten"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:88
 msgid "Numbering"
@@ -7278,10 +7275,9 @@ msgid "Generate"
 msgstr "Erstellen"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+"Generierung der Stückliste benötigt einen komplett annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7857,7 +7853,7 @@ msgstr "*** Symbol nicht gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** new symbol has too few units ***"
-msgstr "*** neues Symbol hat zu wenige Einheiten ***"
+msgstr "*** neues Bauteil hat zu wenige Einheiten ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
@@ -8605,11 +8601,11 @@ msgstr "Filtere Elemente nach übergeordnetem Bauteiltyp:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
-msgstr "Keine Spannungsquellensymbole"
+msgstr "Keine Spannungssymbole"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Power symbols"
-msgstr "Spannungssymbol"
+msgstr "Spannungssymbole"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
@@ -8618,7 +8614,7 @@ msgstr "Filter Elemente nach Netzen:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:145
 msgid "Set To"
-msgstr "Einstelluungen"
+msgstr "Setzen auf"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:158
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
@@ -8669,12 +8665,12 @@ msgstr "Linienstyle:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:321
 msgid "Sheet background color:"
-msgstr "Hintergrundfabe:"
+msgstr "Blatt-Hintergrundfarbe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:104
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:93
 msgid "Edit Text and Graphic Properties"
-msgstr "Bearbeiten Text- und Grafikeigenschaften"
+msgstr "Text- und Grafikeigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
@@ -8888,7 +8884,7 @@ msgstr "Pinname"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:66
 msgid "(Power symbol value field text cannot be changed.)"
-msgstr "(Der Wert von Spannungsquellen kann nicht verändert werden.)"
+msgstr "(Der Wert von Spannungssymbolen kann nicht verändert werden.)"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9002,7 +8998,7 @@ msgstr "Bauteil mit alternativer Darstellungsform (De Morgan) erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr "Als Spannungsquellen-Bauteil erstellen"
+msgstr "Als Spannungssymbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
@@ -9197,7 +9193,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
-msgstr "Als Bauteil für eine Spannungsquelle definieren"
+msgstr "Als Spannungssymbol definieren"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:174
 msgid ""
@@ -9419,10 +9415,8 @@ msgid "Export Netlist"
 msgstr "Export Netzliste"
 
 #: eeschema/dialogs/dialog_netlist.cpp:341
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+msgstr "Simulator benötigt einen komplett annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
 msgid "Reformat passive symbol values"
@@ -9465,7 +9459,6 @@ msgstr "%s Export"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
@@ -10263,9 +10256,8 @@ msgid "Add signal by name:"
 msgstr "Hinzufügen Signal nach Name:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "Sie müssen eine DC-Quelle auswählen (Sweep 1)"
+msgstr "Sie müssen eine DC-Quelle auswählen"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10282,9 +10274,8 @@ msgid "Volts"
 msgstr "Volt"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "Jumper"
+msgstr "Ampere"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
@@ -10353,15 +10344,13 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "π (Pi)"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10386,23 +10375,20 @@ msgid "DC source:"
 msgstr "DC-Quelle:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Startspannung:"
+msgstr "Startwert:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "Initialwert:"
+msgstr "Endwert:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "Erhöhungsschritt:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "Quelle"
+msgstr "Quellen tauschen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -10650,8 +10636,8 @@ msgid ""
 "In Spice values,the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"Der dezimale Trenner in den Spicewerten ist der Punkt.\n"
-"Werte können Einheiten aus den Spice Bauteilen benutzen."
+"Der Dezimaltrenner in Spicewerten ist der Punkt.\n"
+"Werte können Einheiten aus den Spice-Bauteilen benutzen."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
@@ -11906,9 +11892,8 @@ msgid "Passive Pin"
 msgstr "Passiver Pin"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "Anschluss erstellen"
+msgstr "Freier Pin"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -12079,24 +12064,20 @@ msgid "Library symbol issue"
 msgstr "Problem mit dem Bibliotheksbauteil"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Bauteil Elementanmerkungen:"
+msgstr "Bauteil ist nicht annotiert"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Schaltplan zu Footprintänderungen sind nicht gespeichert"
+msgstr "Bauteil hat mehr Einheiten als definiert sind"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Pads auf unterschiedlichen Lagen nicht modifizieren"
+msgstr "Einheiten des gleichen Bauteils haben unterschiedliche Werte"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Aktualisierung voreingestellter Referenzbezeichner"
+msgstr "Doppelte Referenzbezeichner"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:98
 msgid "Schematic Files"
@@ -12317,7 +12298,7 @@ msgstr "Kürzlich benutzt"
 #: eeschema/getpart.cpp:152
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr "Auswahl Spannungsversorgungsbauteil (%d Elemente geladen)"
+msgstr "Spannungssymbol wählen (%d Elemente geladen)"
 
 #: eeschema/getpart.cpp:154 eeschema/symbol_viewer_frame.cpp:836
 #, c-format
@@ -12752,7 +12733,7 @@ msgstr "Typ Buseingang"
 
 #: eeschema/sch_component.cpp:1367
 msgid "Power symbol"
-msgstr "Spannungsquellensymbol"
+msgstr "Spannungssymbol"
 
 #: eeschema/sch_component.cpp:1372
 msgid "flags"
@@ -12843,10 +12824,8 @@ msgid "Open Schematic"
 msgstr "Schaltplan öffnen"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+msgstr "Zuweisen von Footprints benötigt einen komplett annotierten Schaltplan."
 
 #: eeschema/sch_edit_frame.cpp:1049
 msgid "Could not open CvPcb"
@@ -13011,7 +12990,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1573
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "Das Power-Symbol erstellt eine globale Bezeichnung mit Namen '%s'"
+msgstr "Spannungssymbol erstellt einen globalen Bezeichner mit Namen '%s'"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:66
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:63
@@ -13118,8 +13097,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"Die Symbol-ID '%s' ist von unbekanntem Typ. Es ist weder eine Komponente "
-"noch eine Nettoleistung / ein Nettosymbol. Das Symbol wurde nicht geladen."
+"Die Symbol-ID '%s' ist von unbekanntem Typ. Es ist weder ein Baueil noch ein "
+"Netz- oder Spannungssymbol. Das Symbol wurde nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:463
 #, c-format
@@ -13346,17 +13325,17 @@ msgstr ""
 "Spalte: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Unzulässige Gleitkommazahl in\n"
+"Gleitkommazahl mit falschem local in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
-"Spalte: %d"
+"Offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:415
 #: pcbnew/plugins/kicad/pcb_parser.cpp:150
@@ -14317,14 +14296,12 @@ msgid "Tune component values"
 msgstr "Bauteilwerte anpassen"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Parameter"
+msgstr "Sim-Parameter"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Einstellungen für Simulationen"
+msgstr "Parameter und Einstellungen für Simulationen"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14528,19 +14505,16 @@ msgid "Voltage (swept)"
 msgstr "Spannung (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Aktueller Schlüssel:"
+msgstr "Strom (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Widerstand:"
+msgstr "Widerstand (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Temperaturanstieg:"
+msgstr "Temperatur (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -14659,7 +14633,7 @@ msgid "Could not open the library file."
 msgstr "Konnte die Bibliotheksdatei nicht öffnen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
 msgstr "Lade Bibliothek \"%s\""
 
@@ -14950,7 +14924,7 @@ msgstr "Gehäuse"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1189
 msgid "Power Symbol"
-msgstr "Spannungsquellensymbol"
+msgstr "Spannungssymbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:52
 msgid "Import Symbol"
@@ -15301,9 +15275,8 @@ msgid "Create a new symbol"
 msgstr "Neues Bauteil erstellen"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Bauteil bearbeiten..."
+msgstr "Bauteil bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -15391,10 +15364,9 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Synchronisierter Pin Bearbeitungsmodus\n"
+"Synchronisierter Pin-Bearbeitungsmodus\n"
 "Überträgt alle Änderungen (außer Pinnummern) auf andere Einheiten.\n"
-"Standardmäßig für alle Teile der Multi-Einheiten mit austauschbaren "
-"Einheiten eingeschaltet."
+"Standardmäßig für Multi-Einheiten mit austauschbaren Einheiten eingeschaltet."
 
 #: eeschema/tools/ee_actions.cpp:204
 msgid "Save In Schematic"
@@ -16142,109 +16114,112 @@ msgid "Symbol Warnings"
 msgstr "Bauteilwarnungen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
-"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> vom konvertierten"
+"<b>Pin-Duplikat %s</b> %s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> des konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
-"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c vom "
-"konvertierten"
+"<b>Pin-Duplikat %s</b> %s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c des "
+"konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
-"mit Pin %s%s an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin-Duplikat %s</b> %s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>Pin-Duplikat %s</b>%s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
-"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c"
+"<b>Pin-Duplikat %s</b> %s an Position <b>(%.3f, %.3f)</b> steht in Konflikt "
+"mit Pin %s%s an Position <b>(%.3f, %.3f)</b> in Einheiten %c und %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> vom "
-"konvertierten"
+"<b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%.3f, %.3f)</"
+"b> des konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> in "
-"Bauteil %c vom konvertierten"
+"<b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%.3f, %.3f)</"
+"b> in Einheit %c des konvertieren."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b>"
+msgstr ""
+"<b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%.3f, %."
+"3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> im "
-"Bauteil %c"
+"<b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%.3f, %.3f)</"
+"b> in Einheit %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Versteckte Stromversorgungs-Pins leiten ihre Pin-Namen an alle "
+"angeschlossenen Netze.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> vom "
-"konvertierten"
+"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> des "
+"konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> in "
-"Bauteil %c vom konvertierten"
+"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> in "
+"Einheit %c des konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Pin %s</b>%s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> im "
-"Bauteil %c"
+"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%.3f, %.3f)</b> im "
+"Einheit %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
-#, fuzzy
 msgid "No symbol issues found."
-msgstr "Bauteil nicht gefunden."
+msgstr "Keine Bauteilprobleme gefunden."
 
 #: eeschema/tools/ee_selection_tool.cpp:1459
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
@@ -17942,14 +17917,14 @@ msgid "Save Project To"
 msgstr "Projekt speichern zu"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Ein neues Projekt aus einer Vorlage erstellen"
+msgstr ""
+"Erstellen (oder öffnen) Sie ein Projekt, um einen Schaltplan zu bearbeiten."
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Ein neues Projekt für diese Platine erstellen"
+msgstr ""
+"Erstellen (oder öffnen) Sie ein Projekt, um eine Leiterplatte zu bearbeiten."
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -22410,8 +22385,8 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Ein negativer Abstand bedeutet eine kleinere Fläche als das Pad (üblicher "
-"Weise zum Einfügen von Abständen benutzt)."
+"Ein negativer Abstand bedeutet eine kleinere Fläche als das Pad ("
+"üblicherweise für Lotpaste)."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:247
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
@@ -23055,9 +23030,8 @@ msgid "Include &zones"
 msgstr "Inklusive &Flächen"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Ausgewählte Elemente"
+msgstr "Ausgewählte Elemente filtern"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -23363,9 +23337,8 @@ msgid "Include board edge layer"
 msgstr "Inklusive Platinenumrisslage"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:72
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Mapdatei generieren"
+msgstr "Platzierungsdateien generieren"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:40
 msgid "Export to GenCAD settings"
@@ -23828,7 +23801,7 @@ msgstr "DuKo Bohrung"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:194
 msgid "uVia Drill"
-msgstr "Micro-DuKo-Bohrer"
+msgstr "µVia-Bohrung"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -26358,13 +26331,12 @@ msgid "Lock pads of newly added footprints"
 msgstr "Pads von neu hinzugefügten Footprints sperren"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:42
-#, fuzzy
 msgid ""
 "If checked, when a footprint is added to the board, its pads will be locked "
 "and not movable with respect to the footprint."
 msgstr ""
-"Falls gesetzt, werden Pads von zur Platine hinzugefügten Footprints frei "
-"beweglich sein."
+"Falls gesetzt, werden Pads von zur Platine hinzugefügten Footprints gesperrt "
+"und in Relation zum Footprint nicht frei beweglich sein."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:46
 msgid "Flip board items L/R (default is T/B)"
@@ -26704,16 +26676,15 @@ msgstr "Blinde/Vergrabene Durchkontaktierungen erlauben"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:38
 msgid "Allow micro vias (uVias)"
-msgstr "Micro-Durchkontaktierungen erlauben"
+msgstr "Micro-Durchkontaktierungen (µVias) erlauben"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:50
 msgid "Arc/circle approximated by segments"
 msgstr "Bogen / Kreis durch Segmente angenähert"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:63
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Maximale Abweichung:"
+msgstr "Maximal zulässige Abweichung:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:65
 msgid ""
@@ -26801,15 +26772,15 @@ msgstr "Loch-zu-Loch-Abstand:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:314
 msgid "uVias"
-msgstr "Mikro-DuKos"
+msgstr "µVias"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:330
 msgid "Minimum uVia diameter:"
-msgstr "Micro DuKo Minimaldurchmesser:"
+msgstr "µVia-Minimaldurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:344
 msgid "Minimum uVia hole:"
-msgstr "Mindestgröße Mikro-DuKo Loch:"
+msgstr "Mindestgröße µVia-Loch:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:367
 msgid "Silkscreen"
@@ -27630,9 +27601,8 @@ msgstr ""
 "endgültigen Abstand zu bestimmen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Änderungen speichern"
+msgstr "Änderungen verwerfen?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -27939,9 +27909,8 @@ msgid "Signal Integrity"
 msgstr "Signalintegrität"
 
 #: pcbnew/drc/drc_item.cpp:49
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Ungültige Verbindung zwischen Bus und Netzelementen"
+msgstr "Fehlende Verbindung zwischen Elementen"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Items shorting two nets"
@@ -28510,7 +28479,7 @@ msgstr "Kann \"%s\" nicht erstellen."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:275
 #: pcbnew/exporters/gen_footprints_placefile.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: \"%s\"."
 msgstr "Platzierungsdatei der Vorderseite (Oberseite): \"%s\"."
 
@@ -28524,7 +28493,7 @@ msgstr "Bauteilanzahl: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:297
 #: pcbnew/exporters/gen_footprints_placefile.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: \"%s\"."
 msgstr "Platzierungsdatei der Rückseite (Unterseite): \"%s\"."
 
@@ -28537,16 +28506,15 @@ msgstr "Gesamte Anzahl Bauteile %d\n"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:400
 #: pcbnew/exporters/gen_footprints_placefile.cpp:449
-#, fuzzy
 msgid "File generation successful."
-msgstr "Die STEP Datei wurde erfolgreich erstellt."
+msgstr "Datei erfolgreich erstellt."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
 msgid "No footprint for automated placement."
 msgstr "Kein Footprint für automatische Platzierung vorhanden."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Placement file: \"%s\"."
 msgstr "Platzierungsdatei: \"%s\"."
 
@@ -30888,9 +30856,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr "Erwartete Pad-Offset-Werte aber %s : %s gefunden in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Unbekannter Pad-Form-Name %s in Zeile %zu"
+msgstr "Unbekannter Pad-Form-Name \"%s\" auf Lage \"%s\" in Zeile %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
@@ -30956,9 +30924,9 @@ msgstr ""
 "Ungültiges benutzerdefiniertes Pad \"%s\". Ersetze mit kreisförmigem Pad."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad named %s"
-msgstr "Konnte Spaltenbeschriftung %s nicht finden"
+msgstr "Benutzerdefiniertes Pad namens %s nicht gefunden"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
@@ -31927,10 +31895,10 @@ msgid "No board problems found."
 msgstr "Keine Platinenprobleme gefunden."
 
 #: pcbnew/tools/board_editor_control.cpp:499
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
 msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+"Aktualisierung der Leiterplatte benötigt einen komplett annotierten "
+"Schaltplan."
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -32050,9 +32018,8 @@ msgstr "Ermittlung Bestückungsdruckabstände für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:389
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Ermittlung Kantenabstände für:"
+msgstr "Ermittlung Lochabstände für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:380
 #: pcbnew/tools/board_inspection_tool.cpp:401
@@ -32231,9 +32198,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Selbstüberschneidende Polygone sind nicht zulässig"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Der Routing-Startpunkt verletzt die DRC."
+msgstr "DuKo-Position verletzt die DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -32244,10 +32210,8 @@ msgid "Refilling all zones..."
 msgstr "Alle Flächen ausfüllen..."
 
 #: pcbnew/tools/drc_tool.cpp:157
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+msgstr "Schaltplan-Paritätstest benötigt einen komplett annotierten Schaltplan."
 
 #: pcbnew/tools/drc_tool.cpp:205
 msgid "DRC"
@@ -33020,14 +32984,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Excellon Bohrdatei(en) erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Bauteilparameter"
+msgstr "Bauteilplatzierungsdateien (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Datei mit Footprintpositionen für Bauteileplatzierung erstellen"
+msgstr "Erzeugen von Bauteilplatzierungsdatei(en) für Pick and Place"
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Footprint Report (.rpt)..."
@@ -33106,9 +33068,8 @@ msgid "Drill/Place File Origin"
 msgstr "Ursprung Drill/Place-Datei"
 
 #: pcbnew/tools/pcb_actions.cpp:637
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "Ursprungspunkt für Bohr- und Platzierungsdateien setzen"
+msgstr "Ursprungspunkt für Bohrdateien und Bauteilplatzierungsdateien setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Toggle Lock"
@@ -33642,14 +33603,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Wählt alle Footprints und Leiterbahnen im selben Schaltplanblatt"
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "Filter Auswahl..."
+msgstr "Ausgewählte Elemente filtern..."
 
 #: pcbnew/tools/pcb_actions.cpp:1198
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Element(e) aus Auswahl entfernen."
+msgstr "Elemente nach Typ aus der Auswahl entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1206
 msgid "Fill zone(s)"
