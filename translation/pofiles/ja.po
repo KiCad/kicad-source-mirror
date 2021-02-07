@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-07 23:01+0000\n"
+"PO-Revision-Date: 2021-02-07 23:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -12683,9 +12683,8 @@ msgid "Back"
 msgstr "裏面"
 
 #: eeschema/sch_field.cpp:516
-#, fuzzy
 msgid "Intersheet References"
-msgstr "Eeschema の設定を編集"
+msgstr "シート間のリファレンス"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -17493,14 +17492,12 @@ msgid "Save Project To"
 msgstr "名前を付けてプロジェクトを保存"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "テンプレートから新規プロジェクトを作成"
+msgstr "プロジェクトを作成して(または開いて)、回路図を編集します。"
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "この基板の新規プロジェクトを作成"
+msgstr "プロジェクトを作成して(または開いて)、基板(PCB) を編集します。"
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -21539,9 +21536,8 @@ msgid "Keep aligned with dimension"
 msgstr "寸法線に沿って配置"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
-#, fuzzy
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "寸法線に合わせてテキストの向きを自動的に設定します。"
+msgstr "寸法線に合わせてテキストの向きを自動的に設定します"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
@@ -21626,9 +21622,8 @@ msgid "Show design rules."
 msgstr "デザイン ルールを表示します。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:250
-#, fuzzy
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRCがユーザーによってキャンセルされました。<br> <br>"
+msgstr "-------- DRCがユーザーによってキャンセルされました。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
@@ -29782,13 +29777,11 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
-"Altium レイヤー %d 上の寸法は KiCad と等価ではありません。代わりに Eco1_User "
-"上に配置して下さい"
+msgstr "寸法 ID %s は角度付きの寸法線で、KiCad に相当するものはありません。代わりに寸法線がロードされました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29799,20 +29792,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported"
-msgstr ""
-"Altium レイヤー %d 上の寸法は KiCad と等価ではありません。代わりに Eco1_User "
-"上に配置して下さい"
+msgstr "予期しない寸法の種類 (ID %s)です。インポートされませんでした"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr ""
-"Altium レイヤー %d 上の寸法は KiCad と等価ではありません。代わりに Eco1_User "
-"上に配置して下さい"
+msgstr "寸法 ID %s は、KiCad に同等のものがない角度寸法です。オブジェクトはインポートされませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
@@ -30086,9 +30075,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "未知のシート タイプ \"%s\" : %d 行目"
+msgstr "不明なパッド形状名 '%s' (レイヤー '%s' 上, 行 %zu)"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
