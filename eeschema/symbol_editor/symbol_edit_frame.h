@@ -350,6 +350,10 @@ public:
     ///< Restore the empty editor screen, without any part or library selected.
     void emptyScreen();
 
+    ///< Return either the part selected in the symbol tree, if context menu is active or the
+    ///< currently modified part.
+    LIB_ID GetTargetLibId() const;
+
 protected:
     void setupUIConditions() override;
 
@@ -432,10 +436,6 @@ private:
 
     ///< Return currently edited part.
     LIB_PART* getTargetPart() const;
-
-    ///< Return either the part selected in the symbol tree, if context menu is active or the
-    ///< currently modified part.
-    LIB_ID getTargetLibId() const;
 
     ///< Return either the library selected in the symbol tree, if context menu is active or
     ///< the library that is currently modified.

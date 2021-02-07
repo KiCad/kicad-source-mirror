@@ -79,6 +79,12 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     LIB_ID sel = editFrame->GetTreeLIBID();
                     return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
                 };
+        auto saveSymbolAsCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    LIB_ID sel = editFrame->GetTargetLibId();
+                    return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+                };
 
         ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
@@ -97,7 +103,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,       symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,       saveSymbolAsCondition );
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
 
         ctxMenu.AddSeparator();

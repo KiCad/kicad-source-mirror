@@ -523,9 +523,9 @@ void SYMBOL_EDIT_FRAME::Save()
             saveCurrentPart();
         }
     }
-    else if( !getTargetLibId().GetLibNickname().empty() )
+    else if( !GetTargetLibId().GetLibNickname().empty() )
     {
-        LIB_ID          libId   = getTargetLibId();
+        LIB_ID          libId   = GetTargetLibId();
         const wxString& libName = libId.GetLibNickname();
 
         if( m_libMgr->IsLibraryReadOnly( libName ) )
@@ -549,9 +549,9 @@ void SYMBOL_EDIT_FRAME::Save()
 
 void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 {
-    wxCHECK( !getTargetLibId().GetLibNickname().empty(), /* void */ );
+    wxCHECK( !GetTargetLibId().GetLibNickname().empty(), /* void */ );
 
-    const wxString& libName = getTargetLibId().GetLibNickname();
+    const wxString& libName = GetTargetLibId().GetLibNickname();
 
     saveLibrary( libName, true );
     m_treePane->GetLibTree()->RefreshLibTree();
@@ -560,7 +560,7 @@ void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 
 void SYMBOL_EDIT_FRAME::SaveSymbolAs()
 {
-    wxCHECK( getTargetLibId().IsValid(), /* void */ );
+    wxCHECK( GetTargetLibId().IsValid(), /* void */ );
 
     savePartAs();
 
@@ -713,7 +713,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 
 void SYMBOL_EDIT_FRAME::DeletePartFromLibrary()
 {
-    LIB_ID libId = getTargetLibId();
+    LIB_ID libId = GetTargetLibId();
 
     if( m_libMgr->IsPartModified( libId.GetLibItemName(), libId.GetLibNickname() )
         && !IsOK( this, _( wxString::Format( "The symbol \"%s\" has been modified\n"
@@ -869,7 +869,7 @@ void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibr
 
 void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
 {
-    LIB_ID libId = getTargetLibId();
+    LIB_ID libId = GetTargetLibId();
     const wxString& libName = libId.GetLibNickname();
 
     // Empty if this is the library itself that is selected.

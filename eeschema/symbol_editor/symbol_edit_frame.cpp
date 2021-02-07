@@ -355,30 +355,37 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto libSelectedCondition =
         [this] ( const SELECTION& sel )
         {
-            return !getTargetLibId().GetLibNickname().empty();
+            return !GetTargetLibId().GetLibNickname().empty();
         };
 
     auto canEditLib =
-            [this] ( const SELECTION& sel )
-            {
-                const wxString libName = getTargetLibId().GetLibNickname();
+        [this] ( const SELECTION& sel )
+        {
+            const wxString libName = GetTargetLibId().GetLibNickname();
 
-                return !libName.empty() && m_libMgr->LibraryExists( libName )
-                       && !m_libMgr->IsLibraryReadOnly( libName );
-            };
+            return !libName.empty() && m_libMgr->LibraryExists( libName )
+                    && !m_libMgr->IsLibraryReadOnly( libName );
+        };
 
     auto canEditProperties =
-            [this] ( const SELECTION& sel )
-            {
-                return m_my_part && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
-            };
+        [this] ( const SELECTION& sel )
+        {
+            return m_my_part && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
+        };
+
+    auto saveSymbolAsCondition =
+        [ this ]( const SELECTION& aSel )
+        {
+            LIB_ID sel = GetTargetLibId();
+            return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+        };
 
     mgr->SetConditions( ACTIONS::saveAll,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs, ENABLE( libSelectedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( saveSymbolAsCondition ) );
     mgr->SetConditions( EE_ACTIONS::newSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
     mgr->SetConditions( EE_ACTIONS::importSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
 
@@ -884,7 +891,7 @@ LIB_PART* SYMBOL_EDIT_FRAME::getTargetPart() const
 }
 
 
-LIB_ID SYMBOL_EDIT_FRAME::getTargetLibId() const
+LIB_ID SYMBOL_EDIT_FRAME::GetTargetLibId() const
 {
     LIB_ID id = GetTreeLIBID();
 
@@ -903,7 +910,7 @@ LIB_TREE_NODE* SYMBOL_EDIT_FRAME::GetCurrentTreeNode() const
 
 wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 {
-    return getTargetLibId().GetLibNickname();
+    return GetTargetLibId().GetLibNickname();
 }
 
 
@@ -972,7 +979,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, const wxString& aForc
 
 void SYMBOL_EDIT_FRAME::RegenerateLibraryTree()
 {
-    LIB_ID target = getTargetLibId();
+    LIB_ID target = GetTargetLibId();
 
     m_treePane->GetLibTree()->Regenerate( true );
 
