@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-03 22:53+0000\n"
+"PO-Revision-Date: 2021-02-07 23:02+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -291,7 +291,7 @@ msgstr "Nastavení zobrazení"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Raytracing"
-msgstr "Raytracing"
+msgstr "Raytrasing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
@@ -1942,7 +1942,7 @@ msgid "Configure Global %s Library Table"
 msgstr "Konfigurace globální tabulky knihoven %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
 "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -1952,7 +1952,7 @@ msgid ""
 msgstr ""
 "KiCad byl poprvé spuštěn pomocí nové tabulky knihovny %s pro\n"
 "přístup ke knihovnám. Aby mohl KiCad přistupovat ke knihovnám %s,\n"
-" globální tabulku knihoven %s. Vyberte jednu z níže uvedených možností.\n"
+"globální tabulku knihoven %s. Vyberte jednu z níže uvedených možností.\n"
 "Pokud si nejste jisti, kterou volbu můžete vybrat, použijte prosím výchozí "
 "výběr."
 
@@ -7040,16 +7040,16 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Neočíslované položky: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Chyba: symbol %s%s jednotka %d a symbol má pouze %d definované jednotky\n"
+"Chyba: symbol %s%s%s (jednotka %d) překračuje definované jednotky (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Vícenásobná položka %s%s\n"
+msgstr "Duplicitní prvky %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
@@ -9600,7 +9600,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 msgid "PostScript"
-msgstr "PostScript"
+msgstr "PostSkript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
@@ -11430,7 +11430,7 @@ msgstr "["
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:175
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
 msgid "Suffix:"
-msgstr "Suffix:"
+msgstr "Sufix:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
 msgid "]"
@@ -11908,9 +11908,8 @@ msgid "Library symbol issue"
 msgstr "Vydání symbolu knihovny"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Zápis pro jednotku:"
+msgstr "Nečíslovaný symbol"
 
 #: eeschema/erc_item.cpp:142
 #, fuzzy
@@ -14316,21 +14315,13 @@ msgstr "Knihovna symbolů není povolena."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Při ukládání tabulky globální knihovny došlo k chybě:\n"
-"\n"
-"%s"
+msgstr "Chyba při ukládání globální tabulky knihovny symbolů."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Chyba při ukládání tabulky knihovny symbolů specifické pro projekt:\n"
-"\n"
-"%s"
+msgstr "Chyba při ukládání tabulky knihoven projektu."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -16516,7 +16507,7 @@ msgstr "Název obrázku: \"%s\" Název vrstvy:: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:642
 msgid "X2 attr"
-msgstr "X2 attr"
+msgstr "X2 atr"
 
 #: gerbview/gerbview_frame.cpp:1001
 msgid "Gerbview"
@@ -18736,7 +18727,7 @@ msgstr "nH"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1386
 msgid "nano-Henry"
-msgstr "nano-Henry"
+msgstr "nano Henry"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1390
 msgid "Reactance:"
@@ -22483,7 +22474,7 @@ msgstr "metr"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:113
 msgid "0.1 Inch"
-msgstr "0.1 Inch"
+msgstr "0.1 palce"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:128
 msgid "Copy 3D model files to 3D model path"
@@ -23748,7 +23739,7 @@ msgstr "Zástupné znaky"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr "RegEx Substr"
+msgstr "RegEx Substrát"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
@@ -30186,9 +30177,9 @@ msgid "Expecting pad offset values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' at line %zu"
-msgstr "Neznámý název tvaru plošky %s na řádku %zu"
+msgstr "Neznámý název tvaru plošky '%s' na vrstvě '%s' na řádku %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:888
 #, c-format
