@@ -531,8 +531,8 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
                                                    double aGlyphThickness ) const
 {
     VECTOR2D string_bbox;
-    int line_count = 1;
-    double maxX = 0.0, curX = 0.0;
+    int      line_count = 1;
+    double   maxX = 0.0, curX = 0.0;
 
     double curScale = 1.0;
     bool   in_overbar = false;

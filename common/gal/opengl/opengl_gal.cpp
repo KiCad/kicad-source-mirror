@@ -1211,7 +1211,9 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                              double aRotationAngle )
 {
-    wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
+    // Fallback to generic impl (which uses the stroke font) on cases we don't handle
+    if( IsTextMirrored() || aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) ) )
+        return GAL::BitmapText( aText, aPosition, aRotationAngle );
 
     const UTF8 text( aText );
     // Compute text size, so it can be properly justified
@@ -2002,33 +2004,61 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 
 std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText ) const
 {
+    static const FONT_GLYPH_TYPE* defaultGlyph = LookupGlyph( '(' ); // for strange chars
+    static const FONT_GLYPH_TYPE* lineGlyph = LookupGlyph( '_' );    // for overbar thickness
+
     VECTOR2D textSize( 0, 0 );
-    float commonOffset = std::numeric_limits<float>::max();
-    static const auto defaultGlyph = LookupGlyph( '(' ); // for strange chars
+    float    commonOffset = std::numeric_limits<float>::max();
+    bool     in_overbar = false;
+    float    char_height = font_information.max_y - defaultGlyph->miny;
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        unsigned int c = *chIt;
+        if( *chIt == '~' )
+        {
+            if( ++chIt == end )
+                break;
 
-        const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
-        // Debug: show not coded char in the atlas
-        // Be carefull before allowing the assert: it usually crash kicad
-        // when the assert is made during a paint event.
-        // wxASSERT_MSG( glyph, wxString::Format( "missing char in font: code 0x%x <%c>", c, c ) );
+            if( *chIt == '~' )
+            {
+                // double ~ is really a ~ so go ahead and process the second one
 
-        if( !glyph || // Not coded in font
-            c == '-' || c == '_' )     // Strange size of these 2 chars
+                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
+                // it could be an overbar followed by a real ~.  The old algorithm did the
+                // former so we will too....
+            }
+            else
+            {
+                // single ~ toggles overbar
+                in_overbar = !in_overbar;
+            }
+        }
+        else if( in_overbar && ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) )
+        {
+            in_overbar = false;
+        }
+
+        const FONT_GLYPH_TYPE* glyph = LookupGlyph( *chIt );
+
+        if( !glyph                                  // Not coded in font
+                || *chIt == '-' || *chIt == '_' )   // Strange size of these 2 chars
         {
             glyph = defaultGlyph;
         }
 
         if( glyph )
         {
-            textSize.x  += glyph->advance;
+            textSize.x += glyph->advance;
+
+            if( in_overbar )
+            {
+                const float H = lineGlyph->maxy - lineGlyph->miny;
+                textSize.y = std::max<float>( textSize.y, char_height + 1.5 * H );
+            }
         }
     }
 
-    textSize.y   = std::max<float>( textSize.y, font_information.max_y - defaultGlyph->miny );
+    textSize.y   = std::max<float>( textSize.y, char_height );
     commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
     textSize.y -= commonOffset;
 
