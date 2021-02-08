@@ -94,7 +94,9 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                 if( !via )
                     return true;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( ANNULAR_WIDTH_CONSTRAINT, via );
+                // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
+                auto constraint = m_drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, via, nullptr,
+                                                          UNDEFINED_LAYER );
                 int  annulus = ( via->GetWidth() - via->GetDrillValue() ) / 2;
                 bool fail_min = false;
                 bool fail_max = false;

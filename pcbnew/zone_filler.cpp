@@ -675,7 +675,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             [&bds]( DRC_CONSTRAINT_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
                     PCB_LAYER_ID aEvalLayer ) -> int
             {
-                auto c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aEvalLayer );
+                auto c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
                 return c.Value().Min();
             };
 

@@ -243,8 +243,8 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
                 for( int i = 0; i < 3; i++ )
                 {
-                    auto constraint = m_drcEngine->EvalRulesForItems( constraintsToCheck[i], item,
-                                                                      nullptr, item->GetLayer() );
+                    auto constraint = m_drcEngine->EvalRules( constraintsToCheck[i], item, nullptr,
+                                                              item->GetLayer() );
 
                     if( constraint.IsNull() )
                         continue;

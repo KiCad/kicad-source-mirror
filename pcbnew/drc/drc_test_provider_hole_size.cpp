@@ -129,7 +129,8 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
     if( holeMinor == 0 )
         return;
 
-    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, aPad );
+    auto constraint = m_drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, aPad, nullptr,
+                                              UNDEFINED_LAYER /* holes are not layer-specific */ );
     bool fail_min = false;
     bool fail_max = false;
     int  constraintValue;
@@ -193,7 +194,8 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         errorCode = DRCE_DRILL_OUT_OF_RANGE;
     }
 
-    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, via );
+    auto constraint = m_drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, via, nullptr,
+                                              UNDEFINED_LAYER /* holes are not layer-specific */ );
     bool fail_min = false;
     bool fail_max = false;
     int  constraintValue;

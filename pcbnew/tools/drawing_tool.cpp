@@ -2172,8 +2172,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
-                DRC_CONSTRAINT constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT,
-                                                                            aVia, aOther, layer );
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,
+                                                                    aOther, layer );
                 int clearance = constraint.GetValue().Min();
 
                 if( clearance >= 0 )

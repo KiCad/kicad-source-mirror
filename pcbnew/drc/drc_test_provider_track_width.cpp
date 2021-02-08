@@ -100,7 +100,8 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     return true;
                 }
 
-                auto constraint = m_drcEngine->EvalRulesForItems( TRACK_WIDTH_CONSTRAINT, item );
+                auto constraint = m_drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, item, nullptr,
+                                                          item->GetLayer() );
                 bool fail_min = false;
                 bool fail_max = false;
                 int  constraintWidth;

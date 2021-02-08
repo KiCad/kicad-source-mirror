@@ -166,8 +166,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             if( footprintFront.OutlineCount() > 0 && testFront.OutlineCount() > 0
                     && frontBBox.Intersects( testFront.BBoxFromCaches() ) )
             {
-                constraint = m_drcEngine->EvalRulesForItems( COURTYARD_CLEARANCE_CONSTRAINT,
-                                                             footprint, test, F_Cu );
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, footprint,
+                                                     test, F_Cu );
                 clearance = constraint.GetValue().Min();
 
                 if( clearance >= 0 && footprintFront.Collide( &testFront, clearance, &actual, &pos ) )
@@ -193,8 +193,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             if( footprintBack.OutlineCount() > 0 && testBack.OutlineCount() > 0
                     && backBBox.Intersects( testBack.BBoxFromCaches() ) )
             {
-                constraint = m_drcEngine->EvalRulesForItems( COURTYARD_CLEARANCE_CONSTRAINT,
-                                                             footprint, test, B_Cu );
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, footprint,
+                                                     test, B_Cu );
                 clearance = constraint.GetValue().Min();
 
                 if( clearance >= 0 && footprintBack.Collide( &testBack, clearance, &actual, &pos ) )

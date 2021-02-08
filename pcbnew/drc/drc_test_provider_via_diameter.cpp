@@ -87,7 +87,9 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 if( !via )
                     return true;
 
-                auto constraint = m_drcEngine->EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, item );
+                // TODO: once we have padstacks this will need to run per-layer...
+                auto constraint = m_drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, item, nullptr,
+                                                          UNDEFINED_LAYER );
                 bool fail_min = false;
                 bool fail_max = false;
                 int  constraintDiameter = 0;

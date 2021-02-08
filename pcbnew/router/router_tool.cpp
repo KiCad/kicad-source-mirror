@@ -909,14 +909,14 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         DRC_CONSTRAINT constraint;
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( VIA_DIAMETER_CONSTRAINT, &dummyVia,
-                                                         nullptr, currentLayer );
+        constraint = bds.m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, &dummyVia, nullptr,
+                                                 currentLayer );
 
         if( !constraint.IsNull() )
             sizes.SetViaDiameter( constraint.m_Value.Opt() );
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
-                                                         currentLayer );
+        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
+                                                 currentLayer );
 
         if( !constraint.IsNull() )
             sizes.SetViaDrill( constraint.m_Value.Opt() );

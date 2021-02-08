@@ -278,7 +278,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     int actual = ( aHole->GetCenter() - otherHole->GetCenter() ).EuclideanNorm();
     actual = std::max( 0, actual - aHole->GetRadius() - otherHole->GetRadius() );
 
-    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther );
+    auto constraint = m_drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther,
+                                              UNDEFINED_LAYER /* holes pierce all layers */ );
     int  minClearance = constraint.GetValue().Min();
 
     if( minClearance >= 0 && actual < minClearance )

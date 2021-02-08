@@ -74,8 +74,8 @@ std::function<void( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )> DRC_
  * PROGRESS_REPORTER and rule parse errors via a REPORTER, all set through various setter
  * calls.
  *
- * Note that EvalRulesForItems() has yet another optional REPORTER for reporting resolution
- * info to the user.
+ * Note that EvalRules() has yet another optional REPORTER for reporting resolution info to
+ * the user.
  */
 class DRC_ENGINE
 {
@@ -142,10 +142,9 @@ public:
 
     bool IsErrorLimitExceeded( int error_code );
 
-    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_T ruleID, const BOARD_ITEM* a,
-                                      const BOARD_ITEM* b = nullptr,
-                                      PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-                                      REPORTER* aReporter = nullptr );
+    DRC_CONSTRAINT EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOARD_ITEM* a,
+                              const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                              REPORTER* aReporter = nullptr );
 
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 

@@ -122,8 +122,7 @@ void TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( TRACK_WIDTH_CONSTRAINT, this, nullptr,
-                                                         GetLayer() );
+        constraint = bds.m_DRCEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this, nullptr, GetLayer() );
     }
 
     if( constraint.Value().HasMin() || constraint.Value().HasMax() )
@@ -156,8 +155,7 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-        constraint = bds.m_DRCEngine->EvalRulesForItems( ANNULAR_WIDTH_CONSTRAINT, this, nullptr,
-                                                         aLayer );
+        constraint = bds.m_DRCEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, this, nullptr, aLayer );
     }
 
     if( constraint.Value().HasMin() )

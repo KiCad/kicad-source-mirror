@@ -244,10 +244,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     }
 
     if( parentA )
-    {
-        hostConstraint = drcEngine->EvalRulesForItems( hostType, parentA, parentB,
-                                                       (PCB_LAYER_ID) aLayer );
-    }
+        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, (PCB_LAYER_ID) aLayer );
 
     if( hostConstraint.IsNull() )
         return false;

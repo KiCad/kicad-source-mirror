@@ -709,9 +709,9 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 }
 
 
-DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
-                                              const BOARD_ITEM* a, const BOARD_ITEM* b,
-                                              PCB_LAYER_ID aLayer, REPORTER* aReporter )
+DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOARD_ITEM* a,
+                                      const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                                      REPORTER* aReporter )
 {
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
