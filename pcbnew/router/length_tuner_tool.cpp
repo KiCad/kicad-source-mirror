@@ -171,6 +171,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
 
     placer->UpdateSettings( m_savedMeanderSettings );
+    frame()->UndoRedoBlock( true );
 
     VECTOR2I end = getViewControls()->GetMousePosition();
 
@@ -252,6 +253,8 @@ void LENGTH_TUNER_TOOL::performTuning()
     }
 
     m_router->StopRouting();
+    frame()->UndoRedoBlock( false );
+
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -279,7 +282,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_router->SetMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
 
     controls()->ShowCursor( true );
-    frame()->UndoRedoBlock( true );
 
     auto setCursor = 
             [&]() 
@@ -317,9 +319,11 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
+        else
+        {
+            evt->SetPassEvent();
+        }
     }
-
-    frame()->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation
     m_savedSizes = m_router->Sizes();
