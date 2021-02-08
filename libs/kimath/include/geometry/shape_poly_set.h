@@ -547,6 +547,9 @@ public:
     ///< Adds a new hole to the given outline (default: last) and returns its index
     int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
 
+    ///< Return the area of this poly set
+    double Area();
+
     ///< Appends a vertex at the end of the given outline/hole (default: the last outline)
     /**
      * Add a new vertex to the contour indexed by \p aOutline and \p aHole (defaults to the

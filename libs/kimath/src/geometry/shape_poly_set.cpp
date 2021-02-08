@@ -455,6 +455,22 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 }
 
 
+double SHAPE_POLY_SET::Area()
+{
+    double area = 0.0;
+
+    for( int i = 0; i < OutlineCount(); i++ )
+    {
+        area += Outline( i ).Area();
+
+        for( int j = 0; j < HoleCount( i ); j++ )
+            area -= Hole( i, j ).Area();
+    }
+
+    return area;
+}
+
+
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
         POLYGON_MODE aFastMode )
 {
