@@ -780,7 +780,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     case PAD_SIDE::THROUGH_HOLE:
-
         if( csPadcode.Plated )
             pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_PTH );
         else
@@ -799,8 +798,20 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
                           aCadstarPad.Identifier );
 
     if( csPadcode.Shape.Size == 0 )
+    {
+        if( csPadcode.DrillDiameter == UNDEFINED_VALUE
+            && aCadstarPad.Side == PAD_SIDE::THROUGH_HOLE )
+        {
+            // Through-hole, zero sized pad?. Lets load this just on the F_Mask for now to
+            // prevent DRC errors.
+            // TODO: This could be a custom padstack, update when KiCad supports padstacks
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+            pad->SetLayerSet( LSET( 1, F_Mask ) );
+        }
+
         // zero sized pads seems to break KiCad so lets make it very small instead
         csPadcode.Shape.Size = 1;
+    }
 
     wxPoint padOffset = { 0, 0 }; // offset of the pad origin (before rotating)
     wxPoint drillOffset = { 0, 0 }; // offset of the drill origin w.r.t. the pad (before rotating)
@@ -927,6 +938,10 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
         drillOffset.x = -getKiCadLength( csPadcode.DrillXoffset );
         drillOffset.y = getKiCadLength( csPadcode.DrillYoffset );
+    }
+    else
+    {
+        pad->SetDrillSize( { 0, 0 } );
     }
 
 
