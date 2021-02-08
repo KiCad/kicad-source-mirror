@@ -331,7 +331,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 }
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
-{   
+{
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
         return false;
 
@@ -558,15 +558,42 @@ void ROUTER::CommitRouting( NODE* aNode )
     if( m_state == ROUTE_TRACK && !m_placer->HasPlacedAnything() )
         return;
 
-    NODE::ITEM_VECTOR removed, added;
+    NODE::ITEM_VECTOR removed;
+    NODE::ITEM_VECTOR added;
+    NODE::ITEM_VECTOR changed;
 
     aNode->GetUpdatedItems( removed, added );
 
     for( ITEM* item : removed )
-        m_iface->RemoveItem( item );
+    {
+        bool is_changed = false;
+
+        // Items in remove/add that share the same parent are just updated versions
+        // We move them to the updated vector to preserve attributes such as UUID and pad data
+        if( item->Parent() )
+        {
+            for( NODE::ITEM_VECTOR::iterator added_it = added.begin();
+                    added_it != added.end(); ++added_it )
+            {
+                if( ( *added_it )->Parent() && ( *added_it )->Parent() == item->Parent() )
+                {
+                    changed.push_back( *added_it );
+                    added.erase( added_it );
+                    is_changed = true;
+                    break;
+                }
+            }
+        }
+
+        if( !is_changed )
+            m_iface->RemoveItem( item );
+    }
 
     for( ITEM* item : added )
         m_iface->AddItem( item );
+
+    for( ITEM* item : changed )
+        m_iface->UpdateItem( item );
 
     m_iface->Commit();
     m_world->Commit( aNode );

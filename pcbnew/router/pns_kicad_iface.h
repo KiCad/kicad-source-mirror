@@ -62,6 +62,7 @@ public:
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false ) override {}
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
+    void UpdateItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override {}
     bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet ) override;
@@ -120,6 +121,7 @@ public:
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override;
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;
+    void UpdateItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
 
     void UpdateNet( int aNetCode ) override;
