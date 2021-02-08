@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-03 13:29+0000\n"
+"PO-Revision-Date: 2021-02-10 14:12+0000\n"
 "Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -290,7 +290,7 @@ msgstr "Opsi Render"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
-msgstr ""
+msgstr "Properti Material"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:134
 msgid "Raytracing Options"
@@ -448,7 +448,7 @@ msgstr "Lapisan Pengguna (tidak ditampilkan dalam mode realistis)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "Tampilkan lapisan komentar dan gambar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show ECO layers"
@@ -614,7 +614,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "Shadows:"
-msgstr ""
+msgstr "Bayangan:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -18230,7 +18230,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1844
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "Via: (diameter - drill)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
 msgid "Plated Pad: (diam - drill)"
@@ -19888,7 +19888,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:718
 msgid "Drill holes"
-msgstr ""
+msgstr "Lubang drill"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:725
 #, c-format
@@ -19933,7 +19933,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:258
 msgid "Drill Holes"
-msgstr ""
+msgstr "Lubang Drill"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
@@ -22061,11 +22061,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
-msgstr ""
+msgstr "Gunakan mode drill alternatif"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Oval Holes Drill Mode"
-msgstr ""
+msgstr "Mode Lubang Drill Oval"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid ""
@@ -24298,11 +24298,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
-msgstr ""
+msgstr "Ubah Pad di Footprint Saat Ini"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:56
 msgid "Change Pads on Identical Footprints"
-msgstr ""
+msgstr "Ubah Pad pada Footprint yang Identik"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
@@ -24415,7 +24415,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:69
 msgid "Footprint Text Properties"
-msgstr ""
+msgstr "Properti Teks Footprint"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:76
 msgid "Reference:"
@@ -24424,7 +24424,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties.cpp:274
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr ""
+msgstr "Footprint %s (%s), %s, dirotasi %.1f derajat"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:374
 msgid ""
@@ -24446,7 +24446,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 msgid "Parent footprint description"
-msgstr ""
+msgstr "Deskripsi footprint induk"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
 #, c-format
@@ -24623,7 +24623,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr ""
+msgstr "Hapus footprint tanpa simbol"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
@@ -24633,7 +24633,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr ""
+msgstr "Ganti footprint dengan yang ditentukan dalam skema"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -27015,7 +27015,7 @@ msgstr ""
 #: pcbnew/footprint.cpp:851
 #, c-format
 msgid "3D-Shape: %s"
-msgstr ""
+msgstr "Bentuk 3D: %s"
 
 #: pcbnew/footprint.cpp:855 pcbnew/tools/pcb_control.cpp:1084
 #, c-format
@@ -27085,11 +27085,11 @@ msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:778 pcbnew/pcb_edit_frame.cpp:1184
 msgid "[Unsaved]"
-msgstr ""
+msgstr "[Tak disimpan]"
 
 #: pcbnew/footprint_edit_frame.cpp:834
 msgid "Updating Footprint Libraries"
-msgstr ""
+msgstr "Memperbarui Pustaka Footprint"
 
 #: pcbnew/footprint_edit_frame.cpp:1102
 msgid "No footprint selected."
