@@ -288,9 +288,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<wxString>( "export_svg.output_dir",
             &m_ExportSvg.output_dir, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "export_svg.line_width",
-            &m_ExportSvg.line_width, DEFAULT_LINE_WIDTH ) );
-
     m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers",
             &m_ExportSvg.layers, {} ) );
 

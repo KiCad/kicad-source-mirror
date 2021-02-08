@@ -116,7 +116,6 @@ public:
         bool             plot_board_edges;
         int              page_size;
         wxString         output_dir;
-        int              line_width;
         std::vector<int> layers;
     };
 
