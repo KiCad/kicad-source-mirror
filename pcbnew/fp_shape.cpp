@@ -161,7 +161,9 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     switch( GetShape() )
     {
     case S_ARC:
-        SetAngle( -GetAngle() );
+        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // arc center and start point must be updated before calculation arc end.
+        SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
 
     default:
@@ -225,10 +227,13 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.
+
     switch( GetShape() )
     {
     case S_ARC:
-        SetAngle( -GetAngle() );
+        // Update arc angle but do not yet update m_ThirdPoint0 and m_thirdPoint,
+        // arc center and start point must be updated before calculation arc end.
+        SetAngle( -GetAngle(), false );
         KI_FALLTHROUGH;
 
     default:
@@ -238,6 +243,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         {
             MIRROR( m_Start0.y, aCentre.y );
             MIRROR( m_End0.y, aCentre.y );
+            MIRROR( m_ThirdPoint0.y, aCentre.y );
             MIRROR( m_Bezier0_C1.y, aCentre.y );
             MIRROR( m_Bezier0_C2.y, aCentre.y );
         }
@@ -245,6 +251,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
         {
             MIRROR( m_Start0.x, aCentre.x );
             MIRROR( m_End0.x, aCentre.x );
+            MIRROR( m_ThirdPoint0.x, aCentre.x );
             MIRROR( m_Bezier0_C1.x, aCentre.x );
             MIRROR( m_Bezier0_C2.x, aCentre.x );
         }

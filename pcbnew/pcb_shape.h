@@ -118,9 +118,10 @@ public:
     int GetWidth() const        { return m_width; }
 
     /**
-     * Function SetAngle
-     * sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
+     * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
+     * @param aUpdateEnd = true to update also arc end coordinates m_thirdPoint,
+     * so must be called after setting m_Start and m_End
      */
     virtual void SetAngle( double aAngle, bool aUpdateEnd = true );
     double GetAngle() const { return m_angle; }

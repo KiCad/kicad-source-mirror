@@ -67,6 +67,12 @@ public:
         return false;
     }
 
+    /**
+     * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
+     * @param aAngle is tenths of degrees, but will soon be degrees.
+     * @param aUpdateEnd = true to update also arc end coordinates m_thirdPoint and
+     * m_ThirdPoint0, so must be called after setting m_Start, m_Start0, m_End and m_End0
+     */
     void SetAngle( double aAngle, bool aUpdateEnd = true ) override;
 
     /**
