@@ -1778,7 +1778,7 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
     BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
     DIALOG_TRACK_VIA_SIZE sizeDlg( frame(), bds );
 
-    if( sizeDlg.ShowModal() )
+    if( sizeDlg.ShowModal() == wxID_OK )
     {
         bds.UseCustomTrackViaSize( true );
 

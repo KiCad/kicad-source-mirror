@@ -340,7 +340,7 @@ int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
     PNS::MEANDER_SETTINGS settings = placer ? placer->MeanderSettings() : m_savedMeanderSettings;
     DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( frame(), settings, m_router->Mode() );
 
-    if( settingsDlg.ShowModal() )
+    if( settingsDlg.ShowModal() == wxID_OK )
     {
         if( placer )
             placer->UpdateSettings( settings );

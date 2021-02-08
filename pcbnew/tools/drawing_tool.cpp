@@ -127,7 +127,7 @@ protected:
         {
             DIALOG_TRACK_VIA_SIZE sizeDlg( frame, bds );
 
-            if( sizeDlg.ShowModal() )
+            if( sizeDlg.ShowModal() == wxID_OK )
             {
                 bds.UseCustomTrackViaSize( true );
                 bds.m_UseConnectedTrackWidth = false;
