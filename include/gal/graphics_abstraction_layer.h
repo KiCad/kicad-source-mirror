@@ -368,7 +368,7 @@ public:
 
         // Bitmap font is slightly smaller and slightly heavier than the stroke font so we
         // compensate a bit before stroking
-        int saveLineWidth = lineWidth;
+        float    saveLineWidth = lineWidth;
         VECTOR2D saveGlyphSize = textProperties.m_glyphSize;
         {
             lineWidth *= 1.2f;
