@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-04 22:37+0000\n"
+"PO-Revision-Date: 2021-02-10 14:12+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1546,7 +1546,7 @@ msgstr "Επαναφορά"
 #: pcbnew/dialogs/dialog_drc.cpp:241 pcbnew/microwave/microwave_polygon.cpp:125
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Cancel"
-msgstr "Ακύρωση"
+msgstr "Άκυρο"
 
 #: common/confirm.cpp:229 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
@@ -1951,7 +1951,7 @@ msgstr "Διαδρομές αναζήτησης 3Δ"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:306
 msgid "Alias"
-msgstr "Συνώνυμο"
+msgstr "Όνομα"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
@@ -2916,7 +2916,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr "Days"
+msgstr "Ημέρες"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3444,7 +3444,7 @@ msgstr "Στυλ Γραμμής"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 #: eeschema/tools/sch_editor_control.cpp:934
 msgid "Default"
-msgstr "Προκαθορισμένο"
+msgstr "Προεπιλογή"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:65
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
@@ -10614,7 +10614,7 @@ msgstr "Εύρος:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:778
 #: eeschema/dialogs/dialog_spice_model_base.cpp:894
 msgid "Offset:"
-msgstr "Offset:"
+msgstr "Μετατόπιση:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1088
 msgid "Standard deviation:"
@@ -12827,15 +12827,15 @@ msgstr "Μέλη Συνώνυμου Διαύλου %s"
 
 #: eeschema/sch_edit_frame.cpp:165 pcbnew/board_connected_item.cpp:135
 msgid "Not Found"
-msgstr "Δεν βρέθηκε"
+msgstr "Δε βρέθηκε"
 
 #: eeschema/sch_edit_frame.cpp:167
 msgid "The following libraries were not found:"
-msgstr "Δεν βρέθηκαν οι ακόλουθες βιβλιοθήκες:"
+msgstr "Δε βρέθηκαν οι ακόλουθες βιβλιοθήκες:"
 
 #: eeschema/sch_edit_frame.cpp:300
 msgid "New schematic file is unsaved"
-msgstr "Νέο αρχείο σχηματικού δεν έχει αποθηκευτεί"
+msgstr "Το νέο σχηματικό αρχείο δεν έχει αποθηκευτεί"
 
 #: eeschema/sch_edit_frame.cpp:640
 #: eeschema/symbol_editor/symbol_editor.cpp:1099
