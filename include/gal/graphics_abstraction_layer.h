@@ -371,7 +371,7 @@ public:
         int saveLineWidth = lineWidth;
         VECTOR2D saveGlyphSize = textProperties.m_glyphSize;
         {
-            lineWidth *= 1.2;
+            lineWidth *= 1.2f;
             textProperties.m_glyphSize = textProperties.m_glyphSize * 0.8;
 
             StrokeText( aText, aPosition, aRotationAngle );
