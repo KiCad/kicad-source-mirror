@@ -619,7 +619,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
     applyRule( "C_B", &ds.m_CopperEdgeClearance );
     applyRule( "H_H", &ds.m_HoleToHoleMin );
 
-    ds.m_TrackMinWidth = Assignments.Technology.MinRouteWidth;
+    ds.m_TrackMinWidth = getKiCadLength( Assignments.Technology.MinRouteWidth );
+    ds.m_ViasMinSize = ds.m_TrackMinWidth; // Not specified, assumed same as track width
+    ds.m_ViasMinAnnulus = ds.m_TrackMinWidth / 2; // Not specified, assumed half track width
+    ds.m_MinThroughDrill = 0; // CADSTAR does not specify a minimum hole size
+    ds.m_HoleClearance = ds.m_CopperEdgeClearance; // Not specified, assumed same as edge
 
     auto applyNetClassRule = [&]( wxString aID, ::NETCLASS* aNetClassPtr,
                                      void ( ::NETCLASS::*aFunc )( int ) ) {
