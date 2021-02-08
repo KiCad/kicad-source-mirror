@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
 "PO-Revision-Date: 2021-02-10 14:12+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -4240,14 +4240,12 @@ msgstr ""
 "footprints.pretty."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Ένας φάκελος που περιέχει πρότυπα έργων εγκατεστημένα με το KiCad."
+msgstr "Ένας φάκελος που περιέχει πρότυπα έργων εγκατεστημένα με το KiCad"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Ένας φάκελος που περιέχει πρότυπα έργων εγκατεστημένα με το KiCad."
+msgstr "Ένας φάκελος που περιέχει πρότυπα έργων εγκατεστημένα με το KiCad"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -8259,6 +8257,8 @@ msgstr "Εμφάνιση Διαλόγου Ονοματοδοσίας"
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Το Σχηματικό δεν είναι πλήρως σχολιασμένο. Τα αποτελέσματα ERC θα είναι "
+"ελλιπή."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -10359,7 +10359,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "Ενεργοποίηση δεύτερης πηγής"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10383,7 +10383,7 @@ msgstr "R1"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -14603,21 +14603,13 @@ msgstr "Δεν έχει ενεργοποιηθεί η βιβλιοθήκη συ�
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Σφάλμα κατά την αποθήκευση του καθολικού καταλόγου βιβλιοθήκης:\n"
-"\n"
-"%s"
+msgstr "Σφάλμα κατά την αποθήκευση του καθολικού καταλόγου βιβλιοθήκης."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1365
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Σφάλμα κατά την αποθήκευση καταλόγου βιβλιοθήκης για το έργο:\n"
-"\n"
-"%s"
+msgstr "Σφάλμα κατά την αποθήκευση καταλόγου βιβλιοθήκης για το έργο."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 #, fuzzy
@@ -15177,9 +15169,8 @@ msgid "Create a new symbol"
 msgstr "Δημιουργία νέου συμβόλου"
 
 #: eeschema/tools/ee_actions.cpp:127
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Επεξεργασία Συμβόλου..."
+msgstr "Επεξεργασία Συμβόλου"
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Show selected symbol on editor canvas"
@@ -31210,7 +31201,7 @@ msgstr "Προειδοποίηση Ζώνης Παλαιότερου Τύπου"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:543
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Το αρχείο '%s' έχει μία μη αναγνωρίσιμη εκδοχή: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:697
 #, c-format
@@ -31472,7 +31463,7 @@ msgstr ""
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr ""
+msgstr "Η περιοχή κανόνων δεν επιτρέπει καταγραφές."
 
 #: pcbnew/router/pns_router.cpp:218
 #, fuzzy
@@ -32685,11 +32676,11 @@ msgstr "Ορισμός προσαρμοσμένων μεγεθών δρόμων 
 
 #: pcbnew/tools/pcb_actions.cpp:303
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr ""
+msgstr "Προσθέτει τόξα εφαπτόμενα στα επιλεγμένα ευθύγραμμα τμήματα"
 
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Delete Full Track"
-msgstr "Διαγραφή Πλήρους Δρόμου"
+msgstr "Διαγραφή Πλήρους Καταγραφής"
 
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Deletes selected item(s) and copper connections"
@@ -33931,6 +33922,8 @@ msgstr "Προβολή DCodes"
 #: pcbnew/tools/zone_filler_tool.cpp:122
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr ""
+"Οι συμπληρώσεις ζώνης μπορεί να είναι ανακριβείς. Οι κανόνες DRC περιέχουν "
+"σφάλματα."
 
 #: pcbnew/tools/zone_filler_tool.cpp:129
 msgid "Fill All Zones"
@@ -34247,7 +34240,7 @@ msgstr "Τα χρώματα net και netclass εμφανίζονται μόν�
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
-msgstr ""
+msgstr "Δεν εμφανίζονται τα χρώματα net και netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 #, fuzzy
@@ -34256,11 +34249,11 @@ msgstr "Προβολή περιγράμματος:"
 
 #: pcbnew/widgets/appearance_controls.cpp:675
 msgid "Choose what ratsnest lines to display"
-msgstr ""
+msgstr "Επιλέξτε ποιες γραμμές ratsnest θα εμφανίζονται"
 
 #: pcbnew/widgets/appearance_controls.cpp:683
 msgid "Ratsnest lines are shown to items on all layers"
-msgstr ""
+msgstr "Οι γραμμές ratsnest εμφανίζονται σε αντικείμενα σε όλα τα επίπεδα"
 
 #: pcbnew/widgets/appearance_controls.cpp:688
 #, fuzzy
@@ -34301,12 +34294,12 @@ msgstr "Απόκρυψη Όλων των Επιπέδων Χαλκού"
 #: pcbnew/widgets/appearance_controls.cpp:880
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr ""
+msgstr "Πατήστε εδώ για απόκρυψη του ratsnest για %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr ""
+msgstr "Πατήστε εδώ για εμφάνιση του ratsnest για %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1377
 #, fuzzy
