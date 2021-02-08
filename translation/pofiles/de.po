@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-07 23:02+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2021-02-10 14:12+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3405,7 +3405,7 @@ msgstr "DuKo-Bohrung"
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
 msgid "uVia Size"
-msgstr "Micro DuKo Größe"
+msgstr "µVia Größe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Hole"
@@ -5015,7 +5015,7 @@ msgstr "Blinde/Vergrabene DuKos"
 
 #: common/layer_id.cpp:156
 msgid "Micro-vias"
-msgstr "Mikro-DuKos"
+msgstr "Mikro-Vias"
 
 #: common/layer_id.cpp:157
 msgid "Via holes"
@@ -8345,8 +8345,8 @@ msgstr "Ändern des Schweregrades auf Fehler für alle '%s' Verletzungen"
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"Schweregradverletzungen können auch im Dialog 'Datei -> Einstellung "
-"Schaltplan...' bearbeitet werden"
+"Schweregradverletzungen können auch im \"Platinenkonfiguration...\"-Dialog "
+"bearbeitet werden"
 
 #: eeschema/dialogs/dialog_erc.cpp:516 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
@@ -18341,7 +18341,7 @@ msgstr "Linie hinzufügen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr "Eine Microwave-Line platzieren"
+msgstr "Linie hinzufügen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
@@ -20938,7 +20938,7 @@ msgstr "Geografische Reannotation"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:44
 msgid "Board Setup"
-msgstr "Einstellungen Platine/Board"
+msgstr "Platinenkonfiguration"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:45
 msgid "Import Settings from Another Board..."
@@ -20975,7 +20975,7 @@ msgstr "Design-Regeln"
 #: pcbnew/dialogs/dialog_board_setup.cpp:83 pcbnew/router/router_tool.cpp:782
 #: pcbnew/router/router_tool.cpp:803
 msgid "Constraints"
-msgstr "Beschränkungen"
+msgstr "Einschränkungen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
 msgid "Pre-defined Sizes"
@@ -21057,7 +21057,7 @@ msgstr "Blind/Vergraben:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr "Mikro-Durchkontaktierungen:"
+msgstr "Mikro-Vias:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:363
 #: pcbnew/dialogs/dialog_board_statistics.cpp:378
@@ -22136,7 +22136,7 @@ msgstr "-------- DRC vom Benutzer abgebrochen. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
-msgstr "Öffnen des Dialogs Platine/Board einrichten..."
+msgstr "\"Platinenkonfiguration...\"-Dialog anzeigen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:634
 #, c-format
@@ -23159,7 +23159,7 @@ msgstr "Bearbeite Bibliothek Footprint..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 msgid "Set values to 0 to use Board Setup values."
-msgstr "Werte von 0 benutzen Board-Setup-Werte."
+msgstr "Werte auf 0 setzen um Werte der Platinenkonfiguration zu benutzen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 msgid ""
@@ -25254,7 +25254,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
-msgstr "Einstellungen Platine/Board"
+msgstr "Platinenkonfiguration"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:195
 msgid "Gerber Options"
@@ -26672,7 +26672,7 @@ msgstr "Blinde/Vergrabene Durchkontaktierungen erlauben"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:38
 msgid "Allow micro vias (uVias)"
-msgstr "Micro-Durchkontaktierungen (µVias) erlauben"
+msgstr "Micro-Vias (µVias) erlauben"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:50
 msgid "Arc/circle approximated by segments"
@@ -27773,11 +27773,11 @@ msgstr "Abmessung \"%s\" auf %s"
 #: pcbnew/drc/drc_engine.cpp:139 pcbnew/drc/drc_engine.cpp:181
 #: pcbnew/drc/drc_engine.cpp:211
 msgid "board setup constraints"
-msgstr "Platinen-Setup-Einschränkungen"
+msgstr "Platinenkonfigurations-Einschränkungen"
 
 #: pcbnew/drc/drc_engine.cpp:190
 msgid "board setup micro-via constraints"
-msgstr "Board-Setup Micro-DuKo-Einschränkungen"
+msgstr "Platinenkonfigurations-Mikro-Via-Einschränkungen"
 
 #: pcbnew/drc/drc_engine.cpp:236 pcbnew/drc/drc_engine.cpp:263
 #: pcbnew/drc/drc_engine.cpp:291 pcbnew/drc/drc_engine.cpp:319
@@ -27974,7 +27974,7 @@ msgstr "Padstapel ist ungültig"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Micro via drill out of range"
-msgstr "Mikro-DuKo-Bohrung außerhalb des Bereichs"
+msgstr "Mikro-Via-Bohrung außerhalb des Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Courtyards overlap"
@@ -28251,7 +28251,7 @@ msgstr "tatsächliche: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 msgid "Checking keepouts & disallow constraints..."
-msgstr "Prüfe Sperrflächen und Verbotsbeschränkungen..."
+msgstr "Prüfe Sperrflächen und Verbotseinschränkungen..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:130
 msgid "Checking board edge clearances..."
@@ -28617,8 +28617,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Wenn die Zonen auf dieser Platine neu gefüllt werden wird die Einstellung "
-"'Abstand minimale Kupferbreite' verwendet (siehe Platine/Board einrichten... "
-"> Design-Regeln > Einschränkungen).\n"
+"'Abstand minimale Kupferbreite' verwendet (siehe Platinenkonfiguration... > "
+"Design-Regeln > Einschränkungen).\n"
 "Dies kann zu anderen Füllungen als in früheren KiCad-Versionen führen, bei "
 "denen die Linienstärke der Platinenbegrenzung auf der Edge Cuts-Lage "
 "verwendet wurde."
@@ -29472,7 +29472,7 @@ msgstr "Falsche Nummer, abbruch"
 
 #: pcbnew/microwave/microwave_inductor.cpp:321
 msgid "Add microwave inductor"
-msgstr "Mikrowellen Drossel hinzufügen"
+msgstr "Mikrowellen-Drossel hinzufügen"
 
 #: pcbnew/microwave/microwave_inductor.cpp:373
 msgid "Length of Trace:"
@@ -29532,7 +29532,7 @@ msgstr "Die Form hat keine Punkte!"
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
-msgstr "Microwave-Bauteil platzieren"
+msgstr "Mikrowellen-Bauteil platzieren"
 
 #: pcbnew/netinfo_item.cpp:127
 msgid "On Board"
@@ -31518,13 +31518,11 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:117
 msgid "Place Microvia"
-msgstr "Micro Durchkontaktierung platzieren"
+msgstr "Mikro-Via platzieren"
 
 #: pcbnew/router/router_tool.cpp:117
 msgid "Adds a microvia at the end of currently routed track."
-msgstr ""
-"Fügt eine Micro Durchkontaktierung am Ende der aktuell gerouteten Leiterbahn "
-"hinzu."
+msgstr "Fügt ein Mikro-Via am Ende der aktuell gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid "Select Layer and Place Through Via..."
@@ -31663,22 +31661,22 @@ msgstr "Breite %s, Lücke %s, DuKo Lücke %s"
 
 #: pcbnew/router/router_tool.cpp:776 pcbnew/router/router_tool.cpp:798
 msgid "Show board setup"
-msgstr "Board-Setup anzeigen"
+msgstr "Platinenkonfiguration anzeigen"
 
 #: pcbnew/router/router_tool.cpp:788
 msgid ""
 "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene DuKos müssen in 'Platine/Board einrichten... > Design-"
-"Regeln > Beschränkungen' aktiviert werden."
+"Blinde/vergrabene DuKos müssen in 'Platinenkonfiguration... > Design-Regeln "
+"> Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:809
 msgid ""
 "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Mikro-Durchkontaktierungen müssen in 'Platine/Board einrichten... > Design-"
-"Regeln > Beschränkungen' aktiviert werden."
+"Mikro-Vias müssen in 'Platinenkonfiguration... > Design-Regeln > "
+"Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:818
 msgid "Only through vias are allowed on 2 layer boards."
@@ -31690,7 +31688,7 @@ msgid ""
 "Microvias can only be placed between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
 msgstr ""
-"Micro-DuKos können nur jeweils zwischen den äußersten Lagen (F.Cu/B.Cu) und "
+"Micro-Vias können nur jeweils zwischen den äußersten Lagen (F.Cu/B.Cu) und "
 "den direkt anliegenden Lagen platziert werden."
 
 #: pcbnew/router/router_tool.cpp:953
@@ -32817,16 +32815,15 @@ msgstr "Bereinigen Sie redundante Elemente usw."
 
 #: pcbnew/tools/pcb_actions.cpp:459
 msgid "Add Microwave Gap"
-msgstr "Hinzufügen Microwave Abstand"
+msgstr "Mikrowellenspalt hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:459
 msgid "Create gap of specified length for microwave applications"
-msgstr ""
-"Zwischenraum spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Spalt spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:464
 msgid "Add Microwave Stub"
-msgstr "Mikrowellen Stich hinzufügen"
+msgstr "Mikrowellen-Stich hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:464
 msgid "Create stub of specified length for microwave applications"
@@ -32834,7 +32831,7 @@ msgstr "Stich spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:469
 msgid "Add Microwave Arc Stub"
-msgstr "Mikrowellen Stich (Kreisbogen) hinzufügen"
+msgstr "Mikrowellen-Stich (Kreisbogen) hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:469
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -32852,7 +32849,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:479
 msgid "Add Microwave Line"
-msgstr "Microwave-Line platzieren"
+msgstr "Microwellen-Linie hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:479
 msgid "Create line of specified length for microwave applications"
@@ -32931,12 +32928,12 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:537
 msgid "Board Setup..."
-msgstr "Platine/Board einrichten..."
+msgstr "Platinenkonfiguration..."
 
 #: pcbnew/tools/pcb_actions.cpp:538
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
-"Bearbeiten der Boardeinstellungen inklusive der Lagen, Designregeln und "
+"Bearbeiten der Platinenkonfiguration inklusive der Lagen, Designregeln und "
 "diverser Standards"
 
 #: pcbnew/tools/pcb_actions.cpp:543
@@ -33876,7 +33873,7 @@ msgstr "Blinde/Vergrabene DuKo %s auf %s"
 #: pcbnew/track.cpp:91
 #, c-format
 msgid "Micro Via %s on %s"
-msgstr "Micro DuKo %s auf %s"
+msgstr "Mikro-Via %s auf %s"
 
 #: pcbnew/track.cpp:92
 #, c-format
@@ -33898,7 +33895,7 @@ msgstr "Min Breite: %s"
 
 #: pcbnew/track.cpp:703
 msgid "Micro Via"
-msgstr "Mikro-DuKo"
+msgstr "Mikro-Via"
 
 #: pcbnew/track.cpp:704
 msgid "Blind/Buried Via"
