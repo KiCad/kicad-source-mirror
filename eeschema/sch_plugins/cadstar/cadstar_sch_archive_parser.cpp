@@ -199,7 +199,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode, PARSER_CON
     case TERMINAL_SHAPE_TYPE::POINTER:
     case TERMINAL_SHAPE_TYPE::RECTANGLE:
     case TERMINAL_SHAPE_TYPE::TRIANGLE:
-        RightLength = GetXmlAttributeIDLong( aNode, 2 );
+        RightLength = GetXmlAttributeIDLong( aNode, 2, false ); // Optional
         LeftLength  = GetXmlAttributeIDLong( aNode, 1 );
         break;
 
