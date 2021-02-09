@@ -266,7 +266,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
-    initExitKey();
     setupUnits( config() );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame

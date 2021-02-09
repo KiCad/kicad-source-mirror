@@ -618,6 +618,14 @@ protected:
      */
     virtual void setupUIConditions();
 
+    /**
+     * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
+     * to the wxID_EXIT event id.
+     *
+     * This is useful in sub-applications to pass the event up to a non-owning window.
+     */
+    void initExitKey();
+
     DECLARE_EVENT_TABLE()
 
 private:

@@ -118,6 +118,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     // hook wxEVT_CLOSE_WINDOW so we can call SaveSettings().  This function seems
     // to be called before any other hook for wxCloseEvent, which is necessary.
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
+
+    initExitKey();
 }
 
 
@@ -971,6 +973,15 @@ bool EDA_BASE_FRAME::IsContentModified()
 {
     // This function should be overridden in child classes
     return false;
+}
+
+
+void EDA_BASE_FRAME::initExitKey()
+{
+    wxAcceleratorEntry entries[1];
+    entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
+    wxAcceleratorTable accel( 1, entries );
+    SetAcceleratorTable( accel );
 }
 
 

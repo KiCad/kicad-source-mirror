@@ -189,7 +189,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SwitchCanvas( m_canvasType );
 
     // Add the exit key handler
-    initExitKey();
     setupUnits( config() );
 
     wxPoint originCoord = ReturnCoordOriginCorner();

@@ -313,7 +313,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     resolveCanvasType();
 
-    initExitKey();
     setupUnits( config() );
 
     // Ensure the Python interpreter is up to date with its environment variables

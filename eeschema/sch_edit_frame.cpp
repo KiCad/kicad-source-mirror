@@ -288,7 +288,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             p->SetSchematic( m_schematic );
     }
 
-    initExitKey();
     setupUnits( eeconfig() );
 
     // Net list generator

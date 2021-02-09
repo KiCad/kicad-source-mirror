@@ -147,7 +147,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
-    initExitKey();
 
     updateTitle();
     DisplaySymbolDatasheet();

@@ -455,15 +455,6 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 }
 
 
-void EDA_DRAW_FRAME::initExitKey()
-{
-    wxAcceleratorEntry entries[1];
-    entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
-    wxAcceleratorTable accel( 1, entries );
-    SetAcceleratorTable( accel );
-}
-
-
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 6 );
