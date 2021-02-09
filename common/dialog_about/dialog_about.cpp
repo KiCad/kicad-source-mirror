@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2017-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -398,7 +398,7 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
 
     // to have a unique look background color for HTML pages is set to the default as it is
     // used for all the other widgets
-    wxString htmlColor = ( this->GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
+    wxString htmlColor = ( GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
     wxString textColor = GetForegroundColour().GetAsString( wxC2S_HTML_SYNTAX );
     wxString linkColor =
             wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ).GetAsString( wxC2S_HTML_SYNTAX );
@@ -419,7 +419,7 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
 
     // HTML font set to font properties as they are used for widgets to have an unique look
     // under different platforms with HTML
-    wxFont font = this->GetFont();
+    wxFont font = GetFont();
     htmlWindow->SetStandardFonts( font.GetPointSize(), font.GetFaceName(), font.GetFaceName() );
     htmlWindow->SetPage( htmlPage );
 

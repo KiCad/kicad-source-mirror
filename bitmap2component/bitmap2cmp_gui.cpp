@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,7 +201,7 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
      * This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed
      */
-    this->Freeze( );
+    Freeze();
 }
 
 

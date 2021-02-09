@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Joshua Redstone redstone at gmail.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,7 +153,7 @@ PCB_GROUP* PCB_GROUP::DeepClone() const
 
 PCB_GROUP* PCB_GROUP::DeepDuplicate() const
 {
-    PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( this->Duplicate() );
+    PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( Duplicate() );
     newGroup->m_items.clear();
 
     for( BOARD_ITEM* member : m_items )

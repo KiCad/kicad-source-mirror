@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -424,11 +424,11 @@ OPT<nlohmann::json> JSON_SETTINGS::GetJson( const std::string& aPath ) const
 {
     nlohmann::json::json_pointer ptr = PointerFromString( aPath );
 
-    if( this->contains( ptr ) )
+    if( contains( ptr ) )
     {
         try
         {
-            return OPT<nlohmann::json>{ this->at( ptr ) };
+            return OPT<nlohmann::json>{ at( ptr ) };
         }
         catch( ... )
         {

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,7 +327,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately
-                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
             } );
 
     // Connect the handlers for the ok/cancel buttons
@@ -335,7 +335,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately, before running Close( true )
-                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
                 Close( true );
             }, wxID_OK );
     Bind( wxEVT_BUTTON,

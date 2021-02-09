@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2020 Kicad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753) from https://stackoverflow.com/a/37274011
+ * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753)
+ *                    from https://stackoverflow.com/a/37274011
+ * Copyright (C) 2020-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +143,7 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
         pEventHandler->CallAfter(
                 [=]()
                 {
-                    wxCommandEvent evt( wxEVT_BUTTON, this->GetId() );
+                    wxCommandEvent evt( wxEVT_BUTTON, GetId() );
                     evt.SetEventObject( this );
                     GetEventHandler()->ProcessEvent( evt );
                 } );

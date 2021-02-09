@@ -135,12 +135,12 @@ struct TOOL_MANAGER::TOOL_STATE
 
     bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-        return aRhs.theTool == this->theTool;
+        return aRhs.theTool == theTool;
     }
 
     bool operator!=( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
     {
-        return aRhs.theTool != this->theTool;
+        return aRhs.theTool != theTool;
     }
 
     /**

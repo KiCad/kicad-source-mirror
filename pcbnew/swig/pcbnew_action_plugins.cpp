@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )
 {
     PyLOCK lock;
 
-    this->m_PyAction = aAction;
+    m_PyAction = aAction;
     Py_XINCREF( aAction );
 }
 
@@ -45,7 +45,7 @@ PYTHON_ACTION_PLUGIN::~PYTHON_ACTION_PLUGIN()
 {
     PyLOCK lock;
 
-    Py_XDECREF( this->m_PyAction );
+    Py_XDECREF( m_PyAction );
 }
 
 
@@ -55,7 +55,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
 
     PyErr_Clear();
     // pFunc is a new reference to the desired method
-    PyObject* pFunc = PyObject_GetAttrString( this->m_PyAction, aMethod );
+    PyObject* pFunc = PyObject_GetAttrString( m_PyAction, aMethod );
 
     if( pFunc && PyCallable_Check( pFunc ) )
     {

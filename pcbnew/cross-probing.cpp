@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -510,7 +510,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         NETLIST          netlist;
         STRING_FORMATTER sf;
 
-        for( FOOTPRINT* footprint : this->GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
             if( footprint->GetAttributes() & FP_BOARD_ONLY )
                 continue; // Don't add board-only footprints to the netlist

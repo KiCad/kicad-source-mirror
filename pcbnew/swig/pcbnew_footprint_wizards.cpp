@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD( PyObject* aWizard )
 {
     PyLOCK lock;
 
-    this->m_PyWizard = aWizard;
+    m_PyWizard = aWizard;
     Py_XINCREF( aWizard );
 }
 
@@ -46,7 +46,7 @@ PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
 {
     PyLOCK lock;
 
-    Py_XDECREF( this->m_PyWizard );
+    Py_XDECREF( m_PyWizard );
 }
 
 
@@ -56,7 +56,7 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
 
     PyErr_Clear();
     // pFunc is a new reference to the desired method
-    PyObject* pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
+    PyObject* pFunc = PyObject_GetAttrString( m_PyWizard, aMethod );
 
     if( pFunc && PyCallable_Check( pFunc ) )
     {

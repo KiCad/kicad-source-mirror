@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
 
     addButtons( false, aRightBtns );
 
-    this->SetSizer( m_sizer );
-    this->Layout();
+    SetSizer( m_sizer );
+    Layout();
 }
 
 

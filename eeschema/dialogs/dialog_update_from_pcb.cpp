@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
 {
     bool successfulRun = false;
     m_messagePanel->Clear();
-    BACK_ANNOTATE backAnno( this->m_frame,
+    BACK_ANNOTATE backAnno( m_frame,
                             m_messagePanel->Reporter(),
                             m_cbRelinkFootprints->GetValue(),
                             m_cbUpdateFootprints->GetValue(),

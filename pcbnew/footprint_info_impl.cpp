@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -258,7 +258,7 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
         threads.emplace_back( [this, &queue_parsed]() {
             wxString nickname;
 
-            while( this->m_queue_out.pop( nickname ) && !m_cancelled )
+            while( m_queue_out.pop( nickname ) && !m_cancelled )
             {
                 wxArrayString fpnames;
 
