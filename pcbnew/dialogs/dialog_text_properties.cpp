@@ -91,10 +91,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
 
-        wxFont font;
-        font.SetFamily( wxFONTFAMILY_MODERN );  // Use a monospace font to match the stroke font spacing
-        m_MultiLineText->StyleSetFaceName( wxSTC_STYLE_DEFAULT, font.GetFaceName() );
-        m_MultiLineText->StyleClearAll();      // Addresses a bug in wx3.0 where styles are not correctly set
+        int    size = wxNORMAL_FONT->GetPointSize();
+        wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+
+        for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+            m_MultiLineText->StyleSetFont( i, fixedFont );
 
         // This option makes sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );
