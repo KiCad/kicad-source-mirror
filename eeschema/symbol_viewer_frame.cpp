@@ -134,7 +134,8 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     // Ensure axis are always drawn (initial default display was not drawn)
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
-    GetCanvas()->GetGAL()->SetAxesEnabled( true );
+    gal_opts.m_gridMinSpacing = 10.0;
+    gal_opts.NotifyChanged();
 
     GetRenderSettings()->LoadColors( GetColorSettings() );
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
