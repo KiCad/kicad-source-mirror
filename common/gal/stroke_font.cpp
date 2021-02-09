@@ -48,7 +48,7 @@ std::vector<BOX2D>* g_newStrokeFontGlyphBoundingBoxes;   ///< Bounding boxes of 
 
 
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
-    m_gal( aGal ), m_glyphs( nullptr ), m_glyphBoundingBoxes( nullptr )
+    m_gal( aGal ), m_glyphs( nullptr ), m_glyphBoundingBoxes( nullptr ), m_maxGlyphWidth( 1.0 )
 {
 }
 
@@ -151,6 +151,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         // Compute the bounding box of the glyph
         g_newStrokeFontGlyphBoundingBoxes->emplace_back( computeBoundingBox( glyph, glyphWidth ) );
         g_newStrokeFontGlyphs->push_back( glyph );
+        m_maxGlyphWidth = std::max( m_maxGlyphWidth,
+                g_newStrokeFontGlyphBoundingBoxes->back().GetWidth() );
     }
 
     m_glyphs = g_newStrokeFontGlyphs;
@@ -334,6 +336,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     // Allocate only once (for performance)
     std::vector<VECTOR2D> ptListScaled;
+    int char_count = 0;
 
     yOffset = 0;
 
@@ -343,16 +346,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *chIt == '\t' )
         {
-            double space = glyphSize.x * m_glyphBoundingBoxes->at( 0 ).GetEnd().x;
-
-            // We align to the 4th column (fmod) but only need to account for 3 of
-            // the four spaces here with the extra.  This ensures that we have at
-            // least 1 space for the \t character
-            double addlSpace = 3.0 * space - std::fmod( xOffset, 4.0 * space );
-
-            // Add the remaining space (between 0 and 3 spaces)
-            // The fourth space is added by the 'dd' character
-            xOffset += addlSpace;
+            // We align to the 4th column.  This is based on the monospace font used in the text input
+            // boxes.  Here, we take the widest character as our baseline spacing and make tab stops
+            // at each fourth of this widest character
+            char_count = ( char_count / 4 + 1 ) * 4 - 1;
+            xOffset = m_maxGlyphWidth * baseGlyphSize.x * char_count;
 
             glyphSize = baseGlyphSize;
             yOffset = 0;
@@ -491,6 +489,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             m_gal->DrawPolyline( &ptListScaled[0], ptCount );
         }
 
+        char_count++;
         xOffset += glyphSize.x * bbox.GetEnd().x;
     }
 

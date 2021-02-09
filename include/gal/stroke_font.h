@@ -168,6 +168,7 @@ private:
     GAL*                      m_gal;                  ///< Pointer to the GAL
     const GLYPH_LIST*         m_glyphs;               ///< Glyph list
     const std::vector<BOX2D>* m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
+    double                    m_maxGlyphWidth;        ///< The widest glyph in our set
 
     ///< Factor that determines relative vertical position of the overbar.
     static const double OVERBAR_POSITION_FACTOR;
