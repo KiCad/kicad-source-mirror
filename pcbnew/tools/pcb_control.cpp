@@ -356,6 +356,10 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
         KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
         view->UpdateLayerColor( currentLayer );
+        view->UpdateLayerColor( GetNetnameLayer( currentLayer ) );
+
+        if( IsCopperLayer( currentLayer ) )
+            view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_EDIT_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
@@ -382,6 +386,10 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
         KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
         view->UpdateLayerColor( currentLayer );
+        view->UpdateLayerColor( GetNetnameLayer( currentLayer ) );
+
+        if( IsCopperLayer( currentLayer ) )
+            view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_BASE_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
