@@ -50,7 +50,6 @@ include_directories(
 
 target_link_libraries( qa_common_tools
     common
-    libcontext
     gal
     qa_utils
     sexpr
@@ -60,6 +59,10 @@ target_link_libraries( qa_common_tools
 # we need to pretend to be something to appease the units code
 target_compile_definitions( qa_common_tools
     PRIVATE PCBNEW
+)
+
+target_include_directories( qa_common_tools PRIVATE
+    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 kicad_add_utils_executable( qa_common_tools )

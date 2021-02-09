@@ -74,10 +74,18 @@ endif()
 
 add_executable( qa_eeschema
     ${QA_EESCHEMA_SRCS}
+
+    # Older CMakes cannot link OBJECT libraries
+    # https://cmake.org/pipermail/cmake/2013-November/056263.html
+    $<TARGET_OBJECTS:eeschema_kiface_objects>
 )
 
+# Anytime we link to the kiface_objects, we have to add a dependency on the last object
+# to ensure that the generated lexer files are finished being used before the qa runs in a
+# multi-threaded build
+add_dependencies( qa_eeschema eeschema )
+
 target_link_libraries( qa_eeschema
-    eeschema_kiface_objects
     common
     pcbcommon
     kimath
@@ -86,6 +94,12 @@ target_link_libraries( qa_eeschema
     markdown_lib
     ${GDI_PLUS_LIBRARIES}
     ${Boost_LIBRARIES}
+)
+
+target_include_directories( qa_eeschema PUBLIC
+    # Paths for eeschema lib usage (should really be in eeschema/common
+    # target_include_directories and made PUBLIC)
+    $<TARGET_PROPERTY:eeschema_kiface_objects,INCLUDE_DIRECTORIES>
 )
 
 # Eeschema tests, so pretend to be eeschema (for units, etc)

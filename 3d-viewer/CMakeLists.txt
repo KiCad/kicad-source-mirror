@@ -104,13 +104,15 @@ add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})
 add_dependencies( 3d-viewer pcbcommon )
 
 target_link_libraries( 3d-viewer
-    PRIVATE
-        gal
-        kimath
-        nlohmann_json
-        ${Boost_LIBRARIES}
-        ${wxWidgets_LIBRARIES}
-        ${OPENGL_LIBRARIES}
-        kicad_3dsg )
+                       gal
+                       kimath
+                       ${Boost_LIBRARIES}
+                       ${wxWidgets_LIBRARIES}
+                       ${OPENGL_LIBRARIES}
+                       kicad_3dsg )
+
+target_include_directories( 3d-viewer PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 add_subdirectory( 3d_cache )
