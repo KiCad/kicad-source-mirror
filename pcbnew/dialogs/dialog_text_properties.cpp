@@ -97,7 +97,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
             m_MultiLineText->StyleSetFont( i, fixedFont );
 
-        m_MultiLineText->StyleClearAll();      // Addresses a bug in wx3.0 where styles are not correctly set
+        // Addresses a bug in wx3.0 where styles are not correctly set
+        m_MultiLineText->StyleClearAll();
 
         // This option makes sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );

@@ -133,7 +133,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
         m_valueMultiLine->StyleSetFont( i, fixedFont );
 
-    m_valueMultiLine->StyleClearAll();      // Addresses a bug in wx3.0 where styles are not correctly set
+    // Addresses a bug in wx3.0 where styles are not correctly set
+    m_valueMultiLine->StyleClearAll();
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // various versions have different controls so we want to store sizes for each version.
