@@ -177,7 +177,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     // Clearance settings
     switch( aOptions.m_ShowTrackClearanceMode )
     {
-        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE: m_clearanceDisplayFlags = CL_NONE;
+        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
+            m_clearanceDisplayFlags = CL_NONE;
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:

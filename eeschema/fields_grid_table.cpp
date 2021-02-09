@@ -31,7 +31,6 @@
 #include <validators.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
-#include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
