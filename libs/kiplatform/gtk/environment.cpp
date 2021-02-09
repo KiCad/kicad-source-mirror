@@ -21,6 +21,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <kiplatform/environment.h>
+#include <wx/filename.h>
 
 
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
@@ -50,7 +51,20 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 
 wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
-    return g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
+    wxString docsPath = g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
+
+    if( docsPath.IsEmpty() )
+    {
+        wxFileName fallback;
+
+        fallback.AssignDir( g_get_home_dir() );
+        fallback.AppendDir( "Documents" );
+        fallback.MakeAbsolute();
+
+        docsPath = fallback.GetFullPath();
+    }
+
+    return docsPath;
 }
 
 
