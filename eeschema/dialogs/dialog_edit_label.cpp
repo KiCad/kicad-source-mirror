@@ -127,9 +127,12 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     m_valueMultiLine->Bind( wxEVT_STC_CHARADDED, &DIALOG_LABEL_EDITOR::onScintillaCharAdded, this );
 
-    wxFont font;
-    font.SetFamily( wxFONTFAMILY_MODERN );  // Use a monospace font to match the stroke font spacing
-    m_valueMultiLine->StyleSetFaceName( wxSTC_STYLE_DEFAULT, font.GetFaceName() );
+    int    size = wxNORMAL_FONT->GetPointSize();
+    wxFont fixedFont( size, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
+
+    for( size_t i = 0; i < wxSTC_STYLE_MAX; ++i )
+        m_valueMultiLine->StyleSetFont( i, fixedFont );
+
     m_valueMultiLine->StyleClearAll();      // Addresses a bug in wx3.0 where styles are not correctly set
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
