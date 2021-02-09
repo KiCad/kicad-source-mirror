@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-07 23:02+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-02-10 14:12+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -488,7 +488,7 @@ msgstr "对非电镀的铜使用裸铜色"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "对镀铜和非镀铜使用不同的颜色。 (慢速)"
+msgstr "对镀铜和非镀铜使用不同的颜色。 (慢)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -1398,15 +1398,15 @@ msgstr "mm^3"
 #: pagelayout_editor/pl_editor_frame.cpp:719
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
-msgstr "mils (密尔)"
+msgstr "mils"
 
 #: common/base_units.cpp:499
 msgid "sq. mils"
-msgstr "mil^2"
+msgstr "mils^2"
 
 #: common/base_units.cpp:501
 msgid "cu. mils"
-msgstr "mil^3"
+msgstr "mils^3"
 
 #: common/base_units.cpp:511
 msgid "in"
@@ -5678,7 +5678,7 @@ msgstr "使用英寸"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Mils"
-msgstr "密尔(Mils)"
+msgstr "Mils"
 
 #: common/tool/actions.cpp:486
 msgid "Use mils"
@@ -5693,7 +5693,7 @@ msgstr "使用密尔"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:51
 msgid "Millimeters"
-msgstr "毫米"
+msgstr "mm"
 
 #: common/tool/actions.cpp:491
 msgid "Use millimeters"
@@ -15691,7 +15691,7 @@ msgstr "<b>隐藏的电源引脚%s</b>%s，于位置 <b>(%.3f, %.3f)</b>，此�
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr "（隐藏的电源引脚会将其引脚名称驱动到任何连接的网上。）"
+msgstr "（隐藏的电源引脚会将其引脚名称驱动到任何连接的网络上。）"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
 #, c-format
@@ -22111,7 +22111,7 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"电路板轮廓缺失或未用 %.3f 毫米公差闭合。\n"
+"电路板轮廓缺失或未用 %.3f mm 公差闭合。\n"
 "运行设计规则检查 (DRC) 进行全面分析。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
@@ -24698,7 +24698,7 @@ msgstr "SVG 选项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:376
 msgid "Millimeter"
-msgstr "毫米"
+msgstr "mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
 msgid ""
@@ -29881,7 +29881,7 @@ msgstr "ID 字符串 \"%s\" 的格式无效在自定义填充行 %zu 中"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr "无法将图形项目%d插入焊盘叠\"%s\""
+msgstr "无法将图形项目 %d 插入焊盘堆叠 \"%s\""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
 #, c-format
@@ -29925,7 +29925,7 @@ msgstr "ID %d 和序列 %d 的重复项位于布线定义行 %zu 中 \n"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2154
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
-msgstr "无效的自定义焊盘命名为' %s'。正用圆形盘代替。"
+msgstr "无效的自定义焊盘命名为 '%s'。正用圆形盘代替。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
 #, c-format
