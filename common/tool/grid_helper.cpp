@@ -94,7 +94,7 @@ VECTOR2I GRID_HELPER::AlignGrid( const VECTOR2I& aPoint ) const
 
 VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 {
-    if( !m_toolMgr->GetView()->GetGAL()->GetGridSnapping() )
+    if( !canUseGrid() )
         return aPoint;
 
     VECTOR2I nearest = AlignGrid( aPoint );

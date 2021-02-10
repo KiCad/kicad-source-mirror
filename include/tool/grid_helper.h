@@ -24,6 +24,7 @@
 #ifndef GRID_HELPER_H
 #define GRID_HELPER_H
 
+#include <tool/tool_manager.h>
 #include <vector>
 #include <math/vector2d.h>
 #include <origin_viewitem.h>
@@ -111,6 +112,15 @@ protected:
     void clearAnchors()
     {
         m_anchors.clear();
+    }
+
+    /**
+     * Check whether it is possible to use the grid -- this depends both on local grid helper
+     * settings and global (tool manager) KiCad settings.
+     */
+    bool canUseGrid() const
+    {
+        return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
     }
 
 protected:

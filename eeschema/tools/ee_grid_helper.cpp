@@ -135,7 +135,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
         computeAnchors( item, aOrigin );
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayer );
-    VECTOR2I nearestGrid = m_enableGrid ? Align( aOrigin ) : aOrigin;
+    VECTOR2I nearestGrid = Align( aOrigin );
 
     if( m_enableSnapLine && m_snapItem && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
     {
@@ -153,14 +153,14 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
             snapLineY = true;
         }
 
-        if( m_enableGrid && std::abs( nearestGrid.x - aOrigin.x ) < snapDist.x )
+        if( canUseGrid() && std::abs( nearestGrid.x - aOrigin.x ) < snapDist.x )
         {
             pt.x = nearestGrid.x;
             snapDist.x = std::abs( nearestGrid.x - aOrigin.x );
             snapLineX = false;
         }
 
-        if( m_enableGrid && std::abs( nearestGrid.y - aOrigin.y ) < snapDist.y )
+        if( canUseGrid() && std::abs( nearestGrid.y - aOrigin.y ) < snapDist.y )
         {
             pt.y = nearestGrid.y;
             snapDist.y = std::abs( nearestGrid.y - aOrigin.y );
@@ -172,24 +172,27 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
 
     if( m_enableSnap && nearest && nearest->Distance( aOrigin ) < snapDist.EuclideanNorm() )
     {
-        pt = nearest->pos;
-        snapDist.x = std::abs( nearest->pos.x - aOrigin.x );
-        snapDist.y = std::abs( nearest->pos.y - aOrigin.y );
-        snapLineX = snapLineY = false;
-        snapPoint = true;
 
-        if( m_enableGrid && ( nearestGrid - aOrigin ).EuclideanNorm() < snapDist.EuclideanNorm() )
+        if( canUseGrid() && ( nearestGrid - aOrigin ).EuclideanNorm() < snapDist.EuclideanNorm() )
         {
             pt = nearestGrid;
             snapDist.x = std::abs( nearestGrid.x - aOrigin.x );
             snapDist.y = std::abs( nearestGrid.y - aOrigin.y );
             snapPoint = false;
         }
+        else
+        {
+            pt = nearest->pos;
+            snapDist.x = std::abs( nearest->pos.x - aOrigin.x );
+            snapDist.y = std::abs( nearest->pos.y - aOrigin.y );
+            snapPoint = true;
+        }
 
+        snapLineX = snapLineY = false;
         gridChecked = true;
     }
 
-    if( m_enableGrid && !gridChecked )
+    if( canUseGrid() && !gridChecked )
         pt = nearestGrid;
 
     if( snapLineX || snapLineY )
@@ -222,7 +225,6 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
 
     return pt;
 }
-
 
 SCH_ITEM* EE_GRID_HELPER::GetSnapped() const
 {
@@ -289,7 +291,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
 
     if( SCH_LINE* line = dyn_cast<SCH_LINE*>( aItem ) )
     {
-        VECTOR2I pt = m_enableGrid ? Align( aRefPos ) : aRefPos;
+        VECTOR2I pt = Align( aRefPos );
 
         if( line->GetStartPoint().x == line->GetEndPoint().x )
         {

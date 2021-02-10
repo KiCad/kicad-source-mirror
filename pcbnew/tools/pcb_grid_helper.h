@@ -46,14 +46,6 @@ public:
      */
     BOARD_ITEM* GetSnapped() const;
 
-    VECTOR2I Align( const VECTOR2I& aPoint ) const override
-    {
-        if( !m_enableGrid )
-            return aPoint;
-
-        return GRID_HELPER::Align( aPoint );
-    }
-
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
