@@ -498,6 +498,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     Layout();
 
+    // Workaround to fix an annoying issue on wxGTK: in some cases selecting a field
+    // to change its value make this value invisible. It happens until the dialog is resized.
+    // So I am guessing there is a problem when initializing sizers settings
+    // Do not create issues on other OS
+    wxSafeYield();              // slice of time to handle events generated when creating the
+                                // dialog, especially size events
+    m_fieldsGrid->Layout();     // Force recalculating  all sizers in m_fieldsGrid
+
     return true;
 }
 
