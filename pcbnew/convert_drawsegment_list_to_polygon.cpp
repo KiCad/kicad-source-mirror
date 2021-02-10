@@ -1092,8 +1092,18 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
                                     int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
 
 {
+    FOOTPRINT* footprint = aBoard->GetFirstFootprint();
+
+    // No footprint loaded
+    if( !footprint )
+    {
+        wxLogTrace( traceBoardOutline, "No footprint found on board" );
+        return false;
+    }
+
     PCB_TYPE_COLLECTOR  items;
     SHAPE_POLY_SET      outlines;
+    bool                success = false;
 
     // Get all the SHAPEs into 'items', then keep only those on layer == Edge_Cuts.
     static const KICAD_T scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
@@ -1108,20 +1118,14 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, outlines, aErrorMax, aChainingEpsilon,
-                                            aErrorHandler );
-
-    FOOTPRINT* footprint = aBoard->GetFirstFootprint();
-
-    // No footprint loaded
-    if( !footprint )
+    if( !segList.empty() )
     {
-        wxLogTrace( traceBoardOutline, "No footprint found on board" );
-        return false;
+        success = ConvertOutlineToPolygon( segList, outlines, aErrorMax, aChainingEpsilon,
+                                           aErrorHandler );
     }
 
     // A closed outline was found on Edge_Cuts
-    if( success && outlines.OutlineCount() )
+    if( success )
     {
         wxLogTrace( traceBoardOutline, "Closed outline found" );
 
