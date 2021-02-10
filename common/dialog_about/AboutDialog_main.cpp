@@ -633,7 +633,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Maui",
-                                      wxEmptyString,
+                                      "https://github.com/easyw",
                                       "https://gitlab.com/kicad/libraries/kicad-packages3D-generator",
                                       MODELS_3D_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( three_d_xpm ) ) );
