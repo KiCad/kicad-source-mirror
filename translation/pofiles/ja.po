@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-07 23:33+0000\n"
+"PO-Revision-Date: 2021-02-10 14:11+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -624,13 +624,13 @@ msgstr "影:"
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr ""
+msgstr "影の点を評価するために、光の方向に投影される光線の数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:302
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:320
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:340
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "投影する光線の方向のランダム化係数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
 msgid "Reflections:"
@@ -638,7 +638,7 @@ msgstr "反射:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
+msgstr "反射の点を評価するために投影される光線の数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:325
 msgid ""
@@ -652,11 +652,11 @@ msgstr "屈折:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "屈折点を評価するために投影される光線の数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:345
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "光線が反射オブジェクトに当たって反射できる回数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
@@ -1605,11 +1605,11 @@ msgstr "GNU General Public License (GPL) のバージョン3 以降の全ての�
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "リード開発チーム"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "リード開発の引退者"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1621,7 +1621,7 @@ msgstr "その他"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "KiCadライブラリアンチーム"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -2244,9 +2244,8 @@ msgid "Start with default settings"
 msgstr "デフォルト設定を使って開始する"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "パスを設定"
+msgstr "KiCadの設定パスを設定します"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -4945,18 +4944,16 @@ msgid "Via holes"
 msgstr "ビア穴"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "ビア穴"
+msgstr "ビア穴壁"
 
 #: common/layer_id.cpp:159
 msgid "Plated holes"
 msgstr "メッキ穴"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "メッキなし穴"
+msgstr "メッキ穴壁"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -5031,12 +5028,12 @@ msgstr "認識されないキャラクター '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:830
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "関数パラメーターの親が不明"
 
 #: common/libeval_compiler/libeval_compiler.cpp:844
 #, fuzzy
 msgid "Unknown parent of property"
-msgstr "プロパティが見つかりませんでした: %s"
+msgstr "プロパティの親が不明"
 
 #: common/libeval_compiler/libeval_compiler.cpp:861
 #: common/libeval_compiler/libeval_compiler.cpp:889
@@ -5505,7 +5502,7 @@ msgstr "クリックしたアイテムを削除"
 #: common/tool/actions.cpp:197
 #, fuzzy
 msgid "Change Edit Method"
-msgstr "テキストに変更"
+msgstr "編集方法の変更"
 
 #: common/tool/actions.cpp:197
 #, fuzzy
@@ -9699,19 +9696,19 @@ msgstr "位置と単位:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "左下、プロッターユニット"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "中央、プロッターユニット"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
-msgstr ""
+msgstr "ページに合わせる、ユーザーユニット"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Content fit, user units"
-msgstr ""
+msgstr "内容に合わせる、ユーザーユニット"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -15824,7 +15821,7 @@ msgstr "選択を拡大 (&E)\tE"
 
 #: eeschema/tools/reannotate.cpp:74
 msgid "Errors reported by Eeschema:\n"
-msgstr ""
+msgstr "Eeschemaから報告されたエラー:\n"
 
 #: eeschema/tools/reannotate.cpp:75
 msgid ""
@@ -15862,9 +15859,8 @@ msgid "symbol is not multi-unit"
 msgstr "シンボルは複数ユニットではありません"
 
 #: eeschema/tools/sch_edit_tool.cpp:946
-#, fuzzy
 msgid "Label value cannot go below zero"
-msgstr "円弧の角度は０にできません。"
+msgstr "ラベルの値をゼロ以下にすることはできません"
 
 #: eeschema/tools/sch_edit_tool.cpp:1114 pcbnew/tools/pcb_control.cpp:479
 msgid "Item locked."
@@ -17065,9 +17061,9 @@ msgid "Restoring session"
 msgstr "セッションの復元"
 
 #: kicad/kicad_manager_frame.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring \"%s\""
-msgstr "予期される \"%s\""
+msgstr "\"%s\" を復元しています"
 
 #: kicad/menubar.cpp:54
 msgid "Clear Recent Projects"
@@ -20068,9 +20064,8 @@ msgstr ""
 "裏面のフットプリントを %s から開始します。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
-#, fuzzy
 msgid "the last front footprint + 1"
-msgstr "フットプリント上のパッドを変更する"
+msgstr "表面の最後のフットプリント + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -20176,7 +20171,7 @@ msgstr ""
 "フットプリントなし"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "\n"
 "*********** Sort on %s ***********"
@@ -21033,7 +21028,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:333
 #, fuzzy
 msgid "Smoothing amount:"
-msgstr "スムージング効果:"
+msgstr "スムージング量:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:335
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:173
@@ -21364,10 +21359,9 @@ msgid "Override value"
 msgstr "値を上書き"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:107
-#, fuzzy
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
-msgstr "チェックすると、実際の測定値は無視され、任意の値を入力できます"
+msgstr "チェックすると、実際の測定値を無視して、任意の値を入力できます"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
@@ -21387,9 +21381,8 @@ msgstr "この寸法の単位(\"自動\"はエディターで選択した単位�
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
-#, fuzzy
 msgid "Text to print before the dimension value"
-msgstr "寸法値の前に印刷するテキスト"
+msgstr "寸法値の前に表示するテキスト"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:110
@@ -21471,7 +21464,7 @@ msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
-msgstr ""
+msgstr "チェックすると、精度を高く設定しても \"0.100\" は \"0.1\" と表示されます"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
@@ -23404,9 +23397,8 @@ msgstr "円弧角:"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1519
-#, fuzzy
 msgid "Filled shape"
-msgstr "選択された輪郭を塗り潰し"
+msgstr "塗り潰し"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:94
 msgid "Graphic Item Properties"
@@ -24042,7 +24034,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "エラー: カスタムパッドの形状は単一のポリゴンに解決する必要があります。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1409
 msgid "Pad Properties Errors"
@@ -26239,7 +26231,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:870
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "内層レイヤーは削除されます"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:888
 msgid "Select user defined layer to add to board layer set"
@@ -27012,7 +27004,7 @@ msgstr "テキスト位置:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:106
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr ""
+msgstr "寸法線に対して寸法テキストをどの位置に配置するか"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:120
 msgid "Keep text aligned"
@@ -27020,17 +27012,17 @@ msgstr "寸法線に沿ってテキストを配置"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:121
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr ""
+msgstr "チェックすると、寸法のテキストを寸法線に沿わせます"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:133
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "表示する精度の桁数"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:149
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
-msgstr ""
+msgstr "チェックすると、桁を多く表示する精度の設定でも、\"1.2300\" は \"1.23\" として描画されます"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:241
 #, c-format
@@ -27193,7 +27185,7 @@ msgstr "%s をチェックしています。"
 
 #: pcbnew/drc/drc_engine.cpp:819
 msgid "Board and netclass clearances apply only between copper items."
-msgstr ""
+msgstr "基板とネットクラスのクリアランスは、導体のアイテム間でのみ適用されます。"
 
 #: pcbnew/drc/drc_engine.cpp:863
 #, fuzzy
@@ -27227,7 +27219,7 @@ msgstr "拡大率 (X) は制限されています。"
 
 #: pcbnew/drc/drc_engine.cpp:913
 msgid "Unconditional rule applied."
-msgstr ""
+msgstr "条件なしのルールが適用されました。"
 
 #: pcbnew/drc/drc_engine.cpp:926
 #, c-format
@@ -27245,7 +27237,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:940
 msgid "Membership not satisfied; constraint ignored."
-msgstr ""
+msgstr "メンバーシップが満たされていません; 制約は無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:941
 msgid "Condition not satisfied; rule ignored."
@@ -29243,9 +29235,9 @@ msgid "Pad of %s on %s"
 msgstr "パッド %s ( %s 上)"
 
 #: pcbnew/pad.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "スルーホール パッド"
+msgstr "スルーホール パッド %s"
 
 #: pcbnew/pad.cpp:1115
 #, c-format
@@ -30129,9 +30121,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2154
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "'%s' という名前のカスタム パッドが無効です。円形パッドで置き換えます。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2174
 #, c-format
@@ -30229,6 +30221,9 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
+"このバグを報告してください。グループ構造の検証エラー：%s\n"
+"\n"
+"とにかく保存しますか？"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:337
 #, fuzzy
@@ -30678,7 +30673,7 @@ msgstr "図形から配線を開始することはできません。"
 
 #: pcbnew/router/pns_router.cpp:269 pcbnew/router/pns_router.cpp:325
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "配線の開始点は DRC に違反しています。"
 
 #: pcbnew/router/pns_router.cpp:277
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -31137,7 +31132,7 @@ msgstr "ゾーン"
 #: pcbnew/tools/board_inspection_tool.cpp:149
 #, c-format
 msgid "Overridden by %s; connection type: %s."
-msgstr ""
+msgstr "%s でオーバーライドされます: 接続タイプ: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:164
 #, c-format
@@ -31152,7 +31147,7 @@ msgstr "ゾーンのサーマル リリーフ: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #, c-format
 msgid "Overridden by %s; thermal relief: %s."
-msgstr ""
+msgstr "%s でオーバーライドされます: サーマルリリーフ: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:192
 #, c-format
@@ -31193,8 +31188,9 @@ msgstr "クリアランス レポート"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #: pcbnew/tools/board_inspection_tool.cpp:313
+#, fuzzy
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "空のグループに対するクリアランスレポートを生成できません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:354
 msgid "Silkscreen clearance resolution for:"
@@ -31225,8 +31221,9 @@ msgid "Items belong to the same net. Clearance is 0."
 msgstr "アイテムは同じネットに属しています。 クリアランスは0です。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:468
+#, fuzzy
 msgid "Select an item for a constraints resolution report."
-msgstr ""
+msgstr "制約解決レポートの項目を選択します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:475
 #, fuzzy
@@ -31432,10 +31429,13 @@ msgid "Fillet Tracks"
 msgstr "フィレット半"
 
 #: pcbnew/tools/edit_tool.cpp:1044
+#, fuzzy
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"半径がゼロに設定されました。\n"
+"フィレット操作は実行されませんでした。"
 
 #: pcbnew/tools/edit_tool.cpp:1204
 #, fuzzy
@@ -31488,8 +31488,9 @@ msgid "Group is in inconsistent state:"
 msgstr "グループが不整合状態です:"
 
 #: pcbnew/tools/group_tool.cpp:146
+#, fuzzy
 msgid "Click on new member..."
-msgstr ""
+msgstr "新しいメンバーをクリックしてください..."
 
 #: pcbnew/tools/pad_tool.cpp:142
 msgid "Paste Pad Properties"
@@ -32618,7 +32619,7 @@ msgstr "クリアランスの解決..."
 #: pcbnew/tools/pcb_actions.cpp:1041
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr ""
+msgstr "アクティブなレイヤーの選択した 2つのオブジェクト間のクリアランスの解決を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Constraints Resolution..."
@@ -32635,7 +32636,7 @@ msgstr "位置で再アノテート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Reannotate PCB in geographical order"
-msgstr ""
+msgstr "プリント基板を位置の順で再アノテーションします"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 msgid "Repair Board"
@@ -33731,8 +33732,9 @@ msgid "Zone %s on %s"
 msgstr "ゾーン %s ( %s 上)"
 
 #: pcbnew/zone.cpp:1394
+#, fuzzy
 msgid "Inherited"
-msgstr ""
+msgstr "継承"
 
 #: pcbnew/zone.cpp:1412
 msgid "Min Width"
