@@ -61,6 +61,10 @@ wxString KIPLATFORM::ENV::GetDocumentsPath()
         fallback.AppendDir( "Documents" );
         fallback.MakeAbsolute();
 
+        // No Documents dir and nothing from XDG?  Give up and use $HOME
+        if( !fallback.DirExists() || !fallback.IsDirWritable() )
+            fallback.RemoveLastDir();
+
         docsPath = fallback.GetFullPath();
     }
 
