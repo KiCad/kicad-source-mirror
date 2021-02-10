@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /**
  * @file kicad.cpp
- * @brief Main KiCad Project manager file
+ * Main KiCad project manager file.
  */
 
 
@@ -39,6 +39,7 @@
 #include <kiway.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
+#include <wildcards_and_files_ext.h>
 
 #include <stdexcept>
 
@@ -78,6 +79,7 @@ PGM_BASE* PgmOrNull()
 {
     return &program;
 }
+
 
 PGM_KICAD& PgmTop()
 {
@@ -149,7 +151,23 @@ bool PGM_KICAD::OnPgmInit()
     wxString projToLoad;
 
     if( App().argc > 1 )
-        projToLoad = App().argv[1];
+    {
+        wxFileName tmp = App().argv[1];
+
+        if( tmp.GetExt() != ProjectFileExtension && tmp.GetExt() != LegacyProjectFileExtension )
+        {
+            wxString msg;
+
+            msg.Printf( _( "File '%s'\ndoes not appear to be a valid KiCad project file." ),
+                        tmp.GetFullPath() );
+            wxMessageDialog dlg( nullptr, msg, _( "Error" ), wxOK | wxICON_EXCLAMATION );
+            dlg.ShowModal();
+        }
+        else
+        {
+            projToLoad = tmp.GetFullPath();
+        }
+    }
 
     // If no file was given as an argument, check that there was a file open.
     if( projToLoad.IsEmpty() && settings->m_OpenProjects.size() )
@@ -229,8 +247,7 @@ KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
 
 
 /**
- * Struct APP_KICAD
- * is not publicly visible because most of the action is in PGM_KICAD these days.
+ * Not publicly visible because most of the action is in #PGM_KICAD these days.
  */
 struct APP_KICAD : public wxApp
 {
@@ -247,15 +264,17 @@ struct APP_KICAD : public wxApp
             wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
         }
 
-        // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is required until wxWidgets
-        // supports the Wayland compositors
+        // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is
+        // required until wxWidgets supports the Wayland compositors
         wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 
-        // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause excessive redraw requests
+        // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause
+        // excessive redraw requests.
         wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
 
-        // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth scrolling
-        // Needed to ensure that we are not getting multiple mouse scroll events
+        // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
+        // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
+        // events.
         wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
     }
 #endif
@@ -263,8 +282,8 @@ struct APP_KICAD : public wxApp
     bool OnInit()           override
     {
 #if defined( _MSC_VER ) && defined( DEBUG )
-        // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump for half a hour
-        // _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC
+        // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump
+        // for half a hour _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC.
         _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
 #endif
 
@@ -272,12 +291,14 @@ struct APP_KICAD : public wxApp
         && ( ( PYTHON_VERSION_MAJOR == 3 && PYTHON_VERSION_MINOR >= 8 )                            \
              || PYTHON_VERSION_MAJOR > 3 )
 
-        // Python 3.8 switched to Windows 8+ API, we do not support Windows 7 and will not attempt to hack around it
-        // Gracefully inform the user and refuse to start (because python will crash us if we continue)
+        // Python 3.8 switched to Windows 8+ API, we do not support Windows 7 and will not
+        // attempt to hack around it.  Gracefully inform the user and refuse to start (because
+        // python will crash us if we continue).
         if( !IsWindows8OrGreater() )
         {
-            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and its dependencies." ),
-                          _( "Unsupported Operating System" ), wxOK | wxICON_ERROR );
+            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and its "
+                             "dependencies." ), _( "Unsupported Operating System" ),
+                          wxOK | wxICON_ERROR );
             return false;
         }
 #endif
@@ -296,7 +317,7 @@ struct APP_KICAD : public wxApp
         program.OnPgmExit();
 
 #if defined(__FreeBSD__)
-        /* Avoid wxLog crashing when used in destructors. */
+        // Avoid wxLog crashing when used in destructors.
         wxLog::EnableLogging( false );
 #endif
 
@@ -312,7 +333,7 @@ struct APP_KICAD : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
+                        FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
         }
         catch( const IO_ERROR& ioe )
         {
