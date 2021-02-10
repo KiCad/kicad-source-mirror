@@ -1020,6 +1020,12 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
             };
 
+    auto boardFlippedCond =
+        [this]( const SELECTION& )
+        {
+            return GetCanvas()->GetView()->IsMirroredX();
+        };
+
     auto footprintTreeCond =
             [this] (const SELECTION& )
             {
@@ -1027,6 +1033,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
             };
 
     mgr->SetConditions( ACTIONS::highContrastMode,         CHECK( highContrastCond ) );
+    mgr->SetConditions( PCB_ACTIONS::flipBoard,            CHECK( boardFlippedCond ) );
     mgr->SetConditions( PCB_ACTIONS::toggleFootprintTree,  CHECK( footprintTreeCond ) );
 
     mgr->SetConditions( ACTIONS::print,                    ENABLE( haveFootprintCond ) );
