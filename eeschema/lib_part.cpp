@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -401,6 +401,42 @@ const wxString LIB_PART::GetLibraryName() const
 }
 
 
+bool LIB_PART::IsPower() const
+{
+    if( PART_SPTR parent = m_parent.lock() )
+        return parent->m_options == ENTRY_POWER;
+
+    return m_options == ENTRY_POWER;
+}
+
+
+void LIB_PART::SetPower()
+{
+    if( PART_SPTR parent = m_parent.lock() )
+        parent->m_options = ENTRY_POWER;
+
+    m_options = ENTRY_POWER;
+}
+
+
+bool LIB_PART::IsNormal() const
+{
+    if( PART_SPTR parent = m_parent.lock() )
+        return parent->m_options == ENTRY_NORMAL;
+
+    return m_options == ENTRY_NORMAL;
+}
+
+
+void LIB_PART::SetNormal()
+{
+    if( PART_SPTR parent = m_parent.lock() )
+        parent->m_options = ENTRY_NORMAL;
+
+    m_options = ENTRY_NORMAL;
+}
+
+
 wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 {
     wxString subRef;
@@ -540,8 +576,8 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& 
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aOffset, fill && ( item.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ),
-                   aTransform );
+        item.Plot( aPlotter, aOffset,
+                   fill && ( item.m_fill != FILL_TYPE::FILLED_WITH_BG_BODYCOLOR ), aTransform );
     }
 }
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 
 /* values for member .m_options */
-enum  LIBRENTRYOPTIONS
+enum LIBRENTRYOPTIONS
 {
     ENTRY_NORMAL,   // Libentry is a standard part (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
@@ -95,9 +95,6 @@ class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
 public:
     LIB_PART( const wxString& aName, LIB_PART* aParent = nullptr, PART_LIB* aLibrary = nullptr );
 
-    /**
-     * Copy constructor.
-     */
     LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary = NULL );
 
     virtual ~LIB_PART();
@@ -106,8 +103,7 @@ public:
     PART_SPTR SharedPtr() { return m_me; }
 
     /**
-     * Function Duplicate
-     * Creates a copy of a LIB_PART and assigns unique KIIDs to the copy and its children
+     * Create a copy of a LIB_PART and assigns unique KIIDs to the copy and its children.
      */
     virtual LIB_PART* Duplicate() const
     {
@@ -222,11 +218,11 @@ public:
         return GetUnitBoundingBox( 0, 0 );
     }
 
-    bool IsPower() const  { return m_options == ENTRY_POWER; }
-    bool IsNormal() const { return m_options == ENTRY_NORMAL; }
+    bool IsPower() const;
+    bool IsNormal() const;
 
-    void SetPower()     { m_options = ENTRY_POWER; }
-    void SetNormal()    { m_options = ENTRY_NORMAL; }
+    void SetPower();
+    void SetNormal();
 
     /**
      * Set interchangeable the property for part units.
@@ -261,7 +257,6 @@ public:
 
     /**
      * Add a field.  Takes ownership of the pointer.
-     * @param aField
      */
     void AddField( LIB_FIELD* aField );
 
@@ -511,13 +506,14 @@ public:
     // Accessors to sub ref parameters
     static int GetSubpartIdSeparator() { return m_subpartIdSeparator; }
 
-    /** return a reference to m_subpartIdSeparator,
-     * only for read/save setting functions
+    /**
+     * Return a reference to m_subpartIdSeparator, only for read/save setting functions.
      */
     static int* SubpartIdSeparatorPtr() { return &m_subpartIdSeparator; }
     static int GetSubpartFirstId() { return m_subpartFirstId; }
 
-    /** return a reference to m_subpartFirstId, only for read/save setting functions
+    /**
+     * Return a reference to m_subpartFirstId, only for read/save setting functions.
      */
     static int* SubpartFirstIdPtr() { return &m_subpartFirstId; }
 
