@@ -1120,8 +1120,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         return false;
     }
 
-    // A closed outline was found
-    if( success )
+    // A closed outline was found on Edge_Cuts
+    if( success && outlines.OutlineCount() )
     {
         wxLogTrace( traceBoardOutline, "Closed outline found" );
 
