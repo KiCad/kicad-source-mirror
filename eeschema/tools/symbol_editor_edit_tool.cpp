@@ -71,7 +71,19 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
                 SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
                 wxCHECK( editor, false );
 
-                return editor->IsSymbolEditable();
+                if( !editor->IsSymbolEditable() )
+                    return false;
+
+                if( editor->IsSymbolAlias() )
+                {
+                    for( EDA_ITEM* item : sel )
+                    {
+                        if( item->Type() != LIB_FIELD_T )
+                            return false;
+                    }
+                }
+
+                return true;
             };
 
     // Add edit actions to the move tool menu

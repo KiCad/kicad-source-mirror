@@ -99,7 +99,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
                 SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
                 wxCHECK( editor, false );
 
-                return editor->IsSymbolEditable();
+                return editor->IsSymbolEditable() && !editor->IsSymbolAlias();
             };
 
     auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyType( LIB_PIN_T );

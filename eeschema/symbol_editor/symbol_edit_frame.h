@@ -342,10 +342,14 @@ public:
      *
      * The following conditions are required for a symbol to be editable:
      *  - The symbol must selected from either a library or the schematic.
-     *  - The symbol must be a root symbol.
      *  - The symbol must not be from a legacy library.
+     *
+     * Note that many things are not editable in a non-root symbol (ie: an alias), but others
+     * are so this routine no longer returns false for an alias.
      */
     bool IsSymbolEditable() const;
+
+    bool IsSymbolAlias() const;
 
     ///< Restore the empty editor screen, without any part or library selected.
     void emptyScreen();

@@ -44,7 +44,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
 
-    if( !aParent->IsSymbolEditable() )
+    if( !aParent->IsSymbolEditable() || aParent->IsSymbolAlias() )
     {
         m_sdbSizerCancel->SetDefault();
         m_sdbSizerOK->SetLabel( _( "Read Only" ) );

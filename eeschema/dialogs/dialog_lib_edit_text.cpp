@@ -52,7 +52,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );
 
-    if( !aParent->IsSymbolEditable() )
+    if( !aParent->IsSymbolEditable() || aParent->IsSymbolAlias() )
     {
         m_sdbSizerButtonsCancel->SetDefault();
         m_sdbSizerButtonsOK->SetLabel( _( "Read Only" ) );

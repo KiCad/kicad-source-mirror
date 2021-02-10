@@ -490,7 +490,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     GetSizer()->SetSizeHints(this);
     Centre();
 
-    if( !parent->IsSymbolEditable() )
+    if( !parent->IsSymbolEditable() || parent->IsSymbolAlias() )
     {
         m_ButtonsCancel->SetDefault();
         m_ButtonsOK->SetLabel( _( "Read Only" ) );

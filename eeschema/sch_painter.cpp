@@ -74,6 +74,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowHiddenPins( true ),
         m_ShowPinsElectricalType( true ),
         m_ShowDisabled( false ),
+        m_ShowGraphicsDisabled( false ),
         m_ShowUmbilicals( true ),
         m_OverrideItemColors( false ),
         m_TextOffsetRatio( 0.08 ),
@@ -309,8 +310,11 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
             color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS ).WithAlpha( 0.8 );
     }
 
-    if( m_schSettings.m_ShowDisabled )
+    if( m_schSettings.m_ShowDisabled
+            || ( m_schSettings.m_ShowGraphicsDisabled && aItem->Type() != LIB_FIELD_T ) )
+    {
         color = color.Darken( 0.5f );
+    }
 
     return color;
 }

@@ -48,16 +48,28 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    auto canEdit =
+    auto canMove =
             [&]( const SELECTION& sel )
             {
                 SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
                 wxCHECK( editor, false );
 
-                return editor->IsSymbolEditable();
+                if( !editor->IsSymbolEditable() )
+                    return false;
+
+                if( editor->IsSymbolAlias() )
+                {
+                    for( EDA_ITEM* item : sel )
+                    {
+                        if( item->Type() != LIB_FIELD_T )
+                            return false;
+                    }
+                }
+
+                return true;
             };
 
-    selToolMenu.AddItem( EE_ACTIONS::move, canEdit && EE_CONDITIONS::IdleSelection, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::move, canMove && EE_CONDITIONS::IdleSelection, 150 );
 
     return true;
 }
@@ -77,13 +89,17 @@ void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
 
 int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    static KICAD_T fieldsOnly[] = { LIB_FIELD_T, EOT };
+
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     m_anchorPos = { 0, 0 };
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    EE_SELECTION& selection = m_selectionTool->RequestSelection();
+    EE_SELECTION& selection = m_frame->IsSymbolAlias()
+                                                ? m_selectionTool->RequestSelection( fieldsOnly )
+                                                : m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
     if( !m_frame->IsSymbolEditable() || selection.Empty() || m_moveInProgress )

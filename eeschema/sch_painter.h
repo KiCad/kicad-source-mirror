@@ -112,6 +112,7 @@ public:
     bool   m_ShowHiddenPins;
     bool   m_ShowPinsElectricalType;
     bool   m_ShowDisabled;
+    bool   m_ShowGraphicsDisabled;
     bool   m_ShowUmbilicals;
 
     bool   m_OverrideItemColors;
