@@ -958,21 +958,14 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     m_selectionTool->AddItemToSel( newItem );
 
+    // Components need to be handled by the move tool.  The move tool will handle schematic
+    // cleanup routines
     if( performDrag )
-    {
         m_toolMgr->RunAction( EE_ACTIONS::move, true );
-
-        SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
-
-        // We cannot proceed until the move tool has ended (by placement or cancel) otherwise,
-        // we risk breaking out of the tool by activating another
-        while( moveTool->IsToolActive() )
-            Wait();
-    }
 
     newItem->ClearFlags();
 
-    if( newItem->IsConnectable() )
+    if( !performDrag && newItem->IsConnectable() )
     {
         EE_SELECTION new_sel = m_selectionTool->GetSelection();
         new_sel.Add( newItem );
