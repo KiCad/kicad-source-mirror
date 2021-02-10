@@ -56,6 +56,11 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
     m_StdButtonsOK->SetDefault();
     m_image->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
 
+    // Set keep Through Hole pads on external layers ON by default.
+    // Because such a pad does not allow soldering/unsoldering, disable this option
+    // is probably not frequent
+    m_cbPreservePads->SetValue( true );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
