@@ -496,19 +496,23 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 runEventHandlers( aEvent, evt );
 #endif
 
-            // Handling non-action menu entries (e.g. items in clarification list)
-            // in some context menus, that have IDs explicitly chosen between
-            // ID_POPUP_MENU_START and ID_POPUP_MENU_END
-            // Note also items in clarification list have an id >= 0 and < wxID_LOWEST
-            // in fact 0 to n-1 for n items in clarification list)
-            // id < 0 are automatically created for menuitems created with wxID_ANY
-            #define ID_CONTEXT_MENU_ID_MAX wxID_LOWEST  /* = 100 should be enough and better */
+            // Handling non-ACTION menu entries.  Two ranges of ids are supported:
+            //   between 0 and ID_CONTEXT_MENU_ID_MAX
+            //   between ID_POPUP_MENU_START and ID_POPUP_MENU_END
+
+            #define ID_CONTEXT_MENU_ID_MAX wxID_LOWEST  /* = 100 should be plenty */
 
             if( !evt &&
                     ( ( m_selected >= 0 && m_selected < ID_CONTEXT_MENU_ID_MAX ) ||
                       ( m_selected >= ID_POPUP_MENU_START && m_selected <= ID_POPUP_MENU_END ) ) )
             {
-                menuText = GetLabelText( aEvent.GetId() );
+                ACTION_MENU* actionMenu = dynamic_cast<ACTION_MENU*>( GetParent() );
+
+                if( actionMenu && actionMenu->PassHelpTextToHandler() )
+                    menuText = GetHelpString( aEvent.GetId() );
+                else
+                    menuText = GetLabelText( aEvent.GetId() );
+
                 evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_CHOICE, m_selected, AS_GLOBAL,
                                   &menuText );
             }

@@ -49,7 +49,6 @@
 #include <tool/tool_event.h>
 #include <trigo.h>
 #include <undo_redo_container.h>
-
 #include <connection_graph.h>
 #include <eeschema_id.h>
 #include <sch_bus_entry.h>
@@ -61,10 +60,8 @@
 #include <sch_sheet.h>
 #include <sch_text.h>
 #include <schematic.h>
-
 #include <ee_actions.h>
 #include <ee_grid_helper.h>
-#include <ee_point_editor.h>
 #include <ee_selection.h>
 #include <ee_selection_tool.h>
 
@@ -84,6 +81,7 @@ public:
         m_showTitle = true;
     }
 
+    bool PassHelpTextToHandler() override { return true; }
 
 protected:
     ACTION_MENU* create() const override
@@ -139,19 +137,19 @@ private:
         for( const auto& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            wxString name = SCH_CONNECTION::PrintBusForUI( member->FullLocalName() );
+            wxString name = member->FullLocalName();
 
             if( member->Type() == CONNECTION_TYPE::BUS )
             {
                 ACTION_MENU* submenu = new ACTION_MENU( true );
                 submenu->SetTool( m_tool );
-                AppendSubMenu( submenu, name );
+                AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
 
                 for( const auto& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-                    name = SCH_CONNECTION::PrintBusForUI( sub_member->FullLocalName() );
-                    submenu->Append( id, name, wxEmptyString );
+                    name = sub_member->FullLocalName();
+                    submenu->Append( id, SCH_CONNECTION::PrintBusForUI( name ), name );
                 }
             }
             else

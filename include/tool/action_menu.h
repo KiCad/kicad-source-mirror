@@ -170,6 +170,8 @@ public:
     void OnMenuEvent( wxMenuEvent& aEvent );
     void OnIdle( wxIdleEvent& event );
 
+    virtual bool PassHelpTextToHandler() { return false; }
+
     static constexpr bool CHECK = true;
 
 protected:
