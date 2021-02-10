@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-10 14:12+0000\n"
+"PO-Revision-Date: 2021-02-11 06:56+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -167,14 +167,14 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Die Grundrisskontur ist fehlerhaft. Führen Sie den Footprint Checker für "
-"eine vollständige Analyse aus."
+"Der Foorprint-Umriss ist fehlerhaft. Footprint Checker für eine vollständige "
+"Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:484
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Der Umriss des Boards fehlt oder ist fehlerhaft. Führen Sie DRC für eine "
-"vollständige Analyse aus."
+"Der Umriss der Platine fehlt oder ist fehlerhaft. DRC für eine vollständige "
+"Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -190,7 +190,7 @@ msgstr "Vereinfachung von Polygonen auf Kupferlagen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:829
 msgid "Simplify holes contours"
-msgstr "Vereinfachung Lochkonturen"
+msgstr "Lochkonturen vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:858
 msgid "Build Tech layers"
@@ -323,7 +323,7 @@ msgstr "Raytracing-Optionen"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:151
 msgid "Choose Colors"
-msgstr "Wähle Farben"
+msgstr "Farben auswählen"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:154
 msgid "Background Top Color..."
@@ -335,7 +335,7 @@ msgstr "Hintergrundfarbe unten..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:162
 msgid "Silkscreen Color..."
-msgstr "Farbe des Siebdrucks..."
+msgstr "Farbe des Bestückungsdrucks..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:166
 msgid "Solder Mask Color..."
@@ -347,7 +347,7 @@ msgstr "Farbe der Lötpaste..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:174
 msgid "Copper/Surface Finish Color..."
-msgstr "Farbe Kupfer/Durchkontaktierung..."
+msgstr "Farbe von Kupfer bzw. Beschichtung..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:178
 msgid "Board Body Color..."
@@ -495,7 +495,7 @@ msgstr "Ausgefüllte Flächenbereiche einblenden"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:90
 #: pcbnew/dialogs/dialog_plot_base.cpp:214
 msgid "Subtract soldermask from silkscreen"
-msgstr "Subtrahiere Lötstoppmaske von Siebdruckmaske"
+msgstr "Lötstoppmaske vom Bestückungsdruck subtrahieren"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
@@ -794,7 +794,7 @@ msgstr "Kann Datei nicht speichern"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:939
 msgid "Silkscreen Color"
-msgstr "Farbe Siebdruck"
+msgstr "Farbe des Bestückungsdrucks"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:975
 msgid "Solder Mask Color"
@@ -951,7 +951,7 @@ msgstr "CAD-Farbstil"
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
-"Benutze einen CAD-Farbstil basierend auf der diffusen Farbe des Materials"
+"Einen CAD-Farbstil basierend auf der diffusen Farbe des Materials benutzen"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
@@ -1401,9 +1401,9 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Wählen Sie die Platinenlage auf der der Umriss erstellt werden soll.\n"
-"Der Referenzbezeichner und der Wert werden immer auf der Lage für Siebdruck "
-"platziert (jedoch markiert als unsichtbar)."
+"Platinenlage wählen, auf der der Umriss platziert werden soll.\n"
+"Referenzbezeichner und Wert werden immer auf der Bestückungsdruck-Lage "
+"platziert (jedoch als unsichtbar markiert)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/bitmap2component.desktop.in:9
@@ -1530,7 +1530,7 @@ msgstr "Warnung"
 #: common/confirm.cpp:161 common/confirm.cpp:188
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr ""
-"Wenn Sie die Änderungen nicht speichern gehen diese unwiderruflich verloren."
+"Wenn Sie nicht speichern, gehen alle Änderungen unwiderruflich verloren."
 
 #: common/confirm.cpp:162 common/confirm.cpp:189 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:595
@@ -2026,8 +2026,8 @@ msgstr "Erstellt eine leere globale %s Bibliothekstabelle"
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Benutzen Sie diese Option zum definieren von %s Bibliotheken in Projekt "
-"spezifischen Bibliothekstabellen"
+"Benutzen Sie diese Option zum Definieren von %s Bibliotheken in "
+"projektspezifischen Bibliothekstabellen"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
@@ -2708,7 +2708,9 @@ msgstr "Es gab ein Problem beim Drucken."
 
 #: common/dialogs/dialog_print_generic.cpp:304
 msgid "An error occurred initializing the printer information."
-msgstr "Es ist ein Fehler bei der Initialisierung des Druckers aufgetreten."
+msgstr ""
+"Es ist ein Fehler bei der Initialisierung der Druckerinformationen "
+"aufgetreten."
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
 #: eeschema/dialogs/dialog_annotate_base.cpp:83
@@ -2838,14 +2840,14 @@ msgstr "Thema:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr "Überschreiben Sie einzelne Artikelfarben"
+msgstr "Einzelne Elementfarben überschreiben"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
-"Zeigen Sie alle Elemente in ihrer Standardfarbe an, auch wenn in ihren "
+"Alle Elemente in ihrer Standardfarbe anzeigen, auch wenn in ihren "
 "Eigenschaften bestimmte Farben festgelegt sind."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
@@ -3052,19 +3054,19 @@ msgstr "Projekt-Sicherungskopien automatisch speichern"
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
-"Erstellen Sie beim Speichern von Dateien automatisch Sicherungsarchive des "
-"aktuellen Projekts"
+"Beim Speichern von Dateien automatisch Sicherungsarchive des aktuellen "
+"Projekts erstellen"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "Create backups when auto save occurs"
-msgstr "Erstellen Sie Backups, wenn das automatische Speichern erfolgt"
+msgstr "Backups erstellen, wenn das automatische Speichern erfolgt"
 
 #: common/dialogs/panel_common_settings_base.cpp:229
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
-"Erstellen Sie Backups, wenn die automatische Speicherfunktion aktiviert ist. "
+"Backups erstellen, wenn die automatische Speicherfunktion aktiviert ist. "
 "Wenn diese Option nicht aktiviert ist, werden Sicherungen nur erstellt, wenn "
 "Sie eine Datei manuell speichern."
 
@@ -3185,7 +3187,7 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Wenn Sie einen Leiterzug zeichnen oder ein Objekt verschieben, wird der "
+"Wenn Sie eine Leiterbahn zeichnen oder ein Objekt verschieben, wird der "
 "Bildausschnitt automatisch verschoben wenn Sie sich dem Rand des Displays "
 "nähern."
 
@@ -3195,7 +3197,7 @@ msgstr "Zoom-Beschleunigung Benutzen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr "Zoomen Sie schneller, wenn Sie schnell scrollen"
+msgstr "Schneller zoomen, wenn Sie schnell scrollen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3207,7 +3209,7 @@ msgstr "Wie weit muss bei jeder Drehung des Mausrads hineingezoomt werden?"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
-msgstr "Wählen Sie die Zoomgeschwindigkeit automatisch"
+msgstr "Zoomgeschwindigkeit automatisch wählen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
@@ -3216,8 +3218,8 @@ msgstr "Automatische Schwenkgeschwindigkeit:"
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr ""
-"Wie schnell Sie schwenken können, wenn Sie ein Objekt vom Bildschirmrand "
-"entfernen"
+"Wie schnell der Bildausschnitt verschoben wird wenn ein Objekt über den "
+"Bildrand geschoben wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 msgid "Drag Gestures"
@@ -3233,8 +3235,7 @@ msgstr "Auswahlrechteck zeichnen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
-"Ziehen Sie ausgewählte Objekte. Andernfalls zeichnen Sie ein Auswahlrechteck"
+msgstr "Ausgewählte Objekte ziehen; andernfalls Auswahlrechteck zeichnen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
@@ -3329,7 +3330,7 @@ msgstr "Links/Rechts mit Horizontalbewegung schwenken"
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Schwenken Sie die Leinwand nach links und rechts, wenn Sie auf dem Touchpad "
+"Bildausschnitt nach links und rechts verschieben, wenn Sie auf dem Touchpad "
 "von links nach rechts scrollen"
 
 #: common/dialogs/panel_setup_netclasses.cpp:81
@@ -3703,10 +3704,10 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Nun, das ist möglicherweise peinlich! \n"
+"Nun, das ist möglicherweise peinlich!\n"
 "Es scheint, dass nach dem Editieren der Datei\n"
 "\"%s\"\n"
-"diese nicht ordnungsgemäß gespeichert wurde.  Möchten Sie die letzten "
+"diese nicht ordnungsgemäß gespeichert wurde. Möchten Sie die letzten "
 "Änderungen wiederherstellen?"
 
 #: common/eda_base_frame.cpp:955
@@ -3787,7 +3788,7 @@ msgid ""
 msgstr ""
 "KiCad kann ihre Grafikkarte benutzen um ein flüssigeres und schnelleres "
 "Arbeiten zu ermöglichen. Diese Option ist standardmäßig deaktiviert und mit "
-"mancher PC Hardware nicht kompatibel.\n"
+"mancher PC-Hardware nicht kompatibel.\n"
 "\n"
 "Möchten Sie versuchen diese Option zu nutzen?\n"
 "\n"
@@ -4217,8 +4218,8 @@ msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
-"Optional. Kann definiert werden wenn Sie ihren eigenen Projektvorlagenordner "
-"erstellen wollen."
+"Optional. Kann definiert werden, wenn Sie ihren eigenen "
+"Projektvorlagenordner erstellen wollen."
 
 #: common/env_vars.cpp:82
 msgid ""
@@ -22987,7 +22988,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:137
 msgid "Plain PCB (no copper or silk)"
-msgstr "Platine ohne Kupfer oder Siebdruck"
+msgstr "Einfache Leiterplatte (ohne Kupfer oder Bestückungsdruck)"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:69
 msgid "VRML Export Options"
@@ -25286,7 +25287,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:215
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Entferne Siebdruck von Bereichen ohne Lötstoppmaske"
+msgstr "Entferne Bestückungsdruck von Bereichen ohne Lötstoppmaske"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "Coordinate format:"
@@ -27019,7 +27020,8 @@ msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:113
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Wenn eine Lage für Siebdruck auf der Platinenvorderseite benötigt wird"
+msgstr ""
+"Wenn eine Lage für Bestückungsdruck auf der Platinenvorderseite benötigt wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:117
 msgid "SilkS_Front"
@@ -27364,7 +27366,8 @@ msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Wenn eine Lage für Siebdruck auf der Platinenrückseite benötigt wird"
+msgstr ""
+"Wenn eine Lage für Bestückungsdruck auf der Platinenrückseite benötigt wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:609
 msgid "SilkS_Back"
@@ -28375,21 +28378,21 @@ msgstr "Prüfe Textvariablen..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:104
 msgid "Checking silkscreen for overlapping items..."
-msgstr "Siebdruck auf überlappende Elemente prüfen ..."
+msgstr "Bestückungsdruck auf überlappende Elemente prüfen..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:212
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "Testen von %d Siebdruckfunktionen gegen %d Plattenelemente."
+msgstr "Testen von %d Bestückungsdruck-Daten gegen %d Platinenelemente."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "Siebdruck auf mögliche Lötmaskenbeschneidungen prüfen ..."
+msgstr "Bestückungsdruck auf mögliche Lötstoppmasken-Überschneidungen prüfen..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:171
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
-msgstr "Testen von %d Maskenöffnungen gegen %d Siebdruckmerkmale."
+msgstr "Testen von %d Maskenöffnungen gegen %d Bestückungsdruck-Daten."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:76
 msgid "Checking track widths..."
