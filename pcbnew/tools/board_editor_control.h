@@ -114,8 +114,6 @@ public:
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   EDA_ITEM* aItem, const VECTOR2D& aPoint );
 
-    int FlipPcbView( const TOOL_EVENT& aEvent );
-
 private:
     ///< How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };

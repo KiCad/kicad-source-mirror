@@ -1356,16 +1356,6 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 }
 
 
-int BOARD_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
-{
-    view()->SetMirror( !view()->IsMirroredX(), false );
-    view()->RecacheAllItems();
-    frame()->GetCanvas()->ForceRefresh();
-    frame()->OnDisplayOptionsChanged();
-    return 0;
-}
-
-
 void BOARD_EDITOR_CONTROL::setTransitions()
 {
     Go( &BOARD_EDITOR_CONTROL::New,                    ACTIONS::doNew.MakeEvent() );
@@ -1414,7 +1404,6 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
 }
 

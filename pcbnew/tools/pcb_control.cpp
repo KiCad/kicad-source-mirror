@@ -1112,6 +1112,16 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
+{
+    view()->SetMirror( !view()->IsMirroredX(), false );
+    view()->RecacheAllItems();
+    frame()->GetCanvas()->ForceRefresh();
+    frame()->OnDisplayOptionsChanged();
+    return 0;
+}
+
+
 void PCB_CONTROL::setTransitions()
 {
     Go( &PCB_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
@@ -1130,6 +1140,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
+    Go( &PCB_CONTROL::FlipPcbView,           PCB_ACTIONS::flipBoard.MakeEvent() );
 
     // Layer control
     Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );

@@ -93,10 +93,12 @@ public:
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
+    int FlipPcbView( const TOOL_EVENT& aEvent );
+
+private:
     ///< Sets up handlers for various events.
     void setTransitions() override;
 
-private:
     /**
      * Add and select or just select for move/place command a list of board items.
      *
