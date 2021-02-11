@@ -216,8 +216,6 @@ static bool scriptingSetup()
 {
 
 #if defined( __WINDOWS__ )
-    // for msvc, we set python library paths via the python c-api in pcbnewInitPythonScripting instead
-    #if !defined( _MSC_VER )
     // If our python.exe (in kicad/bin) exists, force our kicad python environment
     wxString kipython = FindKicadFile( "python.exe" );
 
@@ -241,7 +239,6 @@ static bool scriptingSetup()
         kipython << wxT( ";" ) << ppath;
         wxSetEnv( wxT( "PATH" ), kipython );
     }
-    #endif
 
 #elif defined( __WXMAC__ )
 
