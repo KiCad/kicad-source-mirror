@@ -21,6 +21,8 @@
  */
 
 #include <wx/hyperlink.h>
+#include <advanced_config.h>
+
 #include <functional>
 using namespace std::placeholders;
 #include <board.h>
@@ -51,9 +53,7 @@ using namespace std::placeholders;
 
 #include "pns_kicad_iface.h"
 
-#ifdef DEBUG
 #include <plugins/kicad/kicad_plugin.h>
-#endif
 
 using namespace KIGFX;
 
@@ -480,51 +480,80 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
         TOOL_BASE::Reset( aReason );
 }
 
+// Saves the complete event log and the dump of the PCB, allowing us to
+// recreate hard-to-find P&S quirks and bugs.
 
-void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
+void ROUTER_TOOL::saveRouterDebugLog()
 {
-#ifdef DEBUG
-    if( aEvent.IsKeyPressed() )
+    auto logger = m_router->Logger();
+
+    if( ! logger )
+        return;
+
+    wxString cwd = wxGetCwd();
+
+    wxFileName fname_log( cwd );
+    fname_log.SetName( "pns.log" );
+
+    wxFileName fname_dump( cwd );
+    fname_dump.SetName( "pns.dump" );
+
+    wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(), fname_log.GetFullPath() );
+
+    int rv = OKOrCancelDialog( nullptr, _("Save router log"), _("Would you like to save the router\nevent log for debugging purposes?"), msg, _("OK"), _("Cancel") );
+
+    if( !rv )
+        return;
+
+    FILE *f = fopen( fname_log.GetFullPath().c_str(), "wb" );
+
+    // save base router configuration (mode, etc.)
+    fprintf(f, "config %d %d %d\n",
+        m_router->Settings().Mode(),
+        m_router->Settings().RemoveLoops() ? 1 : 0,
+        m_router->Settings().GetFixAllSegments() ? 1 : 0
+     );
+
+    const auto& events = logger->GetEvents();
+
+    for( auto evt : events)
     {
-        switch( aEvent.KeyCode() )
-        {
-        case '0':
-        {
-            auto logger = m_router->Logger();
+        wxString id = "null";
+        if( evt.item && evt.item->Parent() )
+            id = evt.item->Parent()->m_Uuid.AsString();
 
-            if( ! logger )
-                return;
-
-            FILE *f = fopen("/tmp/pns.log", "wb");
-            wxLogTrace( "PNS", "saving drag/route log...\n" );
-
-            const auto& events = logger->GetEvents();
-
-            for( auto evt : events)
-            {
-                wxString id = "null";
-
-                if( evt.item && evt.item->Parent() )
-                    id = evt.item->Parent()->m_Uuid.AsString();
-
-                fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
-                         (const char*) id.c_str() );
-            }
-
-            fclose( f );
-
-            // Export as *.kicad_pcb format, using a strategy which is specifically chosen
-            // as an example on how it could also be used to send it to the system clipboard.
-
-            PCB_IO  pcb_io;
-
-            pcb_io.Save( "/tmp/pns.dump", m_iface->GetBoard(), nullptr );
-
-            break;
-        }
-        }
+        fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
+                   (const char*) id.c_str() );
     }
-#endif
+
+    fclose( f );
+
+    // Export as *.kicad_pcb format, using a strategy which is specifically chosen
+    // as an example on how it could also be used to send it to the system clipboard.
+
+    PCB_IO  pcb_io;
+
+    pcb_io.Save( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
+}
+
+
+void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
+{
+    if( !aEvent.IsKeyPressed() )
+        return;
+
+    switch( aEvent.KeyCode() )
+    {
+        case '0':
+        if( !ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
+            return;
+
+        saveRouterDebugLog();
+        aEvent.SetPassEvent( false );
+        break;
+        default:
+        break;
+    }
 }
 
 
@@ -1684,6 +1713,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         {
             evt->SetPassEvent();
         }
+
+        handleCommonEvents( *evt );
     }
 
     if( footprint )
