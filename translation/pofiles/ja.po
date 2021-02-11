@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-11 13:20+0000\n"
+"PO-Revision-Date: 2021-02-11 23:32+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1777,7 +1777,7 @@ msgstr "定数:"
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
 msgid "Color Picker"
-msgstr "カラー ピッカー"
+msgstr "色の選択"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
@@ -19620,7 +19620,7 @@ msgstr "ノード数"
 #: pcbnew/widgets/appearance_controls_base.cpp:62
 #: pcbnew/widgets/appearance_controls_base.cpp:156
 msgid "Nets"
-msgstr "ネット数"
+msgstr "ネット"
 
 #: pcbnew/board.cpp:1117 pcbnew/pcb_draw_panel_gal.cpp:468
 msgid "Unrouted"
@@ -22696,7 +22696,7 @@ msgstr "大文字と小文字を区別"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr "周回する"
+msgstr "循環する"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
@@ -23967,7 +23967,7 @@ msgstr "スムージング量:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:83
 msgid "Non Copper Zones Properties"
-msgstr "テクニカル層のゾーンのプロパティ"
+msgstr "非導体ゾーンのプロパティ"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
 #: pcbnew/dialogs/dialog_pad_properties.cpp:698
