@@ -173,7 +173,14 @@ bool isCopper( const PNS::ITEM* aItem )
 
 bool isEdge( const PNS::ITEM* aItem )
 {
-    return aItem->Layer() == Edge_Cuts || aItem->Layer() == Margin;
+    const BOARD_ITEM *parent = aItem->Parent();
+
+    if( parent )
+    {
+        return parent->GetLayer() == Edge_Cuts || parent->GetLayer () == Margin;
+    }
+
+    return false;
 }
 
 
@@ -1616,7 +1623,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     delete m_debugDecorator;
 
-    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR( m_view );
+    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR( );
     m_debugDecorator = dec;
 
     if( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
