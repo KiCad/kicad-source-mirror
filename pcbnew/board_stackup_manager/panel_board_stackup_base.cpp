@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,37 +13,6 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizerBrdThickness;
-	bSizerBrdThickness = new wxBoxSizer( wxHORIZONTAL );
-
-	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Board thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_thicknessLabel->Wrap( -1 );
-	bSizerBrdThickness->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBrdThickness->Add( m_thicknessCtrl, 0, wxALL, 5 );
-
-
-	bSizerBrdThickness->Add( 20, 0, 0, 0, 5 );
-
-	m_staticTextCT = new wxStaticText( this, wxID_ANY, _("Current thickness from stackup:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCT->Wrap( -1 );
-	bSizerBrdThickness->Add( m_staticTextCT, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_tcCTValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bSizerBrdThickness->Add( m_tcCTValue, 0, wxALL, 5 );
-
-
-	bSizerBrdThickness->Add( 5, 0, 0, 0, 5 );
-
-	m_buttonSetDielectricThickness = new wxButton( this, wxID_ANY, _("Set Dielectric Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonSetDielectricThickness->SetToolTip( _("Set thickness of all not locked dielectric layers.\nThe thickness will be the same for all not locked dielectric layers.") );
-
-	bSizerBrdThickness->Add( m_buttonSetDielectricThickness, 0, wxALL, 5 );
-
-
-	bMainSizer->Add( bSizerBrdThickness, 0, wxEXPAND|wxALL, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -117,7 +86,7 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	bSizer5->Add( m_scGridWin, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	m_sizerStackup->Add( bSizer5, 1, wxEXPAND, 5 );
+	m_sizerStackup->Add( bSizer5, 3, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -175,14 +144,48 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_buttonExport = new wxButton( this, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-
-	m_sizerStackup->Add( bSizerRight, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_sizerStackup->Add( bSizerRight, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( m_sizerStackup, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerBrdThickness;
+	bSizerBrdThickness = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextCT = new wxStaticText( this, wxID_ANY, _("Board thickness from stackup:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_staticTextCT->Wrap( -1 );
+	bSizerBrdThickness->Add( m_staticTextCT, 2, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	m_tcCTValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bSizerBrdThickness->Add( m_tcCTValue, 1, wxALL, 5 );
+
+
+	bSizer6->Add( bSizerBrdThickness, 2, wxEXPAND|wxALL, 5 );
+
+
+	bSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_buttonExport = new wxButton( this, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer6->Add( bSizer7, 1, wxEXPAND, 5 );
+
+
+	bMainSizer->Add( bSizer6, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -191,11 +194,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::OnUpdateUI ) );
-	m_thicknessCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
-	m_buttonSetDielectricThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCalculateDielectricThickness ), NULL, this );
 	m_buttonAddDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
+	m_tcCTValue->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 }
 
@@ -203,11 +205,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::~PANEL_SETUP_BOARD_STACKUP_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::OnUpdateUI ) );
-	m_thicknessCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
-	m_buttonSetDielectricThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCalculateDielectricThickness ), NULL, this );
 	m_buttonAddDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
 	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
+	m_tcCTValue->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 
 }

@@ -380,7 +380,7 @@ BOARD_STACKUP_ITEM* BOARD_STACKUP::GetStackupLayer( int aIndex )
 }
 
 
-int BOARD_STACKUP::BuildBoardTicknessFromStackup() const
+int BOARD_STACKUP::BuildBoardThicknessFromStackup() const
 {
     // return the board thickness from the thickness of BOARD_STACKUP_ITEM list
     int thickness = 0;

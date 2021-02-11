@@ -81,7 +81,6 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_units = aFrame->GetUserUnits();
 
     m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
-    m_stackupMismatch = false;
 
     // Calculates a good size for color swatches (icons) in this dialog
     wxClientDC dc( this );
@@ -105,7 +104,6 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_bitmapLockThickness->SetBitmap( KiScaledBitmap( locked_xpm, aFrame ) );
 
     // Gives a minimal size of wxTextCtrl showing dimensions+units
-    m_thicknessCtrl->SetMinSize( m_numericTextCtrlSize );
     m_tcCTValue->SetMinSize( m_numericTextCtrlSize );
 
     // Prepare dielectric layer type: layer type keyword is "core" or "prepreg"
@@ -331,21 +329,12 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
 }
 
 
-int PANEL_SETUP_BOARD_STACKUP::GetPcbThickness()
-{
-    return ValueFromString( m_units, m_thicknessCtrl->GetValue() );
-}
-
-
 void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 {
     const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
     if( aFullSync )
     {
-        int thickness = m_brdSettings->GetBoardThickness();
-        m_thicknessCtrl->SetValue( StringFromValue( m_units, thickness, true ) );
-
         m_rbDielectricConstraint->SetSelection( brd_stackup.m_HasDielectricConstrains ? 1 : 0 );
         m_choiceEdgeConn->SetSelection( brd_stackup.m_EdgeConnectorConstraints );
         m_cbCastellatedPads->SetValue( brd_stackup.m_CastellatedPads );
@@ -883,23 +872,10 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
     LSET layersList = m_panelLayers->GetUILayerMask() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
     if( m_enabledLayers != layersList )
-    {
-        for( size_t i = 0; i < m_parentDialog->GetTreebook()->GetPageCount(); ++i )
-        {
-            if( m_parentDialog->GetTreebook()->GetPage( i ) == this )
-            {
-                m_parentDialog->GetTreebook()->SetSelection( i );
-                break;
-            }
-        }
-
-        m_stackupMismatch = true;
-        return false;
-    }
+        OnLayersOptionsChanged( m_panelLayers->GetUILayerMask() );
 
     // The board thickness and the thickness from stackup settings should be compatible
     // so verify that compatibility
-    int pcbThickness = GetPcbThickness() ;
     int stackup_thickness = 0;
 
     wxString txt;
@@ -1042,28 +1018,6 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         row++;
     }
 
-    int delta = std::abs( stackup_thickness - pcbThickness );
-    double relative_error = pcbThickness ? (double)delta / pcbThickness : 1;
-    const double relative_error_max = 0.01;
-
-    // warn user if relative_error > 0.01
-    if( relative_error > relative_error_max )
-    {
-        wxString msg;
-        msg.Printf( _( "Board thickness %s differs from stackup thickness %s\n"
-                       "Allowed max error %s" ),
-                    StringFromValue( m_units, pcbThickness ),
-                    StringFromValue( m_units, stackup_thickness ),
-                    StringFromValue( m_units, KiROUND( relative_error_max * pcbThickness) ) );
-
-        if( !error_msg.IsEmpty() )
-            error_msg << "\n";
-
-        error_msg << msg;
-
-        success = false;
-    }
-
     if( !success )
     {
         wxMessageBox( error_msg, _( "Errors" ) );
@@ -1111,10 +1065,11 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     brd_stackup.FormatBoardStackup( &new_stackup, m_board, 0 );
 
     bool modified = old_stackup.GetString() != new_stackup.GetString();
+    int thickness = brd_stackup.BuildBoardThicknessFromStackup();
 
-    if( m_brdSettings->GetBoardThickness() != GetPcbThickness() )
+    if( m_brdSettings->GetBoardThickness() != thickness )
     {
-        m_brdSettings->SetBoardThickness( GetPcbThickness() );
+        m_brdSettings->SetBoardThickness( thickness );
         modified = true;
     }
 
@@ -1165,93 +1120,6 @@ void PANEL_SETUP_BOARD_STACKUP::OnLayersOptionsChanged( LSET aNewLayerSet )
 
         Layout();
         Refresh();
-    }
-}
-
-
-void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& event )
-{
-    // Collect thickness of all layers but dielectric
-    int thickness = 0;
-    int fixed_thickness_cnt = 0;
-    bool thickness_error = false;   // True if a locked thickness value in list is < 0
-    int dielectricCount = 0;
-
-    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
-    {
-        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
-        int sublayer_idx = ui_item.m_SubItem;
-
-        if( !item->IsThicknessEditable() || !ui_item.m_isEnabled )
-            continue;
-
-        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-        {
-            dielectricCount++;
-
-            wxCheckBox* checkBox = static_cast<wxCheckBox*>( ui_item.m_ThicknessLockCtrl );
-
-            if( !checkBox->GetValue() )  // Only not locked dielectric thickness can be modified
-                continue;
-            else
-            {
-                fixed_thickness_cnt++;
-
-                if( item->GetThickness( sublayer_idx ) < 0 )
-                    thickness_error = true;
-            }
-        }
-
-        thickness += item->GetThickness( sublayer_idx );
-    }
-
-    if( thickness_error )
-    {
-        wxMessageBox( _( "A locked dielectric thickness is < 0\n"
-                         "Unlock it or change its thickness") );
-        return;
-    }
-
-    // the number of adjustable dielectric layers must obviously be > 0
-    // So verify the user has at least one dielectric layer free
-    int adjustableDielectricCount = dielectricCount - fixed_thickness_cnt;
-
-    if( adjustableDielectricCount <= 0 )
-    {
-        wxMessageBox( _( "Cannot calculate dielectric thickness\n"
-                         "At least one dielectric layer must be not locked") );
-        return;
-    }
-
-    int dielectric_thickness = GetPcbThickness() - thickness;
-
-    if( dielectric_thickness <= 0 ) // fixed thickness is too big: cannot calculate free thickness
-    {
-        wxMessageBox( _( "Cannot calculate dielectric thickness\n"
-                         "Fixed thickness too big or board thickness too small") );
-        return;
-    }
-
-    dielectric_thickness /= adjustableDielectricCount;
-
-    // Update items thickness, and the values displayed on screen
-    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
-    {
-        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
-        int sublayer_idx = ui_item.m_SubItem;
-
-        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && ui_item.m_isEnabled )
-        {
-            wxCheckBox* checkBox = static_cast<wxCheckBox*>( ui_item.m_ThicknessLockCtrl );
-
-            if( !checkBox->GetValue() )  // Not locked thickness: can be modified
-            {
-                item->SetThickness( dielectric_thickness, sublayer_idx );
-                wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl );
-                textCtrl->SetValue( StringFromValue( m_units,
-                                                     item->GetThickness( sublayer_idx ) ) );
-            }
-        }
     }
 }
 
@@ -1544,33 +1412,6 @@ void drawBitmap( wxBitmap& aBitmap, wxColor aColor )
 
         p = rowStart;
         p.OffsetY(data, 1);
-    }
-}
-
-
-void PANEL_SETUP_BOARD_STACKUP::OnUpdateUI( wxUpdateUIEvent& event )
-{
-    // Handle an error.  This is delayed to OnUpdateUI so that we can change the focus
-    // even when the original validation was triggered from a killFocus event, and so
-    // that the corresponding notebook page can be shown in the background when triggered
-    // from an OK.
-    if( m_stackupMismatch )
-    {
-        m_stackupMismatch = false;
-
-        wxRichMessageDialog dlg( this,
-                                 _( "Physical stackup has not been updated to match layer count." ),
-                                 _( "Update Physical Stackup" ),
-                                 wxOK | wxCENTER | wxICON_WARNING );
-        dlg.ShowCheckBox( _( "Update dielectric thickness from board thickness" ), true );
-
-        dlg.ShowModal();
-
-        if( dlg.IsCheckBoxChecked() )
-        {
-            wxCommandEvent dummy;
-            onCalculateDielectricThickness( dummy );
-        }
     }
 }
 

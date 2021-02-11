@@ -270,7 +270,7 @@ public:
     int GetCount() const { return (int) m_list.size(); }
 
     /// @return the board thickness ( in UI) from the thickness of BOARD_STACKUP_ITEM list
-    int BuildBoardTicknessFromStackup() const;
+    int BuildBoardThicknessFromStackup() const;
 
     /// Add a new item in stackup layer
     void Add( BOARD_STACKUP_ITEM* aItem ) { m_list.push_back( aItem ); }
