@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-11 12:16+0000\n"
+"PO-Revision-Date: 2021-02-11 13:20+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1461,7 +1461,7 @@ msgstr "出力ディレクトリー \"%s\" を作成できませんでした。\
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
-msgstr "再表示しません"
+msgstr "再表示しない"
 
 #: common/confirm.cpp:128
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:248
