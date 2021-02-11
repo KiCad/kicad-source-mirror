@@ -777,7 +777,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
             CACHE PATH "Python module install path."
             )
 	elseif( VCPKG_TOOLCHAIN )
-        set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/lib/python3/Lib/site-packages"
+        set( PYTHON_DEST "${CMAKE_INSTALL_PREFIX}/bin/Lib/site-packages"
             CACHE PATH "Python module install path."
             )
     else()
