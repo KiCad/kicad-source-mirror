@@ -932,13 +932,23 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         }
     }
 
-    // Prefer a field to a symbol
+    // Prefer things that are generally smaller than a symbol to a symbol
+    const std::set<KICAD_T> preferred =
+            {
+                SCH_FIELD_T,
+                SCH_LINE_T,
+                SCH_BUS_WIRE_ENTRY_T,
+                SCH_NO_CONNECT_T,
+                SCH_JUNCTION_T,
+                SCH_MARKER_T
+            };
+
     for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
     {
         EDA_ITEM* item = collector[ i ];
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
-        if( item->Type() == SCH_FIELD_T && other->Type() == SCH_COMPONENT_T )
+        if( preferred.count( item->Type() ) && other->Type() == SCH_COMPONENT_T )
             collector.Transfer( other );
     }
 
