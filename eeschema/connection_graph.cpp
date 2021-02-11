@@ -505,11 +505,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         {
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                if( !pin->Connection( &aSheet ) )
-                    pin->InitializeConnection( aSheet, this );
+                pin->InitializeConnection( aSheet, this );
 
                 pin->ConnectedItems( aSheet ).clear();
-                pin->Connection( &aSheet )->Reset();
 
                 connection_map[ pin->GetTextPos() ].push_back( pin );
                 m_items.emplace_back( pin );
