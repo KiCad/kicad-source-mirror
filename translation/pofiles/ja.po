@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-10 14:11+0000\n"
+"PO-Revision-Date: 2021-02-11 06:56+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -644,7 +644,7 @@ msgstr "反射の点を評価するために投影される光線の数"
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
-msgstr ""
+msgstr "光線がオブジェクトを通過できる相互作用の回数。(特に非常に透明なボード上で、レベルの数が高いほど結果が改善されます)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
 msgid "Refractions:"
@@ -665,7 +665,7 @@ msgstr "光源の設定"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "カメラ環境光:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
 msgid "Top light:"
@@ -1613,7 +1613,7 @@ msgstr "リード開発の引退者"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "追加の貢献"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -3788,9 +3788,8 @@ msgid "Orthogonal Dimension"
 msgstr "直交寸法線"
 
 #: common/eda_item.cpp:274
-#, fuzzy
 msgid "Center Dimension"
-msgstr "現在のテキストの寸法"
+msgstr "中心マーク"
 
 #: common/eda_item.cpp:275 pcbnew/dimension.cpp:963
 msgid "Leader"
@@ -5031,7 +5030,6 @@ msgid "Unknown parent of function parameters"
 msgstr "関数パラメーターの親が不明"
 
 #: common/libeval_compiler/libeval_compiler.cpp:844
-#, fuzzy
 msgid "Unknown parent of property"
 msgstr "プロパティの親が不明"
 
@@ -5500,14 +5498,12 @@ msgid "Delete clicked items"
 msgstr "クリックしたアイテムを削除"
 
 #: common/tool/actions.cpp:197
-#, fuzzy
 msgid "Change Edit Method"
 msgstr "編集方法の変更"
 
 #: common/tool/actions.cpp:197
-#, fuzzy
 msgid "Change edit method constraints"
-msgstr "フットプリントを変更"
+msgstr "編集メソッドの制約を変更する"
 
 #: common/tool/actions.cpp:202 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -5870,9 +5866,8 @@ msgid "Update Schematic from PCB..."
 msgstr "基板 (PCB) から回路図を更新..."
 
 #: common/tool/actions.cpp:583
-#, fuzzy
 msgid "Update schematic with changes made to PCB"
-msgstr "基板 (PCB) から回路図を更新"
+msgstr "基板 (PCB) に加えられた変更を使用して回路図を更新"
 
 #: common/tool/actions.cpp:588
 msgid "Accelerated Graphics"
@@ -8089,9 +8084,8 @@ msgid "Text Editor"
 msgstr "テキスト エディター"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:54
-#, fuzzy
 msgid "Leave unchanged"
-msgstr "-- 未変更を維持 --"
+msgstr "変更しないままにする"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:44
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
@@ -10224,7 +10218,7 @@ msgstr "R"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -11123,9 +11117,8 @@ msgstr "(シンボル エディターのみ)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:241
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:494
-#, fuzzy
 msgid "Color Preview"
-msgstr "カラー ピッカー"
+msgstr "色のプレビュー"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:403
 msgid "/path/to/sheet"
@@ -12816,6 +12809,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"デザインが大きすぎるため、KiCadにインポートできません。CADSTARで\n"
+"[デザイン]タブ-> [プロパティ]-> [デザインオプション]-> [最大デザインサイズ]\n"
+"に移動して、最大デザインサイズを縮小してください。\n"
+"現在のデザインサイズ: %.2f, %.2f mm.\n"
+"最大許容設計サイズ: %.2f, %.2f mm.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:99
 #, c-format
@@ -12823,19 +12821,22 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
+"CADSTARのデザインには、KiCadに相当するものがないバリアントが含まれています。マスターバリアント( '%s' )のみがロードされました。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:107
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
+"CADSTARのデザインには、KiCadに相当するものがないグループ化されたアイテムが含まれています。グループ化されたアイテムはグループ化解除されています"
+"。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:114
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:122
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
-msgstr ""
+msgstr "CADSTARのデザインには、KiCadに相当するものがない再利用ブロックが含まれています。再利用ブロック情報はインポート中に破棄されました。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:171
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:127
@@ -12843,10 +12844,12 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"CADSTARのデザインは正常にインポートされました。\n"
+"(ある場合は)インポートのエラーと警告を確認してください。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:225
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "CADSTAR の回路図が壊れている可能性があります: ルート シートがありません。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:301
 #, c-format
@@ -12855,13 +12858,15 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"パーツ定義 '%s'は、シンボル ライブラリーに見つからなかったシンボル '%s'（代替は "
+"'%s'）を参照しています。パーツはKiCadライブラリーにロードされていません。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:336
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
-msgstr ""
+msgstr "シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' を参照しています。シンボルがロードされませんでした"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:359
 #, c-format
@@ -12869,20 +12874,21 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"シンボル ID '%s' は、ライブラリー内に見つからないシンボル '%s' を参照しています。デザインのすべてのアイテムをエクスポートしましたか?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:369
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr ""
+msgstr "シンボル ID '%s' は信号の参照またはグローバルの信号ですが、ピンが多すぎます。期待されるピン数は1ですが%dが見つかりました。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:450
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
-msgstr ""
+msgstr "シンボル ID '%s' は不明なタイプです。これは、コンポーネントでも、電源/シンボルでもありません。シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:463
 #, c-format
@@ -12891,6 +12897,8 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"シンボル '%s' は、元の CADSTAR 回路図では拡大縮小されていますが、KiCad "
+"ではサポートされていません。シンボルは1:1スケールでロードされ、手動で修正する必要があります。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:884
 #, c-format
@@ -12898,10 +12906,11 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"ドキュメンテーション シンボル '%s' は、ライブラリーに存在しないシンボル定義 ID '%s' を指します。シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "プロジェクトがアタッチされていないので、テキスト変数を設定できませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -12910,20 +12919,22 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"シンボル '%s' は、元の CADSTAR のデザインでは %.1f 度の角度で回転されていますが、KiCad は 90 "
+"度単位での回転しかサポートしていません。ワイヤーの接続は手動で修正する必要があります。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1240
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
-msgstr ""
+msgstr "シンボル '%s' は、デザインに存在しないシート ID '%s' を参照しています。シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1323
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
-msgstr ""
+msgstr "ネット %s は未知のネット要素 %s を参照します。ネットが正しくロードされておらず、手動で修正する必要がある場合があります。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1604
 #, c-format
@@ -12932,13 +12943,15 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"ブロック ID %s (ブロック名: '%s') はシート '%s' に描画されますが、デザイン内の別のシートにはリンクされていません。KiCad では、"
+"すべてのシート シンボルをシートに関連付ける必要があるため、ブロックはロードされませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
-msgstr ""
+msgstr "CADSTAR の回路図が壊れている可能性があります: ブロック %s は子シートを参照していますが、図は定義されていません。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:405
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:335
@@ -13090,14 +13103,14 @@ msgstr ""
 "オフセット: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正な浮動小数点数 \n"
+"言語設定で不正な浮動小数点数\n"
 "ファイル: \"%s\"\n"
 "行: %d\n"
 "オフセット: %d"
@@ -13655,6 +13668,139 @@ msgid ""
 "    </tr>\n"
 "</table>\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>マークアップ</th>\n"
+"        <th></th>\n"
+"        <th>出力結果</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{上付き文字}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>上付き文字</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{下付き文字}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>下付き文字</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~上線</samp><br> &nbsp;<br><samp>~CLK</samp><br> "
+"&nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>上線</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${変数}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>変数の値</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${リファレンス指定子:フィールド名}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの "
+"<i>フィールドの値</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>バスの定義</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>生成されるネット</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>接頭辞[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>接頭辞m to 接頭辞n</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{ネット1 ネット2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>ネット1, ネット2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>接頭辞{ネット1 ネット2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>接頭辞.ネット1, 接頭辞.ネット2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> "
+"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>"
+"\n"
+"    </tr>\n"
+"</table>\n"
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14130,19 +14276,16 @@ msgid "Voltage (swept)"
 msgstr "電圧 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "現在のネット:"
+msgstr "電流 (スイープ)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "抵抗"
+msgstr "抵抗(スイープ)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "温度上昇"
+msgstr "温度(スイープ)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -15509,13 +15652,10 @@ msgid "Remap Legacy Library Symbols..."
 msgstr "以前の形式のライブラリーのシンボルをリマップ..."
 
 #: eeschema/tools/ee_actions.cpp:591
-#, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
-msgstr ""
-"以前の形式のライブラリー シンボルをシンボル ライブラリー テーブルにリマップす"
-"る"
+msgstr "従来の回路図のライブラリー シンボルの参照をシンボル ライブラリー テーブルに再マップする"
 
 #: eeschema/tools/ee_actions.cpp:596
 msgid "Bus Definitions..."
@@ -15588,9 +15728,8 @@ msgid "Force H/V Wires and Buses"
 msgstr "バス、配線を90度入力に制限"
 
 #: eeschema/tools/ee_actions.cpp:636
-#, fuzzy
 msgid "Switch H & V only mode for new wires and buses"
-msgstr "配線、バスの90度入力"
+msgstr "配線、バスに90度入力制限を適用"
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Enter Sheet"
@@ -15714,9 +15853,8 @@ msgid "Align Elements to Grid"
 msgstr "グリッドに揃える"
 
 #: eeschema/tools/ee_inspection_tool.cpp:198
-#, fuzzy
 msgid "Symbol Warnings"
-msgstr "シンボル エイリアス:"
+msgstr "シンボルの警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
 #, c-format
@@ -15780,7 +15918,7 @@ msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%.3f, %.3f)</b
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr ""
+msgstr " "
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
 #, c-format
@@ -17079,7 +17217,7 @@ msgstr "CADSTAR プロジェクトをインポート..."
 
 #: kicad/menubar.cpp:95
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr ""
+msgstr "CADSTAR 回路図アーカイブと基板アーカイブ(*.csa, *.cpa)をインポートします"
 
 #: kicad/menubar.cpp:99
 msgid "Import EAGLE Project..."
@@ -20036,6 +20174,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"参照タイプ %s はすべてアノテーションされません。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:314
 msgid ""
@@ -20082,6 +20222,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"表面のフットプリントには、接頭辞として '%s' が挿入されます。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -20098,6 +20240,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"裏面のフットプリントには、接頭辞として '%s' が挿入されます。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
 #, c-format
@@ -20106,6 +20250,8 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"%sでソートする前に、その座標は %s, %s のグリッドに丸められます。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "footprint location"
@@ -20139,6 +20285,10 @@ msgid ""
 "There are %i types of reference designations\n"
 "**********************************************************\n"
 msgstr ""
+"\n"
+"\n"
+"リファレンス指定子は%i種類あります\n"
+"**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 #, c-format
@@ -20157,10 +20307,13 @@ msgid ""
 "    Change Array\n"
 "***********************\n"
 msgstr ""
+"\n"
+"    配列の変更\n"
+"***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:550
 msgid "will be ignored"
-msgstr ""
+msgstr "は無視されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:565
 msgid ""
@@ -20202,6 +20355,8 @@ msgid ""
 "\n"
 "%d %s Uuid: [%s], X, Y: %s, Rounded X, Y, %s"
 msgstr ""
+"\n"
+"%d %s Uuid: [%s], X, Y: %s, 丸められたX, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:614
 #, c-format
@@ -20210,6 +20365,9 @@ msgid ""
 "PCB has %d empty or invalid reference designations.\n"
 "Recommend you run DRC with 'Test footprints against schematic' checked.\n"
 msgstr ""
+"\n"
+"PCB には%d 個の空または無効なリファレンス指定子があります。\n"
+"「回路図に対するフットプリントのテスト」をオンにしてDRCを実行することをお勧めします。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:620
 #, c-format
@@ -20217,10 +20375,12 @@ msgid ""
 "\n"
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
+"\n"
+"リファレンス指定子: %s フットプリント: %s:%s (PCB 上の %s)."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:628
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "とにかく再アノテーションしますか？"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:661
 msgid ""
@@ -20313,6 +20473,9 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"コンポーネントの位置は並べ替える前にこのグリッドに\n"
+"丸められます。\n"
+"これは、パーツの位置がずれている場合に役立ちます。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
@@ -20367,13 +20530,13 @@ msgstr "裏面の開始リファレンス番号:"
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
-msgstr ""
+msgstr "空欄にして表面からの番号を継続するか、表面の一番大きなリファレンス指定子より大きい番号を入力します。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:231
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
-msgstr ""
+msgstr "空白またはゼロのままにするか、表面の一番大きいリファレンス指定子より大きい数値を入力します。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:236
 msgid "Remove front prefix"
@@ -20384,6 +20547,8 @@ msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
+"チェックすると、表面のフットプリントの接頭辞が削除されます。\n"
+"[先頭の接頭辞] が存在する場合は、その前に表示されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:241
 msgid "Remove back prefix"
@@ -20394,6 +20559,8 @@ msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
+"チェックすると、裏面のフットプリントの接頭辞が削除されます。\n"
+"[裏面の接頭辞] が存在する場合は、その前に表示されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:246
 msgid "Front prefix:"
@@ -20401,9 +20568,8 @@ msgstr "表面のリファレンス接頭辞:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (i.e. F_)"
-msgstr "コンポーネントのリファレンス記号の置換 (&t)"
+msgstr "部品面側のリファレンス指定子につけるオプションの接頭辞 (例: F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
@@ -20412,7 +20578,7 @@ msgstr "裏面のリファレンス接頭辞:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Optional prefix for solder side reference designations (i.e. B_)"
-msgstr ""
+msgstr "ハンダ面側のリファレンス指定子につけるオプションの接頭辞 (例: B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Exclude locked footprints"
@@ -20420,7 +20586,7 @@ msgstr "ロックされているフットプリントを除外する"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 msgid "Locked footprints will not be reannotated"
-msgstr ""
+msgstr "ロックされたフットプリントは再アノテーションされません"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:273
 msgid "Exclude references:"
@@ -20431,6 +20597,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"このタイプのリファレンスを再アノテーションをしません。\n"
+"(RはR*を意味します)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:294
 msgid "Reference Designators"
@@ -20790,7 +20958,7 @@ msgstr "配線とビアをクリーンアップ"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
 msgid "Constraints Resolution Report"
-msgstr ""
+msgstr "制約解決レポート"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:282
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
@@ -21026,7 +21194,6 @@ msgstr ""
 "3 = 丸角 (精細な形状)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:333
-#, fuzzy
 msgid "Smoothing amount:"
 msgstr "スムージング量:"
 
@@ -21423,7 +21590,6 @@ msgstr "精度:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
-#, fuzzy
 msgid "Choose how many digits of precision to display"
 msgstr "表示する精度の桁数を選択"
 
@@ -21637,9 +21803,8 @@ msgid "Do you wish to delete excluded markers as well?"
 msgstr "除外されたマーカーも同様に削除してよろしいですか?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:868
-#, fuzzy
 msgid "Delete exclusions"
-msgstr "選択の削除"
+msgstr "除外したマーカーを削除"
 
 #: pcbnew/dialogs/dialog_drc.cpp:939
 msgid "not run"
@@ -22579,12 +22744,14 @@ msgid ""
 "the footprint's pads are unlocked and can be moved with respect to the "
 "footprint."
 msgstr ""
+"フットプリントはキャンバス上で自由に移動し、向きを変えられます。フットプリントの少なくとも一部のパッドはロックが解除されており、フットプリントに対して移動"
+"することができます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:328
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
-msgstr ""
+msgstr "フットプリントはキャンバス上で自由に移動し、向きを変えられますが、そのパッドは全てフットプリントの位置に対してロックされています。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:331
 msgid ""
@@ -22592,6 +22759,8 @@ msgid ""
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
+"フットプリントはロックされています: "
+"キャンバス上で自由に移動したり向き変えることはできず、選択フィルターで[ロックされたアイテム]のチェックボックスが有効になっている場合にのみ選択できます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -23451,30 +23620,29 @@ msgid "Imported Layer"
 msgstr "インポートされたレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:253
-#, fuzzy
 msgid "KiCad Layer"
-msgstr "基板レイヤー"
+msgstr "KiCadレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"必要なすべての('*'でマークされている)レイヤーは一致している必要があります。残りのレイヤーを自動的に一致させるには、[レイヤーを自動一致]をクリックし"
+"てください"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
-#, fuzzy
 msgid "Unmatched Layers"
-msgstr "その他のレイヤー"
+msgstr "一致しないレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
 msgstr "インポートされたレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
-#, fuzzy
 msgid "KiCad Layers"
-msgstr "基板レイヤー"
+msgstr "KiCadレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
@@ -23482,7 +23650,7 @@ msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "選択したレイヤーを一致するレイヤーのリストに追加します。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
@@ -23497,27 +23665,24 @@ msgid "<<"
 msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
-#, fuzzy
 msgid "Remove all matched layers."
-msgstr "一致したものを全て置換"
+msgstr "一致したレイヤーをすべて削除します。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
-#, fuzzy
 msgid "Matched Layers"
-msgstr "その他のレイヤー"
+msgstr "一致するレイヤー"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
-#, fuzzy
 msgid "Auto-Match Layers"
-msgstr "自動的にレイヤーを配置"
+msgstr "レイヤーを自動一致"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
-msgstr ""
+msgstr "一致しないレイヤーを自動的にKiCadの同等ものに一致させます。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "インポートされたレイヤーのマッピングを編集"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
@@ -23677,17 +23842,16 @@ msgid "RegEx"
 msgstr "正規表現"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
-#, fuzzy
 msgid "Wildcard Substr"
-msgstr "ワイルドカード"
+msgstr "ワイルドカードの部分文字列"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "正規表現の部分文字列"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
-msgstr "ファイルを作成..."
+msgstr "レポートを作成..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:741
@@ -23806,9 +23970,8 @@ msgid "degree"
 msgstr "度"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
-#, fuzzy
 msgid "Smooth amount:"
-msgstr "スムージング効果:"
+msgstr "スムージング量:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:83
 msgid "Non Copper Zones Properties"
@@ -23917,7 +24080,7 @@ msgstr "全ての導体レイヤー"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:915
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr ""
+msgstr "%s, %s および接続されたレイヤー"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
 msgid "Connected layers only"
@@ -23940,7 +24103,6 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1254
-#, fuzzy
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr "警告: ローカルクリアランス値が負の値では効果がありません。"
 
@@ -23959,18 +24121,14 @@ msgid ""
 msgstr "警告: パッドよりも大きい負のハンダ マスクのクリアランスです。ハンダ マスクは生成されません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアラ"
-"ンス)"
+msgstr "警告: 負のハンダ ペーストの余白がパッドよりも大きいです。ハンダ ペースト マスクは生成されません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1302
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "エラー:パッドにレイヤー情報がありません"
+msgstr "エラー: パッドにレイヤーがありません。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1308
 #, fuzzy
@@ -24030,7 +24188,7 @@ msgstr "エラー: コーナーのサイズが負の値です。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1392
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "警告: このコーナーサイズではパッドが円形になります。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Custom pad shape must resolve to a single polygon."
@@ -24093,7 +24251,7 @@ msgstr "パッド番号:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
-msgstr ""
+msgstr "親のフットプリントに対するパッドの位置を変更できないようにします"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -24661,12 +24819,12 @@ msgstr "プロット前にゾーンの塗り潰しをチェック"
 msgid ""
 "Global solder mask min width and/or margin are not set to 0.  Most board "
 "houses"
-msgstr ""
+msgstr "グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていません。 ほとんどのボードハウスは"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid ""
 "expect 0 and use their constraints, especially for solder mask min width."
-msgstr ""
+msgstr "0 を指定し、特にハンダ マスクの最小幅に対して制約を使用します。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -25446,9 +25604,8 @@ msgid "Change Nets"
 msgstr "ネットを変更"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "-- 未変更を維持 --"
+msgstr "ネットを変更しないままにする"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
 msgid "Via hole size must be smaller than via diameter"
@@ -25718,9 +25875,8 @@ msgid "Magnetic pads"
 msgstr "マグネティック パッド"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "マグネティック配線"
+msgstr "マグネティック図形"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:41
 msgid "Lock pads of newly added footprints"
@@ -25808,9 +25964,8 @@ msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:236
-#, fuzzy
 msgid "Highlight net (for pads or tracks)."
-msgstr "未接続のパッドど配線を列挙"
+msgstr "ネットをハイライトします。(パッドまたはトラック)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:167
 msgid ""
@@ -26029,7 +26184,6 @@ msgid "X Axis"
 msgstr "X軸"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
-#, fuzzy
 msgid "Select which the direction on the screen in which the X axis increases."
 msgstr "画面上でX軸が増加する方向を選択します。"
 
@@ -26046,7 +26200,6 @@ msgid "Y Axis"
 msgstr "Y軸"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
-#, fuzzy
 msgid "Select which the direction on the screen in which the Y axis increases."
 msgstr "画面上でY軸が増加する方向を選択します。"
 
@@ -26977,7 +27130,6 @@ msgid "ERROR:"
 msgstr "エラー:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:419
-#, fuzzy
 msgid "Design rules cannot be added without a project"
 msgstr "プロジェクトなしでデザインルールを追加することはできません"
 
@@ -27188,19 +27340,16 @@ msgid "Board and netclass clearances apply only between copper items."
 msgstr "基板とネットクラスのクリアランスは、導体のアイテム間でのみ適用されます。"
 
 #: pcbnew/drc/drc_engine.cpp:863
-#, fuzzy
 msgid "Keepout constraint not met."
-msgstr "制限なし"
+msgstr "キープアウトの制約が満たされていません。"
 
 #: pcbnew/drc/drc_engine.cpp:865
-#, fuzzy
 msgid "Disallow constraint not met."
-msgstr "拡大率 (X) は制限されています。"
+msgstr "不許可の制約が満たされていません。"
 
 #: pcbnew/drc/drc_engine.cpp:874
-#, fuzzy
 msgid "Keepout layer(s) not matched."
-msgstr "ルール \"%s\" が見つかりません。"
+msgstr "キープアウト レイヤーが一致しません。"
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:899
 #, c-format
@@ -27208,14 +27357,12 @@ msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "ルールレイヤー '%s' が一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/drc/drc_engine.cpp:904
-#, fuzzy
 msgid "Rule layer not matched; rule ignored."
-msgstr "ルール \"%s\" が見つかりません。"
+msgstr "ルール レイヤーが一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:912
-#, fuzzy
 msgid "Unconditional constraint applied."
-msgstr "拡大率 (X) は制限されています。"
+msgstr "条件なしの制約が適用されます。"
 
 #: pcbnew/drc/drc_engine.cpp:913
 msgid "Unconditional rule applied."
@@ -27227,9 +27374,8 @@ msgid "Checking rule condition \"%s\"."
 msgstr "ルールの条件 \"%s\" をチェック"
 
 #: pcbnew/drc/drc_engine.cpp:932
-#, fuzzy
 msgid "Constraint applied."
-msgstr "制約タイプ"
+msgstr "制約が適用されました。"
 
 #: pcbnew/drc/drc_engine.cpp:933
 msgid "Rule applied; overrides previous constraints."
@@ -27505,7 +27651,6 @@ msgid "Missing opt value."
 msgstr "最適値がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
-#, fuzzy
 msgid "Missing layer name or type."
 msgstr "レイヤー名またはタイプがありません。"
 
@@ -27619,9 +27764,8 @@ msgid "Checking board edge clearances..."
 msgstr "基板端クリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:157
-#, fuzzy
 msgid "Checking hole to hole clearances..."
-msgstr "穴から穴へのクリアランス:"
+msgstr "穴間のクリアランスをチェックしています..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:288
 #, c-format
@@ -27656,7 +27800,6 @@ msgid "Missing footprint %s (%s)"
 msgstr "見つからないフットプリント %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:139
-#, fuzzy
 msgid "No corresponding pin found in schematic."
 msgstr "回路図に対応するピンが見つかりません。"
 
@@ -27927,7 +28070,6 @@ msgid "Create a new project for this board"
 msgstr "この基板の新規プロジェクトを作成"
 
 #: pcbnew/files.cpp:204
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
@@ -28146,9 +28288,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "基板の %s を編集します。 保存するとボードのみが更新されます。"
 
 #: pcbnew/footprint_edit_frame.cpp:751
-#, fuzzy, c-format
+#, c-format
 msgid "%s [from %s.%s]"
-msgstr "%s を更新 %s から %s へ"
+msgstr "%s [%s.%s から]"
 
 #: pcbnew/footprint_edit_frame.cpp:778 pcbnew/pcb_edit_frame.cpp:1184
 msgid "[Unsaved]"
@@ -29262,9 +29404,8 @@ msgid "Trapezoid"
 msgstr "台形"
 
 #: pcbnew/pad.cpp:1446
-#, fuzzy
 msgid "Castellated pad"
-msgstr "端面スルーホール"
+msgstr "端面スルーホール パッド"
 
 #: pcbnew/pad.cpp:1452
 msgid "Pad Type"
@@ -29400,7 +29541,6 @@ msgid "Footprint has no back courtyard."
 msgstr "フットプリントに裏面のコートヤードがありません。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:758
-#, fuzzy
 msgid "must be mm, in, or mil"
 msgstr "mm、in、または mil でなければなりません"
 
@@ -29554,14 +29694,14 @@ msgstr ""
 msgid ""
 "Polygon has only %d point extracted from %ld vertices. At least 2 points are "
 "required."
-msgstr ""
+msgstr "ポリゴンには、%d個の点(%ld個の頂点から抽出された)しかありません。少なくとも2点が必要です。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1445
 #, c-format
 msgid ""
 "ShapeBasedRegion has only %d point extracted from %ld vertices. At least 2 "
 "points are required."
-msgstr ""
+msgstr "ShapeBasedRegion には、%d個の点(%ld個の頂点から抽出された)しかありません。少なくとも2点が必要です。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1473
 #, c-format
@@ -29581,13 +29721,12 @@ msgstr ""
 "Eco1_User 上に配置して下さい"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1651
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
 "instead"
 msgstr ""
-"Altium レイヤー %d 上の円弧は KiCad と等価ではありません。代わりに Eco1_User "
-"上に配置して下さい"
+"Altium レイヤー %d 上のArc Keepout は KiCad に同等のものがありません。代わりに Eco1_User 上に配置します"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1670
 #, c-format
@@ -29647,13 +29786,12 @@ msgstr ""
 "ません"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track Keepout on Altium layer %d has no KiCad equivalent. Put it on "
 "Eco1_User instead"
 msgstr ""
-"Altium レイヤー %d 上の配線は KiCad と等価ではありません。代わりに Eco1_User "
-"上に配置して下さい"
+"Altium レイヤー %d 上のTrack Keepout は KiCadに同等のものがありません。代わりに Eco1_User 上に配置します"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2255
 #, c-format
@@ -29694,19 +29832,22 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"選択されたファイルは、ネットが回路図と同期していない可能性があることを示します。PCBと回路図の間の不整合を避けるために、CADSTAR で "
+"'Align Nets' の手順を実行して再インポートすることをお勧めします。 "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:107
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
+"CADSTAR のデザインには、KiCad に相当するものがないTrunk Routingの要素が含まれています。これらの要素は読み込まれませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
-msgstr ""
+msgstr "CADSTAR のデザインには、KiCad に相当するもののないバリアントが含まれています。バリアント '%s' だけが読み込まれました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
@@ -29714,6 +29855,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"CADSTAR のレイヤー '%s' は、同等のものが KiCad にありません。このレイヤー上のすべての要素は、代わりにKiCadのレイヤー'%s' "
+"にマッピングされます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
@@ -29721,16 +29864,18 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"CADSTAR のレイヤー '%s'はテクニカルレイヤーであると想定されています。このレイヤー上のすべての要素はKiCad のレイヤー '%s' "
+"にマップされています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:441
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "レイヤースタック内に予期しないレイヤー '%s' があります。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:598
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "デザインルール %s が見つかりませんでした。これは無視されました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:624
 msgid ""
@@ -29738,6 +29883,8 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"KiCadのデザインルールはCADSTARのデザインルールとは異なります。互換性のあるデザインルールのみがインポートされました。適用されているデザインルー"
+"ルを確認することをお勧めします。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:726
 #, c-format
@@ -29746,27 +29893,29 @@ msgid ""
 "equivalent. The area is neither a via orroute keepout area. The area was not "
 "imported."
 msgstr ""
+"CADSTAR の ライブラリー コンポーネント '%s' の エリア '%s' "
+"は、KiCadに同等のものがありません。このエリアは、ビアまたは配線のキープアウト領域ではありません。その領域はインポートされませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:961
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
-msgstr ""
+msgstr "CADSTARのパッド定義 '%s' はパッド形状の外側に穴の形状を持っています。穴をパッドの中央に移動しています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1022
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
-msgstr ""
+msgstr "ファイルが破損しているようです。グループ定義の中にグループID %sが見つかりません。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1029
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
 "(parent group ID=%s, Name=%s)."
-msgstr ""
+msgstr "ファイルが破損しているようです。グループマップにサブグループ %s が見つかりません。(親グループID = %s, 名前= %s)"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
 #, c-format
@@ -29782,6 +29931,8 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"寸法ID %s はCADSTARで'External'スタイルを持っています。Externalの寸法スタイルはKiCadではまだサポートされていません。寸"
+"法オブジェクトは代わりに内部寸法のスタイルでインポートされました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, c-format
@@ -29802,23 +29953,25 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"CADSTAR のエリア '%s' は CADSTARでは配置エリアとしてマークされています。配置エリアは KiCad "
+"ではサポートされていません。その領域でサポートされている要素のみがインポートされました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1354
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr ""
+msgstr "CADSTAR のエリア '%s' は、KiCad に相当するものはありません。純粋な配置エリアはサポートされていません。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1381
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr ""
+msgstr "ライブラリー内にコンポーネント '%s' が見つかりません(Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1496
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
+msgstr "ライブラリー内にドキュメンテーション シンボルが見つかりません (Symdef ID: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1562
 #, c-format
@@ -29826,6 +29979,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR のテンプレート '%s' は 'Allow in No Routing Areas' "
+"が有効になっています。KiCadにはこれに相当する設定がないため、無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
 #, c-format
@@ -29833,6 +29988,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR のテンプレート '%s' は 'Box Isolated Pins' "
+"が有効になっています。KiCadにはこれに相当する設定がないため、無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
 #, c-format
@@ -29840,6 +29997,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR のテンプレート '%s' は 'Automatic Repour' "
+"が有効になっています。KiCadにはこれに相当する設定がないため、無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1583
 #, c-format
@@ -29848,6 +30007,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"CADSTAR のテンプレート '%s' は'Silver "
+"Width'の設定に0以外の値が定義されています。KiCadにはこれに相当する設定がないため、無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1591
 #, c-format
@@ -29857,6 +30018,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"CADSTARのテンプレート '%s' の 'Retain Poured Copper-Disjoint'と 'Retain Poured Copper-"
+"Isolated'の設定が異なります。 KiCadはこれら2つの設定を区別しません。 "
+"KK分離銅された導体の設定はKiCadゾーンの最小の島面積として適用されています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1622
 #, c-format
@@ -29865,6 +30029,8 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"CADSTAR のテンプレート '%s' はパッドとビアでサーマルリリーフの設定が異なります。KiCad は両方に対して "
+"1つの設定のみサポートしています。パッドの設定が適用されました。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1662
 #, c-format
@@ -29873,6 +30039,8 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"CADSTARのレイヤー '%s' は、パワープレーン "
+"レイヤーとして定義されます。ただし、そのような名前のネットは存在しません。レイヤーはロードされましたが、導体ゾーンは作成されませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1706
 msgid ""
@@ -29881,24 +30049,26 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"CADSTARのデザインには、直接KiCadに対応するもののない導体の要素が含まれています。これらは、ソリッドまたはハッチングで塗りつぶされている場合は "
+"KiCadのゾーンとしてインポートされ、形状が塗りつぶされていない輪郭(開いているか閉じている)の場合は KiCad の配線としてインポートされています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1804
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
-msgstr ""
+msgstr "ネット '%s' は、存在しないコンポーネントID '%s' を参照しています。これは無視されています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1810
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
-msgstr ""
+msgstr "ネット '%s' は、存在しないパッド インデックス '%d' (コンポーネント '%s' 中) を参照します。これは無視されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "プロジェクトが読み込まれていないため、テキスト変数を設定できませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -29907,13 +30077,15 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"CADSTARの ビア コード '%s' は、定義された円とは異なる形状を持っています。KiCadは円形のビアのみをサポートしているので、"
+"このビアタイプは直径 %.2f mmの円形のビアに変更されています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2176
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr ""
+msgstr "'%s' の形状は、KiCadに相当するもののない、CADSTARでの塗りつぶしがされています。代わりにベタ塗りつぶしを使用します。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2897
 #, c-format
@@ -29922,6 +30094,8 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"CADSTAR のハッチングコード '%s' には %d つのハッチングが定義されています。KiCad は、90 度離れた 2 つのハッチ "
+"(クロスハッチング) のみをサポートします。インポートされたハッチングはクロスハッチングになります。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2907
 #, c-format
@@ -29930,6 +30104,8 @@ msgid ""
 "KiCad only supports one width for the haching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"CADSTAR のハッチングコード '%s' は、ハッチングごとに異なる線幅を持っています。KiCad は1 "
+"つの幅のみのハッチングに対応します。インポートされたハッチングは、最初のハッチング定義で定義された幅、すなわち%.2fmm を使用します。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2919
 #, c-format
@@ -29953,7 +30129,7 @@ msgstr ""
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
-msgstr ""
+msgstr "寸法 ID %s はKiCad でサポートされていないタイプの単位を使用しています。代わりにmmが適用しています。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
@@ -29962,6 +30138,9 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
+"CADSTARのデザインには、'net class' が割り当てられたネットが含まれています。KiCadはCADSTARのネットクラスと同等のものを持って"
+"いないため、これらの要素はインポートされませんでした。注注: KiCadでの'ネットクラス'は、CADSTARの'Net Route "
+"Code'(すべてのネットに対してインポートされている)が近いです。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3106
 msgid ""
@@ -29970,6 +30149,9 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
+"CADSTARのデザインでは、'Spacing Class' が割り当てられたネットが含まれています。KiCad には CADSTAR "
+"の'Spacing Class' "
+"と同等のものがないため、これらの要素はインポートされませんでした。銅の注入はこれによって影響を受けるため、設計ルールを確認してください。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:948
 #, c-format
@@ -29986,27 +30168,27 @@ msgstr "パッケージ \"%s\" がライブラリー \"%s\" 内に見つかり�
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2025
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle のレイヤー '%s'（%d）がマップされていないため、ポリゴンを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1599
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle のレイヤー '%s'（%d）がマップされていないため、ワイヤーを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1772
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle のレイヤー '%s'（%d）がマップされていないため、テキストを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1910
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle のレイヤー '%s'（%d）がマップされていないため、矩形を無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2095
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Eagle のレイヤー '%s'（%d）がマップされていないため、円を無視します"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
 msgid "Could not read file "
@@ -30015,16 +30197,16 @@ msgstr "ファイル \"%s\" を作成できません "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:194
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "未知のFABMASTERセクション %s:%s 行 %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:209
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
-msgstr ""
+msgstr "J 行 %zu の行サイズが無効です。 11 個の要素が必要ですが、%zu が見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:231
 msgid "Could not find units value, defaulting to Mils"
-msgstr ""
+msgstr "単位値が見つかりませんでした。(既定値は Milsです)"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:256
 #, fuzzy, c-format
@@ -30044,17 +30226,17 @@ msgstr "ライブラリー ファイル %s が見つかりません"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1630
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
-msgstr ""
+msgstr "行 %zu の行サイズが無効です。 %zu 個の要素が必要ですが、%zu が見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:431
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s at line %zu"
-msgstr ""
+msgstr "ドリルサイズの値を期待していましたが %s! %s!%s が行%zu で見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:477
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr ""
+msgstr "パッドサイズの値が必要ですが、%s:%s が行%zuで見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:497
 #, c-format
@@ -30064,7 +30246,7 @@ msgstr "不正なパッドサイズ : %zu行目"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:532
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr ""
+msgstr "パッドのオフセット値を期待していましたが、 %s:%s が行%zuで見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:575
 #, c-format
@@ -30079,17 +30261,17 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:929
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr ""
+msgstr "図形アイテム %d をパッドスタック \"%s\" に挿入できませんでした"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:935
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
-msgstr ""
+msgstr "認識されていないパッド形状プリミティブ \"%s\" が 行%zuにあります。"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1041
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr ""
+msgstr "トークン数が無効です。 8を期待しましたが、%zu が見つかりました"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1175
 #, c-format
@@ -30111,17 +30293,17 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1369
 #, c-format
 msgid "Unhandled graphic item '%s' in Traces definition row %zu"
-msgstr ""
+msgstr "未処理の図形アイテム '%s' がトレース定義行 %zu にあります"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1393
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1406
 #, c-format
 msgid ""
 "Duplicate item for ID %d and sequence %d in Traces definition row %zu \n"
-msgstr ""
+msgstr "ID %d とシーケンス %d で重複したアイテムがトレース定義行 %zu にあります \n"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2154
-#, c-format, fuzzy
+#, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
 msgstr "'%s' という名前のカスタム パッドが無効です。円形パッドで置き換えます。"
 
@@ -30133,7 +30315,7 @@ msgstr "%s という名前のカスタムパッドが見つかりません"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2371
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
-msgstr ""
+msgstr "導体層上にエッチングデータが必要です。レイヤー '%s' で行が見つかりました"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -30226,7 +30408,6 @@ msgstr ""
 "とにかく保存しますか？"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:337
-#, fuzzy
 msgid "Internal group data structure corrupt"
 msgstr "内部グループデータ構造が壊れています"
 
@@ -31180,7 +31361,7 @@ msgstr "解決済みクリアランス: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
-msgstr ""
+msgstr "クリアランス解決レポートの項目を2つ選択します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:271
 msgid "Clearance Report"
@@ -31188,7 +31369,6 @@ msgstr "クリアランス レポート"
 
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #: pcbnew/tools/board_inspection_tool.cpp:313
-#, fuzzy
 msgid "Cannot generate clearance report on empty group."
 msgstr "空のグループに対するクリアランスレポートを生成できません。"
 
@@ -31198,9 +31378,8 @@ msgstr "シルクスクリーン クリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:368
 #: pcbnew/tools/board_inspection_tool.cpp:389
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "基板端クリアランスの解決:"
+msgstr "穴のクリアランスの解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:380
 #: pcbnew/tools/board_inspection_tool.cpp:401
@@ -31226,9 +31405,8 @@ msgid "Select an item for a constraints resolution report."
 msgstr "制約解決レポートの項目を選択します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:475
-#, fuzzy
 msgid "Constraints Report"
-msgstr "フットプリント レポート"
+msgstr "制約レポート"
 
 #: pcbnew/tools/board_inspection_tool.cpp:518
 msgid "Track width resolution for:"
@@ -31377,9 +31555,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "自己交差したポリゴンは禁止されています"
 
 #: pcbnew/tools/drawing_tool.cpp:2290
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "違反の深刻度"
+msgstr "ビアの場所は DRC に違反します。"
 
 #: pcbnew/tools/drawing_tool.cpp:2397
 msgid "Place via"
@@ -31402,9 +31579,8 @@ msgid "Special Tools"
 msgstr "スペシャル ツール"
 
 #: pcbnew/tools/edit_tool.cpp:574
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "配線/ビアをドラッグ"
+msgstr "円弧の配線をドラッグ"
 
 #: pcbnew/tools/edit_tool.cpp:675
 msgid "Select reference point for move..."
@@ -31429,7 +31605,6 @@ msgid "Fillet Tracks"
 msgstr "フィレット半"
 
 #: pcbnew/tools/edit_tool.cpp:1044
-#, fuzzy
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -31488,7 +31663,6 @@ msgid "Group is in inconsistent state:"
 msgstr "グループが不整合状態です:"
 
 #: pcbnew/tools/group_tool.cpp:146
-#, fuzzy
 msgid "Click on new member..."
 msgstr "新しいメンバーをクリックしてください..."
 
@@ -32146,9 +32320,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Excellon ドリル ファイルを生成"
 
 #: pcbnew/tools/pcb_actions.cpp:568
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "コンポーネント パラメーター"
+msgstr "部品配置ファイル(.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Generate component placement file(s) for pick and place"
@@ -32239,9 +32412,8 @@ msgid "Toggle Lock"
 msgstr "ロックを切替"
 
 #: pcbnew/tools/pcb_actions.cpp:658
-#, fuzzy
 msgid "Add the selected items to a new group"
-msgstr "数値を指定して選択中のアイテムを移動"
+msgstr "選択したアイテムを新しいグループに追加"
 
 #: pcbnew/tools/pcb_actions.cpp:663
 msgid "Ungroup"
@@ -32260,9 +32432,8 @@ msgid "Enter Group"
 msgstr "グループに入る"
 
 #: pcbnew/tools/pcb_actions.cpp:673
-#, fuzzy
 msgid "Enter the group to edit items"
-msgstr "レポートファイル名を入力"
+msgstr "グループに入ってアイテムを編集します"
 
 #: pcbnew/tools/pcb_actions.cpp:678
 msgid "Leave Group"
@@ -32626,9 +32797,8 @@ msgid "Constraints Resolution..."
 msgstr "制限の解決..."
 
 #: pcbnew/tools/pcb_actions.cpp:1047
-#, fuzzy
 msgid "Show constraints resolution for the selected object"
-msgstr "選択されたネットのラッツネストを表示"
+msgstr "選択されたオブジェクトの制約の解決を表示します"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Geographical Reannotate..."
@@ -33732,7 +33902,6 @@ msgid "Zone %s on %s"
 msgstr "ゾーン %s ( %s 上)"
 
 #: pcbnew/zone.cpp:1394
-#, fuzzy
 msgid "Inherited"
 msgstr "継承"
 
