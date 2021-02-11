@@ -175,9 +175,6 @@ bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUs
     wxFileName pyHome;
 
     pyHome.Assign( Pgm().GetExecutablePath() );
-    pyHome.AppendDir( wxT("..") );
-    pyHome.AppendDir( wxT("lib") );
-    pyHome.AppendDir( wxT("python3") );
 
     pyHome.Normalize();
 
