@@ -65,6 +65,9 @@ public:
     struct COMMAND_POLYLINE;
     struct COMMAND_POINT_POLYLINE;
 
+    struct COMMAND_GLYPH_SIZE;
+    struct COMMAND_BITMAP_TEXT;
+
     void Clear();
 
     virtual const BOX2I ViewBBox() const override;
@@ -83,14 +86,19 @@ public:
     // polygon primitives
     void Polygon( const std::deque<VECTOR2D>& aPointList );
     void Polygon( const SHAPE_POLY_SET& aPolySet );
+    void Polyline( const SHAPE_LINE_CHAIN& aPolyLine );
     void Polygon( const VECTOR2D aPointList[], int aListSize );
 
+    void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle );
+    
     // Draw settings
     void SetIsFill( bool aIsFillEnabled );
     void SetIsStroke( bool aIsStrokeEnabled );
     void SetFillColor( const COLOR4D& aColor );
     void SetStrokeColor( const COLOR4D& aColor );
-
+    void SetGlyphSize( const VECTOR2D aSize );
+    
     void SetLineWidth( double aLineWidth );
 
 private:

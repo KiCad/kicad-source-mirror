@@ -218,6 +218,38 @@ struct VIEW_OVERLAY::COMMAND_SET_WIDTH : public VIEW_OVERLAY::COMMAND
 };
 
 
+struct VIEW_OVERLAY::COMMAND_GLYPH_SIZE : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_GLYPH_SIZE( const VECTOR2D aSize ) :
+        m_size( aSize ) {};
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->SetGlyphSize( m_size );
+    }
+
+    VECTOR2D m_size;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_BITMAP_TEXT( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle ) :
+        m_text( aText ),
+        m_pos( aPosition ),
+        m_angle (aRotationAngle) {};
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->BitmapText( m_text, m_pos, m_angle );
+    }
+
+    double m_angle;
+    wxString m_text;
+    VECTOR2D m_pos;
+};
+
 VIEW_OVERLAY::VIEW_OVERLAY()
 {
 }
@@ -286,6 +318,17 @@ void VIEW_OVERLAY::Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoi
 }
 
 
+void VIEW_OVERLAY::Polyline( const SHAPE_LINE_CHAIN& aPolyLine )
+{
+    SetIsStroke( true );
+    SetIsFill( false );
+    for( int i = 0; i < aPolyLine.SegmentCount(); i++ )
+    {
+        Line( aPolyLine.CSegment( i ) );
+    }
+}
+
+
 void VIEW_OVERLAY::Polygon( const SHAPE_POLY_SET& aPolySet )
 {
     m_commands.push_back( new COMMAND_POLY_POLYGON( aPolySet ) );
@@ -326,6 +369,19 @@ void VIEW_OVERLAY::Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 void VIEW_OVERLAY::SetIsFill( bool aIsFillEnabled )
 {
     m_commands.push_back( new COMMAND_SET_FILL( aIsFillEnabled ) );
+}
+
+
+void VIEW_OVERLAY::SetGlyphSize( const VECTOR2D aSize )
+{
+    m_commands.push_back( new COMMAND_GLYPH_SIZE( aSize ) );
+}
+
+
+void VIEW_OVERLAY::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle )
+{
+    m_commands.push_back( new COMMAND_BITMAP_TEXT( aText, aPosition, aRotationAngle ) );
 }
 
 
