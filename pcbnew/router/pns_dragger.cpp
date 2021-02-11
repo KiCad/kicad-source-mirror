@@ -405,8 +405,8 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
             //Dbg()->AddBox( *affectedArea, 2 );
             optimizer.SetRestrictArea( *affectedArea );
             optimizer.Optimize( &aDragged );
-	}
-        
+
+
 
             OPT_BOX2I optArea = *aDragged.ChangedArea( &aOrig );
             if( optArea )
@@ -497,6 +497,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
         if( ok )
         {
+            //Dbg()->AddLine( origLine.CLine(), 4, 100000 );
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
