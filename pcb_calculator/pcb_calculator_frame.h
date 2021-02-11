@@ -70,6 +70,9 @@ private:
     std::vector<ATTENUATOR*> m_attenuator_list;
     wxString                 m_lastSelectedRegulatorName; // last regulator name selected
 
+    int                      m_lastNotebookPage;
+    int                      m_lastRadioButton;
+
 public:
     PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PCB_CALCULATOR_FRAME();
@@ -78,10 +81,7 @@ private:
     // Event handlers
     void OnClosePcbCalc( wxCloseEvent& event ) override;
 
-    // These 3 functions are called by the OnPaint event, to draw
-    // icons that show the current item on the specific panels
-    void OnPaintTranslinePanel( wxPaintEvent& event ) override;
-    void OnPaintAttenuatorPanel( wxPaintEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     // Config read-write, virtual from EDA_BASE_FRAME
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -127,7 +127,7 @@ private:
      * Radio Buttons to select the E-serie for the resistor calculator
      * @param event contains the radio button state
      */
-    void OnESerieSelection( wxCommandEvent& event ) override;
+    void OnESeriesSelection( wxCommandEvent& event ) override;
 
     /**
      * Function TW_WriteConfig
@@ -174,23 +174,23 @@ private:
      * Function TWCalculateWidth
      * Calculate track width required based on given current and temperature rise.
      */
-    double TWCalculateWidth(
-            double aCurrent, double aThickness, double aDeltaT_C, bool aUseInternalLayer );
+    double TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
+                             bool aUseInternalLayer );
 
     /**
      * Function TWCalculateCurrent
      * Calculate maximum current based on given width and temperature rise.
      */
-    double TWCalculateCurrent(
-            double aWidth, double aThickness, double aDeltaT_C, bool aUseInternalLayer );
+    double TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
+                               bool aUseInternalLayer );
 
     /**
      * Function TWDisplayValues
      * Displays the results of a calculation (including resulting values such
      * as the resistance and power loss).
      */
-    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth, double aExtThickness,
-            double aIntThickness );
+    void TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
+                          double aExtThickness, double aIntThickness );
 
     /**
      * Function TWUpdateModeDisplay
@@ -246,8 +246,9 @@ private:
      * Displays the results of the calculation.
      */
     void VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
-            double aEstimatedAmpacity, double aThermalResistance, double aCapacitance,
-            double aTimeDegradation, double aInductance, double aReactance );
+                          double aEstimatedAmpacity, double aThermalResistance,
+                          double aCapacitance, double aTimeDegradation, double aInductance,
+                          double aReactance );
 
     // Electrical spacing panel:
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;

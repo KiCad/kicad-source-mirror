@@ -78,6 +78,11 @@ void PCB_CALCULATOR_FRAME::TransfPanelDataToAttenuator()
 
 void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
 {
+    // TODO: make attenuator bitmaps transparent so we can remove this
+    m_attenuatorPanel->SetBackgroundColour( *wxWHITE );
+
+    m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
+
     wxString msg;
 
     msg.Printf( wxT( "%g" ), m_currAttenuator->m_Attenuation );
@@ -99,7 +104,9 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
     if( m_currAttenuator->m_FormulaName )
     {
         if( m_currAttenuator->m_FormulaName->StartsWith( "<!" ) )
+        {
             m_panelAttFormula->SetPage( *m_currAttenuator->m_FormulaName );
+        }
         else
         {
             wxString html_txt;
@@ -108,7 +115,9 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
         }
     }
     else
+    {
         m_panelAttFormula->SetPage( wxEmptyString );
+    }
 }
 
 
@@ -140,8 +149,11 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorResultsToPanel()
     m_Att_R1_Value->SetValue( msg );
     msg.Printf( wxT( "%g" ), m_currAttenuator->m_R2 );
     m_Att_R2_Value->SetValue( msg );
+
     if( m_currAttenuator->m_ResultCount  < 3 )
+    {
         m_Att_R3_Value->SetValue( wxEmptyString );
+    }
     else
     {
         msg.Printf( wxT( "%g" ), m_currAttenuator->m_R3 );
@@ -150,17 +162,3 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorResultsToPanel()
 }
 
 
-void PCB_CALCULATOR_FRAME::OnPaintAttenuatorPanel( wxPaintEvent& event )
-{
-    wxPaintDC dc( m_panelDisplayAttenuator );
-
-    if( m_currAttenuator && m_currAttenuator->m_SchBitMap )
-    {
-        wxSize size = m_panelDisplayAttenuator->GetSize();
-        size.x -= m_currAttenuator->m_SchBitMap->GetWidth();
-        size.y -= m_currAttenuator->m_SchBitMap->GetHeight();
-        dc.DrawBitmap( *m_currAttenuator->m_SchBitMap, size.x / 2, size.y / 2 );
-    }
-
-    event.Skip();
-}

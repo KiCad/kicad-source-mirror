@@ -108,10 +108,10 @@ double TRANSLINE_PRM::FromUserUnit()
 
 TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 {
-    m_Type = aType;                     // The type of transline handled
-    m_Icon = NULL;                      // An xpm icon to display in dialogs
-    m_TLine    = NULL;                  // The TRANSLINE itself
-    m_HasPrmSelection = false;          // true if selection of parameters must be enabled in dialog menu
+    m_Type = aType;               // The type of transline handled
+    m_Icon = NULL;                // An xpm icon to display in dialogs
+    m_TLine = NULL;               // The TRANSLINE itself
+    m_HasPrmSelection = false;    // true if selection of parameters must be enabled in dialog menu
 
     // Add common prms:
     // Default values are for FR4
@@ -139,7 +139,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     switch( m_Type )
     {
     case MICROSTRIP_TYPE:      // microstrip
-        m_TLine    = new MICROSTRIP();
+        m_TLine = new MICROSTRIP();
         m_Icon = new wxBitmap( microstrip_xpm );
 
         m_Messages.Add( _( "ErEff:" ) );
@@ -178,7 +178,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case CPW_TYPE:          // coplanar waveguide
-        m_TLine    = new COPLANAR();
+        m_TLine = new COPLANAR();
         m_Icon = new wxBitmap( cpw_xpm );
         m_HasPrmSelection = true;
 
@@ -211,7 +211,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case GROUNDED_CPW_TYPE:      // grounded coplanar waveguide
-        m_TLine    = new GROUNDEDCOPLANAR();
+        m_TLine = new GROUNDEDCOPLANAR();
         m_Icon = new wxBitmap( cpw_back_xpm );
         m_HasPrmSelection = true;
 
@@ -245,7 +245,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
 
     case RECTWAVEGUIDE_TYPE:      // rectangular waveguide
-        m_TLine    = new RECTWAVEGUIDE();
+        m_TLine = new RECTWAVEGUIDE();
         m_Icon = new wxBitmap( rectwaveguide_xpm );
         m_HasPrmSelection = true;
 
@@ -279,7 +279,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case COAX_TYPE:      // coaxial cable
-        m_TLine    = new COAX();
+        m_TLine = new COAX();
         m_Icon = new wxBitmap( coax_xpm );
         m_HasPrmSelection = true;
 
@@ -317,7 +317,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case C_MICROSTRIP_TYPE:      // coupled microstrip
-        m_TLine    = new C_MICROSTRIP();
+        m_TLine = new C_MICROSTRIP();
         m_Icon = new wxBitmap( c_microstrip_xpm );
         m_HasPrmSelection = true;
 
@@ -368,7 +368,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case STRIPLINE_TYPE:      // stripline
-        m_TLine    = new STRIPLINE();
+        m_TLine = new STRIPLINE();
         m_Icon = new wxBitmap( stripline_xpm );
 
         m_Messages.Add( _( "ErEff:" ) );
@@ -408,7 +408,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case TWISTEDPAIR_TYPE:      // twisted pair
-        m_TLine    = new TWISTEDPAIR();
+        m_TLine = new TWISTEDPAIR();
         m_Icon = new wxBitmap( twistedpair_xpm );
         m_HasPrmSelection = true;
 
@@ -473,14 +473,12 @@ void TRANSLINE_IDENT::ReadConfig()
     {
         wxASSERT( cfg->m_TransLine.param_units.count( name ) );
 
-        for( auto& param : m_prms_List )
+        for( auto& p : m_prms_List )
         {
             try
             {
-                param->m_Value =
-                        cfg->m_TransLine.param_values.at( name ).at( param->m_KeyWord );
-                param->m_UnitSelection =
-                        cfg->m_TransLine.param_units.at( name ).at( param->m_KeyWord );
+                p->m_Value = cfg->m_TransLine.param_values.at( name ).at( p->m_KeyWord );
+                p->m_UnitSelection =  cfg->m_TransLine.param_units.at( name ).at( p->m_KeyWord );
             }
             catch( ... )
             {}
@@ -497,9 +495,7 @@ void TRANSLINE_IDENT::WriteConfig()
     for( auto& param : m_prms_List )
     {
         if( !std::isfinite( param->m_Value ) )
-        {
             param->m_Value = 0;
-        }
 
         cfg->m_TransLine.param_values[ name ][ param->m_KeyWord ] = param->m_Value;
         cfg->m_TransLine.param_units[ name ][ param->m_KeyWord ] = param->m_UnitSelection;

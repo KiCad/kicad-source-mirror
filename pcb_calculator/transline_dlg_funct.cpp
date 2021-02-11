@@ -24,6 +24,8 @@
 
 #include "common_data.h"
 #include "pcb_calculator_frame.h"
+#include "bitmaps/microstrip_zodd_zeven.xpm"
+
 
 extern double DoubleFromString( const wxString& TextValue );
 
@@ -103,9 +105,9 @@ static bool findMatch(wxArrayString& aList, const wxString& aValue, int& aIdx )
         }
     }
 
-
     return success;
 }
+
 
 /**
  * Function OnEpsilonR_Button
@@ -122,13 +124,13 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
     int prevChoice = 0;
     findMatch( list, prevChoiceStr, prevChoice );
 
-    int index = wxGetSingleChoiceIndex( wxEmptyString,
-                                        _("Relative Dielectric Constants"),
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _( "Relative Dielectric Constants" ),
                                         list, prevChoice );
 
     if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_EpsilonR->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
 }
+
 
 /**
  * Function OnTanD_Button
@@ -145,12 +147,13 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
     int prevChoice = 0;
     findMatch( list, prevChoiceStr, prevChoice );
 
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Loss Factor"),
-                                        list, prevChoice, NULL);
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _( "Dielectric Loss Factor" ), list,
+                                        prevChoice, NULL );
 
     if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_TanD->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
 }
+
 
 /**
  * Function OnTranslineRho_Button
@@ -167,20 +170,23 @@ void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
     int prevChoice = 0;
     findMatch( list, prevChoiceStr, prevChoice );
 
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Specific Resistance"),
-                                        list, prevChoice, NULL);
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _( "Specific Resistance" ), list,
+                                        prevChoice, NULL );
 
     if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_Rho->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
 }
 
+
 // Minor helper struct to handle dialog items for a given parameter
 struct DLG_PRM_DATA
 {
-        wxStaticText * name;
-        wxTextCtrl * value;
-        UNIT_SELECTOR * unit;
+    wxStaticText*  name;
+    wxTextCtrl*    value;
+    UNIT_SELECTOR* unit;
 };
+
+
 /**
  * Function TranslineTypeSelection
  * Must be called after selection of a new transline.
@@ -191,17 +197,25 @@ struct DLG_PRM_DATA
 */
 void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 {
-    wxString msg;
-    #define DOUBLE_TO_CTLR( dlg_item, value ) { msg.Printf( wxT( "%g" ), value );\
-                                      dlg_item->SetValue( msg ); }
     m_currTransLineType = aType;
 
     if( (m_currTransLineType < START_OF_LIST_TYPE )
-       || ( m_currTransLineType >= END_OF_LIST_TYPE ) )
+            || ( m_currTransLineType >= END_OF_LIST_TYPE ) )
+    {
         m_currTransLineType = DEFAULT_TYPE;
+    }
+
+    // TODO: make transline bitmaps transparent so we can remove this
+    m_translinePanel->SetBackgroundColour( *wxWHITE );
+
+    m_translineBitmap->SetBitmap( *m_transline_list[m_currTransLineType]->m_Icon );
 
     // This helper bitmap is shown for coupled microstrip only:
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE );
+
+    static wxBitmap* microstrip = new wxBitmap( microstrip_zodd_zeven_xpm );
+    m_bmCMicrostripZoddZeven->SetBitmap( *microstrip );
+
     m_fgSizerZcomment->Show( aType == C_MICROSTRIP_TYPE );
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
@@ -246,28 +260,28 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         { m_EpsilonR_label,m_Value_EpsilonR, NULL },
         { m_TanD_label,m_Value_TanD, NULL },
         { m_Rho_label, m_Value_Rho, NULL },
-        { m_substrate_prm4_label,m_Substrate_prm4_Value, m_SubsPrm4_choiceUnit },
-        { m_substrate_prm5_label,m_Substrate_prm5_Value, m_SubsPrm5_choiceUnit },
-        { m_substrate_prm6_label,m_Substrate_prm6_Value, m_SubsPrm6_choiceUnit },
-        { m_substrate_prm7_label,m_Substrate_prm7_Value, m_SubsPrm7_choiceUnit },
-        { m_substrate_prm8_label,m_Substrate_prm8_Value, m_SubsPrm8_choiceUnit },
-        { m_substrate_prm9_label,m_Substrate_prm9_Value, m_SubsPrm9_choiceUnit }
+        { m_substrate_prm4_label, m_Substrate_prm4_Value, m_SubsPrm4_choiceUnit },
+        { m_substrate_prm5_label, m_Substrate_prm5_Value, m_SubsPrm5_choiceUnit },
+        { m_substrate_prm6_label, m_Substrate_prm6_Value, m_SubsPrm6_choiceUnit },
+        { m_substrate_prm7_label, m_Substrate_prm7_Value, m_SubsPrm7_choiceUnit },
+        { m_substrate_prm8_label, m_Substrate_prm8_Value, m_SubsPrm8_choiceUnit },
+        { m_substrate_prm9_label, m_Substrate_prm9_Value, m_SubsPrm9_choiceUnit }
     };
     #define substrateprms_cnt (sizeof(substrateprms)/sizeof(substrateprms[0]))
 
     struct DLG_PRM_DATA physprms[] =
     {
-        { m_phys_prm1_label,m_Phys_prm1_Value,m_choiceUnit_Param1 },
-        { m_phys_prm2_label,m_Phys_prm2_Value,m_choiceUnit_Param2 },
-        { m_phys_prm3_label,m_Phys_prm3_Value,m_choiceUnit_Param3 }
+        { m_phys_prm1_label, m_Phys_prm1_Value, m_choiceUnit_Param1 },
+        { m_phys_prm2_label, m_Phys_prm2_Value, m_choiceUnit_Param2 },
+        { m_phys_prm3_label, m_Phys_prm3_Value, m_choiceUnit_Param3 }
     };
     #define physprms_cnt (sizeof(physprms)/sizeof(physprms[0]))
 
     struct DLG_PRM_DATA elecprms[] =
     {
-        { m_elec_prm1_label,m_Elec_prm1_Value, m_choiceUnit_ElecPrm1 },
-        { m_elec_prm2_label,m_Elec_prm2_Value, m_choiceUnit_ElecPrm2 },
-        { m_elec_prm3_label,m_Elec_prm3_Value, m_choiceUnit_ElecPrm3 }
+        { m_elec_prm1_label, m_Elec_prm1_Value, m_choiceUnit_ElecPrm1 },
+        { m_elec_prm2_label, m_Elec_prm2_Value, m_choiceUnit_ElecPrm2 },
+        { m_elec_prm3_label, m_Elec_prm3_Value, m_choiceUnit_ElecPrm3 }
     };
     #define elecprms_cnt (sizeof(elecprms)/sizeof(elecprms[0]))
 
@@ -288,31 +302,31 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         struct DLG_PRM_DATA * data = NULL;
         switch( prm->m_Type )
         {
-            case PRM_TYPE_SUBS:
-                wxASSERT( idxsubs < substrateprms_cnt );
-                data = &substrateprms[idxsubs];
-                idxsubs++;
-                break;
+        case PRM_TYPE_SUBS:
+            wxASSERT( idxsubs < substrateprms_cnt );
+            data = &substrateprms[idxsubs];
+            idxsubs++;
+            break;
 
-            case PRM_TYPE_PHYS:
-                wxASSERT( idxphys < physprms_cnt );
-                data = &physprms[idxphys];
-                idxphys++;
-                break;
+        case PRM_TYPE_PHYS:
+            wxASSERT( idxphys < physprms_cnt );
+            data = &physprms[idxphys];
+            idxphys++;
+            break;
 
-            case PRM_TYPE_ELEC:
-                wxASSERT( idxelec < elecprms_cnt );
-                data = &elecprms[idxelec];
-                idxelec++;
-                break;
+        case PRM_TYPE_ELEC:
+            wxASSERT( idxelec < elecprms_cnt );
+            data = &elecprms[idxelec];
+            idxelec++;
+            break;
 
-            case PRM_TYPE_FREQUENCY:
-                wxASSERT( idxfreq < frequencyprms_cnt );
-                data = &frequencyprms[idxfreq];
-                idxfreq++;
-                break;
-
+        case PRM_TYPE_FREQUENCY:
+            wxASSERT( idxfreq < frequencyprms_cnt );
+            data = &frequencyprms[idxfreq];
+            idxfreq++;
+            break;
         }
+
         wxASSERT ( data );
         data->name->SetToolTip( prm->m_ToolTip );
         data->name->SetLabel( prm->m_DlgLabel != "" ? prm->m_DlgLabel + ':' : "" );
@@ -320,7 +334,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
 
         if( prm->m_Id != DUMMY_PRM )
         {
-            DOUBLE_TO_CTLR( data->value, prm->m_Value );
+            data->value->SetValue( wxString::Format( "%g", prm->m_Value ) );
             data->value->Enable( true );
         }
         else
@@ -347,6 +361,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         substrateprms[idxsubs].name->SetToolTip(wxEmptyString);
         substrateprms[idxsubs].value->SetValue(wxEmptyString);
         substrateprms[idxsubs].value->Enable( false );
+
         if( substrateprms[idxsubs].unit)
         {
             substrateprms[idxsubs].unit->Show( false );
@@ -361,6 +376,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         physprms[idxphys].name->SetToolTip(wxEmptyString);
         physprms[idxphys].value->SetValue(wxEmptyString);
         physprms[idxphys].value->Enable( false );
+
         if( physprms[idxphys].unit)
         {
             physprms[idxphys].unit->Show( false );
@@ -375,6 +391,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         elecprms[idxelec].name->SetToolTip(wxEmptyString);
         elecprms[idxelec].value->SetValue(wxEmptyString);
         elecprms[idxelec].value->Enable( false );
+
         if( elecprms[idxelec].unit)
         {
             elecprms[idxelec].unit->Show( false );
@@ -389,6 +406,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         frequencyprms[idxfreq].name->SetToolTip(wxEmptyString);
         frequencyprms[idxfreq].value->SetValue(wxEmptyString);
         frequencyprms[idxfreq].value->Enable( false );
+
         if( frequencyprms[idxfreq].unit )
         {
             frequencyprms[idxfreq].unit->Show( false );
@@ -406,6 +424,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
 void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
+
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
     {
         TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
@@ -414,11 +433,13 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
         double value = DoubleFromString(value_txt);
         prm->m_Value = value;
         UNIT_SELECTOR * unit_ctrl = (UNIT_SELECTOR * ) prm->m_UnitCtrl;
+
         if( unit_ctrl )
         {
             prm->m_UnitSelection = unit_ctrl->GetSelection();
             value *= unit_ctrl->GetUnitScale();
         }
+
         prm->m_NormalizedValue = value;
     }
 }
@@ -427,7 +448,7 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 /**
  * Function OnTranslineSelection
  * Called on new transmission line selection
-*/
+ */
 void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 {
     enum TRANSLINE_TYPE_ID id = (enum TRANSLINE_TYPE_ID) event.GetSelection();
@@ -438,22 +459,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
     // The new size must be taken in account
     m_panelTransline->GetSizer()->Layout();
     m_panelTransline->Refresh();
-    // Delete previous warnings / errors
-    wxColour background = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-
-    m_Value_EpsilonR->SetBackgroundColour( background );
-    m_Value_TanD->SetBackgroundColour( background );
-    m_Value_Rho->SetBackgroundColour( background );
-    m_Substrate_prm4_Value->SetBackgroundColour( background );
-    m_Substrate_prm5_Value->SetBackgroundColour( background );
-    m_Substrate_prm6_Value->SetBackgroundColour( background );
-    m_Substrate_prm7_Value->SetBackgroundColour( background );
-    m_Substrate_prm8_Value->SetBackgroundColour( background );
-    m_Substrate_prm9_Value->SetBackgroundColour( background );
-    m_Value_Frequency_Ctrl->SetBackgroundColour( background );
-    m_Phys_prm1_Value->SetBackgroundColour( background );
-    m_Phys_prm2_Value->SetBackgroundColour( background );
-    m_Phys_prm3_Value->SetBackgroundColour( background );
 }
 
 
@@ -461,7 +466,7 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
  * Function OnTransLineResetButtonClick
  * Called when the user clicks the reset button. This sets
  * the parameters to their default values.
-*/
+ */
 void PCB_CALCULATOR_FRAME::OnTransLineResetButtonClick( wxCommandEvent& event )
 {
     TranslineTypeSelection( DEFAULT_TYPE );

@@ -22,17 +22,22 @@
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_i.h>
-
+#include "bitmaps/color_code_value_and_name.xpm"
+#include "bitmaps/color_code_value.xpm"
+#include "bitmaps/color_code_multiplier.xpm"
+#include "bitmaps/color_code_tolerance.xpm"
 #include "attenuators/attenuator_classes.h"
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 
+
 // extension of pcb_calculator data filename:
 const wxString DataFileNameExt( wxT("pcbcalc") );
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_CALCULATOR_FRAME_BASE( aParent )
+    PCB_CALCULATOR_FRAME_BASE( aParent ),
+    m_lastNotebookPage( -1 )
 {
     m_bpButtonCalcAtt->SetBitmap( KiBitmap( small_down_xpm ) );
     m_bpButtonAnalyze->SetBitmap( KiBitmap( small_down_xpm ) );
@@ -46,16 +51,24 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
 
+    // TODO: make regulator bitmaps transparent so we can remove this
+    m_panelRegulatorBitmaps->SetBackgroundColour( *wxWHITE );
+
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =
-    {
-        MICROSTRIP_TYPE,    CPW_TYPE,  GROUNDED_CPW_TYPE,
-        RECTWAVEGUIDE_TYPE, COAX_TYPE, C_MICROSTRIP_TYPE,
-        STRIPLINE_TYPE,     TWISTEDPAIR_TYPE
-    };
+            {
+                MICROSTRIP_TYPE,
+                CPW_TYPE,
+                GROUNDED_CPW_TYPE,
+                RECTWAVEGUIDE_TYPE,
+                COAX_TYPE,
+                C_MICROSTRIP_TYPE,
+                STRIPLINE_TYPE,
+                TWISTEDPAIR_TYPE
+            };
 
     for( int ii = 0; ii < 8; ii++ )
         m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
@@ -66,6 +79,10 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_attenuator_list.push_back( new ATTENUATOR_BRIDGE() );
     m_attenuator_list.push_back( new ATTENUATOR_SPLITTER() );
     m_currAttenuator = m_attenuator_list[0];
+
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_staticTextAttMsg->SetFont( infoFont );
 
     LoadSettings( config() );
 
@@ -120,10 +137,53 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
         delete m_attenuator_list[ii];
 
-    /* This needed for OSX: avoids furter OnDraw processing after this
-     * destructor and before the native window is destroyed
-     */
+    // This needed for OSX: avoids furter OnDraw processing after this destructor and before
+    // the native window is destroyed
     this->Freeze();
+}
+
+
+void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    if( m_Notebook->GetSelection() != m_lastNotebookPage )
+    {
+        // Kick all the things that wxWidgets can't seem to redraw on its own.
+
+        wxCommandEvent event2( wxEVT_RADIOBUTTON );
+        event2.SetEventObject( m_TranslineSelection );
+        event2.SetInt( m_currTransLineType );
+        m_TranslineSelection->ProcessCommand( event2 );
+
+        for( int i = 0; i < m_attenuator_list.size(); ++i )
+        {
+            if( m_attenuator_list[i] == m_currAttenuator )
+            {
+                event2.SetEventObject( m_AttenuatorsSelection );
+                event2.SetInt( i );
+                m_AttenuatorsSelection->ProcessCommand( event2 );
+                break;
+            }
+        }
+
+        static wxBitmap* valueNameBitmap = new wxBitmap( color_code_value_and_name_xpm );
+        m_Band1bitmap->SetBitmap( *valueNameBitmap );
+
+        static wxBitmap* valueBitmap = new wxBitmap( color_code_value_xpm );
+       	m_Band2bitmap->SetBitmap( *valueBitmap );
+       	m_Band3bitmap->SetBitmap( *valueBitmap );
+       	m_Band4bitmap->SetBitmap( *valueBitmap );
+
+       	static wxBitmap* multiplierBitmap = new wxBitmap( color_code_multiplier_xpm );
+       	m_Band_mult_bitmap->SetBitmap( *multiplierBitmap );
+
+       	static wxBitmap* toleranceBitmap = new wxBitmap( color_code_tolerance_xpm );
+       	m_Band_tol_bitmap->SetBitmap( *toleranceBitmap );
+
+        // Until it's shown on screen the above won't work; but doing it anyway at least keeps
+        // putting new OnUpdateUI events into the queue until it *is* shown on screen.
+        if( m_Notebook->IsShownOnScreen() )
+            m_lastNotebookPage = m_Notebook->GetSelection();
+    }
 }
 
 
@@ -131,37 +191,34 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
     if( m_RegulatorListChanged )
     {
+        wxString msg;
+        wxString title = _( "Write Data Failed" );
+
         if( GetDataFilename().IsEmpty() )
         {
-            int opt = wxMessageBox(
-                _("Data modified, and no data filename to save modifications\n"\
-                  "Do you want to exit and abandon your change?"),
-                _("Regulator list change"),
-                wxYES_NO | wxICON_QUESTION );
+            msg = _( "No data filename to save modifications.\n"
+                     "Do you want to exit and abandon your changes?" );
 
-            if( opt == wxNO )
+            if( wxMessageBox( msg, title, wxYES_NO | wxICON_QUESTION ) == wxNO )
                 return;
         }
         else
         {
             if( !WriteDataFile() )
             {
-                wxString msg;
-                msg.Printf( _("Unable to write file \"%s\"\n"\
-                            "Do you want to exit and abandon your change?"),
+                msg.Printf( _( "Unable to write file '%s'\n"
+                               "Do you want to exit and abandon your changes?"),
                             GetDataFilename() );
 
-                int opt = wxMessageBox( msg, _("Write Data File Error"),
-                                        wxYES_NO | wxICON_ERROR );
-                if( opt  == wxNO )
+                if( wxMessageBox( msg, title, wxYES_NO | wxICON_ERROR ) == wxNO )
                     return;
             }
         }
     }
 
     event.Skip();
-//    Destroy();
 }
+
 
 void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
@@ -199,10 +256,10 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_ElectricalSpacingUnitsSelector->SetSelection( cfg->m_Electrical.spacing_units );
     m_ElectricalSpacingVoltage->SetValue( cfg->m_Electrical.spacing_voltage );
 
-    for( auto& transline : m_transline_list )
+    for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->ReadConfig();
 
-    for( auto& attenuator : m_attenuator_list )
+    for( ATTENUATOR* attenuator : m_attenuator_list )
         attenuator->ReadConfig();
 }
 
@@ -273,23 +330,6 @@ void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnPaintTranslinePanel( wxPaintEvent& event )
-{
-    wxPaintDC           dc( m_panelDisplayshape );
-
-    TRANSLINE_IDENT*    tr_ident = m_transline_list[m_currTransLineType];
-
-    if( tr_ident )
-    {
-        wxSize size = m_panelDisplayshape->GetSize();
-        size.x  -= tr_ident->m_Icon->GetWidth();
-        size.y  -= tr_ident->m_Icon->GetHeight();
-        dc.DrawBitmap( *tr_ident->m_Icon, size.x / 2, size.y / 2 );
-    }
-
-    event.Skip();
-}
-
 /* returns the full filename of the selected pcb_calculator data file
  * the extension file is forced
  */
@@ -302,6 +342,7 @@ const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
     fn.SetExt( DataFileNameExt );
     return fn.GetFullPath();
 }
+
 
 /* Initialize the full filename of the selected pcb_calculator data file
  * force the standard extension of the file (.pcbcalc)

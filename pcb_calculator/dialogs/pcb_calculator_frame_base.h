@@ -30,13 +30,13 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/radiobox.h>
 #include <wx/bmpbuttn.h>
 #include <wx/html/htmlwin.h>
@@ -60,6 +60,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStatusBar* m_statusBar;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelRegulators;
+		wxPanel* m_panelRegulatorBitmaps;
 		wxStaticBitmap* m_bitmapRegul4pins;
 		wxStaticBitmap* m_bitmapRegul3pins;
 		wxStaticText* m_RegulFormula;
@@ -95,7 +96,8 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_RegulMessage;
 		wxPanel* m_panelAttenuators;
 		wxRadioBox* m_AttenuatorsSelection;
-		wxPanel* m_panelDisplayAttenuator;
+		wxPanel* m_attenuatorPanel;
+		wxStaticBitmap* m_attenuatorBitmap;
 		wxStaticText* m_attenuationLabel;
 		wxTextCtrl* m_AttValueCtrl;
 		wxStaticText* m_attUnit;
@@ -120,7 +122,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxHtmlWindow* m_Attenuator_Messages;
 		wxHtmlWindow* m_panelAttFormula;
 		wxPanel* m_panelESeries;
-		wxStaticText* m_staticTextESeriesMsg111;
 		wxStaticText* m_ESrequired;
 		wxTextCtrl* m_ResRequired;
 		wxStaticText* m_UnitRegultR111;
@@ -130,7 +131,11 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_ESrequired11;
 		wxTextCtrl* m_ResExclude2;
 		wxStaticText* m_UnitRegultR1112;
-		wxRadioBox* m_rbESerieSelection;
+		wxStaticLine* m_staticline6;
+		wxRadioButton* m_e1;
+		wxRadioButton* m_e3;
+		wxRadioButton* m_e6;
+		wxRadioButton* m_e12;
 		wxStaticText* m_ESerieSimpleSolution;
 		wxTextCtrl* m_ESeries_Sol2R;
 		wxStaticText* m_ESeriesSimpleErr;
@@ -146,6 +151,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_ESeriesAltErr1;
 		wxTextCtrl* m_ESeriesError4R;
 		wxStaticText* m_ESeriesAltPercent1;
+		wxStaticLine* m_staticline7;
 		wxButton* m_buttonEScalculate;
 		wxHtmlWindow* m_panelESeriesHelp;
 		wxPanel* m_panelColorCode;
@@ -164,7 +170,8 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticBitmap* m_Band_tol_bitmap;
 		wxPanel* m_panelTransline;
 		wxRadioBox* m_TranslineSelection;
-		wxPanel* m_panelDisplayshape;
+		wxPanel* m_translinePanel;
+		wxStaticBitmap* m_translineBitmap;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_EpsilonR_label;
 		wxTextCtrl* m_Value_EpsilonR;
@@ -374,6 +381,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -383,13 +391,11 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPaintAttenuatorPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnESerieSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateESeries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPaintTranslinePanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineRho_Button( wxCommandEvent& event ) { event.Skip(); }

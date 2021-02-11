@@ -53,11 +53,6 @@ void eserie::set_rb( uint32_t a_rb )
     rb_state = a_rb;
 }
 
-uint32_t eserie::get_rb( void )
-{
-    return rb_state;
-}
-
 std::array<r_data, S4R + 1> eserie::get_rslt( void )
 {
     return results;
@@ -414,9 +409,16 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     m_ESeries_Sol4R->SetValue( fs );
 }
 
-void PCB_CALCULATOR_FRAME::OnESerieSelection( wxCommandEvent& event )
+void PCB_CALCULATOR_FRAME::OnESeriesSelection( wxCommandEvent& event )
 {
-    r.set_rb ( event.GetSelection() );
+    if( event.GetEventObject() == m_e1 )
+        r.set_rb( E1 );
+    else if( event.GetEventObject() == m_e3 )
+        r.set_rb( E3 );
+    else if( event.GetEventObject() == m_e12 )
+        r.set_rb( E12 );
+    else
+        r.set_rb( E6 );
 }
 
 void PCB_CALCULATOR_FRAME::ES_Init()    // initialize ESeries tab at each pcb-calculator start

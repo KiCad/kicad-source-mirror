@@ -232,10 +232,7 @@ public:
 /**
  * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
  */
-    void                     set_4R_cb ( bool a_tb );
-    bool                     get_4R_cb ( void );
     void                     set_rb    ( uint32_t a_rb );
-    uint32_t                 get_rb    ( void );
     void                     set_reqR  ( double aR );
     std::array<r_data,S4R+1> get_rslt  ( void );
 };
