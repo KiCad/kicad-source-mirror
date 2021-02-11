@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-11 23:39+0000\n"
+"PO-Revision-Date: 2021-02-11 23:55+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11162,7 +11162,7 @@ msgstr "ハイライトの太さ (&H):"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
-msgstr "(ハイライト カラーは \"カラー\" ページで編集可能です)"
+msgstr "(ハイライトの色は \"カラー\" ページで編集可能です)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -29308,7 +29308,7 @@ msgstr "テスト ポイント"
 
 #: pcbnew/pad.cpp:888
 msgid "Heat sink"
-msgstr "ヒート シンク"
+msgstr "ヒートシンク"
 
 #: pcbnew/pad.cpp:889
 msgid "Castellated"
