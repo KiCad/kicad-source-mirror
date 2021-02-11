@@ -570,7 +570,7 @@ void to_json( nlohmann::json& aJson, const FILE_INFO_PAIR& aPair )
 
 void from_json( const nlohmann::json& aJson, FILE_INFO_PAIR& aPair )
 {
-    wxASSERT( aJson.is_array() && aJson.size() == 2 );
+    wxCHECK( aJson.is_array() && aJson.size() == 2, /* void */ );
     aPair.first  = KIID( wxString( aJson[0].get<std::string>().c_str(), wxConvUTF8 ) );
     aPair.second = wxString( aJson[1].get<std::string>().c_str(), wxConvUTF8 );
 }
