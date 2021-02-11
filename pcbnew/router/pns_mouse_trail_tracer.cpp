@@ -257,5 +257,18 @@ void MOUSE_TRAIL_TRACER::FlipPosture()
     m_manuallyForced = true;
 }
 
+
+VECTOR2I MOUSE_TRAIL_TRACER::GetTrailLeadVector() const
+{
+    if( m_trail.PointCount() < 2 )
+    {
+        return VECTOR2I(0, 0);
+    }
+    else
+    {
+        return m_trail.CPoint( -1 ) - m_trail.CPoint( 0 );
+    }
+}
+
 }
 

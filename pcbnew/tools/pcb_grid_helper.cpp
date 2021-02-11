@@ -79,6 +79,8 @@ VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSe
 {
     OPT_VECTOR2I pts[6];
 
+    const int c_gridSnapEpsilon = 2;
+
     if( !m_enableSnap )
         return aPoint;
 
@@ -97,7 +99,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSe
 
     for( int i = 0; i < 4; i++ )
     {
-        if( pts[i] && aSeg.Contains( *pts[i] ) )
+        if( pts[i] && aSeg.Distance( *pts[i] ) <= c_gridSnapEpsilon )
         {
             int d = (*pts[i] - aPoint).EuclideanNorm();
 

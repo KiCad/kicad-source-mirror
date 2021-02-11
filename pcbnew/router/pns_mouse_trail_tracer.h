@@ -59,6 +59,7 @@ public:
 
     bool IsManuallyForced() const { return m_manuallyForced; }
 
+    VECTOR2I GetTrailLeadVector() const;
 private:
      SHAPE_LINE_CHAIN m_trail;
     int              m_tolerance;
