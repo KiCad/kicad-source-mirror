@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-11 23:32+0000\n"
+"PO-Revision-Date: 2021-02-11 23:39+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -32582,7 +32582,7 @@ msgstr "ゾーンの塗り潰し領域を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Wireframe Zones"
-msgstr "ゾーンをワイヤー フレーム表示"
+msgstr "ゾーンをワイヤーフレームで表示"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid "Show only zone boundaries"
