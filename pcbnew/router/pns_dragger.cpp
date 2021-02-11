@@ -345,7 +345,7 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 
     if( !viaPropOk ) // can't force-propagate the via? bummer...
         return false;
-
+    
     for( ITEM* item : fanout.Items() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
@@ -364,16 +364,16 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
                 if( !ok )
                     return false;
 
-                m_lastNode->Remove( origLine );
+            m_lastNode->Remove( origLine );
                 optimizeAndUpdateDraggedLine( walkLine, origLine, aP );
-            }
+        }
             else
-            {
+        {
                 m_draggedItems.Add( draggedLine );
 
                 m_lastNode->Remove( origLine );
                 m_lastNode->Add( draggedLine );
-            }
+        }
     }
 }
 
@@ -395,11 +395,6 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
         optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY );
 
-        //printf("sa %d %d\n", aDraggedSeg.A.x, aDraggedSeg.A.y );
-        //Dbg()->AddPoint( aDraggedSeg.A, 4 );
-        //Dbg()->AddPoint( aDraggedSeg.B, 5 );
-
-       // Dbg()->AddLine( aDragged.CLine(), 3, 1000 );
 
         OPT_BOX2I affectedArea = *aDragged.ChangedArea( &aOrig );
 
@@ -410,7 +405,7 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
             //Dbg()->AddBox( *affectedArea, 2 );
             optimizer.SetRestrictArea( *affectedArea );
             optimizer.Optimize( &aDragged );
-
+	}
         
 
             OPT_BOX2I optArea = *aDragged.ChangedArea( &aOrig );
@@ -500,9 +495,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             ok = true;
         }
 
-        if(ok)
+        if( ok )
         {
-            //Dbg()->AddLine( origLine.CLine(), 4, 100000 );
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
@@ -635,24 +629,24 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     }
     else
     {
-    switch( m_currentMode )
-    {
-    case RM_MarkObstacles:
-                ret = dragMarkObstacles( aP );
-                break;
+        switch( m_currentMode )
+        {
+        case RM_MarkObstacles:
+            ret = dragMarkObstacles( aP );
+            break;
 
-    case RM_Shove:
-    case RM_Smart:
-                ret = dragShove( aP );
-                break;
+        case RM_Shove:
+        case RM_Smart:
+            ret = dragShove( aP );
+            break;
 
-    case RM_Walkaround:
-                ret = dragWalkaround( aP );
-                break;
+        case RM_Walkaround:
+            ret = dragWalkaround( aP );
+            break;
 
-    default:
-                break;
-    }
+        default:
+            break;
+        }
     }
 
     if( ret )
