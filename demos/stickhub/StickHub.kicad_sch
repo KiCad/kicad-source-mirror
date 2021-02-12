@@ -3476,7 +3476,6 @@
     )
   )
 
-
   (junction (at 45.72 283.21) (diameter 1.016) (color 0 0 0 0))
   (junction (at 45.72 290.83) (diameter 1.016) (color 0 0 0 0))
   (junction (at 50.8 45.72) (diameter 1.016) (color 0 0 0 0))
@@ -8707,7 +8706,7 @@
   )
 
   (symbol (lib_id "RobotProtos:CPsmall") (at 199.39 285.75 0) (unit 1)
-    (in_bom yes) (on_board yes)
+    (in_bom no) (on_board yes)
     (uuid bd66d73f-0f87-447e-9d5e-a5ae9d9acd9f)
     (property "Reference" "C38" (id 0) (at 202.057 285.75 90)
       (effects (font (size 0.762 0.762)))
