@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 <janvi@veith.net>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,10 +16,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file eserie.h
  */
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -126,113 +122,114 @@ struct r_data {
 
 class eserie
 {
-    private:
+public:
+    /**
+     * If any value of the selected E-serie not available, it can be entered as an exclude value.
+     *
+     * @param aValue is the value to exclude from calculation
+     * Values to exclude are set to false in the selected E-serie source lookup table
+     */
+    void Exclude( double aValue );
+
+    /**
+     *  initialize next calculation and erase results from previous calculation
+     */
+    void NewCalc( void );
+
+    /**
+     * called on calculate button to execute all the 2R, 3R and 4R calculations
+     */
+    void Calculate( void );
+
+    /**
+     * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
+     */
+    void SetSeries( uint32_t aSeries ) { m_series = aSeries; }
+    void SetRequiredValue( double aValue ) { m_required_value = aValue; }
+
+    std::array<r_data,S4R+1> get_rslt( void ) { return m_results; }
+
+private:
+    /**
+     * Build all 2R combinations from the selected E-serie values
+     *
+     * Pre-calculated value combinations are saved in intermediate look up table m_cmb_lut
+     * @return is the number of found combinations what also depends from exclude values
+    */
+    uint32_t combine2( void );
+
+    /**
+     * Search for closest two component solution
+     *
+     * @param aSize is the number of valid 2R combinations in m_cmb_lut on where to search
+     * The 2R result with smallest deviation will be saved in results
+    */
+    void simple_solution( uint32_t aSize );
+
+    /**
+     * Check if there is a better 3 R solution than previous one using only two components.
+     *
+     * @param aSize gives the number of available combinations to be checked inside m_cmb_lut
+     * Therefore m_cmb_lut is combinated with the primary E-serie look up table
+     * The 3R result with smallest deviation will be saved in results if better than 2R
+     */
+    void combine3( uint32_t aSize );
+
+    /**
+     * Check if there is a better four component solution.
+     *
+     * @param aSsize gives the number of 2R combinations to be checked inside m_cmb_lut
+     * Occupied calculation time depends from number of available E-serie values
+     * with the power of 4 why execution for E12 is conditional with 4R check box
+     * for the case the previously found 3R solution is already exact
+     */
+    void combine4( uint32_t aSize );
+
+    /*
+     * Strip redundant braces from three component result
+     *
+     * Example: R1+(R2+R3) become R1+R2+R3
+     * and      R1|(R2|R3) become R1|R2|R3
+     * while    R1+(R2|R3) or (R1+R2)|R3) remains untouched
+     */
+    void strip3( void );
+
+    /*
+     * Strip redundant braces from four component result
+     *
+     * Example: (R1+R2)+(R3+R4) become R1+R2+R3+R4
+     * and      (R1|R2)|(R2|R3) become R1|R2|R3|R4
+     * while    (R1+R2)|(R3+R4) remains untouched
+     */
+    void strip4( void );
+
+private:
     std::vector<std::vector<r_data>> luts {
                                               { E1_VAL },
                                               { E1_VAL, E3_ADD },
                                               { E1_VAL, E3_ADD, E6_ADD },
                                               { E1_VAL, E3_ADD, E6_ADD, E12_ADD }
                                           };
-/*
- * TODO: Manual array size calculation is dangerous. Unlike legacy ANSI-C Arrays
- * std::array can not drop length param by providing aggregate init list up
- * to C++17. Reserved array size should be 2*E12² of std::vector primary list.
- * Exceeding memory limit 7442 will crash the calculator without any warnings !
- * Compare to previous MAX_COMB macro for legacy ANSI-C array automatic solution
- * #define E12_SIZE sizeof ( e12_lut ) / sizeof ( r_data )
- *  #define MAX_COMB (2 * E12_SIZE * E12_SIZE)
- * 2 component combinations including redundant swappable terms are for the moment
- * 72 combinations for E1
- * 512 combinations for E3
- * 1922 combinations for E6
- * 7442 combinations for E12
- */
+    /*
+     * TODO: Manual array size calculation is dangerous. Unlike legacy ANSI-C Arrays
+     * std::array can not drop length param by providing aggregate init list up
+     * to C++17. Reserved array size should be 2*E12² of std::vector primary list.
+     * Exceeding memory limit 7442 will crash the calculator without any warnings !
+     * Compare to previous MAX_COMB macro for legacy ANSI-C array automatic solution
+     * #define E12_SIZE sizeof ( e12_lut ) / sizeof ( r_data )
+     *  #define MAX_COMB (2 * E12_SIZE * E12_SIZE)
+     * 2 component combinations including redundant swappable terms are for the moment
+     * 72 combinations for E1
+     * 512 combinations for E3
+     * 1922 combinations for E6
+     * 7442 combinations for E12
+     */
 
 #define MAX_CMB 7442			// maximum combinations for E12
 
-    std::array<r_data,MAX_CMB> cmb_lut;	// intermediate 2R combinations
-    std::array<r_data,S4R+1> results;	// 2R, 3R and 4R results
-    uint32_t rb_state = E6;		// Radio Button State
-    uint32_t cb_state = false;          // Check Box 4R enable
-    double reqR;			// required Resistor
-
-/**
- * Build all 2R combinations from the selected E-serie values
- *
- * Pre-calculated value combinations are saved in intermediate look up table cmb_lut
- * @return is the number of found combinations what also depends from exclude values
-*/
-    uint32_t combine2( void );
-
-/**
- * Search for closest two component solution
- *
- * @param aSize is the number of valid 2R combinations in cmb_lut on where to search
- * The 2R result with smallest deviation will be saved in results
-*/
-    void simple_solution( uint32_t aSize );
-
-/**
- * Check if there is a better 3 R solution than previous one using only two components.
- *
- * @param aSize gives the number of available combinations to be checked inside cmb_lut
- * Therefore cmb_lut is combinated with the primary E-serie look up table
- * The 3R result with smallest deviation will be saved in results if better than 2R
- */
-    void combine3( uint32_t aSize );
-
-/**
- * Check if there is a better four component solution.
- *
- * @param aSsize gives the number of 2R combinations to be checked inside cmb_lut
- * Occupied calculation time depends from number of available E-serie values
- * with the power of 4 why execution for E12 is conditional with 4R check box
- * for the case the previously found 3R solution is already exact
-*/
-    void combine4( uint32_t aSize );
-
-/*
- * Strip redundant braces from three component result
- *
- * Example: R1+(R2+R3) become R1+R2+R3
- * and      R1|(R2|R3) become R1|R2|R3
- * while    R1+(R2|R3) or (R1+R2)|R3) remains untouched
- */
-    void strip3( void );
-
-/*
- * Strip redundant braces from four component result
- *
- * Example: (R1+R2)+(R3+R4) become R1+R2+R3+R4
- * and      (R1|R2)|(R2|R3) become R1|R2|R3|R4
- * while    (R1+R2)|(R3+R4) remains untouched
- */
-    void strip4( void );
-
-public:
-
-/**
- * If any value of the selected E-serie not available, it can be entered as an exclude value.
- *
- * @param aValue is the value to exclude from calculation
- * Values to exclude are set to false in the selected E-serie source lookup table
- */
-    void exclude( double aValue );
-
-/**
- *  initialize next calculation and erase results from previous calculation
- */
-    void new_calc( void );
-
-/**
- * called on calculate button to execute all the 2R, 3R and 4R calculations
- */
-    void calculate( void );
-
-/**
- * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
- */
-    void                     set_rb    ( uint32_t a_rb );
-    void                     set_reqR  ( double aR );
-    std::array<r_data,S4R+1> get_rslt  ( void );
+    std::array<r_data, MAX_CMB> m_cmb_lut;	            // intermediate 2R combinations
+    std::array<r_data, S4R+1>   m_results;	            // 2R, 3R and 4R results
+    uint32_t                    m_series = E6;		    // Radio Button State
+    uint32_t                    m_enable_4R = false;    // Check Box 4R enable
+    double                      m_required_value;	    // required Resistor
 };

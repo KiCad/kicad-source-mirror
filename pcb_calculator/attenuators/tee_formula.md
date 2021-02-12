@@ -1,4 +1,4 @@
-## Tee attenuator
+### Tee attenuator
 __Zin__ desired input impedance in &#x2126;<br>
 __Zout__ desired output impedance<br>
 __Zin = Zout__<br><br>

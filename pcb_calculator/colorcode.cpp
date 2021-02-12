@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,9 +19,21 @@
  */
 
 #include <wx/app.h>
-#include <wx/msgdlg.h>
-
+#include "bitmaps/color_code_value_and_name.xpm"
+#include "bitmaps/color_code_value.xpm"
+#include "bitmaps/color_code_multiplier.xpm"
+#include "bitmaps/color_code_tolerance.xpm"
 #include "pcb_calculator_frame.h"
+
+
+void PCB_CALCULATOR_FRAME::initColorCodePanel()
+{
+    m_ccValueNamesBitmap = new wxBitmap( color_code_value_and_name_xpm );
+    m_ccValuesBitmap = new wxBitmap( color_code_value_xpm );
+    m_ccMultipliersBitmap = new wxBitmap( color_code_multiplier_xpm );
+    m_ccTolerancesBitmap = new wxBitmap( color_code_tolerance_xpm );
+}
+
 
 void PCB_CALCULATOR_FRAME::OnToleranceSelection( wxCommandEvent& event )
 {
@@ -34,27 +46,22 @@ void PCB_CALCULATOR_FRAME::ToleranceSelection( int aSelection )
     /* For tolerance = 5 or 10 %, there are 3 bands for the value
      * but for tolerance < 5 %, there are 4 bands
      */
-    bool show4thBand;
-    switch( aSelection )
-    {
-        case 0: // 5 or 10 %
-            show4thBand = false;
-            break;
-        case 1: // < 5 %
-            show4thBand = true;
-            break;
-        default: // Show 4th band if something went wrong
-            show4thBand = true;
-            break;
-    }
-    bool oldstate = m_Band4Label->IsShown();
-    if( oldstate != show4thBand )
-    {
-        m_Band4bitmap->Show(show4thBand);
-        m_Band4Label->Show(show4thBand);
-        // m_Band4Label visibility has changed:
-        // The new size must be taken in account
-        m_panelColorCode->GetSizer()->Layout();
-        m_panelColorCode->Refresh();
-    }
+    bool show4thBand = aSelection != 0;
+
+    m_Band4bitmap->Show(show4thBand);
+    m_Band4Label->Show(show4thBand);
+
+    // m_Band4Label visibility has changed:
+    // The new size must be taken in account
+    m_panelColorCode->GetSizer()->Layout();
+
+    // All this shouldn't be necessary but if you want the bitmaps to show up on OSX it is.
+    m_Band1bitmap->SetBitmap( *m_ccValueNamesBitmap );
+   	m_Band2bitmap->SetBitmap( *m_ccValuesBitmap );
+   	m_Band3bitmap->SetBitmap( *m_ccValuesBitmap );
+   	m_Band4bitmap->SetBitmap( *m_ccValuesBitmap );
+   	m_Band_mult_bitmap->SetBitmap( *m_ccMultipliersBitmap );
+   	m_Band_tol_bitmap->SetBitmap( *m_ccTolerancesBitmap );
+
+    m_panelColorCode->Refresh();
 }

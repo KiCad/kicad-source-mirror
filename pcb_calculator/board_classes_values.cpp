@@ -130,8 +130,5 @@ void PCB_CALCULATOR_FRAME::BoardClassesUpdateData( double aUnitScale )
             txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(4, ii, txt );
     }
-
-    m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
-    m_gridClassesValuesDisplay->AutoSize();
 }
 

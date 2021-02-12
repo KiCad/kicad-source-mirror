@@ -22,10 +22,7 @@
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_i.h>
-#include "bitmaps/color_code_value_and_name.xpm"
-#include "bitmaps/color_code_value.xpm"
-#include "bitmaps/color_code_multiplier.xpm"
-#include "bitmaps/color_code_tolerance.xpm"
+#include "bitmaps/via_dims.xpm"
 #include "attenuators/attenuator_classes.h"
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
@@ -51,8 +48,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
 
-    // TODO: make regulator bitmaps transparent so we can remove this
+    // TODO: make regulator & via bitmaps transparent so we can remove these
     m_panelRegulatorBitmaps->SetBackgroundColour( *wxWHITE );
+    m_panelViaBitmap->SetBackgroundColour( *wxWHITE );
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -91,9 +89,10 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
-    TW_Init();   // Track Width
-    VS_Init();   // Via Size
-    ES_Init();   // E-Series
+    initTrackWidthPanel();
+    initColorCodePanel();
+    initViaSizePanel();
+    initESeriesPanel();
 
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
@@ -137,6 +136,11 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
         delete m_attenuator_list[ii];
 
+    delete m_ccValueNamesBitmap;
+    delete m_ccValuesBitmap;
+    delete m_ccMultipliersBitmap;
+    delete m_ccTolerancesBitmap;
+
     // This needed for OSX: avoids furter OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
@@ -165,19 +169,13 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
             }
         }
 
-        static wxBitmap* valueNameBitmap = new wxBitmap( color_code_value_and_name_xpm );
-        m_Band1bitmap->SetBitmap( *valueNameBitmap );
+        ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
-        static wxBitmap* valueBitmap = new wxBitmap( color_code_value_xpm );
-       	m_Band2bitmap->SetBitmap( *valueBitmap );
-       	m_Band3bitmap->SetBitmap( *valueBitmap );
-       	m_Band4bitmap->SetBitmap( *valueBitmap );
+       	static wxBitmap* viaBitmap = new wxBitmap( via_dims_xpm );
+       	m_viaBitmap->SetBitmap( *viaBitmap );
 
-       	static wxBitmap* multiplierBitmap = new wxBitmap( color_code_multiplier_xpm );
-       	m_Band_mult_bitmap->SetBitmap( *multiplierBitmap );
-
-       	static wxBitmap* toleranceBitmap = new wxBitmap( color_code_tolerance_xpm );
-       	m_Band_tol_bitmap->SetBitmap( *toleranceBitmap );
+        m_panelESeriesHelp->Refresh();
+        m_htmlWinFormulas->Refresh();
 
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
@@ -288,9 +286,9 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         Regulators_WriteConfig( cfg );
     }
 
-    TW_WriteConfig();
+    writeTrackWidthConfig();
 
-    VS_WriteConfig();
+    writeViaSizeConfig();
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig();

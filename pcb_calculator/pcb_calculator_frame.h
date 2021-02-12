@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,10 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file pcb_calculator.h
  */
 
 #ifndef PCB_CALCULATOR_H
@@ -38,42 +34,15 @@ class KIWAY;
 class PCB_CALCULATOR_SETTINGS;
 
 
-/* Class PCB_CALCULATOR_FRAME_BASE
-This is the main frame for this application
-*/
+/*
+ * Class PCB_CALCULATOR_FRAME_BASE
+ * This is the main frame for this application
+ */
 class PCB_CALCULATOR_FRAME : public PCB_CALCULATOR_FRAME_BASE
 {
 public:
     REGULATOR_LIST m_RegulatorList;      // the list of known regulator
 
-private:
-    bool m_RegulatorListChanged; // set to true when m_RegulatorList
-                                 // was modified, and the corresponging file
-                                 // must be rewritten
-
-    enum                     // Which dimension is controlling the track
-    {                        // width / current calculations:
-        TW_MASTER_CURRENT,   // the maximum current,
-        TW_MASTER_EXT_WIDTH, // the external trace width,
-        TW_MASTER_INT_WIDTH  // or the internal trace width?
-    } m_TWMode;
-
-    bool m_TWNested; // Used to stop events caused by setting the answers.
-
-    enum TRANSLINE_TYPE_ID m_currTransLineType;
-    TRANSLINE*             m_currTransLine; // a pointer to the active transline
-    // List of translines: ordered like in dialog menu list
-    std::vector<TRANSLINE_IDENT*> m_transline_list;
-
-    ATTENUATOR* m_currAttenuator;
-    // List ofattenuators: ordered like in dialog menu list
-    std::vector<ATTENUATOR*> m_attenuator_list;
-    wxString                 m_lastSelectedRegulatorName; // last regulator name selected
-
-    int                      m_lastNotebookPage;
-    int                      m_lastRadioButton;
-
-public:
     PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PCB_CALCULATOR_FRAME();
 
@@ -103,24 +72,17 @@ private:
      */
     void SetDataFilename( const wxString& aFilename );
 
-    // Trace width / maximum current capability calculations.
     /**
-     * Function TW_Init
-     * Read config and init dialog widgets values
+     * Panel-specific initializers
      */
-    void TW_Init();
-
-    /**
-     * E-Series Resistor calculator Panel
-     * Called on calculator start to display markdown formula explanations
-     */
-    void ES_Init( void );
+    void initTrackWidthPanel();
+    void initESeriesPanel();
+    void initColorCodePanel();
+    void initViaSizePanel();
 
     /**
      * Called on calculate button and executes all E-series calculations
-     *
      */
-
     void OnCalculateESeries( wxCommandEvent& event ) override;
 
     /**
@@ -130,10 +92,10 @@ private:
     void OnESeriesSelection( wxCommandEvent& event ) override;
 
     /**
-     * Function TW_WriteConfig
+     * Function writeTrackWidthConfig
      * Write Track width parameters in config
      */
-    void TW_WriteConfig();
+    void writeTrackWidthConfig();
 
     /**
      * Function OnTWParametersChanged
@@ -199,19 +161,11 @@ private:
      */
     void TWUpdateModeDisplay();
 
-    // Via size calculations
-
     /**
-     * Function VS_Init
-     * Read config and init dialog widgets values
-     */
-    void VS_Init();
-
-    /**
-     * Function VS_WriteConfig
+     * Function writeViaSizeConfig
      * Write Via Size parameters in config
      */
-    void VS_WriteConfig();
+    void writeViaSizeConfig();
 
     /**
      * Function OnViaCalculate
@@ -235,10 +189,9 @@ private:
     void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
 
     /**
-    * Function OnViaResetButtonClick
-    * Called when the user clicks the reset button. This sets
-    * the parameters to their default values.
-    */
+     * Function OnViaResetButtonClick
+     * Called when the user clicks the reset button; sets the parameters to their default values.
+     */
     void OnViaResetButtonClick( wxCommandEvent& event ) override;
 
     /**
@@ -255,69 +208,65 @@ private:
     void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;
     void ElectricalSpacingUpdateData( double aUnitScale );
 
-    // Transline functions:
     /**
      * Function OnTranslineSelection
      * Called on new transmission line selection
-    */
+     */
     void OnTranslineSelection( wxCommandEvent& event ) override;
 
     /**
      * Function OnTransLineResetButtonClick
-     * Called when the user clicks the reset button. This sets
-     * the parameters to their default values.
-    */
+     * Called when the user clicks the reset button; sets the parameters to their default values.
+     */
     void OnTransLineResetButtonClick( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineAnalyse
-     * Run a new analyse for the current transline with current parameters
-     * and displays the electrical parameters
+     * Run a new analyse for the current transline with current parameters and displays the
+     * electrical parameters
      */
     void OnTranslineAnalyse( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineSynthetize
-     * Run a new synthezis for the current transline with current parameters
-     * and displays the geometrical parameters
+     * Run a new synthezis for the current transline with current parameters and displays the
+     * geometrical parameters
      */
     void OnTranslineSynthetize( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineEpsilonR_Button
-     * Shows a list of current relative dielectric constant(Er)
-     * and set the selected value in main dialog frame
+     * Shows a list of current relative dielectric constant(Er) and set the selected value in
+     * main dialog frame
      */
     void OnTranslineEpsilonR_Button( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineTanD_Button
-     * Shows a list of current dielectric loss factor (tangent delta)
-     * and set the selected value in main dialog frame
+     * Shows a list of current dielectric loss factor (tangent delta) and set the selected value
+     * in main dialog frame
      */
     void OnTranslineTanD_Button( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineRho_Button
-     * Shows a list of current Specific resistance list (rho)
-     * and set the selected value in main dialog frame
+     * Shows a list of current Specific resistance list (rho) and set the selected value in main
+     * dialog frame
      */
     void OnTranslineRho_Button( wxCommandEvent& event ) override;
 
     /**
      * Function TranslineTypeSelection
-     * Must be called after selection of a new transline.
-     * Update all values, labels and tool tips of parameters needed
-     * by the new transline
-     * Irrelevant parameters texts are blanked.
+     * Must be called after selection of a new transline. Update all values, labels and tool
+     * tips of parameters needed by the new transline; irrelevant parameters are blanked.
      * @param aType = the TRANSLINE_TYPE_ID of the new selected transline
     */
     void TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType );
 
     /**
      * Function TransfDlgDataToTranslineParams
-     * Read values entered in dialog frame, and transfert these
-     * values in current transline parameters, converted in normalized units
+     * Read values entered in dialog frame, and transfert these values in current transline
+     * parameters, converted in normalized units
      */
     void TransfDlgDataToTranslineParams();
 
@@ -352,11 +301,7 @@ private:
 
     /**
      * Function SelectLastSelectedRegulator
-     * select in choice box the last selected regulator
-     * (name in m_lastSelectedRegulatorName)
-     * and update the displayed values.
-     * if m_lastSelectedRegulatorName is empty, just calls
-     * RegulatorPageUpdate()
+     * If m_lastSelectedRegulatorName is empty, just calls RegulatorPageUpdate()
      */
     void SelectLastSelectedRegulator();
 
@@ -417,6 +362,35 @@ public:
     {
         return nullptr;
     }
+
+private:
+    bool m_RegulatorListChanged; // Set when m_RegulatorList is modified and the corresponging file
+                                 // must be rewritten
+
+    enum                         // Which dimension is controlling the track width / current
+    {                            // calculations:
+        TW_MASTER_CURRENT,       //   the maximum current,
+        TW_MASTER_EXT_WIDTH,     //   the external trace width,
+        TW_MASTER_INT_WIDTH      //   or the internal trace width?
+    } m_TWMode;
+
+    bool                          m_TWNested; // Used to stop events caused by setting the answers.
+
+    enum TRANSLINE_TYPE_ID        m_currTransLineType;
+    TRANSLINE*                    m_currTransLine;
+    std::vector<TRANSLINE_IDENT*> m_transline_list;
+
+    ATTENUATOR*                   m_currAttenuator;
+    std::vector<ATTENUATOR*>      m_attenuator_list;
+
+    wxString                      m_lastSelectedRegulatorName;
+
+    wxBitmap*                     m_ccValueNamesBitmap;
+    wxBitmap*                     m_ccValuesBitmap;
+    wxBitmap*                     m_ccMultipliersBitmap;
+    wxBitmap*                     m_ccTolerancesBitmap;
+
+    int                           m_lastNotebookPage;
 };
 
 

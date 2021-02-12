@@ -280,7 +280,8 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextRiseTime;
 		wxTextCtrl* m_textCtrlRiseTime;
 		wxStaticText* m_staticTextRiseTimeUnits;
-		wxStaticBitmap* m_bitmap10;
+		wxPanel* m_panelViaBitmap;
+		wxStaticBitmap* m_viaBitmap;
 		wxStaticText* m_staticTextArea11;
 		wxStaticText* m_ViaResistance;
 		wxStaticText* m_IntTrackAreaUnitLabel1;

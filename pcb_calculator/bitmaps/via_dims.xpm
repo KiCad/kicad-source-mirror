@@ -1,5 +1,5 @@
 /* XPM */
-const static char *via_xpm[] = {
+const static char *via_dims_xpm[] = {
 "175 176 874 2",
 "  	c None",
 ". 	c #FFFFFF",

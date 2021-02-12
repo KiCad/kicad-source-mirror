@@ -123,7 +123,7 @@ void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::VS_Init()
+void PCB_CALCULATOR_FRAME::initViaSizePanel()
 {
     auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -152,7 +152,8 @@ void PCB_CALCULATOR_FRAME::VS_Init()
     m_textCtrlRiseTime->SetValue( cfg->m_ViaSize.pulse_rise_time );
 }
 
-void PCB_CALCULATOR_FRAME::VS_WriteConfig()
+
+void PCB_CALCULATOR_FRAME::writeViaSizeConfig()
 {
     auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -174,6 +175,7 @@ void PCB_CALCULATOR_FRAME::VS_WriteConfig()
     cfg->m_ViaSize.temp_rise                      = m_textCtrlTemperatureDiff->GetValue();
     cfg->m_ViaSize.pulse_rise_time                = m_textCtrlRiseTime->GetValue();
 }
+
 
 void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
 {

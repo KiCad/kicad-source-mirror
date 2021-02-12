@@ -42,7 +42,7 @@ wxString tracks_width_versus_current_formula =
 extern double DoubleFromString( const wxString& TextValue );
 
 
-void PCB_CALCULATOR_FRAME::TW_WriteConfig()
+void PCB_CALCULATOR_FRAME::writeTrackWidthConfig()
 {
     // Save current parameters values in config.
     auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
@@ -414,7 +414,7 @@ double PCB_CALCULATOR_FRAME::TWCalculateCurrent( double aWidth, double aThicknes
 }
 
 
-void PCB_CALCULATOR_FRAME::TW_Init()
+void PCB_CALCULATOR_FRAME::initTrackWidthPanel()
 {
     wxString msg;
 
