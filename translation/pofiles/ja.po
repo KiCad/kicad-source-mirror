@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 00:50+0000\n"
+"PO-Revision-Date: 2021-02-12 04:13+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -18063,7 +18063,7 @@ msgstr "現在のファイルに既存のページ レイアウト デザイン 
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
-msgstr "デザイン インスペクターを表示"
+msgstr "デザインインスペクターを表示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in page layout"
@@ -23849,7 +23849,7 @@ msgstr "レポートを作成..."
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:741
 msgid "Net Inspector"
-msgstr "ネット インスペクター"
+msgstr "ネットインスペクター"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:87
 msgid "Rebuild Ratsnest"
@@ -32486,7 +32486,7 @@ msgstr "選択されたアイテムのラッツネストを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:741
 msgid "Show the net inspector"
-msgstr "ネット インスペクターを表示"
+msgstr "ネットインスペクターを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:746
 msgid "Scripting Console"
@@ -33749,7 +33749,7 @@ msgstr "オブジェクト"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
 msgid "Show the Net Inspector"
-msgstr "ネット インスペクターを表示"
+msgstr "ネットインスペクターを表示"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
 msgid "Configure net classes"
