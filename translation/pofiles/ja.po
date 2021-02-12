@@ -7241,8 +7241,7 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"既定では、コマンド ラインは隠れたコンソール ウィンドウで実行され、出力は "
-"info 表示にリダイレクトされます。\n"
+"既定では、コマンドラインは隠れたコンソール ウィンドウで実行され、出力は info 表示にリダイレクトされます。\n"
 "コマンド実行のウィンドウを表示するには、このオプションをセットします。"
 
 #: eeschema/dialogs/dialog_bom_base.h:80
