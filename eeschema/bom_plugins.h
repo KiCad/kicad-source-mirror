@@ -128,6 +128,14 @@ protected:
      */
     wxString readHeader( const wxString& aEndSection );
 
+    /**
+     * Extracts the output BOM file's extension, including the '.', from the
+     * plugin file header. If the output extension cannot be determined from
+     * the plugin header, returns wxEmptyString.
+     * @param aHeader is the plugin file's header, as returned by readHeader()
+     **/
+    static wxString getOutputExtension( const wxString& aHeader );
+
     ///< true if the plugin is working (i.e. if the plugin file exists and was read
     bool m_isOk;
 
