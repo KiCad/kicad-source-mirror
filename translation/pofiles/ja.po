@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 05:24+0000\n"
+"PO-Revision-Date: 2021-02-12 05:31+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2928,7 +2928,7 @@ msgstr "ヘルパー アプリケーション"
 
 #: common/dialogs/panel_common_settings_base.cpp:105
 msgid "Text editor:"
-msgstr "テキスト エディター:"
+msgstr "テキストエディター:"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "System default PDF viewer"
@@ -5063,7 +5063,7 @@ msgstr "ファイル \"%s\" は全て読み込まれていません"
 #: common/page_layout/ws_data_model_io.cpp:101
 #: common/page_layout/ws_data_model_io.cpp:129
 msgid "Error writing page layout design file"
-msgstr "ページ レイアウト デザイン ファイルの書き込みエラー"
+msgstr "ページレイアウト デザイン ファイルの書き込みエラー"
 
 #: common/page_layout/ws_draw_item.cpp:114 eeschema/pin_type.cpp:74
 #: gerbview/gerber_draw_item.cpp:230 pcbnew/board_item.cpp:35
@@ -7201,9 +7201,7 @@ msgstr "ジェネレーター ファイル名が見つかりません。"
 
 #: eeschema/dialogs/dialog_bom.cpp:598
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
-"KiCad で使用するテキスト エディターが設定されていません。一つ選択してくださ"
-"い。"
+msgstr "KiCad で使用するテキストエディターが設定されていません。一つ選択してください。"
 
 #: eeschema/dialogs/dialog_bom.cpp:610
 msgid "Bill of Material Generation Help"
@@ -7219,7 +7217,7 @@ msgstr "新しい BOM ジェネレーターとリストへのコマンドライ�
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
-msgstr "テキスト エディターでスクリプト ファイルを編集"
+msgstr "テキストエディターでスクリプト ファイルを編集"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
 msgid "Remove the current generator script from list"
@@ -8078,7 +8076,7 @@ msgstr "形状"
 
 #: eeschema/dialogs/dialog_edit_label_base.h:72
 msgid "Text Editor"
-msgstr "テキスト エディター"
+msgstr "テキストエディター"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:54
 msgid "Leave unchanged"
@@ -17248,7 +17246,7 @@ msgstr "ローカル ファイルを編集..."
 
 #: kicad/menubar.cpp:155
 msgid "Edit local file in text editor"
-msgstr "テキスト エディターでローカル ファイルを編集します"
+msgstr "テキストエディターでローカル ファイルを編集します"
 
 #: kicad/menubar.cpp:211
 msgid "Archive all project files"
@@ -17359,15 +17357,15 @@ msgstr "既定のシステム ファイル マネージャーでディレクト�
 
 #: kicad/project_tree_pane.cpp:741
 msgid "Open the file in a Text Editor"
-msgstr "テキスト エディターでファイルを開く"
+msgstr "テキストエディターでファイルを開く"
 
 #: kicad/project_tree_pane.cpp:743
 msgid "Open files in a Text Editor"
-msgstr "テキスト エディターでファイルを開く"
+msgstr "テキストエディターでファイルを開く"
 
 #: kicad/project_tree_pane.cpp:745
 msgid "Edit in a Text Editor"
-msgstr "テキスト エディターで編集"
+msgstr "テキストエディターで編集"
 
 #: kicad/project_tree_pane.cpp:753
 msgid "Rename File..."
@@ -17514,11 +17512,11 @@ msgstr "ワークシートのグラフィックとテキストを編集します
 
 #: kicad/tools/kicad_manager_actions.cpp:112
 msgid "Open Text Editor"
-msgstr "テキスト エディターを開く"
+msgstr "テキストエディターを開く"
 
 #: kicad/tools/kicad_manager_actions.cpp:112
 msgid "Launch preferred text editor"
-msgstr "お気に入りのテキスト エディターを起動します"
+msgstr "お気に入りのテキストエディターを起動します"
 
 #: kicad/tools/kicad_manager_control.cpp:45
 msgid "Create a new directory for the project"
