@@ -156,7 +156,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         wxCommandEvent event2( wxEVT_RADIOBUTTON );
         event2.SetEventObject( m_TranslineSelection );
         event2.SetInt( m_currTransLineType );
-        m_TranslineSelection->ProcessCommand( event2 );
+        m_TranslineSelection->Command( event2 );
 
         for( int i = 0; i < m_attenuator_list.size(); ++i )
         {
@@ -164,7 +164,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
             {
                 event2.SetEventObject( m_AttenuatorsSelection );
                 event2.SetInt( i );
-                m_AttenuatorsSelection->ProcessCommand( event2 );
+                m_AttenuatorsSelection->Command( event2 );
                 break;
             }
         }
