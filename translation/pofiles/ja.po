@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:25+0000\n"
+"PO-Revision-Date: 2021-02-12 04:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3137,7 +3137,7 @@ msgstr "ズーム速度:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "マウス ホイールの回転に対するズームインの度合い"
+msgstr "マウスホイールの回転に対するズームインの度合い"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -18335,7 +18335,7 @@ msgstr "レギュレーターを追加"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:233
 msgid "Enter a new item to the current list of available regulators"
-msgstr "レギュレーター リストへ新しい項目を追加します"
+msgstr "レギュレーターのリストへ新しい項目を追加します"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:237
 #: pcb_calculator/regulators_funct.cpp:223
