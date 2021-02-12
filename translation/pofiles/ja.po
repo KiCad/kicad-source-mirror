@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 07:33+0000\n"
+"PO-Revision-Date: 2021-02-12 07:36+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -12110,12 +12110,12 @@ msgstr "最近使用された"
 #: eeschema/getpart.cpp:152
 #, c-format
 msgid "Choose Power Symbol (%d items loaded)"
-msgstr "電源シンボルを選択 (%d アイテムがロードされています)"
+msgstr "電源シンボルを選択 (%d個のアイテムがロードされています)"
 
 #: eeschema/getpart.cpp:154 eeschema/symbol_viewer_frame.cpp:836
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "シンボルを選択 (%d アイテムがロードされています)"
+msgstr "シンボルを選択 (%d個のアイテムがロードされています)"
 
 #: eeschema/getpart.cpp:248
 #, c-format
@@ -28703,7 +28703,7 @@ msgstr "クリップボードの内容は KiCad 互換ではありません"
 #: pcbnew/load_select_footprint.cpp:266
 #, c-format
 msgid "Choose Footprint (%d items loaded)"
-msgstr "コンポーネントを選択 (%d アイテム ロード済)"
+msgstr "フットプリントを選択 (%d個のアイテムがロードされています)"
 
 #: pcbnew/load_select_footprint.cpp:364
 #, c-format
