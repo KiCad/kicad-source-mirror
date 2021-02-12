@@ -42,6 +42,7 @@ private:
     int*                  m_originalColWidths;
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
     wxSize                m_membershipSize;     // The size needed to show the membership list
+    int                   m_hoveredCol;         // Column being hovered over, for tooltips
 
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
@@ -51,6 +52,7 @@ private:
     void onmembershipPanelSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent &event ) override;
     void OnNetclassGridCellChanging( wxGridEvent& event );
+    void OnNetclassGridMouseEvent( wxMouseEvent& event );
     void OnShowAll( wxCommandEvent& event ) override { doApplyFilters( true ); }
     void OnApplyFilters( wxCommandEvent& event ) override { doApplyFilters( false ); }
     void OnAssignAll( wxCommandEvent& event ) override { doAssignments( true ); }

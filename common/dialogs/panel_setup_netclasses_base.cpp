@@ -62,8 +62,6 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_netclassGrid->SetToolTip( _("Net Class parameters") );
-
 	sbSizerUpper->Add( m_netclassGrid, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* buttonBoxSizer;

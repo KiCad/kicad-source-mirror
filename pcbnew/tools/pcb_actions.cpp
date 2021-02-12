@@ -1237,14 +1237,14 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autopla
 TOOL_ACTION PCB_ACTIONS::routeSingleTrack( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL,
         'X', LEGACY_HK_NAME( "Add New Track" ),
-        _( "Route Single Track" ), _( "Run push & shove router (single tracks)" ),
+        _( "Route Single Track" ), _( "Route tracks" ),
         add_tracks_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_SINGLE );
 
 TOOL_ACTION PCB_ACTIONS::routeDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '6', LEGACY_HK_NAME( "Route Differential Pair (Modern Toolset only)" ),
-        _( "Route Differential Pair" ), _( "Run push & shove router (differential pairs)" ),
+        _( "Route Differential Pair" ), _( "Route differential pairs" ),
         ps_diff_pair_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_DIFF_PAIR );
 
 TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
