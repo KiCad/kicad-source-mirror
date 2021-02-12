@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:33+0000\n"
+"PO-Revision-Date: 2021-02-12 04:56+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -17773,7 +17773,7 @@ msgstr "最大幅:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:149
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
 msgid "Set to 0 to disable this constraint"
-msgstr "この制限を無効にするために 0 を設定"
+msgstr "この制約を無効にするために 0 を設定"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Max height:"
@@ -19868,7 +19868,7 @@ msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:125
 msgid "No constraint"
-msgstr "制限なし"
+msgstr "制約なし"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:125
 msgid "Impedance controlled"
@@ -19884,7 +19884,7 @@ msgid ""
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
 "インピーダンス コントロールのオプションがセットされている場合、\n"
-"損失正接と εR は制限設定に追加されます。"
+"損失正接と εR は制約設定に追加されます。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:133
 msgid "Add Dielectric Layer"
@@ -20638,7 +20638,7 @@ msgstr "デザイン ルール"
 #: pcbnew/dialogs/dialog_board_setup.cpp:83 pcbnew/router/router_tool.cpp:782
 #: pcbnew/router/router_tool.cpp:803
 msgid "Constraints"
-msgstr "制限設定"
+msgstr "制約"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
 msgid "Pre-defined Sizes"
@@ -21901,7 +21901,7 @@ msgstr "テキスト アイテム"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:61
 msgid "Unconstrained"
-msgstr "制限なし"
+msgstr "制約なし"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:62
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
@@ -27267,11 +27267,11 @@ msgstr "寸法 \"%s\" (%s 上)"
 #: pcbnew/drc/drc_engine.cpp:139 pcbnew/drc/drc_engine.cpp:181
 #: pcbnew/drc/drc_engine.cpp:211
 msgid "board setup constraints"
-msgstr "基板セットアップの制限"
+msgstr "基板セットアップの制約"
 
 #: pcbnew/drc/drc_engine.cpp:190
 msgid "board setup micro-via constraints"
-msgstr "基板セットアップのマイクロビアの制限"
+msgstr "基板セットアップのマイクロビアの制約"
 
 #: pcbnew/drc/drc_engine.cpp:236 pcbnew/drc/drc_engine.cpp:263
 #: pcbnew/drc/drc_engine.cpp:291 pcbnew/drc/drc_engine.cpp:319
@@ -27744,7 +27744,7 @@ msgstr "現状: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 msgid "Checking keepouts & disallow constraints..."
-msgstr "禁止と不許可の制限をチェック..."
+msgstr "禁止と不許可の制約をチェック..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:130
 msgid "Checking board edge clearances..."
@@ -28099,10 +28099,8 @@ msgid ""
 "This may result in different fills from previous Kicad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗り潰される場合には、板端クリアランス設定が使用されます (基板"
-"セットアップ > デザイン ルール > 制限設定 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗り潰しの結果となります。"
+"基板のゾーンが塗り潰される場合には、板端クリアランス設定が使用されます (基板セットアップ > デザイン ルール > 制約 を参照)。\n"
+"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前のバージョンの KiCad とは異なった塗り潰しの結果となります。"
 
 #: pcbnew/files.cpp:534
 msgid "Edge Clearance Warning"
@@ -31025,16 +31023,12 @@ msgstr "基板セットアップを表示"
 msgid ""
 "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr ""
-"ブラインド/ベリード ビアは、基板セットアップ > デザイン ルール > 制限設定 で"
-"有効にしなければなりません。"
+msgstr "ブラインド/ベリード ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:809
 msgid ""
 "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
-"マイクロ ビアは、基板セットアップ > デザイン ルール > 制限設定 で有効にしなけ"
-"ればなりません。"
+msgstr "マイクロ ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:818
 msgid "Only through vias are allowed on 2 layer boards."
@@ -31405,7 +31399,7 @@ msgstr "未定義"
 #: pcbnew/tools/board_inspection_tool.cpp:543
 #, c-format
 msgid "Width constraints: min %s max %s."
-msgstr "幅の制限: 最小 %s 最大 %s."
+msgstr "幅の制約: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:553
 msgid "Via Diameter"
@@ -31418,7 +31412,7 @@ msgstr "ビアの直径の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:580
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr "直径の制限: 最小 %s 最大 %s."
+msgstr "直径の制約: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:587
 msgid "Via Annular Width"
@@ -31431,7 +31425,7 @@ msgstr "ビアのアニュラー幅の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:614
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr "アニュラー幅の制限: 最小 %s 最大 %s."
+msgstr "アニュラー幅の制約: 最小 %s 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:625
 msgid "Hole Size"
@@ -31444,7 +31438,7 @@ msgstr "穴の直径の解決:"
 #: pcbnew/tools/board_inspection_tool.cpp:648
 #, c-format
 msgid "Hole constraint: min %s."
-msgstr "穴の制限: 最小 %s."
+msgstr "穴の制約: 最小 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:654
 msgid "Keepouts"
@@ -32771,7 +32765,7 @@ msgstr "アクティブなレイヤーの選択した 2つのオブジェクト�
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 msgid "Constraints Resolution..."
-msgstr "制限の解決..."
+msgstr "制約の解決..."
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Show constraints resolution for the selected object"
