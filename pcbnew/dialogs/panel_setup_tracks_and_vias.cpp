@@ -130,8 +130,12 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataToWindow()
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 {
-    if( !validateData() )
+    if( !m_trackWidthsGrid->CommitPendingChanges()
+        || !m_viaSizesGrid->CommitPendingChanges()
+        || !m_diffPairsGrid->CommitPendingChanges() )
+    {
         return false;
+    }
 
     wxString                         msg;
     std::vector<int>                 trackWidths;
@@ -212,7 +216,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 }
 
 
-bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
+bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
 {
     if( !m_trackWidthsGrid->CommitPendingChanges()
             || !m_viaSizesGrid->CommitPendingChanges()
@@ -239,7 +243,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
         {
             msg.Printf( _( "Track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true ) );
             m_Parent->SetError( msg, this, m_trackWidthsGrid, row, TR_WIDTH_COL );
             return false;
         }
@@ -256,7 +260,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaDia ) < minViaDia )
         {
             msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDia ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minViaDia, true ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
@@ -265,15 +269,15 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
 
         if( viaDrill.IsEmpty() )
         {
-            msg = _( "No via drill defined." );
+            msg = _( "No via hole size defined." );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
 
         if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minThroughHole )
         {
-            msg.Printf( _( "Via drill less than minimum through hole (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole ) );
+            msg.Printf( _( "Via hole diameter less than minimum through hole diameter (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
@@ -281,7 +285,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaDrill )
                 >= ValueFromString( m_Frame->GetUserUnits(), viaDia ) )
         {
-            msg = _( "Via drill larger than via diameter." );
+            msg = _( "Via hole diameter larger than via diameter." );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
@@ -289,8 +293,8 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ( ValueFromString( m_Frame->GetUserUnits(), viaDia )
                 - ValueFromString( m_Frame->GetUserUnits(), viaDrill ) ) / 2 < minViaAnnulus )
         {
-            msg.Printf( _( "Diameter and drill leave via annulus less than minimum (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus ) );
+            msg.Printf( _( "Diameter and hole leave via annulus less than minimum (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
@@ -307,7 +311,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
         {
             msg.Printf( _( "Differential pair track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 0 );
             return false;
         }
@@ -324,7 +328,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), gap ) < minClearance )
         {
             msg.Printf( _( "Differential pair gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
             return false;
         }
@@ -337,7 +341,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < minClearance )
         {
             msg.Printf( _( "Differential pair via gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 2 );
             return false;
         }

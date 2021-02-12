@@ -357,7 +357,7 @@ static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NE
 
 bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 {
-    if( !validateData() )
+    if( !Validate() )
         return false;
 
     m_netclasses->Clear();
@@ -696,7 +696,7 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-bool PANEL_SETUP_NETCLASSES::validateData()
+bool PANEL_SETUP_NETCLASSES::Validate()
 {
     if( !m_netclassGrid->CommitPendingChanges() || !m_membershipGrid->CommitPendingChanges() )
         return false;

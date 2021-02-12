@@ -35,10 +35,13 @@
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <widgets/infobar.h>
+#include <widgets/resettable_panel.h>
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
 #include "panel_setup_rules.h"
+
+using std::placeholders::_1;
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), false,
@@ -88,6 +91,9 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
    	    m_macHack.push_back( true );
+
+    AddAuxiliaryAction( "Validate Settings", "Check for problems with board settings",
+                        std::bind( &DIALOG_BOARD_SETUP::OnValidate, this, _1 ) );
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,

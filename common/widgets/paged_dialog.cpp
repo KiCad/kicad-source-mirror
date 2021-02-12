@@ -62,21 +62,21 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
                                   wxLI_HORIZONTAL );
     mainSizer->Add( line, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 10 );
 
-    auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
     if( aUseReset )
     {
         m_resetButton = new wxButton( this, wxID_ANY, _( "Reset to Defaults" ) );
-        buttonsSizer->Add( m_resetButton, 0, wxRIGHT|wxLEFT, 5 );
+        m_buttonsSizer->Add( m_resetButton, 0, wxRIGHT|wxLEFT, 5 );
     }
 
     if( !aAuxiliaryAction.IsEmpty() )
     {
         m_auxiliaryButton = new wxButton( this, wxID_ANY, aAuxiliaryAction );
-        buttonsSizer->Add( m_auxiliaryButton, 0, wxRIGHT|wxLEFT, 5 );
+        m_buttonsSizer->Add( m_auxiliaryButton, 0, wxRIGHT|wxLEFT, 5 );
     }
 
-    buttonsSizer->AddStretchSpacer();
+    m_buttonsSizer->AddStretchSpacer();
 
     auto sdbSizer = new wxStdDialogButtonSizer();
     wxButton* sdbSizerOK = new wxButton( this, wxID_OK );
@@ -85,8 +85,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUse
     sdbSizer->AddButton( sdbSizerCancel );
     sdbSizer->Realize();
 
-    buttonsSizer->Add( sdbSizer, 1, 0, 5 );
-    mainSizer->Add( buttonsSizer, 0, wxALL|wxEXPAND, 5 );
+    m_buttonsSizer->Add( sdbSizer, 1, 0, 5 );
+    mainSizer->Add( m_buttonsSizer, 0, wxALL|wxEXPAND, 5 );
 
     sdbSizerOK->SetDefault();
 
@@ -282,6 +282,35 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow
 }
 
 
+void PAGED_DIALOG::AddAuxiliaryAction( const wxString& aTitle, const wxString& aTooltip,
+                                       std::function<void( wxCommandEvent& )> aHandler )
+{
+    // Insert before standard button sizer and flex spacer
+    const int idx = m_buttonsSizer->GetItemCount() - 2;
+
+    wxButton* button = new wxButton( this, wxID_ANY, aTitle );
+    button->SetToolTip( aTooltip );
+    button->Bind( wxEVT_BUTTON, aHandler );
+    m_buttonsSizer->Insert( idx, button, 0, wxRIGHT | wxLEFT, 5 );
+}
+
+
+void PAGED_DIALOG::OnValidate( wxCommandEvent& aEvent )
+{
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        wxWindow* page = m_treebook->GetPage( i );
+
+        // Display first warning
+        if( !page->Validate() )
+            break;
+    }
+
+    if( !m_errorMessage.IsEmpty() )
+        m_infoBar->ShowMessage( m_errorMessage, wxICON_WARNING );
+}
+
+
 void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
 {
     // Handle an error.  This is delayed to OnUpdateUI so that we can change the focus
@@ -294,8 +323,6 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
         // sure we don't keep putting up more dialogs.
         wxWindow* ctrl = m_errorCtrl;
         m_errorCtrl = nullptr;
-
-        DisplayErrorMessage( ctrl, m_errorMessage );
 
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctrl ) )
         {

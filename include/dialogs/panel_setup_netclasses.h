@@ -59,7 +59,6 @@ private:
     void OnAssignSelected( wxCommandEvent& event ) override { doAssignments( false ); }
 
     bool validateNetclassName( int aRow, wxString aName, bool focusFirst = true );
-    bool validateData();
 
     void rebuildNetclassDropdowns();
 
@@ -77,6 +76,8 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    bool Validate() override;
 
     void ImportSettingsFrom( NETCLASSES* aBoard );
 };

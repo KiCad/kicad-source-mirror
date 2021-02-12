@@ -45,8 +45,6 @@ private:
     UNIT_BINDER             m_extensionOffset;
 
 private:
-    bool validateData();
-
     int getGridValue( int aRow, int aCol );
 
 public:
@@ -57,6 +55,8 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( BOARD* aBoard );
+
+    bool Validate() override;
 };
 
 #endif //PANEL_SETUP_TEXT_AND_GRAPHICS_H

@@ -48,8 +48,6 @@ private:
     // changed but not yet committed.  Fetch them from the constraints panel.
     PANEL_SETUP_CONSTRAINTS* m_ConstraintsPanel;
 
-    bool validateData();
-
 protected:
     void OnAddTrackWidthsClick( wxCommandEvent& event ) override;
     void OnRemoveTrackWidthsClick( wxCommandEvent& event ) override;
@@ -69,6 +67,8 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    bool Validate() override;
 
     void ImportSettingsFrom( BOARD* aBoard );
 };

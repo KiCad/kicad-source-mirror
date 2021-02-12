@@ -162,7 +162,7 @@ int PANEL_SETUP_TEXT_AND_GRAPHICS::getGridValue( int aRow, int aCol )
 }
 
 
-bool PANEL_SETUP_TEXT_AND_GRAPHICS::validateData()
+bool PANEL_SETUP_TEXT_AND_GRAPHICS::Validate()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
@@ -175,7 +175,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::validateData()
 
         if( getGridValue( row, COL_TEXT_THICKNESS ) > textSize / 4 )
         {
-            wxString msg = _( "Text will not be readable with a thickness greater than\n"
+            wxString msg = _( "Text will not be readable with a thickness greater than "
                               "1/4 its width or height." );
             m_Parent->SetError( msg, this, m_grid, row, COL_TEXT_THICKNESS );
             return false;
@@ -188,9 +188,6 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::validateData()
 
 bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
-    if( !validateData() )
-        return false;
-
     for( int i = 0; i < ROW_COUNT; ++i )
     {
         m_BrdSettings->m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );

@@ -25,7 +25,7 @@
 class PAGED_DIALOG;
 
 /**
- * A wxPanel that is designed to be reset in a standard manor.
+ * A wxPanel that is designed to be reset in a standard manner.
  */
 class RESETTABLE_PANEL : public wxPanel
 {
