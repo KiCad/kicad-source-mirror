@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 05:12+0000\n"
+"PO-Revision-Date: 2021-02-12 05:24+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2340,7 +2340,7 @@ msgstr "縦向き"
 #: common/dialogs/dialog_page_settings.cpp:463
 #, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr "ページ レイアウト記述ファイル \"%s\" が見つかりません。"
+msgstr "ページレイアウト記述ファイル \"%s\" が見つかりません。"
 
 #: common/dialogs/dialog_page_settings.cpp:535
 msgid "the translation for paper size must preserve original spellings"
@@ -2353,7 +2353,7 @@ msgstr "横向き"
 
 #: common/dialogs/dialog_page_settings.cpp:779
 msgid "Select Page Layout Description File"
-msgstr "ページ レイアウト記述ファイルを選択"
+msgstr "ページレイアウト記述ファイルを選択"
 
 #: common/dialogs/dialog_page_settings.cpp:795
 #, c-format
@@ -2364,7 +2364,7 @@ msgid ""
 "instead of\n"
 "\"%s\"?"
 msgstr ""
-"ページ レイアウト記述ファイルの名前は変更されています。\n"
+"ページレイアウト記述ファイルの名前は変更されています。\n"
 "相対パス:\n"
 "\"%s\" を\n"
 "\"%s\"\n"
@@ -2573,7 +2573,7 @@ msgstr "コメント9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Page layout description file"
-msgstr "ページ レイアウト記述ファイル"
+msgstr "ページレイアウト記述ファイル"
 
 #: common/dialogs/dialog_page_settings_base.cpp:348
 msgid "Browse..."
@@ -4420,7 +4420,7 @@ msgstr "Pcbnew"
 #: pagelayout_editor/pl_editor_frame.cpp:468
 #: pagelayout_editor/pl_editor_frame.cpp:536
 msgid "Page Layout Editor"
-msgstr "ページ レイアウト エディター"
+msgstr "ページレイアウト エディター"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -6357,7 +6357,7 @@ msgstr "Geda PCB フットプリント ライブラリー ファイル"
 
 #: common/wildcards_and_files_ext.cpp:354
 msgid "Page layout design files"
-msgstr "ページ レイアウト デザイン ファイル"
+msgstr "ページレイアウト デザイン ファイル"
 
 #: common/wildcards_and_files_ext.cpp:361
 msgid "KiCad symbol footprint link files"
@@ -17724,11 +17724,11 @@ msgstr "新規アイテム"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:235
 msgid "Print Page Layout"
-msgstr "ページ レイアウトを印刷"
+msgstr "ページレイアウトを印刷"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:240
 msgid "An error occurred attempting to print the page layout."
-msgstr "ページ レイアウトの印刷中にエラーが発生しました。"
+msgstr "ページレイアウトの印刷中にエラーが発生しました。"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:241
 msgid "Printing"
@@ -17899,11 +17899,11 @@ msgstr "全般 オプション"
 
 #: pagelayout_editor/files.cpp:52
 msgid "Page Layout Description File"
-msgstr "ページ レイアウト記述ファイル"
+msgstr "ページレイアウト記述ファイル"
 
 #: pagelayout_editor/files.cpp:58
 msgid "The current page layout has been modified. Save changes?"
-msgstr "現在のページ レイアウトは変更されています。 保存しますか?"
+msgstr "現在のページレイアウトは変更されています。 保存しますか?"
 
 #: pagelayout_editor/files.cpp:71
 #, c-format
@@ -17912,11 +17912,11 @@ msgstr "ファイル \"%s\" を読み込みました"
 
 #: pagelayout_editor/files.cpp:99
 msgid "The current page layout has been modified.  Save changes?"
-msgstr "現在のページ レイアウトは変更されています。  保存しますか?"
+msgstr "現在のページレイアウトは変更されています。  保存しますか?"
 
 #: pagelayout_editor/files.cpp:118
 msgid "Append Existing Page Layout File"
-msgstr "既存のページ レイアウト ファイルを追加"
+msgstr "既存のページレイアウト ファイルを追加"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -17979,11 +17979,11 @@ msgstr "原点位置: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:885
 msgid "New page layout file is unsaved"
-msgstr "新しいページ レイアウト ファイルは保存されていません"
+msgstr "新しいページレイアウト ファイルは保存されていません"
 
 #: pagelayout_editor/pl_editor_frame.cpp:889
 msgid "Page layout changes are unsaved"
-msgstr "ページ レイアウトの変更は保存されていません"
+msgstr "ページレイアウトの変更は保存されていません"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -18051,11 +18051,11 @@ msgstr "ビットマップ イメージを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Page Layout File..."
-msgstr "既存のページ レイアウト ファイルを追加..."
+msgstr "既存のページレイアウト ファイルを追加..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 msgid "Append an existing page layout design file to current file"
-msgstr "現在のファイルに既存のページ レイアウト デザイン ファイルを追加"
+msgstr "現在のファイルに既存のページレイアウト デザイン ファイルを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
