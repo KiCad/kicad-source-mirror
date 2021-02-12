@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-12 07:36+0000\n"
+"PO-Revision-Date: 2021-02-12 22:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3304,18 +3304,16 @@ msgid "Netclass name already in use."
 msgstr "ネットクラス名は既に使われています。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "最小クリアランス:"
+msgstr "最小導体クリアランス"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
 msgid "Minimum track width"
 msgstr "最小配線幅"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "ビア パッドの直径:"
+msgstr "ビアパッドの直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 #, fuzzy
@@ -3323,9 +3321,8 @@ msgid "Via plated hole diameter"
 msgstr "ビア穴 > 直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "ビア パッドの直径:"
+msgstr "マイクロビアパッドの直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 #, fuzzy
@@ -3333,34 +3330,28 @@ msgid "Microvia plated hole diameter"
 msgstr "ビア穴 > 直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "差動ペア遅延(スキュー)の調整"
+msgstr "差動ペアの配線幅"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "差動ペア"
+msgstr "差動ペアのギャップ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "回路図上のプロパティ"
+msgstr "回路図のワイヤーの太さ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "バス線幅 (&B):"
+msgstr "バス配線の太さ"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "回路図フィールド"
+msgstr "回路図のワイヤーの色"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "回路図ファイル"
+msgstr "回路図のワイヤーの線のスタイル"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -14687,9 +14678,8 @@ msgid "Nickname"
 msgstr "別名(ニックネーム)"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "名前を付けてシンボルを保存..."
+msgstr "シンボルに名前を付けて保存"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -17289,11 +17279,13 @@ msgid "Import Eagle Project Files"
 msgstr "Eagle プロジェクト ファイルをインポート"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "ファイル \"%s\" は有効な回路図ファイルではないようです。"
+msgstr ""
+"ファイル '%s'\n"
+"は有効なKiCadプロジェクトファイルではないようです。"
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -19035,49 +19027,40 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
-#, fuzzy
 msgid "0 .. 15V"
-msgstr "0 ... 15V"
+msgstr "0 .. 15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
-#, fuzzy
 msgid "16 .. 30V"
-msgstr "16 ... 30V"
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
-#, fuzzy
 msgid "31 .. 50V"
-msgstr "31 ... 50V"
+msgstr "31 .. 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
-#, fuzzy
 msgid "51 .. 100V"
-msgstr "51 ... 100V"
+msgstr "51 .. 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
-#, fuzzy
 msgid "101 .. 150V"
-msgstr "101 ... 150V"
+msgstr "101 .. 150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
-#, fuzzy
 msgid "151 .. 170V"
-msgstr "151 ... 170V"
+msgstr "151 .. 170V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
-#, fuzzy
 msgid "171 .. 250V"
-msgstr "171 ... 250V"
+msgstr "171 .. 250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
-#, fuzzy
 msgid "251 .. 300V"
-msgstr "251 ... 300V"
+msgstr "251 .. 300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
-#, fuzzy
 msgid "301 .. 500V"
-msgstr "301 ... 500V"
+msgstr "301 .. 500V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1854
 msgid " > 500V"
@@ -19227,26 +19210,24 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\t上記の任意の組み合わせ\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:193
-#, fuzzy
 msgid "Write Data Failed"
-msgstr "データ ファイル書き出しエラー"
+msgstr "データ書き込みに失敗"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:197
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"変更されたデータが保存されていません。\n"
+"変更を保存するデータファイル名がありません。\n"
 "変更を破棄して終了してよいですか？"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"ファイル \"%s\" を書込めませんでした\n"
+"ファイル' %s' に書き込めませんでした\n"
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/regulators_funct.cpp:126
@@ -25048,9 +25029,8 @@ msgid ""
 "Check to use Pcbnew stroke font\n"
 "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Pcbnew ストローク フォントを使用する場合はチェックします\n"
-"編集可能なテキストとして一行の ASCII テキストをプロットする場合はチェックを外"
-"します (DXF フォントを使用)"
+"Pcbnewのストロークフォントを使用する場合はチェックします\n"
+"編集可能なテキストとして一行の ASCII テキストをプロットする場合はチェックを外します (DXFフォントを使用します)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
 msgid "Export units:"
@@ -27229,13 +27209,10 @@ msgid "Check rule syntax"
 msgstr "ルールの文法をチェック"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
-msgstr ""
-"文字の幅または高さの1/4を超える値の太さでは、\n"
-"テキストは判読不能になるでしょう。"
+msgstr "文字の幅または高さの1/4を超える太さでは、テキストは判読不能になるでしょう。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -27285,19 +27262,17 @@ msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "最小ビア径 (%s) 未満のビア径。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "ビア ドリルが未定義です。"
+msgstr "ビア穴のサイズが未定義です。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "最小ビア径 (%s) 未満のビア径。"
+msgstr "ビア穴の直径は最小スルーホール直径(%s)よりも小さくなければなりません。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
-msgstr "ビア ドリルはビアの直径より大きくなければなりません。"
+msgstr "ビア穴の直径はビアの直径より大きくなければなりません。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
 #, fuzzy, c-format
@@ -28249,13 +28224,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
-msgstr ""
-"プロジェクト固有のフットプリント ライブラリー テーブルの保存中にエラーが発生"
-"しました:\n"
-"\n"
-"%s"
+msgstr "プロジェクト固有のフットプリント ライブラリー テーブルの保存中にエラーが発生しました: %s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
 #, c-format
@@ -33164,12 +33135,11 @@ msgstr "配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
 msgid "Route Differential Pair"
-msgstr "差動ペアをインタラクティブ配線"
+msgstr "差動ペアの配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "差動ペアをインタラクティブ配線"
+msgstr "差動ペアを配線"
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Interactive Router Settings..."
