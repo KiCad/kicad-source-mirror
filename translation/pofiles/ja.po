@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:15+0000\n"
+"PO-Revision-Date: 2021-02-12 06:17+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -315,7 +315,7 @@ msgstr "背景下面色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:162
 msgid "Silkscreen Color..."
-msgstr "シルクの色..."
+msgstr "シルクスクリーンの色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:166
 msgid "Solder Mask Color..."
@@ -433,7 +433,7 @@ msgstr "基板レイヤー"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:45
 msgid "Show silkscreen layers"
-msgstr "シルク レイヤーを表示"
+msgstr "シルクスクリーンレイヤーを表示"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:48
 msgid "Show solder mask layers"
@@ -762,7 +762,7 @@ msgstr "ファイルを保存できません"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:939
 msgid "Silkscreen Color"
-msgstr "シルクの色"
+msgstr "シルクスクリーンの色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:975
 msgid "Solder Mask Color"
@@ -1337,7 +1337,7 @@ msgstr "ネガ"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Front silk screen"
-msgstr "表面層シルク"
+msgstr "表面層シルクスクリーン"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
@@ -19674,7 +19674,7 @@ msgstr "誘電体 %d"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:525
 msgid "Top Silk Screen"
-msgstr "表面層シルク"
+msgstr "表面層シルクスクリーン"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:533
 msgid "Top Solder Paste"
@@ -19694,7 +19694,7 @@ msgstr "裏面層ハンダ ペースト"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:601
 msgid "Bottom Silk Screen"
-msgstr "裏面層シルク"
+msgstr "裏面層シルクスクリーン"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:48
 msgid "Incorrect value for Epsilon R"
@@ -24417,7 +24417,7 @@ msgstr "裏面のハンダ ペースト層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 msgid "Back silk screen"
-msgstr "裏面のシルク層"
+msgstr "裏面のシルクスクリーン層"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 msgid "Back solder mask"
@@ -26529,7 +26529,7 @@ msgstr "SoldP_Front"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:113
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "基板表面にシルク スクリーン レイヤーを使用したい場合"
+msgstr "基板表面にシルクスクリーン レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:117
 msgid "SilkS_Front"
@@ -26872,7 +26872,7 @@ msgstr "SoldM_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:605
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "基板裏面にシルク スクリーン レイヤーを使用したい場合"
+msgstr "基板裏面にシルクスクリーン レイヤーを使用したい場合"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:609
 msgid "SilkS_Back"
