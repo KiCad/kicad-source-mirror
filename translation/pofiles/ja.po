@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:19+0000\n"
+"PO-Revision-Date: 2021-02-12 06:30+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1587,7 +1587,7 @@ msgstr "バグを調査または報告する - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
 msgid "KiCad users group and community"
-msgstr "KiCad ユーザー グループとコミュニティ"
+msgstr "KiCad ユーザーグループとコミュニティ"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -3638,7 +3638,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:955
 msgid "The auto save file could not be renamed to the board file name."
-msgstr "オート セーブ ファイルを基板ファイル名にリネームできませんでした。"
+msgstr "自動保存ファイルを基板ファイル名にリネームできませんでした。"
 
 #: common/eda_doc.cpp:143
 msgid "Doc Files"
