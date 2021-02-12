@@ -224,23 +224,25 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol,
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
+        SCH_SHEET_PATH& sheet = sheetList[i];
+
         for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
             SCH_COMPONENT* comp2 = static_cast<SCH_COMPONENT*>( item );
 
-            ref2 = comp2->GetRef( &sheetList[i] );
+            ref2 = comp2->GetRef( &sheet );
 
             if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
-            for( const SCH_PIN* pin : comp2->GetPins( aSheetPath ) )
+            for( const SCH_PIN* pin : comp2->GetPins( &sheet ) )
             {
-                if( SCH_CONNECTION* conn = pin->Connection( aSheetPath ) )
+                if( SCH_CONNECTION* conn = pin->Connection( &sheet ) )
                 {
                     const wxString& netName = conn->Name();
 
                     // Skip unconnected pins
-                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, *aSheetPath );
+                    CONNECTION_SUBGRAPH* sg = graph->FindSubgraphByName( netName, sheet );
 
                     if( !sg || sg->m_no_connect || sg->m_items.size() < 2 )
                         continue;
