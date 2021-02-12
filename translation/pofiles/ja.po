@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:56+0000\n"
+"PO-Revision-Date: 2021-02-12 05:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -445,7 +445,7 @@ msgstr "ハンダ ペースト レイヤーを表示"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show adhesive layers"
-msgstr "ボンド (Adhesive) レイヤーを表示"
+msgstr "接着剤 (Adhesive) レイヤーを表示"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
@@ -1015,7 +1015,7 @@ msgstr "ゾーン表示の切替"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle adhesive display"
-msgstr "接着部表示の切替"
+msgstr "接着剤レイヤーの表示の切替"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle display of adhesive layers"
