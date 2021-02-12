@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-04 15:59-0800\n"
+"POT-Creation-Date: 2021-02-12 10:26-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2070,6 +2070,42 @@ msgstr "Netclass must have a name."
 msgid "Netclass name already in use."
 msgstr "Netclass name already in use."
 
+msgid "Minimum copper clearance"
+msgstr "Minimum copper clearance"
+
+msgid "Minimum track width"
+msgstr "Minimum track width"
+
+msgid "Via pad diameter"
+msgstr "Via pad diameter"
+
+msgid "Via plated hole diameter"
+msgstr "Via plated hole diameter"
+
+msgid "Microvia pad diameter"
+msgstr "Microvia pad diameter"
+
+msgid "Microvia plated hole diameter"
+msgstr "Microvia plated hole diameter"
+
+msgid "Differential pair track width"
+msgstr "Differential pair track width"
+
+msgid "Differential pair gap"
+msgstr "Differential pair gap"
+
+msgid "Schematic wire thickness"
+msgstr "Schematic wire thickness"
+
+msgid "Bus wire thickness"
+msgstr "Bus wire thickness"
+
+msgid "Schematic wire color"
+msgstr "Schematic wire color"
+
+msgid "Schematic wire line style"
+msgstr "Schematic wire line style"
+
 msgid "The default net class is required."
 msgstr "The default net class is required."
 
@@ -2111,9 +2147,6 @@ msgstr "Line Style"
 
 msgid "Default"
 msgstr "Default"
-
-msgid "Net Class parameters"
-msgstr "Net Class parameters"
 
 msgid "Net Class Memberships"
 msgstr "Net Class Memberships"
@@ -10245,6 +10278,9 @@ msgstr "This new symbol has no name and cannot be created."
 msgid "Symbol \"%s\" already exists in library \"%s\""
 msgstr "Symbol “%s” already exists in library “%s”"
 
+msgid "No schematic currently open."
+msgstr "No schematic currently open."
+
 #, c-format
 msgid "Symbol library '%s' is not writeable."
 msgstr "Symbol library '%s' is not writeable."
@@ -10255,8 +10291,8 @@ msgstr "You must save to a different location."
 msgid "Nickname"
 msgstr "Nickname"
 
-msgid "Save Copy of Symbol"
-msgstr "Save Copy of Symbol"
+msgid "Save Symbol As"
+msgstr "Save Symbol As"
 
 msgid "Save in library:"
 msgstr "Save in library:"
@@ -10603,9 +10639,6 @@ msgstr "Duplicate Symbol"
 msgid "Make a copy of the selected symbol"
 msgstr "Make a copy of the selected symbol"
 
-msgid "Save Symbol As..."
-msgstr "Save Symbol As..."
-
 msgid "Save the current symbol to a different library."
 msgstr "Save the current symbol to a different library."
 
@@ -10662,12 +10695,6 @@ msgstr ""
 "Synchronized Pins Edit Mode\n"
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
-
-msgid "Save In Schematic"
-msgstr "Save In Schematic"
-
-msgid "Save the current symbol in the schematic"
-msgstr "Save the current symbol in the schematic"
 
 msgid "Add Pin"
 msgstr "Add Pin"
@@ -11399,9 +11426,6 @@ msgstr "Can't save file “%s”."
 
 msgid "Filename:"
 msgstr "Filename:"
-
-msgid "No schematic currently open."
-msgstr "No schematic currently open."
 
 msgid "Edit Symbol Name"
 msgstr "Edit Symbol Name"
@@ -12189,6 +12213,14 @@ msgstr "Import CADSTAR Archive Project Files"
 msgid "Import Eagle Project Files"
 msgstr "Import Eagle Project Files"
 
+#, c-format
+msgid ""
+"File '%s'\n"
+"does not appear to be a valid KiCad project file."
+msgstr ""
+"File '%s'\n"
+"does not appear to be a valid KiCad project file."
+
 msgid "Load File to Edit"
 msgstr "Load File to Edit"
 
@@ -12894,7 +12926,7 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 msgid ""
-"## Pi attenuator\n"
+"### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -12906,7 +12938,7 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## Pi attenuator\n"
+"### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -12919,16 +12951,16 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 msgid ""
-"## Splitted attenuator\n"
-"### Attenuation is 6dB\n"
+"### Split attenuator\n"
+"#### Attenuation is 6dB\n"
 "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## Splitted attenuator\n"
-"### Attenuation is 6dB\n"
+"### Split attenuator\n"
+"#### Attenuation is 6dB\n"
 "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -12936,7 +12968,7 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 msgid ""
-"## Tee attenuator\n"
+"### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -12948,7 +12980,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## Tee attenuator\n"
+"### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -13104,14 +13136,8 @@ msgstr "R2"
 msgid "R3"
 msgstr "R3"
 
-msgid "Messages:"
-msgstr "Messages:"
-
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
-
-msgid "E-Series Resistor Calculator"
-msgstr "E-Series Resistor Calculator"
 
 msgid "Inputs"
 msgstr "Inputs"
@@ -13136,9 +13162,6 @@ msgstr "E6"
 
 msgid "E12"
 msgstr "E12"
-
-msgid "Available Values"
-msgstr "Available Values"
 
 msgid "Solutions"
 msgstr "Solutions"
@@ -13472,32 +13495,32 @@ msgstr "A6"
 msgid "A7"
 msgstr "A7"
 
-msgid "0 ... 15V"
-msgstr "0–15V"
+msgid "0 .. 15V"
+msgstr "0 .. 15V"
 
-msgid "16 ... 30V"
-msgstr "16–30V"
+msgid "16 .. 30V"
+msgstr "16 .. 30V"
 
-msgid "31 ... 50V"
-msgstr "31–50V"
+msgid "31 .. 50V"
+msgstr "31 .. 50V"
 
-msgid "51 ... 100V"
-msgstr "51–100V"
+msgid "51 .. 100V"
+msgstr "51 .. 100V"
 
-msgid "101 ... 150V"
-msgstr "101–150V"
+msgid "101 .. 150V"
+msgstr "101 .. 150V"
 
-msgid "151 ... 170V"
-msgstr "151–170V"
+msgid "151 .. 170V"
+msgstr "151 .. 170V"
 
-msgid "171 ... 250V"
-msgstr "171–250V"
+msgid "171 .. 250V"
+msgstr "171 .. 250V"
 
-msgid "251 ... 300V"
-msgstr "251–300V"
+msgid "251 .. 300V"
+msgstr "251 .. 300V"
 
-msgid "301 ... 500V"
-msgstr "301–500V"
+msgid "301 .. 500V"
+msgstr "301 .. 500V"
 
 msgid " > 500V"
 msgstr " > 500V"
@@ -13579,15 +13602,15 @@ msgid ""
 "numbers for electronic components.  Available values are approximately\n"
 "equally spaced in a logarithmic scale.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
 "create arbitrary values.  You can enter the required resistance from 0,0025 "
-"to 4000 kOhm. \n"
-"Solutions using up to 4 components are given.  \n"
+"to 4000 kOhm.\n"
+"Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It "
 "is also possible to specify\n"
@@ -13604,15 +13627,15 @@ msgstr ""
 "numbers for electronic components.  Available values are approximately\n"
 "equally spaced in a logarithmic scale.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
 "create arbitrary values.  You can enter the required resistance from 0,0025 "
-"to 4000 kOhm. \n"
-"Solutions using up to 4 components are given.  \n"
+"to 4000 kOhm.\n"
+"Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It "
 "is also possible to specify\n"
@@ -13625,26 +13648,23 @@ msgstr ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
-msgid ""
-"Data modified, and no data filename to save modifications\n"
-"Do you want to exit and abandon your change?"
-msgstr ""
-"Data modified, and no data filename to save modifications\n"
-"Do you want to exit and abandon your change?"
+msgid "Write Data Failed"
+msgstr "Write Data Failed"
 
-msgid "Regulator list change"
-msgstr "Regulator list change"
+msgid ""
+"No data filename to save modifications.\n"
+"Do you want to exit and abandon your changes?"
+msgstr ""
+"No data filename to save modifications.\n"
+"Do you want to exit and abandon your changes?"
 
 #, c-format
 msgid ""
-"Unable to write file \"%s\"\n"
-"Do you want to exit and abandon your change?"
+"Unable to write file '%s'\n"
+"Do you want to exit and abandon your changes?"
 msgstr ""
-"Unable to write file “%s”\n"
-"Do you want to exit and abandon your change?"
-
-msgid "Write Data File Error"
-msgstr "Write Data File Error"
+"Unable to write file '%s'\n"
+"Do you want to exit and abandon your changes?"
 
 #, c-format
 msgid "PCB Calculator data file (*.%s)|*.%s"
@@ -14085,60 +14105,6 @@ msgstr ""
 msgid "A layer thickness is < 0. Fix it"
 msgstr "A layer thickness is < 0. Fix it"
 
-#, c-format
-msgid ""
-"Board thickness %s differs from stackup thickness %s\n"
-"Allowed max error %s"
-msgstr ""
-"Board thickness %s differs from stackup thickness %s\n"
-"Allowed max error %s"
-
-msgid ""
-"A locked dielectric thickness is < 0\n"
-"Unlock it or change its thickness"
-msgstr ""
-"A locked dielectric thickness is < 0\n"
-"Unlock it or change its thickness"
-
-msgid ""
-"Cannot calculate dielectric thickness\n"
-"At least one dielectric layer must be not locked"
-msgstr ""
-"Cannot calculate dielectric thickness\n"
-"At least one dielectric layer must be not locked"
-
-msgid ""
-"Cannot calculate dielectric thickness\n"
-"Fixed thickness too big or board thickness too small"
-msgstr ""
-"Cannot calculate dielectric thickness\n"
-"Fixed thickness too big or board thickness too small"
-
-msgid "Physical stackup has not been updated to match layer count."
-msgstr "Physical stackup has not been updated to match layer count."
-
-msgid "Update Physical Stackup"
-msgstr "Update Physical Stackup"
-
-msgid "Update dielectric thickness from board thickness"
-msgstr "Update dielectric thickness from board thickness"
-
-msgid "Board thickness:"
-msgstr "Board thickness:"
-
-msgid "Current thickness from stackup:"
-msgstr "Current thickness from stackup:"
-
-msgid "Set Dielectric Thickness"
-msgstr "Set Dielectric Thickness"
-
-msgid ""
-"Set thickness of all not locked dielectric layers.\n"
-"The thickness will be the same for all not locked dielectric layers."
-msgstr ""
-"Set thickness of all not locked dielectric layers.\n"
-"The thickness will be the same for all not locked dielectric layers."
-
 msgid "Id"
 msgstr "Id"
 
@@ -14184,6 +14150,9 @@ msgstr "Yes, bevelled"
 
 msgid "Options for edge card connectors."
 msgstr "Options for edge card connectors."
+
+msgid "Board thickness from stackup:"
+msgstr "Board thickness from stackup:"
 
 msgid "ENIG"
 msgstr "ENIG"
@@ -16040,16 +16009,6 @@ msgstr "Copper layers:"
 msgid "Technical layers:"
 msgstr "Technical layers:"
 
-msgid "Default pen size:"
-msgstr "Default pen size:"
-
-msgid ""
-"Selection of the pen size used to draw items which have no pen size "
-"specified."
-msgstr ""
-"Selection of the pen size used to draw items which have no pen size "
-"specified."
-
 msgid "Print Mode"
 msgstr "Print Mode"
 
@@ -17864,6 +17823,9 @@ msgstr ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 
+msgid "Default pen size:"
+msgstr "Default pen size:"
+
 msgid "Postscript Options"
 msgstr "Postscript Options"
 
@@ -18760,6 +18722,9 @@ msgstr ""
 msgid "Default properties for new graphic items:"
 msgstr "Default properties for new graphic items:"
 
+msgid "Net Class parameters"
+msgstr "Net Class parameters"
+
 msgid "Options Editor..."
 msgstr "Options Editor…"
 
@@ -19435,6 +19400,13 @@ msgstr "DRC rules:"
 msgid "Check rule syntax"
 msgstr "Check rule syntax"
 
+msgid ""
+"Text will not be readable with a thickness greater than 1/4 its width or "
+"height."
+msgstr ""
+"Text will not be readable with a thickness greater than 1/4 its width or "
+"height."
+
 msgid "Default properties for new dimension objects:"
 msgstr "Default properties for new dimension objects:"
 
@@ -19473,19 +19445,19 @@ msgstr "Track width less than minimum track width (%s)."
 msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "Via diameter less than minimum via diameter (%s)."
 
-msgid "No via drill defined."
-msgstr "No via drill defined."
+msgid "No via hole size defined."
+msgstr "No via hole size defined."
 
 #, c-format
-msgid "Via drill less than minimum through hole (%s)."
-msgstr "Via drill less than minimum through hole (%s)."
+msgid "Via hole diameter less than minimum through hole diameter (%s)."
+msgstr "Via hole diameter less than minimum through hole diameter (%s)."
 
-msgid "Via drill larger than via diameter."
-msgstr "Via drill larger than via diameter."
+msgid "Via hole diameter larger than via diameter."
+msgstr "Via hole diameter larger than via diameter."
 
 #, c-format
-msgid "Diameter and drill leave via annulus less than minimum (%s)."
-msgstr "Diameter and drill leave via annulus less than minimum (%s)."
+msgid "Diameter and hole leave via annulus less than minimum (%s)."
+msgstr "Diameter and hole leave via annulus less than minimum (%s)."
 
 #, c-format
 msgid "Differential pair track width less than minimum track width (%s)."
@@ -20178,6 +20150,18 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB “%s” does not exist.  Do you wish to create it?"
 
 #, c-format
+msgid ""
+"Error occurred when saving footprint '%s' to the project specific footprint "
+"library: %s"
+msgstr ""
+"Error occurred when saving footprint '%s' to the project specific footprint "
+"library: %s"
+
+#, c-format
+msgid "Error occurred saving the project specific footprint library table: %s"
+msgstr "Error occurred saving the project specific footprint library table: %s"
+
+#, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "No access rights to write to file “%s”"
 
@@ -20204,16 +20188,6 @@ msgid ""
 msgstr ""
 "Board copied to:\n"
 "“%s”"
-
-#, c-format
-msgid ""
-"Error occurred saving project specific footprint library table:\n"
-"\n"
-"%s"
-msgstr ""
-"Error occurred saving project specific footprint library table:\n"
-"\n"
-"%s"
 
 msgid "Last Change"
 msgstr "Last Change"
@@ -20419,8 +20393,8 @@ msgstr ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
 
-msgid "Save Footprint"
-msgstr "Save Footprint"
+msgid "Save Footprint As"
+msgstr "Save Footprint As"
 
 msgid "No library specified.  Footprint could not be saved."
 msgstr "No library specified.  Footprint could not be saved."
@@ -21688,6 +21662,18 @@ msgstr ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
+
+#, c-format
+msgid ""
+"The CADSTAR template '%s' has thermal reliefs in the original design but "
+"there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
+"has been applied instead. When the template is re-filled the thermal reliefs "
+"will be removed."
+msgstr ""
+"The CADSTAR template '%s' has thermal reliefs in the original design but "
+"there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
+"has been applied instead. When the template is re-filled the thermal reliefs "
+"will be removed."
 
 #, c-format
 msgid ""
@@ -23146,6 +23132,12 @@ msgstr "Close Outline"
 msgid "Close the in progress outline"
 msgstr "Close the in progress outline"
 
+msgid "Limit Lines to 45 deg"
+msgstr "Limit Lines to 45 deg"
+
+msgid "Limit graphic lines to H, V and 45 degrees"
+msgstr "Limit graphic lines to H, V and 45 degrees"
+
 msgid "Design Rules Checker"
 msgstr "Design Rules Checker"
 
@@ -23239,18 +23231,6 @@ msgstr "Create Footprint..."
 
 msgid "Create a new footprint using the Footprint Wizard"
 msgstr "Create a new footprint using the Footprint Wizard"
-
-msgid "Save to Board"
-msgstr "Save to Board"
-
-msgid "Update footprint on board"
-msgstr "Update footprint on board"
-
-msgid "Save to Library"
-msgstr "Save to Library"
-
-msgid "Save changes to library"
-msgstr "Save changes to library"
 
 msgid "Edit Footprint"
 msgstr "Edit Footprint"
@@ -23957,14 +23937,14 @@ msgstr "Performs automatic placement of components outside board area"
 msgid "Route Single Track"
 msgstr "Route Single Track"
 
-msgid "Run push & shove router (single tracks)"
-msgstr "Run push & shove router (single tracks)"
+msgid "Route tracks"
+msgstr "Route tracks"
 
 msgid "Route Differential Pair"
 msgstr "Route Differential Pair"
 
-msgid "Run push & shove router (differential pairs)"
-msgstr "Run push & shove router (differential pairs)"
+msgid "Route differential pairs"
+msgstr "Route differential pairs"
 
 msgid "Interactive Router Settings..."
 msgstr "Interactive Router Settings…"
@@ -24759,6 +24739,299 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Save Copy of Symbol"
+#~ msgstr "Save Copy of Symbol"
+
+#~ msgid "Save Symbol As..."
+#~ msgstr "Save Symbol As..."
+
+#~ msgid "Save In Schematic"
+#~ msgstr "Save In Schematic"
+
+#~ msgid "Save the current symbol in the schematic"
+#~ msgstr "Save the current symbol in the schematic"
+
+#~ msgid ""
+#~ "## Pi attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* __A = (L + 1)/(L - 1)__<br><br>\n"
+#~ "* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+#~ "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+#~ "* ___R3 = 1/ (A/Zout - 1/R2 )___"
+#~ msgstr ""
+#~ "## Pi attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* __A = (L + 1)/(L - 1)__<br><br>\n"
+#~ "* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+#~ "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+#~ "* ___R3 = 1/ (A/Zout - 1/R2 )___"
+
+#~ msgid ""
+#~ "## Splitted attenuator\n"
+#~ "### Attenuation is 6dB\n"
+#~ "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+#~ msgstr ""
+#~ "## Splitted attenuator\n"
+#~ "### Attenuation is 6dB\n"
+#~ "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+
+#~ msgid ""
+#~ "## Tee attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* ___A = (L + 1)/(L - 1)___<br><br>\n"
+#~ "* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+#~ "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+#~ "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+#~ msgstr ""
+#~ "## Tee attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* ___A = (L + 1)/(L - 1)___<br><br>\n"
+#~ "* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+#~ "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+#~ "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+
+#~ msgid "Messages:"
+#~ msgstr "Messages:"
+
+#~ msgid "E-Series Resistor Calculator"
+#~ msgstr "E-Series Resistor Calculator"
+
+#~ msgid "Available Values"
+#~ msgstr "Available Values"
+
+#~ msgid "0 ... 15V"
+#~ msgstr "0–15V"
+
+#~ msgid "16 ... 30V"
+#~ msgstr "16–30V"
+
+#~ msgid "31 ... 50V"
+#~ msgstr "31–50V"
+
+#~ msgid "51 ... 100V"
+#~ msgstr "51–100V"
+
+#~ msgid "101 ... 150V"
+#~ msgstr "101–150V"
+
+#~ msgid "151 ... 170V"
+#~ msgstr "151–170V"
+
+#~ msgid "171 ... 250V"
+#~ msgstr "171–250V"
+
+#~ msgid "251 ... 300V"
+#~ msgstr "251–300V"
+
+#~ msgid "301 ... 500V"
+#~ msgstr "301–500V"
+
+#~ msgid ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+#~ "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+#~ "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+#~ "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0,0025 to 4000 kOhm. \n"
+#~ "Solutions using up to 4 components are given.  \n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ msgstr ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+#~ "\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+#~ "\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+#~ "\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0,0025 to 4000 kOhm. \n"
+#~ "Solutions using up to 4 components are given.  \n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+
+#~ msgid ""
+#~ "Data modified, and no data filename to save modifications\n"
+#~ "Do you want to exit and abandon your change?"
+#~ msgstr ""
+#~ "Data modified, and no data filename to save modifications\n"
+#~ "Do you want to exit and abandon your change?"
+
+#~ msgid "Regulator list change"
+#~ msgstr "Regulator list change"
+
+#, c-format
+#~ msgid ""
+#~ "Unable to write file \"%s\"\n"
+#~ "Do you want to exit and abandon your change?"
+#~ msgstr ""
+#~ "Unable to write file “%s”\n"
+#~ "Do you want to exit and abandon your change?"
+
+#~ msgid "Write Data File Error"
+#~ msgstr "Write Data File Error"
+
+#, c-format
+#~ msgid ""
+#~ "Board thickness %s differs from stackup thickness %s\n"
+#~ "Allowed max error %s"
+#~ msgstr ""
+#~ "Board thickness %s differs from stackup thickness %s\n"
+#~ "Allowed max error %s"
+
+#~ msgid ""
+#~ "A locked dielectric thickness is < 0\n"
+#~ "Unlock it or change its thickness"
+#~ msgstr ""
+#~ "A locked dielectric thickness is < 0\n"
+#~ "Unlock it or change its thickness"
+
+#~ msgid ""
+#~ "Cannot calculate dielectric thickness\n"
+#~ "At least one dielectric layer must be not locked"
+#~ msgstr ""
+#~ "Cannot calculate dielectric thickness\n"
+#~ "At least one dielectric layer must be not locked"
+
+#~ msgid ""
+#~ "Cannot calculate dielectric thickness\n"
+#~ "Fixed thickness too big or board thickness too small"
+#~ msgstr ""
+#~ "Cannot calculate dielectric thickness\n"
+#~ "Fixed thickness too big or board thickness too small"
+
+#~ msgid "Physical stackup has not been updated to match layer count."
+#~ msgstr "Physical stackup has not been updated to match layer count."
+
+#~ msgid "Update Physical Stackup"
+#~ msgstr "Update Physical Stackup"
+
+#~ msgid "Update dielectric thickness from board thickness"
+#~ msgstr "Update dielectric thickness from board thickness"
+
+#~ msgid "Board thickness:"
+#~ msgstr "Board thickness:"
+
+#~ msgid "Current thickness from stackup:"
+#~ msgstr "Current thickness from stackup:"
+
+#~ msgid "Set Dielectric Thickness"
+#~ msgstr "Set Dielectric Thickness"
+
+#~ msgid ""
+#~ "Set thickness of all not locked dielectric layers.\n"
+#~ "The thickness will be the same for all not locked dielectric layers."
+#~ msgstr ""
+#~ "Set thickness of all not locked dielectric layers.\n"
+#~ "The thickness will be the same for all not locked dielectric layers."
+
+#~ msgid ""
+#~ "Selection of the pen size used to draw items which have no pen size "
+#~ "specified."
+#~ msgstr ""
+#~ "Selection of the pen size used to draw items which have no pen size "
+#~ "specified."
+
+#~ msgid "No via drill defined."
+#~ msgstr "No via drill defined."
+
+#, c-format
+#~ msgid "Via drill less than minimum through hole (%s)."
+#~ msgstr "Via drill less than minimum through hole (%s)."
+
+#~ msgid "Via drill larger than via diameter."
+#~ msgstr "Via drill larger than via diameter."
+
+#, c-format
+#~ msgid "Diameter and drill leave via annulus less than minimum (%s)."
+#~ msgstr "Diameter and drill leave via annulus less than minimum (%s)."
+
+#, c-format
+#~ msgid ""
+#~ "Error occurred saving project specific footprint library table:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Error occurred saving project specific footprint library table:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Save Footprint"
+#~ msgstr "Save Footprint"
+
+#~ msgid "Save to Board"
+#~ msgstr "Save to Board"
+
+#~ msgid "Update footprint on board"
+#~ msgstr "Update footprint on board"
+
+#~ msgid "Save to Library"
+#~ msgstr "Save to Library"
+
+#~ msgid "Save changes to library"
+#~ msgstr "Save changes to library"
+
+#~ msgid "Run push & shove router (single tracks)"
+#~ msgstr "Run push & shove router (single tracks)"
+
+#~ msgid "Run push & shove router (differential pairs)"
+#~ msgstr "Run push & shove router (differential pairs)"
 
 #~ msgid "Footprint place files"
 #~ msgstr "Footprint place files"
@@ -33895,9 +34168,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Add footprints"
 #~ msgstr "Add footprints"
-
-#~ msgid "Route tracks"
-#~ msgstr "Route tracks"
 
 #~ msgid "Add vias"
 #~ msgstr "Add vias"

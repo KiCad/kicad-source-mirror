@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-12 16:07+0100\n"
+"POT-Creation-Date: 2021-02-12 10:26-0800\n"
 "PO-Revision-Date: 2021-02-12 16:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1395,8 +1395,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop:9
-#: resources/linux/launchers/bitmap2component.desktop:10
+#: resources/linux/launchers/bitmap2component.desktop.in:9
+#: resources/linux/launchers/bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -16908,7 +16908,7 @@ msgid "Drawing layer %d not in use"
 msgstr "Couche de dessin %d non utilisée"
 
 #: gerbview/gerbview_frame.cpp:616 gerbview/menubar.cpp:148
-#: resources/linux/launchers/gerbview.desktop:10
+#: resources/linux/launchers/gerbview.desktop.in:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -17960,6 +17960,11 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
+
+#: libs/kiplatform/msw/environment.cpp:49
+#, fuzzy, c-format
+msgid "Error code: %d"
+msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19348,8 +19353,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:423
-#: resources/linux/launchers/pcbcalculator.desktop:9
-#: resources/linux/launchers/pcbcalculator.desktop:10
+#: resources/linux/launchers/pcbcalculator.desktop.in:9
+#: resources/linux/launchers/pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -19363,17 +19368,15 @@ msgid "Not worth using"
 msgstr "Ne vaut pas la peine d’utiliser"
 
 #: pcb_calculator/eserie_help.h:2
+#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
 "equally spaced in a logarithmic scale.\n"
 "\n"
 "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\n"
 "\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\n"
 "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\n"
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
@@ -33850,7 +33853,7 @@ msgstr "Couche Dessous"
 msgid "Via Type"
 msgstr "Type Via"
 
-#: pcbnew/undo_redo.cpp:586
+#: pcbnew/undo_redo.cpp:540
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr ""
 "Opération d'annulation/rétablissement incomplète: certains éléments ne sont "
@@ -34534,17 +34537,21 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: resources/linux/appdata/kicad.appdata.xml:6
-#: resources/linux/launchers/kicad.desktop:10
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr ""
+
+#: resources/linux/appdata/kicad.appdata.xml.in:6
+#: resources/linux/launchers/kicad.desktop.in:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml:13
-#: resources/linux/launchers/kicad.desktop:11
+#: resources/linux/appdata/kicad.appdata.xml.in:13
+#: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml:37
+#: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -34554,67 +34561,92 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml:49
+#: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml:54
+#: resources/linux/appdata/kicad.appdata.xml.in:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml:59
+#: resources/linux/appdata/kicad.appdata.xml.in:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml:71
+#: resources/linux/appdata/kicad.appdata.xml.in:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop:11
+#: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop:10
+#: resources/linux/launchers/eeschema.desktop.in:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop:11
+#: resources/linux/launchers/eeschema.desktop.in:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop:12
+#: resources/linux/launchers/eeschema.desktop.in:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop:11
+#: resources/linux/launchers/gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop:12
+#: resources/linux/launchers/gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop:12
+#: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop:11
+#: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop:10
+#: resources/linux/launchers/pcbnew.desktop.in:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop:11
+#: resources/linux/launchers/pcbnew.desktop.in:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop:12
+#: resources/linux/launchers/pcbnew.desktop.in:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:5
+#, fuzzy
+msgid "Gerber File"
+msgstr "Fichiers Gerber"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:10
+#, fuzzy
+msgid "Excellon drill file"
+msgstr "Créer Fichier(s) de perçage Excellon"
+
+#: resources/linux/mime/kicad-kicad.xml.in:5
+#, fuzzy
+msgid "KiCad Project"
+msgstr "Fichier projet KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:11
+#, fuzzy
+msgid "KiCad Schematic"
+msgstr "Editer la Schématique"
+
+#: resources/linux/mime/kicad-kicad.xml.in:17
+#, fuzzy
+msgid "KiCad Printed Circuit Board"
+msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Messages:"
 #~ msgstr "Messages:"
@@ -35051,10 +35083,6 @@ msgstr "Editeur de circuits imprimés KiCad (autonome)"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
-
-#, fuzzy, c-format
-#~ msgid "Error code: %d"
-#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
