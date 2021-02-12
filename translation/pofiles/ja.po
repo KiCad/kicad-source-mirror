@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:32+0000\n"
+"PO-Revision-Date: 2021-02-12 06:51+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -20959,7 +20959,7 @@ msgstr "フィレット半径:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:402
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr "サーマル リリーフのスポーク幅は最小幅より狭くできません。"
+msgstr "サーマルリリーフのスポーク幅は最小幅より狭くできません。"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:430
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
@@ -21106,7 +21106,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
-msgstr "サーマル リリーフ"
+msgstr "サーマルリリーフ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1398
 msgid "Reliefs for PTH"
@@ -21126,7 +21126,7 @@ msgstr "サーマル スポーク幅:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Width of copper in thermal reliefs."
-msgstr "サーマル リリーフ内のブリッジ幅。"
+msgstr "サーマルリリーフ内のブリッジ幅。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:274
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:105
@@ -22147,7 +22147,7 @@ msgstr "ゾーンの設定を利用"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 msgid "Thermal relief"
-msgstr "サーマル リリーフ"
+msgstr "サーマルリリーフ"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:337
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:433
@@ -24544,11 +24544,11 @@ msgstr "親のフットプリントから"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
 msgid "Thermal relief spoke width:"
-msgstr "サーマル リリーフ スポーク幅:"
+msgstr "サーマルリリーフ スポーク幅:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:750
 msgid "Thermal relief gap:"
-msgstr "サーマル リリーフのギャップ:"
+msgstr "サーマルリリーフのギャップ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:761
 msgid "Custom pad shape in zone:"
@@ -29417,7 +29417,7 @@ msgstr "ローカル ハンダマスク マージン"
 
 #: pcbnew/pad.cpp:1492
 msgid "Thermal Relief Spoke Width"
-msgstr "サーマル リリーフ スポーク幅"
+msgstr "サーマルリリーフ スポーク幅"
 
 #: pcbnew/pad.cpp:1495
 msgid "Thermal Relief"
@@ -31293,7 +31293,7 @@ msgstr "パッドはPTHパッドではありません。接続は %s になり�
 #: pcbnew/tools/board_inspection_tool.cpp:176
 #, c-format
 msgid "Zone thermal relief: %s."
-msgstr "ゾーンのサーマル リリーフ: %s."
+msgstr "ゾーンのサーマルリリーフ: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #, c-format
