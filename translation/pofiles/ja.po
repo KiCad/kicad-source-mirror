@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:04+0000\n"
+"PO-Revision-Date: 2021-02-12 06:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3864,7 +3864,7 @@ msgstr "コンポーネント"
 
 #: common/eda_item.cpp:295
 msgid "Sheet Pin"
-msgstr "シート ピン"
+msgstr "シートピン"
 
 #: common/eda_item.cpp:296 eeschema/dialogs/dialog_migrate_buses.cpp:101
 #: pcbnew/tools/pcb_actions.cpp:1186
@@ -4812,7 +4812,7 @@ msgstr "シート ファイル名"
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
 msgid "Sheet pins"
-msgstr "シート ピン"
+msgstr "シートピン"
 
 #: common/layer_id.cpp:128
 msgid "No-connect symbols"
@@ -7939,7 +7939,7 @@ msgstr "ラベル プロパティ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:61
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "階層シート ピン プロパティ"
+msgstr "階層シートピン プロパティ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:62
 #: pcbnew/dialogs/dialog_text_properties.cpp:86
@@ -9998,7 +9998,7 @@ msgstr "接続タイプ:"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:62
 msgid "Sheet Pin Properties"
-msgstr "シート ピン プロパティ"
+msgstr "シートピン プロパティ"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:256
 msgid "A sheet must have a valid file name."
@@ -13255,7 +13255,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"不正なシート ピン名：\n"
+"不正なシートピン名：\n"
 "ファイル: \"%s\"\n"
 "行: %d\n"
 "オフセット: %d"
@@ -13268,7 +13268,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"空のシート ピン名：\n"
+"空のシートピン名：\n"
 "ファイル: \"%s\"\n"
 "行: %d\n"
 "オフセット: %d"
@@ -15271,19 +15271,19 @@ msgstr "階層シートを追加"
 
 #: eeschema/tools/ee_actions.cpp:321
 msgid "Add Sheet Pin"
-msgstr "シート ピンを追加"
+msgstr "シートピンを追加"
 
 #: eeschema/tools/ee_actions.cpp:321
 msgid "Add a sheet pin"
-msgstr "シート ピンを追加"
+msgstr "シートピンを追加"
 
 #: eeschema/tools/ee_actions.cpp:326
 msgid "Import Sheet Pin"
-msgstr "シート ピンをインポート"
+msgstr "シートピンをインポート"
 
 #: eeschema/tools/ee_actions.cpp:326
 msgid "Import a hierarchical sheet pin"
-msgstr "階層シート ピンをインポート"
+msgstr "階層シートピンをインポート"
 
 #: eeschema/tools/ee_actions.cpp:332
 msgid "Add Global Label"
@@ -15488,11 +15488,11 @@ msgstr "既存のアイテムをテキスト コメントに変更"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Cleanup Sheet Pins"
-msgstr "シート ピンをクリーンアップ"
+msgstr "シートピンをクリーンアップ"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Delete unreferenced sheet pins"
-msgstr "参照されていないシート ピンを削除"
+msgstr "参照されていないシートピンを削除"
 
 #: eeschema/tools/ee_actions.cpp:483 pcbnew/tools/pcb_actions.cpp:433
 msgid "Edit Text & Graphics Properties..."
