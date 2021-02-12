@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:17+0000\n"
+"PO-Revision-Date: 2021-02-12 04:19+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7217,7 +7217,7 @@ msgstr "BOM ジェネレーター スクリプト:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "新しい BOM ジェネレーターとリストへのコマンド ラインを追加"
+msgstr "新しい BOM ジェネレーターとリストへのコマンドラインを追加"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
@@ -7229,7 +7229,7 @@ msgstr "リストから現在のジェネレーター スクリプトを削除"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr "ジェネレーター実行用コマンド ライン:"
+msgstr "ジェネレーター実行用コマンドライン:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
@@ -9366,7 +9366,7 @@ msgstr "名前:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:92
 msgid "Command line to run the generator:"
-msgstr "ジェネレーター実行用コマンド ライン:"
+msgstr "ジェネレーター実行用コマンドライン:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:107
 msgid "Browse Generators..."
