@@ -54,6 +54,7 @@ class BASE_SCREEN;
  */
 enum class UNDO_REDO {
     UNSPECIFIED = 0,     // illegal
+    NOP,				 // Undo/redo will ignore this entry.  Only forces the start of a new stack
     CHANGED,             // params of items have a value changed: undo is made by exchange
                          // values with a copy of these values
     NEWITEM,             // new item, undo by changing in deleted
@@ -132,12 +133,6 @@ private:
  */
 class PICKED_ITEMS_LIST
 {
-public:
-    UNDO_REDO m_Status;             /* info about operation to undo/redo for this item. can be
-                                     * UNSPECIFIED */
-    wxPoint     m_TransformPoint;   /* used to undo redo command by the same command: usually
-                                     * need to know the rotate point or the move vector */
-
 private:
     std::vector <ITEM_PICKER> m_ItemsList;
 

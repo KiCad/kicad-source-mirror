@@ -163,8 +163,8 @@ private:
      */
     void Update3DView( bool aForceReload, const wxString* aTitle = nullptr ) override;
 
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO, const wxPoint& ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO, const wxPoint &) override {}
+    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
 
     void updateView();
 

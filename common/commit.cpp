@@ -107,9 +107,6 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
         EDA_ITEM* copy = NULL;
 
         if( change_type == UNDO_REDO::UNSPECIFIED )
-            change_type = aItems.m_Status;
-
-        if( change_type == UNDO_REDO::UNSPECIFIED )
             change_type = aModFlag;
 
         if( ( copy = aItems.GetPickedItemLink( i ) ) )

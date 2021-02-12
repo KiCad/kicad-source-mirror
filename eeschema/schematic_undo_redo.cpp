@@ -98,8 +98,7 @@
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
                                          SCH_ITEM*      aItem,
                                          UNDO_REDO      aCommandType,
-                                         bool           aAppend,
-                                         const wxPoint& aTransformPoint )
+                                         bool           aAppend )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
@@ -114,7 +113,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
     if( !commandToUndo )
     {
         commandToUndo = new PICKED_ITEMS_LIST();
-        commandToUndo->m_TransformPoint = aTransformPoint;
     }
 
     ITEM_PICKER itemWrapper( aScreen, aItem, aCommandType );
@@ -155,24 +153,18 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                          UNDO_REDO                aTypeCommand,
-                                         bool                     aAppend,
-                                         const wxPoint&           aTransformPoint )
+                                         bool                     aAppend )
 {
     PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
     if( !aItemsList.GetCount() )
         return;
 
-    // Can't append a WIRE IMAGE, so fail to a new undo point
     if( aAppend )
         commandToUndo = PopCommandFromUndoList();
 
     if( !commandToUndo )
-    {
         commandToUndo = new PICKED_ITEMS_LIST();
-        commandToUndo->m_TransformPoint = aTransformPoint;
-        commandToUndo->m_Status = aTypeCommand;
-    }
 
     // Copy picker list:
     if( !commandToUndo->GetCount() )
@@ -258,6 +250,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         eda_item->ClearEditFlags();
         eda_item->ClearTempFlags();
 
+        if( status == UNDO_REDO::NOP )
+        {
+        	continue;
+        }
         if( status == UNDO_REDO::NEWITEM )
         {
             // new items are deleted on undo
@@ -330,6 +326,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 {
     PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
+
+    // Skip empty frames
+    while( undo && undo->GetCount() == 1 && undo->GetPickedItemStatus( 0 ) == UNDO_REDO::NOP )
+    	undo = PopCommandFromUndoList();
 
     if( undo )
     {

@@ -207,8 +207,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     BOARD*  currentPcb  = GetBoard();
     bool    fromEmpty   = false;
 
-    itemsList.m_Status = UNDO_REDO::CHANGED;
-
     // Append tracks:
     for( TRACK* item : currentPcb->Tracks() )
     {
@@ -238,7 +236,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     if( itemsList.GetCount() > 0 )
-        SaveCopyInUndoList( itemsList, UNDO_REDO::CHANGED, wxPoint( 0.0, 0.0 ) );
+        SaveCopyInUndoList( itemsList, UNDO_REDO::CHANGED );
     else
         fromEmpty = true;
 
@@ -255,7 +253,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     if( fromEmpty )
     {
         oldBuffer = new PICKED_ITEMS_LIST();
-        oldBuffer->m_Status = UNDO_REDO::NEWITEM;
     }
     else
     {

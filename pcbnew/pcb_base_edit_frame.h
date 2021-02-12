@@ -86,10 +86,8 @@ public:
      *
      * @param aItemToCopy the board item modified by the command to undo.
      * @param aTypeCommand command type (see enum UNDO_REDO).
-     * @param aTransformPoint the reference point of the transformation, for commands like move
      */
-    void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand,
-                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+    void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand ) override;
 
     /**
      * Create a new entry in undo list of commands.
@@ -98,10 +96,8 @@ public:
      *
      * @param aItemsList the list of items modified by the command to undo.
      * @param aTypeCommand command type (see enum UNDO_REDO).
-     * @param aTransformPoint the reference point of the transformation for commands like move.
      */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
-                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand ) override;
 
     /**
      * Redo the last edit:

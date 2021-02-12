@@ -176,22 +176,18 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 }
 
 
-void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aCommandType,
-                                              const wxPoint& aTransformPoint )
+void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aCommandType )
 {
     PICKED_ITEMS_LIST commandToUndo;
     commandToUndo.PushItem( ITEM_PICKER( nullptr, aItem, aCommandType ) );
-    SaveCopyInUndoList( commandToUndo, aCommandType, aTransformPoint );
+    SaveCopyInUndoList( commandToUndo, aCommandType );
 }
 
 
 void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                              UNDO_REDO aTypeCommand,
-                                              const wxPoint& aTransformPoint )
+                                              UNDO_REDO aTypeCommand )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
-
-    commandToUndo->m_TransformPoint = aTransformPoint;
 
     // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
     // take the first occurence of the footprint (we save copies of footprints when one of its

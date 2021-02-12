@@ -207,8 +207,8 @@ private:
     /*
      * Not used here but needed by PCB_BASE_EDIT_FRAME.
      */
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO, const wxPoint& ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO, const wxPoint& ) override {}
+    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
     void OnEditItemRequest( BOARD_ITEM* aItem ) override {}
 
     DECLARE_EVENT_TABLE()
