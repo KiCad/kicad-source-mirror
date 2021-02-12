@@ -129,8 +129,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
 
     case UNDO_REDO::NEWITEM:
     case UNDO_REDO::DELETED:
-    case UNDO_REDO::ROTATED:
-    case UNDO_REDO::MOVED:
         commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -220,10 +218,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
             wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;
 
-        case UNDO_REDO::MOVED:
-        case UNDO_REDO::MIRRORED_Y:
-        case UNDO_REDO::MIRRORED_X:
-        case UNDO_REDO::ROTATED:
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
         case UNDO_REDO::EXCHANGE_T:
@@ -304,30 +298,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 if( item->Type() == SCH_COMPONENT_T )
                     static_cast<SCH_COMPONENT*>( item )->UpdatePins();
 
-                break;
-
-            case UNDO_REDO::MOVED:
-                item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
-                break;
-
-            case UNDO_REDO::MIRRORED_Y:
-                item->MirrorY( aList->m_TransformPoint.x );
-                break;
-
-            case UNDO_REDO::MIRRORED_X:
-                item->MirrorX( aList->m_TransformPoint.y );
-                break;
-
-            case UNDO_REDO::ROTATED:
-                if( aRedoCommand )
-                    item->Rotate( aList->m_TransformPoint );
-                else
-                {
-                    // Rotate 270 deg to undo 90-deg rotate
-                    item->Rotate( aList->m_TransformPoint );
-                    item->Rotate( aList->m_TransformPoint );
-                    item->Rotate( aList->m_TransformPoint );
-                }
                 break;
 
             case UNDO_REDO::EXCHANGE_T:

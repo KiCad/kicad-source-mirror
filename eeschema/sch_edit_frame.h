@@ -764,7 +764,6 @@ public:
      *      NEWITEM
      *      DELETED
      *      UR_WIRE_IMAGE
-     *      MOVED
      *
      * If it is a delete command, items are put on list with the .Flags member
      * set to DELETED.

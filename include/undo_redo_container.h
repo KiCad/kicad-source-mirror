@@ -58,12 +58,6 @@ enum class UNDO_REDO {
                          // values with a copy of these values
     NEWITEM,             // new item, undo by changing in deleted
     DELETED,             // deleted item, undo by changing in deleted
-    MOVED,               // moved item, undo by move it
-    MIRRORED_X,          // mirrored item, undo by mirror X
-    MIRRORED_Y,          // mirrored item, undo by mirror Y
-    ROTATED,             // Rotated item (counterclockwise), undo by rotating it
-    ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
-    FLIPPED,             // flipped (board items only), undo by flipping it
     LIBEDIT,             // Specific to the component editor (symbol_editor creates a full copy
                          // of the current component when changed)
     LIB_RENAME,          // As LIBEDIT, but old copy should be removed from library

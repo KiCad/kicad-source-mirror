@@ -214,12 +214,6 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
         // fall through
 
     case UNDO_REDO::CHANGED:
-    case UNDO_REDO::MOVED:
-    case UNDO_REDO::MIRRORED_X:
-    case UNDO_REDO::MIRRORED_Y:
-    case UNDO_REDO::ROTATED:
-    case UNDO_REDO::ROTATED_CLOCKWISE:
-    case UNDO_REDO::FLIPPED:
         return CHT_MODIFY;
     }
 }
