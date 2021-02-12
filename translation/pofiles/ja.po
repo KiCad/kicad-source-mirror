@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:15+0000\n"
+"PO-Revision-Date: 2021-02-12 04:16+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -30457,9 +30457,7 @@ msgstr "ユーザーにはディレクトリー \"%s\" を削除する権限が�
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2463
 #, c-format
 msgid "Library directory \"%s\" has unexpected sub-directories."
-msgstr ""
-"ライブラリーのディレクトリー \"%s\" は予期しないサブ ディレクトリーを含んでい"
-"ます。"
+msgstr "ライブラリーのディレクトリー \"%s\" は予期しないサブディレクトリーを含んでいます。"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2482
 #, c-format
