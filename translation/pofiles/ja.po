@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 07:01+0000\n"
+"PO-Revision-Date: 2021-02-12 07:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9788,7 +9788,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 msgid "Rescue Symbols"
-msgstr "シンボルのレスキュー"
+msgstr "シンボルをレスキュー"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -27341,7 +27341,7 @@ msgstr "ルールレイヤー '%s' が一致しません。ルールは無視さ
 
 #: pcbnew/drc/drc_engine.cpp:884 pcbnew/drc/drc_engine.cpp:904
 msgid "Rule layer not matched; rule ignored."
-msgstr "ルール レイヤーが一致しません。ルールは無視されます。"
+msgstr "ルールレイヤーが一致しません。ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:912
 msgid "Unconditional constraint applied."
