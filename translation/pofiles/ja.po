@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 05:05+0000\n"
+"PO-Revision-Date: 2021-02-12 05:09+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5787,7 +5787,7 @@ msgstr "単一レイヤー表示モード"
 
 #: common/tool/actions.cpp:527
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "非アクティブ レイヤーを標準と非表示で切り替える"
+msgstr "非アクティブレイヤーを標準と非表示で切り替える"
 
 #: common/tool/actions.cpp:531
 msgid "Single Layer View Mode (3-state)"
@@ -5795,7 +5795,7 @@ msgstr "単一レイヤー表示モード (3 状態)"
 
 #: common/tool/actions.cpp:532
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr "非アクティブ レイヤーを標準、ぼかし、非表示で切り替える"
+msgstr "非アクティブレイヤーを標準、ぼかし、非表示で切り替える"
 
 #: common/tool/actions.cpp:536
 msgid "Select item(s)"
