@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 05:31+0000\n"
+"PO-Revision-Date: 2021-02-12 06:04+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -532,7 +532,7 @@ msgstr "その他オプション"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
 msgid "Anti-aliasing:"
-msgstr "アンチエイリアス:"
+msgstr "アンチエイリアシング:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -564,7 +564,7 @@ msgstr "移動中"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
 msgid "Disable anti-aliasing"
-msgstr "アンチ-エイリアスを無効化"
+msgstr "アンチエイリアシングを無効化"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
 msgid "Disable thickness"
@@ -597,7 +597,7 @@ msgstr "床面を追加"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr "アンチエイリアス"
+msgstr "アンチエイリアシング"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:264
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -2884,15 +2884,15 @@ msgstr "アクセラレーター グラフィックス:"
 #: common/dialogs/panel_common_settings_base.cpp:73
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "No Antialiasing"
-msgstr "アンチ-エイリアスなし"
+msgstr "アンチエイリアシングなし"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Subpixel Antialiasing (High Quality)"
-msgstr "サブピクセル アンチ-エイリアシング (High Quality)"
+msgstr "サブピクセル アンチエイリアシング (High Quality)"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Subpixel Antialiasing (Ultra Quality)"
-msgstr "サブピクセル アンチ-エイリアシング (Ultra Quality)"
+msgstr "サブピクセル アンチエイリアシング (Ultra Quality)"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Supersampling (2x)"
@@ -2908,15 +2908,15 @@ msgstr "代替グラフィックス:"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Fast Antialiasing"
-msgstr "高速アンチ-エイリアシング"
+msgstr "高速アンチエイリアシング"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "Balanced Antialiasing"
-msgstr "平衡アンチ-エイリアシング"
+msgstr "平衡アンチエイリアシング"
 
 #: common/dialogs/panel_common_settings_base.cpp:83
 msgid "High Quality Antialiasing"
-msgstr "高品質アンチ-エイリアシング"
+msgstr "高品質アンチエイリアシング"
 
 #: common/dialogs/panel_common_settings_base.cpp:89
 msgid "3D cache file duration:"
