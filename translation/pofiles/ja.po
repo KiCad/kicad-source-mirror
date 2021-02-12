@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 04:19+0000\n"
+"PO-Revision-Date: 2021-02-12 04:22+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1559,9 +1559,7 @@ msgstr "説明"
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
-msgstr ""
-"KiCad EDA Suite は電気回路図作成及びプリント基板設計のための、オープン ソー"
-"ス アプリケーション セットです。"
+msgstr "KiCad EDAスイートは電気回路図作成及びプリント基板設計のための、オープンソースのアプリケーションのセットです。"
 
 #: common/dialog_about/AboutDialog_main.cpp:126
 msgid "KiCad on the web"
@@ -1597,7 +1595,7 @@ msgstr "KiCad フォーラム - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "KiCad EDAソフトウエアは、下記のラインセンスのもと提供されています"
+msgstr "KiCad EDAスイートは、下記のラインセンスのもと提供されています"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -33935,7 +33933,7 @@ msgstr "KiCad"
 #: resources/linux/appdata/kicad.appdata.xml.in:13
 #: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
-msgstr "EDA スイート"
+msgstr "EDAスイート"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
