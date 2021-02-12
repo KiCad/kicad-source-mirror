@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-11 23:55+0000\n"
+"PO-Revision-Date: 2021-02-12 00:50+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6849,7 +6849,7 @@ msgstr "選択されたフットプリントを表示"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
 msgid "View the selected footprint in the footprint viewer"
-msgstr "フットプリント ビューワーで選択されたフットプリントを見る"
+msgstr "フットプリント ビューアーで選択されたフットプリントを見る"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
@@ -14838,7 +14838,7 @@ msgstr "次のシンボルを表示"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
-msgstr "シンボル ビューワー"
+msgstr "シンボル ビューアー"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
@@ -24890,7 +24890,7 @@ msgid ""
 msgstr ""
 "ガーバー ファイルにネットリストのメタデータと穴の属性を含めます。\n"
 "X1 フォーマットでは、これらはコメントです。\n"
-"CAM ツールとガーバー ビューワーで接続をチェックするために使用されます。"
+"CAM ツールとガーバー ビューアーで接続をチェックするために使用されます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:239
 msgid "Disable aperture macros (non recommended)"
@@ -32446,7 +32446,7 @@ msgstr "最後の２つのハイライトされたネットを切り替えます
 
 #: pcbnew/tools/pcb_actions.cpp:696
 msgid "Clear Net Highlighting"
-msgstr "ネット ハイライトをクリア"
+msgstr "ネットのハイライトをクリア"
 
 #: pcbnew/tools/pcb_actions.cpp:700 pcbnew/tools/pcb_actions.cpp:707
 msgid "Highlight all copper items of a net"
