@@ -48,24 +48,28 @@ BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
     if( extension == "xsl" )
     {
         m_info = readHeader( "-->" );
-        m_cmd = wxString::Format( "xsltproc -o \"%%O\" \"%s\" \"%%I\"", m_file.GetFullPath() );
+        m_cmd = wxString::Format( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"",
+                                  getOutputExtension( m_info ), m_file.GetFullPath() );
     }
     else if( extension == "py" )
     {
         m_info = readHeader( "\"\"\"" );
 #ifdef __WINDOWS__
-        m_cmd = wxString::Format( "python \"%s/%s\" \"%%I\" \"%%O\"",
-                                  m_file.GetPath(), m_file.GetFullName() );
+        m_cmd = wxString::Format( "python \"%s/%s\" \"%%I\" \"%%O%s\"",
+                                  m_file.GetPath(), m_file.GetFullName(),
+                                  getOutputExtension( m_info ) );
 #else
-        m_cmd = wxString::Format( "python \"%s\" \"%%I\" \"%%O\"", m_file.GetFullPath() );
+        m_cmd = wxString::Format( "python \"%s\" \"%%I\" \"%%O%s\"", m_file.GetFullPath(),
+                                  getOutputExtension( m_info ) );
 #endif
     }
 #ifdef __WINDOWS__
     else if( extension == "pyw" )
     {
         m_info = readHeader( "\"\"\"" );
-        m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O\"",
-                                  m_file.GetPath(),m_file.GetFullName() );
+        m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O%s\"",
+                                  m_file.GetPath(), m_file.GetFullName(),
+                                  getOutputExtension( m_info ) );
     }
 #endif /* __WINDOWS__ */
     else // fallback
@@ -112,7 +116,7 @@ wxString BOM_PLUGIN::readHeader( const wxString& aEndSection )
     strstart += header.Length();
     int strend = data.find( aEndSection, strstart );
 
-    if( strend == wxNOT_FOUND)
+    if( strend == wxNOT_FOUND )
         return wxEmptyString;
 
     // Remove empty line if any
@@ -120,4 +124,25 @@ wxString BOM_PLUGIN::readHeader( const wxString& aEndSection )
             strstart++;
 
     return data.SubString( strstart, strend - 1 );
+}
+
+
+wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
+{
+    // search header for extension after %O (extension includes '.')
+    // looks for output argument of the form `"%O.extension"`
+    const wxString outputarg( "\"%O" );
+
+    int strstart = aHeader.Find( outputarg );
+
+    if( strstart == wxNOT_FOUND )
+        return wxEmptyString;
+
+    strstart += outputarg.Length();
+    int strend = aHeader.find( "\"", strstart );
+
+    if( strend == wxNOT_FOUND )
+        return wxEmptyString;
+
+    return aHeader.SubString( strstart, strend - 1 );
 }
