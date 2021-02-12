@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-12 11:19+0100\n"
-"PO-Revision-Date: 2021-02-12 11:28+0100\n"
+"POT-Creation-Date: 2021-02-12 16:07+0100\n"
+"PO-Revision-Date: 2021-02-12 16:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1451,9 +1451,9 @@ msgstr "inch^3"
 
 #: common/base_units.cpp:519
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:524
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:544
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:538
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:558
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:578
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:295
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:391
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:168
@@ -1494,7 +1494,6 @@ msgid "Do not show again"
 msgstr "Ne pas montrer de nouveau"
 
 #: common/confirm.cpp:128
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:248
 msgid "Message"
 msgstr "Message"
 
@@ -2058,40 +2057,40 @@ msgstr "Sélectionnez le fichier table de librairies %s globale:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:177
 #: eeschema/dialogs/dialog_spice_model_base.cpp:181
 #: eeschema/dialogs/dialog_spice_model_base.cpp:185
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:890
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:905
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1032
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1036
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1040
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1044
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1048
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1052
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1056
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1060
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1064
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1068
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1072
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1076
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1080
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1286
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1298
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1324
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1338
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1350
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1366
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1380
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1396
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1556
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1568
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1580
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1592
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1645
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1657
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1669
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1681
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:928
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:943
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:958
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1063
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1067
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1071
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1075
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1079
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1083
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1087
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1091
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1095
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1099
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1103
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1107
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1111
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1115
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1346
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1358
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1370
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1384
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1398
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1410
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1426
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1440
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1456
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1616
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1628
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1640
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1652
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1705
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1717
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1729
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1741
 msgid "dummy"
 msgstr "dummy"
 
@@ -3422,14 +3421,14 @@ msgid "Clearance"
 msgstr "Isolation"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:42
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1705
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1765
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:190
 #: pcbnew/tools/board_inspection_tool.cpp:516
 msgid "Track Width"
 msgstr "Largeur Piste"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1429
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1489
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:191
 msgid "Via Size"
 msgstr "Diam Via"
@@ -3557,9 +3556,9 @@ msgstr "Substitution de Texte"
 
 #: common/dialogs/wx_html_report_panel.cpp:185
 #: common/dialogs/wx_html_report_panel.cpp:210
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:517
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:537
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:557
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:531
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:551
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:571
 msgid "Error:"
 msgstr "Erreur:"
 
@@ -4992,7 +4991,7 @@ msgstr "Empreintes dessous"
 #: common/layer_id.cpp:145
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:343
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:353
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Values"
@@ -6043,7 +6042,7 @@ msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Ouvrir le guide pour les débutants \"Démarrer avec KiCad\""
 
 #: common/tool/actions.cpp:621
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:590
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:607
 msgid "Help"
 msgstr "Aide"
 
@@ -6287,10 +6286,10 @@ msgid "Filter:"
 msgstr "Filtre:"
 
 #: common/widgets/paged_dialog.cpp:69
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:189
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1090
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1419
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1695
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:186
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1479
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1755
 msgid "Reset to Defaults"
 msgstr "Réinitialiser aux Défauts"
 
@@ -8455,6 +8454,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.cpp:44 gerbview/files.cpp:647
 #: gerbview/job_file_reader.cpp:237
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:202
 msgid "Messages"
@@ -8661,11 +8661,11 @@ msgstr "Taille texte:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:712
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:722
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:734
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1216
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1228
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:747
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:769
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1254
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1266
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:532
 msgid "..."
 msgstr "..."
@@ -9687,7 +9687,7 @@ msgid "Schematic size"
 msgstr "Taille schématique"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:225
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1760
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1827
 msgid "A5"
 msgstr "A5"
 
@@ -9717,9 +9717,9 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:242
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1203
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1342
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1455
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1402
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1515
 msgid "A"
 msgstr "A"
 
@@ -10314,11 +10314,11 @@ msgid "Amperes"
 msgstr "Ampères"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:309
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:320
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:358
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:369
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:380
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:319
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:330
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:368
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:379
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:390
 msgid "Ohms"
 msgstr "Ohms"
 
@@ -10373,8 +10373,8 @@ msgstr "Activer la deuxième source"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:123
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:139
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:117
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:133
 msgid "V"
 msgstr "V"
 
@@ -10644,7 +10644,7 @@ msgstr "type de générateur aléatoire pour la source invalide"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
 #: eeschema/dialogs/dialog_spice_model_base.cpp:849
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:162
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:156
 msgid "Type:"
 msgstr "Type:"
 
@@ -10786,7 +10786,7 @@ msgid "Amplitude:"
 msgstr "Amplitude:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:824
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:859
 msgid "Frequency:"
 msgstr "Fréquence:"
 
@@ -17396,7 +17396,7 @@ msgid "Template path:"
 msgstr "Chemin template:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:218
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:215
 msgid "Browse"
 msgstr "Examiner"
 
@@ -18416,7 +18416,7 @@ msgstr ""
 msgid "Error writing objects to clipboard"
 msgstr "Erreur d’écriture d’objets dans le presse-papiers"
 
-#: pcb_calculator/attenuators.cpp:123
+#: pcb_calculator/attenuators.cpp:132
 #, c-format
 msgid "Attenuation more than %f dB"
 msgstr "Atténuation ajustée à plus que %f dB"
@@ -18445,7 +18445,7 @@ msgstr ""
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
-"## Pi attenuator\n"
+"### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18457,7 +18457,7 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## Atténuateur en PI\n"
+"### Atténuateur en PI\n"
 "__Zin__  impédance d'entrée désirée en  &#x2126;<br>\n"
 "__Zout__  impédance de sortie désirée<br>\n"
 "__Zin = Zout__\n"
@@ -18470,25 +18470,25 @@ msgstr ""
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
-"## Splitted attenuator\n"
-"### Attenuation is 6dB\n"
+"### Split attenuator\n"
+"#### Attenuation is 6dB\n"
 "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## Séparateur résistif\n"
-"### L'atténuation est 6dB\n"
-"___Z<sub>in</sub>___  impédance d'entrée desirée en  &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impédance de sortie desirée en  &#x2126;<br>\n"
+"### Séparateur résistif\n"
+"#### L'atténuation est 6dB\n"
+"___Z<sub>in</sub>___  impédance d'entrée désirée en  &#x2126;<br>\n"
+"___Z<sub>out</sub>___ impédance de sortie désirée en  &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
-"## Tee attenuator\n"
+"### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18500,7 +18500,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## Atténuateur en T\n"
+"### Atténuateur en T\n"
 "__Zin__  impédance d'entrée désirée en  &#x2126;<br>\n"
 "__Zout__  impédance de sortie désirée <br>\n"
 "__Zin = Zout__\n"
@@ -18522,14 +18522,14 @@ msgid "Bad or missing parameters!"
 msgstr "Paramètres mauvais ou manquants!"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:130
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:124
 msgid "Vref:"
 msgstr "Vref:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1302
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1584
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1673
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1362
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1644
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1733
 msgid "Volt"
 msgstr "Volt"
 
@@ -18542,12 +18542,12 @@ msgid "3 terminals regulator"
 msgstr "Régulateur 3 pins"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:146
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:140
 msgid "Iadj:"
 msgstr "Iadj:"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:149
 msgid "uA"
 msgstr "uA"
 
@@ -18555,37 +18555,37 @@ msgstr "uA"
 msgid "Regulator Parameters"
 msgstr "Paramètres du Régulateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:61
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:401
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:55
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:423
 msgid "Formula"
 msgstr "Formule"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:63
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:57
 msgid "Vout = Vref * (R1 + R2) / R2"
 msgstr "Vout = Vref * (R1 + R2) / R2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:88
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:82
 msgid "R1:"
 msgstr "R1:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:95
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:109
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:483
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:89
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:103
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:459
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:470
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:481
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kOhm"
 msgstr "kOhm"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:102
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:96
 msgid "R2:"
 msgstr "R2:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:116
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:110
 msgid "Vout:"
 msgstr "Vout:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:132
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:126
 msgid ""
 "The internal reference voltage of the regulator.\n"
 "Should not be 0."
@@ -18593,12 +18593,12 @@ msgstr ""
 "La référence interne de tension du régulateur.\n"
 "Ne doit pas être 0."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:148
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:142
 msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr ""
 "Pour les régulateurs 3 pins seulement, le courant de la pin d'ajustement."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:164
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:158
 msgid ""
 "Type of the regulator.\n"
 "There are 2 types:\n"
@@ -18610,543 +18610,531 @@ msgstr ""
 "- régulateurs qui ont une entrée spécialisée pour la régulation de tension.\n"
 "- régulateurs à 3 pins seulement."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:168
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:162
 msgid "Standard Type"
 msgstr "Type Standard"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:168
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:162
 msgid "3 Terminal Type"
 msgstr "3 Pins Type"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:186
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:333
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:568
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:180
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:343
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:588
 msgid "Calculate"
 msgstr "Calculer"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:199
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:196
 msgid "Regulator"
 msgstr "Régulateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:203
 msgid "Regulators data file:"
 msgstr "Fichier de données des régulateurs:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:208
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:205
 msgid "The name of the data file which stores known regulators parameters."
 msgstr ""
 "Le nom du fichier de données qui contient les paramètres des régulateurs."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:227
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:224
 msgid "Edit Regulator"
 msgstr "Éditer le Régulateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:228
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
 msgid "Edit the current selected regulator."
 msgstr "Éditer le régulateur actuellement sélectionné."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:232
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:229
 msgid "Add Regulator"
 msgstr "Ajouter un Régulateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:233
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:230
 msgid "Enter a new item to the current list of available regulators"
 msgstr ""
 "Entrer un nouvel élément dans la liste actuelle des régulateurs disponibles"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:237
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:234
 #: pcb_calculator/regulators_funct.cpp:223
 msgid "Remove Regulator"
 msgstr "Supprimer Régulateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:238
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:235
 msgid "Remove an item from the current list of available regulators"
 msgstr "Supprimer un élément de la liste actuelle des régulateurs disponibles"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:259
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
 msgid "Regulators"
 msgstr "Régulateurs"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:264
 msgid "PI"
 msgstr "PI"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:264
 msgid "Tee"
 msgstr "Té"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:264
 msgid "Bridged Tee"
 msgstr "Té Ponté"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:264
 msgid "Resistive Splitter"
 msgstr "Séparateur résistif"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:269
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:266
 msgid "Attenuators"
 msgstr "Atténuateurs"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:283
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1106
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1438
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:293
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1498
 #: pcbnew/footprint_wizard_frame.cpp:197
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:291
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:301
 msgid "Attenuation"
 msgstr "Atténuation"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:298
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:308
 msgid "dB"
 msgstr "dB"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:302
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:312
 msgid "Zin"
 msgstr "Zin"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:313
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:323
 msgid "Zout"
 msgstr "Zout"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:351
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:361
 msgid "R1"
 msgstr "R1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:362
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:372
 msgid "R2"
 msgstr "R2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:373
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
 msgid "R3"
 msgstr "R3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:390
-msgid "Messages:"
-msgstr "Messages:"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:413
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:435
 msgid "RF Attenuators"
 msgstr "Atténuateurs RF"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:427
-msgid "E-Series Resistor Calculator"
-msgstr "Calculatrice de résistance de séries E"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:446
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:444
 msgid "Inputs"
 msgstr "Entrées"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:452
 msgid "Required Resistance:"
 msgstr "Résistance Requise:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:463
 msgid "Exclude Value 1:"
 msgstr "Exclure Valeur 1:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:476
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:474
 msgid "Exclude Value 2:"
 msgstr "Exclure Valeur 2:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:494
 msgid "E1"
 msgstr "E1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:497
 msgid "E3"
 msgstr "E3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:500
 msgid "E6"
 msgstr "E6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:487
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
 msgid "E12"
 msgstr "E12"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:489
-msgid "Available Values"
-msgstr "Valeurs Disponibles"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:500
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:514
 msgid "Solutions"
 msgstr "Solutions"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:508
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:522
 msgid "Simple Solution:"
 msgstr "Solution Simple:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:528
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:542
 msgid "3R Solution:"
 msgstr "Solution 3R :"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:548
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:562
 msgid "4R Solution:"
 msgstr "Solution 4R :"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:605
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:622
 msgid "E-Series"
 msgstr "Séries E"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:610
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:630
 msgid "10% / 5%"
 msgstr "10% / 5%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:610
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:630
 msgid "<= 2%"
 msgstr "<= 2%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:612
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:641
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:632
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:664
 msgid "Tolerance"
 msgstr "Tolérance"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:621
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:644
 msgid "1st Band"
 msgstr "1ère Bande"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:625
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:648
 msgid "2nd Band"
 msgstr "2ème Bande"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:629
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:652
 msgid "3rd Band"
 msgstr "3ème Bande"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:633
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656
 msgid "4th Band"
 msgstr "4ième Bande"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:637
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:660
 msgid "Multiplier"
 msgstr "Multiplicateur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:670
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:693
 msgid "Color Code"
 msgstr "Code des Couleurs"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Microstrip Line"
 msgstr "Ligne Microstrip"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Coplanar wave guide"
 msgstr "Guide d'ondes coplanaire"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Coplanar wave guide with ground plane"
 msgstr "Guide d'onde coplanaire sur plan de masse"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Rectangular Waveguide"
 msgstr "Guide d'Onde Rectangulaire"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Coaxial Line"
 msgstr "Ligne Coaxiale"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Coupled Microstrip Line"
 msgstr "Ligne Microstrip Couplée"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Stripline"
 msgstr "Stripline"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Twisted Pair"
 msgstr "Paire Torsadée"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:680
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:703
 msgid "Transmission Line Type"
 msgstr "Type de Ligne de Transmission"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:697
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:732
 msgid "Substrate Parameters"
 msgstr "Paramètres du Substrat"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:705
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1219
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:740
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1257
 msgid "Er:"
 msgstr "Er:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:715
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:750
 msgid "TanD:"
 msgstr "TanD:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:725
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:760
 msgid "Rho:"
 msgstr "Rho:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:727
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1209
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:762
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1247
 msgid "Specific resistance in ohms * meters"
 msgstr "Résistance spécifique en ohms * mètres"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:737
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:772
 msgid "H:"
 msgstr "H:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:749
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:784
 msgid "H_t:"
 msgstr "H_t:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:761
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:796
 msgid "T:"
 msgstr "T:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:773
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:808
 msgid "Rough:"
 msgstr "Rugosité:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:785
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:820
 msgid "mu Rel:"
 msgstr "mu Rel:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:797
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:832
 msgid "mu Rel C:"
 msgstr "mu Rel C:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:816
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:851
 msgid "Component Parameters"
 msgstr "Paramètres du Composant"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:854
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:892
 msgid "Zdiff = Zodd * 2"
 msgstr "Zdiff = Zodd * 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:860
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:898
 msgid "Zcommon = Zeven / 2"
 msgstr "Zcommon = Zeven / 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:879
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
 msgid "Physical Parameters"
 msgstr "Paramètres Physiques"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:953
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:988
 msgid "Analyze"
 msgstr "Analyse"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:956
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:991
 msgid "Synthesize"
 msgstr "Synthétiser"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:969
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
 msgid "Electrical Parameters"
 msgstr "Paramètres Électriques"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:989
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 msgid "Z"
 msgstr "Z"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1001
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1036
 #: pcbnew/fp_text.cpp:301 pcbnew/pcb_shape.cpp:515 pcbnew/pcb_shape.cpp:555
 #: pcbnew/pcb_text.cpp:120
 msgid "Angle"
 msgstr "Angle"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1020
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1274
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1055
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1333
 msgid "Results"
 msgstr "Résultats"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1100
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
 msgid "TransLine"
 msgstr "Ligne Transmission"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1152
 msgid "Finished hole diameter (D):"
 msgstr "Diamètre du trou fini (D):"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1128
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1166
 msgid "Plating thickness (T):"
 msgstr "Epaisseur de couche conductrice:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1140
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
 msgid "Via length:"
 msgstr "Longueur de via:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1142
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
 msgstr ""
 "La longueur de la via est l’épaisseur de la carte pour les vias traversantes"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1154
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1192
 msgid "Via pad diameter:"
 msgstr "Diamètre extérieur de via:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1156
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1194
 msgid "Diameter of pad surrounding via (annular ring)"
 msgstr "Diamètre de l'anneau entourant la via"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1168
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Clearance hole diameter:"
 msgstr "Diametre d'isolation du trou:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1170
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1208
 msgid "Diameter of clearance hole in ground plane(s)"
 msgstr "Diamètre d'isolation du trou dans le(s) plan(s) de masse"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1182
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1220
 msgid "Z0:"
 msgstr "Z0:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1184
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1222
 msgid "Characteristic impedance of conductor"
 msgstr "Impédance caractéristique du conducteur"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1196
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1234
 msgid "Applied current:"
 msgstr "Courant appliqué:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1207
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
 msgid "Plating resistivity (Ohm.m):"
 msgstr "Résistivité conducteur (Ohm.m):"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1221
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1259
 msgid "Relative dielectric constant (epsilon r)"
 msgstr "Constante diélectrique relative (Epsilon r)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1231
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1459
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1519
 msgid "Temperature rise:"
 msgstr "Élévation de température:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1233
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1271
 msgid "Maximum acceptable rise in temperature"
 msgstr "Elévation max acceptable de température"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1240
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1466
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1278
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1526
 msgid "deg C"
 msgstr "deg C"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1244
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1282
 msgid "Pulse rise time:"
 msgstr "Temps de montée de l'impulsion:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1246
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1284
 msgid "Pulse rise time to calculate reactance"
 msgstr "Temps de montée des impulsions pour calculer la réactance"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1253
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1291
 msgid "ns"
 msgstr "ns"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1255
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1293
 msgid "nanoseconds"
 msgstr "nanosecondes"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1313
 msgid "Top view of via"
 msgstr "Vue de dessus de la via"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1282
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1564
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1653
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1342
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1713
 msgid "Resistance:"
 msgstr "Résistance:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1290
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1400
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1572
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1661
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1350
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1460
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1721
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ohm"
 msgstr "Ohm"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1294
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1576
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1665
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1354
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1725
 msgid "Voltage drop:"
 msgstr "Chute de tension:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1306
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1588
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1677
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1366
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1648
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1737
 msgid "Power loss:"
 msgstr "Perte de puissance:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1314
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1596
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1685
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1374
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1745
 msgid "Watt"
 msgstr "Watt"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1318
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1378
 msgid "Thermal resistance:"
 msgstr "Résistance Thermique:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1320
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1380
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Utilise la valeur de conductivité thermique 401 watts/(mètre-Kelvin)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1328
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1388
 msgid "deg C/Watt"
 msgstr "deg C/Watt"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1332
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1392
 msgid "Estimated ampacity:"
 msgstr "Courant permanent admissible estimé:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1334
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1394
 msgid "Based on temperature rise"
 msgstr "Basé sur l’élévation de la température"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1346
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1406
 msgid "Capacitance:"
 msgstr "Capacité:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1354
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1414
 msgid "pF"
 msgstr "pF"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1356
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1416
 msgid "pico-Farad"
 msgstr "picofarad"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1360
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1420
 msgid "Rise time degradation:"
 msgstr "Dégradation du temps de montée:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1362
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1422
 msgid "Rise time degradation for given Z0 and calculated capacitance"
 msgstr ""
 "Dégradation du temps de montée pour le Z0 donné et la capacité calculée"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1370
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1430
 msgid "ps"
 msgstr "ps"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1372
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1432
 msgid "picoseconds"
 msgstr "picoseconds"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1376
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1436
 msgid "Inductance:"
 msgstr "Inductance:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1384
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1444
 msgid "nH"
 msgstr "nH"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1386
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1446
 msgid "nano-Henry"
 msgstr "nanohenry"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1390
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1450
 msgid "Reactance:"
 msgstr "Réactance:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1392
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1452
 msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr ""
 "Réactance inductive pour le temps de montée donné et l’inductance calculée"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1410
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1470
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
@@ -19158,127 +19146,127 @@ msgstr ""
 "Certains paramètres ne peuvent pas être calculés pour une via\n"
 "à l'intérieur d'une zone de cuivre."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1446
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1506
 msgid "Current:"
 msgstr "Courant:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1470
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1530
 msgid "Conductor length:"
 msgstr "Longueur du conducteur:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1485
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1545
 msgid "Resistivity:"
 msgstr "Résistivité:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1489
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
 msgid "Ohm-meter"
 msgstr "Ohm - mètre"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1509
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1569
 msgid "External Layer Traces"
 msgstr "Pistes sur Couches Externes"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1517
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1615
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1577
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1675
 msgid "Trace width:"
 msgstr "Largeur de piste:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1531
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1629
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
 msgid "Trace thickness:"
 msgstr "Épaisseur de piste:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1552
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1641
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1701
 msgid "Cross-section area:"
 msgstr "Surface de la section:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1560
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1649
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1620
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1709
 msgid "mm ^ 2"
 msgstr "mm ^ 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1607
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1667
 msgid "Internal Layer Traces"
 msgstr "Pistes sur Couches Internes"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1721
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1781
 msgid "Voltage > 500V:"
 msgstr "Voltage > 500V:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1728
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1788
 msgid "Update Values"
 msgstr "Calculer Valeurs"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1737
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1797
 msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "Note: les Valeurs sont des valeurs minimales (venant de IPC 2221)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1756
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1823
 msgid "B1"
 msgstr "B1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1757
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1824
 msgid "B2"
 msgstr "B2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1758
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1825
 msgid "B3"
 msgstr "B3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1759
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1826
 msgid "B4"
 msgstr "B4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1761
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1828
 msgid "A6"
 msgstr "A6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1762
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1829
 msgid "A7"
 msgstr "A7"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1769
-msgid "0 ... 15V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
+msgid "0 .. 15V"
 msgstr "0 ... 15V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1770
-msgid "16 ... 30V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
+msgid "16 .. 30V"
 msgstr "16 ... 30V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1771
-msgid "31 ... 50V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
+msgid "31 .. 50V"
 msgstr "31 ... 50V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1772
-msgid "51 ... 100V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
+msgid "51 .. 100V"
 msgstr "51 ... 100V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1773
-msgid "101 ... 150V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
+msgid "101 .. 150V"
 msgstr "101 ... 150V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1774
-msgid "151 ... 170V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
+msgid "151 .. 170V"
 msgstr "151 ... 170V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1775
-msgid "171 ... 250V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
+msgid "171 .. 250V"
 msgstr "171 ... 250V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1776
-msgid "251 ... 300V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
+msgid "251 .. 300V"
 msgstr "251 ... 300V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1777
-msgid "301 ... 500V"
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
+msgid "301 .. 500V"
 msgstr "301 ... 500V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1778
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1854
 msgid " > 500V"
 msgstr " > 500V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1787
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
 msgid ""
 "*  B1 - Internal Conductors\n"
 "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
@@ -19303,74 +19291,74 @@ msgstr ""
 "*  A7 -  Pins de Composants, avec vernis de protection (n'importe quelle "
 "altitude)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1798
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1874
 msgid "Electrical Spacing"
 msgstr "Espacement Électrique"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1811
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1893
 msgid "Note: Values are minimal values"
 msgstr "Note: les Valeurs sont des valeurs minimales"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1830
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1918
 msgid "Class 1"
 msgstr "Classe 1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1831
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1919
 msgid "Class 2"
 msgstr "Classe 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1832
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1920
 msgid "Class 3"
 msgstr "Classe 3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1833
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1921
 msgid "Class 4"
 msgstr "Classe 4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1834
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1922
 msgid "Class 5"
 msgstr "Classe 5"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1835
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1923
 msgid "Class 6"
 msgstr "Classe 6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1842
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1934
 msgid "Lines width"
 msgstr "Largeur des lignes"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1843
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1935
 msgid "Min clearance"
 msgstr "Isolation minimum"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1844
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1936
 msgid "Via: (diam - drill)"
 msgstr "Via: (diam - perçage)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1937
 msgid "Plated Pad: (diam - drill)"
 msgstr "Pad métallisé: (diam - perçage)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1938
 msgid "NP Pad: (diam - drill)"
 msgstr "Pad non métallisé: (diam - perçage)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1865
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1957
 msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:416
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:423
 #: resources/linux/launchers/pcbcalculator.desktop:9
 #: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
-#: pcb_calculator/eserie.cpp:350 pcb_calculator/eserie.cpp:373
-#: pcb_calculator/eserie.cpp:402
+#: pcb_calculator/eserie.cpp:323 pcb_calculator/eserie.cpp:342
+#: pcb_calculator/eserie.cpp:368
 msgid "Exact"
 msgstr "Exact"
 
-#: pcb_calculator/eserie.cpp:382 pcb_calculator/eserie.cpp:409
+#: pcb_calculator/eserie.cpp:351 pcb_calculator/eserie.cpp:374
 msgid "Not worth using"
 msgstr "Ne vaut pas la peine d’utiliser"
 
@@ -19380,15 +19368,18 @@ msgid ""
 "numbers for electronic components.  Available values are approximately\n"
 "equally spaced in a logarithmic scale.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
 "create arbitrary values.  You can enter the required resistance from 0,0025 "
-"to 4000 kOhm. \n"
-"Solutions using up to 4 components are given.  \n"
+"to 4000 kOhm.\n"
+"Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It "
 "is also possible to specify\n"
@@ -19401,15 +19392,19 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Les séries électroniques définies dans iEC 60063 sont un système largement\n"
-"numéros pour composants électroniques.  Les valeurs disponibles sont "
+"Les séries électroniques définies dans IEC 60063 sont un système largement "
+"utilisé pour les\n"
+"valeurs de composants électroniques.  Les valeurs disponibles sont "
 "approximativement\n"
-"également espacé dans une échelle logarithmique.\n"
+"également espacées dans une échelle logarithmique.\n"
 "\n"
-"E12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
-"\tE3: 1,0 - - - 2,2 - - - 4,7 - - -\n"
-"\tE1: 1,0 - - - - - - - -\n"
+"\tE12: 1,0  1,2  1,5  1,8  2,2  2,7  3,3  3,9  4,7  5,6  6,8  8,2\n"
+"\n"
+"\tE6:  1,0   -   1,5   -   2,2   -   3,3   -   4,7   -   6,8   -\n"
+"\n"
+"\tE3:  1,0   -    -    -   2,2   -    -    -   4,7   -    -    -\n"
+"\n"
+"\tE1:  1,0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "Cette calculatrice trouve des combinaisons de composants standard de la "
 "série E à\n"
@@ -19428,31 +19423,26 @@ msgstr ""
 "\tR1 | R2 |... | Rn \trésistances en parallèle\n"
 "\tR1 + (R2| R3)...\t\ttoute combinaison de ce qui précède\n"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:137
+#: pcb_calculator/pcb_calculator_frame.cpp:193
+msgid "Write Data Failed"
+msgstr "Erreur d'Écriture des Données"
+
+#: pcb_calculator/pcb_calculator_frame.cpp:197
 msgid ""
-"Data modified, and no data filename to save modifications\n"
-"Do you want to exit and abandon your change?"
+"No data filename to save modifications.\n"
+"Do you want to exit and abandon your changes?"
 msgstr ""
-"Données modifiées et pas de nom de fichier de données pour sauver les "
-"modifications\n"
+"Pas de nom de fichier de données pour sauver les modifications.\n"
 "Voulez vous sortir et abandonner vos changements?"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:139
-msgid "Regulator list change"
-msgstr "Changement de la Liste des Régulateurs"
-
-#: pcb_calculator/pcb_calculator_frame.cpp:150
+#: pcb_calculator/pcb_calculator_frame.cpp:207
 #, c-format
 msgid ""
-"Unable to write file \"%s\"\n"
-"Do you want to exit and abandon your change?"
+"Unable to write file '%s'\n"
+"Do you want to exit and abandon your changes?"
 msgstr ""
 "Impossible d'écrire le fichier \"%s\"\n"
 "Voulez vous sortir et abandonner vos changements?"
-
-#: pcb_calculator/pcb_calculator_frame.cpp:154
-msgid "Write Data File Error"
-msgstr "Erreur d'Écriture du Fichier de Données"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
@@ -19534,15 +19524,15 @@ msgstr ""
 "__W,H__ = largeur et épaisseur en mils  \n"
 "__K__ = 0,024 pour les piste internes ou 0,048 pour les pistes externes  \n"
 
-#: pcb_calculator/transline_dlg_funct.cpp:126 pcb_calculator/via.cpp:68
+#: pcb_calculator/transline_dlg_funct.cpp:127 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
 msgstr "Constantes Diélectriques Relatives"
 
-#: pcb_calculator/transline_dlg_funct.cpp:148
+#: pcb_calculator/transline_dlg_funct.cpp:150
 msgid "Dielectric Loss Factor"
 msgstr "Facteur de Pertes Diélectriques"
 
-#: pcb_calculator/transline_dlg_funct.cpp:170
+#: pcb_calculator/transline_dlg_funct.cpp:173
 msgid "Specific Resistance"
 msgstr "Résistance Spécifique"
 
@@ -34625,6 +34615,18 @@ msgstr "Éditeur de Circuit Imprimé"
 #: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
+
+#~ msgid "Messages:"
+#~ msgstr "Messages:"
+
+#~ msgid "E-Series Resistor Calculator"
+#~ msgstr "Calculatrice de résistance de séries E"
+
+#~ msgid "Available Values"
+#~ msgstr "Valeurs Disponibles"
+
+#~ msgid "Regulator list change"
+#~ msgstr "Changement de la Liste des Régulateurs"
 
 #, c-format
 #~ msgid ""
