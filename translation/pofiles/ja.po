@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 05:09+0000\n"
+"PO-Revision-Date: 2021-02-12 05:12+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5787,7 +5787,7 @@ msgstr "単一レイヤー表示モード"
 
 #: common/tool/actions.cpp:527
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "非アクティブレイヤーを標準と非表示で切り替える"
+msgstr "非アクティブのレイヤーを標準と非表示で切り替える"
 
 #: common/tool/actions.cpp:531
 msgid "Single Layer View Mode (3-state)"
@@ -5795,7 +5795,7 @@ msgstr "単一レイヤー表示モード (3 状態)"
 
 #: common/tool/actions.cpp:532
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr "非アクティブレイヤーを標準、ぼかし、非表示で切り替える"
+msgstr "非アクティブのレイヤーを標準、ぼかし、非表示で切り替える"
 
 #: common/tool/actions.cpp:536
 msgid "Select item(s)"
@@ -33395,7 +33395,7 @@ msgstr "非アクティブ レイヤー:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Non-active layers will be shown in full color"
-msgstr "非アクティブ レイヤーをフルカラーで表示"
+msgstr "非アクティブのレイヤーをフルカラーで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
@@ -33403,7 +33403,7 @@ msgstr "ぼかし"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
-msgstr "非アクティブ レイヤーをぼかしで表示"
+msgstr "非アクティブのレイヤーをぼかしで表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Hide"
@@ -33411,7 +33411,7 @@ msgstr "非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:599
 msgid "Non-active layers will be hidden"
-msgstr "非アクティブ レイヤーを非表示にする"
+msgstr "非アクティブのレイヤーを非表示にする"
 
 #: pcbnew/widgets/appearance_controls.cpp:609
 msgid "Flip board view"
