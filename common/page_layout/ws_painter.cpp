@@ -94,20 +94,7 @@ void WS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
     aVars->push_back( wxT( "FILENAME" ) );
     aVars->push_back( wxT( "PAPER" ) );
     aVars->push_back( wxT( "LAYER" ) );
-    aVars->push_back( wxT( "ISSUE_DATE" ) );
-    aVars->push_back( wxT( "REVISION" ) );
-    aVars->push_back( wxT( "TITLE" ) );
-    aVars->push_back( wxT( "COMPANY" ) );
-    aVars->push_back( wxT( "COMMENT0" ) );
-    aVars->push_back( wxT( "COMMENT1" ) );
-    aVars->push_back( wxT( "COMMENT2" ) );
-    aVars->push_back( wxT( "COMMENT3" ) );
-    aVars->push_back( wxT( "COMMENT4" ) );
-    aVars->push_back( wxT( "COMMENT5" ) );
-    aVars->push_back( wxT( "COMMENT6" ) );
-    aVars->push_back( wxT( "COMMENT7" ) );
-    aVars->push_back( wxT( "COMMENT8" ) );
-    aVars->push_back( wxT( "COMMENT9" ) );
+    TITLE_BLOCK::GetContextualTextVars( aVars );
 }
 
 

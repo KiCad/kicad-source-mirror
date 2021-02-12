@@ -116,6 +116,7 @@ public:
         m_tbTexts.Clear();
     }
 
+    static void GetContextualTextVars( wxArrayString* aVars );
     bool TextVarResolver( wxString* aToken, const PROJECT* aProject ) const;
 
     /**

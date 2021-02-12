@@ -70,6 +70,24 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
     }
 }
 
+void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
+{
+    aVars->push_back( wxT( "ISSUE_DATE" ) );
+    aVars->push_back( wxT( "REVISION" ) );
+    aVars->push_back( wxT( "TITLE" ) );
+    aVars->push_back( wxT( "COMPANY" ) );
+    aVars->push_back( wxT( "COMMENT0" ) );
+    aVars->push_back( wxT( "COMMENT1" ) );
+    aVars->push_back( wxT( "COMMENT2" ) );
+    aVars->push_back( wxT( "COMMENT3" ) );
+    aVars->push_back( wxT( "COMMENT4" ) );
+    aVars->push_back( wxT( "COMMENT5" ) );
+    aVars->push_back( wxT( "COMMENT6" ) );
+    aVars->push_back( wxT( "COMMENT7" ) );
+    aVars->push_back( wxT( "COMMENT8" ) );
+    aVars->push_back( wxT( "COMMENT9" ) );
+}
+
 
 bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) const
 {
@@ -111,7 +129,7 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject ) c
         case '7':
         case '8':
         case '9':
-            *aToken = GetComment( c - '0' );
+            *aToken = GetComment( c - '1' );
             tokenUpdated = true;
         }
     }

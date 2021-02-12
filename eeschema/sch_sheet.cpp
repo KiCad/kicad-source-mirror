@@ -201,6 +201,7 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 
     aVars->push_back( wxT( "#" ) );
     aVars->push_back( wxT( "##" ) );
+    m_screen->GetTitleBlock().GetContextualTextVars( aVars );
 }
 
 
@@ -222,6 +223,13 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
             *token = m_fields[i].GetShownText( aDepth + 1 );
             return true;
         }
+    }
+
+    PROJECT *project = &Schematic()->Prj();
+
+    if( m_screen->GetTitleBlock().TextVarResolver( token, project ) )
+    {
+        return true;
     }
 
     if( token->IsSameAs( wxT( "#" ) ) )
