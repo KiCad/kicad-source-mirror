@@ -170,7 +170,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticBitmap* m_Band_tol_bitmap;
 		wxPanel* m_panelTransline;
 		wxRadioBox* m_TranslineSelection;
-		wxPanel* m_translinePanel;
 		wxStaticBitmap* m_translineBitmap;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_EpsilonR_label;
@@ -280,7 +279,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextRiseTime;
 		wxTextCtrl* m_textCtrlRiseTime;
 		wxStaticText* m_staticTextRiseTimeUnits;
-		wxPanel* m_panelViaBitmap;
 		wxStaticBitmap* m_viaBitmap;
 		wxStaticText* m_staticTextArea11;
 		wxStaticText* m_ViaResistance;

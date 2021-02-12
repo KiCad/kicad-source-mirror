@@ -22,7 +22,7 @@
 #include <bitmaps.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_i.h>
-#include "bitmaps/via_dims.xpm"
+#include "bitmaps/viacalc.cpp"
 #include "attenuators/attenuator_classes.h"
 #include "class_regulator_data.h"
 #include "pcb_calculator_frame.h"
@@ -48,9 +48,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
 
-    // TODO: make regulator & via bitmaps transparent so we can remove these
+    // TODO: make regulator bitmaps transparent so we can remove this
     m_panelRegulatorBitmaps->SetBackgroundColour( *wxWHITE );
-    m_panelViaBitmap->SetBackgroundColour( *wxWHITE );
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -171,8 +170,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
 
         ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
-       	static wxBitmap* viaBitmap = new wxBitmap( via_dims_xpm );
-       	m_viaBitmap->SetBitmap( *viaBitmap );
+       	m_viaBitmap->SetBitmap( KiBitmap( viacalc_xpm ) );
 
         m_panelESeriesHelp->Refresh();
         m_htmlWinFormulas->Refresh();

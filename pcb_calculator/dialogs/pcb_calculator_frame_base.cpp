@@ -704,20 +704,11 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_TranslineSelection->SetSelection( 0 );
 	bLeftSizer->Add( m_TranslineSelection, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_translinePanel = new wxPanel( m_panelTransline, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_translinePanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	wxBoxSizer* bSizer39;
-	bSizer39 = new wxBoxSizer( wxVERTICAL );
+	bLeftSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_translineBitmap = new wxStaticBitmap( m_translinePanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer39->Add( m_translineBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
-
-
-	m_translinePanel->SetSizer( bSizer39 );
-	m_translinePanel->Layout();
-	bSizer39->Fit( m_translinePanel );
-	bLeftSizer->Add( m_translinePanel, 1, wxEXPAND | wxALL, 8 );
+	m_translineBitmap = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftSizer->Add( m_translineBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 
 	bSizeTransline->Add( bLeftSizer, 0, wxEXPAND, 5 );
@@ -877,11 +868,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerHelpBitmaps;
 	bSizerHelpBitmaps = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizerHelpBitmaps->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_bmCMicrostripZoddZeven = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 	m_fgSizerZcomment = new wxFlexGridSizer( 0, 2, 0, 15 );
 	m_fgSizerZcomment->AddGrowableCol( 0 );
@@ -903,9 +891,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 
 	bSizerHelpBitmaps->Add( m_fgSizerZcomment, 0, wxEXPAND, 5 );
-
-
-	bSizerHelpBitmaps->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bMiddleSizer->Add( bSizerHelpBitmaps, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -1300,28 +1285,10 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	bSizerViaLeftColumn->Add( sbSizerVS_Inputs, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_panelViaBitmap = new wxPanel( m_panelViaSize, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelViaBitmap->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNHIGHLIGHT ) );
-
-	wxBoxSizer* bSizer143;
-	bSizer143 = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizer143->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_viaBitmap = new wxStaticBitmap( m_panelViaBitmap, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaBitmap = new wxStaticBitmap( m_panelViaSize, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaBitmap->SetToolTip( _("Top view of via") );
 
-	bSizer143->Add( m_viaBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 10 );
-
-
-	bSizer143->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_panelViaBitmap->SetSizer( bSizer143 );
-	m_panelViaBitmap->Layout();
-	bSizer143->Fit( m_panelViaBitmap );
-	bSizerViaLeftColumn->Add( m_panelViaBitmap, 1, wxEXPAND | wxALL, 8 );
+	bSizerViaLeftColumn->Add( m_viaBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 10 );
 
 
 	bSizerViaSize->Add( bSizerViaLeftColumn, 1, wxEXPAND, 5 );

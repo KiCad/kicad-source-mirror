@@ -78,9 +78,6 @@ void PCB_CALCULATOR_FRAME::TransfPanelDataToAttenuator()
 
 void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
 {
-    // TODO: make attenuator bitmaps transparent so we can remove this
-    m_attenuatorPanel->SetBackgroundColour( *wxWHITE );
-
     m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
 
     wxString msg;
