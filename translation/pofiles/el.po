@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-10 14:12+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-02-12 22:33+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12889,7 +12889,7 @@ msgstr "Δε βρέθηκαν οι ακόλουθες βιβλιοθήκες:"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
-msgstr "Το νέο σχηματικό αρχείο δεν έχει αποθηκευτεί"
+msgstr "Το νέο αρχείο του σχηματικού δεν έχει αποθηκευτεί"
 
 #: eeschema/sch_edit_frame.cpp:639
 #: eeschema/symbol_editor/symbol_editor.cpp:1103
@@ -31464,7 +31464,7 @@ msgstr ""
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
-msgstr "Η περιοχή κανόνων δεν επιτρέπει καταγραφές."
+msgstr "Η περιοχή κανόνων δεν επιτρέπει διαδρόμους."
 
 #: pcbnew/router/pns_router.cpp:218
 #, fuzzy
