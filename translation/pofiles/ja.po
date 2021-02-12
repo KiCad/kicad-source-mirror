@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:30+0000\n"
+"PO-Revision-Date: 2021-02-12 06:32+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9331,7 +9331,7 @@ msgstr "エラー: コマンド文字列を設定する必要があります"
 
 #: eeschema/dialogs/dialog_netlist.cpp:736
 msgid "Error. You must provide a Title"
-msgstr "エラー タイトルを設定してください"
+msgstr "エラー: タイトルを設定してください"
 
 #: eeschema/dialogs/dialog_netlist.cpp:780
 msgid "Do not forget to choose a title for this netlist control page"
