@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 07:22+0000\n"
+"PO-Revision-Date: 2021-02-12 07:33+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11460,7 +11460,7 @@ msgstr "デフォルトのピン名サイズ (&a):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
 msgid "Show pin &electrical type"
-msgstr "ピンのエレクトリック タイプを表示 (&e)"
+msgstr "ピンのエレクトリカル タイプを表示 (&e)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
