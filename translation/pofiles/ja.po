@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 15:59-0800\n"
-"PO-Revision-Date: 2021-02-12 06:17+0000\n"
+"PO-Revision-Date: 2021-02-12 06:19+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -17239,11 +17239,11 @@ msgstr "ファイル ブラウザーでプロジェクトのディレクトリ�
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
-msgstr "ローカル ファイルを編集..."
+msgstr "ローカルファイルを編集..."
 
 #: kicad/menubar.cpp:155
 msgid "Edit local file in text editor"
-msgstr "テキストエディターでローカル ファイルを編集します"
+msgstr "テキストエディターでローカルファイルを編集します"
 
 #: kicad/menubar.cpp:211
 msgid "Archive all project files"
