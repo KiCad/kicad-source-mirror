@@ -110,6 +110,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_remap_base.cpp
     dialogs/dialog_update_from_pcb.cpp
     dialogs/dialog_update_from_pcb_base.cpp
+    dialogs/dialog_update_symbol_fields.cpp
+    dialogs/dialog_update_symbol_fields_base.cpp
     dialogs/panel_eeschema_color_settings.cpp
     dialogs/panel_eeschema_template_fieldnames.cpp
     dialogs/panel_eeschema_template_fieldnames_base.cpp

@@ -37,6 +37,7 @@
 #include <dialogs/dialog_edit_one_field.h>
 #include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
+#include <dialogs/dialog_update_symbol_fields.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
 #include "symbol_editor_edit_tool.h"
@@ -630,6 +631,29 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
+{
+    LIB_PART* part = m_frame->GetCurPart();
+
+    if( !part )
+        return 0;
+
+    if( !part->IsAlias() )
+    {
+        m_frame->ShowInfoBarError( _( "Symbol is not derived from another symbol." ) );
+    }
+    else
+    {
+        DIALOG_UPDATE_SYMBOL_FIELDS dlg( m_frame, part );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return -1;
+    }
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetSymbolFromUndoList();
@@ -824,4 +848,5 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields, EE_ACTIONS::updateSymbolFields.MakeEvent() );
 }

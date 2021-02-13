@@ -168,6 +168,11 @@ TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbo
         _( "Export..." ), _( "Export a symbol to a new library file" ),
         export_part_xpm );
 
+TOOL_ACTION EE_ACTIONS::updateSymbolFields( "eeschema.SymbolLibraryControl.updateSymbolFields",
+        AS_GLOBAL, 0, "",
+        _( "Update Symbol Fields..." ), _( "Update symbol to match changes made in parent symbol" ),
+        refresh_xpm );
+
 TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",
         AS_GLOBAL, 0, "",
         _( "Add Symbol to Schematic" ), _( "Add Symbol to Schematic" ),

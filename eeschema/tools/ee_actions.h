@@ -176,6 +176,7 @@ public:
     static TOOL_ACTION pasteSymbol;
     static TOOL_ACTION importSymbol;
     static TOOL_ACTION exportSymbol;
+    static TOOL_ACTION updateSymbolFields;
 
     // Hierarchy navigation
     static TOOL_ACTION enterSheet;
