@@ -140,15 +140,16 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
+                      .Layer( 2 ) );
 
     // BestSize() does not always set the actual pane size of m_leftWin to the required value.
     // It happens when m_leftWin is too large (roughly > 1/3 of the kicad manager frame width.
     // (Well, BestSize() sets the best size... not the window size)
     // A trick is to use MinSize() to set the required pane width,
     // and after give a reasonable MinSize value
-    m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer(3)
-                      .CaptionVisible( false ).PaneBorder( false )
+    m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer( 1 )
+                      .CaptionVisible( false ).PaneBorder( true )
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
     m_auimgr.AddPane( m_launcher,
@@ -158,7 +159,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.Update();
 
     // Now the actual m_leftWin size is set, give it a reasonable min width
-    m_auimgr.GetPane( m_leftWin ).MinSize( 200, -1 );
+    m_auimgr.GetPane( m_leftWin ).MinSize( 250, -1 );
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 
