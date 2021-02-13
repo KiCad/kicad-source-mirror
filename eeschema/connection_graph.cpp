@@ -2417,9 +2417,9 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
         {
             conflict = true;    // Assume a conflict; we'll reset if we find it's OK
 
-            bus_name = bus_wire->Connection( &sheet )->Name( true );
+            bus_name = bus_wire->Connection( &sheet )->Name();
 
-            wxString test_name = bus_entry->Connection( &sheet )->Name( true );
+            wxString test_name = bus_entry->Connection( &sheet )->Name();
 
             for( const auto& member : bus_wire->Connection( &sheet )->Members() )
             {
@@ -2427,11 +2427,11 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
                 {
                     for( const auto& sub_member : member->Members() )
                     {
-                        if( sub_member->Name( true ) == test_name )
+                        if( sub_member->Name() == test_name )
                             conflict = false;
                     }
                 }
-                else if( member->Name( true ) == test_name )
+                else if( member->Name() == test_name )
                 {
                     conflict = false;
                 }
@@ -2447,7 +2447,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
-        wxString netName = aSubgraph->m_driver_connection->Name( true );
+        wxString netName = aSubgraph->m_driver_connection->Name();
         wxString msg = wxString::Format( _( "Net %s is graphically connected to bus %s but is not a"
                                             " member of that bus" ),
                                          UnescapeString( netName ),
