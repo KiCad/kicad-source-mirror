@@ -106,10 +106,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_aboutTitle = "KiCad";
 
     // Create the status line (bottom of the frame)
-    static const int dims[1] = { -1 };
+    static const int dims[2] = { -1, -1 };
 
-    CreateStatusBar( 1 );
-    SetStatusWidths( 1, dims );
+    CreateStatusBar( 2 );
+    SetStatusWidths( 2, dims );
 
     // Give an icon
     wxIcon icon;
@@ -139,6 +139,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetFlags( wxAUI_MGR_LIVE_RESIZE );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
                       .Layer( 2 ) );
@@ -165,9 +166,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
-
-    // Do not let our size hide the launcher
-    SetMinSize( GetBestSize() );
 
     // Ensure the window is on top
     Raise();

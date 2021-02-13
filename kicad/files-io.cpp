@@ -85,7 +85,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
             return;
     }
 
-    STATUSBAR_REPORTER reporter( GetStatusBar() );
+    STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
 
     PROJECT_ARCHIVER archiver;
 
@@ -126,7 +126,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return;
 
-    STATUSBAR_REPORTER reporter( GetStatusBar() );
+    STATUSBAR_REPORTER reporter( GetStatusBar(), 1 );
     PROJECT_ARCHIVER archiver;
 
     archiver.Archive( currdirname, zipFile.GetFullPath(), reporter, true, true );
