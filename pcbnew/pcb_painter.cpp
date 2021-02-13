@@ -503,28 +503,38 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             return;
 
         const wxString& netName = UnescapeString( aTrack->GetShortNetname() );
+        double   textSize = width;
+        double   penWidth = width / 12.0;
         VECTOR2D textPosition = start + line / 2.0;     // center of the track
-
-        double textOrientation;
+        double   textOrientation;
 
         if( end.y == start.y ) // horizontal
+        {
             textOrientation = 0;
+            textPosition.y += penWidth;
+        }
         else if( end.x == start.x ) // vertical
+        {
             textOrientation = M_PI / 2;
+            textPosition.x += penWidth;
+        }
         else
+        {
             textOrientation = -atan( line.y / line.x );
+            textPosition.x += penWidth / 1.4;
+            textPosition.y += penWidth / 1.4;
+        }
 
-        double textSize = width;
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
         m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( width / 10.0 );
+        m_gal->SetLineWidth( penWidth );
         m_gal->SetFontBold( false );
         m_gal->SetFontItalic( false );
         m_gal->SetFontUnderlined( false );
         m_gal->SetTextMirrored( false );
-        m_gal->SetGlyphSize( VECTOR2D( textSize * 0.7, textSize * 0.7 ) );
+        m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
         m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
         m_gal->BitmapText( netName, textPosition, textOrientation );

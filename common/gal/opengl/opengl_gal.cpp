@@ -1986,7 +1986,7 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
     Translate( VECTOR2D( -aLength, -aHeight-1.5*H ) );
 
     currentManager->Reserve( 6 );
-    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, 1 );
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
     currentManager->Shader( 0 );
 
