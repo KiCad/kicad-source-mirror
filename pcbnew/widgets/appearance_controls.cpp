@@ -2265,7 +2265,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
                 if( m_currentPreset )
                     m_cbLayerPresets->SetStringSelection( m_currentPreset->name );
                 else
-                    m_cbLayerPresets->SetSelection( count - 3 );
+                    m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
             };
 
     if( index == count - 3 )
@@ -2301,12 +2301,16 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         m_currentPreset      = preset;
 
         if( !exists )
+        {
             index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+        }
         else
+        {
             index = m_cbLayerPresets->FindString( name );
+            m_presetMRU.Remove( name );
+        }
 
         m_cbLayerPresets->SetSelection( index );
-
         m_presetMRU.Insert( name, 0 );
 
         return;
@@ -2335,14 +2339,17 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         if( dlg.ShowModal() == wxID_OK )
         {
             wxString presetName = dlg.GetTextSelection();
+            int idx = m_cbLayerPresets->FindString( presetName );
 
-            m_layerPresets.erase( presetName );
+            if( idx != wxNOT_FOUND )
+            {
+                m_layerPresets.erase( presetName );
 
-            m_cbLayerPresets->Delete( m_cbLayerPresets->FindString( presetName ) );
-            m_cbLayerPresets->SetSelection( m_cbLayerPresets->GetCount() - 3 );
-            m_currentPreset = nullptr;
+                m_cbLayerPresets->Delete( idx );
+                m_currentPreset = nullptr;
 
-            m_presetMRU.Remove( presetName );
+                m_presetMRU.Remove( presetName );
+            }
         }
 
         resetSelection();
