@@ -5,19 +5,19 @@
 **     since 2006/6/14
 **
 *****************************************************************************/
-#include <wx/bitmap.h>
 
 #include <i18n_utility.h>
 #include <kiface_i.h>
+#include <bitmap_types.h>
 
 #include "attenuator_classes.h"
 #include "pcb_calculator_settings.h"
 
 // Bitmaps:
-#include "bitmaps/att_bridge.xpm"
-#include "bitmaps/att_pi.xpm"
-#include "bitmaps/att_splitter.xpm"
-#include "bitmaps/att_tee.xpm"
+#include "bitmaps/att_bridge.cpp"
+#include "bitmaps/att_pi.cpp"
+#include "bitmaps/att_splitter.cpp"
+#include "bitmaps/att_tee.cpp"
 
 
 // Html texts showing the formulas
@@ -98,7 +98,7 @@ void ATTENUATOR::WriteConfig()
 ATTENUATOR_PI::ATTENUATOR_PI() : ATTENUATOR( PI_TYPE )
 {
     m_Name = wxT("att_pi");
-    m_SchBitMap     = new wxBitmap( att_pi_xpm );
+    m_SchBitMap     = new wxBitmap( KiBitmap( att_pi_xpm ) );
     m_FormulaName   = &pi_formula;
 }
 
@@ -119,7 +119,7 @@ bool ATTENUATOR_PI::Calculate()
 ATTENUATOR_TEE::ATTENUATOR_TEE() : ATTENUATOR( TEE_TYPE )
 {
     m_Name = wxT("att_tee");
-    m_SchBitMap     = new wxBitmap( att_tee_xpm );
+    m_SchBitMap     = new wxBitmap( KiBitmap( att_tee_xpm ) );
     m_FormulaName   = &tee_formula;
 }
 
@@ -142,7 +142,7 @@ ATTENUATOR_BRIDGE::ATTENUATOR_BRIDGE() : ATTENUATOR( BRIDGE_TYPE )
     m_Name = wxT("att_bridge");
     m_Zin_Enable    = false;
     m_ResultCount   = 2;
-    m_SchBitMap     = new wxBitmap( att_bridge_xpm );
+    m_SchBitMap     = new wxBitmap( KiBitmap( att_bridge_xpm ) );
     m_FormulaName   = &bridget_tee_formula;
 }
 
@@ -168,7 +168,7 @@ ATTENUATOR_SPLITTER::ATTENUATOR_SPLITTER() : ATTENUATOR( SPLITTER_TYPE )
     m_Attenuation = 6.0;
     m_MinimumATT    = 6.0;
     m_Zin_Enable    = false;
-    m_SchBitMap     = new wxBitmap( att_splitter_xpm );
+    m_SchBitMap     = new wxBitmap( KiBitmap( att_splitter_xpm ) );
     m_FormulaName   = &splitter_formula;
 }
 

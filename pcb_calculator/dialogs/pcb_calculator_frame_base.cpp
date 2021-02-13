@@ -9,9 +9,6 @@
 
 #include "pcb_calculator_frame_base.h"
 
-#include "../bitmaps/regul.xpm"
-#include "../bitmaps/regul_3pins.xpm"
-
 ///////////////////////////////////////////////////////////////////////////
 
 PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : KIWAY_PLAYER( parent, id, title, pos, size, style, name )
@@ -33,23 +30,11 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizeLeftpReg;
 	bSizeLeftpReg = new wxBoxSizer( wxVERTICAL );
 
-	m_panelRegulatorBitmaps = new wxPanel( m_panelRegulators, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelRegulatorBitmaps->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNHIGHLIGHT ) );
+	m_bitmapRegul4pins = new wxStaticBitmap( m_panelRegulators, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeLeftpReg->Add( m_bitmapRegul4pins, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
-	wxBoxSizer* bSizerBitmapReg;
-	bSizerBitmapReg = new wxBoxSizer( wxVERTICAL );
-
-	m_bitmapRegul4pins = new wxStaticBitmap( m_panelRegulatorBitmaps, wxID_ANY, wxBitmap( regul_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmapReg->Add( m_bitmapRegul4pins, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-	m_bitmapRegul3pins = new wxStaticBitmap( m_panelRegulatorBitmaps, wxID_ANY, wxBitmap( regul_3pins_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmapReg->Add( m_bitmapRegul3pins, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	m_panelRegulatorBitmaps->SetSizer( bSizerBitmapReg );
-	m_panelRegulatorBitmaps->Layout();
-	bSizerBitmapReg->Fit( m_panelRegulatorBitmaps );
-	bSizeLeftpReg->Add( m_panelRegulatorBitmaps, 1, wxEXPAND | wxALL, 8 );
+	m_bitmapRegul3pins = new wxStaticBitmap( m_panelRegulators, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeLeftpReg->Add( m_bitmapRegul3pins, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 	wxStaticBoxSizer* sbSizerRegFormula;
 	sbSizerRegFormula = new wxStaticBoxSizer( new wxStaticBox( m_panelRegulators, wxID_ANY, _("Formula") ), wxVERTICAL );
@@ -267,21 +252,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_AttenuatorsSelection->SetSelection( 0 );
 	bLeftSizerAtt->Add( m_AttenuatorsSelection, 0, wxEXPAND|wxALL, 5 );
 
-	m_attenuatorPanel = new wxPanel( m_panelAttenuators, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
-	m_attenuatorPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
-
-	wxBoxSizer* bSizer41;
-	bSizer41 = new wxBoxSizer( wxVERTICAL );
-
-	bSizer41->SetMinSize( wxSize( 256,-1 ) );
-	m_attenuatorBitmap = new wxStaticBitmap( m_attenuatorPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer41->Add( m_attenuatorBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
-
-
-	m_attenuatorPanel->SetSizer( bSizer41 );
-	m_attenuatorPanel->Layout();
-	bSizer41->Fit( m_attenuatorPanel );
-	bLeftSizerAtt->Add( m_attenuatorPanel, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 8 );
+	m_attenuatorBitmap = new wxStaticBitmap( m_panelAttenuators, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftSizerAtt->Add( m_attenuatorBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 
 	bSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND, 5 );

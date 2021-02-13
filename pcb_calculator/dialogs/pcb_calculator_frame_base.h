@@ -29,14 +29,14 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
 #include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/radiobox.h>
 #include <wx/bmpbuttn.h>
 #include <wx/html/htmlwin.h>
@@ -60,7 +60,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStatusBar* m_statusBar;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelRegulators;
-		wxPanel* m_panelRegulatorBitmaps;
 		wxStaticBitmap* m_bitmapRegul4pins;
 		wxStaticBitmap* m_bitmapRegul3pins;
 		wxStaticText* m_RegulFormula;
@@ -96,7 +95,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_RegulMessage;
 		wxPanel* m_panelAttenuators;
 		wxRadioBox* m_AttenuatorsSelection;
-		wxPanel* m_attenuatorPanel;
 		wxStaticBitmap* m_attenuatorBitmap;
 		wxStaticText* m_attenuationLabel;
 		wxTextCtrl* m_AttValueCtrl;
