@@ -767,6 +767,14 @@ void PGM_BASE::SetLanguagePath()
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
     }
+
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        wxFileName fn( Pgm().GetExecutablePath() );
+        fn.RemoveLastDir();
+        fn.AppendDir( "translation" );
+        wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
+    }
 }
 
 
