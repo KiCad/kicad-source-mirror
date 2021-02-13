@@ -126,8 +126,8 @@ UNIT_SELECTOR_ANGLE::UNIT_SELECTOR_ANGLE( wxWindow *parent, wxWindowID id,
         const wxArrayString& choices, long style ) :
     UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
-    Append( _( "Radian" ) );
-    Append( _( "Degree" ) );
+    Append( _( "rad" ) );
+    Append( _( "deg" ) );
 }
 
 /*

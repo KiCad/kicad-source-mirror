@@ -264,11 +264,11 @@ void PCB_CALCULATOR_FRAME::TWDisplayValues( double aCurrent, double aExtWidth,
 
     // Show area units.
     wxString strunit = m_TW_ExtTrackWidth_choiceUnit->GetUnitName();
-    msg = strunit + wxT( " x " ) + strunit;
-    m_ExtTrackAreaUnitLabel->SetLabel( msg );
+    msg = strunit + wxT( "²" );
+    m_extTrackAreaUnitLabel->SetLabel( msg );
     strunit = m_TW_IntTrackWidth_choiceUnit->GetUnitName();
-    msg = strunit + wxT( " x " ) + strunit;
-    m_IntTrackAreaUnitLabel->SetLabel( msg );
+    msg = strunit + wxT( "²" );
+    m_intTrackAreaUnitLabel->SetLabel( msg );
 
     // Load resistivity and length of traces.
     double rho      = std::abs( DoubleFromString( m_TWResistivity->GetValue() ) );

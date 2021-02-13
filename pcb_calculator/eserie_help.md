@@ -8,7 +8,7 @@ equally spaced in a logarithmic scale.
 	E1:  1.0   -    -    -    -    -    -    -    -    -    -    -
 
 This calculator finds combinations of standard E-series components to
-create arbitrary values.  You can enter the required resistance from 0,0025 to 4000 kOhm.
+create arbitrary values.  You can enter the required resistance from 0.0025 to 4000 kΩ.
 Solutions using up to 4 components are given.
 
 By default, the request value is always excluded from the solution set.  It is also possible to specify

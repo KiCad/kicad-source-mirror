@@ -80,6 +80,32 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_staticTextAttMsg->SetFont( infoFont );
 
+    m_IadjUnitLabel->SetLabel( wxT( "µA" ) );
+
+    m_attZinUnit->SetLabel( wxT( "Ω" ) );
+    m_attZoutUnit->SetLabel( wxT( "Ω" ) );
+    m_attR1Unit->SetLabel( wxT( "Ω" ) );
+    m_attR2Unit->SetLabel( wxT( "Ω" ) );
+    m_attR3Unit->SetLabel( wxT( "Ω" ) );
+
+    m_r1Units->SetLabel( wxT( "kΩ" ) );
+    m_r2Units->SetLabel( wxT( "kΩ" ) );
+
+    m_reqResUnits->SetLabel( wxT( "kΩ" ) );
+    m_exclude1Units->SetLabel( wxT( "kΩ" ) );
+    m_exclude2Units->SetLabel( wxT( "kΩ" ) );
+
+    m_trackTempUnits->SetLabel( wxT( "ºC" ) );
+    m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
+
+    m_viaTempUnits->SetLabel( wxT( "ºC" ) );
+    m_viaResUnits->SetLabel( wxT( "Ω" ) );
+    m_viaThermalResUnits->SetLabel( wxT( "ºC/W" ) );
+    m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
+
+    m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
+    m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
+
     LoadSettings( config() );
 
     ReadDataFile();
@@ -150,6 +176,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
     if( m_Notebook->GetSelection() != m_lastNotebookPage )
     {
         // Kick all the things that wxWidgets can't seem to redraw on its own.
+        // This is getting seriously ridiculous....
 
         wxCommandEvent event2( wxEVT_RADIOBUTTON );
         event2.SetEventObject( m_TranslineSelection );
@@ -173,6 +200,9 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
        	m_bitmapRegul3pins->SetBitmap( KiBitmap( regul_3pins_xpm ) );
        	m_bitmapRegul4pins->SetBitmap( KiBitmap( regul_xpm ) );
+
+       	m_attenuatorBitmap->GetParent()->Layout();
+       	m_attenuatorBitmap->GetParent()->Refresh();
 
         m_panelESeriesHelp->Refresh();
         m_htmlWinFormulas->Refresh();

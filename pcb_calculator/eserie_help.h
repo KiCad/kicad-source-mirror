@@ -9,7 +9,7 @@ _HKI( "E-series defined in IEC 60063 are a widely accepted system of preferred\n
 "	E1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
-"create arbitrary values.  You can enter the required resistance from 0,0025 to 4000 kOhm.\n"
+"create arbitrary values.  You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
 "Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It is also possible to specify\n"

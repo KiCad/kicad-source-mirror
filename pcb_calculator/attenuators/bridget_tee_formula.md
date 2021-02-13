@@ -1,4 +1,4 @@
-### Bridged tee attenuator:
+### Bridged Tee Attenuator
 __Zin__ desired input impedance in &#x2126;<br>
 __Zout__ desired output impedance<br>
 __Z<sub>0</sub> = Zin = Zout__<br><br>
