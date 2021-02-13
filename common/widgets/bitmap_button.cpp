@@ -42,8 +42,10 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
     Bind( wxEVT_PAINT,        &BITMAP_BUTTON::OnPaint,          this );
     Bind( wxEVT_LEFT_UP,      &BITMAP_BUTTON::OnLeftButtonUp,   this );
     Bind( wxEVT_LEFT_DOWN,    &BITMAP_BUTTON::OnLeftButtonDown, this );
-    Bind( wxEVT_LEAVE_WINDOW, &BITMAP_BUTTON::OnMouseLeave,     this );
-    Bind( wxEVT_ENTER_WINDOW, &BITMAP_BUTTON::OnMouseEnter,     this );
+    Bind( wxEVT_LEAVE_WINDOW, &BITMAP_BUTTON::OnLeave,          this );
+    Bind( wxEVT_ENTER_WINDOW, &BITMAP_BUTTON::OnEnter,          this );
+    Bind( wxEVT_KILL_FOCUS,   &BITMAP_BUTTON::OnLeave,          this );
+    Bind( wxEVT_SET_FOCUS,    &BITMAP_BUTTON::OnEnter,          this );
 }
 
 
@@ -74,7 +76,7 @@ void BITMAP_BUTTON::SetDisabledBitmap( const wxBitmap& aBmp )
 }
 
 
-void BITMAP_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
+void BITMAP_BUTTON::OnLeave( wxEvent& aEvent )
 {
     clearFlag( wxCONTROL_CURRENT );
     Refresh();
@@ -83,7 +85,7 @@ void BITMAP_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 }
 
 
-void BITMAP_BUTTON::OnMouseEnter( wxMouseEvent& aEvent )
+void BITMAP_BUTTON::OnEnter( wxEvent& aEvent )
 {
     setFlag( wxCONTROL_CURRENT );
     Refresh();

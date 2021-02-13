@@ -33,8 +33,6 @@ public:
 
     void CreateLaunchers();
 
-    wxTextCtrl* GetMessagesBox() const { return m_messagesBox; }
-
 private:
 
     TOOL_MANAGER* m_toolManager;

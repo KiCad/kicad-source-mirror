@@ -232,8 +232,6 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         return -1;
     }
 
-    m_frame->ClearMsg();
-
     // Make sure we are not overwriting anything in the destination folder.
     std::vector< wxFileName > destFiles;
 

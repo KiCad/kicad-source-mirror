@@ -55,8 +55,6 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
     wxString default_dir = GetMruPath();
     int      style       = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 
-    ClearMsg();
-
     wxFileDialog schdlg( this, aWindowTitle, default_dir, wxEmptyString, aFilesWildcard, style );
 
     if( schdlg.ShowModal() == wxID_CANCEL )

@@ -106,10 +106,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_aboutTitle = "KiCad";
 
     // Create the status line (bottom of the frame)
-    static const int dims[3] = { -1, -1, 100 };
+    static const int dims[1] = { -1 };
 
-    CreateStatusBar( 3 );
-    SetStatusWidths( 3, dims );
+    CreateStatusBar( 1 );
+    SetStatusWidths( 1, dims );
 
     // Give an icon
     wxIcon icon;
@@ -152,7 +152,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
     m_auimgr.AddPane( m_launcher,
-                      EDA_PANE().Canvas().PaneBorder( false ).Name( "Launcher" ).Center() );
+                      EDA_PANE().Canvas().PaneBorder( false ).Name( "Launcher" ).Center()
+                      .MinSize( m_launcher->GetBestSize() ) );
 
     m_auimgr.Update();
 
@@ -163,6 +164,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
+
+    // Do not let our size hide the launcher
+    SetMinSize( GetBestSize() );
 
     // Ensure the window is on top
     Raise();
@@ -311,12 +315,6 @@ wxString KICAD_MANAGER_FRAME::help_name()
 }
 
 
-void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
-{
-    m_launcher->GetMessagesBox()->AppendText( aText );
-}
-
-
 void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 {
     if( m_auimgr.GetManagedWindow() )
@@ -402,7 +400,7 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         mgr.UnloadProject( &Prj() );
     }
 
-    ClearMsg();
+    SetStatusText( "" );
 
     m_leftWin->EmptyTreePrj();
 
@@ -619,12 +617,6 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
 }
 
 
-void KICAD_MANAGER_FRAME::ClearMsg()
-{
-    m_launcher->GetMessagesBox()->Clear();
-}
-
-
 void KICAD_MANAGER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
@@ -658,8 +650,7 @@ void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    wxString msg = wxString::Format( _( "Project name:\n%s\n" ), GetProjectFileName() );
-    PrintMsg( msg );
+    SetStatusText( wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() ) );
 }
 
 

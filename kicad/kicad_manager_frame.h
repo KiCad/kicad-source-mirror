@@ -96,21 +96,9 @@ public:
     void OnImportEagleFiles( wxCommandEvent& event );
 
     /**
-     * Displays \a aText in the text panel.
-     *
-     * @param aText The text to display.
-     */
-    void PrintMsg( const wxString& aText );
-
-    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();
-
-    /**
-     * Erase the text panel.
-     */
-    void ClearMsg();
 
     void RefreshProjectTree();
 

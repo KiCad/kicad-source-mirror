@@ -80,8 +80,8 @@ public:
     void Check( bool aCheck = true );
 
 protected:
-    void OnMouseLeave( wxMouseEvent& aEvent );
-    void OnMouseEnter( wxMouseEvent& aEvent );
+    void OnLeave( wxEvent& aEvent );
+    void OnEnter( wxEvent& aEvent );
     void OnLeftButtonUp( wxMouseEvent& aEvent );
     void OnLeftButtonDown( wxMouseEvent& aEvent );
     void OnPaint( wxPaintEvent& aEvent );

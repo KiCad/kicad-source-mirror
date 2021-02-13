@@ -12,14 +12,12 @@
 #include <wx/intl.h>
 #include <wx/gdicmn.h>
 #include <wx/gbsizer.h>
-#include <wx/string.h>
-#include <wx/textctrl.h>
+#include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/panel.h>
+#include <wx/string.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +32,6 @@ class PANEL_KICAD_LAUNCHER_BASE : public wxPanel
 	protected:
 		wxBoxSizer* m_mainSizer;
 		wxGridBagSizer* m_toolsSizer;
-		wxTextCtrl* m_messagesBox;
 
 	public:
 
