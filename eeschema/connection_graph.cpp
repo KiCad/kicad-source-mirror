@@ -2756,7 +2756,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         // This will be set to true if the global is connected to a pin above, but we
         // want to reset this to false so that globals get flagged if they only have a
         // single instance connected to a single pin
-        hasOtherConnections = ( pinCount < 2 );
+        hasOtherConnections = ( pinCount > 1 );
 
         auto it = m_net_name_to_subgraphs_map.find( name );
 
