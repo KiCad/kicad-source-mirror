@@ -117,10 +117,13 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
 	PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
 
 	// If the last stack was empty, use that one instead of creating a new stack
-    if( aAppend || !lastUndo->GetCount() )
-        commandToUndo = lastUndo;
-    else
-    	PushCommandToUndoList( lastUndo );
+	if( lastUndo )
+	{
+		if( aAppend || !lastUndo->GetCount() )
+			commandToUndo = lastUndo;
+		else
+			PushCommandToUndoList( lastUndo );
+	}
 
     if( !commandToUndo )
     {
