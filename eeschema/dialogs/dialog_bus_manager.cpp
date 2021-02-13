@@ -273,7 +273,6 @@ void DIALOG_BUS_MANAGER::OnSelectBus( wxListEvent& event )
 
             m_bus_edit->ChangeValue( alias->GetName() );
 
-            m_btn_add_bus->Disable();
             m_btn_rename_bus->Enable();
             m_btn_remove_bus->Enable();
 
@@ -303,7 +302,6 @@ void DIALOG_BUS_MANAGER::OnSelectBus( wxListEvent& event )
         m_signal_edit->Clear();
         m_signal_list_view->DeleteAllItems();
 
-        m_btn_add_bus->Enable();
         m_btn_rename_bus->Disable();
         m_btn_remove_bus->Disable();
 
