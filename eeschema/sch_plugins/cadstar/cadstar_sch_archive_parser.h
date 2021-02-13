@@ -423,7 +423,7 @@ public:
     };
 
 
-    struct SCHEMATIC : PARSER
+    struct CADSTAR_SCHEMATIC : PARSER
     {
         std::map<GROUP_ID, GROUP>                               Groups;
         std::map<REUSEBLOCK_ID, REUSEBLOCK>                     ReuseBlocks;
@@ -441,15 +441,15 @@ public:
     };
 
 
-    wxString        Filename;
-    HEADER          Header;
-    ASSIGNMENTS_SCM Assignments;
-    LIBRARY_SCM     Library;
-    PARTS           Parts;
-    SHEETS          Sheets;
-    SCHEMATIC       Schematic;
-    ATTRCOLORS      AttrColors;
-    PARTNAMECOL     SymbolPartNameColor;
+    wxString          Filename;
+    HEADER            Header;
+    ASSIGNMENTS_SCM   Assignments;
+    LIBRARY_SCM       Library;
+    PARTS             Parts;
+    SHEETS            Sheets;
+    CADSTAR_SCHEMATIC Schematic;
+    ATTRCOLORS        AttrColors;
+    PARTNAMECOL       SymbolPartNameColor;
 
     double KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
 

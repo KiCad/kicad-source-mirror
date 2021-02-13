@@ -32,7 +32,7 @@ const double CADSTAR_ARCHIVE_PARSER::TXT_HEIGHT_RATIO = ( 24.0 - 5.0 ) / 24.0;
 
 // Cadstar fields and their KiCad equivalent
 const std::map<CADSTAR_ARCHIVE_PARSER::TEXT_FIELD_NAME, wxString>
-        CADSTAR_ARCHIVE_PARSER::CadstarToKicadFieldsMap =
+        CADSTAR_ARCHIVE_PARSER::CADSTAR_TO_KICAD_FIELDS =
                 {   { TEXT_FIELD_NAME::DESIGN_TITLE, wxT( "DESIGN_TITLE" ) },
                     { TEXT_FIELD_NAME::SHORT_JOBNAME, wxT( "SHORT_JOBNAME" ) },
                     { TEXT_FIELD_NAME::LONG_JOBNAME, wxT( "LONG_JOBNAME" ) },
@@ -870,7 +870,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         case TEXT_FIELD_NAME::NUM_OF_SHEETS:
         case TEXT_FIELD_NAME::SHEET_NUMBER:
         case TEXT_FIELD_NAME::SHEET_NAME:
-            returnStr += wxT( "${" ) + CadstarToKicadFieldsMap.at( foundField ) + wxT( "}" );
+            returnStr += wxT( "${" ) + CADSTAR_TO_KICAD_FIELDS.at( foundField ) + wxT( "}" );
             break;
 
         case TEXT_FIELD_NAME::DISTANCE:
@@ -1295,7 +1295,7 @@ void CADSTAR_ARCHIVE_PARSER::TEXT_LOCATION::Parse( XNODE* aNode, PARSER_CONTEXT*
 }
 
 
-void CADSTAR_ARCHIVE_PARSER::NETCLASS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_ARCHIVE_PARSER::CADSTAR_NETCLASS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "NETCLASS" ) );
 
@@ -1368,7 +1368,7 @@ bool CADSTAR_ARCHIVE_PARSER::CODEDEFS::ParseSubNode( XNODE* aChildNode, PARSER_C
     }
     else if( nodeName == wxT( "NETCLASS" ) )
     {
-        NETCLASS netclass;
+        CADSTAR_NETCLASS netclass;
         netclass.Parse( aChildNode, aContext );
         NetClasses.insert( std::make_pair( netclass.ID, netclass ) );
     }

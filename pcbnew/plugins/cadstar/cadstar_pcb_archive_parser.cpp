@@ -41,7 +41,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
     {
         if( cNode->GetName() == wxT( "HEADER" ) )
         {
-            Header.Parse( cNode, &mContext );
+            Header.Parse( cNode, &m_context );
 
             switch( Header.Resolution )
             {
@@ -72,11 +72,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
-            Assignments.Parse( cNode, &mContext );
+            Assignments.Parse( cNode, &m_context );
         }
         else if( cNode->GetName() == wxT( "LIBRARY" ) )
         {
-            Library.Parse( cNode, &mContext );
+            Library.Parse( cNode, &m_context );
         }
         else if( cNode->GetName() == wxT( "DEFAULTS" ) )
         {
@@ -86,11 +86,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "PARTS" ) )
         {
-            Parts.Parse( cNode, &mContext );
+            Parts.Parse( cNode, &m_context );
         }
         else if( cNode->GetName() == wxT( "LAYOUT" ) )
         {
-            Layout.Parse( cNode, &mContext );
+            Layout.Parse( cNode, &m_context );
         }
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
@@ -1598,7 +1598,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode, PARSER_CONTEXT* a
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
+void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_BOARD::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "BOARD" ) );
 
@@ -2473,7 +2473,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aC
         }
         else if( cNodeName == wxT( "BOARD" ) )
         {
-            BOARD board;
+            CADSTAR_BOARD board;
             board.Parse( cNode, aContext );
             Boards.insert( std::make_pair( board.ID, board ) );
         }

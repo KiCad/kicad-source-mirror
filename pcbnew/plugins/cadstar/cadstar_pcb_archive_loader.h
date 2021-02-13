@@ -41,22 +41,22 @@ public:
             wxString aFilename, LAYER_MAPPING_HANDLER aLayerMappingHandler, bool aLogLayerWarnings )
             : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
-        mLayerMappingHandler     = aLayerMappingHandler;
-        mLogLayerWarnings        = aLogLayerWarnings;
-        mBoard                   = nullptr;
-        mProject                 = nullptr;
-        mDesignCenter.x          = 0;
-        mDesignCenter.y          = 0;
-        mDoneCopperWarning       = false;
-        mDoneSpacingClassWarning = false;
-        mDoneNetClassWarning     = false;
-        mNumNets                 = 0;
+        m_layerMappingHandler     = aLayerMappingHandler;
+        m_logLayerWarnings        = aLogLayerWarnings;
+        m_board                   = nullptr;
+        m_project                 = nullptr;
+        m_designCenter.x          = 0;
+        m_designCenter.y          = 0;
+        m_doneCopperWarning       = false;
+        m_doneSpacingClassWarning = false;
+        m_doneNetClassWarning     = false;
+        m_numNets                 = 0;
     }
 
 
     ~CADSTAR_PCB_ARCHIVE_LOADER()
     {
-        for( std::pair<SYMDEF_ID, FOOTPRINT*> libItem : mLibraryMap )
+        for( std::pair<SYMDEF_ID, FOOTPRINT*> libItem : m_libraryMap )
         {
             FOOTPRINT* footprint = libItem.second;
 
@@ -69,7 +69,7 @@ public:
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
      * @param aBoard
      */
-    void Load( ::BOARD* aBoard, ::PROJECT* aProject );
+    void Load( BOARD* aBoard, PROJECT* aProject );
 
     /**
      * @brief Return a copy of the loaded library footprints (caller owns the objects)
@@ -78,51 +78,49 @@ public:
     std::vector<FOOTPRINT*> GetLoadedLibraryFootpints() const;
 
 private:
-    LAYER_MAPPING_HANDLER            mLayerMappingHandler; ///< Callback to get layer mapping
-    bool                             mLogLayerWarnings;    ///< Used in loadBoardStackup()
-    ::BOARD*                         mBoard;
-    ::PROJECT*                       mProject;
-    std::map<LAYER_ID, PCB_LAYER_ID> mLayermap;          ///< Map between Cadstar and KiCad Layers.
+    LAYER_MAPPING_HANDLER            m_layerMappingHandler; ///< Callback to get layer mapping
+    bool                             m_logLayerWarnings;    ///< Used in loadBoardStackup()
+    BOARD*                           m_board;
+    PROJECT*                         m_project;
+    std::map<LAYER_ID, PCB_LAYER_ID> m_layermap;         ///< Map between Cadstar and KiCad Layers.
                                                          ///< Populated by loadBoardStackup().
-    std::map<SYMDEF_ID, FOOTPRINT*>  mLibraryMap;        ///< Map between Cadstar and KiCad
+    std::map<SYMDEF_ID, FOOTPRINT*>  m_libraryMap;       ///< Map between Cadstar and KiCad
                                                          ///< components in the library. Populated
                                                          ///< by loadComponentLibrary(). Owns the
                                                          ///< FOOTPRINT objects.
-    std::map<GROUP_ID, PCB_GROUP*>   mGroupMap;          ///< Map between Cadstar and KiCad
+    std::map<GROUP_ID, PCB_GROUP*>   m_groupMap;         ///< Map between Cadstar and KiCad
                                                          ///< groups. Does NOT ownthe PCB_GROUP
                                                          ///< objects (these should have been
-                                                         ///< loaded to mBoard).
-    std::map<COMPONENT_ID, FOOTPRINT*> mComponentMap;    ///< Map between Cadstar and KiCad
+                                                         ///< loaded to m_board).
+    std::map<COMPONENT_ID, FOOTPRINT*> m_componentMap;   ///< Map between Cadstar and KiCad
                                                          ///< components on the board. Does NOT own
                                                          ///< the FOOTPRINT objects (these should
-                                                         ///< have been loaded to mBoard).
-    std::map<NET_ID, NETINFO_ITEM*>       mNetMap;       ///< Map between Cadstar and KiCad Nets
-    std::map<ROUTECODE_ID, NETCLASSPTR>   mNetClassMap;  ///< Map between Cadstar and KiCad classes
-    std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
-                                                         ///< CADSTAR Layer IDs
-    std::map<TEMPLATE_ID, ZONE*> mLoadedTemplates;       ///< Map between Cadstar and KiCad zones
-    std::vector<LAYER_ID> mPowerPlaneLayers;             ///< List of layers that are marked as
+                                                         ///< have been loaded to m_board).
+    std::map<NET_ID, NETINFO_ITEM*>       m_netMap;      ///< Map between Cadstar and KiCad Nets
+    std::map<ROUTECODE_ID, NETCLASSPTR>   m_netClassMap; ///< Map between Cadstar and KiCad classes
+    std::map<TEMPLATE_ID, ZONE*> m_zonesMap;             ///< Map between Cadstar and KiCad zones
+    std::vector<LAYER_ID> m_powerPlaneLayers;            ///< List of layers that are marked as
                                                          ///< power plane in CADSTAR. This is used
                                                          ///< by "loadtemplates"
-    wxPoint mDesignCenter;                               ///< Used for calculating the required
+    wxPoint m_designCenter;                              ///< Used for calculating the required
                                                          ///< offset to apply to the Cadstar design
                                                          ///< so that it fits in KiCad canvas
-    std::set<HATCHCODE_ID> mHatchcodesTested;            ///< Used by checkAndLogHatchCode() to
+    std::set<HATCHCODE_ID> m_hatchcodesTested;           ///< Used by checkAndLogHatchCode() to
                                                          ///< avoid multiple duplicate warnings
-    std::set<PADCODE_ID> mPadcodesTested;                ///< Used by getKiCadPad() to avoid
+    std::set<PADCODE_ID> m_padcodesTested;               ///< Used by getKiCadPad() to avoid
                                                          ///< multiple duplicate warnings
-    bool mDoneCopperWarning;                             ///< Used by loadCoppers() to avoid
+    bool m_doneCopperWarning;                            ///< Used by loadCoppers() to avoid
                                                          ///< multiple duplicate warnings
-    bool mDoneSpacingClassWarning;                       ///< Used by getKiCadNet() to avoid
+    bool m_doneSpacingClassWarning;                      ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
-    bool mDoneNetClassWarning;                           ///< Used by getKiCadNet() to avoid
+    bool m_doneNetClassWarning;                          ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
-    int mNumNets;                                        ///< Number of nets loaded so far
+    int m_numNets;                                       ///< Number of nets loaded so far
 
 
     // Functions for loading individual elements:
     void loadBoardStackup();
-    void remapUnsureLayers(); ///< Callback mLayerMappingHandler for layers we aren't sure of
+    void remapUnsureLayers(); ///< Callback m_layerMappingHandler for layers we aren't sure of
     void loadDesignRules();
     void loadComponentLibrary();
     void loadGroups();
@@ -143,7 +141,7 @@ private:
                                  const PCB_LAYER_ID& aKiCadLayer );
     void logBoardStackupMessage( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
-    void initStackupItem( const LAYER& aCadstarLayer, ::BOARD_STACKUP_ITEM* aKiCadItem,
+    void initStackupItem( const LAYER& aCadstarLayer, BOARD_STACKUP_ITEM* aKiCadItem,
                           int aDielectricSublayer );
     void loadLibraryFigures( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadLibraryCoppers( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
@@ -153,7 +151,8 @@ private:
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
     void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
-    void applyDimensionSettings( const DIMENSION& aCadstarDim, ::DIMENSION_BASE* aKiCadDim );
+    void applyDimensionSettings( const DIMENSION& aCadstarDim, DIMENSION_BASE* aKiCadDim );
+
 
     /**
      * @brief Tries to make a best guess as to the zone priorities based on the pour status.
@@ -165,7 +164,7 @@ private:
     /**
      * @brief
      * @param aCadstarText
-     * @param aContainer to draw on (e.g. mBoard)
+     * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the text to
      * @param aCadstarLayerOverride if not empty, overrides the LayerID in aCadstarText
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
@@ -189,7 +188,7 @@ private:
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
      * @param aShapeName for reporting warnings/errors to the user
-     * @param aContainer to draw on (e.g. mBoard)
+     * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
@@ -207,11 +206,11 @@ private:
                            const bool& aMirrorInvert = false );
 
     /**
-     * @brief Uses PCB_SHAPE to draw the cutouts on mBoard object
+     * @brief Uses PCB_SHAPE to draw the cutouts on m_board object
      * @param aVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
-     * @param aContainer to draw on (e.g. mBoard)
+     * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
@@ -230,11 +229,11 @@ private:
                                        const bool& aMirrorInvert = false );
 
     /**
-     * @brief Uses PCB_SHAPE to draw the vertices on mBoard object
+     * @brief Uses PCB_SHAPE to draw the vertices on m_board object
      * @param aCadstarVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
-     * @param aContainer to draw on (e.g. mBoard)
+     * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
@@ -256,7 +255,7 @@ private:
     /**
      * @brief Returns a vector of pointers to PCB_SHAPE objects. Caller owns the objects.
      * @param aCadstarVertices
-     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aContainer to draw on (e.g. m_board). Can be nullptr.
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
@@ -278,7 +277,7 @@ private:
      * @brief Returns a pointer to a PCB_SHAPE object. Caller owns the object.
      * @param aCadstarStartPoint
      * @param aCadstarVertex
-     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aContainer to draw on (e.g. m_board). Can be nullptr.
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
@@ -311,7 +310,7 @@ private:
      * @brief Returns a SHAPE_POLY_SET object from a Cadstar SHAPE
      * @param aCadstarShape
      * @param aLineThickness Thickness of line is used for expanding the polygon by half.
-     * @param aContainer to draw on (e.g. mBoard). Can be nullptr.
+     * @param aContainer to draw on (e.g. m_board). Can be nullptr.
      * @param aMoveVector move draw segment by this amount (in KiCad coordinates)
      * @param aRotationAngle rotate draw segment by this amount (in tenth degrees)
      * @param aScalingFactor scale draw segment by this amount
@@ -440,8 +439,8 @@ private:
     double getPolarAngle( wxPoint aPoint );
 
     /**
-     * @brief Searches mNetMap and returns the NETINFO_ITEM pointer if exists. Otherwise
-     * creates a new one and adds it to mBoard.
+     * @brief Searches m_netMap and returns the NETINFO_ITEM pointer if exists. Otherwise
+     * creates a new one and adds it to m_board.
      * @param aCadstarNetID
      * @return
      */
@@ -486,7 +485,7 @@ private:
     void addToGroup( const GROUP_ID& aCadstarGroupID, BOARD_ITEM* aKiCadItem );
 
     /**
-     * @brief Adds a new PCB_GROUP* to mGroupMap
+     * @brief Adds a new PCB_GROUP* to m_groupMap
      * @param aName Name to give the group. If name already exists, append "_1", "_2", etc.
      * to the end to ensure it is unique
      * @return

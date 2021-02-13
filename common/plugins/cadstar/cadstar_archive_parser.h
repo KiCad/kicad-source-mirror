@@ -151,9 +151,10 @@ public:
     };
 
     /**
-     * Map between CADSTAR fields and KiCad text variables. This is used as a lookup
+     * Map between CADSTAR fields and KiCad text variables. This is used as a lookup table when
+     * parsing CADSTAR text fields. Most variables have a similar name in KiCad as in CADSTAR.
      */
-    static const std::map<TEXT_FIELD_NAME, wxString> CadstarToKicadFieldsMap;
+    static const std::map<TEXT_FIELD_NAME, wxString> CADSTAR_TO_KICAD_FIELDS;
 
 
     struct PARSER_CONTEXT
@@ -183,9 +184,6 @@ public:
          */
         std::set<TEXT_FIELD_NAME> InconsistentTextFields;
     };
-
-
-    PARSER_CONTEXT mContext;
 
     /**
      * @brief Replaces CADSTAR fields for the equivalent in KiCad and stores the field values
@@ -755,7 +753,7 @@ public:
     };
 
 
-    struct NETCLASS : PARSER
+    struct CADSTAR_NETCLASS : PARSER
     {
         NETCLASS_ID                  ID;
         wxString                     Name;
@@ -781,7 +779,7 @@ public:
         std::map<TEXTCODE_ID, TEXTCODE>          TextCodes;
         std::map<ROUTECODE_ID, ROUTECODE>        RouteCodes;
         std::map<ATTRIBUTE_ID, ATTRNAME>         AttributeNames;
-        std::map<NETCLASS_ID, NETCLASS>          NetClasses;
+        std::map<NETCLASS_ID, CADSTAR_NETCLASS>  NetClasses;
         std::map<SPACING_CLASS_ID, SPCCLASSNAME> SpacingClassNames;
 
         bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
@@ -1379,6 +1377,10 @@ public:
                + ( ( aAlternateName.size() > 0 ) ? ( wxT( " (" ) + aAlternateName + wxT( ")" ) )
                                                  : wxT( "" ) );
     }
+
+protected:
+    PARSER_CONTEXT m_context;
+
 
 }; // class CADSTAR_ARCHIVE_PARSER
 

@@ -793,7 +793,7 @@ public:
     };
 
 
-    struct BOARD : PARSER
+    struct CADSTAR_BOARD : PARSER
     {
         BOARD_ID                                ID;
         LINECODE_ID                             LineCodeID;
@@ -801,8 +801,8 @@ public:
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
         bool                                    Fixed = false;
 
-        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this BOARD is part of a group
-        REUSEBLOCKREF ReuseBlockRef;           ///< Normally BOARD cannot be part of a reuseblock,
+        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this CADSTAR_BOARD is part of a group
+        REUSEBLOCKREF ReuseBlockRef;           ///< Normally CADSTAR_BOARD cannot be part of a reuseblock,
                                                ///< but included for completeness
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -1178,7 +1178,7 @@ public:
         std::map<GROUP_ID, GROUP>           Groups;
         std::map<REUSEBLOCK_ID, REUSEBLOCK> ReuseBlocks;
 
-        std::map<BOARD_ID, BOARD> Boards; ///< Normally CADSTAR only allows one board but
+        std::map<BOARD_ID, CADSTAR_BOARD> Boards; ///< Normally CADSTAR only allows one board but
                                           ///< implemented this as a map just in case
         std::map<FIGURE_ID, FIGURE>                             Figures;
         std::map<AREA_ID, AREA>                                 Areas;
