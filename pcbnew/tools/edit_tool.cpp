@@ -2299,7 +2299,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         }
         else
         {
-            refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition( false ), items );
+            refPoint = grid.BestDragOrigin( getViewControls()->GetCursorPosition(), items );
         }
 
         selection.SetReferencePoint( refPoint );
