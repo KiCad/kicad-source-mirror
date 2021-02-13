@@ -60,7 +60,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     Dwgs_User,
     Cmts_User,
     Eco1_User, Eco2_User,
-    Edge_Cuts,
+    Edge_Cuts, Margin,
 
     User_1, ZONE_LAYER_FOR( User_1 ),
     User_2, ZONE_LAYER_FOR( User_2 ),
