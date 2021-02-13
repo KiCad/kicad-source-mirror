@@ -2818,6 +2818,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
             SCH_SHEET* parentSheet = static_cast<SCH_SHEET*>( item );
 
             std::map<wxString, SCH_SHEET_PIN*> pins;
+            std::map<wxString, SCH_HIERLABEL*> labels;
 
             for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
             {
@@ -2840,6 +2841,10 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 if( subItem->Type() == SCH_HIER_LABEL_T )
                 {
                     SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
+
+                    if( !pins.count( label->GetText() ) )
+                        labels[label->GetText()] = label;
+
                     pins.erase( label->GetText() );
                 }
             }
@@ -2857,6 +2862,23 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
                 sheet.LastScreen()->Append( marker );
+
+                errors++;
+            }
+
+            for( const std::pair<const wxString, SCH_HIERLABEL*>& unmatched : labels )
+            {
+                wxString msg = wxString::Format( _( "Hierarchical label %s has no matching "
+                                                    "sheet pin outside the sheet" ),
+                                                 UnescapeString( unmatched.first ) );
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
+                ercItem->SetItems( unmatched.second );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetIsSheetSpecific();
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                parentSheet->GetScreen()->Append( marker );
 
                 errors++;
             }
