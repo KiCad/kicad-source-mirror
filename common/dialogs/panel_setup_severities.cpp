@@ -126,8 +126,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
                                                                  pinMapSeverities[i],
                                                                  wxDefaultPosition, wxDefaultSize,
                                                                  i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[ errorCode ][i], 0,
-                                 wxEXPAND | wxALIGN_CENTER_VERTICAL );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxEXPAND );
             }
         }
 
