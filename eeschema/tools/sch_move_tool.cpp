@@ -81,27 +81,6 @@ bool SCH_MOVE_TOOL::Init()
 }
 
 
-static const KICAD_T movableItems[] =
-{
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-    EOT
-};
-
-
 /* TODO - Tom/Jeff
   - add preferences option "Move origin: always cursor / item origin"
   - add preferences option "Default drag action: drag items / move"
@@ -150,7 +129,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
     bool          unselect = selection.IsHover();
 
     // Keep an original copy of the starting points for cleanup after the move
@@ -751,7 +730,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
     EE_GRID_HELPER grid( m_toolMgr);
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
     bool append_undo = false;
 
     for( SCH_ITEM* it : m_frame->GetScreen()->Items() )

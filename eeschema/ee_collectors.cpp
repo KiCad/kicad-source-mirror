@@ -71,6 +71,33 @@ const KICAD_T EE_COLLECTOR::SheetsOnly[] = {
 };
 
 
+const KICAD_T EE_COLLECTOR::MovableItems[] =
+{
+    SCH_MARKER_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_BITMAP_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_FIELD_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_PIN_T,
+    SCH_SHEET_T,
+    EOT
+};
+
+
+const KICAD_T EE_COLLECTOR::WiresOnly[] = {
+    SCH_LINE_T,
+    EOT
+};
+
+
 const KICAD_T EE_COLLECTOR::FieldOwners[] = {
     SCH_COMPONENT_T,
     SCH_SHEET_T,

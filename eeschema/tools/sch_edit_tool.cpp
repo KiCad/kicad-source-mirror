@@ -66,6 +66,8 @@
 #include <dialogs/dialog_edit_label.h>
 #include <core/kicad_algo.h>
 
+#include <limits>
+
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
 public:
@@ -1685,10 +1687,28 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    auto cursorPos = wxPoint( getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) ) );
+    wxPoint cursorPos = wxPoint( getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) ) );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::WiresOnly );
 
-    if( m_frame->BreakSegments( cursorPos ) )
+    std::vector<SCH_LINE*> lines;
+
+    for( auto& item : selection )
     {
+    	if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+		{
+    		if( !line->IsEndPoint( cursorPos ) )
+    		lines.push_back( line );
+		}
+    }
+
+    m_selectionTool->ClearSelection();
+	m_frame->StartNewUndo();
+
+	for( SCH_LINE* line : lines )
+		m_frame->BreakSegment( line,  cursorPos );
+
+	if( !lines.empty() )
+	{
         if( m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
             m_frame->AddJunction( m_frame->GetScreen(), cursorPos, true, false );
 
@@ -1696,6 +1716,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
         m_frame->OnModify();
         m_frame->GetCanvas()->Refresh();
+
+        m_toolMgr->RunAction( EE_ACTIONS::drag );
     }
 
     return 0;

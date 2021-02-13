@@ -295,12 +295,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
                                    SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
 {
-    if( !IsPointOnSegment( aSegment->GetStartPoint(), aSegment->GetEndPoint(), aPoint )
-            || aSegment->IsEndPoint( aPoint ) )
-    {
-        return false;
-    }
-
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
@@ -331,7 +325,6 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
 
     bool                   brokenSegments = false;
     std::vector<SCH_LINE*> wires;
-    EDA_RECT               bbox( aPoint, wxSize( 2, 2 ) );
 
     for( auto item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
     {

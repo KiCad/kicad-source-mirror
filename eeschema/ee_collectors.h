@@ -44,8 +44,10 @@ class EE_COLLECTOR : public COLLECTOR
 public:
     static const KICAD_T AllItems[];
     static const KICAD_T EditableItems[];
+    static const KICAD_T MovableItems[];
     static const KICAD_T ComponentsOnly[];
     static const KICAD_T SheetsOnly[];
+    static const KICAD_T WiresOnly[];
     static const KICAD_T FieldOwners[];
 
     EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :

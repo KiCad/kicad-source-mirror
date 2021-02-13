@@ -757,6 +757,11 @@ public:
     /* Undo - redo */
 
     /**
+     * Create a new, blank stack for future Undo commands to be pushed to
+     */
+    void StartNewUndo();
+
+    /**
      * Create a copy of the current schematic item, and put it in the undo list.
      *
      *  aTypeCommand =

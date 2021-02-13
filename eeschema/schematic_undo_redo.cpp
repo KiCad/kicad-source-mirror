@@ -95,6 +95,13 @@
  * swapped data is data modified by editing, so not all values are swapped
  */
 
+void SCH_EDIT_FRAME::StartNewUndo()
+{
+	PICKED_ITEMS_LIST* blank = new PICKED_ITEMS_LIST();
+	PushCommandToUndoList( blank );
+}
+
+
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
                                          SCH_ITEM*      aItem,
                                          UNDO_REDO      aCommandType,
@@ -107,8 +114,13 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
     // Connectivity may change
     aItem->SetConnectivityDirty();
 
-    if( aAppend )
-        commandToUndo = PopCommandFromUndoList();
+	PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
+
+	// If the last stack was empty, use that one instead of creating a new stack
+    if( aAppend || !lastUndo->GetCount() )
+        commandToUndo = lastUndo;
+    else
+    	PushCommandToUndoList( lastUndo );
 
     if( !commandToUndo )
     {
