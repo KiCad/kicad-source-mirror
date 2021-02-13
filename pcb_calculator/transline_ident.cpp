@@ -144,38 +144,38 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( microstrip_xpm ) );
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of Substrate" ), 0.2, true ) );
+                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H_t", _( "Height of Box Top" ), 1e20, true ) );
+                                   "H_t", "H_t", _( "Height of box top" ), 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T",
-                                   _( "Strip Thickness" ), 0.035, true ) );
+                                   _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
                                    "Rough", _( "Rough" ),
-                                   _( "Conductor Roughness" ), 0.0, true ) );
+                                   _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel S",_( "mu Rel S" ),
-                                   _( "Relative Permeability (mu) of Substrate" ), 1, false ) );
+                                   "mu Rel S",_( "mu substrate" ),
+                                   _( "Relative permeability (mu) of substrate" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line Width" ), 0.2, true ) );
+                                   "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line wength" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical Length" ), 0.0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
         break;
 
     case CPW_TYPE:          // coplanar waveguide
@@ -184,31 +184,31 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of Substrate" ), 0.2, true ) );
+                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T", _( "Strip Thickness" ), 0.035, true ) );
+                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line Width" ), 0.2, true ) );
+                                   "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "S", "S", _( "Gap Width" ), 0.2, true ) );
+                                   "S", "S", _( "Gap width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical Length" ), 0.0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
         break;
 
     case GROUNDED_CPW_TYPE:      // grounded coplanar waveguide
@@ -217,31 +217,31 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H", _( "Height of Substrate" ), 0.2, true ) );
+                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T", _( "Strip Thickness" ), 0.035, true ) );
+                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", "mu Rel C",
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C", "mu condutor",
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W", _( "Line Width" ), 0.2, true ) );
+                                   "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "S", "S", _( "Gap Width" ), 0.2, true ) );
+                                   "S", "S", _( "Gap width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical Length" ), 0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
         break;
 
 
@@ -252,31 +252,31 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
         m_Messages.Add( _( "ZF(H10) = Ey / Hx:" ) );
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "TE-Modes:" ) );
-        m_Messages.Add( _( "TM-Modes:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "TE-modes:" ) );
+        m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I",_( "mu Rel I" ),
-                                   _( "Relative Permeability (mu) of Insulator" ), 1, false ) );
+                                   "mu Rel I",_( "mu insulator" ),
+                                   _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C",_( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C",_( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "a", "a", _( "Width of Waveguide" ), 10.0, true ) );
+                                   "a", "a", _( "Width of waveguide" ), 10.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "b", "b", _( "Height of Waveguide" ), 5.0, true ) );
+                                   "b", "b", _( "Height of waveguide" ), 5.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Waveguide Length" ), 50.0, true ) );
+                                   "L", "L", _( "Waveguide length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0", _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l", _( "Electrical Length" ), 0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
         break;
 
     case COAX_TYPE:      // coaxial cable
@@ -285,36 +285,31 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "TE-Modes:" ) );
-        m_Messages.Add( _( "TM-Modes:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "TE-modes:" ) );
+        m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I", _( "mu Rel I" ),
-                                   _( "Relative Permeability (mu) of Insulator" ), 1, false ) );
+                                   "mu Rel I", _( "mu insulator" ),
+                                   _( "Relative Permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,
-                                   "Din", _( "Din" ),
-                                   _( "Inner Diameter (conductor)" ), 1.0, true ) );
+                                   "Din", _( "Din" ), _( "Inner diameter (conductor)" ), 1.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_OUT_PRM,
-                                   "Dout", _( "Dout" ),
-                                   _( "Outer Diameter (insulator)" ), 8.0, true ) );
+                                   "Dout", _( "Dout" ), _( "Outer diameter (insulator)" ), 8.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L",
-                                   _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0",
-                                   _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l",
-                                   _( "Electrical Length" ), 0.0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
         break;
 
     case C_MICROSTRIP_TYPE:      // coupled microstrip
@@ -322,40 +317,33 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( c_microstrip_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff Even:" ) );
-        m_Messages.Add( _( "ErEff Odd:" ) );
-        m_Messages.Add( _( "Conductor Losses Even:" ) );
-        m_Messages.Add( _( "Conductor Losses Odd:" ) );
-        m_Messages.Add( _( "Dielectric Losses Even:" ) );
-        m_Messages.Add( _( "Dielectric Losses Odd:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "ErEff even:" ) );
+        m_Messages.Add( _( "ErEff odd:" ) );
+        m_Messages.Add( _( "Conductor losses even:" ) );
+        m_Messages.Add( _( "Conductor losses odd:" ) );
+        m_Messages.Add( _( "Dielectric losses even:" ) );
+        m_Messages.Add( _( "Dielectric losses odd:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H",
-                                   _( "Height of Substrate" ), 0.2, true ) );
+                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H_t",
-                                   _( "Height of Box Top" ), 1e20, true ) );
+                                   "H_t", "H_t", _( "Height of box top" ), 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T",
-                                   _( "Strip Thickness" ), 0.035, true ) );
+                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
-                                   "Rough", _( "Rough" ),
-                                   _( "Conductor Roughness" ), 0.0, true ) );
+                                   "Rough", _( "Rough" ), _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W",
-                                   _( "Line Width" ), 0.2, true ) );
+                                   "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   "S", "S",
-                                   _( "Gap Width" ), 0.2, true ) );
+                                   "S", "S", _( "Gap width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L",
-                                   _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_E_PRM,
                                    "Zeven", _( "Zeven" ),
@@ -365,7 +353,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    _( "Odd mode impedance (lines driven by opposite (differential) voltages)" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
                                    "Ang_l", "Ang_l",
-                                   _( "Electrical Length" ), 0.0, true ) );
+                                   _( "Electrical length" ), 0.0, true ) );
         break;
 
     case STRIPLINE_TYPE:      // stripline
@@ -373,39 +361,31 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( stripline_xpm ) );
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
-                                   "H", "H",
-                                   _( "Height of Substrate" ), 0.2, true ) );
+                                   "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, STRIPLINE_A_PRM,
-                                   "a", "a",
-                                   _( "distance between strip and top metal" ), 0.2,
+                                   "a", "a", _( "Distance between strip and top metal" ), 0.2,
                                    true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
-                                   "T", "T",
-                                   _( "Strip Thickness" ), 0.035, true ) );
+                                   "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
-                                   false ) );
+                                   "mu Rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1, false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
-                                   "W", "W",
-                                   _( "Line Width" ), 0.2, true ) );
+                                   "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L",
-                                   _( "Line Length" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0",
-                                   _( "Characteristic Impedance" ), 50, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l",
-                                   _( "Electrical Length" ), 0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0, true ) );
         break;
 
     case TWISTEDPAIR_TYPE:      // twisted pair
@@ -414,38 +394,35 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ErEff:" ) );
-        m_Messages.Add( _( "Conductor Losses:" ) );
-        m_Messages.Add( _( "Dielectric Losses:" ) );
-        m_Messages.Add( _( "Skin Depth:" ) );
+        m_Messages.Add( _( "Conductor losses:" ) );
+        m_Messages.Add( _( "Dielectric losses:" ) );
+        m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_TWIST_PRM,
                                    "Twists", _( "Twists" ),
-                                   _( "Number of Twists per Length" ), 0.0, false ) );
+                                   _( "Number of twists per length" ), 0.0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu Rel C" ),
-                                   _( "Relative Permeability (mu) of Conductor" ), 1,
+                                   "mu Rel C", _( "mu conductor" ),
+                                   _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_EPSILONR_ENV_PRM,
                                    "ErEnv", _( "ErEnv" ),
-                                   _( "Relative Permittivity of Environment" ), 1,
+                                   _( "Relative permittivity of environment" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,
                                    "Din", _( "Din" ),
-                                   _( "Inner Diameter (conductor)" ), 1.0, true ) );
+                                   _( "Inner diameter (conductor)" ), 1.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_OUT_PRM,
                                    "Dout", _( "Dout" ),
-                                   _( "Outer Diameter (insulator)" ), 8.0, true ) );
+                                   _( "Outer diameter (insulator)" ), 8.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L",
-                                   _( "Cable Length" ), 50.0, true ) );
+                                   "L", "L", _( "Cable length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
-                                   "Z0", "Z0",
-                                   _( "Characteristic Impedance" ), 50.0, true ) );
+                                   "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, DUMMY_PRM ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, ANG_L_PRM,
-                                   "Ang_l", "Ang_l",
-                                   _( "Electrical Length" ), 0.0, true ) );
+                                   "Ang_l", "Ang_l", _( "Electrical length" ), 0.0, true ) );
         break;
 
     case END_OF_LIST_TYPE:      // Not really used
