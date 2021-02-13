@@ -34,6 +34,7 @@ class PROJECT_TREE_PANE;
 class ACTION_TOOLBAR;
 class KICAD_SETTINGS;
 class EDA_BASE_FRAME;
+class PANEL_KICAD_LAUNCHER;
 
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
@@ -64,7 +65,6 @@ public:
 
     void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();
-    void RecreateLauncher();
 
     wxString GetCurrentFileName() const override
     {
@@ -185,10 +185,9 @@ private:
     bool m_openSavedWindows;
 
 private:
-    PROJECT_TREE_PANE* m_leftWin;
-    ACTION_TOOLBAR*     m_launcher;
-    wxTextCtrl*         m_messagesBox;
-    ACTION_TOOLBAR*     m_mainToolBar;
+    PROJECT_TREE_PANE*    m_leftWin;
+    PANEL_KICAD_LAUNCHER* m_launcher;
+    ACTION_TOOLBAR*       m_mainToolBar;
 
     int                 m_leftWinWidth;
     bool                m_active_project;

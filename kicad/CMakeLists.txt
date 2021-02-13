@@ -17,6 +17,8 @@ include_directories(
 set( KICAD_SRCS
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
+    dialogs/panel_kicad_launcher_base.cpp
+    dialogs/panel_kicad_launcher.cpp
     files-io.cpp
     import_project.cpp
     kicad.cpp

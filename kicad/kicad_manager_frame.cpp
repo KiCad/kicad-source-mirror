@@ -28,18 +28,17 @@
 #include "project_tree_pane.h"
 #include <bitmaps.h>
 #include <build_version.h>
+#include <dialogs/panel_kicad_launcher.h>
 #include <eda_base_frame.h>
 #include <filehistory.h>
 #include <kiplatform/app.h>
 #include <kiway.h>
 #include <kiway_express.h>
-#include <kiway_player.h>
 #include <launch_ext.h>
 #include <panel_hotkeys_editor.h>
 #include <reporter.h>
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
-#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -100,7 +99,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                         KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME, &::Kiway ),
         m_leftWin( nullptr ),
         m_launcher( nullptr ),
-        m_messagesBox( nullptr ),
         m_mainToolBar( nullptr )
 {
     m_active_project = false;
@@ -132,16 +130,12 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // Left window: is the box which display tree project
     m_leftWin = new PROJECT_TREE_PANE( this );
 
-    // Add the wxTextCtrl showing all messages from KiCad:
-    m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    wxTE_MULTILINE | wxTE_READONLY | wxBORDER_NONE );
-
     setupTools();
     setupUIConditions();
 
+    m_launcher = new PANEL_KICAD_LAUNCHER( this );
+
     RecreateBaseHToolbar();
-    RecreateLauncher();
     ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
@@ -157,9 +151,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                       .CaptionVisible( false ).PaneBorder( false )
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
-    m_auimgr.AddPane( m_launcher, EDA_PANE().HToolbar().Name( "Launcher" ).Top().Layer(1) );
-
-    m_auimgr.AddPane( m_messagesBox, EDA_PANE().Messages().Name( "MsgPanel" ).Center() );
+    m_auimgr.AddPane( m_launcher,
+                      EDA_PANE().Canvas().PaneBorder( false ).Name( "Launcher" ).Center() );
 
     m_auimgr.Update();
 
@@ -320,7 +313,7 @@ wxString KICAD_MANAGER_FRAME::help_name()
 
 void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
-    m_messagesBox->AppendText( aText );
+    m_launcher->GetMessagesBox()->AppendText( aText );
 }
 
 
@@ -590,7 +583,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 
     // tooltips in toolbars
     RecreateBaseHToolbar();
-    RecreateLauncher();
+    m_launcher->CreateLaunchers();
 
     PrintPrjInfo();
 }
@@ -628,7 +621,7 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
 
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
-    m_messagesBox->Clear();
+    m_launcher->GetMessagesBox()->Clear();
 }
 
 

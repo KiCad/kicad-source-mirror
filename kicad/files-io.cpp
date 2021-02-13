@@ -27,6 +27,7 @@
  */
 
 #include <confirm.h>
+#include <dialogs/panel_kicad_launcher.h>
 #include <kiway.h>
 #include <pgm_kicad.h>
 #include <project/project_archiver.h>
@@ -84,7 +85,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
             return;
     }
 
-    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+    WX_TEXT_CTRL_REPORTER reporter( m_launcher->GetMessagesBox() );
 
     PROJECT_ARCHIVER archiver;
 
@@ -125,7 +126,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return;
 
-    WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
+    WX_TEXT_CTRL_REPORTER reporter( m_launcher->GetMessagesBox() );
 
     PROJECT_ARCHIVER archiver;
 
