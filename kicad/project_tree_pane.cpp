@@ -1190,12 +1190,12 @@ void PROJECT_TREE_PANE::FileWatcherReset()
         // choosing to fault on an invalid event ID instead of sanely ignoring them we need to
         // avoid spawning a filewatcher. Unforunately this punishes corporate environments with
         // Windows Server shares :/
-        wxLogTrace( tracePathsAndFiles, "Network path: not monitoring folder changes" );
+        m_Parent->SetStatusText( _( "Network path: not monitoring folder changes" ), 0 );
         return;
     }
     else
     {
-        wxLogTrace( tracePathsAndFiles, "Local path: monitoring folder changes" );
+        m_Parent->SetStatusText( _( "Local path: monitoring folder changes" ), 0 );
     }
     #endif
 
