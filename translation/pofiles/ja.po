@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 04:24+0000\n"
+"PO-Revision-Date: 2021-02-14 06:49+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -19704,11 +19704,11 @@ msgstr "ビア"
 
 #: pcbnew/board.cpp:1108 pcbnew/pcb_draw_panel_gal.cpp:459
 msgid "Track Segments"
-msgstr "配線セグメント数"
+msgstr "配線セグメント"
 
 #: pcbnew/board.cpp:1111 pcbnew/pcb_draw_panel_gal.cpp:462
 msgid "Nodes"
-msgstr "ノード数"
+msgstr "ノード"
 
 #: pcbnew/board.cpp:1114 pcbnew/pcb_draw_panel_gal.cpp:465
 #: pcbnew/widgets/appearance_controls_base.cpp:62
@@ -26806,7 +26806,7 @@ msgid ""
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
 "Freerouter や他の外部ルーター用の導体レイヤー タイプ。\n"
-"電源プレーン レイヤーは Freerouter のレイヤー メニューから削除されます。"
+"電源プレーンのレイヤーは Freerouter のレイヤー メニューから削除されます。"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:157
 msgid "In1"
@@ -28187,7 +28187,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:534
 msgid "Edge Clearance Warning"
-msgstr "板端クリアランス警告"
+msgstr "基板端クリアランス警告"
 
 #: pcbnew/files.cpp:565
 #, c-format
@@ -30141,9 +30141,8 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"CADSTARのレイヤー '%s' は、パワープレーン レイヤーとして定義されます。ただ"
-"し、そのような名前のネットは存在しません。レイヤーはロードされましたが、導体"
-"ゾーンは作成されませんでした。"
+"CADSTARのレイヤー '%s' は、電源プレーンのレイヤーとして定義されます。ただし、そのような名前のネットは存在しません。レイヤーはロードされました"
+"が、導体ゾーンは作成されませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1856
 msgid ""
@@ -31071,7 +31070,7 @@ msgstr "カスタム配線幅/ビアサイズ..."
 
 #: pcbnew/router/router_tool.cpp:142
 msgid "Shows a dialog for changing the track width and via size."
-msgstr "配線幅とビア サイズを変更するための設定ダイアログを表示します。"
+msgstr "配線幅とビアのサイズを変更するための設定ダイアログを表示します。"
 
 #: pcbnew/router/router_tool.cpp:148
 msgid "Switch Track Posture"
@@ -31897,11 +31896,11 @@ msgstr "選択された図形ラインを配線に変換"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw Line"
-msgstr "図形線を描画"
+msgstr "線を描く"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Draw a line"
-msgstr "図形線を描画"
+msgstr "線を描画"
 
 #: pcbnew/tools/pcb_actions.cpp:94
 msgid "Draw Graphic Polygon"
