@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 10:52+0000\n"
+"PO-Revision-Date: 2021-02-14 11:11+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -22501,9 +22501,7 @@ msgstr "相対パスを使用しますか？"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:198
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
-msgstr ""
-"パスの関連付けを作成できません (ターゲット ボリュームが基板ファイルのボリュー"
-"ムと異なります)！"
+msgstr "相対パスを作れません (出力先のボリュームが基板ファイルのボリュームと異なります)！"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:257
 #, c-format
@@ -23023,9 +23021,7 @@ msgstr "マップ ファイルを生成"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:309
 msgid "Cannot make path relative (target volume different from file volume)!"
-msgstr ""
-"パスの関連付けを作成できません (ターゲット ボリュームがファイルのボリュームと"
-"異なります)！"
+msgstr "相対パスを作れません (出力先のボリュームがファイルのボリュームと異なります)！"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:379
 #, c-format
