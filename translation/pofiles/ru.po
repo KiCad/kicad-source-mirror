@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-05 12:17+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2021-02-15 09:40+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3361,14 +3361,12 @@ msgid "Netclass name already in use."
 msgstr "Класс цепей с таким именем уже используется."
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Минимальный зазор:"
+msgstr "Минимальный зазор"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Минимальная ширина дорожки:"
+msgstr "Минимальная ширина дорожки"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 #, fuzzy
@@ -17299,11 +17297,13 @@ msgid "Import Eagle Project Files"
 msgstr "Импортировать файлы проекта Eagle"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "Похоже файл \"%s\" не является файлом схемы."
+msgstr ""
+"Похоже файл '%s'\n"
+"не является файлом проект."
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -27304,13 +27304,11 @@ msgid "Check rule syntax"
 msgstr "Проверить синтаксис правил"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
 msgstr ""
-"Текст станет нечитабельным с толщиной больше\n"
-"чем 1/4 ширины или толщины."
+"Текст станет нечитабельным с толщиной больше чем 1/4 ширины или толщины."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
