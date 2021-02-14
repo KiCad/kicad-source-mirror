@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-11 23:32+0000\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -167,7 +167,7 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Der Foorprint-Umriss ist fehlerhaft. Footprint Checker für eine vollständige "
+"Der Footprint-Umriss ist fehlerhaft. Footprint Checker für eine vollständige "
 "Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:484
@@ -3370,64 +3370,52 @@ msgid "Netclass name already in use."
 msgstr "Name der Netzklasse wird bereits benutzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Mindestabstand:"
+msgstr "Minimum Kupferabstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Mindestleiterbahnbreite:"
+msgstr "Minimum Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "DuKo-Pad Durchmesser:"
+msgstr "DuKo-Paddurchmesser"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Durchkontaktierung > Durchmesser"
+msgstr "DuKo-Lochdurchmesser metallisiert"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "DuKo-Pad Durchmesser:"
+msgstr "µVia-Paddurchmesser"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Durchkontaktierung > Durchmesser"
+msgstr "µVia-Lochdurchmesser metallisiert"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Anpassen der Abstimmung eines differenziellem Signalpaares"
+msgstr "Leiterbahnbreite Differentialpaar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Differenzielle Paare"
+msgstr "Abstand Differentialpaar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Voreinstellung für Strichstärke:"
+msgstr "Dicke Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Busbreite"
+msgstr "Dicke Busverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Schematisches Feld"
+msgstr "Farbe Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Schaltplan Dateien"
+msgstr "Linienstil Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -3456,7 +3444,7 @@ msgstr "Leiterbahnbreite"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1489
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:191
 msgid "Via Size"
-msgstr "DuKo Größe"
+msgstr "DuKo-Größe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 msgid "Via Hole"
@@ -3465,7 +3453,7 @@ msgstr "DuKo-Bohrung"
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
 msgid "uVia Size"
-msgstr "µVia Größe"
+msgstr "µVia-Größe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 msgid "uVia Hole"
@@ -3477,11 +3465,11 @@ msgstr "DP-Breite"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Gap"
-msgstr "Abstand DP"
+msgstr "DP-Abstand"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "Wire Thickness"
-msgstr "Leiterbahnbreite"
+msgstr "Verbindungsbreite"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:50
 msgid "Bus Thickness"
@@ -3883,7 +3871,7 @@ msgstr "Grafikform"
 
 #: common/eda_item.cpp:265
 msgid "Board Text"
-msgstr "Platinetext"
+msgstr "Platinentext"
 
 #: common/eda_item.cpp:266 pcbnew/widgets/appearance_controls.cpp:343
 msgid "Footprint Text"
@@ -3912,7 +3900,7 @@ msgstr "Ausgerichtete Bemaßung"
 
 #: common/eda_item.cpp:273
 msgid "Orthogonal Dimension"
-msgstr "Senkrechte Abmessungen"
+msgstr "Orthogonale Bemaßung"
 
 #: common/eda_item.cpp:274
 msgid "Center Dimension"
@@ -3920,7 +3908,7 @@ msgstr "Mittige Bemaßung"
 
 #: common/eda_item.cpp:275 pcbnew/dimension.cpp:963
 msgid "Leader"
-msgstr "Führer"
+msgstr "Hinweislinie"
 
 #: common/eda_item.cpp:276 pcbnew/pcb_target.cpp:123
 msgid "Target"
@@ -3941,7 +3929,7 @@ msgstr "Gruppe"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Marker"
-msgstr "Schematische Markierung"
+msgstr "Schaltplanmarker"
 
 #: common/eda_item.cpp:283 eeschema/sch_junction.h:91
 msgid "Junction"
@@ -3969,7 +3957,7 @@ msgstr "Bitmap"
 
 #: common/eda_item.cpp:289
 msgid "Schematic Text"
-msgstr "Schematischer Text"
+msgstr "Schaltplan-Text"
 
 #: common/eda_item.cpp:290
 msgid "Net Label"
@@ -3985,7 +3973,7 @@ msgstr "Hierarchischer Bezeichner"
 
 #: common/eda_item.cpp:293
 msgid "Schematic Field"
-msgstr "Schematisches Feld"
+msgstr "Schaltplanfeld"
 
 #: common/eda_item.cpp:294
 msgid "Component"
@@ -3998,7 +3986,7 @@ msgstr "Schaltplanpin"
 #: common/eda_item.cpp:296 eeschema/dialogs/dialog_migrate_buses.cpp:101
 #: pcbnew/tools/pcb_actions.cpp:1181
 msgid "Sheet"
-msgstr "Schaltplan"
+msgstr "Schaltplanblatt"
 
 #: common/eda_item.cpp:303
 msgid "SCH Screen"
@@ -14880,9 +14868,8 @@ msgid "Nickname"
 msgstr "Aliasname"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Bauteil speichern unter ..."
+msgstr "Bauteil speichern unter"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -17512,11 +17499,13 @@ msgid "Import Eagle Project Files"
 msgstr "Importiere Eagle-Projektdateien"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "Die Datei \"%s\" scheint keine gültige Schema-Datei zu sein."
+msgstr ""
+"Datei \"%s\"\n"
+"scheint keine gültige KiCad-Projekt-Datei zu sein."
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -18484,7 +18473,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18498,7 +18486,7 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## Pi Dämpfungsglied\n"
+"### Pi Dämpfungsglied\n"
 "__Zin__ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "__Zout__ gewünschte Ausgangsimpedanz<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18511,7 +18499,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18521,8 +18508,8 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## Resistives Dämpfungsglied\n"
-"### Dämpfung beträgt 6dB\n"
+"### Resistives Dämpfungsglied\n"
+"#### Dämpfung beträgt 6dB\n"
 "___Z<sub>in</sub>___ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ gewünschte Ausgangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -18530,7 +18517,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18544,7 +18530,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## T-Dämpfungsglied\n"
+"### T-Dämpfungsglied\n"
 "__Zin__ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "__Zout__ gewünschte Ausgangsimpedanz<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -19269,47 +19255,38 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
-#, fuzzy
 msgid "0 .. 15V"
 msgstr "0 ... 15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
-#, fuzzy
 msgid "16 .. 30V"
 msgstr "16 ... 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
-#, fuzzy
 msgid "31 .. 50V"
 msgstr "31 ... 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
-#, fuzzy
 msgid "51 .. 100V"
 msgstr "51 ... 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
-#, fuzzy
 msgid "101 .. 150V"
 msgstr "101 ... 150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
-#, fuzzy
 msgid "151 .. 170V"
 msgstr "151 ... 170V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
-#, fuzzy
 msgid "171 .. 250V"
 msgstr "171 ... 250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
-#, fuzzy
 msgid "251 .. 300V"
 msgstr "251 ... 300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
-#, fuzzy
 msgid "301 .. 500V"
 msgstr "301 ... 500V"
 
@@ -19409,7 +19386,6 @@ msgid "Not worth using"
 msgstr "Nicht erforderlich"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19439,12 +19415,12 @@ msgstr ""
 "In IEC 60063 definierte E-Serien sind ein weithin akzeptiertes System für "
 "bevorzugte\n"
 "Nummern von elektronischen Komponenten. Verfügbare Werte sind ungefähr\n"
-"in logarithmischer Skala gleich beabstandet. \n"
+"in logarithmischer Skala gleich beabstandet.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1,0  1,2  1,5  1,8  2,2  2,7  3,3  3,9  4,7  5,6  6,8  8,2\n"
+"\tE6:  1,0   -   1,5   -   2,2   -   3,3   -   4,7   -   6,8   -\n"
+"\tE3:  1,0   -    -    -   2,2   -    -    -   4,7   -    -    -\n"
+"\tE1:  1,0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "Dieser Rechner findet Kombinationen von Standardkomponenten der E-Serie, um\n"
 "beliebige Werte zu erzeugen.  Sie können den gewünschten Widerstand von "
@@ -19463,28 +19439,25 @@ msgstr ""
 "R1 + (R2 | R3) ...\t\teine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:193
-#, fuzzy
 msgid "Write Data Failed"
-msgstr "Fehler bei Dateischreibvorgang"
+msgstr "Daten schreiben fehlgeschlagen"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:197
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Die Daten wurden verändert, kein Dateiname vorhanden um die Veränderungen zu "
-"speichern.\n"
-"Möchten Sie Abbrechen und die Änderungen verwerfen?"
+"Kein Daten-Dateiname vorhanden, um Änderungen zu speichern.\n"
+"Beenden und die Änderungen verwerfen?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
 "Datei \"%s\" kann nicht geschrieben werden.\n"
-"Möchten Sie beenden und ihre Veränderungen verwerfen?"
+"Möchten Sie beenden und Ihre Änderungen verwerfen?"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
@@ -20237,9 +20210,8 @@ msgid "Options for edge card connectors."
 msgstr "Optionen für Randsteckverbinder."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:159
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "Aktuelle Dicke Lagenaufbau:"
+msgstr "Platinendicke vom Lagenaufbau:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -27608,13 +27580,12 @@ msgid "Check rule syntax"
 msgstr "Überprüfen Sie die Regelsyntax"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
 msgstr ""
-"Text wird nicht mehr lesbar sein bei einer Linienstärke größer\n"
-"1/4 der Weite oder Höhe."
+"Bei einer Linienstärke größer als 1/4 der Breite oder Höhe wird der Text "
+"nicht lesbar sein."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -27662,50 +27633,46 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:245
 #, c-format
 msgid "Track width less than minimum track width (%s)."
-msgstr ""
-"Leiterbahnbreite ist kleiner der zulässigen minimalen Leiterbahnbreite (%s)."
+msgstr "Leiterbahnbreite ist kleiner als die minimale Leiterbahnbreite (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:262
 #, c-format
 msgid "Via diameter less than minimum via diameter (%s)."
-msgstr "DuKo Durchmesser ist kleiner als der minimale DuKo Durchmesser (%s)."
+msgstr "DuKo-Durchmesser ist kleiner als der minimale DuKo-Durchmesser (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Kein DuKo Bohrdurchmesser definiert."
+msgstr "Keine DuKo-Lochgröße definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "DuKo Durchmesser ist kleiner als der minimale DuKo Durchmesser (%s)."
+msgstr "DuKo-Lochdurchmesser ist kleiner als der minimale Lochdurchmesser (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
-msgstr "DuKo Bohrdurchmesser ist größer als der DuKo Durchmesser."
+msgstr "DuKo-Lochdurchmesser ist größer als der DuKo-Durchmesser."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
-msgstr ""
-"Durchmesser und Bohrung lassen weniger DuKo-Ring übrig als erlaubt (%s)."
+msgstr "Durchmesser und Loch lassen weniger DuKo-Ring übrig, als erlaubt (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:313
 #, c-format
 msgid "Differential pair track width less than minimum track width (%s)."
 msgstr ""
-"Leiterbahnbreite Differentialpaar ist kleiner der zulässigen minimalen "
+"Differentialpaar-Leiterbahnbreite ist kleiner als die zulässige minimale "
 "Leiterbahnbreite (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:323
 msgid "No differential pair gap defined."
-msgstr "Kein Abstand Differentialpaar definiert."
+msgstr "Kein Differentialpaar-Abstand definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:330
 #, c-format
 msgid "Differential pair gap less than minimum clearance (%s)."
-msgstr "Differentialpaarabstand ist kleiner als Mindestabstand (%s)."
+msgstr "Differentialpaar-Abstand ist kleiner als Mindestabstand (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:343
 #, c-format
@@ -27716,7 +27683,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Vordefinierte Größen Leiterbahn und Durchkontaktierungen:"
+msgstr "Vordefinierte Leiterbahn- und DuKo-Größen:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
@@ -28640,24 +28607,19 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "Platine \"%s\" existiert nicht. Soll diese erstellt werden?"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Footprintbibliothekstabelle zu "
-"speichern ist ein Fehler aufgetreten.\n"
-"\n"
-"%s"
+"Fehler beim Speichern des Footprints \"%s\" in die projektspezifische "
+"Footprintbibliothekstabelle: %s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Footprintbibliothekstabelle zu "
-"speichern ist ein Fehler aufgetreten.\n"
-"\n"
-"%s"
+"Fehler beim Speichern der projektspezifischen Footprintbibliothekstabelle: %s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
 #, c-format
@@ -28960,9 +28922,8 @@ msgstr ""
 "Kann nicht speichern."
 
 #: pcbnew/footprint_libraries_utils.cpp:949
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "Footprint speichern"
+msgstr "Footprint speichern unter"
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 msgid "No library specified.  Footprint could not be saved."
@@ -30614,6 +30575,10 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"Die CADSTAR-Vorlage '%s' hat thermische Entlastungen im ursprünglichen "
+"Design, aber KiCad hat kein äquivalent für die ursprünglichen CADSTAR-"
+"Einstellungen. Stattdessen wurde eine solide Füllung gesetzt. Wenn die "
+"Vorlage neu ausgefüllt wird, werden thermische Entlastungen entfernt."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
 #, c-format
@@ -32565,14 +32530,12 @@ msgid "Close the in progress outline"
 msgstr "Schließen der in Bearbeitung befindlichen Fläche"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "Begrenze grafische L&inien auf H,V und 45 Grad"
+msgstr "Beschränke Linien auf 45 Grad"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr "Begrenze grafische L&inien auf H,V und 45 Grad"
+msgstr "Beschränke grafische Linien auf H, V und 45 Grad"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Design Rules Checker"
@@ -33665,18 +33628,16 @@ msgid "Route Single Track"
 msgstr "Einzelne Leiterbahn verlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1240
-#, fuzzy
 msgid "Route tracks"
-msgstr "Route Leiterbahnen"
+msgstr "Leiterbahnen verlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
 msgid "Route Differential Pair"
 msgstr "Interaktives Verlegen eines differenziellen Paares"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Interaktives Verlegen eines differenziellen Paares"
+msgstr "Differentialpaar verlegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Interactive Router Settings..."
