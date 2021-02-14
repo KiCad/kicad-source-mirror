@@ -169,7 +169,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
                                    "W", "W", _( "Line width" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
-                                   "L", "L", _( "Line wength" ), 50.0, true ) );
+                                   "L", "L", _( "Line length" ), 50.0, true ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_ELEC, Z0_PRM,
                                    "Z0", "Z0", _( "Characteristic impedance" ), 50.0, true ) );
@@ -292,7 +292,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
                                    "mu Rel I", _( "mu insulator" ),
-                                   _( "Relative Permeability (mu) of insulator" ), 1, false ) );
+                                   _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
                                    "mu Rel C", _( "mu conductor" ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
