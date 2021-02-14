@@ -54,7 +54,6 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
         {
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( this, wxID_ANY );
             btn->SetBitmap( aBitmap );
-            btn->SetPadding( 3 );
             btn->SetToolTip( aAction.GetDescription() );
 
             auto handler =
@@ -79,7 +78,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
             int row = m_toolsSizer->GetRows();
 
-            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, 0 );
+            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, 3 );
             m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM, 0 );
             m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP, 0 );
         };
@@ -94,7 +93,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                  _( "Edit the project PCB design" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editFootprints, KiScaledBitmap( icon_modedit_xpm, this ),
-                 _( "Edit glabal and/or project PCB footprint libraries" ) );
+                 _( "Edit global and/or project PCB footprint libraries" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, KiScaledBitmap( icon_gerbview_xpm, this ),
                  _( "Preview Gerber files" ) );
