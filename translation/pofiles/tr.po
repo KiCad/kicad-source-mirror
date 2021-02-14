@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # Dozimas <ozangunaydin@gmail.com>, 2021.
+# Murat Ursavaş <murat.ursavas@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-01-28 01:55+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
+"Last-Translator: Murat Ursavaş <murat.ursavas@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -475,15 +476,15 @@ msgstr "Lehim maskesini ipek baskıdan çıkar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Geçiş (via) halkasından serigrafiyi sil"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Kaplanmamış bakır için çıplak bakır rengini kullan"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Kaplanmış ve kaplanmamış bakır için farklı renkler kullan. (Yavaş)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -609,11 +610,11 @@ msgstr "Numune Sayısı"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:283
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Dağıtma Çarpanı (%)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
 msgid "Recursion Level"
-msgstr ""
+msgstr "Özyineleme (Recursion) Seviyesi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "Shadows:"
@@ -655,7 +656,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:345
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "Bir ışının yansıtıcı nesnelerden sekebileceği sayı"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
@@ -677,12 +678,12 @@ msgstr "Alt ışık:"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
 msgid "Elevation (degrees)"
-msgstr ""
+msgstr "Yükseltme (derece)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:434
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:451
 msgid "Azimuth (degrees)"
-msgstr ""
+msgstr "İstikamet (derece)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
 msgid "1:"
@@ -782,11 +783,11 @@ msgstr "Lehim Pastası Rengi"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation"
-msgstr ""
+msgstr "Merkez pivot dönüşü"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr ""
+msgstr "Merkez pivot dönüşü (orta fare tıklaması)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -830,51 +831,51 @@ msgstr "Kartı aşağı hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
 msgid "Home view"
-msgstr ""
+msgstr "Ana görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
 msgid "Reset view"
-msgstr ""
+msgstr "Görünümü Sıfırla"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip Board"
-msgstr ""
+msgstr "Kartı Çevir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr ""
+msgstr "Kart Görünümünü Ters Çevir"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr ""
+msgstr "Ortografik projeksiyonu aç / kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr ""
+msgstr "Ortografik projeksiyonu etkinleştir / devre dışı bırak"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
 msgid "View Front"
-msgstr ""
+msgstr "Önden Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:132
 msgid "View Back"
-msgstr ""
+msgstr "Arkadan Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:138
 msgid "View Left"
-msgstr ""
+msgstr "Soldan Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:144
 msgid "View Right"
-msgstr ""
+msgstr "Sağdan Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:150
 msgid "View Top"
-msgstr ""
+msgstr "Üstten Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
 msgid "View Bottom"
-msgstr ""
+msgstr "Alttan Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
@@ -906,11 +907,11 @@ msgstr "Her 3B model dosyasındaki tüm malzeme özelliklerini kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
-msgstr ""
+msgstr "Sadece Temel Materyali Kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr ""
+msgstr "Yalnızca 3B model dosyasındaki temel renk özelliğini kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "CAD Color Style"
@@ -918,35 +919,35 @@ msgstr "CAD Renk Tarzı"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:199
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
+msgstr "Malzemenin temel rengine dayalı bir CAD renk stili kullan"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
-msgstr ""
+msgstr "Delik İçi 3B Modelleri Aç / Kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr ""
+msgstr "'Delik İçi' özelliği olan 3B Modelleri Aç/Kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr ""
+msgstr "Yüzey Monte 3B Modelleri Aç/Kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr ""
+msgstr "'Yüzey Monte' özelliği olan 3B modelleri aç/kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
-msgstr ""
+msgstr "Sanal 3B Modelleri Aç/Kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr ""
+msgstr "'Sanal' özelliği olan 3B modelleri aç/kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "Model Sınırlama Kutusunu Göster"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:232
 msgid "Render Shadows"
@@ -966,7 +967,7 @@ msgstr "Kat Ekle"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
-msgstr ""
+msgstr "Kartın altına bir zemin ekle (yavaş)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Refractions"
@@ -3225,54 +3226,47 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
 msgid "Minimum copper clearance"
-msgstr ""
+msgstr "En düşük bakır açıklığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Yol genişliği:"
+msgstr "En ince yol genişliği"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Geçiş çapı:"
+msgstr "Geçiş dış çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Geçiş çapı:"
+msgstr "Geçiş kaplanmış delik çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Geçiş çapı:"
+msgstr "Mikro geçiş dış çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 msgid "Microvia plated hole diameter"
-msgstr ""
+msgstr "Mikro geçiş (microvia) kaplanmış delik çapı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
 msgid "Differential pair track width"
-msgstr ""
+msgstr "Diferansiyel çift yol kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
 msgid "Differential pair gap"
-msgstr ""
+msgstr "Diferansiyel çift aralığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Bakır kalınlığını göster"
+msgstr "Şema bağlantı kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Kalınlığı devre dışı bırak"
+msgstr "Veriyolu bağlantı kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Ağ rengini ayarla"
+msgstr "Şema bağlantı rengi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
 msgid "Schematic wire line style"
@@ -28648,12 +28642,12 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2176
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
-msgstr ""
+msgstr "'%s' adındaki geçersiz özel ped yuvarlak ped ile değiştirildi."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2196
 #, c-format
 msgid "Could not find custom pad named %s"
-msgstr ""
+msgstr "%s isminde özel bir ped bulunamadı"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2393
 #, c-format
@@ -29545,7 +29539,7 @@ msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:499
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
+msgstr "Kartın güncellenebilmesi için tamamen isimlendirilmiş şema gerekir."
 
 #: pcbnew/tools/board_editor_control.cpp:514
 msgid ""
@@ -29836,7 +29830,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_tool.cpp:2298
 msgid "Via location violates DRC."
-msgstr ""
+msgstr "Geçiş yeri tasarım kurallarını (DRC) ihlal ediyor."
 
 #: pcbnew/tools/drawing_tool.cpp:2405
 msgid "Place via"
@@ -29848,7 +29842,7 @@ msgstr ""
 
 #: pcbnew/tools/drc_tool.cpp:157
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr ""
+msgstr "Karşılıklı şema testi tamamen isimlendirilmiş şema gerektirir."
 
 #: pcbnew/tools/drc_tool.cpp:205
 msgid "DRC"
@@ -30583,13 +30577,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:563
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Bileşen Parametreleri"
+msgstr "Bileşen Yerleştirme (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:564
 msgid "Generate component placement file(s) for pick and place"
-msgstr ""
+msgstr "Otomatik dizgi için bileşen yerleştirme dosyası oluştur"
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Footprint Report (.rpt)..."
@@ -30669,7 +30662,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:632
 msgid "Place origin point for drill files and component placement files"
-msgstr ""
+msgstr "Delme ve bileşen yerleştirme dosyaları için orijin noktası yerleştir"
 
 #: pcbnew/tools/pcb_actions.cpp:638
 msgid "Toggle Lock"
@@ -31191,14 +31184,12 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1193
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "Öge(ler) seç."
+msgstr "Seçilmiş Ögeleri Filtrele..."
 
 #: pcbnew/tools/pcb_actions.cpp:1193
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Öge(ler)i seçimden kaldır."
+msgstr "Ögeleri tipine göre seçimden çıkar"
 
 #: pcbnew/tools/pcb_actions.cpp:1201
 msgid "Fill zone(s)"
