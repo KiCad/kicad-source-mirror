@@ -1569,7 +1569,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
@@ -1588,8 +1588,7 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 
     if( symbolEditor )
     {
-        symbolEditor->LoadSymbolFromSchematic( sym->GetPartRef(), sym->GetRef( &currentSheet ),
-                                               sym->GetUnit(), sym->GetConvert() );
+        symbolEditor->LoadSymbolFromSchematic( sym );
     }
 
     return 0;
@@ -1817,7 +1816,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::pasteSpecial.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,   EE_ACTIONS::importFPAssignments.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );

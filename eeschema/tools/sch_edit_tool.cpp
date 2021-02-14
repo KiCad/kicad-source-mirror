@@ -1396,9 +1396,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
 
-            editor->LoadSymbolFromSchematic( component->GetPartRef(),
-                                             component->GetRef( &m_frame->GetCurrentSheet() ),
-                                             component->GetUnit(), component->GetConvert() );
+            editor->LoadSymbolFromSchematic( component );
 
             editor->Show( true );
             editor->Raise();

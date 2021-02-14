@@ -1284,26 +1284,44 @@ SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 }
 
 
-void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
-                                                 const wxString& aReference, int aUnit,
-                                                 int aConvert )
+void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol )
 {
-    std::unique_ptr<LIB_PART> symbol = aSymbol->Flatten();
-    wxCHECK( symbol, /* void */ );
+    std::unique_ptr<LIB_PART> part = aSymbol->GetPartRef()->Flatten();
+    wxCHECK( part, /* void */ );
+
+    std::vector<LIB_FIELD> fullSetOfFields;
+
+    for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
+    {
+        SCH_FIELD* field = aSymbol->GetField( i );
+        wxPoint    pos = field->GetPosition() - aSymbol->GetPosition();
+        LIB_FIELD  libField( part.get(), field->GetId() );
+
+        if( i >= MANDATORY_FIELDS && !field->GetName( false ).IsEmpty() )
+            libField.SetName( field->GetName( false ) );
+
+        libField.SetText( field->GetText() );
+        libField.SetEffects( *field );
+        libField.SetPosition( wxPoint( pos.x, -pos.y ) );
+
+        fullSetOfFields.emplace_back( std::move( libField ) );
+    }
+
+    part->SetFields( fullSetOfFields );
 
     if( m_my_part )
         SetCurPart( nullptr, false );
 
     m_isSymbolFromSchematic = true;
-    m_reference = aReference;
-    m_unit = aUnit > 0 ? aUnit : 1;
-    m_convert = aConvert > 0 ? aConvert : 1;
+    m_reference = part->GetField( REFERENCE_FIELD )->GetText();
+    m_unit = std::max( 1, aSymbol->GetUnit() );
+    m_convert = std::max( 1, aSymbol->GetConvert() );
 
     // The buffered screen for the part
     SCH_SCREEN* tmpScreen = new SCH_SCREEN();
 
     SetScreen( tmpScreen );
-    SetCurPart( symbol.release(), true );
+    SetCurPart( part.release(), true );
 
     ReCreateMenuBar();
     ReCreateHToolbar();

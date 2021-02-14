@@ -593,10 +593,14 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
 
             if( resetEffects )
             {
-                // Careful: the visible bit is also in Effects
-                bool visible = field->IsVisible();
+                // Careful: the visible bit and position are also in Effects
+                bool    visible = field->IsVisible();
+                wxPoint pos = field->GetPosition();
+
                 field->SetEffects( *libField );
+
                 field->SetVisible( visible );
+                field->SetPosition( pos );
             }
 
             if( resetPositions )

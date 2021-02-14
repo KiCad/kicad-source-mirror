@@ -112,7 +112,7 @@ public:
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
-    int EditWithLibEdit( const TOOL_EVENT& aEvent );
+    int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowCvpcb( const TOOL_EVENT& aEvent );
     int Annotate( const TOOL_EVENT& aEvent );
     int EditSymbolFields( const TOOL_EVENT& aEvent );

@@ -1631,7 +1631,7 @@ void SCH_EDIT_FRAME::UpdateSymbolFromEditor( const LIB_PART& aSymbol )
 
     // This should work for multiple selections of the same symbol even though the editor
     // only works for a single symbol selection.
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
 

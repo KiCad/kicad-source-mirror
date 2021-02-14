@@ -330,12 +330,8 @@ public:
      * Load a symbol from the schematic to edit in place.
      *
      * @param aSymbol the symbol to edit.
-     * @param aReference the reference of the symbol to edit.
-     * @param aUnit the unit of the symbol to edit.
-     * @param aConvert the alternate body style of the symbol to edit.
      */
-    void LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
-                                  const wxString& aReference, int aUnit, int aConvert );
+    void LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol );
 
     /**
      * Test if a symbol is loaded and can be edited.
