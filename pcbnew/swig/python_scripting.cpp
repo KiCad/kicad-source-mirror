@@ -179,7 +179,10 @@ bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUs
     pyHome.Normalize();
 
     // MUST be called before Py_Initialize so it will to create valid default lib paths
-    Py_SetPythonHome( pyHome.GetFullPath().c_str() );
+    if( !wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        Py_SetPythonHome( pyHome.GetFullPath().c_str() );
+    }
 #endif
 
     Py_Initialize();
