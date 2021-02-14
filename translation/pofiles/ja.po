@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 07:18+0000\n"
+"PO-Revision-Date: 2021-02-14 10:49+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -166,7 +166,7 @@ msgstr "ゾーンを作成"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:750
 msgid "Simplifying copper layers polygons"
-msgstr "導体レイヤー ポリゴンを簡略化"
+msgstr "導体レイヤーのポリゴンを簡略化"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:829
 msgid "Simplify holes contours"
@@ -11225,22 +11225,22 @@ msgstr "(ハイライトの色は \"カラー\" ページで編集可能です)"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr "クロス プローブ"
+msgstr "クロスプローブ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Center view on cross-probed items"
-msgstr "クロス プローブされたアイテムに表示をセンタリング"
+msgstr "クロスプローブされたアイテムに表示をセンタリング"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
 msgid "Zoom to fit cross-probed items"
-msgstr "クロス プローブされたアイテムに合わせてズーム"
+msgstr "クロスプローブされたアイテムに合わせてズーム"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Highlight cross-probed nets"
-msgstr "クロス プローブされたネットをハイライト表示"
+msgstr "クロスプローブされたネットをハイライト表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -21299,9 +21299,7 @@ msgstr "%s に対する不正な数値: %s"
 msgid ""
 "Could not determine numbering start from \"%s\": expected value consistent "
 "with alphabet \"%s\""
-msgstr ""
-"\"%s\" から始まるナンバーリングを実行できません: 期待される値は英文字 \"%s\" "
-"での一貫性が必要です"
+msgstr "\"%s\" から始まるナンバリングを実行できません: 期待される値は英文字 \"%s\" での一貫性が必要です"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:306
 msgid "step value"
@@ -21387,11 +21385,11 @@ msgstr "垂直方向のち水平方向"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
 msgid "Numbering Direction"
-msgstr "ナンバーリングの方向"
+msgstr "ナンバリングの方向"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Reverse numbering on alternate rows/columns"
-msgstr "行/列ごとにナンバーリングの方向を反転"
+msgstr "行/列ごとにナンバリングの方向を反転"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:119
 #: pcbnew/dialogs/dialog_create_array_base.cpp:281
@@ -21421,21 +21419,21 @@ msgstr "パッド ナンバリングの方式"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Primary axis numbering:"
-msgstr "第1軸のナンバーリング:"
+msgstr "第1軸のナンバリング:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:140
 msgid "Secondary axis numbering:"
-msgstr "第2軸のナンバーリング:"
+msgstr "第2軸のナンバリング:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:159
 #: pcbnew/dialogs/dialog_create_array_base.cpp:302
 msgid "Pad numbering start:"
-msgstr "パッド ナンバーリングの開始:"
+msgstr "パッド ナンバリングの開始:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 #: pcbnew/dialogs/dialog_create_array_base.cpp:309
 msgid "Pad numbering skip:"
-msgstr "パッド ナンバーリングのスキップ:"
+msgstr "パッド ナンバリングのスキップ:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Grid Array"
@@ -21486,7 +21484,7 @@ msgstr "複数の選択アイテムを動かすのと同様、回転は一緒に
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 msgid "Numbering Options"
-msgstr "ナンバーリング オプション"
+msgstr "ナンバリング オプション"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:283
 msgid "Initial Pad Number:"
@@ -23466,8 +23464,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"空のシンボル フットプリント テーブル ファイルを書き込もうとしたところ、エラー"
-"が発生しました。\n"
+"空のフットプリント ライブラリー テーブル ファイルを書き込もうとしたところ、エラーが発生しました。\n"
 "\n"
 "%s"
 
@@ -25872,7 +25869,7 @@ msgstr "パッドの <ネット未接続> インジケータを表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:57
 msgid "Clearance Outlines"
-msgstr "外形を除去"
+msgstr "クリアランスの概要"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when creating tracks"
@@ -25880,7 +25877,7 @@ msgstr "配線の作成時に表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show with via clearance at end"
-msgstr "最後にビア クリアランスを表示"
+msgstr "最後にビアのクリアランスを表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when creating and editing tracks"
@@ -25905,7 +25902,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr "パッド クリアランスを表示"
+msgstr "パッドのクリアランスを表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
