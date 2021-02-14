@@ -333,7 +333,11 @@ void NGSPICE::init_dll()
 // Extra effort to find libngspice
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
 #if defined(__WINDOWS__)
+    #if defined( _MSC_VER )
+    const vector<string> dllPaths = { "" };
+    #else
     const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
+    #endif
 #elif defined(__WXMAC__)
     const vector<string> dllPaths = {
         GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
