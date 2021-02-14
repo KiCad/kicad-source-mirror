@@ -42,13 +42,19 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
         m_toolsSizer->SetRows( 0 );
     }
 
+    wxFont titleFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    titleFont.SetPointSize( titleFont.GetPointSize() + 2 );
+    titleFont.SetWeight( wxFONTWEIGHT_BOLD );
+
+    wxFont helpFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    helpFont.SetStyle( wxFONTSTYLE_ITALIC );
+
     auto addLauncher =
-        [&]( const TOOL_ACTION& aAction, const wxBitmap& aBitmap,
-             const wxString& aHelpText = wxEmptyString )
+        [&]( const TOOL_ACTION& aAction, const wxBitmap& aBitmap, const wxString& aHelpText )
         {
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( this, wxID_ANY );
             btn->SetBitmap( aBitmap );
-            btn->SetPadding( 5 );
+            btn->SetPadding( 3 );
             btn->SetToolTip( aAction.GetDescription() );
 
             auto handler =
@@ -59,54 +65,51 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                         m_toolManager->ProcessEvent( *evt );
                     };
 
-            bool createHelp = !aHelpText.IsEmpty();
-
             wxStaticText* label = new wxStaticText( this, wxID_ANY, aAction.GetLabel() );
             wxStaticText* help;
 
             label->SetToolTip( aAction.GetDescription() );
+            label->SetFont( titleFont );
 
-            if( createHelp )
-            {
-                help = new wxStaticText( this, wxID_ANY, aHelpText );
-                help->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-            }
+            help = new wxStaticText( this, wxID_ANY, aHelpText );
+            help->SetFont( helpFont );
 
             btn->Bind( wxEVT_BUTTON, handler );
             label->Bind( wxEVT_LEFT_UP, handler );
 
-            int row     = m_toolsSizer->GetRows();
-            int rowSpan = createHelp ? 2 : 1;
-            int flags   = createHelp ? wxALIGN_BOTTOM : wxALIGN_CENTER_VERTICAL;
+            int row = m_toolsSizer->GetRows();
 
-            m_toolsSizer->Add( btn,   wxGBPosition( row, 0 ), wxGBSpan( rowSpan, 1 ), 0, 0 );
-            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), flags, 0 );
-
-            if( createHelp )
-            {
-                m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ),
-                                   wxALIGN_TOP, 0 );
-            }
+            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, 0 );
+            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM, 0 );
+            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP, 0 );
         };
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ) );
+    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ),
+                 _( "Edit the project schematic" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols, KiScaledBitmap( icon_libedit_xpm, this ) );
+    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols, KiScaledBitmap( icon_libedit_xpm, this ),
+                 _( "Edit global and/or project schematic symbol libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editPCB, KiScaledBitmap( icon_pcbnew_xpm, this ) );
+    addLauncher( KICAD_MANAGER_ACTIONS::editPCB, KiScaledBitmap( icon_pcbnew_xpm, this ),
+                 _( "Edit the project PCB design" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints, KiScaledBitmap( icon_modedit_xpm, this ) );
+    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints, KiScaledBitmap( icon_modedit_xpm, this ),
+                 _( "Edit glabal and/or project PCB footprint libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, KiScaledBitmap( icon_gerbview_xpm, this ) );
+    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, KiScaledBitmap( icon_gerbview_xpm, this ),
+                 _( "Preview Gerber files" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::convertImage,
-                 KiScaledBitmap( icon_bitmap2component_xpm, this ) );
+                 KiScaledBitmap( icon_bitmap2component_xpm, this ),
+                 _( "Convert bitmap images to schematic symbols or PCB footprints" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::showCalculator,
-                 KiScaledBitmap( icon_pcbcalculator_xpm, this ) );
+                 KiScaledBitmap( icon_pcbcalculator_xpm, this ),
+                 _( "Show tools for calculating resistance, current capacity, etc." ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editWorksheet,
-                 KiScaledBitmap( icon_pagelayout_editor_xpm, this ) );
+                 KiScaledBitmap( icon_pagelayout_editor_xpm, this ),
+                 _( "Edit worksheet borders and title blocks for use in schematics and PCB designs" ) );
 
     if( m_toolsSizer->IsColGrowable( 1 ) )
         m_toolsSizer->RemoveGrowableCol( 1 );

@@ -150,11 +150,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // A trick is to use MinSize() to set the required pane width,
     // and after give a reasonable MinSize value
     m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer( 1 )
-                      .CaptionVisible( false ).PaneBorder( true )
+                      .Caption( _( "Project Files" ) ).PaneBorder( true )
                       .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
-    m_auimgr.AddPane( m_launcher,
-                      EDA_PANE().Canvas().PaneBorder( false ).Name( "Launcher" ).Center()
+    m_auimgr.AddPane( m_launcher, EDA_PANE().Canvas().Name( "Launcher" ).Center()
+                      .Caption( _( "Editors" ) ).PaneBorder( false )
                       .MinSize( m_launcher->GetBestSize() ) );
 
     m_auimgr.Update();

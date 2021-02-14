@@ -16,8 +16,8 @@ PANEL_KICAD_LAUNCHER_BASE::PANEL_KICAD_LAUNCHER_BASE( wxWindow* parent, wxWindow
 
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_toolsSizer = new wxGridBagSizer( 5, 20 );
-	m_toolsSizer->SetFlexibleDirection( wxBOTH );
+	m_toolsSizer = new wxGridBagSizer( 3, 12 );
+	m_toolsSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_toolsSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
 
@@ -27,7 +27,7 @@ PANEL_KICAD_LAUNCHER_BASE::PANEL_KICAD_LAUNCHER_BASE( wxWindow* parent, wxWindow
 	m_mainSizer->Add( 0, 20, 0, wxEXPAND, 5 );
 
 
-	bSizer2->Add( m_mainSizer, 1, wxEXPAND|wxLEFT, 24 );
+	bSizer2->Add( m_mainSizer, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
 
 
 	this->SetSizer( bSizer2 );
