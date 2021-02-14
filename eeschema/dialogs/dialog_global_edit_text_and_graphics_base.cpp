@@ -126,6 +126,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_netFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_netFilter, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
 
+	m_selectedFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Only include selected items"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_selectedFilterOpt, 0, wxALL, 5 );
+
 
 	sbFilters->Add( fgSizer2, 1, wxEXPAND|wxRIGHT, 5 );
 

@@ -61,6 +61,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxChoice* m_typeFilter;
 		wxCheckBox* m_netFilterOpt;
 		wxTextCtrl* m_netFilter;
+		wxCheckBox* m_selectedFilterOpt;
 		wxPanel* m_specifiedValues;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;

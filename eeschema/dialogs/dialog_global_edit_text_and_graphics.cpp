@@ -60,6 +60,7 @@ static bool       g_filterByType;
 static bool       g_typeFilterIsPower;
 static bool       g_filterByNet;
 static wxString   g_netFilter;
+static bool       g_filterSelected;
 
 
 #define DEFAULT_STYLE _( "Default" )
@@ -67,6 +68,7 @@ static wxString   g_netFilter;
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
     SCH_EDIT_FRAME*        m_parent;
+    EE_SELECTION           m_selection;
 
     UNIT_BINDER            m_textSize;
     UNIT_BINDER            m_lineWidth;
@@ -147,13 +149,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_typeFilterIsPower = m_typeFilter->GetSelection() == 1;
     g_filterByNet = m_netFilterOpt->GetValue();
     g_netFilter = m_netFilter->GetValue();
+    g_filterSelected = m_selectedFilterOpt->GetValue();
 }
 
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 {
     EE_SELECTION_TOOL* selectionTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selectionTool->GetSelection();
+    m_selection = selectionTool->GetSelection();
 
     m_references->SetValue( g_modifyReferences );
     m_values->SetValue( g_modifyValues );
@@ -177,6 +180,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_symbolFilterOpt->SetValue( g_filterBySymbol );
     m_typeFilter->SetSelection( g_typeFilterIsPower ? 1 : 0 );
     m_typeFilterOpt->SetValue( g_filterByType );
+    m_selectedFilterOpt->SetValue( g_filterSelected );
 
     if( g_filterByNet && !g_netFilter.IsEmpty() )
     {
@@ -187,9 +191,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     {
         m_netFilter->SetValue( m_parent->GetHighlightedConnection()->Name() );
     }
-    else if( selection.GetSize() )
+    else if( m_selection.GetSize() )
     {
-        SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
+        SCH_ITEM* sch_item = (SCH_ITEM*) m_selection.Front();
         SCH_CONNECTION* connection = sch_item->Connection();
 
         if( connection )
@@ -306,6 +310,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aSheetPath,
                                                       SCH_ITEM* aItem )
 {
+    if( m_selectedFilterOpt->GetValue() && !m_selection.Contains( aItem ) )
+    {
+        return;
+    }
+
     if( m_netFilterOpt->GetValue() && !m_netFilter->GetValue().IsEmpty() )
     {
         SCH_CONNECTION* connection = aItem->Connection( &aSheetPath );
