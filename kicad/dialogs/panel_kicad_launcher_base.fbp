@@ -77,7 +77,7 @@
                                 <property name="name">m_toolsSizer</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                                 <property name="permission">protected</property>
-                                <property name="vgap">3</property>
+                                <property name="vgap">0</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
