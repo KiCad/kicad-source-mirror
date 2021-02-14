@@ -56,6 +56,29 @@
             <property name="xrc_skip_sizer">1</property>
             <event name="OnClose">OnClosePcbCalc</event>
             <event name="OnUpdateUI">OnUpdateUI</event>
+            <object class="wxMenuBar" expanded="1">
+                <property name="bg"></property>
+                <property name="context_help"></property>
+                <property name="context_menu">1</property>
+                <property name="enabled">1</property>
+                <property name="fg"></property>
+                <property name="font"></property>
+                <property name="hidden">0</property>
+                <property name="id">wxID_ANY</property>
+                <property name="label">MenuBar</property>
+                <property name="maximum_size"></property>
+                <property name="minimum_size"></property>
+                <property name="name">m_menubar</property>
+                <property name="permission">protected</property>
+                <property name="pos"></property>
+                <property name="size"></property>
+                <property name="style"></property>
+                <property name="subclass">; ; forward_declare</property>
+                <property name="tooltip"></property>
+                <property name="window_extra_style"></property>
+                <property name="window_name"></property>
+                <property name="window_style"></property>
+            </object>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bmainFrameSizer</property>
@@ -20496,9 +20519,9 @@
                                         <property name="proportion">1</property>
                                         <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
-                                            <property name="name">bElectricalSpacingSizerRight</property>
+                                            <property name="name">m_electricalSpacingSizer</property>
                                             <property name="orient">wxVERTICAL</property>
-                                            <property name="permission">none</property>
+                                            <property name="permission">protected</property>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT</property>

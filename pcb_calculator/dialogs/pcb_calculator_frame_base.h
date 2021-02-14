@@ -19,11 +19,12 @@ class UNIT_SELECTOR_THICKNESS;
 #include "widgets/unit_selector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/menu.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/bitmap.h>
@@ -54,6 +55,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 	private:
 
 	protected:
+		wxMenuBar* m_menubar;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelRegulators;
 		wxStaticText* m_staticTextRegType;
@@ -365,6 +367,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticText891;
 		wxTextCtrl* m_ElectricalSpacingVoltage;
 		wxButton* m_buttonElectSpacingRefresh;
+		wxBoxSizer* m_electricalSpacingSizer;
 		wxStaticText* m_staticTextElectricalSpacing;
 		wxGrid* m_gridElectricalSpacingValues;
 		wxStaticText* m_staticText88;

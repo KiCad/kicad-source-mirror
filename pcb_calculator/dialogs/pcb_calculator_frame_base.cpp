@@ -15,6 +15,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
+	m_menubar = new wxMenuBar( 0 );
+	this->SetMenuBar( m_menubar );
+
 	wxBoxSizer* bmainFrameSizer;
 	bmainFrameSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -1753,14 +1756,13 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	bSizerElectricalClearance->Add( bLeftSizerElectricalClearance, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	wxBoxSizer* bElectricalSpacingSizerRight;
-	bElectricalSpacingSizerRight = new wxBoxSizer( wxVERTICAL );
+	m_electricalSpacingSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_staticTextElectricalSpacing = new wxStaticText( m_panelElectricalSpacing, wxID_ANY, _("Note: Values are minimal values (from IPC 2221)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextElectricalSpacing->Wrap( -1 );
 	m_staticTextElectricalSpacing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bElectricalSpacingSizerRight->Add( m_staticTextElectricalSpacing, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_electricalSpacingSizer->Add( m_staticTextElectricalSpacing, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_gridElectricalSpacingValues = new wxGrid( m_panelElectricalSpacing, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -1820,14 +1822,14 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	// Cell Defaults
 	m_gridElectricalSpacingValues->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
-	bElectricalSpacingSizerRight->Add( m_gridElectricalSpacingValues, 0, wxALL, 5 );
+	m_electricalSpacingSizer->Add( m_gridElectricalSpacingValues, 0, wxALL, 5 );
 
 	m_staticText88 = new wxStaticText( m_panelElectricalSpacing, wxID_ANY, _("*  B1 - Internal Conductors\n*  B2 - External Conductors, uncoated, sea level to 3050 m\n*  B3 - External Conductors, uncoated, over 3050 m\n*  B4 - External Conductors, with permanent polymer coating (any elevation)\n*  A5 - External Conductors, with conformal coating over assembly (any elevation)\n*  A6 - External Component lead/termination, uncoated\n*  A7 - External Component lead termination, with conformal coating (any elevation)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText88->Wrap( -1 );
-	bElectricalSpacingSizerRight->Add( m_staticText88, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_electricalSpacingSizer->Add( m_staticText88, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerElectricalClearance->Add( bElectricalSpacingSizerRight, 1, wxEXPAND|wxLEFT, 20 );
+	bSizerElectricalClearance->Add( m_electricalSpacingSizer, 1, wxEXPAND|wxLEFT, 20 );
 
 
 	m_panelElectricalSpacing->SetSizer( bSizerElectricalClearance );

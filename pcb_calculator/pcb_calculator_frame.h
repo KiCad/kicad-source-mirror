@@ -391,6 +391,7 @@ private:
     wxBitmap*                     m_ccTolerancesBitmap;
 
     int                           m_lastNotebookPage;
+    bool                          m_macHack;
 };
 
 

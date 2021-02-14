@@ -36,7 +36,8 @@ const wxString DataFileNameExt( wxT("pcbcalc") );
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_CALCULATOR_FRAME_BASE( aParent ),
-    m_lastNotebookPage( -1 )
+    m_lastNotebookPage( -1 ),
+    m_macHack( true )
 {
     m_bpButtonCalcAtt->SetBitmap( KiBitmap( small_down_xpm ) );
     m_bpButtonAnalyze->SetBitmap( KiBitmap( small_down_xpm ) );
@@ -210,7 +211,28 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
         if( m_Notebook->IsShownOnScreen() )
+        {
+            // Work around an OSX bug where the wxGrid children don't get placed correctly until
+            // the first resize event.
+#ifdef __WXMAC__
+            if( m_macHack )
+            {
+                wxSize pageSize = m_panelElectricalSpacing->GetSize();
+
+                pageSize.x -= 100;
+                m_panelElectricalSpacing->SetSize( pageSize );
+                m_panelElectricalSpacing->Layout();
+
+                pageSize.x += 100;
+                m_panelElectricalSpacing->SetSize( pageSize );
+                m_panelElectricalSpacing->Layout();
+
+                m_macHack = false;
+            }
+#endif
+
             m_lastNotebookPage = m_Notebook->GetSelection();
+        }
     }
 }
 
