@@ -508,6 +508,25 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
     if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
         base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false, false ), "" ) );
 
+#ifdef __WXGTK__
+    // When running inside FlatPak, KIPLATFORM::ENV::GetUserConfigPath() will return a sandboxed
+    // path.  In case the user wants to move from non-FlatPak KiCad to FlatPak KiCad, let's add our
+    // best guess as to the non-FlatPak config path.  Unfortunately FlatPak also hides the host
+    // XDG_CONFIG_HOME, so if the user customizes their config path, they will have to browse
+    // for it.
+    {
+        wxFileName wxGtkPath;
+        wxGtkPath.AssignDir( "~/.config/kicad" );
+        wxGtkPath.MakeAbsolute();
+        base_paths.emplace_back( wxGtkPath.GetPath() );
+
+        // We also want to pick up regular flatpak if we are nightly
+        wxGtkPath.AssignDir( "~/.var/app/org.kicad.KiCad/config/kicad" );
+        wxGtkPath.MakeAbsolute();
+        base_paths.emplace_back( wxGtkPath.GetPath() );
+    }
+#endif
+
     wxString subdir;
     std::string mine = GetSettingsVersion();
 
@@ -526,17 +545,24 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         }
     };
 
+    std::set<wxString> checkedPaths;
+
     for( auto base_path : base_paths )
     {
+        if( checkedPaths.count( base_path.GetFullPath() ) )
+            continue;
+
+        checkedPaths.insert( base_path.GetFullPath() );
+
         if( !dir.Open( base_path.GetFullPath() ) )
         {
             wxLogTrace( traceSettings, "GetPreviousVersionName: could not open base path %s",
-                    base_path.GetFullPath() );
+                        base_path.GetFullPath() );
             continue;
         }
 
         wxLogTrace( traceSettings, "GetPreviousVersionName: checking base path %s",
-            base_path.GetFullPath() );
+                    base_path.GetFullPath() );
 
         if( dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
         {
@@ -554,7 +580,7 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         if( IsSettingsPathValid( dir.GetNameWithSep() ) )
         {
             wxLogTrace( traceSettings,
-                    "GetPreviousVersionName: root path %s is valid", dir.GetName() );
+                        "GetPreviousVersionName: root path %s is valid", dir.GetName() );
             aPaths->push_back( dir.GetName() );
         }
     }
@@ -566,6 +592,12 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
 bool SETTINGS_MANAGER::IsSettingsPathValid( const wxString& aPath )
 {
     wxFileName test( aPath, "kicad_common" );
+
+    if( test.Exists() )
+        return true;
+
+    test.SetExt( "json" );
+
     return test.Exists();
 }
 
