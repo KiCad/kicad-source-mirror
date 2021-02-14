@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 06:49+0000\n"
+"PO-Revision-Date: 2021-02-14 07:18+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9351,7 +9351,7 @@ msgstr "受動部品シンボルの定数を再フォーマット　例: 1M -> 1
 
 #: eeschema/dialogs/dialog_netlist.cpp:370
 msgid "External simulator command:"
-msgstr "外部シミュレーター コマンド:"
+msgstr "外部のシミュレーターのコマンド:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:371
 msgid ""
@@ -13024,9 +13024,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"ブロック ID %s (ブロック名: '%s') はシート '%s' に描画されますが、デザイン内"
-"の別のシートにはリンクされていません。KiCad では、すべてのシート シンボルを"
-"シートに関連付ける必要があるため、ブロックはロードされませんでした。"
+"ブロック ID %s (ブロック名: '%s') はシート '%s' に描画されますが、デザイン内の別のシートにはリンクされていません。KiCad "
+"では、すべてのシートシンボルをシートに関連付ける必要があるため、ブロックはロードされませんでした。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1942
 #, c-format
@@ -14290,9 +14289,7 @@ msgstr "SPICE ネットリストを表示..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:67
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
-msgstr ""
-"現在のシミュレーション ネットリストを表示する。SPICE エラーのデバッグに役立ち"
-"ます。"
+msgstr "現在のシミュレーションのネットリストを表示します。SPICE エラーのデバッグに役立ちます。"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:72
 msgid "Settings..."
@@ -25462,7 +25459,7 @@ msgstr "レイヤー毎に１ページ"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
 msgid "All layers on single page"
-msgstr "シングル ページに全レイヤー"
+msgstr "1ページに全レイヤー"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:310
 msgid "Exclude PCB edge layer"
