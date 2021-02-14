@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-12 22:33+0000\n"
+"PO-Revision-Date: 2021-02-14 04:24+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3313,21 +3313,19 @@ msgstr "最小配線幅"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 msgid "Via pad diameter"
-msgstr "ビアパッドの直径"
+msgstr "ビアのパッド直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "ビア穴 > 直径"
+msgstr "ビアのメッキ穴直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
 msgid "Microvia pad diameter"
-msgstr "マイクロビアパッドの直径"
+msgstr "マイクロビアのパッド直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "ビア穴 > 直径"
+msgstr "マイクロビアのメッキ穴の直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
 msgid "Differential pair track width"
@@ -11242,7 +11240,7 @@ msgstr "クロス プローブされたアイテムに合わせてズーム"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
 msgid "Highlight cross-probed nets"
-msgstr "クロスプローブされたネットをハイライト表示"
+msgstr "クロス プローブされたネットをハイライト表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -18245,7 +18243,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18259,7 +18256,7 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## π型減衰器\n"
+"### π型減衰器\n"
 "__Zin__ 要求される入力インピーダンス in &#x2126;<br>\n"
 "__Zout__ 要求される出力インピーダンス<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18272,7 +18269,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18282,8 +18278,8 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## 分割 (固定) 減衰器\n"
-"### 減衰量 (= 6dB)\n"
+"### 分割 (固定) 減衰器\n"
+"#### 減衰量 (= 6dB)\n"
 "___Z<sub>in</sub>___ 要求される入力インピーダンス in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ 要求される出力インピーダンス in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -18291,7 +18287,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18305,7 +18300,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## T型減衰器\n"
+"### T型減衰器\n"
 "__Zin__ 要求される入力インピーダンス in &#x2126;<br>\n"
 "__Zout__ 要求される出力インピーダンス<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -19158,7 +19153,6 @@ msgid "Not worth using"
 msgstr "使用する価値はありません"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19185,17 +19179,15 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"IEC 60063で定義されているE系列は、広く受け入れられている電子部品に好ましい値"
-"のシステムです。\n"
+"IEC 60063で定義されているE系列は、広く受け入れられている電子部品に好ましい値のシステムです。\n"
 "利用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
-"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけま"
-"す。\n"
+"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけます。\n"
 "0,0025Ωから4000 kΩまで必要な抵抗値を入力できます。\n"
 "\n"
 "最大4つまでの部品を使用する解が提供されます。\n"
@@ -19964,9 +19956,8 @@ msgid "Options for edge card connectors."
 msgstr "エッジ カード コネクターのオプション"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:159
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "現在のスタックアップ厚:"
+msgstr "スタックアップからの基板厚:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -27275,9 +27266,9 @@ msgid "Via hole diameter larger than via diameter."
 msgstr "ビア穴の直径はビアの直径より大きくなければなりません。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
-msgstr "直径とドリルは最小値 (%s) 未満のビア円環としておいて下さい。"
+msgstr "ビアの直径と穴サイズから残される環は最小値の (%s) 未満です。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:313
 #, c-format
@@ -27568,7 +27559,7 @@ msgstr "フットプリントにコートヤードの定義がない"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Footprint has malformed courtyard"
-msgstr "フットプリントのコートヤードが異常な形状です"
+msgstr "フットプリントのコートヤードが不正"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "PTH inside courtyard"
@@ -28213,15 +28204,11 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "基板 \"%s\" は存在しません。  新規作成しますか?"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
-msgstr ""
-"プロジェクト固有のフットプリント ライブラリー テーブルの保存中にエラーが発生"
-"しました:\n"
-"\n"
-"%s"
+msgstr "フットプリント '%s' をプロジェクト固有のフットプリント ライブラリー テーブルに保存中にエラーが発生しました: %s"
 
 #: pcbnew/files.cpp:830
 #, c-format
@@ -28523,9 +28510,8 @@ msgstr ""
 "保存できません。"
 
 #: pcbnew/footprint_libraries_utils.cpp:949
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "フットプリントを保存"
+msgstr "フットプリントに名前を付けて保存"
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 msgid "No library specified.  Footprint could not be saved."
@@ -30145,6 +30131,8 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"CADSTARのテンプレート '%s' は、元のデザインではサーマルリリーフがありますが、オリジナルのCADSTARの設定と同等のものがKiCadにはあり"
+"ません。代わりにベタ塗りが適用されています。テンプレートを塗りなおすとサーマルリリーフは削除されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
 #, c-format
@@ -32060,14 +32048,12 @@ msgid "Close the in progress outline"
 msgstr "作成中の外形を閉じます"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "グラフィック ラインの角度を45度単位に制限 (&i)"
+msgstr "線を45度に制限"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr "グラフィック ラインの角度を45度単位に制限 (&i)"
+msgstr "図形ラインの角度を水平、垂直、45度単位に制限"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Design Rules Checker"
