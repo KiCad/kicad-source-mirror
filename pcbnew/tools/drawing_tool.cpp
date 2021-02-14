@@ -34,6 +34,7 @@
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
 #include <tools/drawing_tool.h>
+#include <router/router_tool.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <board_commit.h>
@@ -2084,6 +2085,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         std::shared_ptr<DRC_ENGINE> m_drcEngine;
         int                         m_drcEpsilon;
         int                         m_worstClearance;
+        bool                        m_allowDRCViolations;
         bool                        m_flaggedDRC;
 
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
@@ -2094,6 +2096,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             m_worstClearance( 0 ),
             m_flaggedDRC( false )
         {
+            ROUTER_TOOL*           router = m_frame->GetToolManager()->GetTool<ROUTER_TOOL>();
+            PNS::ROUTING_SETTINGS& cfg = router->Router()->Settings();
+
+            m_allowDRCViolations = cfg.Mode() == PNS::RM_MarkObstacles && cfg.CanViolateDRC();
+
             try
             {
                 m_drcEngine->InitEngine( aFrame->GetDesignRulesPath() );
@@ -2178,11 +2185,16 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             if( cItem && cItem->GetNetCode() == aVia->GetNetCode() )
                 return false;
 
+            DRC_CONSTRAINT constraint;
+            int            clearance;
+
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
-                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,
-                                                                    aOther, layer );
-                int clearance = constraint.GetValue().Min();
+                if( !IsCopperLayer( layer ) )
+                    continue;
+
+                constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
+                clearance = constraint.GetValue().Min();
 
                 if( clearance >= 0 )
                 {
@@ -2194,13 +2206,45 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
+            std::unique_ptr<SHAPE_SEGMENT> holeShape;
+
+            if( aOther->Type() == PCB_VIA_T )
+            {
+                VIA* via = static_cast<VIA*>( aOther );
+                wxPoint pos = via->GetPosition();
+
+                holeShape.reset( new SHAPE_SEGMENT( pos, pos, via->GetDrill() ) );
+            }
+            else if( aOther->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( aOther );
+
+                if( pad->GetDrillSize().x )
+                    holeShape.reset( new SHAPE_SEGMENT( *pad->GetEffectiveHoleShape() ) );
+            }
+
+            if( holeShape )
+            {
+                constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, aVia, aOther,
+                                                     UNDEFINED_LAYER );
+                clearance = constraint.GetValue().Min();
+
+                if( clearance >= 0 )
+                {
+                    std::shared_ptr<SHAPE> viaShape = DRC_ENGINE::GetShape( aVia, UNDEFINED_LAYER );
+
+                    if( viaShape->Collide( holeShape.get(), clearance - m_drcEpsilon ) )
+                        return true;
+                }
+            }
+
             return false;
         }
 
         bool hasDRCViolation( VIA* aVia )
         {
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
-            std::set<BOARD_ITEM*> handled;
+            std::set<BOARD_ITEM*> checkedItems;
             BOX2I bbox = aVia->GetBoundingBox();
 
             bbox.Inflate( m_worstClearance );
@@ -2210,16 +2254,22 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             {
                 BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( it.first );
 
-                if( !item || item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                if( !item )
                     continue;
 
-                if( handled.count( item ) )
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                    continue;
+
+                if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
+                    continue;
+
+                if( checkedItems.count( item ) )
                     continue;
 
                 if( hasDRCViolation( aVia, item ) )
                     return true;
 
-                handled.insert( item );
+                checkedItems.insert( item );
             }
 
             return false;
@@ -2293,7 +2343,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             int     newNet;
             TRACK*  track = findTrack( via );
 
-            if( hasDRCViolation( via ) )
+            if( !m_allowDRCViolations && hasDRCViolation( via ) )
             {
                 m_frame->ShowInfoBarError( _( "Via location violates DRC." ) );
                 m_flaggedDRC = true;
