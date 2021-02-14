@@ -31,7 +31,7 @@ constexpr int ICON_PADDING = 5;
 constexpr int CELL_MARGINS = 0;
 #else
 constexpr int ICON_PADDING = 5;
-constexpr int CELL_MARGINS = 5;
+constexpr int CELL_MARGINS = 3;
 #endif
 
 PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
