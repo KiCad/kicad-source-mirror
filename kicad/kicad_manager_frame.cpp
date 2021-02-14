@@ -108,7 +108,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // Create the status line (bottom of the frame)
     static const int dims[2] = { -1, -1 };
 
-    CreateStatusBar( 2 );
+    CreateStatusBar( 2, wxSTB_SIZEGRIP | wxSTB_SHOW_TIPS | wxSTB_ELLIPSIZE_MIDDLE |
+                     wxFULL_REPAINT_ON_RESIZE );
     SetStatusWidths( 2, dims );
 
     // Give an icon
@@ -650,6 +651,7 @@ void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
     SetStatusText( wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() ) );
+
 }
 
 
