@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-10 14:12+0000\n"
+"PO-Revision-Date: 2021-02-15 15:38+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3272,64 +3272,52 @@ msgid "Netclass name already in use."
 msgstr "网络类名称已经在使用。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "最小间隙："
+msgstr "最小铜间隙"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "最小布线宽度："
+msgstr "最小布线宽度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "过孔焊盘外径："
+msgstr "过孔焊盘直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "过孔 孔 > 直径"
+msgstr "镀过孔(Via plated hole)直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "过孔焊盘外径："
+msgstr "微过孔焊盘直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "过孔 孔 > 直径"
+msgstr "微镀过孔直径"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "调整差分对斜交"
+msgstr "差动线对(Differential pair)导线宽度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "差分对布线"
+msgstr "差动线对间距"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "默认线宽："
+msgstr "原理图线厚度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "总线宽度 (&B)："
+msgstr "总线连线厚度"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "原理图字段"
+msgstr "原理线颜色"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "原理图文件"
+msgstr "原理线型"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -14435,9 +14423,8 @@ msgid "Nickname"
 msgstr "别名"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "将符号保存为 ......"
+msgstr "将符号保存为"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -16992,11 +16979,13 @@ msgid "Import Eagle Project Files"
 msgstr "导入 Eagle 工程文件"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "文件 \"%s\" 似乎不是有效的原理图文件。"
+msgstr ""
+"文件 '%s'\n"
+"似乎不是有效的 KiCad 项目文件。"
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -17951,7 +17940,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -17965,9 +17953,9 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## Pi（π）衰减器\n"
-"__Zin__ 所需的输入阻抗 &#x2126;<br>\n"
-"__Zout__ 所需的输出阻抗<br>\n"
+"### Pi 衰减器\n"
+"__Zin__ &#x2126 中期望的输入阻抗;<br>\n"
+"__Zout__ 期望的输出阻抗<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ 衰减（以 dB 表示）\n"
@@ -17978,7 +17966,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -17988,16 +17975,15 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## 分离式衰减器\n"
-"### 衰减为 6dB\n"
-"___Z<sub>in</sub>___ 所需的输入阻抗 &#x2126;<br>\n"
-"___Z<sub>out</sub>___ 所需的输出阻抗 &#x2126;<br>\n"
+"### 分离式衰减器\n"
+"#### 衰减是 6dB\n"
+"___Z<sub>in</sub>___ 期望的输入阻抗 &#x2126;<br>\n"
+"___Z<sub>out</sub>___ 期望的输出阻抗 &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18011,9 +17997,9 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## T 形三通衰减器\n"
-"__Zin__ 所需的输入阻抗 &#x2126;<br>\n"
-"__Zout__ 所需的输出阻抗<br>\n"
+"### T 形衰减器\n"
+"__Zin__ &#x2126 中期望的输入阻抗;<br>\n"
+"__Zout__ 期望的输出阻抗<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ 衰减（以 dB 表示）\n"
@@ -18732,49 +18718,40 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
-#, fuzzy
 msgid "0 .. 15V"
-msgstr "0 ... 15V"
+msgstr "0 .. 15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
-#, fuzzy
 msgid "16 .. 30V"
-msgstr "16 ... 30V"
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
-#, fuzzy
 msgid "31 .. 50V"
-msgstr "31 ... 50V"
+msgstr "31 .. 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
-#, fuzzy
 msgid "51 .. 100V"
-msgstr "51 ... 100V"
+msgstr "51 .. 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
-#, fuzzy
 msgid "101 .. 150V"
-msgstr "101 ... 150V"
+msgstr "101 .. 150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
-#, fuzzy
 msgid "151 .. 170V"
-msgstr "151 ... 170V"
+msgstr "151 .. 170V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
-#, fuzzy
 msgid "171 .. 250V"
-msgstr "171 ... 250V"
+msgstr "171 .. 250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
-#, fuzzy
 msgid "251 .. 300V"
-msgstr "251 ... 300V"
+msgstr "251 .. 300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
-#, fuzzy
 msgid "301 .. 500V"
-msgstr "301 ... 500V"
+msgstr "301 .. 500V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1854
 msgid " > 500V"
@@ -18872,7 +18849,6 @@ msgid "Not worth using"
 msgstr "不值得使用"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -18900,20 +18876,19 @@ msgid ""
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
 "在 IEC (国际电工委员会) 60063 中定义的 E 系列是一种被\n"
-"广泛接受的电子元器件首选编号系统。  可用值在对数刻度\n"
-"中的间距大致相等。\n"
+"广泛接受的电子元器件首选编号系统。可用值在对数刻度\n"
+"上近似等距。\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6:  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3:  1.0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+"\tE1:  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"此计算器可查找标准 E 系列元件的组合来\n"
+"此计算器查找标准 E 系列元件的组合来\n"
 "创建任意值。您可以输入所需的电阻，范围从0,0025 到 4000 kOhm。\n"
-"给出了使用多达 4 个元件的解决方案。\n"
+"给出的解决方案使用多达 4 个元件。\n"
 "\n"
-"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排"
-"除在解决方案之外，前提是\n"
+"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排除在解决方案之外，前提是\n"
 "这些组件值不可用。\n"
 "\n"
 "解决方案依照下列格式提供：\n"
@@ -18923,27 +18898,25 @@ msgstr ""
 "\tR1 + (R2 | R3)...\t以上任意组合\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:193
-#, fuzzy
 msgid "Write Data Failed"
-msgstr "写入数据文件时发生错误"
+msgstr "写入数据失败"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:197
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"更改后的数据不会被保存。\n"
-"你确定要退出并放弃更改？"
+"无数据文件名来保存更改。\n"
+"你想退出并放弃您的更改吗?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"无法写入文件 \"%s\"\n"
-"是否退出并放弃修改？"
+"无法写入文件 '%s'\n"
+"你想退出并放弃你的更改吗?"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
@@ -19677,9 +19650,8 @@ msgid "Options for edge card connectors."
 msgstr "板边连接器选项。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:159
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "堆叠中的当前厚度："
+msgstr "压板的电路板厚度："
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -26804,13 +26776,10 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
-msgstr ""
-"文本读取困难，其线宽大于\n"
-"1/4 的宽度或高度。"
+msgstr "文本将不可读，因其厚度大于其宽度或高度的 1/4。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -26858,24 +26827,22 @@ msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "过孔外径小于最小过孔外径 (%s)。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "没有定义过孔孔径。"
+msgstr "未定义过孔尺寸。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "过孔外径小于最小过孔外径 (%s)。"
+msgstr "过孔直径小于最小通孔直径 (%s)。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
-msgstr "过孔内径大于过孔外径。"
+msgstr "过孔直径大于过孔外径。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
-msgstr "直径和钻头通过的环隙小于最小值 (%s)。"
+msgstr "直径和孔使得过孔环小于最小值 (%s)。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:313
 #, c-format
@@ -27808,22 +27775,16 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" 不存在，你想创建它吗？"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
-msgstr ""
-"保存工程特定的封装库列表时发生错误：\n"
-"\n"
-"%s"
+msgstr "当保存封装 '%s'保存到项目特定的封装库时发生了错误：%s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
-msgstr ""
-"保存工程特定的封装库列表时发生错误：\n"
-"\n"
-"%s"
+msgstr "保存项目特定的封装库时出错，这个库是：%s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
 #, c-format
@@ -28118,9 +28079,8 @@ msgstr ""
 "无法保存。"
 
 #: pcbnew/footprint_libraries_utils.cpp:949
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "保存封装"
+msgstr "将保存封装为"
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 msgid "No library specified.  Footprint could not be saved."
@@ -29665,6 +29625,8 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"该 CADSTAR 模板 '%s' 在原始设计中有散热功能，但 KiCad 中不存在与原始 CADSTAR "
+"设置等同的东西。取而代之的是实心填充。当模板重新填充时，散热将被移除。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
 #, c-format
@@ -31525,14 +31487,12 @@ msgid "Close the in progress outline"
 msgstr "闭合进行中的边界"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "限制图形线水平，垂直和 45 度角 (&I)"
+msgstr "限制线到 45 度角"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr "限制图形线水平，垂直和 45 度角 (&I)"
+msgstr "限制图形线到水平、垂直和 45 度角"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Design Rules Checker"
@@ -32597,9 +32557,8 @@ msgid "Route Differential Pair"
 msgstr "差分对交互布线"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "差分对交互布线"
+msgstr "规定差动线对的路线"
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Interactive Router Settings..."
