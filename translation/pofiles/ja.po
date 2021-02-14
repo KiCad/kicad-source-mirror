@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 11:11+0000\n"
+"PO-Revision-Date: 2021-02-14 12:15+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -22745,7 +22745,7 @@ msgstr "検索を再開"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
 msgid "Run Checks"
-msgstr "チェックを実行します"
+msgstr "チェックを実行"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:383
@@ -25957,8 +25957,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
-"左クリック(およびドラッグ)の動作は、3つの修飾キーに依存します:\n"
-"Alt、Shift、Ctrl."
+"左クリック(およびドラッグ)の動作は、Alt、Shift、Ctrlの\n"
+"3つの修飾キーに依存します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
@@ -26008,8 +26008,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
-"左クリック(およびドラッグ)の動作は、3つの修飾キーに依存します:\n"
-"Alt, Shift, Cmd."
+"左クリック(およびドラッグ)の動作は、Alt, Shift, Cmdの\n"
+"3つの修飾キーに依存します。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:201
 msgid "Shift+Cmd"
@@ -32270,7 +32270,7 @@ msgstr "基板から配線、フットプリント、図形アイテムを削除
 
 #: pcbnew/tools/pcb_actions.cpp:440
 msgid "Cleanup Tracks & Vias..."
-msgstr "配線 & ビアをクリーンアップ..."
+msgstr "配線とビアをクリーンアップ..."
 
 #: pcbnew/tools/pcb_actions.cpp:441
 msgid "Cleanup redundant items, shorting items, etc."
