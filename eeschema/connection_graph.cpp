@@ -2255,7 +2255,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
     SCH_ITEM* bus_item = nullptr;
     SCH_CONNECTION conn( this );
 
-    for( auto item : aSubgraph->m_items )
+    for( SCH_ITEM* item : aSubgraph->m_items )
     {
         switch( item->Type() )
         {
@@ -2268,6 +2268,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
             break;
         }
 
+        case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_SHEET_PIN_T:
         case SCH_HIER_LABEL_T:
