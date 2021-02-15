@@ -2167,6 +2167,7 @@ LIB_PART* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxSt
 void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                                    const PROPERTIES* aProperties )
 {
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     m_props = aProperties;
 
     cacheLib( aLibraryPath );
@@ -2181,6 +2182,7 @@ void SCH_SEXPR_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART*
 void SCH_SEXPR_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                      const PROPERTIES* aProperties )
 {
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     m_props = aProperties;
 
     cacheLib( aLibraryPath );

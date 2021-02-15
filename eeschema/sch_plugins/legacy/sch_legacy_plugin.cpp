@@ -4314,6 +4314,7 @@ LIB_PART* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxS
 void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                                     const PROPERTIES* aProperties )
 {
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     m_props = aProperties;
 
     cacheLib( aLibraryPath );
@@ -4328,6 +4329,7 @@ void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART
 void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                       const PROPERTIES* aProperties )
 {
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
     m_props = aProperties;
 
     cacheLib( aLibraryPath );
