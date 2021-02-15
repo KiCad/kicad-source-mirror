@@ -530,8 +530,8 @@ void EDA_3D_CANVAS::DoRePaint()
             // Calculation time in milliseconds
             const double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e3;
 
-            activityReporter.Report( wxString::Format( _( "Render time %.0f ms ( %.1f fps)" ),
-                                     calculation_time, 1000.0 / calculation_time ) );
+            activityReporter.Report( wxString::Format( _( "Render time %.0f ms" ),
+                                     calculation_time ) );
         }
     }
 
