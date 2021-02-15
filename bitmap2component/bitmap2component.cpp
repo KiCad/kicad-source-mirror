@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 
+#include <convert_to_biu.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <locale_io.h>
@@ -38,9 +39,6 @@
 
 #include "bitmap2component.h"
 
-// Unit conversion. Coord unit from potrace is mm
-#define MM2MICRON 1e3       // For pl_editor
-#define MM2NANOMETER 1e6    // For pcbew
 
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
@@ -121,8 +119,8 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
     {
     case KICAD_LOGO:
         m_Format = KICAD_LOGO;
-        m_ScaleX = MM2MICRON * 25.4 / aDpi_X;  // the conversion scale from PPI to micron
-        m_ScaleY = MM2MICRON * 25.4 / aDpi_Y;  // Y axis is top to bottom
+        m_ScaleX = PL_IU_PER_MM * 25.4 / aDpi_X;  // the conversion scale from PPI to micron
+        m_ScaleY = PL_IU_PER_MM * 25.4 / aDpi_Y;  // Y axis is top to bottom
         createOutputData();
         break;
 
@@ -136,15 +134,15 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
 
     case EESCHEMA_FMT:
         m_Format = EESCHEMA_FMT;
-        m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to UI (mil)
+        m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to legacy IU (mil)
         m_ScaleY = -1000.0 / aDpi_Y;      // Y axis is bottom to Top for components in libs
         createOutputData();
         break;
 
     case PCBNEW_KICAD_MOD:
         m_Format = PCBNEW_KICAD_MOD;
-        m_ScaleX = MM2NANOMETER * 25.4 / aDpi_X;   // the conversion scale from PPI to UI
-        m_ScaleY = MM2NANOMETER * 25.4 / aDpi_Y;   // Y axis is top to bottom in Footprint Editor
+        m_ScaleX = PCB_IU_PER_MM * 25.4 / aDpi_X;   // the conversion scale from PPI to IU
+        m_ScaleY = PCB_IU_PER_MM * 25.4 / aDpi_Y;   // Y axis is top to bottom in Footprint Editor
         createOutputData( aModLayer );
         break;
 
@@ -318,8 +316,8 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
         {
             currpoint = aPolygon.CPoint( ii );
             sprintf( strbuf, " (xy %f %f)",
-                    ( currpoint.x - offsetX ) / MM2NANOMETER,
-                    ( currpoint.y - offsetY ) / MM2NANOMETER );
+                    ( currpoint.x - offsetX ) / PCB_IU_PER_MM,
+                    ( currpoint.y - offsetY ) / PCB_IU_PER_MM );
             m_Data += strbuf;
 
             if( jj++ > 6 )
@@ -343,8 +341,8 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
         {
             currpoint = aPolygon.CPoint( ii );
             sprintf( strbuf, " (xy %.3f %.3f)",
-                    ( currpoint.x - offsetX ) / MM2MICRON,
-                    ( currpoint.y - offsetY ) / MM2MICRON );
+                    ( currpoint.x - offsetX ) / PL_IU_PER_MM,
+                    ( currpoint.y - offsetY ) / PL_IU_PER_MM );
             m_Data += strbuf;
 
             if( jj++ > 4 )
@@ -355,8 +353,8 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char*
         }
         // Close polygon
         sprintf( strbuf, " (xy %.3f %.3f) )\n",
-                 ( startpoint.x - offsetX ) / MM2MICRON,
-                 ( startpoint.y - offsetY ) / MM2MICRON );
+                 ( startpoint.x - offsetX ) / PL_IU_PER_MM,
+                 ( startpoint.y - offsetY ) / PL_IU_PER_MM );
         m_Data += strbuf;
         break;
 
