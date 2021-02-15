@@ -314,6 +314,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         bool displayWireCursor = false;
+        bool displayBusCursor = false;
         KIID rolloverItem = lastRolloverItem;
         m_additive = m_subtractive = m_exclusive_or = false;
 
@@ -356,9 +357,20 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
-                        OPT_TOOL_EVENT newEvt = EE_ACTIONS::drawWire.MakeEvent();
-                        auto*          params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
-                        auto*          newParams = new DRAW_SEGMENT_EVENT_PARAMS();
+                        OPT_TOOL_EVENT newEvt;
+                        SCH_CONNECTION* connection = collector[0]->Connection();
+
+                        if( connection && connection->IsBus() )
+                        {
+                            newEvt = EE_ACTIONS::drawBus.MakeEvent();
+                        }
+                        else
+                        {
+                            newEvt = EE_ACTIONS::drawWire.MakeEvent();
+                        }
+                    
+                        auto* params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
+                        auto* newParams = new DRAW_SEGMENT_EVENT_PARAMS();
 
                         *newParams= *params;
                         newParams->quitOnDraw = true;
@@ -558,7 +570,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
-                        displayWireCursor = true;
+                        SCH_CONNECTION* connection = collector[0]->Connection();
+
+                        if( connection && connection->IsBus() )
+                        {
+                            displayBusCursor = true;
+                        }
+                        else
+                        {
+                            displayWireCursor = true;
+                        }
+
                         getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                     }
                     else if( collector[0]->IsHypertext()
@@ -613,6 +635,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( displayWireCursor )
             {
                 m_nonModifiedCursor = KICURSOR::LINE_WIRE_ADD;
+            }
+            else if( displayBusCursor )
+            {
+                m_nonModifiedCursor = KICURSOR::LINE_BUS;
             }
             else if( rolloverItem != niluuid )
             {
