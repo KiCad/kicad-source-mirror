@@ -372,7 +372,7 @@ void EDA_3D_CANVAS::DoRePaint()
     // !TODO: implement error reporter
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
     STATUSBAR_REPORTER activityReporter( m_parentStatusBar,
-                                         (int) EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT );
+                                         (int) EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -710,7 +710,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         STATUSBAR_REPORTER reporter( m_parentStatusBar,
-                                     static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
+                                     static_cast<int>( EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM ) );
 
         RAY mouseRay = getRayAtCurrrentMousePosition();
 

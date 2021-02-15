@@ -54,9 +54,10 @@
 
 enum EDA_3D_VIEWER_STATUSBAR
 {
-    STATUS_TEXT = 0,
+    ACTIVITY = 0,
+    HOVERED_ITEM,
     X_POS,
-    Y_POS
+    Y_POS,
 };
 
 /**
