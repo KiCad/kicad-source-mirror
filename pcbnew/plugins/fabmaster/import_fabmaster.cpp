@@ -2525,16 +2525,16 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
         }
     }
 
-	if( zone_outline->Outline( 0 ).PointCount() >= 3 )
-	{
-		zone->SetOutline( zone_outline );
-		aBoard->Add( zone, ADD_MODE::APPEND );
-	}
-	else
-	{
-		delete( zone_outline );
-		delete( zone );
-	}
+    if( zone_outline->Outline( 0 ).PointCount() >= 3 )
+    {
+        zone->SetOutline( zone_outline );
+        aBoard->Add( zone, ADD_MODE::APPEND );
+    }
+    else
+    {
+        delete( zone_outline );
+        delete( zone );
+    }
 
     return true;
 }
