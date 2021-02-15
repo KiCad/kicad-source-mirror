@@ -42,7 +42,7 @@ bool GRAPHICS_IMPORTER::Load( const wxString &aFileName )
 
     if( !m_plugin )
     {
-        wxASSERT_MSG( false, "Plugin has to be set before load." );
+        wxASSERT_MSG( false, "Plugin must be set before load." );
         return false;
     }
 
@@ -55,7 +55,7 @@ bool GRAPHICS_IMPORTER::Import( double aScale )
 {
     if( !m_plugin )
     {
-        wxASSERT_MSG( false, "Plugin has to be set before import." );
+        wxASSERT_MSG( false, "Plugin must be set before import." );
         return false;
     }
 

@@ -785,7 +785,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             infobar->RemoveAllButtons();
             infobar->AddButton( button );
 
-            infobar->ShowMessageFor( _( "Blind/buried vias have to be enabled in "
+            infobar->ShowMessageFor( _( "Blind/buried vias must first be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
                                      10000, wxICON_ERROR );
             return false;
@@ -806,7 +806,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             infobar->RemoveAllButtons();
             infobar->AddButton( button );
 
-            infobar->ShowMessageFor( _( "Microvias have to be enabled in "
+            infobar->ShowMessageFor( _( "Microvias must first be enabled in "
                                         "Board Setup > Design Rules > Constraints." ),
                                      10000, wxICON_ERROR );
             return false;

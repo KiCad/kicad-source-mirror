@@ -55,7 +55,7 @@ bool DIALOG_TRACK_VIA_SIZE::TransferDataFromWindow()
 
     if( m_viaDrill.GetValue() >= m_viaDiameter.GetValue() )
     {
-        DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
+        DisplayError( GetParent(), _( "Via drill size must be smaller than via diameter" ) );
         m_viaDrillText->SetFocus();
         return false;
     }

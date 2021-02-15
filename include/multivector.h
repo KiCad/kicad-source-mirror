@@ -51,9 +51,9 @@ public:
      */
     static constexpr int UNDEFINED_TYPE = 0;
     static_assert( FIRST_TYPE_VAL > UNDEFINED_TYPE,
-                   "FIRST_TYPE_VAL has to be greater than UNDEFINED_TYPE" );
+                   "FIRST_TYPE_VAL must be greater than UNDEFINED_TYPE" );
     static_assert( FIRST_TYPE_VAL < LAST_TYPE_VAL,
-                   "FIRST_TYPE_VAL has to be greater than LAST_TYPE_VAL" );
+                   "FIRST_TYPE_VAL must be greater than LAST_TYPE_VAL" );
 
     /**
     * Helper for defining a list of library draw object pointers.
