@@ -238,7 +238,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     auto insideZone =
             [&]( ZONE* zone ) -> bool
             {
-                if( !zone || zone == item )
+                if( !zone || zone == item || zone->GetParent() == item )
                     return false;
 
                 if( !zone->GetCachedBoundingBox().Intersects( itemBBox ) )
