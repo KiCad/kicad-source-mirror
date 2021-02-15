@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN.
+ *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -59,17 +60,21 @@ OPTIONAL_XML_ATTRIBUTE<wxString>::OPTIONAL_XML_ATTRIBUTE( wxString aData )
 
 ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 {
-    // this array is used to adjust the fraction part value basing on the number of digits in the fraction
+    // This array is used to adjust the fraction part value basing on the number of digits
+    // in the fraction.
     constexpr int DIVIDERS[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
     constexpr unsigned int DIVIDERS_MAX_IDX = sizeof( DIVIDERS ) / sizeof( DIVIDERS[0] ) - 1;
 
     int integer, fraction, pre_fraction, post_fraction;
 
-    // the following check is needed to handle correctly negative fractions where the integer part == 0
+    // The following check is needed to handle correctly negative fractions where the integer
+    // part == 0.
     bool negative = ( aValue[0] == '-' );
 
-    // %n is used to find out how many digits contains the fraction part, e.g. 0.001 contains 3 digits
-    int ret = sscanf( aValue.c_str(), "%d.%n%d%n", &integer, &pre_fraction, &fraction, &post_fraction );
+    // %n is used to find out how many digits contains the fraction part, e.g. 0.001 contains 3
+    // digits.
+    int ret = sscanf( aValue.c_str(), "%d.%n%d%n", &integer, &pre_fraction, &fraction,
+                      &post_fraction );
 
     if( ret == 0 )
         throw XML_PARSER_ERROR( "Invalid coordinate" );
@@ -82,7 +87,8 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
     {
         int digits = post_fraction - pre_fraction;
 
-        // adjust the number of digits if necessary as we cannot handle anything smaller than nanometers (rounding)
+        // adjust the number of digits if necessary as we cannot handle anything smaller than
+        // nanometers (rounding).
         if( (unsigned) digits > DIVIDERS_MAX_IDX )
         {
             int diff = digits - DIVIDERS_MAX_IDX;
@@ -204,8 +210,8 @@ ECOORD Convert<ECOORD>( const wxString& aCoord )
 
 
 /**
- * Function parseRequiredAttribute
- * parsese the aAttribute of the XML node aNode.
+ * Parse \a aAttribute of the XML node \a aNode.
+ *
  * @param  aNode      is the node whose attribute will be parsed.
  * @param  aAttribute is the attribute that will be parsed.
  * @throw  XML_PARSER_ERROR - exception thrown if the required attribute is missing
@@ -224,12 +230,12 @@ T parseRequiredAttribute( wxXmlNode* aNode, const wxString& aAttribute )
 
 
 /**
- * Function parseOptionalAttribute
- * parses the aAttribute of the XML node aNode.
+ * Parse option \a aAttribute of the XML node \a aNode.
+ *
  * @param  aNode      is the node whose attribute will be parsed.
  * @param  aAttribute is the attribute that will be parsed.
  * @return OPTIONAL_XML_ATTRIBUTE<T> - an optional XML attribute, parsed as the specified type if
- *                                   found.
+ *                                     found.
  */
 template<typename T>
 OPTIONAL_XML_ATTRIBUTE<T> parseOptionalAttribute( wxXmlNode* aNode, const wxString& aAttribute )
@@ -610,6 +616,43 @@ wxSize ETEXT::ConvertSize() const
 }
 
 
+EFRAME::EFRAME( wxXmlNode* aFrameNode )
+{
+    /*
+     * <!ELEMENT frame EMPTY>
+     * <!ATTLIST frame
+     *          x1            %Coord;       #REQUIRED
+     *          y1            %Coord;       #REQUIRED
+     *          x2            %Coord;       #REQUIRED
+     *          y2            %Coord;       #REQUIRED
+     *          columns       %Int;         #REQUIRED
+     *          rows          %Int;         #REQUIRED
+     *          layer         %Layer;       #REQUIRED
+     *          border-left   %Bool;        "yes"
+     *          border-top    %Bool;        "yes"
+     *          border-right  %Bool;        "yes"
+     *          border-bottom %Bool;        "yes"
+     *          >
+     */
+    border_left = true;
+    border_top = true;
+    border_right = true;
+    border_bottom = true;
+
+    x1 = parseRequiredAttribute<ECOORD>( aFrameNode, "x1" );
+    y1 = parseRequiredAttribute<ECOORD>( aFrameNode, "y1" );
+    x2 = parseRequiredAttribute<ECOORD>( aFrameNode, "x2" );
+    y2 = parseRequiredAttribute<ECOORD>( aFrameNode, "y2" );
+    columns = parseRequiredAttribute<int>( aFrameNode, "columns" );
+    rows = parseRequiredAttribute<int>( aFrameNode, "rows" );
+    layer = parseRequiredAttribute<int>( aFrameNode, "layer" );
+    border_left = parseOptionalAttribute<bool>( aFrameNode, "border-left" );
+    border_top = parseOptionalAttribute<bool>( aFrameNode, "border-top" );
+    border_right = parseOptionalAttribute<bool>( aFrameNode, "border-right" );
+    border_bottom = parseOptionalAttribute<bool>( aFrameNode, "border-bottom" );
+}
+
+
 EPAD_COMMON::EPAD_COMMON( wxXmlNode* aPad )
 {
     // #REQUIRED says DTD, throw exception if not found
@@ -753,7 +796,8 @@ EPOLYGON::EPOLYGON( wxXmlNode* aPolygon )
           isolate       %Dimension;    #IMPLIED -- only in <signal> or <package> context --
           orphans       %Bool;         "no"  -- only in <signal> context --
           thermals      %Bool;         "yes" -- only in <signal> context --
-          rank          %Int;          "0"   -- 1..6 in <signal> context, 0 or 7 in <package> context --
+          rank          %Int;          "0"   -- 1..6 in <signal> context, 0 or 7 in
+                                                <package> context --
           >
     */
 
@@ -996,12 +1040,12 @@ ECONNECT::ECONNECT( wxXmlNode* aConnect )
 EDEVICE::EDEVICE( wxXmlNode* aDevice )
 {
     /*
-    <!ELEMENT device (connects?, technologies?)>
-    <!ATTLIST device
-              name          %String;       ""
-              package       %String;       #IMPLIED
-              >
-*/
+        <!ELEMENT device (connects?, technologies?)>
+        <!ATTLIST device
+                name          %String;       ""
+                package       %String;       #IMPLIED
+                >
+     */
     name = parseRequiredAttribute<wxString>( aDevice, "name" );
     opt_wxString pack = parseOptionalAttribute<wxString>( aDevice, "package" );
 
@@ -1026,13 +1070,13 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
 EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )
 {
     /*
-    <!ELEMENT deviceset (description?, gates, devices)>
-    <!ATTLIST deviceset
+      <!ELEMENT deviceset (description?, gates, devices)>
+      <!ATTLIST deviceset
               name          %String;       #REQUIRED
               prefix        %String;       ""
               uservalue     %Bool;         "no"
               >
-    */
+     */
 
     name = parseRequiredAttribute<wxString>(aDeviceSet, "name");
     prefix = parseOptionalAttribute<wxString>( aDeviceSet, "prefix" );

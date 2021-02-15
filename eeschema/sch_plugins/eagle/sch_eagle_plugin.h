@@ -127,6 +127,7 @@ private:
     SCH_TEXT*           loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadPlainText( wxXmlNode* aSchText );
+    void                loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>& aLines );
 
     bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_PART>& aPart,
                                 EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
@@ -142,6 +143,7 @@ private:
                              int aGateNumber );
     LIB_TEXT*       loadSymbolText( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aLibText,
                                     int aGateNumber );
+    void            loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>& aLines );
 
     void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
     void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
@@ -178,6 +180,8 @@ private:
      * @param aUpdateSet decides whether the missing units data should be updated.
      */
     void addImplicitConnections( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen, bool aUpdateSet );
+
+    bool netHasPowerDriver( SCH_LINE* aLine, const wxString& aNetName ) const;
 
     /**
      * Fix invalid characters in Eagle symbol names.
@@ -243,6 +247,9 @@ private:
 
     ///< Segments representing wires for intersection checking
     std::vector<SEG_DESC> m_segments;
+
+    ///< Nets as defined in the <nets> sections of an Eagle schematic file.
+    std::map<wxString, ENET> m_nets;
 
     ///< Positions of pins and wire endings mapped to its parent
     std::map<wxPoint, std::set<const EDA_ITEM*>> m_connPoints;
