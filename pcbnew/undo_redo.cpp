@@ -428,7 +428,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         switch( eda_item->Type() )
         {
         case PCB_FOOTPRINT_T:
-        case PCB_GROUP_T:
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
             KI_FALLTHROUGH;
 
@@ -436,6 +435,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
+        case PCB_PAD_T:
             reBuild_ratsnest = true;
             break;
 
@@ -491,10 +491,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             break;
 
         case UNDO_REDO::GROUP:
+            aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
             static_cast<BOARD_ITEM*>( eda_item )->SetParentGroup( nullptr );
             break;
 
         case UNDO_REDO::UNGROUP:
+            aList->SetPickedItemStatus( UNDO_REDO::GROUP, ii );
+
             if( group )
                 group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
 
@@ -547,8 +550,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
     GetBoard()->SanitizeNetcodes();
 }
-
-
 
 
 void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )

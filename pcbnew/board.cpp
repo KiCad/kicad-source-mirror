@@ -738,8 +738,12 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
     }
 
-    if( aBoardItem->GetParentGroup() )
-        aBoardItem->GetParentGroup()->RemoveItem( aBoardItem );
+    aBoardItem->SetFlags( STRUCT_DELETED );
+
+    PCB_GROUP* parentGroup = aBoardItem->GetParentGroup();
+
+    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+        parentGroup->RemoveItem( aBoardItem );
 
     m_connectivity->Remove( aBoardItem );
 

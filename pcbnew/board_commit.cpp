@@ -182,6 +182,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
             case CHT_REMOVE:
             {
+                PCB_GROUP* parentGroup = boardItem->GetParentGroup();
+
                 if( !m_isFootprintEditor && aCreateUndoEntry )
                     undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
 
@@ -212,8 +214,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                             break;
                     }
 
-                    if( boardItem->GetParentGroup() )
-                        boardItem->GetParentGroup()->RemoveItem( boardItem );
+                    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+                        parentGroup->RemoveItem( boardItem );
 
                     view->Remove( boardItem );
 

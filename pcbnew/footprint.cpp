@@ -580,8 +580,12 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     }
     }
 
-    if( aBoardItem->GetParentGroup() )
-        aBoardItem->GetParentGroup()->RemoveItem( aBoardItem );
+    aBoardItem->SetFlags( STRUCT_DELETED );
+
+    PCB_GROUP* parentGroup = aBoardItem->GetParentGroup();
+
+    if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
+        parentGroup->RemoveItem( aBoardItem );
 
     if( aBoardItem->Type() != PCB_FP_TEXT_T )
         m_hullDirty = true;
