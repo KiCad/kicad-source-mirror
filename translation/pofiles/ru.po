@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-15 09:40+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2021-02-16 11:10+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -3369,54 +3369,44 @@ msgid "Minimum track width"
 msgstr "Минимальная ширина дорожки"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Диаметр конт.пл. перех.отв.:"
+msgstr "Диаметр конт.пл. перех.отв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Сверло больше чем перех.отв."
+msgstr "Сверло перех.отв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Диаметр конт.пл. перех.отв.:"
+msgstr "Диаметр конт.пл. перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Сверло больше чем перех.отв."
+msgstr "Сверло перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Настройка перекоса диф.пары"
+msgstr "Ширина дорожек диф.пары"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Диф.пары"
+msgstr "Зазор диф.пары"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Толщина линий по умолчанию:"
+msgstr "Толщина проводника схемы"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Толщина шины:"
+msgstr "Толщина шин"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Поле схемы"
+msgstr "Цвет проводника схемы"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Файлы схемы"
+msgstr "Стиль линии проводника схемы"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -14707,9 +14697,8 @@ msgid "Nickname"
 msgstr "Уникальное имя"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Сохранить символ как..."
+msgstr "Сохранить символ как"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -17303,7 +17292,7 @@ msgid ""
 "does not appear to be a valid KiCad project file."
 msgstr ""
 "Похоже файл '%s'\n"
-"не является файлом проект."
+"не является файлом проекта KiCad."
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -18261,7 +18250,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18275,7 +18263,7 @@ msgid ""
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
-"## П-образный аттенюатор\n"
+"### П-образный аттенюатор\n"
 "__Zin__ ожидаемый входной импеданс в омах<br>\n"
 "__Zout__ ожидаемый выходной импеданс<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -18288,7 +18276,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18298,8 +18285,8 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## Резистивный разветвитель\n"
-"### Ослабление 6dB\n"
+"### Резистивный разветвитель\n"
+"#### Ослабление 6dB\n"
 "___Z<sub>in</sub>___ ожидаемый входной импеданс в омах<br>\n"
 "___Z<sub>out</sub>___ ожидаемый выходной импеданс в омах<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -18307,7 +18294,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18321,7 +18307,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## Т-образный аттенюатор\n"
+"### Т-образный аттенюатор\n"
 "__Zin__ ожидаемый входной импеданс в омах<br>\n"
 "__Zout__ ожидаемый выходной импеданс<br>\n"
 "__Zin = Zout__<br><br>\n"
@@ -19044,47 +19030,38 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
-#, fuzzy
 msgid "0 .. 15V"
 msgstr "0 ... 15В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
-#, fuzzy
 msgid "16 .. 30V"
 msgstr "16 ... 30В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
-#, fuzzy
 msgid "31 .. 50V"
 msgstr "31 ... 50В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
-#, fuzzy
 msgid "51 .. 100V"
 msgstr "51 ... 100В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
-#, fuzzy
 msgid "101 .. 150V"
 msgstr "101 ... 150В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
-#, fuzzy
 msgid "151 .. 170V"
 msgstr "151 ... 170В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
-#, fuzzy
 msgid "171 .. 250V"
 msgstr "171 ... 250В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
-#, fuzzy
 msgid "251 .. 300V"
 msgstr "251 ... 300В"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
-#, fuzzy
 msgid "301 .. 500V"
 msgstr "301 ... 500В"
 
@@ -19186,7 +19163,6 @@ msgid "Not worth using"
 msgstr "Не стоит использовать"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19241,27 +19217,25 @@ msgstr ""
 "соединений\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:193
-#, fuzzy
 msgid "Write Data Failed"
-msgstr "Ошибка записи файла"
+msgstr "Ошибка записи данных"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:197
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Данные изменены, но нет имени файла для сохранения изменений\n"
-"Желаете выйти и потерять все изменения?"
+"Не указано имя файла для сохранения данных.\n"
+"Желаете выйти и отказаться от изменений?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Не удалось записать файл \"%s\"\n"
-"Желаете выйти и потерять все изменения?"
+"Не удалось записать файл '%s'\n"
+"Желаете выйти и отказаться от изменений?"
 
 #: pcb_calculator/regulators_funct.cpp:126
 #, c-format
@@ -20001,9 +19975,8 @@ msgid "Options for edge card connectors."
 msgstr "Параметры краевых соединителей."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:159
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "Текущая толщина пакета:"
+msgstr "Толщина пакета:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -27360,22 +27333,20 @@ msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "Размер перех.отв. меньше мин. допустимого значения (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
-#, fuzzy
 msgid "No via hole size defined."
 msgstr "Не указан размер сверла перех.отв."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "Размер перех.отв. меньше мин. допустимого значения (%s)."
+msgstr "Размер сверла перех.отв. меньше мин. допустимого значения (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
-msgstr "Размер сверла перех.отв. больше макс. допустимого значения (%s)."
+msgstr "Размер сверла перех.отв. больше его конт.пл."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
 msgstr ""
 "Поясок перех.отв. меньше мин. допустимого значения (%s) при заданном размере "
@@ -28319,22 +28290,18 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "Плата \"%s\" не существует. Создать?"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Не удалось сохранить таблицу библиотек посад.мест проекта:\n"
-"\n"
-"%s"
+"При сохранении посад.места '%s' в библиотеку посад.мест проекта возникла "
+"ошибка: %s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
-msgstr ""
-"Не удалось сохранить таблицу библиотек посад.мест проекта:\n"
-"\n"
-"%s"
+msgstr "При сохранении таблицы библиотек посад.мест проекта возникла ошибка: %s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
 #, c-format
@@ -28630,9 +28597,8 @@ msgstr ""
 "Сохранить не удалось."
 
 #: pcbnew/footprint_libraries_utils.cpp:949
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "Сохранить посад.место"
+msgstr "Сохранить посад.место как"
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 msgid "No library specified.  Footprint could not be saved."
@@ -30243,6 +30209,9 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"Шаблон CADSTAR '%s' имеет элементы терморазгрузки в исходном проекте, но "
+"KiCad не имеет аналога подобным параметрам CADSTAR. Применена сплошная "
+"заливка. При следующей заливке элементы терморазгрузки будут удалены."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
 #, c-format
@@ -32162,12 +32131,10 @@ msgid "Close the in progress outline"
 msgstr "Замкнуть текущий контур"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "Ограничить графические линии ортогонально и под 45°"
+msgstr "Ограничить линии под 45°"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
 msgstr "Ограничить графические линии ортогонально и под 45°"
 
@@ -33240,18 +33207,16 @@ msgid "Route Single Track"
 msgstr "Проложить дорожку"
 
 #: pcbnew/tools/pcb_actions.cpp:1240
-#, fuzzy
 msgid "Route tracks"
-msgstr "Без дорожек"
+msgstr "Трассировать дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
 msgid "Route Differential Pair"
 msgstr "Проложить диф.пару"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Проложить диф.пару"
+msgstr "Трассировать диф.пару"
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Interactive Router Settings..."
