@@ -117,18 +117,18 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     // Add common prms:
     // Default values are for FR4
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, EPSILONR_PRM,
-                               "Er", _( "Er" ),
-                               _( "Epsilon R: substrate relative dielectric constant" ),
+                               "Er", wxT( "εr" ),
+                               _( "Substrate relative permittivity (dielectric constant)" ),
                                4.6, false ) );
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TAND_PRM,
-                               "TanD", _( "TanD" ),
-                               _( "Tangent delta: dielectric loss factor." ), 2e-2,
-                               false ) );
+                               "TanD", wxT( "tan δ" ),
+                               _( "Dielectric loss (dissipation factor)" ),
+                               2e-2, false ) );
 
     // Default value is for copper
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, RHO_PRM,
-                               "Rho", _( "Rho" ),
-                               _( "Electrical resistivity or specific electrical resistance of conductor (Ohm*meter)" ),
+                               "Rho", wxT( "ρ" ),
+                               _( "Electrical resistivity or specific electrical resistance of conductor (ohm*meter)" ),
                                1.72e-8, false ) );
 
     // Default value is in GHz
@@ -143,7 +143,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_TLine = new MICROSTRIP();
         m_Icon = new wxBitmap( KiBitmap( microstrip_xpm ) );
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -151,18 +151,18 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H_t", _( "Height of box top" ), 1e20, true ) );
+                                   "H_t", "H(top)", _( "Height of box top" ), 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T",
                                    _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
-                                   "Rough", _( "Rough" ),
+                                   "Rough", _( "Roughness" ),
                                    _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel S",_( "mu substrate" ),
+                                   "mu Rel S", wxString::Format( wxT( "μ(%s)" ), _( "substrate" ) ),
                                    _( "Relative permeability (mu) of substrate" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -183,7 +183,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( cpw_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -193,7 +193,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -216,7 +216,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( cpw_back_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -226,7 +226,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", "mu condutor",
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -251,17 +251,17 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ZF(H10) = Ey / Hx:" ) );
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "TE-modes:" ) );
         m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I",_( "mu insulator" ),
+                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ), _( "insulator" ) ),
                                    _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C",_( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -284,24 +284,26 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( coax_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "TE-modes:" ) );
         m_Messages.Add( _( "TM-modes:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
-                                   "mu Rel I", _( "mu insulator" ),
+                                   "mu Rel I", wxString::Format( wxT( "μ(%s)" ), _( "insulator" ) ),
                                    _( "Relative permeability (mu) of insulator" ), 1, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,
-                                   "Din", _( "Din" ), _( "Inner diameter (conductor)" ), 1.0, true ) );
+                                   "Din", _( "Din" ),
+                                   _( "Inner diameter (conductor)" ), 1.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_OUT_PRM,
-                                   "Dout", _( "Dout" ), _( "Outer diameter (insulator)" ), 8.0, true ) );
+                                   "Dout", _( "Dout" ),
+                                   _( "Outer diameter (insulator)" ), 8.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
                                    "L", "L", _( "Line length" ), 50.0, true ) );
 
@@ -317,12 +319,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( c_microstrip_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff even:" ) );
-        m_Messages.Add( _( "ErEff odd:" ) );
-        m_Messages.Add( _( "Conductor losses even:" ) );
-        m_Messages.Add( _( "Conductor losses odd:" ) );
-        m_Messages.Add( _( "Dielectric losses even:" ) );
-        m_Messages.Add( _( "Dielectric losses odd:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s (even):" ), wxT( "εr" ) ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s (odd):" ), wxT( "εr" ) ) );
+        m_Messages.Add( _( "Conductor losses (even):" ) );
+        m_Messages.Add( _( "Conductor losses (odd):" ) );
+        m_Messages.Add( _( "Dielectric losses (even):" ) );
+        m_Messages.Add( _( "Dielectric losses (odd):" ) );
         m_Messages.Add( _( "Skin depth:" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
@@ -332,9 +334,10 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,
-                                   "Rough", _( "Rough" ), _( "Conductor roughness" ), 0.0, true ) );
+                                   "Rough", _( "Roughness" ),
+                                   _( "Conductor roughness" ), 0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu rel C", _( "mu conductor" ),
+                                   "mu rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
 
@@ -360,7 +363,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_TLine = new STRIPLINE();
         m_Icon = new wxBitmap( KiBitmap( stripline_xpm ) );
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -373,7 +376,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1, false ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
@@ -393,7 +396,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Icon = new wxBitmap( KiBitmap( twistedpair_xpm ) );
         m_HasPrmSelection = true;
 
-        m_Messages.Add( _( "ErEff:" ) );
+        m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
         m_Messages.Add( _( "Dielectric losses:" ) );
         m_Messages.Add( _( "Skin depth:" ) );
@@ -402,11 +405,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "Twists", _( "Twists" ),
                                    _( "Number of twists per length" ), 0.0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
-                                   "mu Rel C", _( "mu conductor" ),
+                                   "mu Rel C", wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),
                                    _( "Relative permeability (mu) of conductor" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TWISTEDPAIR_EPSILONR_ENV_PRM,
-                                   "ErEnv", _( "ErEnv" ),
+                                   "ErEnv", wxString::Format( wxT( "εr(%s)" ), _( "environment" ) ),
                                    _( "Relative permittivity of environment" ), 1,
                                    false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_DIAM_IN_PRM,

@@ -96,12 +96,16 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
     m_exclude2Units->SetLabel( wxT( "kΩ" ) );
 
-    m_trackTempUnits->SetLabel( wxT( "ºC" ) );
+    m_EpsilonR_label->SetLabel( wxT( "εr" ) );
+
+    m_trackTempUnits->SetLabel( wxT( "°C" ) );
     m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
 
-    m_viaTempUnits->SetLabel( wxT( "ºC" ) );
+    m_viaResistivityUnits->SetLabel( wxT( "Ω•m" ) );
+
+    m_viaTempUnits->SetLabel( wxT( "°C" ) );
     m_viaResUnits->SetLabel( wxT( "Ω" ) );
-    m_viaThermalResUnits->SetLabel( wxT( "ºC/W" ) );
+    m_viaThermalResUnits->SetLabel( wxT( "°C/W" ) );
     m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
 
     m_extTrackResUnits->SetLabel( wxT( "Ω" ) );

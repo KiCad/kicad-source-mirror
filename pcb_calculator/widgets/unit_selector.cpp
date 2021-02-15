@@ -63,12 +63,12 @@ UNIT_SELECTOR_THICKNESS::UNIT_SELECTOR_THICKNESS( wxWindow *parent, wxWindowID i
                   const wxArrayString& choices, long style )
                 : UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
-    Append( _( "mm" ) );
-    Append( _( "um" ) );
-    Append( _( "cm" ) );
-    Append( _( "mil" ) );
-    Append( _( "inch" ) );
-    Append( _( "oz/ft^2" ) );
+    Append( wxT( "mm" ) );
+    Append( wxT( "µm" ) );
+    Append( wxT( "cm" ) );
+    Append( wxT( "mil" ) );
+    Append( wxT( "inch" ) );
+    Append( wxT( "oz/ft²" ) );
 }
 
 
@@ -151,8 +151,8 @@ UNIT_SELECTOR_RESISTOR::UNIT_SELECTOR_RESISTOR( wxWindow *parent, wxWindowID id,
                   const wxArrayString& choices, long style )
                 : UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
-    Append( _( "Ohm" ) );
-    Append( _( "kOhm" ) );
+    Append( _( "Ω" ) );
+    Append( _( "kΩ" ) );
 }
 
 

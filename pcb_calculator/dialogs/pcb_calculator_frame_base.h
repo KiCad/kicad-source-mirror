@@ -265,6 +265,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextResistivity;
 		wxTextCtrl* m_textCtrlPlatingResistivity;
 		wxButton* m_button_ResistivityVia;
+		wxStaticText* m_viaResistivityUnits;
 		wxStaticText* m_staticTextPermittivity;
 		wxTextCtrl* m_textCtrlPlatingPermittivity;
 		wxButton* m_button_Permittivity;
@@ -314,8 +315,8 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticText66;
 		wxTextCtrl* m_TrackLengthValue;
 		UNIT_SELECTOR_LEN* m_TW_CuLength_choiceUnit;
-		wxTextCtrl* m_TWResistivity;
 		wxStaticText* m_staticText103;
+		wxTextCtrl* m_TWResistivity;
 		wxStaticText* m_resistivityUnits;
 		wxHtmlWindow* m_htmlWinFormulas;
 		wxStaticText* m_staticTextExtWidth;

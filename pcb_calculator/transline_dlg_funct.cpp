@@ -221,15 +221,12 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     // Setup messages
     wxStaticText* left_msg_list[] =
     {
-        m_left_message1, m_left_message2, m_left_message3,
-        m_left_message4, m_left_message5, m_left_message6,
-        m_left_message7, NULL
+        m_left_message1, m_left_message2, m_left_message3, m_left_message4, m_left_message5,
+        m_left_message6, m_left_message7, NULL
     };
     wxStaticText* msg_list[] =
     {
-        m_Message1, m_Message2, m_Message3,
-        m_Message4, m_Message5, m_Message6,
-        m_Message7, NULL
+        m_Message1, m_Message2, m_Message3, m_Message4, m_Message5, m_Message6, m_Message7, NULL
     };
 
     unsigned jj = 0;
@@ -237,6 +234,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
     {
         if( left_msg_list[jj] == NULL )
             break;
+
         left_msg_list[jj]->SetLabel( tr_ident->m_Messages[jj] );
         msg_list[jj]->SetLabel( wxEmptyString );
     }
@@ -248,35 +246,36 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         jj++;
     }
 
-    // Init parameters dialog items
+
+// Init parameters dialog items
     struct DLG_PRM_DATA substrateprms[] =
-    {
-        { m_EpsilonR_label,m_Value_EpsilonR, NULL },
-        { m_TanD_label,m_Value_TanD, NULL },
-        { m_Rho_label, m_Value_Rho, NULL },
-        { m_substrate_prm4_label, m_Substrate_prm4_Value, m_SubsPrm4_choiceUnit },
-        { m_substrate_prm5_label, m_Substrate_prm5_Value, m_SubsPrm5_choiceUnit },
-        { m_substrate_prm6_label, m_Substrate_prm6_Value, m_SubsPrm6_choiceUnit },
-        { m_substrate_prm7_label, m_Substrate_prm7_Value, m_SubsPrm7_choiceUnit },
-        { m_substrate_prm8_label, m_Substrate_prm8_Value, m_SubsPrm8_choiceUnit },
-        { m_substrate_prm9_label, m_Substrate_prm9_Value, m_SubsPrm9_choiceUnit }
-    };
+            {
+                { m_EpsilonR_label,       m_Value_EpsilonR,       NULL },
+                { m_TanD_label,           m_Value_TanD,           NULL },
+                { m_Rho_label,            m_Value_Rho,            NULL },
+                { m_substrate_prm4_label, m_Substrate_prm4_Value, m_SubsPrm4_choiceUnit },
+                { m_substrate_prm5_label, m_Substrate_prm5_Value, m_SubsPrm5_choiceUnit },
+                { m_substrate_prm6_label, m_Substrate_prm6_Value, m_SubsPrm6_choiceUnit },
+                { m_substrate_prm7_label, m_Substrate_prm7_Value, m_SubsPrm7_choiceUnit },
+                { m_substrate_prm8_label, m_Substrate_prm8_Value, m_SubsPrm8_choiceUnit },
+                { m_substrate_prm9_label, m_Substrate_prm9_Value, m_SubsPrm9_choiceUnit }
+            };
     #define substrateprms_cnt (sizeof(substrateprms)/sizeof(substrateprms[0]))
 
     struct DLG_PRM_DATA physprms[] =
-    {
-        { m_phys_prm1_label, m_Phys_prm1_Value, m_choiceUnit_Param1 },
-        { m_phys_prm2_label, m_Phys_prm2_Value, m_choiceUnit_Param2 },
-        { m_phys_prm3_label, m_Phys_prm3_Value, m_choiceUnit_Param3 }
-    };
+            {
+                { m_phys_prm1_label, m_Phys_prm1_Value, m_choiceUnit_Param1 },
+                { m_phys_prm2_label, m_Phys_prm2_Value, m_choiceUnit_Param2 },
+                { m_phys_prm3_label, m_Phys_prm3_Value, m_choiceUnit_Param3 }
+            };
     #define physprms_cnt (sizeof(physprms)/sizeof(physprms[0]))
 
     struct DLG_PRM_DATA elecprms[] =
-    {
-        { m_elec_prm1_label, m_Elec_prm1_Value, m_choiceUnit_ElecPrm1 },
-        { m_elec_prm2_label, m_Elec_prm2_Value, m_choiceUnit_ElecPrm2 },
-        { m_elec_prm3_label, m_Elec_prm3_Value, m_choiceUnit_ElecPrm3 }
-    };
+            {
+                { m_elec_prm1_label, m_Elec_prm1_Value, m_choiceUnit_ElecPrm1 },
+                { m_elec_prm2_label, m_Elec_prm2_Value, m_choiceUnit_ElecPrm2 },
+                { m_elec_prm3_label, m_Elec_prm3_Value, m_choiceUnit_ElecPrm3 }
+            };
     #define elecprms_cnt (sizeof(elecprms)/sizeof(elecprms[0]))
 
     struct DLG_PRM_DATA frequencyprms[] =
