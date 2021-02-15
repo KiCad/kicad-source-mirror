@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
+void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 {
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
@@ -348,7 +348,7 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 
     if( undo )
     {
-        PutDataInPreviousState( undo, false );
+        PutDataInPreviousState( undo );
         undo->ClearListAndDeleteItems();
         delete undo;
 

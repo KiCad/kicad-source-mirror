@@ -96,15 +96,13 @@ using namespace std::placeholders;
 
 /**
  * Function TestForExistingItem
- * test if aItem exists somewhere in lists of items
- * This is a function used by PutDataInPreviousState to be sure an item was not deleted
- * since an undo or redo.
+ * Test if aItem exists somewhere in undo/redo lists of items.  Used by PutDataInPreviousState
+ * to be sure an item was not deleted since an undo or redo.
  * This could be possible:
  *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
  *   - in zones outlines, when a change in one zone merges this zone with an other
- * This function avoids a Pcbnew crash
- * Before using this function to test existence of items,
- * it must be called with aItem = NULL to prepare the list
+ * Before using this function to test existence of items, it must be called with aItem = NULL to
+ * prepare the list
  * @param aPcb = board to test
  * @param aItem = item to find
  *              = NULL to build the list of existing items
@@ -185,7 +183,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aComman
 
 
 void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                              UNDO_REDO aTypeCommand )
+                                              UNDO_REDO aCommandType )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
@@ -257,7 +255,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
         if( command == UNDO_REDO::UNSPECIFIED )
         {
-            command = aTypeCommand;
+            command = aCommandType;
             commandToUndo->SetPickedItemStatus( command, ii );
         }
 
@@ -326,14 +324,14 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
-    PICKED_ITEMS_LIST* List = PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* list = PopCommandFromUndoList();
 
     // Undo the command
-    PutDataInPreviousState( List, false );
+    PutDataInPreviousState( list );
 
     // Put the old list in RedoList
-    List->ReversePickersListOrder();
-    PushCommandToRedoList( List );
+    list->ReversePickersListOrder();
+    PushCommandToRedoList( list );
 
     OnModify();
 
@@ -355,14 +353,14 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
-    PICKED_ITEMS_LIST* List = PopCommandFromRedoList();
+    PICKED_ITEMS_LIST* list = PopCommandFromRedoList();
 
     // Redo the command
-    PutDataInPreviousState( List, true );
+    PutDataInPreviousState( list );
 
     // Put the old list in UndoList
-    List->ReversePickersListOrder();
-    PushCommandToUndoList( List );
+    list->ReversePickersListOrder();
+    PushCommandToUndoList( list );
 
     OnModify();
 
@@ -372,8 +370,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 }
 
 
-void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
-                                                  bool aRebuildRatsnet )
+void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 {
     bool not_found = false;
     bool reBuild_ratsnest = false;
@@ -580,7 +577,7 @@ void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aIt
 void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
 {
     PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
-    PutDataInPreviousState( undo, false );
+    PutDataInPreviousState( undo );
 
     undo->ClearListAndDeleteItems();
     delete undo;

@@ -1159,7 +1159,7 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     PICKED_ITEMS_LIST* List = m_frame->PopCommandFromUndoList();
 
     /* Undo the command */
-    m_frame->PutDataInPreviousState( List, false );
+    m_frame->PutDataInPreviousState( List );
 
     /* Put the old list in RedoList */
     List->ReversePickersListOrder();
@@ -1189,14 +1189,14 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     /* Get the old list */
-    PICKED_ITEMS_LIST* List = m_frame->PopCommandFromRedoList();
+    PICKED_ITEMS_LIST* list = m_frame->PopCommandFromRedoList();
 
     /* Redo the command: */
-    m_frame->PutDataInPreviousState( List, true );
+    m_frame->PutDataInPreviousState( list );
 
     /* Put the old list in UndoList */
-    List->ReversePickersListOrder();
-    m_frame->PushCommandToUndoList( List );
+    list->ReversePickersListOrder();
+    m_frame->PushCommandToUndoList( list );
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();

@@ -796,9 +796,8 @@ public:
      * Restore an undo or redo command to put data pointed by \a aList in the previous state.
      *
      * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
-     * @param aRedoCommand  a bool: true for redo, false for undo
      */
-    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
 
     /**
      * Free the undo or redo list from \a aList element.

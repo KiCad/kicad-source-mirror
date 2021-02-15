@@ -95,9 +95,9 @@ public:
      * Add a list of pickers to handle a list of items.
      *
      * @param aItemsList the list of items modified by the command to undo.
-     * @param aTypeCommand command type (see enum UNDO_REDO).
+     * @param aCommandType command type (see enum UNDO_REDO).
      */
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand ) override;
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aCommandType ) override;
 
     /**
      * Redo the last edit:
@@ -125,13 +125,8 @@ public:
      * Put data pointed by List in the previous state, i.e. the state memorized by \a aList.
      *
      * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo.
-     * @param aRedoCommand true for redo, false for undo.
-     * @param aRebuildRatsnet a bool: true to rebuild ratsnest (normal use), false to just
-     *                        retrieve last state (used in abort commands that do not need
-     *                        to rebuild ratsnest).
      */
-    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
-                                 bool aRebuildRatsnet = true );
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
 
     /**
      * Check if the undo and redo operations are currently blocked.
