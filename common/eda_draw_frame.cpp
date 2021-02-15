@@ -744,6 +744,20 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 }
 
 
+wxPoint EDA_DRAW_FRAME::GetNearestHalfGridPosition( const wxPoint& aPosition ) const
+{
+    const wxPoint& gridOrigin = GetGridOrigin();
+    VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize() / 2.0;
+
+    double xOffset = fmod( gridOrigin.x, gridSize.x );
+    int    x = KiROUND( (aPosition.x - xOffset) / gridSize.x );
+    double yOffset = fmod( gridOrigin.y, gridSize.y );
+    int    y = KiROUND( (aPosition.y - yOffset) / gridSize.y );
+
+    return wxPoint( KiROUND( x * gridSize.x + xOffset ), KiROUND( y * gridSize.y + yOffset ) );
+}
+
+
 const BOX2I EDA_DRAW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     return BOX2I();

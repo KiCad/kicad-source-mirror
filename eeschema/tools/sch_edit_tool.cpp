@@ -699,7 +699,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
             // Mirror the sheet on itself. Sheets do not have a anchor point.
-            mirrorPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
+            mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
 
             if( xAxis )
                 item->MirrorX( mirrorPoint.y );
@@ -717,7 +717,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        mirrorPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+        mirrorPoint = m_frame->GetNearestHalfGridPosition( (wxPoint)selection.GetCenter() );
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {

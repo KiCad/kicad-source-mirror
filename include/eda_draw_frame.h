@@ -136,6 +136,17 @@ public:
     wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
 
     /**
+     * Return the nearest \a aGridSize / 2 location to \a aPosition.
+     *
+     * This is useful when attempting for keep outer points on grid but
+     * not the middle point.
+     *
+     * @param aPosition The position to check.
+     * @return The nearest half-grid position.
+     */
+    wxPoint GetNearestHalfGridPosition( const wxPoint& aPosition ) const;
+
+    /**
      * Return a reference to the default ORIGIN_TRANSFORMS object
      */
     virtual ORIGIN_TRANSFORMS& GetOriginTransforms()

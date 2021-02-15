@@ -206,7 +206,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
         mirrorPoint = item->GetPosition();
     else
-        mirrorPoint = m_frame->GetNearestGridPosition( mapCoords( selection.GetCenter() ) );
+        mirrorPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter() ) );
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
