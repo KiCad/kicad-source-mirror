@@ -181,7 +181,12 @@ TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
 
 TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
         AS_GLOBAL,
-        WXK_DELETE, LEGACY_HK_NAME( "Delete Item" ),
+#if defined( __WXMAC__ )
+        WXK_BACK,
+#else
+        WXK_DELETE,
+#endif
+        LEGACY_HK_NAME( "Delete Item" ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
         trash_xpm );
 
