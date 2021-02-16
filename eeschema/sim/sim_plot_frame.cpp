@@ -41,7 +41,6 @@
 #include "spice_simulator.h"
 #include "spice_reporter.h"
 #include <menus_helpers.h>
-#include <settings/common_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <eeschema_settings.h>
@@ -242,7 +241,7 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 
 void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
     if( cfg )
@@ -260,7 +259,7 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
     if( cfg )
@@ -279,7 +278,7 @@ void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 WINDOW_SETTINGS* SIM_PLOT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
     return cfg ? &cfg->m_Simulator.window : nullptr;
@@ -1600,8 +1599,9 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 
 
 SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSignal,
-        SIM_PLOT_FRAME* aPlotFrame )
-    : m_signal( aSignal ), m_plotFrame( aPlotFrame )
+                                                          SIM_PLOT_FRAME* aPlotFrame ) :
+        m_signal( aSignal ),
+        m_plotFrame( aPlotFrame )
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
