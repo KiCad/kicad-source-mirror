@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,93 +24,105 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <confirm.h>    // DisplayError
+#include <confirm.h> // DisplayError
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <gal/opengl/kiglew.h> // Must be included first
 
 #include <stdexcept>
-#include <wx/log.h>     // wxLogDebug
+#include <wx/log.h> // wxLogDebug
 
 
 int checkGlError( const std::string& aInfo, bool aThrow )
 {
-    int result = glGetError();
+    int      result = glGetError();
     wxString errorMsg;
 
     switch( result )
     {
-        case GL_NO_ERROR:
-            // all good
-            break;
+    case GL_NO_ERROR:
+        // all good
+        break;
 
-        case GL_INVALID_ENUM:
-            errorMsg = wxString::Format( "Error: %s: invalid enum", aInfo );
-            break;
+    case GL_INVALID_ENUM:
+        errorMsg = wxString::Format( "Error: %s: invalid enum", aInfo );
+        break;
 
-        case GL_INVALID_VALUE:
-            errorMsg = wxString::Format( "Error: %s: invalid value", aInfo );
-            break;
+    case GL_INVALID_VALUE:
+        errorMsg = wxString::Format( "Error: %s: invalid value", aInfo );
+        break;
 
-        case GL_INVALID_OPERATION:
-            errorMsg = wxString::Format( "Error: %s: invalid operation", aInfo );
-            break;
+    case GL_INVALID_OPERATION:
+        errorMsg = wxString::Format( "Error: %s: invalid operation", aInfo );
+        break;
 
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
+    case GL_INVALID_FRAMEBUFFER_OPERATION:
+    {
+        GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
+
+        if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
         {
-            GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
-
-            if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
+            switch( status )
             {
-                switch( status )
-                {
-                case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-                    errorMsg = "The framebuffer attachment points are incomplete.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-                    errorMsg = "No images attached to the framebuffer.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-                    errorMsg = "The framebuffer does not have at least one image attached to it.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-                    errorMsg = "The framebuffer read buffer is incomplete.";
-                    break;
-                case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-                    errorMsg = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-                    errorMsg = "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-                    errorMsg = "Framebuffer incomplete layer targets errors.";
-                    break;
-                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-                    errorMsg = "Framebuffer attachments have different dimensions";
-                    break;
-                default:
-                    errorMsg.Printf( "Unknown incomplete framebuffer error id %X", status );
-                }
+            case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+                errorMsg = "The framebuffer attachment points are incomplete.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+                errorMsg = "No images attached to the framebuffer.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+                errorMsg = "The framebuffer does not have at least one image attached to it.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+                errorMsg = "The framebuffer read buffer is incomplete.";
+                break;
+
+            case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+                errorMsg = "The combination of internal formats of the attached images violates an "
+                           "implementation dependent set of restrictions.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
+                errorMsg =
+                        "GL_RENDERBUFFER_SAMPLES is not the same for all attached render buffers.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
+                errorMsg = "Framebuffer incomplete layer targets errors.";
+                break;
+
+            case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+                errorMsg = "Framebuffer attachments have different dimensions";
+                break;
+
+            default:
+                errorMsg.Printf( "Unknown incomplete framebuffer error id %X", status );
             }
-            else
-                errorMsg = wxString::Format( "Error: %s: invalid framebuffer operation", aInfo );
         }
-            break;
+        else
+        {
+            errorMsg = wxString::Format( "Error: %s: invalid framebuffer operation", aInfo );
+        }
+    }
+    break;
 
-        case GL_OUT_OF_MEMORY:
-            errorMsg = wxString::Format( "Error: %s: out of memory", aInfo );
-            break;
+    case GL_OUT_OF_MEMORY:
+        errorMsg = wxString::Format( "Error: %s: out of memory", aInfo );
+        break;
 
-        case GL_STACK_UNDERFLOW:
-            errorMsg = wxString::Format( "Error: %s: stack underflow", aInfo );
-            break;
+    case GL_STACK_UNDERFLOW:
+        errorMsg = wxString::Format( "Error: %s: stack underflow", aInfo );
+        break;
 
-        case GL_STACK_OVERFLOW:
-            errorMsg = wxString::Format( "Error: %s: stack overflow", aInfo );
-            break;
+    case GL_STACK_OVERFLOW:
+        errorMsg = wxString::Format( "Error: %s: stack overflow", aInfo );
+        break;
 
-        default:
-            errorMsg = wxString::Format( "Error: %s: unknown error", aInfo );
-            break;
+    default:
+        errorMsg = wxString::Format( "Error: %s: unknown error", aInfo );
+        break;
     }
 
     if( result != GL_NO_ERROR )
@@ -125,15 +139,16 @@ int checkGlError( const std::string& aInfo, bool aThrow )
 
 // debugMsgCallback is a callback function for glDebugMessageCallback.
 // It must have the right type ( GLAPIENTRY )
-static void GLAPIENTRY debugMsgCallback( GLenum aSource, GLenum aType, GLuint aId,
-   GLenum aSeverity, GLsizei aLength, const GLchar* aMessage, const void* aUserParam )
+static void GLAPIENTRY debugMsgCallback( GLenum aSource, GLenum aType, GLuint aId, GLenum aSeverity,
+                                         GLsizei aLength, const GLchar* aMessage,
+                                         const void* aUserParam )
 {
     switch( aSeverity )
     {
-        case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( "OpenGL ERROR: " ); break;
-        case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( "OpenGL WARNING: " ); break;
-        case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( "OpenGL INFO: " ); break;
-        case GL_DEBUG_SEVERITY_NOTIFICATION: return;
+    case GL_DEBUG_SEVERITY_HIGH:   wxLogDebug( "OpenGL ERROR: " );   break;
+    case GL_DEBUG_SEVERITY_MEDIUM: wxLogDebug( "OpenGL WARNING: " ); break;
+    case GL_DEBUG_SEVERITY_LOW:    wxLogDebug( "OpenGL INFO: " );    break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION: return;
     }
 
     wxLogDebug( "%s\n", aMessage );

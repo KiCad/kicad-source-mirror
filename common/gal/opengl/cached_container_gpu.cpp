@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -30,25 +30,26 @@
 #include <gal/opengl/shader.h>
 #include <gal/opengl/utils.h>
 
+#include <wx/log.h>
+
 #include <list>
 
 #ifdef __WXDEBUG__
-#include <wx/log.h>
 #include <profile.h>
 #endif /* __WXDEBUG__ */
 
 using namespace KIGFX;
 
 CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
-    CACHED_CONTAINER( aSize ), m_isMapped( false ), m_glBufferHandle( -1 )
+        CACHED_CONTAINER( aSize ), m_isMapped( false ), m_glBufferHandle( -1 )
 {
     m_useCopyBuffer = GLEW_ARB_copy_buffer;
 
-    wxString vendor( glGetString(GL_VENDOR) );
+    wxString vendor( glGetString( GL_VENDOR ) );
 
     // workaround for intel GPU drivers: disable glCopyBuffer, causes crashes/freezes on
     // certain driver versions
-    if( vendor.Contains ( "Intel " ) || vendor.Contains ( "etnaviv" ) )
+    if( vendor.Contains( "Intel " ) || vendor.Contains( "etnaviv" ) )
     {
         m_useCopyBuffer = false;
     }
@@ -92,6 +93,8 @@ void CACHED_CONTAINER_GPU::Unmap()
 {
     wxCHECK( IsMapped(), /*void*/ );
 
+    // This gets called from ~CACHED_CONTAINER_GPU.  To avoid throwing an exception from
+    // the dtor, catch it here instead.
     glUnmapBuffer( GL_ARRAY_BUFFER );
     checkGlError( "unmapping vertices buffer" );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
@@ -110,7 +113,8 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     wxCHECK( IsMapped(), false );
 
     wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
-            wxT( "Resizing & defragmenting container from %d to %d" ), m_currentSize, aNewSize );
+                wxT( "Resizing & defragmenting container from %d to %d" ), m_currentSize,
+                aNewSize );
 
     // No shrinking if we cannot fit all the data
     if( usedSpace() > aNewSize )
@@ -140,18 +144,18 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     checkGlError( "creating buffer during defragmentation" );
 
     ITEMS::iterator it, it_end;
-    int newOffset = 0;
+    int             newOffset = 0;
 
     // Defragmentation
     for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
     {
         VERTEX_ITEM* item = *it;
-        int itemOffset    = item->GetOffset();
-        int itemSize      = item->GetSize();
+        int          itemOffset = item->GetOffset();
+        int          itemSize = item->GetSize();
 
         // Move an item to the new container
-        glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                itemOffset * VERTEX_SIZE, newOffset * VERTEX_SIZE, itemSize * VERTEX_SIZE );
+        glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, itemOffset * VERTEX_SIZE,
+                             newOffset * VERTEX_SIZE, itemSize * VERTEX_SIZE );
 
         // Update new offset
         item->setOffset( newOffset );
@@ -164,8 +168,8 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     if( m_item->GetSize() > 0 )
     {
         glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                m_item->GetOffset() * VERTEX_SIZE, newOffset * VERTEX_SIZE,
-                m_item->GetSize() * VERTEX_SIZE );
+                             m_item->GetOffset() * VERTEX_SIZE, newOffset * VERTEX_SIZE,
+                             m_item->GetSize() * VERTEX_SIZE );
 
         m_item->setOffset( newOffset );
         m_chunkOffset = newOffset;
@@ -188,8 +192,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
-                "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( "GAL_CACHED_CONTAINER_GPU", "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 
@@ -209,8 +212,8 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     wxCHECK( IsMapped(), false );
 
     wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
-            wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ),
-            m_currentSize, aNewSize );
+                wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ), m_currentSize,
+                aNewSize );
 
     // No shrinking if we cannot fit all the data
     if( usedSpace() > aNewSize )
@@ -220,7 +223,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     PROF_COUNTER totalTime;
 #endif /* __WXDEBUG__ */
 
-    GLuint newBuffer;
+    GLuint  newBuffer;
     VERTEX* newBufferMem;
 
     // Create the destination buffer
@@ -254,8 +257,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
-                "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( "GAL_CACHED_CONTAINER_GPU", "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 

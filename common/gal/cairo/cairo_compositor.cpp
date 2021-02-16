@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,8 +36,10 @@
 using namespace KIGFX;
 
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
-    m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext ),
-    m_currentAntialiasingMode( CAIRO_ANTIALIAS_DEFAULT )
+        m_current( 0 ),
+        m_currentContext( aMainContext ),
+        m_mainContext( *aMainContext ),
+        m_currentAntialiasingMode( CAIRO_ANTIALIAS_DEFAULT )
 {
     // Do not have uninitialized members:
     cairo_matrix_init_identity( &m_matrix );
@@ -59,20 +62,12 @@ void CAIRO_COMPOSITOR::Initialize()
 
 void CAIRO_COMPOSITOR::SetAntialiasingMode( CAIRO_ANTIALIASING_MODE aMode )
 {
-
     switch( aMode )
     {
-    case CAIRO_ANTIALIASING_MODE::FAST:
-        m_currentAntialiasingMode = CAIRO_ANTIALIAS_FAST;
-        break;
-    case CAIRO_ANTIALIASING_MODE::GOOD:
-        m_currentAntialiasingMode = CAIRO_ANTIALIAS_GOOD;
-        break;
-    case CAIRO_ANTIALIASING_MODE::BEST:
-        m_currentAntialiasingMode = CAIRO_ANTIALIAS_BEST;
-        break;
-    default:
-        m_currentAntialiasingMode = CAIRO_ANTIALIAS_NONE;
+    case CAIRO_ANTIALIASING_MODE::FAST: m_currentAntialiasingMode = CAIRO_ANTIALIAS_FAST; break;
+    case CAIRO_ANTIALIASING_MODE::GOOD: m_currentAntialiasingMode = CAIRO_ANTIALIAS_GOOD; break;
+    case CAIRO_ANTIALIASING_MODE::BEST: m_currentAntialiasingMode = CAIRO_ANTIALIAS_BEST; break;
+    default: m_currentAntialiasingMode = CAIRO_ANTIALIAS_NONE;
     }
 
     clean();
@@ -83,10 +78,10 @@ void CAIRO_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 {
     clean();
 
-    m_width  = aWidth;
+    m_width = aWidth;
     m_height = aHeight;
 
-    m_stride     = cairo_format_stride_for_width( CAIRO_FORMAT_ARGB32, m_width );
+    m_stride = cairo_format_stride_for_width( CAIRO_FORMAT_ARGB32, m_width );
     m_bufferSize = m_stride * m_height;
 }
 
@@ -98,10 +93,9 @@ unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 
     // Create the Cairo surface
     cairo_surface_t* surface = cairo_image_surface_create_for_data(
-                                                        (unsigned char*) bitmap,
-                                                        CAIRO_FORMAT_ARGB32, m_width,
-                                                        m_height, m_stride );
+            (unsigned char*) bitmap, CAIRO_FORMAT_ARGB32, m_width, m_height, m_stride );
     cairo_t* context = cairo_create( surface );
+
 #ifdef DEBUG
     cairo_status_t status = cairo_status( context );
     wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, wxT( "Cairo context creation error" ) );
@@ -136,14 +130,16 @@ void CAIRO_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
     cairo_set_matrix( *m_currentContext, &m_matrix );
 }
 
+
 void CAIRO_COMPOSITOR::Begin()
 {
 }
 
+
 void CAIRO_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     // Clear the pixel storage
-    memset( m_buffers[m_current].bitmap, 0x00, m_bufferSize * sizeof(int) );
+    memset( m_buffers[m_current].bitmap, 0x00, m_bufferSize * sizeof( int ) );
 }
 
 
@@ -164,9 +160,11 @@ void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     cairo_set_matrix( m_mainContext, &m_matrix );
 }
 
+
 void CAIRO_COMPOSITOR::Present()
 {
 }
+
 
 void CAIRO_COMPOSITOR::clean()
 {

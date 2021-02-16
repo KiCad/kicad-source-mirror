@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,7 +42,8 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
-    CACHED_CONTAINER( aSize ), m_verticesBuffer( 0 )
+        CACHED_CONTAINER( aSize ),
+        m_verticesBuffer( 0 )
 {
     glGenBuffers( 1, &m_verticesBuffer );
     checkGlError( "generating vertices buffer" );
@@ -76,8 +79,8 @@ void CACHED_CONTAINER_RAM::Unmap()
 bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
 {
     wxLogTrace( "GAL_CACHED_CONTAINER",
-            wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ),
-            m_currentSize, aNewSize );
+                wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ), m_currentSize,
+                aNewSize );
 
     // No shrinking if we cannot fit all the data
     if( usedSpace() > aNewSize )
@@ -101,8 +104,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER",
-                "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( "GAL_CACHED_CONTAINER", "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 

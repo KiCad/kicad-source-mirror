@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -42,7 +42,7 @@
 #include <geometry/shape_poly_set.h>
 #include <bitmap_base.h>
 #include <bezier_curves.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h> // for KiROUND
 
 #include <wx/frame.h>
 
@@ -75,32 +75,30 @@ using namespace KIGFX;
 #include "gl_builtin_shaders.h"
 using namespace KIGFX::BUILTIN_FONT;
 
-static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
+static void      InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
 wxGLContext* OPENGL_GAL::glMainContext = NULL;
-int OPENGL_GAL::instanceCounter = 0;
-GLuint OPENGL_GAL::fontTexture = 0;
-bool OPENGL_GAL::isBitmapFontLoaded = false;
+int          OPENGL_GAL::instanceCounter = 0;
+GLuint       OPENGL_GAL::fontTexture = 0;
+bool         OPENGL_GAL::isBitmapFontLoaded = false;
 
-namespace KIGFX {
+namespace KIGFX
+{
 class GL_BITMAP_CACHE
 {
 public:
-    GL_BITMAP_CACHE()
-    {
-    }
+    GL_BITMAP_CACHE() {}
 
     ~GL_BITMAP_CACHE();
 
     GLuint RequestBitmap( const BITMAP_BASE* aBitmap );
 
 private:
-
     struct CACHED_BITMAP
     {
         GLuint id;
-        int w, h;
+        int    w, h;
     };
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
@@ -108,21 +106,21 @@ private:
     std::map<const BITMAP_BASE*, CACHED_BITMAP> m_bitmaps;
 };
 
-};
+}; // namespace KIGFX
 
 
 GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 {
-    for ( auto b = m_bitmaps.begin(); b != m_bitmaps.end(); ++b )
+    for( auto b = m_bitmaps.begin(); b != m_bitmaps.end(); ++b )
         glDeleteTextures( 1, &b->second.id );
 }
 
 
 GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 {
-    auto it = m_bitmaps.find( aBitmap) ;
+    auto it = m_bitmaps.find( aBitmap );
 
-    if ( it != m_bitmaps.end() )
+    if( it != m_bitmaps.end() )
     {
         // A bitmap is found in cache bitmap.
         // Ensure the associated texture is still valid (can be destroyed somewhere)
@@ -152,17 +150,17 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         extra_w = 4 - extra_w;
 
     GLuint textureID;
-    glGenTextures(1, &textureID);
+    glGenTextures( 1, &textureID );
 
     // make_unique initializes this to 0, so extra pixels are transparent
-    auto buf = std::make_unique<uint8_t[]>( ( bmp.w + extra_w ) * bmp.h * 4 );
+    auto           buf = std::make_unique<uint8_t[]>( ( bmp.w + extra_w ) * bmp.h * 4 );
     const wxImage& imgData = *aBitmap->GetImageData();
 
     for( int y = 0; y < bmp.h; y++ )
     {
         for( int x = 0; x < bmp.w; x++ )
         {
-            uint8_t *p = buf.get() + ( ( bmp.w + extra_w ) * y + x ) * 4;
+            uint8_t* p = buf.get() + ( ( bmp.w + extra_w ) * y + x ) * 4;
 
             p[0] = imgData.GetRed( x, y );
             p[1] = imgData.GetGreen( x, y );
@@ -170,8 +168,8 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
             if( imgData.HasAlpha() )
                 p[3] = imgData.GetAlpha( x, y );
-            else if( imgData.HasMask() && p[0] == imgData.GetMaskRed() &&
-                     p[1] == imgData.GetMaskGreen() && p[2] == imgData.GetMaskBlue() )
+            else if( imgData.HasMask() && p[0] == imgData.GetMaskRed()
+                     && p[1] == imgData.GetMaskGreen() && p[2] == imgData.GetMaskBlue() )
                 p[3] = wxALPHA_TRANSPARENT;
             else
                 p[3] = wxALPHA_OPAQUE;
@@ -179,7 +177,8 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     }
 
     glBindTexture( GL_TEXTURE_2D, textureID );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w + extra_w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf.get() );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w + extra_w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                  buf.get() );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
@@ -187,7 +186,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.id = textureID;
 
 #ifndef DISABLE_BITMAP_CACHE
-    m_bitmaps[ aBitmap ] = bmp;
+    m_bitmaps[aBitmap] = bmp;
 #endif
 
     return textureID;
@@ -196,19 +195,19 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
-    GAL( aDisplayOptions ),
-    HIDPI_GL_CANVAS( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
-                wxEXPAND, aName ),
-    mouseListener( aMouseListener ),
-    paintListener( aPaintListener ),
-    currentManager( nullptr ),
-    cachedManager( nullptr ),
-    nonCachedManager( nullptr ),
-    overlayManager( nullptr ),
-    mainBuffer( 0 ),
-    overlayBuffer( 0 ),
-    m_isContextLocked( false ),
-    lockClientCookie( 0 )
+        GAL( aDisplayOptions ),
+        HIDPI_GL_CANVAS( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
+                         wxEXPAND, aName ),
+        mouseListener( aMouseListener ),
+        paintListener( aPaintListener ),
+        currentManager( nullptr ),
+        cachedManager( nullptr ),
+        nonCachedManager( nullptr ),
+        overlayManager( nullptr ),
+        mainBuffer( 0 ),
+        overlayBuffer( 0 ),
+        m_isContextLocked( false ),
+        lockClientCookie( 0 )
 {
     if( glMainContext == NULL )
     {
@@ -224,38 +223,38 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     shader = new SHADER();
     ++instanceCounter;
 
-    bitmapCache = std::make_unique<GL_BITMAP_CACHE>( );
+    bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
     compositor = new OPENGL_COMPOSITOR;
     compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
 
     // Initialize the flags
     isFramebufferInitialized = false;
-    isBitmapFontInitialized  = false;
-    isInitialized            = false;
-    isGrouping               = false;
-    groupCounter             = 0;
+    isBitmapFontInitialized = false;
+    isInitialized = false;
+    isGrouping = false;
+    groupCounter = 0;
 
     // Connecting the event handlers
-    Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
+    Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::onPaint ) );
 
     // Mouse events are skipped to the parent
-    Connect( wxEVT_MOTION,          wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_DOWN,       wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_UP,         wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_LEFT_DCLICK,     wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_DOWN,     wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_UP,       wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MIDDLE_DCLICK,   wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_DOWN,      wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_UP,        wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_RIGHT_DCLICK,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-    Connect( wxEVT_MOUSEWHEEL,      wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOTION, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MIDDLE_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_RIGHT_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
-    Connect( wxEVT_MAGNIFY,         wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_MAGNIFY, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 #if defined _WIN32 || defined _WIN64
-    Connect( wxEVT_ENTER_WINDOW,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
     SetSize( aParent->GetClientSize() );
@@ -415,7 +414,7 @@ void OPENGL_GAL::beginDrawing()
 #endif /* __WXDEBUG__ */
 
     wxASSERT_MSG( m_isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "
-                                   "Calling GAL::beginDrawing() directly is not allowed." );
+                                     "Calling GAL::beginDrawing() directly is not allowed." );
 
     wxASSERT_MSG( IsVisible(), "GAL::beginDrawing() must not be entered when GAL is not visible. "
                                "Other drawing routines will expect everything to be initialized "
@@ -468,15 +467,15 @@ void OPENGL_GAL::beginDrawing()
     // Set up the world <-> screen transformation
     ComputeWorldScreenMatrix();
     GLdouble matrixData[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-    matrixData[0]   = worldScreenMatrix.m_data[0][0];
-    matrixData[1]   = worldScreenMatrix.m_data[1][0];
-    matrixData[2]   = worldScreenMatrix.m_data[2][0];
-    matrixData[4]   = worldScreenMatrix.m_data[0][1];
-    matrixData[5]   = worldScreenMatrix.m_data[1][1];
-    matrixData[6]   = worldScreenMatrix.m_data[2][1];
-    matrixData[12]  = worldScreenMatrix.m_data[0][2];
-    matrixData[13]  = worldScreenMatrix.m_data[1][2];
-    matrixData[14]  = worldScreenMatrix.m_data[2][2];
+    matrixData[0] = worldScreenMatrix.m_data[0][0];
+    matrixData[1] = worldScreenMatrix.m_data[1][0];
+    matrixData[2] = worldScreenMatrix.m_data[2][0];
+    matrixData[4] = worldScreenMatrix.m_data[0][1];
+    matrixData[5] = worldScreenMatrix.m_data[1][1];
+    matrixData[6] = worldScreenMatrix.m_data[2][1];
+    matrixData[12] = worldScreenMatrix.m_data[0][2];
+    matrixData[13] = worldScreenMatrix.m_data[1][2];
+    matrixData[14] = worldScreenMatrix.m_data[2][2];
     glLoadMatrixd( matrixData );
 
     // Set defaults
@@ -502,8 +501,8 @@ void OPENGL_GAL::beginDrawing()
             glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
             glGenTextures( 1, &fontTexture );
             glBindTexture( GL_TEXTURE_2D, fontTexture );
-            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, font_image.width, font_image.height,
-                          0, GL_RGB, GL_UNSIGNED_BYTE, font_image.pixels );
+            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, font_image.width, font_image.height, 0, GL_RGB,
+                          GL_UNSIGNED_BYTE, font_image.pixels );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             checkGlError( "loading bitmap font" );
@@ -520,15 +519,15 @@ void OPENGL_GAL::beginDrawing()
         }
 
         // Set shader parameter
-        GLint ufm_fontTexture       = shader->AddParameter( "fontTexture" );
-        GLint ufm_fontTextureWidth  = shader->AddParameter( "fontTextureWidth" );
-        ufm_worldPixelSize          = shader->AddParameter( "worldPixelSize" );
-        ufm_screenPixelSize         = shader->AddParameter( "screenPixelSize" );
-        ufm_pixelSizeMultiplier     = shader->AddParameter( "pixelSizeMultiplier" );
+        GLint ufm_fontTexture = shader->AddParameter( "fontTexture" );
+        GLint ufm_fontTextureWidth = shader->AddParameter( "fontTextureWidth" );
+        ufm_worldPixelSize = shader->AddParameter( "worldPixelSize" );
+        ufm_screenPixelSize = shader->AddParameter( "screenPixelSize" );
+        ufm_pixelSizeMultiplier = shader->AddParameter( "pixelSizeMultiplier" );
 
         shader->Use();
-        shader->SetParameter( ufm_fontTexture,       (int) FONT_TEXTURE_UNIT  );
-        shader->SetParameter( ufm_fontTextureWidth,  (int) font_image.width  );
+        shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
+        shader->SetParameter( ufm_fontTextureWidth, (int) font_image.width );
         shader->Deactivate();
         checkGlError( "setting bitmap font sampler as shader parameter" );
 
@@ -551,7 +550,8 @@ void OPENGL_GAL::beginDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ), totalRealTime.msecs() );
+    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ),
+                totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 
@@ -608,7 +608,7 @@ void OPENGL_GAL::lockContext( int aClientCookie )
 void OPENGL_GAL::unlockContext( int aClientCookie )
 {
     wxASSERT_MSG( m_isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
-                                   "be stacked rather than making separate lock/unlock calls." );
+                                     "be stacked rather than making separate lock/unlock calls." );
 
     wxASSERT_MSG( lockClientCookie == aClientCookie, "Context was locked by a different client. "
                                                      "Should not be possible with RAII objects." );
@@ -622,7 +622,7 @@ void OPENGL_GAL::unlockContext( int aClientCookie )
 void OPENGL_GAL::beginUpdate()
 {
     wxASSERT_MSG( m_isContextLocked, "GAL_UPDATE_CONTEXT RAII object should have locked context. "
-                                   "Calling this from anywhere else is not allowed." );
+                                     "Calling this from anywhere else is not allowed." );
 
     wxASSERT_MSG( IsVisible(), "GAL::beginUpdate() must not be entered when GAL is not visible. "
                                "Other update routines will expect everything to be initialized "
@@ -656,19 +656,19 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
                               double aWidth )
 {
     VECTOR2D startEndVector = aEndPoint - aStartPoint;
-    double lineLength = startEndVector.EuclideanNorm();
+    double   lineLength = startEndVector.EuclideanNorm();
 
     float startx = aStartPoint.x;
     float starty = aStartPoint.y;
     float endx = aStartPoint.x + lineLength;
     float endy = aStartPoint.y + lineLength;
 
-    // Be careful about floating point rounding.  As we draw segments in larger and larger coordinates,
-    // the shader (which uses floats) will lose precision and stop drawing small segments.
-    // In this case, we need to draw a circle for the minimal segment
+    // Be careful about floating point rounding.  As we draw segments in larger and larger
+    // coordinates, the shader (which uses floats) will lose precision and stop drawing small
+    // segments.  In this case, we need to draw a circle for the minimal segment.
     if( startx == endx || starty == endy )
     {
-        DrawCircle( aStartPoint, aWidth/2 );
+        DrawCircle( aStartPoint, aWidth / 2 );
         return;
     }
 
@@ -681,7 +681,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
     }
     else
     {
-        auto lineAngle      = startEndVector.Angle();
+        auto lineAngle = startEndVector.Angle();
         // Outlined tracks
 
         SetLineWidth( 1.0 );
@@ -692,11 +692,9 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         currentManager->Translate( aStartPoint.x, aStartPoint.y, 0.0 );
         currentManager->Rotate( lineAngle, 0.0f, 0.0f, 1.0f );
 
-        drawLineQuad( VECTOR2D( 0.0,         aWidth / 2.0 ),
-                      VECTOR2D( lineLength,  aWidth / 2.0 ) );
+        drawLineQuad( VECTOR2D( 0.0, aWidth / 2.0 ), VECTOR2D( lineLength, aWidth / 2.0 ) );
 
-        drawLineQuad( VECTOR2D( 0.0,        -aWidth / 2.0 ),
-                      VECTOR2D( lineLength, -aWidth / 2.0 ) );
+        drawLineQuad( VECTOR2D( 0.0, -aWidth / 2.0 ), VECTOR2D( lineLength, -aWidth / 2.0 ) );
 
         // Draw line caps
         drawStrokedSemiCircle( VECTOR2D( 0.0, 0.0 ), aWidth / 2, M_PI / 2 );
@@ -749,15 +747,15 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
          *  v0 /_\/_\ v1
          */
         currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x,            // v0
+        currentManager->Vertex( aCenterPoint.x, // v0
                                 aCenterPoint.y, layerDepth );
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x,            // v1
+        currentManager->Vertex( aCenterPoint.x, // v1
                                 aCenterPoint.y, layerDepth );
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y,    // v2
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, // v2
                                 layerDepth );
     }
 }
@@ -807,7 +805,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        double alpha;
+        double   alpha;
 
         for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
         {
@@ -849,14 +847,14 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     // Refinement: Use a segment count multiple of 2, because we have a control point
     // on the middle of the arc, and the look is better if it is on a segment junction
     // because there is no approx error
-    int seg_count = KiROUND( (aEndAngle -aStartAngle ) / alphaIncrement );
+    int seg_count = KiROUND( ( aEndAngle - aStartAngle ) / alphaIncrement );
 
-    if( seg_count %2 != 0 )
+    if( seg_count % 2 != 0 )
         seg_count += 1;
 
     // Recalculate alphaIncrement with a even integer number of segment
     if( seg_count )
-        alphaIncrement = (aEndAngle -aStartAngle ) / seg_count;
+        alphaIncrement = ( aEndAngle - aStartAngle ) / seg_count;
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
@@ -865,11 +863,9 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     {
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-        double width = aWidth / 2.0;
-        VECTOR2D startPoint( cos( aStartAngle ) * aRadius,
-                             sin( aStartAngle ) * aRadius );
-        VECTOR2D endPoint( cos( aEndAngle ) * aRadius,
-                           sin( aEndAngle ) * aRadius );
+        double   width = aWidth / 2.0;
+        VECTOR2D startPoint( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
+        VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
 
         drawStrokedSemiCircle( startPoint, width, aStartAngle + M_PI );
         drawStrokedSemiCircle( endPoint, width, aEndAngle );
@@ -915,7 +911,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
         SetLineWidth( aWidth );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        double alpha;
+        double   alpha;
 
         for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
         {
@@ -977,13 +973,23 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 {
-    drawPolyline( [&](int idx) { return aPointList[idx]; }, aPointList.size() );
+    drawPolyline(
+            [&]( int idx )
+            {
+                return aPointList[idx];
+            },
+            aPointList.size() );
 }
 
 
 void OPENGL_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
 {
-    drawPolyline( [&](int idx) { return aPointList[idx]; }, aListSize );
+    drawPolyline(
+            [&]( int idx )
+            {
+                return aPointList[idx];
+            },
+            aListSize );
 }
 
 
@@ -994,14 +1000,19 @@ void OPENGL_GAL::DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain )
     if( aLineChain.IsClosed() )
         numPoints += 1;
 
-    drawPolyline( [&](int idx) { return aLineChain.CPoint(idx); }, numPoints );
+    drawPolyline(
+            [&]( int idx )
+            {
+                return aLineChain.CPoint( idx );
+            },
+            numPoints );
 }
 
 
 void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 {
     wxCHECK( aPointList.size() >= 2, /* void */ );
-    auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aPointList.size()] );
+    auto      points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aPointList.size()] );
     GLdouble* ptr = points.get();
 
     for( const VECTOR2D& p : aPointList )
@@ -1018,8 +1029,8 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
 {
     wxCHECK( aListSize >= 2, /* void */ );
-    auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aListSize] );
-    GLdouble* target = points.get();
+    auto            points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aListSize] );
+    GLdouble*       target = points.get();
     const VECTOR2D* src = aPointList;
 
     for( int i = 0; i < aListSize; ++i )
@@ -1071,7 +1082,7 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 
     if( ADVANCED_CFG::GetCfg().m_DrawTriangulationOutlines )
     {
-        auto oldStrokeColor = strokeColor;
+        auto   oldStrokeColor = strokeColor;
         double oldLayerDepth = layerDepth;
 
         SetLayerDepth( layerDepth - 1 );
@@ -1099,7 +1110,7 @@ void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
 
 void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
 {
-    if ( aPolySet.IsTriangulationUpToDate() )
+    if( aPolySet.IsTriangulationUpToDate() )
     {
         drawTriangulatedPolyset( aPolySet );
         return;
@@ -1113,14 +1124,13 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
 }
 
 
-
 void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 {
     wxCHECK( aPolygon.PointCount() >= 2, /* void */ );
 
-    const int pointCount = aPolygon.SegmentCount() + 1;
+    const int                   pointCount = aPolygon.SegmentCount() + 1;
     std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
-    GLdouble* ptr = points.get();
+    GLdouble*                   ptr = points.get();
 
     for( int i = 0; i < pointCount; ++i )
     {
@@ -1163,13 +1173,13 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     auto xform = currentManager->GetTransformation();
 
-    glm::vec4 v0 = xform * glm::vec4( -w/2, -h/2, 0.0, 0.0 );
-    glm::vec4 v1 = xform * glm::vec4( w/2, h/2, 0.0, 0.0 );
+    glm::vec4 v0 = xform * glm::vec4( -w / 2, -h / 2, 0.0, 0.0 );
+    glm::vec4 v1 = xform * glm::vec4( w / 2, h / 2, 0.0, 0.0 );
     glm::vec4 trans = xform[3];
 
     auto texture_id = bitmapCache->RequestBitmap( &aBitmap );
 
-    if( !glIsTexture( texture_id ) )    // ensure the bitmap texture is still valid
+    if( !glIsTexture( texture_id ) ) // ensure the bitmap texture is still valid
         return;
 
     auto oldTarget = GetTarget();
@@ -1178,7 +1188,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glTranslated( trans.x, trans.y, trans.z );
 
     SetTarget( TARGET_NONCACHED );
-    glEnable(GL_TEXTURE_2D);
+    glEnable( GL_TEXTURE_2D );
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, texture_id );
 
@@ -1218,13 +1228,13 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     const UTF8 text( aText );
     // Compute text size, so it can be properly justified
     VECTOR2D textSize;
-    float commonOffset;
+    float    commonOffset;
     std::tie( textSize, commonOffset ) = computeBitmapTextSize( text );
 
     const double SCALE = 1.4 * GetGlyphSize().y / textSize.y;
-    bool overbar = false;
+    bool         overbar = false;
 
-    int overbarLength = 0;
+    int    overbarLength = 0;
     double overbarHeight = textSize.y;
 
     Save();
@@ -1241,18 +1251,16 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
     switch( GetHorizontalJustify() )
     {
-    case GR_TEXT_HJUSTIFY_CENTER:
-        Translate( VECTOR2D( -textSize.x / 2.0, 0 ) );
-        break;
+    case GR_TEXT_HJUSTIFY_CENTER: Translate( VECTOR2D( -textSize.x / 2.0, 0 ) ); break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
         //if( !IsTextMirrored() )
-            Translate( VECTOR2D( -textSize.x, 0 ) );
+        Translate( VECTOR2D( -textSize.x, 0 ) );
         break;
 
     case GR_TEXT_HJUSTIFY_LEFT:
         //if( IsTextMirrored() )
-            //Translate( VECTOR2D( -textSize.x, 0 ) );
+        //Translate( VECTOR2D( -textSize.x, 0 ) );
         break;
     }
 
@@ -1268,8 +1276,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         overbarHeight = 0;
         break;
 
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: break;
     }
 
     int i = 0;
@@ -1373,26 +1380,28 @@ void OPENGL_GAL::DrawGrid()
 
     // If we cannot display the grid density, scale down by a tick size and
     // try again.  Eventually, we get some representation of the grid
-    while( std::min( gridScreenSize.x,  gridScreenSize.y ) <= gridThreshold )
+    while( std::min( gridScreenSize.x, gridScreenSize.y ) <= gridThreshold )
     {
-        gridScreenSize  = gridScreenSize * static_cast<double>( gridTick );
+        gridScreenSize = gridScreenSize * static_cast<double>( gridTick );
     }
 
     // Compute grid starting and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
     int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSize.x );
-    int gridEndX   = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSize.x );
+    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSize.x );
     int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSize.y );
-    int gridEndY   = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSize.y );
+    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSize.y );
 
     // Ensure start coordinate > end coordinate
     SWAP( gridStartX, >, gridEndX );
     SWAP( gridStartY, >, gridEndY );
 
     // Ensure the grid fills the screen
-    --gridStartX; ++gridEndX;
-    --gridStartY; ++gridEndY;
+    --gridStartX;
+    ++gridEndX;
+    --gridStartY;
+    ++gridEndY;
 
     glDisable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );
@@ -1413,12 +1422,11 @@ void OPENGL_GAL::DrawGrid()
 
     if( gridStyle == GRID_STYLE::SMALL_CROSS )
     {
-
         // Vertical positions
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            bool tickY = ( j % gridTick == 0 );
-            const double posY =  j * gridScreenSize.y + gridOrigin.y;
+            bool         tickY = ( j % gridTick == 0 );
+            const double posY = j * gridScreenSize.y + gridOrigin.y;
 
             // Horizontal positions
             for( int i = gridStartX; i <= gridEndX; i++ )
@@ -1447,8 +1455,8 @@ void OPENGL_GAL::DrawGrid()
                 continue;
 
             SetLineWidth( ( j % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
-            VECTOR2D a ( gridStartX * gridScreenSize.x + gridOrigin.x, y );
-            VECTOR2D b ( gridEndX * gridScreenSize.x + gridOrigin.x, y );
+            VECTOR2D a( gridStartX * gridScreenSize.x + gridOrigin.x, y );
+            VECTOR2D b( gridEndX * gridScreenSize.x + gridOrigin.x, y );
 
             DrawLine( a, b );
         }
@@ -1472,8 +1480,8 @@ void OPENGL_GAL::DrawGrid()
                 continue;
 
             SetLineWidth( ( i % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
-            VECTOR2D a ( x, gridStartY * gridScreenSize.y + gridOrigin.y );
-            VECTOR2D b ( x, gridEndY * gridScreenSize.y + gridOrigin.y );
+            VECTOR2D a( x, gridStartY * gridScreenSize.y + gridOrigin.y );
+            VECTOR2D b( x, gridEndY * gridScreenSize.y + gridOrigin.y );
             DrawLine( a, b );
         }
 
@@ -1518,10 +1526,11 @@ void OPENGL_GAL::Flush()
 }
 
 
-void OPENGL_GAL::ClearScreen( )
+void OPENGL_GAL::ClearScreen()
 {
     // Clear screen
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+
     // NOTE: Black used here instead of m_clearColor; it will be composited later
     glClearColor( 0, 0, 0, 1 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -1532,15 +1541,15 @@ void OPENGL_GAL::Transform( const MATRIX3x3D& aTransformation )
 {
     GLdouble matrixData[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
-    matrixData[0]   = aTransformation.m_data[0][0];
-    matrixData[1]   = aTransformation.m_data[1][0];
-    matrixData[2]   = aTransformation.m_data[2][0];
-    matrixData[4]   = aTransformation.m_data[0][1];
-    matrixData[5]   = aTransformation.m_data[1][1];
-    matrixData[6]   = aTransformation.m_data[2][1];
-    matrixData[12]  = aTransformation.m_data[0][2];
-    matrixData[13]  = aTransformation.m_data[1][2];
-    matrixData[14]  = aTransformation.m_data[2][2];
+    matrixData[0] = aTransformation.m_data[0][0];
+    matrixData[1] = aTransformation.m_data[1][0];
+    matrixData[2] = aTransformation.m_data[2][0];
+    matrixData[4] = aTransformation.m_data[0][1];
+    matrixData[5] = aTransformation.m_data[1][1];
+    matrixData[6] = aTransformation.m_data[2][1];
+    matrixData[12] = aTransformation.m_data[0][2];
+    matrixData[13] = aTransformation.m_data[1][2];
+    matrixData[14] = aTransformation.m_data[2][2];
 
     glMultMatrixd( matrixData );
 }
@@ -1581,7 +1590,7 @@ int OPENGL_GAL::BeginGroup()
     isGrouping = true;
 
     std::shared_ptr<VERTEX_ITEM> newItem = std::make_shared<VERTEX_ITEM>( *cachedManager );
-    int groupNumber = getNewGroupNumber();
+    int                          groupNumber = getNewGroupNumber();
     groups.insert( std::make_pair( groupNumber, newItem ) );
 
     return groupNumber;
@@ -1625,7 +1634,7 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 
 void OPENGL_GAL::ClearCache()
 {
-    bitmapCache = std::make_unique<GL_BITMAP_CACHE>( );
+    bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
     groups.clear();
 
@@ -1639,17 +1648,9 @@ void OPENGL_GAL::SetTarget( RENDER_TARGET aTarget )
     switch( aTarget )
     {
     default:
-    case TARGET_CACHED:
-        currentManager = cachedManager;
-        break;
-
-    case TARGET_NONCACHED:
-        currentManager = nonCachedManager;
-        break;
-
-    case TARGET_OVERLAY:
-        currentManager = overlayManager;
-        break;
+    case TARGET_CACHED:    currentManager = cachedManager;    break;
+    case TARGET_NONCACHED: currentManager = nonCachedManager; break;
+    case TARGET_OVERLAY:   currentManager = overlayManager;   break;
     }
 
     currentTarget = aTarget;
@@ -1699,11 +1700,9 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
     {
     default:
     case TARGET_CACHED:
-    case TARGET_NONCACHED:
-        return true;
+    case TARGET_NONCACHED: return true;
 
-    case TARGET_OVERLAY:
-        return ( overlayBuffer != 0 );
+    case TARGET_OVERLAY:   return ( overlayBuffer != 0 );
     }
 }
 
@@ -1735,8 +1734,9 @@ void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
      * dots mark triangles' hypotenuses
      */
 
-    auto v1  = currentManager->GetTransformation() * glm::vec4( aStartPoint.x, aStartPoint.y, 0.0, 0.0 );
-    auto v2  = currentManager->GetTransformation() * glm::vec4( aEndPoint.x, aEndPoint.y, 0.0, 0.0 );
+    auto v1 = currentManager->GetTransformation()
+              * glm::vec4( aStartPoint.x, aStartPoint.y, 0.0, 0.0 );
+    auto v2 = currentManager->GetTransformation() * glm::vec4( aEndPoint.x, aEndPoint.y, 0.0, 0.0 );
 
     VECTOR2D vs( v2.x - v1.x, v2.y - v1.y );
 
@@ -1779,8 +1779,7 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 }
 
 
-void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius,
-                                       double aAngle )
+void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle )
 {
     Save();
 
@@ -1798,13 +1797,13 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
      *  v0 //__\\ v1
      */
     currentManager->Shader( SHADER_FILLED_CIRCLE, 4.0f );
-    currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
+    currentManager->Vertex( -aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth ); // v0
 
     currentManager->Shader( SHADER_FILLED_CIRCLE, 5.0f );
-    currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
+    currentManager->Vertex( aRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth ); // v1
 
     currentManager->Shader( SHADER_FILLED_CIRCLE, 6.0f );
-    currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth );                     // v2
+    currentManager->Vertex( 0.0f, aRadius * 2.0f, layerDepth ); // v2
 
     Restore();
 }
@@ -1832,13 +1831,13 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
      *  v0 //__\\ v1
      */
     currentManager->Shader( SHADER_STROKED_CIRCLE, 4.0f, aRadius, lineWidth );
-    currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );     // v0
+    currentManager->Vertex( -outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth ); // v0
 
     currentManager->Shader( SHADER_STROKED_CIRCLE, 5.0f, aRadius, lineWidth );
-    currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth );      // v1
+    currentManager->Vertex( outerRadius * 3.0f / sqrt( 3.0f ), 0.0f, layerDepth ); // v1
 
     currentManager->Shader( SHADER_STROKED_CIRCLE, 6.0f, aRadius, lineWidth );
-    currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
+    currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth ); // v2
 
     Restore();
 }
@@ -1862,7 +1861,7 @@ void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
         for( int i = 0; i < aPointCount; ++i )
         {
             gluTessVertex( tesselator, point, point );
-            point += 3;     // 3 coordinates
+            point += 3; // 3 coordinates
         }
 
         gluTessEndContour( tesselator );
@@ -1874,13 +1873,17 @@ void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 
     if( isStrokeEnabled )
     {
-        drawPolyline( [&](int idx) { return VECTOR2D( aPoints[idx * 3], aPoints[idx * 3 + 1] ); },
+        drawPolyline(
+                [&]( int idx )
+                {
+                    return VECTOR2D( aPoints[idx * 3], aPoints[idx * 3 + 1] );
+                },
                 aPointCount );
     }
 }
 
 
-void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter, int aPointCount )
+void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D( int )>& aPointGetter, int aPointCount )
 {
     wxCHECK( aPointCount >= 2, /* return */ );
 
@@ -1908,7 +1911,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
         const FONT_GLYPH_TYPE* g = LookupGlyph( 'x' );
         wxASSERT( g );
 
-        if( !g )    // Should not happen.
+        if( !g ) // Should not happen.
             return 0;
 
         Translate( VECTOR2D( g->advance, 0 ) );
@@ -1922,50 +1925,51 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     if( !glyph )
         glyph = LookupGlyph( '?' );
 
-    if( !glyph )    // Should not happen.
+    if( !glyph ) // Should not happen.
         return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
     const float Y = glyph->atlas_y + font_information.smooth_pixels;
-    const float XOFF =  glyph->minx;
+    const float XOFF = glyph->minx;
 
     // adjust for height rounding
-    const float round_adjust =   ( glyph->maxy - glyph->miny )
+    const float round_adjust = ( glyph->maxy - glyph->miny )
                                - float( glyph->atlas_h - font_information.smooth_pixels * 2 );
-    const float top_adjust   = font_information.max_y - glyph->maxy;
+    const float top_adjust = font_information.max_y - glyph->maxy;
     const float YOFF = round_adjust + top_adjust;
-    const float W    = glyph->atlas_w  - font_information.smooth_pixels *2;
-    const float H    = glyph->atlas_h  - font_information.smooth_pixels *2;
-    const float B    = 0;
+    const float W = glyph->atlas_w - font_information.smooth_pixels * 2;
+    const float H = glyph->atlas_h - font_information.smooth_pixels * 2;
+    const float B = 0;
 
     currentManager->Reserve( 6 );
     Translate( VECTOR2D( XOFF, YOFF ) );
+
     /* Glyph:
-    * v0    v1
-    *   +--+
-    *   | /|
-    *   |/ |
-    *   +--+
-    * v2    v3
-    */
+     * v0    v1
+     *   +--+
+     *   | /|
+     *   |/ |
+     *   +--+
+     * v2    v3
+     */
     currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( -B,      -B, 0 );             // v0
+    currentManager->Vertex( -B, -B, 0 ); // v0
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( W + B,   -B, 0 );             // v1
+    currentManager->Vertex( W + B, -B, 0 ); // v1
 
     currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( -B,   H + B, 0 );             // v2
+    currentManager->Vertex( -B, H + B, 0 ); // v2
 
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( W + B, -B, 0 );               // v1
+    currentManager->Vertex( W + B, -B, 0 ); // v1
 
     currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( -B,  H + B, 0 );              // v2
+    currentManager->Vertex( -B, H + B, 0 ); // v2
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( W + B,  H + B, 0 );           // v3
+    currentManager->Vertex( W + B, H + B, 0 ); // v3
 
     Translate( VECTOR2D( -XOFF + glyph->advance, -YOFF ) );
 
@@ -1983,20 +1987,20 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 
     Save();
 
-    Translate( VECTOR2D( -aLength, -aHeight-1.5*H ) );
+    Translate( VECTOR2D( -aLength, -aHeight - 1.5 * H ) );
 
     currentManager->Reserve( 6 );
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
     currentManager->Shader( 0 );
 
-    currentManager->Vertex( 0, 0, 0 );          // v0
-    currentManager->Vertex( aLength, 0, 0 );    // v1
-    currentManager->Vertex( 0, H, 0 );          // v2
+    currentManager->Vertex( 0, 0, 0 );       // v0
+    currentManager->Vertex( aLength, 0, 0 ); // v1
+    currentManager->Vertex( 0, H, 0 );       // v2
 
-    currentManager->Vertex( aLength, 0, 0 );    // v1
-    currentManager->Vertex( 0, H, 0 );          // v2
-    currentManager->Vertex( aLength, H, 0 );    // v3
+    currentManager->Vertex( aLength, 0, 0 ); // v1
+    currentManager->Vertex( 0, H, 0 );       // v2
+    currentManager->Vertex( aLength, H, 0 ); // v3
 
     Restore();
 }
@@ -2040,8 +2044,8 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( *chIt );
 
-        if( !glyph                                  // Not coded in font
-                || *chIt == '-' || *chIt == '_' )   // Strange size of these 2 chars
+        if( !glyph                            // Not coded in font
+            || *chIt == '-' || *chIt == '_' ) // Strange size of these 2 chars
         {
             glyph = defaultGlyph;
         }
@@ -2058,7 +2062,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         }
     }
 
-    textSize.y   = std::max<float>( textSize.y, char_height );
+    textSize.y = std::max<float>( textSize.y, char_height );
     commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
     textSize.y -= commonOffset;
 
@@ -2089,13 +2093,12 @@ void OPENGL_GAL::blitCursor()
 
     const int cursorSize = fullscreenCursor ? 8000 : 80;
 
-    VECTOR2D cursorBegin  = cursorPosition - cursorSize / ( 2 * worldScale );
-    VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorBegin = cursorPosition - cursorSize / ( 2 * worldScale );
+    VECTOR2D cursorEnd = cursorPosition + cursorSize / ( 2 * worldScale );
     VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
 
     const COLOR4D cColor = getCursorColor();
-    const COLOR4D color( cColor.r * cColor.a, cColor.g * cColor.a,
-                         cColor.b * cColor.a, 1.0 );
+    const COLOR4D color( cColor.r * cColor.a, cColor.g * cColor.a, cColor.b * cColor.a, 1.0 );
 
     glActiveTexture( GL_TEXTURE0 );
     glDisable( GL_TEXTURE_2D );
@@ -2128,7 +2131,6 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 void OPENGL_GAL::init()
 {
-
     wxASSERT( IsShownOnScreen() );
 
     wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
@@ -2162,7 +2164,7 @@ void OPENGL_GAL::init()
     if( !GLEW_VERSION_2_1 )
         throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
 
-#if defined (__LINUX__)      // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
+#if defined( __LINUX__ ) // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
 #ifdef DEBUG
     if( GLEW_ARB_debug_output )
         enableGlDebug( true );
@@ -2178,10 +2180,14 @@ void OPENGL_GAL::init()
         throw std::runtime_error( "Vertex buffer objects are not supported!" );
 
     // Prepare shaders
-    if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX, BUILTIN_SHADERS::kicad_vertex_shader ) )
+    if( !shader->IsLinked()
+        && !shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX,
+                                           BUILTIN_SHADERS::kicad_vertex_shader ) )
         throw std::runtime_error( "Cannot compile vertex shader!" );
 
-    if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::kicad_fragment_shader ) )
+    if( !shader->IsLinked()
+        && !shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT,
+                                           BUILTIN_SHADERS::kicad_fragment_shader ) )
         throw std::runtime_error( "Cannot compile fragment shader!" );
 
     if( !shader->IsLinked() && !shader->Link() )
@@ -2213,29 +2219,28 @@ void OPENGL_GAL::init()
 }
 
 
-// ------------------------------------- // Callback functions for the tesselator // ------------------------------------- // Compare Redbook Chapter 11
+// Callback functions for the tesselator.  Compare Redbook Chapter 11.
 void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
 {
-    GLdouble* vertex = static_cast<GLdouble*>( aVertexPtr );
+    GLdouble*               vertex = static_cast<GLdouble*>( aVertexPtr );
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
-    VERTEX_MANAGER* vboManager = param->vboManager;
+    VERTEX_MANAGER*         vboManager = param->vboManager;
 
     assert( vboManager );
     vboManager->Vertex( vertex[0], vertex[1], vertex[2] );
 }
 
 
-void CALLBACK CombineCallback( GLdouble coords[3],
-                               GLdouble* vertex_data[4],
-                               GLfloat weight[4], GLdouble** dataOut, void* aData )
+void CALLBACK CombineCallback( GLdouble coords[3], GLdouble* vertex_data[4], GLfloat weight[4],
+                               GLdouble** dataOut, void* aData )
 {
-    GLdouble* vertex = new GLdouble[3];
+    GLdouble*               vertex = new GLdouble[3];
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
 
     // Save the pointer so we can delete it later
     param->intersectPoints.emplace_back( vertex );
 
-    memcpy( vertex, coords, 3 * sizeof(GLdouble) );
+    memcpy( vertex, coords, 3 * sizeof( GLdouble ) );
 
     *dataOut = vertex;
 }
@@ -2250,16 +2255,16 @@ void CALLBACK EdgeCallback( GLboolean aEdgeFlag )
 void CALLBACK ErrorCallback( GLenum aErrorCode )
 {
     //throw std::runtime_error( std::string( "Tessellation error: " ) +
-                              //std::string( (const char*) gluErrorString( aErrorCode ) );
+    //std::string( (const char*) gluErrorString( aErrorCode ) );
 }
 
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 {
-    gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA,  ( void (CALLBACK*)() )VertexCallback );
-    gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, ( void (CALLBACK*)() )CombineCallback );
-    gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG,    ( void (CALLBACK*)() )EdgeCallback );
-    gluTessCallback( aTesselator, GLU_TESS_ERROR,        ( void (CALLBACK*)() )ErrorCallback );
+    gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA, (void( CALLBACK* )()) VertexCallback );
+    gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, (void( CALLBACK* )()) CombineCallback );
+    gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG, (void( CALLBACK* )()) EdgeCallback );
+    gluTessCallback( aTesselator, GLU_TESS_ERROR, (void( CALLBACK* )()) ErrorCallback );
 }
 
 void OPENGL_GAL::EnableDepthTest( bool aEnabled )
@@ -2272,7 +2277,7 @@ void OPENGL_GAL::EnableDepthTest( bool aEnabled )
 
 static double roundr( double f, double r )
 {
-    return floor(f / r + 0.5) * r;
+    return floor( f / r + 0.5 ) * r;
 }
 
 
@@ -2285,4 +2290,3 @@ void OPENGL_GAL::ComputeWorldScreenMatrix()
 
     GAL::ComputeWorldScreenMatrix();
 }
-

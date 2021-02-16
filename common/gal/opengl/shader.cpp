@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2020 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
  *
@@ -39,12 +39,12 @@
 using namespace KIGFX;
 
 SHADER::SHADER() :
-    isProgramCreated( false ),
-    isShaderLinked( false ),
-    active( false ),
-    maximumVertices( 4 ),
-    geomInputType( GL_LINES ),
-    geomOutputType( GL_LINES )
+        isProgramCreated( false ),
+        isShaderLinked( false ),
+        active( false ),
+        maximumVertices( 4 ),
+        geomInputType( GL_LINES ),
+        geomOutputType( GL_LINES )
 
 {
     // Do not have uninitialized members:
@@ -63,7 +63,7 @@ SHADER::~SHADER()
         {
             // Delete the shaders and the program
             for( std::deque<GLuint>::iterator it = shaderNumbers.begin(); it != shaderNumbers.end();
-                    ++it )
+                 ++it )
             {
                 GLuint shader = *it;
 
@@ -92,8 +92,8 @@ void SHADER::ConfigureGeometryShader( GLuint maxVertices, GLuint geometryInputTy
                                       GLuint geometryOutputType )
 {
     maximumVertices = maxVertices;
-    geomInputType   = geometryInputType;
-    geomOutputType  = geometryOutputType;
+    geomInputType = geometryInputType;
+    geomOutputType = geometryOutputType;
 }
 
 
@@ -156,14 +156,14 @@ void SHADER::SetParameter( int parameterNumber, int value ) const
 
 void SHADER::SetParameter( int parameterNumber, float f0, float f1, float f2, float f3 ) const
 {
-    assert( (unsigned)parameterNumber < parameterLocation.size() );
+    assert( (unsigned) parameterNumber < parameterLocation.size() );
     float arr[4] = { f0, f1, f2, f3 };
     glUniform4fv( parameterLocation[parameterNumber], 1, arr );
 }
 
 void SHADER::SetParameter( int aParameterNumber, const VECTOR2D& aValue ) const
 {
-    assert( (unsigned)aParameterNumber < parameterLocation.size() );
+    assert( (unsigned) aParameterNumber < parameterLocation.size() );
     glUniform2f( parameterLocation[aParameterNumber], aValue.x, aValue.y );
 }
 
@@ -177,7 +177,7 @@ int SHADER::GetAttribute( const std::string& aAttributeName ) const
 void SHADER::programInfo( GLuint aProgram )
 {
     GLint glInfoLogLength = 0;
-    GLint writtenChars    = 0;
+    GLint writtenChars = 0;
 
     // Get the length of the info string
     glGetProgramiv( aProgram, GL_INFO_LOG_LENGTH, &glInfoLogLength );
@@ -196,7 +196,7 @@ void SHADER::programInfo( GLuint aProgram )
 void SHADER::shaderInfo( GLuint aShader )
 {
     GLint glInfoLogLength = 0;
-    GLint writtenChars    = 0;
+    GLint writtenChars = 0;
 
     // Get the length of the info string
     glGetShaderiv( aShader, GL_INFO_LOG_LENGTH, &glInfoLogLength );
@@ -216,7 +216,7 @@ std::string SHADER::ReadSource( const std::string& aShaderSourceName )
 {
     // Open the shader source for reading
     std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
-    std::string shaderSource;
+    std::string   shaderSource;
 
     if( !inputFile )
         throw std::runtime_error( "Can't read the shader source: " + aShaderSourceName );
@@ -234,15 +234,14 @@ std::string SHADER::ReadSource( const std::string& aShaderSourceName )
 }
 
 
-bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray,
-                                        size_t aSize )
+bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray, size_t aSize )
 {
     assert( !isShaderLinked );
 
     // Create the program
     if( !isProgramCreated )
     {
-        programNumber    = glCreateProgram();
+        programNumber = glCreateProgram();
         isProgramCreated = true;
     }
 

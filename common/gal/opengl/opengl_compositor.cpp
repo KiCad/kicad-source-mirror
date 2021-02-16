@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,9 +42,12 @@
 using namespace KIGFX;
 
 OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
-    m_initialized( false ), m_curBuffer( 0 ),
-    m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING ),
-    m_currentAntialiasingMode( OPENGL_ANTIALIASING_MODE::NONE )
+        m_initialized( false ),
+        m_curBuffer( 0 ),
+        m_mainFbo( 0 ),
+        m_depthBuffer( 0 ),
+        m_curFbo( DIRECT_RENDERING ),
+        m_currentAntialiasingMode( OPENGL_ANTIALIASING_MODE::NONE )
 {
     m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
 }
@@ -77,21 +82,23 @@ void OPENGL_COMPOSITOR::Initialize()
 
     switch( m_currentAntialiasingMode )
     {
-        case OPENGL_ANTIALIASING_MODE::NONE:
-            m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
-            break;
-        case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-            m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::HIGH );
-            break;
-        case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-            m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::ULTRA );
-            break;
-        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-            m_antialiasing = std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X2 );
-            break;
-        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-            m_antialiasing = std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X4 );
-            break;
+    case OPENGL_ANTIALIASING_MODE::NONE:
+        m_antialiasing = std::make_unique<ANTIALIASING_NONE>( this );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
+        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::HIGH );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
+        m_antialiasing = std::make_unique<ANTIALIASING_SMAA>( this, SMAA_QUALITY::ULTRA );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+        m_antialiasing =
+                std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X2 );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+        m_antialiasing =
+                std::make_unique<ANTIALIASING_SUPERSAMPLING>( this, SUPERSAMPLING_MODE::X4 );
+        break;
     }
 
     VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
@@ -139,7 +146,7 @@ void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 
     m_antialiasing->OnLostBuffers();
 
-    m_width  = aWidth;
+    m_width = aWidth;
     m_height = aHeight;
 }
 
@@ -161,9 +168,10 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 
     if( (int) usedBuffers() >= maxBuffers )
     {
-        throw std::runtime_error( "Cannot create more framebuffers. OpenGL rendering "
-                        "backend requires at least 3 framebuffers. You may try to update/change "
-                        "your graphic drivers." );
+        throw std::runtime_error(
+                "Cannot create more framebuffers. OpenGL rendering "
+                "backend requires at least 3 framebuffers. You may try to update/change "
+                "your graphic drivers." );
     }
 
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*) &maxTextureSize );
@@ -171,7 +179,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
     if( maxTextureSize < (int) aDimensions.x || maxTextureSize < (int) aDimensions.y )
     {
         throw std::runtime_error( "Requested texture size is not supported. "
-                                   "Could not create a buffer." );
+                                  "Could not create a buffer." );
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
@@ -195,8 +203,8 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 
     // Bind the texture to the specific attachment point, clear and rebind the screen
     bindFb( m_mainFbo );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint,
-                               GL_TEXTURE_2D, textureTarget, 0 );
+    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint, GL_TEXTURE_2D, textureTarget,
+                               0 );
 
     // Check the status, exit if the framebuffer can't be created
     GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
@@ -215,7 +223,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
             throw std::runtime_error( "The framebuffer does not have at least one "
-                    "image attached to it." );
+                                      "image attached to it." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
@@ -223,13 +231,14 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            throw std::runtime_error( "The combination of internal formats of the attached "
+            throw std::runtime_error(
+                    "The combination of internal formats of the attached "
                     "images violates an implementation-dependent set of restrictions." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
             throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for "
-                    "all attached renderbuffers" );
+                                      "all attached renderbuffers" );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
@@ -283,8 +292,8 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         glDrawBuffer( m_buffers[m_curBuffer].attachmentPoint );
         checkGlError( "setting draw buffer" );
 
-        glViewport( 0, 0,
-                    m_buffers[m_curBuffer].dimensions.x, m_buffers[m_curBuffer].dimensions.y );
+        glViewport( 0, 0, m_buffers[m_curBuffer].dimensions.x,
+                    m_buffers[m_curBuffer].dimensions.y );
     }
     else
     {
@@ -327,7 +336,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDe
     assert( aDestHandle <= usedBuffers() );
 
     // Switch to the destination buffer and blit the scene
-    SetBuffer ( aDestHandle );
+    SetBuffer( aDestHandle );
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );
@@ -346,19 +355,19 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDe
     glLoadIdentity();
 
     glBegin( GL_TRIANGLES );
-    glTexCoord2f(  0.0f,  1.0f );
-    glVertex2f  ( -1.0f,  1.0f );
-    glTexCoord2f(  0.0f,  0.0f );
-    glVertex2f  ( -1.0f, -1.0f );
-    glTexCoord2f(  1.0f,  1.0f );
-    glVertex2f  (  1.0f,  1.0f );
+    glTexCoord2f( 0.0f, 1.0f );
+    glVertex2f( -1.0f, 1.0f );
+    glTexCoord2f( 0.0f, 0.0f );
+    glVertex2f( -1.0f, -1.0f );
+    glTexCoord2f( 1.0f, 1.0f );
+    glVertex2f( 1.0f, 1.0f );
 
-    glTexCoord2f(  1.0f,  1.0f );
-    glVertex2f  (  1.0f,  1.0f );
-    glTexCoord2f(  0.0f,  0.0f );
-    glVertex2f  ( -1.0f, -1.0f );
-    glTexCoord2f(  1.0f,  0.0f );
-    glVertex2f  (  1.0f, -1.0f );
+    glTexCoord2f( 1.0f, 1.0f );
+    glVertex2f( 1.0f, 1.0f );
+    glTexCoord2f( 0.0f, 0.0f );
+    glVertex2f( -1.0f, -1.0f );
+    glTexCoord2f( 1.0f, 0.0f );
+    glVertex2f( 1.0f, -1.0f );
     glEnd();
 
     glPopMatrix();
@@ -414,11 +423,8 @@ int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
 {
     switch( m_currentAntialiasingMode )
     {
-        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-            return 2;
-        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-            return 4;
-        default:
-            return 1;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2: return 2;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4: return 4;
+    default: return 1;
     }
 }

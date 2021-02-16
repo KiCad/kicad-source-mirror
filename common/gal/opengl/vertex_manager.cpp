@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +40,10 @@
 using namespace KIGFX;
 
 VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
-    m_noTransform( true ), m_transform( 1.0f ), m_reserved( NULL ), m_reservedSpace( 0 )
+        m_noTransform( true ),
+        m_transform( 1.0f ),
+        m_reserved( NULL ),
+        m_reservedSpace( 0 )
 {
     m_container.reset( VERTEX_CONTAINER::MakeContainer( aCached ) );
     m_gpu.reset( GPU_MANAGER::MakeManager( m_container.get() ) );
@@ -174,7 +179,7 @@ void VERTEX_MANAGER::FreeItem( VERTEX_ITEM& aItem ) const
 
 void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& aColor ) const
 {
-    unsigned int size   = aItem.GetSize();
+    unsigned int size = aItem.GetSize();
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );
@@ -194,7 +199,7 @@ void VERTEX_MANAGER::ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& a
 
 void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth ) const
 {
-    unsigned int size   = aItem.GetSize();
+    unsigned int size = aItem.GetSize();
     unsigned int offset = aItem.GetOffset();
 
     VERTEX* vertex = m_container->GetVertices( offset );

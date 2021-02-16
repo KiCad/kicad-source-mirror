@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -53,21 +54,20 @@
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
-                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                                        GAL_TYPE aGalType )
-        : wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
-          m_edaFrame( nullptr ),
-          m_gal( nullptr ),
-          m_view( nullptr ),
-          m_painter( nullptr ),
-          m_viewControls( nullptr ),
-          m_backend( GAL_TYPE_NONE ),
-          m_options( aOptions ),
-          m_eventDispatcher( nullptr ),
-          m_lostFocus( false ),
-          m_stealsFocus( true )
+                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+        wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
+        m_edaFrame( nullptr ),
+        m_gal( nullptr ),
+        m_view( nullptr ),
+        m_painter( nullptr ),
+        m_viewControls( nullptr ),
+        m_backend( GAL_TYPE_NONE ),
+        m_options( aOptions ),
+        m_eventDispatcher( nullptr ),
+        m_lostFocus( false ),
+        m_stealsFocus( true )
 {
-    m_parent          = aParentWindow;
+    m_parent = aParentWindow;
     m_currentKiCursor = KICURSOR::DEFAULT;
     SetCurrentCursor( KICURSOR::ARROW );
 
@@ -91,23 +91,32 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
-    EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
+    EnableScrolling( false, false ); // otherwise Zoom Auto disables GAL canvas
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
-    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL, this );
+    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL,
+             this );
 
-    const wxEventType events[] =
-    {
+    const wxEventType events[] = {
         // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events,
         // especially special key like arrow keys, are handled by the GAL event dispatcher,
         // and not sent to GUI without filtering, because they have a default action (scroll)
         // that must not be called.
-        wxEVT_LEFT_UP, wxEVT_LEFT_DOWN, wxEVT_LEFT_DCLICK,
-        wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
-        wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
-        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, wxEVT_CHAR_HOOK,
+        wxEVT_LEFT_UP,
+        wxEVT_LEFT_DOWN,
+        wxEVT_LEFT_DCLICK,
+        wxEVT_RIGHT_UP,
+        wxEVT_RIGHT_DOWN,
+        wxEVT_RIGHT_DCLICK,
+        wxEVT_MIDDLE_UP,
+        wxEVT_MIDDLE_DOWN,
+        wxEVT_MIDDLE_DCLICK,
+        wxEVT_MOTION,
+        wxEVT_MOUSEWHEEL,
+        wxEVT_CHAR,
+        wxEVT_CHAR_HOOK,
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         wxEVT_MAGNIFY,
 #endif
@@ -115,7 +124,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     };
 
     for( wxEventType eventType : events )
-        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), NULL, m_eventDispatcher );
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), NULL,
+                 m_eventDispatcher );
 
     m_pendingRefresh = false;
     m_drawing = false;
@@ -187,7 +197,8 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     wxASSERT( m_painter );
 
     m_drawing = true;
-    KIGFX::RENDER_SETTINGS* settings = static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
+    KIGFX::RENDER_SETTINGS* settings =
+            static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
     try
     {
@@ -196,7 +207,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
 
         if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
-                && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
+            && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
         {
             m_view->MarkDirty();
         }
@@ -206,14 +217,14 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         m_gal->SetCursorColor( settings->GetCursorColor() );
 
         // TODO: find why ClearScreen() must be called here in opengl mode
-        // and only if m_view->IsDirty() in Cairo mode to avoid distaly artifacts
+        // and only if m_view->IsDirty() in Cairo mode to avoid display artifacts
         // when moving the mouse cursor
         if( m_backend == GAL_TYPE_OPENGL )
             m_gal->ClearScreen();
 
         if( m_view->IsDirty() )
         {
-            if( m_backend != GAL_TYPE_OPENGL &&     // Already called in opengl
+            if( m_backend != GAL_TYPE_OPENGL && // Already called in opengl
                 m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
                 m_gal->ClearScreen();
 
@@ -262,7 +273,7 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
         return;
 
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
-    wxSize clientSize = GetClientSize();
+    wxSize                    clientSize = GetClientSize();
     WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;
 
     if( VECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
@@ -313,8 +324,6 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
-    //wxPaintEvent redrawEvent;
-    //wxPostEvent( this, redrawEvent );
     m_pendingRefresh = true;
     DoRePaint();
 }
@@ -338,9 +347,10 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
         for( wxEventType type : eventTypes )
         {
             // While loop is used to be sure that all event handlers are removed.
-            while( m_parent->Disconnect( type,
-                                         wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                         NULL, m_eventDispatcher ) );
+            while( m_parent->Disconnect(
+                    type, wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ), NULL,
+                    m_eventDispatcher ) )
+                ;
         }
     }
 }
@@ -416,9 +426,10 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                 if( GAL_FALLBACK != aGalType )
                 {
                     aGalType = GAL_FALLBACK;
-                    DisplayInfoMessage( m_parent,
-                                        _( "Could not use OpenGL, falling back to software rendering" ),
-                                        errormsg );
+                    DisplayInfoMessage(
+                            m_parent,
+                            _( "Could not use OpenGL, falling back to software rendering" ),
+                            errormsg );
                     new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
                 }
                 else
@@ -430,9 +441,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             break;
         }
 
-        case GAL_TYPE_CAIRO:
-            new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
-            break;
+        case GAL_TYPE_CAIRO: new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this ); break;
 
         default:
             wxASSERT( false );
@@ -455,8 +464,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         result = false;
     }
 
-    // trigger update of the gal options in case they differ
-    // from the defaults
+    // trigger update of the gal options in case they differ from the defaults
     m_options.NotifyChanged();
 
     wxWindow* galWindow = dynamic_cast<wxWindow*>( new_gal );
@@ -499,9 +507,8 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 {
-    bool shouldSetFocus = m_lostFocus && m_stealsFocus
-                            && !KIUI::IsInputControlFocused()
-                            && !KIUI::IsModalDialogFocused();
+    bool shouldSetFocus = m_lostFocus && m_stealsFocus && !KIUI::IsInputControlFocused()
+                          && !KIUI::IsModalDialogFocused();
 
 #if defined( _WIN32 )
     // Ensure we are the active foreground window before we attempt to steal focus
@@ -523,9 +530,8 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onEnter( wxMouseEvent& aEvent )
 {
-    bool shouldSetFocus = m_stealsFocus
-                            && !KIUI::IsInputControlFocused()
-                            && !KIUI::IsModalDialogFocused();
+    bool shouldSetFocus =
+            m_stealsFocus && !KIUI::IsInputControlFocused() && !KIUI::IsModalDialogFocused();
 
 #if defined( _WIN32 )
     // Ensure we are the active foreground window before we attempt to steal focus
@@ -570,8 +576,6 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
         }
     }
 
-    //wxPaintEvent redrawEvent;
-    //wxPostEvent( this, redrawEvent );
     DoRePaint();
 }
 

@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2019 CERN
+ * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -25,10 +27,10 @@
 #include <wx/dcmemory.h>
 #include <wx/dcprint.h>
 
-#ifdef NOMINMAX         /* workaround for gdiplus.h */
+#ifdef NOMINMAX /* workaround for gdiplus.h */
 #include <algorithm>
-using std::min;
 using std::max;
+using std::min;
 #endif
 
 #ifdef __WXMSW__
@@ -45,8 +47,10 @@ using std::max;
 
 using namespace KIGFX;
 
-CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
-    : m_gcdc( nullptr ), m_ctx( nullptr ), m_surface( nullptr )
+CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC ) :
+        m_gcdc( nullptr ),
+        m_ctx( nullptr ),
+        m_surface( nullptr )
 {
     if( wxPrinterDC* printerDC = dynamic_cast<wxPrinterDC*>( aDC ) )
         m_gcdc = new wxGCDC( *printerDC );
@@ -69,15 +73,18 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 #ifdef __WXGTK__
     m_ctx = static_cast<cairo_t*>( gctx->GetNativeContext() );
     m_surface = cairo_get_target( m_ctx );
-    // On linux, cairo printers have 72 DPI by default.
-    // This is an unusable resolution for us.
-    // A better resolution could be 4800 DPI (at 600 DPI, we still have minor
-    // but visible artifacts, for instance with arcs, but not at 4800 DPI)
-    // so modify the default:
-    #define DEFAULT_DPI 72.0
-    #define KICAD_PRINTER_DPI 4800.0
+
+// On linux, cairo printers have 72 DPI by default.
+// This is an unusable resolution for us.
+// A better resolution could be 4800 DPI (at 600 DPI, we still have minor
+// but visible artifacts, for instance with arcs, but not at 4800 DPI)
+// so modify the default:
+#define DEFAULT_DPI 72.0
+#define KICAD_PRINTER_DPI 4800.0
+
     // our device scale is DEFAULT_DPI / KICAD_PRINTER_DPI
-    cairo_surface_set_device_scale( m_surface, DEFAULT_DPI/KICAD_PRINTER_DPI, DEFAULT_DPI/KICAD_PRINTER_DPI );
+    cairo_surface_set_device_scale( m_surface, DEFAULT_DPI / KICAD_PRINTER_DPI,
+                                    DEFAULT_DPI / KICAD_PRINTER_DPI );
     m_dpi = KICAD_PRINTER_DPI;
 #endif /* __WXGTK__ */
 
@@ -90,7 +97,7 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 #endif /* __WXMSW__ */
 
 #ifdef __WXMAC__
-    wxSize size = m_gcdc->GetSize();
+    wxSize       size = m_gcdc->GetSize();
     CGContextRef cg = (CGContextRef) gctx->GetNativeContext();
     m_surface = cairo_quartz_surface_create_for_cg_context( cg, size.x, size.y );
     m_ctx = cairo_create( m_surface );
@@ -124,9 +131,9 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
 }
 
 
-CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
-        std::unique_ptr<CAIRO_PRINT_CTX> aContext )
-    : CAIRO_GAL_BASE( aDisplayOptions )
+CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS&             aDisplayOptions,
+                                  std::unique_ptr<CAIRO_PRINT_CTX> aContext ) :
+        CAIRO_GAL_BASE( aDisplayOptions )
 {
     m_printCtx = std::move( aContext );
     context = currentContext = m_printCtx->GetContext();
@@ -144,7 +151,8 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
 void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 {
     worldScale = screenDPI * worldUnitLength * zoomFactor;
-    const auto paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */ / worldUnitLength; /* 1 inch in IU */
+    const auto paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */
+                             / worldUnitLength;                                   /* 1 inch in IU */
     const auto paperSizeIUTransposed = VECTOR2D( paperSizeIU.y, paperSizeIU.x );
 
     MATRIX3x3D scale, translation, flip, rotate, lookat;
@@ -192,7 +200,7 @@ void CAIRO_PRINT_GAL::SetSheetSize( const VECTOR2D& aSize )
 {
     // Convert aSize (inches) to pixels
     SetScreenSize( VECTOR2I( std::ceil( aSize.x * screenDPI ) * 2,
-                std::ceil( aSize.y * screenDPI ) * 2 ) );
+                             std::ceil( aSize.y * screenDPI ) * 2 ) );
 }
 
 
