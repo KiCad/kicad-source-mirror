@@ -774,6 +774,7 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
     SCH_PLUGIN::SCH_PLUGIN_RELEASER kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     std::vector<LIB_PART*>          parts;
     std::vector<LIB_PART*>          newParts;
+    std::map<LIB_PART*, LIB_PART*>  partMap;
 
     try
     {
@@ -788,8 +789,31 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
 
         legacyPI->EnumerateSymbolLib( parts, legacyFilepath );
 
+        // Copy non-aliases first so we can build a map from parts to newParts
         for( LIB_PART* part : parts )
-            kicadPI->SaveSymbol( newFilepath, new LIB_PART( *part ) );
+        {
+            if( part->IsAlias() )
+                continue;
+
+            newParts.push_back( new LIB_PART( *part ) );
+            partMap[part] = newParts.back();
+        }
+
+        // Now do the aliases using the map to hook them up to their newPart parents
+        for( LIB_PART* part : parts )
+        {
+            if( !part->IsAlias() )
+                continue;
+
+            newParts.push_back( new LIB_PART( *part ) );
+            newParts.back()->SetParent( partMap[ part->GetParent().lock().get() ] );
+        }
+
+        // Finally write out newParts
+        for( LIB_PART* part : newParts )
+        {
+            kicadPI->SaveSymbol( newFilepath, part );
+        }
     }
     catch( ... )
     {
