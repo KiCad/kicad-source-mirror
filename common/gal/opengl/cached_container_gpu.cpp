@@ -95,11 +95,18 @@ void CACHED_CONTAINER_GPU::Unmap()
 
     // This gets called from ~CACHED_CONTAINER_GPU.  To avoid throwing an exception from
     // the dtor, catch it here instead.
-    glUnmapBuffer( GL_ARRAY_BUFFER );
-    checkGlError( "unmapping vertices buffer" );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    m_vertices = NULL;
-    checkGlError( "unbinding vertices buffer" );
+    try
+    {
+        glUnmapBuffer( GL_ARRAY_BUFFER );
+        checkGlError( "unmapping vertices buffer" );
+        glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        m_vertices = NULL;
+        checkGlError( "unbinding vertices buffer" );
+    }
+    catch( const std::runtime_error& err )
+    {
+        wxLogError( wxT( "OpenGL did not shut down properly.\n\n%s" ), err.what() );
+    }
 
     m_isMapped = false;
 }
