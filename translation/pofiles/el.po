@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
 "PO-Revision-Date: 2021-02-17 10:11+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -20063,7 +20063,7 @@ msgstr "Επίπεδο \"%s\" (δευτερεύον επίπεδο %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 msgid "Select dielectric layer to add to board stack up."
-msgstr ""
+msgstr "Επιλέξτε διηλεκτρικό επίπεδο για να προσθέσετε στη στοίβα της πλακέτας."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 msgid "Dielectric Layers List"
@@ -20072,6 +20072,7 @@ msgstr "Κατάλογος Διηλεκτρικών Επιπέδων"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
 msgstr ""
+"Επιλέξτε διηλεκτρικό επίπεδο για να αφαιρέσετε από τη στοίβα της πλακέτας."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 msgid "Dielectric Layers"
@@ -34687,7 +34688,7 @@ msgstr "Ζώνη %s στο %s"
 
 #: pcbnew/zone.cpp:1394
 msgid "Inherited"
-msgstr ""
+msgstr "Κληρονομημένο"
 
 #: pcbnew/zone.cpp:1412
 #, fuzzy
