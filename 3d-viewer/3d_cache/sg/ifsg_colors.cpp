@@ -43,8 +43,7 @@ IFSG_COLORS::IFSG_COLORS( bool create )
 
     m_node = new SGCOLORS( nullptr );
 
-    if( m_node )
-        m_node->AssociateWrapper( &m_node );
+    m_node->AssociateWrapper( &m_node );
 }
 
 
@@ -52,20 +51,17 @@ IFSG_COLORS::IFSG_COLORS( SGNODE* aParent )
 {
     m_node = new SGCOLORS( nullptr );
 
-    if( m_node )
+    if( !m_node->SetParent( aParent ) )
     {
-        if( !m_node->SetParent( aParent ) )
-        {
-            delete m_node;
-            m_node = nullptr;
+        delete m_node;
+        m_node = nullptr;
 
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d", __FILE__, __FUNCTION__, __LINE__ );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d", __FILE__, __FUNCTION__, __LINE__ );
 
-            return;
-        }
-
-        m_node->AssociateWrapper( &m_node );
+        return;
     }
+
+    m_node->AssociateWrapper( &m_node );
 }
 
 
@@ -83,21 +79,18 @@ IFSG_COLORS::IFSG_COLORS( IFSG_NODE& aParent )
 
     m_node = new SGCOLORS( nullptr );
 
-    if( m_node )
+    if( !m_node->SetParent( pp ) )
     {
-        if( !m_node->SetParent( pp ) )
-        {
-            delete m_node;
-            m_node = nullptr;
+        delete m_node;
+        m_node = nullptr;
 
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__,
-                        WrongParent );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__,
+                    WrongParent );
 
-            return;
-        }
-
-        m_node->AssociateWrapper( &m_node );
+        return;
     }
+
+    m_node->AssociateWrapper( &m_node );
 }
 
 

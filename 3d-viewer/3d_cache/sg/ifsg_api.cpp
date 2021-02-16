@@ -234,14 +234,6 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
     SGNODE* np = new SCENEGRAPH( nullptr );
 
-    if( nullptr == np )
-    {
-        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to instantiate SCENEGRAPH",
-                    __FILE__, __FUNCTION__, __LINE__ );
-
-        return nullptr;
-    }
-
     OPEN_ISTREAM( file, aFileName );
 
     if( file.fail() )

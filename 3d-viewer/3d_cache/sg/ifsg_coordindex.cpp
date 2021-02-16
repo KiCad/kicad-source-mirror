@@ -44,8 +44,7 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( bool create )
 
     m_node = new SGCOORDINDEX( nullptr );
 
-    if( m_node )
-        m_node->AssociateWrapper( &m_node );
+    m_node->AssociateWrapper( &m_node );
 }
 
 
