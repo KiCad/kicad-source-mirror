@@ -81,6 +81,10 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
 
     for( TRACK* segment : m_brd->Tracks() )
     {
+        // Assume that the user knows what they are doing
+        if( segment->IsLocked() )
+            continue;
+
         for( PAD* testedPad : connectivity->GetConnectedPads( segment ) )
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
@@ -175,6 +179,9 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
 
         for( TRACK* track : temp_tracks )
         {
+            if( track->IsLocked() )
+                continue;
+
             if( !aVia && track->Type() == PCB_VIA_T )
                 continue;
 
@@ -223,6 +230,9 @@ void TRACKS_CLEANER::deleteTracksInPads()
 
     for( TRACK* track : m_brd->Tracks() )
     {
+        if( track->IsLocked() )
+            continue;
+
         if( track->Type() == PCB_VIA_T )
             continue;
 
