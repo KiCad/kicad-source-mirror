@@ -78,16 +78,20 @@ vector<string> NGSPICE::AllPlots() const
     char**    allPlots    = m_ngSpice_AllVecs( currentPlot );
     int       noOfPlots   = 0;
 
+    vector<string> retVal;
     if( allPlots != nullptr )
+    {
         for( char** plot = allPlots; *plot != nullptr; plot++ )
             noOfPlots++;
 
-    vector<string> retVal( noOfPlots );
-    for( int i = 0; i < noOfPlots; i++, allPlots++ )
-    {
-        string vec = *allPlots;
-        retVal.at( i )  = vec;
+        retVal.reserve( noOfPlots );
+        for( int i = 0; i < noOfPlots; i++, allPlots++ )
+        {
+            string vec = *allPlots;
+            retVal.at( i ) = vec;
+        }
     }
+
 
     return retVal;
 }
