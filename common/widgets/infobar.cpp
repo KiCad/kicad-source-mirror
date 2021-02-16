@@ -47,7 +47,8 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
           m_showTime( 0 ),
           m_updateLock( false ),
           m_showTimer( nullptr ),
-          m_auiManager( aMgr )
+          m_auiManager( aMgr ),
+          m_type( MESSAGE_TYPE::GENERIC )
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
@@ -136,7 +137,29 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
     if( m_showTime > 0 )
         m_showTimer->StartOnce( m_showTime );
 
+    m_type = MESSAGE_TYPE::GENERIC;
     m_updateLock = false;
+}
+
+
+void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags, MESSAGE_TYPE aType )
+{
+    // Don't do anything if we requested the UI update
+    if( m_updateLock )
+        return;
+
+    ShowMessage( aMessage, aFlags );
+
+    m_type = aType;
+}
+
+
+void WX_INFOBAR::DismissOutdatedSave()
+{
+    if( m_updateLock || m_type != MESSAGE_TYPE::OUTDATED_SAVE )
+        return;
+
+    Dismiss();
 }
 
 

@@ -759,7 +759,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             m_infoBar->AddCloseButton();
             m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
                                        "It will be converted to the new format when saved." ),
-                                    wxICON_WARNING );
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
         }
 
         // Import footprints into a project-specific library
@@ -1040,6 +1040,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     SetStatusText( lowerTxt, 0 );
 
     // Get rid of the old version conversion warning, or any other dismissable warning :)
+    m_infoBar->DismissOutdatedSave();
+
     if( m_infoBar->IsShown() && m_infoBar->HasCloseButton() )
         m_infoBar->Dismiss();
 

@@ -82,6 +82,16 @@ public:
 
     ~WX_INFOBAR();
 
+
+    /**
+     * Sets the type of message for special handling if needed
+     */
+    enum class MESSAGE_TYPE
+    {
+        GENERIC,     /**< GENERIC Are messages that do not have special handling */
+        OUTDATED_SAVE/**< OUTDATED_SAVE Messages that should be cleared on save */
+    };
+
     /**
      * Set the time period to show the infobar.
      *
@@ -161,10 +171,25 @@ public:
     void ShowMessage( const wxString& aMessage, int aFlags = wxICON_INFORMATION ) override;
 
     /**
+     * Show the info bar with the provided message and icon, setting the type
+     *
+     * @param aMessage is the message to display
+     * @param aFlags is the flag containing the icon to display on the left side of the infobar
+     * @param aType is the type of message being displayed
+     */
+    void ShowMessage( const wxString& aMessage, int aFlags, MESSAGE_TYPE aType );
+
+    /**
      * Dismisses the infobar and updates the containing layout and AUI manager
      * (if one is provided).
      */
     void Dismiss() override;
+
+    /**
+     * Dismisses the infobar for outdated save warnings and updates the containing
+     * layout and AUI manager (if one is provided).
+     */
+    void DismissOutdatedSave();
 
     /**
      * Send the infobar an event telling it to show a message.
@@ -226,6 +251,7 @@ protected:
     bool          m_updateLock;     ///< True if this infobar requested the UI update
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
     wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
+    MESSAGE_TYPE  m_type;           ///< The type of message being displayed
 
     OPT<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
 

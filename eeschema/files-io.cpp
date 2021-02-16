@@ -489,7 +489,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             m_infoBar->AddCloseButton();
             m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
                                        "It will be converted to the new format when saved." ),
-                                    wxICON_WARNING );
+                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
 
             // Legacy schematic can have duplicate time stamps so fix that before converting
             // to the s-expression format.
@@ -506,7 +506,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 m_infoBar->AddCloseButton();
                 m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
                                            "It will be converted to the new format when saved." ),
-                                        wxICON_WARNING );
+                                        wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
             }
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
@@ -838,6 +838,8 @@ bool SCH_EDIT_FRAME::SaveProject()
     }
 
     UpdateTitle();
+
+    m_infoBar->DismissOutdatedSave();
 
     return success;
 }
