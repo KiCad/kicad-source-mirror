@@ -1625,6 +1625,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 
         break;
 
+    case PCB_FP_ZONE_T:
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
@@ -1637,6 +1638,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
     }
         break;
 
+    case PCB_FP_SHAPE_T:
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
         if( !m_filter.graphics )
