@@ -1529,13 +1529,16 @@ std::shared_ptr<VIEW_OVERLAY> VIEW::MakeOverlay()
 
 void VIEW::ClearPreview()
 {
-   m_preview->Clear();
+    if( !m_preview )
+        return;
 
-   for( EDA_ITEM* item : m_ownedItems )
-       delete item;
+    m_preview->Clear();
 
-   m_ownedItems.clear();
-   Update( m_preview.get() );
+    for( EDA_ITEM *item : m_ownedItems )
+        delete item;
+
+    m_ownedItems.clear();
+    Update( m_preview.get() );
 }
 
 
