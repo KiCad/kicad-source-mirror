@@ -27,7 +27,7 @@
 
 
 #ifdef __WXMAC__
-constexpr int ICON_PADDING = 5;
+constexpr int ICON_PADDING = 4;
 constexpr int CELL_MARGINS = 0;
 #else
 constexpr int ICON_PADDING = 5;

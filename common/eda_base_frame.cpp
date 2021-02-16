@@ -60,11 +60,29 @@ wxDEFINE_EVENT( UNITS_CHANGED, wxCommandEvent );
 
 
 // Minimum window size
-static const int s_minsize_x = 500;
-static const int s_minsize_y = 400;
+static const wxSize minSize( FRAME_T aFrameType )
+{
+    switch( aFrameType )
+    {
+    case KICAD_MAIN_FRAME_T:
+        return wxSize( 406, 354 );
 
-static const int s_defaultSize_x = 1280;
-static const int s_defaultSize_y = 720;
+    default:
+        return wxSize( 500, 400 );
+    }
+}
+
+static const wxSize defaultSize( FRAME_T aFrameType )
+{
+    switch( aFrameType )
+    {
+    case KICAD_MAIN_FRAME_T:
+        return wxSize( 850, 540 );
+
+    default:
+        return wxSize( 1280, 720 );
+    }
+}
 
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
@@ -100,14 +118,14 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath       = PATHS::GetDefaultUserProjectsPath();
-    m_frameSize     = wxSize( s_defaultSize_x, s_defaultSize_y );
+    m_frameSize     = defaultSize( aFrameType );
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
     m_settingsManager = &Pgm().GetSettingsManager();
 
     // Set a reasonable minimal size for the frame
-    SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );
+    SetSizeHints( minSize( aFrameType ).x, minSize( aFrameType ).y, -1, -1, -1, -1 );
 
     // Store dimensions of the user area of the main window.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );
@@ -464,11 +482,10 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
-    if( m_frameSize.x < s_minsize_x || m_frameSize.y < s_minsize_y )
+    if( m_frameSize.x < minSize( m_ident ).x || m_frameSize.y < minSize( m_ident ).y )
     {
-        m_frameSize.x = s_defaultSize_x;
-        m_frameSize.y = s_defaultSize_y;
-        wasDefault    = true;
+        m_frameSize = defaultSize( m_ident );
+        wasDefault  = true;
 
         wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_frameSize.x, m_frameSize.y );
     }

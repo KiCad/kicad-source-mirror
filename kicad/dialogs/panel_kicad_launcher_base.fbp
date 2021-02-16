@@ -55,7 +55,7 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">10</property>
+                    <property name="border">8</property>
                     <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
@@ -72,8 +72,8 @@
                                 <property name="flexible_direction">wxHORIZONTAL</property>
                                 <property name="growablecols"></property>
                                 <property name="growablerows"></property>
-                                <property name="hgap">12</property>
-                                <property name="minimum_size"></property>
+                                <property name="hgap">10</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="name">m_toolsSizer</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                                 <property name="permission">protected</property>
