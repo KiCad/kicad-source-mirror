@@ -1573,23 +1573,20 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
-    SCH_SHEET_PATH&    currentSheet = m_frame->GetCurrentSheet();
-    SCH_COMPONENT*     sym = nullptr;
+    SCH_COMPONENT*     symbol = nullptr;
     SYMBOL_EDIT_FRAME* symbolEditor;
 
     if( selection.GetSize() >= 1 )
-        sym = (SCH_COMPONENT*) selection.Front();
+        symbol = (SCH_COMPONENT*) selection.Front();
 
-    if( !sym || sym->GetEditFlags() != 0 )
+    if( !symbol || symbol->GetEditFlags() != 0 )
         return 0;
 
     m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );
     symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
     if( symbolEditor )
-    {
-        symbolEditor->LoadSymbolFromSchematic( sym );
-    }
+        symbolEditor->LoadSymbolFromSchematic( symbol );
 
     return 0;
 }
