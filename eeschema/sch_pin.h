@@ -81,8 +81,8 @@ public:
 
     void Move( const wxPoint& aMoveVector ) override {}
 
-    void MirrorY( int aYaxis_position ) override {}
-    void MirrorX( int aXaxis_position ) override {}
+    void MirrorHorizontally( int aCenter ) override {}
+    void MirrorVertically( int aCenter ) override {}
 
     void Rotate( wxPoint aPosition ) override {}
 

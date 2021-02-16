@@ -645,8 +645,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             if( ( type == SCH_BUS_WIRE_ENTRY_T )
                     && (   evt->IsAction( &EE_ACTIONS::rotateCW )
                         || evt->IsAction( &EE_ACTIONS::rotateCCW )
-                        || evt->IsAction( &EE_ACTIONS::mirrorX )
-                        || evt->IsAction( &EE_ACTIONS::mirrorY ) ) )
+                        || evt->IsAction( &EE_ACTIONS::mirrorV )
+                        || evt->IsAction( &EE_ACTIONS::mirrorH ) ) )
             {
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
@@ -656,13 +656,13 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 {
                     busItem->Rotate( busItem->GetPosition() );
                 }
-                else if( evt->IsAction( &EE_ACTIONS::mirrorX ) )
+                else if( evt->IsAction( &EE_ACTIONS::mirrorV ) )
                 {
-                    busItem->MirrorX( busItem->GetPosition().x );
+                    busItem->MirrorVertically( busItem->GetPosition().x );
                 }
-                else if( evt->IsAction( &EE_ACTIONS::mirrorY ) )
+                else if( evt->IsAction( &EE_ACTIONS::mirrorH ) )
                 {
-                    busItem->MirrorY( busItem->GetPosition().y );
+                    busItem->MirrorHorizontally( busItem->GetPosition().y );
                 }
 
                 m_view->ClearPreview();

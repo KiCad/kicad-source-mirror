@@ -264,11 +264,9 @@ set( BMAPS_MID
     grid_select_axis
     grid
     group
-    group_add
     group_enter
     group_leave
     group_remove
-    group_ungroup
     help
     help_online
     hidden_pin
@@ -454,6 +452,7 @@ set( BMAPS_MID
     tools
     trash
     undo
+    ungroup
     unit_inch
     unit_mil
     unit_mm

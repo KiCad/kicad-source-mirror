@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="mirror_h.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_24/mirror_h.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,26 +25,24 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1420"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="5.4369741"
-     inkscape:cy="24.0251"
+     inkscape:cx="12.972962"
+     inkscape:cy="13.859102"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
-       id="grid_kicad"
+       id="grid26"
+       empspacing="2"
        spacingx="0.5"
-       spacingy="0.5"
-       color="#9999ff"
-       opacity="0.13"
-       empspacing="2" />
+       spacingy="0.5" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -80,18 +81,15 @@
   <title
      id="title25709">mirror_h</title>
   <path
-     class="cls-1"
-     d="m 13,1.5011016 v 0.9720902 a 1,0.50066469 0 0 1 -2,0 V 1.5011016 a 1,0.50066469 0 1 1 2,0 z m 0,2.9747482 v 2.002658 a 1,0.50066469 0 0 1 -2,0 v -2.002658 a 1,0.50066469 0 1 1 2,0 z m 0,4.005316 v 2.0026582 a 1,0.50066469 0 0 1 -2,0 V 8.4811658 a 1,0.50066469 0 1 1 2,0 z m 0,4.0053162 v 2.002658 a 1,0.50066469 0 0 1 -2,0 v -2.002658 a 1,0.50066469 0 1 1 2,0 z m 0,4.005316 v 2.002658 a 1,0.50066469 0 0 1 -2,0 v -2.002658 a 1,0.50066469 0 0 1 2,0 z m 0,4.005316 v 2.002658 a 1,0.50066469 0 0 1 -2,0 v -2.002658 a 1,0.50066469 0 0 1 2,0 z"
-     id="path25711"
-     style="stroke-width:0.999998" />
-  <polygon
-     class="cls-2"
-     points="22.995,4.011 22.995,21.989 14.016,13 "
      id="polygon25713"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-3"
-     points="3.005,4.018 3.005,21.982 11.995,13.011 "
+     style="fill:#1a81c4;stroke-width:1.07418"
+     d="m 13,2 9,20 h -9 z"
+     class="cls-2"
+     sodipodi:nodetypes="cccc" />
+  <path
      id="polygon25715"
-     transform="translate(-1,-1)" />
+     style="fill:#909090;stroke-width:1.07418;fill-opacity:1"
+     d="M 11,2 1.9999997,22 H 11 Z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
 </svg>

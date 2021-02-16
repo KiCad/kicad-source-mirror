@@ -91,6 +91,12 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
 
     m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( EE_ACTIONS::rotateCCW );
+    m_mainToolBar->Add( EE_ACTIONS::rotateCW );
+    m_mainToolBar->Add( EE_ACTIONS::mirrorV );
+    m_mainToolBar->Add( EE_ACTIONS::mirrorH );
+
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::showSymbolEditor );
     m_mainToolBar->Add( ACTIONS::showSymbolBrowser );
     m_mainToolBar->Add( ACTIONS::showFootprintEditor );

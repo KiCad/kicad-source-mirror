@@ -295,7 +295,7 @@ public:
      *
      * Because there are different ways to have a given orientation/mirror,
      * the orientation/mirror is not necessary what the user does.  For example:
-     * a mirrorX then a mirrorY returns no mirror but a rotate.  This function finds
+     * a mirrorV then a mirrorH returns no mirror but a rotate.  This function finds
      * a rotation and a mirror value #CMP_MIRROR_X because this is the first mirror
      * option tested.  This can differs from the orientation made by an user.  A
      * #CMP_MIRROR_Y is returned as a #CMP_MIRROR_X with an orientation 180 because
@@ -595,8 +595,8 @@ public:
         SetModified();
     }
 
-    void MirrorY( int aYaxis_position ) override;
-    void MirrorX( int aXaxis_position ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
     void Rotate( wxPoint aPosition ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;

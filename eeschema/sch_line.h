@@ -172,8 +172,8 @@ public:
     void MoveStart( const wxPoint& aMoveVector );
     void MoveEnd( const wxPoint& aMoveVector );
 
-    void MirrorX( int aXaxis_position ) override;
-    void MirrorY( int aYaxis_position ) override;
+    void MirrorVertically( int aCenter ) override;
+    void MirrorHorizontally( int aCenter ) override;
     void Rotate( wxPoint aPosition ) override;
     void RotateStart( wxPoint aPosition );
     void RotateEnd( wxPoint aPosition );

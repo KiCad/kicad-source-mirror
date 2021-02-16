@@ -114,8 +114,8 @@ public:
     static TOOL_ACTION repeatDrawItem;
     static TOOL_ACTION rotateCW;
     static TOOL_ACTION rotateCCW;
-    static TOOL_ACTION mirrorX;
-    static TOOL_ACTION mirrorY;
+    static TOOL_ACTION mirrorV;
+    static TOOL_ACTION mirrorH;
     static TOOL_ACTION properties;
     static TOOL_ACTION editReference;
     static TOOL_ACTION editValue;

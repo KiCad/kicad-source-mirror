@@ -11,8 +11,11 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="group_ungroup.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   sodipodi:docname="ungroup.svg"
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/sources/ungroup.png"
+   inkscape:export-xdpi="60"
+   inkscape:export-ydpi="60">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1904"
-     inkscape:window-height="1041"
+     inkscape:window-width="1285"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="30.702139"
-     inkscape:cx="2.5605781"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="19.147172"
+     inkscape:cx="10.672684"
+     inkscape:cy="11.842059"
+     inkscape:window-x="108"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -82,14 +85,6 @@
   <rect
      class="cls-3"
      x="1"
-     y="19"
-     width="4"
-     height="3.9999998"
-     id="rect27"
-     style="fill:#545454;stroke-width:1" />
-  <rect
-     class="cls-3"
-     x="1"
      y="1"
      width="3.9995003"
      height="4"
@@ -105,7 +100,7 @@
      style="fill:#545454;stroke-width:0.999999" />
   <rect
      class="cls-3"
-     x="19"
+     x="8"
      y="1"
      width="3.9999998"
      height="3.9999998"
@@ -113,87 +108,88 @@
      style="fill:#545454;stroke-width:1" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 3,2.5 H 6"
+     d="M 3,2.5000002 H 6"
      id="path14" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 18,2.5 h 3"
-     id="path14-8" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 2.5,21.5 H 6"
-     id="path14-6" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 18,21.5 h 3.5"
      id="path14-8-6" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999995px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 2.5,3 V 6"
+     d="m 2.5,3.0000002 v 3"
      id="path14-0" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 2.5,18 v 3"
-     id="path14-0-3" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 21.5,18 v 3"
      id="path14-0-3-7" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 21.5,3 V 6"
-     id="path14-0-3-7-7" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 8,21.5 h 3"
-     id="path14-6-3" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 13,21.5 h 3"
      id="path14-6-3-2" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 8,2.5 h 3"
+     d="m 8,2.5000002 h 3"
      id="path14-6-3-8" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 13,2.5 h 3"
-     id="path14-6-3-2-3" />
-  <path
      style="fill:none;stroke:#545454;stroke-width:0.999995px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 2.5,7.9999998 V 11"
+     d="M 2.5,8.0000002 V 11"
      id="path14-0-30" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 21.499999,7.9999998 V 11"
-     id="path14-0-3-7-7-4" />
-  <path
-     style="fill:none;stroke:#545454;stroke-width:0.999995px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 2.5,13 v 3"
-     id="path14-0-30-0" />
   <path
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 21.499998,13 v 3"
      id="path14-0-3-7-7-4-0" />
-  <path
-     class="cls-4"
-     d="m 21.95532,21.9551 a 7.0032,7.0032 0 1 1 0,-9.9038 7.0034,7.0034 0 0 1 0,9.9038 z"
-     id="path7940"
-     style="fill:#bf2641" />
-  <line
-     class="cls-5"
-     x1="19.474821"
-     y1="14.522901"
-     x2="14.522921"
-     y2="19.4748"
-     id="line7942"
-     style="fill:none;stroke:#f5f5f5;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
-  <line
-     class="cls-5"
-     x1="19.474821"
-     y1="19.4748"
-     x2="14.522921"
-     y2="14.522901"
-     id="line7944"
-     style="fill:none;stroke:#f5f5f5;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+  <rect
+     style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:0.970142;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect2613"
+     width="8"
+     height="8"
+     x="2.5"
+     y="2.5" />
+  <rect
+     style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect2615"
+     width="7"
+     height="8"
+     x="14.5"
+     y="13.5" />
+  <rect
+     class="cls-3"
+     x="13"
+     y="12"
+     width="3.9999998"
+     height="3.9999998"
+     id="rect2635"
+     style="fill:#545454;stroke-width:1" />
+  <rect
+     class="cls-3"
+     x="19"
+     y="12"
+     width="4"
+     height="3.9999998"
+     id="rect2637"
+     style="fill:#545454;stroke-width:1" />
+  <rect
+     class="cls-3"
+     x="1"
+     y="8"
+     width="4"
+     height="3.9999998"
+     id="rect2639"
+     style="fill:#545454;stroke-width:1" />
+  <rect
+     class="cls-3"
+     x="8"
+     y="8"
+     width="3.9999998"
+     height="3.9999998"
+     id="rect2641"
+     style="fill:#545454;stroke-width:1" />
+  <rect
+     class="cls-3"
+     x="13"
+     y="19"
+     width="4"
+     height="3.9999998"
+     id="rect2645"
+     style="fill:#545454;stroke-width:1" />
 </svg>

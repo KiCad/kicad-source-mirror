@@ -197,21 +197,21 @@ wxPoint SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) con
 }
 
 
-void SCH_TEXT::MirrorY( int aYaxis_position )
+void SCH_TEXT::MirrorHorizontally( int aCenter )
 {
     // Text is NOT really mirrored; it is moved to a suitable horizontal position
     SetLabelSpinStyle( GetLabelSpinStyle().MirrorY() );
 
-    SetTextX( MIRRORVAL( GetTextPos().x, aYaxis_position ) );
+    SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
 }
 
 
-void SCH_TEXT::MirrorX( int aXaxis_position )
+void SCH_TEXT::MirrorVertically( int aCenter )
 {
     // Text is NOT really mirrored; it is moved to a suitable vertical position
     SetLabelSpinStyle( GetLabelSpinStyle().MirrorX() );
 
-    SetTextY( MIRRORVAL( GetTextPos().y, aXaxis_position ) );
+    SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
 }
 
 
@@ -1057,10 +1057,10 @@ void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
 }
 
 
-void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
+void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
 {
     wxPoint old_pos = GetPosition();
-    SCH_TEXT::MirrorY( aYaxis_position );
+    SCH_TEXT::MirrorHorizontally( aCenter );
 
     if( m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
@@ -1075,10 +1075,10 @@ void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
 }
 
 
-void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
+void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
 {
     wxPoint old_pos = GetPosition();
-    SCH_TEXT::MirrorX( aXaxis_position );
+    SCH_TEXT::MirrorVertically( aCenter );
     wxPoint pos = m_intersheetRefsField.GetTextPos();
     wxPoint delta = old_pos - pos;
     pos.y = GetPosition().y + delta.y;

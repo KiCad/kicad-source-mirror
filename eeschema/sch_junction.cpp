@@ -123,15 +123,15 @@ void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffs
 }
 
 
-void SCH_JUNCTION::MirrorX( int aXaxis_position )
+void SCH_JUNCTION::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
 }
 
 
-void SCH_JUNCTION::MirrorY( int aYaxis_position )
+void SCH_JUNCTION::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
 }
 
 

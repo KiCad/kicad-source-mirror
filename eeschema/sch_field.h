@@ -160,24 +160,24 @@ public:
     void Rotate( wxPoint aPosition ) override;
 
     /**
-     * @copydoc SCH_ITEM::MirrorX()
+     * @copydoc SCH_ITEM::MirrorVertically()
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
      * when the parent component is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
-    void MirrorX( int aXaxis_position ) override
+    void MirrorVertically( int aCenter ) override
     {
     }
 
     /**
-     * @copydoc SCH_ITEM::MirrorY()
+     * @copydoc SCH_ITEM::MirrorHorizontally()
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
      * when the parent component is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
-    void MirrorY( int aYaxis_position ) override
+    void MirrorHorizontally( int aCenter ) override
     {
     }
 

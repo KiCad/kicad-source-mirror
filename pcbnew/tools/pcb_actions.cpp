@@ -648,17 +648,17 @@ TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
         _( "Unlock" ), "",
         unlocked_xpm );
 
-TOOL_ACTION PCB_ACTIONS::groupCreate( "pcbnew.EditorControl.groupCreate",
+TOOL_ACTION PCB_ACTIONS::group( "pcbnew.EditorControl.group",
         AS_GLOBAL, 0, "",
         _( "Group" ), _( "Add the selected items to a new group" ),
-        group_add_xpm );
+        group_xpm );
 
-TOOL_ACTION PCB_ACTIONS::groupUngroup( "pcbnew.EditorControl.groupUngroup",
+TOOL_ACTION PCB_ACTIONS::ungroup( "pcbnew.EditorControl.ungroup",
         AS_GLOBAL, 0, "",
         _( "Ungroup" ), "",
-        group_ungroup_xpm );
+        ungroup_xpm );
 
-TOOL_ACTION PCB_ACTIONS::groupRemoveItems( "pcbnew.EditorControl.groupRemoveItems",
+TOOL_ACTION PCB_ACTIONS::removeFromGroup( "pcbnew.EditorControl.removeFromGroup",
         AS_GLOBAL, 0, "",
         _( "Remove Items" ), _( "Remove items from group" ),
         group_remove_xpm );

@@ -40,9 +40,9 @@ public:
         SetIcon( group_xpm ); // fixme
         SetTitle( _( "Grouping" ) );
 
-        Add( PCB_ACTIONS::groupCreate );
-        Add( PCB_ACTIONS::groupUngroup );
-        Add( PCB_ACTIONS::groupRemoveItems );
+        Add( PCB_ACTIONS::group );
+        Add( PCB_ACTIONS::ungroup );
+        Add( PCB_ACTIONS::removeFromGroup );
         Add( PCB_ACTIONS::groupEnter );
     }
 
@@ -64,10 +64,10 @@ private:
 
         BOARD::GroupLegalOpsField legalOps = board->GroupLegalOps( selection );
 
-        Enable( PCB_ACTIONS::groupCreate.GetUIId(),      legalOps.create );
-        Enable( PCB_ACTIONS::groupUngroup.GetUIId(),     legalOps.ungroup );
-        Enable( PCB_ACTIONS::groupRemoveItems.GetUIId(), legalOps.removeItems );
-        Enable( PCB_ACTIONS::groupEnter.GetUIId(),       legalOps.enter );
+        Enable( PCB_ACTIONS::group.GetUIId(),           legalOps.create );
+        Enable( PCB_ACTIONS::ungroup.GetUIId(),         legalOps.ungroup );
+        Enable( PCB_ACTIONS::removeFromGroup.GetUIId(), legalOps.removeItems );
+        Enable( PCB_ACTIONS::groupEnter.GetUIId(),      legalOps.enter );
     }
 };
 
@@ -378,9 +378,9 @@ void GROUP_TOOL::setTransitions()
     Go( &GROUP_TOOL::GroupProperties,         PCB_ACTIONS::groupProperties.MakeEvent() );
     Go( &GROUP_TOOL::PickNewMember,           PCB_ACTIONS::pickNewGroupMember.MakeEvent() );
 
-    Go( &GROUP_TOOL::Group,                   PCB_ACTIONS::groupCreate.MakeEvent() );
-    Go( &GROUP_TOOL::Ungroup,                 PCB_ACTIONS::groupUngroup.MakeEvent() );
-    Go( &GROUP_TOOL::RemoveFromGroup,         PCB_ACTIONS::groupRemoveItems.MakeEvent() );
+    Go( &GROUP_TOOL::Group,                   PCB_ACTIONS::group.MakeEvent() );
+    Go( &GROUP_TOOL::Ungroup,                 PCB_ACTIONS::ungroup.MakeEvent() );
+    Go( &GROUP_TOOL::RemoveFromGroup,         PCB_ACTIONS::removeFromGroup.MakeEvent() );
     Go( &GROUP_TOOL::EnterGroup,              PCB_ACTIONS::groupEnter.MakeEvent() );
     Go( &GROUP_TOOL::LeaveGroup,              PCB_ACTIONS::groupLeave.MakeEvent() );
 }

@@ -124,8 +124,8 @@ public:
      */
     bool IsMovableFromAnchorPoint() const override { return false; }
 
-    void MirrorY( int aYaxis_position ) override;
-    void MirrorX( int aXaxis_position ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
     void Rotate( wxPoint aPosition ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override

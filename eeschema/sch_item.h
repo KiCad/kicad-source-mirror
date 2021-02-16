@@ -312,30 +312,21 @@ public:
 
     /**
      * Move the item by \a aMoveVector to a new position.
-     *
-     * @param aMoveVector = the displacement vector
      */
     virtual void Move( const wxPoint& aMoveVector ) = 0;
 
     /**
-     * Mirror item relative to the Y axis about \a aYaxis_position.
-     *
-     * @param aYaxis_position The Y axis position to mirror around.
+     * Mirror item horizontally about \a aCenter.
      */
-    virtual void MirrorY( int aYaxis_position ) = 0;
+    virtual void MirrorHorizontally( int aCenter ) = 0;
 
     /**
-     * Mirror item relative to the X axis about \a aXaxis_position.
-     *
-     * @param aXaxis_position The X axis position to mirror around.
+     * Mirror item vertically about \a aCenter.
      */
-    virtual void MirrorX( int aXaxis_position ) = 0;
+    virtual void MirrorVertically( int aCenter ) = 0;
 
     /**
      * Rotate the item around \a aPosition 90 degrees in the clockwise direction.
-     *
-     * @param aPosition A reference to a wxPoint object containing the coordinates to
-     *                  rotate around.
      */
     virtual void Rotate( wxPoint aPosition ) = 0;
 

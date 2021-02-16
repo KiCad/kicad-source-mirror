@@ -1201,7 +1201,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         component->SetOrientation( kiCadComponentRotation( einstance.rot->degrees ) );
 
         if( einstance.rot->mirror )
-            component->MirrorY( einstance.x.ToSchUnits() );
+            component->MirrorHorizontally( einstance.x.ToSchUnits() );
     }
 
     std::vector<LIB_FIELD*> partFields;

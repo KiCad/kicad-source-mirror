@@ -254,16 +254,16 @@ void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint&
 }
 
 
-void SCH_BUS_ENTRY_BASE::MirrorX( int aXaxis_position )
+void SCH_BUS_ENTRY_BASE::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
     m_size.y = -m_size.y;
 }
 
 
-void SCH_BUS_ENTRY_BASE::MirrorY( int aYaxis_position )
+void SCH_BUS_ENTRY_BASE::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
     m_size.x = -m_size.x;
 }
 

@@ -128,16 +128,16 @@ wxSize SCH_BITMAP::GetSize() const
 }
 
 
-void SCH_BITMAP::MirrorX( int aXaxis_position )
+void SCH_BITMAP::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
     m_image->Mirror( true );
 }
 
 
-void SCH_BITMAP::MirrorY( int aYaxis_position )
+void SCH_BITMAP::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
     m_image->Mirror( false );
 }
 

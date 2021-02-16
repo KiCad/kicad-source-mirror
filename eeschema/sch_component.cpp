@@ -1439,12 +1439,12 @@ BITMAP_DEF SCH_COMPONENT::GetMenuImage() const
 }
 
 
-void SCH_COMPONENT::MirrorY( int aYaxis_position )
+void SCH_COMPONENT::MirrorHorizontally( int aCenter )
 {
     int dx = m_pos.x;
 
     SetOrientation( CMP_MIRROR_Y );
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
     dx -= m_pos.x;     // dx,0 is the move vector for this transform
 
     for( SCH_FIELD& field : m_fields )
@@ -1457,12 +1457,12 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
 }
 
 
-void SCH_COMPONENT::MirrorX( int aXaxis_position )
+void SCH_COMPONENT::MirrorVertically( int aCenter )
 {
     int dy = m_pos.y;
 
     SetOrientation( CMP_MIRROR_X );
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
     dy -= m_pos.y;     // dy,0 is the move vector for this transform
 
     for( SCH_FIELD& field : m_fields )

@@ -257,6 +257,14 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( PCB_ACTIONS::rotateCcw );
+    m_mainToolBar->Add( PCB_ACTIONS::rotateCw );
+    m_mainToolBar->Add( PCB_ACTIONS::group );
+    m_mainToolBar->Add( PCB_ACTIONS::ungroup );
+    m_mainToolBar->Add( PCB_ACTIONS::lock );
+    m_mainToolBar->Add( PCB_ACTIONS::unlock );
+
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::showFootprintEditor );
     m_mainToolBar->Add( ACTIONS::showFootprintBrowser );
 

@@ -115,15 +115,15 @@ void SCH_NO_CONNECT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOf
 }
 
 
-void SCH_NO_CONNECT::MirrorX( int aXaxis_position )
+void SCH_NO_CONNECT::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
 }
 
 
-void SCH_NO_CONNECT::MirrorY( int aYaxis_position )
+void SCH_NO_CONNECT::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
 }
 
 

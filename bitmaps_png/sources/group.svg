@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="group.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/group.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1904"
-     inkscape:window-height="1041"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="30.702139"
-     inkscape:cx="8.016224"
-     inkscape:cy="11.40402"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:cx="11.517609"
+     inkscape:cy="12.05544"
+     inkscape:window-x="-40"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -175,4 +178,18 @@
      style="fill:none;stroke:#545454;stroke-width:0.999997px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 21.499998,13 v 3"
      id="path14-0-3-7-7-4-0" />
+  <rect
+     style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect2613"
+     width="8"
+     height="8"
+     x="2.5"
+     y="2.5" />
+  <rect
+     style="fill:none;fill-rule:evenodd;stroke:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect2613-6"
+     width="8"
+     height="8"
+     x="13.5"
+     y="13.5" />
 </svg>

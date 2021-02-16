@@ -179,8 +179,8 @@ public:
         Offset( aMoveVector );
     }
 
-    void MirrorX( int aXaxis_position ) override;
-    void MirrorY( int aYaxis_position ) override;
+    void MirrorVertically( int aCenter ) override;
+    void MirrorHorizontally( int aCenter ) override;
     void Rotate( wxPoint aPosition ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
@@ -522,8 +522,8 @@ public:
             field.Move( aMoveVector );
     }
 
-    void MirrorY( int aYaxis_position ) override;
-    void MirrorX( int aXaxis_position ) override;
+    void MirrorHorizontally( int aYaxis_position ) override;
+    void MirrorVertically( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;

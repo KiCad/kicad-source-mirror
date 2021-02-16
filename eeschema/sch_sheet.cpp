@@ -761,23 +761,23 @@ void SCH_SHEET::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_SHEET::MirrorX( int aXaxis_position )
+void SCH_SHEET::MirrorVertically( int aCenter )
 {
-    MIRROR( m_pos.y, aXaxis_position );
+    MIRROR( m_pos.y, aCenter );
     m_pos.y -= m_size.y;
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->MirrorX( aXaxis_position );
+        sheetPin->MirrorVertically( aCenter );
 }
 
 
-void SCH_SHEET::MirrorY( int aYaxis_position )
+void SCH_SHEET::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_pos.x, aYaxis_position );
+    MIRROR( m_pos.x, aCenter );
     m_pos.x -= m_size.x;
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->MirrorY( aYaxis_position );
+        sheetPin->MirrorHorizontally( aCenter );
 }
 
 

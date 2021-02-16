@@ -116,7 +116,7 @@ public:
         case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::UP;     break;
         case LABEL_SPIN_STYLE::LEFT:                                       break;
         case LABEL_SPIN_STYLE::RIGHT:                                      break;
-        default: wxLogWarning( "MirrorX encountered unknown current spin style" ); break;
+        default: wxLogWarning( "MirrorVertically encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -135,7 +135,7 @@ public:
         case LABEL_SPIN_STYLE::RIGHT: newSpin = LABEL_SPIN_STYLE::LEFT;  break;
         case LABEL_SPIN_STYLE::UP:                                       break;
         case LABEL_SPIN_STYLE::BOTTOM:                                   break;
-        default: wxLogWarning( "MirrorY encountered unknown current spin style" ); break;
+        default: wxLogWarning( "MirrorHorizontally encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -276,8 +276,8 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
-    void MirrorY( int aYaxis_position ) override;
-    void MirrorX( int aXaxis_position ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
     void Rotate( wxPoint aPosition ) override;
 
     virtual void Rotate90( bool aClockwise );
@@ -406,8 +406,8 @@ public:
     void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 
-    void MirrorY( int aYaxis_position ) override;
-    void MirrorX( int aXaxis_position ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 

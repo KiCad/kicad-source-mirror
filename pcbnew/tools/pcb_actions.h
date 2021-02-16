@@ -420,9 +420,9 @@ public:
     static TOOL_ACTION unlock;
 
     // Grouping
-    static TOOL_ACTION groupCreate;
-    static TOOL_ACTION groupUngroup;
-    static TOOL_ACTION groupRemoveItems;
+    static TOOL_ACTION group;
+    static TOOL_ACTION ungroup;
+    static TOOL_ACTION removeFromGroup;
     static TOOL_ACTION groupEnter;
     static TOOL_ACTION groupLeave;
 

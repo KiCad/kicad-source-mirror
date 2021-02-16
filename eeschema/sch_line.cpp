@@ -377,17 +377,17 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
 }
 
 
-void SCH_LINE::MirrorX( int aXaxis_position )
+void SCH_LINE::MirrorVertically( int aCenter )
 {
-    MIRROR( m_start.y, aXaxis_position );
-    MIRROR( m_end.y,   aXaxis_position );
+    MIRROR( m_start.y, aCenter );
+    MIRROR( m_end.y,   aCenter );
 }
 
 
-void SCH_LINE::MirrorY( int aYaxis_position )
+void SCH_LINE::MirrorHorizontally( int aCenter )
 {
-    MIRROR( m_start.x, aYaxis_position );
-    MIRROR( m_end.x,   aYaxis_position );
+    MIRROR( m_start.x, aCenter );
+    MIRROR( m_end.x,   aCenter );
 }
 
 

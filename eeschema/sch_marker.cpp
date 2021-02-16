@@ -179,13 +179,13 @@ void SCH_MARKER::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_MARKER::MirrorX( int aXaxis_position )
+void SCH_MARKER::MirrorVertically( int aCenter )
 {
     // Marker geometry isn't user-editable
 }
 
 
-void SCH_MARKER::MirrorY( int aYaxis_position )
+void SCH_MARKER::MirrorHorizontally( int aCenter )
 {
     // Marker geometry isn't user-editable
 }

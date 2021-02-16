@@ -271,8 +271,8 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddSeparator();
         moveMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition );
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::mirrorV,         orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::mirrorH,         orientCondition );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
         moveMenu.AddItem( EE_ACTIONS::editReference,   singleSymbolCondition );
@@ -302,8 +302,8 @@ bool SCH_EDIT_TOOL::Init()
 
     drawMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::editReference,    singleSymbolCondition, 200 );
@@ -332,8 +332,8 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
@@ -612,7 +612,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
 
     wxPoint   mirrorPoint;
-    bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorX.MakeEvent() ) );
+    bool      vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
     bool      moving = item->IsMoving();
@@ -628,7 +628,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
-            if( xAxis )
+            if( vertical )
                 component->SetOrientation( CMP_MIRROR_X );
             else
                 component->SetOrientation( CMP_MIRROR_Y );
@@ -645,7 +645,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-            textItem->MirrorSpinStyle( !xAxis );
+            textItem->MirrorSpinStyle( !vertical );
             break;
         }
 
@@ -655,27 +655,27 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
             SCH_SHEET*     sheet = pin->GetParent();
 
-            if( xAxis )
-                pin->MirrorX( sheet->GetBoundingBox().GetCenter().y );
+            if( vertical )
+                pin->MirrorVertically( sheet->GetBoundingBox().GetCenter().y );
             else
-                pin->MirrorY( sheet->GetBoundingBox().GetCenter().x );
+                pin->MirrorHorizontally( sheet->GetBoundingBox().GetCenter().x );
 
             break;
         }
 
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
-            if( xAxis )
-                item->MirrorX( item->GetPosition().y );
+            if( vertical )
+                item->MirrorVertically( item->GetPosition().y );
             else
-                item->MirrorY( item->GetPosition().x );
+                item->MirrorHorizontally( item->GetPosition().x );
             break;
 
         case SCH_FIELD_T:
         {
             SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-            if( xAxis )
+            if( vertical )
                 field->SetVertJustify( (EDA_TEXT_VJUSTIFY_T)-field->GetVertJustify() );
             else
                 field->SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-field->GetHorizJustify() );
@@ -687,10 +687,10 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
 
         case SCH_BITMAP_T:
-            if( xAxis )
-                item->MirrorX( item->GetPosition().y );
+            if( vertical )
+                item->MirrorVertically( item->GetPosition().y );
             else
-                item->MirrorY( item->GetPosition().x );
+                item->MirrorHorizontally( item->GetPosition().x );
 
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
@@ -700,10 +700,10 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             // Mirror the sheet on itself. Sheets do not have a anchor point.
             mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
 
-            if( xAxis )
-                item->MirrorX( mirrorPoint.y );
+            if( vertical )
+                item->MirrorVertically( mirrorPoint.y );
             else
-                item->MirrorY( mirrorPoint.x );
+                item->MirrorHorizontally( mirrorPoint.x );
 
             break;
 
@@ -737,18 +737,18 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                     SCH_SHEET*     sheet = pin->GetParent();
 
-                    if( xAxis )
-                        pin->MirrorX( sheet->GetBoundingBox().GetCenter().y );
+                    if( vertical )
+                        pin->MirrorVertically( sheet->GetBoundingBox().GetCenter().y );
                     else
-                        pin->MirrorY( sheet->GetBoundingBox().GetCenter().x );
+                        pin->MirrorHorizontally( sheet->GetBoundingBox().GetCenter().x );
                 }
             }
             else
             {
-                if( xAxis )
-                    item->MirrorX( mirrorPoint.y );
+                if( vertical )
+                    item->MirrorVertically( mirrorPoint.y );
                 else
-                    item->MirrorY( mirrorPoint.x );
+                    item->MirrorHorizontally( mirrorPoint.x );
             }
 
             connections |= item->IsConnectable();
@@ -1827,8 +1827,8 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 

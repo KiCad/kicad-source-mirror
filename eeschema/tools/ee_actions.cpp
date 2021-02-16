@@ -370,16 +370,16 @@ TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm );
 
-TOOL_ACTION EE_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
+TOOL_ACTION EE_ACTIONS::mirrorV( "eeschema.InteractiveEdit.mirrorV",
         AS_GLOBAL,
-        'X', LEGACY_HK_NAME( "Mirror X" ),
-        _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ),
+        'Y', LEGACY_HK_NAME( "Mirror X" ),  // Yes, these were backwards prior to 6.0....
+        _( "Mirror Vertically" ), _( "Flips selected item(s) from top to bottom" ),
         mirror_v_xpm );
 
-TOOL_ACTION EE_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
+TOOL_ACTION EE_ACTIONS::mirrorH( "eeschema.InteractiveEdit.mirrorH",
         AS_GLOBAL,
-        'Y', LEGACY_HK_NAME( "Mirror Y" ),
-        _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ),
+        'X', LEGACY_HK_NAME( "Mirror Y" ),  // Yes, these were backwards prior to 6.0....
+        _( "Mirror Horizontally" ), _( "Flips selected item(s) from left to right" ),
         mirror_h_xpm );
 
 TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",

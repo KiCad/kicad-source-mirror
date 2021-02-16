@@ -213,11 +213,11 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 }
 
 
-void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
+void SCH_SHEET_PIN::MirrorVertically( int aCenter )
 {
-    int p = GetTextPos().y - aXaxis_position;
+    int p = GetTextPos().y - aCenter;
 
-    SetTextY( aXaxis_position - p );
+    SetTextY( aCenter - p );
 
     switch( m_edge )
     {
@@ -228,11 +228,11 @@ void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 }
 
 
-void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
+void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 {
-    int p = GetTextPos().x - aYaxis_position;
+    int p = GetTextPos().x - aCenter;
 
-    SetTextX( aYaxis_position - p );
+    SetTextX( aCenter - p );
 
     switch( m_edge )
     {

@@ -104,6 +104,12 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE, ACTION_TOOLBAR::CANCEL );
 
     m_mainToolBar->AddScaledSeparator( this );
+    m_mainToolBar->Add( EE_ACTIONS::rotateCCW );
+    m_mainToolBar->Add( EE_ACTIONS::rotateCW );
+    m_mainToolBar->Add( EE_ACTIONS::mirrorV );
+    m_mainToolBar->Add( EE_ACTIONS::mirrorH );
+
+    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::symbolProperties );
     m_mainToolBar->Add( EE_ACTIONS::pinTable );
 
