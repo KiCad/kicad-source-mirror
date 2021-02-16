@@ -77,7 +77,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             [&]( BOARD_ITEM* item )
             {
                 auto constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item, nullptr,
-                                                          item->GetLayer() );
+                                                          UNDEFINED_LAYER );
 
                 if( constraint.m_DisallowFlags )
                 {
