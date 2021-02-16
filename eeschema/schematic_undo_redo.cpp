@@ -97,8 +97,8 @@
 
 void SCH_EDIT_FRAME::StartNewUndo()
 {
-	PICKED_ITEMS_LIST* blank = new PICKED_ITEMS_LIST();
-	PushCommandToUndoList( blank );
+    PICKED_ITEMS_LIST* blank = new PICKED_ITEMS_LIST();
+    PushCommandToUndoList( blank );
 }
 
 
@@ -114,16 +114,16 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN*    aScreen,
     // Connectivity may change
     aItem->SetConnectivityDirty();
 
-	PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
 
-	// If the last stack was empty, use that one instead of creating a new stack
-	if( lastUndo )
-	{
-		if( aAppend || !lastUndo->GetCount() )
-			commandToUndo = lastUndo;
-		else
-			PushCommandToUndoList( lastUndo );
-	}
+    // If the last stack was empty, use that one instead of creating a new stack
+    if( lastUndo )
+    {
+        if( aAppend || !lastUndo->GetCount() )
+            commandToUndo = lastUndo;
+        else
+            PushCommandToUndoList( lastUndo );
+    }
 
     if( !commandToUndo )
     {
@@ -175,8 +175,16 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     if( !aItemsList.GetCount() )
         return;
 
-    if( aAppend )
-        commandToUndo = PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
+
+    // If the last stack was empty, use that one instead of creating a new stack
+    if( lastUndo )
+    {
+        if( aAppend || !lastUndo->GetCount() )
+            commandToUndo = lastUndo;
+        else
+            PushCommandToUndoList( lastUndo );
+    }
 
     if( !commandToUndo )
         commandToUndo = new PICKED_ITEMS_LIST();
@@ -267,7 +275,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         if( status == UNDO_REDO::NOP )
         {
-        	continue;
+            continue;
         }
         if( status == UNDO_REDO::NEWITEM )
         {
@@ -343,8 +351,12 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
     PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
 
     // Skip empty frames
-    while( undo && undo->GetCount() == 1 && undo->GetPickedItemStatus( 0 ) == UNDO_REDO::NOP )
-    	undo = PopCommandFromUndoList();
+    while( undo && ( !undo->GetCount()
+            || ( undo->GetCount() == 1 && undo->GetPickedItemStatus( 0 ) == UNDO_REDO::NOP ) ) )
+    {
+        delete undo;
+        undo = PopCommandFromUndoList();
+    }
 
     if( undo )
     {

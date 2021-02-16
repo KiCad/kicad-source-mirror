@@ -66,7 +66,6 @@
 #include <dialogs/dialog_edit_label.h>
 #include <core/kicad_algo.h>
 
-#include <limits>
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -1692,21 +1691,21 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     for( auto& item : selection )
     {
-    	if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
-		{
-    		if( !line->IsEndPoint( cursorPos ) )
-    		lines.push_back( line );
-		}
+        if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+        {
+            if( !line->IsEndPoint( cursorPos ) )
+            lines.push_back( line );
+        }
     }
 
     m_selectionTool->ClearSelection();
-	m_frame->StartNewUndo();
+    m_frame->StartNewUndo();
 
-	for( SCH_LINE* line : lines )
-		m_frame->BreakSegment( line,  cursorPos );
+    for( SCH_LINE* line : lines )
+        m_frame->BreakSegment( line,  cursorPos );
 
-	if( !lines.empty() )
-	{
+    if( !lines.empty() )
+    {
         if( m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
             m_frame->AddJunction( m_frame->GetScreen(), cursorPos, true, false );
 

@@ -329,7 +329,15 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
     for( auto item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
     {
         if( item->IsType( wiresAndBuses ) )
-            wires.push_back( static_cast<SCH_LINE*>( item ) );
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), aPoint )
+                                && !wire->IsEndPoint( aPoint ) )
+            {
+                wires.push_back( wire );
+            }
+        }
     }
 
     for( auto wire : wires )
