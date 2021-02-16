@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_H__
-#define __DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -41,16 +40,17 @@ class PCB_LAYER_BOX_SELECTOR;
 class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxCheckBox* m_tracks;
 		wxCheckBox* m_vias;
 		wxCheckBox* m_netFilterOpt;
-		NET_SELECTOR* m_netFilter; 
+		NET_SELECTOR* m_netFilter;
 		wxCheckBox* m_netclassFilterOpt;
 		wxChoice* m_netclassFilter;
 		wxCheckBox* m_layerFilterOpt;
 		PCB_LAYER_BOX_SELECTOR* m_layerFilter;
+		wxCheckBox* m_selectedItemsFilter;
 		wxRadioButton* m_setToSpecifiedValues;
 		wxChoice* m_trackWidthSelectBox;
 		wxChoice* m_viaSizesSelectBox;
@@ -60,19 +60,18 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnNetclassFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Set Track and Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Set Track and Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE();
-	
+
 };
 
-#endif //__DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_H__

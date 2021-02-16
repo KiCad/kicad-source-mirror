@@ -55,6 +55,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_referenceFilter;
 		wxCheckBox* m_footprintFilterOpt;
 		wxTextCtrl* m_footprintFilter;
+		wxCheckBox* m_selectedItemsFilter;
 		wxRadioButton* m_setToSpecifiedValues;
 		wxPanel* m_specifiedValues;
 		wxStaticText* m_LayerLabel;

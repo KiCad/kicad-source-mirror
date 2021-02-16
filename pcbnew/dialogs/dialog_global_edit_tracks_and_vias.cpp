@@ -55,6 +55,7 @@ static bool         g_filterByNet;
 static wxString     g_netFilter;
 static bool         g_filterByLayer;
 static LAYER_NUM    g_layerFilter;
+static bool         g_filterSelected = false;
 
 
 class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
@@ -63,6 +64,7 @@ private:
     PCB_EDIT_FRAME* m_parent;
     BOARD*          m_brd;
     int*            m_originalColWidths;
+    PCB_SELECTION   m_selection;
 
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
@@ -145,6 +147,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
     g_netFilter = m_netFilter->GetSelectedNetname();
     g_filterByLayer = m_layerFilterOpt->GetValue();
     g_layerFilter = m_layerFilter->GetLayerSelection();
+    g_filterSelected = m_selectedItemsFilter->GetValue();
 
     m_netFilter->Disconnect( NET_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ), NULL, this );
 
@@ -220,9 +223,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    PCB_SELECTION_TOOL*   selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    PCB_SELECTION&        selection = selTool->GetSelection();
-    BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
+    PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    m_selection                 = selTool->GetSelection();
+    BOARD_CONNECTED_ITEM* item  = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_selection.Front() );
 
     m_tracks->SetValue( g_modifyTracks );
     m_vias->SetValue( g_modifyVias );
@@ -250,6 +253,8 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     m_trackWidthSelectBox->SetSelection( (int) m_trackWidthSelectBox->GetCount() - 1 );
     m_viaSizesSelectBox->SetSelection( (int) m_viaSizesSelectBox->GetCount() - 1 );
     m_layerBox->SetStringSelection( INDETERMINATE_ACTION );
+
+    m_selectedItemsFilter->SetValue( g_filterSelected );
 
     return true;
 }
@@ -313,6 +318,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::visitItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem )
 {
+    if( m_selectedItemsFilter->GetValue() && !m_selection.Contains( aItem ) )
+        return;
+
     if( m_netFilterOpt->GetValue() && m_netFilter->GetSelectedNetcode() >= 0 )
     {
         if( aItem->GetNetCode() != m_netFilter->GetSelectedNetcode() )
