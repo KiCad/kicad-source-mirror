@@ -1880,18 +1880,176 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
 {
     EFRAME eframe( aFrameNode );
 
-    wxPoint corner1( eframe.x1.ToSchUnits(), eframe.y1.ToSchUnits() );
-    wxPoint corner3( eframe.x2.ToSchUnits(), eframe.y2.ToSchUnits() );
-    wxPoint corner2( corner3.x, corner1.y );
-    wxPoint corner4( corner1.x, corner3.y );
+    int xMin = eframe.x1.ToSchUnits();
+    int xMax = eframe.x2.ToSchUnits();
+    int yMin = eframe.y1.ToSchUnits();
+    int yMax = eframe.y2.ToSchUnits();
+
+    if( xMin > xMax )
+        std::swap( xMin, xMax );
+
+    if( yMin > yMax )
+        std::swap( yMin, yMax );
 
     LIB_POLYLINE* lines = new LIB_POLYLINE( nullptr );
-    lines->AddPoint( corner1 );
-    lines->AddPoint( corner2 );
-    lines->AddPoint( corner3 );
-    lines->AddPoint( corner4 );
-    lines->AddPoint( corner1 );
+    lines->AddPoint( wxPoint( xMin, yMin ) );
+    lines->AddPoint( wxPoint( xMax, yMin ) );
+    lines->AddPoint( wxPoint( xMax, yMax ) );
+    lines->AddPoint( wxPoint( xMin, yMax ) );
+    lines->AddPoint( wxPoint( xMin, yMin ) );
     aItems.push_back( lines );
+
+    if( !eframe.border_left )
+    {
+        lines = new LIB_POLYLINE( nullptr );
+        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int height = yMax - yMin;
+        int x1 = xMin;
+        int x2 = x1 + Mils2iu( 150 );
+        int legendPosX = xMin + Mils2iu( 75 );
+        double rowSpacing = height / double( eframe.rows );
+        double legendPosY = yMax - ( rowSpacing / 2 );
+
+        for( i = 1; i < eframe.rows; i++ )
+        {
+            int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
+            lines = new LIB_POLYLINE( nullptr );
+            lines->AddPoint( wxPoint( x1, newY ) );
+            lines->AddPoint( wxPoint( x2, newY ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = 'A';
+
+        for( i = 0; i < eframe.rows; i++ )
+        {
+            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
+            legendText->SetPosition( wxPoint( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosY -= rowSpacing;
+        }
+    }
+
+    if( !eframe.border_right )
+    {
+        lines = new LIB_POLYLINE( nullptr );
+        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int height = yMax - yMin;
+        int x1 = xMax - Mils2iu( 150 );
+        int x2 = xMax;
+        int legendPosX = xMax - Mils2iu( 75 );
+        double rowSpacing = height / double( eframe.rows );
+        double legendPosY = yMax - ( rowSpacing / 2 );
+
+        for( i = 1; i < eframe.rows; i++ )
+        {
+            int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
+            lines = new LIB_POLYLINE( nullptr );
+            lines->AddPoint( wxPoint( x1, newY ) );
+            lines->AddPoint( wxPoint( x2, newY ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = 'A';
+
+        for( i = 0; i < eframe.rows; i++ )
+        {
+            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
+            legendText->SetPosition( wxPoint( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosY -= rowSpacing;
+        }
+    }
+
+    if( !eframe.border_top )
+    {
+        lines = new LIB_POLYLINE( nullptr );
+        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int width = xMax - xMin;
+        int y1 = yMin;
+        int y2 = yMin + Mils2iu( 150 );
+        int legendPosY = yMax - Mils2iu( 75 );
+        double columnSpacing = width / double( eframe.columns );
+        double legendPosX = xMin + ( columnSpacing / 2 );
+
+        for( i = 1; i < eframe.columns; i++ )
+        {
+            int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
+            lines = new LIB_POLYLINE( nullptr );
+            lines->AddPoint( wxPoint( newX, y1 ) );
+            lines->AddPoint( wxPoint( newX, y2 ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = '1';
+
+        for( i = 0; i < eframe.columns; i++ )
+        {
+            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
+            legendText->SetPosition( wxPoint( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosX += columnSpacing;
+        }
+    }
+
+    if( !eframe.border_bottom )
+    {
+        lines = new LIB_POLYLINE( nullptr );
+        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        aItems.push_back( lines );
+
+        int i;
+        int width = xMax - xMin;
+        int y1 = yMax - Mils2iu( 150 );
+        int y2 = yMax;
+        int legendPosY = yMin + Mils2iu( 75 );
+        double columnSpacing = width / double( eframe.columns );
+        double legendPosX = xMin + ( columnSpacing / 2 );
+
+        for( i = 1; i < eframe.columns; i++ )
+        {
+            int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
+            lines = new LIB_POLYLINE( nullptr );
+            lines->AddPoint( wxPoint( newX, y1 ) );
+            lines->AddPoint( wxPoint( newX, y2 ) );
+            aItems.push_back( lines );
+        }
+
+        char legendChar = '1';
+
+        for( i = 0; i < eframe.columns; i++ )
+        {
+            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
+            legendText->SetPosition( wxPoint( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetText( wxString( legendChar ) );
+            legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
+            aItems.push_back( legendText );
+            legendChar++;
+            legendPosX += columnSpacing;
+        }
+    }
 }
 
 
