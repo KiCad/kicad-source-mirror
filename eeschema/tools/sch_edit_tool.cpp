@@ -348,8 +348,8 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleSymbolCondition && E_C::Idle, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::toLabel,          toLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
