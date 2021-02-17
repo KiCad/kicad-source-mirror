@@ -495,7 +495,7 @@ public:
         wxString  Name;
         long      Param1; ///< Either Units or X step, depending on Type (see GRID_TYPE for
                           ///< more details)
-        long Param2;      ///< Either Divisor or Y step, depending on Type (see GRID_TYPE for
+        long      Param2; ///< Either Divisor or Y step, depending on Type (see GRID_TYPE for
                           ///< more details)
 
         static bool IsGrid( XNODE* aNode );

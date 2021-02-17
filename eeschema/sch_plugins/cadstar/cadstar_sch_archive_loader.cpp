@@ -138,24 +138,35 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
             sheetBoundingBox.Merge( bbox );
         }
 
-        auto roundToNearest100mil =
-            []( int aNumber ) -> int
-            {
-                int error = aNumber % Mils2iu( 100 );
+        // Find the working grid of the original CADSTAR design
+        int grid = Assignments.Grids.WorkingGrid.Param1;
 
-                if( abs( error ) > Mils2iu( 50 ) )
-                 return aNumber + ( sign(error) * Mils2iu( 100 ) ) - error;
+        if( Assignments.Grids.WorkingGrid.Type == GRID_TYPE::FRACTIONALGRID )
+            grid = grid / Assignments.Grids.WorkingGrid.Param2;
+        else if( Assignments.Grids.WorkingGrid.Param2 > grid )
+            grid = Assignments.Grids.WorkingGrid.Param2;
+
+        grid = getKiCadLength( grid );
+
+        auto roundToNearestGrid =
+            [&]( int aNumber ) -> int
+            {
+                int error = aNumber % grid;
+                int absError = sign( error ) * error;
+
+                if( absError > ( grid / 2 ) )
+                 return aNumber + ( sign( error ) * grid ) - error;
                 else
                   return aNumber - error;
             };
 
         // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
-        // the margin to the nearest 100mil, ensuring all items remain on the grid
+        // the margin to the nearest grid, ensuring all items remain on the grid.
         wxSize targetSheetSize = sheetBoundingBox.GetSize();
         int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
         int    margin = ( (double) longestSide * 0.03);
-        margin = roundToNearest100mil( margin );
+        margin = roundToNearestGrid( margin );
         targetSheetSize.IncBy( margin * 2, margin * 2 );
 
         // Update page size always
@@ -166,14 +177,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // Set the new sheet size.
         sheet->GetScreen()->SetPageSettings( pageInfo );
 
+
         wxSize  pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
         wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
         wxPoint itemsCentre = sheetBoundingBox.Centre();
 
-        // round the translation to nearest 100mil to place it on the grid.
+        // round the translation to nearest point on the grid
         wxPoint translation = sheetcentre - itemsCentre;
-        translation.x = roundToNearest100mil( translation.x );
-        translation.y = roundToNearest100mil( translation.y );
+        translation.x = roundToNearestGrid( translation.x );
+        translation.y = roundToNearestGrid( translation.y );
 
         // Translate the items.
         std::vector<SCH_ITEM*> allItems;
