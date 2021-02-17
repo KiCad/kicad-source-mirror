@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-07 23:02+0000\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -1941,7 +1941,7 @@ msgid "Configure Global %s Library Table"
 msgstr "Konfigurace globální tabulky knihoven %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
 "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -1949,11 +1949,12 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad byl poprvé spuštěn pomocí nové tabulky knihovny %s pro\n"
-"přístup ke knihovnám. Aby mohl KiCad přistupovat ke knihovnám %s,\n"
-"globální tabulku knihoven %s. Vyberte jednu z níže uvedených možností.\n"
-"Pokud si nejste jisti, kterou volbu můžete vybrat, použijte prosím výchozí "
-"výběr."
+"KiCad byl poprvé spuštěn pomocí nové tabulky knihoven %s pro\n"
+"přístup ke knihovnám.  Aby mohl KiCad přistupovat ke knihovnám %s,\n"
+"musíte nakonfigurovat globální tabulku knihoven %s. Vyberte prosím jednu\n"
+"z níže uvedených možností. Pokud si nejste jisti, kterou možnost zvolit, "
+"prosím\n"
+"použijte prosím výchozí výběr."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
@@ -3318,64 +3319,52 @@ msgid "Netclass name already in use."
 msgstr "Název třídy spojů je již používán."
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Min. izolační mezera:"
+msgstr "Minimální izolační mezera mědi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Minimální šířka spoje:"
+msgstr "Minimální šířka spoje"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Průměr plošky prokovu:"
+msgstr "Vnější průměr prokovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Průměr plošky prokovu:"
+msgstr "Průměr vrtání prokovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Průměr plošky prokovu:"
+msgstr "Vnější průměr mikroprokovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Průměr plošky prokovu:"
+msgstr "Průměr vrtání mikroprokovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Doladění skosení diferenciálního páru"
+msgstr "Šířka spojů diferenciálního páru"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Diferenciální páry"
+msgstr "Mezera diferenciálního páru"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Vlastnosti schématu:"
+msgstr "Tloušťka čáry schématu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Tloušťka sběrnice"
+msgstr "Tloušťka čáry sběrnice"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Pole schématu"
+msgstr "Barva čáry schématu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Soubory schémat"
+msgstr "Styl čáry schématu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -5005,19 +4994,16 @@ msgid "Via holes"
 msgstr "Díry prokovu"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Díry prokovu"
+msgstr "Stěny otvorů prokovu"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "Nepokovené díry"
+msgstr "Pokovené otvory"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Plated hole walls"
-msgstr "Nepokovené díry"
+msgstr "Pokovené stěny otvorů"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -6457,9 +6443,8 @@ msgid "Report files"
 msgstr "Soubory reportů"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "Knihovny součástek"
+msgstr "Soubory umístění komponent"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -7106,9 +7091,9 @@ msgstr "Duplicitní prvky %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Vícenásobná položka %s%s\n"
+msgstr "Duplikovat položky %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
@@ -7235,9 +7220,8 @@ msgid "Generate"
 msgstr "Generovat"
 
 #: eeschema/dialogs/dialog_bom.cpp:488
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
+msgstr "Generování BOM vyžaduje plně očíslované schéma."
 
 #: eeschema/dialogs/dialog_bom.cpp:525 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -8178,7 +8162,7 @@ msgstr "Zobrazit dialog Očíslování"
 
 #: eeschema/dialogs/dialog_erc.cpp:105
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "Schéma není plně očíslované. Výsledky ERC budou neúplné."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9333,9 +9317,8 @@ msgid "Export Netlist"
 msgstr "Exportovat Netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:341
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
+msgstr "Simulátor vyžaduje plně očíslované schéma."
 
 #: eeschema/dialogs/dialog_netlist.cpp:364
 msgid "Reformat passive symbol values"
@@ -9378,9 +9361,8 @@ msgstr "%s Export"
 
 #: eeschema/dialogs/dialog_netlist.cpp:577
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
+msgstr "Exportování netlistu vyžaduje plně očíslované schéma."
 
 #: eeschema/dialogs/dialog_netlist.cpp:702
 msgid "This plugin already exists."
@@ -10171,9 +10153,8 @@ msgid "Add signal by name:"
 msgstr "Přidat signál podle názvu:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "Musíte vybrat zdroj stejnosměrného proudu (rozmítání 1)"
+msgstr "Musíte vybrat zdroj stejnosměrného proudu"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10190,9 +10171,8 @@ msgid "Volts"
 msgstr "Voltů"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "jumper"
+msgstr "Ampéry"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:319
@@ -10250,7 +10230,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "Povolit druhý zdroj"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10261,20 +10241,18 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "PI"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEPLOTA"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -10294,23 +10272,20 @@ msgid "DC source:"
 msgstr "Zdroj DC:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Startovní napětí:"
+msgstr "Počáteční hodnota:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "Počáteční hodnota:"
+msgstr "Konečná hodnota:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "Krok přírůstku:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "Zdroj"
+msgstr "Zaměnit zdroje"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11793,9 +11768,8 @@ msgid "Passive Pin"
 msgstr "Pasivní vývod"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "Vytvořit vývod"
+msgstr "Volný vývod"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -11898,9 +11872,8 @@ msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Je zapojen vývod s příznakem \"Nezapojeno\""
 
 #: eeschema/erc_item.cpp:78
-#, fuzzy
 msgid "Unconnected \"no connection\" flag"
-msgstr "Přidat příznak nezapojeno"
+msgstr "Nepřipojený příznak \"žádné připojení\""
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
@@ -11911,19 +11884,16 @@ msgid "Global label not connected anywhere else in the schematic"
 msgstr "Globální označení není nikde jinde ve schématu připojeno"
 
 #: eeschema/erc_item.cpp:90
-#, fuzzy
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "Global labels are similar (lower/upper case difference only)"
+msgstr "Podobné označení (pouze malá a velká písmena)"
 
 #: eeschema/erc_item.cpp:94
-#, fuzzy
 msgid "Different footprint assigned in another unit of the symbol"
-msgstr "Různá pouzdra přiřazena v jiné jednotce stejné součástky"
+msgstr "Různá pouzdra přiřazena v jiné jednotce stejného symbolu"
 
 #: eeschema/erc_item.cpp:98
-#, fuzzy
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr "Různá síť přiřazena sdílenému vývodu v jiné jednotce stejné součástky"
+msgstr "Různá síť přiřazena sdílenému vývodu v jiné jednotce stejného symbolu"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -11966,14 +11936,12 @@ msgid "Symbol is not annotated"
 msgstr "Nečíslovaný symbol"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Soubor přiřazení pouzdra k symbolu není uložen"
+msgstr "Symbol má více jednotek než je definováno"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Neupravujte plošky mající různé vrstvy"
+msgstr "Jednotky stejného symbolu mají různé hodnoty"
 
 #: eeschema/erc_item.cpp:150
 #, fuzzy
@@ -12201,9 +12169,11 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Zvolit symbol (%d položek načteno)"
 
 #: eeschema/getpart.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
-msgstr "Pro symbol \"%s\" nenalezena alternativa v knihovně \"%s\"."
+msgstr ""
+"V knihovně \"%s\" nebyl pro symbol \"%s\" nalezen žádný alternativní styl "
+"tvaru."
 
 #: eeschema/hierarch.cpp:89
 msgid "Navigator"
@@ -12809,9 +12779,8 @@ msgid "Graphic Line, length %s"
 msgstr "Grafická čára, délka %s"
 
 #: eeschema/sch_line.cpp:862
-#, fuzzy
 msgid "Graphical"
-msgstr "Přidat mnohoúhelník"
+msgstr "Grafika"
 
 #: eeschema/sch_line.cpp:865
 msgid "Line Type"
@@ -12914,6 +12883,8 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
+"Návrh CADSTAR obsahuje bloky pro opětovné použití, které nemají ekvivalent "
+"KiCadu. Informace o opakovaném použití bloku byly během importu odstraněny."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:193
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:128
@@ -12921,10 +12892,12 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
+"Návrh CADSTAR byl úspěšně importován.\n"
+"Zkontrolujte chyby a varování při importu (pokud existují)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:247
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr ""
+msgstr "Schéma CADSTAR může být poškozeno: není žádný kořenový list."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:323
 #, c-format
@@ -12933,6 +12906,8 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
+"Definice dílu „%s“ odkazuje na symbol „%s“ (alternativní „%s“), který nebyl "
+"v knihovně symbolů nalezen. Díl nebyl načten do knihovny KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:358
 #, c-format
@@ -12940,6 +12915,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
+"Symbol '%s' odkazuje na komponentu '%s', kterou nelze v knihovně najít. "
+"Symbol nebyl načten"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:442
 #, c-format
@@ -12947,6 +12924,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
+"Symbol ID '%s' odkazuje na symbol knihovny '%s', který nebyl v knihovně "
+"nalezen. Byly exportovány všechny části projektu?"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:452
 #, c-format
@@ -13288,14 +13267,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid alternate pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatný název vývodu listu v\n"
+"Neplatný alternativní název vývodu v\n"
 "souboru: \"%s\"\n"
 "řádek: %d\n"
 "offset: %d"
@@ -13346,14 +13325,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol library name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné ID knihovny symbolů v\n"
+"Neplatný název knihovny symbolů v\n"
 "souboru: \"%s\"\n"
 "řádek: %d\n"
 "offset: %d"
@@ -13770,9 +13749,8 @@ msgid "carriage return"
 msgstr "návrat vozíku"
 
 #: eeschema/sch_validators.cpp:157
-#, fuzzy
 msgid "line feed"
-msgstr "odřádkování"
+msgstr "posun řádku"
 
 #: eeschema/sch_validators.cpp:159
 msgid "tab"
@@ -13808,6 +13786,8 @@ msgstr "Chyba ověření pole"
 #: eeschema/sch_validators.cpp:204
 msgid "Signal name contains '[' or ']' but is not a valid vector bus name"
 msgstr ""
+"Název signálu obsahuje znaky '[' or ']', ale nejedná se o platný název "
+"sběrnice"
 
 #: eeschema/sheet.cpp:60
 #, c-format
@@ -14014,18 +13994,16 @@ msgid "Save Simulation Workbook"
 msgstr "Uložit záznamy simulace"
 
 #: eeschema/sim/sim_plot_frame.cpp:1079
-#, fuzzy
 msgid "There was an error while saving the workbook file"
-msgstr "Při ukládání záznamů simulací nastala chyba"
+msgstr "Při ukládání souboru sešitu došlo k chybě"
 
 #: eeschema/sim/sim_plot_frame.cpp:1088
 msgid "Save Plot as Image"
 msgstr "Uložit kresbu jako obrázek"
 
 #: eeschema/sim/sim_plot_frame.cpp:1105
-#, fuzzy
 msgid "Save Plot Data"
-msgstr "Uložit kresbu"
+msgstr "Uložit data vykreslení"
 
 #: eeschema/sim/sim_plot_frame.cpp:1347
 #, fuzzy
@@ -14098,9 +14076,8 @@ msgid "Probe from schematics"
 msgstr "Sonda z schématu"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:62
-#, fuzzy
 msgid "Tune Component Value"
-msgstr "Hodnota součástky"
+msgstr "Vyladit hodnoty komponent"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:67
 msgid "Show SPICE Netlist..."
@@ -14176,19 +14153,16 @@ msgid "Voltage (swept)"
 msgstr "Napětí (rozmítané)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Současná síť:"
+msgstr "Proud (rozmítán)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Odpor:"
+msgstr "Odpor (rozmítán)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Zvýšení teploty:"
+msgstr "Teplota (rozmítána)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -14476,14 +14450,12 @@ msgstr "Musíte uložit na jiné místo."
 #: eeschema/symbol_editor/symbol_editor.cpp:586 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:938
 #: pcbnew/footprint_libraries_utils.cpp:1174
-#, fuzzy
 msgid "Nickname"
-msgstr "Nedovolený znak '%s' nalezen v názvu: '%s' na řádku %d"
+msgstr "Přezdívka"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Uložit symbol jako..."
+msgstr "Uložit symbol jako"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -14519,9 +14491,8 @@ msgid "Delete Symbol"
 msgstr "Smazat symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:736
-#, fuzzy
 msgid "Keep Symbol"
-msgstr "Nový symbol"
+msgstr "Ponechat symbol"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1052
@@ -14914,9 +14885,8 @@ msgid "Create a new symbol"
 msgstr "Vytvořit nový symbol"
 
 #: eeschema/tools/ee_actions.cpp:128
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Upravit symbol..."
+msgstr "Upravit symbol"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Show selected symbol on editor canvas"
@@ -14968,9 +14938,8 @@ msgid "Show Pin Electrical Types"
 msgstr "Zobrazit elektrický typ vývodu"
 
 #: eeschema/tools/ee_actions.cpp:178
-#, fuzzy
 msgid "Annotate pins with their electrical types"
-msgstr "Zobrazit &elektrický typ vývodu"
+msgstr "Zobrazit elektrický typ vývodu"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Show Symbol Tree"
@@ -15212,9 +15181,8 @@ msgid "Repeat Last Item"
 msgstr "Opakovat poslední položku"
 
 #: eeschema/tools/ee_actions.cpp:354
-#, fuzzy
 msgid "Duplicates the last drawn item"
-msgstr "Duplikuje vybranou položku(y)"
+msgstr "Duplikuje poslední kreslenou položku"
 
 #: eeschema/tools/ee_actions.cpp:359 pcbnew/tools/pcb_actions.cpp:282
 msgid "Rotate Clockwise"
@@ -15257,9 +15225,8 @@ msgid "Displays item properties dialog"
 msgstr "Zobrazí okno vlastností položky"
 
 #: eeschema/tools/ee_actions.cpp:389
-#, fuzzy
 msgid "Edit Reference Designator..."
-msgstr "Upravit referenci..."
+msgstr "Upravit označení reference..."
 
 #: eeschema/tools/ee_actions.cpp:389
 msgid "Displays reference designator dialog"
@@ -15270,9 +15237,8 @@ msgid "Edit Value..."
 msgstr "Upravit hodnotu..."
 
 #: eeschema/tools/ee_actions.cpp:395
-#, fuzzy
 msgid "Displays value field dialog"
-msgstr "Zobrazí okno vlastností položky"
+msgstr "Zobrazí okno Pole hodnoty"
 
 #: eeschema/tools/ee_actions.cpp:401
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:255
@@ -15309,9 +15275,8 @@ msgid "Update symbols to include any changes from the library"
 msgstr "Aktualizovat symboly a zahrnout všechny změny z knihovny"
 
 #: eeschema/tools/ee_actions.cpp:425
-#, fuzzy
 msgid "Assign a different symbol from the library"
-msgstr "Otevřít pouzdro z knihovny"
+msgstr "Přiřaďte jiný symbol z knihovny"
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "Update Symbol..."
@@ -15762,68 +15727,69 @@ msgid "Symbol Warnings"
 msgstr "Varování symbolu"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Duplicitní vývod %s</b> \"%s\" na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s \"%s\" na místě <b>(%.3f, %.3f)</b> převedených"
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
+"vývodem %s%s na místě <b>(%.3f, %.3f)</b> převedených."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Duplicitní vývod %s</b> \"%s\" na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s \"%s\" na místě <b>(%.3f, %.3f)</b> v jednotkách %c a %c "
-"převedených"
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
+"vývodem %s%s na místě <b>(%.3f, %.3f)</b> v jednotkách %c a %c převedených."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b>."
 msgstr ""
-"<b>Duplicitní vývod %s</b> \"%s\" na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s \"%s\" na místě <b>(%.3f, %.3f)</b>"
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
+"vývodem %s%s na místě <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c."
 msgstr ""
-"<b>Duplicitní vývod %s</b> \"%s\" na místě <b>(%.3f, %.3f)</b> v rozporu s "
-"vývodem %s \"%s\" na místě <b>(%.3f, %.3f)</b>v jednotkách %c a %c"
+"<b>Duplicitní vývod %s</b> %s na místě <b>(%.3f, %.3f)</b> v rozporu s "
+"vývodem %s%s na místě <b>(%.3f, %.3f)</b>v jednotkách %c a %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> převedeno"
+msgstr ""
+"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b> převeden."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>v symbolu %c "
-"převedeného"
+"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b>v jednotce "
+"%c převedeného."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>"
+msgstr "<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> v symbolu %c"
+"<b>Skrytý napájecí vývod %s</b> %s na pozici <b>(%.3f, %.3f)</b> v jednotce "
+"%c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 msgid ""
@@ -15831,29 +15797,29 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
-msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> převedeno"
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b> převedeno."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>v symbolu %c "
-"převedeného"
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b>v jednotce %c "
+"převedeno."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b>."
-msgstr "<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b>"
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c."
 msgstr ""
-"<b>Vývod mimo mřížku %s</b>%s na pozici <b>(%.3f, %.3f)</b> v symbolu %c"
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%.3f, %.3f)</b> v jednotce %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:398
 #, fuzzy
@@ -17107,11 +17073,13 @@ msgid "Import Eagle Project Files"
 msgstr "Import souborů projektu Eagle"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr " <%s> nevypadá jako platná knihovna součástek Kicadu."
+msgstr ""
+"Soubor '%s'\n"
+"se nezdá být platný soubor KiCad projektu."
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -17563,14 +17531,12 @@ msgid "Save Project To"
 msgstr "Uložit projekt do"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#, fuzzy
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Vytvoří nový projekt ze šablony"
+msgstr "Vytvořit (nebo otevřít) projekt pro úpravu schématu."
 
 #: kicad/tools/kicad_manager_control.cpp:607
-#, fuzzy
 msgid "Create (or open) a project to edit a pcb."
-msgstr "Vytvoří nový projekt ze šablony"
+msgstr "Vytvořit (nebo otevřít) projekt pro úpravu DPS."
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
@@ -27093,13 +27059,10 @@ msgid "Check rule syntax"
 msgstr "Kontrola syntaxe pravidla"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
-msgstr ""
-"Text nebude čitelný s tloušťkou větší než\n"
-"je 1/4 jeho šířky nebo výšky."
+msgstr "Text nebude čitelný s tloušťkou větší než je 1/4 jeho šířky nebo výšky."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -28129,21 +28092,18 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" neexistuje. Chcete ji vytvořit?"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Došlo k chybě při ukládání tabulky knihovny pouzder projektu:\n"
-"\n"
-"%s"
+"Chyba při ukládání pouzdra '%s' do knihovny specifických pouzder projektu: %s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
-"Došlo k chybě při ukládání tabulky knihovny pouzder projektu:\n"
-"\n"
+"Došlo k chybě při ukládání tabulky knihoven pouzder specifické pro projekt: "
 "%s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
@@ -29531,19 +29491,16 @@ msgid "Unrecognized layer '%s'"
 msgstr "Nerozpoznaná vrstva '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:279
-#, fuzzy
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Pouzdra osazena na dolní straně desek"
+msgstr "Plocha obsazení stopy není jediný uzavřený tvar."
 
 #: pcbnew/pcb_expr_evaluator.cpp:289
-#, fuzzy
 msgid "Footprint has no front courtyard."
-msgstr "Modul '%s' nenalezeno"
+msgstr "Pouzdro nemá nahoře žádnou zónu obsazení."
 
 #: pcbnew/pcb_expr_evaluator.cpp:304
-#, fuzzy
 msgid "Footprint has no back courtyard."
-msgstr "Modul '%s' nenalezeno"
+msgstr "Pouzdro nemá dole žádnou zónu obsazení."
 
 #: pcbnew/pcb_expr_evaluator.cpp:758
 #, fuzzy
@@ -31521,9 +31478,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Protínající se polygony nejsou povoleny"
 
 #: pcbnew/tools/drawing_tool.cpp:2298
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Závažnost porušení"
+msgstr "Poloha prokovu porušuje DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2405
 msgid "Place via"
@@ -31582,9 +31538,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1204
-#, fuzzy
 msgid "Unable to fillet the selected track segments."
-msgstr "Nelze táhnout tento segment, dva souběžné segmenty"
+msgstr "Nelze zaokrouhlit vybrané segmenty spoje."
 
 #: pcbnew/tools/edit_tool.cpp:1206
 #, fuzzy
@@ -32343,9 +32298,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Generovat soubor(y) vrtání Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:563
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Parametry součástky"
+msgstr "Umístění komponent (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:564
 #, fuzzy
@@ -32985,9 +32939,8 @@ msgid "Filter Selected Items..."
 msgstr "Výběr filtru..."
 
 #: pcbnew/tools/pcb_actions.cpp:1193
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Odebrat položku(y) z výběru."
+msgstr "Odebrat položky z výběru podle typu"
 
 #: pcbnew/tools/pcb_actions.cpp:1201
 msgid "Fill zone(s)"
