@@ -948,6 +948,18 @@ void APPEARANCE_CONTROLS::OnBoardNetSettingsChanged( BOARD& aBoard )
 }
 
 
+void APPEARANCE_CONTROLS::OnNetVisibilityChanged( int aNetCode, bool aVisibility )
+{
+    int row = m_netsTable->GetRowByNetcode( aNetCode );
+
+    if( row >= 0 )
+    {
+        m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aVisibility );
+        m_netsGrid->ForceRefresh();
+    }
+}
+
+
 bool APPEARANCE_CONTROLS::doesBoardItemNeedRebuild( BOARD_ITEM* aBoardItem )
 {
     return aBoardItem->Type() == PCB_NETINFO_T;

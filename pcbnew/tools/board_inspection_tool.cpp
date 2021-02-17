@@ -1242,7 +1242,7 @@ void BOARD_INSPECTION_TOOL::doHideNet( int aNetCode, bool aHide )
     m_frame->GetCanvas()->RedrawRatsnest();
     m_frame->GetCanvas()->Refresh();
 
-    m_frame->GetAppearancePanel()->OnBoardNetSettingsChanged( *m_frame->GetBoard() );
+    m_frame->GetAppearancePanel()->OnNetVisibilityChanged( aNetCode, !aHide );
 }
 
 

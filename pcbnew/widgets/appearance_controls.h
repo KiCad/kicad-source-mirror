@@ -224,6 +224,9 @@ public:
     ///< Update the widget when the active board layer is changed.
     void OnLayerChanged();
 
+    /// Notifies the panel when a net has been hidden or shown via the external tool.
+    void OnNetVisibilityChanged( int aNetCode, bool aVisibility );
+
     ///< Manually update visibility for a given layer
     void SetLayerVisible( LAYER_NUM aLayer, bool isVisible );
 
