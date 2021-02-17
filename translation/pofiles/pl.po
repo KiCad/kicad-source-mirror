@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-07 23:02+0000\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1625,7 +1625,7 @@ msgstr "Grupa twórców wiodących"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr "Absolwenci twórców wiodących"
+msgstr "Starsi twórcy wiodący"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1735,7 +1735,7 @@ msgstr "Kopiuje informacje o wersji programu KiCad do schowka"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "Raportowanie błędów"
+msgstr "Zgłoś błąd"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:641
 msgid "Report a problem with KiCad"
@@ -3330,64 +3330,52 @@ msgid "Netclass name already in use."
 msgstr "Nazwa klasy połączeń jest już używana."
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Minimalny prześwit:"
+msgstr "Minimalny prześwit"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Miminalna szerokość ścieżki:"
+msgstr "Minimalna szerokość ścieżki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Średnica przelotki:"
+msgstr "Średnica przelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Otwór przelotki jest większy niż jej średnica"
+msgstr "Średnica otworu przelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Średnica przelotki:"
+msgstr "Średnica mikroprzelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Otwór przelotki jest większy niż jej średnica"
+msgstr "Średnica otworu mikroprzelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Dostrajanie odchyłek par różnicowych"
+msgstr "Szerokość ścieżek pary różnicowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Pary różnicowe"
+msgstr "Prześwit między ścieżkami pary różnicowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Domyślna szerokość linii:"
+msgstr "Domyślna szerokość linii"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Bus wire thickness"
 msgstr "Grubość magistrali"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Pole schematu"
+msgstr "Kolor linii sygnałowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:484
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Pliki schematów"
+msgstr "Styl linii sygnałowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:535
 msgid "The default net class is required."
@@ -3892,7 +3880,7 @@ msgstr "Informacja o sieci"
 #: common/eda_item.cpp:280 pcbnew/pcb_group.cpp:305
 #: pcbnew/tools/pcb_actions.cpp:653
 msgid "Group"
-msgstr "Grupa"
+msgstr "Grupuj"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Marker"
@@ -11439,7 +11427,7 @@ msgstr "URL"
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 #: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Annotations"
-msgstr "Numeracje"
+msgstr "Numeracja"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:26
 msgid "Symbol unit notation:"
@@ -11495,7 +11483,7 @@ msgstr "Rozmiar pinu symbolu:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:119
 #: eeschema/erc_item.cpp:41
 msgid "Connections"
-msgstr "Podłączenia"
+msgstr "Połączenia"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:124
 msgid "Junction dot size:"
@@ -14757,9 +14745,8 @@ msgid "Nickname"
 msgstr "Nazwa skrótowa"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:597
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Zapisz symbol jako..."
+msgstr "Zapisz symbol jako"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:598
 #: pcbnew/footprint_libraries_utils.cpp:950
@@ -17368,11 +17355,13 @@ msgid "Import Eagle Project Files"
 msgstr "Import projektów z programu EAGLE"
 
 #: kicad/kicad.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "Plik \"%s\" nie wygląda na plik z prawidłowym schematem."
+msgstr ""
+"Plik '%s'\n"
+"nie wygląda na prawidłowy plik z projektem programu KiCad."
 
 #: kicad/kicad_manager_frame.cpp:552
 msgid "Load File to Edit"
@@ -17439,11 +17428,11 @@ msgstr "Rozpakowuje pliki projektu z archiwum ZIP"
 
 #: kicad/menubar.cpp:128
 msgid "Browse Project Files"
-msgstr "Przeglądaj pliki projektu"
+msgstr "Eksploruj pliki projektu"
 
 #: kicad/menubar.cpp:129
 msgid "Open project directory in file browser"
-msgstr "Otwórz folder projektu w eksploratorze plików"
+msgstr "Otwórz folder z projektem w eksploratorze plików"
 
 #: kicad/menubar.cpp:154
 msgid "Edit Local File..."
@@ -18333,7 +18322,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18360,7 +18348,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18370,7 +18357,7 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
-"## Tłumik rozdzielczy\n"
+"## Tłumik rozdzielający\n"
 "### Tłumienie to 6dB\n"
 "___Z<sub>in</sub>___ żądana impedancja wejściowa w &#x2126;<br>\n"
 "___Z<sub>out</sub>___ żądana impedancja wyjściowa w &#x2126;<br>\n"
@@ -18379,7 +18366,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -19116,49 +19102,40 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1845
-#, fuzzy
 msgid "0 .. 15V"
-msgstr "0 ... 15V"
+msgstr "0 .. 15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1846
-#, fuzzy
 msgid "16 .. 30V"
-msgstr "16 ... 30V"
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1847
-#, fuzzy
 msgid "31 .. 50V"
-msgstr "31 ... 50V"
+msgstr "31 .. 50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1848
-#, fuzzy
 msgid "51 .. 100V"
-msgstr "51 ... 100V"
+msgstr "51 .. 100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1849
-#, fuzzy
 msgid "101 .. 150V"
-msgstr "101 ... 150V"
+msgstr "101 .. 150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1850
-#, fuzzy
 msgid "151 .. 170V"
-msgstr "151 ... 170V"
+msgstr "151 .. 170V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1851
-#, fuzzy
 msgid "171 .. 250V"
-msgstr "171 ... 250V"
+msgstr "171 .. 250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1852
-#, fuzzy
 msgid "251 .. 300V"
-msgstr "251 ... 300V"
+msgstr "251 .. 300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1853
-#, fuzzy
 msgid "301 .. 500V"
-msgstr "301 ... 500V"
+msgstr "301 .. 500V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1854
 msgid " > 500V"
@@ -19260,7 +19237,6 @@ msgid "Not worth using"
 msgstr "Nie warte użycia"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19313,26 +19289,24 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\tdowolna kombinacja powyższych\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:193
-#, fuzzy
 msgid "Write Data Failed"
 msgstr "Błąd zapisu pliku danych"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:197
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Dane zostały zmodyfikowane, ale nie ma pliku danych by je zapisać\n"
+"Nie określono nazwy pliku by zapisać wykonane modyfikacje.\n"
 "Czy chcesz opuścić program i porzucić zmiany?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Nie można zapisać pliku \"%s\"\n"
+"Nie można zapisać pliku '%s'\n"
 "Czy chcesz opuścić program i porzucić zmiany?"
 
 #: pcb_calculator/regulators_funct.cpp:126
@@ -20075,7 +20049,6 @@ msgid "Options for edge card connectors."
 msgstr "Opcje dla złącz krawędziowych."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:159
-#, fuzzy
 msgid "Board thickness from stackup:"
 msgstr "Bieżąca grubość ze stosu warstw:"
 
@@ -27417,13 +27390,12 @@ msgid "Check rule syntax"
 msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
 msgstr ""
-"Tekst nie będzie czytelny z grubością większą niż\n"
-"1/2 jego szerokości lub wysokości."
+"Tekst nie będzie czytelny z grubością większą niż 1/4 jego szerokości lub "
+"wysokości."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -27475,25 +27447,23 @@ msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "Rozmiar przelotki jest mniejsza niż minimalny rozmiar (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
-#, fuzzy
 msgid "No via hole size defined."
-msgstr "Nie zdefiniowano otworu przelotki."
+msgstr "Nie zdefiniowano rozmiaru otworu przelotki."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "Rozmiar przelotki jest mniejsza niż minimalny rozmiar (%s)."
+msgstr "Rozmiar otworu przelotki jest mniejszy niż minimalny rozmiar (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
 msgstr "Rozmiar otworu przelotki jest większy niż rozmiar przelotki."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
 msgstr ""
-"Średnica oraz otwór przelotki zostawia szerokość pierścienia mniejszy od "
+"Średnica oraz otwór przelotki pozostawia szerokość pierścienia mniejszy od "
 "minimalnego (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:313
@@ -28443,21 +28413,19 @@ msgstr ""
 "Plik z obwodem drukowanym \"%s\" nie istnieje.  Czy chcesz go teraz utworzyć?"
 
 #: pcbnew/files.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Wystąpił błąd przy próbie zapisu lokalnej tablicy bibliotek footprintów:\n"
-"\n"
-"%s"
+"Wystąpił błąd podczas zapisu footprintu '%s' do projektowej tablicy "
+"bibliotek footprintów: %s"
 
 #: pcbnew/files.cpp:830
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
-"Wystąpił błąd przy próbie zapisu lokalnej tablicy bibliotek footprintów:\n"
-"\n"
+"Wystąpił błąd przy próbie zapisu projektowej tablicy bibliotek footprintów: "
 "%s"
 
 #: pcbnew/files.cpp:920 pcbnew/files.cpp:1062
@@ -28756,9 +28724,8 @@ msgstr ""
 "Nie można zapisać."
 
 #: pcbnew/footprint_libraries_utils.cpp:949
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "Zapisz footprint"
+msgstr "Zapisz footprint jako"
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 msgid "No library specified.  Footprint could not be saved."
@@ -29004,7 +28971,7 @@ msgstr "Skala importowanej grafiki:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:163
 msgid "Group items"
-msgstr "Grupa elementów"
+msgstr "Grupuj elementy"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
@@ -30377,6 +30344,10 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
+"Szablon CADSTAR '%s' posiada w oryginalnym projekcie łącza termiczne, ale "
+"ich ustawienia nie mają odpowiednika w programie KiCad. Zamiast tego "
+"zastosowano pełne łącze. Gdy obrys strefy zostanie ponownie wypełniony, "
+"łącza termiczne zostaną usunięte."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1754
 #, c-format
@@ -32319,12 +32290,10 @@ msgid "Close the in progress outline"
 msgstr "Zamyka tworzony właśnie obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "Linie graficzne tylko poziomo, pionowo i pod kątem 45 stopni"
+msgstr "Linie graficzne tylko pod kątem 45 stopni"
 
 #: pcbnew/tools/pcb_actions.cpp:217
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
 msgstr "Linie graficzne tylko poziomo, pionowo i pod kątem 45 stopni"
 
@@ -33403,18 +33372,16 @@ msgid "Route Single Track"
 msgstr "Trasowanie pojedynczej ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:1240
-#, fuzzy
 msgid "Route tracks"
-msgstr "Bez ścieżek"
+msgstr "Trasowanie ścieżek"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
 msgid "Route Differential Pair"
 msgstr "Trasowanie pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:1247
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Trasowanie pary różnicowej"
+msgstr "Trasowanie par różnicowych"
 
 #: pcbnew/tools/pcb_actions.cpp:1253
 msgid "Interactive Router Settings..."
