@@ -71,9 +71,8 @@ ROUTER::ROUTER()
     m_lastNode = nullptr;
     m_iterLimit = 0;
     m_settings = nullptr;
-    m_showInterSteps = false;
-    m_snapshotIter = 0;
     m_iface = nullptr;
+    m_visibleViewArea.SetMaximum();
 }
 
 
