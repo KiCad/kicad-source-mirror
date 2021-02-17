@@ -2258,10 +2258,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     continue;
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-                    continue;
+                    continue;       // stitching vias bind to zones, so ignore them
+
+                if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_GROUP_T )
+                    continue;       // check against children, but not against footprint itself
 
                 if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
-                    continue;
+                    continue;       // ignore hidden items
 
                 if( checkedItems.count( item ) )
                     continue;
