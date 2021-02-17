@@ -61,37 +61,37 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::closeProject( "kicad.Control.closeProject",
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
-        _( "Edit Schematic" ), _( "Edit schematic" ),
+        _( "Schematic Editor" ), _( "Edit schematic" ),
         icon_eeschema_24_xpm, AF_NONE, (void*) FRAME_SCH );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
         AS_GLOBAL,
         MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
-        _( "Edit Symbols" ), _( "Edit schematic symbols" ),
+        _( "Symbol Editor" ), _( "Edit schematic symbols" ),
         icon_libedit_24_xpm, AF_NONE, (void*) FRAME_SCH_SYMBOL_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,
         MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
-        _( "Edit PCB" ), _( "Edit PCB" ),
+        _( "PCB Editor" ), _( "Edit PCB" ),
         icon_pcbnew_24_xpm, AF_NONE, (void*) FRAME_PCB_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
         AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
-        _( "Edit Footprints" ), _( "Edit PCB footprints" ),
+        _( "Footprint Editor" ), _( "Edit PCB footprints" ),
         icon_modedit_24_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
         AS_GLOBAL,
         MD_CTRL + 'G', LEGACY_HK_NAME( "Run Gerbview" ),
-        _( "View Gerbers" ), _( "Preview Gerber output files" ),
+        _( "Gerber Viewer" ), _( "Preview Gerber output files" ),
         icon_gerbview_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
         AS_GLOBAL,
         MD_CTRL + 'B', LEGACY_HK_NAME( "Run Bitmap2Component" ),
-        _( "Convert Image" ), _( "Convert bitmap images to schematic or PCB components" ),
+        _( "Image Converter" ), _( "Convert bitmap images to schematic or PCB components" ),
         icon_bitmap2component_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator",
@@ -102,7 +102,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editWorksheet( "kicad.Control.editWorksheet",
         AS_GLOBAL,
         MD_CTRL + 'Y', LEGACY_HK_NAME( "Run PlEditor" ),
-        _( "Edit Worksheets" ), _( "Edit worksheet graphics and text" ),
+        _( "Worksheet Editor" ), _( "Edit worksheet graphics and text" ),
         icon_pagelayout_editor_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( "kicad.Control.openTextEditor",
