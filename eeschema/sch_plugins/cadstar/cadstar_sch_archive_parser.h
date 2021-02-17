@@ -222,12 +222,13 @@ public:
         enum class TYPE
         {
             GLOBALSIGNAL,
-            SIGNALREF
+            SIGNALREF,
+            TESTPOINT
             //TODO: there might be others
         };
 
         TYPE     Type;
-        wxString Reference;
+        wxString Reference = wxEmptyString;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };

@@ -613,6 +613,11 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode, PARSER_CONT
             Type      = TYPE::GLOBALSIGNAL;
             Reference = GetXmlAttributeIDString( cNode, 0 );
         }
+        else if( cNodeName == wxT( "TESTPOINT" ) )
+        {
+            Type = TYPE::TESTPOINT;
+            CheckNoNextNodes( cNode );
+        }
         else
         {
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
