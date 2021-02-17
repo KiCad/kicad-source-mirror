@@ -228,7 +228,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
         GetCanvas()->Refresh();
     }
 
-    if( aItem )
+    if( aItem && aItem != DELETED_BOARD_ITEM::GetInstance() )
     {
         aItem->SetBrightened();
 
