@@ -271,7 +271,7 @@ wxString PATHS::GetOSXKicadDataDir()
 
     // This must be mapped to main bundle for everything but kicad.app
     const wxArrayString dirs = ddir.GetDirs();
-    if( dirs[dirs.GetCount() - 3] != wxT( "kicad.app" ) )
+    if( dirs[dirs.GetCount() - 3].Lower() != wxT( "kicad.app" ) )
     {
         // Bundle structure resp. current path is
         //   kicad.app/Contents/Applications/<standalone>.app/Contents/SharedSupport
