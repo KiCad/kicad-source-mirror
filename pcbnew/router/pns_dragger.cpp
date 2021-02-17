@@ -395,24 +395,26 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
         optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY );
 
+        OPT_BOX2I affectedArea = aDragged.ChangedArea( &aOrig );
+        VECTOR2I anchor( aP );
 
-        OPT_BOX2I affectedArea = *aDragged.ChangedArea( &aOrig );
+        if( aDragged.CLine().Find( aP ) < 0 )
+        {
+            anchor = aDragged.CLine().NearestPoint( aP );
+        }
 
-        optimizer.SetPreserveVertex( aP );
+        optimizer.SetPreserveVertex( anchor );
 
         if( affectedArea )
         {
-            //Dbg()->AddBox( *affectedArea, 2 );
+            Dbg()->AddPoint( anchor, 3 );
+            Dbg()->AddBox( *affectedArea, 2 );
             optimizer.SetRestrictArea( *affectedArea );
             optimizer.Optimize( &aDragged );
-
-
 
             OPT_BOX2I optArea = *aDragged.ChangedArea( &aOrig );
             if( optArea )
                 Dbg()->AddBox( *optArea, 4 );
-
-
         }
     }
 
