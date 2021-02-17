@@ -2022,13 +2022,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         }
         else
         {
-            // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have
-            // to select footprint subparts one by one, rather than with a drag selection.  This
-            // is so you can pick up items under an (unlocked) footprint without also moving the
-            // footprint's sub-parts.
-            if( !checkVisibilityOnly && m_multiple && !settings->GetHighContrast() )
-                    return false;
-
             if( !view()->IsVisible( aItem ) )
                 return false;
 
