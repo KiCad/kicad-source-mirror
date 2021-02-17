@@ -687,6 +687,8 @@ public:
     bool GetIncludeOnBoard() const { return m_onBoard; }
     void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_onBoard = aIncludeOnBoard; }
 
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override;
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
 };

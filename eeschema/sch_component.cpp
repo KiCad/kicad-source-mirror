@@ -1876,3 +1876,11 @@ void SCH_COMPONENT::ClearBrightenedPins()
 }
 
 
+bool SCH_COMPONENT::IsPointClickableAnchor( const wxPoint& aPos ) const
+{
+    for( auto& pin : m_pins )
+        if( pin->IsPointClickableAnchor( aPos ) )
+            return true;
+
+    return false;
+}
