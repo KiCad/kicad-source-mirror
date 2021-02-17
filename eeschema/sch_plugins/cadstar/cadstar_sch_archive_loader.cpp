@@ -1908,6 +1908,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
     filename += wxT( "." ) + KiCadSchematicFileExtension;
 
     filenameField.SetText( filename );
+
     wxFileName fn( filename );
     sheet->GetScreen()->SetFileName( fn.GetFullPath() );
     aParentSheet.Last()->GetScreen()->Append( sheet );
@@ -1916,6 +1917,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
 
     wxString pageNumStr = wxString::Format( "%d", getSheetNumber( aCadstarSheetID ) );
     sheet->SetPageNumber( instance, pageNumStr );
+
+    sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
     m_sheetMap.insert( { aCadstarSheetID, sheet } );
 
