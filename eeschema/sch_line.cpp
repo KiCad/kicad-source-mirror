@@ -566,19 +566,29 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 
 void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    if( IsGraphicLine() )
-        return;
+    DANGLING_END_T startType, endType;
 
-    if( ( GetLayer() == LAYER_BUS ) || ( GetLayer() == LAYER_WIRE ) )
+    switch( GetLayer() )
     {
-        DANGLING_END_ITEM item( (GetLayer() == LAYER_BUS) ? BUS_START_END : WIRE_START_END, this,
-                                m_start );
-        aItemList.push_back( item );
-
-        DANGLING_END_ITEM item1( (GetLayer() == LAYER_BUS) ? BUS_END_END : WIRE_END_END, this,
-                                 m_end );
-        aItemList.push_back( item1 );
+    case LAYER_WIRE:
+        startType = WIRE_START_END;
+        endType = WIRE_END_END;
+        break;
+    case LAYER_BUS:
+        startType = BUS_START_END;
+        endType = BUS_END_END;
+        break;
+    default:
+        startType = GRAPHIC_START_END;
+        endType = GRAPHIC_END_END;
+        break;
     }
+
+    DANGLING_END_ITEM item( startType, this, m_start );
+    aItemList.push_back( item );
+
+    DANGLING_END_ITEM item1( endType, this, m_end );
+    aItemList.push_back( item1 );
 }
 
 
@@ -590,32 +600,36 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
     m_startIsDangling = m_endIsDangling = true;
 
-    if( GetLayer() == LAYER_WIRE )
+    for( DANGLING_END_ITEM item : aItemList )
     {
-        for( DANGLING_END_ITEM item : aItemList )
-        {
-            if( item.GetItem() == this )
-                continue;
+        if( item.GetItem() == this )
+            continue;
 
-            if(     item.GetType() == BUS_START_END ||
-                    item.GetType() == BUS_END_END  ||
-                    item.GetType() == BUS_ENTRY_END )
-                continue;
+        if( ( IsWire()
+              && ( item.GetType() == BUS_START_END || item.GetType() == BUS_END_END
+                   || item.GetType() == BUS_ENTRY_END ) )
+            || ( IsBus()
+                 && ( item.GetType() == WIRE_START_END || item.GetType() == WIRE_END_END
+                      || item.GetType() == PIN_END ) )
+            || ( IsGraphicLine()
+                 && ( item.GetType() != GRAPHIC_START_END && item.GetType() != GRAPHIC_END_END ) ) )
+            continue;
 
-            if( m_start == item.GetPosition() )
-                m_startIsDangling = false;
+        if( m_start == item.GetPosition() )
+            m_startIsDangling = false;
 
-            if( m_end == item.GetPosition() )
-                m_endIsDangling = false;
+        if( m_end == item.GetPosition() )
+            m_endIsDangling = false;
 
-            if( !m_startIsDangling && !m_endIsDangling )
-                break;
-        }
+        if( !m_startIsDangling && !m_endIsDangling )
+            break;
     }
-    else if( GetLayer() == LAYER_BUS || IsGraphicLine() )
+
+    if( IsBus() || IsGraphicLine() )
     {
-        // Lines on the notes layer and the bus layer cannot be tested for dangling ends.
-        previousStartState = previousEndState = m_startIsDangling = m_endIsDangling = false;
+        // Force unchanged return state for graphic lines and busses
+        previousStartState = m_startIsDangling;
+        previousEndState = m_endIsDangling;
     }
 
     return ( previousStartState != m_startIsDangling ) || ( previousEndState != m_endIsDangling );
@@ -901,6 +915,11 @@ bool SCH_LINE::IsGraphicLine() const
 bool SCH_LINE::IsWire() const
 {
     return ( GetLayer() == LAYER_WIRE );
+}
+
+bool SCH_LINE::IsBus() const
+{
+    return ( GetLayer() == LAYER_BUS );
 }
 
 

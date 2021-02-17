@@ -127,6 +127,8 @@ public:
         return ( m_type == CONNECTION_TYPE::NET );
     }
 
+    bool IsUnconnected() const { return ( m_type == CONNECTION_TYPE::NONE ); }
+
     bool IsDirty() const { return m_dirty; }
     void SetDirty() { m_dirty = true; }
     void ClearDirty() { m_dirty = false; }

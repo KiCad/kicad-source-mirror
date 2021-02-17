@@ -266,6 +266,13 @@ public:
      */
     bool IsWire() const;
 
+    /**
+     * Returns true if the line is a bus.
+     *
+     * @return true if this line is on the bus layer.
+     */
+    bool IsBus() const;
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
 };

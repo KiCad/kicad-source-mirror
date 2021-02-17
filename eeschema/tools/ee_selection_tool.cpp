@@ -329,6 +329,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         bool displayWireCursor = false;
         bool displayBusCursor = false;
+        bool displayLineCursor = false;
         KIID rolloverItem = lastRolloverItem;
         m_additive = m_subtractive = m_exclusive_or = false;
 
@@ -374,22 +375,27 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         OPT_TOOL_EVENT newEvt;
                         SCH_CONNECTION* connection = collector[0]->Connection();
 
-                        if( connection && connection->IsBus() )
-                        {
-                            newEvt = EE_ACTIONS::drawBus.MakeEvent();
-                        }
-                        else
+                        if( ( connection && ( connection->IsNet() || connection->IsUnconnected() ) )
+                            || collector[0]->Type() == SCH_COMPONENT_T )
                         {
                             newEvt = EE_ACTIONS::drawWire.MakeEvent();
                         }
-                    
+                        else if( connection && connection->IsBus() )
+                        {
+                            newEvt = EE_ACTIONS::drawBus.MakeEvent();
+                        }
+                        else if( collector[0]->Type() == SCH_LINE_T
+                                 && static_cast<SCH_LINE*>( collector[0] )->IsGraphicLine() )
+                        {
+                            newEvt = EE_ACTIONS::drawLines.MakeEvent();
+                        }
+
                         auto* params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
                         auto* newParams = new DRAW_SEGMENT_EVENT_PARAMS();
 
                         *newParams= *params;
                         newParams->quitOnDraw = true;
                         newEvt->SetParameter( newParams );
-
 
                         getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                         newEvt->SetMousePosition( snappedCursorPos );
@@ -586,13 +592,19 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         SCH_CONNECTION* connection = collector[0]->Connection();
 
-                        if( connection && connection->IsBus() )
+                        if( ( connection && ( connection->IsNet() || connection->IsUnconnected() ) )
+                            || collector[0]->Type() == SCH_COMPONENT_T )
+                        {
+                            displayWireCursor = true;
+                        }
+                        else if( connection && connection->IsBus() )
                         {
                             displayBusCursor = true;
                         }
-                        else
+                        else if( collector[0]->Type() == SCH_LINE_T
+                                 && static_cast<SCH_LINE*>( collector[0] )->IsGraphicLine() )
                         {
-                            displayWireCursor = true;
+                            displayLineCursor = true;
                         }
 
                         getViewControls()->ForceCursorPosition( true, snappedCursorPos );
@@ -653,6 +665,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( displayBusCursor )
             {
                 m_nonModifiedCursor = KICURSOR::LINE_BUS;
+            }
+            else if( displayLineCursor )
+            {
+                m_nonModifiedCursor = KICURSOR::LINE_GRAPHIC;
             }
             else if( rolloverItem != niluuid )
             {

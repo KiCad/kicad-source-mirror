@@ -1272,13 +1272,13 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         }
     }
 
-    if( aLine->IsStartDangling() )
+    if( aLine->IsStartDangling() && aLine->IsWire() )
     {
         drawDanglingSymbol( aLine->GetStartPoint(), getLineWidth( aLine, drawingShadows ),
                             drawingShadows );
     }
 
-    if( aLine->IsEndDangling() )
+    if( aLine->IsEndDangling() && aLine->IsWire() )
     {
         drawDanglingSymbol( aLine->GetEndPoint(), getLineWidth( aLine, drawingShadows ),
                             drawingShadows );
