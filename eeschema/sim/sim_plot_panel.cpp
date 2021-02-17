@@ -37,8 +37,7 @@ static wxString formatFloat( double x, int nDigits )
 
     if( nDigits )
     {
-        fmt = wxT( "%.0Nf" );
-        fmt[3] = '0' + nDigits;
+        fmt.Printf( "%%.0%df", nDigits );
     }
     else
     {
@@ -102,6 +101,12 @@ static void getSISuffix( double x, const wxString& unit, int& power, wxString& s
 
 static int countDecimalDigits( double x, int maxDigits )
 {
+    if( std::isnan( x ) )
+    {
+        // avoid trying to count the decimals of NaN
+        return 0;
+    }
+
     int64_t k = (int)( ( x - floor( x ) ) * pow( 10.0, (double) maxDigits ) );
     int n = 0;
 
