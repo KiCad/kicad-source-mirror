@@ -128,12 +128,23 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         {
             EDA_RECT bbox;
 
-            // Don't use the fields of the components to calculate their bounding box
+            // Only use the visible fields of the components to calculate their bounding box
             // (hidden fields could be very long and artificially enlarge the sheet bounding box)
             if( item->Type() == SCH_COMPONENT_T )
-                bbox = static_cast<SCH_COMPONENT*>( item )->GetBodyBoundingBox();
+            {
+                SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
+                bbox = comp->GetBodyBoundingBox();
+
+                for( const SCH_FIELD& field : comp->GetFields() )
+                {
+                    if( field.IsVisible() )
+                        bbox.Merge( field.GetBoundingBox() );
+                }
+            }
             else
+            {
                 bbox = item->GetBoundingBox();
+            }
 
             sheetBoundingBox.Merge( bbox );
         }
