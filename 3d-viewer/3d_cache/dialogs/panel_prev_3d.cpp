@@ -449,7 +449,7 @@ void PANEL_PREV_3D::UpdateDummyFootprint( bool aReloadRequired )
 {
     m_dummyFootprint->Models().clear();
 
-    for( FP_3DMODEL& model : *m_parentModelList)
+    for( FP_3DMODEL& model : *m_parentModelList )
     {
         if( model.m_Show )
             m_dummyFootprint->Models().push_back( model );

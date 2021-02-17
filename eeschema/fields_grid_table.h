@@ -72,8 +72,10 @@ template <class T>
 class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
 {
 public:
-    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, LIB_PART* aPart );
-    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, SCH_SHEET* aSheet );
+    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
+                       LIB_PART* aPart );
+    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
+                       SCH_SHEET* aSheet );
     ~FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) this->size(); }
@@ -100,11 +102,12 @@ public:
     bool BoolFromString( wxString aValue ) const;
 
 protected:
-    void initGrid( DIALOG_SHIM* aDialog );
+    void initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid );
 
 private:
     SCH_BASE_FRAME* m_frame;
     EDA_UNITS       m_userUnits;
+    WX_GRID*        m_grid;
     KICAD_T         m_parentType;
     int             m_mandatoryFieldCount;
     LIB_PART*       m_part;

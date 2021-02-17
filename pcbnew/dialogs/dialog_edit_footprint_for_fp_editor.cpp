@@ -27,7 +27,6 @@
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <pcb_edit_frame.h>
 #include <validators.h>
 #include <board_design_settings.h>
 #include <board_commit.h>
@@ -96,8 +95,8 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     }
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &cfg->m_lastFootprint3dDir, "*.*",
-                                                true, Prj().GetProjectPath() ) );
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, m_modelsGrid, &cfg->m_lastFootprint3dDir,
+                                                "*.*", true, Prj().GetProjectPath() ) );
     m_modelsGrid->SetColAttr( 0, attr );
 
     // Show checkbox
@@ -315,6 +314,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
+    m_PreviewPane->UpdateDummyFootprint();
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

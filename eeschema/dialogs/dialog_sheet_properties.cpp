@@ -49,7 +49,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_dummySheetNameField( wxDefaultPosition, SHEETNAME, &m_dummySheet )
 {
     m_sheet = aSheet;
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_sheet );
+    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_sheet );
     m_width = 100;  // Will be later set to a better value
     m_delayedFocusRow = SHEETNAME;
     m_delayedFocusColumn = FDC_VALUE;

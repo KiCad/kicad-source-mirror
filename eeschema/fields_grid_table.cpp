@@ -46,9 +46,10 @@ enum
 
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
-                                         LIB_PART* aPart ) :
+                                         WX_GRID* aGrid, LIB_PART* aPart ) :
         m_frame( aFrame ),
         m_userUnits( aDialog->GetUserUnits() ),
+        m_grid( aGrid ),
         m_parentType( SCH_COMPONENT_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aPart ),
@@ -60,15 +61,16 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
 {
-    initGrid( aDialog );
+    initGrid( aDialog, aGrid );
 }
 
 
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
-                                         SCH_SHEET* aSheet ) :
+                                         WX_GRID* aGrid, SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_userUnits( aDialog->GetUserUnits() ),
+        m_grid( aGrid ),
         m_parentType( SCH_SHEET_T ),
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
@@ -80,12 +82,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME_V )
 {
-    initGrid( aDialog );
+    initGrid( aDialog, aGrid );
 }
 
 
 template <class T>
-void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
+void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid )
 {
     // Build the various grid cell attributes.
     // NOTE: validators and cellAttrs are member variables to get the destruction order
@@ -133,7 +135,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
     exts.push_back( KiCadSchematicFileExtension );
     wildCard += AddFileExtListToFilter( exts );
 
-    auto filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, wildCard );
+    auto filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, aGrid, &m_curdir, wildCard );
     filepathEditor->SetValidator( m_filepathValidator );
     m_filepathAttr->SetEditor( filepathEditor );
 

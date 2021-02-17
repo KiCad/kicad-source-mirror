@@ -286,7 +286,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     // so we need to handle m_part == nullptr
     wxASSERT( m_part );
 
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
+    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_part );
 
     m_width = 0;
     m_delayedFocusRow = REFERENCE_FIELD;

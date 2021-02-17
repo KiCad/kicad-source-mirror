@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 CERN
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +33,7 @@
 #include <dialog_shim.h>
 #include <common.h>
 #include <env_paths.h>
-
+#include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <eda_doc.h>
 
@@ -318,11 +319,13 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
+    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, WX_GRID* aGrid,
                               wxString* aCurrentDir, wxString* aExt = nullptr,
-                              bool aNormalize = false, wxString aNormalizeBasePath = wxEmptyString ) :
+                              bool aNormalize = false,
+                              wxString aNormalizeBasePath = wxEmptyString ) :
             wxComboCtrl( aParent ),
             m_dlg( aParentDlg ),
+            m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
             m_ext( aExt ),
             m_normalize( aNormalize ),
@@ -370,6 +373,7 @@ protected:
                     relPath = filePath;
 
                 SetValue( relPath );
+                m_grid->CommitPendingChanges();
                 *m_currentDir = lastPath;
             }
         }
@@ -393,12 +397,14 @@ protected:
                     relPath = filePath;
 
                 SetValue( relPath );
+                m_grid->CommitPendingChanges();
                 *m_currentDir = relPath;
             }
         }
     }
 
     DIALOG_SHIM* m_dlg;
+    WX_GRID*     m_grid;
     wxString*    m_currentDir;
     wxString*    m_ext;
     bool         m_normalize;
@@ -410,10 +416,10 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     if( m_ext.IsEmpty() )
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, nullptr,
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, nullptr,
                                                   m_normalize, m_normalizeBasePath );
     else
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext,
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, &m_ext,
                                                   m_normalize, m_normalizeBasePath );
 
 #if wxUSE_VALIDATORS

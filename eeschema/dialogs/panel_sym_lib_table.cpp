@@ -222,9 +222,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 wxString wildcards = AllSymbolLibFilesWildcard()
                                      + "|" + KiCadSymbolLibFileWildcard()
                                      + "|" + LegacySymbolLibFileWildcard();
-                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &cfg->m_lastSymbolLibDir,
-                                                            wildcards, true,
-                                                            m_project->GetProjectPath() ) );
+                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
+                                                            &cfg->m_lastSymbolLibDir, wildcards,
+                                                            true, m_project->GetProjectPath() ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;
