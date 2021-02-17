@@ -89,6 +89,7 @@ class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
 public:
     PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD * aBrd, PCB_LAYER_ID aDefaultLayer,
                             LSET aNotAllowedLayersMask );
+    ~PCB_ONE_LAYER_SELECTOR();
 
     LAYER_NUM GetLayerSelection()   { return m_layerSelected; }
 
@@ -96,6 +97,9 @@ private:
     // Event handlers
     void OnLeftGridCellClick( wxGridEvent& event ) override;
     void OnRightGridCellClick( wxGridEvent& event ) override;
+
+    // Will close the dialog on ESC key
+    void onCharHook( wxKeyEvent& event );
 
     void buildList();
 };
@@ -119,9 +123,24 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
     m_rightGridLayers->SetColFormatBool( SELECT_COLNUM );
     buildList();
 
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PCB_ONE_LAYER_SELECTOR::onCharHook ) );
+
     Layout();
     GetSizer()->SetSizeHints( this );
     SetFocus();
+}
+
+
+PCB_ONE_LAYER_SELECTOR::~PCB_ONE_LAYER_SELECTOR()
+{
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PCB_ONE_LAYER_SELECTOR::onCharHook ) );
+}
+
+
+void PCB_ONE_LAYER_SELECTOR::onCharHook( wxKeyEvent& event )
+{
+    if( event.GetKeyCode() == WXK_ESCAPE )
+        Close();
 }
 
 
@@ -203,8 +222,9 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 }
 
 
-PCB_LAYER_ID PCB_BASE_FRAME::SelectLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask,
-                                          wxPoint aDlgPosition )
+PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer,
+                                             LSET aNotAllowedLayersMask,
+                                             wxPoint aDlgPosition )
 {
     PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(), aDefaultLayer, aNotAllowedLayersMask );
 

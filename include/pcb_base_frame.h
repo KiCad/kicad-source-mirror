@@ -328,16 +328,16 @@ public:
 
 
     /**
-     * Show the dialog box for layer selection.
+     * Show the dialog box for a layer selection.
      *
-     * @param aDefaultLayer is the default layer to select.  Use #NB_PCB_LAYERS if no selection
+     * @param aDefaultLayer is the default layer to select.  Use UNDEFINED_LAYER if no selection
      *                      is desired.
      * @param aNotAllowedLayersMask is a layer mask for not allowed layers.  Use 0 to show all
      *                              layers in use.
      * @param aDlgPosition is the position of dialog (default is centered).
      * @return the selected layer id.
      */
-    PCB_LAYER_ID SelectLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
+    PCB_LAYER_ID SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
                               wxPoint aDlgPosition = wxDefaultPosition );
 
     virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );

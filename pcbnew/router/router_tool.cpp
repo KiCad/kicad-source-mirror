@@ -753,10 +753,8 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             wxPoint endPoint = (wxPoint) view()->ToScreen( m_endSnapPoint );
             endPoint = frame()->GetCanvas()->ClientToScreen( endPoint );
 
-            controls()->WarpCursor( endPoint );
-
-            targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
-                                                LSET::AllNonCuMask(), endPoint );
+            targetLayer = frame()->SelectOneLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
+                                                   LSET::AllNonCuMask(), endPoint );
 
             // Reset the cursor to the end of the track
             controls()->SetCursorPosition( m_endSnapPoint );

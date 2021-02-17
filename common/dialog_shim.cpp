@@ -183,6 +183,36 @@ int DIALOG_SHIM::vertPixelsFromDU( int y ) const
 
 static RECT_MAP class_map;
 
+
+void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
+{
+    wxDialog::SetPosition( aNewPosition );
+
+    // Now update the stored position:
+    const char* hash_key;
+
+    if( m_hash_key.size() )
+    {
+        // a special case like EDA_LIST_DIALOG, which has multiple uses.
+        hash_key = m_hash_key.c_str();
+    }
+    else
+    {
+        hash_key = typeid(*this).name();
+    }
+
+    RECT_MAP::iterator it = class_map.find( hash_key );
+
+    if( it == class_map.end() )
+        return;
+
+    EDA_RECT rect = it->second;
+    rect.SetOrigin( aNewPosition );
+
+    class_map[ hash_key ] = rect;
+}
+
+
 bool DIALOG_SHIM::Show( bool show )
 {
     bool        ret;

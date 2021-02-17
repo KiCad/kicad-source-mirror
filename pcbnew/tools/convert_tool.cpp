@@ -537,7 +537,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
             BOARD_ITEM_CONTAINER* parent = frame->GetModel();
 
             if( !IsCopperLayer( layer ) )
-                layer = frame->SelectLayer( F_Cu, LSET::AllNonCuMask() );
+                layer = frame->SelectOneLayer( F_Cu, LSET::AllNonCuMask() );
 
             // I am really unsure converting a polygon to "tracks" (i.e. segments on
             // copper layers) make sense for footprints, but anyway this code exists

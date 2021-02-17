@@ -112,6 +112,11 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
+    /** Force the position of the dialog to a new position
+     * @param aNewPosition is the new forced position
+     */
+    void SetPosition( const wxPoint& aNewPosition );
+
     EDA_UNITS GetUserUnits() const
     {
         return m_units;
