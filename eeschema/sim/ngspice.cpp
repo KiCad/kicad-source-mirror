@@ -34,6 +34,8 @@
 #include <common.h>
 #include <locale_io.h>
 
+#include <paths.h>
+
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
 
@@ -344,8 +346,8 @@ void NGSPICE::init_dll()
     #endif
 #elif defined(__WXMAC__)
     const vector<string> dllPaths = {
-        GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
-        GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",
+        PATHS::GetOSXKicadUserDataDir().ToStdString() + "/PlugIns/ngspice",
+        PATHS::GetOSXKicadMachineDataDir().ToStdString() + "/PlugIns/ngspice",
         // when running kicad.app
         stdPaths.GetPluginsDir().ToStdString() + "/sim",
         // when running eeschema.app

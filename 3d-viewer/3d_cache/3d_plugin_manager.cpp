@@ -163,10 +163,10 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 
    // Search path on OS X is
    // (1) User     ~/Library/Application Support/kicad/PlugIns/3d
-   checkPluginPath( GetOSXKicadUserDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+   checkPluginPath( PATHS::GetOSXKicadUserDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
 
    // (2) Machine  /Library/Application Support/kicad/PlugIns/3d
-   checkPluginPath( GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+   checkPluginPath( PATHS::GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
 
    // (3) Bundle   kicad.app/Contents/PlugIns/3d
    fn.AssignDir( PATHS::GetStockPlugins3DPath() );

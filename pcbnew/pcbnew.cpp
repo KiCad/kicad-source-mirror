@@ -54,6 +54,7 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
+#include <paths.h>
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
 
@@ -246,7 +247,7 @@ static bool scriptingSetup()
     wxString pypath;
 
     // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting)
-    pypath += GetOSXKicadDataDir() + wxT( "/scripting" );
+    pypath += PATHS::GetOSXKicadDataDir() + wxT( "/scripting" );
 
     // $(KICAD_PATH)/scripting/plugins is always added in kicadplugins.i
     if( wxGetenv("KICAD_PATH") != NULL )

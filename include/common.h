@@ -124,26 +124,6 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
  */
 const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 
-
-#ifdef __WXMAC__
-/**
- * OSX specific function GetOSXKicadUserDataDir
- *
- * @return The macOS specific user data directory for KiCad.
- */
-wxString GetOSXKicadUserDataDir();
-
-/**
- * @return The macOS specific machine data directory for KiCad
- */
-wxString GetOSXKicadMachineDataDir();
-
-/**
- * @return The macOS specific bundle data directory for KiCad
- */
-wxString GetOSXKicadDataDir();
-#endif
-
 // Some wxWidgets versions (for instance before 3.1.0) do not include
 // this function, so add it if missing
 #if !wxCHECK_VERSION( 3, 1, 0 )

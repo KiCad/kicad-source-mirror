@@ -97,6 +97,25 @@ public:
      */
     static void EnsureUserPathsExist();
 
+#ifdef __WXMAC__
+    /**
+     * OSX specific function GetOSXKicadUserDataDir
+     *
+     * @return The macOS specific user data directory for KiCad.
+     */
+    static wxString GetOSXKicadUserDataDir();
+
+    /**
+     * @return The macOS specific machine data directory for KiCad
+     */
+    static wxString GetOSXKicadMachineDataDir();
+
+    /**
+     * @return The macOS specific bundle data directory for KiCad
+     */
+    static wxString GetOSXKicadDataDir();
+#endif
+
 private:
     // we are a static helper
     PATHS() {}

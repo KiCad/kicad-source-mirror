@@ -45,6 +45,7 @@
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <eeschema_settings.h>
 #include <schematic.h>
+#include <paths.h>
 
 #include <eeschema_id.h>
 #include <wx/regex.h>
@@ -748,7 +749,7 @@ void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 #ifndef __WXMAC__
     Path = Pgm().GetExecutablePath();
 #else
-    Path = GetOSXKicadDataDir() + wxT( "/plugins" );
+    Path = PATHS::GetOSXKicadDataDir() + wxT( "/plugins" );
 #endif
     FullFileName = EDA_FILE_SELECTOR( _( "Generator files:" ), Path, FullFileName,
                                       wxEmptyString, wxFileSelectorDefaultWildcardStr,

@@ -29,6 +29,7 @@
 #include <macros.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
+#include <paths.h>
 
 
 /**
@@ -79,7 +80,7 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     ss.AddPaths( wxT( DEFAULT_INSTALL_PATH ), 0 );
 
 #if defined(__WXMAC__)
-    ss.AddPaths( GetOSXKicadMachineDataDir() );
+    ss.AddPaths( PATHS::GetOSXKicadMachineDataDir() );
     ss.AddPaths( Pgm().GetExecutablePath(), 0 );
 
     // OS X packages can have the help files in

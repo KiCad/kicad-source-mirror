@@ -29,7 +29,7 @@
 #include <search_stack.h>
 #include <pgm_base.h>
 #include <config.h>     // to define DEFAULT_INSTALL_PATH
-
+#include <paths.h>
 
 // put your best guesses in here, send the computer on a wild goose chase, its
 // got nothing else to do.
@@ -53,13 +53,13 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
 
 #ifdef __WXMAC__
     // Add the directory for the user-dependent, program specific data files.
-    maybe.AddPaths( GetOSXKicadUserDataDir() );
+    maybe.AddPaths( PATHS::GetOSXKicadUserDataDir() );
 
     // Global machine specific application data
-    maybe.AddPaths( GetOSXKicadMachineDataDir() );
+    maybe.AddPaths( PATHS::GetOSXKicadMachineDataDir() );
 
     // Global application specific data files inside bundle
-    maybe.AddPaths( GetOSXKicadDataDir() );
+    maybe.AddPaths( PATHS::GetOSXKicadDataDir() );
 #else
     // This is from CMAKE_INSTALL_PREFIX.
     // Useful when KiCad is installed by `make install`.

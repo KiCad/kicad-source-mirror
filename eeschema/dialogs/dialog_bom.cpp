@@ -44,6 +44,7 @@
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <paths.h>
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 
@@ -352,7 +353,7 @@ void DIALOG_BOM::installGeneratorsList()
 #elif defined(__WXMSW__)
             wxString::Format( "%s\\scripting\\plugins", Pgm().GetExecutablePath() ),
 #elif defined(__WXMAC__)
-            wxString::Format( "%s/plugins", GetOSXKicadDataDir() ),
+            wxString::Format( "%s/plugins", PATHS::GetOSXKicadDataDir() ),
 #endif
         };
 
@@ -562,7 +563,7 @@ wxString DIALOG_BOM::chooseGenerator()
 #ifndef __WXMAC__
         lastPath = Pgm().GetExecutablePath();
 #else
-        lastPath = GetOSXKicadDataDir() + "/plugins";
+        lastPath = PATHS::GetOSXKicadDataDir() + "/plugins";
 #endif
     }
 
