@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-12 10:26-0800\n"
+"POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -99,8 +99,8 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Your OpenGL version is not supported. Minimum required is 1.5"
 
 #, c-format
-msgid "Render time %.0f ms ( %.1f fps)"
-msgstr "Render time %.0f ms ( %.1f fps)"
+msgid "Last render time %.0f ms"
+msgstr "Last render time %.0f ms"
 
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
@@ -4741,6 +4741,10 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sheet pin %s has no matching hierarchical label inside the sheet"
 
 #, c-format
+msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
+msgstr "Hierarchical label %s has no matching sheet pin outside the sheet"
+
+#, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s found"
 
@@ -5828,6 +5832,9 @@ msgstr "Power symbols"
 
 msgid "Filter items by net:"
 msgstr "Filter items by net:"
+
+msgid "Only include selected items"
+msgstr "Only include selected items"
 
 msgid "Set To"
 msgstr "Set To"
@@ -7570,6 +7577,18 @@ msgstr "Update symbols values that have been replaced in the PCB editor."
 
 msgid "Update Schematic from PCB"
 msgstr "Update Schematic from PCB"
+
+msgid "Parent symbol:"
+msgstr "Parent symbol:"
+
+msgid "Remove fields if not in parent symbol"
+msgstr "Remove fields if not in parent symbol"
+
+msgid "Reset fields if empty in parent symbol"
+msgstr "Reset fields if empty in parent symbol"
+
+msgid "Update Symbol Fields"
+msgstr "Update Symbol Fields"
 
 msgid ""
 "Some items have the same color as the background\n"
@@ -10660,6 +10679,12 @@ msgstr "Export…"
 msgid "Export a symbol to a new library file"
 msgstr "Export a symbol to a new library file"
 
+msgid "Update Symbol Fields..."
+msgstr "Update Symbol Fields..."
+
+msgid "Update symbol to match changes made in parent symbol"
+msgstr "Update symbol to match changes made in parent symbol"
+
 msgid "Add Symbol to Schematic"
 msgstr "Add Symbol to Schematic"
 
@@ -10858,14 +10883,14 @@ msgstr "Rotate"
 msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Rotates selected item(s) counter-clockwise"
 
-msgid "Mirror Around Horizontal Axis"
-msgstr "Mirror Around Horizontal Axis"
+msgid "Mirror Vertically"
+msgstr "Mirror Vertically"
 
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Flips selected item(s) from top to bottom"
 
-msgid "Mirror Around Vertical Axis"
-msgstr "Mirror Around Vertical Axis"
+msgid "Mirror Horizontally"
+msgstr "Mirror Horizontally"
 
 msgid "Flips selected item(s) from left to right"
 msgstr "Flips selected item(s) from left to right"
@@ -11429,6 +11454,9 @@ msgstr "Filename:"
 
 msgid "Edit Symbol Name"
 msgstr "Edit Symbol Name"
+
+msgid "Symbol is not derived from another symbol."
+msgstr "Symbol is not derived from another symbol."
 
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
@@ -12162,6 +12190,32 @@ msgstr "Project Template Title"
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
 
+msgid "Edit the project schematic"
+msgstr "Edit the project schematic"
+
+msgid "Edit global and/or project schematic symbol libraries"
+msgstr "Edit global and/or project schematic symbol libraries"
+
+msgid "Edit the project PCB design"
+msgstr "Edit the project PCB design"
+
+msgid "Edit global and/or project PCB footprint libraries"
+msgstr "Edit global and/or project PCB footprint libraries"
+
+msgid "Preview Gerber files"
+msgstr "Preview Gerber files"
+
+msgid "Convert bitmap images to schematic symbols or PCB footprints"
+msgstr "Convert bitmap images to schematic symbols or PCB footprints"
+
+msgid "Show tools for calculating resistance, current capacity, etc."
+msgstr "Show tools for calculating resistance, current capacity, etc."
+
+msgid ""
+"Edit worksheet borders and title blocks for use in schematics and PCB designs"
+msgstr ""
+"Edit worksheet borders and title blocks for use in schematics and PCB designs"
+
 msgid "KiCad project file"
 msgstr "KiCad project file"
 
@@ -12221,16 +12275,18 @@ msgstr ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
 
+msgid "Project Files"
+msgstr "Project Files"
+
+msgid "Editors"
+msgstr "Editors"
+
 msgid "Load File to Edit"
 msgstr "Load File to Edit"
 
 #, c-format
-msgid ""
-"Project name:\n"
-"%s\n"
-msgstr ""
-"Project name:\n"
-"%s\n"
+msgid "Project: %s"
+msgstr "Project: %s"
 
 msgid "Restoring session"
 msgstr "Restoring session"
@@ -12446,23 +12502,32 @@ msgstr "Close Project"
 msgid "Close the current project"
 msgstr "Close the current project"
 
-msgid "Edit Schematic"
-msgstr "Edit Schematic"
+msgid "Schematic Editor"
+msgstr "Schematic Editor"
 
-msgid "Edit Schematic Symbols"
-msgstr "Edit Schematic Symbols"
+msgid "Edit schematic"
+msgstr "Edit schematic"
+
+msgid "Edit schematic symbols"
+msgstr "Edit schematic symbols"
+
+msgid "PCB Editor"
+msgstr "PCB Editor"
 
 msgid "Edit PCB"
 msgstr "Edit PCB"
 
-msgid "Edit PCB Footprints"
-msgstr "Edit PCB Footprints"
+msgid "Edit PCB footprints"
+msgstr "Edit PCB footprints"
 
-msgid "View Gerber Files"
-msgstr "View Gerber Files"
+msgid "Gerber Viewer"
+msgstr "Gerber Viewer"
 
-msgid "Convert Image"
-msgstr "Convert Image"
+msgid "Preview Gerber output files"
+msgstr "Preview Gerber output files"
+
+msgid "Image Converter"
+msgstr "Image Converter"
 
 msgid "Convert bitmap images to schematic or PCB components"
 msgstr "Convert bitmap images to schematic or PCB components"
@@ -12473,8 +12538,8 @@ msgstr "Calculator Tools"
 msgid "Run component calculations, track width calculations, etc."
 msgstr "Run component calculations, track width calculations, etc."
 
-msgid "Edit Worksheet"
-msgstr "Edit Worksheet"
+msgid "Worksheet Editor"
+msgstr "Worksheet Editor"
 
 msgid "Edit worksheet graphics and text"
 msgstr "Edit worksheet graphics and text"
@@ -12905,7 +12970,7 @@ msgid "Attenuation more than %f dB"
 msgstr "Attenuation more than %f dB"
 
 msgid ""
-"### Bridged tee attenuator:\n"
+"### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
@@ -12915,7 +12980,7 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### Bridged tee attenuator:\n"
+"### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
@@ -12926,69 +12991,71 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 msgid ""
-"### Pi attenuator\n"
+"### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* __A = (L + 1)/(L - 1)__<br><br>\n"
-"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
-"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
-"* ___R3 = 1/ (A/Zout - 1/R2 )___"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
-"### Pi attenuator\n"
+"### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* __A = (L + 1)/(L - 1)__<br><br>\n"
-"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
-"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
-"* ___R3 = 1/ (A/Zout - 1/R2 )___"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 
 msgid ""
-"### Split attenuator\n"
+"### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
 "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 msgstr ""
-"### Split attenuator\n"
+"### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
 "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 msgid ""
-"### Tee attenuator\n"
+"### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___A = (L + 1) / (L - 1)___<br><br>\n"
+"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
+"1)___\n"
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"### Tee attenuator\n"
+"### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___A = (L + 1) / (L - 1)___<br><br>\n"
+"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
+"1)___\n"
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
@@ -13019,6 +13086,23 @@ msgstr "µA"
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
 
+msgid ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+msgstr ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+
+msgid "Standard Type"
+msgstr "Standard Type"
+
+msgid "3 Terminal Type"
+msgstr "3 Terminal Type"
+
 msgid "Formula"
 msgstr "Formula"
 
@@ -13046,23 +13130,6 @@ msgstr ""
 
 msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "For 3 terminal regulators only, the  Adjust pin current."
-
-msgid ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-msgstr ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-
-msgid "Standard Type"
-msgstr "Standard Type"
-
-msgid "3 Terminal Type"
-msgstr "3 Terminal Type"
 
 msgid "Calculate"
 msgstr "Calculate"
@@ -13103,11 +13170,11 @@ msgstr "PI"
 msgid "Tee"
 msgstr "Tee"
 
-msgid "Bridged Tee"
-msgstr "Bridged Tee"
+msgid "Bridged tee"
+msgstr "Bridged tee"
 
-msgid "Resistive Splitter"
-msgstr "Resistive Splitter"
+msgid "Resistive splitter"
+msgstr "Resistive splitter"
 
 msgid "Attenuators"
 msgstr "Attenuators"
@@ -13115,26 +13182,20 @@ msgstr "Attenuators"
 msgid "Parameters"
 msgstr "Parameters"
 
-msgid "Attenuation"
-msgstr "Attenuation"
+msgid "Attenuation:"
+msgstr "Attenuation:"
 
 msgid "dB"
 msgstr "dB"
 
-msgid "Zin"
-msgstr "Zin"
+msgid "Zin:"
+msgstr "Zin:"
 
-msgid "Zout"
-msgstr "Zout"
+msgid "Zout:"
+msgstr "Zout:"
 
-msgid "R1"
-msgstr "R1"
-
-msgid "R2"
-msgstr "R2"
-
-msgid "R3"
-msgstr "R3"
+msgid "R3:"
+msgstr "R3:"
 
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
@@ -13142,14 +13203,14 @@ msgstr "RF Attenuators"
 msgid "Inputs"
 msgstr "Inputs"
 
-msgid "Required Resistance:"
-msgstr "Required Resistance:"
+msgid "Required resistance:"
+msgstr "Required resistance:"
 
-msgid "Exclude Value 1:"
-msgstr "Exclude Value 1:"
+msgid "Exclude value 1:"
+msgstr "Exclude value 1:"
 
-msgid "Exclude Value 2:"
-msgstr "Exclude Value 2:"
+msgid "Exclude value 2:"
+msgstr "Exclude value 2:"
 
 msgid "E1"
 msgstr "E1"
@@ -13166,14 +13227,14 @@ msgstr "E12"
 msgid "Solutions"
 msgstr "Solutions"
 
-msgid "Simple Solution:"
-msgstr "Simple Solution:"
+msgid "Simple solution:"
+msgstr "Simple solution:"
 
-msgid "3R Solution:"
-msgstr "3R Solution:"
+msgid "3R solution:"
+msgstr "3R solution:"
 
-msgid "4R Solution:"
-msgstr "4R Solution:"
+msgid "4R solution:"
+msgstr "4R solution:"
 
 msgid "E-Series"
 msgstr "E-Series"
@@ -13211,8 +13272,8 @@ msgstr "Microstrip Line"
 msgid "Coplanar wave guide"
 msgstr "Coplanar wave guide"
 
-msgid "Coplanar wave guide with ground plane"
-msgstr "Coplanar wave guide with ground plane"
+msgid "Coplanar wave guide w/ ground plane"
+msgstr "Coplanar wave guide w/ ground plane"
 
 msgid "Rectangular Waveguide"
 msgstr "Rectangular Waveguide"
@@ -13238,8 +13299,8 @@ msgstr "Substrate Parameters"
 msgid "Er:"
 msgstr "Er:"
 
-msgid "TanD:"
-msgstr "TanD:"
+msgid "Tan delta:"
+msgstr "Tan delta:"
 
 msgid "Rho:"
 msgstr "Rho:"
@@ -13259,11 +13320,11 @@ msgstr "T:"
 msgid "Rough:"
 msgstr "Rough:"
 
-msgid "mu Rel:"
-msgstr "mu Rel:"
+msgid "Insulator mu:"
+msgstr "Insulator mu:"
 
-msgid "mu Rel C:"
-msgstr "mu Rel C:"
+msgid "Conductor mu:"
+msgstr "Conductor mu:"
 
 msgid "Component Parameters"
 msgstr "Component Parameters"
@@ -13285,12 +13346,6 @@ msgstr "Synthesize"
 
 msgid "Electrical Parameters"
 msgstr "Electrical Parameters"
-
-msgid "Z"
-msgstr "Z"
-
-msgid "Angle"
-msgstr "Angle"
 
 msgid "Results"
 msgstr "Results"
@@ -13331,8 +13386,14 @@ msgstr "Characteristic impedance of conductor"
 msgid "Applied current:"
 msgstr "Applied current:"
 
-msgid "Plating resistivity (Ohm.m):"
-msgstr "Plating resistivity (Ohm.m):"
+msgid "Plating resistivity:"
+msgstr "Plating resistivity:"
+
+msgid "ohm-meter"
+msgstr "ohm-meter"
+
+msgid "Substrate relative permittivity:"
+msgstr "Substrate relative permittivity:"
 
 msgid "Relative dielectric constant (epsilon r)"
 msgstr "Relative dielectric constant (epsilon r)"
@@ -13358,14 +13419,20 @@ msgstr "ns"
 msgid "nanoseconds"
 msgstr "nanoseconds"
 
-msgid "Top view of via"
-msgstr "Top view of via"
+msgid ""
+"Warning:\n"
+"Via pad diameter >= Clearance hole diameter.\n"
+"Some parameters cannot be calculated for a via inside a copper zone."
+msgstr ""
+"Warning:\n"
+"Via pad diameter >= Clearance hole diameter.\n"
+"Some parameters cannot be calculated for a via inside a copper zone."
 
 msgid "Resistance:"
 msgstr "Resistance:"
 
-msgid "Ohm"
-msgstr "Ω"
+msgid "ohm"
+msgstr "ohm"
 
 msgid "Voltage drop:"
 msgstr "Voltage drop:"
@@ -13373,8 +13440,8 @@ msgstr "Voltage drop:"
 msgid "Power loss:"
 msgstr "Power loss:"
 
-msgid "Watt"
-msgstr "Watt"
+msgid "W"
+msgstr "W"
 
 msgid "Thermal resistance:"
 msgstr "Thermal resistance:"
@@ -13382,8 +13449,8 @@ msgstr "Thermal resistance:"
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 
-msgid "deg C/Watt"
-msgstr "deg C/Watt"
+msgid "deg C/W"
+msgstr "deg C/W"
 
 msgid "Estimated ampacity:"
 msgstr "Estimated ampacity:"
@@ -13427,16 +13494,8 @@ msgstr "Reactance:"
 msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr "Inductive reactance for given rise time and calculated inductance"
 
-msgid ""
-"Warning:\n"
-"Via pad diameter >= Clearance hole diameter.\n"
-"Some parameters cannot be calculated for a via\n"
-"inside a copper zone."
-msgstr ""
-"Warning:\n"
-"Via pad diameter >= Clearance hole diameter.\n"
-"Some parameters cannot be calculated for a via\n"
-"inside a copper zone."
+msgid "Top view of via"
+msgstr "Top view of via"
 
 msgid "Current:"
 msgstr "Current:"
@@ -13446,9 +13505,6 @@ msgstr "Conductor length:"
 
 msgid "Resistivity:"
 msgstr "Resistivity:"
-
-msgid "Ohm-meter"
-msgstr "Ohm-meter"
 
 msgid "External Layer Traces"
 msgstr "External Layer Traces"
@@ -13468,8 +13524,8 @@ msgstr "mm²"
 msgid "Internal Layer Traces"
 msgstr "Internal Layer Traces"
 
-msgid "Voltage > 500V:"
-msgstr "Voltage > 500V:"
+msgid "Voltage > 500 V:"
+msgstr "Voltage > 500 V:"
 
 msgid "Update Values"
 msgstr "Update Values"
@@ -13495,35 +13551,35 @@ msgstr "A6"
 msgid "A7"
 msgstr "A7"
 
-msgid "0 .. 15V"
-msgstr "0 .. 15V"
+msgid "0 .. 15 V"
+msgstr "0 .. 15 V"
 
-msgid "16 .. 30V"
-msgstr "16 .. 30V"
+msgid "16 .. 30 V"
+msgstr "16 .. 30 V"
 
-msgid "31 .. 50V"
-msgstr "31 .. 50V"
+msgid "31 .. 50 V"
+msgstr "31 .. 50 V"
 
-msgid "51 .. 100V"
-msgstr "51 .. 100V"
+msgid "51 .. 100 V"
+msgstr "51 .. 100 V"
 
-msgid "101 .. 150V"
-msgstr "101 .. 150V"
+msgid "101 .. 150 V"
+msgstr "101 .. 150 V"
 
-msgid "151 .. 170V"
-msgstr "151 .. 170V"
+msgid "151 .. 170 V"
+msgstr "151 .. 170 V"
 
-msgid "171 .. 250V"
-msgstr "171 .. 250V"
+msgid "171 .. 250 V"
+msgstr "171 .. 250 V"
 
-msgid "251 .. 300V"
-msgstr "251 .. 300V"
+msgid "251 .. 300 V"
+msgstr "251 .. 300 V"
 
-msgid "301 .. 500V"
-msgstr "301 .. 500V"
+msgid "301 .. 500 V"
+msgstr "301 .. 500 V"
 
-msgid " > 500V"
-msgstr " > 500V"
+msgid " > 500 V"
+msgstr " > 500 V"
 
 msgid ""
 "*  B1 - Internal Conductors\n"
@@ -13608,8 +13664,8 @@ msgid ""
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
-"create arbitrary values.  You can enter the required resistance from 0,0025 "
-"to 4000 kOhm.\n"
+"create arbitrary values.  You can enter the required resistance from 0.0025 "
+"to 4000 kΩ.\n"
 "Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It "
@@ -13633,8 +13689,8 @@ msgstr ""
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "This calculator finds combinations of standard E-series components to\n"
-"create arbitrary values.  You can enter the required resistance from 0,0025 "
-"to 4000 kOhm.\n"
+"create arbitrary values.  You can enter the required resistance from 0.0025 "
+"to 4000 kΩ.\n"
 "Solutions using up to 4 components are given.\n"
 "\n"
 "By default, the request value is always excluded from the solution set.  It "
@@ -13702,15 +13758,15 @@ msgid ""
 "\n"
 "The controlling value is shown in bold.\n"
 "\n"
-"The calculations are valid for currents up to 35A (external) or 17.5A "
-"(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
-"(10mm).\n"
+"The calculations are valid for currents up to 35 A (external) or 17.5 A "
+"(internal), temperature rises up to 100 ºC, and widths of up to 400 mil (10 "
+"mm).\n"
 "\n"
 "The formula, from IPC 2221, is\n"
 "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
 "where:  \n"
-"__I__ = maximum current in amps  \n"
-"__dt__ = temperature rise above ambient in deg C  \n"
+"__I__ = maximum current in A  \n"
+"__dt__ = temperature rise above ambient in ºC  \n"
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
@@ -13723,15 +13779,15 @@ msgstr ""
 "\n"
 "The controlling value is shown in bold.\n"
 "\n"
-"The calculations are valid for currents up to 35A (external) or 17.5A "
-"(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
-"(10mm).\n"
+"The calculations are valid for currents up to 35 A (external) or 17.5 A "
+"(internal), temperature rises up to 100 ºC, and widths of up to 400 mil (10 "
+"mm).\n"
 "\n"
 "The formula, from IPC 2221, is\n"
 "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
 "where:  \n"
-"__I__ = maximum current in amps  \n"
-"__dt__ = temperature rise above ambient in deg C  \n"
+"__I__ = maximum current in A  \n"
+"__dt__ = temperature rise above ambient in ºC  \n"
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 
@@ -13744,134 +13800,132 @@ msgstr "Dielectric Loss Factor"
 msgid "Specific Resistance"
 msgstr "Specific Resistance"
 
-msgid "Er"
-msgstr "Er"
+msgid "Substrate relative permittivity (dielectric constant)"
+msgstr "Substrate relative permittivity (dielectric constant)"
 
-msgid "Epsilon R: substrate relative dielectric constant"
-msgstr "Epsilon R: substrate relative dielectric constant"
-
-msgid "TanD"
-msgstr "TanD"
-
-msgid "Tangent delta: dielectric loss factor."
-msgstr "Tangent delta: dielectric loss factor."
-
-msgid "Rho"
-msgstr "Rho"
+msgid "Dielectric loss (dissipation factor)"
+msgstr "Dielectric loss (dissipation factor)"
 
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
-"(Ohm*meter)"
+"(ohm*meter)"
 msgstr ""
-"Electrical resistivity or specific electrical resistance of conductor (Ωm)"
+"Electrical resistivity or specific electrical resistance of conductor "
+"(ohm*meter)"
 
 msgid "Frequency of the input signal"
 msgstr "Frequency of the input signal"
 
-msgid "ErEff:"
-msgstr "ErEff:"
+#, c-format
+msgid "Effective %s:"
+msgstr "Effective %s:"
 
-msgid "Conductor Losses:"
-msgstr "Conductor Losses:"
+msgid "Conductor losses:"
+msgstr "Conductor losses:"
 
-msgid "Dielectric Losses:"
-msgstr "Dielectric Losses:"
+msgid "Dielectric losses:"
+msgstr "Dielectric losses:"
 
-msgid "Skin Depth:"
-msgstr "Skin Depth:"
+msgid "Skin depth:"
+msgstr "Skin depth:"
 
-msgid "Height of Substrate"
-msgstr "Height of Substrate"
+msgid "Height of substrate"
+msgstr "Height of substrate"
 
-msgid "Height of Box Top"
-msgstr "Height of Box Top"
+msgid "Height of box top"
+msgstr "Height of box top"
 
-msgid "Strip Thickness"
-msgstr "Strip Thickness"
+msgid "Strip thickness"
+msgstr "Strip thickness"
 
-msgid "Rough"
-msgstr "Rough"
+msgid "Roughness"
+msgstr "Roughness"
 
-msgid "Conductor Roughness"
-msgstr "Conductor Roughness"
+msgid "Conductor roughness"
+msgstr "Conductor roughness"
 
-msgid "mu Rel S"
-msgstr "mu Rel S"
+msgid "substrate"
+msgstr "substrate"
 
-msgid "Relative Permeability (mu) of Substrate"
-msgstr "Relative Permeability (mu) of Substrate"
+msgid "Relative permeability (mu) of substrate"
+msgstr "Relative permeability (mu) of substrate"
 
-msgid "mu Rel C"
-msgstr "mu Rel C"
+msgid "conductor"
+msgstr "conductor"
 
-msgid "Relative Permeability (mu) of Conductor"
-msgstr "Relative Permeability (mu) of Conductor"
+msgid "Relative permeability (mu) of conductor"
+msgstr "Relative permeability (mu) of conductor"
 
-msgid "Line Length"
-msgstr "Line Length"
+msgid "Line width"
+msgstr "Line width"
 
-msgid "Characteristic Impedance"
-msgstr "Characteristic Impedance"
+msgid "Line length"
+msgstr "Line length"
 
-msgid "Electrical Length"
-msgstr "Electrical Length"
+msgid "Characteristic impedance"
+msgstr "Characteristic impedance"
 
-msgid "Gap Width"
-msgstr "Gap Width"
+msgid "Electrical length"
+msgstr "Electrical length"
+
+msgid "Gap width"
+msgstr "Gap width"
 
 msgid "ZF(H10) = Ey / Hx:"
 msgstr "ZF(H10) = Ey / Hx:"
 
-msgid "TE-Modes:"
-msgstr "TE-Modes:"
+msgid "TE-modes:"
+msgstr "TE-modes:"
 
-msgid "TM-Modes:"
-msgstr "TM-Modes:"
+msgid "TM-modes:"
+msgstr "TM-modes:"
 
-msgid "mu Rel I"
-msgstr "mu Rel I"
+msgid "insulator"
+msgstr "insulator"
 
-msgid "Relative Permeability (mu) of Insulator"
-msgstr "Relative Permeability (mu) of Insulator"
+msgid "Relative permeability (mu) of insulator"
+msgstr "Relative permeability (mu) of insulator"
 
-msgid "Width of Waveguide"
-msgstr "Width of Waveguide"
+msgid "Width of waveguide"
+msgstr "Width of waveguide"
 
-msgid "Height of Waveguide"
-msgstr "Height of Waveguide"
+msgid "Height of waveguide"
+msgstr "Height of waveguide"
 
-msgid "Waveguide Length"
-msgstr "Waveguide Length"
+msgid "Waveguide length"
+msgstr "Waveguide length"
 
 msgid "Din"
 msgstr "Din"
 
-msgid "Inner Diameter (conductor)"
-msgstr "Inner Diameter (conductor)"
+msgid "Inner diameter (conductor)"
+msgstr "Inner diameter (conductor)"
 
 msgid "Dout"
 msgstr "Dout"
 
-msgid "Outer Diameter (insulator)"
-msgstr "Outer Diameter (insulator)"
+msgid "Outer diameter (insulator)"
+msgstr "Outer diameter (insulator)"
 
-msgid "ErEff Even:"
-msgstr "ErEff Even:"
+#, c-format
+msgid "Effective %s (even):"
+msgstr "Effective %s (even):"
 
-msgid "ErEff Odd:"
-msgstr "ErEff Odd:"
+#, c-format
+msgid "Effective %s (odd):"
+msgstr "Effective %s (odd):"
 
-msgid "Conductor Losses Even:"
-msgstr "Conductor Losses Even:"
+msgid "Conductor losses (even):"
+msgstr "Conductor losses (even):"
 
-msgid "Conductor Losses Odd:"
-msgstr "Conductor Losses Odd:"
+msgid "Conductor losses (odd):"
+msgstr "Conductor losses (odd):"
 
-msgid "Dielectric Losses Even:"
-msgstr "Dielectric Losses Even:"
+msgid "Dielectric losses (even):"
+msgstr "Dielectric losses (even):"
 
-msgid "Dielectric Losses Odd:"
-msgstr "Dielectric Losses Odd:"
+msgid "Dielectric losses (odd):"
+msgstr "Dielectric losses (odd):"
 
 msgid "Zeven"
 msgstr "Zeven"
@@ -13885,23 +13939,23 @@ msgstr "Zodd"
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr "Odd mode impedance (lines driven by opposite (differential) voltages)"
 
-msgid "distance between strip and top metal"
-msgstr "distance between strip and top metal"
+msgid "Distance between strip and top metal"
+msgstr "Distance between strip and top metal"
 
 msgid "Twists"
 msgstr "Twists"
 
-msgid "Number of Twists per Length"
-msgstr "Number of Twists per Length"
+msgid "Number of twists per length"
+msgstr "Number of twists per length"
 
-msgid "ErEnv"
-msgstr "ErEnv"
+msgid "environment"
+msgstr "environment"
 
-msgid "Relative Permittivity of Environment"
-msgstr "Relative Permittivity of Environment"
+msgid "Relative permittivity of environment"
+msgstr "Relative permittivity of environment"
 
-msgid "Cable Length"
-msgstr "Cable Length"
+msgid "Cable length"
+msgstr "Cable length"
 
 msgid "Electrical Resistivity in Ohm*m"
 msgstr "Electrical Resistivity in Ohm*m"
@@ -13918,9 +13972,6 @@ msgstr "mil"
 msgid "inch"
 msgstr "inch"
 
-msgid "oz/ft^2"
-msgstr "oz/ft^2"
-
 msgid "GHz"
 msgstr "GHz"
 
@@ -13930,11 +13981,14 @@ msgstr "MHz"
 msgid "kHz"
 msgstr "kHz"
 
-msgid "Radian"
-msgstr "Radian"
+msgid "rad"
+msgstr "rad"
 
-msgid "Degree"
-msgstr "Degree"
+msgid "Ω"
+msgstr "Ω"
+
+msgid "kΩ"
+msgstr "kΩ"
 
 msgid "Create an array"
 msgstr "Create an array"
@@ -16535,8 +16589,8 @@ msgstr "Reference designator:"
 msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr "(specify multiple items separated by spaces for successive placement)"
 
-msgid "Available:"
-msgstr "Available:"
+msgid "Available footprints:"
+msgstr "Available footprints:"
 
 msgid "Get and Move Footprint"
 msgstr "Get and Move Footprint"
@@ -18439,8 +18493,8 @@ msgstr "End layer:"
 msgid "Track & Via Properties"
 msgstr "Track & Via Properties"
 
-msgid "Via drill size has to be smaller than via diameter"
-msgstr "Via drill size has to be smaller than via diameter"
+msgid "Via drill size must be smaller than via diameter"
+msgstr "Via drill size must be smaller than via diameter"
 
 msgid "Via drill:"
 msgstr "Via drill:"
@@ -19979,9 +20033,6 @@ msgstr "(%s min diameter %s; actual %s)"
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; actual %s)"
 
-msgid "Tracks & Vias"
-msgstr "Tracks & Vias"
-
 msgid "Modify zone properties"
 msgstr "Modify zone properties"
 
@@ -20504,6 +20555,9 @@ msgstr "Ref."
 
 msgid "Display"
 msgstr "Display"
+
+msgid "Angle"
+msgstr "Angle"
 
 #, c-format
 msgid "Reference '%s'"
@@ -22485,16 +22539,16 @@ msgid "Show board setup"
 msgstr "Show board setup"
 
 msgid ""
-"Blind/buried vias have to be enabled in Board Setup > Design Rules > "
+"Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blind/buried vias have to be enabled in Board Setup > Design Rules > "
+"Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 
 msgid ""
-"Microvias have to be enabled in Board Setup > Design Rules > Constraints."
+"Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Microvias have to be enabled in Board Setup > Design Rules > Constraints."
+"Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Only through vias are allowed on 2 layer boards."
@@ -24740,6 +24794,502 @@ msgstr "KiCad Schematic"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
 
+#, c-format
+#~ msgid "Render time %.0f ms ( %.1f fps)"
+#~ msgstr "Render time %.0f ms ( %.1f fps)"
+
+#~ msgid "Mirror Around Horizontal Axis"
+#~ msgstr "Mirror Around Horizontal Axis"
+
+#~ msgid "Mirror Around Vertical Axis"
+#~ msgstr "Mirror Around Vertical Axis"
+
+#, c-format
+#~ msgid ""
+#~ "Project name:\n"
+#~ "%s\n"
+#~ msgstr ""
+#~ "Project name:\n"
+#~ "%s\n"
+
+#~ msgid "Edit Schematic"
+#~ msgstr "Edit Schematic"
+
+#~ msgid "Edit Schematic Symbols"
+#~ msgstr "Edit Schematic Symbols"
+
+#~ msgid "Edit PCB Footprints"
+#~ msgstr "Edit PCB Footprints"
+
+#~ msgid "View Gerber Files"
+#~ msgstr "View Gerber Files"
+
+#~ msgid "Convert Image"
+#~ msgstr "Convert Image"
+
+#~ msgid "Edit Worksheet"
+#~ msgstr "Edit Worksheet"
+
+#~ msgid ""
+#~ "### Bridged tee attenuator:\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)<br><br>\n"
+#~ "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
+#~ "* ___R2 = Z<sub>0</sub> / (L - 1)___"
+#~ msgstr ""
+#~ "### Bridged tee attenuator:\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)<br><br>\n"
+#~ "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
+#~ "* ___R2 = Z<sub>0</sub> / (L - 1)___"
+
+#~ msgid ""
+#~ "### Pi attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* __A = (L + 1)/(L - 1)__<br><br>\n"
+#~ "* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+#~ "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+#~ "* ___R3 = 1/ (A/Zout - 1/R2 )___"
+#~ msgstr ""
+#~ "### Pi attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* __A = (L + 1)/(L - 1)__<br><br>\n"
+#~ "* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+#~ "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+#~ "* ___R3 = 1/ (A/Zout - 1/R2 )___"
+
+#~ msgid ""
+#~ "### Split attenuator\n"
+#~ "#### Attenuation is 6dB\n"
+#~ "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+#~ msgstr ""
+#~ "### Split attenuator\n"
+#~ "#### Attenuation is 6dB\n"
+#~ "___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+
+#~ msgid ""
+#~ "### Tee attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* ___A = (L + 1)/(L - 1)___<br><br>\n"
+#~ "* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+#~ "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+#~ "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+#~ msgstr ""
+#~ "### Tee attenuator\n"
+#~ "__Zin__ desired input impedance in &#x2126;<br>\n"
+#~ "__Zout__ desired output impedance<br>\n"
+#~ "__Zin = Zout__<br><br>\n"
+#~ "\n"
+#~ "* __a__ attenuation in dB\n"
+#~ "* __L = 10<sup>a/20</sup>__ (the loss)\n"
+#~ "* ___A = (L + 1)/(L - 1)___<br><br>\n"
+#~ "* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+#~ "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+#~ "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+
+#~ msgid "Bridged Tee"
+#~ msgstr "Bridged Tee"
+
+#~ msgid "Resistive Splitter"
+#~ msgstr "Resistive Splitter"
+
+#~ msgid "Attenuation"
+#~ msgstr "Attenuation"
+
+#~ msgid "Zin"
+#~ msgstr "Zin"
+
+#~ msgid "Zout"
+#~ msgstr "Zout"
+
+#~ msgid "R1"
+#~ msgstr "R1"
+
+#~ msgid "R2"
+#~ msgstr "R2"
+
+#~ msgid "R3"
+#~ msgstr "R3"
+
+#~ msgid "Required Resistance:"
+#~ msgstr "Required Resistance:"
+
+#~ msgid "Exclude Value 1:"
+#~ msgstr "Exclude Value 1:"
+
+#~ msgid "Exclude Value 2:"
+#~ msgstr "Exclude Value 2:"
+
+#~ msgid "Simple Solution:"
+#~ msgstr "Simple Solution:"
+
+#~ msgid "3R Solution:"
+#~ msgstr "3R Solution:"
+
+#~ msgid "4R Solution:"
+#~ msgstr "4R Solution:"
+
+#~ msgid "Coplanar wave guide with ground plane"
+#~ msgstr "Coplanar wave guide with ground plane"
+
+#~ msgid "TanD:"
+#~ msgstr "TanD:"
+
+#~ msgid "mu Rel:"
+#~ msgstr "mu Rel:"
+
+#~ msgid "mu Rel C:"
+#~ msgstr "mu Rel C:"
+
+#~ msgid "Z"
+#~ msgstr "Z"
+
+#~ msgid "Plating resistivity (Ohm.m):"
+#~ msgstr "Plating resistivity (Ohm.m):"
+
+#~ msgid "Ohm"
+#~ msgstr "Ω"
+
+#~ msgid "Watt"
+#~ msgstr "Watt"
+
+#~ msgid "deg C/Watt"
+#~ msgstr "deg C/Watt"
+
+#~ msgid ""
+#~ "Warning:\n"
+#~ "Via pad diameter >= Clearance hole diameter.\n"
+#~ "Some parameters cannot be calculated for a via\n"
+#~ "inside a copper zone."
+#~ msgstr ""
+#~ "Warning:\n"
+#~ "Via pad diameter >= Clearance hole diameter.\n"
+#~ "Some parameters cannot be calculated for a via\n"
+#~ "inside a copper zone."
+
+#~ msgid "Ohm-meter"
+#~ msgstr "Ohm-meter"
+
+#~ msgid "Voltage > 500V:"
+#~ msgstr "Voltage > 500V:"
+
+#~ msgid "0 .. 15V"
+#~ msgstr "0 .. 15V"
+
+#~ msgid "16 .. 30V"
+#~ msgstr "16 .. 30V"
+
+#~ msgid "31 .. 50V"
+#~ msgstr "31 .. 50V"
+
+#~ msgid "51 .. 100V"
+#~ msgstr "51 .. 100V"
+
+#~ msgid "101 .. 150V"
+#~ msgstr "101 .. 150V"
+
+#~ msgid "151 .. 170V"
+#~ msgstr "151 .. 170V"
+
+#~ msgid "171 .. 250V"
+#~ msgstr "171 .. 250V"
+
+#~ msgid "251 .. 300V"
+#~ msgstr "251 .. 300V"
+
+#~ msgid "301 .. 500V"
+#~ msgstr "301 .. 500V"
+
+#~ msgid " > 500V"
+#~ msgstr " > 500V"
+
+#~ msgid ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+#~ "\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+#~ "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+#~ "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0,0025 to 4000 kOhm.\n"
+#~ "Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ msgstr ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+#~ "\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+#~ "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+#~ "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0,0025 to 4000 kOhm.\n"
+#~ "Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+
+#~ msgid ""
+#~ "If you specify the maximum current, then the trace widths will be "
+#~ "calculated to suit.\n"
+#~ "\n"
+#~ "If you specify one of the trace widths, the maximum current it can handle "
+#~ "will be calculated. The width for the other trace to also handle this "
+#~ "current will then be calculated.\n"
+#~ "\n"
+#~ "The controlling value is shown in bold.\n"
+#~ "\n"
+#~ "The calculations are valid for currents up to 35A (external) or 17.5A "
+#~ "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
+#~ "(10mm).\n"
+#~ "\n"
+#~ "The formula, from IPC 2221, is\n"
+#~ "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+#~ "where:  \n"
+#~ "__I__ = maximum current in amps  \n"
+#~ "__dt__ = temperature rise above ambient in deg C  \n"
+#~ "__W,H__ = width and thickness in mils  \n"
+#~ "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
+#~ msgstr ""
+#~ "If you specify the maximum current, then the trace widths will be "
+#~ "calculated to suit.\n"
+#~ "\n"
+#~ "If you specify one of the trace widths, the maximum current it can handle "
+#~ "will be calculated. The width for the other trace to also handle this "
+#~ "current will then be calculated.\n"
+#~ "\n"
+#~ "The controlling value is shown in bold.\n"
+#~ "\n"
+#~ "The calculations are valid for currents up to 35A (external) or 17.5A "
+#~ "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
+#~ "(10mm).\n"
+#~ "\n"
+#~ "The formula, from IPC 2221, is\n"
+#~ "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+#~ "where:  \n"
+#~ "__I__ = maximum current in amps  \n"
+#~ "__dt__ = temperature rise above ambient in deg C  \n"
+#~ "__W,H__ = width and thickness in mils  \n"
+#~ "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
+
+#~ msgid "Er"
+#~ msgstr "Er"
+
+#~ msgid "Epsilon R: substrate relative dielectric constant"
+#~ msgstr "Epsilon R: substrate relative dielectric constant"
+
+#~ msgid "TanD"
+#~ msgstr "TanD"
+
+#~ msgid "Tangent delta: dielectric loss factor."
+#~ msgstr "Tangent delta: dielectric loss factor."
+
+#~ msgid "Rho"
+#~ msgstr "Rho"
+
+#~ msgid ""
+#~ "Electrical resistivity or specific electrical resistance of conductor "
+#~ "(Ohm*meter)"
+#~ msgstr ""
+#~ "Electrical resistivity or specific electrical resistance of conductor (Ωm)"
+
+#~ msgid "ErEff:"
+#~ msgstr "ErEff:"
+
+#~ msgid "Conductor Losses:"
+#~ msgstr "Conductor Losses:"
+
+#~ msgid "Dielectric Losses:"
+#~ msgstr "Dielectric Losses:"
+
+#~ msgid "Skin Depth:"
+#~ msgstr "Skin Depth:"
+
+#~ msgid "Height of Substrate"
+#~ msgstr "Height of Substrate"
+
+#~ msgid "Height of Box Top"
+#~ msgstr "Height of Box Top"
+
+#~ msgid "Strip Thickness"
+#~ msgstr "Strip Thickness"
+
+#~ msgid "Rough"
+#~ msgstr "Rough"
+
+#~ msgid "Conductor Roughness"
+#~ msgstr "Conductor Roughness"
+
+#~ msgid "mu Rel S"
+#~ msgstr "mu Rel S"
+
+#~ msgid "Relative Permeability (mu) of Substrate"
+#~ msgstr "Relative Permeability (mu) of Substrate"
+
+#~ msgid "mu Rel C"
+#~ msgstr "mu Rel C"
+
+#~ msgid "Relative Permeability (mu) of Conductor"
+#~ msgstr "Relative Permeability (mu) of Conductor"
+
+#~ msgid "Line Length"
+#~ msgstr "Line Length"
+
+#~ msgid "Characteristic Impedance"
+#~ msgstr "Characteristic Impedance"
+
+#~ msgid "Electrical Length"
+#~ msgstr "Electrical Length"
+
+#~ msgid "Gap Width"
+#~ msgstr "Gap Width"
+
+#~ msgid "TE-Modes:"
+#~ msgstr "TE-Modes:"
+
+#~ msgid "TM-Modes:"
+#~ msgstr "TM-Modes:"
+
+#~ msgid "mu Rel I"
+#~ msgstr "mu Rel I"
+
+#~ msgid "Relative Permeability (mu) of Insulator"
+#~ msgstr "Relative Permeability (mu) of Insulator"
+
+#~ msgid "Width of Waveguide"
+#~ msgstr "Width of Waveguide"
+
+#~ msgid "Height of Waveguide"
+#~ msgstr "Height of Waveguide"
+
+#~ msgid "Waveguide Length"
+#~ msgstr "Waveguide Length"
+
+#~ msgid "Inner Diameter (conductor)"
+#~ msgstr "Inner Diameter (conductor)"
+
+#~ msgid "Outer Diameter (insulator)"
+#~ msgstr "Outer Diameter (insulator)"
+
+#~ msgid "ErEff Even:"
+#~ msgstr "ErEff Even:"
+
+#~ msgid "ErEff Odd:"
+#~ msgstr "ErEff Odd:"
+
+#~ msgid "Conductor Losses Even:"
+#~ msgstr "Conductor Losses Even:"
+
+#~ msgid "Conductor Losses Odd:"
+#~ msgstr "Conductor Losses Odd:"
+
+#~ msgid "Dielectric Losses Even:"
+#~ msgstr "Dielectric Losses Even:"
+
+#~ msgid "Dielectric Losses Odd:"
+#~ msgstr "Dielectric Losses Odd:"
+
+#~ msgid "distance between strip and top metal"
+#~ msgstr "distance between strip and top metal"
+
+#~ msgid "Number of Twists per Length"
+#~ msgstr "Number of Twists per Length"
+
+#~ msgid "ErEnv"
+#~ msgstr "ErEnv"
+
+#~ msgid "Relative Permittivity of Environment"
+#~ msgstr "Relative Permittivity of Environment"
+
+#~ msgid "Cable Length"
+#~ msgstr "Cable Length"
+
+#~ msgid "oz/ft^2"
+#~ msgstr "oz/ft^2"
+
+#~ msgid "Radian"
+#~ msgstr "Radian"
+
+#~ msgid "Degree"
+#~ msgstr "Degree"
+
+#~ msgid "Available:"
+#~ msgstr "Available:"
+
+#~ msgid "Via drill size has to be smaller than via diameter"
+#~ msgstr "Via drill size has to be smaller than via diameter"
+
+#~ msgid "Tracks & Vias"
+#~ msgstr "Tracks & Vias"
+
+#~ msgid ""
+#~ "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
+#~ msgstr ""
+#~ "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
+#~ "Constraints."
+
+#~ msgid ""
+#~ "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
+#~ msgstr ""
+#~ "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
+
 #~ msgid "Save Copy of Symbol"
 #~ msgstr "Save Copy of Symbol"
 
@@ -25844,9 +26394,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Pad setup errors list"
 #~ msgstr "Pad setup errors list"
-
-#~ msgid "Via drill size must be smaller than via diameter"
-#~ msgstr "Via drill size must be smaller than via diameter"
 
 #~ msgid "&Keep unused layers"
 #~ msgstr "&Keep unused layers"
@@ -29362,9 +29909,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Reset field text sizes and styles"
 #~ msgstr "Reset field text sizes and styles"
 
-#~ msgid "Update Symbol Fields"
-#~ msgstr "Update Symbol Fields"
-
 #~ msgid "&Bus thickness:"
 #~ msgstr "&Bus thickness:"
 
@@ -29708,9 +30252,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Switch to Modern Toolset with software graphics (fall-back)"
 #~ msgstr "Switch to Modern Toolset with software graphics (fall-back)"
-
-#~ msgid "Schematic Editor"
-#~ msgstr "Schematic Editor"
 
 #~ msgid "Arc center (%s, %s), radius %s"
 #~ msgstr "Arc center (%s, %s), radius %s"
@@ -31146,9 +31687,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "PCB Layout Editor"
 #~ msgstr "PCB Layout Editor"
-
-#~ msgid "Gerber Viewer"
-#~ msgstr "Gerber Viewer"
 
 #~ msgid ""
 #~ "Bitmap to Component Converter\n"
