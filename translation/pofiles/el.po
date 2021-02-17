@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-16 19:53+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"PO-Revision-Date: 2021-02-17 10:11+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -624,7 +624,6 @@ msgid "Spread Factor %"
 msgstr "Συντελεστής Εξάπλωσης %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
-#, fuzzy
 msgid "Recursion Level"
 msgstr "Αναδρομικό Επίπεδο"
 
@@ -1963,10 +1962,10 @@ msgstr ""
 "Το KiCad εκτέλεστηκε για πρώτη φορά χρησιμοποιώντας τον νέο κατάλογο "
 "βιβλιοθήκης %s\n"
 "για πρόσβαση στις βιβλιοθήκες. Για να έχει πρόσβαση το Kicad στις "
-"βιβλιοθήκες %s, \n"
-"πρέπει να ρυθμιστεί ο καθολικός κατάλογος βιβλιοθήκης %s. Διαλέξτε μία\n"
-"από τις παρακάτω επιλογές. Αν δεν είστε σίγουροι, επιλέξτε την "
-"προκαθορισμένη."
+"βιβλιοθήκες %s,\n"
+"πρέπει να ρυθμιστεί ο καθολικός κατάλογος βιβλιοθήκης %s.\n"
+"Διαλέξτε μία από τις παρακάτω επιλογές.\n"
+"Αν δεν είστε σίγουροι, επιλέξτε την προκαθορισμένη."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
@@ -13152,11 +13151,14 @@ msgstr ""
 "δεν βρέθηκε στη βιβλιοθήκη Εξαγάγατε όλα τα στοιχεία του σχεδίου;"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:452
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"Το σύμβολο ταυτοποίησης «%s» είναι μια αναφορά σήματος ή ένα καθολικό σήμα, "
+"αλλά έχει πάρα πολλά pin. Ο αναμενόμενος αριθμός pin είναι 1, αλλά βρέθηκαν "
+"%d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:545
 #, c-format
@@ -14434,19 +14436,16 @@ msgid "Voltage (swept)"
 msgstr "Τάση (σάρωση)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Τρέχον Δίκτυο:"
+msgstr "Τρέχον (σάρωση)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Αντίσταση:"
+msgstr "Αντίσταση (σάρωση)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Αύξηση θερμοκρασίας:"
+msgstr "Θερμοκρασία (σάρωση)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -15076,7 +15075,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:71
 msgid "Select at least one property to back annotate."
-msgstr ""
+msgstr "Επιλέξτε τουλάχιστον μία ιδιότητα για δημιουργία σχολιασμού."
 
 #: eeschema/tools/backannotate.cpp:95
 #, fuzzy
@@ -15151,6 +15150,8 @@ msgstr "Αλλαγή %s ακροδέκτη %s ετικέτα δικτύου απ
 #, c-format
 msgid "Net %s cannot be changed to '%s' because it is driven by a power pin."
 msgstr ""
+"Το δίκτυο %s δεν μπορεί να αλλάξει σε «%s» επειδή οδηγείται από μία ακίδα "
+"ισχύος."
 
 #: eeschema/tools/backannotate.cpp:565
 #, c-format
@@ -16154,6 +16155,8 @@ msgstr ""
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
+"(Οι κρυμμένες ακίδες ισχύος θα οδηγήσουν τα ονόματά τους σε οποιαδήποτε "
+"συνδεδεμένα δίκτυα.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
 #, fuzzy, c-format
@@ -17943,9 +17946,7 @@ msgstr "Δημιουργήστε (ή ανοίξτε) ένα έργο για να
 
 #: kicad/tools/kicad_manager_control.cpp:624
 msgid "Application failed to load:\n"
-msgstr ""
-"Αποτυχία φόρτωσης της εφαρμογής:\n"
-"\n"
+msgstr "Αποτυχία φόρτωσης της εφαρμογής:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:624
 #: kicad/tools/kicad_manager_control.cpp:631 pcbnew/pcb_edit_frame.cpp:1415
@@ -20065,18 +20066,16 @@ msgid "Select dielectric layer to add to board stack up."
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
-#, fuzzy
 msgid "Dielectric Layers List"
-msgstr "Διηλεκτρικά Υλικά"
+msgstr "Κατάλογος Διηλεκτρικών Επιπέδων"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
-#, fuzzy
 msgid "Dielectric Layers"
-msgstr "Διηλεκτρικά Υλικά"
+msgstr "Διηλεκτρικά Επίπεδα"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:612
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:150
@@ -20126,14 +20125,12 @@ msgstr ""
 "η Εφαπτομένη απώλειας και το EpsilonR θα προστεθούν στους περιορισμούς."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:102
-#, fuzzy
 msgid "Add Dielectric Layer"
-msgstr "Διηλεκτρικά Υλικά"
+msgstr "Προσθήκη Διηλεκτρικού Υλικού"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
-#, fuzzy
 msgid "Remove Dielectric Layer"
-msgstr "Σχετικές Διηλεκτρικές Σταθερές"
+msgstr "Αφαίρεση Διηλεκτρικού Επιπέδου"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:112
 msgid "Board Finish"
@@ -21117,9 +21114,8 @@ msgid "Via/Pad"
 msgstr "Via/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
-#, fuzzy
 msgid "Start Layer"
-msgstr "Επίπεδο αρχής:"
+msgstr "Επίπεδο Εκκίνησης"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
 #, fuzzy
@@ -28105,18 +28101,18 @@ msgstr "κανόνας %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "ΣΦΑΛΜΑ στην έκφραση."
 
 #: pcbnew/drc/drc_rule_condition.cpp:97 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "ΣΦΑΛΜΑ: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "ΣΦΑΛΜΑ: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
@@ -28125,16 +28121,16 @@ msgstr "Λείπουν '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 msgid "Missing version statement."
-msgstr ""
+msgstr "Λείπει η δήλωση έκδοσης."
 
 #: pcbnew/drc/drc_rule_parser.cpp:125
 msgid "Missing version number."
-msgstr ""
+msgstr "Λείπει ο αριθμός έκδοσης."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
 #, c-format
 msgid "Unrecognized item '%s'.| Expected version number"
-msgstr ""
+msgstr "Μη αναγνωριζόμενο στοιχείο \"%s\". | Αναμενόμενος αριθμός έκδοσης"
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
@@ -28146,7 +28142,7 @@ msgstr "Μη αναγνωρισμένο αντικείμενο '%s'."
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:415
 msgid "Incomplete statement."
-msgstr ""
+msgstr "Ατελής δήλωση."
 
 #: pcbnew/drc/drc_rule_parser.cpp:161 pcbnew/drc/drc_rule_parser.cpp:240
 #: pcbnew/drc/drc_rule_parser.cpp:293 pcbnew/drc/drc_rule_parser.cpp:326
@@ -28161,7 +28157,7 @@ msgstr "Δεν βρέθηκαν σφάλματα."
 
 #: pcbnew/drc/drc_rule_parser.cpp:183
 msgid "Missing rule name."
-msgstr ""
+msgstr "Λείπει το όνομα κανόνα."
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
 #, fuzzy
@@ -28171,7 +28167,7 @@ msgstr "Λείπει αποτύπωμα"
 #: pcbnew/drc/drc_rule_parser.cpp:216
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "Μη αναγνωριζόμενο στοιχείο \"%s\". | Αναμενόμενη παράθεση έκφρασης."
 
 #: pcbnew/drc/drc_rule_parser.cpp:249 pcbnew/drc/drc_rule_parser.cpp:322
 #: pcbnew/drc/drc_rule_parser.cpp:336 pcbnew/drc/drc_rule_parser.cpp:428
@@ -30088,9 +30084,8 @@ msgid "Eeschema failed to load:\n"
 msgstr "Αποτυχία φόρτωσης του Eeschema:\n"
 
 #: pcbnew/pcb_edit_frame.cpp:1628
-#, fuzzy
 msgid "Edit design rules"
-msgstr "Κανόνες Σχεδίασης"
+msgstr "Επεξεργασία κανόνων σχεδίασης"
 
 #: pcbnew/pcb_edit_frame.cpp:1640
 #, fuzzy
@@ -30139,12 +30134,11 @@ msgstr "Ανώνυμη ομάδα, %zu μέλη"
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr ""
+msgstr "Ομάδα \"%s\", %zu μέλη"
 
 #: pcbnew/pcb_group.cpp:305
-#, fuzzy
 msgid "<unnamed>"
-msgstr "ανώνυμο"
+msgstr "<ανώνυμο>"
 
 #: pcbnew/pcb_group.cpp:306
 msgid "Members"
@@ -30192,9 +30186,8 @@ msgid "End Y"
 msgstr "Τέλος Ψ"
 
 #: pcbnew/pcb_target.cpp:151
-#, fuzzy
 msgid "PCB Target"
-msgstr "Κείμενο PCB"
+msgstr "Στόχος PCB"
 
 #: pcbnew/pcb_text.cpp:111
 msgid "PCB Text"
@@ -30774,26 +30767,33 @@ msgstr "Δεν υπάρχει πακέτο \"%s\" στη βιβλιοθήκη \"
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Αγνόηση ενός πολυγώνου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» "
+"(%d)"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1612
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Αγνόηση ενός καλωδίου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1785
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Αγνόηση ενός κειμένου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1923
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Αγνόηση ενός ορθογωνίου παραλληλογράμμου αφού δεν ήταν χαρτογραφημένο το "
+"επίπεδο Eagle «%s» (%d)"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2108
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Αγνόηση ενός κύκλου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» (%d)"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:76
 msgid "Could not read file "
@@ -30876,7 +30876,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1063
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr ""
+msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αναμένονταν 8 αλλά βρέθηκαν %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1197
 #, c-format
@@ -30911,6 +30911,8 @@ msgstr ""
 #, c-format
 msgid "Invalid custom pad named '%s'. Replacing with circular pad."
 msgstr ""
+"Μη έγκυρο προσαρμοσμένο pad με όνομα \"%s\". Αντικατάστασή του με κυκλικό "
+"pad."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2196
 #, fuzzy, c-format
@@ -31400,12 +31402,10 @@ msgid "%s is malformed."
 msgstr "Το %s έχει λανθασμένη μορφή."
 
 #: pcbnew/router/pns_kicad_iface.cpp:987
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the track layout tool.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"%s\n"
 "Το εργαλείο δρόμων δεν μπορεί να χειριστεί αυτή τη ζώνη.\n"
 "Επιβεβαιώστε ότι δεν είναι πολύγωνο που τέμνει τον εαυτό του."
 
@@ -31447,7 +31447,7 @@ msgstr "Αδυναμία δρομολόγησης μέσα σε καθαρή π�
 #: pcbnew/router/pns_router.cpp:206
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr ""
+msgstr "Η περιοχή κανόνων '%s' απαγορεύει τους διαδρόμους."
 
 #: pcbnew/router/pns_router.cpp:211
 msgid "Rule area disallows tracks."
@@ -31998,7 +31998,7 @@ msgstr "Διάκενο"
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #: pcbnew/tools/board_inspection_tool.cpp:313
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "Δεν είναι δυνατή η δημιουργία αναφοράς εκκαθάρισης σε κενή ομάδα."
 
 #: pcbnew/tools/board_inspection_tool.cpp:354
 #, fuzzy
@@ -34782,9 +34782,8 @@ msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Δημιουργία νέου εξαρτήματος από το τρέχον εξάρτημα"
 
 #: resources/linux/launchers/eeschema.desktop.in:10
-#, fuzzy
 msgid "Eeschema (Standalone)"
-msgstr "Εγχειρίδιο &Eeschema"
+msgstr "Eeschema (Αυτοδύναμο)"
 
 #: resources/linux/launchers/eeschema.desktop.in:11
 #, fuzzy
@@ -34797,13 +34796,12 @@ msgid "KiCad electronic schematic design (standalone)"
 msgstr "Σχηματικά αρχεία KiCad παλαιού τύπου"
 
 #: resources/linux/launchers/gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Αρχεία Gerber"
+msgstr "Πρόγραμμα Προβολής Αρχείων Gerber"
 
 #: resources/linux/launchers/gerbview.desktop.in:12
 msgid "View Gerber files"
-msgstr "Προβολή Αρχείων Gerber"
+msgstr "Προβολή αρχείων Gerber"
 
 #: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
@@ -34815,14 +34813,12 @@ msgstr ""
 "Αριθμομηχανή για διάφορους υπολογισμούς σχετιζόμενους με την ηλεκτρονική"
 
 #: resources/linux/launchers/pcbnew.desktop.in:10
-#, fuzzy
 msgid "Pcbnew (Standalone)"
-msgstr "Εγχειρίδιο του &Pcbnew"
+msgstr "Pcbnew (Αυτοδύναμο)"
 
 #: resources/linux/launchers/pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout"
-msgstr "Επεξεργασία Σχεδίασης PCB"
+msgstr "Διάταξη PCB"
 
 #: resources/linux/launchers/pcbnew.desktop.in:12
 #, fuzzy
@@ -34830,9 +34826,8 @@ msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Αρχεία KiCad τυπωμένης πλακέτας κυκλώματος"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber File"
-msgstr "Αρχεία Gerber"
+msgstr "Αρχείο Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:10
 #, fuzzy
@@ -34840,14 +34835,12 @@ msgid "Excellon drill file"
 msgstr "Φόρτωση αρχείου Διάτρησης excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "Αρχείο έργου KiCad"
+msgstr "Έργο KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Επεξεργασία Σχηματικού"
+msgstr "Σχηματικό KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:17
 msgid "KiCad Printed Circuit Board"
