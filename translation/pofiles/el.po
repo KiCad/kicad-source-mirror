@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
 "PO-Revision-Date: 2021-02-17 10:11+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -28090,9 +28090,8 @@ msgid "Differential pair gap out of range"
 msgstr "Το κενό διαφορικού ζεύγους είναι εκτός εύρους"
 
 #: pcbnew/drc/drc_item.cpp:193
-#, fuzzy
 msgid "Differential uncoupled length too long"
-msgstr "Μικρο-Ρύθμιση Μήκους Διαφορικού Ζεύγους"
+msgstr "Αποδιαζευγμένο μήκος διαφορικού ζεύγους πολύ μεγάλο"
 
 #: pcbnew/drc/drc_rule.h:134
 #, c-format
@@ -28160,9 +28159,8 @@ msgid "Missing rule name."
 msgstr "Λείπει το όνομα κανόνα."
 
 #: pcbnew/drc/drc_rule_parser.cpp:205
-#, fuzzy
 msgid "Missing condition expression."
-msgstr "Λείπει αποτύπωμα"
+msgstr "Λείπει η έκφραση της συνθήκης."
 
 #: pcbnew/drc/drc_rule_parser.cpp:216
 #, c-format
