@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-17 10:11+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -28092,7 +28092,7 @@ msgstr "Το κενό διαφορικού ζεύγους είναι εκτός 
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Differential uncoupled length too long"
-msgstr "Αποδιαζευγμένο μήκος διαφορικού ζεύγους πολύ μεγάλο"
+msgstr "Υπερβολικά μεγάλο αποδιαζευγμένο μήκος διαφορικού ζεύγους"
 
 #: pcbnew/drc/drc_rule.h:134
 #, c-format
@@ -28149,7 +28149,7 @@ msgstr "Ατελής δήλωση."
 #: pcbnew/drc/drc_rule_parser.cpp:419
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr ""
+msgstr "Μη αναγνωριζόμενο στοιχείο «%s». | Αναμένεται %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:170
 msgid "No errors found."
@@ -28176,24 +28176,23 @@ msgstr "Λείπουν ')'."
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr ""
+msgstr "Λείπει τύπος περιορισμού. | Αναμένεται %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "Missing min value."
-msgstr ""
+msgstr "Λείπει η ελάχιστη τιμή."
 
 #: pcbnew/drc/drc_rule_parser.cpp:377
 msgid "Missing max value."
-msgstr ""
+msgstr "Λείπει η μέγιστη τιμή."
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
-#, fuzzy
 msgid "Missing opt value."
-msgstr "Λείπει αποτύπωμα"
+msgstr "Λείπει η τιμή επιλογής."
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
-msgstr ""
+msgstr "Λείπει το όνομα ή ο τύπος επιπέδου."
 
 #: pcbnew/drc/drc_rule_parser.cpp:503
 #, c-format
@@ -28207,12 +28206,12 @@ msgstr "Έλεγχος κυκλικών δακτυλίων via..."
 #: pcbnew/drc/drc_test_provider_annulus.cpp:121
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s ελάχιστο δακτυλιοειδές πλάτος %s· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:127
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr ""
+msgstr "(%s μέγιστο δακτυλιοειδές πλάτος %s· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:74
 msgid "Checking pad, via and zone connections..."
