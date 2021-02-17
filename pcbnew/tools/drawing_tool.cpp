@@ -2241,7 +2241,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        bool hasDRCViolation( VIA* aVia )
+        bool checkDRCViolation( VIA* aVia )
         {
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             std::set<BOARD_ITEM*> checkedItems;
@@ -2343,12 +2343,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
             VIA*    via = static_cast<VIA*>( aItem );
             wxPoint viaPos = via->GetPosition();
-            int     newNet;
             TRACK*  track = findTrack( via );
 
-            if( !m_allowDRCViolations && hasDRCViolation( via ) )
+            if( track )
+                via->SetNetCode( track->GetNetCode() );
+
+            if( !m_allowDRCViolations && checkDRCViolation( via ) )
             {
                 m_frame->ShowInfoBarError( _( "Via location violates DRC." ) );
+                via->SetNetCode( 0 );
                 m_flaggedDRC = true;
                 return false;
             }
@@ -2370,17 +2373,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     newTrack->SetStart( viaPos );
                     aCommit.Add( newTrack );
                 }
-
-                newNet = track->GetNetCode();
             }
             else
             {
-                newNet = findStitchedZoneNet( via );
+                via->SetNetCode( findStitchedZoneNet( via ) );
                 via->SetIsFree();
             }
-
-            if( newNet > 0 )
-                via->SetNetCode( newNet );
 
             aCommit.Add( aItem );
             return true;
