@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-12 10:26-0800\n"
-"PO-Revision-Date: 2021-02-14 12:15+0000\n"
+"PO-Revision-Date: 2021-02-17 22:35+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4519,7 +4519,7 @@ msgstr "エディターをロード中のエラー"
 #: common/kiway.cpp:478
 #, c-format
 msgid "Unable to switch language to %s"
-msgstr "%s に言語を切り替えられません"
+msgstr "言語を %s に切り替えられません"
 
 #: common/languages_menu.cpp:49
 msgid "Set Language"
@@ -7269,7 +7269,7 @@ msgstr "BOM ジェネレーター スクリプト:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "新しい BOM ジェネレーターとリストへのコマンドラインを追加"
+msgstr "新しい BOM ジェネレーターとコマンドラインをリストに追加"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the script file in the text editor"
@@ -8615,8 +8615,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"空のシンボル ライブラリー テーブル ファイルを書き込もうとしたところ、エラーが"
-"発生しました。\n"
+"空のシンボル ライブラリー テーブルを書き込もうとしたところ、エラーが発生しました。\n"
 "\n"
 "%s"
 
@@ -8636,8 +8635,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"ファイル \"%s\" は有効なシンボル ライブラリー テーブル ファイルではありませ"
-"ん。\n"
+"ファイル \"%s\" は有効なシンボル ライブラリー テーブルではありません。\n"
 "\n"
 "%s"
 
@@ -11838,7 +11836,7 @@ msgstr "\"未接続\" タイプのピンが接続されています"
 #: eeschema/erc.cpp:526
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "ピン %s (コンポーネント %s) が接続されていません"
+msgstr "ピンのタイプ %s と %s が接続されています"
 
 #: eeschema/erc.cpp:592
 #, c-format
@@ -14358,15 +14356,15 @@ msgstr "電圧 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:394
 msgid "Current (swept)"
-msgstr "電流 (スイープ)"
+msgstr "電流 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:397
 msgid "Resistance (swept)"
-msgstr "抵抗(スイープ)"
+msgstr "抵抗 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:401
 msgid "Temperature (swept)"
-msgstr "温度(スイープ)"
+msgstr "温度 (swept)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
 msgid "Voltage (measured)"
@@ -22317,7 +22315,7 @@ msgstr "指定のライブラリーIDのフットプリントを更新:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr "新しいフットプリント ライブラリ ID:"
+msgstr "新しいフットプリント ライブラリーID:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -27505,7 +27503,7 @@ msgstr "ビアがレイヤーに未接続か、単一のレイヤーにのみ接
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
-msgstr "配線た未接続"
+msgstr "配線が未接続"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Hole clearance violation"
