@@ -103,7 +103,16 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 item->ClearFlags( HOLE_PROXY );
                 doCheckItem( item );
 
-                if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
+                bool hasHole;
+
+                switch( item->Type() )
+                {
+                case PCB_VIA_T: hasHole = true;                                           break;
+                case PCB_PAD_T: hasHole = static_cast<PAD*>( item )->GetDrillSizeX() > 0; break;
+                default:        hasHole = false;                                          break;
+                }
+
+                if( hasHole )
                 {
                     item->SetFlags( HOLE_PROXY );
                     doCheckItem( item );
