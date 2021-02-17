@@ -37,7 +37,13 @@
 
 void PATHS::getUserDocumentPath( wxFileName& aPath )
 {
-    aPath.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
+    wxString envPath;
+
+    if( wxGetEnv( wxT( "KICAD_DOCUMENTS_HOME" ), &envPath ) )
+        aPath.AssignDir( envPath );
+    else
+        aPath.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
+
     aPath.AppendDir( KICAD_PATH_STR );
     aPath.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
 }
