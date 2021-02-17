@@ -539,6 +539,12 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
 void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
 {
+    if( aEvent.Category() == TC_VIEW || aEvent.Category() == TC_MOUSE )
+    {
+        auto viewAreaD = getView()->GetBoundary();
+        m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
+    }
+
     if( !aEvent.IsKeyPressed() )
         return;
 
