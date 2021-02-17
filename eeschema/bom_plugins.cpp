@@ -127,7 +127,7 @@ wxString BOM_PLUGIN::readHeader( const wxString& aEndSection )
 }
 
 
-wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
+wxString BOM_PLUGIN::getOutputExtension( const wxString& aHeader )
 {
     // search header for extension after %O (extension includes '.')
     // looks for output argument of the form `"%O.extension"`
