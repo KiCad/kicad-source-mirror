@@ -1398,7 +1398,7 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
     BOARD_ITEM* parent = aItem->Parent();
 
-    if ( aItem->OfKind(PNS::ITEM::SOLID_T) )
+    if( aItem->OfKind( PNS::ITEM::SOLID_T ) )
     {
         PAD*   pad = static_cast<PAD*>( parent );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
@@ -1471,6 +1471,7 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
         PAD*   pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
+        m_fpOffsets[ pad ].p_old = pad->GetPosition();
         m_fpOffsets[ pad ].p_new = pos;
         break;
     }
@@ -1566,18 +1567,18 @@ void PNS_KICAD_IFACE::Commit()
 
     for( auto fpOffset : m_fpOffsets )
     {
-        auto offset = fpOffset.second.p_new - fpOffset.second.p_old;
-        auto mod = fpOffset.first->GetParent();
+        VECTOR2I offset = fpOffset.second.p_new - fpOffset.second.p_old;
+        FOOTPRINT* footprint = fpOffset.first->GetParent();
 
-        VECTOR2I p_orig = mod->GetPosition();
+        VECTOR2I p_orig = footprint->GetPosition();
         VECTOR2I p_new = p_orig + offset;
 
-        if( processedMods.find( mod ) != processedMods.end() )
+        if( processedMods.find( footprint ) != processedMods.end() )
             continue;
 
-        processedMods.insert( mod );
-        m_commit->Modify( mod );
-        mod->SetPosition( wxPoint( p_new.x, p_new.y ));
+        processedMods.insert( footprint );
+        m_commit->Modify( footprint );
+        footprint->SetPosition( wxPoint( p_new.x, p_new.y ) );
     }
 
     m_fpOffsets.clear();
