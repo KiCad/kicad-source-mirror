@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-17 22:35+0000\n"
+"PO-Revision-Date: 2021-02-20 14:54+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -190,9 +190,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Czas renderowania %.3f s"
+msgstr "Czas renderowania %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -694,7 +694,7 @@ msgstr "Kąt w stopniach"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:434
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:451
 msgid "Azimuth (degrees)"
-msgstr "Azymut w stopniach"
+msgstr "Azymut (w stopniach)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
 msgid "1:"
@@ -7171,11 +7171,11 @@ msgstr ""
 "wewnątrz arkusza"
 
 #: eeschema/connection_graph.cpp:2872
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
 msgstr ""
-"Pin hierarchiczny %s nie ma odpowiednika w etykietach hierarchicznych "
-"wewnątrz arkusza"
+"Etykieta hierarchiczna %s nie ma odpowiednika w pinach hierarchicznych na "
+"zewnątrz arkusza"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8615,9 +8615,8 @@ msgstr "Filtrowane na podstawie sieci:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Usuwa wybrany(e) element(y)"
+msgstr "Dołącz wyłącznie zaznaczone elementy"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -11239,24 +11238,20 @@ msgid "Update Schematic from PCB"
 msgstr "Uaktualnij schemat na podstawie PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Symbol zasilania"
+msgstr "Symbol nadrzędny:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Usuń pola nie znajdujące się w nowym symbolu"
+msgstr "Usuń pola nie znajdujące się w symbolu nadrzędnym"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Zresetuj pola jeśli są puste w nowym symbolu"
+msgstr "Zresetuj pola jeśli są puste w symbolu nadrzędnym"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Pola symbolu"
+msgstr "Aktualizacja pól symbolu"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -15280,14 +15275,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Eksportuje symbol do nowej biblioteki"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "Edycja pól symboli..."
+msgstr "Aktualizacja pól symbolu..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "Uaktualnia symbol by dołączyć wszystkie zmiany w bibliotece"
+msgstr "Uaktualnia symbol by dołączyć zmiany wykonane w symbolu nadrzędnym"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15556,18 +15549,16 @@ msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Obraca wybrane elementy w prawo"
 
 #: eeschema/tools/ee_actions.cpp:376
-#, fuzzy
 msgid "Mirror Vertically"
-msgstr "Rozłóż pionowo"
+msgstr "Odbij pionowo"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Przenosi wybrane elementy na przeciwną warstwę"
 
 #: eeschema/tools/ee_actions.cpp:382
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "Rozłóż poziomo"
+msgstr "Odbij poziomo"
 
 #: eeschema/tools/ee_actions.cpp:382
 msgid "Flips selected item(s) from left to right"
@@ -16329,7 +16320,7 @@ msgstr "Edytuj nazwę symbolu"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Symbol nie pochodzi z innego symbolu."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -17353,42 +17344,40 @@ msgid "Project Template Selector"
 msgstr "Wybór szablonu projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "Użyj całego schematu"
+msgstr "Edytuje schemat należący do projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr "Edycja globalnej oraz projektowej tabeli bibliotek symboli"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Edycja obwodu drukowanego należącego do projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Edycja globalnej oraz projektowej tabeli bibliotek footprintów"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Preview Gerber files"
 msgstr "Przeglądanie plików Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Konwertuje bitmapy na komponenty lub footprinty"
+msgstr "Konwertowanie obrazów bitmapowych na komponenty lub footprinty"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
+"Wyświetl narzędzia do obliczania rezystancji, obciążalności prądowej, itp."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
 "Edit worksheet borders and title blocks for use in schematics and PCB designs"
 msgstr ""
+"Edytuj obramowanie arkusza oraz tabelkę tytułową do wykorzystania na "
+"schematach i projektach PCB"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17462,23 +17451,21 @@ msgstr ""
 "nie wygląda na prawidłowy plik z projektem programu KiCad."
 
 #: kicad/kicad_manager_frame.cpp:154
-#, fuzzy
 msgid "Project Files"
-msgstr "Eksploruj pliki projektu"
+msgstr "Pliki projektu"
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "Edycja"
+msgstr "Edytory"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
 msgstr "Załaduj plik do edycji"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Projekt"
+msgstr "Projekt %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -17765,48 +17752,40 @@ msgid "Close the current project"
 msgstr "Zamyka obecny projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Edytor Schematów Eeschema"
+msgstr "Edytor Schematów"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
-msgstr "Edytuj schemat"
+msgstr "Edycja schematu należącego do projektu"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "Edycja symboli schematowych"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Przełącz do edytora PCB"
+msgstr "Edytor obwodów drukowanych"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
 msgstr "Edytuj obwód drukowany"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "Edycja footprintów obwodów drukowanych"
+msgstr "Edycja footprintów dla obwodów drukowanych"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
 msgstr "Przeglądarka plików Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Przeglądanie plików Gerber"
+msgstr "Przeglądanie wyjściowych plików w formacie Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Skonwertowany"
+msgstr "Konwerter obrazów"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -17822,9 +17801,8 @@ msgstr ""
 "Zawiera kilka prostych kalkulatorów: szerokość ścieżek, odległości, itp."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Worksheet Editor"
-msgstr "Arkusz"
+msgstr "Edytor obramowań strony"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit worksheet graphics and text"
@@ -18425,7 +18403,6 @@ msgid "Attenuation more than %f dB"
 msgstr "Ustawiono tłumienie większe niż %f dB"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18437,10 +18414,10 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### Tłumik mostkowy:\n"
-"__Zin__ żądana impedancja wejściowa w &#x2126;<br>\n"
-"__Zout__ żądana impedancja wyjściowa<br>\n"
-"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"### Tłumik mostkowy typu T:\n"
+"__Zwe__ żądana impedancja wejściowa w &#x2126;<br>\n"
+"__Zwy__ żądana impedancja wyjściowa<br>\n"
+"__Z<sub>0</sub> = Zwe = Zwy__<br><br>\n"
 "\n"
 "* __a__ tłumienie w dB\n"
 "* __L = 10<sup>a/20</sup>__ (strat)<br><br>\n"
@@ -18448,7 +18425,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18463,9 +18439,9 @@ msgid ""
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
 "## Tłumik typu Pi\n"
-"__Zin__ żądana impedancja wejściowa w &#x2126;<br>\n"
-"__Zout__ żądana impedancja wyjściowa<br>\n"
-"__Zin = Zout__<br><br>\n"
+"__Zwe__ żądana impedancja wejściowa w &#x2126;<br>\n"
+"__Zwy__ żądana impedancja wyjściowa<br>\n"
+"__Zwe = Zwy__<br><br>\n"
 "\n"
 "* __a__ tłumienie w dB\n"
 "* __L = 10<sup>a/20</sup>__ (strat)\n"
@@ -18475,7 +18451,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18487,14 +18462,13 @@ msgid ""
 msgstr ""
 "## Tłumik rozdzielający\n"
 "### Tłumienie to 6dB\n"
-"___Z<sub>in</sub>___ żądana impedancja wejściowa w &#x2126;<br>\n"
-"___Z<sub>out</sub>___ żądana impedancja wyjściowa w &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"___Z<sub>we</sub>___ żądana impedancja wejściowa w &#x2126;<br>\n"
+"___Z<sub>wy</sub>___ żądana impedancja wyjściowa w &#x2126;<br>\n"
+"___Z<sub>we</sub> = Z<sub>wy</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>wy</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18510,16 +18484,16 @@ msgid ""
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
 "## Tłumik typu T\n"
-"__Zin__ żądana impedancja wejściowa w &#x2126;<br>\n"
-"__Zout__ żądana impedancja wyjściowa<br>\n"
-"__Zin = Zout__<br><br>\n"
+"__Zwe__ żądana impedancja wejściowa w &#x2126;<br>\n"
+"__Zwy__ żądana impedancja wyjściowa<br>\n"
+"__Zwe = Zwy__<br><br>\n"
 "\n"
 "* __a__ tłumienie w dB\n"
 "* __L = 10<sup>a/20</sup>__ (strat)\n"
 "* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"* ___R2 = 2&radic;(L \\* Z<sub>we</sub> \\* Z<sub>wy</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>we</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>wy</sub> \\* A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:73
 msgid "Data file error."
@@ -18681,14 +18655,12 @@ msgid "Tee"
 msgstr "Typu T"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
 msgstr "Mostkowy typu T"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
-msgstr "Splitter rezystorowy"
+msgstr "Rozdzielacz rezystorowy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
 msgid "Attenuators"
@@ -18702,9 +18674,8 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "Tłumienie"
+msgstr "Tłumienie:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
@@ -18712,17 +18683,15 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zwe:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "Zout"
+msgstr "Zwy:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18733,17 +18702,14 @@ msgid "Inputs"
 msgstr "Wejścia"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
 msgstr "Oczekiwana rezystancja:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
 msgstr "Wykluczona wartość 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
 msgstr "Wykluczona wartość 2:"
 
@@ -18768,17 +18734,14 @@ msgid "Solutions"
 msgstr "Rozwiązania"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
 msgstr "Rozwiązanie proste:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
 msgstr "Rozwiązanie 3xR:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
 msgstr "Rozwiązanie 4xR:"
 
@@ -18832,9 +18795,8 @@ msgid "Coplanar wave guide"
 msgstr "Linia koplanarna"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
-msgstr "Linia koplanarna z planem masy"
+msgstr "Transmisyjna linia koplanarna z polem masy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Rectangular Waveguide"
@@ -18869,9 +18831,8 @@ msgid "Er:"
 msgstr "Er:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
-#, fuzzy
 msgid "Tan delta:"
-msgstr "Nachylenie:"
+msgstr "Tangens delta:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
@@ -18900,12 +18861,11 @@ msgstr "Chropowatość:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "µ Izolatora:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
-#, fuzzy
 msgid "Conductor mu:"
-msgstr "Długość łącza:"
+msgstr "µ Łącza:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -18989,19 +18949,17 @@ msgid "Applied current:"
 msgstr "Przyłożony prąd:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
-#, fuzzy
 msgid "Plating resistivity:"
-msgstr "Rezystywność pokrycia (Ω.m):"
+msgstr "Rezystywność pokrycia:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "Ω-metr"
+msgstr "Ω/m"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Względna przenikalność podłoża:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -19038,16 +18996,15 @@ msgid "nanoseconds"
 msgstr "nanosekundy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Ostrzeżenie:\n"
-"Średnica przelotki >= Średnica otworu.\n"
-"Niektóre parametry nie mogą być obliczone\n"
-"dla przelotki wewnątrz strefy miedzi."
+"Średnica przelotki >= Ograniczeniu średnicy otworu.\n"
+"Niektóre parametry nie mogą być obliczone dla przelotki wewnątrz strefy "
+"miedzi."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -19059,7 +19016,6 @@ msgstr "Rezystancja:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
 msgstr "Ω"
 
@@ -19078,9 +19034,8 @@ msgstr "Straty mocy:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
-#, fuzzy
 msgid "W"
-msgstr "W:"
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19091,9 +19046,8 @@ msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Używając stałej przewodnictwa cieplnego 401 W/(metr-Kelwin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
-#, fuzzy
 msgid "deg C/W"
-msgstr "st. C"
+msgstr "st. C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
@@ -19197,9 +19151,8 @@ msgid "Internal Layer Traces"
 msgstr "Ścieżki na wewnętrznej warstwie"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr "Napięcie > 500V:"
+msgstr "Napięcie > 500 V:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
@@ -19234,54 +19187,44 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
-#, fuzzy
 msgid "0 .. 15 V"
-msgstr "0 .. 15V"
+msgstr "0 .. 15 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
-#, fuzzy
 msgid "16 .. 30 V"
-msgstr "16 .. 30V"
+msgstr "16 .. 30 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
-#, fuzzy
 msgid "31 .. 50 V"
-msgstr "31 .. 50V"
+msgstr "31 .. 50 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
-#, fuzzy
 msgid "51 .. 100 V"
-msgstr "51 .. 100V"
+msgstr "51 .. 100 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
-#, fuzzy
 msgid "101 .. 150 V"
-msgstr "101 .. 150V"
+msgstr "101 .. 150 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
-#, fuzzy
 msgid "151 .. 170 V"
-msgstr "151 .. 170V"
+msgstr "151 .. 170 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
-#, fuzzy
 msgid "171 .. 250 V"
-msgstr "171 .. 250V"
+msgstr "171 .. 250 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
-#, fuzzy
 msgid "251 .. 300 V"
-msgstr "251 .. 300V"
+msgstr "251 .. 300 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
-#, fuzzy
 msgid "301 .. 500 V"
-msgstr "301 .. 500V"
+msgstr "301 .. 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
-#, fuzzy
 msgid " > 500 V"
-msgstr " > 500V"
+msgstr " > 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1873
 msgid ""
@@ -19379,7 +19322,6 @@ msgid "Not worth using"
 msgstr "Nie warte użycia"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19487,7 +19429,6 @@ msgid "Incorrect value for R1 R2"
 msgstr "Niepoprawne wartości w polach R1 R2"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -19520,8 +19461,8 @@ msgstr ""
 "Wartość kontrolna jest pokazywana jako pogrubiona.\n"
 "\n"
 "Obliczenia dotyczą prądów do 35A (zewnętrzne ścieżki) lub 17,5A (wewnętrzne "
-"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów "
-"(10 mm).\n"
+"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów ("
+"10 mm).\n"
 "\n"
 "Formuła z normy IPC 2221 to\n"
 "<center>__I = K * dT <sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
@@ -19544,17 +19485,14 @@ msgid "Specific Resistance"
 msgstr "Rezystancja charakterystyczna"
 
 #: pcb_calculator/transline_ident.cpp:121
-#, fuzzy
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "Epsilon R: względna stała dielektryczna podłoża"
+msgstr "Względna przenikalność elektryczna podłoża (stała dielektryczna)"
 
 #: pcb_calculator/transline_ident.cpp:125
-#, fuzzy
 msgid "Dielectric loss (dissipation factor)"
-msgstr "Współczynnik strat dielektrycznych"
+msgstr "Straty dielektryka (współczynnik strat)"
 
 #: pcb_calculator/transline_ident.cpp:131
-#, fuzzy
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
@@ -19571,9 +19509,9 @@ msgstr "Częstotliwość sygnału wejściowego"
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:366
 #: pcb_calculator/transline_ident.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "Spodziewano się %s"
+msgstr "Skuteczne %s:"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -19582,7 +19520,6 @@ msgstr "Spodziewano się %s"
 #: pcb_calculator/transline_ident.cpp:288
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
-#, fuzzy
 msgid "Conductor losses:"
 msgstr "Straty łączeniowe:"
 
@@ -19593,9 +19530,8 @@ msgstr "Straty łączeniowe:"
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:368
 #: pcb_calculator/transline_ident.cpp:401
-#, fuzzy
 msgid "Dielectric losses:"
-msgstr "Straty izolatora:"
+msgstr "Straty dielektryka:"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:189
@@ -19603,7 +19539,6 @@ msgstr "Straty izolatora:"
 #: pcb_calculator/transline_ident.cpp:328
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:402
-#, fuzzy
 msgid "Skin depth:"
 msgstr "Naskórkowość:"
 
@@ -19612,43 +19547,37 @@ msgstr "Naskórkowość:"
 #: pcb_calculator/transline_ident.cpp:225
 #: pcb_calculator/transline_ident.cpp:331
 #: pcb_calculator/transline_ident.cpp:372
-#, fuzzy
 msgid "Height of substrate"
 msgstr "Wysokość podłoża"
 
 #: pcb_calculator/transline_ident.cpp:154
 #: pcb_calculator/transline_ident.cpp:333
-#, fuzzy
 msgid "Height of box top"
-msgstr "Wysokość prostokąta"
+msgstr "Wysokość obudowy"
 
 #: pcb_calculator/transline_ident.cpp:157
 #: pcb_calculator/transline_ident.cpp:194
 #: pcb_calculator/transline_ident.cpp:227
 #: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:377
-#, fuzzy
 msgid "Strip thickness"
 msgstr "Grubość paska"
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:337
-#, fuzzy
 msgid "Roughness"
 msgstr "Chropowatość"
 
 #: pcb_calculator/transline_ident.cpp:160
 #: pcb_calculator/transline_ident.cpp:338
-#, fuzzy
 msgid "Conductor roughness"
 msgstr "Chropowatość łącza"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "substrate"
-msgstr ""
+msgstr "podłoże"
 
 #: pcb_calculator/transline_ident.cpp:163
-#, fuzzy
 msgid "Relative permeability (mu) of substrate"
 msgstr "Względna przenikalność (mu) podłoża"
 
@@ -19660,9 +19589,8 @@ msgstr "Względna przenikalność (mu) podłoża"
 #: pcb_calculator/transline_ident.cpp:340
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:408
-#, fuzzy
 msgid "conductor"
-msgstr "Cewka"
+msgstr "łącze"
 
 #: pcb_calculator/transline_ident.cpp:166
 #: pcb_calculator/transline_ident.cpp:197
@@ -19672,7 +19600,6 @@ msgstr "Cewka"
 #: pcb_calculator/transline_ident.cpp:341
 #: pcb_calculator/transline_ident.cpp:380
 #: pcb_calculator/transline_ident.cpp:409
-#, fuzzy
 msgid "Relative permeability (mu) of conductor"
 msgstr "Względna przenikalność (mu) łącza"
 
@@ -19681,9 +19608,8 @@ msgstr "Względna przenikalność (mu) łącza"
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy
 msgid "Line width"
-msgstr "Szerokość linii:"
+msgstr "Szerokość linii"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:205
@@ -19691,7 +19617,6 @@ msgstr "Szerokość linii:"
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:349
 #: pcb_calculator/transline_ident.cpp:385
-#, fuzzy
 msgid "Line length"
 msgstr "Długość linii"
 
@@ -19702,7 +19627,6 @@ msgstr "Długość linii"
 #: pcb_calculator/transline_ident.cpp:311
 #: pcb_calculator/transline_ident.cpp:388
 #: pcb_calculator/transline_ident.cpp:425
-#, fuzzy
 msgid "Characteristic impedance"
 msgstr "Impedancja charakterystyczna"
 
@@ -19714,14 +19638,12 @@ msgstr "Impedancja charakterystyczna"
 #: pcb_calculator/transline_ident.cpp:359
 #: pcb_calculator/transline_ident.cpp:391
 #: pcb_calculator/transline_ident.cpp:428
-#, fuzzy
 msgid "Electrical length"
 msgstr "Długość elektryczna"
 
 #: pcb_calculator/transline_ident.cpp:203
 #: pcb_calculator/transline_ident.cpp:236
 #: pcb_calculator/transline_ident.cpp:347
-#, fuzzy
 msgid "Gap width"
 msgstr "Dystans"
 
@@ -19731,40 +19653,33 @@ msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:257
 #: pcb_calculator/transline_ident.cpp:290
-#, fuzzy
 msgid "TE-modes:"
 msgstr "TE-Modes:"
 
 #: pcb_calculator/transline_ident.cpp:258
 #: pcb_calculator/transline_ident.cpp:291
-#, fuzzy
 msgid "TM-modes:"
 msgstr "TM-Modes:"
 
 #: pcb_calculator/transline_ident.cpp:261
 #: pcb_calculator/transline_ident.cpp:294
-#, fuzzy
 msgid "insulator"
-msgstr "Tłumacze"
+msgstr "izolator"
 
 #: pcb_calculator/transline_ident.cpp:262
 #: pcb_calculator/transline_ident.cpp:295
-#, fuzzy
 msgid "Relative permeability (mu) of insulator"
 msgstr "Względna przenikalność (mu) izolacji"
 
 #: pcb_calculator/transline_ident.cpp:269
-#, fuzzy
 msgid "Width of waveguide"
 msgstr "Szerokość falowodu"
 
 #: pcb_calculator/transline_ident.cpp:271
-#, fuzzy
 msgid "Height of waveguide"
 msgstr "Wysokość falowodu"
 
 #: pcb_calculator/transline_ident.cpp:273
-#, fuzzy
 msgid "Waveguide length"
 msgstr "Długość falowodu"
 
@@ -19775,7 +19690,6 @@ msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:303
 #: pcb_calculator/transline_ident.cpp:417
-#, fuzzy
 msgid "Inner diameter (conductor)"
 msgstr "Wewnętrzna średnica (łącza)"
 
@@ -19786,39 +19700,34 @@ msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:306
 #: pcb_calculator/transline_ident.cpp:420
-#, fuzzy
 msgid "Outer diameter (insulator)"
 msgstr "Zewnętrzna średnica (izolacji)"
 
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "Skuteczne %s (parzyste):"
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "Skuteczne %s (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:324
-#, fuzzy
 msgid "Conductor losses (even):"
-msgstr "Straty łączeniowe Parzysty:"
+msgstr "Straty łączeniowe (parzyste):"
 
 #: pcb_calculator/transline_ident.cpp:325
-#, fuzzy
 msgid "Conductor losses (odd):"
-msgstr "Straty łączeniowe Nieparzysty:"
+msgstr "Straty łączeniowe (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:326
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "Straty dielektryka Parzysty:"
+msgstr "Straty dielektryka (parzyste):"
 
 #: pcb_calculator/transline_ident.cpp:327
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "Straty dielektryka Nieparzysty:"
+msgstr "Straty dielektryka (nieparzyste):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -19838,31 +19747,26 @@ msgstr ""
 "Impedancja w trybie nieparzystym (linie sterowane przez napięcie różnicowe)"
 
 #: pcb_calculator/transline_ident.cpp:374
-#, fuzzy
 msgid "Distance between strip and top metal"
-msgstr "odległość pomiędzy paskiem a górnym przewodnikiem"
+msgstr "Odległość pomiędzy paskiem a górnym przewodnikiem"
 
 #: pcb_calculator/transline_ident.cpp:405
 msgid "Twists"
 msgstr "Skrętów"
 
 #: pcb_calculator/transline_ident.cpp:406
-#, fuzzy
 msgid "Number of twists per length"
 msgstr "Liczba skrętów w na podanej długości"
 
 #: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
 msgid "environment"
-msgstr "Zmienne środowiskowe"
+msgstr "środowisko"
 
 #: pcb_calculator/transline_ident.cpp:413
-#, fuzzy
 msgid "Relative permittivity of environment"
 msgstr "Względna przenikalność środowiska"
 
 #: pcb_calculator/transline_ident.cpp:422
-#, fuzzy
 msgid "Cable length"
 msgstr "Długość przewodu"
 
@@ -19903,17 +19807,16 @@ msgid "kHz"
 msgstr "kHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
-#, fuzzy
 msgid "rad"
-msgstr "Pole lutownicze"
+msgstr "radianów"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
-msgstr ""
+msgstr "Ω"
 
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcbnew/array_creator.cpp:188
 msgid "Create an array"
@@ -23532,9 +23435,8 @@ msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr "(podaj wiele elementów oddzielonych spacjami by je kolejno umieścić)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "Dostępne ścieżki:"
+msgstr "Dostępne footpirnty:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:240
@@ -26102,7 +26004,6 @@ msgid "Track & Via Properties"
 msgstr "Właściwości ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
 msgstr "Rozmiar wiercenia musi być mniejszy niż rozmiar przelotki"
 
@@ -31598,7 +31499,6 @@ msgid "Show board setup"
 msgstr "Pokaż ustawienia płytki"
 
 #: pcbnew/router/router_tool.cpp:786
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
@@ -31607,7 +31507,6 @@ msgstr ""
 "Reguły projektowe > Restrykcje."
 
 #: pcbnew/router/router_tool.cpp:807
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
