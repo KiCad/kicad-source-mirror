@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-17 22:35+0000\n"
+"PO-Revision-Date: 2021-02-18 21:46+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17271,9 +17271,8 @@ msgid "Project Template Selector"
 msgstr "プロジェクト テンプレートの選択"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "全ての回路図を使用"
+msgstr "プロジェクトの回路図を編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
 #, fuzzy
@@ -17295,9 +17294,8 @@ msgid "Preview Gerber files"
 msgstr "ガーバー ファイルの閲覧"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "ビットマップ イメージを回路図または PCB のコンポーネントへ変換します"
+msgstr "ビットマップイメージを回路図シンボルまたはプリント基板のフットプリントに変換します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -17306,7 +17304,7 @@ msgstr ""
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
 "Edit worksheet borders and title blocks for use in schematics and PCB designs"
-msgstr ""
+msgstr "回路図とプリント基板デザインで使われるワークシートの枠線とタイトルブロックを編集します"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17385,18 +17383,17 @@ msgid "Project Files"
 msgstr "プロジェクト ファイルの保存"
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "編集"
+msgstr "エディター"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
 msgstr "編集するファイルをロード"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "プロジェクト: "
+msgstr "プロジェクト: %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -17687,12 +17684,10 @@ msgid "Schematic Editor"
 msgstr "回路図エディター"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
 msgstr "回路図を編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "回路図シンボルを編集"
 
@@ -17721,9 +17716,8 @@ msgid "Preview Gerber output files"
 msgstr "ガーバー ファイルの閲覧"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Kicad2step 変換"
+msgstr "イメージコンバーター"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -17738,9 +17732,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "コンポーネントの計算、トラック幅の計算などを実行します。"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Worksheet Editor"
-msgstr "ワークシート レイアウト エディター"
+msgstr "ワークシートエディター"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit worksheet graphics and text"
@@ -18617,9 +18610,8 @@ msgid "Parameters"
 msgstr "パラメーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "減衰量"
+msgstr "減衰量:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
@@ -18627,17 +18619,15 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "Zout"
+msgstr "Zout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18747,9 +18737,8 @@ msgid "Coplanar wave guide"
 msgstr "コプレーナ導波路"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
-msgstr "グランド プレーン付きコプレーナ導波路"
+msgstr "グランドプレーン付きコプレーナ導波路"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Rectangular Waveguide"
@@ -18953,7 +18942,6 @@ msgid "nanoseconds"
 msgstr "ナノ秒"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
@@ -18961,8 +18949,7 @@ msgid ""
 msgstr ""
 "警告:\n"
 "ビア パッドの直径 >= クリアランス穴の直径 .\n"
-"いくつかのパラメーターは、導体ゾーン内にあるビアに\n"
-"対しては計算されません。"
+"いくつかのパラメーターは、導体ゾーン内にあるビアに対しては計算されません。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -18974,7 +18961,6 @@ msgstr "抵抗:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
 msgstr "Ω"
 
@@ -19111,9 +19097,8 @@ msgid "Internal Layer Traces"
 msgstr "内層配線"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr "電圧 > 500V:"
+msgstr "電圧 > 500 V:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
@@ -19148,54 +19133,44 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
-#, fuzzy
 msgid "0 .. 15 V"
-msgstr "0 .. 15V"
+msgstr "0 .. 15 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
-#, fuzzy
 msgid "16 .. 30 V"
-msgstr "16 .. 30V"
+msgstr "16 .. 30 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
-#, fuzzy
 msgid "31 .. 50 V"
-msgstr "31 .. 50V"
+msgstr "31 .. 50 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
-#, fuzzy
 msgid "51 .. 100 V"
-msgstr "51 .. 100V"
+msgstr "51 .. 100 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
-#, fuzzy
 msgid "101 .. 150 V"
-msgstr "101 .. 150V"
+msgstr "101 .. 150 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
-#, fuzzy
 msgid "151 .. 170 V"
-msgstr "151 .. 170V"
+msgstr "151 .. 170 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
-#, fuzzy
 msgid "171 .. 250 V"
-msgstr "171 .. 250V"
+msgstr "171 .. 250 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
-#, fuzzy
 msgid "251 .. 300 V"
-msgstr "251 .. 300V"
+msgstr "251 .. 300 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
-#, fuzzy
 msgid "301 .. 500 V"
-msgstr "301 .. 500V"
+msgstr "301 .. 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
-#, fuzzy
 msgid " > 500 V"
-msgstr " > 500V"
+msgstr " > 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1873
 msgid ""
@@ -19489,7 +19464,6 @@ msgstr "予期される %s"
 #: pcb_calculator/transline_ident.cpp:288
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
-#, fuzzy
 msgid "Conductor losses:"
 msgstr "導体損失:"
 
@@ -19500,7 +19474,6 @@ msgstr "導体損失:"
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:368
 #: pcb_calculator/transline_ident.cpp:401
-#, fuzzy
 msgid "Dielectric losses:"
 msgstr "誘電体損失:"
 
@@ -19510,7 +19483,6 @@ msgstr "誘電体損失:"
 #: pcb_calculator/transline_ident.cpp:328
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:402
-#, fuzzy
 msgid "Skin depth:"
 msgstr "表皮深さ:"
 
@@ -19519,13 +19491,11 @@ msgstr "表皮深さ:"
 #: pcb_calculator/transline_ident.cpp:225
 #: pcb_calculator/transline_ident.cpp:331
 #: pcb_calculator/transline_ident.cpp:372
-#, fuzzy
 msgid "Height of substrate"
 msgstr "サブストレートの高さ"
 
 #: pcb_calculator/transline_ident.cpp:154
 #: pcb_calculator/transline_ident.cpp:333
-#, fuzzy
 msgid "Height of box top"
 msgstr "ボックスの高さ"
 
@@ -19534,7 +19504,6 @@ msgstr "ボックスの高さ"
 #: pcb_calculator/transline_ident.cpp:227
 #: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:377
-#, fuzzy
 msgid "Strip thickness"
 msgstr "銅箔厚"
 
@@ -19546,13 +19515,12 @@ msgstr "表面荒さ"
 
 #: pcb_calculator/transline_ident.cpp:160
 #: pcb_calculator/transline_ident.cpp:338
-#, fuzzy
 msgid "Conductor roughness"
 msgstr "導体の荒さ"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "substrate"
-msgstr ""
+msgstr "サブストレート"
 
 #: pcb_calculator/transline_ident.cpp:163
 #, fuzzy
@@ -19567,9 +19535,8 @@ msgstr "サブストレートの比透磁率 (μ)"
 #: pcb_calculator/transline_ident.cpp:340
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:408
-#, fuzzy
 msgid "conductor"
-msgstr "インダクター"
+msgstr "導体"
 
 #: pcb_calculator/transline_ident.cpp:166
 #: pcb_calculator/transline_ident.cpp:197
@@ -19597,7 +19564,6 @@ msgstr "線幅"
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:349
 #: pcb_calculator/transline_ident.cpp:385
-#, fuzzy
 msgid "Line length"
 msgstr "線路長"
 
@@ -19608,7 +19574,6 @@ msgstr "線路長"
 #: pcb_calculator/transline_ident.cpp:311
 #: pcb_calculator/transline_ident.cpp:388
 #: pcb_calculator/transline_ident.cpp:425
-#, fuzzy
 msgid "Characteristic impedance"
 msgstr "特性インピーダンス"
 
@@ -19620,14 +19585,12 @@ msgstr "特性インピーダンス"
 #: pcb_calculator/transline_ident.cpp:359
 #: pcb_calculator/transline_ident.cpp:391
 #: pcb_calculator/transline_ident.cpp:428
-#, fuzzy
 msgid "Electrical length"
 msgstr "電気長"
 
 #: pcb_calculator/transline_ident.cpp:203
 #: pcb_calculator/transline_ident.cpp:236
 #: pcb_calculator/transline_ident.cpp:347
-#, fuzzy
 msgid "Gap width"
 msgstr "ギャップ幅"
 
@@ -19637,40 +19600,33 @@ msgstr "ZF(H10) = Ey / Hx:"
 
 #: pcb_calculator/transline_ident.cpp:257
 #: pcb_calculator/transline_ident.cpp:290
-#, fuzzy
 msgid "TE-modes:"
 msgstr "TEモード:"
 
 #: pcb_calculator/transline_ident.cpp:258
 #: pcb_calculator/transline_ident.cpp:291
-#, fuzzy
 msgid "TM-modes:"
 msgstr "TMモード:"
 
 #: pcb_calculator/transline_ident.cpp:261
 #: pcb_calculator/transline_ident.cpp:294
-#, fuzzy
 msgid "insulator"
-msgstr "翻訳者"
+msgstr "絶縁体"
 
 #: pcb_calculator/transline_ident.cpp:262
 #: pcb_calculator/transline_ident.cpp:295
-#, fuzzy
 msgid "Relative permeability (mu) of insulator"
 msgstr "絶縁体の比透磁率 (μ)"
 
 #: pcb_calculator/transline_ident.cpp:269
-#, fuzzy
 msgid "Width of waveguide"
 msgstr "導波管の幅"
 
 #: pcb_calculator/transline_ident.cpp:271
-#, fuzzy
 msgid "Height of waveguide"
 msgstr "導波管の高さ"
 
 #: pcb_calculator/transline_ident.cpp:273
-#, fuzzy
 msgid "Waveguide length"
 msgstr "導波管長"
 
@@ -19681,7 +19637,6 @@ msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:303
 #: pcb_calculator/transline_ident.cpp:417
-#, fuzzy
 msgid "Inner diameter (conductor)"
 msgstr "内径 (導体)"
 
@@ -19692,7 +19647,6 @@ msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:306
 #: pcb_calculator/transline_ident.cpp:420
-#, fuzzy
 msgid "Outer diameter (insulator)"
 msgstr "外径 (絶縁体)"
 
@@ -19707,24 +19661,20 @@ msgid "Effective %s (odd):"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:324
-#, fuzzy
 msgid "Conductor losses (even):"
-msgstr "導体損 Even:"
+msgstr "導体損失 (even):"
 
 #: pcb_calculator/transline_ident.cpp:325
-#, fuzzy
 msgid "Conductor losses (odd):"
-msgstr "導体損 Odd:"
+msgstr "導体損失 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:326
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "誘電体損 Even:"
+msgstr "誘電体損失 (even):"
 
 #: pcb_calculator/transline_ident.cpp:327
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "誘電体損 Odd:"
+msgstr "誘電体損失 (odd):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -19743,7 +19693,6 @@ msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr "奇モード インピーダンス (線路は逆 (差動) 電圧で駆動される)"
 
 #: pcb_calculator/transline_ident.cpp:374
-#, fuzzy
 msgid "Distance between strip and top metal"
 msgstr "ストリップ ラインと上部導体の距離"
 
@@ -19752,7 +19701,6 @@ msgid "Twists"
 msgstr "ツイスト数"
 
 #: pcb_calculator/transline_ident.cpp:406
-#, fuzzy
 msgid "Number of twists per length"
 msgstr "長さあたりの撚り数"
 
@@ -19762,12 +19710,10 @@ msgid "environment"
 msgstr "環境変数"
 
 #: pcb_calculator/transline_ident.cpp:413
-#, fuzzy
 msgid "Relative permittivity of environment"
 msgstr "環境の比誘電率"
 
 #: pcb_calculator/transline_ident.cpp:422
-#, fuzzy
 msgid "Cable length"
 msgstr "ケーブル長"
 
@@ -19814,11 +19760,11 @@ msgstr "パッド"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
-msgstr ""
+msgstr "Ω"
 
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcbnew/array_creator.cpp:188
 msgid "Create an array"
