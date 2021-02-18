@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-18 21:46+0000\n"
+"PO-Revision-Date: 2021-02-18 22:26+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7132,7 +7132,7 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "シートピン %s に対応する階層ラベルがシート内にありません"
 
 #: eeschema/connection_graph.cpp:2872
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
 msgstr "階層ラベル %s がシートラベルに接続されていません"
 
@@ -15210,9 +15210,8 @@ msgid "Export a symbol to a new library file"
 msgstr "新規ライブラリー ファイルにシンボルをエクスポート"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "シンボル フィールドを更新"
+msgstr "シンボル フィールドを更新..."
 
 #: eeschema/tools/ee_actions.cpp:173
 #, fuzzy
@@ -15484,18 +15483,16 @@ msgid "Rotates selected item(s) counter-clockwise"
 msgstr "選択されたアイテムを左回転"
 
 #: eeschema/tools/ee_actions.cpp:376
-#, fuzzy
 msgid "Mirror Vertically"
-msgstr "垂直にミラー"
+msgstr "垂直反転"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Flips selected item(s) from top to bottom"
 msgstr "選択されたアイテムの上下を反転"
 
 #: eeschema/tools/ee_actions.cpp:382
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "水平にミラー"
+msgstr "水平反転"
 
 #: eeschema/tools/ee_actions.cpp:382
 msgid "Flips selected item(s) from left to right"
@@ -18334,7 +18331,6 @@ msgid "Attenuation more than %f dB"
 msgstr "減衰量は %f dB 以上に設定してください"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18357,7 +18353,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18378,13 +18373,12 @@ msgstr ""
 "\n"
 "* __a__ 減衰量 (dB)\n"
 "* __L = 10<sup>a/20</sup>__ (損失)\n"
-"* __A = (L + 1)/(L - 1)__<br><br>\n"
-"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
-"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
-"* ___R3 = 1/ (A/Zout - 1/R2 )___"
+"* __A = (L + 1) / (L - 1)__<br><br>\n"
+"* ___R2 = (L- 1) / 2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
+"* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
+"* ___R3 = 1 / (A / Zout - 1 / R2)___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18400,10 +18394,9 @@ msgstr ""
 "___Z<sub>out</sub>___ 要求される出力インピーダンス in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18589,12 +18582,10 @@ msgid "Tee"
 msgstr "T型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
 msgstr "ブリッジT型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
 msgstr "抵抗分割型"
 
@@ -18638,17 +18629,14 @@ msgid "Inputs"
 msgstr "入力"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
-msgstr "要求する抵抗値:"
+msgstr "求める抵抗値:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
 msgstr "除外する値 1:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
 msgstr "除外する値 2:"
 
@@ -18673,7 +18661,6 @@ msgid "Solutions"
 msgstr "解"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
 msgstr "シンプルな解:"
 
@@ -19264,7 +19251,6 @@ msgid "Not worth using"
 msgstr "使用する価値はありません"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19291,8 +19277,7 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"IEC 60063で定義されているE系列は、広く受け入れられている電子部品に好ましい値"
-"のシステムです。\n"
+"IEC 60063で定義されているE系列は、電子部品の標準数として広く受け入れられているシステムです。\n"
 "利用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
 "\n"
 "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
@@ -19300,9 +19285,8 @@ msgstr ""
 "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
-"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけま"
-"す。\n"
-"0,0025Ωから4000 kΩまで必要な抵抗値を入力できます。\n"
+"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけます。\n"
+"0,0025Ωから4000 kΩまで求める抵抗値を入力できます。\n"
 "\n"
 "最大4つまでの部品を使用する解が提供されます。\n"
 "デフォルトでは、要求する抵抗値は常に解答のセットから除外されます。\n"
@@ -19372,7 +19356,6 @@ msgid "Incorrect value for R1 R2"
 msgstr "不正な値の R1 R2"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -19397,13 +19380,12 @@ msgid ""
 msgstr ""
 "最大電流を指定した場合、トレース幅は適合するように計算されます。\n"
 "\n"
-"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、"
-"この電流を扱えるように別のトレース幅が計算されます。\n"
+"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、この電流を扱えるように別のトレース幅が計算されます。\n"
 "\n"
 "制御する値はボールド体で表示されます。\n"
 "\n"
-"計算は、電流 35A (外部) または 17.5A (内部) まで、温度上昇は 100℃ まで、幅は "
-"400mil (10mm) までの範囲で有効です。\n"
+"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅は 400mil (10mm) "
+"までの範囲で有効です。\n"
 "\n"
 "計算式 (IPC 2221 より) \n"
 "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
