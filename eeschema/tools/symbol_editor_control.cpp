@@ -55,6 +55,15 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     LIB_ID sel = editFrame->GetTreeLIBID();
                     return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
                 };
+        // The libInferredCondition allows you to do things like New Symbol and Paste with a
+        // symbol selected (in other words, when we know the library context even if the library
+        // itself isn't selected.
+        auto libInferredCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    LIB_ID sel = editFrame->GetTreeLIBID();
+                    return !sel.GetLibNickname().empty();
+                };
         auto canEditLibrary =
                 [ editFrame ]( const SELECTION& aSel )
                 {
@@ -97,9 +106,8 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libSelectedCondition && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::editSymbol,
-                         symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libInferredCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition && canEditLibrary );
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
@@ -107,18 +115,14 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,
-                         symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition && canEditLibrary );
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,
-                         SELECTION_CONDITIONS::ShowAlways && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,
-                         symbolSelectedCondition && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,
-                         symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libInferredCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition && canEditLibrary );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libSelectedCondition && canEditLibrary);
+        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition && canEditLibrary);
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }
 
