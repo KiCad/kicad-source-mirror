@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-17 22:35+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-02-18 13:52+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -190,9 +190,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "不支持您的 OpenGL 版本。最低要求为 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "渲染时间 %.3f s"
+msgstr "上次渲染时间 %.0f s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -7046,9 +7046,9 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
 
 #: eeschema/connection_graph.cpp:2872
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
-msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
+msgstr "层次标签 %s 在图框外没有匹配的图框引脚"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8441,9 +8441,8 @@ msgstr "按网络筛选项目："
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "删除选择项"
+msgstr "只包含选中选中项"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -11022,24 +11021,20 @@ msgid "Update Schematic from PCB"
 msgstr "从 PCB 更新原理图"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "放置符号"
+msgstr "父符号："
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "如果不在新符号中，则删除字段"
+msgstr "如果不在父符号中，则删除字段"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "如果新符号中为空，则重置字段"
+msgstr "如果父符号为空，则重置字段"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "符号字段"
+msgstr "更新符号字段"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -14941,14 +14936,12 @@ msgid "Export a symbol to a new library file"
 msgstr "将符号导出到新库文件"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "编辑符号字段..."
+msgstr "更新符号字段..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "更新符号以包含库中的任何更改"
+msgstr "更新符号以匹配父符号中所做的任何更改"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15215,18 +15208,16 @@ msgid "Rotates selected item(s) counter-clockwise"
 msgstr "逆时针旋转所选项目"
 
 #: eeschema/tools/ee_actions.cpp:376
-#, fuzzy
 msgid "Mirror Vertically"
-msgstr "垂直分布"
+msgstr "垂直镜像"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Flips selected item(s) from top to bottom"
 msgstr "从上到下翻转选定的项目"
 
 #: eeschema/tools/ee_actions.cpp:382
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "水平分布"
+msgstr "水平镜像"
 
 #: eeschema/tools/ee_actions.cpp:382
 msgid "Flips selected item(s) from left to right"
@@ -15969,7 +15960,7 @@ msgstr "编辑符号名"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "符号不是从另一个符号派生而来的。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -16978,42 +16969,37 @@ msgid "Project Template Selector"
 msgstr "选择工程模板"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "使用整个原理图"
+msgstr "编辑项目原理图"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "编辑全局和工程符号库表"
+msgstr "编辑全局和/或工程原理符号库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "编辑项目的 PCB 设计"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "编辑全局和项目封装库列表"
+msgstr "编辑全局和/或项目 PCB 封装库"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "查看 Gerber 文件"
+msgstr "预览 Gerber 文件"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "将位图图像转换为原理图或 PCB 元件"
+msgstr "将位图图像转换为原理符号或 PCB 封装"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr ""
+msgstr "显示计算电阻、电流容量等的工具。"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
 "Edit worksheet borders and title blocks for use in schematics and PCB designs"
-msgstr ""
+msgstr "编辑用于原理图和 PCB 设计的图框板和标题块"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17084,23 +17070,21 @@ msgstr ""
 "似乎不是有效的 KiCad 工程文件。"
 
 #: kicad/kicad_manager_frame.cpp:154
-#, fuzzy
 msgid "Project Files"
-msgstr "保存工程文件"
+msgstr "工程文件"
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "编辑"
+msgstr "编辑器"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
 msgstr "打开文件编辑"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "- 工程： "
+msgstr "工程：%s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -17385,48 +17369,40 @@ msgid "Close the current project"
 msgstr "关闭当前工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Eeschema 原理图编辑器"
+msgstr "原理图编辑器"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
 msgstr "编辑原理图"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "编辑原理图符号"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "PCB Editor"
-msgstr "切换到 PCB 编辑器"
+msgstr "PCB 编辑器"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
 msgstr "编辑 PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
 msgstr "编辑 PCB 封装"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
 msgstr "Gerber 文件查看器"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "查看 Gerber 文件"
+msgstr "预览 Gerber 输出文件"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "KiCad2step 转换器"
+msgstr "图片转换器"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -17441,9 +17417,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "运行元件计算，布线宽度计算等。"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Worksheet Editor"
-msgstr "图框"
+msgstr "图框编辑器"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit worksheet graphics and text"
@@ -18041,7 +18016,6 @@ msgid "Attenuation more than %f dB"
 msgstr "衰减大于 %f dB, 请重新设置"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18053,9 +18027,9 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### 桥 T 型衰减器：\n"
-"__Zin__ 所需的输入阻抗 &#x2126;<br>\n"
-"__Zout__ 所需的输出阻抗<br>\n"
+"### 桥接的 T 型衰减器：\n"
+"__Zin__ 期望的输入阻抗 &#x2126;<br>\n"
+"__Zout__ 期望的输出阻抗<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ 衰减（以 dB 表示）\n"
@@ -18064,7 +18038,6 @@ msgstr ""
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18091,7 +18064,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18110,7 +18082,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18296,14 +18267,12 @@ msgid "Tee"
 msgstr "T 型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
 msgstr "桥 T 型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
-msgstr "电阻分压型"
+msgstr "电阻分流器"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
 msgid "Attenuators"
@@ -18317,27 +18286,25 @@ msgid "Parameters"
 msgstr "参数"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "衰减"
+msgstr "衰减："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
 msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
+#, fuzzy
 msgid "Zin:"
-msgstr ""
+msgstr "锌："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "输出阻抗(Zout)"
+msgstr "输出阻抗(Zout)："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18348,17 +18315,14 @@ msgid "Inputs"
 msgstr "输入"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
 msgstr "所需电阻："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
 msgstr "排除值 1："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
 msgstr "排除值 2："
 
@@ -18383,19 +18347,16 @@ msgid "Solutions"
 msgstr "解决方案"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
 msgstr "简单的解决方案："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
-msgstr "3R 的解决方案："
+msgstr "3R 解决方案："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
-msgstr "4R 的解决方案："
+msgstr "4R 解决方案："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "E-Series"
@@ -18447,7 +18408,6 @@ msgid "Coplanar wave guide"
 msgstr "共面波导"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
 msgstr "共面波导与接地层"
 
@@ -18515,12 +18475,12 @@ msgstr "表面粗糙度："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "绝缘子亩："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 #, fuzzy
 msgid "Conductor mu:"
-msgstr "导线长度："
+msgstr "导体 mu："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -18604,19 +18564,17 @@ msgid "Applied current:"
 msgstr "应用电流："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
-#, fuzzy
 msgid "Plating resistivity:"
-msgstr "电镀电阻率（Ohm.m）："
+msgstr "镀层电阻率："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
 msgstr "欧姆 - 米"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "基质相对介电常数："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -18653,7 +18611,6 @@ msgid "nanoseconds"
 msgstr "ns"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
@@ -18661,8 +18618,7 @@ msgid ""
 msgstr ""
 "警告：\n"
 "过孔焊盘直径 >= 间隙过孔直径。\n"
-"无法为过孔计算某些参数\n"
-"在铜区内。"
+"无法计算一些参数，因铜区域内有一个过孔。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -18674,9 +18630,8 @@ msgstr "阻抗："
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
-msgstr "Ω"
+msgstr "欧姆"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
@@ -18693,9 +18648,8 @@ msgstr "电源损耗："
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
-#, fuzzy
 msgid "W"
-msgstr "W："
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -18708,7 +18662,7 @@ msgstr "使用导热系数 401 瓦特/(米-开尔文)"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
 #, fuzzy
 msgid "deg C/W"
-msgstr "摄氏度"
+msgstr "摄氏度/瓦"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
@@ -18811,9 +18765,8 @@ msgid "Internal Layer Traces"
 msgstr "内层布线"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr "电压 > 500V："
+msgstr "电压 > 500 V："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
@@ -18848,54 +18801,44 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
-#, fuzzy
 msgid "0 .. 15 V"
-msgstr "0 .. 15V"
+msgstr "0 .. 15 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
-#, fuzzy
 msgid "16 .. 30 V"
-msgstr "16 .. 30V"
+msgstr "16 .. 30 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
-#, fuzzy
 msgid "31 .. 50 V"
-msgstr "31 .. 50V"
+msgstr "31 .. 50 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
-#, fuzzy
 msgid "51 .. 100 V"
-msgstr "51 .. 100V"
+msgstr "51 .. 100 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
-#, fuzzy
 msgid "101 .. 150 V"
-msgstr "101 .. 150V"
+msgstr "101 .. 150 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
-#, fuzzy
 msgid "151 .. 170 V"
-msgstr "151 .. 170V"
+msgstr "151 .. 170 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
-#, fuzzy
 msgid "171 .. 250 V"
-msgstr "171 .. 250V"
+msgstr "171 .. 250 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
-#, fuzzy
 msgid "251 .. 300 V"
-msgstr "251 .. 300V"
+msgstr "251 .. 300 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
-#, fuzzy
 msgid "301 .. 500 V"
-msgstr "301 .. 500V"
+msgstr "301 .. 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
-#, fuzzy
 msgid " > 500 V"
-msgstr " > 500V"
+msgstr " > 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1873
 msgid ""
@@ -18989,7 +18932,6 @@ msgid "Not worth using"
 msgstr "不值得使用"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19020,17 +18962,16 @@ msgstr ""
 "广泛接受的电子元器件首选编号系统。可用值在对数刻度\n"
 "上近似等距。\n"
 "\n"
-"\tE12: 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6:  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3:  1.0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "此计算器查找标准 E 系列元件的组合来\n"
-"创建任意值。您可以输入所需的电阻，范围从0,0025 到 4000 kOhm。\n"
+"创建任意值。您可以输入所需的电阻，范围从0.0025 到 4000 k?。\n"
 "给出的解决方案使用多达 4 个元件。\n"
 "\n"
-"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排"
-"除在解决方案之外，前提是\n"
+"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排除在解决方案之外，前提是\n"
 "这些组件值不可用。\n"
 "\n"
 "解决方案依照下列格式提供：\n"
@@ -19095,7 +19036,6 @@ msgid "Incorrect value for R1 R2"
 msgstr "R1 R2 的值错误"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -19118,23 +19058,21 @@ msgid ""
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"如果指定最大电流，则会根据需要计算布线宽度。\n"
+"如果你指定最大电流，则会计算相应的布线宽度。\n"
 "\n"
-"如果指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另一个布线"
-"的宽度，以便处理此电流。\n"
+"如果你指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另外的同样处理此电流的布线宽度。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
-"计算适用于高达 35A（外部）或 17.5A（内部）的电流、高达 100 摄氏度和宽度高达 "
-"400mil（10mm）的电流。\n"
+"计算适用于最大 35A（外部）或 17.5A（内部）的电流、最多 100 摄氏度的气温上升和最多 400mil（10mm）的宽度。\n"
 "\n"
-"该公式来自 IPC 2221，为\n"
+"来自 IPC 2221的该公式，为\n"
 "<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
 "其中： \n"
-"__I__ = 最大电流（以安培） \n"
-"__dt__ = 温度上升高于环境温度 C \n"
-"__W，H__ = 以 mils 为布线的宽度和厚度 \n"
-"__K__ = 0.024 用于内部布线，0.048 表示外部布线\n"
+"__I__ = 最大电流（单位：安培） \n"
+"__dt__ = 环境温度温升（单位：摄氏度） \n"
+"__W，H__ = 布线的宽度和厚度 （单位：密耳）\n"
+"__K__ = 0.024 用于内部布线，0.048 用于外部布线\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:127 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
@@ -19149,21 +19087,18 @@ msgid "Specific Resistance"
 msgstr "电阻系数"
 
 #: pcb_calculator/transline_ident.cpp:121
-#, fuzzy
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "Epsilon R：相对介电常数"
+msgstr "基质相对电容率 (介电常数)"
 
 #: pcb_calculator/transline_ident.cpp:125
-#, fuzzy
 msgid "Dielectric loss (dissipation factor)"
-msgstr "介质损耗因数"
+msgstr "介电损耗 (消耗因数)"
 
 #: pcb_calculator/transline_ident.cpp:131
-#, fuzzy
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
-msgstr "电阻或导体的电阻率（Ω*米）"
+msgstr "电阻系数或导体电阻率 (欧姆*米)"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Frequency of the input signal"
@@ -19176,9 +19111,9 @@ msgstr "输入信号的频率"
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:366
 #: pcb_calculator/transline_ident.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "预期 %s"
+msgstr "有效 %s："
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -19187,7 +19122,6 @@ msgstr "预期 %s"
 #: pcb_calculator/transline_ident.cpp:288
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
-#, fuzzy
 msgid "Conductor losses:"
 msgstr "导体损耗："
 
@@ -19198,7 +19132,6 @@ msgstr "导体损耗："
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:368
 #: pcb_calculator/transline_ident.cpp:401
-#, fuzzy
 msgid "Dielectric losses:"
 msgstr "介电损耗："
 
@@ -19208,7 +19141,6 @@ msgstr "介电损耗："
 #: pcb_calculator/transline_ident.cpp:328
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:402
-#, fuzzy
 msgid "Skin depth:"
 msgstr "趋肤深度："
 
@@ -19217,45 +19149,39 @@ msgstr "趋肤深度："
 #: pcb_calculator/transline_ident.cpp:225
 #: pcb_calculator/transline_ident.cpp:331
 #: pcb_calculator/transline_ident.cpp:372
-#, fuzzy
 msgid "Height of substrate"
-msgstr "基板高度"
+msgstr "底材高度"
 
 #: pcb_calculator/transline_ident.cpp:154
 #: pcb_calculator/transline_ident.cpp:333
-#, fuzzy
 msgid "Height of box top"
-msgstr "方框高度"
+msgstr "框顶高度"
 
 #: pcb_calculator/transline_ident.cpp:157
 #: pcb_calculator/transline_ident.cpp:194
 #: pcb_calculator/transline_ident.cpp:227
 #: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:377
-#, fuzzy
 msgid "Strip thickness"
-msgstr "板厚"
+msgstr "带状线厚度"
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:337
-#, fuzzy
 msgid "Roughness"
-msgstr "表面粗糙度"
+msgstr "粗糙度"
 
 #: pcb_calculator/transline_ident.cpp:160
 #: pcb_calculator/transline_ident.cpp:338
-#, fuzzy
 msgid "Conductor roughness"
 msgstr "导体粗糙度"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "substrate"
-msgstr ""
+msgstr "基质"
 
 #: pcb_calculator/transline_ident.cpp:163
-#, fuzzy
 msgid "Relative permeability (mu) of substrate"
-msgstr "基底相对磁导率"
+msgstr "基底相对磁导率 (mu)"
 
 #: pcb_calculator/transline_ident.cpp:165
 #: pcb_calculator/transline_ident.cpp:196
@@ -19265,9 +19191,8 @@ msgstr "基底相对磁导率"
 #: pcb_calculator/transline_ident.cpp:340
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:408
-#, fuzzy
 msgid "conductor"
-msgstr "电感"
+msgstr "导体"
 
 #: pcb_calculator/transline_ident.cpp:166
 #: pcb_calculator/transline_ident.cpp:197
@@ -19277,7 +19202,6 @@ msgstr "电感"
 #: pcb_calculator/transline_ident.cpp:341
 #: pcb_calculator/transline_ident.cpp:380
 #: pcb_calculator/transline_ident.cpp:409
-#, fuzzy
 msgid "Relative permeability (mu) of conductor"
 msgstr "导体相对磁导率 (mu)"
 
@@ -19286,9 +19210,8 @@ msgstr "导体相对磁导率 (mu)"
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy
 msgid "Line width"
-msgstr "线宽："
+msgstr "线宽"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:205
@@ -19296,7 +19219,6 @@ msgstr "线宽："
 #: pcb_calculator/transline_ident.cpp:308
 #: pcb_calculator/transline_ident.cpp:349
 #: pcb_calculator/transline_ident.cpp:385
-#, fuzzy
 msgid "Line length"
 msgstr "线路长度"
 
@@ -19307,9 +19229,8 @@ msgstr "线路长度"
 #: pcb_calculator/transline_ident.cpp:311
 #: pcb_calculator/transline_ident.cpp:388
 #: pcb_calculator/transline_ident.cpp:425
-#, fuzzy
 msgid "Characteristic impedance"
-msgstr "阻抗特性"
+msgstr "特性阻抗"
 
 #: pcb_calculator/transline_ident.cpp:178
 #: pcb_calculator/transline_ident.cpp:211
@@ -19319,14 +19240,12 @@ msgstr "阻抗特性"
 #: pcb_calculator/transline_ident.cpp:359
 #: pcb_calculator/transline_ident.cpp:391
 #: pcb_calculator/transline_ident.cpp:428
-#, fuzzy
 msgid "Electrical length"
-msgstr "电气长度"
+msgstr "电长度"
 
 #: pcb_calculator/transline_ident.cpp:203
 #: pcb_calculator/transline_ident.cpp:236
 #: pcb_calculator/transline_ident.cpp:347
-#, fuzzy
 msgid "Gap width"
 msgstr "间距宽度"
 
@@ -19336,40 +19255,33 @@ msgstr "ZF(H10) = Ey / Hx："
 
 #: pcb_calculator/transline_ident.cpp:257
 #: pcb_calculator/transline_ident.cpp:290
-#, fuzzy
 msgid "TE-modes:"
 msgstr "TE-模式："
 
 #: pcb_calculator/transline_ident.cpp:258
 #: pcb_calculator/transline_ident.cpp:291
-#, fuzzy
 msgid "TM-modes:"
 msgstr "TM-模式："
 
 #: pcb_calculator/transline_ident.cpp:261
 #: pcb_calculator/transline_ident.cpp:294
-#, fuzzy
 msgid "insulator"
-msgstr "翻译人员"
+msgstr "绝缘体"
 
 #: pcb_calculator/transline_ident.cpp:262
 #: pcb_calculator/transline_ident.cpp:295
-#, fuzzy
 msgid "Relative permeability (mu) of insulator"
 msgstr "绝缘体的相对磁导率 (mu)"
 
 #: pcb_calculator/transline_ident.cpp:269
-#, fuzzy
 msgid "Width of waveguide"
-msgstr "波导管宽度"
+msgstr "波导宽度"
 
 #: pcb_calculator/transline_ident.cpp:271
-#, fuzzy
 msgid "Height of waveguide"
 msgstr "波导管高度"
 
 #: pcb_calculator/transline_ident.cpp:273
-#, fuzzy
 msgid "Waveguide length"
 msgstr "波导管长度"
 
@@ -19380,9 +19292,8 @@ msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:303
 #: pcb_calculator/transline_ident.cpp:417
-#, fuzzy
 msgid "Inner diameter (conductor)"
-msgstr "内径（导体）"
+msgstr "内直径（导体）"
 
 #: pcb_calculator/transline_ident.cpp:305
 #: pcb_calculator/transline_ident.cpp:419
@@ -19391,39 +19302,34 @@ msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:306
 #: pcb_calculator/transline_ident.cpp:420
-#, fuzzy
 msgid "Outer diameter (insulator)"
-msgstr "外径（绝缘体）"
+msgstr "外直径（绝缘体）"
 
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "有效 %s (偶数)："
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "有效 %s (奇数)："
 
 #: pcb_calculator/transline_ident.cpp:324
-#, fuzzy
 msgid "Conductor losses (even):"
-msgstr "导体损耗偶模："
+msgstr "导体损耗 （偶数）:"
 
 #: pcb_calculator/transline_ident.cpp:325
-#, fuzzy
 msgid "Conductor losses (odd):"
-msgstr "导体损耗奇模："
+msgstr "导体损耗 （奇数）："
 
 #: pcb_calculator/transline_ident.cpp:326
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "介电损耗偶模："
+msgstr "介电损耗 （偶数）："
 
 #: pcb_calculator/transline_ident.cpp:327
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "介电损耗奇模："
+msgstr "介电损耗 （奇数）："
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -19442,31 +19348,26 @@ msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr "奇模阻抗（通过驱动线相反 (差分) 电压）"
 
 #: pcb_calculator/transline_ident.cpp:374
-#, fuzzy
 msgid "Distance between strip and top metal"
-msgstr "带状线和顶部导体的距离"
+msgstr "带状线和顶部金属间的距离"
 
 #: pcb_calculator/transline_ident.cpp:405
 msgid "Twists"
 msgstr "扭曲"
 
 #: pcb_calculator/transline_ident.cpp:406
-#, fuzzy
 msgid "Number of twists per length"
-msgstr "每个长度的绞合数"
+msgstr "每个长度的板扭数"
 
 #: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
 msgid "environment"
-msgstr "环境变量"
+msgstr "环境"
 
 #: pcb_calculator/transline_ident.cpp:413
-#, fuzzy
 msgid "Relative permittivity of environment"
 msgstr "环境的相对介电常数"
 
 #: pcb_calculator/transline_ident.cpp:422
-#, fuzzy
 msgid "Cable length"
 msgstr "电缆长度"
 
@@ -19513,11 +19414,11 @@ msgstr "焊盘"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
-msgstr ""
+msgstr "Ω"
 
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcbnew/array_creator.cpp:188
 msgid "Create an array"
@@ -23050,9 +22951,8 @@ msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr "（指定多个项目，并用空格隔开以进行连续放置）"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "可用路径："
+msgstr "可用封装："
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:240
@@ -25538,9 +25438,8 @@ msgid "Track & Via Properties"
 msgstr "布线与过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
-msgstr "过孔内径必须小于过孔外径"
+msgstr "过孔钻尺寸必须小于过孔直径"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
@@ -30807,14 +30706,12 @@ msgid "Show board setup"
 msgstr "显示电路板设置"
 
 #: pcbnew/router/router_tool.cpp:786
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr "必须在“电路板设置”>“设计规则”>“约束”中启用盲孔/埋孔。"
 
 #: pcbnew/router/router_tool.cpp:807
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr "必须在“电路板设置”>“设计规则”>“约束”中启用微孔。"
