@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-19 19:10+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Dominik Wernberger <dominik.wernberger@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19385,7 +19385,6 @@ msgid "301 .. 500 V"
 msgstr "301 ... 500V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
-#, fuzzy
 msgid " > 500 V"
 msgstr " > 500V"
 
@@ -19718,7 +19717,6 @@ msgstr "Höhe des Trägermaterials"
 
 #: pcb_calculator/transline_ident.cpp:154
 #: pcb_calculator/transline_ident.cpp:333
-#, fuzzy
 msgid "Height of box top"
 msgstr "Höhe der Box Top"
 
@@ -19727,7 +19725,6 @@ msgstr "Höhe der Box Top"
 #: pcb_calculator/transline_ident.cpp:227
 #: pcb_calculator/transline_ident.cpp:335
 #: pcb_calculator/transline_ident.cpp:377
-#, fuzzy
 msgid "Strip thickness"
 msgstr "Leiterbahndicke"
 
@@ -19843,7 +19840,6 @@ msgid "Relative permeability (mu) of insulator"
 msgstr "Relative Permeabilität (mu) des Isolators"
 
 #: pcb_calculator/transline_ident.cpp:269
-#, fuzzy
 msgid "Width of waveguide"
 msgstr "Breite des Wellenleiters"
 
@@ -22788,7 +22784,7 @@ msgstr "Ausgabeeinheiten"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
-msgstr "Export IDFv3"
+msgstr "Exportiere IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:206
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -22810,7 +22806,7 @@ msgstr "Die Datei '%s' existiert bereits. Möchten Sie diese überschreiben?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:283
 msgid "STEP Export"
-msgstr "STEP Export"
+msgstr "Exportiere STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "Select a STEP export filename"
@@ -28657,7 +28653,7 @@ msgid "Recovery file \"%s\" not found."
 msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
 
 #: pcbnew/files.cpp:341
-#, c-format
+#, c-format, fuzzy
 msgid "OK to load recovery file \"%s\""
 msgstr "Soll die Wiederherstellungsdatei \"%s\" geladen werden?"
 
