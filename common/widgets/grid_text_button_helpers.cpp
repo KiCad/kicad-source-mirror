@@ -375,7 +375,7 @@ protected:
                 SetValue( relPath );
 
                 if( !m_grid->CommitPendingChanges() )
-                    ; // shouldn't happen, but Coverity doesn't know that
+                {;} // shouldn't happen, but Coverity doesn't know that
 
                 *m_currentDir = lastPath;
             }
@@ -402,7 +402,7 @@ protected:
                 SetValue( relPath );
 
                 if( !m_grid->CommitPendingChanges() )
-                    ; // shouldn't happen, but Coverity doesn't know that
+                {;} // shouldn't happen, but Coverity doesn't know that
 
                 *m_currentDir = relPath;
             }

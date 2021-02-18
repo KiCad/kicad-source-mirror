@@ -339,12 +339,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return IsSymbolEditable() && !IsSymbolAlias();
         };
 
-    auto schematicModifiedCond =
-        [this] ( const SELECTION& )
-        {
-            return IsSymbolFromSchematic() && GetScreen() && GetScreen()->IsModify();
-        };
-
     auto libModifiedCondition =
         [this] ( const SELECTION& sel )
         {
