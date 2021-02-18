@@ -396,6 +396,11 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
 
+    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( hasElements ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( hasElements ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( hasElements ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( hasElements ) );
+
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 

@@ -379,54 +379,40 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
         };
 
-    mgr->SetConditions( ACTIONS::saveAll,
-                        ENABLE( schematicModifiedCond || libModifiedCondition ) );
-    mgr->SetConditions( ACTIONS::save,
-                        ENABLE( schematicModifiedCond || libModifiedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveLibraryAs, ENABLE( libSelectedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::newSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
-    mgr->SetConditions( EE_ACTIONS::importSymbol, ENABLE( !libSelectedCondition || canEditLib ) );
+    mgr->SetConditions( ACTIONS::saveAll,           ENABLE( schematicModifiedCond || libModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::save,              ENABLE( schematicModifiedCond || libModifiedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,  ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,   ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::newSymbol,      ENABLE( !libSelectedCondition || canEditLib ) );
+    mgr->SetConditions( EE_ACTIONS::importSymbol,   ENABLE( !libSelectedCondition || canEditLib ) );
 
-    mgr->SetConditions( ACTIONS::undo,
-                        ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,
-                        ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
-    mgr->SetConditions( ACTIONS::revert,
-                        ENABLE( haveSymbolCond && libModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::undo,              ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,              ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::revert,            ENABLE( haveSymbolCond && libModifiedCondition ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,
-                        CHECK( cond.GridVisible() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle,
-                        CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,
-                        CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,
-                        CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,
-                        CHECK( cond.Units( EDA_UNITS::MILS ) ) );
-    mgr->SetConditions( ACTIONS::acceleratedGraphics,
-                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
-    mgr->SetConditions( ACTIONS::standardGraphics,
-                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,
-                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::copy,
-                        ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::paste,
-                        ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,
-                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::duplicate,
-                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::selectAll,
-                        ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::acceleratedGraphics, CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
+    mgr->SetConditions( ACTIONS::standardGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,
-                        CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,
-                        CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::cut,               ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::copy,              ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::paste,             ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::duplicate,         ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::selectAll,         ENABLE( haveSymbolCond ) );
+
+    mgr->SetConditions( EE_ACTIONS::rotateCW,       ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCCW,      ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorH,        ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorV,        ENABLE( isEditableCond ) );
+
+    mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
      auto pinTypeCond =
         [this] ( const SELECTION& )
@@ -480,8 +466,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
         };
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
-    mgr->SetConditions( EE_ACTIONS::symbolProperties,
-                        ENABLE( canEditProperties && haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond && haveSymbolCond ) );
 
@@ -498,14 +483,11 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle,
-                        EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,
-                        EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle, EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,    EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolArc,       EDIT_TOOL( EE_ACTIONS::drawSymbolArc ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,
-                        EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
 #undef CHECK
 #undef ENABLE

@@ -998,13 +998,19 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::acceleratedGraphics,    CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
     mgr->SetConditions( ACTIONS::standardGraphics,       CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,                    ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::copy,                   ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::cut,                    ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::copy,                   ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::paste,                  ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
     mgr->SetConditions( ACTIONS::pasteSpecial,           ENABLE( SELECTION_CONDITIONS::Idle && cond.NoActiveTool() ) );
-    mgr->SetConditions( ACTIONS::doDelete,               ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
-    mgr->SetConditions( ACTIONS::duplicate,              ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+    mgr->SetConditions( ACTIONS::doDelete,               ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::duplicate,              ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::selectAll,              ENABLE( cond.HasItems() ) );
+
+    mgr->SetConditions( PCB_ACTIONS::rotateCw,           ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCcw,          ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::mirror,             ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::group,              ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::ungroup,            ENABLE( cond.HasItems() ) );
 
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,     CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::textOutlines,       CHECK( !cond.TextFillDisplay() ) );
