@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-18 23:38+0000\n"
-"Last-Translator: Dominik Wernberger <dominik.wernberger@gmx.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -209,9 +209,9 @@ msgstr ""
 "Ihre OpenGL-Version wird nicht unterstützt. Minimal erforderlich ist 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Wiedergabezeit %.3f s"
+msgstr "Letzte Renderzeit %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -7218,14 +7218,14 @@ msgstr ""
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Schaltplanpin %s hat keinen entsprechenden hierarchischen Bezeichner im "
-"Schaltplan"
+"Schaltplanblatt"
 
 #: eeschema/connection_graph.cpp:2872
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
 msgstr ""
-"Schaltplanpin %s hat keinen entsprechenden hierarchischen Bezeichner im "
-"Schaltplan"
+"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin "
+"außerhalb des Schaltplanblatts"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8678,9 +8678,8 @@ msgstr "Filter Elemente nach Netzen:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Gewählte(s) Element(e) abwählen"
+msgstr "Nur ausgewählte Elemente einbeziehen"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -11324,24 +11323,20 @@ msgid "Update Schematic from PCB"
 msgstr "Aktualisiere Schaltplan von PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Bauteil einfügen"
+msgstr "Übergeordnetes Bauteil:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Entferne nicht vorhandene Felder in einem neuen Symbol"
+msgstr "Entferne Felder, die nicht im übergeordneten Bauteil sind"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Zurücksetzen der Felder die im neuen Symbol leer sind"
+msgstr "Felder zurücksetzen, die im übergeordneten Bauteil leer sind"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Bauteilfelder"
+msgstr "Bauteilfelder aktualisieren"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -15409,15 +15404,14 @@ msgid "Export a symbol to a new library file"
 msgstr "Ein Bauteil in eine neue Bibliothek einfügen"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "Bauteilfelder bearbeiten..."
+msgstr "Bauteilfelder aktualisieren..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
-"Bauteil aktualisieren um alle Änderungen aus der Bibliothek zu übernehmen"
+"Bauteil aktualisieren um alle Änderungen vom übergeordneten Bauteil zu "
+"übernehmen"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15684,18 +15678,16 @@ msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Gewählte(s) Element(e) gegen den Uhrzeigersinn rotieren"
 
 #: eeschema/tools/ee_actions.cpp:376
-#, fuzzy
 msgid "Mirror Vertically"
-msgstr "Vertikal verteilen"
+msgstr "Vertikal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:376
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Ausgewählte Elemente von der Oberseite an die Unterseite zuweisen"
 
 #: eeschema/tools/ee_actions.cpp:382
-#, fuzzy
 msgid "Mirror Horizontally"
-msgstr "Horizontal verteilen"
+msgstr "Horizontal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:382
 msgid "Flips selected item(s) from left to right"
@@ -16472,7 +16464,7 @@ msgstr "Bauteilname bearbeiten"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Bauteil ist nicht von anderem Bauteil abgeleitet."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -17499,39 +17491,40 @@ msgid "Project Template Selector"
 msgstr "Projektvorlagenauswahl"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "Ganzer Schaltplan"
+msgstr "Projektschaltplan bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Bibliothekstabellen"
+"Die globalen und/oder projektspezifischen Schaltplan-Bauteilbibliotheken "
+"bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Das Leiterplatten-Design des Projekts bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Bibliothekstabellen"
+"Die globalen und/oder der projektspezifischen Leiterplatten-Footprint-"
+"Bibliotheken bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Gerberdateien betrachten"
+msgstr "Gerberdateien prüfen und betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Konvertiert Bitmap-Bilder zu Schaltplan- oder PCB-Elementen"
+msgstr ""
+"Konvertiert Bitmap-Bilder in Schaltplan-Bauteile oder Leiterplatten-"
+"Footprints"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
+"Werkzeuge zur Berechnung von Widerständen, zulässiger Stromstärke usw. "
+"anzeigen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
@@ -17610,23 +17603,21 @@ msgstr ""
 "scheint keine gültige KiCad-Projekt-Datei zu sein."
 
 #: kicad/kicad_manager_frame.cpp:154
-#, fuzzy
 msgid "Project Files"
-msgstr "Projektdatei speichern"
+msgstr "Projektdateien"
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "Bearbeiten"
+msgstr "Editoren"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
 msgstr "Datei zum Editieren öffnen"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "- Projekt:"
+msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -17911,48 +17902,40 @@ msgid "Close the current project"
 msgstr "Das aktuelle Projekt schließen"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Eeschema Schaltplan Editor"
+msgstr "Schaltplan-Editor"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
-msgstr "Editiere Schaltplan"
+msgstr "Schaltplan bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
 msgstr "Schaltplanbauteile bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Wechseln zum Platineneditor"
+msgstr "Leiterplatten-Editor"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
 msgstr "Leiterplattenlayout bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "Footprints bearbeiten"
+msgstr "Leiterplatten-Footprints bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Gerber-Datei-Betrachter"
+msgstr "Gerber-Betrachter"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Gerberdateien betrachten"
+msgstr "Vorschau von Gerber-Ausgabedateien"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Konvertiert"
+msgstr "Bildkonverter"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -17967,9 +17950,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "Durchführen von Bauteilberechnungen, Leiterbahnkalkulationen, etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Worksheet Editor"
-msgstr "Arbeitsblatt"
+msgstr "Arbeitsblatt-Editor"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit worksheet graphics and text"
@@ -18580,7 +18562,6 @@ msgid "Attenuation more than %f dB"
 msgstr "Dämpfung mehr als %f db"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18592,7 +18573,7 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### Brücken-T-Dämpfungsglied:\n"
+"### Brücken-T-Dämpfungsglied\n"
 "__Zin__ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "__Zout__ gewünschte Ausgangsimpedanz<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
@@ -18629,7 +18610,6 @@ msgstr ""
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "#### Attenuation is 6dB\n"
@@ -18645,10 +18625,9 @@ msgstr ""
 "___Z<sub>out</sub>___ gewünschte Ausgangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18671,7 +18650,7 @@ msgstr ""
 "* __a__ Dämpfung in dB\n"
 "* __L = 10<sup>a/20</sup>__ (der Verlust)\n"
 "* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)___\n"
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
@@ -18836,12 +18815,10 @@ msgid "Tee"
 msgstr "T-Glied"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Bridged tee"
 msgstr "Brücken-T-Glied"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-#, fuzzy
 msgid "Resistive splitter"
 msgstr "Resistiver Splitter"
 
@@ -18857,9 +18834,8 @@ msgid "Parameters"
 msgstr "Parameter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "Dämpfung"
+msgstr "Dämpfung:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
@@ -18867,17 +18843,15 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "Zout"
+msgstr "Zout:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18888,17 +18862,14 @@ msgid "Inputs"
 msgstr "Eingänge"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:443
-#, fuzzy
 msgid "Required resistance:"
 msgstr "Erforderlicher Widerstand:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-#, fuzzy
 msgid "Exclude value 1:"
 msgstr "Wert 1 ausschließen:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:465
-#, fuzzy
 msgid "Exclude value 2:"
 msgstr "Wert 2 ausschließen:"
 
@@ -18923,17 +18894,14 @@ msgid "Solutions"
 msgstr "Lösungen"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:513
-#, fuzzy
 msgid "Simple solution:"
 msgstr "Einfache Lösung:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
 msgstr "3R-Lösung:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
 msgstr "4R-Lösung:"
 
@@ -18987,7 +18955,6 @@ msgid "Coplanar wave guide"
 msgstr "Koplanarer Wellenleiter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
 msgstr "Koplanarer Wellenleiter mit Massefläche"
 
@@ -19024,9 +18991,8 @@ msgid "Er:"
 msgstr "Er:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:738
-#, fuzzy
 msgid "Tan delta:"
-msgstr "Trapezoid Delta:"
+msgstr "Tan Delta:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
 msgid "Rho:"
@@ -19055,12 +19021,11 @@ msgstr "Gleichmäßigkeit:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "Isolator mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
-#, fuzzy
 msgid "Conductor mu:"
-msgstr "Leitungslänge:"
+msgstr "Leiter mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -19144,19 +19109,17 @@ msgid "Applied current:"
 msgstr "Angewandte Stromstärke:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1245
-#, fuzzy
 msgid "Plating resistivity:"
-msgstr "Überzugwiderstand (Ohm * m):"
+msgstr "Beschichtungswiderstand:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "Ohm x Meter"
+msgstr "Ohm-Meter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Relative Permittivität des Substrats:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -19214,15 +19177,14 @@ msgstr "Widerstand:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
-msgstr "Ω"
+msgstr "Ohm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1734
 msgid "Voltage drop:"
-msgstr "Spannungsfall:"
+msgstr "Spannungsabfall:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1369
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1648
@@ -19233,9 +19195,8 @@ msgstr "Verlustleistung:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
-#, fuzzy
 msgid "W"
-msgstr "W:"
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19246,9 +19207,8 @@ msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Verwendung des Wärmeleitwerts 401 Watt/(Meter-Kelvin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
-#, fuzzy
 msgid "deg C/W"
-msgstr "°C"
+msgstr "°C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
