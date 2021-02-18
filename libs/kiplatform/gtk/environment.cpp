@@ -51,19 +51,16 @@ bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
 
 wxString KIPLATFORM::ENV::GetDocumentsPath()
 {
-    wxString docsPath = g_get_user_special_dir( G_USER_DIRECTORY_DOCUMENTS );
+    wxString docsPath = g_get_user_data_dir();
 
     if( docsPath.IsEmpty() )
     {
         wxFileName fallback;
 
         fallback.AssignDir( g_get_home_dir() );
-        fallback.AppendDir( "Documents" );
+        fallback.AppendDir( ".local" );
+        fallback.AppendDir( "share" );
         fallback.MakeAbsolute();
-
-        // No Documents dir and nothing from XDG?  Give up and use $HOME
-        if( !fallback.DirExists() || !fallback.IsDirWritable() )
-            fallback.RemoveLastDir();
 
         docsPath = fallback.GetFullPath();
     }
