@@ -56,28 +56,34 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 // CONVERT_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::convertToPoly( "pcbnew.Convert.convertToPoly",
-        AS_GLOBAL, 0, "", _( "Convert to Polygon" ),
-        _( "Creates a graphic polygon from the selection" ), add_graphical_polygon_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Convert to Polygon" ), _( "Creates a graphic polygon from the selection" ),
+        add_graphical_polygon_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToZone( "pcbnew.Convert.convertToZone",
-        AS_GLOBAL, 0, "", _( "Convert to Zone" ), _( "Creates a copper zone from the selection" ),
+        AS_GLOBAL, 0, "",
+        _( "Convert to Zone" ), _( "Creates a copper zone from the selection" ),
         add_zone_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( "pcbnew.Convert.convertToKeepout",
-        AS_GLOBAL, 0, "", _( "Convert to Rule Area" ),
-        _( "Creates a rule area from the selection" ), add_keepout_area_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Convert to Rule Area" ), _( "Creates a rule area from the selection" ),
+        add_keepout_area_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToLines( "pcbnew.Convert.convertToLines",
-        AS_GLOBAL, 0, "", _( "Convert to Lines" ), _( "Creates graphic lines from the selection" ),
+        AS_GLOBAL, 0, "",
+        _( "Convert to Lines" ), _( "Creates graphic lines from the selection" ),
         add_line_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToArc( "pcbnew.Convert.convertToArc",
-        AS_GLOBAL, 0, "", _( "Convert to Arc" ), _( "Converts selected line segment to an arc" ),
+        AS_GLOBAL, 0, "",
+        _( "Convert to Arc" ), _( "Converts selected line segment to an arc" ),
         add_arc_xpm );
 
 TOOL_ACTION PCB_ACTIONS::convertToTracks( "pcbnew.Convert.convertToTracks",
-        AS_GLOBAL, 0, "", _( "Convert to Tracks" ),
-        _( "Converts selected graphic lines to tracks" ), add_tracks_xpm );
+        AS_GLOBAL, 0, "",
+        _( "Convert to Tracks" ), _( "Converts selected graphic lines to tracks" ),
+        add_tracks_xpm );
 
 
 // DRAWING_TOOL
@@ -124,14 +130,14 @@ TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( "pcbnew.InteractiveDrawing.aligne
         add_aligned_dimension_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawCenterDimension( "pcbnew.InteractiveDrawing.centerDimension",
-       AS_GLOBAL, 0, "",
-       _( "Add Center Dimension" ), _( "Add a center dimension" ),
-       add_center_dimension_xpm, AF_ACTIVATE );
+        AS_GLOBAL, 0, "",
+        _( "Add Center Dimension" ), _( "Add a center dimension" ),
+        add_center_dimension_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawOrthogonalDimension( "pcbnew.InteractiveDrawing.orthogonalDimension",
-      AS_GLOBAL, 0, "",
-      _( "Add Orthogonal Dimension" ), _( "Add an orthogonal dimension" ),
-      add_orthogonal_dimension_xpm, AF_ACTIVATE );
+        AS_GLOBAL, 0, "",
+        _( "Add Orthogonal Dimension" ), _( "Add an orthogonal dimension" ),
+        add_orthogonal_dimension_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawLeader( "pcbnew.InteractiveDrawing.leader",
         AS_GLOBAL, 0, "",
@@ -182,8 +188,7 @@ TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.place
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'N', LEGACY_HK_NAME( "Place the Footprint Anchor" ),
-        _( "Place the Footprint Anchor" ),
-        _( "Set the coordinate origin point (anchor) of the footprint" ),
+        _( "Place the Footprint Anchor" ), _( "Set the coordinate origin point (anchor) of the footprint" ),
         anchor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
@@ -248,12 +253,14 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::moveWithReference( "pcbnew.InteractiveMove.moveWithReference",
-        AS_GLOBAL, 0, "", _( "Move with Reference" ),
+        AS_GLOBAL, 0, "",
+        _( "Move with Reference" ),
         _( "Moves the selected item(s) with a specified starting point" ),
         move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::copyWithReference( "pcbnew.InteractiveMove.copyWithReference",
-        AS_GLOBAL, 0, "", _( "Copy with Reference" ),
+        AS_GLOBAL, 0, "",
+        _( "Copy with Reference" ),
         _( "Copy selected item(s) to clipboard with a specified starting point" ),
         copy_xpm, AF_ACTIVATE );
 
@@ -375,7 +382,7 @@ TOOL_ACTION PCB_ACTIONS::exportFootprint( "pcbnew.ModuleEditor.exportFootprint",
 
 TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
         AS_GLOBAL, 0, "",
-        _( "Footprint Properties..." ), "",
+        _( "Footprint Properties..." ), _( "Edit footprint properties" ),
         module_options_xpm );
 
 TOOL_ACTION PCB_ACTIONS::checkFootprint( "pcbnew.ModuleEditor.checkFootprint",
@@ -420,7 +427,8 @@ TOOL_ACTION PCB_ACTIONS::swapLayers( "pcbnew.GlobalEdit.swapLayers",
 
 TOOL_ACTION PCB_ACTIONS::editTracksAndVias( "pcbnew.GlobalEdit.editTracksAndVias",
         AS_GLOBAL, 0, "",
-        _( "Edit Track & Via Properties..." ), "",
+        _( "Edit Track & Via Properties..." ),
+        _( "Edit track and via properties globally across board" ),
         width_track_via_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editTextAndGraphics( "pcbnew.GlobalEdit.editTextAndGraphics",
@@ -584,22 +592,22 @@ TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Switch Track Width To Next" ),
-        _( "Switch Track Width to Next" ), "" );
+        _( "Switch Track Width to Next" ), _( "Change track width to next pre-defined size" ) );
 
 TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
         AS_GLOBAL,
         MD_SHIFT + 'W', LEGACY_HK_NAME( "Switch Track Width To Previous" ),
-        _( "Switch Track Width to Previous" ), "" );
+        _( "Switch Track Width to Previous" ), _( "Change track width to previous pre-defined size" ) );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
         AS_GLOBAL,
         '\'', LEGACY_HK_NAME( "Increase Via Size" ),
-        _( "Increase Via Size" ), "" );
+        _( "Increase Via Size" ), _( "Change via size to next pre-defined size" ) );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
         AS_GLOBAL,
         '\\', LEGACY_HK_NAME( "Decrease Via Size" ),
-        _( "Decrease Via Size" ), "" );
+        _( "Decrease Via Size" ), _( "Change via size to previous pre-defined size" ) );
 
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0, "",
@@ -635,27 +643,27 @@ TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Lock/Unlock Footprint" ),
-        _( "Toggle Lock" ), "",
+        _( "Toggle Lock" ), _( "Lock or unlock selected items" ),
         lock_unlock_xpm );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0, "",
-        _( "Lock" ), "",
+        _( "Lock" ), _( "Prevent items from being moved and/or resized on the canvas" ),
         locked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
         AS_GLOBAL, 0, "",
-        _( "Unlock" ), "",
+        _( "Unlock" ), _( "Allow items to be moved and/or resized on the canvas" ),
         unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::group( "pcbnew.EditorControl.group",
         AS_GLOBAL, 0, "",
-        _( "Group" ), _( "Add the selected items to a new group" ),
+        _( "Group" ), _( "Group the selected items so that they are treated as a single item" ),
         group_xpm );
 
 TOOL_ACTION PCB_ACTIONS::ungroup( "pcbnew.EditorControl.ungroup",
         AS_GLOBAL, 0, "",
-        _( "Ungroup" ), "",
+        _( "Ungroup" ), _( "Ungroup any selected groups" ),
         group_ungroup_xpm );
 
 TOOL_ACTION PCB_ACTIONS::removeFromGroup( "pcbnew.EditorControl.removeFromGroup",
@@ -675,7 +683,7 @@ TOOL_ACTION PCB_ACTIONS::groupLeave( "pcbnew.EditorControl.groupLeave",
 
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0, "",
-        _( "Append Board..." ), "",
+        _( "Append Board..." ), _( "Open another board and append its contents to this board" ),
         add_board_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
@@ -688,7 +696,7 @@ TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLas
 
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
         AS_GLOBAL, 0, "",
-        _( "Clear Net Highlighting" ), "" );
+        _( "Clear Net Highlighting" ), _( "Clear any existing net highlighting" ) );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
         AS_GLOBAL, 0, "",
@@ -706,10 +714,12 @@ TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::hideNet( "pcbnew.EditorControl.hideNet", AS_GLOBAL, 0, "",
-        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ), hide_ratsnest_xpm );
+        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ),
+        hide_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showNet( "pcbnew.EditorControl.showNet", AS_GLOBAL, 0, "",
-        _( "Show Net" ), _( "Show the ratsnest for the selected net" ), show_ratsnest_xpm );
+        _( "Show Net" ), _( "Show the ratsnest for the selected net" ),
+        show_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",
@@ -748,7 +758,7 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
 
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0, "",
-        _( "Flip Board View" ), _( "Flip (mirror) the board view" ),
+        _( "Flip Board View" ), _( "View board from the opposite side" ),
         flip_board_xpm );
 
 // Display modes
@@ -1103,11 +1113,13 @@ TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distri
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL,
         WXK_INSERT, "",
-        _( "Create Corner" ), _( "Create a corner" ), add_corner_xpm );
+        _( "Create Corner" ), _( "Create a corner" ),
+        add_corner_xpm );
 
 TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorner",
         AS_GLOBAL, 0, "",
-        _( "Remove Corner" ), _( "Remove corner" ), delete_xpm );
+        _( "Remove Corner" ), _( "Remove corner" ),
+        delete_xpm );
 
 
 // GROUP_TOOL
