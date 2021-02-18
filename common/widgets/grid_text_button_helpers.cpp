@@ -373,7 +373,10 @@ protected:
                     relPath = filePath;
 
                 SetValue( relPath );
-                m_grid->CommitPendingChanges();
+
+                if( !m_grid->CommitPendingChanges() )
+                    ; // shouldn't happen, but Coverity doesn't know that
+
                 *m_currentDir = lastPath;
             }
         }
@@ -397,7 +400,10 @@ protected:
                     relPath = filePath;
 
                 SetValue( relPath );
-                m_grid->CommitPendingChanges();
+
+                if( !m_grid->CommitPendingChanges() )
+                    ; // shouldn't happen, but Coverity doesn't know that
+
                 *m_currentDir = relPath;
             }
         }
