@@ -398,9 +398,12 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Yes -> run the move tool and wait till it finishes
                     TRACK* track = dynamic_cast<TRACK*>( m_selection.GetItem( 0 ) );
 
-                    if( track && trackDragAction == TRACK_DRAG_ACTION::DRAG )
+                    // If there is only item in the selection and it's a track, then we need to route it
+                    bool doRouting = ( track && ( 1 == m_selection.GetSize() ) );
+
+                    if( doRouting && trackDragAction == TRACK_DRAG_ACTION::DRAG )
                         m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, true );
-                    else if( track && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
+                    else if( doRouting && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
                         m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
                     else
                         m_toolMgr->RunAction( PCB_ACTIONS::move, true );
