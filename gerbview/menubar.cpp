@@ -145,7 +145,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::print );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( &Kiface(), _( "GerbView" ) );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Gerber Viewer" ) );
 
 
     //-- View menu -------------------------------------------------------

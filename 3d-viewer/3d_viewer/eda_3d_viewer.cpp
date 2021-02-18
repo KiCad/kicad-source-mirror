@@ -93,7 +93,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::EDA_3D_VIEWER %s", aTitle );
 
     m_disable_ray_tracing = false;
-    m_aboutTitle = "3D Viewer";
+    m_aboutTitle = _( "KiCad 3D Viewer" );
 
     // Give it an icon
     wxIcon icon;

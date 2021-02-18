@@ -64,9 +64,9 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
     std::map<wxString, wxString> s_AppNames = {
             { wxT( "common" ),   _( "Common" ) },
             { wxT( "kicad" ),    _( "Project Manager" ) },
-            { wxT( "eeschema" ), _( "Eeschema" ) },
-            { wxT( "pcbnew" ),   _( "Pcbnew" ) },
-            { wxT( "plEditor" ), _( "Page Layout Editor" ), },
+            { wxT( "eeschema" ), _( "Schematic Editor" ) },
+            { wxT( "pcbnew" ),   _( "PCB Editor" ) },
+            { wxT( "plEditor" ), _( "Worksheet Editor" ), },
             { wxT( "3DViewer" ), _( "3D Viewer" ) }
     };
 

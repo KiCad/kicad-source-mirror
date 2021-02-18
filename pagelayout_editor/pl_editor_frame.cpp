@@ -93,7 +93,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
-    m_aboutTitle = "Page Layout Editor";
+    m_aboutTitle = _( "KiCad Worksheet Editor" );
 
     // Give an icon
     wxIcon icon;
@@ -257,7 +257,7 @@ void PL_EDITOR_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::save,              ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo,              ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,              ENABLE( cond.RedoAvailable() ) );
 
@@ -464,7 +464,7 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new wxPanel( book ), _( "Page Layout Editor" ) );
+    book->AddPage( new wxPanel( book ), _( "Worksheet Editor" ) );
     book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent->GetTreebook() ), _( "Colors" ) );
 
@@ -532,7 +532,7 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
     wxString title;
     wxFileName file( GetCurrentFileName() );
 
-    title.Printf( wxT( "%s \u2014 " ) + _( "Page Layout Editor" ),
+    title.Printf( wxT( "%s \u2014 " ) + _( "Worksheet Editor" ),
                   file.IsOk() ? file.GetName() : _( "no file selected" ) );
     SetTitle( title );
 }

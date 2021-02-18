@@ -78,8 +78,8 @@ TOOL_ACTION GERBVIEW_ACTIONS::showSource( "gerbview.Inspection.showSource",
 
 TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
         AS_GLOBAL, 0, "",
-        _( "Export to Pcbnew..." ),
-        _( "Export data in Pcbnew format" ),
+        _( "Export to PCB Editor..." ),
+        _( "Export data as a KiCad PCB file" ),
         export_to_pcbnew_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( "gerbview.Control.clearLayer",

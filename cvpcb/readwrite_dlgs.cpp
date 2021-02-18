@@ -113,7 +113,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     if( hasMissingNicks )
     {
         msg = _( "Some of the assigned footprints are legacy entries with no library names. Would "
-                 "you like Kicad to attempt to convert them to the new required LIB_ID format? "
+                 "you like KiCad to attempt to convert them to the new required LIB_ID format? "
                  "(If you answer no, then these assignments will be cleared and you will need to "
                  "re-assign them manually.)" );
 

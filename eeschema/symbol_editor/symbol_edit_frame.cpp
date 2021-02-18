@@ -106,7 +106,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
     m_unit = 1;
     m_convert = 1;
-    m_aboutTitle = _( "Symbol Editor" );
+    m_aboutTitle = _( "KiCad Symbol Editor" );
 
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -379,8 +379,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
         };
 
-    mgr->SetConditions( ACTIONS::saveAll,           ENABLE( schematicModifiedCond || libModifiedCondition ) );
-    mgr->SetConditions( ACTIONS::save,              ENABLE( schematicModifiedCond || libModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::saveAll,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs,  ENABLE( libSelectedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveSymbolAs,   ENABLE( saveSymbolAsCondition ) );
     mgr->SetConditions( EE_ACTIONS::newSymbol,      ENABLE( !libSelectedCondition || canEditLib ) );

@@ -90,7 +90,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_apertText = nullptr;
     m_dcodeText = nullptr;
     m_displayMode = 0;
-    m_aboutTitle = "GerbView";
+    m_aboutTitle = _( "KiCad Gerber Viewer" );
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -613,7 +613,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         wxString title;
         wxFileName filename( gerber->m_FileName );
 
-        title.Printf( wxT( "%s%s \u2014 " ) + _( "GerbView" ),
+        title.Printf( wxT( "%s%s \u2014 " ) + _( "Gerber Viewer" ),
                       filename.GetFullName(),
                       gerber->m_IsX2_file ? wxS( " " ) + _( "(with X2 attributes)" )
                                           : wxString( wxEmptyString ) );

@@ -101,7 +101,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
     fileMenu->Add( _( "Resc&ue" ),
-                   _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
+                   _( "Clear board and get last rescue file automatically saved by PCB editor" ),
                    ID_MENU_RECOVER_BOARD_AUTOSAVE,
                    rescue_xpm );
 
@@ -185,7 +185,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::plot );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( &Kiface(), _( "Pcbnew" ) );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "PCB Editor" ) );
 
     //-- Edit menu -----------------------------------------------------------
     //

@@ -61,7 +61,7 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new wxPanel( book ), _( "Eeschema" ) );
+    book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_EDITING_OPTIONS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_SETTINGS( this, book ), _( "Colors" ) );

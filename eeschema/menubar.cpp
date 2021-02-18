@@ -124,7 +124,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::plot );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( &Kiface(), _( "Eeschema" ) );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Schematic Editor" ) );
 
 
     //-- Edit menu -----------------------------------------------------------

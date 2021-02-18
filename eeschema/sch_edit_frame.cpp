@@ -216,7 +216,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_hasAutoSave = true;
-    m_aboutTitle = "Eeschema";
+    m_aboutTitle = _( "KiCad Schematic Editor" );
 
     m_findReplaceDialog = nullptr;
 
@@ -376,7 +376,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::save,                ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo,                ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
 
@@ -805,7 +805,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     {
         DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is opened"
                                 " in stand-alone mode. In order to create/update PCBs from"
-                                " schematics, launch the Kicad shell and create a project." ) );
+                                " schematics, launch the KiCad shell and create a project." ) );
         return;
     }
 
@@ -1237,30 +1237,28 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 void SCH_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
-    wxString nofile = _( "[no file]" ) + wxS(" ");
-    wxString app = _( "Eeschema" );
 
     if( GetScreen()->GetFileName().IsEmpty() )
     {
-        title = nofile + wxT( "\u2014 " ) + app;
+        title = _( "[no file]" ) + wxT( " \u2014 " );
     }
     else
     {
-        wxFileName  fn( Prj().AbsolutePath( GetScreen()->GetFileName() ) );
-        wxString    append;
+        wxFileName fn( Prj().AbsolutePath( GetScreen()->GetFileName() ) );
+        bool       readOnly = false;
+        bool       unsaved = false;
 
-        if( fn.FileExists() )
-        {
-            if( !fn.IsFileWritable() )
-                append = _( "[Read Only]" ) + wxS( " " );
-        }
+        if( fn.IsOk() && fn.FileExists() )
+            readOnly = !fn.IsFileWritable();
         else
-            append = nofile;
+            unsaved = true;
 
-        title.Printf( wxT( "%s [%s] %s\u2014 " ) + app,
+        title.Printf( wxT( "%s%s [%s] %s%s\u2014 " ) + _( "Schematic Editor" ),
                       fn.GetName(),
+                      IsContentModified() ? "*" : "",
                       GetCurrentSheet().PathHumanReadable( false ),
-                      append );
+                      readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
+                      unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" );
     }
 
     SetTitle( title );

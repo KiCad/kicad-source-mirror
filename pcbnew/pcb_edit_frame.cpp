@@ -170,7 +170,7 @@ END_EVENT_TABLE()
 
 
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, wxT( "Pcbnew" ), wxDefaultPosition,
+    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, wxT( "PCB Editor" ), wxDefaultPosition,
                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
     m_maximizeByDefault = true;
@@ -186,7 +186,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_ZoneFillsDirty = true;
 
     m_rotationAngle = 900;
-    m_aboutTitle = "Pcbnew";
+    m_aboutTitle = _( "KiCad PCB Editor" );
 
     // Create GAL canvas
     auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
@@ -505,7 +505,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
-    mgr->SetConditions( ACTIONS::save,                     ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::save,                     ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::undo,                     ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                     ENABLE( cond.RedoAvailable() ) );
 
@@ -1181,17 +1181,20 @@ void PCB_EDIT_FRAME::ExportSVG( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UpdateTitle()
 {
-    wxFileName fileName = GetBoard()->GetFileName();
-    wxString fileinfo;
+    wxFileName fn = GetBoard()->GetFileName();
+    bool       readOnly = false;
+    bool       unsaved = false;
 
-    if( fileName.IsOk() && fileName.FileExists() )
-        fileinfo = fileName.IsFileWritable() ? wxString( wxEmptyString ) : wxS( " " ) + _( "[Read Only]" );
+    if( fn.IsOk() && fn.FileExists() )
+        readOnly = !fn.IsFileWritable();
     else
-        fileinfo = wxS( " " ) + _( "[Unsaved]" );
+        unsaved = true;
 
-    SetTitle( wxString::Format( wxT( "%s%s \u2014 " ) + _( "Pcbnew" ),
-                                fileName.GetName(),
-                                fileinfo ) );
+    SetTitle( wxString::Format( wxT( "%s%s %s%s\u2014 " ) + _( "PCB Editor" ),
+                                fn.GetName(),
+                                IsContentModified() ? "*" : "",
+                                readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
+                                unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" ) );
 }
 
 
@@ -1363,7 +1366,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 {
     if( !TestStandalone() )
     {
-        DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
+        DisplayError( this, _( "Cannot update the PCB because PCB editor is opened in stand-alone "
                                "mode. In order to create or update PCBs from schematics, you "
                                "must launch the KiCad project manager and create a project." ) );
         return false;       //Not in standalone mode

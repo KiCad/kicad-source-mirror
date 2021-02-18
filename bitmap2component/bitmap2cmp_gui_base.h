@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,7 +79,7 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxRadioBox* m_rbPCBLayer;
 		wxStatusBar* m_statusBar;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }

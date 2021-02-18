@@ -180,7 +180,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizerSecondLine->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxT("File > Board Setup..."), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_boardSetup = new wxHyperlinkCtrl( this, wxID_ANY, _("Board setup"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_boardSetup->SetToolTip( _("File > Board Setup...") );
+
 	bSizerSecondLine->Add( m_boardSetup, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 
 
@@ -335,8 +337,8 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizerdxfLeft->Add( m_DXF_plotModeOpt, 0, wxALL, 5 );
 
-	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use Pcbnew font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use Pcbnew stroke font\nUncheck to plot oneline ASCII texts as editable text (using DXF font)") );
+	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use KiCad font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
 
 	bSizerdxfLeft->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
 

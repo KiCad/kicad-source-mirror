@@ -115,7 +115,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_canvasType = aBackend;
-    m_aboutTitle = _( "Footprint Editor" );
+    m_aboutTitle = _( "KiCad Footprint Editor" );
     m_selLayerBox = nullptr;
     m_settings = nullptr;
 
@@ -747,10 +747,11 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
     if( IsCurrentFPFromBoard() )
     {
-        title += wxString::Format( _( "%s [from %s.%s]" ) + wxT( " \u2014 " ),
-                                   footprint->GetReference(),
-                                   Prj().GetProjectName(),
-                                   PcbFileExtension );
+        title = wxString::Format( _( "%s%s [from %s.%s]" ) + wxT( " \u2014 " ),
+                                  footprint->GetReference(),
+                                  IsContentModified() ? "*" : "",
+                                  Prj().GetProjectName(),
+                                  PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -764,16 +765,17 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
         }
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( "%s %s\u2014 " ),
+        title += wxString::Format( wxT( "%s%s %s\u2014 " ),
                                    FROM_UTF8( footprint->GetFPID().Format().c_str() ),
-                                   writable ? wxString( wxEmptyString )
-                                            : _( "[Read Only]" ) + wxS( " " ) );
+                                   IsContentModified() ? "*" : "",
+                                   writable ? "" : _( "[Read Only]" ) + wxS( " " ) );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( "%s %s \u2014 " ),
+        title += wxString::Format( wxT( "%s%s %s \u2014 " ),
                                    FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ),
+                                   IsContentModified() ? "*" : "",
                                    _( "[Unsaved]" ) );
     }
 
@@ -985,7 +987,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::saveAs,                 ENABLE( footprintTargettedCond ) );
     mgr->SetConditions( ACTIONS::revert,                 ENABLE( cond.ContentModified() ) );
-    mgr->SetConditions( ACTIONS::save,                   ENABLE( cond.ContentModified() ) );
+    mgr->SetConditions( ACTIONS::save,                   ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
     mgr->SetConditions( ACTIONS::undo,                   ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                   ENABLE( cond.RedoAvailable() ) );

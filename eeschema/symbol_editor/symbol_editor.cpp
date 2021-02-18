@@ -137,16 +137,21 @@ void SYMBOL_EDIT_FRAME::updateTitle()
 
     if( IsSymbolFromSchematic() )
     {
-        title += wxString::Format( _( "%s from schematic" ), m_reference );
-        title +=  wxT( " \u2014 " );
+        title = wxString::Format( _( "%s%s [from schematic]" ) + wxT( " \u2014 " ),
+                                   m_reference,
+                                   IsContentModified() ? "*" : "" );
     }
     else
     {
         if( GetCurPart() )
-            title += GetCurPart()->GetLibId().Format() + wxT( " \u2014 " ) ;
+        {
+            bool readOnly = m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() );
 
-        if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
-            title += _( "[Read Only Library]" ) + wxT( " \u2014 " );
+            title = wxString::Format( wxT( "%s%s %s\u2014 " ),
+                                      GetCurPart()->GetLibId().Format().c_str(),
+                                      IsContentModified() ? "*" : "",
+                                      readOnly ? _( "[Read Only Library]" ) + wxT( " " ) : "" );
+        }
     }
 
     title += _( "Symbol Editor" );
