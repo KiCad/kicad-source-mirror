@@ -214,7 +214,15 @@ private:
 
     int getKiCadLength( long long aCadstarLength )
     {
-        return aCadstarLength * KiCadUnitMultiplier;
+        int mod = aCadstarLength % KiCadUnitDivider;
+        int absmod = sign( mod ) * mod;
+        int offset = 0;
+
+        // Round half-way cases away from zero
+        if( absmod >= KiCadUnitDivider / 2 )
+            offset = sign( aCadstarLength );
+
+        return ( aCadstarLength / KiCadUnitDivider ) + offset;
     }
 
     /**

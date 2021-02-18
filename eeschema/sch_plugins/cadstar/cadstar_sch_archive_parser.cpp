@@ -46,7 +46,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
             switch( Header.Resolution )
             {
             case RESOLUTION::HUNDREDTH_MICRON:
-                KiCadUnitMultiplier = SCH_IU_PER_MM / 1e5;
+                KiCadUnitDivider = (long) 1e5 / (long) SCH_IU_PER_MM;
                 break;
 
             default:

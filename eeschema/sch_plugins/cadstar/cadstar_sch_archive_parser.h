@@ -36,7 +36,7 @@ class CADSTAR_SCH_ARCHIVE_PARSER : public CADSTAR_ARCHIVE_PARSER
 {
 public:
     explicit CADSTAR_SCH_ARCHIVE_PARSER( wxString aFilename )
-            : CADSTAR_ARCHIVE_PARSER(), Filename( aFilename ), KiCadUnitMultiplier( 0.1 )
+            : CADSTAR_ARCHIVE_PARSER(), Filename( aFilename ), KiCadUnitDivider( 10 )
     {
     }
 
@@ -452,7 +452,7 @@ public:
     ATTRCOLORS        AttrColors;
     PARTNAMECOL       SymbolPartNameColor;
 
-    double KiCadUnitMultiplier; ///<Use this value to convert units in this CSA file to KiCad units
+    int KiCadUnitDivider; ///<Use this value to convert units in this CSA file to KiCad units
 
 }; //CADSTAR_SCH_ARCHIVE_PARSER
 

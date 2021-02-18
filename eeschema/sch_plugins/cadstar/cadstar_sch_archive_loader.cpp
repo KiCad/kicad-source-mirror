@@ -54,8 +54,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
     LONGPOINT designLimit = Assignments.Settings.DesignLimit;
 
     //Note: can't use getKiCadPoint() due wxPoint being int - need long long to make the check
-    long long designSizeXkicad = (long long) designLimit.x * KiCadUnitMultiplier;
-    long long designSizeYkicad = (long long) designLimit.y * KiCadUnitMultiplier;
+    long long designSizeXkicad = (long long) designLimit.x / KiCadUnitDivider;
+    long long designSizeYkicad = (long long) designLimit.y / KiCadUnitDivider;
 
     // Max size limited by the positive dimension of wxPoint (which is an int)
     constexpr long long maxDesignSizekicad = std::numeric_limits<int>::max();
@@ -2408,8 +2408,8 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPoint( wxPoint aCadstarPoint )
 {
     wxPoint retval;
 
-    retval.x = ( aCadstarPoint.x - m_designCenter.x ) * KiCadUnitMultiplier;
-    retval.y = -( aCadstarPoint.y - m_designCenter.y ) * KiCadUnitMultiplier;
+    retval.x = getKiCadLength( aCadstarPoint.x - m_designCenter.x );
+    retval.y = -getKiCadLength( aCadstarPoint.y - m_designCenter.y );
 
     return retval;
 }
@@ -2420,8 +2420,8 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint(
 {
     wxPoint retval;
 
-    retval.x = ( aCadstarPoint.x - aCadstarCentre.x ) * KiCadUnitMultiplier;
-    retval.y = ( aCadstarPoint.y - aCadstarCentre.y ) * KiCadUnitMultiplier;
+    retval.x = getKiCadLength( aCadstarPoint.x - aCadstarCentre.x );
+    retval.y = getKiCadLength( aCadstarPoint.y - aCadstarCentre.y );
 
     return retval;
 }
