@@ -761,6 +761,9 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         }
     }
 
+    if( targetLayer == UNDEFINED_LAYER )
+        return 0;
+
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
 

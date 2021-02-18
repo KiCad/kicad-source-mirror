@@ -222,8 +222,7 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 }
 
 
-PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer,
-                                             LSET aNotAllowedLayersMask,
+PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask,
                                              wxPoint aDlgPosition )
 {
     PCB_ONE_LAYER_SELECTOR dlg( this, GetBoard(), aDefaultLayer, aNotAllowedLayersMask );
@@ -236,10 +235,10 @@ PCB_LAYER_ID PCB_BASE_FRAME::SelectOneLayer( PCB_LAYER_ID aDefaultLayer,
         dlg.SetPosition( aDlgPosition );
     }
 
-    dlg.ShowModal();
-
-    PCB_LAYER_ID layer = ToLAYER_ID( dlg.GetLayerSelection() );
-    return layer;
+    if( dlg.ShowModal() != wxID_CANCEL )
+        return ToLAYER_ID( dlg.GetLayerSelection() );
+    else
+        return UNDEFINED_LAYER;
 }
 
 
