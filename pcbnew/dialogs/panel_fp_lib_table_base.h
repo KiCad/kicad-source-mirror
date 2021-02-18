@@ -45,6 +45,7 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_global_grid;
 		wxPanel* m_project_panel;
 		WX_GRID* m_project_grid;
+		wxPanel* m_buttonsPanel;
 		wxBitmapButton* m_append_button;
 		SPLIT_BUTTON* m_browseButton;
 		wxBitmapButton* m_move_up_button;

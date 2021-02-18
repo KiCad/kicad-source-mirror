@@ -456,10 +456,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
     m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
 
-    // For aesthetic reasons, we must set the size of m_browseButton to match
-    // the other bitmaps manually (for instance m_append_button)
-    Layout();   // Needed at least on MSW to compute the actual buttons sizes,
-                // after initializing their bitmaps
+    // For aesthetic reasons, we must set the size of m_browseButton to match the other bitmaps
+    // manually (for instance m_append_button)
+    Layout();   // Needed at least on MSW to compute the actual buttons sizes, after initializing
+                // their bitmaps
     wxSize buttonSize = m_append_button->GetSize();
 
     m_browseButton->SetWidthPadding( 4 );
@@ -476,6 +476,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                           this, fileType.first );
     }
 
+    Layout();
+
+    // Hack to make buttons lay out correctly the first time on Mac
+    wxSize hackSize = m_buttonsPanel->GetSize();
+    m_buttonsPanel->SetSize( wxSize( hackSize.x - 5, hackSize.y ) );
     Layout();
 
     // This is the button only press for the browse button instead of the menu
@@ -904,6 +909,10 @@ void PANEL_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
     aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
 
     m_path_subs_grid->AutoSizeColumn( 0 );
+
+    if( aWidth - m_path_subs_grid->GetColSize( 0 ) < 60 )
+        m_path_subs_grid->SetColSize( 0, aWidth / 2 );
+
     m_path_subs_grid->SetColSize( 1, aWidth - m_path_subs_grid->GetColSize( 0 ) );
 }
 
