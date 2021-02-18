@@ -545,8 +545,9 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             if( m_pickerItem )
                 m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-            // Wake the selection tool after exiting to ensure the cursor gets updated
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionActivate, false );
+            // Ensure the cursor gets changed&updated
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+            m_frame->GetCanvas()->Refresh();
         } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
