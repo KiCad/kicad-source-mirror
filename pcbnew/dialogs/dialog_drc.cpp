@@ -135,7 +135,8 @@ void DIALOG_DRC::initValues()
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_all_track_errors );
 
-    if( Kiface().IsSingle() )
+
+    if( !Kiface().IsSingle() )
         m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
 
     m_severities = cfg->m_DrcDialog.severities;
