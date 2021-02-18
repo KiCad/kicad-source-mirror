@@ -13,7 +13,7 @@
    version="1.1"
    id="svg865"
    sodipodi:docname="badges.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <title
      id="title2181">Badges</title>
   <defs
@@ -29,14 +29,14 @@
      inkscape:cx="11.434575"
      inkscape:cy="15.23019"
      inkscape:document-units="px"
-     inkscape:current-layer="layer15"
+     inkscape:current-layer="layer21"
      inkscape:document-rotation="0"
      showgrid="true"
      units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1035"
-     inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-width="2980"
+     inkscape:window-height="1765"
+     inkscape:window-x="3958"
+     inkscape:window-y="211"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -89,7 +89,7 @@
      style="display:none">
     <polygon
        class="cls-5"
-       points="15.397,15.634 17.666,11.038 19.934,15.634 25.005,16.371 21.336,19.948 22.202,25 17.666,22.615 13.129,25 13.996,19.948 10.326,16.371 "
+       points="21.336,19.948 22.202,25 17.666,22.615 13.129,25 13.996,19.948 10.326,16.371 15.397,15.634 17.666,11.038 19.934,15.634 25.005,16.371 "
        id="polygon43"
        transform="matrix(0.26458333,0,0,0.26458333,0.28204607,0.22912935)"
        style="fill:#bf2641" />
@@ -299,7 +299,7 @@
      inkscape:groupmode="layer"
      id="layer15"
      inkscape:label="open"
-     style="display:inline">
+     style="display:none">
     <path
        class="cls-4"
        d="M 6.8791659,5.0253653 A 1.8520833,1.8520832 0 1 1 5.0270561,3.1750002 1.8512375,1.8512374 0 0 1 6.8791659,5.0253653 Z"
@@ -324,25 +324,25 @@
        r="1.8520833" />
     <polygon
        class="cls-1"
-       points="24.995,13 20.203,8.208 20.203,17.792 "
+       points="20.203,8.208 20.203,17.792 24.995,13 "
        id="polygon8-3"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59658;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16564065,0,0,0.16579683,2.4881054,2.8726025)" />
     <polygon
        class="cls-1"
-       points="17.792,5.797 13,1.005 8.208,5.797 "
+       points="13,1.005 8.208,5.797 17.792,5.797 "
        id="polygon10"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
        transform="matrix(0.16548463,0,0,0.16564065,2.8757833,3.2732439)" />
     <polygon
        class="cls-1"
-       points="17.792,20.203 8.208,20.203 13,24.995 "
+       points="8.208,20.203 13,24.995 17.792,20.203 "
        id="polygon12"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16548463,0,0,0.16564065,2.8757833,2.4745247)" />
     <polygon
        class="cls-1"
-       points="5.797,17.792 5.797,8.208 1.005,13 "
+       points="5.797,8.208 1.005,13 5.797,17.792 "
        id="polygon14"
        style="fill:#f5f5f5;fill-opacity:1;stroke:none;stroke-width:1.59658;stroke-linecap:round;stroke-linejoin:round"
        transform="matrix(0.16564065,0,0,0.16579683,3.2731144,2.871854)" />
@@ -507,6 +507,27 @@
        id="polyline27-7"
        style="display:inline;fill:none;stroke:#f5f5f5;stroke-width:0.529167px;stroke-linecap:round;stroke-linejoin:round"
        d="m 4.3014409,5.2244734 c 0.242446,0.2428875 0.484893,0.485775 0.727339,0.7286625 0.242535,-0.2428875 0.48507,-0.485775 0.727605,-0.7286625" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer21"
+     inkscape:label="goto">
+    <path
+       class="cls-3"
+       d="M 6.8880303,5.0403126 A 1.8538031,1.8538031 0 1 1 5.0342272,3.1882293 1.85293,1.85293 0 0 1 6.8880303,5.0403126 Z"
+       id="path116542"
+       style="fill:#bf2641;stroke:none;stroke-width:0.396875;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="polyline116544"
+       style="fill:none;stroke:#ffffff;stroke-width:0.529167px;stroke-linecap:round;stroke-linejoin:round"
+       d="m 6.0531376,5.5369355 c 0,0 -1.0944719,0.1693765 -1.479251,-0.2154026 C 4.2239686,4.9716149 4.4206585,4.0523585 4.4206585,4.0523585"
+       sodipodi:nodetypes="csc" />
+    <polyline
+       class="cls-4"
+       points="19.473 17.45 21.9 19.877 19.473 22.303"
+       id="polyline116546"
+       transform="matrix(0.26458333,0,0,0.26458333,0.27172728,0.27781268)"
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   </g>
   <g
      inkscape:groupmode="layer"

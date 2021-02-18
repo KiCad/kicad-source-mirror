@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="pin_size_to.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1041"
+     inkscape:window-width="2575"
+     inkscape:window-height="1651"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="30.702139"
      inkscape:cx="10.589335"
      inkscape:cy="15.833679"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="37"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -124,18 +124,19 @@
      id="polygon159113"
      transform="translate(-1,-1)" />
   <path
-     class="cls-5"
-     d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
-     id="path159115"
-     style="stroke-width:0.999996" />
+     class="cls-3"
+     d="m 24.0335,17.049999 a 7.0064998,7.0064998 0 1 1 -7.0065,-7 7.0031999,7.0031999 0 0 1 7.0065,7 z"
+     id="path116542"
+     style="fill:#bf2641;stroke:none;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <path
+     id="polyline116544"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="m 20.878,18.926999 c 0,0 -4.136587,0.640163 -5.59087,-0.81412 -1.322525,-1.322525 -0.57913,-4.79688 -0.57913,-4.79688"
+     sodipodi:nodetypes="csc" />
   <polyline
-     class="cls-6"
-     points="21.851 19.877 15.681 19.877 15.681 14.266"
-     id="polyline159117"
-     transform="translate(-1.681,-1)" />
-  <polyline
-     class="cls-6"
+     class="cls-4"
      points="19.473 17.45 21.9 19.877 19.473 22.303"
-     id="polyline159119"
-     transform="translate(-1,-1)" />
+     id="polyline116546"
+     transform="translate(-0.973,-0.95)"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
 </svg>

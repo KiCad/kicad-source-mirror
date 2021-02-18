@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="find_replace.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1035"
+     inkscape:window-width="3840"
+     inkscape:window-height="2099"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="31.505536"
-     inkscape:cx="13.857156"
+     inkscape:cx="13.396919"
      inkscape:cy="19.896218"
      inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-y="37"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -185,16 +185,20 @@
        x="13.533438"
        y="22.992874"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#545454;fill-opacity:1">B</tspan></text>
-  <polyline
-     class="cls-3"
-     points="8.803 19.188 11.229 21.614 8.803 24.041"
-     id="polyline777"
-     transform="translate(1,-2.5)"
-     style="fill:none;stroke:#bf2641;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
-  <path
-     id="polyline775"
-     style="fill:none;stroke:#bf2641;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 11.5,19 H 6 v -5"
-     class="cls-3"
-     sodipodi:nodetypes="ccc" />
+  <g
+     id="g4083"
+     transform="translate(-22.5,16.269004)">
+    <polyline
+       class="cls-3"
+       points="8.803 19.188 11.229 21.614 8.803 24.041"
+       id="polyline777-3"
+       transform="matrix(1,0,0,0.98912611,23.697,-20.048585)"
+       style="fill:none;stroke:#bf2641;stroke-width:2.01096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       id="polyline775-6"
+       style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 34.5,1.2309959 c 0,0 -3.302434,0.285416 -4.598796,-1.01094597 C 28.735508,-0.94564707 29,-3.7146351 29,-3.7146351"
+       class="cls-3"
+       sodipodi:nodetypes="csc" />
+  </g>
 </svg>

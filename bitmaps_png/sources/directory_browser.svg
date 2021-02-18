@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="directory_browser.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="3840"
+     inkscape:window-height="2099"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="10.725507"
-     inkscape:cx="23.608464"
-     inkscape:cy="20.179538"
+     inkscape:zoom="60.67263"
+     inkscape:cx="18.953894"
+     inkscape:cy="18.381916"
      inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-y="37"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -89,11 +89,11 @@
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
      id="path116542"
      style="stroke:none;stroke-opacity:1;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none" />
-  <polyline
-     class="cls-4"
-     points="21.851 19.877 15.681 19.877 15.681 14.266"
+  <path
      id="polyline116544"
-     transform="translate(-1,-1)" />
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="m 20.851,18.877 c 0,0 -4.136587,0.640163 -5.59087,-0.81412 C 13.937605,16.740355 14.681,13.266 14.681,13.266"
+     sodipodi:nodetypes="csc" />
   <polyline
      class="cls-4"
      points="19.473 17.45 21.9 19.877 19.473 22.303"

@@ -656,7 +656,7 @@ TOOL_ACTION PCB_ACTIONS::group( "pcbnew.EditorControl.group",
 TOOL_ACTION PCB_ACTIONS::ungroup( "pcbnew.EditorControl.ungroup",
         AS_GLOBAL, 0, "",
         _( "Ungroup" ), "",
-        ungroup_xpm );
+        group_ungroup_xpm );
 
 TOOL_ACTION PCB_ACTIONS::removeFromGroup( "pcbnew.EditorControl.removeFromGroup",
         AS_GLOBAL, 0, "",
