@@ -154,228 +154,267 @@ int LINE::CountCorners( int aAngles ) const
     return count;
 }
 
-
-bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
-                           SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
+bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
     const SHAPE_LINE_CHAIN& line( CLine() );
 
     if( line.SegmentCount() < 1 )
+    {
         return false;
+    }
 
     const auto pFirst = line.CPoint(0);
     const auto pLast = line.CPoint(-1);
 
-    if( aObstacle.PointInside( line.CPoint( 0 ) ) || aObstacle.PointInside( line.CPoint( -1 ) ) )
+    bool inFirst = aObstacle.PointInside( pFirst ) && !aObstacle.PointOnEdge( pFirst );
+    bool inLast = aObstacle.PointInside( pLast ) && !aObstacle.PointOnEdge( pLast );
+
+    // We can't really walk around if the beginning or the end of the path lies inside the obstacle hull.
+    // Double check if it's not on the hull itself as this triggers many unroutable corner cases.
+    if( inFirst || inLast )
     {
-        return false;
+	    return false;
     }
+
+    enum VERTEX_TYPE { INSIDE = 0, OUTSIDE, ON_EDGE };
+
+    // Represents an entry in directed graph of hull/path vertices. Scanning this graph
+    // starting from the path's first point results (if possible) with a correct walkaround path
+    struct VERTEX
+    {
+        // vertex classification (inside/outside/exactly on the hull)
+        VERTEX_TYPE type;
+        // true = vertex coming from the hull primitive
+        bool isHull;
+        // position
+        VECTOR2I pos;
+        // list of neighboring vertices
+        std::vector<VERTEX*> neighbours;
+        // index of this vertex in path (pnew)
+        int indexp = -1;
+        // index of this vertex in the hull (hnew)
+        int indexh = -1;
+        // visited indicator (for BFS search)
+        bool visited = false;
+    };
 
     SHAPE_LINE_CHAIN::INTERSECTIONS ips;
 
     line.Intersect( aObstacle, ips );
 
-    for( int i = 0; i < line.SegmentCount(); i++ )
+    SHAPE_LINE_CHAIN pnew( CLine() ), hnew( aObstacle );
+
+    std::vector<VERTEX> vts;
+
+    
+
+    auto findVertex = [&]( VECTOR2I pos) -> VERTEX*
     {
-        const SEG& a = line.CSegment(i);
-        bool over = false;
-
-
-        for( int j = 0; j < aObstacle.SegmentCount(); j++ )
+        for( VERTEX& v : vts )
         {
-            const SEG& so = aObstacle.CSegment(j);
-            if( so.Contains( a ) )
-            {
-                over = true;
-                break;
-            }
+            if(v.pos == pos )
+                return &v;
         }
 
-        if(over)
-            continue;
+        return nullptr;
+    };
 
+    // insert all intersections found into the new hull/path SLCs
+    for( auto ip : ips )
+    {
+        bool isNewP, isNewH;
 
-        bool a_in = aObstacle.PointInside( a.A );// && !aObstacle.PointOnEdge( a.A );
-        bool b_in = aObstacle.PointInside( a.B );// && !aObstacle.PointOnEdge( a.B );
-
-        if( a_in ^ b_in ) // segment crosses hull boundary
+        if( pnew.Find( ip.p ) < 0 )
         {
-            for( int j = 0; j < aObstacle.SegmentCount(); j++ )
-            {
-                OPT_VECTOR2I p;
-
-                bool cont_a = aObstacle.CSegment(j).Contains( a.A );
-                bool cont_b = aObstacle.CSegment(j).Contains( a.B );
-
-                if(cont_a)
-                    p = a.A;
-                else if (cont_b)
-                    p = a.B;
-                else
-                    p = aObstacle.CSegment(j).Intersect( a );
-
-                if( p )
-                {
-                      SHAPE_LINE_CHAIN::INTERSECTION ip;
-                      ip.our = a;
-                      ip.their = aObstacle.CSegment(j);
-                      ip.p = *p;
-                      ips.push_back(ip);
-                }
-            }
+            pnew.Split(ip.p);
         }
-        else if( !a_in && !b_in )
+
+        if( hnew.Find( ip.p ) < 0 )
         {
-            int min_idx = INT_MAX;
-            int max_idx = INT_MIN;
-
-            for( int j = 0; j < aObstacle.SegmentCount(); j++ )
-            {
-                const SEG& os = aObstacle.CSegment(j);
-
-                if( os.Intersect(a) )
-                {
-                    min_idx = std::min(min_idx, j);
-                    max_idx = std::max(max_idx, j);
-                }
-
-            }
-
-            if (min_idx != max_idx && min_idx != INT_MAX )
-            {
-                // genuine interesection found
-                for( int j = 0; j < aObstacle.SegmentCount(); j++ )
-                {
-                    const SEG& os = aObstacle.CSegment(j);
-
-                    auto p = os.Intersect(a);
-
-                    if( p )
-                    {
-                        SHAPE_LINE_CHAIN::INTERSECTION ip;
-                        ip.our = a;
-                        ip.their = aObstacle.CSegment(j);
-                        ip.p = *p;
-                        ips.push_back(ip);
-                    }
-
-                }
-            }
+            hnew.Split(ip.p);
         }
     }
 
-    auto eFirst = aObstacle.EdgeContainingPoint( pFirst );
-    auto eLast = aObstacle.EdgeContainingPoint( pLast );
-
-    aWalk.Clear();
-    aPost.Clear();
-
-    int nearest_dist = INT_MAX;
-    int farthest_dist = 0;
-
-    SHAPE_LINE_CHAIN::INTERSECTION nearest, farthest;
-    SHAPE_LINE_CHAIN::INTERSECTION is;
-
-    if( eFirst >= 0 )
+    // make sure all points that lie on the edge of the hull also exist as vertices in the path
+    for( int i = 0; i < pnew.PointCount(); i++ )
     {
-        is.our = line.CSegment(0);
-        is.their = aObstacle.CSegment( eFirst );
-        is.p = pFirst;
-        ips.push_back(is);
+        const VECTOR2I &p = pnew.CPoint(i);
+
+        if( hnew.PointOnEdge( p ) )
+        {
+            SHAPE_LINE_CHAIN::INTERSECTION ip;
+            ip.p = p;
+            ips.push_back( ip );
+        }
     }
 
-    if ( eLast >= 0 )
+    // we assume the default orientation of the hulls is clockwise, so just reverse the vertex
+    // order if the caller wants a counter-clockwise walkaround
+    if ( !aCw )
+        hnew = hnew.Reverse();
+
+    vts.reserve( 2 * ( hnew.PointCount() + pnew.PointCount() ) );
+
+    // create a graph of hull/path vertices and classify them (inside/on edge/outside the hull)
+    for( int i = 0; i < pnew.PointCount(); i++ )
     {
-        is.our = line.CSegment(-1);
-        is.their = aObstacle.CSegment( eLast );
-        is.p = pLast;
-        ips.push_back(is);
+        auto p = pnew.CPoint(i);
+        bool onEdge = hnew.PointOnEdge( p );
+        bool inside = hnew.PointInside( p );
+
+        VERTEX v;
+
+        v.indexp = i;
+        v.isHull = false;
+        v.pos = p;
+        v.type = inside && !onEdge ? INSIDE : onEdge ? ON_EDGE : OUTSIDE;
+        vts.push_back( v );
     }
 
-    for( int i = 0; i < (int) ips.size(); i++ )
+    // each path vertex neighbour list points for sure to the next vertex in the path
+    for( int i = 0; i < pnew.PointCount() - 1; i++ )
     {
-        const VECTOR2I p = ips[i].p;
-        int dist = line.PathLength( p );
+        vts[i].neighbours.push_back( &vts[ i+1 ] );
+    }
 
-        if( dist < 0 )
+    // insert hull vertices into the graph
+    for( int i = 0; i < hnew.PointCount(); i++ )
+    {
+        auto hp = hnew.CPoint( i );
+        auto vn = findVertex( hp );
+
+        // if vertex already present (it's very likely that in recursive shoving hull and path vertices will overlap)
+        // just mark it as a path vertex that also belongs to the hull
+        if( vn )
+        {
+            vn->isHull = true;
+            vn->indexh = i;
+        }
+        else // new hull vertex
+        {
+            VERTEX v;
+            v.pos = hp;
+            v.type = ON_EDGE;
+            v.indexh = i;
+            v.isHull = true;
+            vts.push_back( v );
+        }
+    }
+
+    // go around the hull and fix up the neighbour link lists
+    for( int i = 0; i < hnew.PointCount(); i++ )
+    {
+        auto vc = findVertex( hnew.CPoint(i ) );
+        auto vnext = findVertex( hnew.CPoint( i+1 ) );
+
+        if(vc && vnext)
+            vc->neighbours.push_back(vnext);
+    }
+
+    // vts[0] = start point
+    VERTEX* v = &vts[0];
+    SHAPE_LINE_CHAIN out;
+
+    int iterLimit = 1000;
+
+    // keep scanning the graph until we reach the end point of the path
+    while ( v->indexp != (pnew.PointCount() - 1) )
+    {
+        iterLimit--;
+
+        // I'm not 100% sure this algorithm doesn't have bugs that may cause it to freeze,
+        // so here's a temporary iteration limit
+        if( iterLimit == 0 )
+        {
             return false;
-
-        if( dist <= nearest_dist )
-        {
-            nearest_dist = dist;
-            nearest = ips[i];
         }
 
-        if( dist >= farthest_dist )
+        if(v->visited)
         {
-            farthest_dist = dist;
-            farthest = ips[i];
+            // loop found? clip to beginning of the loop
+            out = out.Slice(0, out.Find( v->pos ) );
+            break;
         }
+
+        out.Append( v->pos );
+
+        VERTEX* v_next = nullptr;
+
+        if (v->type == OUTSIDE)
+        {
+            // current vertex is outside? first look for any vertex further down the path
+            // that is not inside the hull
+            out.Append(v->pos);
+            for( auto vn : v->neighbours )
+            {
+                if( (vn->indexp > v->indexp) && vn->type != INSIDE )
+                {
+                    v_next = vn;
+                    break;
+                }
+            }
+
+            // such a vertex must always be present, if not, bummer.
+            if (!v_next)
+                return false;
+
+        }
+        else if (v->type == ON_EDGE)
+        {
+            // current vertex lies on the hull? first look for the hull/path vertex with the index (N+1)
+            for( VERTEX* vn: v->neighbours)
+            {
+
+                if( vn->type  == ON_EDGE && (vn->indexp == (v->indexp + 1) ) && ( (vn->indexh == (v->indexh + 1) ) % hnew.PointCount() ) )
+                {
+                    v_next = vn;
+                    break;
+                }
+            }
+
+            // nothing found? look for the first vertex outside the hull then
+            if( !v_next )
+            {
+                for( VERTEX* vn: v->neighbours)
+                {
+                    if( vn->type  == OUTSIDE )
+                    {
+                        v_next = vn;
+                        break;
+                    }
+                }
+            }
+
+            // still nothing found? try to find the next (index-wise) point on the hull. I guess
+            // we should never reach this part of the code, but who really knows?
+            if( !v_next )
+            {
+                for( VERTEX* vn: v->neighbours)
+                {
+                    if ( v->type == ON_EDGE )
+                    {
+                        if( vn->indexh == ( (v->indexh + 1) % hnew.PointCount() ) )
+                        {
+                            v_next = vn;
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        v->visited = true;
+        v = v_next;
+
+        if( !v )
+            return false;
     }
 
-    if( ips.size() <= 1 || nearest.p == farthest.p )
-    {
-        aPre = line;
-        return true;
-    }
+    out.Append( v->pos );
+    out.Simplify();
 
-    aPre = line.Slice( 0, nearest.our.Index() );
-    aPre.Append( nearest.p );
-    aPre.Simplify();
-
-    aWalk.Clear();
-    aWalk.SetClosed( false );
-    aWalk.Append( nearest.p );
-
-    assert( nearest.their.Index() >= 0 );
-    assert( farthest.their.Index() >= 0 );
-
-    assert( nearest_dist <= farthest_dist );
-
-    aObstacle.Split( nearest.p );
-    aObstacle.Split( farthest.p );
-
-    int i_first = aObstacle.Find( nearest.p );
-    int i_last = aObstacle.Find( farthest.p );
-
-    int i = i_first;
-
-    if( i_first < 0 || i_last < 0 )
-        return false;
-
-    while( i != i_last )
-    {
-        aWalk.Append( aObstacle.CPoint( i ) );
-        i += ( aCw ? 1 : -1 );
-
-        if( i < 0 )
-            i = aObstacle.PointCount() - 1;
-        else if( i == aObstacle.PointCount() )
-            i = 0;
-    }
-
-    aWalk.Append( farthest.p );
-    aWalk.Simplify();
-
-    aPost.Clear();
-    aPost.Append( farthest.p );
-    aPost.Append( line.Slice( farthest.our.Index() + 1, -1 ) );
-    aPost.Simplify();
-
-    return true;
-}
-
-
-bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
-{
-    SHAPE_LINE_CHAIN walk, post;
-
-    if( ! Walkaround( aObstacle, aPath, walk, post, aCw ) )
-        return false;
-
-    aPath.Append( walk );
-    aPath.Append( post );
-    aPath.Simplify();
+    aPath = out;
 
     return true;
 }
