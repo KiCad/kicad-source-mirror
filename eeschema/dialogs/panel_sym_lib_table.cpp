@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 CERN
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,7 +52,7 @@
 /**
  * Container that describes file type info for the add a library options
  */
-struct supportedFileType
+struct SUPPORTED_FILE_TYPE
 {
     wxString m_Description;            ///< Description shown in the file picker dialog
     wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
@@ -187,9 +188,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     // so make it a grid owned table.
     m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
 
-    // For user info, shows the table filenames:
-    m_GblTableFilename->SetLabel( aGlobalTablePath );
-
     wxArrayString pluginChoices;
 
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
@@ -256,7 +254,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     if( m_projectTable )
     {
-        m_PrjTableFilename->SetLabel( aProjectTablePath );
         m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_projectTable ), true );
         setupGrid( m_project_grid );
     }
@@ -459,9 +456,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                       openDir, wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-    auto result = dlg.ShowModal();
-
-    if( result == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     if( m_cur_grid == m_global_grid )
@@ -514,12 +509,11 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             // SCH_IO_MGR needs to provide file extension information for libraries too
 
             // auto detect the plugin type
-            for( auto pluginType : SCH_IO_MGR::SCH_FILE_T_vector )
+            for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
             {
-                if( SCH_IO_MGR::GetLibraryFileExtension( pluginType ).Lower() == fn.GetExt().Lower() )
+                if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == fn.GetExt().Lower() )
                 {
-                    m_cur_grid->SetCellValue( last_row, COL_TYPE,
-                                              SCH_IO_MGR::ShowType( pluginType ) );
+                    m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( piType ) );
                     break;
                 }
             }

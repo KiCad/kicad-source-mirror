@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 CERN
- * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 CERN
+ * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@
 /**
 * Container that describes file type info for the add a library options
 */
-struct supportedFileType
+struct SUPPORTED_FILE_TYPE
 {
     wxString m_Description;            ///< Description shown in the file picker dialog
     wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
@@ -90,7 +90,7 @@ enum {
 * library option.
 *
 */
-static const std::map<int, supportedFileType>& fileTypes()
+static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
 {
     /*
      * TODO(C++20): Clean this up
@@ -99,7 +99,7 @@ static const std::map<int, supportedFileType>& fileTypes()
      * extensions can be made constexpr and this can be removed from a function call and
      * placed in the file normally.
      */
-    static const std::map<int, supportedFileType> fileTypes =
+    static const std::map<int, SUPPORTED_FILE_TYPE> fileTypes =
     {
         { ID_PANEL_FPLIB_ADD_KICADMOD,
             {
@@ -143,18 +143,15 @@ public:
     {
     }
 
-
     virtual wxDirTraverseResult OnFile( const wxString& aFileName ) override
     {
         wxFileName file( aFileName );
+
         if( m_searchExtension.IsSameAs( file.GetExt(), false ) )
-        {
             m_foundDirs.insert( { m_currentDir, 1 } );
-        }
 
         return wxDIR_CONTINUE;
     }
-
 
     virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName ) override
     {
@@ -162,12 +159,10 @@ public:
         return wxDIR_IGNORE;
     }
 
-
     bool HasDirectoryOpenFailures()
     {
         return m_failedDirs.size() > 0;
     }
-
 
     virtual wxDirTraverseResult OnDir( const wxString& aDirName ) override
     {
@@ -175,22 +170,16 @@ public:
         return wxDIR_CONTINUE;
     }
 
-
     void GetPaths( wxArrayString& aPathArray )
     {
-        for( auto foundDirsPair : m_foundDirs )
-        {
+        for( std::pair<const wxString, int>& foundDirsPair : m_foundDirs )
             aPathArray.Add( foundDirsPair.first );
-        }
     }
-
 
     void GetFailedPaths( wxArrayString& aPathArray )
     {
-        for( auto failedDirsPair : m_failedDirs )
-        {
+        for( std::pair<const wxString, int>& failedDirsPair : m_failedDirs )
             aPathArray.Add( failedDirsPair.first );
-        }
     }
 
 private:
@@ -367,9 +356,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_projectBasePath( aProjectBasePath ),
     m_parent( aParent )
 {
-    // For user info, shows the table filenames:
-    m_GblTableFilename->SetLabel( aGlobalTblPath );
-
     m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobal ), true );
 
     // add Cut, Copy, and Paste to wxGrids
@@ -443,7 +429,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     if( aProject )
     {
-        m_PrjTableFilename->SetLabel( aProjectTblPath );
         m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
         setupGrid( m_project_grid );
     }
@@ -483,12 +468,12 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
-    for( auto& fileType : fileTypes() )
+    for( const std::pair<const int, SUPPORTED_FILE_TYPE>& fileType : fileTypes() )
     {
         browseMenu->Append( fileType.first, fileType.second.m_Description );
 
         browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
-                this, fileType.first );
+                          this, fileType.first );
     }
 
     Layout();
@@ -754,7 +739,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    std::map<int, supportedFileType>::const_iterator fileTypeIt;
+    std::map<int, SUPPORTED_FILE_TYPE>::const_iterator fileTypeIt;
 
     // We are bound both to the menu and button with this one handler
     // So we must set the file type based on it
@@ -774,7 +759,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         return;
     }
 
-    supportedFileType fileType = fileTypeIt->second;
+    SUPPORTED_FILE_TYPE fileType = fileTypeIt->second;
 
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
@@ -865,7 +850,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     wxString           detailedMsg   = _( "One of the nicknames will need to be changed after "
                                           "adding this library." );
 
-    for( const auto& filePath : files )
+    for( const wxString& filePath : files )
     {
         wxFileName fn( filePath );
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName() );
