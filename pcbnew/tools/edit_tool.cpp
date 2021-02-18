@@ -1284,6 +1284,11 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                         if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
                             added_items.insert( item->GetParent() );
                     }
+
+                    // We can't rotate both a footprint and its text in the same operation, so if
+                    // both are selected, remove the text
+                    if( item->Type() == PCB_FP_TEXT_T && aCollector.HasItem( item->GetParent() ) )
+                        aCollector.Remove( item );
                 }
 
                 for( BOARD_ITEM* item : added_items )
@@ -1538,6 +1543,11 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                         if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
                             added_items.insert( item->GetParent() );
                     }
+
+                    // We can't flip both a footprint and its text in the same operation, so if
+                    // both are selected, remove the text
+                    if( item->Type() == PCB_FP_TEXT_T && aCollector.HasItem( item->GetParent() ) )
+                        aCollector.Remove( item );
                 }
 
                 for( BOARD_ITEM* item : added_items )
