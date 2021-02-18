@@ -99,20 +99,13 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::saveLibraryAs,      libSelectedCondition );
-        ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
-
-        ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libInferredCondition && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition && canEditLibrary );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition || libInferredCondition );
+        ctxMenu.AddItem( EE_ACTIONS::saveLibraryAs,      libSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,       saveSymbolAsCondition );
-        ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition || libInferredCondition );
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition && canEditLibrary );

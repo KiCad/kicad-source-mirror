@@ -76,6 +76,15 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
                 LIB_ID sel = m_frame->GetTreeFPID();
                 return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
             };
+    // The libInferredCondition allows you to do things like New Symbol and Paste with a
+    // symbol selected (in other words, when we know the library context even if the library
+    // itself isn't selected.
+    auto libInferredCondition =
+            [ this ]( const SELECTION& aSel )
+            {
+                LIB_ID sel = m_frame->GetTreeFPID();
+                return !sel.GetLibNickname().empty();
+            };
     auto pinnedLibSelectedCondition =
             [ this ]( const SELECTION& aSel )
             {
@@ -99,32 +108,25 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
     ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
-    ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
-    ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
-
-    ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::newFootprint,      libSelectedCondition );
 #ifdef KICAD_SCRIPTING
     ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   libSelectedCondition );
 #endif
-    ctxMenu.AddItem( PCB_ACTIONS::editFootprint,     fpSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( ACTIONS::save,                  fpSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition || libInferredCondition );
+    ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
     ctxMenu.AddItem( ACTIONS::saveCopyAs,            fpSelectedCondition );
-    ctxMenu.AddItem( ACTIONS::revert,                fpSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition || libInferredCondition );
 
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::cutFootprint,      fpSelectedCondition );
     ctxMenu.AddItem( PCB_ACTIONS::copyFootprint,     fpSelectedCondition );
-    ctxMenu.AddItem( PCB_ACTIONS::pasteFootprint,    SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::pasteFootprint,    libInferredCondition );
     ctxMenu.AddItem( PCB_ACTIONS::deleteFootprint,   fpSelectedCondition );
 
     ctxMenu.AddSeparator();
-    ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   libSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   libInferredCondition );
     ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,   fpSelectedCondition );
 
     return true;
