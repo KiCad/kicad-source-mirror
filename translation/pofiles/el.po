@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-19 07:38+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -16341,7 +16341,7 @@ msgstr "Επεξεργασία Τιμής"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Το σύμβολο δεν προέρχεται από άλλο σύμβολο."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -17427,6 +17427,8 @@ msgstr "Μετατροπή εικόνων bitmap σε στοιχεία σχημ�
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
+"Εμφάνιση εργαλείων για τον υπολογισμό της αντίστασης, της τρέχουσας "
+"χωρητικότητας κ.λπ."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
@@ -22899,7 +22901,7 @@ msgstr "Τυπικό (1,2,3)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Χαλαρό (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -24125,15 +24127,15 @@ msgstr "2 Επίπεδα"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr ""
+msgstr "Προσθήκη επιλεγμένων επιπέδων στον κατάλογο αντιστοιχισμένων επιπέδων."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:67
 msgid "Remove selected layers from matched layers list."
@@ -24161,6 +24163,8 @@ msgstr "Άλλα Επίπεδα"
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr ""
+"Αυτόματη αντιστοίχιση τυχόν ασυνδύαστων επιπέδων στο αντίστοιχό τους στο "
+"KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
@@ -24301,7 +24305,7 @@ msgstr "Το %s δεν μπορεί να είναι κενό."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1928
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr ""
+msgstr "Το δίκτυο «%s» χρησιμοποιείται. Διαγραφή ούτως ή άλλως;"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1945
 #, c-format
@@ -26810,7 +26814,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Σημείωση: η πλήρωση ζώνης μπορεί να είναι αργή όταν <%s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
@@ -26966,7 +26970,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:870
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "Διαγραφή Εσωτερικών Επιπέδων"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:888
 msgid "Select user defined layer to add to board layer set"
