@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 12:36+0000\n"
+"PO-Revision-Date: 2021-02-19 13:06+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7016,12 +7016,12 @@ msgstr "%s を更新 %s から %s へ"
 #: eeschema/annotate.cpp:231
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr "%s をアノテート(ユニット %s) %s として"
+msgstr "%s をアノテーション(ユニット %s) %s として"
 
 #: eeschema/annotate.cpp:236
 #, c-format
 msgid "Annotated %s as %s"
-msgstr "%s をアノテート %s として"
+msgstr "%s をアノテーション %s として"
 
 #: eeschema/annotate.cpp:252
 msgid "Annotation complete."
@@ -7079,12 +7079,12 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:525
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr "アノテートされなかったアイテム: %s%s (ユニット %d)\n"
+msgstr "アノテーションされなかったアイテム: %s%s (ユニット %d)\n"
 
 #: eeschema/component_references_lister.cpp:532
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr "アノテートされなかったアイテム: %s%s\n"
+msgstr "アノテーションされなかったアイテム: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:552
 #, c-format
@@ -15227,7 +15227,7 @@ msgstr "ピンのエレクトリカル タイプを表示"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Annotate pins with their electrical types"
-msgstr "エレクトリカル タイプでピンをアノテート"
+msgstr "エレクトリカル タイプでピンをアノテーション"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Show Symbol Tree"
@@ -15747,7 +15747,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Annotate Schematic..."
-msgstr "回路図をアノテート..."
+msgstr "回路図をアノテーション..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Fill in schematic symbol reference designators"
@@ -17702,7 +17702,7 @@ msgstr "PCB フットプリントを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Gerber Viewer"
-msgstr "ガーバー ビューアー"
+msgstr "ガーバービューアー"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Preview Gerber output files"
@@ -20265,7 +20265,7 @@ msgstr "除外"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:118
 msgid "Reannotate PCB"
-msgstr "基板を再アノテート"
+msgstr "基板を再アノテーション"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
@@ -20273,7 +20273,7 @@ msgstr "再アノテーションするPCBがありません!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB and schematic successfully reannotated"
-msgstr "基板と回路図の再アノテートが成功しました"
+msgstr "基板と回路図の再アノテーションが成功しました"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -20282,7 +20282,7 @@ msgid ""
 "%s footprints will be reannotated."
 msgstr ""
 "\n"
-"%s フットプリントは再アノテートされます。"
+"%s フットプリントは再アノテーションされます。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 #, c-format
@@ -20299,7 +20299,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"ロックされたフットプリントは再アノテートされません"
+"ロックされたフットプリントは再アノテーションされません"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 #, c-format
@@ -20505,7 +20505,7 @@ msgid ""
 "Reannotate failed!\n"
 msgstr ""
 "\n"
-"再アノテートが失敗!\n"
+"再アノテーションが失敗!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
 msgid "Aborted: too many errors"
@@ -20596,11 +20596,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr "再アノテートの範囲"
+msgstr "再アノテーションの範囲"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
-msgstr "再アノテート:"
+msgstr "再アノテーション:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -33027,7 +33027,7 @@ msgstr "選択されたオブジェクトの制約の解決を表示します"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
 msgid "Geographical Reannotate..."
-msgstr "位置で再アノテート..."
+msgstr "位置で再アノテーション..."
 
 #: pcbnew/tools/pcb_actions.cpp:1048
 msgid "Reannotate PCB in geographical order"
