@@ -1169,6 +1169,9 @@ void PCB_EDIT_FRAME::OnModify( )
 
     Update3DView( true );
 
+    if( !GetTitle().StartsWith( "*" ) )
+        UpdateTitle();
+
     m_ZoneFillsDirty = true;
 }
 
@@ -1191,8 +1194,8 @@ void PCB_EDIT_FRAME::UpdateTitle()
         unsaved = true;
 
     SetTitle( wxString::Format( wxT( "%s%s %s%s\u2014 " ) + _( "PCB Editor" ),
-                                fn.GetName(),
                                 IsContentModified() ? "*" : "",
+                                fn.GetName(),
                                 readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
                                 unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" ) );
 }

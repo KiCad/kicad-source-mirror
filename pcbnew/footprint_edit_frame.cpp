@@ -735,6 +735,9 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     PCB_BASE_FRAME::OnModify();
     Update3DView( true );
     m_treePane->GetLibTree()->RefreshLibTree();
+
+    if( !GetTitle().StartsWith( "*" ) )
+        UpdateTitle();
 }
 
 
@@ -748,8 +751,8 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     if( IsCurrentFPFromBoard() )
     {
         title = wxString::Format( _( "%s%s [from %s.%s]" ) + wxT( " \u2014 " ),
-                                  footprint->GetReference(),
                                   IsContentModified() ? "*" : "",
+                                  footprint->GetReference(),
                                   Prj().GetProjectName(),
                                   PcbFileExtension );
     }
@@ -766,16 +769,16 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( "%s%s %s\u2014 " ),
-                                   FROM_UTF8( footprint->GetFPID().Format().c_str() ),
                                    IsContentModified() ? "*" : "",
+                                   FROM_UTF8( footprint->GetFPID().Format().c_str() ),
                                    writable ? "" : _( "[Read Only]" ) + wxS( " " ) );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( "%s%s %s \u2014 " ),
-                                   FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ),
                                    IsContentModified() ? "*" : "",
+                                   FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() ),
                                    _( "[Unsaved]" ) );
     }
 

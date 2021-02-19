@@ -781,6 +781,9 @@ void SYMBOL_EDIT_FRAME::OnModify()
     storeCurrentPart();
 
     m_treePane->GetLibTree()->RefreshLibTree();
+
+    if( !GetTitle().StartsWith( "*" ) )
+        UpdateTitle();
 }
 
 

@@ -796,6 +796,9 @@ void SCH_EDIT_FRAME::OnModify()
 
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();
+
+    if( !GetTitle().StartsWith( "*" ) )
+        UpdateTitle();
 }
 
 
@@ -1254,8 +1257,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
             unsaved = true;
 
         title.Printf( wxT( "%s%s [%s] %s%s\u2014 " ) + _( "Schematic Editor" ),
-                      fn.GetName(),
                       IsContentModified() ? "*" : "",
+                      fn.GetName(),
                       GetCurrentSheet().PathHumanReadable( false ),
                       readOnly ? _( "[Read Only]" ) + wxS( " " ) : "",
                       unsaved ? _( "[Unsaved]" ) + wxS( " " ) : "" );
