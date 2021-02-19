@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 10:59+0000\n"
+"PO-Revision-Date: 2021-02-19 11:35+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -17295,7 +17295,7 @@ msgstr "ビットマップイメージを回路図シンボルまたはプリン
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr ""
+msgstr "抵抗や電流容量などを計算するためのツールを表示します。"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid ""
@@ -19407,9 +19407,8 @@ msgid "Specific Resistance"
 msgstr "比抵抗"
 
 #: pcb_calculator/transline_ident.cpp:121
-#, fuzzy
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "εR: サブストレート比誘電率"
+msgstr "サブストレート比誘電率"
 
 #: pcb_calculator/transline_ident.cpp:125
 #, fuzzy
@@ -19503,7 +19502,6 @@ msgid "substrate"
 msgstr "サブストレート"
 
 #: pcb_calculator/transline_ident.cpp:163
-#, fuzzy
 msgid "Relative permeability (mu) of substrate"
 msgstr "サブストレートの比透磁率 (μ)"
 
@@ -19526,7 +19524,6 @@ msgstr "導体"
 #: pcb_calculator/transline_ident.cpp:341
 #: pcb_calculator/transline_ident.cpp:380
 #: pcb_calculator/transline_ident.cpp:409
-#, fuzzy
 msgid "Relative permeability (mu) of conductor"
 msgstr "導体の比透磁率 (μ)"
 
@@ -19633,12 +19630,12 @@ msgstr "外径 (絶縁体)"
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "実効 %s (even):"
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "実効 %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:324
 msgid "Conductor losses (even):"
@@ -19685,9 +19682,8 @@ msgid "Number of twists per length"
 msgstr "長さあたりの撚り数"
 
 #: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
 msgid "environment"
-msgstr "環境変数"
+msgstr "環境"
 
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Relative permittivity of environment"
@@ -19734,9 +19730,8 @@ msgid "kHz"
 msgstr "kHz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
-#, fuzzy
 msgid "rad"
-msgstr "パッド"
+msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
