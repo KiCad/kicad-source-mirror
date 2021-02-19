@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 12:31+0000\n"
+"PO-Revision-Date: 2021-02-19 12:36+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -15837,7 +15837,7 @@ msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
 
 #: eeschema/tools/ee_actions.cpp:623
 msgid "Highlight on PCB"
-msgstr "基板 (PCB) 上でハイライト"
+msgstr "PCB上でハイライト"
 
 #: eeschema/tools/ee_actions.cpp:623
 msgid "Highlight corresponding items in board editor"
