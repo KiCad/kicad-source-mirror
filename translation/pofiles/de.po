@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-18 23:38+0000\n"
+"PO-Revision-Date: 2021-02-19 19:10+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -19481,7 +19481,6 @@ msgid "Not worth using"
 msgstr "Nicht erforderlich"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19525,14 +19524,14 @@ msgstr ""
 "\n"
 "Standardmäßig wird der angefragte Wert von den Lösungen ausgeschlossen.  Es "
 "ist außerdem möglich,\n"
-"bis zu 2 weitere Werte von den Lösungen auszuschließen, falls diese nicht "
+"bis zu zwei weitere Werte von den Lösungen auszuschließen, falls diese nicht "
 "verfügbar sind.\n"
 "\n"
 "Lösungen werden in folgenden Formaten angegeben:\n"
 "\n"
-"R1 + R2 + ... + Rn\tWiderstände in Reihe\n"
-"R1 | R2 | ... | Rn\tWiderstände parallel\n"
-"R1 + (R2 | R3) ...\t\teine beliebige Kombination der oben genannten\n"
+"R1 + R2 +...+ Rn\tWiderstände in Reihe\n"
+"R1 | R2 |...| Rn\tWiderstände parallel\n"
+"R1 + (R2|R3)...\t\teine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:249
 msgid "Write Data Failed"
@@ -19592,7 +19591,6 @@ msgid "Incorrect value for R1 R2"
 msgstr "Inkorrekte Werte für R1 R2"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -19622,20 +19620,19 @@ msgstr ""
 "berechnet der fließen darf. Der Wert für den andere Leiterbahnparameter, der "
 "ebenfalls zum Erreichen dieses Stromwertes notwendig ist, wird ebenfalls "
 "berechnet.\n"
-"\\ n\n"
+"\n"
 "Der erste vorgegebene Wert ist fett dargestellt.\n"
-"\\ n\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 ° C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
-"\\ n\n"
+"\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 ° C und Breiten von bis zu 400 mil (10 mm).\n"
+"\n"
 "Die zugehörige Formel aus IPC 2221 ist\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
-"Wobei:  \n"
+"<center>__I = K * dT<sup>0,44</sup> * (W*H)<sup>0,725</sup>__</center>\n"
+"wobei:  \n"
 "__I__ = Maximaler Strom in Ampere  \n"
 "__dt__ = Temperaturanstieg über die Umgebungstemperatur in ° C  \n"
 "__W,H__ = Breite und Dicke in mils  \n"
-"__K__ = 0.024 für interne Leiterzüge oder 0.048 für externe Leiterzüge\n"
+"__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterzüge\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:127 pcb_calculator/via.cpp:68
 msgid "Relative Dielectric Constants"
@@ -19658,13 +19655,12 @@ msgid "Dielectric loss (dissipation factor)"
 msgstr "Dielektrischer Verlust (Verlustfaktor)"
 
 #: pcb_calculator/transline_ident.cpp:131
-#, fuzzy
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
 msgstr ""
 "Elektrischer Widerstand oder spezifischer elektrischer Widerstand des "
-"Leiters (Ω/m)"
+"Leiters (Ohm*Meter)"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Frequency of the input signal"
@@ -19737,9 +19733,8 @@ msgstr "Leiterbahndicke"
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:337
-#, fuzzy
 msgid "Roughness"
-msgstr "Rough"
+msgstr "Rauheit"
 
 #: pcb_calculator/transline_ident.cpp:160
 #: pcb_calculator/transline_ident.cpp:338
