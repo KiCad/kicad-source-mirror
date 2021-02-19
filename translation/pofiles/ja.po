@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 13:19+0000\n"
+"PO-Revision-Date: 2021-02-19 13:37+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -188,9 +188,9 @@ msgstr ""
 "サポートされていないOpenGLのバージョンです。最低限必要なバージョンは1.5です"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "レンダリング時間 %.3f s"
+msgstr "最後のレンダリング時間 %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -17277,7 +17277,7 @@ msgstr "グローバルとプロジェクトのシンボル ライブラリー �
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "プロジェクトの基板デザインを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
 #, fuzzy
@@ -17285,9 +17285,8 @@ msgid "Edit global and/or project PCB footprint libraries"
 msgstr "グローバルとプロジェクトのフットプリント ライブラリー リストを編集"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "ガーバー ファイルの閲覧"
+msgstr "ガーバーファイルを確認します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
