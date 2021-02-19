@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 11:35+0000\n"
+"PO-Revision-Date: 2021-02-19 12:31+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11158,7 +11158,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "PCB エディターで変更されたシンボルのリファレンスを更新します。"
+msgstr "PCBエディターで変更されたシンボルのリファレンスを更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11174,7 +11174,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "PCB エディターで置き換えられたシンボルの定数を更新します。"
+msgstr "PCBエディターで置き換えられたシンボルの定数を更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
@@ -11288,7 +11288,7 @@ msgstr "クロスプローブされたネットをハイライト表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "PCB エディターでハイライトされたトラックのネットをハイライト"
+msgstr "PCBエディターでハイライトされたトラックのネットをハイライト"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
@@ -15811,7 +15811,7 @@ msgstr "クリップボードに現在のシートにある線画をエクスポ
 
 #: eeschema/tools/ee_actions.cpp:608
 msgid "Switch to PCB Editor"
-msgstr "基板エディターに切替"
+msgstr "PCBエディターに切替"
 
 #: eeschema/tools/ee_actions.cpp:608
 msgid "Open PCB in board editor"
@@ -17688,9 +17688,8 @@ msgid "Edit schematic symbols"
 msgstr "回路図シンボルを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "PCB Editor"
-msgstr "パッド エディター"
+msgstr "PCBエディター"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
@@ -17702,14 +17701,12 @@ msgid "Edit PCB footprints"
 msgstr "PCB フットプリントを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
 msgstr "ガーバー ビューアー"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "ガーバー ファイルの閲覧"
+msgstr "ガーバー出力ファイルを確認します"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Image Converter"
@@ -18789,14 +18786,12 @@ msgid "Rough:"
 msgstr "導体荒さ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
-#, fuzzy
 msgid "Insulator mu:"
-msgstr "レギュレーター:"
+msgstr "絶縁体μ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
-#, fuzzy
 msgid "Conductor mu:"
-msgstr "導体長:"
+msgstr "導体μ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -19288,14 +19283,14 @@ msgstr ""
 "0,0025Ωから4000 kΩまで求める抵抗値を入力できます。\n"
 "\n"
 "最大4つまでの部品を使用する解が提供されます。\n"
-"デフォルトでは、要求する抵抗値は常に解答のセットから除外されます。\n"
+"デフォルトでは、求める抵抗値は常に解答のセットから除外されます。\n"
 "また、これらの部品の値が利用できない場合は、\n"
 "2つまで解から除外する値を追加で指定することも可能です。\n"
 "\n"
 "解は以下のフォーマットで与えられます。\n"
 "\n"
 "\tR1 + R2 + ... + Rn\t直列接続の抵抗\n"
-"\tR1 | R2 | ... | Rn\t\t並列接続の抵抗\n"
+"\tR1 | R2 | ... | Rn\t並列接続の抵抗\n"
 "\tR1 + (R2|R3)...\t\t上記の任意の組み合わせ\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:249
@@ -19411,9 +19406,8 @@ msgid "Substrate relative permittivity (dielectric constant)"
 msgstr "サブストレート比誘電率"
 
 #: pcb_calculator/transline_ident.cpp:125
-#, fuzzy
 msgid "Dielectric loss (dissipation factor)"
-msgstr "誘電損失"
+msgstr "誘電損失 (誘電正接)"
 
 #: pcb_calculator/transline_ident.cpp:131
 msgid ""
