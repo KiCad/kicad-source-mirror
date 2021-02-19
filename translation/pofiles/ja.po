@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 22:09+0000\n"
+"PO-Revision-Date: 2021-02-19 23:28+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -12132,9 +12132,7 @@ msgstr "このダイアログを再度表示しない。"
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr ""
-"このファイルは古いバージョンの Pcbnew で作成されています。次に保存する際に、"
-"新しいフォーマットで保存し直されます。"
+msgstr "このファイルは古いバージョンのKiCadで作成されています。保存する際に、新しいフォーマットに変換されます。"
 
 #: eeschema/files-io.cpp:563
 msgid "Schematic file is read only."
@@ -17373,9 +17371,8 @@ msgstr ""
 "は有効なKiCadプロジェクトファイルではないようです。"
 
 #: kicad/kicad_manager_frame.cpp:154
-#, fuzzy
 msgid "Project Files"
-msgstr "プロジェクト ファイルの保存"
+msgstr "プロジェクト ファイル"
 
 #: kicad/kicad_manager_frame.cpp:158
 msgid "Editors"
@@ -18878,9 +18875,8 @@ msgstr "めっき抵抗:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "電気抵抗計"
+msgstr "Ω•m"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
@@ -18970,9 +18966,8 @@ msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "熱伝導率＝ 401 (W/m K) を使用"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
-#, fuzzy
 msgid "deg C/W"
-msgstr "℃"
+msgstr "°C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
@@ -19480,7 +19475,6 @@ msgstr "銅箔厚"
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:337
-#, fuzzy
 msgid "Roughness"
 msgstr "表面荒さ"
 
@@ -23309,9 +23303,8 @@ msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr "(続けて配置するには、空白で区切られた複数のアイテムを指定)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "有効なパス:"
+msgstr "利用可能なフットプリント:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:240
