@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 07:38+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-02-19 07:46+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -12777,9 +12777,8 @@ msgid "flags"
 msgstr "σημαίες"
 
 #: eeschema/sch_component.cpp:1382
-#, fuzzy
 msgid "Missing parent"
-msgstr "Λείπει αποτύπωμα"
+msgstr "Λείπει γονέας??"
 
 #: eeschema/sch_component.cpp:1397
 msgid "Undefined!!!"
