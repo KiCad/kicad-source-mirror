@@ -1628,7 +1628,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     if( drawing->Type() == PCB_FP_SHAPE_T )
                     {
                         FP_SHAPE* shape = static_cast<FP_SHAPE*>( previewItem );
-                        shape->PCB_SHAPE::Move( (wxPoint) offset );
+                        wxPoint fp_offset = wxPoint( offset.Rotate( footprint->GetOrientationRadians() ) );
+                        shape->FP_SHAPE::Move( fp_offset );
                     }
                     else
                     {
