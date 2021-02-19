@@ -766,20 +766,28 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             m_sheetMap.at( bus.LayerID )->GetScreen()->Append( busEntry );
 
+            // Always add a label at bus terminals to ensure connectivity.
+            // If the original design does not have a label, just make it very small
+            // to keep connectivity but make the design look visually similar to
+            // the original.
+            SCH_LABEL* label = new SCH_LABEL();
+            label->SetText( netName );
+            label->SetPosition( getKiCadPoint( busTerm.SecondPoint ) );
+            label->SetVisible( true );
+
             if( busTerm.HasNetLabel )
             {
-                SCH_LABEL* label = new SCH_LABEL();
-                label->SetText( netName );
-                label->SetPosition( getKiCadPoint( busTerm.SecondPoint ) );
-                label->SetVisible( true );
 
                 applyTextSettings( busTerm.NetLabel.TextCodeID, busTerm.NetLabel.Alignment,
                                    busTerm.NetLabel.Justification, label );
-
-                netlabels.insert( { busTerm.ID, label } );
-
-                m_sheetMap.at( bus.LayerID )->GetScreen()->Append( label );
             }
+            else
+            {
+                label->SetTextSize( wxSize( 1000, 1000 ) );
+            }
+
+            netlabels.insert( { busTerm.ID, label } );
+            m_sheetMap.at( bus.LayerID )->GetScreen()->Append( label );
         }
 
 
