@@ -758,11 +758,11 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
             // Reset the cursor to the end of the track
             controls()->SetCursorPosition( m_endSnapPoint );
+
+            if( targetLayer == UNDEFINED_LAYER )    // cancelled by user
+                return 0;
         }
     }
-
-    if( targetLayer == UNDEFINED_LAYER )
-        return 0;
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
