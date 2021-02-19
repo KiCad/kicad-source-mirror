@@ -173,7 +173,7 @@ bool EE_SELECTION_TOOL::Init()
                 if( m_isSymbolEditor || m_isSymbolViewer )
                     return false;
 
-                return ( E_C::Empty( aSel ) || sheetSelection( aSel ) );
+                return E_C::LessThan( 2 )( aSel ) && E_C::OnlyType( SCH_SHEET_T )( aSel );
             };
 
     auto schEditCondition =
