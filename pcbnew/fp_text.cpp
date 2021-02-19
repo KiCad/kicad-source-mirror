@@ -457,5 +457,8 @@ static struct FP_TEXT_DESC
         propMgr.AddTypeCast( new TYPE_CAST<FP_TEXT, EDA_TEXT> );
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( FP_TEXT ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.AddProperty( new PROPERTY<FP_TEXT, wxString>( _HKI( "Parent" ),
+                    NO_SETTER( FP_TEXT, wxString ), &FP_TEXT::GetParentAsString ) );
     }
 } _FP_TEXT_DESC;

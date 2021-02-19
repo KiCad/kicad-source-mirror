@@ -1510,6 +1510,9 @@ static struct PAD_DESC
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Local Clearance" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Parent" ),
+                    NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ) );
+
         // TODO delta, dirill shape offset, layerset, zone connection
     }
 } _PAD_DESC;

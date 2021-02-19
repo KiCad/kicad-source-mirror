@@ -143,6 +143,8 @@ public:
         return wxT( "MGRAPHIC" );
     }
 
+    wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;

@@ -78,6 +78,8 @@ public:
         return false;
     }
 
+    wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
+
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );

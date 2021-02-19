@@ -107,6 +107,8 @@ public:
 
     FOOTPRINT* GetParent() const;
 
+    wxString GetParentAsString() const { return m_parent->m_Uuid.AsString(); }
+
     bool IsLocked() const override;
 
     /**
