@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-19 07:46+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -3140,7 +3140,6 @@ msgstr "Εισαγωγή Αρχείου Συντομεύσεων:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
-#, fuzzy
 msgid "Cmd"
 msgstr "Cmd"
 
@@ -3209,9 +3208,8 @@ msgid "Left button drag:"
 msgstr "Σύρσιμο αριστερού κουμπιού:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Σχεδιάστε ορθογώνιο"
+msgstr "Σχεδιάστε ορθογώνιο επιλογής"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
@@ -3219,9 +3217,8 @@ msgstr ""
 "Σύρσιμο επιλεγμένων αντικειμένων. Αλλιώς, σχεδιάστε ένα ορθογώνιο επιλογής"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Σύρσιμο επιλεγμένων αντικειμένων"
+msgstr "Σύρσιμο οποιουδήποτε αντικείμενο (επιλεγμένου ή μη)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3264,9 +3261,8 @@ msgid "Right button drag:"
 msgstr "Σύρσιμο δεξιού κουμπιού:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Χειρονομίες"
+msgstr "Χειρονομίες Κύλισης"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -3306,11 +3302,8 @@ msgid "Pan left/right:"
 msgstr "Μετακίνηση αριστερά/δεξιά:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr ""
-"Μετακινήστε αριστερά / δεξιά με οριζόντια επιφάνεια αφής ή κίνηση τροχού "
-"κύλισης"
+msgstr "Μετακινήστε αριστερά/δεξιά με οριζόντια κίνηση"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:244
 msgid ""
