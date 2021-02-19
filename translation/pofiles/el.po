@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-20 14:54+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -2372,7 +2372,7 @@ msgstr "Κατακόρυφος"
 #: common/dialogs/dialog_page_settings.cpp:463
 #, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr "Δεν βρέθηκε το αρχείο περιγραφής σχεδίασης σελίδας \"%s\"."
+msgstr "Δεν βρέθηκε το αρχείο περιγραφής σχεδίασης «%s»."
 
 #: common/dialogs/dialog_page_settings.cpp:535
 msgid "the translation for paper size must preserve original spellings"
@@ -3359,7 +3359,7 @@ msgstr "Ελάχιστο πλάτος δρόμου"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 msgid "Via pad diameter"
-msgstr "Διάμετρος έδρας via"
+msgstr "Διάμετρος pad via"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Via plated hole diameter"
@@ -12017,11 +12017,8 @@ msgid "Pin not connected"
 msgstr "Pin μη συνδεδεμένο"
 
 #: eeschema/erc_item.cpp:54
-#, fuzzy
 msgid "Input pin not driven by any Output pins"
-msgstr ""
-"Ο ακροδέκτης έχει συνδεθεί σε άλλους ακροδέκτες αλλά δεν υπάρχει ακροδέκτης "
-"να τον οδηγήσει"
+msgstr "Το pin Εισόδου δεν οδηγείται από κανένα pin Εξόδου"
 
 #: eeschema/erc_item.cpp:58
 #, fuzzy
@@ -12769,7 +12766,7 @@ msgstr "σημαίες"
 
 #: eeschema/sch_component.cpp:1382
 msgid "Missing parent"
-msgstr "Λείπει γονέας??"
+msgstr "Λείπει γονική σύνδεση"
 
 #: eeschema/sch_component.cpp:1397
 msgid "Undefined!!!"
@@ -12919,9 +12916,9 @@ msgid "Vertical Bus, length %s"
 msgstr "Κατακόρυφος Δίαυλος, μήκος %s"
 
 #: eeschema/sch_line.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "Γραφικό Pcb %s, μήκος %s στο %s"
+msgstr "Κάθετη Γραφική Γραμμή, μήκος %s"
 
 #: eeschema/sch_line.cpp:708
 #, c-format
@@ -12934,9 +12931,9 @@ msgid "Horizontal Bus, length %s"
 msgstr "Οριζόντιος Δίαυλος, μήκος %s"
 
 #: eeschema/sch_line.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "Γραφικό Pcb %s, μήκος %s στο %s"
+msgstr "Οριζόντια Γραφική Γραμμή, μήκος %s"
 
 #: eeschema/sch_line.cpp:717
 #, c-format
@@ -12949,9 +12946,9 @@ msgid "Bus, length %s"
 msgstr "Δίαυλος, μήκος %s"
 
 #: eeschema/sch_line.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Line, length %s"
-msgstr "Γραφικό Pcb %s, μήκος %s στο %s"
+msgstr "Γραφική Γραμμή, μήκος %s"
 
 #: eeschema/sch_line.cpp:862
 msgid "Graphical"
@@ -12962,9 +12959,8 @@ msgid "Line Type"
 msgstr "Τύπος Γραμμής"
 
 #: eeschema/sch_line.cpp:868
-#, fuzzy
 msgid "from netclass"
-msgstr "Ανά Κλάση Δικτύου"
+msgstr "από το netclass"
 
 #: eeschema/sch_line.cpp:889 eeschema/sch_text.cpp:711
 #, fuzzy
@@ -13109,7 +13105,7 @@ msgstr ""
 "δεν βρέθηκε στη βιβλιοθήκη Εξαγάγατε όλα τα στοιχεία του σχεδίου;"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
@@ -13233,119 +13229,119 @@ msgid "Bus Entry needed"
 msgstr "Απαιτείται Καταχώριση Διαύλου"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο όνομα συμβόλου στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid library identifier in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο αναγνωριστικό βιβλιοθήκης στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol extends name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο όνομα επεκτάσεων συμβόλου στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No parent for extended symbol %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Δεν υπάρχει γονική σύνδεση για το επεκταμένο σύμβολο %s στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol unit name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο όνομα μονάδας συμβόλου στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol unit name prefix %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας αποτυπώματος στο\n"
-"αρχείο: <%s>\n"
+"Μη έγκυρο πρόθημα ονόματος μονάδας συμβόλου %s σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol unit name suffix %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο επίθημα ονόματος μονάδας συμβόλου %s σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol unit number %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
+"Μη έγκυρος αριθμός μονάδας συμβόλου %s σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid symbol convert number %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
+"Μη έγκυρος αριθμός μετατροπής συμβόλου %s σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
@@ -13446,41 +13442,41 @@ msgstr ""
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1213
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Μη έγκυρος αριθμός ταυτότητας δικτύου στο\n"
-"αρχείο: \"%s\"\n"
+"Μη έγκυρο όνομα pin στο\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid pin number in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
+"Μη έγκυρος αριθμός pin σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid alternate pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
+"Μη έγκυρο εναλλακτικό όνομα pin σε\n"
+"αρχείο: «%s»\n"
 "γραμμή: %d\n"
 "θέση: %d"
 
@@ -13663,9 +13659,9 @@ msgstr ""
 "βιβλιοθήκη προσωρινής μνήμης.  Αδύνατη η σύνδεση του συμβόλου βιβλιοθήκης."
 
 #: eeschema/sch_screen.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "Σφάλμα αποθήκευσης βιβλιοθήκης"
+msgstr "Σφάλμα I/O %s επίλυση συμβόλου βιβλιοθήκης %s"
 
 #: eeschema/sch_screen.cpp:673
 #, c-format
@@ -15089,9 +15085,9 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Αλλαγή τιμής %s από %s σε %s."
 
 #: eeschema/tools/backannotate.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Αδυναμία ανοίγματος αρχείου λίστας δικτύων \"%s\"."
+msgstr "Δε βρέθηκε %s ακίδα «%s»."
 
 #: eeschema/tools/backannotate.cpp:531
 #, c-format
@@ -15888,9 +15884,8 @@ msgid "Show Hidden Pins"
 msgstr "Προβολή Κρυφών Ακροδεκτών"
 
 #: eeschema/tools/ee_actions.cpp:628
-#, fuzzy
 msgid "Toggle display of hidden pins"
-msgstr "Αλλαγή σε προβολή σταυρού που πιάνει όλο το παράθυρο"
+msgstr "Εναλλαγή εμφάνισης κρυφών pin"
 
 #: eeschema/tools/ee_actions.cpp:633
 msgid "Show Hidden Fields"
@@ -16038,22 +16033,23 @@ msgid "Symbol Warnings"
 msgstr "Προειδοποιήσεις Συμβόλου"
 
 #: eeschema/tools/ee_inspection_tool.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Διπλός ακροδέκτης %s</b> \"%s\" στη θέση <b>(%.3f, %.3f)</b> που "
-"συγκρούεται με τον ακροδέκτη %s \"%s\" στη θέση <b>(%.3f, %.3f)</b>"
+"<b>Διπλότυπο pin %s</b> %s στην τοποθεσία <b>(%.3f, %.3f)</b> συγκρούεται με "
+"το pin %s%s στην τοποθεσία <b>(%.3f, %.3f)</b> μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>Διπλός ακροδέκτης %s</b> \"%s\" στη θέση <b>(%.3f, %.3f)</b> που "
-"συγκρούεται με τον ακροδέκτη %s \"%s\" στη θέση <b>(%.3f, %.3f)</b>"
+"<b>Διπλότυπο pin %s</b> %s στην τοποθεσία <b>(%.3f, %.3f)</b> συγκρούεται με "
+"το pin %s%s στην τοποθεσία <b>(%.3f, %.3f)</b> στις ενότητες %c και %c "
+"μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:258
 #, c-format
@@ -16111,20 +16107,20 @@ msgstr ""
 "συνδεδεμένα nets.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Ο ακροδέκτης %s είναι εκτός πλέγματος</b> \"%s\" στη θέση <b>(%.3f, "
-"%.3f)</b>"
+"<b>Το pin %s είναι εκτός πλέγματος</b> %s στην τοποθεσία <b>(%.3f, %.3f)</b> "
+"μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Ο ακροδέκτης %s είναι εκτός πλέγματος</b> \"%s\" στη θέση <b>(%.3f, "
-"%.3f)</b>"
+"<b>Το pin %s είναι εκτός πλέγματος</b> %s στην τοποθεσία <b>(%.3f, %.3f)</b> "
+"στην ενότητα %c μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
 #, c-format
@@ -18593,7 +18589,7 @@ msgstr "R1:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
 msgid "kOhm"
-msgstr ""
+msgstr "kOhm"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:111
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:363
@@ -18705,7 +18701,7 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 #, fuzzy
@@ -24264,7 +24260,7 @@ msgstr "Το %s δεν μπορεί να είναι κενό."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1928
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Το δίκτυο «%s» χρησιμοποιείται. Διαγραφή ούτως ή άλλως;"
+msgstr "Το net «%s» χρησιμοποιείται. Διαγραφή ούτως ή άλλως;"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1945
 #, c-format
@@ -24309,9 +24305,8 @@ msgstr "Δημιουργία Αναφοράς..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:736
-#, fuzzy
 msgid "Net Inspector"
-msgstr "Επ&ιθεώρηση"
+msgstr "Επιθεωρητής Net"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:87
 msgid "Rebuild Ratsnest"
@@ -28464,12 +28459,12 @@ msgstr "Έλεγχος μεταβλητών κειμένου..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:104
 msgid "Checking silkscreen for overlapping items..."
-msgstr ""
+msgstr "Έλεγχος μεταξοτυπίας για επικάλυψη αντικειμένων ..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:211
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr ""
+msgstr "Δοκιμή %d χαρακτηριστικών μεταξοτυπίας έναντι %d στοιχείων πλακέτας."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
@@ -29703,7 +29698,7 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:401
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "Αποσύνδεση %s ακροδέκτη %s."
+msgstr "Αποσύνδεση %s pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:409
 #, fuzzy, c-format
@@ -29718,12 +29713,12 @@ msgstr "Προσθήκη δικτύου %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:467
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
-msgstr "Επανασύνδεση ακροδέκτη %s ακροδέκτης %s από %s σε %s."
+msgstr "Επανασύνδεση %s pin %s από %s σε %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:475
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Σύνδεση %s ακροδέκτης %s σε δίκτυο %s."
+msgstr "Σύνδεση %s pin %s σε %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:547
 #, c-format
@@ -29920,9 +29915,8 @@ msgid "Pin Name"
 msgstr "Όνομα Pin"
 
 #: pcbnew/pad.cpp:866 pcbnew/pad.cpp:1464
-#, fuzzy
 msgid "Pin Type"
-msgstr "Τύπος Πρόσθετου"
+msgstr "Τύπος Pin"
 
 #: pcbnew/pad.cpp:884
 msgid "BGA"
@@ -31060,7 +31054,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:337
 msgid "Internal group data structure corrupt"
-msgstr ""
+msgstr "Η δομή δεδομένων εσωτερικής ομάδας είναι κατεστραμμένη"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:339
 msgid "Save Anyway"
@@ -34625,9 +34619,8 @@ msgid "Locked items"
 msgstr "Κλειδωμένο : Ναι"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "Διαγραφή ξανά για να αφαιρεθούν τα κλειδωμένα στοιχεία"
+msgstr "Να επιτρέπεται η επιλογή κλειδωμένων στοιχείων"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
 #, fuzzy
@@ -34639,28 +34632,24 @@ msgid "Dimensions"
 msgstr "Διαστάσεις"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "Άλλες Σελίδες"
+msgstr "Άλλα Στοιχεία"
 
 #: pcbnew/zone.cpp:549
 msgid "Rule Area"
 msgstr "Περιοχή Κανόνων"
 
 #: pcbnew/zone.cpp:551
-#, fuzzy
 msgid "Copper Zone"
-msgstr "Μη χάλκινη ζώνη"
+msgstr "Χάλκινη ζώνη"
 
 #: pcbnew/zone.cpp:553
-#, fuzzy
 msgid "Non-copper Zone"
 msgstr "Μη χάλκινη ζώνη"
 
 #: pcbnew/zone.cpp:558
-#, fuzzy
 msgid "Cutout"
-msgstr "(Αποκοπή)"
+msgstr "Αποκοπή"
 
 #: pcbnew/zone.cpp:567
 msgid "No vias"
@@ -34727,9 +34716,9 @@ msgid "Zone Cutout on %s"
 msgstr "Ζώνη (%08lX) [%s] στο %s"
 
 #: pcbnew/zone.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area on %s"
-msgstr "Περιοχή Κανόνων"
+msgstr "Περιοχή Κανόνων σε %s"
 
 #: pcbnew/zone.cpp:881
 #, c-format
@@ -34741,9 +34730,8 @@ msgid "Inherited"
 msgstr "Κληρονομημένο"
 
 #: pcbnew/zone.cpp:1412
-#, fuzzy
 msgid "Min Width"
-msgstr "Πλάτος Γραμμής"
+msgstr "Ελάχιστο Πλάτος"
 
 #: pcbnew/zone.cpp:1415
 msgid "Pad Connections"
@@ -34807,19 +34795,16 @@ msgstr ""
 "και τη Διάταξη PCB με έξοδο Gerber."
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
-#, fuzzy
 msgid "Eeschema Schematic Editor"
-msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
+msgstr "Eeschema Επεξεργαστής Σχηματικού"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
-#, fuzzy
 msgid "PcbNew PCB Layout"
-msgstr "Επεξεργασία Σχεδίασης PCB"
+msgstr "PcbNew Διάταξη PCB"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:59
-#, fuzzy
 msgid "PcbNew 3D Viewer"
-msgstr "3Δ Προβολή"
+msgstr "PcbNew Πρόγραμμα Τρισδιάστατης Προβολής"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:71
 msgid "The KiCad Developers"
