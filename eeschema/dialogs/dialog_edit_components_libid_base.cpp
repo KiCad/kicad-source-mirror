@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Feb 16 2021)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,10 +33,10 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	m_grid->SetColSize( 2, 280 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Symbols") );
 	m_grid->SetColLabelValue( 1, _("Current Library Reference") );
 	m_grid->SetColLabelValue( 2, _("New Library Reference") );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -61,7 +61,8 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	bSizerButtons->Add( m_buttonOrphanItems, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_checkBoxUpdateFields = new wxCheckBox( this, wxID_ANY, _("Update symbol fields from new library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxUpdateFields->SetValue(true);
+	m_checkBoxUpdateFields->SetToolTip( _("Replace current symbole fields by fields from the new lobrary.\nWarning: fields \"Value\" and \"Footprints\" will be therefore replaced.") );
+
 	bSizerButtons->Add( m_checkBoxUpdateFields, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
