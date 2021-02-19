@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 13:37+0000\n"
+"PO-Revision-Date: 2021-02-19 22:09+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -190,7 +190,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "最後のレンダリング時間 %.0f ms"
+msgstr "最終レンダリング時間 %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -17695,9 +17695,8 @@ msgid "Edit PCB"
 msgstr "PCB を編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "PCB フットプリントを編集"
+msgstr "基板のフットプリントを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Gerber Viewer"
@@ -17717,7 +17716,7 @@ msgstr "ビットマップ イメージを回路図または PCB のコンポー
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Calculator Tools"
-msgstr "計算用ツール"
+msgstr "計算機ツール"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Run component calculations, track width calculations, etc."
