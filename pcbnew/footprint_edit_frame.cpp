@@ -737,7 +737,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     m_treePane->GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( "*" ) )
-        UpdateTitle();
+        updateTitle();
 }
 
 
