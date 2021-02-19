@@ -62,15 +62,6 @@ SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
 SELECTION_CONDITION operator&&( SELECTION_BOOL aConditionA,
                                 const SELECTION_CONDITION& aConditionB );
 
-// We don't use uninitialized SELECTION_CONDITIONs, so casting to bool is probably
-// a programming error.
-template<> SELECTION_CONDITION::operator bool() const noexcept
-{
-    wxASSERT( "Incorrect use of SELECTION_CONDITION" );
-    return false;
-};
-
-
 /**
  * Class that groups generic conditions for selected items.
  */
