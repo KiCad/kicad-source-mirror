@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-18 22:26+0000\n"
+"PO-Revision-Date: 2021-02-19 10:59+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -8563,9 +8563,8 @@ msgstr "ネットでアイテムをフィルター:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "選択したアイテムを反転"
+msgstr "選択されたアイテムのみ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -19418,7 +19417,6 @@ msgid "Dielectric loss (dissipation factor)"
 msgstr "誘電損失"
 
 #: pcb_calculator/transline_ident.cpp:131
-#, fuzzy
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
@@ -19435,9 +19433,9 @@ msgstr "入力信号の周波数"
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:366
 #: pcb_calculator/transline_ident.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "予期される %s"
+msgstr "実効 %s:"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -25859,7 +25857,6 @@ msgid "Track & Via Properties"
 msgstr "配線とビアのプロパティ"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
 msgstr "ビアのドリル サイズはビアの直径より小さくなければなりません"
 
@@ -31290,21 +31287,15 @@ msgid "Show board setup"
 msgstr "基板セットアップを表示"
 
 #: pcbnew/router/router_tool.cpp:786
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr ""
-"ブラインド/ベリード ビアは、基板セットアップ > デザイン ルール > 制約 で有効"
-"にしなければなりません。"
+msgstr "ブラインド/ベリード ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:807
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr ""
-"マイクロ ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければ"
-"なりません。"
+msgstr "マイクロ ビアは、基板セットアップ > デザイン ルール > 制約 で有効にしなければなりません。"
 
 #: pcbnew/router/router_tool.cpp:816
 msgid "Only through vias are allowed on 2 layer boards."
