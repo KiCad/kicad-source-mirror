@@ -261,6 +261,7 @@ bool SCH_EDIT_TOOL::Init()
     auto singleSymbolCondition = E_C::Count( 1 ) && E_C::OnlyType( SCH_COMPONENT_T );
 
     auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
+
     //
     // Add edit actions to the move tool menu
     //
@@ -1798,7 +1799,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     msg.Printf( _( "Enter page number for sheet path%s" ),
                 ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
 
-    wxTextEntryDialog dlg( m_frame, msg, _( "Edit Page Number" ), pageNumber );
+    wxTextEntryDialog dlg( m_frame, msg, _( "Edit Sheet Page Number" ), pageNumber );
 
     dlg.SetTextValidator( wxFILTER_ALPHANUMERIC );  // No white space.
 

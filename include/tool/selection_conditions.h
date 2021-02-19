@@ -41,7 +41,6 @@ SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
 SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                 const SELECTION_CONDITION& aConditionB );
 
-SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition );
 
 
 /// Signature for a reference to a function that takes a SELECTION and returns

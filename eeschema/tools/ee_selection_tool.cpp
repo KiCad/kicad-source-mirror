@@ -168,11 +168,12 @@ bool EE_SELECTION_TOOL::Init()
     auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
 
     auto schEditSheetPageNumberCondition =
-            [this] ( const SELECTION& aSel )
+            [&] ( const SELECTION& aSel )
             {
-                return !m_isSymbolEditor
-                        && !m_isSymbolViewer
-                        && ( E_C::Empty || ( E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T ) ) );
+                if( m_isSymbolEditor || m_isSymbolViewer )
+                    return false;
+
+                return ( E_C::Empty( aSel ) || sheetSelection( aSel ) );
             };
 
     auto schEditCondition =

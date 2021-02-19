@@ -37,7 +37,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <eda_doc.h>
-#include <invoke_sch_dialog.h>
+#include <sch_marker.h>
 #include <project.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
 #include <dialogs/dialog_erc.h>
@@ -61,6 +61,8 @@ bool EE_INSPECTION_TOOL::Init()
     // Add inspection actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
+
+    selToolMenu.AddItem( EE_ACTIONS::excludeMarker, singleMarkerCondition, 100 );
 
     selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
 
@@ -154,7 +156,25 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
     if( m_ercDialog )
+    {
+        // Let the ERC dialog handle it since it has more update hassles to worry about
         m_ercDialog->ExcludeMarker();
+    }
+    else
+    {
+        EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->GetSelection();
+
+        if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( selection.Front() );
+
+            marker->SetExcluded( true );
+            m_frame->GetCanvas()->GetView()->Update( marker );
+            m_frame->GetCanvas()->Refresh();
+            m_frame->OnModify();
+        }
+    }
 
     return 0;
 }

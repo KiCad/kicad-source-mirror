@@ -577,7 +577,7 @@ TOOL_ACTION EE_ACTIONS::schematicSetup( "eeschema.EditorControl.schematicSetup",
 
 TOOL_ACTION EE_ACTIONS::editPageNumber( "eeschema.EditorControl.editPageNumber",
         AS_GLOBAL, 0, "",
-        _( "Edit Page Number..." ),
+        _( "Edit Sheet Page Number..." ),
         _( "Edit the page number of the current or selected sheet" ),
         nullptr );
 
