@@ -284,7 +284,7 @@
                                 <property name="style"></property>
                                 <property name="subclass">; ; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Replace current symbole fields by fields from the new lobrary.&#x0A;Warning: fields &quot;Value&quot; and &quot;Footprints&quot; will be therefore replaced.</property>
+                                <property name="tooltip">Replace current symbols fields by fields from the new library.&#x0A;Warning: fields &quot;Value&quot; and &quot;Footprints&quot; will be therefore replaced.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>

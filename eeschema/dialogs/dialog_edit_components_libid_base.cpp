@@ -61,7 +61,7 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	bSizerButtons->Add( m_buttonOrphanItems, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_checkBoxUpdateFields = new wxCheckBox( this, wxID_ANY, _("Update symbol fields from new library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxUpdateFields->SetToolTip( _("Replace current symbole fields by fields from the new lobrary.\nWarning: fields \"Value\" and \"Footprints\" will be therefore replaced.") );
+	m_checkBoxUpdateFields->SetToolTip( _("Replace current symbols fields by fields from the new library.\nWarning: fields \"Value\" and \"Footprints\" will be therefore replaced.") );
 
 	bSizerButtons->Add( m_checkBoxUpdateFields, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
