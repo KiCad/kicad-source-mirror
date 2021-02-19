@@ -716,13 +716,6 @@ bool SCH_EDIT_FRAME::SaveProject()
     wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
     wxFileName  fn = fileName;
 
-    if( fn.IsOk() && !fn.IsDirWritable() )
-    {
-        msg = wxString::Format( _( "Directory \"%s\" is not writable." ), fn.GetPath() );
-        DisplayError( this, msg );
-        return false;
-    }
-
     // Warn user on potential file overwrite.  This can happen on shared sheets.
     wxArrayString overwrittenFiles;
 
@@ -749,7 +742,7 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     if( !overwrittenFiles.IsEmpty() )
     {
-        for( auto overwrittenFile : overwrittenFiles )
+        for( const wxString& overwrittenFile : overwrittenFiles )
         {
             if( msg.IsEmpty() )
                 msg = overwrittenFile;
@@ -757,15 +750,12 @@ bool SCH_EDIT_FRAME::SaveProject()
                 msg += "\n" + overwrittenFile;
         }
 
-        wxRichMessageDialog dlg(
-                this,
-                _( "Saving the project to the new file format will overwrite existing files." ),
-                _( "Project Save Warning" ),
-                wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_EXCLAMATION );
-        dlg.ShowDetailedText( wxString::Format(
-                              _( "The following files will be overwritten:\n\n%s" ), msg ) );
+        wxRichMessageDialog dlg( this, _( "Saving will overwrite existing files." ),
+                                 _( "Save Warning" ),
+                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_EXCLAMATION );
+        dlg.ShowDetailedText( _( "The following files will be overwritten:\n\n" ) + msg );
         dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Overwrite Files" ) ),
-                wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
+                               wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
