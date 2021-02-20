@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 02:02+0000\n"
+"PO-Revision-Date: 2021-02-20 02:05+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -17691,7 +17691,7 @@ msgstr "基板のフットプリントを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Gerber Viewer"
-msgstr "ガーバービューアー"
+msgstr "ガーバー ビューアー"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
 msgid "Preview Gerber output files"
@@ -17699,7 +17699,7 @@ msgstr "ガーバー出力ファイルを確認します"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Image Converter"
-msgstr "イメージコンバーター"
+msgstr "イメージ コンバーター"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -17715,7 +17715,7 @@ msgstr "コンポーネントの計算、トラック幅の計算などを実行
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Worksheet Editor"
-msgstr "ワークシートエディター"
+msgstr "ワークシート エディター"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit worksheet graphics and text"
@@ -28892,7 +28892,7 @@ msgstr "グラフィックスをインポート (&I)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:74
 msgid "Import 2D Drawing file to Footprint Editor on Drawings layer"
-msgstr "線画レイヤー上のフットプリントエディターへ 2D 図面ファイルをインポートします"
+msgstr "線画レイヤー上のフットプリント エディターへ 2D 図面ファイルをインポートします"
 
 #: pcbnew/menubar_footprint_editor.cpp:85
 msgid "Export View as &PNG..."
@@ -32138,11 +32138,11 @@ msgstr "デザイン ルール チェッカー ウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Open in Footprint Editor"
-msgstr "フットプリントエディターで開く"
+msgstr "フットプリント エディターで開く"
 
 #: pcbnew/tools/pcb_actions.cpp:234
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr "フットプリントエディターで選択したフットプリントを開きます"
+msgstr "フットプリント エディターで選択したフットプリントを開きます"
 
 #: pcbnew/tools/pcb_actions.cpp:241
 msgid ""
