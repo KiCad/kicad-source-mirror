@@ -380,7 +380,7 @@ public:
         return bbox;
     }
 
-    void GenerateBBoxCache()
+    void GenerateBBoxCache() const
     {
         m_bbox.Compute( m_points );
 
@@ -787,7 +787,7 @@ private:
     int m_width;
 
     /// cached bounding box
-    BOX2I m_bbox;
+    mutable BOX2I m_bbox;
 };
 
 

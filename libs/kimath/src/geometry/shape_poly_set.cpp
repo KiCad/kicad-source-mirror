@@ -1525,14 +1525,14 @@ bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
 }
 
 
-void SHAPE_POLY_SET::BuildBBoxCaches()
+void SHAPE_POLY_SET::BuildBBoxCaches() const
 {
     for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        Outline( polygonIdx ).GenerateBBoxCache();
+        COutline( polygonIdx ).GenerateBBoxCache();
 
         for( int holeIdx = 0; holeIdx < HoleCount( polygonIdx ); holeIdx++ )
-            Hole( polygonIdx, holeIdx ).GenerateBBoxCache();
+            CHole( polygonIdx, holeIdx ).GenerateBBoxCache();
     }
 }
 

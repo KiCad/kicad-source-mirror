@@ -673,8 +673,8 @@ public:
      *
      * @return the courtyard polygon.
      */
-    SHAPE_POLY_SET& GetPolyCourtyardFront() { return m_poly_courtyard_front; }
-    SHAPE_POLY_SET& GetPolyCourtyardBack() { return m_poly_courtyard_back; }
+    const SHAPE_POLY_SET& GetPolyCourtyardFront() const { return m_poly_courtyard_front; }
+    const SHAPE_POLY_SET& GetPolyCourtyardBack() const { return m_poly_courtyard_back; }
 
     /**
      * Build complex polygons of the courtyard areas from graphic items on the courtyard layers.

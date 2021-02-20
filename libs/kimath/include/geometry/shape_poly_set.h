@@ -1141,7 +1141,7 @@ public:
      * @note These caches **must** be built before a group of calls to Contains().  They are
      *       **not** kept up-to-date by editing actions.
      */
-    void BuildBBoxCaches();
+    void BuildBBoxCaches() const;
 
     const BOX2I BBoxFromCaches() const;
 

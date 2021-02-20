@@ -32,6 +32,7 @@
 #include <drc/drc_rule_condition.h>
 #include <drc/drc_test_provider.h>
 #include <track.h>
+#include <footprint.h>
 #include <geometry/shape.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_null.h>
@@ -867,7 +868,20 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintId, const BOAR
                         return false;
                     }
 
-                    if( !( c->layerTest & a->GetLayerSet() ).any() )
+                    LSET itemLayers = a->GetLayerSet();
+
+                    if( a->Type() == PCB_FOOTPRINT_T )
+                    {
+                        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( a );
+
+                        if( !footprint->GetPolyCourtyardFront().IsEmpty() )
+                            itemLayers |= LSET::FrontMask();
+
+                        if( !footprint->GetPolyCourtyardBack().IsEmpty() )
+                            itemLayers |= LSET::BackMask();
+                    }
+
+                    if( !( c->layerTest & itemLayers ).any() )
                     {
                         if( implicit )
                         {
