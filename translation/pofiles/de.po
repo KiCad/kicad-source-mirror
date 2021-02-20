@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-20 07:55+0000\n"
-"Last-Translator: Dominik Wernberger <dominik.wernberger@gmx.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19979,11 +19979,11 @@ msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
-msgstr "Ω"
+msgstr "Ω"
 
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kΩ"
-msgstr "kΩ"
+msgstr "kΩ"
 
 #: pcbnew/array_creator.cpp:188
 msgid "Create an array"
