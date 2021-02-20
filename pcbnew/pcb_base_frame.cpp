@@ -194,7 +194,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
     {
         lastItem = GetBoard()->GetItem( lastBrightenedItemID );
     }
-    catch( const boost::uuids::entropy_error& e )
+    catch( const boost::uuids::entropy_error& )
     {
         wxLogError( "A Boost UUID entropy exception was thrown in %s:%s.", __FILE__, __FUNCTION__ );
     }

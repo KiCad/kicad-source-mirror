@@ -2119,7 +2119,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                         m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
                 }
             }
-            catch( PARSE_ERROR& pe )
+            catch( PARSE_ERROR& )
             {
             }
         }

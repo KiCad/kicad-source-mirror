@@ -224,7 +224,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PC
     {
         drcEngine.InitEngine( m_frame->GetDesignRulesPath() );
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         r->Report( "" );
         r->Report( _( "Report incomplete: could not compile custom design rules.  " )
@@ -490,7 +490,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     {
         drcEngine.InitEngine( m_frame->GetDesignRulesPath() );
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         compileError = true;
     }
