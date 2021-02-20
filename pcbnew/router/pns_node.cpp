@@ -862,7 +862,7 @@ void NODE::Remove( LINE& aLine )
 }
 
 
-void NODE::followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int aLimit,
+void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, int aLimit,
                        VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
                        bool& aGuardHit, bool aStopAtLockedJoints )
 {
