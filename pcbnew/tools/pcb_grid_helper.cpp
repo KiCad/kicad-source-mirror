@@ -343,7 +343,6 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
 void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom )
 {
-    VECTOR2I                      origin;
     KIGFX::VIEW*                  view = m_toolMgr->GetView();
     RENDER_SETTINGS*              settings = view->GetPainter()->GetSettings();
     const std::set<unsigned int>& activeLayers = settings->GetHighContrastLayers();
@@ -534,11 +533,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 }
 
                 case S_ARC:
-                    origin = shape->GetCenter();
                     addAnchor( shape->GetArcStart(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetArcEnd(), CORNER | SNAPPABLE, shape );
                     addAnchor( shape->GetArcMid(), CORNER | SNAPPABLE, shape );
-                    addAnchor( origin, ORIGIN | SNAPPABLE, shape );
+                    addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape );
                     break;
 
                 case S_RECT:
@@ -562,12 +560,9 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                 }
 
                 case S_SEGMENT:
-                    origin.x = start.x + ( start.x - end.x ) / 2;
-                    origin.y = start.y + ( start.y - end.y ) / 2;
                     addAnchor( start, CORNER | SNAPPABLE, shape );
                     addAnchor( end, CORNER | SNAPPABLE, shape );
-                    addAnchor( SEG( start, end ).Center(), CORNER | SNAPPABLE, shape );
-                    addAnchor( origin, ORIGIN, shape );
+                    addAnchor( shape->GetCenter(), CORNER | SNAPPABLE, shape );
                     break;
 
                 case S_POLYGON:
@@ -582,8 +577,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     KI_FALLTHROUGH;
 
                 default:
-                    origin = shape->GetStart();
-                    addAnchor( origin, ORIGIN | SNAPPABLE, shape );
+                    addAnchor( shape->GetStart(), ORIGIN | SNAPPABLE, shape );
                     break;
             }
             break;
@@ -595,13 +589,10 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             if( aFrom || m_magneticSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 TRACK* track = static_cast<TRACK*>( aItem );
-                VECTOR2I start = track->GetStart();
-                VECTOR2I end = track->GetEnd();
-                origin.x = start.x + ( start.x - end.x ) / 2;
-                origin.y = start.y + ( start.y - end.y ) / 2;
-                addAnchor( start, CORNER | SNAPPABLE, track );
-                addAnchor( end, CORNER | SNAPPABLE, track );
-                addAnchor( origin, ORIGIN, track);
+
+                addAnchor( track->GetStart(), CORNER | SNAPPABLE, track );
+                addAnchor( track->GetEnd(), CORNER | SNAPPABLE, track );
+                addAnchor( track->GetCenter(), ORIGIN, track);
             }
 
             break;
