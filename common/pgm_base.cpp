@@ -766,6 +766,18 @@ void PGM_BASE::SetLanguagePath()
             wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
+
+	// Append path for macOS install
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.AppendDir( "internat" );
+
+        if( fn.IsDirReadable() )
+        {
+            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
+            wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
+        }
     }
 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
