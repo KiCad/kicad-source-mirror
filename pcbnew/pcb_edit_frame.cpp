@@ -1041,7 +1041,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     {
         drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         // Not sure this is the best place to tell the user their rules are buggy, so
         // we'll stay quiet for now.  Feel free to revisit this decision....
@@ -1644,7 +1644,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
         infobar->Hide();
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Edit design rules" ),
                                                        wxEmptyString );

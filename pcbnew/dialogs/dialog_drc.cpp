@@ -205,7 +205,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     {
         drcTool->GetDRCEngine()->InitEngine( m_brdEditor->GetDesignRulesPath() );
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
         m_DeleteCurrentMarkerButton->Enable( false );

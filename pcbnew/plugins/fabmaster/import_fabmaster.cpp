@@ -153,7 +153,7 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
     {
         row = rows.at( aOffset );
     }
-    catch( std::out_of_range& e )
+    catch( std::out_of_range& )
     {
         return UNKNOWN_EXTRACT;
     }

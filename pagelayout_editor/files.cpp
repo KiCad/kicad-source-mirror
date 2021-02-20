@@ -271,7 +271,7 @@ bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
         {
             WS_DATA_MODEL::GetTheInstance().Save( tempFile.GetFullPath() );
         }
-        catch( const IO_ERROR& ioe )
+        catch( const IO_ERROR& )
         {
             // In case we started a file but didn't fully write it, clean up
             wxRemoveFile( tempFile.GetFullPath() );

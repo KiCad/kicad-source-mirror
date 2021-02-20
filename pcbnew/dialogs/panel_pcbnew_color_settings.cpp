@@ -504,7 +504,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     {
         pi.DoLoad( reader, m_preview->GetBoard(), nullptr );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return;
     }

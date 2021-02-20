@@ -442,7 +442,7 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
             return true;
         }
     }
-    catch( PARSE_ERROR& pe )
+    catch( PARSE_ERROR& )
     {
         // Don't lock them in to the Setup dialog if they have bad rules.  They've already
         // saved them so we can allow an exit.
