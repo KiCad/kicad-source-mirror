@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 01:56+0000\n"
+"PO-Revision-Date: 2021-02-20 01:58+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5899,7 +5899,7 @@ msgstr "フットプリント ライブラリーを参照"
 #: pcbnew/footprint_edit_frame.cpp:118 pcbnew/footprint_edit_frame.cpp:780
 #: pcbnew/footprint_edit_frame.cpp:907 pcbnew/menubar_footprint_editor.cpp:96
 msgid "Footprint Editor"
-msgstr "フットプリント エディター"
+msgstr "フットプリントエディター"
 
 #: common/tool/actions.cpp:577
 msgid "Create, delete and edit footprints"
@@ -28892,8 +28892,7 @@ msgstr "グラフィックスをインポート (&I)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:74
 msgid "Import 2D Drawing file to Footprint Editor on Drawings layer"
-msgstr ""
-"線画レイヤー上のフットプリント エディターへ 2D 図面ファイルをインポートします"
+msgstr "線画レイヤー上のフットプリントエディターへ 2D 図面ファイルをインポートします"
 
 #: pcbnew/menubar_footprint_editor.cpp:85
 msgid "Export View as &PNG..."
@@ -32139,11 +32138,11 @@ msgstr "デザイン ルール チェッカー ウィンドウを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Open in Footprint Editor"
-msgstr "フットプリント エディターで開く"
+msgstr "フットプリントエディターで開く"
 
 #: pcbnew/tools/pcb_actions.cpp:234
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr "フットプリント エディターで選択したフットプリントを開きます"
+msgstr "フットプリントエディターで選択したフットプリントを開きます"
 
 #: pcbnew/tools/pcb_actions.cpp:241
 msgid ""
