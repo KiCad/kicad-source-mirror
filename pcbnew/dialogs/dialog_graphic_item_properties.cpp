@@ -146,7 +146,7 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
     wxCHECK_RET( aItem != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
 
     DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();
 }
 
 

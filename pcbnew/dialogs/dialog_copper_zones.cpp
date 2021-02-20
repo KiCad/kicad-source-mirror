@@ -98,7 +98,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 {
     DIALOG_COPPER_ZONE dlg( aCaller, aSettings );
 
-    return dlg.ShowModal();
+    return dlg.ShowQuasiModal();
 }
 
 #define MIN_THICKNESS ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS
@@ -321,7 +321,8 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
 
 void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 {
-    EndModal( m_settingsExported ? ZONE_EXPORT_VALUES : wxID_CANCEL );
+    SetReturnCode( m_settingsExported ? ZONE_EXPORT_VALUES : wxID_CANCEL );
+    event.Skip();
 }
 
 

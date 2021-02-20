@@ -170,10 +170,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
 void PCB_EDIT_FRAME::ShowDimensionPropertiesDialog( DIMENSION_BASE* aDimension )
 {
-    if( aDimension == NULL )
+    if( aDimension == nullptr )
         return;
 
     DIALOG_DIMENSION_PROPERTIES dlg( this, aDimension );
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();
 }
 

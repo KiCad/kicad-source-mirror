@@ -172,13 +172,11 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 }
 
 
-/**
- * Routine for main window class to launch text properties dialog.
- */
+// Launch the text properties dialog in quasi modal mode.
 void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( BOARD_ITEM* aText )
 {
     DIALOG_TEXT_PROPERTIES dlg( this, aText );
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();
 }
 
 
@@ -187,7 +185,12 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
     if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
     {
         if( TransferDataFromWindow() )
-            EndModal( wxID_OK );
+        {
+            // Do not use EndModal to close the dialog that can be opened
+            // in quasi modal mode
+            SetReturnCode( wxID_OK );
+            Close();
+        }
     }
     else if( m_MultiLineText->IsShown() && m_MultiLineText->HasFocus() )
     {
