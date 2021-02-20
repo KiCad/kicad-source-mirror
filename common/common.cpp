@@ -570,6 +570,7 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
         {
             ConvertFileTimeToWx( &lastModDate, findData.ftLastWriteTime );
             timestamp += lastModDate.GetValue().GetValue();
+            timestamp += findData.nFileSizeLow; // Get the file size (partial) as well to check for sneaky changes
         }
         while ( FindNextFile( fileHandle, &findData ) != 0 );
     }
@@ -620,7 +621,10 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
                 }
 
                 if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
+                {
                     timestamp += entry_stat.st_mtime * 1000;
+                    timestamp += entry_stat.st_size;    // Get the file size as well to check for sneaky changes
+                }
             }
             else
             {
