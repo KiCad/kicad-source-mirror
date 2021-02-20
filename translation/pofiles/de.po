@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 07:55+0000\n"
+"PO-Revision-Date: 2021-02-20 14:54+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -17530,6 +17530,8 @@ msgstr ""
 msgid ""
 "Edit worksheet borders and title blocks for use in schematics and PCB designs"
 msgstr ""
+"Arbeitsblattränder und Schriftfelder zur Verwendung in Schaltplänen und "
+"Leiterplattenentwürfen bearbeiten"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -19156,16 +19158,15 @@ msgid "nanoseconds"
 msgstr "Nanosekunden"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Warnung:\n"
-"DuKo Durchmesser >= Durchmesser Durchgangsloch.\n"
-"Einige Parameter können innerhalb einer Kupferfläche\n"
-"für eine DuKo nicht berechnet werden."
+"Durchmesser DuKo-Pad >= Durchmesser Lochabstandsfläche.\n"
+"Einige Parameter können nicht für eine DuKo in einer Kupferfläche berechnet "
+"werden."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -19296,7 +19297,7 @@ msgstr "Leiterbahnbreite:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1591
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1689
 msgid "Trace thickness:"
-msgstr "Leiterbahnstärke:"
+msgstr "Leiterbahndicke:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1710
@@ -19518,7 +19519,7 @@ msgstr ""
 "\n"
 "Dieser Rechner findet Kombinationen von Standardkomponenten der E-Serie, um\n"
 "beliebige Werte zu erzeugen.  Sie können den gewünschten Widerstand von "
-"0,0025 bis 4000 kOhm eingeben. \n"
+"0,0025 bis 4000 kΩ eingeben. \n"
 "Es werden Lösungen mit bis zu 4 Komponenten angegeben.  \n"
 "\n"
 "Standardmäßig wird der angefragte Wert von den Lösungen ausgeschlossen.  Es "
@@ -19623,13 +19624,13 @@ msgstr ""
 "Der erste vorgegebene Wert ist fett dargestellt.\n"
 "\n"
 "Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A (intern)"
-", Temperaturanstiege bis zu 100 ° C und Breiten von bis zu 400 mil (10 mm).\n"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
 "Die zugehörige Formel aus IPC 2221 ist\n"
 "<center>__I = K * dT<sup>0,44</sup> * (W*H)<sup>0,725</sup>__</center>\n"
-"wobei:  \n"
+"Wobei:  \n"
 "__I__ = Maximaler Strom in Ampere  \n"
-"__dt__ = Temperaturanstieg über die Umgebungstemperatur in ° C  \n"
+"__dt__ = Temperaturanstieg über die Umgebungstemperatur in °C  \n"
 "__W,H__ = Breite und Dicke in mils  \n"
 "__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterzüge\n"
 
@@ -19659,7 +19660,7 @@ msgid ""
 "(ohm*meter)"
 msgstr ""
 "Elektrischer Widerstand oder spezifischer elektrischer Widerstand des "
-"Leiters (Ω*m)"
+"Leiters (Ω*m)"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Frequency of the input signal"
@@ -19674,7 +19675,7 @@ msgstr "Frequenz des Eingangssignal"
 #: pcb_calculator/transline_ident.cpp:399
 #, c-format
 msgid "Effective %s:"
-msgstr "Erwartete %s:"
+msgstr "Effektive %s:"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -19925,9 +19926,8 @@ msgid "Number of twists per length"
 msgstr "Anzahl Verdrehungen pro Länge"
 
 #: pcb_calculator/transline_ident.cpp:412
-#, fuzzy
 msgid "environment"
-msgstr "Umgebungsvariablen"
+msgstr "Umgebung"
 
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Relative permittivity of environment"
@@ -23137,7 +23137,7 @@ msgstr "Prüfungen starten"
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:383
 msgid "Footprint Checker"
-msgstr "Footprint Prüfer"
+msgstr "Footprint-Prüfer"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:324
 msgid ""
@@ -27695,7 +27695,7 @@ msgstr "Textposition:"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:106
 msgid "Where to position the dimension text relative to the dimension line"
 msgstr ""
-"Wo soll der Bemaßungstext relativ zur Bemaßungslinie positioniert werden?"
+"Wo der Bemaßungstext relativ zur Bemaßungslinie positioniert werden soll"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:120
 msgid "Keep text aligned"
@@ -28642,9 +28642,9 @@ msgid "Recovery file \"%s\" not found."
 msgstr "Wiederherstellungsdatei \"%s\" wurde nicht gefunden."
 
 #: pcbnew/files.cpp:341
-#, c-format, fuzzy
+#, c-format
 msgid "OK to load recovery file \"%s\""
-msgstr "Soll die Wiederherstellungsdatei \"%s\" geladen werden?"
+msgstr "Wiederherstellungsdatei \"%s\" laden"
 
 #: pcbnew/files.cpp:364
 #, c-format
@@ -30680,8 +30680,8 @@ msgid ""
 "created."
 msgstr ""
 "Die CADSTAR-Lage '%s' ist als Lage der Leistungsebene definiert. Es "
-"existiert jedoch kein Netz mit einem solchen Namen. Die Schicht wurde "
-"geladen, aber es wurde keine Kupferzone erstellt."
+"existiert jedoch kein Netz mit einem solchen Namen. Die Lage wurde geladen, "
+"aber es wurde keine Kupferzone erstellt."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1856
 msgid ""
@@ -31737,20 +31737,18 @@ msgid "Show board setup"
 msgstr "Platinenkonfiguration anzeigen"
 
 #: pcbnew/router/router_tool.cpp:786
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene DuKos müssen in 'Platinenkonfiguration... > Design-Regeln "
-"> Einschränkungen' aktiviert werden."
+"Blinde/vergrabene DuKos müssen in 'Platinenkonfiguration > Design-Regeln > "
+"Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:807
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Mikro-Vias müssen in 'Platinenkonfiguration... > Design-Regeln > "
+"Mikro-Vias müssen in 'Platinenkonfiguration > Design-Regeln > "
 "Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:816
