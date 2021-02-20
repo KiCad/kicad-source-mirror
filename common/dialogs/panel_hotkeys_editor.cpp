@@ -224,7 +224,6 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 
     wxFileName fn( filename );
 
-    LOCALE_IO locale;
     wxFFileOutputStream fileStream( fn.GetFullPath(), "w" );
     wxTextOutputStream stream( fileStream );
 
@@ -237,7 +236,7 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 
         stream << wxT( "[width=\"100%\",options=\"header\",cols=\"20%,15%,65%\"]" ) << endl;
         stream << wxT( "|===" ) << endl;
-        stream << wxT( "| Action | Default Hotkey | Description" ) << endl;
+        stream << _( "| Action | Default Hotkey | Description" ) << endl;
 
         for( HOTKEY& hk : section.m_HotKeys )
         {
