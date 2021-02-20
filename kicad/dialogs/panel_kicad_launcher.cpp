@@ -88,8 +88,8 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             int row = m_toolsSizer->GetRows();
 
             m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, CELL_MARGINS );
-            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM, 0 );
-            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP, 0 );
+            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxEXPAND, 0 );
+            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP|wxEXPAND, 0 );
         };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ),
