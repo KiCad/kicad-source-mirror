@@ -224,11 +224,12 @@ bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine
 
     bool p1_in = m_allowedArea.Contains( p1 );
     bool p2_in = m_allowedArea.Contains( p2 );
-    bool p1n_in = false;
-    bool p2n_in = false;
-
-    return p1_in || p2_in;
-    }
+ 
+    if( m_allowedAreaStrict ) // strict restriction? both points must be inside the restricted area
+        return p1_in && p2_in;
+    else // loose restriction
+        return p1_in || p2_in;
+}
 
 
 bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
@@ -255,9 +256,7 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* 
         SEG::ecoord dist = aReplacement.CSegment(i).SquaredDistance( m_v );
 
         if ( dist <= 1 )
-        {
             return true;
-        }
     }
 
     return false;
@@ -625,7 +624,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         rv |= mergeObtuse( aResult );
 
     if( m_effortLevel & MERGE_COLINEAR )
-        rv |= mergeColinear( aResult );
+    	rv |= mergeColinear( aResult );
 
     // TODO: Fix for arcs
     if( !hasArcs && m_effortLevel & SMART_PADS )
