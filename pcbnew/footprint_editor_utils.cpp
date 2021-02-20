@@ -190,15 +190,15 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
         if( zone->GetIsRuleArea() )
         {
-            success = InvokeRuleAreaEditor( this, &zoneSettings );
+            success = InvokeRuleAreaEditor( this, &zoneSettings ) == wxID_OK;
         }
         else if( zone->IsOnCopperLayer() )
         {
-            success = InvokeCopperZonesEditor( this, &zoneSettings );
+            success = InvokeCopperZonesEditor( this, &zoneSettings ) == wxID_OK;
         }
         else
         {
-            success = InvokeNonCopperZonesEditor( this, &zoneSettings );
+            success = InvokeNonCopperZonesEditor( this, &zoneSettings ) == wxID_OK;
         }
 
         if( success )
