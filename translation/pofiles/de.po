@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 07:46+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"PO-Revision-Date: 2021-02-20 07:55+0000\n"
+"Last-Translator: Dominik Wernberger <dominik.wernberger@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19658,8 +19658,8 @@ msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
 msgstr ""
-"Elektrischer Widerstand oder spezifischer elektrischer Leitungswiderstand "
-"(Ω*m)"
+"Elektrischer Widerstand oder spezifischer elektrischer Widerstand des "
+"Leiters (Ω*m)"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Frequency of the input signal"
@@ -19672,9 +19672,9 @@ msgstr "Frequenz des Eingangssignal"
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:366
 #: pcb_calculator/transline_ident.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "Erwarte %s"
+msgstr "Erwartete %s:"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -19684,7 +19684,7 @@ msgstr "Erwarte %s"
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Conductor losses:"
-msgstr "Leiterverluste:"
+msgstr "Leitungsverluste:"
 
 #: pcb_calculator/transline_ident.cpp:148
 #: pcb_calculator/transline_ident.cpp:188
@@ -19791,7 +19791,7 @@ msgstr "Leiterlänge"
 #: pcb_calculator/transline_ident.cpp:388
 #: pcb_calculator/transline_ident.cpp:425
 msgid "Characteristic impedance"
-msgstr "Typische Impedanz"
+msgstr "Charakteristische Impedanz"
 
 #: pcb_calculator/transline_ident.cpp:178
 #: pcb_calculator/transline_ident.cpp:211
@@ -19869,21 +19869,20 @@ msgstr "Außendurchmesser (Isolation)"
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "Effektive %s (even):"
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "Effektive %s (odd):"
 
 #: pcb_calculator/transline_ident.cpp:324
-#, fuzzy
 msgid "Conductor losses (even):"
-msgstr "Leiterverluste gerade:"
+msgstr "Leitungsverluste (even):"
 
 #: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor losses (odd):"
-msgstr "Leiterverluste (ungerade):"
+msgstr "Leitungsverluste (odd):"
 
 #: pcb_calculator/transline_ident.cpp:326
 msgid "Dielectric losses (even):"
@@ -19914,9 +19913,8 @@ msgstr ""
 "angesteuert)"
 
 #: pcb_calculator/transline_ident.cpp:374
-#, fuzzy
 msgid "Distance between strip and top metal"
-msgstr "Abstand zwischen dem Leiter und dem oberen Metall"
+msgstr "Abstand zwischen Leiter und Oberflächenmetallisierung"
 
 #: pcb_calculator/transline_ident.cpp:405
 msgid "Twists"
@@ -23139,7 +23137,7 @@ msgstr "Prüfungen starten"
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:383
 msgid "Footprint Checker"
-msgstr "Footprint Checker"
+msgstr "Footprint Prüfer"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:324
 msgid ""
@@ -23620,9 +23618,8 @@ msgstr ""
 "Leerzeichen getrennt sind.)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "Verfügbare Pfade:"
+msgstr "Verfügbare Footprints:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:240
