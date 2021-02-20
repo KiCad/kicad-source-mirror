@@ -98,6 +98,9 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+#if defined(KICAD_SCRIPTING_ACTION_MENU)
+#include <action_plugin.h>
+#endif
 #endif
 
 
@@ -1487,6 +1490,11 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
 {
     // Reload Python plugins if they are newer than the already loaded, and load new plugins
 #if defined(KICAD_SCRIPTING)
+#if defined(KICAD_SCRIPTING_ACTION_MENU)
+    // Remove all action plugins so that we don't keep references to old versions
+    ACTION_PLUGINS::UnloadAll();
+#endif
+
     // Reload plugin list: reload Python plugins if they are newer than the already loaded,
     // and load new plugins
     PythonPluginsReloadBase();

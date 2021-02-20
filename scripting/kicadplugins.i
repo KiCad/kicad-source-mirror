@@ -96,28 +96,33 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
     import sys
     import traceback
 
+    try:
+        from importlib import reload # Python 3.4 or above
+    except ImportError:
+        from imp import reload # Python <3.4; harmless alias on 2.7
+
     global NOT_LOADED_WIZARDS
     global FULL_BACK_TRACE
+    global KICAD_PLUGINS
+
+    top_level_modules = KICAD_PLUGINS.keys()
 
     try:  # If there is an error loading the script, skip it
 
         module_filename = os.path.join( Dirname, FileName )
         mtime = os.path.getmtime( module_filename )
+        mods_before = set( sys.modules )
 
         if ModuleName in KICAD_PLUGINS:
             plugin = KICAD_PLUGINS[ModuleName]
 
-            if sys.version_info >= (3,4,0):
-                import importlib
-                mod = importlib.reload( plugin["ModuleName"] )
-            elif sys.version_info >= (3,2,0):
-                """
-                TODO: This branch can be removed once the required python version is >=3.4
-                """
-                import imp
-                mod = imp.reload( plugin["ModuleName"] )
-            else:
-                mod = reload( plugin["ModuleName"] )
+            for dependency in plugin["dependencies"]:
+                if dependency in sys.modules and dependency not in top_level_modules:
+                    del sys.modules[dependency]
+
+            mods_before = set( sys.modules )
+
+            mod = reload( plugin["ModuleName"] )
 
         else:
             if sys.version_info >= (3,0,0):
@@ -126,11 +131,17 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
             else:
                 mod = __import__( ModuleName, locals(), globals() )
 
+        mods_after = set( sys.modules ).difference( mods_before )
+
         KICAD_PLUGINS[ModuleName]={ "filename":module_filename,
                                     "modification_time":mtime,
-                                    "ModuleName":mod }
+                                    "ModuleName":mod,
+                                    "dependencies": mods_after }
 
     except:
+        if ModuleName in KICAD_PLUGINS:
+            del KICAD_PLUGINS[ModuleName]
+
         if NOT_LOADED_WIZARDS != "" :
             NOT_LOADED_WIZARDS += "\n"
         NOT_LOADED_WIZARDS += module_filename

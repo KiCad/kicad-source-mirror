@@ -204,3 +204,12 @@ void ACTION_PLUGINS::SetActionRunning( bool aRunning )
 {
     ACTION_PLUGINS::m_actionRunning = aRunning;
 }
+
+
+void ACTION_PLUGINS::UnloadAll()
+{
+    for( ACTION_PLUGIN* plugin : m_actionsList )
+        delete plugin;
+
+    m_actionsList.clear();
+}

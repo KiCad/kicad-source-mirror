@@ -218,6 +218,11 @@ public:
      * @param aRunning sets whether an action is running now.
      */
     static void SetActionRunning( bool aRunning );
+
+    /**
+     * Unloads (deregisters) all action plugins
+     */
+    static void UnloadAll();
 };
 
 #endif /* PCBNEW_ACTION_PLUGINS_H */
