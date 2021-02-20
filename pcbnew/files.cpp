@@ -306,66 +306,71 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     switch( id )
     {
     case ID_LOAD_FILE:
-        {
-            int         open_ctl = 0;
-            wxString    fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
+    {
+        int         open_ctl = 0;
+        wxString    fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
-            return AskLoadBoardFileName( this, &open_ctl, &fileName, true )
-                       && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
-        }
+        return AskLoadBoardFileName( this, &open_ctl, &fileName, true )
+                   && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+    }
 
     case ID_IMPORT_NON_KICAD_BOARD:
-        {
-            int         open_ctl = 1;
-            wxString    fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
+    {
+        int         open_ctl = 1;
+        wxString    fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
-            return AskLoadBoardFileName( this, &open_ctl, &fileName, false )
-                       && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
-        }
+        return AskLoadBoardFileName( this, &open_ctl, &fileName, false )
+                   && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+    }
 
     case ID_MENU_RECOVER_BOARD_AUTOSAVE:
+    {
+        wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+        wxFileName fn = currfn;
+
+        wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
+        fn.SetName( rec_name );
+
+        if( !fn.FileExists() )
         {
-            wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
-            wxFileName fn = currfn;
-
-            wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
-            fn.SetName( rec_name );
-
-            if( !fn.FileExists() )
-            {
-                msg.Printf( _( "Recovery file \"%s\" not found." ), fn.GetFullPath() );
-                DisplayInfoMessage( this, msg );
-                return false;
-            }
-
-            msg.Printf( _( "OK to load recovery file \"%s\"" ), fn.GetFullPath() );
-
-            if( !IsOK( this, msg ) )
-                return false;
-
-            GetScreen()->ClrModify();    // do not prompt the user for changes
-
-            if( OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
-            {
-                // Re-set the name since name or extension was changed
-                GetBoard()->SetFileName( currfn.GetFullPath() );
-                UpdateTitle();
-                return true;
-            }
+            msg.Printf( _( "Recovery file \"%s\" not found." ), fn.GetFullPath() );
+            DisplayInfoMessage( this, msg );
             return false;
         }
+
+        msg.Printf( _( "OK to load recovery file \"%s\"" ), fn.GetFullPath() );
+
+        if( !IsOK( this, msg ) )
+            return false;
+
+        GetScreen()->ClrModify();    // do not prompt the user for changes
+
+        if( OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) ) )
+        {
+            // Re-set the name since name or extension was changed
+            GetBoard()->SetFileName( currfn.GetFullPath() );
+            UpdateTitle();
+            return true;
+        }
+        return false;
+    }
 
     case ID_NEW_BOARD:
     {
         if( IsContentModified() )
         {
             wxFileName fileName = GetBoard()->GetFileName();
-            wxString   saveMsg =
-                    _( "Current board will be closed, save changes to \"%s\" before continuing?" );
+            wxString   saveMsg = _( "Current board will be closed, save changes to '%s' before "
+                                    "continuing?" );
 
             if( !HandleUnsavedChanges( this, wxString::Format( saveMsg, fileName.GetFullName() ),
-                                       [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
+                                       [&]()->bool
+                                       {
+                                           return Files_io_from_id( ID_SAVE_BOARD );
+                                       } ) )
+            {
                 return false;
+            }
         }
         else if( !GetBoard()->IsEmpty() )
         {
@@ -401,42 +406,42 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_COPY_BOARD_AS:
     case ID_SAVE_BOARD_AS:
+    {
+        bool addToHistory = false;
+        wxString orig_name;
+        wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name, nullptr );
+
+        if( orig_name.IsEmpty() )
         {
-            bool addToHistory = false;
-            wxString orig_name;
-            wxFileName::SplitPath( GetBoard()->GetFileName(), nullptr, nullptr, &orig_name,
-                                   nullptr );
+            addToHistory = true;
+            orig_name = _( "noname" );
+        }
 
-            if( orig_name.IsEmpty() )
-            {
-                addToHistory = true;
-                orig_name = _( "noname" );
-            }
+        wxFileName savePath( Prj().GetProjectFullName() );
 
-            wxFileName savePath( Prj().GetProjectFullName() );
+        if( !savePath.IsOk() || !savePath.IsDirWritable() )
+        {
+            savePath = GetMruPath();
 
             if( !savePath.IsOk() || !savePath.IsDirWritable() )
-            {
-                savePath = GetMruPath();
-
-                if( !savePath.IsOk() || !savePath.IsDirWritable() )
-                    savePath = PATHS::GetDefaultUserProjectsPath();
-            }
-
-            wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
-            wxString    filename = fn.GetFullPath();
-
-            bool createProject = false;
-
-            if( AskSaveBoardFileName( this, &filename, &createProject ) )
-            {
-                if( id == ID_COPY_BOARD_AS )
-                    return SavePcbCopy( filename, createProject );
-                else
-                    return SavePcbFile( filename, addToHistory, createProject );
-            }
-            return false;
+                savePath = PATHS::GetDefaultUserProjectsPath();
         }
+
+        wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
+        wxString    filename = fn.GetFullPath();
+
+        bool createProject = false;
+
+        if( AskSaveBoardFileName( this, &filename, &createProject ) )
+        {
+            if( id == ID_COPY_BOARD_AS )
+                return SavePcbCopy( filename, createProject );
+            else
+                return SavePcbFile( filename, addToHistory, createProject );
+        }
+
+        return false;
+    }
 
     default:
         return false;

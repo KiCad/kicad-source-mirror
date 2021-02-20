@@ -756,7 +756,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
             return true;
         }
         else
+        {
             return false;
+        }
     }
     else if( libraryName.IsEmpty() || footprintName.IsEmpty() )
     {
@@ -767,7 +769,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
             return true;
         }
         else
+        {
             return false;
+        }
     }
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
