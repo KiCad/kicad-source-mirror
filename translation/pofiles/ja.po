@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 01:58+0000\n"
+"PO-Revision-Date: 2021-02-20 02:02+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5880,7 +5880,7 @@ msgstr "シンボル ライブラリーを参照"
 #: eeschema/symbol_editor/symbol_editor.cpp:152
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Symbol Editor"
-msgstr "シンボルエディター"
+msgstr "シンボル エディター"
 
 #: common/tool/actions.cpp:567
 msgid "Create, delete and edit symbols"
@@ -5899,7 +5899,7 @@ msgstr "フットプリント ライブラリーを参照"
 #: pcbnew/footprint_edit_frame.cpp:118 pcbnew/footprint_edit_frame.cpp:780
 #: pcbnew/footprint_edit_frame.cpp:907 pcbnew/menubar_footprint_editor.cpp:96
 msgid "Footprint Editor"
-msgstr "フットプリントエディター"
+msgstr "フットプリント エディター"
 
 #: common/tool/actions.cpp:577
 msgid "Create, delete and edit footprints"
@@ -11208,7 +11208,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:205
 msgid "(symbol editor only)"
-msgstr "(シンボルエディターのみ)"
+msgstr "(シンボル エディターのみ)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:241
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:494
@@ -15699,11 +15699,11 @@ msgstr "ネットのワイヤーとピンをハイライト表示"
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Edit with Symbol Editor"
-msgstr "シンボルエディターで編集"
+msgstr "シンボル エディターで編集"
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Open the symbol editor to edit the symbol"
-msgstr "シンボルを編集するためにシンボルエディターを開く"
+msgstr "シンボルを編集するためにシンボル エディターを開く"
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Edit Symbol Fields..."
