@@ -808,7 +808,26 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
                 item = getItem( aUuid );
 
             if( item && item->Type() != NOT_USED )
-                group->AddItem( item );
+            {
+                switch( item->Type() )
+                {
+                // We used to allow fp items in non-footprint groups.  It was a mistake.
+                case PCB_FP_TEXT_T:
+                case PCB_FP_SHAPE_T:
+                case PCB_FP_ZONE_T:
+                    if( item->GetParent() == group->GetParent() )
+                        group->AddItem( item );
+
+                    break;
+
+                // This is the deleted item singleton, which means we didn't find the uuid.
+                case NOT_USED:
+                    break;
+
+                default:
+                    group->AddItem( item );
+                }
+            }
         }
     }
 

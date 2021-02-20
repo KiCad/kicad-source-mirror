@@ -211,13 +211,46 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
 
 int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 {
-    PCB_SELECTION_TOOL*  selTool   = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    const PCB_SELECTION& selection = selTool->GetSelection();
-    BOARD*               board     = getModel<BOARD>();
-    PCB_GROUP*           group     = nullptr;
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION       selection;
+
+    if( m_isFootprintEditor )
+    {
+        selection = selTool->RequestSelection(
+                []( const VECTOR2I& , GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL*  )
+                {
+                } );
+    }
+    else
+    {
+        selection = selTool->RequestSelection(
+                []( const VECTOR2I& , GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL*  )
+                {
+                    // Iterate from the back so we don't have to worry about removals.
+                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                    {
+                        BOARD_ITEM* item = aCollector[ i ];
+
+                        switch( item->Type() )
+                        {
+                        case PCB_FP_TEXT_T:
+                        case PCB_FP_SHAPE_T:
+                        case PCB_FP_ZONE_T:
+                            aCollector.Remove( item );
+                            break;
+
+                        default:
+                            break;
+                        }
+                    }
+                } );
+    }
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+        return 0;
+
+    BOARD*     board = getModel<BOARD>();
+    PCB_GROUP* group = nullptr;
 
     if( m_isFootprintEditor )
     {
