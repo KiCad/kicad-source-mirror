@@ -153,7 +153,7 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
         m_treePane->GetLibTree()->RefreshLibTree();
     }
 
-    updateTitle();      // in case of a name change...
+    UpdateTitle();      // in case of a name change...
 
     UpdateMsgPanel();
 }

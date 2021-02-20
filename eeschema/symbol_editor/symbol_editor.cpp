@@ -549,6 +549,7 @@ void SYMBOL_EDIT_FRAME::Save()
     }
 
     m_treePane->GetLibTree()->RefreshLibTree();
+    updateTitle();
 }
 
 

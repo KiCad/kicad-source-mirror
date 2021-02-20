@@ -305,6 +305,8 @@ public:
     ///< Reload displayed items and sets view.
     void UpdateView();
 
+    void UpdateTitle();
+
     void FocusOnLibID( const LIB_ID& aLibID );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
@@ -324,11 +326,6 @@ protected:
      * the footprint library tree.
      */
     void initLibraryTree();
-
-    /**
-     * Updates window title according to getLibNickName().
-     */
-    void updateTitle();
 
     void restoreLastFootprint();
     void retainLastFootprint();

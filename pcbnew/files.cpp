@@ -1054,6 +1054,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     GetScreen()->ClrModify();
     GetScreen()->ClrSave();
+    UpdateTitle();
     return true;
 }
 

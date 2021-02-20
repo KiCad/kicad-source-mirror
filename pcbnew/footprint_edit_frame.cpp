@@ -284,7 +284,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
-    updateTitle();
+    UpdateTitle();
     setupUnits( GetSettings() );
 
     // Default shutdown reason until a file is loaded
@@ -737,11 +737,11 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     m_treePane->GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( "*" ) )
-        updateTitle();
+        UpdateTitle();
 }
 
 
-void FOOTPRINT_EDIT_FRAME::updateTitle()
+void FOOTPRINT_EDIT_FRAME::UpdateTitle()
 {
     wxString   title;
     LIB_ID     fpid = GetLoadedFPID();
@@ -799,7 +799,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateView()
     GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    updateTitle();
+    UpdateTitle();
 }
 
 

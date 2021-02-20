@@ -252,6 +252,7 @@ int FOOTPRINT_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 
             canvas()->ForceRefresh();
             m_frame->ClearModify();
+            m_frame->UpdateTitle();
         }
     }
 
