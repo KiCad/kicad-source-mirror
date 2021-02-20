@@ -155,6 +155,11 @@ public:
      */
     double m_SmallDrillMarkSize;
 
+    /**
+     * Enable the hotkeys dumper feature, used for generating documentation
+     */
+    bool m_HotkeysDumper;
+
 private:
     ADVANCED_CFG();
 

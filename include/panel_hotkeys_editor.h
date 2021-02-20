@@ -76,6 +76,13 @@ private:
      */
     void ImportHotKeys();
 
+    /**
+     * Dumps all actions and their hotkeys to a text file for inclusion in documentation.
+     * The format is asciidoc-compatible table rows.
+     * This function is hidden behind an advanced config flag and not intended for users.
+     */
+    void dumpHotkeys();
+
 protected:
     EDA_BASE_FRAME*            m_frame;
     bool                       m_readOnly;

@@ -21,17 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <panel_hotkeys_editor.h>
-#include <kiway_player.h>
-#include <wx/srchctrl.h>
-#include <wx/panel.h>
-#include <wx/sizer.h>
+#include <advanced_config.h>
+#include <gestfich.h>
 #include <hotkeys_basic.h>
+#include <kiway_player.h>
+#include <locale_io.h>
+#include <panel_hotkeys_editor.h>
+#include <tool/tool_manager.h>
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
-#include <tool/tool_manager.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/srchctrl.h>
 #include <wx/tokenzr.h>
-#include <gestfich.h>
+#include <wx/txtstrm.h>
+#include <wx/wfstream.h>
 
 static const wxSize default_dialog_size { 500, 350 };
 
@@ -108,7 +112,7 @@ void PANEL_HOTKEYS_EDITOR::ResetPanel()
 
 void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 {
-    const BUTTON_ROW_PANEL::BTN_DEF_LIST l_btn_defs = {
+    BUTTON_ROW_PANEL::BTN_DEF_LIST l_btn_defs = {
         {
             wxID_RESET,
             _( "Undo All Changes" ),
@@ -128,6 +132,19 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             }
         }
     };
+
+
+    if( ADVANCED_CFG::GetCfg().m_HotkeysDumper )
+    {
+        // Add hotkeys dumper (does not need translation, it's a dev tool only)
+        l_btn_defs.push_back( {
+                wxID_ANY, wxT( "Dump Hotkeys" ), wxEmptyString,
+                [this]( wxCommandEvent& )
+                {
+                    dumpHotkeys();
+                }
+            } );
+    }
 
     const BUTTON_ROW_PANEL::BTN_DEF_LIST r_btn_defs = {
     };
@@ -196,4 +213,47 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 }
 
 
+void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
+{
+    wxString filename = EDA_FILE_SELECTOR( wxT( "Dump Hotkeys File:" ), m_frame->GetMruPath(),
+                                           wxEmptyString, wxT( "txt" ), wxT( "*.txt" ), this,
+                                           wxFD_SAVE, true );
 
+    if( filename.IsEmpty() )
+        return;
+
+    wxFileName fn( filename );
+
+    LOCALE_IO locale;
+    wxFFileOutputStream fileStream( fn.GetFullPath(), "w" );
+    wxTextOutputStream stream( fileStream );
+
+    if( !fn.IsDirWritable() || ( fn.Exists() && !fn.IsFileWritable() ) )
+        return;
+
+    for( HOTKEY_SECTION& section : m_hotkeyStore.GetSections() )
+    {
+        stream << wxT( "=== " ) << section.m_SectionName << endl << endl;
+
+        stream << wxT( "[width=\"100%\",options=\"header\",cols=\"20%,15%,65%\"]" ) << endl;
+        stream << wxT( "|===" ) << endl;
+        stream << wxT( "| Action | Default Hotkey | Description" ) << endl;
+
+        for( HOTKEY& hk : section.m_HotKeys )
+        {
+            stream << wxT( "| " ) << hk.m_Actions[0]->GetLabel() << endl;
+
+            if( hk.m_EditKeycode > 0 )
+                stream << wxT( "  | `" ) << KeyNameFromKeyCode( hk.m_EditKeycode ) << '`' << endl;
+            else
+                stream << wxT( "  |" ) << endl;
+
+            stream << wxT( "  | " ) << hk.m_Actions[0]->GetDescription( false ) << endl;
+        }
+
+        stream << wxT( "|===" ) << endl << endl;
+    }
+
+    stream.Flush();
+    fileStream.Close();
+}

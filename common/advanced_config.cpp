@@ -149,6 +149,8 @@ static const wxChar SkipBoundingBoxFpLoad[] = wxT( "SkipBoundingBoxFpLoad" );
  */
 static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
 
+static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
+
 
 } // namespace KEYS
 
@@ -247,10 +249,9 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_DebugZoneFiller           = false;
     m_DebugPDFWriter            = false;
-
     m_SkipBoundingBoxOnFpLoad   = false;
-
-    m_SmallDrillMarkSize	= 0.35;
+    m_SmallDrillMarkSize        = 0.35;
+    m_HotkeysDumper             = false;
 
     loadFromConfigFile();
 }
@@ -337,6 +338,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
                                                   &m_SmallDrillMarkSize, 0.35, 0.0, 3.0 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HotkeysDumper,
+                                                &m_HotkeysDumper, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
