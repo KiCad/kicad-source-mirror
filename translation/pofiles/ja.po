@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-19 23:38+0000\n"
+"PO-Revision-Date: 2021-02-20 01:54+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7749,7 +7749,7 @@ msgstr "新しいシンボルにないフィールドを削除"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Reset fields if empty in new symbol"
-msgstr "新しいシンボルにない場合、フィールドをリセット"
+msgstr "新しいシンボルで空となっているフィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Update field visibilities"
@@ -7854,7 +7854,7 @@ msgstr "元のライブラリーのシンボルに存在しないフィールド
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
-msgstr "ライブラリーのシンボルにない場合、フィールドをリセット"
+msgstr "ライブラリーのシンボルで空となっているフィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -11181,19 +11181,16 @@ msgid "Update Schematic from PCB"
 msgstr "基板 (PCB) から回路図を更新"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "シンボルを配置"
+msgstr "親シンボル:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "新しいシンボルにないフィールドを削除"
+msgstr "親シンボルにないフィールドを削除"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "新しいシンボルにない場合、フィールドをリセット"
+msgstr "親シンボルで空となっているフィールドをリセット"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
 msgid "Update Symbol Fields"
@@ -15211,9 +15208,8 @@ msgid "Update Symbol Fields..."
 msgstr "シンボル フィールドを更新..."
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "全ての変更を適用するためにライブラリーからシンボルを更新"
+msgstr "親シンボルの変更に一致するようにシンボルを更新"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -16246,7 +16242,7 @@ msgstr "シンボル名を編集"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "シンボルは他のシンボルから派生していません。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -17269,18 +17265,16 @@ msgid "Edit the project schematic"
 msgstr "プロジェクトの回路図を編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "グローバルとプロジェクトのシンボル ライブラリー リストを編集"
+msgstr "グローバルおよびプロジェクトの回路図シンボル ライブラリーを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
 msgid "Edit the project PCB design"
 msgstr "プロジェクトの基板デザインを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "グローバルとプロジェクトのフットプリント ライブラリー リストを編集"
+msgstr "グローバルおよびプロジェクトのPCBフットプリント ライブラリーを編集します"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
 msgid "Preview Gerber files"
@@ -18656,14 +18650,12 @@ msgid "Simple solution:"
 msgstr "シンプルな解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
-msgstr "抵抗3本の解:"
+msgstr "3本の抵抗の解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
-msgstr "抵抗4本の解:"
+msgstr "4本の抵抗の解:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "E-Series"
@@ -18879,7 +18871,7 @@ msgstr "Ω•m"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "基材の比誘電率:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -32083,7 +32075,7 @@ msgstr "インポートされた画像を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Place the Footprint Anchor"
-msgstr "フットプリントのアンカー(基準点)を配置"
+msgstr "フットプリントのアンカーを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Set the coordinate origin point (anchor) of the footprint"
