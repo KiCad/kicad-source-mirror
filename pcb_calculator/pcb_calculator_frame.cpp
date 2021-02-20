@@ -147,6 +147,10 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
+    // Autosize the the row label column to be sure label are not truncated
+    m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
+    m_gridElectricalSpacingValues->SetRowLabelSize( wxGRID_AUTOSIZE );
+
     GetSizer()->SetSizeHints( this );
 
     // Set previous size and position

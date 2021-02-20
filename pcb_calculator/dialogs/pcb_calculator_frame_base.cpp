@@ -423,7 +423,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelAttenuators->SetSizer( bSizerAtt );
 	m_panelAttenuators->Layout();
 	bSizerAtt->Fit( m_panelAttenuators );
-	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
+	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), false );
 	m_panelESeries = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerESerie;
 	bSizerESerie = new wxBoxSizer( wxVERTICAL );
@@ -1952,7 +1952,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 	// Cell Defaults
 	m_gridClassesValuesDisplay->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
-	brdclsSizerRight->Add( m_gridClassesValuesDisplay, 0, wxALL, 5 );
+	brdclsSizerRight->Add( m_gridClassesValuesDisplay, 0, wxALL|wxEXPAND, 5 );
 
 	m_panelShowClassPrms = new wxPanel( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	brdclsSizerRight->Add( m_panelShowClassPrms, 1, wxALL|wxEXPAND, 5 );
@@ -1964,7 +1964,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelBoardClass->SetSizer( bSizerBoardClass );
 	m_panelBoardClass->Layout();
 	bSizerBoardClass->Fit( m_panelBoardClass );
-	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), false );
+	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), true );
 
 	bmainFrameSizer->Add( m_Notebook, 1, wxEXPAND, 5 );
 
