@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-20 07:46+0000\n"
-"Last-Translator: Dominik Wernberger <dominik.wernberger@gmx.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -19683,7 +19683,6 @@ msgstr "Erwarte %s"
 #: pcb_calculator/transline_ident.cpp:288
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
-#, fuzzy
 msgid "Conductor losses:"
 msgstr "Leiterverluste:"
 
@@ -19694,9 +19693,8 @@ msgstr "Leiterverluste:"
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:368
 #: pcb_calculator/transline_ident.cpp:401
-#, fuzzy
 msgid "Dielectric losses:"
-msgstr "Verlust Dielektrikum:"
+msgstr "Dielektrische Verluste:"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:189
@@ -19740,7 +19738,7 @@ msgstr "Oberflächenrauheit des Leiters"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "substrate"
-msgstr "Trägermaterial"
+msgstr "Substrat"
 
 #: pcb_calculator/transline_ident.cpp:163
 msgid "Relative permeability (mu) of substrate"
@@ -19773,9 +19771,8 @@ msgstr "Relative Permeabilität (mu) des Leiters"
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy
 msgid "Line width"
-msgstr "Leiterbreite:"
+msgstr "Linienbreite"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:205
@@ -19793,7 +19790,6 @@ msgstr "Leiterlänge"
 #: pcb_calculator/transline_ident.cpp:311
 #: pcb_calculator/transline_ident.cpp:388
 #: pcb_calculator/transline_ident.cpp:425
-#, fuzzy
 msgid "Characteristic impedance"
 msgstr "Typische Impedanz"
 
@@ -19886,19 +19882,16 @@ msgid "Conductor losses (even):"
 msgstr "Leiterverluste gerade:"
 
 #: pcb_calculator/transline_ident.cpp:325
-#, fuzzy
 msgid "Conductor losses (odd):"
-msgstr "Leiterverluste ungerade:"
+msgstr "Leiterverluste (ungerade):"
 
 #: pcb_calculator/transline_ident.cpp:326
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "Verlust Dielektrikum gerade:"
+msgstr "Dielektrische Verluste (gerade):"
 
 #: pcb_calculator/transline_ident.cpp:327
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "Verlust Dielektrikum ungerade:"
+msgstr "Dielektrische Verluste (ungerade):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
