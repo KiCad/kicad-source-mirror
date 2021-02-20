@@ -439,7 +439,7 @@ void OPENGL_GAL::beginDrawing()
         {
             overlayBuffer = compositor->CreateBuffer();
         }
-        catch( const std::runtime_error& error )
+        catch( const std::runtime_error& )
         {
             wxLogVerbose( "Could not create a framebuffer for overlays.\n" );
             overlayBuffer = 0;

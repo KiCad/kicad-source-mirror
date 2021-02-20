@@ -224,7 +224,7 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
         b   = double( y1f - y1i ) / (x1f - x1i);
         a   = (double) y1i - b * x1i;
 
-        double  x1, y1, x2, y2;
+        double  x1, y1;
         bool    test = FindLineSegmentIntersection( a, b, x2i, y2i, x2f, y2f, x1, y1 );
 
         if( test )

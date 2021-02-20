@@ -154,8 +154,6 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
     if( !m_board->IsLayerEnabled( aLayer ) )
         return false;
 
-    DISPLAY3D_FLG flg;
-
     // see if layer needs to be shown
     // check the flags
     switch( aLayer )

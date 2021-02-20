@@ -1378,7 +1378,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         plugin.LoadContent( reader, &paste_sheet );
     }
-    catch( IO_ERROR& ioe )
+    catch( IO_ERROR& )
     {
         // If it wasn't content, then paste as text
         paste_screen->Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );

@@ -69,7 +69,7 @@ KIID::KIID()
 
 #if BOOST_VERSION >= 106700
     }
-    catch( const boost::uuids::entropy_error& e )
+    catch( const boost::uuids::entropy_error& )
     {
         wxLogFatalError( "A Boost UUID entropy exception was thrown in %s:%s.",
                          __FILE__, __FUNCTION__ );
@@ -121,7 +121,7 @@ KIID::KIID( const wxString& aString ) : m_uuid(), m_cached_timestamp( 0 )
 
 #if BOOST_VERSION >= 106700
             }
-            catch( const boost::uuids::entropy_error& e )
+            catch( const boost::uuids::entropy_error& )
             {
                 wxLogFatalError( "A Boost UUID entropy exception was thrown in %s:%s.",
                                  __FILE__, __FUNCTION__ );

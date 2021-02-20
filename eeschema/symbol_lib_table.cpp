@@ -406,7 +406,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
     {
         row->plugin->SaveSymbol( row->GetFullURI( true ), aSymbol, row->GetProperties() );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return SAVE_SKIPPED;
     }

@@ -33,7 +33,7 @@
 #include "object_2d.h"
 #include <vector>
 
-class RAYSEG2D;
+struct RAYSEG2D;
 
 #define CSGITEM_EMPTY 0
 #define CSGITEM_FULL (OBJECT_2D*) ( ( size_t )( -1 ) )

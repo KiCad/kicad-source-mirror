@@ -499,7 +499,7 @@ void EDA_3D_CANVAS::DoRePaint()
             if( reloadRaytracingForIntersectionCalculations )
                 m_3d_render_raytracing->Reload( nullptr, nullptr, true );
         }
-        catch( std::runtime_error& err )
+        catch( std::runtime_error& )
         {
             m_is_opengl_version_supported = false;
             m_opengl_supports_raytracing  = false;
