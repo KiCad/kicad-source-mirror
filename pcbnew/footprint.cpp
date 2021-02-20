@@ -1414,6 +1414,8 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         UpdateBoundingHull();
     else
         m_hull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
+
+    std::swap( m_poly_courtyard_front, m_poly_courtyard_back );
 }
 
 
