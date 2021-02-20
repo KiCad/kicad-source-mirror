@@ -149,7 +149,7 @@ void FP_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     SetTextAngle( -GetTextAngle() );
 
-    SetLayer( FlipLayer( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
     SetMirrored( IsBackLayer( GetLayer() ) );
     SetLocalCoord();
 

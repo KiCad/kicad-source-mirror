@@ -254,9 +254,7 @@ void DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre );
 
-    // DIMENSION items are not usually on copper layers, so
-    // copper layers count is not taken in accoun in Flip transform
-    SetLayer( FlipLayer( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
 }
 
 

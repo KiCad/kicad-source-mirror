@@ -210,10 +210,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
     }
 
-    // PCB_SHAPE items are not usually on copper layers, but it can happen in microwave apps.
-    // However, currently, only on Front or Back layers.
-    // So the copper layers count is not taken in account
-    SetLayer( FlipLayer( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
 }
 
 bool FP_SHAPE::IsParentFlipped() const

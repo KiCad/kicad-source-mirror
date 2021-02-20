@@ -308,9 +308,7 @@ void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
     }
 
-    // PCB_SHAPE items are not allowed on copper layers, so
-    // copper layers count is not taken in account in Flip transform
-    SetLayer( FlipLayer( GetLayer() ) );
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
 }
 
 
