@@ -46,9 +46,11 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 
     if( aQuery && !GetBoard()->IsEmpty() )
     {
-        if( !IsOK( this,
-                   _( "Current Board will be lost and this operation cannot be undone. Continue?" ) ) )
+        if( !IsOK( this, _( "Current Board will be lost and this operation cannot be undone. "
+                            "Continue?" ) ) )
+        {
             return false;
+        }
     }
 
     // Release the lock file, if exists

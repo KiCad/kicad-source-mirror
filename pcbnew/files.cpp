@@ -352,6 +352,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
             UpdateTitle();
             return true;
         }
+
         return false;
     }
 
@@ -1004,13 +1005,14 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     // If save succeeded, replace the original with what we just wrote
     if( !wxRenameFile( tempFile.GetFullPath(), pcbFileName.GetFullPath() ) )
     {
-        wxString msg = wxString::Format( _(
-                "Error saving board file \"%s\".\nFailed to rename temporary file \"%s\"" ),
-                pcbFileName.GetFullPath(), tempFile.GetFullPath()
-                );
+        wxString msg = wxString::Format( _( "Error saving board file \"%s\".\n"
+                                            "Failed to rename temporary file \"%s\"" ),
+                                         pcbFileName.GetFullPath(),
+                                         tempFile.GetFullPath() );
         DisplayError( this, msg );
 
-        lowerTxt.Printf( _( "Failed to rename temporary file \"%s\"" ), tempFile.GetFullPath() );
+        lowerTxt.Printf( _( "Failed to rename temporary file \"%s\"" ),
+                         tempFile.GetFullPath() );
 
         SetMsgPanel( upperTxt, lowerTxt );
 
