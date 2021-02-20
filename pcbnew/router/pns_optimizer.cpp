@@ -268,14 +268,21 @@ bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check( int aVertex1, int aVertex2, const 
     return true;
 }
 
-
-// fixme: integrate into SHAPE_LINE_CHAIN, check corner cases against current PointInside implementation
+/**
+ * Determine if a point is located within a given polygon
+ *
+ * @todo fixme: integrate into SHAPE_LINE_CHAIN, check corner cases against current PointInside implementation
+ *
+ * @param aL Polygon
+ * @param aP Point to check for location within the polygon
+ *
+ * @return false if point is not polygon boundary aL, true if within or on the polygon boundary
+ */
 static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
 {
     if( !aL.IsClosed() || aL.SegmentCount() < 3 )
         return false;
 
-    // returns 0 if false, +1 if true, -1 if pt ON polygon boundary
     int result  = 0;
     size_t cnt  = aL.PointCount();
 
@@ -288,7 +295,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
         if( ipNext.y == aP.y )
         {
             if( (ipNext.x ==aP.x) || ( ip.y == aP.y && ( (ipNext.x >aP.x) == (ip.x <aP.x) ) ) )
-                return -1;
+                return true;  // pt on polyground boundary
         }
 
         if( (ip.y <aP.y) != (ipNext.y <aP.y) )
@@ -299,13 +306,13 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
                     result = 1 - result;
                 else
                 {
-                    double d = static_cast<double>( ip.x - aP.x ) * 
+                    double d = static_cast<double>( ip.x - aP.x ) *
                                static_cast<double>( ipNext.y - aP.y ) -
-                               static_cast<double>( ipNext.x - aP.x ) * 
+                               static_cast<double>( ipNext.x - aP.x ) *
                                static_cast<double>( ip.y - aP.y );
 
                     if( !d )
-                        return -1;
+                        return true;  // pt on polyground boundary
 
                     if( (d > 0) == (ipNext.y > ip.y) )
                         result = 1 - result;
@@ -319,7 +326,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
                                ((double)ipNext.x -aP.x) * ((double)ip.y -aP.y);
 
                     if( !d )
-                        return -1;
+                        return true;  // pt on polyground boundary
 
                     if( (d > 0) == (ipNext.y > ip.y) )
                         result = 1 - result;
@@ -585,7 +592,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
         AddConstraint( c );
     }
-    
+
     if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first,
