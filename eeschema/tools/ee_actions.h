@@ -84,7 +84,6 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
-    static TOOL_ACTION placeSheetPin;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
@@ -183,6 +182,7 @@ public:
     static TOOL_ACTION leaveSheet;
     static TOOL_ACTION navigateHierarchy;
     static TOOL_ACTION hypertextCommand;
+    static TOOL_ACTION importSingleSheetPin;
 
     // Global edit tools
     static TOOL_ACTION cleanupSheetPins;

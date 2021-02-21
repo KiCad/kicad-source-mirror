@@ -304,13 +304,13 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
         _( "Add Label" ), _( "Add a net label" ),
-        add_label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
+        add_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
         'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
         _( "Add Hierarchical Label" ), _( "Add a hierarchical label" ),
-        add_hierarchical_label_xpm, AF_ACTIVATE, (void*) SCH_HIER_LABEL_T );
+        add_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL,
@@ -318,27 +318,27 @@ TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
         add_hierarchical_subsheet_xpm, AF_ACTIVATE, (void*) SCH_SHEET_T );
 
-TOOL_ACTION EE_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
+TOOL_ACTION EE_ACTIONS::importSingleSheetPin( "eeschema.InteractiveDrawing.importSingleSheetPin",
         AS_GLOBAL, 0, "",
-        _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
+        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
         add_hierar_pin_xpm, AF_ACTIVATE, (void*) SCH_SHEET_PIN_T );
 
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, "",
         _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
-        import_hierarchical_label_xpm, AF_ACTIVATE, (void*) SCH_SHEET_PIN_T );
+        import_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL,
         MD_CTRL + 'H', LEGACY_HK_NAME( "Add Global Label" ),
         _( "Add Global Label" ), _( "Add a global label" ),
-        add_glabel_xpm, AF_ACTIVATE, (void*) SCH_GLOBAL_LABEL_T );
+        add_glabel_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
         AS_GLOBAL,
         'T', LEGACY_HK_NAME( "Add Graphic Text" ),
         _( "Add Text" ), _( "Add text" ),
-        text_xpm, AF_ACTIVATE, (void*) SCH_TEXT_T );
+        text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",

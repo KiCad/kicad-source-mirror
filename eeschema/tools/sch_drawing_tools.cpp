@@ -502,16 +502,14 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
-    wxPoint         cursorPos;
-    KICAD_T         type = aEvent.Parameter<KICAD_T>();
-    EE_GRID_HELPER  grid( m_toolMgr );
-
+    wxPoint               cursorPos;
+    KICAD_T               type = aEvent.Parameter<KICAD_T>();
+    EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    SCH_ITEM*             previewItem;
 
     if( m_inSingleClickPlace )
         return 0;
-    else
-        m_inSingleClickPlace = true;
 
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
@@ -527,40 +525,68 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
     }
 
+    switch( type )
+    {
+    case SCH_NO_CONNECT_T:
+        previewItem = new SCH_NO_CONNECT( cursorPos );
+        previewItem->SetParent( m_frame->GetScreen() );
+        break;
+
+    case SCH_JUNCTION_T:
+        previewItem = new SCH_JUNCTION( cursorPos );
+        previewItem->SetParent( m_frame->GetScreen() );
+        break;
+
+    case SCH_BUS_WIRE_ENTRY_T:
+        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
+        previewItem->SetParent( m_frame->GetScreen() );
+        break;
+
+    case SCH_SHEET_PIN_T:
+    {
+        EE_SELECTION& selection = m_selectionTool->GetSelection();
+        SCH_SHEET*    sheet = dynamic_cast<SCH_SHEET*>( selection.Front() );
+
+        if( !sheet )
+            return 0;
+
+        SCH_HIERLABEL* label = importHierLabel( sheet );
+
+        if( !label )
+        {
+            m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+            m_statusPopup->PopupFor( 2000 );
+            return 0;
+        }
+
+        previewItem = createSheetPin( sheet, label );
+    }
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
+        return 0;
+    }
+
+    m_inSingleClickPlace = true;
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
     cursorPos = aEvent.IsPrime() ? (wxPoint) aEvent.Position()
                                  : (wxPoint) controls->GetMousePosition();
 
-    SCH_ITEM* previewItem;
-    switch( type )
-    {
-    case SCH_NO_CONNECT_T:
-        previewItem = new SCH_NO_CONNECT( cursorPos );
-        break;
-    case SCH_JUNCTION_T:
-        previewItem = new SCH_JUNCTION( cursorPos );
-        break;
-    case SCH_BUS_WIRE_ENTRY_T:
-        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
-        break;
-    default:
-        wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
-        return 0;
-    }
-
-    previewItem->SetParent( m_frame->GetScreen() );
-
-    m_view->ClearPreview();
-    m_view->AddToPreview( previewItem->Clone() );
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
 
+    m_view->ClearPreview();
+    m_view->AddToPreview( previewItem->Clone() );
+
     // Prime the pump
-    if( aEvent.HasPosition() )
+    if( aEvent.HasPosition() && type != SCH_SHEET_PIN_T )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
     else
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -614,7 +640,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 newItem->SetFlags( IS_NEW );
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
-                m_frame->SaveCopyForRepeatItem( newItem );
+
+                if( type != SCH_SHEET_PIN_T )
+                    m_frame->SaveCopyForRepeatItem( newItem );
 
                 if( type == SCH_JUNCTION_T )
                     m_frame->TestDanglingEnds();
@@ -624,7 +652,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
             }
 
-            if( evt->IsDblClick( BUT_LEFT ) )       // Finish tool.
+            if( evt->IsDblClick( BUT_LEFT ) || type == SCH_SHEET_PIN_T )  // Finish tool.
             {
                 m_frame->PopTool( tool );
                 break;
@@ -1255,6 +1283,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::importSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::importSingleSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
 }
