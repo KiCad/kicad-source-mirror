@@ -104,17 +104,6 @@ SELECTION_CONDITION EDITOR_CONDITIONS::FullscreenCursor()
 }
 
 
-SELECTION_CONDITION EDITOR_CONDITIONS::CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE aType )
-{
-    // The canvas type requires a draw frame
-    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
-
-    wxASSERT( drwFrame );
-
-    return std::bind( &EDITOR_CONDITIONS::canvasTypeFunc, _1, drwFrame, aType );
-}
-
-
 bool EDITOR_CONDITIONS::contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame )
 {
     return aFrame->IsContentModified();
@@ -170,9 +159,3 @@ bool EDITOR_CONDITIONS::cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME*
     return aFrame->GetGalDisplayOptions().m_fullscreenCursor;
 }
 
-
-bool EDITOR_CONDITIONS::canvasTypeFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame,
-                                        EDA_DRAW_PANEL_GAL::GAL_TYPE aType )
-{
-    return aFrame->GetCanvas()->GetBackend() == aType;
-}

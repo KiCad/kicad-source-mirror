@@ -44,9 +44,7 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( PCB_BASE_FRAME* aFrame,
     PANEL_DISPLAY_OPTIONS_BASE( aParent->GetTreebook() ),
     m_frame( aFrame )
 {
-    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
-
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
     m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) ? 1 : 0 );

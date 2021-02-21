@@ -118,15 +118,6 @@ public:
      */
     SELECTION_CONDITION FullscreenCursor();
 
-    /**
-     * Create a functor testing if the specified canvas is active in the frame.
-     *
-     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
-     *
-     * @return Functor testing the canvas type of the frame
-     */
-    SELECTION_CONDITION CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
-
 protected:
     ///< Helper function used by ContentModified().
     static bool contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );

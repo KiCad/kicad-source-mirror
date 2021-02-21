@@ -32,12 +32,13 @@ class wxBoxSizer;
 class wxRadioBox;
 class wxSpinCtrlDouble;
 class wxStaticText;
+class EDA_DRAW_FRAME;
 
 class GAL_OPTIONS_PANEL: public wxPanel
 {
 public:
 
-    GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTIONS& aGalOpts );
+    GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame );
 
     /**
      * Load the panel controls from the given opt
@@ -50,24 +51,27 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    wxBoxSizer* m_mainSizer;
+    EDA_DRAW_FRAME*   m_drawFrame;
 
-    wxRadioBox* m_gridStyle;
+    wxBoxSizer*       m_mainSizer;
 
-    wxStaticText* l_gridLineWidth;
+    wxRadioBox*       m_renderingEngine;
+
+    wxRadioBox*       m_gridStyle;
+    wxStaticText*     l_gridLineWidth;
     wxSpinCtrlDouble* m_gridLineWidth;
-    wxStaticText* l_gridLineWidthUnits;
+    wxStaticText*     l_gridLineWidthUnits;
 
-    wxStaticText* l_gridMinSpacing;
+    wxStaticText*     l_gridMinSpacing;
     wxSpinCtrlDouble* m_gridMinSpacing;
-    wxStaticText* l_gridMinSpacingUnits;
+    wxStaticText*     l_gridMinSpacingUnits;
 
-    wxStaticText* l_gridSnapOptions;
-    wxChoice* m_gridSnapOptions;
-    wxStaticText* l_gridSnapSpace;
+    wxStaticText*     l_gridSnapOptions;
+    wxChoice*         m_gridSnapOptions;
+    wxStaticText*     l_gridSnapSpace;
 
-    wxRadioBox* m_cursorShape;
-    wxCheckBox* m_forceCursorDisplay;
+    wxRadioBox*       m_cursorShape;
+    wxCheckBox*       m_forceCursorDisplay;
 
     ///< The GAL options to read/write
     KIGFX::GAL_DISPLAY_OPTIONS& m_galOptions;

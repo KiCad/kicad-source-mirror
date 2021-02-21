@@ -48,12 +48,12 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
+		wxStaticText* m_staticTextClear3DCache;
 		wxSpinCtrl* m_Clear3DCacheFilesOlder;
 		wxStaticText* m_staticTextDays;
 		wxChoice* m_antialiasing;
 		wxStaticText* m_antialiasingFallbackLabel;
 		wxChoice* m_antialiasingFallback;
-		wxStaticText* m_staticTextClear3DCache;
 		wxTextCtrl* m_textEditorPath;
 		wxBitmapButton* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;

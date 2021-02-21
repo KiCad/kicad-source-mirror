@@ -33,8 +33,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
         PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aWindow ),
         m_frame( aFrame )
 {
-    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
 
     m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 

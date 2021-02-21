@@ -165,8 +165,6 @@ public:
     static TOOL_ACTION showFootprintEditor;
     static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION updateSchematicFromPcb;
-    static TOOL_ACTION acceleratedGraphics;
-    static TOOL_ACTION standardGraphics;
 
     // Internal
     static TOOL_ACTION updateMenu;

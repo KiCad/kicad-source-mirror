@@ -33,8 +33,7 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( GERBVIEW_FRAME *
     PANEL_GERBVIEW_DISPLAY_OPTIONS_BASE( aWindow, wxID_ANY ),
     m_Parent( aFrame )
 {
-    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_Parent->GetGalDisplayOptions();
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_Parent );
     m_galOptionsSizer->Add( m_galOptsPanel, 0, wxEXPAND | wxLEFT, 5 );
 }
 

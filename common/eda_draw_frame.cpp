@@ -1046,16 +1046,19 @@ void EDA_DRAW_FRAME::resolveCanvasType()
                 saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
                 // Switch to OpenGL, which will save the new setting if successful
-                GetToolManager()->RunAction( ACTIONS::acceleratedGraphics, true );
+                SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
                 // Switch back to Cairo if OpenGL is not supported
                 if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                    GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
+                    SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+
+                HardRedraw();
             }
             else
             {
                 // If they were on legacy, switch to Cairo
-                GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
+                SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+                HardRedraw();
             }
         }
 

@@ -148,7 +148,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     ACTION_MENU* inspectorMenu = new ACTION_MENU( false, selTool );
     inspectorMenu->Add( PL_ACTIONS::showInspector );
 
-
     //-- Preferences menu --------------------------------------------------
     //
     ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
@@ -160,12 +159,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Language submenu
     AddMenuLanguageList( preferencesMenu, selTool );
-
-#ifndef __WXMAC__
-    preferencesMenu->AppendSeparator();
-    preferencesMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
-    preferencesMenu->Add( ACTIONS::standardGraphics, ACTION_MENU::CHECK );
-#endif
 
     //-- Menubar -----------------------------------------------------------
     //

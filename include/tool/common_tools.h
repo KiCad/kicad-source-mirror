@@ -85,8 +85,6 @@ public:
     int GridPreset( int idx );
     int OnGridChanged();
 
-    int SwitchCanvas( const TOOL_EVENT& aEvent );
-
 private:
     /**
      * The set of "Zoom to Fit" types that can be performed.

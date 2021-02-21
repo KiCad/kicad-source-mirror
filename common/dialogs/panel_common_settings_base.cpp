@@ -25,7 +25,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("&Auto save:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextautosave->Wrap( -1 );
-	gbSizer1->Add( m_staticTextautosave, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticTextautosave, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
@@ -41,7 +41,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer6->Add( minutesLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	gbSizer1->Add( bSizer6, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbSizer1->Add( bSizer6, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP, 5 );
 
 	m_staticTextFileHistorySize = new wxStaticText( this, wxID_ANY, _("File history size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFileHistorySize->Wrap( -1 );
@@ -49,6 +49,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_fileHistorySize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 0 );
 	gbSizer1->Add( m_fileHistorySize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticTextClear3DCache = new wxStaticText( this, wxID_ANY, _("3D cache file duration:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextClear3DCache->Wrap( -1 );
+	gbSizer1->Add( m_staticTextClear3DCache, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -86,14 +90,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_antialiasingFallback->SetSelection( 0 );
 	gbSizer1->Add( m_antialiasingFallback, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_staticTextClear3DCache = new wxStaticText( this, wxID_ANY, _("3D cache file duration:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextClear3DCache->Wrap( -1 );
-	gbSizer1->Add( m_staticTextClear3DCache, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
-
 
 	gbSizer1->AddGrowableCol( 1 );
 
-	bLeftSizer->Add( gbSizer1, 0, wxEXPAND|wxALL, 15 );
+	bLeftSizer->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sizerHelperApps;
 	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxVERTICAL );
@@ -150,10 +150,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( sizerHelperApps, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerIconsOpts;
-	sbSizerIconsOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxHORIZONTAL );
+	sbSizerIconsOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxVERTICAL );
 
 	wxGridBagSizer* gbSizer4;
-	gbSizer4 = new wxGridBagSizer( 20, 0 );
+	gbSizer4 = new wxGridBagSizer( 10, 0 );
 	gbSizer4->SetFlexibleDirection( wxBOTH );
 	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -187,7 +187,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	gbSizer4->AddGrowableCol( 1 );
 	gbSizer4->AddGrowableRow( 0 );
 
-	sbSizerIconsOpts->Add( gbSizer4, 1, wxBOTTOM|wxRIGHT, 5 );
+	sbSizerIconsOpts->Add( gbSizer4, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( sbSizerIconsOpts, 1, wxEXPAND|wxALL, 5 );

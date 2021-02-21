@@ -587,16 +587,6 @@ TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFrom
         _( "Update Schematic from PCB..." ), _( "Update schematic with changes made to PCB" ),
         update_sch_from_pcb_xpm );
 
-TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
-        AS_GLOBAL, 0, "",
-        _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
-        tools_xpm );
-
-TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
-        AS_GLOBAL, 0, "",
-        _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
-        tools_xpm );
-
 TOOL_ACTION ACTIONS::configurePaths( "common.SuiteControl.configurePaths",
         AS_GLOBAL, 0, "",
         _( "Configure Paths..." ), _( "Edit path configuration environment variables" ),

@@ -34,9 +34,7 @@ PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame,
     SetSizer( mainSizer );
 
     // install GAL options pane
-    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
-
-    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, m_frame );
     mainSizer->Add( m_galOptsPanel, 1, wxEXPAND | wxLEFT, 5 );
 
     // a spacer to take up the other half of the width

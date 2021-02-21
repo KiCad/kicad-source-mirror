@@ -1060,11 +1060,6 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::milsUnits,
                         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::acceleratedGraphics,
-                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ) ) );
-    mgr->SetConditions( ACTIONS::standardGraphics,
-                        CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
-
     auto flashedDisplayOutlinesCond =
         [this] ( const SELECTION& )
         {

@@ -273,12 +273,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
 
-#ifndef __WXMAC__
-    prefsMenu->AppendSeparator();
-    prefsMenu->Add( ACTIONS::acceleratedGraphics, ACTION_MENU::CHECK );
-    prefsMenu->Add( ACTIONS::standardGraphics,    ACTION_MENU::CHECK );
-#endif
-
 
     //-- Menubar -------------------------------------------------------------
     //
