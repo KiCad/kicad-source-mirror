@@ -192,8 +192,11 @@ def LoadPlugins(bundlepath=None, userpath=None):
     bundlepath and userpath are strings utf-8 encoded (compatible "C" strings).
     So convert these utf8 encoding to unicode strings to avoid any encoding issue.
     """
-    bundlepath = bundlepath.decode( 'UTF-8' );
-    userpath = userpath.decode( 'UTF-8' );
+    try:
+        bundlepath = bundlepath.decode( 'UTF-8' );
+        userpath = userpath.decode( 'UTF-8' );
+    except AttributeError:
+        pass
 
     config_path = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
     plugin_directories=[]
