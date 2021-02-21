@@ -77,7 +77,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     wxString value = StringFromValue( editFrame.GetUserUnits(), gap_size );
     WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create microwave footprint" ), value );
 
-    if( dlg.ShowModal() != wxID_OK )
+    if( dlg.ShowQuasiModal() != wxID_OK )
         return NULL; // cancelled by user
 
     value    = dlg.GetValue();
@@ -92,7 +92,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         WX_TEXT_ENTRY_DIALOG angledlg( &editFrame, _( "Angle in degrees:" ),
                                        _( "Create microwave footprint" ), msg );
 
-        if( angledlg.ShowModal() != wxID_OK )
+        if( angledlg.ShowQuasiModal() != wxID_OK )
             return NULL; // cancelled by user
 
         msg = angledlg.GetValue();
