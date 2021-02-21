@@ -22,7 +22,7 @@
 #include <project/project_local_settings.h>
 #include <settings/parameters.h>
 
-const int projectLocalSettingsVersion = 2;
+const int projectLocalSettingsVersion = 3;
 
 
 PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename ) :
@@ -243,6 +243,64 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     {
                         at( "board" ).erase( "visible_items" );
                     }
+                }
+
+                return true;
+            } );
+
+    registerMigration( 2, 3,
+            [&]()
+            {
+                /**
+                 * Schema version 2 to 3:
+                 * Fix issue with object visibility not migrating from legacy, which required
+                 * remapping of GAL_LAYER_ID to match the legacy bitmask ordering.
+                 */
+
+                /// Stores a mapping from old to new enum offset
+                const std::map<int, int> offsets = {
+                        { 22, 34 },    // LAYER_PAD_HOLEWALLS
+                        { 23, 22 },    // LAYER_VIA_HOLES
+                        { 24, 35 },    // LAYER_VIA_HOLEWALLS
+                        { 25, 23 },    // LAYER_DRC_ERROR
+                        { 26, 36 },    // LAYER_DRC_WARNING
+                        { 27, 37 },    // LAYER_DRC_EXCLUSION
+                        { 28, 38 },    // LAYER_MARKER_SHADOWS
+                        { 29, 24 },    // LAYER_WORKSHEET
+                        { 30, 25 },    // LAYER_GP_OVERLAY
+                        { 31, 26 },    // LAYER_SELECT_OVERLAY
+                        { 32, 27 },    // LAYER_PCB_BACKGROUND
+                        { 33, 28 },    // LAYER_CURSOR
+                        { 34, 29 },    // LAYER_AUX_ITEM
+                        { 35, 30 },    // LAYER_DRAW_BITMAPS
+                        { 39, 32 },    // LAYER_PADS
+                        { 40, 33 },    // LAYER_ZONES
+                    };
+
+                nlohmann::json::json_pointer ptr( "/board/visible_items"_json_pointer );
+
+                if( contains( ptr ) && at( ptr ).is_array() )
+                {
+                    nlohmann::json visible = nlohmann::json::array();
+
+                    for( const nlohmann::json& val : at( ptr ) )
+                    {
+                        try
+                        {
+                            int layer = val.get<int>();
+
+                            if( offsets.count( layer ) )
+                                visible.push_back( offsets.at( layer ) );
+                            else
+                                visible.push_back( layer );
+                        }
+                        catch( ... )
+                        {
+                            // skip invalid value
+                        }
+                    }
+
+                    at( "board" )["visible_items"] = visible;
                 }
 
                 return true;

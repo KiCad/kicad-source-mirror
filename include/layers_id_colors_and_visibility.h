@@ -173,63 +173,78 @@ enum NETNAMES_LAYER_ID: int
 /// Macro for obtaining netname layer for a given PCB layer
 #define NETNAMES_LAYER_INDEX( layer )   ( NETNAMES_LAYER_ID_START + layer )
 
-/// GAL layers are "virtual" layers, i.e. not tied into design data.
-/// Some layers here are shared between applications.
+/**
+ *  GAL layers are "virtual" layers, i.e. not tied into design data.
+ *  Some layers here are shared between applications.
+ *
+ *  NOTE: Be very careful where you add new layers here.  Layers below GAL_LAYER_ID_BITMASK_END
+ *  must never be re-ordered and new layers must always be added after this value, because the
+ *  layers before this value are mapped to bit locations in legacy board files.
+ *
+ *  The values in this enum that are used to store visibility state are explicitly encoded with an
+ *  offset from GAL_LAYER_ID_START, which is explicitly encoded itself. The exact value of
+ *  GAL_LAYER_ID_START is not that sensitive, but the offsets should never be changed or else any
+ *  existing visibility settings will be disrupted.
+ */
 enum GAL_LAYER_ID: int
 {
     GAL_LAYER_ID_START = NETNAMES_LAYER_ID_END,
 
-    LAYER_VIAS = GAL_LAYER_ID_START, ///< Meta control for all vias opacity/visibility
-    LAYER_VIA_MICROVIA,         ///< to draw micro vias
-    LAYER_VIA_BBLIND,           ///< to draw blind/buried vias
-    LAYER_VIA_THROUGH,          ///< to draw usual through hole vias
-    LAYER_NON_PLATEDHOLES,      ///< handle color for not plated holes (holes, not pads)
-    LAYER_MOD_TEXT_FR,
-    LAYER_MOD_TEXT_BK,
-    LAYER_MOD_TEXT_INVISIBLE,   ///< text marked as invisible
-    LAYER_ANCHOR,               ///< anchor of items having an anchor point (texts, footprints)
-    LAYER_PAD_FR,               ///< smd pads, front layer
-    LAYER_PAD_BK,               ///< smd pads, back layer
-    LAYER_RATSNEST,
-    LAYER_GRID,
-    LAYER_GRID_AXES,
-    LAYER_NO_CONNECTS,          ///< show a marker on pads with no nets
-    LAYER_MOD_FR,               ///< show footprints on front
-    LAYER_MOD_BK,               ///< show footprints on back
-    LAYER_MOD_VALUES,           ///< show footprints values (when texts are visibles)
-    LAYER_MOD_REFERENCES,       ///< show footprints references (when texts are visibles)
-    LAYER_TRACKS,
-    LAYER_PADS_TH,              ///< multilayer pads, usually with holes
-    LAYER_PAD_PLATEDHOLES,      ///< to draw pad holes (plated)
-    LAYER_PAD_HOLEWALLS,
-    LAYER_VIA_HOLES,            ///< to draw via holes (pad holes do not use this layer)
-    LAYER_VIA_HOLEWALLS,
-    LAYER_DRC_ERROR,            ///< layer for drc markers with SEVERITY_ERROR
-    LAYER_DRC_WARNING,          ///< layer for drc markers with SEVERITY_WARNING
-    LAYER_DRC_EXCLUSION,        ///< layer for drc markers which have been individually excluded
-    LAYER_MARKER_SHADOWS,       ///< shadows for drc markers
-    LAYER_WORKSHEET,            ///< worksheet frame
-    LAYER_GP_OVERLAY,           ///< general purpose overlay
-    LAYER_SELECT_OVERLAY,       ///< currently selected items overlay
-    LAYER_PCB_BACKGROUND,       ///< PCB background color
-    LAYER_CURSOR,               ///< PCB cursor
-    LAYER_AUX_ITEMS,            ///< Auxiliary items (guides, rule, etc)
-    LAYER_DRAW_BITMAPS,         ///< to handle and draw images bitmaps
+    LAYER_VIAS               = GAL_LAYER_ID_START +  0, ///< Meta control for all vias opacity/visibility
+    LAYER_VIA_MICROVIA       = GAL_LAYER_ID_START +  1, ///< to draw micro vias
+    LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, ///< to draw blind/buried vias
+    LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, ///< to draw usual through hole vias
+    LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4, ///< handle color for not plated holes (holes, not pads)
+    LAYER_MOD_TEXT_FR        = GAL_LAYER_ID_START +  5,
+    LAYER_MOD_TEXT_BK        = GAL_LAYER_ID_START +  6,
+    LAYER_MOD_TEXT_INVISIBLE = GAL_LAYER_ID_START +  7, ///< text marked as invisible
+    LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
+    LAYER_PAD_FR             = GAL_LAYER_ID_START +  9, ///< smd pads, front layer
+    LAYER_PAD_BK             = GAL_LAYER_ID_START + 10, ///< smd pads, back layer
+    LAYER_RATSNEST           = GAL_LAYER_ID_START + 11,
+    LAYER_GRID               = GAL_LAYER_ID_START + 12,
+    LAYER_GRID_AXES          = GAL_LAYER_ID_START + 13,
+    LAYER_NO_CONNECTS        = GAL_LAYER_ID_START + 14, ///< show a marker on pads with no nets
+    LAYER_MOD_FR             = GAL_LAYER_ID_START + 15, ///< show footprints on front
+    LAYER_MOD_BK             = GAL_LAYER_ID_START + 16, ///< show footprints on back
+    LAYER_MOD_VALUES         = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visibles)
+    LAYER_MOD_REFERENCES     = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visibles)
+    LAYER_TRACKS             = GAL_LAYER_ID_START + 19,
+    LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< multilayer pads, usually with holes
+    LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)
+    LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22, ///< to draw via holes (pad holes do not use this layer)
+    LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23, ///< layer for drc markers with SEVERITY_ERROR
+    LAYER_WORKSHEET          = GAL_LAYER_ID_START + 24, ///< worksheet frame
+    LAYER_GP_OVERLAY         = GAL_LAYER_ID_START + 25, ///< general purpose overlay
+    LAYER_SELECT_OVERLAY     = GAL_LAYER_ID_START + 26, ///< currently selected items overlay
+    LAYER_PCB_BACKGROUND     = GAL_LAYER_ID_START + 27, ///< PCB background color
+    LAYER_CURSOR             = GAL_LAYER_ID_START + 28, ///< PCB cursor
+    LAYER_AUX_ITEMS          = GAL_LAYER_ID_START + 29, ///< Auxiliary items (guides, rule, etc)
+    LAYER_DRAW_BITMAPS       = GAL_LAYER_ID_START + 30, ///< to handle and draw images bitmaps
 
     /// This is the end of the layers used for visibility bit masks in Pcbnew
-    GAL_LAYER_ID_BITMASK_END,
+    GAL_LAYER_ID_BITMASK_END = GAL_LAYER_ID_START + 31,
+
+    // Layers in this section have visibility controls but were not present in legacy board files.
+
+    LAYER_PADS               = GAL_LAYER_ID_START + 32, ///< Meta control for all pads opacity/visibility (color ignored)
+    LAYER_ZONES              = GAL_LAYER_ID_START + 33, ///< Control for copper zone opacity/visibility (color ignored)
+
+    LAYER_PAD_HOLEWALLS      = GAL_LAYER_ID_START + 34,
+    LAYER_VIA_HOLEWALLS      = GAL_LAYER_ID_START + 35,
+    LAYER_DRC_WARNING        = GAL_LAYER_ID_START + 36, ///< layer for drc markers with SEVERITY_WARNING
+    LAYER_DRC_EXCLUSION      = GAL_LAYER_ID_START + 37, ///< layer for drc markers which have been individually excluded
+    LAYER_MARKER_SHADOWS     = GAL_LAYER_ID_START + 38, ///< shadows for drc markers
+
+    // Add layers below this point that do not have visibility controls, so don't need explicit
+    // enum values
 
     LAYER_WORKSHEET_PAGE1,      ///< for pageLayout editor previewing
     LAYER_WORKSHEET_PAGEn,      ///< for pageLayout editor previewing
 
-    LAYER_PADS,                 ///< Meta control for all pads opacity/visibility (color ignored)
-    LAYER_ZONES,                ///< Control for copper zone opacity/visibility (color ignored)
-
     /// Virtual layers for stacking zones and tracks on a given copper layer
     LAYER_ZONE_START,
     LAYER_ZONE_END = LAYER_ZONE_START + PCB_LAYER_ID_COUNT,
-
-    /// Add new GAL layers here
 
     GAL_LAYER_ID_END
 };
@@ -424,9 +439,7 @@ wxString LayerName( int aLayer );
 // Here is a mask to set them visible, to be sure they are displayed
 // after loading a board for instance
 #define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PAD_PLATEDHOLES ) ) +\
-                                 ( 1 << GAL_LAYER_INDEX( LAYER_PAD_HOLEWALLS ) ) +\
                                  ( 1 << GAL_LAYER_INDEX( LAYER_VIA_HOLES ) ) +\
-                                 ( 1 << GAL_LAYER_INDEX( LAYER_VIA_HOLEWALLS ) ) +\
                                  ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
                                  ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) +\
                                  ( 1 << GAL_LAYER_INDEX( LAYER_RATSNEST ) ) )
