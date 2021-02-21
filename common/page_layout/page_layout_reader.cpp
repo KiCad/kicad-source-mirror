@@ -168,16 +168,15 @@ wxString convertLegacyVariableRefs( const wxString& aTextbase )
 
                 switch( format )
                 {
-                case '0': msg += wxT( "${COMMENT0}" );  break;
-                case '1': msg += wxT( "${COMMENT1}" );  break;
-                case '2': msg += wxT( "${COMMENT2}" );  break;
-                case '3': msg += wxT( "${COMMENT3}" );  break;
-                case '4': msg += wxT( "${COMMENT4}" );  break;
-                case '5': msg += wxT( "${COMMENT5}" );  break;
-                case '6': msg += wxT( "${COMMENT6}" );  break;
-                case '7': msg += wxT( "${COMMENT7}" );  break;
-                case '8': msg += wxT( "${COMMENT8}" );  break;
-                case '9': msg += wxT( "${COMMENT9}" );  break;
+                case '0': msg += wxT( "${COMMENT1}" );  break;
+                case '1': msg += wxT( "${COMMENT2}" );  break;
+                case '2': msg += wxT( "${COMMENT3}" );  break;
+                case '3': msg += wxT( "${COMMENT4}" );  break;
+                case '4': msg += wxT( "${COMMENT5}" );  break;
+                case '5': msg += wxT( "${COMMENT6}" );  break;
+                case '6': msg += wxT( "${COMMENT7}" );  break;
+                case '7': msg += wxT( "${COMMENT8}" );  break;
+                case '8': msg += wxT( "${COMMENT9}" );  break;
                 }
                 break;
 

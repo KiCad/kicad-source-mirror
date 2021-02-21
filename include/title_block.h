@@ -1,7 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Author: Dick Hollenbeck
+ *
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,21 +36,18 @@ class PROJECT;
 /**
  * Hold the information shown in the lower right corner of a plot, printout, or
  * editing view.
- *
- * @author Dick Hollenbeck
  */
 class TITLE_BLOCK
 {
     // Texts are stored in wxArraystring.
-    // textsIdx gives the index of known texts in
-    // this array
-    enum textsIdx
+    // TEXTS_IDX gives the index of known texts in this array
+    enum TEXTS_IDX
     {
-        titleIdx = 0,
-        dateIdx,
-        revisionIdx,
-        companyIdx,
-        m_commentIdx
+        TITLE_IDX = 0,
+        DATE_IDX,
+        REVISION_IDX,
+        COMPANY_IDX,
+        COMMENT1_IDX    // idx of the first comment: one can have more than 1 comment
     };
 
 public:
@@ -58,12 +57,12 @@ public:
 
     void SetTitle( const wxString& aTitle )
     {
-        setTbText( titleIdx, aTitle );
+        setTbText( TITLE_IDX, aTitle );
     }
 
     const wxString& GetTitle() const
     {
-        return getTbText( titleIdx );
+        return getTbText( TITLE_IDX );
     }
 
     /**
@@ -71,43 +70,43 @@ public:
      */
     void SetDate( const wxString& aDate )
     {
-        setTbText( dateIdx, aDate );
+        setTbText( DATE_IDX, aDate );
     }
 
     const wxString& GetDate() const
     {
-        return getTbText( dateIdx );
+        return getTbText( DATE_IDX );
     }
 
     void SetRevision( const wxString& aRevision )
     {
-        setTbText( revisionIdx, aRevision );
+        setTbText( REVISION_IDX, aRevision );
     }
 
     const wxString& GetRevision() const
     {
-        return getTbText( revisionIdx );
+        return getTbText( REVISION_IDX );
     }
 
     void SetCompany( const wxString& aCompany )
     {
-        setTbText( companyIdx, aCompany );
+        setTbText( COMPANY_IDX, aCompany );
     }
 
     const wxString& GetCompany() const
     {
-        return getTbText( companyIdx );
+        return getTbText( COMPANY_IDX );
     }
 
     void SetComment( int aIdx, const wxString& aComment )
     {
-        aIdx += m_commentIdx;
+        aIdx += COMMENT1_IDX;
         return setTbText( aIdx, aComment );
     }
 
     const wxString& GetComment( int aIdx ) const
     {
-        aIdx += m_commentIdx;
+        aIdx += COMMENT1_IDX;
         return getTbText( aIdx );
     }
 
