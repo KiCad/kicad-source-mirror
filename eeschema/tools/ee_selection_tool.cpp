@@ -69,14 +69,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbolOrPower = [] (const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
-    {
-        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
-
-        if( symbol )
-            return !symbol->GetPartRef();
-    }
-
-    return false;
+        return dynamic_cast<SCH_COMPONENT*>( aSel.Front() ) != nullptr;
 };
 
 

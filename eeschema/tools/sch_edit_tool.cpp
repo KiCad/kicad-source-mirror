@@ -258,8 +258,6 @@ bool SCH_EDIT_TOOL::Init()
     static KICAD_T fieldParentTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
     auto singleFieldParentCondition = E_C::Count( 1 ) && E_C::OnlyTypes( fieldParentTypes );
 
-    auto singleSymbolCondition = E_C::Count( 1 ) && E_C::OnlyType( SCH_COMPONENT_T );
-
     auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
 
     //
@@ -276,9 +274,9 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::mirrorH,         orientCondition );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
-        moveMenu.AddItem( EE_ACTIONS::editReference,   singleSymbolCondition );
-        moveMenu.AddItem( EE_ACTIONS::editValue,       singleSymbolCondition );
-        moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleSymbolCondition );
+        moveMenu.AddItem( EE_ACTIONS::editReference,   E_C::SingleSymbol );
+        moveMenu.AddItem( EE_ACTIONS::editValue,       E_C::SingleSymbol );
+        moveMenu.AddItem( EE_ACTIONS::editFootprint,   E_C::SingleSymbol );
         moveMenu.AddItem( EE_ACTIONS::toggleDeMorgan,  E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -307,9 +305,9 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editReference,    singleSymbolCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editValue,        singleSymbolCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleSymbolCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
     drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleFieldParentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
 
@@ -318,7 +316,7 @@ bool SCH_EDIT_TOOL::Init()
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,     singleSymbolCondition && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,     E_C::SingleSymbolOrPower && E_C::Idle, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::toLabel,             anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toHLabel,            anyTextTool && E_C::Idle, 200 );
@@ -348,7 +346,7 @@ bool SCH_EDIT_TOOL::Init()
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
     selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleSymbolCondition && E_C::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
 
