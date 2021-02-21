@@ -7,13 +7,14 @@
 # Mathias Neumann <alfrede@opferindustries.de>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Dominik Wernberger <dominik.wernberger@gmx.de>, 2021.
+# Flo082002 <flos6323@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-23 18:38+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Flo082002 <flos6323@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -16470,7 +16471,7 @@ msgstr "Bauteil ist nicht von anderem Bauteil abgeleitet."
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
 msgstr ""
-"Diese Position wird bereist von einem anderen Pin in Einheit %d benutzt."
+"Diese Position wird bereits von einem anderen Pin in Einheit %d benutzt."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:235
 msgid "Place Pin Anyway"
