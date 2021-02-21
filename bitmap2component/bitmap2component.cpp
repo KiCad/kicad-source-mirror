@@ -207,6 +207,8 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         // fields text thickness = 1.5 / 5 = 0.3mm
         sprintf( strbuf, "(module %s (layer F.Cu)\n  (at 0 0)\n", m_CmpName.c_str() );
         m_Data += strbuf;
+        sprintf( strbuf, "(attr board_only exclude_from_pos_files exclude_from_bom)\n");
+        m_Data += strbuf;
         sprintf( strbuf, " (fp_text reference \"G***\" (at 0 0) (layer %s)\n"
             "  (effects (font (thickness 0.3)))\n  )\n", aBrdLayerName );
         m_Data += strbuf;
