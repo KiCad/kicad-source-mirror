@@ -277,7 +277,7 @@ bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
     if( s_PcbEditFrame )
     {
         bool ok = s_PcbEditFrame->ExportVRML_File( aFullFileName, aMMtoWRMLunit,
-                                                   aExport3DFiles, aUseRelativePaths, 
+                                                   aExport3DFiles, aUseRelativePaths,
                                                    aUsePlainPCB, a3D_Subdir, aXRef, aYRef );
         return ok;
     }

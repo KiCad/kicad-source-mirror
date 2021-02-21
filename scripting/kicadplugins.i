@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,21 +67,24 @@ NOT_LOADED_WIZARDS=""
 """
 PLUGIN_DIRECTORIES_SEARCH=""
 
-""" the trace of errors during execution of footprint wizards scripts
 """
+    the trace of errors during execution of footprint wizards scripts
+    Warning: strings (internally unicode) are returned as UTF-8 compatible C strings
+"""
+
 FULL_BACK_TRACE=""
 
 def GetUnLoadableWizards():
     global NOT_LOADED_WIZARDS
-    return NOT_LOADED_WIZARDS
+    return NOT_LOADED_WIZARDS.encode( 'UTF-8' )
 
 def GetWizardsSearchPaths():
     global PLUGIN_DIRECTORIES_SEARCH
-    return PLUGIN_DIRECTORIES_SEARCH
+    return PLUGIN_DIRECTORIES_SEARCH.encode( 'UTF-8' )
 
 def GetWizardsBackTrace():
     global FULL_BACK_TRACE
-    return FULL_BACK_TRACE
+    return FULL_BACK_TRACE.encode( 'UTF-8' )
 
 
 def LoadPluginModule(Dirname, ModuleName, FileName):
@@ -153,6 +156,7 @@ def LoadPlugins(bundlepath=None, userpath=None):
     Initialise Scripting/Plugin python environment and load plugins.
 
     Arguments:
+    Note: bundlepath and userpath are given  utf8 encoded, to be compatible with asimple C string
     bundlepath -- The path to the bundled scripts.
                   The bundled Plugins are relative to this path, in the
                   "plugins" subdirectory.
@@ -183,6 +187,13 @@ def LoadPlugins(bundlepath=None, userpath=None):
     if sys.version_info >= (3,3,0):
         import importlib
         importlib.invalidate_caches()
+
+    """
+    bundlepath and userpath are strings utf-8 encoded (compatible "C" strings).
+    So convert these utf8 encoding to unicode strings to avoid any encoding issue.
+    """
+    bundlepath = bundlepath.decode( 'UTF-8' );
+    userpath = userpath.decode( 'UTF-8' );
 
     config_path = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
     plugin_directories=[]
