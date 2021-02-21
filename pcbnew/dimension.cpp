@@ -229,9 +229,6 @@ void DIMENSION_BASE::Move( const wxPoint& offset )
 
 void DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    if( m_keepTextAligned )
-        m_keepTextAligned = false;
-
     double newAngle = m_text.GetTextAngle() + aAngle;
 
     if( newAngle >= 3600 )
@@ -644,7 +641,12 @@ void ALIGNED_DIMENSION::updateText()
     {
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
-        double rotation = std::copysign( DEG2RAD( 90 ), m_height );
+        double rotation;
+        if( crossbarCenter.x == 0 )
+            rotation = sign( crossbarCenter.y ) * DEG2RAD( 90 );
+        else
+            rotation = -std::copysign( DEG2RAD( 90 ), crossbarCenter.x );
+
         VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
         textOffset += crossbarCenter;
 
@@ -661,7 +663,7 @@ void ALIGNED_DIMENSION::updateText()
 
         NORMALIZE_ANGLE_POS( textAngle );
 
-        if( textAngle > 900 && textAngle < 2700 )
+        if( textAngle > 900 && textAngle <= 2700 )
             textAngle -= 1800;
 
         m_text.SetTextAngle( textAngle );
@@ -824,17 +826,15 @@ void ORTHOGONAL_DIMENSION::updateText()
     {
         int textOffsetDistance = m_text.GetEffectiveTextPenWidth() + m_text.GetTextHeight();
 
-        VECTOR2D height( m_crossBarStart - GetStart() );
-        VECTOR2D crossBar( m_crossBarEnd - m_crossBarStart );
+        VECTOR2I textOffset;
+        if( m_orientation == DIR::HORIZONTAL )
+            textOffset.y = -textOffsetDistance;
+        else
+            textOffset.x = -textOffsetDistance;
 
-        double sign = height.Cross( crossBar ) > 0 ? 1 : -1;
-        double rotation = sign * DEG2RAD( -90 );
-
-        VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
         textOffset += crossbarCenter;
 
         m_text.SetTextPos( m_crossBarStart + wxPoint( textOffset ) );
-        m_text.SetTextAngle(rotation);
     }
     else if( m_textPosition == DIM_TEXT_POSITION::INLINE )
     {
@@ -843,12 +843,11 @@ void ORTHOGONAL_DIMENSION::updateText()
 
     if( m_keepTextAligned )
     {
-        double textAngle = 3600 - RAD2DECIDEG( crossbarCenter.Angle() );
-
-        NORMALIZE_ANGLE_POS( textAngle );
-
-        if( textAngle > 900 && textAngle < 2700 )
-            textAngle -= 1800;
+        double textAngle;
+        if( abs( crossbarCenter.x ) > abs( crossbarCenter.y ) )
+            textAngle = 0;
+        else
+            textAngle = 900;
 
         m_text.SetTextAngle( textAngle );
     }
