@@ -61,6 +61,8 @@ void TOOL_EVENT::init()
     // Cancel tool doesn't contain a position
     if( IsCancel() )
         m_hasPosition = false;
+
+    m_forceImmediate = false;
 }
 
 

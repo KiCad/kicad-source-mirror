@@ -258,6 +258,11 @@ public:
     bool HasPosition() const { return m_hasPosition; }
     void SetHasPosition( bool aHasPosition ) { m_hasPosition = aHasPosition; }
 
+    ///< Returns if the action associated with this event should be treated as immediate regardless
+    ///< of the current immediate action settings.
+    bool ForceImmediate() const { return m_forceImmediate; }
+    void SetForceImmediate( bool aForceImmediate = true ) { m_forceImmediate = aForceImmediate; }
+
     TOOL_BASE* FirstResponder() const { return m_firstResponder; }
     void SetFirstResponder( TOOL_BASE* aTool ) { m_firstResponder = aTool; }
 
@@ -520,6 +525,7 @@ private:
     TOOL_ACTION_SCOPE m_scope;
     bool m_passEvent;
     bool m_hasPosition;
+    bool m_forceImmediate;
 
     ///< Difference between mouse cursor position and
     ///< the point where dragging event has started

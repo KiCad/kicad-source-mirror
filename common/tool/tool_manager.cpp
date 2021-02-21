@@ -1118,7 +1118,8 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         {
             // An tool-selection-event has no position
             if( mod_event.GetCommandStr().is_initialized()
-                    && mod_event.GetCommandStr().get() != GetToolHolder()->CurrentToolName() )
+                    && mod_event.GetCommandStr().get() != GetToolHolder()->CurrentToolName()
+                    && !mod_event.ForceImmediate() )
             {
                 mod_event.SetHasPosition( false );
             }

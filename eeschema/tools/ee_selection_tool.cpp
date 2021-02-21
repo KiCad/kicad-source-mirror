@@ -401,6 +401,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                         newEvt->SetMousePosition( snappedCursorPos );
                         newEvt->SetHasPosition( true );
+                        newEvt->SetForceImmediate( true );
                         m_toolMgr->ProcessEvent( *newEvt );
 
                         continueSelect = false;
