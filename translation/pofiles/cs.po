@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-17 22:35+0000\n"
+"PO-Revision-Date: 2021-02-23 18:38+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,9 +194,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Vaše verze OpenGL není podporována. Minimální požadovaná je 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Čas rendrování %.3f s"
+msgstr "Čas posledního vykreslení %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -541,7 +541,7 @@ msgstr "Další možnosti"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
 msgid "Anti-aliasing:"
-msgstr "Anti-aliasing:"
+msgstr "Antialiasing:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -607,7 +607,7 @@ msgstr "Přidat referenční rovinu"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr "Anti-aliasing"
+msgstr "Antialiasing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:264
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -2913,11 +2913,11 @@ msgstr "Subpixelové vyhlazování (ultra kvalita)"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Supersampling (2x)"
-msgstr "Supersampling (2x)"
+msgstr "Převzorkování (2x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Supersampling (4x)"
-msgstr "Supersampling (4x)"
+msgstr "Převzorkování (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:79
 msgid "Fallback graphics:"
@@ -7123,9 +7123,9 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Vývod listu %s nemá uvnitř listu odpovídající hierarchické označení"
 
 #: eeschema/connection_graph.cpp:2872
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
-msgstr "Hierarchické označení %s není připojeno k označení listu."
+msgstr "Hierarchické označení %s nemá odpovídající vývod listu mimo list"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8446,7 +8446,7 @@ msgstr "Reference"
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:969
 #: eeschema/symbol_editor/symbol_editor.cpp:1200
 msgid "Datasheet"
-msgstr "Datasheet"
+msgstr "Dokumentace"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:991
 msgid "New field name:"
@@ -8552,9 +8552,8 @@ msgstr "Filtrovat položky podle sítě:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Vyjmout vybraný prvek"
+msgstr "Zahrnout pouze vybrané položky"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -10505,7 +10504,7 @@ msgstr "Rozsah:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:778
 #: eeschema/dialogs/dialog_spice_model_base.cpp:894
 msgid "Offset:"
-msgstr "Offset:"
+msgstr "Ofset:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1088
 msgid "Standard deviation:"
@@ -11163,19 +11162,16 @@ msgid "Update Schematic from PCB"
 msgstr "Aktualizace schématu z DPS"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Umístit symbol"
+msgstr "Nadřazený symbol:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Odstranit pole, pokud nejsou v novém symbolu"
+msgstr "Odstranit pole, pokud nejsou v nadřazeném symbolu"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Resetovat pole, pokud jsou v novém symbolu prázdná"
+msgstr "Resetovat pole, pokud jsou v nadřazeném symbolu prázdná"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
 msgid "Update Symbol Fields"
@@ -11481,9 +11477,8 @@ msgid "Inter-sheet References"
 msgstr "Reference"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
-#, fuzzy
 msgid "Show inter-sheet references"
-msgstr "Zobrazit reference pouzder"
+msgstr "Připojit reference mezi listy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:155
 msgid "Standard (1,2,3)"
@@ -11900,10 +11895,8 @@ msgid "Input pin not driven by any Output pins"
 msgstr "Vstupní vývod není řízen žádným výstupním vývodem"
 
 #: eeschema/erc_item.cpp:58
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr ""
-"Vývod připojený k některým jiným vývodům, ale žádný vývod k jeho řízení"
+msgstr "Vývod vstupního napájení není řízen žádným vývodem výstupního napájení"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
@@ -12117,9 +12110,8 @@ msgstr ""
 "nového formátu."
 
 #: eeschema/files-io.cpp:563
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "Soubor schématu \"%s\" je již otevřen."
+msgstr "Soubor schématu je pouze pro čtení."
 
 #: eeschema/files-io.cpp:588
 msgid "Append Schematic"
@@ -12716,9 +12708,8 @@ msgid "Open Schematic"
 msgstr "Otevřít schéma"
 
 #: eeschema/sch_edit_frame.cpp:1029
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
+msgstr "Přiřazení pouzder vyžaduje kompletně očíslované schéma."
 
 #: eeschema/sch_edit_frame.cpp:1048
 msgid "Could not open CvPcb"
@@ -12974,6 +12965,8 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
+"Symbol ID '%s' je referenční nebo globální signál, ale má příliš mnoho "
+"vývodů. Očekávaný počet vývodů je 1, ale %d bylo nalezeno."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:545
 #, c-format
@@ -12981,6 +12974,8 @@ msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
+"ID symbolu '%s' je neznámého typu. Nejedná se ani o komponentu ani síť / "
+"symbol napájení. Symbol nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:558
 #, c-format
@@ -12989,6 +12984,8 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"Symbol'%s' má ve schématu CADSTAR měřítko, ale KiCad jej nepodporuje. Symbol "
+"byl načten v měřítku 1: 1 a může vyžadovat ruční úpravu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:979
 #, c-format
@@ -12996,10 +12993,12 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
+"Symbol dokumentace '%s' odkazuje na ID definice symbolu '%s', které v "
+"knihovně neexistuje. Symbol nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1084
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "Nelze nastavit textové proměnné, protože není připojen žádný projekt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1481
 #, c-format
@@ -13008,6 +13007,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Symbol '%s' je v původním návrhu CADSTAR otočen o úhel %.1f stupňů, ale "
+"KiCad podporuje pouze násobky úhlů otočení o 90 stupňů. Propojovací vodiče "
+"bude třeba ručně připojit."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1493
 #, c-format
@@ -13015,6 +13017,8 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
+"Symbol '%s' odkazuje na list ID '%s', který v návrhu neexistuje. Symbol "
+"nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1639
 #, c-format
@@ -13022,6 +13026,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
+"Síť %s odkazuje na neznámý prvek %s. Síť nebyla správně načtena a může "
+"vyžadovat ruční opravu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1920
 #, c-format
@@ -13030,6 +13036,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"ID bloku %s (název bloku: '%s') je nakreslen na listu '%s', ale není ve "
+"schématu propojen s jiným listem. KiCad vyžaduje, aby všechny symboly listu "
+"byly přidruženy k listu, takže blok nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1942
 #, c-format
@@ -13037,6 +13046,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
+"Schéma CADSTAR může být poškozeno: Blok %s odkazuje na podřízený list, ale "
+"nedefinoval výkres."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:404
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:335
@@ -13051,6 +13062,8 @@ msgid ""
 "Error parsing Eagle file.  Could not find \"%s\" instance but it is "
 "referenced in the schematic."
 msgstr ""
+"Chyba při analýze souboru Eagle. Nelze najít instanci „%s“, i když je ve "
+"schématu na ni odkazováno."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1187
 #, c-format
@@ -13186,14 +13199,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné reálné číslo v\n"
+"Číslo s plovoucí desetinnou čárkou se špatnou místní hodnotou v\n"
 "souboru: \"%s\"\n"
 "řádek: %d\n"
 "offset: %d"
@@ -13399,9 +13412,9 @@ msgstr "Soubor knihovny \"%s\" nenalezen."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2029
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4165
-#, fuzzy, c-format
+#, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "knihovna %s neobsahuje alias %s"
+msgstr "knihovna %s neobsahuje symbol s názvem %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2203
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4350
@@ -14210,9 +14223,8 @@ msgid "Voltage (measured)"
 msgstr "Napětí (měřeno)"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep"
-msgstr "Rozmítaný"
+msgstr "Rozmítaný DC"
 
 #: eeschema/sim/spice_simulator.cpp:71
 #, fuzzy
@@ -14971,9 +14983,8 @@ msgid "Export a symbol to a new library file"
 msgstr "Exportujte symbol do nového souboru knihovny"
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "Aktualizovat pole součástky"
+msgstr "Aktualizovat pole symbolů..."
 
 #: eeschema/tools/ee_actions.cpp:173
 #, fuzzy
@@ -15093,9 +15104,8 @@ msgid "Finish drawing shape"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:257
-#, fuzzy
 msgid "Push Pin Length"
-msgstr "Délka vedení"
+msgstr "Exportujte délku vývodu"
 
 #: eeschema/tools/ee_actions.cpp:257
 msgid "Copy pin length to other pins in symbol"
@@ -15336,9 +15346,8 @@ msgid "Update Symbol..."
 msgstr "Aktualizovat symbol..."
 
 #: eeschema/tools/ee_actions.cpp:436
-#, fuzzy
 msgid "Update symbol to include any changes from the library"
-msgstr "Uložit pouzdro do aktivní knihovny"
+msgstr "Aktualizace symbolu, aby zahrnoval všechny změny v knihovně"
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Assign Netclass..."
@@ -15414,14 +15423,12 @@ msgid "Delete unreferenced sheet pins"
 msgstr "Odstranit vývody listu bez reference"
 
 #: eeschema/tools/ee_actions.cpp:485 pcbnew/tools/pcb_actions.cpp:428
-#, fuzzy
 msgid "Edit Text & Graphics Properties..."
-msgstr "Upravuji vlastnosti zóny..."
+msgstr "Úpravy vlastností textu a grafických prvků..."
 
 #: eeschema/tools/ee_actions.cpp:486
-#, fuzzy
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "Upravit vlastnosti pole"
+msgstr "Globální úpravy všech vlastností textu a grafických prvků ve schématu"
 
 #: eeschema/tools/ee_actions.cpp:491
 msgid "Symbol Properties..."
@@ -15527,9 +15534,8 @@ msgid "Annotate Schematic..."
 msgstr "Očíslovat schéma..."
 
 #: eeschema/tools/ee_actions.cpp:569
-#, fuzzy
 msgid "Fill in schematic symbol reference designators"
-msgstr "Nahradit součástk&u označení reference"
+msgstr "Vyplnit označení reference symbolů ve schématu"
 
 #: eeschema/tools/ee_actions.cpp:574
 msgid "Schematic Setup..."
@@ -15560,11 +15566,11 @@ msgid "Remap Legacy Library Symbols..."
 msgstr "Přemapovat symboly staré knihovny..."
 
 #: eeschema/tools/ee_actions.cpp:593
-#, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
-msgstr "Přemapovat legacy knihovny symbolů do tabulky knihoven symbolů"
+msgstr ""
+"Přemapování referencí starší knihovny symbolů do tabulky knihoven symbolů"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Bus Definitions..."
@@ -15666,9 +15672,8 @@ msgid "Show schematic sheet hierarchy"
 msgstr "Zobrazit hierarchii listů schématu"
 
 #: eeschema/tools/ee_actions.cpp:662
-#, fuzzy
 msgid "Navigate to page"
-msgstr "Přizpůsobit straně"
+msgstr "Přejít na stránku"
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Add Junctions to Selection where needed"
@@ -17071,9 +17076,8 @@ msgid "Project Template Selector"
 msgstr "Vybrat šablonu projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "na celé schéma?"
+msgstr "Upravit schéma projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
 #, fuzzy
@@ -17193,9 +17197,9 @@ msgid "Load File to Edit"
 msgstr "Načíst soubor k úpravám"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr "Projekt"
+msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -18433,9 +18437,8 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#, fuzzy
 msgid "Attenuation:"
-msgstr "Útlum"
+msgstr "Útlum:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
 msgid "dB"
@@ -18446,9 +18449,8 @@ msgid "Zin:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
-#, fuzzy
 msgid "Zout:"
-msgstr "Zout"
+msgstr "Z out:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
 #, fuzzy
@@ -18804,9 +18806,8 @@ msgstr "Ztrátový výkon:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
-#, fuzzy
 msgid "W"
-msgstr "Š:"
+msgstr "Š"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19250,9 +19251,9 @@ msgstr "Frekvence vstupního signálu"
 #: pcb_calculator/transline_ident.cpp:287
 #: pcb_calculator/transline_ident.cpp:366
 #: pcb_calculator/transline_ident.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Effective %s:"
-msgstr "Očekávám %s"
+msgstr "Efektivní: %s:"
 
 #: pcb_calculator/transline_ident.cpp:147
 #: pcb_calculator/transline_ident.cpp:187
@@ -19360,9 +19361,8 @@ msgstr "Relativní permeabilita (mu) vodiče"
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy
 msgid "Line width"
-msgstr "Tloušťka čáry:"
+msgstr "Tloušťka čáry"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:205
@@ -22453,7 +22453,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
-msgstr "Export STEP"
+msgstr "Export do STEP"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:197
 #: pcbnew/exporters/gen_footprints_placefile.cpp:189
@@ -24738,7 +24738,7 @@ msgstr "Formát kreslení:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Postscript"
-msgstr "Postscript"
+msgstr "Postskript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
