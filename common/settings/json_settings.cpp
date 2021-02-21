@@ -320,6 +320,18 @@ void JSON_SETTINGS::ResetToDefaults()
 }
 
 
+bool JSON_SETTINGS::IsDefault( const std::string& aParamName )
+{
+    for( const PARAM_BASE* param : m_params )
+    {
+        if( param->GetJsonPath() == aParamName )
+            return param->IsDefault();
+    }
+
+    return false;
+}
+
+
 bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     if( !m_writeFile )

@@ -155,6 +155,9 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
+    /// Override in child classes to define the default for the window.grid.sizes parameter
+    virtual const std::vector<wxString> DefaultGridSizeList() const { return {}; }
+
 public:
     CROSS_PROBING_SETTINGS m_CrossProbing;
 

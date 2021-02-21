@@ -62,7 +62,8 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		wxChoice* m_grid2Ctrl;
 		wxStaticText* m_grid2HotKey;
 		wxStaticLine* m_staticline1;
-		wxButton* m_buttonReset;
+		wxButton* m_buttonResetOrigin;
+		wxButton* m_buttonResetSizes;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

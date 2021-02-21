@@ -106,6 +106,13 @@ c     * @return true if the file was saved
     void ResetToDefaults();
 
     /**
+     * Checks if the current state of a parameter matches its default value
+     * @param aParamName is the JSON path to the parameter
+     * @return true if the given parameter is at its default value
+     */
+    bool IsDefault( const std::string& aParamName );
+
+    /**
      * Fetches a JSON object that is a subset of this JSON_SETTINGS object, using a path of the
      * form "key1.key2.key3" to refer to nested objects.
      * @param aPath is a string containing one or more keys separated by '.'

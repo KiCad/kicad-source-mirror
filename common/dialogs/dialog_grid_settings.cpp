@@ -43,11 +43,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     m_gridOriginX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_gridOriginY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    wxArrayString grids;
-    GRID_MENU::BuildChoiceList( &grids, m_parent->config(), m_parent );
-    m_currentGridCtrl->Append( grids );
-    m_grid1Ctrl->Append( grids );
-    m_grid2Ctrl->Append( grids );
+    RebuildGridSizes();
 
     if( m_parent->IsType( FRAME_SCH )
         || m_parent->IsType( FRAME_SCH_SYMBOL_EDITOR )
@@ -56,7 +52,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
         || m_parent->IsType( FRAME_SIMULATOR ) )
     {
         m_book->SetSelection( 1 );
-        m_buttonReset->Hide();              // Eeschema and friends don't use grid origin
+        m_buttonResetOrigin->Hide();              // Eeschema and friends don't use grid origin
     }
     else
     {
@@ -70,6 +66,36 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    m_buttonResetSizes->Bind( wxEVT_BUTTON,
+            [&]( wxCommandEvent )
+            {
+                APP_SETTINGS_BASE* settings   = m_parent->config();
+                settings->m_Window.grid.sizes = settings->DefaultGridSizeList();
+                RebuildGridSizes();
+                settings->m_Window.grid.last_size_idx = m_currentGridCtrl->GetSelection();
+            } );
+}
+
+
+void DIALOG_GRID_SETTINGS::RebuildGridSizes()
+{
+    APP_SETTINGS_BASE* settings = m_parent->config();
+
+    wxString savedCurrentGrid = m_currentGridCtrl->GetStringSelection();
+    wxString savedGrid1       = m_grid1Ctrl->GetStringSelection();
+    wxString savedGrid2       = m_grid2Ctrl->GetStringSelection();
+
+    wxArrayString grids;
+    GRID_MENU::BuildChoiceList( &grids, settings, m_parent );
+
+    m_currentGridCtrl->Set( grids );
+    m_grid1Ctrl->Set( grids );
+    m_grid2Ctrl->Set( grids );
+
+    m_currentGridCtrl->SetStringSelection( savedCurrentGrid );
+    m_grid1Ctrl->SetStringSelection( savedGrid1 );
+    m_grid2Ctrl->SetStringSelection( savedGrid2 );
 }
 
 
@@ -108,9 +134,14 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
 bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 {
-    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    APP_SETTINGS_BASE* settings = m_parent->config();
 
-    m_currentGridCtrl->SetSelection( m_parent->config()->m_Window.grid.last_size_idx );
+    GRID_SETTINGS& gridCfg = settings->m_Window.grid;
+
+    m_buttonResetSizes->Show( gridCfg.sizes != settings->DefaultGridSizeList() );
+    Layout();
+
+    m_currentGridCtrl->SetSelection( settings->m_Window.grid.last_size_idx );
 
     m_userGridX.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_x ) );
     m_userGridY.SetValue( ValueFromString( GetUserUnits(), gridCfg.user_grid_y ) );

@@ -234,6 +234,8 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+    const std::vector<wxString> DefaultGridSizeList() const override;
+
     AUI_PANELS m_AuiPanels;
 
     DIALOG_CLEANUP m_Cleanup;

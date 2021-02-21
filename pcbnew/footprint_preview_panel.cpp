@@ -162,33 +162,8 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    // Currently values read from config file are not used because the user cannot
-    // change this config
-    // if( cfg->m_Window.grid.sizes.empty() )
-    {
-        cfg->m_Window.grid.sizes = { "1000 mil",
-                                     "500 mil",
-                                     "250 mil",
-                                     "200 mil",
-                                     "100 mil",
-                                     "50 mil",
-                                     "25 mil",
-                                     "20 mil",
-                                     "10 mil",
-                                     "5 mil",
-                                     "2 mil",
-                                     "1 mil",
-                                     "5.0 mm",
-                                     "2.5 mm",
-                                     "1.0 mm",
-                                     "0.5 mm",
-                                     "0.25 mm",
-                                     "0.2 mm",
-                                     "0.1 mm",
-                                     "0.05 mm",
-                                     "0.025 mm",
-                                     "0.01 mm" };
-    }
+    if( cfg->m_Window.grid.sizes.empty() )
+        cfg->m_Window.grid.sizes = cfg->DefaultGridSizeList();
 
     // Currently values read from config file are not used because the user cannot
     // change this config

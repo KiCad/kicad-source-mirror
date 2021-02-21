@@ -170,8 +170,14 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_buttonReset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_buttonResetOrigin = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonSizer->Add( m_buttonResetOrigin, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_buttonResetSizes = new wxButton( this, wxID_ANY, _("Reset Grid Sizes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonResetSizes->Hide();
+	m_buttonResetSizes->SetToolTip( _("Resets the list of grid sizes to default values") );
+
+	bButtonSizer->Add( m_buttonResetSizes, 0, wxALL, 5 );
 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -195,7 +201,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRID_SETTINGS_BASE::OnInitDlg ) );
-	m_buttonReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
+	m_buttonResetOrigin->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnOkClick ), NULL, this );
 }
@@ -204,7 +210,7 @@ DIALOG_GRID_SETTINGS_BASE::~DIALOG_GRID_SETTINGS_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRID_SETTINGS_BASE::OnInitDlg ) );
-	m_buttonReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
+	m_buttonResetOrigin->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnResetGridOriginClick ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRID_SETTINGS_BASE::OnOkClick ), NULL, this );
 

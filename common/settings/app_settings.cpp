@@ -287,7 +287,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
             &aWindow->grid.axes_enabled, false ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
-            &aWindow->grid.sizes, {} ) );
+            &aWindow->grid.sizes, DefaultGridSizeList() ) );
 
     // pcbnew default grid doesn't matter much, but eeschema does, so default to the index
     // of the 50mil grid in eeschema

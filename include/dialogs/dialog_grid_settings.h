@@ -42,6 +42,8 @@ public:
 private:
     void OnResetGridOriginClick( wxCommandEvent& event ) override;
 
+    void RebuildGridSizes();
+
     UNIT_BINDER m_gridOriginX;
     UNIT_BINDER m_gridOriginY;
     UNIT_BINDER m_userGridX;
