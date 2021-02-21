@@ -90,8 +90,11 @@ class COMPONENT
     wxString       m_reference;         ///< The component reference designator found in netlist.
     wxString       m_value;             ///< The component value found in netlist.
 
-    /// A fully specified path to the component: [ sheetUUID, sheetUUID, .., componentUUID ]
+    /// A fully specified path to the component (but not the component: [ sheetUUID, sheetUUID, .. ]
     KIID_PATH      m_path;
+
+    /// A vector of possible KIIDs corresponding to all units in a symbol
+    std::vector<KIID>   m_kiids;
 
     /// The name of the component in #m_library used when it was placed on the schematic..
     wxString       m_name;
@@ -116,16 +119,18 @@ class COMPONENT
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const LIB_ID&    aFPID,
-               const wxString&  aReference,
-               const wxString&  aValue,
-               const KIID_PATH& aPath )
+    COMPONENT( const LIB_ID&            aFPID,
+               const wxString&          aReference,
+               const wxString&          aValue,
+               const KIID_PATH&         aPath,
+               const std::vector<KIID>& aKiids )
     {
         m_fpid             = aFPID;
         m_reference        = aReference;
         m_value            = aValue;
         m_pinCount         = 0;
         m_path             = aPath;
+        m_kiids            = aKiids;
     }
 
     virtual ~COMPONENT() { };
@@ -166,6 +171,8 @@ public:
     const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
     const KIID_PATH& GetPath() const { return m_path; }
+
+    const std::vector<KIID>& GetKIIDs() const { return m_kiids; }
 
     void SetFootprintFilters( const wxArrayString& aFilters ) { m_footprintFilters = aFilters; }
     const wxArrayString& GetFootprintFilters() const { return m_footprintFilters; }

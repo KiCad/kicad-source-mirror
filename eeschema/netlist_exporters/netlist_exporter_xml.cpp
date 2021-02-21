@@ -34,6 +34,7 @@
 
 #include <symbol_lib_table.h>
 
+#include <set>
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
@@ -52,7 +53,7 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 {
     XNODE*      xroot = node( "export" );
 
-    xroot->AddAttribute( "version", "D" );
+    xroot->AddAttribute( "version", "E" );
 
     if( aCtl & GNL_HEADER )
         // add the "design" header
@@ -237,6 +238,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                    };
 
         std::set<SCH_COMPONENT*, decltype( cmp )> ordered_symbols( cmp );
+        std::multiset<SCH_COMPONENT*, decltype( cmp )> extra_units( cmp );
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
@@ -245,10 +247,15 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             if( !test.second )
             {
-                if( ( *( test.first ) )->GetUnit() > symbol->GetUnit() )
+                if( ( *( test.first ) )->m_Uuid > symbol->m_Uuid )
                 {
+                    extra_units.insert( *( test.first ) );
                     ordered_symbols.erase( test.first );
                     ordered_symbols.insert( symbol );
+                }
+                else
+                {
+                    extra_units.insert( symbol );
                 }
             }
         }
@@ -323,7 +330,20 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             xsheetpath->AddAttribute( "names", sheet.PathHumanReadable() );
             xsheetpath->AddAttribute( "tstamps", sheet.PathAsString() );
-            xcomp->AddChild( node( "tstamp", symbol->m_Uuid.AsString() ) );
+
+            XNODE* xunits; // Node for extra units
+            xcomp->AddChild( xunits = node( "tstamps" ) );
+
+            auto range = extra_units.equal_range( symbol );
+
+            // Output a series of children with all UUIDs associated with the REFDES
+            for( auto it = range.first; it != range.second; ++it )
+                xunits->AddChild(
+                        new XNODE( wxXML_TEXT_NODE, wxEmptyString, ( *it )->m_Uuid.AsString() ) );
+
+            // Output the primary UUID
+            xunits->AddChild(
+                    new XNODE( wxXML_TEXT_NODE, wxEmptyString, symbol->m_Uuid.AsString() ) );
         }
     }
 

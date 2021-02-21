@@ -308,7 +308,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
     wxString    library;
     wxString    name;
     KIID_PATH   path;
-    KIID        uuid;
+
+    std::vector<KIID>            uuids;
     std::map<wxString, wxString> properties;
 
     // The token comp was read, so the next data is (ref P1)
@@ -414,10 +415,15 @@ void KICAD_NETLIST_PARSER::parseComponent()
             NeedRIGHT();
             break;
 
-        case T_tstamp:
-            NeedSYMBOLorNUMBER();
-            uuid = KIID( FROM_UTF8( CurText() ) );
-            NeedRIGHT();
+        case T_tstamps:
+            while( ( token = NextTok() ) != T_EOF )
+            {
+                if( token == T_RIGHT )
+                    break;
+
+                uuids.emplace_back( FROM_UTF8( CurText() ) );
+            }
+
             break;
 
         default:
@@ -436,8 +442,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
         THROW_IO_ERROR( error );
     }
 
-    path.push_back( uuid );
-    COMPONENT* component = new COMPONENT( fpid, ref, value, path );
+    COMPONENT* component = new COMPONENT( fpid, ref, value, path, uuids );
     component->SetName( name );
     component->SetLibrary( library );
     component->SetProperties( properties );

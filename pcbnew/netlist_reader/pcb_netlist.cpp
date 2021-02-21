@@ -40,6 +40,9 @@ int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
 {
     m_footprint.reset( aFootprint );
+    KIID_PATH path = m_path;
+
+    path.push_back( m_kiids.front() );
 
     if( aFootprint == NULL )
         return;
@@ -47,7 +50,7 @@ void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
     aFootprint->SetReference( m_reference );
     aFootprint->SetValue( m_value );
     aFootprint->SetFPID( m_fpid );
-    aFootprint->SetPath( m_path );
+    aFootprint->SetPath( path );
     aFootprint->SetProperties( m_properties );
 }
 
@@ -84,6 +87,9 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 
         for( const KIID& pathStep : m_path )
             path += '/' + pathStep.AsString();
+
+        if( !m_kiids.empty() )
+            path += '/' + m_kiids.front().AsString();
 
         aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
     }
@@ -160,9 +166,20 @@ COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 
 COMPONENT* NETLIST::GetComponentByPath( const KIID_PATH& aUuidPath )
 {
+    KIID comp_uuid = aUuidPath.back();
+    KIID_PATH base = aUuidPath;
+
+    if( !base.empty() )
+        base.pop_back();
+
     for( COMPONENT& component : m_components )
     {
-        if( component.GetPath() == aUuidPath )
+        const std::vector<KIID>& kiids = component.GetKIIDs();
+
+        if( base != component.GetPath() )
+            continue;
+
+        if( std::find( kiids.begin(), kiids.end(), comp_uuid ) != kiids.end() )
             return &component;
     }
 

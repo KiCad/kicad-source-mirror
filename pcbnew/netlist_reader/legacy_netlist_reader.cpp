@@ -168,7 +168,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
     if( !footprintName.IsEmpty() )
         fpid.SetLibItemName( footprintName );
 
-    COMPONENT* component = new COMPONENT( fpid, reference, value, path );
+    COMPONENT* component = new COMPONENT( fpid, reference, value, path, {} );
     component->SetName( name );
     m_netlist->AddComponent( component );
     return component;

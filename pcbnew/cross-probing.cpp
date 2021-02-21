@@ -516,7 +516,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 continue; // Don't add board-only footprints to the netlist
 
             COMPONENT* component = new COMPONENT( footprint->GetFPID(), footprint->GetReference(),
-                                                  footprint->GetValue(), footprint->GetPath() );
+                                                  footprint->GetValue(), footprint->GetPath(), {} );
 
             for( PAD* pad : footprint->Pads() )
             {

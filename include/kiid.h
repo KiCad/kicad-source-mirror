@@ -83,6 +83,11 @@ public:
         return m_uuid < rhs.m_uuid;
     }
 
+    bool operator>( KIID const& rhs ) const
+    {
+        return m_uuid > rhs.m_uuid;
+    }
+
 private:
     boost::uuids::uuid m_uuid;
 

@@ -645,7 +645,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
             //add to the netlist
             netlist.AddComponent( new COMPONENT( footprint->GetFPID(), newref->NewRefDes,
-                                                 footprint->GetValue(), footprint->GetPath() ) );
+                                                 footprint->GetValue(), footprint->GetPath(), { footprint->m_Uuid } ) );
         }
 
         netlist.Format( "pcb_netlist", &stringformatter, 0,

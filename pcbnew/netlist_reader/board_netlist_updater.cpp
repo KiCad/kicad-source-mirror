@@ -289,18 +289,21 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     }
 
     // Test for time stamp change.
-    if( aPcbFootprint->GetPath() != aNetlistComponent->GetPath() )
+    KIID_PATH new_path = aNetlistComponent->GetPath();
+    new_path.push_back( aNetlistComponent->GetKIIDs().front() );
+
+    if( aPcbFootprint->GetPath() != new_path )
     {
         msg.Printf( _( "Update %s symbol association from %s to %s." ),
                     aPcbFootprint->GetReference(),
                     aPcbFootprint->GetPath().AsString(),
-                    aNetlistComponent->GetPath().AsString() );
+                    new_path.AsString() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbFootprint->SetPath( aNetlistComponent->GetPath() );
+            aPcbFootprint->SetPath( new_path );
         }
     }
 
@@ -810,7 +813,19 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             bool match = false;
 
             if( m_lookupByTimestamp )
-                match = footprint->GetPath() == component->GetPath();
+            {
+                for( auto& uuid : component->GetKIIDs() )
+                {
+                    KIID_PATH base = component->GetPath();
+                    base.push_back( uuid );
+
+                    if( footprint->GetPath() == base )
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+            }
             else
                 match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
 
