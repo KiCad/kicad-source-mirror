@@ -354,8 +354,8 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         m_previewItem = symbol;
         view->Add( m_previewItem );
 
-        wxString parentName = _( "<none>" );
-        std::shared_ptr< LIB_PART > parent  = m_previewItem->GetParent().lock();
+        wxString parentName;
+        std::shared_ptr<LIB_PART> parent  = m_previewItem->GetParent().lock();
 
         if( parent )
             parentName = parent->GetName();

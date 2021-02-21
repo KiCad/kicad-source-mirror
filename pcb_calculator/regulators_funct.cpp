@@ -65,14 +65,14 @@ void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
             m_bitmapRegul4pins->Show( true );
             m_bitmapRegul3pins->Show( false );
             m_RegulIadjValue->Enable( false );
-            m_RegulFormula->SetLabel( wxT("Vout = Vref * (R1 + R2) / R2") );
+            m_RegulFormula->SetLabel( wxT( "Vout = Vref * (R1 + R2) / R2" ) );
             break;
 
         case 1:
             m_bitmapRegul4pins->Show( false );
             m_bitmapRegul3pins->Show( true );
             m_RegulIadjValue->Enable( true );
-            m_RegulFormula->SetLabel( wxT("Vout = Vref * (R1 + R2) / R1 + Iadj * R2") );
+            m_RegulFormula->SetLabel( wxT( "Vout = Vref * (R1 + R2) / R1 + Iadj * R2" ) );
             break;
     }
     // The new icon size must be taken in account
