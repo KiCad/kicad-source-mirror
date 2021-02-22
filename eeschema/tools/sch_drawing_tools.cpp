@@ -880,13 +880,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     else
         m_inTwoClickPlace = true;
 
-    bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
-    bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
-    bool      isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
-    bool      isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
-    bool      isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
-    KICAD_T   type          = aEvent.Parameter<KICAD_T>();
-    int       snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
+    bool isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
+    bool isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
+    bool isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
+    bool isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
+    bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
+    int  snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     controls->ShowCursor( true );
@@ -977,21 +976,23 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                switch( type )
+                if( isText )
                 {
-                case SCH_LABEL_T:
                     item = createNewText( cursorPos, LAYER_LOCLABEL );
-                    break;
-                case SCH_HIER_LABEL_T:
-                    item = createNewText( cursorPos, LAYER_HIERLABEL );
-                    break;
-                case SCH_GLOBAL_LABEL_T:
+                }
+                else if( isGlobalLabel )
+                {
                     item = createNewText( cursorPos, LAYER_GLOBLABEL );
-                    break;
-                case SCH_TEXT_T:
-                    item = createNewText( cursorPos, LAYER_NOTES );
-                    break;
-                case SCH_SHEET_PIN_T:
+                }
+                else if( isHierLabel )
+                {
+                    item = createNewText( cursorPos, LAYER_HIERLABEL );
+                }
+                else if( isNetLabel )
+                {
+                    item = createNewText( cursorPos, LAYER_LOCLABEL );
+                }
+                else if( isSheetPin )
                 {
                     EDA_ITEM*      i;
                     SCH_HIERLABEL* label = nullptr;
@@ -1000,18 +1001,15 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &i ) )
                         sheet = dynamic_cast<SCH_SHEET*>( i );
 
-                    item = nullptr;
-
                     if( !sheet )
                     {
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
                         m_statusPopup->SetText( _( "Click over a sheet." ) );
                         m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                         m_statusPopup->PopupFor( 2000 );
-                        break;
+                        item = nullptr;
                     }
-
-                    if( isImportMode )
+                    else
                     {
                         label = importHierLabel( sheet );
 
@@ -1021,15 +1019,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
                             m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                             m_statusPopup->PopupFor( 2000 );
-                            break;
+                            item = nullptr;
+                        }
+                        else
+                        {
+                            item = createSheetPin( sheet, label );
                         }
                     }
-
-                    item = createSheetPin( sheet, label );
-                    break;
-                }
-                default:
-                    break;
                 }
 
                 // Restore cursor after dialog
