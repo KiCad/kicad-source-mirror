@@ -505,10 +505,10 @@ public:
         i->SetParent( nullptr );
 
         m_items.erase( *aRow );
+        ItemDeleted( wxDataViewItem( parent ), wxDataViewItem( &*i ) );
 
         if( parent )
         {
-            ItemDeleted( wxDataViewItem( parent ), wxDataViewItem( &*i ) );
             ItemChanged( wxDataViewItem( parent ) );
 
             // for grouping type 2,3 a group item might disappear if it becomes empty.
