@@ -137,7 +137,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     LIB_ID     lastFPID;
     COMPONENT* component;
     FOOTPRINT* footprint = nullptr;
-    FOOTPRINT* fpOnBoard;
+    FOOTPRINT* fpOnBoard = nullptr;
 
     if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
         return;
