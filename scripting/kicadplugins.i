@@ -76,15 +76,17 @@ FULL_BACK_TRACE=""
 
 def GetUnLoadableWizards():
     global NOT_LOADED_WIZARDS
-    return NOT_LOADED_WIZARDS.encode( 'UTF-8' )
+    utf8_str = NOT_LOADED_WIZARDS.encode( 'UTF-8' )
+    return utf8_str
 
 def GetWizardsSearchPaths():
     global PLUGIN_DIRECTORIES_SEARCH
-    return PLUGIN_DIRECTORIES_SEARCH.encode( 'UTF-8' )
+    utf8_str = PLUGIN_DIRECTORIES_SEARCH.encode( 'UTF-8' )
+    return utf8_str
 
 def GetWizardsBackTrace():
-    global FULL_BACK_TRACE
-    return FULL_BACK_TRACE.encode( 'UTF-8' )
+    global FULL_BACK_TRACE  # Already correct format
+    return FULL_BACK_TRACE
 
 
 def LoadPluginModule(Dirname, ModuleName, FileName):
