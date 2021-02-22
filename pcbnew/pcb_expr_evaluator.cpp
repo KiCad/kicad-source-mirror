@@ -125,7 +125,10 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
-    if( item->Type() == PCB_PAD_T && dynamic_cast<PAD*>( item )->GetAttribute() == PAD_ATTRIB_PTH )
+    if( !item )
+        return;
+
+    if( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetAttribute() == PAD_ATTRIB_PTH )
         result->Set( 1.0 );
     else if( item->Type() == PCB_VIA_T )
         result->Set( 1.0 );
