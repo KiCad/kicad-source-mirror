@@ -397,6 +397,7 @@ void DIALOG_BUS_MANAGER::OnRemoveBus( wxCommandEvent& aEvent )
     wxASSERT(  m_active_alias == m_aliases[ i ] );
 
     m_bus_list_view->DeleteItem( i );
+    m_bus_list_view->Update();
     m_aliases.erase( m_aliases.begin() + i );
     m_bus_edit->Clear();
 
