@@ -84,7 +84,6 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
     m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Rebuild Ratsnest" ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_buttonsSizer->Layout();
 
@@ -205,14 +204,6 @@ void DIALOG_NETLIST::OnOptionChanged( wxCommandEvent& event )
 {
     if( m_initialized )
         loadNetlist( true );
-}
-
-
-void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
-{
-    // Rebuild the board connectivity:
-    auto board = m_parent->GetBoard();
-	board->GetConnectivity()->RecalculateRatsnest();
 }
 
 

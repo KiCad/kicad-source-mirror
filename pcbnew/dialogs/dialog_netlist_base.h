@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,16 +54,13 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_buttonsSizer;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnUpdateUIValidNetlistFile( wxUpdateUIEvent& event ) { event.Skip(); }
+		// Virtual event handlers, override them in your derived class
 		virtual void OnFilenameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdatePCB( wxCommandEvent& event ) { event.Skip(); }
 
 

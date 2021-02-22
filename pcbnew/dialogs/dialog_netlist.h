@@ -64,7 +64,6 @@ private:
     void OnFilenameKillFocus( wxFocusEvent& event ) override;
     void OnMatchChanged( wxCommandEvent& event ) override;
     void OnOptionChanged( wxCommandEvent& event ) override;
-    void OnCompileRatsnestClick( wxCommandEvent& event ) override;
 };
 
 

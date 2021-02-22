@@ -14,6 +14,7 @@
         <property name="file">dialog_netlist_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_netlist_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -206,6 +208,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>
@@ -767,7 +770,7 @@
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxStdDialogButtonSizer" expanded="1">
-                                <property name="Apply">1</property>
+                                <property name="Apply">0</property>
                                 <property name="Cancel">1</property>
                                 <property name="ContextHelp">0</property>
                                 <property name="Help">0</property>
@@ -778,7 +781,6 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">m_sdbSizer1</property>
                                 <property name="permission">protected</property>
-                                <event name="OnApplyButtonClick">OnCompileRatsnestClick</event>
                                 <event name="OnOKButtonClick">OnUpdatePCB</event>
                             </object>
                         </object>
