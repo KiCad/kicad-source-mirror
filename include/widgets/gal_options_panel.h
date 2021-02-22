@@ -55,7 +55,9 @@ private:
 
     wxBoxSizer*       m_mainSizer;
 
+#ifndef __WXMAC__
     wxRadioBox*       m_renderingEngine;
+#endif
 
     wxRadioBox*       m_gridStyle;
     wxStaticText*     l_gridLineWidth;

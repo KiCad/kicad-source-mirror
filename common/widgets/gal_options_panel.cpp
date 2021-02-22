@@ -208,10 +208,12 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFr
 
 bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 {
+#ifndef __WXMAC__
     if( m_drawFrame->GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         m_renderingEngine->SetSelection( 0 );
     else
         m_renderingEngine->SetSelection( 1 );
+#endif
 
     m_gridSnapOptions->SetSelection( UTIL::GetConfigForVal( gridSnapConfigVals,
                                                             m_galOptions.m_gridSnapping ) );
@@ -247,6 +249,7 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     m_galOptions.m_forceDisplayCursor = m_forceCursorDisplay->GetValue();
 
+#ifndef __WXMAC__
     EDA_DRAW_PANEL_GAL::GAL_TYPE wantedType = m_renderingEngine->GetSelection() == 0 ?
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL :
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
@@ -254,6 +257,7 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     if( wantedType != currentType )
         m_drawFrame->GetCanvas()->SwitchBackend( wantedType );
+#endif
 
     return true;
 }
