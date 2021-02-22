@@ -45,7 +45,7 @@
 #include <symbol_lib_table.h>
 #include <widgets/paged_dialog.h>
 #include <wildcards_and_files_ext.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <zoom_defines.h>
 
 
@@ -86,14 +86,13 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     LIB_PART::SetSubpartIdNotation( LIB_PART::GetSubpartIdSeparator(),
                                     LIB_PART::GetSubpartFirstId() );
 
-    // Load the page layout decr file, from the filename stored in
+    // Load the drawing sheet description file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, or not existing, the default descr is loaded
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-    wxString filename = WS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
+    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
                                                          Prj().GetProjectPath() );
 
-    pglayout.SetPageLayout( filename );
+    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename );
 
     return true;
 }

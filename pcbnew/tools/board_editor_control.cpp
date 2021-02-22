@@ -62,7 +62,7 @@
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <wildcards_and_files_ext.h>
-#include <page_layout/ws_proxy_undo_item.h>
+#include <drawing_sheet/ds_proxy_undo_item.h>
 #include <footprint_edit_frame.h>
 
 using namespace std::placeholders;
@@ -271,7 +271,7 @@ int BOARD_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
-    WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
+    DS_PROXY_UNDO_ITEM* undoItem = new DS_PROXY_UNDO_ITEM( m_frame );
     ITEM_PICKER         wrapper( nullptr, undoItem, UNDO_REDO::PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );

@@ -32,7 +32,7 @@
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -750,9 +750,9 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
 
     case LAYER_GERBVIEW_DRAWINGSHEET:
         settings->SetColor( LAYER_GERBVIEW_DRAWINGSHEET, aColor );
-        // LAYER_DRAWINGSHEET color is also used to draw the worksheet
+        // LAYER_DRAWINGSHEET color is also used to draw the drawing-sheet
         // FIX ME: why LAYER_DRAWINGSHEET must be set, although LAYER_GERBVIEW_DRAWINGSHEET
-        // is used to initialize the worksheet color layer.
+        // is used to initialize the drawing-sheet color layer.
         settings->SetColor( LAYER_DRAWINGSHEET, aColor );
         break;
 
@@ -819,22 +819,22 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     if( GetScreen() )
         GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
 
-    auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
+    GERBVIEW_DRAW_PANEL_GAL* drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
-    // Prepare worksheet template
-    auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(),
-                                                    &Prj(), &GetTitleBlock() );
+    // Prepare drawing-sheet template
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(),
+                                                               &Prj(), &GetTitleBlock() );
 
     if( GetScreen() )
     {
-        worksheet->SetPageNumber( "1" );
-        worksheet->SetSheetCount( 1 );
+        drawingSheet->SetPageNumber( "1" );
+        drawingSheet->SetSheetCount( 1 );
     }
 
-    worksheet->SetColorLayer( LAYER_GERBVIEW_DRAWINGSHEET );
+    drawingSheet->SetColorLayer( LAYER_GERBVIEW_DRAWINGSHEET );
 
-    // Draw panel takes ownership of the worksheet
-    drawPanel->SetDrawingSheet( worksheet );
+    // Draw panel takes ownership of the drawing-sheet
+    drawPanel->SetDrawingSheet( drawingSheet );
 }
 
 

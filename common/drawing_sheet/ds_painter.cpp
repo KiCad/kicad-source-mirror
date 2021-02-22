@@ -29,11 +29,11 @@
 #include <title_block.h>
 #include <build_version.h>
 #include <settings/color_settings.h>
-#include <page_layout/ws_draw_item.h>
+#include <drawing_sheet/ds_draw_item.h>
 #include <gal/graphics_abstraction_layer.h>
 
-#include <page_layout/ws_painter.h>
-#include <page_layout/ws_data_item.h>
+#include <drawing_sheet/ds_painter.h>
+#include <drawing_sheet/ds_data_item.h>
 
 #include <wx/app.h>
 
@@ -41,7 +41,7 @@ using namespace KIGFX;
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
-WS_RENDER_SETTINGS::WS_RENDER_SETTINGS()
+DS_RENDER_SETTINGS::DS_RENDER_SETTINGS()
 {
     m_backgroundColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
     m_normalColor =     RED;
@@ -53,7 +53,7 @@ WS_RENDER_SETTINGS::WS_RENDER_SETTINGS()
 }
 
 
-void WS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
+void DS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
     for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
         m_layerColors[ layer ] = aSettings->GetColor( layer );
@@ -67,7 +67,7 @@ void WS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 }
 
 
-COLOR4D WS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
+COLOR4D DS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
 
@@ -85,7 +85,7 @@ COLOR4D WS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 }
 
 
-void WS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
+void DS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
 {
     aVars->push_back( wxT( "KICAD_VERSION" ) );
     aVars->push_back( wxT( "#" ) );
@@ -100,7 +100,7 @@ void WS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
 
 // returns the full text corresponding to the aTextbase,
 // after replacing format symbols by the corresponding value
-wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
+wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 {
     std::function<bool( wxString* )> wsResolver =
             [ this ]( wxString* token ) -> bool
@@ -169,7 +169,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 }
 
 
-bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
+bool KIGFX::DS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     auto item = dynamic_cast<const EDA_ITEM*>( aItem );
 
@@ -178,12 +178,12 @@ bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     switch( item->Type() )
     {
-    case WSG_LINE_T:   draw( (WS_DRAW_ITEM_LINE*) item, aLayer );         break;
-    case WSG_POLY_T:   draw( (WS_DRAW_ITEM_POLYPOLYGONS*) item, aLayer );      break;
-    case WSG_RECT_T:   draw( (WS_DRAW_ITEM_RECT*) item, aLayer );         break;
-    case WSG_TEXT_T:   draw( (WS_DRAW_ITEM_TEXT*) item, aLayer );         break;
-    case WSG_BITMAP_T: draw( (WS_DRAW_ITEM_BITMAP*) item, aLayer );       break;
-    case WSG_PAGE_T:   draw( (WS_DRAW_ITEM_PAGE*) item, aLayer );       break;
+    case WSG_LINE_T:   draw( (DS_DRAW_ITEM_LINE*) item, aLayer );         break;
+    case WSG_POLY_T:   draw( (DS_DRAW_ITEM_POLYPOLYGONS*) item, aLayer ); break;
+    case WSG_RECT_T:   draw( (DS_DRAW_ITEM_RECT*) item, aLayer );         break;
+    case WSG_TEXT_T:   draw( (DS_DRAW_ITEM_TEXT*) item, aLayer );         break;
+    case WSG_BITMAP_T: draw( (DS_DRAW_ITEM_BITMAP*) item, aLayer );       break;
+    case WSG_PAGE_T:   draw( (DS_DRAW_ITEM_PAGE*) item, aLayer );         break;
     default:           return false;
     }
 
@@ -191,7 +191,7 @@ bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_LINE* aItem, int aLayer ) const
 {
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
@@ -201,7 +201,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_RECT* aItem, int aLayer ) const
 {
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
@@ -211,13 +211,13 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const
 {
     m_gal->SetFillColor( m_renderSettings.GetColor( aItem, aLayer ) );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
 
-    WS_DRAW_ITEM_POLYPOLYGONS* item =  (WS_DRAW_ITEM_POLYPOLYGONS*)aItem;
+    DS_DRAW_ITEM_POLYPOLYGONS* item =  (DS_DRAW_ITEM_POLYPOLYGONS*)aItem;
 
     for( int idx = 0; idx < item->GetPolygons().OutlineCount(); ++idx )
     {
@@ -227,7 +227,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 {
     VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
     int      penWidth = std::max( aItem->GetEffectiveTextPenWidth(),
@@ -246,10 +246,10 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const
 {
     m_gal->Save();
-    auto* bitmap = static_cast<WS_DATA_ITEM_BITMAP*>( aItem->GetPeer() );
+    auto* bitmap = static_cast<DS_DATA_ITEM_BITMAP*>( aItem->GetPeer() );
 
     VECTOR2D position = aItem->GetPosition();
     m_gal->Translate( position );
@@ -281,7 +281,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) con
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
+void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
 {
     VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
     VECTOR2D end = VECTOR2D( aItem->GetPageSize().x,
@@ -309,7 +309,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
 }
 
 
-void KIGFX::WS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const
+void KIGFX::DS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const
 {
     VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
     VECTOR2D end = VECTOR2D( aPageInfo->GetWidthMils() * aScaleFactor,

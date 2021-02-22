@@ -42,14 +42,10 @@
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.
 class PL_EDITOR_FRAME;
-class WS_DATA_ITEM;
+class DS_DATA_ITEM;
 class wxPrintData;
 class wxPageSetupDialogData;
 
-
-/// Create and show DIALOG_NEW_DATAITEM and return whatever
-/// DIALOG_NEW_DATAITEM::ShowModal() returns.
-int InvokeDialogNewItem( PL_EDITOR_FRAME* aCaller, WS_DATA_ITEM* aItem );
 
 /// Create and show a print dialog
 /// returns 1 if OK, 0 , there is a problem.

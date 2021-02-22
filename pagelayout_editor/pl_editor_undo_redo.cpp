@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_proxy_undo_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 
@@ -34,7 +34,7 @@
 void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {
     PICKED_ITEMS_LIST*  lastcmd = new PICKED_ITEMS_LIST();
-    WS_PROXY_UNDO_ITEM* copyItem = new WS_PROXY_UNDO_ITEM( this );
+    DS_PROXY_UNDO_ITEM* copyItem = new DS_PROXY_UNDO_ITEM( this );
     ITEM_PICKER         wrapper( GetScreen(), copyItem, UNDO_REDO::LIBEDIT );
 
     lastcmd->PushItem( wrapper );
@@ -57,11 +57,11 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
         return;
 
     ITEM_PICKER         redoWrapper = PopCommandFromRedoList()->PopItem();
-    WS_PROXY_UNDO_ITEM* redoItem = static_cast<WS_PROXY_UNDO_ITEM*>( redoWrapper.GetItem() );
+    DS_PROXY_UNDO_ITEM* redoItem = static_cast<DS_PROXY_UNDO_ITEM*>( redoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = redoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     PICKED_ITEMS_LIST*  undoCmd = new PICKED_ITEMS_LIST();
-    WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
+    DS_PROXY_UNDO_ITEM* undoItem = new DS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
     ITEM_PICKER         undoWrapper( GetScreen(), undoItem );
 
     undoCmd->PushItem( undoWrapper );
@@ -94,11 +94,11 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
         return;
 
     ITEM_PICKER         undoWrapper = PopCommandFromUndoList()->PopItem();
-    WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
+    DS_PROXY_UNDO_ITEM* undoItem = static_cast<DS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     PICKED_ITEMS_LIST*  redoCmd = new PICKED_ITEMS_LIST();
-    WS_PROXY_UNDO_ITEM* redoItem = new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
+    DS_PROXY_UNDO_ITEM* redoItem = new DS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr );
     ITEM_PICKER         redoWrapper( GetScreen(), redoItem );
 
     redoCmd->PushItem( redoWrapper );
@@ -130,7 +130,7 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
         return;
 
     ITEM_PICKER         undoWrapper = PopCommandFromUndoList()->PopItem();
-    WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
+    DS_PROXY_UNDO_ITEM* undoItem = static_cast<DS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
     bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     selTool->ClearSelection();

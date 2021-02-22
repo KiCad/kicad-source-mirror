@@ -26,40 +26,39 @@
 
 /*
  * The WS_DATA_ITEM_* classes define the basic shapes of a drawing sheet (frame references
- * and title block).  The list of these items is stored in a WS_DATA_MODEL instance.
+ * and title block).  The list of these items is stored in a DS_DATA_MODEL instance.
  *
  * These items cannot be drawn or plotetd "as is".  They must be converted to WS_DRAW_*
  * types. When building the draw list:
- *   - the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
+ *   - the DS_DATA_MODEL is used to create a DS_DRAW_ITEM_LIST
  *   - coordinates are converted to draw/plot coordinates.
  *   - texts are expanded if they contain format symbols.
  *   - items with m_RepeatCount > 1 are created m_RepeatCount times.
  *
- * The WS_DATA_MODEL is created only once.
+ * The DS_DATA_MODEL is created only once.
  * The WS_DRAW_ITEM_*s are created and maintained by the PlEditor, but are created each time
  * they're needed for drawing by the clients (Eeschema, Pcbnew, etc.)
  *
- * The WS_DATA_MODEL instance is created from a S expression which describes the page
+ * The DS_DATA_MODEL instance is created from a S expression which describes the page
  * layout (can be the default page layout or a custom file).  This format is also used
- * for undo/redo storage (wrapped in a WS_PROXY_UNDO_ITEM).
+ * for undo/redo storage (wrapped in a DS_PROXY_UNDO_ITEM).
  */
 
 #include <kiface_i.h>
 #include <title_block.h>
 #include <common.h>
 #include <eda_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_painter.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_painter.h>
 
 
 // The layout shape used in the application
-// It is accessible by WS_DATA_MODEL::GetTheInstance()
-static WS_DATA_MODEL wksTheInstance;
-static WS_DATA_MODEL* wksAltInstance;
+// It is accessible by DS_DATA_MODEL::GetTheInstance()
+static DS_DATA_MODEL wksTheInstance;
+static DS_DATA_MODEL* wksAltInstance;
 
-WS_DATA_MODEL::WS_DATA_MODEL() :
+DS_DATA_MODEL::DS_DATA_MODEL() :
         m_WSunits2Iu( 1000.0 ),
         m_DefaultLineWidth( 0.0 ),
         m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE ),
@@ -73,10 +72,10 @@ WS_DATA_MODEL::WS_DATA_MODEL() :
     m_bottomMargin = 10.0;  // the bottom page margin in mm
 }
 
-/* static function: returns the instance of WS_DATA_MODEL
- * used in the application
+/*
+ * static function: returns the instance of DS_DATA_MODEL used in the application
  */
-WS_DATA_MODEL& WS_DATA_MODEL::GetTheInstance()
+DS_DATA_MODEL& DS_DATA_MODEL::GetTheInstance()
 {
     if( wksAltInstance )
         return *wksAltInstance;
@@ -85,18 +84,18 @@ WS_DATA_MODEL& WS_DATA_MODEL::GetTheInstance()
 }
 
 /**
- * static function: Set an alternate instance of WS_DATA_MODEL
+ * static function: Set an alternate instance of DS_DATA_MODEL
  * mainly used in page setting dialog
  * @param aLayout = the alternate page layout.
  * if null, restore the basic page layout
  */
-void WS_DATA_MODEL::SetAltInstance( WS_DATA_MODEL* aLayout )
+void DS_DATA_MODEL::SetAltInstance( DS_DATA_MODEL* aLayout )
 {
     wksAltInstance = aLayout;
 }
 
 
-void WS_DATA_MODEL::SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMilsToIU )
+void DS_DATA_MODEL::SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMilsToIU )
 {
 #define MILS_TO_MM (25.4/1000)
 
@@ -116,29 +115,29 @@ void WS_DATA_MODEL::SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMi
 }
 
 
-void WS_DATA_MODEL::ClearList()
+void DS_DATA_MODEL::ClearList()
 {
-    for( WS_DATA_ITEM* item : m_list )
+    for( DS_DATA_ITEM* item : m_list )
         delete item;
 
     m_list.clear();
 }
 
 
-void WS_DATA_MODEL::Append( WS_DATA_ITEM* aItem )
+void DS_DATA_MODEL::Append( DS_DATA_ITEM* aItem )
 {
     m_list.push_back( aItem );
 }
 
 
-void WS_DATA_MODEL::Remove( WS_DATA_ITEM* aItem )
+void DS_DATA_MODEL::Remove( DS_DATA_ITEM* aItem )
 {
     auto newEnd = std::remove( m_list.begin(), m_list.end(), aItem );
     m_list.erase( newEnd, m_list.end() );
 }
 
 
-int WS_DATA_MODEL::GetItemIndex( WS_DATA_ITEM* aItem ) const
+int DS_DATA_MODEL::GetItemIndex( DS_DATA_ITEM* aItem ) const
 {
     unsigned idx = 0;
     while( idx < m_list.size() )
@@ -154,7 +153,7 @@ int WS_DATA_MODEL::GetItemIndex( WS_DATA_ITEM* aItem ) const
 
 /* return the item from its index aIdx, or NULL if does not exist
  */
-WS_DATA_ITEM* WS_DATA_MODEL::GetItem( unsigned aIdx ) const
+DS_DATA_ITEM* DS_DATA_MODEL::GetItem( unsigned aIdx ) const
 {
     if( aIdx < m_list.size() )
         return m_list[aIdx];
@@ -163,7 +162,7 @@ WS_DATA_ITEM* WS_DATA_MODEL::GetItem( unsigned aIdx ) const
 }
 
 
-const wxString WS_DATA_MODEL::MakeShortFileName( const wxString& aFullFileName,
+const wxString DS_DATA_MODEL::MakeShortFileName( const wxString& aFullFileName,
                                                  const wxString& aProjectPath  )
 {
     wxString    shortFileName = aFullFileName;
@@ -192,7 +191,7 @@ const wxString WS_DATA_MODEL::MakeShortFileName( const wxString& aFullFileName,
 }
 
 
-const wxString WS_DATA_MODEL::MakeFullFileName( const wxString& aShortFileName,
+const wxString DS_DATA_MODEL::MakeFullFileName( const wxString& aShortFileName,
                                                 const wxString& aProjectPath )
 {
     wxString fullFileName = ExpandEnvVarSubstitutions( aShortFileName, nullptr );

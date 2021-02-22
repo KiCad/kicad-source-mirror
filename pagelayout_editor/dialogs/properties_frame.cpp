@@ -26,13 +26,12 @@
 #include <project.h>
 #include <scintilla_tricks.h>
 #include <tool/tool_manager.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <view/view.h>
 
 #include "properties_frame.h"
-#include "pl_draw_panel_gal.h"
 #include "pl_editor_frame.h"
 #include "tools/pl_selection_tool.h"
 
@@ -101,7 +100,7 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
 // Data transfert from general properties to widgets
 void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 {
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
     // Set default parameters
     m_textCtrlDefaultLineWidthBinder.SetDoubleValue(
@@ -125,7 +124,7 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 // Data transfert from widgets to general properties
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 {
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
     // Import default parameters from widgets
     model.m_DefaultLineWidth =
@@ -156,7 +155,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 
 
 // Data transfert from item to widgets in properties frame
-void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
+void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 {
     if( !aItem )
     {
@@ -166,7 +165,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 
     wxString msg;
 
-    // Set parameters common to all WS_DATA_ITEM types
+    // Set parameters common to all DS_DATA_ITEM types
     m_staticTextType->SetLabel( aItem->GetClassName() );
     m_textCtrlComment->SetValue( aItem->m_Info );
 
@@ -210,12 +209,12 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
     m_textCtrlThicknessBinder.SetDoubleValue(
             From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_LineWidth ) );
 
-    // Now, set prms more specific to WS_DATA_ITEM types
+    // Now, set prms more specific to DS_DATA_ITEM types
     // For a given type, disable widgets which are not relevant,
     // and be sure widgets which are relevant are enabled
-    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
     {
-        WS_DATA_ITEM_TEXT* item = (WS_DATA_ITEM_TEXT*) aItem;
+        DS_DATA_ITEM_TEXT* item = static_cast<DS_DATA_ITEM_TEXT*>( aItem );
         item->m_FullText = item->m_TextBase;
         // Replace our '\' 'n' sequence by the EOL char
         item->ReplaceAntiSlashSequence();
@@ -259,17 +258,17 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
                 From_User_Unit( EDA_UNITS::MILLIMETRES, item->m_TextSize.y ) );
     }
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
     {
-        WS_DATA_ITEM_POLYGONS* item = (WS_DATA_ITEM_POLYGONS*) aItem;
+        DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
         // Rotation (poly and text)
         msg.Printf( wxT("%.3f"), item->m_Orient );
         m_textCtrlRotation->SetValue( msg );
     }
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
     {
-        WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
+        DS_DATA_ITEM_BITMAP* item = static_cast<DS_DATA_ITEM_BITMAP*>( aItem );
         // select definition in PPI
         msg.Printf( wxT("%d"), item->GetPPI() );
         m_textCtrlBitmapDPI->SetValue( msg );
@@ -277,15 +276,15 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 
     m_SizerItemProperties->Show( true );
 
-    m_SizerTextOptions->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
+    m_SizerTextOptions->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
 
-    m_sbSizerEndPosition->Show( aItem->GetType() == WS_DATA_ITEM::WS_SEGMENT
-                           || aItem->GetType() == WS_DATA_ITEM::WS_RECT );
+    m_sbSizerEndPosition->Show( aItem->GetType() == DS_DATA_ITEM::DS_SEGMENT
+                           || aItem->GetType() == DS_DATA_ITEM::DS_RECT );
 
-    m_textCtrlThicknessBinder.Show( aItem->GetType() != WS_DATA_ITEM::WS_BITMAP );
+    m_textCtrlThicknessBinder.Show( aItem->GetType() != DS_DATA_ITEM::DS_BITMAP );
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT
-            || aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_TEXT
+            || aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
     {
         m_staticTextRot->Show( true );
         m_textCtrlRotation->Show( true );
@@ -296,11 +295,11 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
         m_textCtrlRotation->Show( false );
     }
 
-    m_staticTextBitmapDPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
-    m_textCtrlBitmapDPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
+    m_staticTextBitmapDPI->Show( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP );
+    m_textCtrlBitmapDPI->Show( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP );
 
-    m_staticTextInclabel->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
-    m_textCtrlTextIncrement->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
+    m_staticTextInclabel->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
+    m_textCtrlTextIncrement->Show( aItem->GetType() == DS_DATA_ITEM::DS_TEXT );
 
     // Repeat parameters
     msg.Printf( wxT("%d"), aItem->m_RepeatCount );
@@ -334,11 +333,11 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
     m_parent->SaveCopyInUndoList();
 
-    WS_DRAW_ITEM_BASE* drawItem = (WS_DRAW_ITEM_BASE*) selection.Front();
+    DS_DRAW_ITEM_BASE* drawItem = (DS_DRAW_ITEM_BASE*) selection.Front();
 
     if( drawItem )
     {
-        WS_DATA_ITEM* dataItem = drawItem->GetPeer();
+        DS_DATA_ITEM* dataItem = drawItem->GetPeer();
         CopyPrmsFromPanelToItem( dataItem );
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
@@ -361,7 +360,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
 void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 {
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
     model.m_DefaultTextSize = DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
     model.m_DefaultLineWidth = 0.15;
@@ -376,7 +375,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 
 
 // Data transfert from  properties frame to item parameters
-bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
+bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 {
     if( aItem == NULL )
         return false;
@@ -430,9 +429,9 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     aItem->m_IncrementVector.x = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlStepXBinder.GetValue() );
     aItem->m_IncrementVector.y = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlStepYBinder.GetValue() );
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
     {
-        WS_DATA_ITEM_TEXT* item = (WS_DATA_ITEM_TEXT*) aItem;
+        DS_DATA_ITEM_TEXT* item = static_cast<DS_DATA_ITEM_TEXT*>( aItem );
 
         item->m_TextBase = m_stcText->GetValue();
 
@@ -473,17 +472,17 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
                 To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlConstraintYBinder.GetValue() );
     }
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_POLYPOLYGON )
     {
-        WS_DATA_ITEM_POLYGONS* item = (WS_DATA_ITEM_POLYGONS*) aItem;
+        DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
 
         msg = m_textCtrlRotation->GetValue();
         item->m_Orient = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
     }
 
-    if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
     {
-        WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
+        DS_DATA_ITEM_BITMAP* item = static_cast<DS_DATA_ITEM_BITMAP*>( aItem );
         long                 value;
 
         msg = m_textCtrlBitmapDPI->GetValue();
@@ -507,7 +506,7 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             && m_stcText->GetCharAt( start-2 ) == '$'
             && m_stcText->GetCharAt( start-1 ) == '{' )
     {
-        WS_DRAW_ITEM_LIST::GetTextVars( &autocompleteTokens );
+        DS_DRAW_ITEM_LIST::GetTextVars( &autocompleteTokens );
 
         partial = m_stcText->GetTextRange( start, pos );
 

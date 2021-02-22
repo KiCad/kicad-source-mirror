@@ -1,12 +1,8 @@
-/**
- * @file common/page_layout/page_layout_default_description.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -28,7 +24,7 @@
  */
 
 /* keyword used in page layout description are listed
- * in page_layout_reader.keywords file
+ * in drawing_sheet_reader.keywords file
  */
 
 /*
@@ -116,15 +112,15 @@
  */
 
 
-// height of the band reference grid  2.0 mm
-// drawing sheet frame reference text size 1.3 mm
+// height of the coordinates band 2.0 mm
+// coordinates text size 1.3 mm
 // default text size 1.5 mm
 // default line width 0.15 mm
 // frame ref pitch 50 mm
 
 // Default page layout (sizes are in mm)
-extern const char defaultPageLayout[] =
-    "(page_layout\n"
+extern const char defaultDrawingSheet[] =
+    "(drawing_sheet\n"
     "(setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15)\n"
     "(left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n"
     "(rect (comment \"rect around the title block\") (linewidth 0.15) (start 110 34) (end 2 2) )\n"
@@ -158,8 +154,8 @@ extern const char defaultPageLayout[] =
     "(line (start 26 8.5) (end 26 2) )\n"
     ")\n";
 
-extern const char emptyPageLayout[] =
-    "(page_layout\n"
+extern const char emptyDrawingSheet[] =
+    "(drawing_sheet\n"
     "(setup (textsize 1.5 1.5)(linewidth 0.15)(textlinewidth 0.15)\n"
     "(left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n"
     "(line (name segm1:Line) (start 0 0) (end 0 0))\n"

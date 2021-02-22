@@ -23,13 +23,13 @@
 
 // For page and paper size, values are in 1/1000 inch
 
-#ifndef WS_PAINTER_H
-#define WS_PAINTER_H
+#ifndef DS_PAINTER_H
+#define DS_PAINTER_H
 
 #include <gal/color4d.h>
 #include <painter.h>
 #include <page_info.h>
-#include <page_layout/ws_draw_item.h>
+#include <drawing_sheet/ds_draw_item.h>
 
 // Forward declarations:
 class EDA_RECT;
@@ -43,12 +43,12 @@ namespace KIGFX
 /**
  * Store page-layout-specific render settings.
  */
-class WS_RENDER_SETTINGS : public RENDER_SETTINGS
+class DS_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
-    friend class WS_PAINTER;
+    friend class DS_PAINTER;
 
-    WS_RENDER_SETTINGS();
+    DS_RENDER_SETTINGS();
 
     void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
@@ -95,10 +95,10 @@ private:
 /**
  * Methods for drawing worksheet items.
  */
-class WS_PAINTER : public PAINTER
+class DS_PAINTER : public PAINTER
 {
 public:
-    WS_PAINTER( GAL* aGal ) :
+    DS_PAINTER( GAL* aGal ) :
             PAINTER( aGal )
     { }
 
@@ -111,15 +111,15 @@ public:
     virtual RENDER_SETTINGS* GetSettings() override { return &m_renderSettings; }
 
 private:
-    void draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_LINE* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_RECT* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const;
+    void draw( const DS_DRAW_ITEM_PAGE* aItem, int aLayer ) const;
 
 private:
-    WS_RENDER_SETTINGS m_renderSettings;
+    DS_RENDER_SETTINGS m_renderSettings;
 };
 
 } // namespace KIGFX
@@ -144,10 +144,10 @@ private:
  * - the LTmargin The left top margin of the page layout.
  * - the RBmargin The right bottom margin of the page layout.
  */
-void PrintPageLayout( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
-                      const wxString& aFullSheetName, const wxString& aFileName,
-                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
-                      double aScalar, const PROJECT* aProject,
-                      const wxString& aSheetLayer = wxEmptyString, bool aIsFirstPage = true );
+void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
+                        const wxString& aFullSheetName, const wxString& aFileName,
+                        const TITLE_BLOCK& aTitleBlock, int aSheetCount,
+                        const wxString& aPageNumber, double aScalar, const PROJECT* aProject,
+                        const wxString& aSheetLayer = wxEmptyString, bool aIsFirstPage = true );
 
-#endif // WS_PAINTER_H
+#endif // DS_PAINTER_H

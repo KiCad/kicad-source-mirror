@@ -317,5 +317,5 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     TOOL_EVENT dummy;
     editTool->UpdateNetHighlighting( dummy );
 
-    HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
+    HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
 }

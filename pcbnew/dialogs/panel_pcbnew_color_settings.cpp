@@ -30,7 +30,7 @@
 #include <settings/settings_manager.h>
 #include <footprint_preview_panel.h>
 #include <widgets/appearance_controls.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_painter.h>
 #include <track.h>
 #include <plugins/kicad/kicad_plugin.h>
@@ -512,10 +512,10 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_preview->UpdateColors();
     m_preview->DisplayBoard( m_preview->GetBoard() );
 
-    auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr,
-                                                    m_titleBlock );
-    worksheet->SetColorLayer( LAYER_DRAWINGSHEET );
-    m_preview->SetDrawingSheet( worksheet );
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr,
+                                                               m_titleBlock );
+    drawingSheet->SetColorLayer( LAYER_DRAWINGSHEET );
+    m_preview->SetDrawingSheet( drawingSheet );
 
     zoomFitPreview();
 }

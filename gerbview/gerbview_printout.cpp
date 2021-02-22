@@ -46,22 +46,19 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
     // Store the layerset, as it is going to be modified below and the original settings are needed
     LSET lset = m_settings.m_LayerSet;
 
-    // The gerber filename of the page to print will be printed to the worksheet.
-    // Find this filename:
-    // Find the graphic layer number for the page to print
     LSEQ seq = lset.UIOrder();
     wxCHECK( unsigned( aPage - 1 ) < seq.size(), false );
     auto layerId = seq[aPage - 1];
 
-    // In gerbview, draw layers are always printed on separate pages
-    // because handling negative objects when using only one page is tricky
+    // In gerbview, draw layers are always printed on separate pages because handling negative
+    // objects when using only one page is tricky
 
     // Enable only one layer to create a printout
     m_settings.m_LayerSet = LSET( layerId );
 
     GERBER_FILE_IMAGE_LIST& gbrImgList = GERBER_FILE_IMAGE_LIST::GetImagesList();
-    GERBER_FILE_IMAGE* gbrImage = gbrImgList.GetGbrImage( layerId );
-    wxString gbr_filename;
+    GERBER_FILE_IMAGE*      gbrImage = gbrImgList.GetGbrImage( layerId );
+    wxString                gbr_filename;
 
     if( gbrImage )
         gbr_filename = gbrImage->m_FileName;

@@ -35,7 +35,7 @@
 
 class PL_DRAW_PANEL_GAL;
 class PROPERTIES_FRAME;
-class WS_DATA_ITEM;
+class DS_DATA_ITEM;
 
 
 /**
@@ -69,7 +69,7 @@ public:
     PROPERTIES_FRAME* GetPropertiesFrame() { return m_propertiesPagelayout; }
 
     /**
-     * Show the dialog displaying the list of WS_DATA_ITEM items in the page layout
+     * Show the dialog displaying the list of DS_DATA_ITEM items in the page layout
      */
     void ShowDesignInspector();
 
@@ -243,11 +243,11 @@ public:
      * Function AddPageLayoutItem
      * Add a new item to the page layout item list.
      * @param aType = the type of item:
-     *  WS_TEXT, WS_SEGMENT, WS_RECT, WS_POLYPOLYGON
+     *  DS_TEXT, DS_SEGMENT, DS_RECT, DS_POLYPOLYGON
      * @param aIdx = the position in list to insert the new item.
      * @return a reference to the new item
      */
-    WS_DATA_ITEM* AddPageLayoutItem( int aType );
+    DS_DATA_ITEM* AddPageLayoutItem( int aType );
 
     /**
      * Must be called after a change in order to set the "modify" flag

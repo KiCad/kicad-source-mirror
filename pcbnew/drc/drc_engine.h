@@ -36,6 +36,7 @@
 class BOARD_DESIGN_SETTINGS;
 class DRC_TEST_PROVIDER;
 class PCB_EDIT_FRAME;
+class DS_PROXY_VIEW_ITEM;
 class BOARD_ITEM;
 class BOARD;
 class PCB_MARKER;
@@ -48,7 +49,6 @@ class wxFileName;
 
 namespace KIGFX
 {
-    class WS_PROXY_VIEW_ITEM;
     class VIEW_OVERLAY;
 };
 
@@ -92,8 +92,8 @@ public:
     void SetSchematicNetlist( NETLIST* aNetlist ) { m_schematicNetlist = aNetlist; }
     NETLIST* GetSchematicNetlist() const { return m_schematicNetlist; }
 
-    void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
-    KIGFX::WS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_worksheet; }
+    void SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet ) { m_drawingSheet = aDrawingSheet; }
+    DS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_drawingSheet; }
 
     void SetDebugOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay ) { m_debugOverlay = aOverlay; }
     std::shared_ptr<KIGFX::VIEW_OVERLAY> GetDebugOverlay() const { return m_debugOverlay; }
@@ -200,7 +200,7 @@ private:
 protected:
     BOARD_DESIGN_SETTINGS*           m_designSettings;
     BOARD*                           m_board;
-    KIGFX::WS_PROXY_VIEW_ITEM*       m_worksheet;
+    DS_PROXY_VIEW_ITEM*              m_drawingSheet;
     NETLIST*                         m_schematicNetlist;
 
     std::vector<DRC_RULE*>           m_rules;

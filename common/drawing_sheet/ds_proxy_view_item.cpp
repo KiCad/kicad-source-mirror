@@ -24,16 +24,16 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <page_info.h>
-#include <page_layout/ws_proxy_view_item.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_painter.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_painter.h>
 #include <project.h>
 #include <view/view.h>
 
 using namespace KIGFX;
 
-WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO* aPageInfo,
+DS_PROXY_VIEW_ITEM::DS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO* aPageInfo,
                                         const PROJECT* aProject, const TITLE_BLOCK* aTitleBlock ) :
         EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
         m_mils2IUscalefactor( aMils2IUscalefactor ),
@@ -49,7 +49,7 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
 }
 
 
-const BOX2I WS_PROXY_VIEW_ITEM::ViewBBox() const
+const BOX2I DS_PROXY_VIEW_ITEM::ViewBBox() const
 {
     BOX2I bbox;
 
@@ -68,7 +68,7 @@ const BOX2I WS_PROXY_VIEW_ITEM::ViewBBox() const
 }
 
 
-void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawList ) const
+void DS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, DS_DRAW_ITEM_LIST* aDrawList ) const
 {
     RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
     wxString         fileName( m_fileName.c_str(), wxConvUTF8 );
@@ -89,11 +89,11 @@ void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawLis
 }
 
 
-void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
+void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
     GAL*              gal = aView->GetGAL();
     RENDER_SETTINGS*  settings = aView->GetPainter()->GetSettings();
-    WS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList;
 
     buildDrawList( aView, &drawList );
 
@@ -107,8 +107,8 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
         gal->Scale( VECTOR2D( -1.0, 1.0 ) );
     }
 
-    WS_PAINTER ws_painter( gal );
-    auto       ws_settings = static_cast<WS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
+    DS_PAINTER ws_painter( gal );
+    auto       ws_settings = static_cast<DS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
 
     ws_settings->SetNormalColor( settings->GetLayerColor( m_colorLayer ) );
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
@@ -116,7 +116,7 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetPageBorderColor( settings->GetLayerColor( m_pageBorderColorLayer ) );
 
     // Draw all the components that make the page layout
-    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
         ws_painter.Draw( item, LAYER_DRAWINGSHEET );
 
     // Draw gray line that outlines the sheet size
@@ -128,21 +128,21 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 }
 
 
-void WS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+void DS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = LAYER_DRAWINGSHEET;
 }
 
 
-bool WS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition )
+bool DS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition )
 {
     int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
-    WS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList;
 
     buildDrawList( aView, &drawList );
 
-    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
         if( item->HitTest( aPosition, accuracy ) )
             return true;

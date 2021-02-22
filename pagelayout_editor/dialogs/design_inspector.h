@@ -43,8 +43,8 @@ private:
     wxGrid* GetGridList() const { return m_gridListItems; }
 	void onCellClicked( wxGridEvent& event ) override;
 
-    // The list of WS_DATA_ITEM found in page layout
-    std::vector<WS_DATA_ITEM*> m_itemsList;
+    // The list of DS_DATA_ITEM found in page layout
+    std::vector<DS_DATA_ITEM*> m_itemsList;
     PL_EDITOR_FRAME* m_editorFrame;
 
 public:
@@ -53,16 +53,13 @@ public:
 
     void    ReCreateDesignList();
 
-    /** @return the WS_DATA_ITEM item managed by the grid row
+    /**
+     * @return the DS_DATA_ITEM item managed by the grid row
      */
-    WS_DATA_ITEM* GetWsDataItem( int aRow ) const;
+    DS_DATA_ITEM* GetDrawingSheetDataItem( int aRow ) const;
 
-    /** @return the page layout item managed by the selected row (or NULL)
-     */
-    WS_DATA_ITEM* GetSelectedWsDataItem() const;
-
-    // Select the tree item corresponding to the WS_DATA_ITEM aItem
-    void SelectRow( WS_DATA_ITEM* aItem );
+    // Select the tree item corresponding to the DS_DATA_ITEM aItem
+    void SelectRow( DS_DATA_ITEM* aItem );
 };
 
 #endif /* _DESIGN_INSPECTOR_H */

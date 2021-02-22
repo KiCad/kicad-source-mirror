@@ -30,7 +30,7 @@
 
 #include <page_info.h>
 #include <title_block.h>
-#include <page_layout/ws_draw_item.h>
+#include <drawing_sheet/ds_draw_item.h>
 
 
 /**
@@ -43,7 +43,7 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;
 
-    WS_DRAW_ITEM_LIST       m_drawItemList;
+    DS_DRAW_ITEM_LIST       m_drawItemList;
 
 public:
     PL_EDITOR_LAYOUT();
@@ -63,7 +63,7 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titles = aTitleBlock; }
 
-    WS_DRAW_ITEM_LIST& GetDrawItems()
+    DS_DRAW_ITEM_LIST& GetDrawItems()
     {
         return m_drawItemList;
     }

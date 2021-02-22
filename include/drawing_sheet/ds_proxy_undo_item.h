@@ -22,18 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef WS_PROXY_UNDO_ITEM_H
-#define WS_PROXY_UNDO_ITEM_H
+#ifndef DS_PROXY_UNDO_ITEM_H
+#define DS_PROXY_UNDO_ITEM_H
 
 #include <eda_item.h>
 #include <title_block.h>
 #include <page_info.h>
 
 
-class WS_PROXY_UNDO_ITEM : public EDA_ITEM
+class DS_PROXY_UNDO_ITEM : public EDA_ITEM
 {
 public:
-    WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame );
+    DS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame );
 
     /*
      * Restores the saved worksheet layout to the global worksheet record, and the saved
@@ -49,7 +49,7 @@ public:
 
     wxString GetClass() const override
     {
-        return wxT( "WS_PROXY_UNDO_ITEM" );
+        return wxT( "DS_PROXY_UNDO_ITEM" );
     }
 
 protected:
@@ -60,4 +60,4 @@ protected:
     int         m_selectedDrawItem;
 };
 
-#endif /* WS_PROXY_UNDO_ITEM_H */
+#endif /* DS_PROXY_UNDO_ITEM_H */

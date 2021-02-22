@@ -33,11 +33,8 @@ class PAGE_INFO;
 class SCH_ITEM;
 class SCH_PREVIEW_PANEL;
 class TITLE_BLOCK;
+class DS_PROXY_VIEW_ITEM;
 
-namespace KIGFX
-{
-    class WS_PROXY_VIEW_ITEM;
-}
 
 class PANEL_EESCHEMA_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
@@ -68,7 +65,7 @@ private:
     SCH_PREVIEW_PANEL*         m_preview;
     PAGE_INFO*                 m_page;
     TITLE_BLOCK*               m_titleBlock;
-    KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
+    DS_PROXY_VIEW_ITEM*        m_drawingSheet;
     std::vector<EDA_ITEM*>     m_previewItems;
 
     KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;

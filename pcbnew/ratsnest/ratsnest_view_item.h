@@ -25,12 +25,11 @@
  */
 
 /**
- * @file ratsnest_viewitem.h
  * @brief Class that draws missing connections on a PCB.
  */
 
-#ifndef RATSNEST_VIEWITEM_H
-#define RATSNEST_VIEWITEM_H
+#ifndef RATSNEST_VIEW_ITEM_H
+#define RATSNEST_VIEW_ITEM_H
 
 #include <memory>
 #include <eda_item.h>
@@ -39,12 +38,11 @@
 class GAL;
 class CONNECTIVITY_DATA;
 
-namespace KIGFX
-{
-class RATSNEST_VIEWITEM : public EDA_ITEM
+
+class RATSNEST_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    RATSNEST_VIEWITEM( std::shared_ptr<CONNECTIVITY_DATA> aData );
+    RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData );
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -65,21 +63,14 @@ public:
     void Show( int x, std::ostream& st ) const override { }
 #endif
 
-    /**
-     * Get class name.
-     *
-     * @return string "RATSNEST_VIEWITEM"
-     */
     virtual wxString GetClass() const override
     {
-        return wxT( "RATSNEST_VIEWITEM" );
+        return wxT( "RATSNEST_VIEW_ITEM" );
     }
 
 protected:
-    ///< Object containing ratsnest data.
-    std::shared_ptr<CONNECTIVITY_DATA> m_data;
+    std::shared_ptr<CONNECTIVITY_DATA> m_data;      ///< Object containing ratsnest data.
 };
 
-}   // namespace KIGFX
 
-#endif /* RATSNEST_VIEWITEM_H */
+#endif /* RATSNEST_VIEW_ITEM_H */

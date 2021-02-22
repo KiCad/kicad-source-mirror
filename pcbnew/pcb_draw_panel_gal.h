@@ -31,11 +31,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_view.h>
 
-namespace KIGFX
-{
-    class WS_PROXY_VIEW_ITEM;
-    class RATSNEST_VIEWITEM;
-}
+class DS_PROXY_VIEW_ITEM;
+class RATSNEST_VIEW_ITEM;
 
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
@@ -54,14 +51,14 @@ public:
     void DisplayBoard( BOARD* aBoard );
 
     /**
-     * Set (or updates) worksheet used by the draw panel.
+     * Sets (or updates) drawing-sheet used by the draw panel.
      *
-     * @param aWorksheet is the worksheet to be used.  The object is then owned by
+     * @param aDrawingSheet is the drawing-sheet to be used.  The object is then owned by
      *                   #PCB_DRAW_PANEL_GAL.
      */
-    void SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
+    void SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
-    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
+    DS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_drawingSheet.get(); }
 
     // TODO(JE) Look at optimizing this out
     /**
@@ -117,11 +114,11 @@ protected:
     ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used worksheet.
-    std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
+    ///< Currently used drawing-sheet.
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
 
     ///< Ratsnest view item
-    std::unique_ptr<KIGFX::RATSNEST_VIEWITEM> m_ratsnest;
+    std::unique_ptr<RATSNEST_VIEW_ITEM> m_ratsnest;
 };
 
 #endif /* PCB_DRAW_PANEL_GAL_H_ */

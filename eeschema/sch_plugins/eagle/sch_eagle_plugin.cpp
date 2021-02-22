@@ -57,7 +57,6 @@
 #include <schematic.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
-#include <page_layout/ws_draw_item.h>
 
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top

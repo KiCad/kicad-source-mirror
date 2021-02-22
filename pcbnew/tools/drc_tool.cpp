@@ -150,7 +150,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
         zoneFiller->FillAllZones( m_drcDialog, aProgressReporter );
     }
 
-    m_drcEngine->SetWorksheet( m_editFrame->GetCanvas()->GetWorksheet() );
+    m_drcEngine->SetDrawingSheet( m_editFrame->GetCanvas()->GetDrawingSheet());
 
     if( aTestFootprints && !Kiface().IsSingle() )
     {

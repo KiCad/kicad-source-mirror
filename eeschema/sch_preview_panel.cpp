@@ -23,7 +23,7 @@
 
 
 #include <view/wx_view_controls.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 
 #include <gal/graphics_abstraction_layer.h>
 

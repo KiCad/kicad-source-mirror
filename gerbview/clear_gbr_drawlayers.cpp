@@ -55,7 +55,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 
         GetCanvas()->GetView()->Clear();
 
-        // Reinit the worksheet view, cleared by GetView()->Clear():
+        // Reinit the drawing-sheet view, cleared by GetView()->Clear():
         SetPageSettings( GetPageSettings() );
     }
 

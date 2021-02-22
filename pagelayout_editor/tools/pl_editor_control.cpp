@@ -28,8 +28,8 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <dialogs/dialog_page_settings.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_painter.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_painter.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
@@ -130,9 +130,9 @@ int PL_EDITOR_CONTROL::ShowInspector( const TOOL_EVENT& aEvent )
 int PL_EDITOR_CONTROL::TitleBlockDisplayMode( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &PL_ACTIONS::layoutEditMode ) )
-        WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
+        DS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     else
-        WS_DATA_MODEL::GetTheInstance().m_EditMode = false;
+        DS_DATA_MODEL::GetTheInstance().m_EditMode = false;
 
     m_frame->HardRedraw();
     return 0;
@@ -155,7 +155,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
 
-        WS_DATA_ITEM* dataItem = static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer();
+        DS_DATA_ITEM* dataItem = static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer();
         m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( dataItem );
     }
     else

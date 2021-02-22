@@ -25,11 +25,10 @@
  */
 
 /**
- * @file ratsnest_viewitem.cpp
  * @brief Class that draws missing connections on a PCB.
  */
 
-#include <ratsnest/ratsnest_viewitem.h>
+#include <ratsnest/ratsnest_view_item.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
@@ -43,15 +42,13 @@
 
 #include <view/view.h>
 
-namespace KIGFX {
-
-RATSNEST_VIEWITEM::RATSNEST_VIEWITEM(  std::shared_ptr<CONNECTIVITY_DATA> aData ) :
+RATSNEST_VIEW_ITEM::RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData ) :
         EDA_ITEM( NOT_USED ), m_data( std::move(aData) )
 {
 }
 
 
-const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
+const BOX2I RATSNEST_VIEW_ITEM::ViewBBox() const
 {
     // Make it always visible
     BOX2I bbox;
@@ -61,7 +58,7 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
 }
 
 
-void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     std::unique_lock<KISPINLOCK> lock( m_data->GetLock(), std::try_to_lock );
 
@@ -74,7 +71,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 	gal->SetIsStroke( true );
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
-    auto rs = static_cast<PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     COLOR4D    defaultColor = rs->GetColor( nullptr, LAYER_RATSNEST );
     COLOR4D    color        = defaultColor;
@@ -234,10 +231,9 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void RATSNEST_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+void RATSNEST_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = LAYER_RATSNEST;
 }
 
-}

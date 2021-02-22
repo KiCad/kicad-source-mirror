@@ -34,8 +34,8 @@ using namespace std::placeholders;
 
 #include <bitmaps.h>
 #include <status_popup.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
 #include <widgets/progress_reporter.h>
 
 #include "pl_editor_frame.h"
@@ -71,14 +71,14 @@ public:
         {
         case WSG_LINE_T:
         {
-            WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) aItem;
+            DS_DRAW_ITEM_LINE* line = static_cast<DS_DRAW_ITEM_LINE*>( aItem );
             points->AddPoint( line->GetStart() );
             points->AddPoint( line->GetEnd() );
             break;
         }
         case WSG_RECT_T:
         {
-            WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) aItem;
+            DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( aItem );
             wxPoint            topLeft = rect->GetStart();
             wxPoint            botRight = rect->GetEnd();
 
@@ -317,7 +317,7 @@ void PL_POINT_EDITOR::updateItem() const
     if( !item )
         return;
 
-    WS_DATA_ITEM* dataItem = static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer();
+    DS_DATA_ITEM* dataItem = static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer();
 
     // the current item is perhaps not the main item if we have a set of
     // repeated items.
@@ -328,7 +328,7 @@ void PL_POINT_EDITOR::updateItem() const
     {
     case WSG_LINE_T:
     {
-        WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+        DS_DRAW_ITEM_LINE* line = static_cast<DS_DRAW_ITEM_LINE*>( item );
 
         wxPoint move_startpoint = (wxPoint) m_editPoints->Point( LINE_START ).GetPosition()
                                   - line->GetStart();
@@ -338,9 +338,9 @@ void PL_POINT_EDITOR::updateItem() const
         dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
         dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
 
-        for( WS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
+        for( DS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
         {
-            WS_DRAW_ITEM_LINE* draw_line = static_cast<WS_DRAW_ITEM_LINE*>( draw_item );
+            DS_DRAW_ITEM_LINE* draw_line = static_cast<DS_DRAW_ITEM_LINE*>( draw_item );
 
             draw_line->SetStart( draw_line->GetStart() + move_startpoint );
             draw_line->SetEnd( draw_line->GetEnd() + move_endpoint );
@@ -352,7 +352,7 @@ void PL_POINT_EDITOR::updateItem() const
 
     case WSG_RECT_T:
     {
-        WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
+        DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( item );
         VECTOR2I           topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
         VECTOR2I           topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
         VECTOR2I           botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
@@ -366,10 +366,9 @@ void PL_POINT_EDITOR::updateItem() const
 
         dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
         dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
-
-        for( WS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
+        for( DS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
         {
-            WS_DRAW_ITEM_RECT* draw_rect = (WS_DRAW_ITEM_RECT*) draw_item;
+            DS_DRAW_ITEM_RECT* draw_rect = static_cast<DS_DRAW_ITEM_RECT*>( draw_item );
 
             draw_rect->SetStart( draw_rect->GetStart() + move_startpoint );
             draw_rect->SetEnd( draw_rect->GetEnd() + move_endpoint );
@@ -406,7 +405,7 @@ void PL_POINT_EDITOR::updatePoints()
     {
     case WSG_LINE_T:
     {
-        WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+        DS_DRAW_ITEM_LINE* line = static_cast<DS_DRAW_ITEM_LINE*>( item );
 
         m_editPoints->Point( LINE_START ).SetPosition( line->GetStart() );
         m_editPoints->Point( LINE_END ).SetPosition( line->GetEnd() );
@@ -415,7 +414,7 @@ void PL_POINT_EDITOR::updatePoints()
 
     case WSG_RECT_T:
     {
-        WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
+        DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( item );
         wxPoint            topLeft = rect->GetPosition();
         wxPoint            botRight = rect->GetEnd();
 

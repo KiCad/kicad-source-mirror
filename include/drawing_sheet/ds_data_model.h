@@ -22,39 +22,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef  WS_DATA_MODEL_H
-#define  WS_DATA_MODEL_H
+#ifndef  DS_DATA_MODEL_H
+#define  DS_DATA_MODEL_H
 
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
 
-class WS_DATA_ITEM;
+class DS_DATA_ITEM;
 class PAGE_INFO;
 
 /**
  * Handle the graphic items list to draw/plot the frame and title block.
  */
-class WS_DATA_MODEL
+class DS_DATA_MODEL
 {
 public:
-    WS_DATA_MODEL();
-    ~WS_DATA_MODEL()
+    DS_DATA_MODEL();
+
+    ~DS_DATA_MODEL()
     {
         ClearList();
     }
 
     /**
-     * static function: returns the instance of WS_DATA_MODEL used in the application
+     * static function: returns the instance of DS_DATA_MODEL used in the application
      */
-    static WS_DATA_MODEL& GetTheInstance();
+    static DS_DATA_MODEL& GetTheInstance();
 
     /**
-     * Set an alternate instance of WS_DATA_MODEL.
+     * Set an alternate instance of DS_DATA_MODEL.
      *
      * @param aLayout the alternate page layout; if null restore the basic page layout
      */
-    static void SetAltInstance( WS_DATA_MODEL* aLayout = NULL );
+    static void SetAltInstance( DS_DATA_MODEL* aLayout = NULL );
 
     double GetLeftMargin() { return m_leftMargin; }
     void SetLeftMargin( double aMargin ) { m_leftMargin = aMargin; }
@@ -106,25 +107,25 @@ public:
     /**
      * Fill the given string with an S-expr serialization of the WS_DATA_ITEMs.
      */
-    void SaveInString( std::vector<WS_DATA_ITEM*> aItemsList, wxString& aOutputString );
+    void SaveInString( std::vector<DS_DATA_ITEM*> aItemsList, wxString& aOutputString );
 
-    void Append( WS_DATA_ITEM* aItem );
-    void Remove( WS_DATA_ITEM* aItem );
+    void Append( DS_DATA_ITEM* aItem );
+    void Remove( DS_DATA_ITEM* aItem );
 
     /**
      * @return the index of aItem, or -1 if does not exist.
      */
-    int GetItemIndex( WS_DATA_ITEM* aItem ) const;
+    int GetItemIndex( DS_DATA_ITEM* aItem ) const;
 
     /**
      * @return is the item from it's index \a aIdx, or NULL if does not exist.
      */
-    WS_DATA_ITEM* GetItem( unsigned aIdx ) const;
+    DS_DATA_ITEM* GetItem( unsigned aIdx ) const;
 
     /**
      * @return a reference to the items.
      */
-    std::vector<WS_DATA_ITEM*>& GetItems() { return m_list; }
+    std::vector<DS_DATA_ITEM*>& GetItems() { return m_list; }
 
     /**
      * @return the item count.
@@ -153,7 +154,7 @@ public:
      *                      default internal description.
      * @param Append if true: do not delete old layout, and load only \a aFullFileName.
      */
-    void SetPageLayout( const wxString& aFullFileName = wxEmptyString, bool Append = false );
+    void LoadDrawingSheet( const wxString& aFullFileName = wxEmptyString, bool Append = false );
 
     /**
      * Populate the list from a S expr description stored in a string.
@@ -204,9 +205,9 @@ public:
                                     // displayed "as this"
 
 private:
-    std::vector <WS_DATA_ITEM*> m_list;
+    std::vector <DS_DATA_ITEM*> m_list;
     bool   m_allowVoidList;         // If false, the default page layout will be loaded the
-                                    // first time WS_DRAW_ITEM_LIST::BuildDrawItemsList
+                                    // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList
                                     // is run (useful mainly for drawing sheet editor)
     double m_leftMargin;            // the left page margin in mm
     double m_rightMargin;           // the right page margin in mm
@@ -216,4 +217,4 @@ private:
 
 };
 
-#endif      // WS_DATA_MODEL_H
+#endif      // DS_DATA_MODEL_H

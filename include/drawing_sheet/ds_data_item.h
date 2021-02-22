@@ -22,20 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file worksheet_dataitem.h
- * @brief description of graphic items and texts to build a title block
- */
-
-#ifndef  WORKSHEET_DATA_ITEM_H
-#define  WORKSHEET_DATA_ITEM_H
+#ifndef  DS_DATA_ITEM_H
+#define  DS_DATA_ITEM_H
 
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
-#include "page_layout/ws_draw_item.h"
+#include "drawing_sheet/ds_draw_item.h"
 
-class WS_DRAW_ITEM_TEXT;            // Forward declaration
+class DS_DRAW_ITEM_TEXT;            // Forward declaration
 
 #define TB_DEFAULT_TEXTSIZE 1.5     // default worksheet text size in mm
 
@@ -88,7 +83,7 @@ public:
 
 
 /**
- * Work sheet structure type definitions.
+ * Drawing sheet structure type definitions.
  *
  * Basic items are:
  * * segment and rect (defined by 2 points)
@@ -97,25 +92,25 @@ public:
  *   ( because we use it for logos, there are more than one polygon
  *   in this description
  */
-class WS_DATA_ITEM
+class DS_DATA_ITEM
 {
 public:
-    enum WS_ITEM_TYPE {
-        WS_TEXT,
-        WS_SEGMENT,
-        WS_RECT,
-        WS_POLYPOLYGON,
-        WS_BITMAP
+    enum DS_ITEM_TYPE {
+        DS_TEXT,
+        DS_SEGMENT,
+        DS_RECT,
+        DS_POLYPOLYGON,
+        DS_BITMAP
     };
 
 public:
-    WS_DATA_ITEM( WS_ITEM_TYPE aType );
+    DS_DATA_ITEM( DS_ITEM_TYPE aType );
 
-    virtual ~WS_DATA_ITEM();
+    virtual ~DS_DATA_ITEM();
 
-    const std::vector<WS_DRAW_ITEM_BASE*>& GetDrawItems() const { return m_drawItems; }
+    const std::vector<DS_DRAW_ITEM_BASE*>& GetDrawItems() const { return m_drawItems; }
 
-    virtual void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView );
+    virtual void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView );
 
     void SetStart( double aPosx, double aPosy, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
@@ -131,7 +126,7 @@ public:
         m_End.m_Anchor = aAnchor;
     }
 
-    WS_ITEM_TYPE GetType() const { return m_type; }
+    DS_ITEM_TYPE GetType() const { return m_type; }
 
     /**
      * @return true if the item has a end point (segment; rect) of false (text, polygon).
@@ -202,10 +197,10 @@ public:
     const wxString GetClassName() const;
 
 protected:
-    WS_ITEM_TYPE   m_type;
+    DS_ITEM_TYPE   m_type;
     PAGE_OPTION    m_pageOption;
 
-    std::vector<WS_DRAW_ITEM_BASE*> m_drawItems;
+    std::vector<DS_DRAW_ITEM_BASE*> m_drawItems;
 
 public:
     wxString       m_Name;                  // a item name used in page layout
@@ -221,12 +216,12 @@ public:
 };
 
 
-class WS_DATA_ITEM_POLYGONS : public WS_DATA_ITEM
+class DS_DATA_ITEM_POLYGONS : public DS_DATA_ITEM
 {
 public:
-    WS_DATA_ITEM_POLYGONS( );
+    DS_DATA_ITEM_POLYGONS( );
 
-    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
+    void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     virtual int GetPenSizeUi() override;
 
@@ -303,12 +298,12 @@ private:
 };
 
 
-class WS_DATA_ITEM_TEXT : public WS_DATA_ITEM
+class DS_DATA_ITEM_TEXT : public DS_DATA_ITEM
 {
 public:
-    WS_DATA_ITEM_TEXT( const wxString& aTextBase );
+    DS_DATA_ITEM_TEXT( const wxString& aTextBase );
 
-    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
+    void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     virtual int GetPenSizeUi() override;
 
@@ -360,16 +355,16 @@ public:
 
 class BITMAP_BASE;
 
-class WS_DATA_ITEM_BITMAP : public WS_DATA_ITEM
+class DS_DATA_ITEM_BITMAP : public DS_DATA_ITEM
 {
 public:
-    WS_DATA_ITEM_BITMAP( BITMAP_BASE* aImage ) :
-            WS_DATA_ITEM( WS_BITMAP )
+    DS_DATA_ITEM_BITMAP( BITMAP_BASE* aImage ) :
+            DS_DATA_ITEM( DS_BITMAP )
     {
         m_ImageBitmap = aImage;
     }
 
-    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
+    void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     int GetPPI() const;
     void SetPPI( int aBitmapPPI );
@@ -379,4 +374,4 @@ public:
 };
 
 
-#endif      // WORKSHEET_DATA_ITEM_H
+#endif      // DS_DATA_ITEM_H

@@ -30,7 +30,7 @@
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <tools/ee_selection_tool.h>
-#include <page_layout/ws_proxy_undo_item.h>
+#include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
 
 
@@ -292,8 +292,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
             // swap current settings with stored settings
-            WS_PROXY_UNDO_ITEM  alt_item( this );
-            WS_PROXY_UNDO_ITEM* item = (WS_PROXY_UNDO_ITEM*) eda_item;
+            DS_PROXY_UNDO_ITEM  alt_item( this );
+            DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
             item->Restore( this );
             *item = alt_item;
             GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );

@@ -23,10 +23,10 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <view/wx_view_controls.h>
-#include <page_layout/ws_proxy_view_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_painter.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_painter.h>
 #include <pgm_base.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>
@@ -52,7 +52,7 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 
-    m_painter = std::make_unique<KIGFX::WS_PAINTER>( m_gal );
+    m_painter = std::make_unique<KIGFX::DS_PAINTER>( m_gal );
 
     SETTINGS_MANAGER&   settingsManager = Pgm().GetSettingsManager();
     PL_EDITOR_SETTINGS* cfg = settingsManager.GetAppSettings<PL_EDITOR_SETTINGS>();
@@ -86,7 +86,7 @@ void PL_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 {
     PL_SELECTION_TOOL* selTool = m_edaFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
-    WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL&     model = DS_DATA_MODEL::GetTheInstance();
 
     selTool->GetSelection().Clear();
     m_view->Clear();
@@ -102,22 +102,22 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
 
     // To show the formatted texts instead of raw texts in drawing sheet editor, we need
-    // a dummy WS_DRAW_ITEM_LIST.
-    WS_DRAW_ITEM_LIST dummy;
+    // a dummy DS_DRAW_ITEM_LIST.
+    DS_DRAW_ITEM_LIST dummy;
     dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
     dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
     dummy.SetProject( &m_edaFrame->Prj() );
     dummy.SetMilsToIUfactor( IU_PER_MILS );
 
-    for( WS_DATA_ITEM* dataItem : model.GetItems() )
+    for( DS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( &dummy, m_view );
 
-    // Build and add a WS_DRAW_ITEM_PAGE to show the page limits and the corner position
+    // Build and add a DS_DRAW_ITEM_PAGE to show the page limits and the corner position
     // of the selected corner for coord origin of new items
-    // Not also this item has no peer in WS_DATA_MODEL list.
+    // Not also this item has no peer in DS_DATA_MODEL list.
     const int penWidth = 0;     // This value is to use the default thickness line
     constexpr double markerSize = Millimeter2iu( 5 );
-    m_pageDrawItem = std::make_unique<WS_DRAW_ITEM_PAGE>( penWidth, markerSize );
+    m_pageDrawItem = std::make_unique<DS_DRAW_ITEM_PAGE>( penWidth, markerSize );
     m_view->Add( m_pageDrawItem.get() );
 
     selTool->RebuildSelection();

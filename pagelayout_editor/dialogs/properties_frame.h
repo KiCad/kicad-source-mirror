@@ -32,7 +32,7 @@
 #include "dialogs/properties_frame_base.h"
 #include <widgets/unit_binder.h>
 
-class WS_DATA_ITEM;
+class DS_DATA_ITEM;
 class PL_EDITOR_FRAME;
 class SCINTILLA_TRICKS;
 
@@ -91,10 +91,10 @@ public:
     bool CopyPrmsFromPanelToGeneral();
 
     // Data transfert from item to widgets in properties frame
-    void CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem );
+    void CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem );
 
     // Data transfert from widgets in properties frame to item
-    bool CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem );
+    bool CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem );
 
     wxSize GetMinSize() const override;
 };

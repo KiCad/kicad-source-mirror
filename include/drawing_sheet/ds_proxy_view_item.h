@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef WS_PROXY_VIEW_ITEM_H
-#define WS_PROXY_VIEW_ITEM_H
+#ifndef DS_PROXY_VIEW_ITEM_H
+#define DS_PROXY_VIEW_ITEM_H
 
 #include <eda_item.h>
 
@@ -32,21 +32,22 @@ class BOARD;
 class PAGE_INFO;
 class PROJECT;
 class TITLE_BLOCK;
-class WS_DRAW_ITEM_LINE;
-class WS_DRAW_ITEM_RECT;
-class WS_DRAW_ITEM_TEXT;
-class WS_DRAW_ITEM_BITMAP;
-class WS_DRAW_ITEM_LIST;
+class DS_DRAW_ITEM_LINE;
+class DS_DRAW_ITEM_RECT;
+class DS_DRAW_ITEM_TEXT;
+class DS_DRAW_ITEM_BITMAP;
+class DS_DRAW_ITEM_LIST;
 
 namespace KIGFX
 {
 class VIEW;
 class GAL;
+}
 
-class WS_PROXY_VIEW_ITEM : public EDA_ITEM
+class DS_PROXY_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    WS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo, const PROJECT* aProject,
+    DS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo, const PROJECT* aProject,
                         const TITLE_BLOCK* aTitleBlock );
 
     /**
@@ -65,7 +66,7 @@ public:
     void SetPageNumber( const std::string& aPageNumber ) { m_pageNumber = aPageNumber; }
 
     /**
-     * Change the sheets count number displayed in the title block.
+     * Changes the sheet-count number displayed in the title block.
      */
     void SetSheetCount( int aSheetCount ) { m_sheetCount = aSheetCount; }
 
@@ -102,7 +103,7 @@ public:
     const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewDraw()
-    void ViewDraw( int aLayer, VIEW* aView ) const override;
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -117,13 +118,13 @@ public:
      */
     virtual wxString GetClass() const override
     {
-        return wxT( "WS_PROXY_VIEW_ITEM" );
+        return wxT( "DS_PROXY_VIEW_ITEM" );
     }
 
-    bool HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition );
+    bool HitTestDrawingSheetItems( KIGFX::VIEW* aView, const wxPoint& aPosition );
 
 protected:
-    void buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawList ) const;
+    void buildDrawList( KIGFX::VIEW* aView, DS_DRAW_ITEM_LIST* aDrawList ) const;
 
     /// the factor between mils (units used in worksheet and internal units)
     /// it is the value IU_PER_MILS used in the caller
@@ -144,6 +145,5 @@ protected:
     /// Layer that is used for page border color
     int                m_pageBorderColorLayer;
 };
-}
 
-#endif /* WS_PROXY_VIEW_ITEM_H */
+#endif /* DS_PROXY_VIEW_ITEM_H */

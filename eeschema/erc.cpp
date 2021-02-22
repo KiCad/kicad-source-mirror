@@ -32,8 +32,8 @@
 #include <sch_reference_list.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <wx/ffile.h>
 
 
@@ -159,9 +159,9 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
-void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet )
+void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
-    WS_DRAW_ITEM_LIST wsItems;
+    DS_DRAW_ITEM_LIST wsItems;
 
     auto unresolved = [this]( wxString str )
     {
@@ -252,9 +252,9 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
         }
 
-        for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
+        for( DS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
         {
-            if( WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item ) )
+            if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {

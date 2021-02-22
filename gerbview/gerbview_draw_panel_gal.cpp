@@ -21,7 +21,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gerbview_painter.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <zoom_defines.h>
 
 #include <gerbview_frame.h>
@@ -30,7 +30,6 @@
 
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <zoom_defines.h>
 
 #include <functional>
 #include <memory>
@@ -177,7 +176,7 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
 }
 
 
-void GERBVIEW_DRAW_PANEL_GAL::SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet )
+void GERBVIEW_DRAW_PANEL_GAL::SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
     m_drawingSheet.reset( aDrawingSheet );
     m_view->Add( m_drawingSheet.get() );

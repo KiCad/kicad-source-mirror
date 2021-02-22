@@ -1,9 +1,3 @@
-/**
- * @file page_layout_writer.cpp
- * @brief write an S expression of description of graphic items and texts
- * to build a title block and page layout
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -33,12 +27,12 @@
 #include <eda_item.h>
 #include <locale_io.h>
 #include <macros.h>
-#include <page_layout/ws_painter.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_painter.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <math/vector2d.h>
-#include <page_layout/page_layout_reader_lexer.h>
+#include <drawing_sheet/drawing_sheet_reader_lexer.h>
 #include <convert_to_biu.h>
 
 #include <wx/msgdlg.h>
@@ -50,46 +44,45 @@ using namespace TB_READER_T;
 // A helper function to write tokens:
 static const char* getTokenName( T aTok )
 {
-    return PAGE_LAYOUT_READER_LEXER::TokenName( aTok );
+    return DRAWING_SHEET_READER_LEXER::TokenName( aTok );
 }
 
 // A basic helper class to write a page layout description
-// Not used alone, a file writer or a string writer should be
-// derived to use it
-// Therefore the constructor is protected
-class WS_DATA_MODEL_IO
+// Not used alone, a file writer or a string writer should be derived to use it.
+// Therefore the constructor is protected.
+class DS_DATA_MODEL_IO
 {
 protected:
     OUTPUTFORMATTER* m_out;
 
-    WS_DATA_MODEL_IO() { m_out = NULL; }
-    virtual ~WS_DATA_MODEL_IO() {}
+    DS_DATA_MODEL_IO() { m_out = NULL; }
+    virtual ~DS_DATA_MODEL_IO() {}
 
 public:
-    void Format( WS_DATA_MODEL* aModel ) const;
+    void Format( DS_DATA_MODEL* aModel ) const;
 
-    void Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const;
+    void Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
 
 private:
-    void format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const;
-    void format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const;
-    void format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel )
+    void format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const;
+    void format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
+    void format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel )
                  const;
-    void format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const;
+    void format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const;
     void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const;
-    void formatRepeatParameters( WS_DATA_ITEM* aItem ) const;
-    void formatOptions( WS_DATA_ITEM* aItem ) const;
+    void formatRepeatParameters( DS_DATA_ITEM* aItem ) const;
+    void formatOptions( DS_DATA_ITEM* aItem ) const;
 };
 
 
 // A helper class to write a page layout description to a file
-class WS_DATA_MODEL_FILEIO: public WS_DATA_MODEL_IO
+class DS_DATA_MODEL_FILEIO : public DS_DATA_MODEL_IO
 {
     FILE_OUTPUTFORMATTER * m_fileout;
 
 public:
-    WS_DATA_MODEL_FILEIO( const wxString& aFilename ):
-        WS_DATA_MODEL_IO()
+    DS_DATA_MODEL_FILEIO( const wxString& aFilename ) :
+            DS_DATA_MODEL_IO()
     {
         try
         {
@@ -102,7 +95,7 @@ public:
         }
     }
 
-    ~WS_DATA_MODEL_FILEIO()
+    ~DS_DATA_MODEL_FILEIO()
     {
         delete m_fileout;
     }
@@ -110,14 +103,14 @@ public:
 
 
 // A helper class to write a page layout description to a string
-class WS_DATA_MODEL_STRINGIO: public WS_DATA_MODEL_IO
+class DS_DATA_MODEL_STRINGIO : public DS_DATA_MODEL_IO
 {
     STRING_FORMATTER * m_writer;
     wxString & m_output;
 
 public:
-    WS_DATA_MODEL_STRINGIO( wxString& aOutputString ):
-        WS_DATA_MODEL_IO(), m_output( aOutputString )
+    DS_DATA_MODEL_STRINGIO( wxString& aOutputString ) :
+            DS_DATA_MODEL_IO(), m_output( aOutputString )
     {
         try
         {
@@ -130,7 +123,7 @@ public:
         }
     }
 
-    ~WS_DATA_MODEL_STRINGIO()
+    ~DS_DATA_MODEL_STRINGIO()
     {
         m_output = FROM_UTF8( m_writer->GetString().c_str() );
         delete m_writer;
@@ -141,52 +134,52 @@ public:
 /*
  * Save the description in a file
  */
-void WS_DATA_MODEL::Save( const wxString& aFullFileName )
+void DS_DATA_MODEL::Save( const wxString& aFullFileName )
 {
-    WS_DATA_MODEL_FILEIO writer( aFullFileName );
+    DS_DATA_MODEL_FILEIO writer( aFullFileName );
     writer.Format( this );
 }
 
 
 /* Save the description in a buffer
  */
-void WS_DATA_MODEL::SaveInString( wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( wxString& aOutputString )
 {
-    WS_DATA_MODEL_STRINGIO writer( aOutputString );
+    DS_DATA_MODEL_STRINGIO writer( aOutputString );
     writer.Format( this );
 }
 
 
-void WS_DATA_MODEL::SaveInString( std::vector<WS_DATA_ITEM*> aItemsList, wxString& aOutputString )
+void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*> aItemsList, wxString& aOutputString )
 {
-    WS_DATA_MODEL_STRINGIO writer( aOutputString );
+    DS_DATA_MODEL_STRINGIO writer( aOutputString );
 
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    for( WS_DATA_ITEM* item : aItemsList )
+    for( DS_DATA_ITEM* item : aItemsList )
         writer.Format( this, item, 0 );
 }
 
 
-void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const
+void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     switch( aItem->GetType() )
     {
-    case WS_DATA_ITEM::WS_TEXT:
-        format( (WS_DATA_ITEM_TEXT*) aItem, aNestLevel );
+    case DS_DATA_ITEM::DS_TEXT:
+        format( (DS_DATA_ITEM_TEXT*) aItem, aNestLevel );
         break;
 
-    case WS_DATA_ITEM::WS_SEGMENT:
-    case WS_DATA_ITEM::WS_RECT:
+    case DS_DATA_ITEM::DS_SEGMENT:
+    case DS_DATA_ITEM::DS_RECT:
         format( aModel, aItem, aNestLevel );
         break;
 
-    case WS_DATA_ITEM::WS_POLYPOLYGON:
-        format( (WS_DATA_ITEM_POLYGONS*) aItem, aNestLevel );
+    case DS_DATA_ITEM::DS_POLYPOLYGON:
+        format( (DS_DATA_ITEM_POLYGONS*) aItem, aNestLevel );
         break;
 
-    case WS_DATA_ITEM::WS_BITMAP:
-        format( (WS_DATA_ITEM_BITMAP*) aItem, aNestLevel );
+    case DS_DATA_ITEM::DS_BITMAP:
+        format( (DS_DATA_ITEM_BITMAP*) aItem, aNestLevel );
         break;
 
     default:
@@ -195,11 +188,11 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int a
 }
 
 
-void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
+void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aPageLayout ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( 0, "(page_layout\n" );
+    m_out->Print( 0, "(drawing_sheet\n" );
 
     // Setup
     int nestLevel = 1;
@@ -228,7 +221,7 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
     // Save the graphical items on the page layout
     for( unsigned ii = 0; ii < aPageLayout->GetCount(); ii++ )
     {
-        WS_DATA_ITEM* item = aPageLayout->GetItem( ii );
+        DS_DATA_ITEM* item = aPageLayout->GetItem( ii );
         Format( aPageLayout, item, nestLevel );
     }
 
@@ -236,7 +229,7 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
 }
 
 
-void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
+void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_tbtext ) );
     m_out->Print( 0, " %s", m_out->Quotew( aItem->m_TextBase ).c_str() );
@@ -316,9 +309,9 @@ void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     m_out->Print( 0, ")\n" );
 }
 
-void WS_DATA_MODEL_IO::format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const
+void DS_DATA_MODEL_IO::format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const
 {
-    if( aItem->GetType() == WS_DATA_ITEM::WS_RECT )
+    if( aItem->GetType() == DS_DATA_ITEM::DS_RECT )
         m_out->Print( aNestLevel, "(%s", getTokenName( T_rect ) );
     else
         m_out->Print( aNestLevel, "(%s", getTokenName( T_line ) );
@@ -339,7 +332,7 @@ void WS_DATA_MODEL_IO::format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int a
 }
 
 
-void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) const
+void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_polygon ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -389,7 +382,7 @@ void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
 }
 
 
-void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const
+void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_bitmap ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -417,8 +410,8 @@ void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
 }
 
 
-void WS_DATA_MODEL_IO::formatCoordinate( const char * aToken,
-                                            POINT_COORD & aCoord ) const
+void DS_DATA_MODEL_IO::formatCoordinate( const char * aToken,
+                                         POINT_COORD & aCoord ) const
 {
     m_out->Print( 0, " (%s %s %s", aToken,
                   double2Str( aCoord.m_Pos.x ).c_str(),
@@ -436,7 +429,7 @@ void WS_DATA_MODEL_IO::formatCoordinate( const char * aToken,
 }
 
 
-void WS_DATA_MODEL_IO::formatRepeatParameters( WS_DATA_ITEM* aItem ) const
+void DS_DATA_MODEL_IO::formatRepeatParameters( DS_DATA_ITEM* aItem ) const
 {
     if( aItem->m_RepeatCount <= 1 )
         return;
@@ -449,12 +442,12 @@ void WS_DATA_MODEL_IO::formatRepeatParameters( WS_DATA_ITEM* aItem ) const
     if( aItem->m_IncrementVector.y )
         m_out->Print( 0, " (incry %s)", double2Str( aItem->m_IncrementVector.y ).c_str() );
 
-    if( aItem->m_IncrementLabel != 1 && aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
+    if( aItem->m_IncrementLabel != 1 && aItem->GetType() == DS_DATA_ITEM::DS_TEXT )
         m_out->Print( 0, " (incrlabel %d)", aItem->m_IncrementLabel );
 }
 
 
-void WS_DATA_MODEL_IO::formatOptions( WS_DATA_ITEM* aItem ) const
+void DS_DATA_MODEL_IO::formatOptions( DS_DATA_ITEM* aItem ) const
 {
     if( aItem->GetPage1Option() == FIRST_PAGE_ONLY )
         m_out->Print( 0, " (%s %s)", getTokenName( T_option ), getTokenName(T_page1only ) );

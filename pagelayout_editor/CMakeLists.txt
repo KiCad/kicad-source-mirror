@@ -18,7 +18,6 @@ set( DIALOGS_SRCS
     dialogs/properties_frame_base.cpp
     dialogs/dialogs_for_printing.cpp
     dialogs/dialog_new_dataitem_base.cpp
-    dialogs/dialog_new_dataitem.cpp
     dialogs/dialog_design_inspector_base.cpp
     dialogs/design_inspector.cpp
     dialogs/panel_pl_editor_color_settings.cpp

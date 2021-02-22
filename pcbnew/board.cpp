@@ -29,7 +29,6 @@
 #include <iterator>
 #include <pcb_base_frame.h>
 #include <reporter.h>
-#include <page_layout/ws_proxy_view_item.h>
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
@@ -49,7 +48,6 @@
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <ratsnest/ratsnest_data.h>
-#include <ratsnest/ratsnest_viewitem.h>
 #include <tool/selection_conditions.h>
 #include <convert_drawsegment_list_to_polygon.h>
 

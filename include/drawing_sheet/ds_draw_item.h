@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef  WS_DRAW_ITEM_H
-#define  WS_DRAW_ITEM_H
+#ifndef  DS_DRAW_ITEM_H
+#define  DS_DRAW_ITEM_H
 
 #include <core/typeinfo.h>
 #include <math/vector2d.h>
@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <vector>
 
-class WS_DATA_ITEM;
+class DS_DATA_ITEM;
 class TITLE_BLOCK;
 class PAGE_INFO;
 class EDA_ITEM;
@@ -55,12 +55,12 @@ class PROJECT;
  *  - bitmaps (also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters
  *    where we just plot the bounding box)
  */
-class WS_DRAW_ITEM_BASE : public EDA_ITEM
+class DS_DRAW_ITEM_BASE : public EDA_ITEM
 {
 public:
-    virtual ~WS_DRAW_ITEM_BASE() {}
+    virtual ~DS_DRAW_ITEM_BASE() {}
 
-    WS_DATA_ITEM* GetPeer() const { return m_peer; }
+    DS_DATA_ITEM* GetPeer() const { return m_peer; }
     int GetIndexInPeer() const { return m_index; }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -100,7 +100,7 @@ public:
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
 
 protected:
-    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
+    DS_DRAW_ITEM_BASE( DS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
             EDA_ITEM( aType )
     {
         m_peer = aPeer;
@@ -109,26 +109,26 @@ protected:
         m_flags = 0;
     }
 
-    WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
+    DS_DATA_ITEM*  m_peer;       // the parent DS_DATA_ITEM item in the DS_DATA_MODEL
     int            m_index;      // the index in the parent's repeat count
     int            m_penWidth;
 };
 
 
 // This class draws a thick segment
-class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
+class DS_DRAW_ITEM_LINE : public DS_DRAW_ITEM_BASE
 {
 public:
-    WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+    DS_DRAW_ITEM_LINE( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
                        int aPenWidth ) :
-        WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_LINE_T )
+            DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_LINE_T )
     {
         m_start     = aStart;
         m_end       = aEnd;
         m_penWidth  = aPenWidth;
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_LINE" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_LINE" ); }
 
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
@@ -155,17 +155,17 @@ private:
 };
 
 
-class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
+class DS_DRAW_ITEM_POLYPOLYGONS : public DS_DRAW_ITEM_BASE
 {
 public:
-    WS_DRAW_ITEM_POLYPOLYGONS( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, int aPenWidth ) :
-            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
+    DS_DRAW_ITEM_POLYPOLYGONS( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, int aPenWidth ) :
+            DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
     {
         m_penWidth = aPenWidth;
         m_pos = aPos;
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_POLYPOLYGONS" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_POLYPOLYGONS" ); }
 
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
     wxPoint GetPosition() const override { return m_pos; }
@@ -194,7 +194,7 @@ public:
 
 
 private:
-    wxPoint m_pos;      // position of reference point, from the WS_DATA_ITEM_POLYGONS parent
+    wxPoint m_pos;      // position of reference point, from the DS_DATA_ITEM_POLYGONS parent
                         // (used only in drawing sheet editor to draw anchors)
 };
 
@@ -202,19 +202,19 @@ private:
 /**
  * Non filled rectangle with thick segment.
  */
-class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
+class DS_DRAW_ITEM_RECT : public DS_DRAW_ITEM_BASE
 {
 public:
-    WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+    DS_DRAW_ITEM_RECT( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
                        int aPenWidth ) :
-            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_RECT_T )
+            DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_RECT_T )
     {
         m_start     = aStart;
         m_end       = aEnd;
         m_penWidth  = aPenWidth;
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_RECT" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_RECT" ); }
 
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
@@ -246,20 +246,20 @@ private:
  * A rectangle with thick segment showing the page limits and a marker showing the coordinate
  * origin.
  *
- * This only a draw item only.  Therefore m_peer ( the parent WS_DATA_ITEM item in the
- * WS_DATA_MODEL) is always a nullptr.
+ * This only a draw item only.  Therefore m_peer ( the parent DS_DATA_ITEM item in the
+ * DS_DATA_MODEL) is always a nullptr.
  */
-class WS_DRAW_ITEM_PAGE : public WS_DRAW_ITEM_BASE
+class DS_DRAW_ITEM_PAGE : public DS_DRAW_ITEM_BASE
 {
 public:
-    WS_DRAW_ITEM_PAGE( int aPenWidth, double aMarkerSize ) :
-            WS_DRAW_ITEM_BASE( nullptr, 0, WSG_PAGE_T )
+    DS_DRAW_ITEM_PAGE( int aPenWidth, double aMarkerSize ) :
+            DS_DRAW_ITEM_BASE( nullptr, 0, WSG_PAGE_T )
     {
         m_penWidth  = aPenWidth;
         m_markerSize = aMarkerSize;
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_PAGE" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_PAGE" ); }
 
     void SetPageSize( wxSize aSize ) { m_pageSize = aSize; }
     wxSize GetPageSize() const { return m_pageSize; }
@@ -294,13 +294,13 @@ private:
  * It is derived from an #EDA_TEXT, so it handle all characteristics of this graphic text
  * (justification, rotation ... ).
  */
-class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
+class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
+    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
                        wxSize aSize, int aPenWidth, bool aItalic = false,
                        bool aBold = false ) :
-            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
+            DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )
     {
         SetTextPos( aPos );
@@ -310,7 +310,7 @@ public:
         SetBold( aBold );
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_TEXT" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_TEXT" ); }
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
@@ -334,18 +334,18 @@ public:
 /**
  * A bitmap.
  */
-class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
+class DS_DRAW_ITEM_BITMAP : public DS_DRAW_ITEM_BASE
 {
 public:
-    WS_DRAW_ITEM_BITMAP( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos ) :
-            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_BITMAP_T )
+    DS_DRAW_ITEM_BITMAP( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos ) :
+            DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_BITMAP_T )
     {
         m_pos = aPos;
     }
 
-    ~WS_DRAW_ITEM_BITMAP() {}
+    ~DS_DRAW_ITEM_BITMAP() {}
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_BITMAP" ); }
+    virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_BITMAP" ); }
 
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
@@ -373,10 +373,10 @@ private:
  * the title block and frame references, and parameters to
  * draw/plot them
  */
-class WS_DRAW_ITEM_LIST
+class DS_DRAW_ITEM_LIST
 {
 public:
-    WS_DRAW_ITEM_LIST()
+    DS_DRAW_ITEM_LIST()
     {
         m_idx = 0;
         m_milsToIu = 1.0;
@@ -390,10 +390,10 @@ public:
         m_isFirstPage = true;
     }
 
-    ~WS_DRAW_ITEM_LIST()
+    ~DS_DRAW_ITEM_LIST()
     {
         // Items in the m_graphicList are owned by their respective WORKSHEET_DATAITEMs.
-        // for( WS_DRAW_ITEM_BASE* item : m_graphicList )
+        // for( DS_DRAW_ITEM_BASE* item : m_graphicList )
         //     delete item;
     }
 
@@ -470,18 +470,18 @@ public:
         m_sheetCount = aSheetCount;
     }
 
-    void Append( WS_DRAW_ITEM_BASE* aItem )
+    void Append( DS_DRAW_ITEM_BASE* aItem )
     {
         m_graphicList.push_back( aItem );
     }
 
-    void Remove( WS_DRAW_ITEM_BASE* aItem )
+    void Remove( DS_DRAW_ITEM_BASE* aItem )
     {
         auto newEnd = std::remove( m_graphicList.begin(), m_graphicList.end(), aItem );
         m_graphicList.erase( newEnd, m_graphicList.end() );
     }
 
-    WS_DRAW_ITEM_BASE* GetFirst()
+    DS_DRAW_ITEM_BASE* GetFirst()
     {
         m_idx = 0;
 
@@ -491,7 +491,7 @@ public:
             return NULL;
     }
 
-    WS_DRAW_ITEM_BASE* GetNext()
+    DS_DRAW_ITEM_BASE* GetNext()
     {
         m_idx++;
 
@@ -501,7 +501,7 @@ public:
             return NULL;
     }
 
-    void GetAllItems( std::vector<WS_DRAW_ITEM_BASE*>* aList )
+    void GetAllItems( std::vector<DS_DRAW_ITEM_BASE*>* aList )
     {
         *aList = m_graphicList;
     }
@@ -561,7 +561,7 @@ public:
     wxString BuildFullText( const wxString& aTextbase );
 
 protected:
-    std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
+    std::vector <DS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
     unsigned           m_idx;             // for GetFirst, GetNext functions
     double             m_milsToIu;        // the scalar to convert pages units ( mils)
                                           // to draw/plot units.
@@ -580,4 +580,4 @@ protected:
 };
 
 
-#endif      // WS_DRAW_ITEM_H
+#endif      // DS_DRAW_ITEM_H

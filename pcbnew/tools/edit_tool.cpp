@@ -30,7 +30,7 @@
 #include <fp_shape.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
 #include <array_creator.h>
 #include <pcbnew_settings.h>
@@ -1236,10 +1236,10 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
     else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_DRAWINGSHEET ) )
     {
-        KIGFX::WS_PROXY_VIEW_ITEM* worksheet = editFrame->GetCanvas()->GetWorksheet();
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+        DS_PROXY_VIEW_ITEM* ds = editFrame->GetCanvas()->GetDrawingSheet();
+        VECTOR2D            cursorPos = getViewControls()->GetCursorPosition( false );
 
-        if( worksheet && worksheet->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
+        if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
             m_toolMgr->RunAction( ACTIONS::pageSettings );
     }
 

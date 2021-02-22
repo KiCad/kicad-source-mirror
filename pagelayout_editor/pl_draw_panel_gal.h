@@ -22,12 +22,9 @@
 
 #include <class_draw_panel_gal.h>
 
-namespace KIGFX
-{
-    class WS_PROXY_VIEW_ITEM;
-}
+class DS_PROXY_VIEW_ITEM;
+class DS_DRAW_ITEM_PAGE;
 
-class WS_DRAW_ITEM_PAGE;
 
 class PL_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
@@ -57,9 +54,9 @@ protected:
     void setDefaultLayerDeps();
 
     ///< Currently used worksheet
-    std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_worksheet;
 
-    std::unique_ptr<WS_DRAW_ITEM_PAGE> m_pageDrawItem;
+    std::unique_ptr<DS_DRAW_ITEM_PAGE> m_pageDrawItem;
 };
 
 

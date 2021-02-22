@@ -43,7 +43,7 @@ class PLOTTER;
  * This class handle bitmap images in KiCad.
  *
  * It is not intended to be used alone, but inside another class so all methods are protected
- * or private.  It is used in #SCH_BITMAP class, #WS_DRAW_ITEM_BITMAP, and possibly others in
+ * or private.  It is used in #SCH_BITMAP class, #DS_DRAW_ITEM_BITMAP, and possibly others in
  * the future.
  *
  * @warning Not all plotters are able to plot a bitmap.  Mainly GERBER plotters cannot.

@@ -9,7 +9,7 @@ common/drc_rules_lexer.h
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
-common/page_layout/page_layout_reader_keywords.cpp
+common/drawing_sheet/drawing_sheet_reader_keywords.cpp
 common/lib_table_keywords.*
 common/gal/opengl/shader_src.h
 include/fp_lib_table_lexer.h

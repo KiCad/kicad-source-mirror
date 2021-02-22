@@ -25,7 +25,7 @@
 #include <tool/tool_action.h>
 #include <bitmaps.h>
 #include <eda_item.h>
-#include <page_layout/ws_data_item.h>
+#include <drawing_sheet/ds_data_item.h>
 
 #include "tools/pl_actions.h"
 
@@ -42,22 +42,22 @@
 TOOL_ACTION PL_ACTIONS::drawLine( "plEditor.InteractiveDrawing.drawLine",
         AS_GLOBAL, 0, "",
         _( "Add Line" ), _( "Add a line" ),
-        add_graphical_segments_xpm, AF_ACTIVATE, (void*) WS_DATA_ITEM::WS_SEGMENT );
+        add_graphical_segments_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_SEGMENT );
 
 TOOL_ACTION PL_ACTIONS::drawRectangle( "plEditor.InteractiveDrawing.drawRectangle",
         AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
-        add_rectangle_xpm, AF_ACTIVATE, (void*) WS_DATA_ITEM::WS_RECT );
+        add_rectangle_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_RECT );
 
 TOOL_ACTION PL_ACTIONS::placeText( "plEditor.InteractiveDrawing.placeText",
         AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
-        text_xpm, AF_ACTIVATE, (void*) WS_DATA_ITEM::WS_TEXT );
+        text_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_TEXT );
 
 TOOL_ACTION PL_ACTIONS::placeImage( "plEditor.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",
         _( "Add Bitmap" ), _( "Add a bitmap image" ),
-        image_xpm, AF_ACTIVATE, (void*) WS_DATA_ITEM::WS_BITMAP );
+        image_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_BITMAP );
 
 
 // PL_EDIT_TOOL

@@ -77,7 +77,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -1466,9 +1466,9 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
     }
     else
     {
-        // Get current drawing sheet in a form we can compare to an EDA_ITEM
-        KIGFX::WS_PROXY_VIEW_ITEM* ds = SCH_BASE_FRAME::GetCanvas()->GetView()->GetDrawingSheet();
-        EDA_ITEM*                  dsAsItem = static_cast<EDA_ITEM*>( ds );
+        // Get current drawing-sheet in a form we can compare to an EDA_ITEM
+        DS_PROXY_VIEW_ITEM* ds = SCH_BASE_FRAME::GetCanvas()->GetView()->GetDrawingSheet();
+        EDA_ITEM*           dsAsItem = static_cast<EDA_ITEM*>( ds );
 
         // Need an EDA_RECT so the first ".Merge" sees it's uninitialized
         EDA_RECT bBoxItems;
@@ -1476,7 +1476,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
         // Calc the bounding box of all items on screen except the page border
         for( EDA_ITEM* item : GetScreen()->Items() )
         {
-            if( item != dsAsItem ) // Ignore the worksheet itself
+            if( item != dsAsItem ) // Ignore the drawing-sheet itself
             {
                 if( item->Type() == SCH_COMPONENT_T )
                 {

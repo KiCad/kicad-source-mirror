@@ -1,14 +1,8 @@
-/**
- * @file common/page_layout/page_layout_reader.cpp
- * @brief read an S expression of description of graphic items and texts
- * to build a title block and page layout
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -31,11 +25,11 @@
 
 #include <eda_item.h>
 #include <locale_io.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_painter.h>
-#include <page_layout/page_layout_reader_lexer.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_painter.h>
+#include <drawing_sheet/drawing_sheet_reader_lexer.h>
 #include <wx/ffile.h>
 
 #include <wx/file.h>
@@ -45,15 +39,15 @@
 using namespace TB_READER_T;
 
 /**
- * PAGE_LAYOUT_READER_PARSER
+ * DRAWING_SHEET_READER_PARSER
  * holds data and functions pertinent to parsing a S-expression file
- * for a WS_DATA_MODEL.
+ * for a DS_DATA_MODEL.
  */
-class PAGE_LAYOUT_READER_PARSER : public PAGE_LAYOUT_READER_LEXER
+class DRAWING_SHEET_READER_PARSER : public DRAWING_SHEET_READER_LEXER
 {
 public:
-    PAGE_LAYOUT_READER_PARSER( const char* aLine, const wxString& aSource );
-    void Parse( WS_DATA_MODEL* aLayout );
+    DRAWING_SHEET_READER_PARSER( const char* aLine, const wxString& aSource );
+    void Parse( DS_DATA_MODEL* aLayout );
 
 private:
 
@@ -73,44 +67,45 @@ private:
      */
     double parseDouble();
 
-    void parseSetup( WS_DATA_MODEL* aLayout );
+    void parseSetup( DS_DATA_MODEL* aLayout );
 
     /**
      * parse a graphic item starting by "(line" or "(rect" and read parameters.
      */
-    void parseGraphic( WS_DATA_ITEM * aItem );
+    void parseGraphic( DS_DATA_ITEM * aItem );
 
     /**
      * parse a text item starting by "(tbtext" and read parameters.
      */
-    void parseText( WS_DATA_ITEM_TEXT * aItem );
+    void parseText( DS_DATA_ITEM_TEXT * aItem );
 
     /**
      * parse a polygon item starting by "( polygon" and read parameters.
      * the list of corners included in this description is read by parsePolyOutline
      */
-    void parsePolygon( WS_DATA_ITEM_POLYGONS * aItem );
+    void parsePolygon( DS_DATA_ITEM_POLYGONS * aItem );
 
     /**
      * parse a list of corners starting by "( pts" and read coordinates.
      */
-    void parsePolyOutline( WS_DATA_ITEM_POLYGONS * aItem );
+    void parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem );
 
 
     /**
      * parse a bitmap item starting by "( bitmap" and read parameters.
      */
-    void parseBitmap( WS_DATA_ITEM_BITMAP * aItem );
+    void parseBitmap( DS_DATA_ITEM_BITMAP * aItem );
 
     void parseCoordinate( POINT_COORD& aCoord);
-    void readOption( WS_DATA_ITEM * aItem );
-    void readPngdata( WS_DATA_ITEM_BITMAP * aItem );
+    void readOption( DS_DATA_ITEM * aItem );
+    void readPngdata( DS_DATA_ITEM_BITMAP * aItem );
 };
 
 // PCB_PLOT_PARAMS_PARSER
 
-PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const wxString& aSource ) :
-    PAGE_LAYOUT_READER_LEXER( aLine, aSource )
+DRAWING_SHEET_READER_PARSER::DRAWING_SHEET_READER_PARSER( const char* aLine,
+                                                          const wxString& aSource ) :
+        DRAWING_SHEET_READER_LEXER( aLine, aSource )
 {
 }
 
@@ -189,9 +184,9 @@ wxString convertLegacyVariableRefs( const wxString& aTextbase )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
+void DRAWING_SHEET_READER_PARSER::Parse( DS_DATA_MODEL* aLayout )
 {
-    WS_DATA_ITEM* item;
+    DS_DATA_ITEM* item;
     LOCALE_IO     toggle;
 
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
@@ -199,7 +194,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
         if( token == T_LEFT )
             token = NextTok();
 
-        if( token == T_page_layout )
+        if( token == T_page_layout || token == T_drawing_sheet )
             continue;
 
         switch( token )
@@ -209,33 +204,33 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
             break;
 
         case T_line:
-            item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_SEGMENT );
+            item = new DS_DATA_ITEM( DS_DATA_ITEM::DS_SEGMENT );
             parseGraphic( item );
             aLayout->Append( item );
             break;
 
         case T_rect:
-            item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_RECT );
+            item = new DS_DATA_ITEM( DS_DATA_ITEM::DS_RECT );
             parseGraphic( item );
             aLayout->Append( item );
             break;
 
         case T_polygon:
-            item = new WS_DATA_ITEM_POLYGONS();
-            parsePolygon(  (WS_DATA_ITEM_POLYGONS*) item );
+            item = new DS_DATA_ITEM_POLYGONS();
+            parsePolygon(  (DS_DATA_ITEM_POLYGONS*) item );
             aLayout->Append( item );
             break;
 
         case T_bitmap:
-            item = new WS_DATA_ITEM_BITMAP( NULL );
-            parseBitmap( (WS_DATA_ITEM_BITMAP*) item );
+            item = new DS_DATA_ITEM_BITMAP( NULL );
+            parseBitmap( (DS_DATA_ITEM_BITMAP*) item );
             aLayout->Append( item );
             break;
 
         case T_tbtext:
             NeedSYMBOLorNUMBER();
-            item = new WS_DATA_ITEM_TEXT( convertLegacyVariableRefs( FromUTF8() ) );
-            parseText( (WS_DATA_ITEM_TEXT*) item );
+            item = new DS_DATA_ITEM_TEXT( convertLegacyVariableRefs( FromUTF8() ) );
+            parseText( (DS_DATA_ITEM_TEXT*) item );
             aLayout->Append( item );
             break;
 
@@ -247,7 +242,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
+void DRAWING_SHEET_READER_PARSER::parseSetup( DS_DATA_MODEL* aLayout )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -304,7 +299,7 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parsePolygon( WS_DATA_ITEM_POLYGONS * aItem )
+void DRAWING_SHEET_READER_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -372,7 +367,7 @@ void PAGE_LAYOUT_READER_PARSER::parsePolygon( WS_DATA_ITEM_POLYGONS * aItem )
     aItem->SetBoundingBox();
 }
 
-void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WS_DATA_ITEM_POLYGONS * aItem )
+void DRAWING_SHEET_READER_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem )
 {
     DPOINT corner;
 
@@ -398,7 +393,7 @@ void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WS_DATA_ITEM_POLYGONS * aItem 
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseBitmap( WS_DATA_ITEM_BITMAP * aItem )
+void DRAWING_SHEET_READER_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
 {
     BITMAP_BASE* image = new BITMAP_BASE;
     aItem->m_ImageBitmap = image;
@@ -460,7 +455,7 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WS_DATA_ITEM_BITMAP * aItem )
     }
 }
 
-void PAGE_LAYOUT_READER_PARSER::readPngdata( WS_DATA_ITEM_BITMAP * aItem )
+void DRAWING_SHEET_READER_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
 {
     std::string tmp;
 
@@ -494,7 +489,7 @@ void PAGE_LAYOUT_READER_PARSER::readPngdata( WS_DATA_ITEM_BITMAP * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::readOption( WS_DATA_ITEM * aItem )
+void DRAWING_SHEET_READER_PARSER::readOption( DS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -508,7 +503,7 @@ void PAGE_LAYOUT_READER_PARSER::readOption( WS_DATA_ITEM * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseGraphic( WS_DATA_ITEM * aItem )
+void DRAWING_SHEET_READER_PARSER::parseGraphic( DS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -578,7 +573,7 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WS_DATA_ITEM * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseText( WS_DATA_ITEM_TEXT* aItem )
+void DRAWING_SHEET_READER_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -717,7 +712,7 @@ void PAGE_LAYOUT_READER_PARSER::parseText( WS_DATA_ITEM_TEXT* aItem )
 }
 
 // parse an expression like " 25 1 ltcorner)"
-void PAGE_LAYOUT_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
+void DRAWING_SHEET_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
 {
     aCoord.m_Pos.x = parseDouble();
     aCoord.m_Pos.y = parseDouble();
@@ -735,7 +730,7 @@ void PAGE_LAYOUT_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
     }
 }
 
-int PAGE_LAYOUT_READER_PARSER::parseInt( int aMin, int aMax )
+int DRAWING_SHEET_READER_PARSER::parseInt( int aMin, int aMax )
 {
     T token = NextTok();
 
@@ -753,7 +748,7 @@ int PAGE_LAYOUT_READER_PARSER::parseInt( int aMin, int aMax )
 }
 
 
-double PAGE_LAYOUT_READER_PARSER::parseDouble()
+double DRAWING_SHEET_READER_PARSER::parseDouble()
 {
     T token = NextTok();
 
@@ -765,46 +760,42 @@ double PAGE_LAYOUT_READER_PARSER::parseDouble()
     return val;
 }
 
-// defaultPageLayout is the default page layout description
-// using the S expr.
-// see page_layout_default_shape.cpp
-extern const char defaultPageLayout[];
+// defaultDrawingSheet is the default page layout description using the S expr.
+extern const char defaultDrawingSheet[];
 
-void WS_DATA_MODEL::SetDefaultLayout()
+void DS_DATA_MODEL::SetDefaultLayout()
 {
-    SetPageLayout( defaultPageLayout, false, wxT( "default page" ) );
+    SetPageLayout( defaultDrawingSheet, false, wxT( "default page" ) );
 }
 
-// Returns defaultPageLayout as a string;
-wxString WS_DATA_MODEL::DefaultLayout()
+// Returns defaultDrawingSheet as a string;
+wxString DS_DATA_MODEL::DefaultLayout()
 {
-    return wxString( defaultPageLayout );
+    return wxString( defaultDrawingSheet );
 }
 
-// emptyPageLayout is a "empty" page layout description
+// emptyDrawingSheet is a "empty" page layout description using the S expr.
 // there is a 0 length line to fool something somewhere.
-// using the S expr.
-// see page_layout_empty_description.cpp
-extern const char emptyPageLayout[];
+extern const char emptyDrawingSheet[];
 
-void WS_DATA_MODEL::SetEmptyLayout()
+void DS_DATA_MODEL::SetEmptyLayout()
 {
-    SetPageLayout( emptyPageLayout, false, wxT( "empty page" ) );
+    SetPageLayout( emptyDrawingSheet, false, wxT( "empty page" ) );
 }
 
 
-wxString WS_DATA_MODEL::EmptyLayout()
+wxString DS_DATA_MODEL::EmptyLayout()
 {
-    return wxString( emptyPageLayout );
+    return wxString( emptyDrawingSheet );
 }
 
 
-void WS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const wxString& aSource )
+void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const wxString& aSource )
 {
     if( ! Append )
         ClearList();
 
-    PAGE_LAYOUT_READER_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
+    DRAWING_SHEET_READER_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
 
     try
     {
@@ -817,7 +808,7 @@ void WS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
 }
 
 
-void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
+void DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append )
 {
     wxString fullFileName = aFullFileName;
 
@@ -830,7 +821,7 @@ void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
         {
             #if 0
             if( !fullFileName.IsEmpty() )
-                wxLogMessage( wxT( "Page layout file <%s> not found" ), fullFileName.GetData() );
+                wxLogMessage( wxT( "Drawing sheet file <%s> not found" ), fullFileName.GetData() );
             #endif
             SetDefaultLayout();
             return;
@@ -858,7 +849,7 @@ void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
         if( ! Append )
             ClearList();
 
-        PAGE_LAYOUT_READER_PARSER pl_parser( buffer, fullFileName );
+        DRAWING_SHEET_READER_PARSER pl_parser( buffer, fullFileName );
 
         try
         {

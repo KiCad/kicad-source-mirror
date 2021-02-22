@@ -24,9 +24,9 @@
 
 #include <eda_item.h>
 #include <plotters_specific.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_painter.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_painter.h>
 #include <title_block.h>
 #include <wx/filename.h>
 
@@ -69,7 +69,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         plotColor = COLOR4D( RED );
 
     plotter->SetColor( plotColor );
-    WS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList;
 
     // Print only a short filename, if aFilename is the full filename
     wxFileName fn( aFilename );
@@ -87,7 +87,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
     // Draw item list
-    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
         plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
@@ -95,7 +95,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         {
         case WSG_LINE_T:
             {
-                WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
+                DS_DRAW_ITEM_LINE* line = (DS_DRAW_ITEM_LINE*) item;
                 plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
                 plotter->MoveTo( line->GetStart() );
                 plotter->FinishTo( line->GetEnd() );
@@ -104,7 +104,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
         case WSG_RECT_T:
             {
-                WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
+                DS_DRAW_ITEM_RECT* rect = (DS_DRAW_ITEM_RECT*) item;
                 int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
                 plotter->Rect( rect->GetStart(), rect->GetEnd(), FILL_TYPE::NO_FILL, penWidth );
             }
@@ -112,7 +112,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
         case WSG_TEXT_T:
             {
-                WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
+                DS_DRAW_ITEM_TEXT* text = (DS_DRAW_ITEM_TEXT*) item;
                 int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
                 plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
                                text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
@@ -123,7 +123,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
         case WSG_POLY_T:
             {
-                WS_DRAW_ITEM_POLYPOLYGONS* poly = (WS_DRAW_ITEM_POLYPOLYGONS*) item;
+                DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
                 int penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
                 std::vector<wxPoint> points;
 
@@ -142,8 +142,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
         case WSG_BITMAP_T:
             {
-                WS_DRAW_ITEM_BITMAP* drawItem = (WS_DRAW_ITEM_BITMAP*) item;
-                auto*                bitmap = (WS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
+                DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
+                DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
 
                 if( bitmap->m_ImageBitmap == NULL )
                     break;

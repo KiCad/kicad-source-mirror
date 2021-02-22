@@ -28,8 +28,8 @@
 #include <bitmaps.h>
 #include <core/arraydim.h>
 #include <eda_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
@@ -91,7 +91,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_userUnits = EDA_UNITS::MILLIMETRES;
 
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
-    WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
+    DS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
     m_aboutTitle = _( "KiCad Drawing Sheet Editor" );
 
@@ -195,12 +195,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetGridOrigin( originCoord );
 
     // Initialize the current page layout
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 #if 0       //start with empty layout
-    pglayout.AllowVoidList( true );
-    pglayout.ClearList();
+    DS_DATA_MODEL::GetTheInstance().AllowVoidList( true );
+    DS_DATA_MODEL::GetTheInstance().ClearList();
 #else       // start with the default Kicad layout
-    pglayout.SetPageLayout();
+    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet();
 #endif
     OnNewPageLayout();
 
@@ -287,13 +286,13 @@ void PL_EDITOR_FRAME::setupUIConditions()
     auto titleBlockNormalMode =
         [] ( const SELECTION& )
         {
-            return WS_DATA_MODEL::GetTheInstance().m_EditMode == false;
+            return DS_DATA_MODEL::GetTheInstance().m_EditMode == false;
         };
 
     auto titleBlockEditMode =
         [] ( const SELECTION& )
         {
-            return WS_DATA_MODEL::GetTheInstance().m_EditMode == true;
+            return DS_DATA_MODEL::GetTheInstance().m_EditMode == true;
         };
 
     mgr->SetConditions( PL_ACTIONS::layoutNormalMode, CHECK( titleBlockNormalMode ) );
@@ -372,7 +371,7 @@ void PL_EDITOR_FRAME::doCloseWindow()
     Show( false );
 
     // clean up the data before the view is destroyed
-    WS_DATA_MODEL::GetTheInstance().ClearList();
+    DS_DATA_MODEL::GetTheInstance().ClearList();
 
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing
@@ -609,7 +608,7 @@ wxPoint PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
     wxPoint originCoord;
 
     // To avoid duplicate code, we use a dummy segment starting at 0,0 in relative coord
-    WS_DATA_ITEM dummy( WS_DATA_ITEM::WS_SEGMENT );
+    DS_DATA_ITEM dummy( DS_DATA_ITEM::DS_SEGMENT );
 
     switch( m_originSelectChoice )
     {
@@ -749,14 +748,14 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     GetScreen()->SetVirtualPageNumber( GetPageNumberOption() ? 1 : 2 );
-    WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    for( WS_DATA_ITEM* dataItem : model.GetItems() )
+    for( DS_DATA_ITEM* dataItem : model.GetItems() )
     {
         // Ensure the scaling factor (used only in printing) of bitmaps is up to date
-        if( dataItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
+        if( dataItem->GetType() == DS_DATA_ITEM::DS_BITMAP )
         {
-            BITMAP_BASE* bitmap = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
+            BITMAP_BASE* bitmap = static_cast<DS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
             bitmap->SetPixelSizeIu( IU_PER_MILS * 1000 / bitmap->GetPPI() );
         }
     }
@@ -786,10 +785,10 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     PL_SELECTION&       selection = selTool->GetSelection();
-    WS_DATA_ITEM*       item = nullptr;
+    DS_DATA_ITEM*       item = nullptr;
 
     if( selection.GetSize() == 1 )
-        item = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();
+        item = static_cast<DS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
@@ -797,29 +796,29 @@ void PL_EDITOR_FRAME::HardRedraw()
 }
 
 
-WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
+DS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 {
-    WS_DATA_ITEM * item = NULL;
+    DS_DATA_ITEM * item = NULL;
 
     switch( aType )
     {
-    case WS_DATA_ITEM::WS_TEXT:
-        item = new WS_DATA_ITEM_TEXT( wxT( "Text") );
+    case DS_DATA_ITEM::DS_TEXT:
+        item = new DS_DATA_ITEM_TEXT( wxT( "Text") );
         break;
 
-    case WS_DATA_ITEM::WS_SEGMENT:
-        item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_SEGMENT );
+    case DS_DATA_ITEM::DS_SEGMENT:
+        item = new DS_DATA_ITEM( DS_DATA_ITEM::DS_SEGMENT );
         break;
 
-    case WS_DATA_ITEM::WS_RECT:
-        item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_RECT );
+    case DS_DATA_ITEM::DS_RECT:
+        item = new DS_DATA_ITEM( DS_DATA_ITEM::DS_RECT );
         break;
 
-    case WS_DATA_ITEM::WS_POLYPOLYGON:
-        item = new WS_DATA_ITEM_POLYGONS();
+    case DS_DATA_ITEM::DS_POLYPOLYGON:
+        item = new DS_DATA_ITEM_POLYGONS();
         break;
 
-    case WS_DATA_ITEM::WS_BITMAP:
+    case DS_DATA_ITEM::DS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                               _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
@@ -847,7 +846,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 
         // Set the scale factor for pl_editor (it is set for eeschema by default)
         image->SetPixelSizeIu( IU_PER_MILS * 1000.0 / image->GetPPI() );
-        item = new WS_DATA_ITEM_BITMAP( image );
+        item = new DS_DATA_ITEM_BITMAP( image );
     }
     break;
     }
@@ -855,7 +854,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
     if( item == NULL )
         return NULL;
 
-    WS_DATA_MODEL::GetTheInstance().Append( item );
+    DS_DATA_MODEL::GetTheInstance().Append( item );
     item->SyncDrawItems( nullptr, GetCanvas()->GetView() );
 
     return item;

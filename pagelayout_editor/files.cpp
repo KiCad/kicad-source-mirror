@@ -26,7 +26,7 @@
 
 #include <confirm.h>
 #include <gestfich.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <paths.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
@@ -89,7 +89,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     wxString       msg;
     int            id = event.GetId();
     wxString       filename = GetCurrentFileName();
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& pglayout = DS_DATA_MODEL::GetTheInstance();
 
     if( filename.IsEmpty() && id == wxID_SAVE )
         id = wxID_SAVEAS;
@@ -223,7 +223,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
-        WS_DATA_MODEL::GetTheInstance().SetPageLayout( aFullFileName );
+        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName );
         SetCurrentFileName( aFullFileName );
         UpdateFileHistory( aFullFileName );
         GetScreen()->ClrModify();
@@ -251,7 +251,7 @@ bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
     {
         const bool append = true;
         SaveCopyInUndoList();
-        WS_DATA_MODEL::GetTheInstance().SetPageLayout( aFullFileName, append );
+        DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( aFullFileName, append );
         return true;
     }
 
@@ -269,7 +269,7 @@ bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
 
         try
         {
-            WS_DATA_MODEL::GetTheInstance().Save( tempFile.GetFullPath() );
+            DS_DATA_MODEL::GetTheInstance().Save( tempFile.GetFullPath() );
         }
         catch( const IO_ERROR& )
         {

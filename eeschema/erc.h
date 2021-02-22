@@ -37,11 +37,7 @@ class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 class SCH_SHEET_LIST;
 class SCHEMATIC;
-
-namespace KIGFX
-{
-class WS_PROXY_VIEW_ITEM;
-}
+class DS_PROXY_VIEW_ITEM;
 
 
 extern const wxString CommentERC_H[];
@@ -83,7 +79,7 @@ public:
     /**
      * Check for any unresolved text variable references.
      */
-    void TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet );
+    void TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
      * Check that there are no conflicting bus alias definitions in the schematic.

@@ -33,7 +33,7 @@
 #include <panel_pcbnew_display_origin.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
@@ -71,14 +71,13 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     BASE_SCREEN::m_PageLayoutDescrFileName = project.m_BoardPageLayoutDescrFile;
 
-    // Load the page layout decr file, from the filename stored in
+    // Load the drawing sheet description file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, or not existing, the default descr is loaded
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-    wxString filename = WS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
+    wxString filename = DS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
                                                          Prj().GetProjectPath() );
 
-    pglayout.SetPageLayout( filename );
+    DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename );
 
     // Load render settings that aren't stored in PCB_DISPLAY_OPTIONS
 

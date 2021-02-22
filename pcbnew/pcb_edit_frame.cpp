@@ -40,7 +40,7 @@
 #include <invoke_pcb_dialog.h>
 #include <board.h>
 #include <footprint.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_draw_panel_gal.h>
@@ -88,7 +88,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
-#include <ratsnest/ratsnest_viewitem.h>
+#include <ratsnest/ratsnest_view_item.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/panel_selection_filter.h>
 #include <kiplatform/app.h>
@@ -396,7 +396,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
     aBoard->SetProject( &Prj() );
     aBoard->GetConnectivity()->Build( aBoard );
 
-    // reload the drawing sheet
+    // reload the drawing-sheet
     SetPageSettings( aBoard->GetPageSettings() );
 }
 
@@ -411,10 +411,11 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
-    // Prepare drawingSheet template
-    KIGFX::WS_PROXY_VIEW_ITEM* drawingSheet;
-    drawingSheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &m_pcb->GetPageSettings(),
-                                                  m_pcb->GetProject(), &m_pcb->GetTitleBlock() );
+    // Prepare drawing-sheet template
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( IU_PER_MILS,
+                                                               &m_pcb->GetPageSettings(),
+                                                               m_pcb->GetProject(),
+                                                               &m_pcb->GetTitleBlock() );
     drawingSheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
     BASE_SCREEN* screen = GetScreen();
@@ -428,7 +429,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     if( BOARD* board = GetBoard() )
         drawingSheet->SetFileName( TO_UTF8( board->GetFileName() ) );
 
-    // PCB_DRAW_PANEL_GAL takes ownership of the drawing sheet
+    // PCB_DRAW_PANEL_GAL takes ownership of the drawing-sheet
     GetCanvas()->SetDrawingSheet( drawingSheet );
 }
 

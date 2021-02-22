@@ -30,9 +30,9 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
 #include <collector.h>
 #include <math/util.h>      // for KiROUND
 
@@ -232,9 +232,9 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
     // locate items.
     COLLECTOR collector;
 
-    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+    for( DS_DATA_ITEM* dataItem : DS_DATA_MODEL::GetTheInstance().GetItems() )
     {
-        for( WS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
+        for( DS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
         {
             if( drawItem->HitTest( (wxPoint) aWhere, threshold ) )
                 collector.Append( drawItem );
@@ -389,9 +389,9 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
             selectionRect.Normalize();
 
-            for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+            for( DS_DATA_ITEM* dataItem : DS_DATA_MODEL::GetTheInstance().GetItems() )
             {
-                for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
+                for( DS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
                 {
                     if( item->HitTest( selectionRect, windowSelection ) )
                     {
@@ -538,9 +538,9 @@ void PL_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
-    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+    for( DS_DATA_ITEM* dataItem : DS_DATA_MODEL::GetTheInstance().GetItems() )
     {
-        for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
+        for( DS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
         {
             if( item->IsSelected() )
                 select( item );

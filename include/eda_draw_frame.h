@@ -302,7 +302,7 @@ public:
     void AddStandardSubMenus( TOOL_MENU& aMenu );
 
     /**
-     * Prints the drawing sheet with the frame and title block.
+     * Prints the drawing-sheet (frame and title block).
      *
      * @param aScreen screen to draw.
      * @param aMils2Iu The mils to Iu conversion factor.

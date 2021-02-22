@@ -56,7 +56,7 @@ void drcPrintDebugMessage( int level, const wxString& msg, const char *function,
 DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
     m_designSettings ( aSettings ),
     m_board( aBoard ),
-    m_worksheet( nullptr ),
+    m_drawingSheet( nullptr ),
     m_schematicNetlist( nullptr ),
     m_rulesValid( false ),
     m_userUnits( EDA_UNITS::MILLIMETRES ),

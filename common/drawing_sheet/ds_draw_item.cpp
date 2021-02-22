@@ -24,36 +24,35 @@
  */
 
 /*
- * the class WS_DATA_ITEM (and WS_DATA_ITEM_TEXT) defines
+ * the class DS_DATA_ITEM (and DS_DATA_ITEM_TEXT) defines
  * a basic shape of a page layout ( frame references and title block )
  * Basic shapes are line, rect and texts
- * the WS_DATA_ITEM coordinates units is the mm, and are relative to
+ * the DS_DATA_ITEM coordinates units is the mm, and are relative to
  * one of 4 page corners.
  *
  * These items cannot be drawn or plot "as this". they should be converted
- * to a "draw list" (WS_DRAW_ITEM_BASE and derived items)
+ * to a "draw list" (DS_DRAW_ITEM_BASE and derived items)
 
- * The list of these items is stored in a WS_DATA_MODEL instance.
+ * The list of these items is stored in a DS_DATA_MODEL instance.
  *
  * When building the draw list:
- * the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
+ * the DS_DATA_MODEL is used to create a DS_DRAW_ITEM_LIST
  *  coordinates are converted to draw/plot coordinates.
  *  texts are expanded if they contain format symbols.
  *  Items with m_RepeatCount > 1 are created m_RepeatCount times
  *
- * the WS_DATA_MODEL is created only once.
- * the WS_DRAW_ITEM_LIST is created each time the page layout is plotted/drawn
+ * the DS_DATA_MODEL is created only once.
+ * the DS_DRAW_ITEM_LIST is created each time the page layout is plotted/drawn
  *
- * the WS_DATA_MODEL instance is created from a S expression which
+ * the DS_DATA_MODEL instance is created from a S expression which
  * describes the page layout (can be the default page layout or a custom file).
  */
 
 #include <eda_rect.h>
 #include <eda_draw_frame.h>
-#include <fill_type.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <base_units.h>
 #include <page_info.h>
 #include <layers_id_colors_and_visibility.h>
@@ -63,13 +62,13 @@
 
 // ============================ BASE CLASS ==============================
 
-void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+void DS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
 
-    WS_DATA_ITEM* dataItem = GetPeer();
+    DS_DATA_ITEM* dataItem = GetPeer();
 
-    if( !dataItem )     // No peer: this item is like a WS_DRAW_ITEM_PAGE
+    if( !dataItem )     // No peer: this item is like a DS_DRAW_ITEM_PAGE
     {
         aLayers[0] = LAYER_DRAWINGSHEET;
         return;
@@ -85,7 +84,7 @@ void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 
 
 // A generic HitTest that can be used by some, but not all, sub-classes.
-bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool DS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT sel = aRect;
 
@@ -99,10 +98,10 @@ bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 }
 
 
-void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void DS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString      msg;
-    WS_DATA_ITEM* dataItem = GetPeer();
+    DS_DATA_ITEM* dataItem = GetPeer();
 
     if( dataItem == nullptr )   // Is only a pure graphic item used in drawing sheet editor to
                                 // handle the page limits
@@ -110,24 +109,24 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
 
     switch( dataItem->GetType() )
     {
-    case WS_DATA_ITEM::WS_SEGMENT:
+    case DS_DATA_ITEM::DS_SEGMENT:
         aList.push_back( MSG_PANEL_ITEM( _( "Line" ), msg ) );
         break;
 
-    case WS_DATA_ITEM::WS_RECT:
+    case DS_DATA_ITEM::DS_RECT:
         aList.push_back( MSG_PANEL_ITEM( _( "Rectangle" ), msg ) );
         break;
 
-    case WS_DATA_ITEM::WS_TEXT:
-        msg = static_cast<WS_DRAW_ITEM_TEXT*>( this )->GetShownText();
+    case DS_DATA_ITEM::DS_TEXT:
+        msg = static_cast<DS_DRAW_ITEM_TEXT*>( this )->GetShownText();
         aList.push_back( MSG_PANEL_ITEM( _( "Text" ), msg ) );
         break;
 
-    case WS_DATA_ITEM::WS_POLYPOLYGON:
+    case DS_DATA_ITEM::DS_POLYPOLYGON:
         aList.push_back( MSG_PANEL_ITEM( _( "Imported Shape" ), msg ) );
         break;
 
-    case WS_DATA_ITEM::WS_BITMAP:
+    case DS_DATA_ITEM::DS_BITMAP:
         aList.push_back( MSG_PANEL_ITEM( _( "Image" ), msg ) );
         break;
     }
@@ -159,45 +158,46 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
 
 // ============================ TEXT ==============================
 
-void WS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_DRAWINGSHEET ), FILLED );
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_TEXT::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
     return EDA_TEXT::GetTextBox();
 }
 
 
-bool WS_DRAW_ITEM_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool DS_DRAW_ITEM_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     return EDA_TEXT::TextHitTest( aPosition, aAccuracy );
 }
 
 
-bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool DS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
 {
     return EDA_TEXT::TextHitTest( aRect, aContains, aAccuracy );
 }
 
 
-wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Text '%s'" ),
                              GetShownText() );
 }
 
 
-void WS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
+void DS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
 {
     EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
 }
 
 // ============================ POLYGON =================================
 
-void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void DS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings,
+                                             const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
@@ -222,7 +222,7 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings, c
 }
 
 
-void WS_DRAW_ITEM_POLYPOLYGONS::SetPosition( const wxPoint& aPos )
+void DS_DRAW_ITEM_POLYPOLYGONS::SetPosition( const wxPoint& aPos )
 {
     // Note: m_pos is the anchor point of the shape.
     wxPoint move_vect = aPos - m_pos;
@@ -233,7 +233,7 @@ void WS_DRAW_ITEM_POLYPOLYGONS::SetPosition( const wxPoint& aPos )
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 {
     EDA_RECT rect;
     BOX2I box = m_Polygons.BBox();
@@ -247,13 +247,13 @@ const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 }
 
 
-bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     return m_Polygons.Collide( aPosition, aAccuracy );
 }
 
 
-bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
+bool DS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
                                          int aAccuracy ) const
 {
     EDA_RECT sel = aRect;
@@ -293,7 +293,7 @@ bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
 }
 
 
-wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Imported Shape" ) );
 }
@@ -301,7 +301,7 @@ wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ RECT ==============================
 
-void WS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void DS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
@@ -312,13 +312,13 @@ void WS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxP
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_RECT::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_RECT::GetBoundingBox() const
 {
     return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
 }
 
 
-bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool DS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int dist = aAccuracy + ( GetPenWidth() / 2 );
     wxPoint start = GetStart();
@@ -352,7 +352,7 @@ bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool DS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT sel = aRect;
 
@@ -363,7 +363,7 @@ bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
         return sel.Contains( GetBoundingBox() );
 
     // For greedy we need to check each side of the rect as we're pretty much always inside the
-    // rect which defines the drawing sheet frame.
+    // rect which defines the drawing-sheet frame.
     EDA_RECT side = GetBoundingBox();
     side.SetHeight( 0 );
 
@@ -390,7 +390,7 @@ bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 }
 
 
-wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),
                              MessageTextFromValue( aUnits, std::abs( GetStart().x - GetEnd().x ) ),
@@ -400,7 +400,7 @@ wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ LINE ==============================
 
-void WS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void DS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
@@ -410,20 +410,20 @@ void WS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxP
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_LINE::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_LINE::GetBoundingBox() const
 {
     return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
 }
 
 
-bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool DS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int mindist = aAccuracy + ( GetPenWidth() / 2 ) + 1;
     return TestSegmentHit( aPosition, GetStart(), GetEnd(), mindist );
 }
 
 
-wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Line, length %s" ),
                              MessageTextFromValue( aUnits, EuclideanNorm( GetStart() - GetEnd() ) ) );
@@ -432,9 +432,9 @@ wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============== BITMAP ================
 
-void WS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void DS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
+    DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) GetPeer();
 
     if( !bitmap->m_ImageBitmap )
         return;
@@ -443,9 +443,9 @@ void WS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const w
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 {
-    auto*    bitmap = static_cast<const WS_DATA_ITEM_BITMAP*>( m_peer );
+    auto*    bitmap = static_cast<const DS_DATA_ITEM_BITMAP*>( m_peer );
     wxSize bm_size = bitmap->m_ImageBitmap->GetSize();
 
     EDA_RECT bbox;
@@ -456,7 +456,7 @@ const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 }
 
 
-bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool DS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT bbox = GetBoundingBox();
     bbox.Inflate( aAccuracy );
@@ -465,25 +465,25 @@ bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) con
 }
 
 
-bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+bool DS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
 {
-    return WS_DRAW_ITEM_BASE::HitTest( aRect, aContains, aAccuracy );
+    return DS_DRAW_ITEM_BASE::HitTest( aRect, aContains, aAccuracy );
 }
 
 
-wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return _( "Image" );
 }
 
 
-wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString DS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return _( "Page Limits" );
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_PAGE::GetBoundingBox() const
+const EDA_RECT DS_DRAW_ITEM_PAGE::GetBoundingBox() const
 {
     EDA_RECT dummy;
 
@@ -494,23 +494,23 @@ const EDA_RECT WS_DRAW_ITEM_PAGE::GetBoundingBox() const
 }
 
 
-// ====================== WS_DRAW_ITEM_LIST ==============================
+// ====================== DS_DRAW_ITEM_LIST ==============================
 
-void WS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
+void DS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
                                             const TITLE_BLOCK& aTitleBlock )
 {
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
     m_titleBlock = &aTitleBlock;
     m_paperFormat = &aPageInfo.GetType();
 
     // Build the basic layout shape, if the layout list is empty
     if( model.GetCount() == 0 && !model.VoidListAllowed() )
-        model.SetPageLayout();
+        model.LoadDrawingSheet();
 
     model.SetupDrawEnvironment( aPageInfo, m_milsToIu );
 
-    for( WS_DATA_ITEM* wsItem : model.GetItems() )
+    for( DS_DATA_ITEM* wsItem : model.GetItems() )
     {
         // Generate it only if the page option allows this
         if( wsItem->GetPage1Option() == FIRST_PAGE_ONLY && !m_isFirstPage )
@@ -529,11 +529,11 @@ void WS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
  * The selected items are drawn after (usually 0 or 1)
  * to be sure they are seen, even for overlapping items
  */
-void WS_DRAW_ITEM_LIST::Print( const RENDER_SETTINGS* aSettings )
+void DS_DRAW_ITEM_LIST::Print( const RENDER_SETTINGS* aSettings )
 {
-    std::vector<WS_DRAW_ITEM_BASE*> second_items;
+    std::vector<DS_DRAW_ITEM_BASE*> second_items;
 
-    for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
+    for( DS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
     {
         if( item->Type() == WSG_BITMAP_T )
             item->PrintWsItem( aSettings );

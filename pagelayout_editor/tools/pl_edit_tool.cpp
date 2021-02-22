@@ -24,9 +24,9 @@
 
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
-#include <page_layout/ws_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_item.h>
@@ -108,11 +108,11 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() || m_moveInProgress )
         return 0;
 
-    std::set<WS_DATA_ITEM*> unique_peers;
+    std::set<DS_DATA_ITEM*> unique_peers;
 
     for( EDA_ITEM* item : selection )
     {
-        WS_DRAW_ITEM_BASE* drawItem = static_cast<WS_DRAW_ITEM_BASE*>( item );
+        DS_DRAW_ITEM_BASE* drawItem = static_cast<DS_DRAW_ITEM_BASE*>( item );
         unique_peers.insert( drawItem->GetPeer() );
     }
 
@@ -146,7 +146,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Apply any initial offset in case we're coming from a previous command.
                 //
-                for( WS_DATA_ITEM* item : unique_peers )
+                for( DS_DATA_ITEM* item : unique_peers )
                     moveItem( item, m_moveOffset );
 
                 // Set up the starting position and move/drag offset
@@ -158,7 +158,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I delta = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
-                    for( WS_DATA_ITEM* item : unique_peers )
+                    for( DS_DATA_ITEM* item : unique_peers )
                         moveItem( item, delta );
 
                     selection.SetReferencePoint( m_cursor );
@@ -192,7 +192,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             m_moveOffset += delta;
             prevPos = m_cursor;
 
-            for( WS_DATA_ITEM* item : unique_peers )
+            for( DS_DATA_ITEM* item : unique_peers )
                 moveItem( item, delta );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
@@ -271,11 +271,11 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void PL_EDIT_TOOL::moveItem( WS_DATA_ITEM* aItem, VECTOR2I aDelta )
+void PL_EDIT_TOOL::moveItem( DS_DATA_ITEM* aItem, VECTOR2I aDelta )
 {
     aItem->MoveToUi( aItem->GetStartPosUi() + (wxPoint) aDelta );
 
-    for( WS_DRAW_ITEM_BASE* item : aItem->GetDrawItems() )
+    for( DS_DRAW_ITEM_BASE* item : aItem->GetDrawItems() )
     {
         getView()->Update( item );
         item->SetFlags( IS_MOVED );
@@ -326,11 +326,11 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
     while( selection.Front() )
     {
-        WS_DRAW_ITEM_BASE*  drawItem = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() );
-        WS_DATA_ITEM* dataItem = drawItem->GetPeer();
-        WS_DATA_MODEL::GetTheInstance().Remove( dataItem );
+        DS_DRAW_ITEM_BASE* drawItem = static_cast<DS_DRAW_ITEM_BASE*>( selection.Front() );
+        DS_DATA_ITEM*      dataItem = drawItem->GetPeer();
+        DS_DATA_MODEL::GetTheInstance().Remove( dataItem );
 
-        for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
+        for( DS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
         {
             // Note: repeat items won't be selected but must be removed & deleted
 
@@ -384,9 +384,9 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             int threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
             EDA_ITEM* item = nullptr;
 
-            for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+            for( DS_DATA_ITEM* dataItem : DS_DATA_MODEL::GetTheInstance().GetItems() )
             {
-                for( WS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
+                for( DS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
                 {
                     if( drawItem->HitTest( (wxPoint) aPos, threshold ) )
                     {
@@ -454,15 +454,15 @@ int PL_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION&              selection = m_selectionTool->RequestSelection();
-    std::vector<WS_DATA_ITEM*> items;
-    WS_DATA_MODEL&             model = WS_DATA_MODEL::GetTheInstance();
+    std::vector<DS_DATA_ITEM*> items;
+    DS_DATA_MODEL&             model = DS_DATA_MODEL::GetTheInstance();
     wxString                   sexpr;
 
     if( selection.GetSize() == 0 )
         return 0;
 
     for( EDA_ITEM* item : selection.GetItems() )
-        items.push_back( static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer() );
+        items.push_back( static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer() );
 
     try
     {
@@ -483,7 +483,7 @@ int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION&  selection = m_selectionTool->GetSelection();
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
     std::string    sexpr = m_toolMgr->GetClipboardUTF8();
 
     m_selectionTool->ClearSelection();
@@ -491,7 +491,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     model.SetPageLayout( sexpr.c_str(), true, wxT( "clipboard" ) );
 
     // Build out draw items and select the first of each data item
-    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+    for( DS_DATA_ITEM* dataItem : model.GetItems() )
     {
         if( dataItem->GetDrawItems().empty() )
         {

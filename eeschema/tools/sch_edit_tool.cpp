@@ -46,8 +46,8 @@
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <page_layout/ws_proxy_view_item.h>
-#include <page_layout/ws_proxy_undo_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
@@ -207,7 +207,7 @@ bool SCH_EDIT_TOOL::Init()
             []( const SELECTION& aSel )
             {
                 if( aSel.GetSize() == 0 )
-                    return true;            // Show worksheet properties
+                    return true;            // Show drawing-sheet properties
 
                 SCH_ITEM*           firstItem   = dynamic_cast<SCH_ITEM*>( aSel.Front() );
                 const EE_SELECTION* eeSelection = dynamic_cast<const EE_SELECTION*>( &aSel );
@@ -1335,8 +1335,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
         {
-            KIGFX::WS_PROXY_VIEW_ITEM* ds = m_frame->GetCanvas()->GetView()->GetDrawingSheet();
-            VECTOR2D                   cursorPos = getViewControls()->GetCursorPosition( false );
+            DS_PROXY_VIEW_ITEM* ds = m_frame->GetCanvas()->GetView()->GetDrawingSheet();
+            VECTOR2D            cursorPos = getViewControls()->GetCursorPosition( false );
 
             if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
                 m_toolMgr->RunAction( ACTIONS::pageSettings );

@@ -22,7 +22,6 @@
 
 #include <dialogs/dialog_page_settings.h>
 
-class WS_DATA_MODEL;
 
 class DIALOG_EESCHEMA_PAGE_SETTINGS : public DIALOG_PAGES_SETTINGS
 {

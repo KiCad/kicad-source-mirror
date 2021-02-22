@@ -21,16 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <page_layout/ws_proxy_undo_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_proxy_undo_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <view/view.h>
 #include <eda_draw_frame.h>
 #include <macros.h>
 
 using namespace KIGFX;
 
-WS_PROXY_UNDO_ITEM::WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
+DS_PROXY_UNDO_ITEM::DS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
         EDA_ITEM( aFrame ? WS_PROXY_UNDO_ITEM_PLUS_T : WS_PROXY_UNDO_ITEM_T ),
         m_selectedDataItem( INT_MAX ),
         m_selectedDrawItem( INT_MAX )
@@ -41,16 +41,16 @@ WS_PROXY_UNDO_ITEM::WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
         m_titleBlock = aFrame->GetTitleBlock();
     }
 
-    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
     model.SaveInString( m_layoutSerialization );
 
     for( size_t ii = 0; ii < model.GetItems().size(); ++ii )
     {
-        WS_DATA_ITEM* dataItem = model.GetItem( ii );
+        DS_DATA_ITEM* dataItem = model.GetItem( ii );
 
         for( size_t jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
         {
-            WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
+            DS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
 
             if( drawItem->IsSelected() )
             {
@@ -63,7 +63,7 @@ WS_PROXY_UNDO_ITEM::WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
 }
 
 
-void WS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
+void DS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
 {
     if( Type() == WS_PROXY_UNDO_ITEM_PLUS_T )
     {
@@ -71,21 +71,21 @@ void WS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
         aFrame->SetTitleBlock( m_titleBlock );
     }
 
-    WS_DATA_MODEL::GetTheInstance().SetPageLayout( TO_UTF8( m_layoutSerialization ) );
+    DS_DATA_MODEL::GetTheInstance().SetPageLayout(TO_UTF8( m_layoutSerialization ) );
 
     if( aView )
     {
         aView->Clear();
 
-        for( int ii = 0; ii < (int)WS_DATA_MODEL::GetTheInstance().GetItems().size(); ++ii )
+        for( int ii = 0; ii < (int)DS_DATA_MODEL::GetTheInstance().GetItems().size(); ++ii )
         {
-            WS_DATA_ITEM* dataItem = WS_DATA_MODEL::GetTheInstance().GetItem( ii );
+            DS_DATA_ITEM* dataItem = DS_DATA_MODEL::GetTheInstance().GetItem( ii );
 
             dataItem->SyncDrawItems( nullptr, aView );
 
             if( ii == m_selectedDataItem && m_selectedDrawItem < (int)dataItem->GetDrawItems().size() )
             {
-                WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
+                DS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
                 drawItem->SetSelected();
             }
         }

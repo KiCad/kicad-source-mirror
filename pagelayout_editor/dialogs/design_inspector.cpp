@@ -26,9 +26,9 @@
 #include <wx/wupdlock.h>
 
 #include <eda_item.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <tool/tool_manager.h>
 
 #include "dialogs/dialog_design_inspector_base.h"
@@ -209,7 +209,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
 
     m_itemsList.clear();
 
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
+    DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
     wxFileName     fn( static_cast<PL_EDITOR_FRAME*>( GetParent() )->GetCurrentFileName() );
 
     if( fn.GetName().IsEmpty() )
@@ -227,33 +227,33 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
                                  Iu2Millimeter( page_sizeIU.x ), Iu2Millimeter( page_sizeIU.y ) ) );
     GetGridList()->SetCellRenderer (row, COL_BITMAP, new BitmapGridCellRenderer( root_xpm ) );
     GetGridList()->SetReadOnly( row, COL_BITMAP );
-    m_itemsList.push_back( nullptr );   // this item is not a WS_DATA_ITEM, just a pseudo item
+    m_itemsList.push_back( nullptr );   // this item is not a DS_DATA_ITEM, just a pseudo item
 
     // Now adding all current items
     row++;
-    for( WS_DATA_ITEM* item : pglayout.GetItems() )
+    for( DS_DATA_ITEM* item : drawingSheet.GetItems() )
     {
         const char** img = nullptr;
 
         switch( item->GetType() )
         {
-            case WS_DATA_ITEM::WS_SEGMENT:
+            case DS_DATA_ITEM::DS_SEGMENT:
                 img = line_xpm;
                 break;
 
-            case WS_DATA_ITEM::WS_RECT:
+            case DS_DATA_ITEM::DS_RECT:
                 img = rect_xpm;
                 break;
 
-            case WS_DATA_ITEM::WS_TEXT:
+            case DS_DATA_ITEM::DS_TEXT:
                 img = text_xpm;
                 break;
 
-            case WS_DATA_ITEM::WS_POLYPOLYGON:
+            case DS_DATA_ITEM::DS_POLYPOLYGON:
                 img = poly_xpm;
                 break;
 
-            case WS_DATA_ITEM::WS_BITMAP:
+            case DS_DATA_ITEM::DS_BITMAP:
                 img = img_xpm;
                 break;
         }
@@ -266,9 +266,9 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
                                      wxString::Format( "%d", item->m_RepeatCount ) );
         GetGridList()->SetCellValue( row, COL_COMMENT, item->m_Info );
 
-        if( item->GetType() == WS_DATA_ITEM::WS_TEXT )
+        if( item->GetType() == DS_DATA_ITEM::DS_TEXT )
         {
-            WS_DATA_ITEM_TEXT* t_item = static_cast<WS_DATA_ITEM_TEXT*>( item );
+            DS_DATA_ITEM_TEXT* t_item = static_cast<DS_DATA_ITEM_TEXT*>( item );
             GetGridList()->SetCellValue( row, COL_TEXTSTRING, t_item->m_TextBase );
         }
 
@@ -303,10 +303,10 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
 }
 
 
-// Select the row corresponding to the WS_DATA_ITEM aItem
-void DIALOG_INSPECTOR::SelectRow( WS_DATA_ITEM* aItem )
+// Select the row corresponding to the DS_DATA_ITEM aItem
+void DIALOG_INSPECTOR::SelectRow( DS_DATA_ITEM* aItem )
 {
-    // m_itemsList[0] is not a true WS_DATA_ITEM
+    // m_itemsList[0] is not a true DS_DATA_ITEM
     for( unsigned row = 1; row < m_itemsList.size(); ++row )
     {
         if( m_itemsList[row] == aItem )
@@ -319,18 +319,9 @@ void DIALOG_INSPECTOR::SelectRow( WS_DATA_ITEM* aItem )
 }
 
 //return the page layout item managed by the cell
-WS_DATA_ITEM* DIALOG_INSPECTOR::GetWsDataItem( int aRow ) const
+DS_DATA_ITEM* DIALOG_INSPECTOR::GetDrawingSheetDataItem( int aRow ) const
 {
         return ( aRow >= 0 && aRow < (int)m_itemsList.size() ) ? m_itemsList[aRow]: nullptr;
-}
-
-
-/* return the page layout item managed by the selected cell (or NULL)
- */
-WS_DATA_ITEM* DIALOG_INSPECTOR::GetSelectedWsDataItem() const
-{
-    int idx = GetGridList()->GetGridCursorRow();
-    return GetWsDataItem( idx );
 }
 
 
@@ -339,9 +330,9 @@ void DIALOG_INSPECTOR::onCellClicked( wxGridEvent& event )
     int row = event.GetRow();
     GetGridList()->SelectRow( row );
 
-    WS_DATA_ITEM* item = GetWsDataItem( row );
+    DS_DATA_ITEM* item = GetDrawingSheetDataItem( row );
 
-    if( !item )     // only WS_DATA_ITEM are returned.
+    if( !item )     // only DS_DATA_ITEM are returned.
         return;
 
     // Select this item in drawing sheet editor, and update the properties panel:

@@ -26,7 +26,7 @@
 #include <pcb_view.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 
 #include <board.h>
@@ -36,7 +36,7 @@
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
-#include <ratsnest/ratsnest_viewitem.h>
+#include <ratsnest/ratsnest_view_item.h>
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -198,8 +198,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         t.detach();
     }
 
-    if( m_worksheet )
-        m_worksheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
+    if( m_drawingSheet )
+        m_drawingSheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
 
     // Load drawings
     for( BOARD_ITEM* drawing : aBoard->Drawings() )
@@ -226,15 +226,15 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( zone );
 
     // Ratsnest
-    m_ratsnest = std::make_unique<KIGFX::RATSNEST_VIEWITEM>( aBoard->GetConnectivity() );
+    m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aBoard->GetConnectivity() );
     m_view->Add( m_ratsnest.get() );
 }
 
 
-void PCB_DRAW_PANEL_GAL::SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+void PCB_DRAW_PANEL_GAL::SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
-    m_worksheet.reset( aWorksheet );
-    m_view->Add( m_worksheet.get() );
+    m_drawingSheet.reset( aDrawingSheet );
+    m_view->Add( m_drawingSheet.get() );
 }
 
 
@@ -535,8 +535,8 @@ void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
 
 BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
-    if( m_worksheet && m_view->IsLayerVisible( LAYER_DRAWINGSHEET ) )
-        return m_worksheet->ViewBBox();
+    if( m_drawingSheet && m_view->IsLayerVisible( LAYER_DRAWINGSHEET ) )
+        return m_drawingSheet->ViewBBox();
 
     return BOX2I();
 }

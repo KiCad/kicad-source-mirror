@@ -108,7 +108,7 @@ protected:
     ///< Configures GAL object for a printout
     virtual void setupGal( KIGFX::GAL* aGal );
 
-    ///< Returns bounding box of the printed objects (excluding worksheet frame)
+    ///< Returns bounding box of the printed objects (excluding drawing-sheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
 
     ///< Returns a PAINTER instance used to draw the items.

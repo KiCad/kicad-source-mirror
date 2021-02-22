@@ -29,8 +29,8 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_data_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_data_item.h>
 
 #include "invoke_pl_editor_dialog.h"
 #include "pl_editor_frame.h"
@@ -75,9 +75,9 @@ void PL_DRAWING_TOOLS::Reset( RESET_REASON aReason )
 
 int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 {
-    WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
+    DS_DATA_ITEM::DS_ITEM_TYPE type = aEvent.Parameter<DS_DATA_ITEM::DS_ITEM_TYPE>();
     VECTOR2I                   cursorPos;
-    WS_DRAW_ITEM_BASE*         item   = nullptr;
+    DS_DRAW_ITEM_BASE*         item   = nullptr;
     bool                       isText = aEvent.IsAction( &PL_ACTIONS::placeText );
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
@@ -151,7 +151,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             // First click creates...
             if( !item )
             {
-                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
+                DS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
 
                 if( dataItem )  // dataItem = nullptr can happens if the command was cancelled
                 {
@@ -219,8 +219,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
 int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
-    WS_DRAW_ITEM_BASE*         item = nullptr;
+    DS_DATA_ITEM::DS_ITEM_TYPE type = aEvent.Parameter<DS_DATA_ITEM::DS_ITEM_TYPE>();
+    DS_DRAW_ITEM_BASE*         item = nullptr;
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -279,7 +279,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->SaveCopyInUndoList();
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
+                DS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
                 dataItem->MoveToUi( (wxPoint) cursorPos );
 
                 item = dataItem->GetDrawItems()[0];

@@ -486,7 +486,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( cfg->m_Printing.use_theme && theme )
         renderSettings.LoadColors( theme );
 
-    // The drawing sheet item print code is shared between PCBNew and EESchema, so it's easier
+    // The drawing-sheet-item print code is shared between PCBNew and EESchema, so it's easier
     // if they just use the PCB layer.
     renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
                                   renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );

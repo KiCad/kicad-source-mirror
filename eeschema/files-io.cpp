@@ -41,25 +41,21 @@
 #include <project_rescue.h>
 #include <reporter.h>
 #include <richio.h>
-#include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_file_versions.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
-#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
-#include <symbol_lib_table.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
 #include <trace_helpers.h>
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
-#include <page_layout/ws_data_model.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <wx/ffile.h>
-#include <wx/stdpaths.h>
 #include <tools/ee_inspection_tool.h>
 #include <paths.h>
 
@@ -920,9 +916,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                     SCH_IO_MGR::FindPlugin( (SCH_IO_MGR::SCH_FILE_T) aFileType ) );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
-            // Eagle sheets do not use a drawing sheet frame by default, so set it to an empty one
-            WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-            pglayout.SetEmptyLayout();
+            // Eagle sheets do not use a drawing-sheet frame by default, so set it to an empty one
+            DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
+            drawingSheet.SetEmptyLayout();
 
             BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
             wxFileName layoutfn( Prj().GetProjectPath(), BASE_SCREEN::m_PageLayoutDescrFileName );
@@ -930,7 +926,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             if( layoutfile.Open( layoutfn.GetFullPath(), "wb" ) )
             {
-                layoutfile.Write( WS_DATA_MODEL::EmptyLayout() );
+                layoutfile.Write( DS_DATA_MODEL::EmptyLayout() );
                 layoutfile.Close();
             }
 

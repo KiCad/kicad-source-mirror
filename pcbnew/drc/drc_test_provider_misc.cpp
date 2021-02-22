@@ -26,8 +26,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 
-#include <page_layout/ws_draw_item.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_draw_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 
 /*
     Miscellaneous tests:
@@ -176,8 +176,8 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
                          checkUnresolvedTextVar );
 
-    KIGFX::WS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
-    WS_DRAW_ITEM_LIST          drawItems;
+    DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
+    DS_DRAW_ITEM_LIST   drawItems;
 
     if( !drawingSheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
@@ -191,12 +191,12 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     drawItems.SetProject( m_board->GetProject() );
     drawItems.BuildDrawItemsList( drawingSheet->GetPageInfo(), drawingSheet->GetTitleBlock() );
 
-    for( WS_DRAW_ITEM_BASE* item = drawItems.GetFirst(); item; item = drawItems.GetNext() )
+    for( DS_DRAW_ITEM_BASE* item = drawItems.GetFirst(); item; item = drawItems.GetNext() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
             break;
 
-        WS_DRAW_ITEM_TEXT* text = dynamic_cast<WS_DRAW_ITEM_TEXT*>( item );
+        DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item );
 
         if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
         {

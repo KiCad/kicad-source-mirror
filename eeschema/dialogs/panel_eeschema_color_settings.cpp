@@ -40,20 +40,20 @@
 #include <settings/settings_manager.h>
 #include <title_block.h>
 #include <view/view.h>
-#include <page_layout/ws_proxy_view_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
 
 
 PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,
                                                               wxWindow* aParent ) :
-          PANEL_COLOR_SETTINGS( aParent ),
-          m_frame( aFrame ),
-          m_preview( nullptr ),
-          m_page( nullptr ),
-          m_titleBlock( nullptr ),
-          m_ws( nullptr ),
-          m_previewItems()
+        PANEL_COLOR_SETTINGS( aParent ),
+        m_frame( aFrame ),
+        m_preview( nullptr ),
+        m_page( nullptr ),
+        m_titleBlock( nullptr ),
+        m_drawingSheet( nullptr ),
+        m_previewItems()
 {
     m_colorNamespace = "schematic";
 
@@ -107,7 +107,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
 {
     delete m_page;
     delete m_titleBlock;
-    delete m_ws;
+    delete m_drawingSheet;
     delete m_currentSettings;
 
     for( EDA_ITEM* item : m_previewItems )
@@ -244,9 +244,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
 
-    m_ws = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
-    m_ws->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
-    view->Add( m_ws );
+    m_drawingSheet = new DS_PROXY_VIEW_ITEM((int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
+    m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+    view->Add( m_drawingSheet );
 
     // NOTE: It would be nice to parse a schematic file here.
     // This is created from the color_settings.sch file in demos folder
@@ -453,7 +453,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::zoomFitPreview()
                                                 fabs( psize.y / screenSize.y ) );
 
     view->SetScale( scale * 1.1 );
-    view->SetCenter( m_ws->ViewBBox().Centre() );
+    view->SetCenter( m_drawingSheet->ViewBBox().Centre() );
     m_preview->ForceRefresh();
 }
 

@@ -22,10 +22,7 @@
 
 #include <class_draw_panel_gal.h>
 
-namespace KIGFX
-{
-    class WS_PROXY_VIEW_ITEM;
-}
+class DS_PROXY_VIEW_ITEM;
 
 
 class GERBVIEW_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
@@ -56,24 +53,24 @@ public:
     BOX2I GetDefaultViewBBox() const override;
 
     /**
-     * Set or update worksheet used by the draw panel.
+     * Set or update the drawing-sheet (borders and title block) used by the draw panel.
      *
-     * @param aDrawingSheet is the worksheet to be used.
+     * @param aDrawingSheet is the drawing-sheet to be used.
      *        The object is then owned by GERBVIEW_DRAW_PANEL_GAL.
      */
-    void SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet );
+    void SetDrawingSheet( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
-     * @return the current worksheet
+     * @return the current drawing-sheet
      */
-    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_drawingSheet.get(); }
+    DS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_drawingSheet.get(); }
 
 protected:
     ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
-    ///< Currently used worksheet
-    std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_drawingSheet;
+    ///< Currently used drawing-sheet (borders and title block)
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
 };
 
 
