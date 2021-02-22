@@ -2287,6 +2287,15 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    // We can't copy both a footprint and its text in the same operation, so if
+                    // both are selected, remove the text
+                    if( item->Type() == PCB_FP_TEXT_T && aCollector.HasItem( item->GetParent() ) )
+                        aCollector.Remove( item );
+                }
             },
             aEvent.IsAction( &ACTIONS::cut ) && !m_isFootprintEditor /* prompt user regarding locked items */ );
 
