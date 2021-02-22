@@ -12,8 +12,8 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="rotate_ccw.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_24/mirror_h.png"
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_24/rotate_ccw.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
@@ -25,18 +25,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2521"
-     inkscape:window-height="1496"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="8.2642508"
-     inkscape:cy="21.223834"
-     inkscape:window-x="881"
-     inkscape:window-y="327"
+     inkscape:zoom="20.06"
+     inkscape:cx="6.3191217"
+     inkscape:cy="14.931604"
+     inkscape:window-x="2"
+     inkscape:window-y="58"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:snap-global="true">
     <inkscape:grid
        type="xygrid"
        id="grid26"
@@ -80,28 +81,22 @@
   </defs>
   <title
      id="title25709">mirror_h</title>
-  <path
-     id="polygon25713"
-     style="fill:#1a81c4;stroke-width:0.7926"
-     d="M 9,8 2,22 h 7 z"
-     class="cls-2"
-     sodipodi:nodetypes="cccc" />
-  <path
-     id="polygon25715"
-     style="fill:#848484;fill-opacity:1;stroke-width:0.792599"
-     d="M 24,22 10,15 v 7 z"
-     class="cls-3"
-     sodipodi:nodetypes="cccc" />
   <polyline
      class="cls-3"
      points="8.803 19.188 11.229 21.614 8.803 24.041"
      id="polyline777"
-     transform="matrix(-1,0,0,-0.98912611,24.303,32.274127)"
-     style="fill:none;stroke:#bf2641;stroke-width:2.01096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+     transform="matrix(-1.1619314,0,0,-1.2331412,21.228482,33.661513)"
+     style="fill:none;stroke:#1a81c4;stroke-width:1.67083;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <path
+     id="path1535"
+     style="fill:#848484;fill-opacity:1;stroke-width:1.09389"
+     d="M 22,21 2,11.666668 V 21 Z"
+     class="cls-2"
+     sodipodi:nodetypes="cccc" />
   <path
      id="polyline775"
-     style="fill:none;stroke:#bf2641;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 13.5,11.026576 c 0,0 3.302433,-0.285416 4.598796,1.010946 C 19.264492,13.203219 19,15.972207 19,15.972207"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 9.6494334,6.9508303 c 0,0 3.5547336,-0.903698 5.9472096,1.5341149 2.177483,2.2187448 1.79722,4.9650538 1.79722,4.9650538"
      class="cls-3"
      sodipodi:nodetypes="csc" />
 </svg>
