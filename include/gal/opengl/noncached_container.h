@@ -41,6 +41,12 @@ class SHADER;
 class NONCACHED_CONTAINER : public VERTEX_CONTAINER
 {
 public:
+    /**
+     * Contruct a non-cached container object.
+     *
+     * @param aSize is the size of the cache.
+     * @throw bad_alloc exception if memory allocation fails.
+     */
     NONCACHED_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
     virtual ~NONCACHED_CONTAINER();
 

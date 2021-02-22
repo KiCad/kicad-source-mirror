@@ -49,6 +49,9 @@ CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
     checkGlError( "generating vertices buffer" );
 
     m_vertices = static_cast<VERTEX*>( malloc( aSize * VERTEX_SIZE ) );
+
+    if( !m_vertices )
+        throw std::bad_alloc();
 }
 
 
@@ -93,7 +96,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
     VERTEX* newBufferMem = static_cast<VERTEX*>( malloc( aNewSize * VERTEX_SIZE ) );
 
     if( !newBufferMem )
-        return false;
+        throw std::bad_alloc();
 
     defragment( newBufferMem );
 

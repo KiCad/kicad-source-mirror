@@ -54,13 +54,22 @@ public:
         return true;
     }
 
-    ///< @copydoc VERTEX_CONTAINER::SetItem()
     virtual void SetItem( VERTEX_ITEM* aItem ) override;
 
     ///< @copydoc VERTEX_CONTAINER::FinishItem()
     virtual void FinishItem() override;
 
-    ///< @copydoc VERTEX_CONTAINER::Allocate()
+    /**
+     * Return allocated space for the requested number of vertices associated with the
+     * current item (set with SetItem()).
+     *
+     * The allocated space is added at the end of the chunk used by the current item and
+     * may serve to store new vertices.
+     *
+     * @param aSize is the number of vertices to be allocated.
+     * @return Pointer to the allocated space.
+     * @throw bad_alloc exception if allocation fails.
+     */
     virtual VERTEX* Allocate( unsigned int aSize ) override;
 
     ///< @copydoc VERTEX_CONTAINER::Delete()

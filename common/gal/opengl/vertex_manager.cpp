@@ -42,7 +42,7 @@ using namespace KIGFX;
 VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
         m_noTransform( true ),
         m_transform( 1.0f ),
-        m_reserved( NULL ),
+        m_reserved( nullptr ),
         m_reservedSpace( 0 )
 {
     m_container.reset( VERTEX_CONTAINER::MakeContainer( aCached ) );
@@ -68,18 +68,18 @@ void VERTEX_MANAGER::Unmap()
 
 bool VERTEX_MANAGER::Reserve( unsigned int aSize )
 {
-    assert( m_reservedSpace == 0 && m_reserved == NULL );
+    assert( m_reservedSpace == 0 && m_reserved == nullptr );
 
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
 
     m_reserved = m_container->Allocate( aSize );
 
-    if( m_reserved == NULL )
+    if( m_reserved == nullptr )
     {
         if( show_err )
         {
-            DisplayError( NULL, wxT( "VERTEX_MANAGER::Reserve: Vertex allocation error" ) );
+            DisplayError( nullptr, wxT( "VERTEX_MANAGER::Reserve: Vertex allocation error" ) );
             show_err = false;
         }
 
@@ -106,18 +106,18 @@ bool VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
         --m_reservedSpace;
 
         if( m_reservedSpace == 0 )
-            m_reserved = NULL;
+            m_reserved = nullptr;
     }
     else
     {
         newVertex = m_container->Allocate( 1 );
     }
 
-    if( newVertex == NULL )
+    if( newVertex == nullptr )
     {
         if( show_err )
         {
-            DisplayError( NULL, wxT( "VERTEX_MANAGER::Vertex: Vertex allocation error" ) );
+            DisplayError( nullptr, wxT( "VERTEX_MANAGER::Vertex: Vertex allocation error" ) );
             show_err = false;
         }
 
@@ -138,11 +138,11 @@ bool VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
     // Obtain pointer to the vertex in currently used container
     VERTEX* newVertex = m_container->Allocate( aSize );
 
-    if( newVertex == NULL )
+    if( newVertex == nullptr )
     {
         if( show_err )
         {
-            DisplayError( NULL, wxT( "VERTEX_MANAGER::Vertices: Vertex allocation error" ) );
+            DisplayError( nullptr, wxT( "VERTEX_MANAGER::Vertices: Vertex allocation error" ) );
             show_err = false;
         }
 
@@ -217,7 +217,7 @@ void VERTEX_MANAGER::ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth )
 VERTEX* VERTEX_MANAGER::GetVertices( const VERTEX_ITEM& aItem ) const
 {
     if( aItem.GetSize() == 0 )
-        return NULL; // The item is not stored in the container
+        return nullptr; // The item is not stored in the container
 
     return m_container->GetVertices( aItem.GetOffset() );
 }

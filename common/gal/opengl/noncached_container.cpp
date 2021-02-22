@@ -41,6 +41,13 @@ NONCACHED_CONTAINER::NONCACHED_CONTAINER( unsigned int aSize ) :
         m_freePtr( 0 )
 {
     m_vertices = static_cast<VERTEX*>( malloc( aSize * sizeof( VERTEX ) ) );
+
+    // Unfortunately we cannot remove the use of malloc here because realloc is used in
+    // the Allocate method below.  The new operator behavior is mimicked here so that a
+    // malloc failure can be caught in the OpenGL initialization code further up the stack.
+    if( !m_vertices )
+        throw std::bad_alloc();
+
     memset( m_vertices, 0x00, aSize * sizeof( VERTEX ) );
 }
 
@@ -74,7 +81,7 @@ VERTEX* NONCACHED_CONTAINER::Allocate( unsigned int aSize )
         }
         else
         {
-            return NULL;
+            throw std::bad_alloc();
         }
     }
 

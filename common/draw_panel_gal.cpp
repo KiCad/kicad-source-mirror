@@ -239,7 +239,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
         m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
     }
-    catch( std::runtime_error& err )
+    catch( std::exception& err )
     {
         if( GAL_FALLBACK != m_backend )
         {

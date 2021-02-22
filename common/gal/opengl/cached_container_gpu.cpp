@@ -41,7 +41,9 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
-        CACHED_CONTAINER( aSize ), m_isMapped( false ), m_glBufferHandle( -1 )
+        CACHED_CONTAINER( aSize ),
+        m_isMapped( false ),
+        m_glBufferHandle( -1 )
 {
     m_useCopyBuffer = GLEW_ARB_copy_buffer;
 
@@ -57,7 +59,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
 
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
-    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     checkGlError( "allocating video memory for cached container" );
 }
@@ -100,7 +102,7 @@ void CACHED_CONTAINER_GPU::Unmap()
         glUnmapBuffer( GL_ARRAY_BUFFER );
         checkGlError( "unmapping vertices buffer" );
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
-        m_vertices = NULL;
+        m_vertices = nullptr;
         checkGlError( "unbinding vertices buffer" );
     }
     catch( const std::runtime_error& err )
@@ -147,7 +149,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     wxASSERT( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     checkGlError( "creating buffer during defragmentation" );
 
     ITEMS::iterator it, it_end;
@@ -244,7 +246,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     wxASSERT( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
     checkGlError( "creating buffer during defragmentation" );
 

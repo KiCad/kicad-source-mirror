@@ -49,7 +49,7 @@ using namespace KIGFX;
 
 CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
         VERTEX_CONTAINER( aSize ),
-        m_item( NULL ),
+        m_item( nullptr ),
         m_chunkSize( 0 ),
         m_chunkOffset( 0 ),
         m_maxIndex( 0 )
@@ -61,7 +61,7 @@ CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
 
 void CACHED_CONTAINER::SetItem( VERTEX_ITEM* aItem )
 {
-    assert( aItem != NULL );
+    assert( aItem != nullptr );
 
     unsigned int itemSize = aItem->GetSize();
     m_item = aItem;
@@ -74,7 +74,7 @@ void CACHED_CONTAINER::SetItem( VERTEX_ITEM* aItem )
 
 void CACHED_CONTAINER::FinishItem()
 {
-    assert( m_item != NULL );
+    assert( m_item != nullptr );
 
     unsigned int itemSize = m_item->GetSize();
 
@@ -94,7 +94,7 @@ void CACHED_CONTAINER::FinishItem()
     if( itemSize > 0 )
         m_items.insert( m_item );
 
-    m_item = NULL;
+    m_item = nullptr;
     m_chunkSize = 0;
     m_chunkOffset = 0;
 
@@ -106,11 +106,11 @@ void CACHED_CONTAINER::FinishItem()
 
 VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
 {
-    assert( m_item != NULL );
+    assert( m_item != nullptr );
     assert( IsMapped() );
 
     if( m_failed )
-        return NULL;
+        return nullptr;
 
     unsigned int itemSize = m_item->GetSize();
     unsigned int newSize = itemSize + aSize;
@@ -121,7 +121,7 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
         if( !reallocate( newSize ) )
         {
             m_failed = true;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -147,7 +147,7 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
 
 void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 {
-    assert( aItem != NULL );
+    assert( aItem != nullptr );
     assert( m_items.find( aItem ) != m_items.end() || aItem->GetSize() == 0 );
 
     int size = aItem->GetSize();

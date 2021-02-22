@@ -61,7 +61,7 @@ VERTEX_CONTAINER::VERTEX_CONTAINER( unsigned int aSize ) :
         m_freeSpace( aSize ),
         m_currentSize( aSize ),
         m_initialSize( aSize ),
-        m_vertices( NULL ),
+        m_vertices( nullptr ),
         m_failed( false ),
         m_dirty( true )
 {
