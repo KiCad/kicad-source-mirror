@@ -29,6 +29,7 @@
 
 bool g_removeExtraLibFields      = false;
 bool g_resetEmptyLibFields       = false;
+bool g_resetLibFieldText         = true;
 bool g_resetLibFieldVisibilities = true;
 bool g_resetLibFieldEffects      = true;
 bool g_resetLibFieldPositions    = true;
@@ -55,6 +56,7 @@ DIALOG_UPDATE_SYMBOL_FIELDS::DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aPa
 
     m_removeExtraBox->SetValue( g_removeExtraLibFields );
     m_resetEmptyFields->SetValue( g_resetEmptyLibFields );
+    m_resetFieldText->SetValue( g_resetLibFieldText );
     m_resetFieldVisibilities->SetValue( g_resetLibFieldVisibilities );
     m_resetFieldEffects->SetValue( g_resetLibFieldEffects );
     m_resetFieldPositions->SetValue( g_resetLibFieldPositions );
@@ -70,6 +72,7 @@ DIALOG_UPDATE_SYMBOL_FIELDS::~DIALOG_UPDATE_SYMBOL_FIELDS()
 {
     g_removeExtraLibFields = m_removeExtraBox->GetValue();
     g_resetEmptyLibFields = m_resetEmptyFields->GetValue();
+    g_resetLibFieldText = m_resetFieldText->GetValue();
     g_resetLibFieldVisibilities = m_resetFieldVisibilities->GetValue();
     g_resetLibFieldEffects = m_resetFieldEffects->GetValue();
     g_resetLibFieldPositions = m_resetFieldPositions->GetValue();
@@ -135,7 +138,6 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
     std::unique_ptr<LIB_PART> flattenedParent = m_symbol->GetParent().lock()->Flatten();
 
     bool removeExtras = m_removeExtraBox->GetValue();
-    bool resetEmpty = m_resetEmptyFields->GetValue();
     bool resetVis = m_resetFieldVisibilities->GetValue();
     bool resetEffects = m_resetFieldEffects->GetValue();
     bool resetPositions = m_resetFieldPositions->GetValue();
@@ -155,7 +157,10 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
             if( parentField )
             {
-                if( !parentField->GetText().IsEmpty() || resetEmpty )
+                bool resetText = parentField->GetText().IsEmpty() ? m_resetEmptyFields->GetValue()
+                                                                  : m_resetFieldText->GetValue();
+
+                if( resetText )
                     field.SetText( parentField->GetText() );
 
                 if( resetVis )

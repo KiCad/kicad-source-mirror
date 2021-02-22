@@ -52,7 +52,7 @@
 #include <view/view_controls.h>
 
 
-SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
+SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
     {
@@ -66,14 +66,13 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
 };
 
 
-SELECTION_CONDITION EE_CONDITIONS::SingleSymbolOrPower = [] (const SELECTION& aSel )
+SELECTION_CONDITION EE_CONDITIONS::SingleSymbolOrPower = []( const SELECTION& aSel )
 {
-    if( aSel.GetSize() == 1 )
-        return dynamic_cast<SCH_COMPONENT*>( aSel.Front() ) != nullptr;
+    return aSel.GetSize() == 1 && aSel.Front()->Type() == SCH_COMPONENT_T;
 };
 
 
-SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& aSel )
+SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = []( const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
     {
@@ -87,7 +86,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& 
 };
 
 
-SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION& aSel )
+SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = []( const SELECTION& aSel )
 {
     if( aSel.GetSize() == 1 )
     {

@@ -69,6 +69,9 @@ DIALOG_UPDATE_SYMBOL_FIELDS_BASE::DIALOG_UPDATE_SYMBOL_FIELDS_BASE( wxWindow* pa
 
 	m_updateOptionsSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
+	m_resetFieldText = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetFieldText, 0, wxBOTTOM|wxRIGHT, 4 );
+
 	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
 

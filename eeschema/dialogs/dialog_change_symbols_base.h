@@ -68,6 +68,7 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_updateOptionsSizer;
 		wxCheckBox* m_removeExtraBox;
 		wxCheckBox* m_resetEmptyFields;
+		wxCheckBox* m_resetFieldText;
 		wxCheckBox* m_resetFieldVisibilities;
 		wxCheckBox* m_resetFieldEffects;
 		wxCheckBox* m_resetFieldPositions;
