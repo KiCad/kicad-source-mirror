@@ -697,7 +697,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
     GetCanvas()->DisplayComponent( m_my_part );
-    GetCanvas()->GetView()->HideWorksheet();
+    GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
     if( aUpdateZoom )
@@ -1099,7 +1099,7 @@ void SYMBOL_EDIT_FRAME::RebuildView()
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
     GetCanvas()->DisplayComponent( m_my_part );
-    GetCanvas()->GetView()->HideWorksheet();
+    GetCanvas()->GetView()->HideDrawingSheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
     GetCanvas()->Refresh();

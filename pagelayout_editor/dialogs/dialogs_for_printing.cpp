@@ -190,7 +190,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     KIGFX::WS_RENDER_SETTINGS renderSettings;
     renderSettings.SetDefaultPenWidth( 1 );
-    renderSettings.SetLayerColor( LAYER_WORKSHEET, COLOR4D( RED ) );
+    renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, COLOR4D( RED ) );
     renderSettings.SetPrintDC( dc );
 
     // Ensure the scaling factor (used only in printing) of bitmaps is up to date
@@ -205,7 +205,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
         }
     }
 
-    m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
+    m_parent->PrintDrawingSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
 
@@ -214,7 +214,7 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
 
-    // PrintWorkSheet clears the current display list when calling BuildWorkSheetGraphicList()
+    // PrintDrawingSheet clears the current display list when calling BuildDrawItemsList()
     // So rebuild and redraw it.
     m_parent->GetCanvas()->DisplayWorksheet();
 }

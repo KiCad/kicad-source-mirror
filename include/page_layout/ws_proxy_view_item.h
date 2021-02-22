@@ -79,7 +79,7 @@ public:
 
     /**
      * Can be used to override which layer ID is used for worksheet item colors
-     * @param aLayerId is the color to use (will default to LAYER_WORKSHEET if this is not called)
+     * @param aLayerId is the color to use (defaults to LAYER_DRAWINGSHEET if this is not called)
      */
     void SetColorLayer( int aLayerId )
     {
@@ -120,7 +120,7 @@ public:
         return wxT( "WS_PROXY_VIEW_ITEM" );
     }
 
-    bool HitTestWorksheetItems( VIEW* aView, const wxPoint& aPosition );
+    bool HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition );
 
 protected:
     void buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawList ) const;
@@ -138,7 +138,7 @@ protected:
     bool               m_isFirstPage;
     const PROJECT*     m_project;
 
-    /// Layer that is used for worksheet color (LAYER_WORKSHEET is always used for visibility)
+    /// Layer that is used for worksheet color (LAYER_DRAWINGSHEET is always used for visibility)
     int                m_colorLayer;
 
     /// Layer that is used for page border color

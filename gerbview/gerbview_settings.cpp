@@ -134,7 +134,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "DCodeColorEx",            LAYER_DCODES );
     migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_GRID );
     migrateLegacyColor( "NegativeObjectsColorEx",  LAYER_NEGATIVE_OBJECTS );
-    migrateLegacyColor( "WorksheetColorEx",        LAYER_GERBVIEW_WORKSHEET );
+    migrateLegacyColor( "WorksheetColorEx",        LAYER_GERBVIEW_DRAWINGSHEET );
 
     wxString key;
 

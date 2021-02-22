@@ -83,7 +83,7 @@ public:
     /**
      * Check for any unresolved text variable references.
      */
-    void TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
+    void TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
      * Check that there are no conflicting bus alias definitions in the schematic.

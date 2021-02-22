@@ -486,15 +486,15 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( cfg->m_Printing.use_theme && theme )
         renderSettings.LoadColors( theme );
 
-    // The worksheet item print code is shared between PCBNew and EESchema, so it's easier
+    // The drawing sheet item print code is shared between PCBNew and EESchema, so it's easier
     // if they just use the PCB layer.
-    renderSettings.SetLayerColor( LAYER_WORKSHEET,
-                                  renderSettings.GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) );
+    renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
+                                  renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
 
     if( printReference )
     {
-        m_parent->PrintWorkSheet( &renderSettings, aScreen, IU_PER_MILS, aScreen->GetFileName(),
-                                  wxEmptyString );
+        m_parent->PrintDrawingSheet( &renderSettings, aScreen, IU_PER_MILS, aScreen->GetFileName(),
+                                     wxEmptyString );
     }
 
     renderSettings.SetIsPrinting( true );

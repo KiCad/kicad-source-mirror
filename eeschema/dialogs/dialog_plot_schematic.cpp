@@ -94,7 +94,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         setModeColor( cfg->m_PlotPanel.color );
 
         // Set plot or not frame reference option
-        setPlotFrameRef( cfg->m_PlotPanel.frame_reference );
+        setPlotDrawingSheet( cfg->m_PlotPanel.frame_reference );
 
         // HPGL plot origin and unit system configuration
         m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
@@ -277,7 +277,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
         cfg->m_PlotPanel.color            = getModeColor();
         cfg->m_PlotPanel.color_theme      = colors->GetFilename();
-        cfg->m_PlotPanel.frame_reference  = getPlotFrameRef();
+        cfg->m_PlotPanel.frame_reference  = getPlotDrawingSheet();
         cfg->m_PlotPanel.format           = static_cast<int>( GetPlotFileFormat() );
         cfg->m_PlotPanel.hpgl_origin      = m_plotOriginOpt->GetSelection();
         cfg->m_PlotPanel.hpgl_paper_size  = m_HPGLPaperSizeSelect;
@@ -340,19 +340,19 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
     {
     default:
     case PLOT_FORMAT::POST:
-        createPSFile( aPlotAll, getPlotFrameRef(), &renderSettings );
+        createPSFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::DXF:
-        CreateDXFFile( aPlotAll, getPlotFrameRef(), &renderSettings );
+        CreateDXFFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::PDF:
-        createPDFFile( aPlotAll, getPlotFrameRef(), &renderSettings );
+        createPDFFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::SVG:
-        createSVGFile( aPlotAll, getPlotFrameRef(), &renderSettings );
+        createSVGFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     case PLOT_FORMAT::HPGL:
-        createHPGLFile( aPlotAll, getPlotFrameRef(), &renderSettings );
+        createHPGLFile( aPlotAll, getPlotDrawingSheet(), &renderSettings );
         break;
     }
 }

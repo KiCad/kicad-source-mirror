@@ -66,7 +66,7 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
             { wxT( "kicad" ),    _( "Project Manager" ) },
             { wxT( "eeschema" ), _( "Schematic Editor" ) },
             { wxT( "pcbnew" ),   _( "PCB Editor" ) },
-            { wxT( "plEditor" ), _( "Worksheet Editor" ), },
+            { wxT( "plEditor" ), _( "Drawing Sheet Editor" ), },
             { wxT( "3DViewer" ), _( "3D Viewer" ) }
     };
 

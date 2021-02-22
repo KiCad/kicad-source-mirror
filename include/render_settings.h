@@ -180,7 +180,7 @@ public:
      */
     virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
 
-    float GetWorksheetLineWidth() const { return m_worksheetLineWidth; }
+    float GetDrawingSheetLineWidth() const { return m_drawingSheetLineWidth; }
 
     int GetDefaultPenWidth() const { return m_defaultPenWidth; }
     void SetDefaultPenWidth( int aWidth ) { m_defaultPenWidth = aWidth; }
@@ -289,7 +289,7 @@ protected:
 
     float         m_selectFactor;         // Specifies how color of selected items is changed
     float         m_outlineWidth;         // Line width used when drawing outlines
-    float         m_worksheetLineWidth;   // Line width used when drawing worksheet
+    float         m_drawingSheetLineWidth;// Line width used for borders and titleblock
 
     int           m_defaultPenWidth;
     int           m_minPenWidth;          // Some clients (such as PDF) don't like ultra-thin

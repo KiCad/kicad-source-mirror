@@ -176,12 +176,12 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     if( aPlotFrameRef )
     {
-        PlotWorkSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(), aPageInfo,
-                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                       m_parent->GetScreenDesc(), aScreen->GetFileName(),
-                       plotter->GetColorMode() ?
-                       plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
+        PlotDrawingSheet( plotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
+                          aPageInfo, aScreen->GetPageNumber(), aScreen->GetPageCount(),
+                          m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                          plotter->GetColorMode() ?
+                          plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) :
+                          COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

@@ -658,8 +658,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
                 || m_parent->IsType( FRAME_SCH_VIEWER )
                 || m_parent->IsType( FRAME_SCH_VIEWER_MODAL ) )
             {
-                COLOR4D worksheetColor = renderSettings.GetLayerColor( LAYER_SCHEMATIC_WORKSHEET );
-                renderSettings.SetLayerColor( LAYER_WORKSHEET, worksheetColor );
+                COLOR4D worksheetColor = renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
+                renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, worksheetColor );
             }
 
             GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor, bgColor );

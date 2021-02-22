@@ -350,7 +350,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _( "DRC Errors" ),       LAYER_DRC_ERROR,          _( "DRC violations with an Error severity" ) ),
     RR( _( "DRC Exclusions" ),   LAYER_DRC_EXCLUSION,      _( "DRC violations which have been individually excluded" ) ),
     RR( _( "Anchors" ),          LAYER_ANCHOR,             _( "Show footprint and text origins as a cross" ) ),
-    RR( _( "Worksheet" ),        LAYER_WORKSHEET,          _( "Show worksheet" ) ),
+    RR( _( "Drawing Sheet" ),    LAYER_DRAWINGSHEET,       _( "Show drawing sheet borders and title block" ) ),
     RR( _( "Grid" ),             LAYER_GRID,               _( "Show the (x,y) grid dots" ) )
 };
 

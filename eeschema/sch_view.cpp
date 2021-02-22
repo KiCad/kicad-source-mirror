@@ -67,7 +67,7 @@ SCH_VIEW::~SCH_VIEW()
 void SCH_VIEW::Cleanup()
 {
     Clear();
-    m_worksheet.reset();
+    m_drawingSheet.reset();
     m_preview.reset();
 }
 
@@ -97,25 +97,25 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     for( SCH_ITEM* item : aScreen->Items() )
         Add( item );
 
-    m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),
-                                                      &aScreen->GetPageSettings(),
-                                                      &aScreen->Schematic()->Prj(),
-                                                      &aScreen->GetTitleBlock() ) );
-    m_worksheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
-    m_worksheet->SetSheetCount( aScreen->GetPageCount() );
-    m_worksheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
-    m_worksheet->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
-    m_worksheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_GRID );
-    m_worksheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
+    m_drawingSheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),
+                                                         &aScreen->GetPageSettings(),
+                                                         &aScreen->Schematic()->Prj(),
+                                                         &aScreen->GetTitleBlock() ) );
+    m_drawingSheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
+    m_drawingSheet->SetSheetCount( aScreen->GetPageCount() );
+    m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
+    m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+    m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_GRID );
+    m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
-        m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );
+        m_drawingSheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );
     else
-        m_worksheet->SetSheetName( "" );
+        m_drawingSheet->SetSheetName( "" );
 
     ResizeSheetWorkingArea( aScreen );
 
-    Add( m_worksheet.get() );
+    Add( m_drawingSheet.get() );
 
     InitPreview();
 }
@@ -178,9 +178,9 @@ void SCH_VIEW::ClearHiddenFlags()
 }
 
 
-void SCH_VIEW::HideWorksheet()
+void SCH_VIEW::HideDrawingSheet()
 {
-    //    SetVisible( m_worksheet.get(), false );
+    //    SetVisible( m_drawingSheet.get(), false );
 }
 
 

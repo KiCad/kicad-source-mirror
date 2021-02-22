@@ -366,7 +366,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( f + "Color4DViaBBlindEx",        LAYER_VIA_BBLIND );
     migrateLegacyColor( f + "Color4DViaMicroEx",         LAYER_VIA_MICROVIA );
     migrateLegacyColor( f + "Color4DViaThruEx",          LAYER_VIA_THROUGH );
-    migrateLegacyColor( f + "Color4DWorksheet",          LAYER_WORKSHEET );
+    migrateLegacyColor( f + "Color4DWorksheet",          LAYER_DRAWINGSHEET );
 
     manager.SaveColorSettings( cs, "board" );
 

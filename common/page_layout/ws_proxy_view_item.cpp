@@ -43,7 +43,7 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_sheetCount( 1 ),
         m_isFirstPage( false ),
         m_project( aProject ),
-        m_colorLayer( LAYER_WORKSHEET ),
+        m_colorLayer( LAYER_DRAWINGSHEET ),
         m_pageBorderColorLayer( LAYER_GRID )
 {
 }
@@ -74,9 +74,8 @@ void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawLis
     wxString         fileName( m_fileName.c_str(), wxConvUTF8 );
     wxString         sheetName( m_sheetName.c_str(), wxConvUTF8 );
 
-    aDrawList->SetDefaultPenSize( (int) settings->GetWorksheetLineWidth() );
-    // Adjust the scaling factor for worksheet items:
-    // worksheet items coordinates and sizes are stored in mils,
+    aDrawList->SetDefaultPenSize( (int) settings->GetDrawingSheetLineWidth() );
+    // Adjust the scaling factor: drawing sheet item coordinates and sizes are stored in mils,
     // and must be scaled to the same units as the caller
     aDrawList->SetMilsToIUfactor( m_mils2IUscalefactor );
     aDrawList->SetIsFirstPage( m_isFirstPage );
@@ -86,7 +85,7 @@ void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawLis
     aDrawList->SetSheetName( sheetName );
     aDrawList->SetProject( m_project );
 
-    aDrawList->BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock );
+    aDrawList->BuildDrawItemsList( *m_pageInfo, *m_titleBlock );
 }
 
 
@@ -118,7 +117,7 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 
     // Draw all the components that make the page layout
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
-        ws_painter.Draw( item, LAYER_WORKSHEET );
+        ws_painter.Draw( item, LAYER_DRAWINGSHEET );
 
     // Draw gray line that outlines the sheet size
     if( settings->GetShowPageLimits() )
@@ -132,11 +131,11 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 void WS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = LAYER_WORKSHEET;
+    aLayers[0] = LAYER_DRAWINGSHEET;
 }
 
 
-bool WS_PROXY_VIEW_ITEM::HitTestWorksheetItems( VIEW* aView, const wxPoint& aPosition )
+bool WS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition )
 {
     int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
     WS_DRAW_ITEM_LIST drawList;

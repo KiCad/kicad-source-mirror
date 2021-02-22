@@ -148,7 +148,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::convertImage );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::showCalculator );
-    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editWorksheet );
+    toolsMenu->Add( KICAD_MANAGER_ACTIONS::editDrawingSheet );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( _( "Edit Local File..." ),

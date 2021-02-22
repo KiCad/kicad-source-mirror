@@ -96,14 +96,15 @@ private:
 
     PLOT_FORMAT GetPlotFileFormat();
 
-    bool getPlotFrameRef() { return m_PlotFrameRefOpt->GetValue(); }
-    void setPlotFrameRef( bool aPlot) {m_PlotFrameRefOpt->SetValue( aPlot ); }
+    bool getPlotDrawingSheet() { return m_plotDrawingSheet->GetValue(); }
+    void setPlotDrawingSheet( bool aPlot) { m_plotDrawingSheet->SetValue( aPlot ); }
 
     void PlotSchematic( bool aPlotAll );
 
     // PDF
-    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
-    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotWorksheet);
+    void    createPDFFile( bool aPlotAll, bool aPlotDrawingSheet,
+                           RENDER_SETTINGS* aRenderSettings );
+    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotDrawingSheet);
     void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
     /**
@@ -114,10 +115,11 @@ private:
     void    restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
 
     // DXF
-    void    CreateDXFFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS*  aRenderSettings );
+    void    CreateDXFFile( bool aPlotAll, bool aPlotDrawingSheet,
+                           RENDER_SETTINGS* aRenderSettings );
     bool    PlotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
-                             RENDER_SETTINGS*  aRenderSettings,
-                             wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
+                             RENDER_SETTINGS* aRenderSettings, wxPoint aPlotOffset, double aScale,
+                             bool aPlotFrameRef );
 
     // HPGL
     HPGL_PLOT_ORIGIN_AND_UNITS GetPlotOriginAndUnits()
@@ -137,9 +139,9 @@ private:
         switch( aOriginAndUnits )
         {
         case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-        default: m_plotOriginOpt->SetSelection( 0 ); break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER: m_plotOriginOpt->SetSelection( 1 ); break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE: m_plotOriginOpt->SetSelection( 2 ); break;
+        default:                                           m_plotOriginOpt->SetSelection( 0 ); break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:   m_plotOriginOpt->SetSelection( 1 ); break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:    m_plotOriginOpt->SetSelection( 2 ); break;
         case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT: m_plotOriginOpt->SetSelection( 3 ); break;
         }
     }
@@ -171,7 +173,6 @@ private:
      * @return the created file name
      * @throw IO_ERROR on file I/O errors
      */
-    wxFileName createPlotFileName( const wxString& aPlotFileName,
-                                   const wxString& aExtension,
+    wxFileName createPlotFileName( const wxString& aPlotFileName, const wxString& aExtension,
                                    REPORTER* aReporter = NULL );
 };

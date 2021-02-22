@@ -302,15 +302,16 @@ public:
     void AddStandardSubMenus( TOOL_MENU& aMenu );
 
     /**
-     * Prints the page layout with the frame and the basic inscriptions.
+     * Prints the drawing sheet with the frame and title block.
      *
      * @param aScreen screen to draw.
      * @param aMils2Iu The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from PcbNew.
      */
-    void PrintWorkSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aMils2Iu,
-                         const wxString& aFilename, const wxString& aSheetLayer = wxEmptyString );
+    void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
+                            double aMils2Iu, const wxString& aFilename,
+                            const wxString& aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
 

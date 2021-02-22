@@ -40,7 +40,7 @@ class WS_DATA_ITEM;
 
 /**
  * PL_EDITOR_FRAME
- * is the main window used in the page layout editor.
+ * is the main window used in the drawing sheet editor.
  */
 
 class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
@@ -167,7 +167,7 @@ public:
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 
     /**
-     * Page layout editor can show the title block using a page number 1 or another number.
+     * Drawing sheet editor can show the title block using a page number 1 or another number.
      * This is because some items can be shown (or not) only on page 1 (a feature  which
      * looks like word processing option "page 1 differs from other pages").
      * @return true if the page 1 is selected, and false if not

@@ -195,7 +195,7 @@ public:
 
 private:
     wxPoint m_pos;      // position of reference point, from the WS_DATA_ITEM_POLYGONS parent
-                        // (used only in page layout editor to draw anchors)
+                        // (used only in drawing sheet editor to draw anchors)
 };
 
 
@@ -400,12 +400,12 @@ public:
     void SetProject( const PROJECT* aProject ) { m_project = aProject; }
 
     /**
-     * Set the title block (mainly for page layout editor)
+     * Set the title block (mainly for drawing sheet editor)
      */
     void SetTitleBlock( const TITLE_BLOCK* aTblock ) { m_titleBlock = aTblock; }
 
     /**
-     * Set the paper format name (mainly for page layout editor)
+     * Set the paper format name (mainly for drawing sheet editor)
      */
     void SetPaperFormat( const wxString* aFormatName ) { m_paperFormat = aFormatName; }
 
@@ -507,7 +507,7 @@ public:
     }
 
     /**
-     * Draws the item list created by BuildWorkSheetGraphicList
+     * Draws the item list created by BuildDrawItemsList
      */
     void Print( const RENDER_SETTINGS* aSettings );
 
@@ -527,7 +527,7 @@ public:
      * @param aColor The color for drawing.
      * @param aAltColor The color for items which need to be "highlighted".
      */
-    void BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo, const TITLE_BLOCK& aTitleBlock );
+    void BuildDrawItemsList( const PAGE_INFO& aPageInfo, const TITLE_BLOCK& aTitleBlock );
 
     static void GetTextVars( wxArrayString* aVars );
 

@@ -176,22 +176,22 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     forEachGeometryItem( { PCB_FP_TEXT_T, PCB_TEXT_T }, LSET::AllLayersMask(),
                          checkUnresolvedTextVar );
 
-    KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_drcEngine->GetWorksheet();
-    WS_DRAW_ITEM_LIST          wsItems;
+    KIGFX::WS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
+    WS_DRAW_ITEM_LIST          drawItems;
 
-    if( !worksheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+    if( !drawingSheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
 
-    wsItems.SetMilsToIUfactor( IU_PER_MILS );
-    wsItems.SetPageNumber( "1" );
-    wsItems.SetSheetCount( 1 );
-    wsItems.SetFileName( "dummyFilename" );
-    wsItems.SetSheetName( "dummySheet" );
-    wsItems.SetSheetLayer( "dummyLayer" );
-    wsItems.SetProject( m_board->GetProject() );
-    wsItems.BuildWorkSheetGraphicList( worksheet->GetPageInfo(), worksheet->GetTitleBlock() );
+    drawItems.SetMilsToIUfactor( IU_PER_MILS );
+    drawItems.SetPageNumber( "1" );
+    drawItems.SetSheetCount( 1 );
+    drawItems.SetFileName( "dummyFilename" );
+    drawItems.SetSheetName( "dummySheet" );
+    drawItems.SetSheetLayer( "dummyLayer" );
+    drawItems.SetProject( m_board->GetProject() );
+    drawItems.BuildDrawItemsList( drawingSheet->GetPageInfo(), drawingSheet->GetTitleBlock() );
 
-    for( WS_DRAW_ITEM_BASE* item = wsItems.GetFirst(); item; item = wsItems.GetNext() )
+    for( WS_DRAW_ITEM_BASE* item = drawItems.GetFirst(); item; item = drawItems.GetNext() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
             break;

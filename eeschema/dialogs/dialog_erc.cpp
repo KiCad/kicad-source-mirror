@@ -390,7 +390,7 @@ void DIALOG_ERC::testErc()
     if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
     {
         AdvancePhase( _( "Checking for unresolved variables..." ) );
-        tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetWorksheet() );
+        tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetDrawingSheet() );
     }
 
     if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )

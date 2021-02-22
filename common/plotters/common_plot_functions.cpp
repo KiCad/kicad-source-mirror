@@ -54,10 +54,10 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 }
 
 
-void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
-                    const PAGE_INFO& aPageInfo, const wxString&  aSheetNumber, int aNumberOfSheets,
-                    const wxString& aSheetDesc, const wxString& aFilename, COLOR4D aColor,
-                    bool aIsFirstPage )
+void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
+                       const PAGE_INFO& aPageInfo, const wxString& aSheetNumber, int aSheetCount,
+                       const wxString& aSheetDesc, const wxString& aFilename, COLOR4D aColor,
+                       bool aIsFirstPage )
 {
     /* Note: Page sizes values are given in mils
      */
@@ -78,13 +78,13 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
     drawList.SetDefaultPenSize( PLOTTER::USE_DEFAULT_LINE_WIDTH );
     drawList.SetMilsToIUfactor( iusPerMil );
     drawList.SetPageNumber( aSheetNumber );
-    drawList.SetSheetCount( aNumberOfSheets );
+    drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
     drawList.SetSheetName( aSheetDesc );
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
+    drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
     // Draw item list
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
@@ -154,7 +154,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
             break;
 
         default:
-            wxFAIL_MSG( "PlotWorkSheet(): Unknown worksheet item." );
+            wxFAIL_MSG( "PlotDrawingSheet(): Unknown drawing sheet item." );
             break;
         }
     }

@@ -1,8 +1,3 @@
-/**
- * @file pl_editor.cpp
- * @brief page layout editor main file.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *

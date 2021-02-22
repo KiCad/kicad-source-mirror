@@ -84,7 +84,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->Add( ACTIONS::print );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddQuitOrClose( &Kiface(), _( "Worksheet Editor" ) );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Drawing Sheet Editor" ) );
 
     //-- Edit menu -------------------------------------------------------
     //

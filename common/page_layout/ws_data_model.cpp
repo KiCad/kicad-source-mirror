@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2018 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 
 
 /*
- * The WS_DATA_ITEM_* classes define the basic shapes of a page layout (frame references
+ * The WS_DATA_ITEM_* classes define the basic shapes of a drawing sheet (frame references
  * and title block).  The list of these items is stored in a WS_DATA_MODEL instance.
  *
  * These items cannot be drawn or plotetd "as is".  They must be converted to WS_DRAW_*

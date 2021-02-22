@@ -214,7 +214,7 @@ enum GAL_LAYER_ID: int
     LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)
     LAYER_VIA_HOLES          = GAL_LAYER_ID_START + 22, ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC_ERROR          = GAL_LAYER_ID_START + 23, ///< layer for drc markers with SEVERITY_ERROR
-    LAYER_WORKSHEET          = GAL_LAYER_ID_START + 24, ///< worksheet frame
+    LAYER_DRAWINGSHEET       = GAL_LAYER_ID_START + 24, ///< drawingsheet frame and titleblock
     LAYER_GP_OVERLAY         = GAL_LAYER_ID_START + 25, ///< general purpose overlay
     LAYER_SELECT_OVERLAY     = GAL_LAYER_ID_START + 26, ///< currently selected items overlay
     LAYER_PCB_BACKGROUND     = GAL_LAYER_ID_START + 27, ///< PCB background color
@@ -239,8 +239,8 @@ enum GAL_LAYER_ID: int
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
-    LAYER_WORKSHEET_PAGE1,      ///< for pageLayout editor previewing
-    LAYER_WORKSHEET_PAGEn,      ///< for pageLayout editor previewing
+    LAYER_DRAWINGSHEET_PAGE1,      ///< for drawingsheetEditor previewing
+    LAYER_DRAWINGSHEET_PAGEn,      ///< for drawingsheetEditor previewing
 
     /// Virtual layers for stacking zones and tracks on a given copper layer
     LAYER_ZONE_START,
@@ -361,7 +361,7 @@ enum SCH_LAYER_ID: int
     LAYER_BRIGHTENED,
     LAYER_HIDDEN,
     LAYER_SELECTION_SHADOWS,
-    LAYER_SCHEMATIC_WORKSHEET,
+    LAYER_SCHEMATIC_DRAWINGSHEET,
     LAYER_BUS_JUNCTION,
     LAYER_SCHEMATIC_AUX_ITEMS,
 
@@ -394,7 +394,7 @@ enum GERBVIEW_LAYER_ID: int
     LAYER_GERBVIEW_GRID,
     LAYER_GERBVIEW_AXES,
     LAYER_GERBVIEW_BACKGROUND,
-    LAYER_GERBVIEW_WORKSHEET,
+    LAYER_GERBVIEW_DRAWINGSHEET,
 
     GERBVIEW_LAYER_ID_END
 };

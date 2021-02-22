@@ -64,9 +64,9 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     setDefaultLayerDeps();
 
-    m_view->SetLayerVisible( LAYER_WORKSHEET, true );
-    m_view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, true );
-    m_view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, false );
+    m_view->SetLayerVisible( LAYER_DRAWINGSHEET, true );
+    m_view->SetLayerVisible( LAYER_DRAWINGSHEET_PAGE1, true );
+    m_view->SetLayerVisible( LAYER_DRAWINGSHEET_PAGEn, false );
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 }
@@ -101,7 +101,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 
     model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
 
-    // To show the formatted texts instead of raw texts in page layout editor, we need
+    // To show the formatted texts instead of raw texts in drawing sheet editor, we need
     // a dummy WS_DRAW_ITEM_LIST.
     WS_DRAW_ITEM_LIST dummy;
     dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
@@ -155,7 +155,7 @@ void PL_DRAW_PANEL_GAL::setDefaultLayerDeps()
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
 
-    m_view->SetLayerDisplayOnly( LAYER_WORKSHEET );
+    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET );
 
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY );

@@ -169,7 +169,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_DRC_ERROR );
         setVisibility( LAYER_DRC_EXCLUSION );
         setVisibility( LAYER_ANCHOR );
-        setVisibility( LAYER_WORKSHEET );
+        setVisibility( LAYER_DRAWINGSHEET );
         setVisibility( LAYER_GRID );
 
         // Keep certain items always enabled and just rely on either the finer or coarser

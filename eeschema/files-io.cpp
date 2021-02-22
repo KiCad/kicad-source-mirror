@@ -920,7 +920,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                     SCH_IO_MGR::FindPlugin( (SCH_IO_MGR::SCH_FILE_T) aFileType ) );
             Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
 
-            // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
+            // Eagle sheets do not use a drawing sheet frame by default, so set it to an empty one
             WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
             pglayout.SetEmptyLayout();
 

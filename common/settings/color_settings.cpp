@@ -65,53 +65,53 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     wxASSERT( s_defaultTheme.count( y ) ); \
     m_params.emplace_back( new COLOR_MAP_PARAM( x, y, s_defaultTheme.at( y ), &m_colors ) );
 
-    CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS  );
-    CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND );
-    CLR( "schematic.brightened",        LAYER_BRIGHTENED           );
-    CLR( "schematic.bus",               LAYER_BUS                  );
-    CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION         );
-    CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND    );
-    CLR( "schematic.component_outline", LAYER_DEVICE               );
-    CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR     );
-    CLR( "schematic.erc_error",         LAYER_ERC_ERR              );
-    CLR( "schematic.erc_warning",       LAYER_ERC_WARN             );
-    CLR( "schematic.fields",            LAYER_FIELDS               );
-    CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID       );
-    CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES  );
-    CLR( "schematic.hidden",            LAYER_HIDDEN               );
-    CLR( "schematic.junction",          LAYER_JUNCTION             );
-    CLR( "schematic.label_global",      LAYER_GLOBLABEL            );
-    CLR( "schematic.label_hier",        LAYER_HIERLABEL            );
-    CLR( "schematic.label_local",       LAYER_LOCLABEL             );
-    CLR( "schematic.net_name",          LAYER_NETNAM               );
-    CLR( "schematic.no_connect",        LAYER_NOCONNECT            );
-    CLR( "schematic.note",              LAYER_NOTES                );
-    CLR( "schematic.pin",               LAYER_PIN                  );
-    CLR( "schematic.pin_name",          LAYER_PINNAM               );
-    CLR( "schematic.pin_number",        LAYER_PINNUM               );
-    CLR( "schematic.reference",         LAYER_REFERENCEPART        );
+    CLR( "schematic.aux_items",         LAYER_SCHEMATIC_AUX_ITEMS    );
+    CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND   );
+    CLR( "schematic.brightened",        LAYER_BRIGHTENED             );
+    CLR( "schematic.bus",               LAYER_BUS                    );
+    CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION           );
+    CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND      );
+    CLR( "schematic.component_outline", LAYER_DEVICE                 );
+    CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR       );
+    CLR( "schematic.erc_error",         LAYER_ERC_ERR                );
+    CLR( "schematic.erc_warning",       LAYER_ERC_WARN               );
+    CLR( "schematic.fields",            LAYER_FIELDS                 );
+    CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID         );
+    CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES    );
+    CLR( "schematic.hidden",            LAYER_HIDDEN                 );
+    CLR( "schematic.junction",          LAYER_JUNCTION               );
+    CLR( "schematic.label_global",      LAYER_GLOBLABEL              );
+    CLR( "schematic.label_hier",        LAYER_HIERLABEL              );
+    CLR( "schematic.label_local",       LAYER_LOCLABEL               );
+    CLR( "schematic.net_name",          LAYER_NETNAM                 );
+    CLR( "schematic.no_connect",        LAYER_NOCONNECT              );
+    CLR( "schematic.note",              LAYER_NOTES                  );
+    CLR( "schematic.pin",               LAYER_PIN                    );
+    CLR( "schematic.pin_name",          LAYER_PINNAM                 );
+    CLR( "schematic.pin_number",        LAYER_PINNUM                 );
+    CLR( "schematic.reference",         LAYER_REFERENCEPART          );
     // Macs look better with a lighter shadow
 #ifdef __WXMAC__
-    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS );
+    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS      );
 #else
-    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS );
+    CLR( "schematic.shadow",            LAYER_SELECTION_SHADOWS      );
 #endif
-    CLR( "schematic.sheet",             LAYER_SHEET                );
-    CLR( "schematic.sheet_background",  LAYER_SHEET_BACKGROUND     );
-    CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME        );
-    CLR( "schematic.sheet_fields",      LAYER_SHEETFIELDS          );
-    CLR( "schematic.sheet_label",       LAYER_SHEETLABEL           );
-    CLR( "schematic.sheet_name",        LAYER_SHEETNAME            );
-    CLR( "schematic.value",             LAYER_VALUEPART            );
-    CLR( "schematic.wire",              LAYER_WIRE                 );
-    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_WORKSHEET  );
+    CLR( "schematic.sheet",             LAYER_SHEET                  );
+    CLR( "schematic.sheet_background",  LAYER_SHEET_BACKGROUND       );
+    CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME          );
+    CLR( "schematic.sheet_fields",      LAYER_SHEETFIELDS            );
+    CLR( "schematic.sheet_label",       LAYER_SHEETLABEL             );
+    CLR( "schematic.sheet_name",        LAYER_SHEETNAME              );
+    CLR( "schematic.value",             LAYER_VALUEPART              );
+    CLR( "schematic.wire",              LAYER_WIRE                   );
+    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_DRAWINGSHEET );
 
-    CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES        );
-    CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND  );
-    CLR( "gerbview.dcodes",             LAYER_DCODES               );
-    CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID        );
-    CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS     );
-    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_WORKSHEET   );
+    CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES          );
+    CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND    );
+    CLR( "gerbview.dcodes",             LAYER_DCODES                 );
+    CLR( "gerbview.grid",               LAYER_GERBVIEW_GRID          );
+    CLR( "gerbview.negative_objects",   LAYER_NEGATIVE_OBJECTS       );
+    CLR( "gerbview.worksheet",          LAYER_GERBVIEW_DRAWINGSHEET  );
 
     for( int i = 0, id = GERBVIEW_LAYER_ID_START;
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
@@ -142,7 +142,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "board.via_hole",                 LAYER_VIA_HOLES          );
     CLR( "board.via_micro",                LAYER_VIA_MICROVIA       );
     CLR( "board.via_through",              LAYER_VIA_THROUGH        );
-    CLR( "board.worksheet",                LAYER_WORKSHEET          );
+    CLR( "board.worksheet",                LAYER_DRAWINGSHEET   );
 
     CLR( "board.copper.f",      F_Cu    );
     CLR( "board.copper.in1",    In1_Cu  );

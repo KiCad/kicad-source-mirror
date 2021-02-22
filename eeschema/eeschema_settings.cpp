@@ -580,7 +580,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DSheetNameEx",       LAYER_SHEETNAME );
     migrateLegacyColor( "Color4DValueEx",           LAYER_VALUEPART );
     migrateLegacyColor( "Color4DWireEx",            LAYER_WIRE );
-    migrateLegacyColor( "Color4DWorksheetEx",       LAYER_SCHEMATIC_WORKSHEET );
+    migrateLegacyColor( "Color4DWorksheetEx",       LAYER_SCHEMATIC_DRAWINGSHEET );
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "schematic" );
 

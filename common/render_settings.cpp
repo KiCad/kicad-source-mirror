@@ -31,18 +31,18 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
         m_printDC( nullptr )
 {
     // Set the default initial values
-    m_activeLayer        = F_Cu;
-    m_highlightFactor    = 0.5f;
-    m_selectFactor       = 0.5f;
-    m_highlightEnabled   = false;
-    m_hiContrastEnabled  = false;
-    m_hiContrastFactor   = 0.2f; //TODO: Make this user-configurable
-    m_outlineWidth       = 1;
-    m_worksheetLineWidth = 100000;
-    m_defaultPenWidth    = 0;
-    m_minPenWidth        = 0;
-    m_showPageLimits     = false;
-    m_isPrinting         = false;
+    m_activeLayer           = F_Cu;
+    m_highlightFactor       = 0.5f;
+    m_selectFactor          = 0.5f;
+    m_highlightEnabled      = false;
+    m_hiContrastEnabled     = false;
+    m_hiContrastFactor      = 0.2f; //TODO: Make this user-configurable
+    m_outlineWidth          = 1;
+    m_drawingSheetLineWidth = 100000;
+    m_defaultPenWidth       = 0;
+    m_minPenWidth           = 0;
+    m_showPageLimits        = false;
+    m_isPrinting            = false;
 }
 
 

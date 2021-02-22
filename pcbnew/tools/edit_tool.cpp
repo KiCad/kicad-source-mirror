@@ -1234,12 +1234,12 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Notify other tools of the changes
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     }
-    else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_WORKSHEET ) )
+    else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_DRAWINGSHEET ) )
     {
         KIGFX::WS_PROXY_VIEW_ITEM* worksheet = editFrame->GetCanvas()->GetWorksheet();
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
 
-        if( worksheet && worksheet->HitTestWorksheetItems( getView(), (wxPoint) cursorPos ) )
+        if( worksheet && worksheet->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
             m_toolMgr->RunAction( ACTIONS::pageSettings );
     }
 

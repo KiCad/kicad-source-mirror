@@ -132,7 +132,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     B_Fab, ZONE_LAYER_FOR( B_Fab ),
 
     LAYER_MOD_TEXT_BK,
-    LAYER_WORKSHEET
+    LAYER_DRAWINGSHEET
 };
 
 
@@ -231,7 +231,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
 }
 
 
-void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+void PCB_DRAW_PANEL_GAL::SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 {
     m_worksheet.reset( aWorksheet );
     m_view->Add( m_worksheet.get() );
@@ -535,7 +535,7 @@ void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
 
 BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
-    if( m_worksheet && m_view->IsLayerVisible( LAYER_WORKSHEET ) )
+    if( m_worksheet && m_view->IsLayerVisible( LAYER_DRAWINGSHEET ) )
         return m_worksheet->ViewBBox();
 
     return BOX2I();
@@ -617,8 +617,8 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_MARKER_SHADOWS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_MARKER_SHADOWS );
 
-    m_view->SetLayerTarget( LAYER_WORKSHEET, KIGFX::TARGET_NONCACHED );
-    m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
+    m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;
     m_view->SetLayerDisplayOnly( LAYER_GRID );
 }
 

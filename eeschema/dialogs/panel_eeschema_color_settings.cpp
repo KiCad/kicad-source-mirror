@@ -245,7 +245,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetWidthMils( 6000 );
 
     m_ws = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
-    m_ws->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
+    m_ws->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     view->Add( m_ws );
 
     // NOTE: It would be nice to parse a schematic file here.

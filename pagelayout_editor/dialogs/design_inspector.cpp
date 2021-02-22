@@ -344,7 +344,7 @@ void DIALOG_INSPECTOR::onCellClicked( wxGridEvent& event )
     if( !item )     // only WS_DATA_ITEM are returned.
         return;
 
-    // Select this item in page layout editor, and update the properties panel:
+    // Select this item in drawing sheet editor, and update the properties panel:
     PL_SELECTION_TOOL*  selectionTool = m_editorFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
     selectionTool->ClearSelection();
     EDA_ITEM* draw_item = item->GetDrawItems()[0];

@@ -71,16 +71,16 @@ void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 
     if( !dataItem )     // No peer: this item is like a WS_DRAW_ITEM_PAGE
     {
-        aLayers[0] = LAYER_WORKSHEET;
+        aLayers[0] = LAYER_DRAWINGSHEET;
         return;
     }
 
     if( dataItem->GetPage1Option() == FIRST_PAGE_ONLY )
-        aLayers[0] = LAYER_WORKSHEET_PAGE1;
+        aLayers[0] = LAYER_DRAWINGSHEET_PAGE1;
     else if( dataItem->GetPage1Option() == SUBSEQUENT_PAGES )
-        aLayers[0] = LAYER_WORKSHEET_PAGEn;
+        aLayers[0] = LAYER_DRAWINGSHEET_PAGEn;
     else
-        aLayers[0] = LAYER_WORKSHEET;
+        aLayers[0] = LAYER_DRAWINGSHEET;
 }
 
 
@@ -104,8 +104,8 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
     wxString      msg;
     WS_DATA_ITEM* dataItem = GetPeer();
 
-    if( dataItem == nullptr )   // Is only a pure graphic item used in page layout editor
-                                // to handle the page limits
+    if( dataItem == nullptr )   // Is only a pure graphic item used in drawing sheet editor to
+                                // handle the page limits
         return;
 
     switch( dataItem->GetType() )
@@ -161,7 +161,7 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
 
 void WS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_WORKSHEET ), FILLED );
+    Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_DRAWINGSHEET ), FILLED );
 }
 
 
@@ -200,7 +200,7 @@ void WS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
 void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     std::vector<wxPoint> points_moved;
@@ -304,7 +304,7 @@ wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 void WS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     GRRect( nullptr, DC, GetStart().x + aOffset.x, GetStart().y + aOffset.y,
@@ -363,7 +363,7 @@ bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
         return sel.Contains( GetBoundingBox() );
 
     // For greedy we need to check each side of the rect as we're pretty much always inside the
-    // rect which defines the worksheet frame.
+    // rect which defines the drawing sheet frame.
     EDA_RECT side = GetBoundingBox();
     side.SetHeight( 0 );
 
@@ -403,7 +403,7 @@ wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 void WS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    COLOR4D color = aSettings->GetLayerColor( LAYER_DRAWINGSHEET );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     GRLine( nullptr, DC, GetStart() + aOffset, GetEnd() + aOffset, penWidth, color );
@@ -496,8 +496,8 @@ const EDA_RECT WS_DRAW_ITEM_PAGE::GetBoundingBox() const
 
 // ====================== WS_DRAW_ITEM_LIST ==============================
 
-void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
-                                                   const TITLE_BLOCK& aTitleBlock )
+void WS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
+                                            const TITLE_BLOCK& aTitleBlock )
 {
     WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
 
@@ -523,7 +523,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
 }
 
 
-/* Print the item list created by BuildWorkSheetGraphicList
+/* Print the item list created by BuildDrawItemsList
  * aDC = the current Device Context
  * The not selected items are drawn first (most of items)
  * The selected items are drawn after (usually 0 or 1)

@@ -118,8 +118,8 @@ void SCH_PREVIEW_PANEL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY , KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
 
-    m_view->SetLayerTarget( LAYER_WORKSHEET , KIGFX::TARGET_NONCACHED );
-    m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
+    m_view->SetLayerTarget( LAYER_DRAWINGSHEET , KIGFX::TARGET_NONCACHED );
+    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;
 }
 
 

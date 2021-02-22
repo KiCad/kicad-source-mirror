@@ -1333,12 +1333,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
     {
-        if( getView()->IsLayerVisible( LAYER_SCHEMATIC_WORKSHEET ) )
+        if( getView()->IsLayerVisible( LAYER_SCHEMATIC_DRAWINGSHEET ) )
         {
-            KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_frame->GetCanvas()->GetView()->GetWorksheet();
-            VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+            KIGFX::WS_PROXY_VIEW_ITEM* ds = m_frame->GetCanvas()->GetView()->GetDrawingSheet();
+            VECTOR2D                   cursorPos = getViewControls()->GetCursorPosition( false );
 
-            if( worksheet && worksheet->HitTestWorksheetItems( getView(), (wxPoint) cursorPos ) )
+            if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
                 m_toolMgr->RunAction( ACTIONS::pageSettings );
         }
 

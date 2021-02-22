@@ -28,7 +28,7 @@
 #include <id.h>
 
 /**
- * Page layout editor IDs.
+ * Drawing sheet editor IDs.
  */
 
 enum pl_editor_ids

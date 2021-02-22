@@ -396,7 +396,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
     aBoard->SetProject( &Prj() );
     aBoard->GetConnectivity()->Build( aBoard );
 
-    // reload the worksheet
+    // reload the drawing sheet
     SetPageSettings( aBoard->GetPageSettings() );
 }
 
@@ -411,25 +411,25 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
-    // Prepare worksheet template
-    KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
-    worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &m_pcb->GetPageSettings(),
-                                               m_pcb->GetProject(), &m_pcb->GetTitleBlock() );
-    worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+    // Prepare drawingSheet template
+    KIGFX::WS_PROXY_VIEW_ITEM* drawingSheet;
+    drawingSheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &m_pcb->GetPageSettings(),
+                                                  m_pcb->GetProject(), &m_pcb->GetTitleBlock() );
+    drawingSheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
     BASE_SCREEN* screen = GetScreen();
 
     if( screen != NULL )
     {
-        worksheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
-        worksheet->SetSheetCount( screen->GetPageCount() );
+        drawingSheet->SetPageNumber(TO_UTF8( screen->GetPageNumber() ) );
+        drawingSheet->SetSheetCount( screen->GetPageCount() );
     }
 
-    if( auto board = GetBoard() )
-        worksheet->SetFileName(  TO_UTF8( board->GetFileName() ) );
+    if( BOARD* board = GetBoard() )
+        drawingSheet->SetFileName( TO_UTF8( board->GetFileName() ) );
 
-    // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
-    GetCanvas()->SetWorksheet( worksheet );
+    // PCB_DRAW_PANEL_GAL takes ownership of the drawing sheet
+    GetCanvas()->SetDrawingSheet( drawingSheet );
 }
 
 

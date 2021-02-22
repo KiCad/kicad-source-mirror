@@ -117,7 +117,7 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
             item = new WS_DRAW_ITEM_RECT( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
         else
         {
-            wxFAIL_MSG( "Unknown worksheet draw item type" );
+            wxFAIL_MSG( "Unknown drawing sheet item type" );
             continue;
         }
 

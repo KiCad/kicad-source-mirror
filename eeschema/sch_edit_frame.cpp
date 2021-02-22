@@ -1071,7 +1071,7 @@ void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 
     aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aSettings );
-    PrintWorkSheet( aSettings, GetScreen(), IU_PER_MILS, fileName );
+    PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, fileName );
 }
 
 
@@ -1466,9 +1466,9 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
     }
     else
     {
-        // Get current worksheet in a form we can compare to an EDA_ITEM
-        KIGFX::WS_PROXY_VIEW_ITEM* currWs = SCH_BASE_FRAME::GetCanvas()->GetView()->GetWorksheet();
-        EDA_ITEM*                  currWsAsItem = static_cast<EDA_ITEM*>( currWs );
+        // Get current drawing sheet in a form we can compare to an EDA_ITEM
+        KIGFX::WS_PROXY_VIEW_ITEM* ds = SCH_BASE_FRAME::GetCanvas()->GetView()->GetDrawingSheet();
+        EDA_ITEM*                  dsAsItem = static_cast<EDA_ITEM*>( ds );
 
         // Need an EDA_RECT so the first ".Merge" sees it's uninitialized
         EDA_RECT bBoxItems;
@@ -1476,7 +1476,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
         // Calc the bounding box of all items on screen except the page border
         for( EDA_ITEM* item : GetScreen()->Items() )
         {
-            if( item != currWsAsItem ) // Ignore the worksheet itself
+            if( item != dsAsItem ) // Ignore the worksheet itself
             {
                 if( item->Type() == SCH_COMPONENT_T )
                 {

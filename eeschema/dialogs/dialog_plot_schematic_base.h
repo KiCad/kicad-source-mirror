@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,7 +51,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxRadioBox* m_plotFormatOpt;
 		wxStaticText* m_staticText4;
 		wxChoice* m_paperSizeOption;
-		wxCheckBox* m_PlotFrameRefOpt;
+		wxCheckBox* m_plotDrawingSheet;
 		wxChoice* m_ModeColorOption;
 		wxCheckBox* m_plotBackgroundColor;
 		wxStaticText* m_staticText9;

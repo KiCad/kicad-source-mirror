@@ -159,7 +159,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
-void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
     WS_DRAW_ITEM_LIST wsItems;
 
@@ -169,7 +169,7 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
         return str.Matches( wxT( "*${*}*" ) );
     };
 
-    if( aWorksheet )
+    if( aDrawingSheet )
     {
         wsItems.SetMilsToIUfactor( IU_PER_MILS );
         wsItems.SetPageNumber( "1" );
@@ -178,7 +178,7 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
         wsItems.SetSheetName( "dummySheet" );
         wsItems.SetSheetLayer( "dummyLayer" );
         wsItems.SetProject( &m_schematic->Prj() );
-        wsItems.BuildWorkSheetGraphicList( aWorksheet->GetPageInfo(), aWorksheet->GetTitleBlock() );
+        wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock());
     }
 
     SCH_SHEET_PATH  savedCurrentSheet = m_schematic->CurrentSheet();
@@ -259,7 +259,7 @@ void ERC_TESTER::TestTextVars( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
-                    ercItem->SetErrorMessage( _( "Unresolved text variable in worksheet." ) );
+                    ercItem->SetErrorMessage( _( "Unresolved text variable in drawing sheet." ) );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
                     screen->Append( marker );

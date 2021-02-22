@@ -97,12 +97,12 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
              // text                 id                         color     tooltip                 checked
-        RR( _( "DCodes" ),           LAYER_DCODES,              WHITE,    _( "Show DCodes identification" ) ),
-        RR( _( "Negative Objects" ), LAYER_NEGATIVE_OBJECTS,    DARKGRAY, _( "Show negative objects in this color" ) ),
+        RR( _( "DCodes" ),           LAYER_DCODES,                WHITE,    _( "Show DCodes identification" ) ),
+        RR( _( "Negative Objects" ), LAYER_NEGATIVE_OBJECTS,      DARKGRAY, _( "Show negative objects in this color" ) ),
         RR(),
-        RR( _( "Grid" ),             LAYER_GERBVIEW_GRID,       WHITE,    _( "Show the (x,y) grid dots" ) ),
-        RR( _( "Worksheet" ),        LAYER_GERBVIEW_WORKSHEET,  DARKRED,  _( "Show worksheet") ),
-        RR( _( "Background" ),       LAYER_GERBVIEW_BACKGROUND, BLACK,    _( "PCB Background" ), true, false )
+        RR( _( "Grid" ),             LAYER_GERBVIEW_GRID,         WHITE,    _( "Show the (x,y) grid dots" ) ),
+        RR( _( "Drawing Sheet" ),    LAYER_GERBVIEW_DRAWINGSHEET, DARKRED,  _( "Show drawing sheet border and title block") ),
+        RR( _( "Background" ),       LAYER_GERBVIEW_BACKGROUND,   BLACK,    _( "PCB Background" ), true, false )
     };
 
     for( unsigned row=0;  row<arrayDim(renderRows);  ++row )

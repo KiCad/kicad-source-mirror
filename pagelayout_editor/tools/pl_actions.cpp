@@ -70,8 +70,8 @@ TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveMove.move",
 
 TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
         AS_GLOBAL, 0, "",
-        _( "Append Existing Page Layout File..." ),
-        _( "Append an existing page layout design file to current file" ),
+        _( "Append Existing Drawing Sheet..." ),
+        _( "Append an existing drawing sheet file to current file" ),
         import_xpm, AF_ACTIVATE );
 
 

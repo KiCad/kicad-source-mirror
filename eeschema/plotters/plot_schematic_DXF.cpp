@@ -38,11 +38,10 @@
 #include <wx_html_report_panel.h>
 
 
-void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef,
+void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotDrawingSheet,
                                            RENDER_SETTINGS*  aRenderSettings )
 {
     SCH_EDIT_FRAME* schframe  = m_parent;
-    SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
 
     /* When printing all pages, the printed page is not the current page.
@@ -70,10 +69,10 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef,
         schframe->SetCurrentSheet( sheetList[i] );
         schframe->GetCurrentSheet().UpdateAllScreenReferences();
         schframe->SetSheetNumberAndCount();
-        screen = schframe->GetCurrentSheet().LastScreen();
 
-        wxPoint plot_offset;
-        wxString msg;
+        SCH_SCREEN* screen = schframe->GetCurrentSheet().LastScreen();
+        wxPoint     plot_offset;
+        wxString    msg;
 
         try
         {
@@ -87,7 +86,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef,
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
             if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, aRenderSettings,
-                                 plot_offset, 1.0, aPlotFrameRef ) )
+                                 plot_offset, 1.0, aPlotDrawingSheet ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -149,12 +148,12 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&  aFileName,
 
     if( aPlotFrameRef )
     {
-        PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
-                       aScreen->GetPageNumber(), aScreen->GetPageCount(),
-                       m_parent->GetScreenDesc(), aScreen->GetFileName(),
-                       plotter->GetColorMode() ?
-                       plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
+        PlotDrawingSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
+                          aScreen->GetPageNumber(), aScreen->GetPageCount(),
+                          m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                          plotter->GetColorMode() ?
+                          plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) :
+                          COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( plotter );

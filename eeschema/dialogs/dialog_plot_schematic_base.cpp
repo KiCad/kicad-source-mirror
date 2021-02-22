@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_plotFormatOptChoices[] = { _("PostScript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
+	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 2 );
@@ -62,11 +62,11 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_paperSizeOption->SetSelection( 0 );
 	gbSizer1->Add( m_paperSizeOption, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_PlotFrameRefOpt = new wxCheckBox( sbOptions->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PlotFrameRefOpt->SetValue(true);
-	m_PlotFrameRefOpt->SetToolTip( _("Print the frame references.") );
+	m_plotDrawingSheet = new wxCheckBox( sbOptions->GetStaticBox(), wxID_ANY, _("Plot drawing sheet"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotDrawingSheet->SetValue(true);
+	m_plotDrawingSheet->SetToolTip( _("Plot the drawing sheet border and title block") );
 
-	gbSizer1->Add( m_PlotFrameRefOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
+	gbSizer1->Add( m_plotDrawingSheet, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
 	wxStaticText* bOutputModeLabel;
 	bOutputModeLabel = new wxStaticText( sbOptions->GetStaticBox(), wxID_ANY, _("Output mode:"), wxDefaultPosition, wxDefaultSize, 0 );

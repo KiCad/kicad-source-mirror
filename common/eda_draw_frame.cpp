@@ -849,16 +849,16 @@ void PrintPageLayout( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageIn
     drawList.SetProject( aProject );
     drawList.SetIsFirstPage( aIsFirstPage );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
+    drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
     // Draw item list
     drawList.Print( aSettings );
 }
 
 
-void EDA_DRAW_FRAME::PrintWorkSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
-                                     double aMils2Iu, const wxString &aFilename,
-                                     const wxString &aSheetLayer )
+void EDA_DRAW_FRAME::PrintDrawingSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
+                                        double aMils2Iu, const wxString &aFilename,
+                                        const wxString &aSheetLayer )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -893,7 +893,8 @@ wxString EDA_DRAW_FRAME::GetScreenDesc() const
 
 bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
                                          const wxString& wildcard, const wxString& ext,
-                                         bool isDirectory, bool aIsGlobal, const wxString& aGlobalPath )
+                                         bool isDirectory, bool aIsGlobal,
+                                         const wxString& aGlobalPath )
 {
     wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );

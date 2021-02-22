@@ -74,7 +74,7 @@ public:
      * In KiCad applications, a page layout description is needed
      * So if the list is empty, a default description is loaded,
      * the first time a page layout is drawn.
-     * However, in page layout editor, an empty list is acceptable.
+     * However, in drawing sheet editor an empty list is acceptable.
      * AllowVoidList allows or not the empty list
      */
     void AllowVoidList( bool Allow ) { m_allowVoidList = Allow; }
@@ -197,7 +197,7 @@ public:
     double m_DefaultLineWidth;      // Used when object line width is 0
     DSIZE  m_DefaultTextSize;       // Used when object text size is 0
     double m_DefaultTextThickness;  // Used when object text stroke width is 0
-    bool   m_EditMode;              // Used in page layout editor to toggle variable substation
+    bool   m_EditMode;              // Used in drawing sheet editor to toggle variable substitution
                                     // In normal mode (m_EditMode = false) the %format is
                                     // replaced by the corresponding text.
                                     // In edit mode (m_EditMode = true) the %format is
@@ -206,8 +206,8 @@ public:
 private:
     std::vector <WS_DATA_ITEM*> m_list;
     bool   m_allowVoidList;         // If false, the default page layout will be loaded the
-                                    // first time WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
-                                    // is run (useful mainly for page layout editor)
+                                    // first time WS_DRAW_ITEM_LIST::BuildDrawItemsList
+                                    // is run (useful mainly for drawing sheet editor)
     double m_leftMargin;            // the left page margin in mm
     double m_rightMargin;           // the right page margin in mm
     double m_topMargin;             // the top page margin in mm

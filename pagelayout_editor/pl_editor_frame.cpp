@@ -93,7 +93,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
-    m_aboutTitle = _( "KiCad Worksheet Editor" );
+    m_aboutTitle = _( "KiCad Drawing Sheet Editor" );
 
     // Give an icon
     wxIcon icon;
@@ -386,8 +386,8 @@ void PL_EDITOR_FRAME::doCloseWindow()
 void PL_EDITOR_FRAME::OnSelectPage( wxCommandEvent& event )
 {
     KIGFX::VIEW* view = GetCanvas()->GetView();
-    view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
-    view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
+    view->SetLayerVisible( LAYER_DRAWINGSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
+    view->SetLayerVisible( LAYER_DRAWINGSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
     GetCanvas()->Refresh();
 }
 
@@ -461,7 +461,7 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new wxPanel( book ), _( "Worksheet Editor" ) );
+    book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
     book->AddSubPage( new PANEL_GAL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_PL_EDITOR_COLOR_SETTINGS( this, aParent->GetTreebook() ), _( "Colors" ) );
 
@@ -529,7 +529,7 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
     wxString title;
     wxFileName file( GetCurrentFileName() );
 
-    title.Printf( wxT( "%s \u2014 " ) + _( "Worksheet Editor" ),
+    title.Printf( wxT( "%s \u2014 " ) + _( "Drawing Sheet Editor" ),
                   file.IsOk() ? file.GetName() : _( "no file selected" ) );
     SetTitle( title );
 }
@@ -761,7 +761,7 @@ void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
         }
     }
 
-    PrintWorkSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
+    PrintDrawingSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
 
     GetCanvas()->DisplayWorksheet();
     GetCanvas()->Refresh();

@@ -317,7 +317,7 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
-    SetElementVisibility( LAYER_GERBVIEW_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
+    SetElementVisibility( LAYER_GERBVIEW_DRAWINGSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     pageInfo.SetType( cfg->m_Appearance.page_type );
@@ -405,11 +405,11 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
         break;
     }
 
-    case LAYER_GERBVIEW_WORKSHEET:
+    case LAYER_GERBVIEW_DRAWINGSHEET:
         m_showBorderAndTitleBlock = aNewState;
-        // NOTE: LAYER_WORKSHEET always used for visibility, but the layer manager passes
-        // LAYER_GERBVIEW_WORKSHEET because of independent color control
-        GetCanvas()->GetView()->SetLayerVisible( LAYER_WORKSHEET, aNewState );
+        // NOTE: LAYER_DRAWINGSHEET always used for visibility, but the layer manager passes
+        // LAYER_GERBVIEW_DRAWINGSHEET because of independent color control
+        GetCanvas()->GetView()->SetLayerVisible( LAYER_DRAWINGSHEET, aNewState );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -653,11 +653,11 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
 {
     switch( aLayerID )
     {
-    case LAYER_DCODES:              return m_DisplayOptions.m_DisplayDCodes;
-    case LAYER_NEGATIVE_OBJECTS:    return m_DisplayOptions.m_DisplayNegativeObjects;
-    case LAYER_GERBVIEW_GRID:       return IsGridVisible();
-    case LAYER_GERBVIEW_WORKSHEET:  return m_showBorderAndTitleBlock;
-    case LAYER_GERBVIEW_BACKGROUND: return true;
+    case LAYER_DCODES:                return m_DisplayOptions.m_DisplayDCodes;
+    case LAYER_NEGATIVE_OBJECTS:      return m_DisplayOptions.m_DisplayNegativeObjects;
+    case LAYER_GERBVIEW_GRID:         return IsGridVisible();
+    case LAYER_GERBVIEW_DRAWINGSHEET: return m_showBorderAndTitleBlock;
+    case LAYER_GERBVIEW_BACKGROUND:   return true;
 
     default:
         wxFAIL_MSG( wxString::Format( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d", aLayerID ) );
@@ -712,7 +712,7 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-    case LAYER_GERBVIEW_WORKSHEET:
+    case LAYER_GERBVIEW_DRAWINGSHEET:
     case LAYER_GERBVIEW_BACKGROUND:
         color = settings->GetColor( aLayerID );
         break;
@@ -748,12 +748,12 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
         settings->SetColor( aLayerID, aColor );
         break;
 
-    case LAYER_GERBVIEW_WORKSHEET:
-        settings->SetColor( LAYER_GERBVIEW_WORKSHEET, aColor );
-        // LAYER_WORKSHEET color is also used to draw the worksheet
-        // FIX ME: why LAYER_WORKSHEET must be set, although LAYER_GERBVIEW_WORKSHEET
+    case LAYER_GERBVIEW_DRAWINGSHEET:
+        settings->SetColor( LAYER_GERBVIEW_DRAWINGSHEET, aColor );
+        // LAYER_DRAWINGSHEET color is also used to draw the worksheet
+        // FIX ME: why LAYER_DRAWINGSHEET must be set, although LAYER_GERBVIEW_DRAWINGSHEET
         // is used to initialize the worksheet color layer.
-        settings->SetColor( LAYER_WORKSHEET, aColor );
+        settings->SetColor( LAYER_DRAWINGSHEET, aColor );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -831,10 +831,10 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
         worksheet->SetSheetCount( 1 );
     }
 
-    worksheet->SetColorLayer( LAYER_GERBVIEW_WORKSHEET );
+    worksheet->SetColorLayer( LAYER_GERBVIEW_DRAWINGSHEET );
 
     // Draw panel takes ownership of the worksheet
-    drawPanel->SetWorksheet( worksheet );
+    drawPanel->SetDrawingSheet( worksheet );
 }
 
 

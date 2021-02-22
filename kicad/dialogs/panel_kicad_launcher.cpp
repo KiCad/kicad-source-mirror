@@ -88,8 +88,17 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             int row = m_toolsSizer->GetRows();
 
             m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, CELL_MARGINS );
+#ifdef __WXGTK__
+            // Due to https://trac.wxwidgets.org/ticket/16088?cversion=0&cnum_hist=7 GTK fails to
+            // correctly set the BestSize of non-default-size text so we need to make sure that the
+            // BestSize isn't needed.
+            // However, another bug on OSX causes this to make the text top-aligned, so we have to
+            // do it only on GTK.  Sigh.
             m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxEXPAND, 0 );
-            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP|wxEXPAND, 0 );
+#else
+            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM, 0 );
+#endif
+            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP, 0 );
         };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ),
@@ -115,9 +124,10 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                  KiScaledBitmap( icon_pcbcalculator_xpm, this ),
                  _( "Show tools for calculating resistance, current capacity, etc." ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editWorksheet,
+    addLauncher( KICAD_MANAGER_ACTIONS::editDrawingSheet,
                  KiScaledBitmap( icon_pagelayout_editor_xpm, this ),
-                 _( "Edit worksheet borders and title blocks for use in schematics and PCB designs" ) );
+                 _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
+                    "designs" ) );
 
     if( m_toolsSizer->IsColGrowable( 1 ) )
         m_toolsSizer->RemoveGrowableCol( 1 );

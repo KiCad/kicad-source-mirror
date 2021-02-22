@@ -99,10 +99,10 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator
         _( "Calculator Tools" ), _( "Run component calculations, track width calculations, etc." ),
         icon_pcbcalculator_24_xpm );
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::editWorksheet( "kicad.Control.editWorksheet",
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editDrawingSheet( "kicad.Control.editDrawingSheet",
         AS_GLOBAL,
         MD_CTRL + 'Y', LEGACY_HK_NAME( "Run PlEditor" ),
-        _( "Worksheet Editor" ), _( "Edit worksheet graphics and text" ),
+        _( "Drawing Sheet Editor" ), _( "Edit drawing sheet borders and title block" ),
         icon_pagelayout_editor_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( "kicad.Control.openTextEditor",

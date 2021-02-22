@@ -32,7 +32,7 @@ class PL_EDITOR_FRAME;
 
 
 /**
- * Handle actions specific to the page layout editor.
+ * Handle actions specific to the drawing sheet editor.
  */
 class PL_EDITOR_CONTROL : public wxEvtHandler, public TOOL_INTERACTIVE
 {

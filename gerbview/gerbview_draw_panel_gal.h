@@ -58,22 +58,22 @@ public:
     /**
      * Set or update worksheet used by the draw panel.
      *
-     * @param aWorksheet is the worksheet to be used.
+     * @param aDrawingSheet is the worksheet to be used.
      *        The object is then owned by GERBVIEW_DRAW_PANEL_GAL.
      */
-    void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
+    void SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
      * @return the current worksheet
      */
-    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
+    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_drawingSheet.get(); }
 
 protected:
     ///< Set rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
     ///< Currently used worksheet
-    std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_worksheet;
+    std::unique_ptr<KIGFX::WS_PROXY_VIEW_ITEM> m_drawingSheet;
 };
 
 

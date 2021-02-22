@@ -167,7 +167,7 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_GRID );
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_AXES );
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_BACKGROUND );
-    m_view->SetLayerDisplayOnly( LAYER_WORKSHEET );
+    m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET );
 
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY );
@@ -177,10 +177,10 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
 }
 
 
-void GERBVIEW_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
+void GERBVIEW_DRAW_PANEL_GAL::SetDrawingSheet( KIGFX::WS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
-    m_worksheet.reset( aWorksheet );
-    m_view->Add( m_worksheet.get() );
+    m_drawingSheet.reset( aDrawingSheet );
+    m_view->Add( m_drawingSheet.get() );
 }
 
 
@@ -209,10 +209,9 @@ void GERBVIEW_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
 BOX2I GERBVIEW_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
-    // Even in Gervbview, this is the LAYER_WORKSHEET that controls the visibility
-    // of the worksheet
-    if( m_worksheet && m_view->IsLayerVisible( LAYER_WORKSHEET ) )
-        return m_worksheet->ViewBBox();
+    // Even in Gervbview, LAYER_DRAWINGSHEET controls the visibility of the drawingsheet
+    if( m_drawingSheet && m_view->IsLayerVisible( LAYER_DRAWINGSHEET ) )
+        return m_drawingSheet->ViewBBox();
 
     return BOX2I();
 }

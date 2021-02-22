@@ -210,7 +210,7 @@ protected:
 public:
     wxString       m_Name;                  // a item name used in page layout
                                             // editor to identify items
-    wxString       m_Info;                  // a comment, only useful in page layout editor
+    wxString       m_Info;                  // a comment, only useful in drawing sheet editor
     POINT_COORD    m_Pos;
     POINT_COORD    m_End;
     double         m_LineWidth;

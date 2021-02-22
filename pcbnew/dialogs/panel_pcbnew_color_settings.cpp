@@ -514,8 +514,8 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
 
     auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr,
                                                     m_titleBlock );
-    worksheet->SetColorLayer( LAYER_WORKSHEET );
-    m_preview->SetWorksheet( worksheet );
+    worksheet->SetColorLayer( LAYER_DRAWINGSHEET );
+    m_preview->SetDrawingSheet( worksheet );
 
     zoomFitPreview();
 }

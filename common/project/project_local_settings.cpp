@@ -266,7 +266,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         { 26, 36 },    // LAYER_DRC_WARNING
                         { 27, 37 },    // LAYER_DRC_EXCLUSION
                         { 28, 38 },    // LAYER_MARKER_SHADOWS
-                        { 29, 24 },    // LAYER_WORKSHEET
+                        { 29, 24 },    // LAYER_DRAWINGSHEET
                         { 30, 25 },    // LAYER_GP_OVERLAY
                         { 31, 26 },    // LAYER_SELECT_OVERLAY
                         { 32, 27 },    // LAYER_PCB_BACKGROUND

@@ -115,7 +115,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_APPEND_DESCR_FILE:
     {
-         wxFileDialog openFileDialog( this, _( "Append Existing Page Layout File" ),
+         wxFileDialog openFileDialog( this, _( "Append Existing Drawing Sheet" ),
                                       wxEmptyString, wxEmptyString,
                                       PageLayoutDescrFileWildcard(), wxFD_OPEN );
 

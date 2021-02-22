@@ -117,7 +117,7 @@
 
 
 // height of the band reference grid  2.0 mm
-// worksheet frame reference text size 1.3 mm
+// drawing sheet frame reference text size 1.3 mm
 // default text size 1.5 mm
 // default line width 0.15 mm
 // frame ref pitch 50 mm

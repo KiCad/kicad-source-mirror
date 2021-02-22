@@ -93,7 +93,7 @@ public:
     NETLIST* GetSchematicNetlist() const { return m_schematicNetlist; }
 
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet ) { m_worksheet = aWorksheet; }
-    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet; }
+    KIGFX::WS_PROXY_VIEW_ITEM* GetDrawingSheet() const { return m_worksheet; }
 
     void SetDebugOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay ) { m_debugOverlay = aOverlay; }
     std::shared_ptr<KIGFX::VIEW_OVERLAY> GetDebugOverlay() const { return m_debugOverlay; }

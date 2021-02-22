@@ -42,7 +42,7 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
-void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
+void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotDrawingSheet,
                                            RENDER_SETTINGS* aRenderSettings )
 {
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
@@ -131,7 +131,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
             plotter->StartPage();
         }
 
-        plotOneSheetPDF( plotter, screen, aPlotFrameRef );
+        plotOneSheetPDF( plotter, screen, aPlotDrawingSheet );
     }
 
     // Everything done, close the plot and restore the environment
@@ -156,7 +156,7 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
 
 
 void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
-                                             bool aPlotWorksheet )
+                                             bool aPlotDrawingSheet )
 {
     if( m_plotBackgroundColor->GetValue() )
     {
@@ -166,17 +166,17 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScr
         aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
     }
 
-    if( aPlotWorksheet )
+    if( aPlotDrawingSheet )
     {
         COLOR4D color = COLOR4D::BLACK;
 
         if( aPlotter->GetColorMode() )
-            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET );
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
 
-        PlotWorkSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(), aScreen->GetPageNumber(),
-                       aScreen->GetPageCount(), m_parent->GetScreenDesc(), aScreen->GetFileName(),
-                       color, aScreen->GetVirtualPageNumber() == 1 );
+        PlotDrawingSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
+                          m_parent->GetPageSettings(), aScreen->GetPageNumber(),
+                          aScreen->GetPageCount(), m_parent->GetScreenDesc(),
+                          aScreen->GetFileName(), color, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( aPlotter );

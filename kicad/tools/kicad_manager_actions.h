@@ -48,7 +48,7 @@ public:
     static TOOL_ACTION viewGerbers;
     static TOOL_ACTION convertImage;
     static TOOL_ACTION showCalculator;
-    static TOOL_ACTION editWorksheet;
+    static TOOL_ACTION editDrawingSheet;
     static TOOL_ACTION openTextEditor;
 
     static TOOL_ACTION editOtherSch;
