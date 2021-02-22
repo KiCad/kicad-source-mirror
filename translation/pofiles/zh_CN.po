@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-18 14:23+0000\n"
+"PO-Revision-Date: 2021-02-22 16:44+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -356,7 +356,7 @@ msgstr "重置为默认值"
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Preferences..."
-msgstr "首选项..."
+msgstr "偏好设置..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:212 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:269
@@ -365,7 +365,7 @@ msgstr "首选项..."
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:233
 #: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Show preferences for all open tools"
-msgstr "显示所有打开工具的首选项"
+msgstr "显示所有打开工具的偏好设置"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:219 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:285
@@ -397,7 +397,7 @@ msgstr "视图 (&V)"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:180
 msgid "&Preferences"
-msgstr "首选项 (&P)"
+msgstr "偏好设置 (&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
@@ -3606,7 +3606,7 @@ msgstr "没有找到文件 \"%s\"。"
 
 #: common/eda_base_frame.cpp:867
 msgid "Preferences"
-msgstr "首选项"
+msgstr "偏好设置"
 
 #: common/eda_base_frame.cpp:870 common/hotkey_store.cpp:65
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
@@ -3724,12 +3724,11 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
-"KiCad 可以使用您的显卡为您提供更流畅、更快速的体验。默认情况下，此选项处于关"
-"闭状态，因为不是所有计算机都兼容该选项。\n"
+"KiCad 可以使用您的显卡为您提供更流畅、更快速的体验。默认情况下，此选项处于关闭状态，因为不是所有计算机都兼容该选项。\n"
 "\n"
 "是否要尝试启用图形加速？\n"
 "\n"
-"如果您想稍后选择，请在首选项菜单中选择“硬件加速图形”。"
+"如果您想稍后选择，请在偏好设置菜单中选择“硬件加速图形”。"
 
 #: common/eda_draw_frame.cpp:1039
 msgid "Enable Graphics Acceleration"
@@ -9786,7 +9785,7 @@ msgstr "导入："
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
-msgstr "格式化首选项"
+msgstr "格式化偏好设置"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -9951,7 +9950,7 @@ msgid ""
 "in Preferences > Eeschema > Colors."
 msgstr ""
 "要查看各个项目的颜色，请取消选中 \"%s\"\n"
-"在首选项 > Eeschema > 颜色中。"
+"在偏好设置 > Eeschema > 颜色中。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:366
 #, c-format
@@ -11208,7 +11207,7 @@ msgstr "标签增量："
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
 msgid "Dialog Preferences"
-msgstr "首选项对话框"
+msgstr "偏好设置对话框"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
 msgid "Show footprint previews in Symbol Chooser"
@@ -11608,7 +11607,7 @@ msgid ""
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
 "试图加载全局符号库表时出错。\n"
-"请在首选项菜单中编辑这个全局符号库表。"
+"请在偏好设置菜单中编辑这个全局符号库表。"
 
 #: eeschema/eeschema_config.cpp:66 eeschema/eeschema_config.cpp:221
 #: gerbview/gerbview_frame.cpp:1003
@@ -12235,7 +12234,7 @@ msgstr "工具 (&T)"
 #: pagelayout_editor/menubar.cpp:177 pcbnew/menubar_footprint_editor.cpp:254
 #: pcbnew/menubar_pcb_editor.cpp:464
 msgid "P&references"
-msgstr "首选项 (&R)"
+msgstr "偏好设置 (&R)"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:53
@@ -16963,7 +16962,7 @@ msgstr "选择工程模板"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
 msgid "Edit the project schematic"
-msgstr "编辑项目原理图"
+msgstr "编辑工程原理图"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
 msgid "Edit global and/or project schematic symbol libraries"
@@ -29301,7 +29300,7 @@ msgid ""
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
 "试图加载全局封装库表时出错：\n"
-"请在首选项菜单中编辑此全局封装库表。"
+"请在偏好设置菜单中编辑此全局封装库表。"
 
 #: pcbnew/pcbnew_config.cpp:59
 msgid "Action Plugins"
@@ -33380,13 +33379,13 @@ msgstr "选择预设："
 
 #: pcbnew/widgets/appearance_controls.cpp:2811
 msgid "Open Preferences"
-msgstr "打开首选项"
+msgstr "打开偏好设置"
 
 #: pcbnew/widgets/appearance_controls.cpp:2825
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
-msgstr "当前颜色主题为只读。在首选项中创建新主题以启用颜色编辑。"
+msgstr "当前颜色主题为只读。在偏好设置中创建新主题以启用颜色编辑。"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
 msgid "Objects"
