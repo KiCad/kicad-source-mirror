@@ -528,14 +528,15 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
         return;
     }
 
-    const KIID& id = component->GetPath().back();
+    const KIID& id = component->GetKIIDs().front();
 
     // Set new footprint to all instances of the selected component
     for( unsigned int idx : GetComponentIndices() )
     {
         COMPONENT* candidate = m_netlist.GetComponent( idx );
+        const std::vector<KIID>& kiids = candidate->GetKIIDs();
 
-        if( candidate->GetPath().back() == id )
+        if( std::find( kiids.begin(), kiids.end(), id ) != kiids.end() )
         {
             // Set the new footprint
             candidate->SetFPID( fpid );
