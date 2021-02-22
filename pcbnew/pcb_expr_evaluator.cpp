@@ -169,6 +169,9 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
             {
                 SHAPE_POLY_SET footprintCourtyard;
 
+                if( !footprint )
+                    return false;
+
                 if( footprint->IsFlipped() )
                     footprintCourtyard = footprint->GetPolyCourtyardBack();
                 else
