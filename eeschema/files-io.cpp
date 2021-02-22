@@ -315,13 +315,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             GetSettingsManager()->SaveProject();
 
         Schematic().SetProject( nullptr );
-        GetSettingsManager()->UnloadProject( &Prj() );
+        GetSettingsManager()->UnloadProject( &Prj(), false );
 
         GetSettingsManager()->LoadProject( pro.GetFullPath() );
 
+        wxFileName legacyPro( pro );
+        legacyPro.SetExt( LegacyProjectFileExtension );
+
         // Do not allow saving a project if one doesn't exist.  This normally happens if we are
         // standalone and opening a schematic that has been moved from its project folder.
-        if( !pro.Exists() && !( aCtl & KICTL_CREATE ) )
+        if( !pro.Exists() && !legacyPro.Exists() && !( aCtl & KICTL_CREATE ) )
             Prj().SetReadOnly();
 
         CreateScreens();
@@ -667,11 +670,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     if( setProject )
     {
-        if( !Prj().IsNullProject() )
-            GetSettingsManager()->SaveProject();
-
         Schematic().SetProject( nullptr );
-        GetSettingsManager()->UnloadProject( &Prj() );
+        GetSettingsManager()->UnloadProject( &Prj(), false );
 
         Schematic().Reset();
 

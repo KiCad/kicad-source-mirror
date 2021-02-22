@@ -322,7 +322,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     // Close the project if we are standalone, so it gets cleaned up properly
     if( Kiface().IsSingle() )
-        GetSettingsManager()->UnloadProject( &Prj() );
+        GetSettingsManager()->UnloadProject( &Prj(), false );
 }
 
 
@@ -704,7 +704,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
     // Clear view before destroying schematic as repaints depend on schematic being valid
     SetScreen( nullptr );
 
-    GetSettingsManager()->SaveProject();
     Schematic().Reset();
 
     Destroy();

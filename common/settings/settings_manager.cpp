@@ -750,7 +750,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( aSetActive && !m_projects.empty() )
     {
         PROJECT* oldProject = m_projects.begin()->second;
-        unloadProjectFile( oldProject, true );
+        unloadProjectFile( oldProject, false );
         m_projects.erase( m_projects.begin() );
     }
 

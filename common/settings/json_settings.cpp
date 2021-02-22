@@ -292,7 +292,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         }
 
         // And write-out immediately so that we don't lose data if the program later crashes.
-        SaveToFile( aDirectory, true );
+        if( m_deleteLegacyAfterMigration )
+            SaveToFile( aDirectory, true );
     }
 
     return success;
