@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 14:54+0000\n"
+"PO-Revision-Date: 2021-02-23 18:38+0000\n"
 "Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -12021,11 +12021,8 @@ msgid "Input pin not driven by any Output pins"
 msgstr "Το pin Εισόδου δεν οδηγείται από κανένα pin Εξόδου"
 
 #: eeschema/erc_item.cpp:58
-#, fuzzy
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr ""
-"Ο ακροδέκτης έχει συνδεθεί σε άλλους ακροδέκτες αλλά δεν υπάρχει ακροδέκτης "
-"να τον οδηγήσει"
+msgstr "Το pin Ισχύος Εισόδου δεν οδηγείται από κανένα pin Ισχύος Εξόδου"
 
 #: eeschema/erc_item.cpp:62 eeschema/erc_item.cpp:66
 msgid "Conflict problem between pins"
@@ -14606,9 +14603,8 @@ msgstr ""
 "Μην εκτελείτε πρόσθετες λειτουργίες μετά την αποθήκευση της βιβλιοθήκης."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Αφαίρεση μίας βιβλιοθήκης από κατάλογο"
+msgstr "Αντικατάσταση μιας εισαγωγής του πίνακα βιβλιοθήκης"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 msgid ""
@@ -15026,15 +15022,15 @@ msgid "Select at least one property to back annotate."
 msgstr "Επιλέξτε τουλάχιστον μία ιδιότητα για δημιουργία σχολιασμού."
 
 #: eeschema/tools/backannotate.cpp:95
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because eeschema is opened in stand-alone mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
 "Αδυναμία ανανέωσης του PCB, επειδή το Pcbnew έχει ανοιχτεί σε αυτόνομη "
-"λειτουργία. Για να είναι εφικτή η δημιουργία ή ενημέρωση των PCB από "
-"σχηματικά διαγράμματα, πρέπει να εκτελέσετε τον διαχειριστή έργων Kicad και "
-"να δημιουργήσετε ένα έργο PCB."
+"λειτουργία.\n"
+"Για να είναι εφικτή η δημιουργία ή ενημέρωση των PCB από σχηματικά "
+"διαγράμματα, πρέπει να εκτελέσετε τον διαχειριστή έργων Kicad και να "
+"δημιουργήσετε ένα έργο PCB."
 
 #: eeschema/tools/backannotate.cpp:162
 #, fuzzy, c-format
@@ -16070,21 +16066,20 @@ msgstr ""
 "με τον ακροδέκτη %s%s στη θέση <b>(%.3f, %.3f)</b> σε μονάδες %c και %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>Ο ακροδέκτης %s είναι εκτός πλέγματος</b> \"%s\" στη θέση <b>(%.3f, "
-"%.3f)</b>"
+"<b>Κρυφό pin ισχύος %s</b> %s στη θέση <b>(%.3f, %.3f)</b> της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Hidden power pin %s</b> %s at location <b>(%.3f, %.3f)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Ο ακροδέκτης %s είναι εκτός πλέγματος</b> \"%s\" στη θέση <b>(%.3f, "
-"%.3f)</b>"
+"<b> Κρυφό pin ισχύος %s</b> %s στη θέση <b>(%.3f, %.3f)</b> στη μονάδα %c "
+"της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:325
 #, c-format
@@ -16353,7 +16348,6 @@ msgid "Hole data"
 msgstr "Πληροφορίες οπής"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:444
-#, fuzzy
 msgid ""
 "Exported board does not have enough copper layers to handle selected inner "
 "layers"
@@ -16885,23 +16879,19 @@ msgid "File \"%s\" not found"
 msgstr "Το αρχείο \"%s\" δεν βρέθηκε"
 
 #: gerbview/readgerb.cpp:85
-#, fuzzy
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
 "Προειδοποίηση: αυτό το αρχείο δεν έχει ορισμένο D-Code\n"
-"Είναι πιθανώς παλιό αρχείο RS274D.\n"
 "Ως αποτέλεσμα, το μέγεθος των αντικειμένων δεν έχει οριστεί"
 
 #: gerbview/readgerb.cpp:88
-#, fuzzy
 msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Προειδοποίηση: αυτό το αρχείο δεν έχει ορισμένο D-Code\n"
-"Είναι πιθανώς παλιό αρχείο RS274D.\n"
+"Προειδοποίηση: λείπουν κάποιοι ορισμοί D-Code από αυτό το αρχείο\n"
 "Ως αποτέλεσμα, το μέγεθος των αντικειμένων δεν έχει οριστεί"
 
 #: gerbview/rs274d.cpp:645
@@ -17273,9 +17263,8 @@ msgid "-- mixed values --"
 msgstr "τιμή πεδίου"
 
 #: include/base_units.h:49
-#, fuzzy
 msgid "-- leave unchanged --"
-msgstr "Αποθήκευση αλλαγών"
+msgstr "-- να παραμείνει αμετάβλητο --"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
@@ -17350,34 +17339,28 @@ msgid "Project Template Selector"
 msgstr "Επιλογέας Πρότυπου Έργου"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:96
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "Χρήση ολόκληρου του σχηματικού"
+msgstr "Επεξεργασία του σχηματικού του έργου"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:99
-#, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr "Επεξεργασία των λιστών βιβλιοθηκών συμβόλων (καθολικές και έργου)"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:102
-#, fuzzy
 msgid "Edit the project PCB design"
-msgstr "Επεξεργασία Ακροδέκτη Φύλλου"
+msgstr "Επεξεργασία του σχεδιασμού PCB του έργου"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:105
-#, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Επεξεργασία των λιστών βιβλιοθηκών αποτυπωμάτων (καθολικές και έργου)"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Προβολή αρχείων Gerber"
+msgstr "Προεπισκόπηση αρχείων Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
-#, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Μετατροπή εικόνων bitmap σε στοιχεία σχηματικού ή PCB"
+msgstr "Μετατροπή εικόνων bitmap σε στοιχεία σχηματικού ή αποτυπώματα PCB"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -17461,21 +17444,19 @@ msgid ""
 msgstr "Το αρχείο \"%s\" δεν φαίνεται να είναι έγκυρο αρχείο σχηματικού."
 
 #: kicad/kicad_manager_frame.cpp:154
-#, fuzzy
 msgid "Project Files"
-msgstr "Αποθήκευση Αρχείου Έργου"
+msgstr "Αρχεία Έργου"
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "Επεξεργασία"
+msgstr "Επεξεργαστές"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
 msgstr "Φόρτωση αρχείου για επεξεργασία"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
 msgstr "Έργο: '%s'"
 
@@ -17549,7 +17530,6 @@ msgid "Archive all project files"
 msgstr "Αρχειοθέτηση όλων των αρχείων έργων"
 
 #: kicad/menubar.cpp:224
-#, fuzzy
 msgid "Reveal project folder in Finder"
 msgstr "Προβολή φακέλου έργου στον Finder"
 
@@ -17595,32 +17575,29 @@ msgid "Permission error?"
 msgstr "Σφάλμα δικαιωμάτων;"
 
 #: kicad/project_tree_item.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to delete '%s'"
-msgstr "Αποτυχία ανοίγματος '%s'"
+msgstr "Αποτυχία διαγραφής '%s'"
 
 #: kicad/project_tree_pane.cpp:248
-#, fuzzy
 msgid "Directory name:"
-msgstr "Κατεύθυνση:"
+msgstr "Όνομα καταλόγου:"
 
 #: kicad/project_tree_pane.cpp:248
 msgid "Create New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
 #: kicad/project_tree_pane.cpp:699
-#, fuzzy
 msgid "Switch to this Project"
-msgstr "Μετάβαση &σε αυτό το Έργο"
+msgstr "Μετάβαση σε αυτό το Έργο"
 
 #: kicad/project_tree_pane.cpp:700
 msgid "Close all editors, and switch to the selected project"
 msgstr "Κλείσιμο όλων των επεξεργαστών, και μετάβαση στο επιλεγμένο έργο"
 
 #: kicad/project_tree_pane.cpp:707
-#, fuzzy
 msgid "New Directory..."
-msgstr "Νέ&ος Φάκελος..."
+msgstr "Νέος Κατάλογος..."
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Create a New Directory"
@@ -17635,79 +17612,69 @@ msgid "Reveals the directory in a Finder window"
 msgstr "Εμφανίζει τον κατάλογο σε ένα παράθυρο Finder"
 
 #: kicad/project_tree_pane.cpp:719
-#, fuzzy
 msgid "Open Directory in File Explorer"
-msgstr "Άν&οιγμα καταλόγου στην Εξερεύνηση Αρχείων"
+msgstr "Άνοιγμα Καταλόγου στην Εξερεύνηση Αρχείων"
 
 #: kicad/project_tree_pane.cpp:720 pcbnew/menubar_pcb_editor.cpp:419
 msgid "Opens the directory in the default system file manager"
 msgstr "Ανοίγει τον κατάλογο στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
 #: kicad/project_tree_pane.cpp:727
-#, fuzzy
 msgid "Reveals the directories in a Finder window"
-msgstr "Εμφανίζει τον κατάλογο σε ένα παράθυρο Finder"
+msgstr "Εμφανίζει τους κατάλογους σε ένα παράθυρο Finder"
 
 #: kicad/project_tree_pane.cpp:729
-#, fuzzy
 msgid "Open Directories in File Explorer"
-msgstr "Άν&οιγμα καταλόγου στην Εξερεύνηση Αρχείων"
+msgstr "Άνοιγμα Καταλόγων στην Εξερεύνηση Αρχείων"
 
 #: kicad/project_tree_pane.cpp:730
-#, fuzzy
 msgid "Opens the directories in the default system file manager"
-msgstr "Ανοίγει τον κατάλογο στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
+msgstr ""
+"Ανοίγει τους καταλόγους στον προεπιλεγμένο διαχειριστή αρχείων συστήματος"
 
 #: kicad/project_tree_pane.cpp:741
 msgid "Open the file in a Text Editor"
 msgstr "Άνοιγμα του αρχείου με έναν επεξεργαστή κειμένου"
 
 #: kicad/project_tree_pane.cpp:743
-#, fuzzy
 msgid "Open files in a Text Editor"
-msgstr "Άνοιγμα του αρχείου με έναν επεξεργαστή κειμένου"
+msgstr "Άνοιγμα αρχείων με έναν Επεξεργαστή Κειμένου"
 
 #: kicad/project_tree_pane.cpp:745
-#, fuzzy
 msgid "Edit in a Text Editor"
-msgstr "&Επεξεργασία σε Επεξεργαστή Κειμένου"
+msgstr "Επεξεργασία σε Επεξεργαστή Κειμένου"
 
 #: kicad/project_tree_pane.cpp:753
-#, fuzzy
 msgid "Rename File..."
-msgstr "Μετονομασία Α&ρχείου..."
+msgstr "Μετονομασία Αρχείου..."
 
 #: kicad/project_tree_pane.cpp:754
 msgid "Rename file"
 msgstr "Μετονομασία αρχείου"
 
 #: kicad/project_tree_pane.cpp:758
-#, fuzzy
 msgid "Rename Files..."
-msgstr "Μετονομασία Α&ρχείου..."
+msgstr "Μετονομασία Αρχείων..."
 
 #: kicad/project_tree_pane.cpp:759
-#, fuzzy
 msgid "Rename files"
-msgstr "Μετονομασία αρχείου"
+msgstr "Μετονομασία αρχείων"
 
 #: kicad/project_tree_pane.cpp:768
 msgid "Delete the file and its content"
 msgstr "Διαγραφή αρχείου και των περιεχομένων του"
 
 #: kicad/project_tree_pane.cpp:770
-#, fuzzy
 msgid "Delete the files and their contents"
-msgstr "Διαγραφή αρχείου και των περιεχομένων του"
+msgstr "Διαγραφή αρχείων και των περιεχομένων τους"
 
 #: kicad/project_tree_pane.cpp:794
 msgid "Print the contents of the file"
 msgstr "Εκτύπωση περιεχομένων του αρχείου"
 
 #: kicad/project_tree_pane.cpp:836
-#, fuzzy
 msgid "Delete Directory"
-msgstr "&Διαγραφή Φακέλου"
+msgstr "Διαγραφή Καταλόγου"
 
 #: kicad/project_tree_pane.cpp:836
 msgid "Delete File"
@@ -17724,9 +17691,8 @@ msgid "Are you sure you want to delete %lu items?"
 msgstr "Σίγουρα θέλετε να διαγράψετε %lu αντικείμενα;"
 
 #: kicad/project_tree_pane.cpp:844
-#, fuzzy
 msgid "Delete Multiple Items"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Διαγραφή Πολλαπλών Αντικειμένων"
 
 #: kicad/project_tree_pane.cpp:876
 #, c-format
@@ -17770,32 +17736,26 @@ msgid "Open an existing project"
 msgstr "Άνοιγμα υπάρχοντος έργου"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close Project"
-msgstr "Αποθήκευση Αρχείου Έργου"
+msgstr "Κλείσιμο Έργου"
 
 #: kicad/tools/kicad_manager_actions.cpp:58
-#, fuzzy
 msgid "Close the current project"
-msgstr "Κλείσιμο επεξεργαστή"
+msgstr "Κλείσιμο του τρέχοντος έργου"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Επιλογές Επεξεργαστή Σχηματικού"
+msgstr "Επεξεργαστής Σχηματικού"
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
-msgstr "Επεξεργασία Σχηματικού"
+msgstr "Επεξεργασία σχηματικού"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
-#, fuzzy
 msgid "Edit schematic symbols"
-msgstr "Επεξεργασία Συμβόλων Σχηματικού"
+msgstr "Επεξεργασία συμβόλων σχηματικού"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
-#, fuzzy
 msgid "PCB Editor"
 msgstr "Επεξεργαστής Σχεδίασης PCB"
 
@@ -17804,24 +17764,20 @@ msgid "Edit PCB"
 msgstr "Επεξεργασία PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:82
-#, fuzzy
 msgid "Edit PCB footprints"
 msgstr "Επεξεργασία Αποτυπωμάτων PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
 msgstr "Πρόγραμμα Προβολής Αρχείων Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Προβολή αρχείων Gerber"
+msgstr "Προεπισκόπηση αρχείων εξόδου Gerber"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
-#, fuzzy
 msgid "Image Converter"
-msgstr "Μετατράπηκε"
+msgstr "Μετατροπέας εικόνας"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Convert bitmap images to schematic or PCB components"
@@ -18989,13 +18945,12 @@ msgstr "Ειδική αντίσταση επιμετάλλωσης (Ohm.m):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1263
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1549
-#, fuzzy
 msgid "ohm-meter"
-msgstr "Ohm-meter"
+msgstr "ωμόμετρο"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Σχετική διαπερατότητα υποστρώματος:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -19053,9 +19008,8 @@ msgstr "Αντίσταση:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1463
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1632
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1730
-#, fuzzy
 msgid "ohm"
-msgstr "Ohm"
+msgstr "ωμ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1357
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
@@ -19072,9 +19026,8 @@ msgstr "Απώλεια ισχύος:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1377
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
-#, fuzzy
 msgid "W"
-msgstr "W:"
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19085,9 +19038,8 @@ msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "Χρήση θερμικής αγωγιμότητας με τιμή 401 Watts / (μέτρο-Kelvin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1391
-#, fuzzy
 msgid "deg C/W"
-msgstr "βαθμ C"
+msgstr "βαθμ C/W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1395
 msgid "Estimated ampacity:"
@@ -19190,9 +19142,8 @@ msgid "Internal Layer Traces"
 msgstr "Διάδρομοι Εσωτερικού Επιπέδου"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1792
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr "Τάση > 500V:"
+msgstr "Τάση > 500 V:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1799
 msgid "Update Values"
@@ -19227,54 +19178,44 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1855
-#, fuzzy
 msgid "0 .. 15 V"
-msgstr "0 ... 15V"
+msgstr "0 .. 15 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1856
-#, fuzzy
 msgid "16 .. 30 V"
-msgstr "16 ... 30V"
+msgstr "16 .. 30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1857
-#, fuzzy
 msgid "31 .. 50 V"
-msgstr "31 ... 50V"
+msgstr "31 .. 50 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1858
-#, fuzzy
 msgid "51 .. 100 V"
-msgstr "51 ... 100V"
+msgstr "51 .. 100 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1859
-#, fuzzy
 msgid "101 .. 150 V"
-msgstr "101 ... 150V"
+msgstr "101 .. 150 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1860
-#, fuzzy
 msgid "151 .. 170 V"
-msgstr "151 ... 170V"
+msgstr "151 .. 170 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1861
-#, fuzzy
 msgid "171 .. 250 V"
-msgstr "171 ... 250V"
+msgstr "171 .. 250 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1862
-#, fuzzy
 msgid "251 .. 300 V"
-msgstr "251 ... 300V"
+msgstr "251 .. 300 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1863
-#, fuzzy
 msgid "301 .. 500 V"
-msgstr "301 ... 500V"
+msgstr "301 .. 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1864
-#, fuzzy
 msgid " > 500 V"
-msgstr " > 500V"
+msgstr " > 500 V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1873
 msgid ""
@@ -19371,7 +19312,6 @@ msgid "Not worth using"
 msgstr "Δεν απαιτείται"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
 "numbers for electronic components.  Available values are approximately\n"
@@ -19425,12 +19365,10 @@ msgstr ""
 "\tR1 + (R2 | R3) ...\t\tοποιοσδήποτε συνδυασμός των παραπάνω\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:249
-#, fuzzy
 msgid "Write Data Failed"
 msgstr "Σφάλμα Εγγραφής Αρχείου Δεδομένων"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:253
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
@@ -19580,9 +19518,8 @@ msgstr "Απώλειες Διηλεκτρικού:"
 #: pcb_calculator/transline_ident.cpp:328
 #: pcb_calculator/transline_ident.cpp:369
 #: pcb_calculator/transline_ident.cpp:402
-#, fuzzy
 msgid "Skin depth:"
-msgstr "Βάθος Επιφάνειας:"
+msgstr "Βάθος επιφάνειας:"
 
 #: pcb_calculator/transline_ident.cpp:152
 #: pcb_calculator/transline_ident.cpp:192
@@ -19770,12 +19707,12 @@ msgstr "Εξωτερική Διάμετρος (μονωτήρας)"
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "Ισχύων %s (ζυγό):"
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "Ισχύων %s (μονό):"
 
 #: pcb_calculator/transline_ident.cpp:324
 #, fuzzy
@@ -20375,23 +20312,20 @@ msgid "Remove duplicated graphic"
 msgstr "Αφαίρεση διπλού δρόμου"
 
 #: pcbnew/cleanup_item.cpp:60
-#, fuzzy
 msgid "Convert lines to rectangle"
-msgstr "Μετακίνηση Ορθογωνίου"
+msgstr "Μετατροπή γραμμών σε ορθογώνιο"
 
 #: pcbnew/cleanup_item.cpp:64
-#, fuzzy
 msgid "Unknown cleanup action"
-msgstr "Αναίρεση τελευταίας ενέργειας"
+msgstr "Άγνωστη ενέργεια εκκαθάρισης"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:413
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:565
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:810
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:847
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:859
-#, fuzzy
 msgid "(self-intersecting)"
-msgstr "Το πολύγωνο δεν πρέπει να τέμνει τον εαυτό του"
+msgstr "(αυτο-τεμνόμενο)"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:573
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:818
@@ -20410,16 +20344,15 @@ msgstr "Επιλογή όλων από φύλλο \"%s\""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:84
 msgid "Only front"
-msgstr ""
+msgstr "Μόνο μπροστά"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:85
 msgid "Only back"
-msgstr ""
+msgstr "Μόνο πίσω"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:86
-#, fuzzy
 msgid "Only selected"
-msgstr "δεν επιλέχθηκε αρχείο"
+msgstr "Μόνο επιλεγμένο"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:92
 msgid "Empty"
@@ -20454,7 +20387,7 @@ msgid ""
 "%s footprints will be reannotated."
 msgstr ""
 "\n"
-"%s αποτυπώματα θα επανα τροποποιηθούν."
+"%s αποτυπώματα θα επανα-τροποποιηθούν."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:309
 #, c-format
@@ -20462,6 +20395,8 @@ msgid ""
 "\n"
 "Any reference types %s will not be annotated."
 msgstr ""
+"\n"
+"Τυχόν τύποι αναφοράς %s δεν θα τροποποιούνται."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:314
 msgid ""
@@ -20469,7 +20404,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"Κλειδωμένα αποτυπώματα δεν θα επανα τροποποιηθούν"
+"Κλειδωμένα αποτυπώματα δεν θα επανα-τροποποιηθούν"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 #, c-format
@@ -20500,6 +20435,8 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"Θα αφαιρεθεί το πρόθημα όσων αποτυπωμάτων αρχίζουν με «%s»."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -20507,6 +20444,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Θα προστεθεί το πρόθημα «%s» στα μπροστινά αποτυπώματα."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -22078,7 +22017,7 @@ msgstr "Εξωτερικά"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
 msgid "Inline"
-msgstr ""
+msgstr "Στη σειρά"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
@@ -22133,6 +22072,8 @@ msgstr "Κανόνες"
 #: pcbnew/dialogs/dialog_drc.cpp:215
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
+"Ημιτελές DRC: δεν ήταν δυνατή η μεταγλώττιση προσαρμοσμένων κανόνων "
+"σχεδίασης.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/tools/board_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:526
@@ -22847,7 +22788,7 @@ msgstr "Ανοχή:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Σφιχτό (0,001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 #, fuzzy
@@ -23615,6 +23556,7 @@ msgstr "ένδειξη αναφοράς"
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr ""
+"(καθορίστε πολλαπλά στοιχεία διαχωρισμένα με κενά για διαδοχική τοποθέτηση)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 #, fuzzy
@@ -23949,6 +23891,7 @@ msgstr "Ιδιότητες Τμήματος Γραμμής"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
 msgstr ""
+"Το πλάτος της γραμμής ενδέχεται να μην είναι 0 για μη συμπληρωμένα σχήματα."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:373
 msgid "Modify drawing properties"
@@ -24063,6 +24006,9 @@ msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"Όλα τα απαιτούμενα επίπεδα (επισημασμένα με '*') πρέπει να είναι "
+"αντιστοιχισμένα. Πατήστε στο «Αυτόματη Αντιστοίχιση Επιπέδων» για να "
+"αντιστοιχιστούν αυτόματα τα υπόλοιπα επίπεδα"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -24111,9 +24057,8 @@ msgid "Matched Layers"
 msgstr "Άλλα Επίπεδα"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:97
-#, fuzzy
 msgid "Auto-Match Layers"
-msgstr "Άλλα Επίπεδα"
+msgstr "Αυτόματη Αντιστοίχιση Επιπέδων"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
