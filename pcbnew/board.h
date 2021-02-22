@@ -950,38 +950,12 @@ public:
     bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area );
 
     /**
-     * Check all copper areas in net for intersections, combining them if found.
-     *
-     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
-     *                       in undo commands can be NULL
-     * @param aNetCode = net to consider
-     * @return true if some areas modified
-     */
-    bool CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode );
-
-    /**
-     * Check for intersection of a given copper area with other areas in same net
-     * @param aZone = area to compare to all other areas in the same net
-     */
-    bool TestZoneIntersections( ZONE* aZone );
-
-    /**
      * Test for intersection of 2 copper areas
      * @param aZone1 = area reference
      * @param aZone2 = area to compare for intersection calculations
      * @return : false if no intersection, true if intersection
      */
     bool TestZoneIntersection( ZONE* aZone1, ZONE* aZone2 );
-
-    /**
-     * If possible, combine 2 copper areas
-     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (for undo).
-     * @param aRefZone = the main area (zone)
-     * @param aZoneToCombine = the zone that can be merged with aRefZone; will be deleted if the
-     *                         combine is successful
-     * @return : true if aZoneToCombine is combined with aRefZone (and therefore be deleted)
-     */
-    bool CombineZones( PICKED_ITEMS_LIST* aDeletedList, ZONE* aRefZone, ZONE* aZoneToCombine );
 
     /**
      * Find a pad \a aPosition on \a aLayer.

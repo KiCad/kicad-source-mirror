@@ -1152,6 +1152,8 @@ int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
                         std::vector<ZONE*>& aMergedZones )
 {
+    aCommit.Modify( aOriginZones[0] );
+
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
         aOriginZones[0]->Outline()->BooleanAdd( *aOriginZones[i]->Outline(),
@@ -1175,7 +1177,6 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
         aCommit.Remove( aOriginZones[i] );
     }
 
-    aCommit.Modify( aOriginZones[0] );
     aMergedZones.push_back( aOriginZones[0] );
 
     aOriginZones[0]->SetLocalFlags( 1 );
