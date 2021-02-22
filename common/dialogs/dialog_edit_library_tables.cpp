@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -14,8 +14,7 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<http://www.gnu.org/licenses/>.
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <wx/statline.h>
