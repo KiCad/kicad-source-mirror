@@ -177,7 +177,13 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
         BOOST_REQUIRE_NE( refComp, nullptr );
 
         // Retrieval by KIID
-        COMPONENT* pathComp = test.GetComponentByPath( goldenComp->GetPath() );
+        KIID_PATH path = goldenComp->GetPath();
+
+        BOOST_REQUIRE( !goldenComp->GetKIIDs().empty() );
+
+        path.push_back( goldenComp->GetKIIDs().front() );
+
+        COMPONENT* pathComp = test.GetComponentByPath( path );
         BOOST_REQUIRE_NE( pathComp, nullptr );
 
         // We should have found the same component

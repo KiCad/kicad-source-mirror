@@ -166,6 +166,9 @@ COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 
 COMPONENT* NETLIST::GetComponentByPath( const KIID_PATH& aUuidPath )
 {
+    if( aUuidPath.empty() )
+        return nullptr;
+
     KIID comp_uuid = aUuidPath.back();
     KIID_PATH base = aUuidPath;
 
