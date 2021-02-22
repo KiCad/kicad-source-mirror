@@ -269,7 +269,15 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::showFootprintBrowser );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( ACTIONS::updatePcbFromSchematic );
+    if( !Kiface().IsSingle() )
+    {
+        m_mainToolBar->Add( ACTIONS::updatePcbFromSchematic );
+    }
+    else
+    {
+        m_mainToolBar->Add( PCB_ACTIONS::importNetlist );
+    }
+
     m_mainToolBar->Add( PCB_ACTIONS::runDRC );
 
     m_mainToolBar->AddScaledSeparator( this );

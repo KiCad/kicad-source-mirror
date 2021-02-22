@@ -236,8 +236,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
-    toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
+    update->Enable( !Kiface().IsSingle() );
+    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    update->Enable( !Kiface().IsSingle() );
+
     toolsMenu->Add( EE_ACTIONS::showPcbNew );
 
     toolsMenu->AppendSeparator();

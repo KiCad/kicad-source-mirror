@@ -377,7 +377,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
 
-    toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
+    wxMenuItem* update = toolsMenu->Add( ACTIONS::updatePcbFromSchematic );
+    update->Enable( !Kiface().IsSingle() );
+
     toolsMenu->Add( PCB_ACTIONS::showEeschema );
 
     toolsMenu->AppendSeparator();
@@ -392,7 +394,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::boardReannotate );
-    toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
+    update->Enable( !Kiface().IsSingle() );
+
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     toolsMenu->AppendSeparator();
