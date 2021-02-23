@@ -30,8 +30,8 @@
 
 bool KIPLATFORM::UI::IsDarkTheme()
 {
-    // TODO(ISM): Write this function
-    return false;
+    NSString *appearanceName = [[NSAppearance currentAppearance] name];
+    return !![appearanceName containsString:@"Dark"];
 }
 
 
