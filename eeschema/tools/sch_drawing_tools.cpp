@@ -1014,7 +1014,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 if( isText )
                 {
-                    item = createNewText( cursorPos, LAYER_LOCLABEL );
+                    item = createNewText( cursorPos, LAYER_NOTES );
                 }
                 else if( isGlobalLabel )
                 {
