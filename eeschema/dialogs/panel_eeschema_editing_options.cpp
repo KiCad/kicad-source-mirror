@@ -41,6 +41,14 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* 
     // Make the color swatch show "Clear Color" instead
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
+
+#ifdef __WXOSX_MAC__
+    m_mouseCmdsOSX->Show( true );
+    m_mouseCmdsWinLin->Show( false );
+#else
+    m_mouseCmdsWinLin->Show( true );
+    m_mouseCmdsOSX->Show( false );
+#endif
 }
 
 

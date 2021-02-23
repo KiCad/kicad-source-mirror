@@ -81,6 +81,110 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( sbSizerPinSel, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
+	bLeftColumn->Add( 0, 20, 0, 0, 5 );
+
+	m_mouseCmdsWinLin = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
+
+	m_staticText8 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Ctrl."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	m_mouseCmdsWinLin->Add( m_staticText8, 0, wxALL, 5 );
+
+	m_staticline1 = new wxStaticLine( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_mouseCmdsWinLin->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+
+	wxFlexGridSizer* fgSizerCmdsWinLin;
+	fgSizerCmdsWinLin = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCmdsWinLin->SetFlexibleDirection( wxBOTH );
+	fgSizerCmdsWinLin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText91 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText91->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText91, 0, wxALL, 5 );
+
+	m_staticText101 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText101->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText101, 0, wxALL, 5 );
+
+	m_staticText131 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText131->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText131, 0, wxALL, 5 );
+
+	m_staticText141 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText141->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText141, 0, wxALL, 5 );
+
+	m_staticText151 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText151, 0, wxALL, 5 );
+
+	m_staticText161 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText161, 0, wxALL, 5 );
+
+	m_staticText111 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText111->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText111, 0, wxALL, 5 );
+
+	m_staticText121 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText121->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( m_staticText121, 0, wxALL, 5 );
+
+
+	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND, 5 );
+
+
+	bLeftColumn->Add( m_mouseCmdsWinLin, 1, wxEXPAND, 5 );
+
+	m_mouseCmdsOSX = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
+
+	m_staticText81 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText81->Wrap( -1 );
+	m_mouseCmdsOSX->Add( m_staticText81, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizerCmdsWinMac;
+	fgSizerCmdsWinMac = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCmdsWinMac->SetFlexibleDirection( wxBOTH );
+	fgSizerCmdsWinMac->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText9 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText9, 0, wxALL, 5 );
+
+	m_staticText10 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText10, 0, wxALL, 5 );
+
+	m_staticText13 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText13, 0, wxALL, 5 );
+
+	m_staticText14 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText14, 0, wxALL, 5 );
+
+	m_staticText15 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Cmd+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText15->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText15, 0, wxALL, 5 );
+
+	m_staticText16 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText16, 0, wxALL, 5 );
+
+	m_staticText11 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText11, 0, wxALL, 5 );
+
+	m_staticText12 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	fgSizerCmdsWinMac->Add( m_staticText12, 0, wxALL, 5 );
+
+
+	m_mouseCmdsOSX->Add( fgSizerCmdsWinMac, 1, wxEXPAND, 5 );
+
+
+	bLeftColumn->Add( m_mouseCmdsOSX, 1, wxEXPAND, 5 );
+
+
 	bPanelSizer->Add( bLeftColumn, 1, wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bRightColumn;
@@ -169,7 +273,6 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
-	bPanelSizer->Fit( this );
 }
 
 PANEL_EESCHEMA_EDITING_OPTIONS_BASE::~PANEL_EESCHEMA_EDITING_OPTIONS_BASE()
