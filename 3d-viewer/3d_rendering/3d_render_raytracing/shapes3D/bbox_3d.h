@@ -67,17 +67,16 @@ public:
     /**
      * Set bounding box with new parameters.
      *
-     * @param aPbMin the minimum point to initialize the bounding box.
-     * @param aPbMax the maximum point to initialize the bounding box.
+     * @param aPbMin the minimum point to set for the bounding box.
+     * @param aPbMax the maximum point to set for the bounding box.
      */
     void Set( const SFVEC3F& aPbMin, const SFVEC3F& aPbMax );
 
     void Set( const BBOX_3D& aBBox );
 
     /**
-     * @brief Set
-     * @param aPbMin
-     * @param aPbMax
+     * @brief Set bounding box to one point.
+     * @param aPoint the single point to set the bounding box to.
      */
     void Set( const SFVEC3F& aPoint );
 
@@ -161,7 +160,7 @@ public:
     bool IsInitialized() const;
 
     /**
-     * Reset the bounding box to zero and de-initialized it.
+     * Reset the bounding box to zero and de-initialize it.
      */
     void Reset();
 
@@ -215,7 +214,7 @@ public:
     float GetMaxDimension() const;
 
     /**
-     * @return the surface are of the box.
+     * @return the surface area of the box.
      */
     float SurfaceArea() const;
 
