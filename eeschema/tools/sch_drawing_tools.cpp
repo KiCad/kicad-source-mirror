@@ -31,6 +31,7 @@
 #include <id.h>
 #include <eeschema_id.h>
 #include <confirm.h>
+#include <widgets/infobar.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <sch_component.h>
@@ -507,6 +508,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     SCH_ITEM*             previewItem;
+    bool                  loggedInfoBarError = false;
 
     if( m_inSingleClickPlace )
         return 0;
@@ -635,14 +637,26 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         {
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
+                if( type == SCH_JUNCTION_T )
+                {
+                    if( !m_frame->GetScreen()->IsJunctionNeeded( cursorPos ) )
+                    {
+                        m_frame->ShowInfoBarError( _( "Junction location contains no joinable "
+                                                      "wires and/or pins." ) );
+                        loggedInfoBarError = true;
+                        continue;
+                    }
+                    else if( loggedInfoBarError )
+                    {
+                        m_frame->GetInfoBar()->Dismiss();
+                    }
+                }
+
                 SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
 
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
-
-                if( type != SCH_SHEET_PIN_T )
-                    m_frame->SaveCopyForRepeatItem( newItem );
 
                 if( type == SCH_JUNCTION_T )
                     m_frame->TestDanglingEnds();
