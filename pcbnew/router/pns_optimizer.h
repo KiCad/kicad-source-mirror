@@ -145,9 +145,10 @@ public:
         m_effortLevel |= OPTIMIZER::RESTRICT_VERTEX_RANGE;
     }
 
-    void SetRestrictArea( const BOX2I& aArea )
+    void SetRestrictArea( const BOX2I& aArea, bool aStrict = true )
     {
         m_restrictArea = aArea;
+        m_restrictAreaIsStrict = aStrict;
     }
 
     void ClearConstraints();
@@ -208,6 +209,7 @@ private:
     VECTOR2I m_preservedVertex;
     std::pair<int, int> m_restrictedVertexRange;
     BOX2I m_restrictArea;
+    bool m_restrictAreaIsStrict;
 };
 
 
@@ -259,9 +261,10 @@ private:
 class AREA_CONSTRAINT : public OPT_CONSTRAINT
 {
 public:
-    AREA_CONSTRAINT( NODE* aWorld, const  BOX2I& aAllowedArea ) :
+    AREA_CONSTRAINT( NODE* aWorld, const  BOX2I& aAllowedArea, bool aAllowedAreaStrict ) :
         OPT_CONSTRAINT( aWorld ),
-        m_allowedArea ( aAllowedArea )
+        m_allowedArea ( aAllowedArea ),
+        m_allowedAreaStrict ( aAllowedAreaStrict )
     {
     };
 
@@ -271,6 +274,7 @@ public:
 
 private:
     BOX2I m_allowedArea;
+    bool m_allowedAreaStrict;
 
 };
 

@@ -224,6 +224,8 @@ bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine
 
     bool p1_in = m_allowedArea.Contains( p1 );
     bool p2_in = m_allowedArea.Contains( p2 );
+    bool p1n_in = false;
+    bool p2n_in = false;
 
     return p1_in || p2_in;
     }
@@ -672,6 +674,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
             bool ok = false;
             if ( !checkColliding( aLine, bypass ) )
             {
+                //printf("Chk-constraints: %d %d\n", n, n+step+1 );
                 ok = checkConstraints ( n, n + step + 1, aLine, aCurrentPath, bypass );
             }
 
