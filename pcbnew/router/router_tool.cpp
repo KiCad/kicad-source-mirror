@@ -951,7 +951,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !IsCopperLayer( routingLayer ) )
     {
-        frame()->ShowInfoBarError( _( "Tracks on Copper layers only" ) );
+        frame()->ShowInfoBarError( _( "Tracks on Copper layers only." ) );
         return false;
     }
 
