@@ -58,7 +58,7 @@ private:
 
     static int                       m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*             m_texts;
+    FP_TEXT_GRID_TABLE*              m_texts;
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
     wxFloatingPointValidator<double> m_OrientValidator;

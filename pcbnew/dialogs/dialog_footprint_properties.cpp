@@ -408,12 +408,19 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     {
         m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false,
                                                                             false ) );
-        // Adjust the column size. The column 6 has a small bitmap, so its width must be
-        // taken in account
+        // Adjust the column size.
         int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
 
-        if( col == 6 )
+        if( col == FPT_LAYER )  // This one's a drop-down.  Check all possible values.
+        {
+            BOARD* board = m_footprint->GetBoard();
+
+            for( PCB_LAYER_ID layer : board->GetEnabledLayers().Seq() )
+                col_size = std::max( col_size, GetTextExtent( board->GetLayerName( layer ) ).x );
+
+            // And the swatch:
             col_size += 20;
+        }
 
         if( m_itemsGrid->IsColShown( col ) )
             m_itemsGrid->SetColSize( col, col_size );
