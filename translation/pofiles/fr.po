@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-20 16:24+0100\n"
+"POT-Creation-Date: 2021-02-23 20:18+0100\n"
+"PO-Revision-Date: 2021-02-23 20:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1401,8 +1401,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/bitmap2component.desktop:9
+#: resources/linux/launchers/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -1417,8 +1417,8 @@ msgstr "mm^3"
 #: common/base_units.cpp:497 common/eda_draw_frame.cpp:481
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:110
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:122
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:133
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:226
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:237
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:58
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:97
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:108
@@ -2174,14 +2174,12 @@ msgid "Reset Grid Origin"
 msgstr "Remise à 0 Origine Grille"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Réinitialiser Dimension"
+msgstr "Réinitialiser Taille des Grilles"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Mettre à 0 pour utiliser les valeurs par défaut"
+msgstr "Réinitialiser la liste des tailles de grille aux valeurs par défaut"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3166,9 +3164,10 @@ msgstr "Fichier Import des Raccourcis:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Action | Hotkey par Défaut | Description"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
 msgid "Cmd"
 msgstr "Cmd"
@@ -3299,17 +3298,22 @@ msgid "--"
 msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:108
 #: pcbnew/dialogs/panel_edit_options_base.cpp:140
 msgid "Ctrl"
 msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:169
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:100
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:149
 #: pcbnew/dialogs/panel_edit_options_base.cpp:110
 #: pcbnew/dialogs/panel_edit_options_base.cpp:191
 msgid "Shift"
 msgstr "Maj"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:173
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:124
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:173
 #: pcbnew/dialogs/panel_edit_options_base.cpp:130
 #: pcbnew/dialogs/panel_edit_options_base.cpp:221
 msgid "Alt"
@@ -4618,9 +4622,8 @@ msgstr "Éditeur de PCB KiCad"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Editeur de Feuille de travail"
+msgstr "Editeur de Feuille de dessin"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5063,9 +5066,8 @@ msgid "Selection highlight"
 msgstr "Sélection surbrillance"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Dessins"
+msgstr "Feuille de dessin"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -6168,31 +6170,28 @@ msgid "No default footprint"
 msgstr "Pas d'empreinte par défaut"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Moteur graphique accéléré:"
+msgstr "Moteur Graphique Accéléré"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Moteur graphique programmé:"
+msgstr "Moteur Graphique Programmé:"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "Moteur de Rendu"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
-"Utiliser le mode graphique accéléré par le matérie  (OpenGL) (recommandé)"
+msgstr "Mode graphique accéléré par le matériel  (OpenGL) (recommandé)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Moteur de tracé logiciel (pour les ordinateurs qui ne supporte pas "
+"l'accélération matérielle de KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -7878,9 +7877,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Réinitialiser les champs si vides dans le nouveau symbole"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "Mise a Jour des Champs"
+msgstr "Mise a jour texte du champ"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
@@ -7895,9 +7893,8 @@ msgid "Update field positions"
 msgstr "Mise à jour position des champs"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Mise à jour/réinitialisation  attributs de symbole"
+msgstr "Mise à jour  attributs de symbole"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7996,9 +7993,8 @@ msgstr "Réinitialiser les champs si vides dans le symbole en librairie"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Mise à jour/réinitialisation Champs"
+msgstr "Mise à jour/réinitialisation texte du champ"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -9880,14 +9876,12 @@ msgid "Page size:"
 msgstr "Dim page:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Finir la feuille de dessin"
+msgstr "Tracer la feuille de dessin"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Imprimer cartouche et encadrement"
+msgstr "Tracer cartouche et encadrement"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11535,51 +11529,113 @@ msgstr ""
 "Si activé,  cliquer sur une pin sélectionne le symbole parent.\n"
 "Si désactivé, cliquer sur une pin sélectionne uniquement la pin."
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:138
+#: pcbnew/dialogs/panel_edit_options_base.cpp:84
+#: pcbnew/dialogs/panel_edit_options_base.cpp:165
+msgid "Left Click Mouse Commands"
+msgstr "Commandes par Souris Clic Gauche"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:88
+#: pcbnew/dialogs/panel_edit_options_base.cpp:86
+msgid ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Ctrl."
+msgstr ""
+"L’action du clic gauche de souris dépend de 3 touches de modification :\n"
+"Alt, Maj et Ctrl."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:104
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:153
+#: pcbnew/dialogs/panel_edit_options_base.cpp:115
+#: pcbnew/dialogs/panel_edit_options_base.cpp:196
+msgid "Add item(s) to selection."
+msgstr "Ajouter élément(s) à la sélection."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:112
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
+#: pcbnew/dialogs/panel_edit_options_base.cpp:135
+#: pcbnew/dialogs/panel_edit_options_base.cpp:216
+msgid "Toggle selected state of item(s)."
+msgstr "Basculer l’état de sélection de l’élément(s)."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
+#: pcbnew/dialogs/panel_edit_options_base.cpp:150
+msgid "Ctrl+Shift"
+msgstr "Ctrl+Maj"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
+#: pcbnew/dialogs/panel_edit_options_base.cpp:125
+#: pcbnew/dialogs/panel_edit_options_base.cpp:206
+msgid "Remove item(s) from selection."
+msgstr "Enlever élément(s) de la sélection."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:128
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:177
+#: pcbnew/dialogs/panel_edit_options_base.cpp:145
+#: pcbnew/dialogs/panel_edit_options_base.cpp:226
+msgid "Clarify selection from menu."
+msgstr "Clarifier la sélection à partir du menu."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:140
+#: pcbnew/dialogs/panel_edit_options_base.cpp:167
+msgid ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Cmd."
+msgstr ""
+"L’action du clic gauche de souris dépend de 3 touches de modification :\n"
+"Alt, Maj et Ctrl."
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
+msgid "Cmd+Shift"
+msgstr "Maj+Cmd"
+
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
 msgstr "Placement Automatique des Champs de Symbole"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:92
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
 msgid "A&utomatically place symbol fields"
 msgstr "Placer a&utomatiquement les champs des symboles"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:95
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:199
 msgid "A&llow field autoplace to change justification"
 msgstr "&Autoriser le changement de justification des champs autoplacés"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:202
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "&Toujours aligner champs autoplacés sur la grille de 50 mil"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:105
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:209
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:103
 msgid "Repeated Items"
 msgstr "Éléments répétés"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:115
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:219
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Horizontal pitch:"
 msgstr "Pas &horizontal:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:126
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:230
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:122
 msgid "&Vertical pitch:"
 msgstr "Pas &vertical:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:137
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:241
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Label increment:"
 msgstr "Incrémentation des labels:"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:258
 msgid "Dialog Preferences"
 msgstr "Préférences"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:156
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 msgid "Show footprint previews in Symbol Chooser"
 msgstr "Prévisualisation de l'empreinte dans le Sélecteur de Symbole"
 
-#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:159
+#: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:263
 msgid "Keep hierarchy navigator open"
 msgstr "Garder le navigateur hiérarchique ouvert"
 
@@ -12048,9 +12104,8 @@ msgid "No Connection"
 msgstr "Pas de Connexion"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "Variable texte non résolue dans la feuille de travail."
+msgstr "Variable texte non résolue dans la feuille de dessin."
 
 #: eeschema/erc.cpp:293
 #, c-format
@@ -16327,13 +16382,13 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "Aucun problème de symbole trouvé."
 
-#: eeschema/tools/ee_selection_tool.cpp:1519
+#: eeschema/tools/ee_selection_tool.cpp:1528
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
 #: pcbnew/tools/pcb_selection_tool.cpp:1785
 msgid "Select &All\tA"
 msgstr "Tout Sélectionner\tT"
 
-#: eeschema/tools/ee_selection_tool.cpp:1522
+#: eeschema/tools/ee_selection_tool.cpp:1531
 #: pcbnew/tools/pcb_selection_tool.cpp:1788
 msgid "&Expand Selection\tE"
 msgstr "&Expandre Sélection\tE"
@@ -16365,6 +16420,8 @@ msgstr "Pas de nouveau label hiérarchique trouvé."
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
+"L’emplacement de la jonction ne contient pas de fils et/ou de pins "
+"connectables."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -16763,11 +16820,9 @@ msgid "Cannot create file \"%s\""
 msgstr "Impossible de créer le  fichier \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
-"<b>Plus aucune couche graphic disponible</b> dans Gerbview pour charger les "
-"fichiers"
+"<b>Plus aucune couche disponible</b> dans GerbView pour charger les fichiers"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -17033,7 +17088,7 @@ msgid "X2 attr"
 msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1001
-#: resources/linux/launchers/gerbview.desktop.in:10
+#: resources/linux/launchers/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -17385,14 +17440,12 @@ msgstr "Afficher les points de grille"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Mode de Tracé"
+msgstr "Feuille de Dessin"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Imprimer cartouche et encadrement"
+msgstr "Montrer dessin du cartouche et encadrement"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17557,13 +17610,12 @@ msgstr ""
 "Afficher les outils de calcul de résistance, de la capacité de courant, etc."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Editer les bordures des feuilles de travail et les titres pour les schémas "
-"et les PCB"
+"Editer les bordures et les titres des feuilles de dessin pour les schémas et "
+"les PCB"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17974,9 +18026,8 @@ msgstr ""
 "Exécuter des calculs de composants, des calculs de largeur de piste, etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Imprimer cartouche et encadrement"
+msgstr "Editer cartouche et encadrement de feuille de dessin"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18113,11 +18164,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:49
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -18385,9 +18431,8 @@ msgstr ""
 "La description de page courante a été modifiée. Sauver les changements?"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "Ajouter Fichier de Description de Page Existant"
+msgstr "Ajouter Fichier de Feuille de Dessin Existant"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -18423,9 +18468,8 @@ msgid "Layout file is read only."
 msgstr "Le fichier est en lecture seule."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
-#, fuzzy
 msgid "KiCad Drawing Sheet Editor"
-msgstr "Editeur de Feuille de Travail KiCad"
+msgstr "Editeur de Feuille de Dessin KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18526,14 +18570,12 @@ msgid "Add a bitmap image"
 msgstr "Ajouter une image bitmap"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Ajouter Fichier de Description de Page Existant..."
+msgstr "Ajouter Contenu de Feuille de Dessin..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Ajouter un fichier de description de page existant au fichier actuel"
+msgstr "Ajouter une de feuille de dessin existant au fichier actuel"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -19492,8 +19534,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/pcbcalculator.desktop:9
+#: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -26421,19 +26463,6 @@ msgstr ""
 "Définir l'incrément (en degrés) pour la rotation à partir du menu contextuel "
 "et des raccourcis clavier."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:84
-#: pcbnew/dialogs/panel_edit_options_base.cpp:165
-msgid "Left Click Mouse Commands"
-msgstr "Commandes par Souris Clic Gauche"
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:86
-msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Ctrl."
-msgstr ""
-"L’action du clic gauche de souris dépend de 3 touches de modification :\n"
-"Alt, Maj et Ctrl."
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:100
 #: pcbnew/dialogs/panel_edit_options_base.cpp:181
 msgid "No modifier"
@@ -26444,46 +26473,14 @@ msgstr "Aucun modificateur"
 msgid "Select item(s)."
 msgstr "Sélection élément(s)."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:115
-#: pcbnew/dialogs/panel_edit_options_base.cpp:196
-msgid "Add item(s) to selection."
-msgstr "Ajouter élément(s) à la sélection."
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:120
 msgid "Shift+Alt"
 msgstr "Maj+Alt"
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:125
-#: pcbnew/dialogs/panel_edit_options_base.cpp:206
-msgid "Remove item(s) from selection."
-msgstr "Enlever élément(s) de la sélection."
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:135
-#: pcbnew/dialogs/panel_edit_options_base.cpp:216
-msgid "Toggle selected state of item(s)."
-msgstr "Basculer l’état de sélection de l’élément(s)."
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:145
-#: pcbnew/dialogs/panel_edit_options_base.cpp:226
-msgid "Clarify selection from menu."
-msgstr "Clarifier la sélection à partir du menu."
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:150
-msgid "Ctrl+Shift"
-msgstr "Ctrl+Maj"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:155
 #: pcbnew/dialogs/panel_edit_options_base.cpp:236
 msgid "Highlight net (for pads or tracks)."
 msgstr "Surbrillance net (pour pads et pistes)"
-
-#: pcbnew/dialogs/panel_edit_options_base.cpp:167
-msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Cmd."
-msgstr ""
-"L’action du clic gauche de souris dépend de 3 touches de modification :\n"
-"Alt, Maj et Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:201
 msgid "Shift+Cmd"
@@ -29602,14 +29599,12 @@ msgid "File not found"
 msgstr "Fichier non trouvé"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "La forme a une taille nulle!"
+msgstr "La forme a une taille nulle."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "La forme n'a pas de points!"
+msgstr "La forme n'a pas de points."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -31779,9 +31774,8 @@ msgstr ""
 "Cu/B.Cu) et celle adjacente."
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Pistes sur Couches Cuivre seulement"
+msgstr "Pistes sur Couches Cuivre seulement."
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
@@ -34176,9 +34170,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Afficher origines des textes et empreintes par une croix"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Imprimer cartouche et encadrement"
+msgstr "Montrer dessin du cartouche et encadrement"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
@@ -34754,21 +34747,17 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/launchers/kicad.desktop:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
+#: resources/linux/appdata/kicad.appdata.xml:13
+#: resources/linux/launchers/kicad.desktop:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:37
+#: resources/linux/appdata/kicad.appdata.xml:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -34778,98 +34767,86 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml.in:49
+#: resources/linux/appdata/kicad.appdata.xml:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:54
+#: resources/linux/appdata/kicad.appdata.xml:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:59
+#: resources/linux/appdata/kicad.appdata.xml:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:71
+#: resources/linux/appdata/kicad.appdata.xml:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/bitmap2component.desktop:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/eeschema.desktop:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/eeschema.desktop:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/eeschema.desktop:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/gerbview.desktop:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/gerbview.desktop:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop.in:12
+#: resources/linux/launchers/kicad.desktop:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/pcbcalculator.desktop:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/pcbnew.desktop:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/pcbnew.desktop:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
-msgid "Gerber File"
-msgstr "Fichiers Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
-msgid "Excellon drill file"
-msgstr "Créer Fichier(s) de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
-msgid "KiCad Project"
-msgstr "Fichier projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
-msgid "KiCad Schematic"
-msgstr "Editeur de Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Net Class Memberships"
 #~ msgstr "Membres de Netclass"
 
 #~ msgid "Worksheet"
 #~ msgstr "Feuille de travail"
+
+#~ msgid "Print the frame references."
+#~ msgstr "Imprimer  le cartouche."
+
+#~ msgid "Show worksheet"
+#~ msgstr "Montrer le cartouche"
+
+#~ msgid "Edit worksheet graphics and text"
+#~ msgstr ""
+#~ "Modifier les éléments graphiques et les textes de la feuille de travail"
+
+#~ msgid "Rebuild Ratsnest"
+#~ msgstr "Regénérer Chevelu"
 
 #~ msgid "Accelerated Graphics"
 #~ msgstr "Accélerateur Graphique"
@@ -34880,9 +34857,6 @@ msgstr "Fichiers circuits imprimés KiCad"
 #~ msgid "Use software graphics (fall-back)"
 #~ msgstr "Utiliser le mode graphique logiciel (alternatif)"
 
-#~ msgid "Print the frame references."
-#~ msgstr "Imprimer  le cartouche."
-
 #~ msgid "Add Sheet Pin"
 #~ msgstr "Ajouter Pins de Feuille de Hierarchie"
 
@@ -34892,18 +34866,8 @@ msgstr "Fichiers circuits imprimés KiCad"
 #~ msgid "Gerbview"
 #~ msgstr "GerbView"
 
-#~ msgid "Show worksheet"
-#~ msgstr "Montrer le cartouche"
-
-#~ msgid "Edit worksheet graphics and text"
-#~ msgstr ""
-#~ "Modifier les éléments graphiques et les textes de la feuille de travail"
-
 #~ msgid "Vout = Vref * (R1 + R2) / R2"
 #~ msgstr "Vout = Vref * (R1 + R2) / R2"
-
-#~ msgid "Rebuild Ratsnest"
-#~ msgstr "Regénérer Chevelu"
 
 #, c-format
 #~ msgid "Directory \"%s\" is not writable."
@@ -35495,6 +35459,10 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
