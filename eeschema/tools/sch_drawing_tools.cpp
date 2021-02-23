@@ -939,8 +939,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
 
-        VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer,
-                                                  item );
+        VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
+        cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
+        controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup =
                 [&] ()
