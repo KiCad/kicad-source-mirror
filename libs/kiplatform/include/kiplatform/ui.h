@@ -85,6 +85,14 @@ namespace KIPLATFORM
          * @param aChoice is the choice box to ellipsize
          */
         void EllipsizeChoiceBox( wxChoice* aChoice );
+
+        /**
+         * Tries to determine the system scaling factor currently in use for the window.  Under wx3.0, GTK
+         * fails to properly detect the scale factor.
+         * @param aWindow pointer to the window to check
+         * @return System scale factor in use, defaulting to the wxWidgets method
+         */
+        double GetSystemScaleFactor( const wxWindow* aWindow );
     }
 }
 

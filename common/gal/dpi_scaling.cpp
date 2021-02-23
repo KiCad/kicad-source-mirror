@@ -28,6 +28,7 @@
 #include <env_vars.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <kiplatform/ui.h>
 
 #include <wx/log.h>
 
@@ -117,7 +118,7 @@ double DPI_SCALING::GetScaleFactor() const
         // Use the native WX reporting.
         // On Linux, this will not work until WX 3.2 and GTK >= 3.10
         // Otherwise it returns 1.0
-        val = m_window->GetContentScaleFactor();
+        val = KIPLATFORM::UI::GetSystemScaleFactor( m_window );
         wxLogTrace( traceHiDpi, "Scale factor (WX): %f", *val );
     }
 

@@ -25,6 +25,7 @@
 #include <wx/nonownedwnd.h>
 #include <wx/toplevel.h>
 #include <wx/button.h>
+#include <wx/window.h>
 
 
 bool KIPLATFORM::UI::IsDarkTheme()
@@ -90,4 +91,10 @@ bool KIPLATFORM::UI::IsStockCursorOk( wxStockCursor aCursor )
 void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
 {
     // Not implemented
+}
+
+
+double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
+{
+    return aWindow->GetContentScaleFactor();
 }

@@ -91,3 +91,16 @@ void KIPLATFORM::UI::EllipsizeChoiceBox( wxChoice* aChoice )
     // Only the list of cells must be freed, the renderer isn't ours to free
     g_list_free( cells );
 }
+
+
+double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
+{
+    double val = 1.0;
+
+    GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( widget && gtk_check_version( 3, 10, 0 ) == NULL )
+        val = gtk_widget_get_scale_factor( widget );
+
+    return val;
+}
