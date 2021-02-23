@@ -130,7 +130,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
-    else if( aEvent.HasPosition() )
+    else
     {
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
     }

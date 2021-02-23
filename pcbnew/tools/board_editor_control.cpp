@@ -818,7 +818,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
-    else if( aEvent.HasPosition() )
+    else
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
 
     auto setCursor =
