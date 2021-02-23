@@ -734,6 +734,15 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         for( BOARD_ITEM* drawing : m_board->Drawings() )
             visitItem( drawing );
 
+        for( FOOTPRINT* fp : m_board->Footprints() )
+        {
+            for( BOARD_ITEM* drawing : fp->GraphicalItems() )
+                visitItem( drawing );
+
+            for( BOARD_ITEM* zone : fp->Zones() )
+                visitItem( zone );
+        }
+
         for( BOARD_ITEM* curr_item : deleteList )
             m_board->Delete( curr_item );
 
@@ -1522,6 +1531,10 @@ T PCB_PARSER::lookUpLayer( const M& aMap )
         m_undefinedLayers.insert( curText );
         return Rescue;
     }
+
+    // Some files may have saved items to the Rescue Layer due to an issue in v5
+    if( it->second == Rescue )
+        m_undefinedLayers.insert( curText );
 
     return it->second;
 }
