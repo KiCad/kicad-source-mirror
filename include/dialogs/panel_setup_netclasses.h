@@ -41,7 +41,6 @@ private:
 
     int*                  m_originalColWidths;
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
-    wxSize                m_membershipSize;     // The size needed to show the membership list
     int                   m_hoveredCol;         // Column being hovered over, for tooltips
 
 private:

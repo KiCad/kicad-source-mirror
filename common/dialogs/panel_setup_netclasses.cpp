@@ -23,6 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
+#include <pgm_base.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <netclass.h>
@@ -35,8 +38,6 @@
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_helpers.h>
-
-#include <algorithm>
 
 // PCBNEW columns of netclasses grid
 enum {
@@ -89,14 +90,6 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     }
 
     m_netclassesDirty = true;
-
-    // Figure out the smallest the netclass membership pane can ever be so that nothing is cutoff
-    // and force it to be that size.
-    m_membershipSize = GetSize();
-    m_membershipSize.y -= m_netclassesPane->GetSize().y;
-    m_membershipSize.x = -1;
-    m_membershipPane->SetMinSize( m_membershipSize );
-    m_membershipPane->SetMaxSize( m_membershipSize );
 
     // Prevent Size events from firing before we are ready
     Freeze();
@@ -170,6 +163,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     attr->SetRenderer( new GRID_CELL_ESCAPED_TEXT_RENDERER );
     m_membershipGrid->SetColAttr( 0, attr );
 
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    m_splitter->SetSashPosition( cfg->m_NetclassPanel.sash_pos );
+
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_removeButton->SetBitmap( KiBitmap( small_trash_xpm ) );
 
@@ -191,6 +187,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
 
 PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 {
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    cfg->m_NetclassPanel.sash_pos = m_splitter->GetSashPosition();
+
     delete [] m_originalColWidths;
 
     // Delete the GRID_TRICKS.
@@ -675,23 +674,6 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
     {
         rebuildNetclassDropdowns();
         m_netclassesDirty = false;
-    }
-
-    // Recompute the desired size for the two content panes. We cannot leave this sizing to
-    // wxWidgets because it wants to shrink the membership panel to an unusable size when the
-    // netlist panel grows, and also it introduces undesired artifacts when the window is resized
-    // and the panes can grow/shrink.
-    wxSize netclassSize = GetClientSize();
-    netclassSize.y -= m_membershipSize.y;
-
-    // Modify m_netclassesPane size only if needed, because calling Layout() has the annoying
-    // effect of closing any open wxChoice dropdowns.  So it cannot blindly called inside each
-    // wxUpdateUIEvent event, at least on Windows + wxWidgets 3.0 (not an issue with 3.1.1).
-    if( netclassSize.y != m_netclassesPane->GetSize().y )
-    {
-        m_netclassesPane->SetMinSize( netclassSize );
-        m_netclassesPane->SetMaxSize( netclassSize );
-        Layout();
     }
 }
 

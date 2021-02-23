@@ -24,11 +24,12 @@ class WX_GRID;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/statbox.h>
+#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -40,6 +41,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 	private:
 
 	protected:
+		wxSplitterWindow* m_splitter;
 		wxPanel* m_netclassesPane;
 		WX_GRID* m_netclassGrid;
 		wxBitmapButton* m_addButton;

@@ -109,6 +109,11 @@ public:
         int clear_3d_cache_interval;
     };
 
+    struct NETCLASS_PANEL
+    {
+        int sash_pos;
+    };
+
     COMMON_SETTINGS();
 
     virtual ~COMMON_SETTINGS() {}
@@ -133,6 +138,8 @@ public:
     SESSION m_Session;
 
     SYSTEM m_System;
+
+    NETCLASS_PANEL m_NetclassPanel;
 
     // TODO: These may not want to be in common
     wxString m_3DLibsUrl;

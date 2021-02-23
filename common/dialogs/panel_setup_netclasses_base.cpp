@@ -19,11 +19,13 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_netclassesPane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxStaticBoxSizer* sbSizerUpper;
-	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_netclassesPane, wxID_ANY, _("Net Classes") ), wxVERTICAL );
+	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
+	m_splitter->SetMinimumPaneSize( 80 );
 
-	sbSizerUpper->SetMinSize( wxSize( -1,140 ) );
+	m_netclassesPane = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bUpperSizer;
+	bUpperSizer = new wxBoxSizer( wxVERTICAL );
+
 	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT|wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
@@ -37,7 +39,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
 	m_netclassGrid->SetColLabelSize( 24 );
-	m_netclassGrid->SetColLabelValue( 0, _("Name") );
+	m_netclassGrid->SetColLabelValue( 0, _("Net Class") );
 	m_netclassGrid->SetColLabelValue( 1, _("Clearance") );
 	m_netclassGrid->SetColLabelValue( 2, _("Track Width") );
 	m_netclassGrid->SetColLabelValue( 3, _("Via Size") );
@@ -62,32 +64,30 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	sbSizerUpper->Add( m_netclassGrid, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT, 2 );
 
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	buttonBoxSizer->Add( m_addButton, 0, wxRIGHT, 5 );
+	buttonBoxSizer->Add( m_addButton, 0, wxLEFT, 2 );
 
 
-	buttonBoxSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( 5, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_removeButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerUpper->Add( buttonBoxSizer, 0, wxTOP|wxEXPAND, 2 );
+	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	m_netclassesPane->SetSizer( sbSizerUpper );
+	m_netclassesPane->SetSizer( bUpperSizer );
 	m_netclassesPane->Layout();
-	sbSizerUpper->Fit( m_netclassesPane );
-	bMargins->Add( m_netclassesPane, 2, wxALL|wxEXPAND, 5 );
-
-	m_membershipPane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxStaticBoxSizer* sbMembership;
-	sbMembership = new wxStaticBoxSizer( new wxStaticBox( m_membershipPane, wxID_ANY, _("Net Class Memberships") ), wxHORIZONTAL );
+	bUpperSizer->Fit( m_netclassesPane );
+	m_membershipPane = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bLowerSizer;
+	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bLeft;
 	bLeft = new wxBoxSizer( wxVERTICAL );
@@ -112,35 +112,35 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	sbFilters->Add( bSizer9, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizer101;
+	bSizer101 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_filterLabel = new wxStaticText( sbFilters->GetStaticBox(), wxID_ANY, _("Net name filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_filterLabel->Wrap( -1 );
 	m_filterLabel->SetMinSize( wxSize( 120,-1 ) );
 
-	bSizer10->Add( m_filterLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer101->Add( m_filterLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_netNameFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSizer10->Add( m_netNameFilter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer101->Add( m_netNameFilter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	sbFilters->Add( bSizer10, 0, wxEXPAND, 5 );
+	sbFilters->Add( bSizer101, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizer131;
+	bSizer131 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_showAllButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Show All Nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_showAllButton, 1, wxALL, 5 );
+	bSizer131->Add( m_showAllButton, 1, wxALL, 5 );
 
 
-	bSizer13->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer131->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_filterNetsButton = new wxButton( sbFilters->GetStaticBox(), wxID_ANY, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_filterNetsButton, 1, wxALL, 5 );
+	bSizer131->Add( m_filterNetsButton, 1, wxALL, 5 );
 
 
-	sbFilters->Add( bSizer13, 1, wxEXPAND|wxTOP|wxBOTTOM, 6 );
+	sbFilters->Add( bSizer131, 1, wxEXPAND|wxTOP|wxBOTTOM, 6 );
 
 
 	bLeft->Add( sbFilters, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -184,7 +184,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bLeft->Add( sbEdit, 1, wxEXPAND|wxTOP, 8 );
 
 
-	sbMembership->Add( bLeft, 1, wxEXPAND|wxRIGHT, 5 );
+	bLowerSizer->Add( bLeft, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 	wxBoxSizer* bRight;
 	bRight = new wxBoxSizer( wxVERTICAL );
@@ -218,16 +218,17 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bRight->Add( m_membershipGrid, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
-	sbMembership->Add( bRight, 1, wxEXPAND|wxLEFT, 5 );
+	bLowerSizer->Add( bRight, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	m_membershipPane->SetSizer( sbMembership );
+	m_membershipPane->SetSizer( bLowerSizer );
 	m_membershipPane->Layout();
-	sbMembership->Fit( m_membershipPane );
-	bMargins->Add( m_membershipPane, 5, wxALL|wxEXPAND, 5 );
+	bLowerSizer->Fit( m_membershipPane );
+	m_splitter->SplitHorizontally( m_netclassesPane, m_membershipPane, -1 );
+	bMargins->Add( m_splitter, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND, 5 );
+	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND|wxTOP, 2 );
 
 
 	this->SetSizer( bpanelNetClassesSizer );
