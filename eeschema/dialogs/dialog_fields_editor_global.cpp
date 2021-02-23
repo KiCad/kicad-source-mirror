@@ -252,7 +252,9 @@ public:
                 return wxT( "    " ) + GetValue( m_rows[ aRow ], aCol );
         }
         else
+        {
             return GetValue( m_rows[ aRow ], aCol );
+        }
     }
 
     std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
@@ -283,13 +285,9 @@ public:
                 }
 
                 if( &ref == &group.m_Refs.front() )
-                {
                     fieldValue = m_dataStore[ symbolID ][ m_fieldNames[ aCol ] ];
-                }
                 else if ( fieldValue != m_dataStore[ symbolID ][ m_fieldNames[ aCol ] ] )
-                {
                     return INDETERMINATE_STATE;
-                }
             }
         }
 
@@ -321,13 +319,9 @@ public:
         }
 
         if( aCol == REFERENCE_FIELD )
-        {
             fieldValue = SCH_REFERENCE_LIST::Shorthand( references );
-        }
         else if( aCol == QUANTITY_COLUMN )
-        {
             fieldValue = wxString::Format( wxT( "%d" ), ( int )references.size() );
-        }
 
         return fieldValue;
     }
@@ -648,9 +642,7 @@ public:
         if( aCol == REFERENCE_FIELD )
         {
             for( int row = 0; row < GetNumberRows(); ++row )
-            {
                 width = std::max( width, KIUI::GetTextSize( GetValue( row, aCol ), GetView() ).x );
-            }
         }
         else
         {
@@ -687,8 +679,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_bRefresh->SetBitmap( KiBitmap( small_refresh_xpm ) );
 
-    m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0,
-                                    wxALIGN_LEFT, 0 );
+    m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
                                       wxALIGN_CENTER, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
@@ -1041,9 +1032,6 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 
     switch ( col )
     {
-    default:
-        break;
-
     case SHOW_FIELD_COLUMN:
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
@@ -1063,6 +1051,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
             m_grid->ShowCol( row );
         else
             m_grid->HideCol( row );     // grid's columns map to fieldsCtrl's rows
+
         break;
     }
 
@@ -1077,6 +1066,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
         m_grid->ForceRefresh();
         break;
     }
+
+    default:
+        break;
     }
 }
 
