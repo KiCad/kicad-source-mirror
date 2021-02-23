@@ -45,7 +45,7 @@ std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()
 {
     std::vector<wxPoint> retval;
 
-    for( auto item : GetScreen()->Items() )
+    for( SCH_ITEM* item : GetScreen()->Items() )
     {
         // Avoid items that are changing
         if( !( item->GetEditFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
@@ -277,7 +277,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
         }
     }
 
-    for( auto item : deletedItems )
+    for( SCH_ITEM* item : deletedItems )
     {
         if( item->IsSelected() )
             selectionTool->RemoveItemFromSel( item, true /*quiet mode*/ );
@@ -326,7 +326,7 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
     bool                   brokenSegments = false;
     std::vector<SCH_LINE*> wires;
 
-    for( auto item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
+    for( SCH_ITEM* item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
     {
         if( item->IsType( wiresAndBuses ) )
         {
@@ -340,7 +340,7 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
         }
     }
 
-    for( auto wire : wires )
+    for( SCH_LINE* wire : wires )
         brokenSegments |= BreakSegment( wire, aPoint, NULL, aScreen );
 
     return brokenSegments;
@@ -367,7 +367,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
     }
 
 
-    for( auto pt : point_set )
+    for( const wxPoint& pt : point_set )
         brokenSegments |= BreakSegments( pt, aScreen );
 
     return brokenSegments;
@@ -439,7 +439,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     SaveCopyInUndoList( undoList, UNDO_REDO::DELETED, aAppend );
 
 
-    for( auto line : lines )
+    for( SCH_LINE* line : lines )
     {
         if( line->GetEditFlags() & STRUCT_DELETED )
         {
@@ -468,7 +468,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_SCREEN* aScreen, const wxPoint& a
         TestDanglingEnds();
         OnModify();
 
-        auto view = GetCanvas()->GetView();
+        KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
         view->ClearPreview();
         view->ShowPreview( false );
         view->ClearHiddenFlags();
