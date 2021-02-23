@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
-"PO-Revision-Date: 2021-02-20 14:54+0000\n"
+"PO-Revision-Date: 2021-02-23 18:38+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -181,7 +181,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
+msgstr "Leiterbahnen und Vias erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:680
 msgid "Create zones"
@@ -201,7 +201,7 @@ msgstr "Erstelle technische Lagen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
 msgid "Build BVH for holes and vias"
-msgstr "Baue BVH für Bohrungen und DuKos"
+msgstr "Erstelle BVH für Löcher und Vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:412
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
@@ -268,7 +268,7 @@ msgstr "Lade OpenGL: Platine"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:487
 msgid "Load OpenGL: holes and vias"
-msgstr "Lade OpenGL: Bohrungen und DuKos"
+msgstr "Lade OpenGL: Löcher und Vias"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:553
 msgid "Load OpenGL: layers"
@@ -440,16 +440,16 @@ msgstr "Sichtbarkeit von 3D-Modellen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
-msgstr "Modelle von Durchsteck-Bauteilen einblenden"
+msgstr "3D-Modelle von Durchsteck-Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:33
 msgid "Show 3D SMD models"
-msgstr "Modelle von SMD-Bauteilen einblenden"
+msgstr "3D-Modelle von SMD-Bauteilen einblenden"
 
 # Ist die Bezeichnung "virtuell" hier sinnvoll? "Sonstige" oder "Andere" könnte auch sinnvoll sein...
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show 3D virtual models"
-msgstr "Modelle von virtuellen Bauteilen einblenden"
+msgstr "3D-Modelle von virtuellen Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:43
 msgid "Board Layers"
@@ -502,7 +502,7 @@ msgstr "Lötstoppmaske vom Bestückungsdruck subtrahieren"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Clip silkscreen at via annulus"
-msgstr "Positionsdruck an DuKo-Restring abschneiden"
+msgstr "Bestückungsdruck auf Via-Ringfläche aussparen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
@@ -602,7 +602,7 @@ msgstr "Linienstärke ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable vias"
-msgstr "DuKos ausschalten"
+msgstr "Vias deaktivieren"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:222
 msgid "Disable holes"
@@ -960,27 +960,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
-msgstr "3D-Ansicht Durchsteck-Bauteile umschalten"
+msgstr "3D-Modelle für Durchsteck-Bauteile umschalten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "Anzeige 3D-Modelle vom Typ 'Durchsteck' umschalten"
+msgstr "Anzeige von 3D-Modellen mit 'Durchsteck'-Attribut umschalten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr "Ansicht SMD 3D-Modelle umschalten"
+msgstr "3D-Modelle für SMD-Bauteile umschalten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "Anzeige 3D-Modelle vom Typ 'Surface Mount' umschalten"
+msgstr "Anzeige von 3D-Modellen mit 'Oberflächenmontage'-Attribut umschalten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
-msgstr "Virtuelle 3D-Modelle umschalten"
+msgstr "3D-Modelle für virtuelle Bauteile umschalten"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "Anzeige 3D-Modelle vom Typ 'Virtuell' umschalten"
+msgstr "Anzeige von 3D-Modellen mit 'Virtuell'-Attribut umschalten"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
@@ -1235,7 +1235,7 @@ msgstr "Postscript-Datei erstellen"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:810
 msgid "Create Symbol Library"
-msgstr "Bauteilbibliothek erstellen"
+msgstr "Symbolbibliothek erstellen"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:849
 msgid "Create Footprint Library"
@@ -1675,7 +1675,7 @@ msgstr "3D-Modelle von"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
-msgstr "Bauteile von"
+msgstr "Symbole von"
 
 #: common/dialog_about/AboutDialog_main.cpp:653
 msgid "Footprints by"
@@ -3207,7 +3207,7 @@ msgstr "Zoomgeschwindigkeit:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "Wie weit muss bei jeder Drehung des Mausrads hineingezoomt werden?"
+msgstr "Wie weit bei jeder Drehung des Mausrads gezoomt werden soll"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -3382,11 +3382,11 @@ msgstr "Minimum Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 msgid "Via pad diameter"
-msgstr "DuKo-Paddurchmesser"
+msgstr "Via-Paddurchmesser"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Via plated hole diameter"
-msgstr "DuKo-Lochdurchmesser metallisiert"
+msgstr "Durchmesser des metallisierten Via-Lochs"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
 msgid "Microvia pad diameter"
@@ -3447,11 +3447,11 @@ msgstr "Leiterbahnbreite"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1491
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:194
 msgid "Via Size"
-msgstr "DuKo-Größe"
+msgstr "Via-Größe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 msgid "Via Hole"
-msgstr "DuKo-Bohrung"
+msgstr "Via-Loch"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
@@ -3891,7 +3891,7 @@ msgstr "Leiterbahn"
 #: common/eda_item.cpp:270 pcbnew/dialogs/dialog_board_statistics.cpp:481
 #: pcbnew/track.cpp:704
 msgid "Via"
-msgstr "DuKo"
+msgstr "Via"
 
 #: common/eda_item.cpp:271
 msgid "Board Marker"
@@ -3999,7 +3999,7 @@ msgstr "SCH Screen"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
 #: eeschema/symbol_editor/symbol_editor.cpp:1195
 msgid "Symbol"
-msgstr "Bauteil"
+msgstr "Symbol"
 
 #: common/eda_item.cpp:307 eeschema/lib_arc.h:70
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/board_item.cpp:37
@@ -4045,11 +4045,11 @@ msgstr "Pin"
 
 #: common/eda_item.cpp:314
 msgid "Symbol Field"
-msgstr "Bauteilfeld"
+msgstr "Symbolfeld"
 
 #: common/eda_item.cpp:316
 msgid "Gerber Layout"
-msgstr "Gerber Layout"
+msgstr "Gerber-Layout"
 
 #: common/eda_item.cpp:317
 msgid "Draw Item"
@@ -4249,7 +4249,7 @@ msgstr "Der Basispfad der System-Footprint-3D-Formen (.3Dshapes Ordner)."
 
 #: common/env_vars.cpp:75
 msgid "The base path of the locally installed symbol libraries."
-msgstr "Der Basispfad von lokal installierten Bauteilbibliotheken."
+msgstr "Der Basispfad von lokal installierten Symbolbibliotheken."
 
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
@@ -4800,7 +4800,7 @@ msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr "F. Fab"
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
@@ -5040,7 +5040,7 @@ msgstr "Pads Rückseite"
 
 #: common/layer_id.cpp:152
 msgid "Through-hole pads"
-msgstr "Durchkontaktierungspads"
+msgstr "Durchsteckpads"
 
 #: common/layer_id.cpp:153
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5053,11 +5053,11 @@ msgstr "Leiterbahnen"
 
 #: common/layer_id.cpp:154
 msgid "Through vias"
-msgstr "Durchgehende DuKos"
+msgstr "Vias (Durchkontaktierungen)"
 
 #: common/layer_id.cpp:155
 msgid "Bl/Buried vias"
-msgstr "Blinde/Vergrabene DuKos"
+msgstr "Blinde/Vergrabene Vias"
 
 #: common/layer_id.cpp:156
 msgid "Micro-vias"
@@ -5065,7 +5065,7 @@ msgstr "Mikro-Vias"
 
 #: common/layer_id.cpp:157
 msgid "Via holes"
-msgstr "Durchkontaktierungsbohrungen"
+msgstr "Via-Löcher"
 
 #: common/layer_id.cpp:158
 msgid "Via hole walls"
@@ -6037,7 +6037,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:614
 msgid "Manage Footprint Libraries..."
-msgstr "Verwalten Footprintbibliotheken..."
+msgstr "Footprintbibliotheken verwalten..."
 
 #: common/tool/actions.cpp:615
 msgid "Edit the global and project footprint library lists"
@@ -6758,7 +6758,7 @@ msgstr "Konfigurationsfehler"
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:805
 #: pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
-msgstr "Footprintbibliotheken verwalten"
+msgstr "Footprint-Bibliotheken laden"
 
 #: cvpcb/cvpcb_mainframe.cpp:856
 #, c-format
@@ -8743,7 +8743,7 @@ msgstr "Text- und Grafikeigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
-msgstr "Bauteil"
+msgstr "Symbol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
 #, c-format
@@ -19076,27 +19076,27 @@ msgstr "Beschichtungsstärke (T):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1178
 msgid "Via length:"
-msgstr "DuKo-Länge:"
+msgstr "Via-Länge:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1180
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Länge der DuKo ist die Dicke der Platine für Durchkontaktierungen"
+msgstr "Via-Länge ist die Dicke der Platine für Durchkontaktierungen"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1192
 msgid "Via pad diameter:"
-msgstr "DuKo-Pad Durchmesser:"
+msgstr "Via-Pad Durchmesser:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1194
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Durchmesser des Pads was das DuKo umgibt"
+msgstr "Durchmesser des Pads um das Via (Restring)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Clearance hole diameter:"
-msgstr "Abstand Lochdurchmesser:"
+msgstr "Antipad-Durchmesser:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1208
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Durchmesser des Durchgangslochs in Grundfläche(n)"
+msgstr "Durchmesser der Aussparung in Massefläche(n)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1220
 msgid "Z0:"
@@ -19164,9 +19164,8 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Warnung:\n"
-"Durchmesser DuKo-Pad >= Durchmesser Lochabstandsfläche.\n"
-"Einige Parameter können nicht für eine DuKo in einer Kupferfläche berechnet "
-"werden."
+"Via-Paddurchmesser >= Antipad-Durchmesser.\n"
+"Einige Parameter können nicht für Vias in Kupferzonen berechnet werden."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -19271,7 +19270,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1474
 msgid "Top view of via"
-msgstr "Ansicht oben DuKo"
+msgstr "Via-Ansicht von oben"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1508
 msgid "Current:"
@@ -19451,7 +19450,7 @@ msgstr "Minimaler Abstand"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1946
 msgid "Via: (diam - drill)"
-msgstr "DuKo: (Durchmesser - Bohrung)"
+msgstr "Via: (Bohrdurchmesser)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1947
 msgid "Plated Pad: (diam - drill)"
@@ -20038,7 +20037,7 @@ msgstr "Pads"
 #: pcbnew/widgets/appearance_controls.cpp:334
 #: pcbnew/widgets/panel_selection_filter_base.cpp:43
 msgid "Vias"
-msgstr "Durchkontaktierung"
+msgstr "Vias"
 
 #: pcbnew/board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:459
 msgid "Track Segments"
@@ -20425,11 +20424,11 @@ msgstr "Entfernen von Leiterbahnen die mehrere Netze kurzschließen"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
-msgstr "DuKos entfernen, die mehrere Netze kurzschließen"
+msgstr "Entferne Vias, die zwei Netze kurzschließen"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
-msgstr "Entferne redundante DuKos"
+msgstr "Entferne redundante Vias"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
@@ -20437,35 +20436,35 @@ msgstr "Entferne redundante Leiterbahnen"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Merge co-linear tracks"
-msgstr "Zusammenführen von kollinearen Leiterzügen"
+msgstr "Kollineare Leiterbahnen vereinen"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr "Leiterbahnen entfernen, die nicht an beiden Enden verbunden sind"
+msgstr "Entferne Leiterbahnen, die nicht an beiden Enden verbunden sind"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "DoKus entfernen, die auf weniger als zwei Lagen verbunden sind"
+msgstr "Entferne Vias, die auf weniger als zwei Lagen verbunden sind"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
-msgstr "Entferne Leiterbahnen mit Länge gleich 0"
+msgstr "Entferne Leiterbahn mit Nulllänge"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr "Entfernen Leiterbahn innerhalb eines Pad"
+msgstr "Entferne Leiterbahn innerhalb eines Pads"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
-msgstr "Grafiken mit Nullgröße entfernen"
+msgstr "Entferne Grafiken mit Nullgröße"
 
 #: pcbnew/cleanup_item.cpp:59
 msgid "Remove duplicated graphic"
-msgstr "Doppelte Grafiken entfernen"
+msgstr "Entferne doppelte Grafiken"
 
 #: pcbnew/cleanup_item.cpp:60
 msgid "Convert lines to rectangle"
-msgstr "Konvertieren Sie Linien in Rechtecke"
+msgstr "Linien in Rechtecke konvertieren"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -21099,7 +21098,7 @@ msgstr "NPTH:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
 msgid "Through vias:"
-msgstr "Durchgehende Durchkontaktierungen:"
+msgstr "Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:148
 msgid "Blind/buried:"
@@ -21219,7 +21218,7 @@ msgstr "Metallisiert"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr "DuKo/Pad"
+msgstr "Via/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Start Layer"
@@ -21296,7 +21295,7 @@ msgstr "Entferne &Leiterbahnsegmente welche unterschiedlicher Netze verbinden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "&Entferne redundante Durchkontaktierungen"
+msgstr "&Entferne redundante Vias"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
@@ -21306,7 +21305,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr "DuKos löschen, die nur auf einer Lage verbunden sind"
+msgstr "Vias löschen, die nur auf einer Lage verbunden sind"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
@@ -21335,7 +21334,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Leiterbahnen und Durchkontaktierungen aufräumen"
+msgstr "Leiterbahnen und Vias aufräumen"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
 msgid "Constraints Resolution Report"
@@ -23057,7 +23056,7 @@ msgstr "Inklusive &Platinenumrisslage"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "Inklusive &DuKos"
+msgstr "Inklusive &Vias"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
@@ -23600,7 +23599,7 @@ msgstr "Nicht metallisierte Pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
-msgstr "Vergrabene Durchkontaktierungen:"
+msgstr "Vergrabene Vias:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
@@ -23661,7 +23660,7 @@ msgstr "Footprints"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr "Leiterbahnen && DuKos"
+msgstr "Leiterbahnen && Vias"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -23831,7 +23830,7 @@ msgstr "Anwenden Standardwerte für Lagen:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:195
 msgid "Via Drill"
-msgstr "DuKo Bohrung"
+msgstr "Via-Bohrung"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:197
 msgid "uVia Drill"
@@ -23851,7 +23850,7 @@ msgstr "Benutze Werte der Netzklasse:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:73
 msgid "Set Track and Via Properties"
-msgstr "Eigenschaften Leiterbahn und DuKos"
+msgstr "Leiterbahn- und Via-Eigenschaften setzen"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -24027,7 +24026,7 @@ msgstr "Design-Regeln"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Vordefinierte Leiterbahn- und DuKo-Größen"
+msgstr "Vordefinierte Leiterbahn- und Via-Größen"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -24188,15 +24187,15 @@ msgstr "Pad Anzahl"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:73
 msgid "Via Count"
-msgstr "Anzahl DuKos"
+msgstr "Via-Anzahl"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:74
 msgid "Via Length"
-msgstr "DuKo-Länge"
+msgstr "Via-Länge"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
 msgid "Board Length"
-msgstr "Länge Platine"
+msgstr "Leiterbahn-Länge"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -24610,8 +24609,7 @@ msgstr "Warnung: Wärmeabführung ist auf mechanischen Bohrungen sinnlos."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
 msgid "Warning: Castellated property is for PTH pads."
-msgstr ""
-"Warnung: Halbloch-Eigenschaft ist für metallisierte Durchkontaktierungspads."
+msgstr "Warnung: Halbloch-Eigenschaft ist für Durchsteckpads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: BGA property is for SMD pads."
@@ -25205,11 +25203,11 @@ msgstr "Pad-Konturen beim Plotten in F.Fab- und B.Fab-Lagen einfügen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
-msgstr "Durchkontaktierungen nicht umschließen"
+msgstr "Vias nicht abdecken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr "Entferne Lötstoppmaske an DuKos"
+msgstr "Entferne Lötstoppmaske auf Vias"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Use drill/place file origin"
@@ -25418,12 +25416,12 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
-"Setze globale Breitenkorrektur für eine exakte Postscriptausgabe der "
-"Breite.\n"
+"Setze globale Breitenkorrektur für eine exakte Postscriptausgabe der Breite."
+"\n"
 "Diese Breitenkorrektur ist für eine Kompensation von Fehlern bei "
-"Leiterbahnbreiten, Pads und DuKo-Größen vorgesehen.\n"
-"Eine angemessener Breitenkorrekturwert muss innerhalb eines Bereiches von [-"
-"(Min.Leiterbahnbreite-1), +(MinAbstandswert-1)] liegen."
+"Leiterbahnbreiten, Pads und Via-Größen vorgesehen.\n"
+"Eine angemessener Breitenkorrekturwert muss innerhalb eines Bereiches von "
+"[-(Min.Leiterbahnbreite-1), +(MinAbstandswert-1)] liegen."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:321
 msgid "Force A4 output"
@@ -25538,11 +25536,11 @@ msgstr "Abstand Leiterbahn:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Abstand Durchkontaktierung:"
+msgstr "Via-Abstand:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Abstand DuKo gleich wie Abstand Zwischenraum"
+msgstr "Via-Zwischenraum identisch zu Leiterbahn-Zwischenraum"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -25630,7 +25628,7 @@ msgstr "DRC Verletzung: Hindernis hervorheben"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC Verletzung: Schieben von Leiterbahnen und DuKos"
+msgstr "DRC-Verletzung: Schieben von Leiterbahnen und Vias"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -25672,14 +25670,14 @@ msgstr "Freier Winkelmodus (kein Schieben/Umgehen)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
-msgstr "Schiebe Durchkontaktierungen"
+msgstr "Schiebe Vias"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Wenn ausgeschaltet werden DuKos als unverschiebbare Objekte behandelt statt "
+"Wenn ausgeschaltet werden Vias als unverschiebbare Objekte behandelt, statt "
 "verschoben zu werden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
@@ -25721,7 +25719,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Wenn eingeschaltet versucht der Router Pads/DuKos auf eine saubere Art "
+"Wenn eingeschaltet versucht der Router Pads/Vias auf eine saubere Art "
 "auszubrechen und große Winkel und unförmige Leiterbahnen zu vermeiden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
@@ -25956,7 +25954,7 @@ msgstr "Leiterbahnen fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:45
 msgid "Keep out vias"
-msgstr "DuKos fernhalten"
+msgstr "Vias fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out pads"
@@ -26093,15 +26091,15 @@ msgstr "Netze unverändert lassen"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
 msgid "Via hole size must be smaller than via diameter"
-msgstr "DuKo-Lochgröße muss kleiner als DuKo-Durchmesser sein"
+msgstr "Via-Lochgröße muss kleiner als Via-Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:397
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Startlage und Endlage für DuKos können nicht gleich sein"
+msgstr "Startlage und Endlage für Vias können nicht gleich sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:538
 msgid "Edit track/via properties"
-msgstr "Eigenschaften des Leiterzuges/DuKo editieren"
+msgstr "Leiterbahn-/Via-Eigenschaften bearbeiten"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:603
 msgid "Updating nets"
@@ -26109,7 +26107,7 @@ msgstr "Netze aktualisieren"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Automatically update via nets"
-msgstr "DuKo-Netze automatisch aktualisieren"
+msgstr "Via-Netze automatisch aktualisieren"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -26155,11 +26153,11 @@ msgstr "Vordefinierte Größen:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr "DuKo-Durchmesser:"
+msgstr "Via-Durchmesser:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
 msgid "Via hole:"
-msgstr "Durchkontaktierungsbohrung:"
+msgstr "Via-Loch:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -26167,7 +26165,7 @@ msgstr "Verwende Größen der Netzklasse"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:247
 msgid "Via type:"
-msgstr "DuKo-Typ:"
+msgstr "Via-Typ:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1041
@@ -26182,7 +26180,7 @@ msgstr "micro"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 #: pcbnew/track.cpp:1042
 msgid "Blind/buried"
-msgstr "Blinde/Vergrabene Durchkontaktierungen"
+msgstr "Blinde/vergrabene Vias"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:259
 msgid "Start layer:"
@@ -26194,19 +26192,19 @@ msgstr "Endlage:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:113
 msgid "Track & Via Properties"
-msgstr "Leiterbahn- & DuKo-Eigenschaften"
+msgstr "Leiterbahn- & Via-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
-msgstr "DuKo Bohrdurchmesser muss kleiner als der DuKo Durchmesser sein"
+msgstr "Via-Bohrdurchmesser muss kleiner als der Via-Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr "DuKo-Bohrdurchmesser:"
+msgstr "Via-Bohrung:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Leiterbahnbreite und Durchkontaktierungsgröße"
+msgstr "Leiterbahnbreite und Viagröße"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:145
 msgid "Set Unused Pad Properties"
@@ -26325,7 +26323,7 @@ msgstr "Anzeige beim Erstellen von Leiterbahnen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show with via clearance at end"
-msgstr "Anzeige mit DuKo-Abstand am Ende"
+msgstr "Anzeige mit Via-Abstand am Ende"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when creating and editing tracks"
@@ -26714,7 +26712,7 @@ msgstr "Zulässige Funktionen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:32
 msgid "Allow blind/buried vias"
-msgstr "Blinde/Vergrabene Durchkontaktierungen erlauben"
+msgstr "Blinde/Vergrabene Vias erlauben"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:38
 msgid "Allow micro vias (uVias)"
@@ -26790,15 +26788,15 @@ msgstr "Minimale Ringbreite:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:210
 msgid "Minimum via diameter:"
-msgstr "DuKo Minimaldurchmesser:"
+msgstr "Via-Minimaldurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Copper hole clearance:"
-msgstr "Abstand Kupfer-Loch:"
+msgstr "Kupfer-Lochabstand:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:238
 msgid "Copper edge clearance:"
-msgstr "Abstand Kupfer-Platinenrand:"
+msgstr "Kupfer-Randabstand:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid "Holes"
@@ -26883,7 +26881,7 @@ msgstr "\"signal\" ist ein reservierter Lagenname."
 #: pcbnew/dialogs/panel_setup_layers.cpp:763
 #, c-format
 msgid "Layer name \"%s\" is already in use."
-msgstr "Eine Lage mit dem Namen \"%s\" wird bereits benutzt."
+msgstr "Lagenname \"%s\" wird bereits benutzt."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:863
 #, c-format
@@ -27728,26 +27726,28 @@ msgstr "Leiterbahnbreite ist kleiner als die minimale Leiterbahnbreite (%s)."
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:262
 #, c-format
 msgid "Via diameter less than minimum via diameter (%s)."
-msgstr "DuKo-Durchmesser ist kleiner als der minimale DuKo-Durchmesser (%s)."
+msgstr "Via-Durchmesser ist kleiner als der minimale Via-Durchmesser (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
 msgid "No via hole size defined."
-msgstr "Keine DuKo-Lochgröße definiert."
+msgstr "Keine Via-Lochgröße definiert."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:279
 #, c-format
 msgid "Via hole diameter less than minimum through hole diameter (%s)."
 msgstr ""
-"DuKo-Lochdurchmesser ist kleiner als der minimale Lochdurchmesser (%s)."
+"Via-Lochdurchmesser ist kleiner als der minimale Durchgangslochdurchmesser "
+"(%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
 msgid "Via hole diameter larger than via diameter."
-msgstr "DuKo-Lochdurchmesser ist größer als der DuKo-Durchmesser."
+msgstr "Via-Lochdurchmesser ist größer als der Via-Durchmesser."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
 #, c-format
 msgid "Diameter and hole leave via annulus less than minimum (%s)."
-msgstr "Durchmesser und Loch lassen weniger DuKo-Ring übrig, als erlaubt (%s)."
+msgstr ""
+"Durchmesser und Loch lassen weniger Via-Ringfläche übrig, als erlaubt (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:313
 #, c-format
@@ -27769,12 +27769,12 @@ msgstr "Differentialpaar-Abstand ist kleiner als Mindestabstand (%s)."
 #, c-format
 msgid "Differential pair via gap less than minimum clearance (%s)."
 msgstr ""
-"Differentialpaar-DuKo-Abstand ist kleiner als der zulässige Mindestabstand "
+"Differentialpaar-Via-Abstand ist kleiner als der zulässige Mindestabstand "
 "(%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Vordefinierte Leiterbahn- und DuKo-Größen:"
+msgstr "Vordefinierte Leiterbahn- und Via-Größen:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:51
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:110
@@ -27802,7 +27802,7 @@ msgstr "Zwischenraum"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:163
 msgid "Via Gap"
-msgstr "Abstand Durchkontaktierung"
+msgstr "Via-Abstand"
 
 #: pcbnew/dimension.cpp:303
 msgid "Dimension"
@@ -27993,7 +27993,7 @@ msgstr "Kupferflächennetz hat keine Pads"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Via is not connected or connected on only one layer"
-msgstr "DuKo ist nicht oder nur auf einer Lage verbunden"
+msgstr "Via ist nicht oder nur auf einer Lage verbunden"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Track has unconnected end"
@@ -28021,7 +28021,7 @@ msgstr "Bohrung außerhalb des Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
-msgstr "DuKo-Durchmesser"
+msgstr "Via-Durchmesser"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
@@ -28093,7 +28093,7 @@ msgstr "Schrägstellung zwischen Spuren außerhalb der Reichweite"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Too many vias on a connection"
-msgstr "Zu viele DuKos in einer Verbindung"
+msgstr "Zu viele Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Differential pair gap out of range"
@@ -28211,7 +28211,7 @@ msgstr "Nicht erkannte Lage '%s'."
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:80
 msgid "Checking via annular rings..."
-msgstr "Prüfe DuKo-Restringe..."
+msgstr "Prüfe Via-Restringe..."
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:121
 #, c-format
@@ -28225,7 +28225,7 @@ msgstr "(%s maximale Ringbreite %s; tatsächliche %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:74
 msgid "Checking pad, via and zone connections..."
-msgstr "Prüfe Pad-, DuKo- und Zonenverbindungen..."
+msgstr "Prüfe Pad-, Via- und Zonenverbindungen..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:145
 msgid "Checking net connections..."
@@ -28241,7 +28241,7 @@ msgstr "Tesseliere Kupferzonen..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:215
 msgid "Checking track & via clearances..."
-msgstr "Prüfe Leiterbahn- & DuKo-Abstände..."
+msgstr "Prüfe Leiterbahn- & Via-Abstände..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:220
 msgid "Checking pad clearances..."
@@ -28278,7 +28278,7 @@ msgstr "Prüfe Footprint-Abstandsflächendefinitionen..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:130
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "Prüfe überlappende Footprint-Abstandsflächen..."
+msgstr "Prüfe Footprints auf überlappende Abstandsflächen..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:340
 msgid "DPs evaluated:"
@@ -28327,7 +28327,7 @@ msgstr "Prüfe Padlöcher..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:95
 msgid "Checking via holes..."
-msgstr "Prüfe DuKo-Löcher..."
+msgstr "Prüfe Via-Löcher..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:156
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:221
@@ -28453,7 +28453,7 @@ msgstr "Prüfe Leiterbahnbreiten..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:75
 msgid "Checking via diameters..."
-msgstr "Prüfe DuKo-Durchmesser..."
+msgstr "Prüfe Via-Durchmesser..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:112
 #, c-format
@@ -29690,12 +29690,12 @@ msgstr "Verbinde %s Pin %s zu %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:547
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Verbinde DuKo von %s nach %s."
+msgstr "Wiederverbinde Via von %s nach %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:568
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "DuKo mit unbekannten Netz (%s) verbunden."
+msgstr "Via mit unbekannten Netz (%s) verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:607
 #, c-format
@@ -29964,7 +29964,7 @@ msgstr "Pad auf %s von %s"
 #: pcbnew/pad.cpp:1107
 #, c-format
 msgid "Through hole pad of %s"
-msgstr "Durchkontaktierungspad von %s"
+msgstr "Durchsteckpad von %s"
 
 #: pcbnew/pad.cpp:1115
 #, c-format
@@ -29974,7 +29974,7 @@ msgstr "Pad %s auf %s von %s"
 #: pcbnew/pad.cpp:1122
 #, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Durchkontaktierungspad %s von %s"
+msgstr "Durchsteckpad %s von %s"
 
 #: pcbnew/pad.cpp:1427
 msgid "Edge connector"
@@ -30116,7 +30116,7 @@ msgstr "Unbekannte Lage '%s'"
 #: pcbnew/pcb_expr_evaluator.cpp:279
 msgid "Footprint's courtyard is not a single, closed shape."
 msgstr ""
-"Footprint-Abstandsfläche ist keine zusammenhängende geschlossene Kontur."
+"Footprint-Abstandsfläche ist keine zusammenhängende, geschlossene Kontur."
 
 #: pcbnew/pcb_expr_evaluator.cpp:289
 msgid "Footprint has no front courtyard."
@@ -30495,7 +30495,7 @@ msgid ""
 msgstr ""
 "Der CADSTAR-Bereich '%s' in der Bibliothekskomponente '%s' hat kein KiCad-"
 "Äquivalent. Der Bereich ist weder ein Sperrbereich für Leiterbahnen noch für "
-"DuKos. Der Bereich wurde nicht importiert."
+"Vias. Der Bereich wurde nicht importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:993
 #, c-format
@@ -30655,9 +30655,8 @@ msgid ""
 "pads has been applied."
 msgstr ""
 "Die CADSTAR-Vorlage '%s' verfügt über unterschiedliche Einstellungen für die "
-"thermische Entlastung von Pads und Durchkontaktierungen. KiCad unterstützt "
-"nur eine einzige Einstellung für beide. Die Einstellung für Pads wurde "
-"angewendet."
+"thermische Entlastung von Pads und Vias. KiCad unterstützt nur eine einzige "
+"Einstellung für beide. Die Einstellung für Pads wurde angewendet."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1717
 #, c-format
@@ -30725,10 +30724,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"Der CADSTAR über den Code '%s' hat eine andere Form als ein definierter "
-"Kreis. KiCad unterstützt nur kreisförmige Durchkontaktierungen, daher wurde "
-"dieser Durchkontakttyp in eine Durchkontaktierung mit kreisförmiger Form von "
-"%.2f mm Durchmesser geändert."
+"Der CADSTAR Via-Code '%s' hat eine andere Form als Kreis. KiCad unterstützt "
+"nur kreisförmige Vias, daher wurde dieser Via-Typ in ein kreisförmiges Via "
+"mit %.2f mm Durchmesser geändert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2342
 #, c-format
@@ -31106,7 +31104,7 @@ msgstr "unbekannter Pad-Typ: %d"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1745
 #, c-format
 msgid "unknown via type %d"
-msgstr "Unbekannter Durchkontaktierungstyp %d"
+msgstr "Unbekannter Via-Typ %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1917
 #, c-format
@@ -31571,23 +31569,23 @@ msgstr "Beendet die aktuell verlegte Leiterbahn automatisch."
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Place Through Via"
-msgstr "Durchgehende DuKo platzieren"
+msgstr "Durchkontaktierung platzieren"
 
 #: pcbnew/router/router_tool.cpp:104
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
-"Fügt eine \"Through-Hole\" Durchkontaktierung (PTH) am Ende der aktuell "
-"gerouteten Leiterbahn hinzu."
+"Fügt eine Durchkontaktierung (Via) am Ende der aktuell gerouteten Leiterbahn "
+"hinzu."
 
 #: pcbnew/router/router_tool.cpp:110
 msgid "Place Blind/Buried Via"
-msgstr "Blinde/Vergrabene Durchkontaktierungen platzieren"
+msgstr "Blinde/vergrabene Via platzieren"
 
 #: pcbnew/router/router_tool.cpp:111
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
-"Fügt eine blinde oder vergrabene Durchkontaktierung am Ende der aktuell "
-"gerouteten Leiterbahn hinzu."
+"Fügt ein blindes oder vergrabenes Via am Ende der aktuell gerouteten "
+"Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:117
 msgid "Place Microvia"
@@ -31599,38 +31597,35 @@ msgstr "Fügt ein Mikro-Via am Ende der aktuell gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid "Select Layer and Place Through Via..."
-msgstr "Lagenpaar und Position für Durchkontaktierung auswählen..."
+msgstr "Lage wählen und Durchkontaktierung platzieren..."
 
 #: pcbnew/router/router_tool.cpp:125
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Wählt einen Lage und fügt eine \"Through-Hole\" Durchkontaktierung (PTH) am "
-"Ende der aktuell gerouteten Leiterbahn hinzu."
+"Wählt eine Lage und fügt eine Durchkontaktierung (Via) am Ende der aktuell "
+"gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr ""
-"Lagenpaar und Position für blinde/vergrabene Durchkontaktierungen "
-"auswählen..."
+msgstr "Lage wählen und blinde/vergrabene Vias platzieren..."
 
 #: pcbnew/router/router_tool.cpp:134
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
-"Wählt eine Lage und fügt eine blinde oder vergrabene Durchkontaktierung am "
-"Ende der aktuell gerouteten Leiterbahn hinzu."
+"Wählt eine Lage und fügt ein blindes oder vergrabenes Via am Ende der "
+"aktuell gerouteten Leiterbahn hinzu."
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Custom Track/Via Size..."
-msgstr "Benutzerdefinierte Leiterbahn/DuKo Größe..."
+msgstr "Benutzerdefinierte Leiterbahn-/Via-Größe..."
 
 #: pcbnew/router/router_tool.cpp:142
 msgid "Shows a dialog for changing the track width and via size."
-msgstr ""
-"Zeigt einen Dialog zum Verändern der Leiterbahnbreite und der DuKo Größe."
+msgstr "Zeigt einen Dialog zum Verändern der Leiterbahnbreite und der Viagröße."
 
 #: pcbnew/router/router_tool.cpp:148
 msgid "Switch Track Posture"
@@ -31650,7 +31645,7 @@ msgstr "Ändern der Kurventypes vom aktuell gerouteten Leiterzug."
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
-msgstr "Breite Leiterbahn/DuKo wählen"
+msgstr "Leiterbahnbreite/Viagröße wählen"
 
 #: pcbnew/router/router_tool.cpp:196
 msgid "Use Starting Track Width"
@@ -31666,7 +31661,7 @@ msgstr "Verwende Werte der Netzklasse"
 
 #: pcbnew/router/router_tool.cpp:202
 msgid "Use track and via sizes from the net class"
-msgstr "Verwende Leiterbahn- und DuKo-Größen aus der Netzklasse"
+msgstr "Verwende Leiterbahn- und Via-Größen der Netzklasse"
 
 #: pcbnew/router/router_tool.cpp:206 pcbnew/router/router_tool.cpp:327
 #: pcbnew/tools/drawing_tool.cpp:91
@@ -31675,7 +31670,7 @@ msgstr "Verwende Benutzerdefinierte Werte..."
 
 #: pcbnew/router/router_tool.cpp:207 pcbnew/tools/drawing_tool.cpp:92
 msgid "Specify custom track and via sizes"
-msgstr "Benutzerdefinierte Leiterbahnen und DuKo Größen"
+msgstr "Benutzerdefinierte Leiterbahn- und Via-Größen angeben"
 
 #: pcbnew/router/router_tool.cpp:218
 msgid "Track netclass width"
@@ -31688,17 +31683,17 @@ msgstr "Leiterbahn %s"
 
 #: pcbnew/router/router_tool.cpp:234
 msgid "Via netclass values"
-msgstr "DuKo Netzklassen Werte"
+msgstr "Via-Netzklassen-Werte"
 
 #: pcbnew/router/router_tool.cpp:238 pcbnew/tools/drawing_tool.cpp:103
 #, c-format
 msgid "Via %s, drill %s"
-msgstr "Durchkontaktierung %s, Bohrung %s"
+msgstr "Via %s, Bohrung %s"
 
 #: pcbnew/router/router_tool.cpp:242 pcbnew/tools/drawing_tool.cpp:109
 #, c-format
 msgid "Via %s"
-msgstr "Durchkontaktierung %s"
+msgstr "Via %s"
 
 #: pcbnew/router/router_tool.cpp:306
 msgid "Select Differential Pair Dimensions"
@@ -31720,7 +31715,7 @@ msgstr "Breite %s"
 #: pcbnew/router/router_tool.cpp:350
 #, c-format
 msgid "Width %s, via gap %s"
-msgstr "Breite %s, DuKo Abstand %s"
+msgstr "Breite %s, Via-Abstand %s"
 
 #: pcbnew/router/router_tool.cpp:359
 #, c-format
@@ -31730,7 +31725,7 @@ msgstr "Breite %s, Lücke %s"
 #: pcbnew/router/router_tool.cpp:365
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Breite %s, Lücke %s, DuKo Lücke %s"
+msgstr "Breite %s, Abstand %s, Via-Abstand %s"
 
 #: pcbnew/router/router_tool.cpp:774 pcbnew/router/router_tool.cpp:796
 msgid "Show board setup"
@@ -31741,7 +31736,7 @@ msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene DuKos müssen in 'Platinenkonfiguration > Design-Regeln > "
+"Blinde/vergrabene Vias müssen in 'Platinenkonfiguration > Design-Regeln > "
 "Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:807
@@ -31753,8 +31748,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:816
 msgid "Only through vias are allowed on 2 layer boards."
-msgstr ""
-"Auf 2-Lagen Platinen sind nur durchgehende Durchkontaktierungen erlaubt."
+msgstr "Auf 2-Lagen Platinen sind nur Durchkontaktierungen erlaubt."
 
 #: pcbnew/router/router_tool.cpp:824
 msgid ""
@@ -31823,14 +31817,14 @@ msgstr "Sessiondatei verwendet fehlerhafte Lagen-ID \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:218
 msgid "Session via padstack has no shapes"
-msgstr "Session für Padstapel von Durchkontaktierung besitzt keinerlei Formen"
+msgstr "Session für Padstapel von Vias besitzt keinerlei Formen"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #: pcbnew/specctra_import_export/specctra_import.cpp:244
 #: pcbnew/specctra_import_export/specctra_import.cpp:269
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr "Nicht unterstützte Form für Durchkontaktierung: %s"
+msgstr "Nicht unterstützte Via-Form: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:324
 msgid "Session file is missing the \"session\" section"
@@ -31923,12 +31917,12 @@ msgstr "Bearbeiten vordefinierter Größen..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:644
 msgid "Via: use netclass sizes"
-msgstr "DuKo: Netzklassengrößen verwenden"
+msgstr "Via: Netzklassengrößen verwenden"
 
 #: pcbnew/toolbars_pcb_editor.cpp:667
 #, c-format
 msgid "Via: %s (%s)"
-msgstr "DuKo: %s (%s)"
+msgstr "Via: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:109
 msgid "Locking"
@@ -32137,11 +32131,11 @@ msgstr "Breitenbeschränkungen: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:553
 msgid "Via Diameter"
-msgstr "DuKo-Durchmesser"
+msgstr "Via-Durchmesser"
 
 #: pcbnew/tools/board_inspection_tool.cpp:555
 msgid "Via diameter resolution for:"
-msgstr "DuKo-Durchmesserermittlung für:"
+msgstr "Via-Durchmesserermittlung für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:581
 #, c-format
@@ -32150,11 +32144,11 @@ msgstr "Durchmesserbeschränkungen: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:588
 msgid "Via Annular Width"
-msgstr "DuKo-Ringbreite"
+msgstr "Via-Ringbreite"
 
 #: pcbnew/tools/board_inspection_tool.cpp:590
 msgid "Via annular width resolution for:"
-msgstr "Ermittele DuKo-Ringbreite für:"
+msgstr "Ermittele Via-Ringbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:616
 #, c-format
@@ -32218,7 +32212,7 @@ msgstr "Bogen aus Liniensegment erstellen"
 
 #: pcbnew/tools/drawing_tool.cpp:71
 msgid "Select Via Size"
-msgstr "DuKo-Größe wählen"
+msgstr "Via-Größe wählen"
 
 #: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1466
 msgid "Draw a line segment"
@@ -32266,11 +32260,11 @@ msgstr "Selbstüberschneidende Polygone sind nicht zulässig"
 
 #: pcbnew/tools/drawing_tool.cpp:2353
 msgid "Via location violates DRC."
-msgstr "DuKo-Position verletzt die DRC."
+msgstr "Via-Position verletzt DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2456
 msgid "Place via"
-msgstr "DuKo platzieren"
+msgstr "Via platzieren"
 
 #: pcbnew/tools/drc_tool.cpp:148
 msgid "Refilling all zones..."
@@ -32299,7 +32293,7 @@ msgstr "Referenzpunkt für Verschieben auswählen..."
 
 #: pcbnew/tools/edit_tool.cpp:995
 msgid "Edit track width/via size"
-msgstr "Eigenschaften der Leiterbahnbreite und Größe der Durchkontaktierung"
+msgstr "Leiterbahnbreite und Via-Größe bearbeiten"
 
 #: pcbnew/tools/edit_tool.cpp:1030
 msgid "At least two straight track segments must be selected."
@@ -32537,11 +32531,11 @@ msgstr "Gefüllte Flächen hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Vias"
-msgstr "Leiterbahnen und Durchkontaktierungen hinzufügen"
+msgstr "Vias hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add free-standing vias"
-msgstr "Freistehende Durchkontaktierungen hinzufügen"
+msgstr "Freistehende Vias hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:161
 msgid "Add Rule Area"
@@ -32718,7 +32712,7 @@ msgstr "Ändern Breite Leiterbahn"
 
 #: pcbnew/tools/pcb_actions.cpp:304
 msgid "Updates selected track & via sizes"
-msgstr "Aktualisierung ausgewählter Leiterbahnen und DuKo Größen"
+msgstr "Ausgewählte Leiterbahn- und Via-Größen aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -32824,7 +32818,7 @@ msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
 "Entfernen oder Wiederherstellen der nicht verbundenen inneren Lagen von "
-"Durchsteckpads und DuKos"
+"Durchsteckpads und Vias"
 
 #: pcbnew/tools/pcb_actions.cpp:408
 msgid "Assign a different footprint from the library"
@@ -32849,7 +32843,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Edit Track & Via Properties..."
-msgstr "Leiterbahn- & DuKo-Eigenschaften bearbeiten..."
+msgstr "Leiterbahn- & Via-Eigenschaften bearbeiten..."
 
 #: pcbnew/tools/pcb_actions.cpp:429
 msgid "Edit Text and graphics properties globally across board"
@@ -32865,7 +32859,7 @@ msgstr "Leiterbahnen, Footprints, und grafische Elemente von Platine entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:440
 msgid "Cleanup Tracks & Vias..."
-msgstr "Leiterbahnen und Durchkontaktierungen aufräumen..."
+msgstr "Leiterbahnen und Vias aufräumen..."
 
 #: pcbnew/tools/pcb_actions.cpp:441
 msgid "Cleanup redundant items, shorting items, etc."
@@ -33084,11 +33078,11 @@ msgstr "Auf vorherige Leiterbahnbreite schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:597
 msgid "Increase Via Size"
-msgstr "Größe DuKo erhöhen"
+msgstr "Via-Größe erhöhen"
 
 #: pcbnew/tools/pcb_actions.cpp:602
 msgid "Decrease Via Size"
-msgstr "Größe DuKo verkleinern"
+msgstr "Via-Größe verkleinern"
 
 #: pcbnew/tools/pcb_actions.cpp:611
 msgid "Merge Zones"
@@ -33280,11 +33274,11 @@ msgstr "Pads als Umriss darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Sketch Vias"
-msgstr "DuKo skizzieren"
+msgstr "Vias skizzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:778
 msgid "Show vias in outline mode"
-msgstr "DuKos als Umriss darstellen"
+msgstr "Vias als Umriss darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Sketch Graphic Items"
@@ -33638,8 +33632,7 @@ msgstr "Auswahl aller Leiterbahnen eines Netzes"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr ""
-"Alle Leiterbahnen und Durchkontaktierungen auf Wert ihrer Netzklasse setzen."
+msgstr "Alle Leiterbahnen und Vias auswählen, die zum selben Netz gehören."
 
 #: pcbnew/tools/pcb_actions.cpp:1176
 msgid "Deselect All Tracks in Net"
@@ -33647,7 +33640,7 @@ msgstr "Alle Leiterbahnen im Netz aus Auswahl entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Deselektiert alle Leiterbahnen & DuKos, die zum selben Netz gehören."
+msgstr "Deselektiert alle Leiterbahnen & Vias, die zum selben Netz gehören."
 
 #: pcbnew/tools/pcb_actions.cpp:1182
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -33934,7 +33927,7 @@ msgstr "Alle Flächenfüllungen entfernen"
 #: pcbnew/track.cpp:90
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Blinde/Vergrabene DuKo %s auf %s"
+msgstr "Blindes/vergrabenes Via %s auf %s"
 
 #: pcbnew/track.cpp:91
 #, c-format
@@ -33944,7 +33937,7 @@ msgstr "Mikro-Via %s auf %s"
 #: pcbnew/track.cpp:92
 #, c-format
 msgid "Via %s on %s"
-msgstr "DuKo %s auf %s"
+msgstr "Via %s auf %s"
 
 #: pcbnew/track.cpp:147
 msgid "removed annular ring"
@@ -33965,11 +33958,11 @@ msgstr "Mikro-Via"
 
 #: pcbnew/track.cpp:702
 msgid "Blind/Buried Via"
-msgstr "Blinde/Vergrabene Durchkontaktierungen"
+msgstr "Blinde/Vergrabene Vias"
 
 #: pcbnew/track.cpp:703
 msgid "Through Via"
-msgstr "Durchgehende DuKo"
+msgstr "Durchkontaktierung"
 
 #: pcbnew/track.cpp:719 pcbnew/track.cpp:1100
 msgid "Drill"
@@ -34007,7 +34000,7 @@ msgstr "Lage Unten"
 
 #: pcbnew/track.cpp:1107
 msgid "Via Type"
-msgstr "DuKo-Typ"
+msgstr "Via-Typ"
 
 #: pcbnew/undo_redo.cpp:536
 msgid "Incomplete undo/redo operation: some items not found"
@@ -34021,7 +34014,7 @@ msgstr "Anzeige Leiterbahnen"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Show all vias"
-msgstr "Alle DuKos zeigen"
+msgstr "Alle Vias zeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show all pads"
@@ -34247,13 +34240,13 @@ msgstr "Hervorhebung %s"
 #: pcbnew/widgets/appearance_controls.cpp:2150
 #, c-format
 msgid "Select tracks and vias in %s"
-msgstr "Wähle Leiterbahnen und Durchkontaktierungen aus %s"
+msgstr "Wähle Leiterbahnen und Vias in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:839
 #: pcbnew/widgets/appearance_controls.cpp:2154
 #, c-format
 msgid "Deselect tracks and vias in %s"
-msgstr "Leiterbahnen und DuKos in %s abwählen"
+msgstr "Leiterbahnen und Vias in %s abwählen"
 
 #: pcbnew/widgets/appearance_controls.cpp:847
 msgid "Hide all other nets"
@@ -34336,11 +34329,11 @@ msgstr "Benutzerspezifische Bedeutung"
 
 #: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "Board's perimeter definition"
-msgstr "Platinenumrisses"
+msgstr "Definition des Platinenumrisses"
 
 #: pcbnew/widgets/appearance_controls.cpp:1517
 msgid "Board's edge setback outline"
-msgstr "Abstände"
+msgstr "Umriss des Randabstands der Platine"
 
 #: pcbnew/widgets/appearance_controls.cpp:1518
 msgid "Footprint courtyards on board's front"
@@ -34577,7 +34570,7 @@ msgstr "Ausschnitt"
 
 #: pcbnew/zone.cpp:567
 msgid "No vias"
-msgstr "Keine DuKos"
+msgstr "Keine Vias"
 
 #: pcbnew/zone.cpp:570
 msgid "No tracks"
