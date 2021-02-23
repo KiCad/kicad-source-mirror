@@ -61,7 +61,14 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew )
     OPT_BOX2I changed_area = ChangedArea( aOld, aNew );
 
     if( changed_area )
+    {
+        if( Dbg() )
+        {
+            Dbg()->AddBox( *changed_area, 3, "shove-changed-area" );
+        }
+
         m_affectedArea = m_affectedArea ? m_affectedArea->Merge( *changed_area ) : *changed_area;
+    }
 
     m_currentNode->Replace( aOld, aNew );
 }
@@ -588,14 +595,6 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
 
     std::set<ITEM*> cluster = topo.AssembleCluster( aObstacle, aCurrent.Layers().Start() );
 
-#if 0
-    m_logger.NewGroup( "on-colliding-solid-cluster", m_iter );
-    for( ITEM* item : cluster )
-    {
-        m_logger.Log( item, 0, "cluster-entry" );
-    }
-#endif
-
     walkaround.SetSolidsOnly( false );
     walkaround.RestrictToSet( true, cluster );
     walkaround.SetIterationLimit( 16 ); // fixme: make configurable
@@ -670,12 +669,13 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
     replaceLine( aCurrent, walkaroundLine );
     walkaroundLine.SetRank( nextRank );
 
-#if 0
-    m_logger.NewGroup( "on-colliding-solid", m_iter );
-    m_logger.Log( aObstacle, 0, "obstacle-solid" );
-    m_logger.Log( &aCurrent, 1, "current-line" );
-    m_logger.Log( &walkaroundLine, 3, "walk-line" );
-#endif
+    if( Dbg() )
+    {
+        Dbg()->BeginGroup( "on-colliding-solid" );
+        Dbg()->AddLine( aCurrent.CLine(), 1, 10000, "current-line" );
+        Dbg()->AddLine( walkaroundLine.CLine(), 3, 10000, "walk-line" );
+        Dbg()->EndGroup();
+    }
 
     popLineStack();
 
@@ -1582,7 +1582,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 void SHOVE::runOptimizer( NODE* aNode )
 {
     OPTIMIZER optimizer( aNode );
-    int optFlags = 0;
+    int optFlags = 0; 
     int n_passes = 0;
 
     PNS_OPTIMIZATION_EFFORT effort = Settings().OptimizerEffort();
@@ -1595,20 +1595,20 @@ void SHOVE::runOptimizer( NODE* aNode )
         maxWidth = std::max( line.Width(), maxWidth );
 
     if( area )
-        area->Inflate( 10 * maxWidth );
+    {
+        area->Inflate( maxWidth );
+        area = area->Intersect( VisibleViewArea() );
+    }
 
     switch( effort )
     {
     case OE_LOW:
-        optFlags = OPTIMIZER::MERGE_OBTUSE;
+        optFlags |= OPTIMIZER::MERGE_OBTUSE;
         n_passes = 1;
         break;
 
     case OE_MEDIUM:
-        optFlags = OPTIMIZER::MERGE_SEGMENTS;
-
-        if( area )
-            optimizer.SetRestrictArea( *area );
+        optFlags |= OPTIMIZER::MERGE_SEGMENTS;
 
         n_passes = 2;
         break;
@@ -1621,6 +1621,17 @@ void SHOVE::runOptimizer( NODE* aNode )
     default:
         break;
     }
+
+    if( area )
+        {
+            if( Dbg() )
+            {
+                Dbg()->AddBox( *area, 1, "opt-area" );
+            }
+
+            optFlags |= OPTIMIZER::RESTRICT_AREA;
+            optimizer.SetRestrictArea( *area, false );
+        }
 
     if( Settings().SmartPads() )
         optFlags |= OPTIMIZER::SMART_PADS;
