@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 15:32-0800\n"
+"POT-Creation-Date: 2021-02-23 10:42-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -470,6 +470,9 @@ msgstr "Reset to defaults"
 msgid "3D Display Options"
 msgstr "3D Display Options"
 
+msgid "KiCad 3D Viewer"
+msgstr "KiCad 3D Viewer"
+
 msgid "Background Color, Bottom"
 msgstr "Background Color, Bottom"
 
@@ -816,20 +819,20 @@ msgstr "Export to File"
 msgid "Export to Clipboard"
 msgstr "Export to Clipboard"
 
-msgid "Eeschema (.lib file)"
-msgstr "Eeschema (.lib file)"
+msgid "Symbol (.lib file)"
+msgstr "Symbol (.lib file)"
 
-msgid "Pcbnew (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod file)"
+msgid "Footprint (.kicad_mod file)"
+msgstr "Footprint (.kicad_mod file)"
 
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps file)"
 
-msgid "Logo for title block (.kicad_wks file)"
-msgstr "Logo for title block (.kicad_wks file)"
+msgid "Worksheet (.kicad_wks file)"
+msgstr "Worksheet (.kicad_wks file)"
 
-msgid "Format"
-msgstr "Format"
+msgid "Output Format"
+msgstr "Output Format"
 
 msgid "Image Options"
 msgstr "Image Options"
@@ -1318,6 +1321,12 @@ msgstr "Grid 2:"
 msgid "Reset Grid Origin"
 msgstr "Reset Grid Origin"
 
+msgid "Reset Grid Sizes"
+msgstr "Reset Grid Sizes"
+
+msgid "Resets the list of grid sizes to default values"
+msgstr "Resets the list of grid sizes to default values"
+
 msgid "Grid Settings"
 msgstr "Grid Settings"
 
@@ -1769,6 +1778,9 @@ msgstr "minutes"
 msgid "File history size:"
 msgstr "File history size:"
 
+msgid "3D cache file duration:"
+msgstr "3D cache file duration:"
+
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
@@ -1808,9 +1820,6 @@ msgstr "Balanced Antialiasing"
 
 msgid "High Quality Antialiasing"
 msgstr "High Quality Antialiasing"
-
-msgid "3D cache file duration:"
-msgstr "3D cache file duration:"
 
 msgid "Helper Applications"
 msgstr "Helper Applications"
@@ -1943,6 +1952,9 @@ msgstr ""
 
 msgid "Import Hotkeys File:"
 msgstr "Import Hotkeys File:"
+
+msgid "| Action | Default Hotkey | Description"
+msgstr "| Action | Default Hotkey | Description"
 
 msgid "Cmd"
 msgstr "Cmd"
@@ -2109,8 +2121,8 @@ msgstr "Schematic wire line style"
 msgid "The default net class is required."
 msgstr "The default net class is required."
 
-msgid "Net Classes"
-msgstr "Net Classes"
+msgid "Net Class"
+msgstr "Net Class"
 
 msgid "Clearance"
 msgstr "Clearance"
@@ -2148,9 +2160,6 @@ msgstr "Line Style"
 msgid "Default"
 msgstr "Default"
 
-msgid "Net Class Memberships"
-msgstr "Net Class Memberships"
-
 msgid "Filter Nets"
 msgstr "Filter Nets"
 
@@ -2180,9 +2189,6 @@ msgstr "Assign To Selected Nets"
 
 msgid "Net"
 msgstr "Net"
-
-msgid "Net Class"
-msgstr "Net Class"
 
 msgid "Ignore"
 msgstr "Ignore"
@@ -2244,6 +2250,67 @@ msgstr "Could not use OpenGL, falling back to software rendering"
 
 msgid "Could not use OpenGL"
 msgstr "Could not use OpenGL"
+
+#, c-format
+msgid "The file \"%s\" was not fully read"
+msgstr "The file “%s” was not fully read"
+
+msgid "Error writing page layout design file"
+msgstr "Error writing page layout design file"
+
+msgid "Line"
+msgstr "Line"
+
+msgid "Rectangle"
+msgstr "Rectangle"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Imported Shape"
+msgstr "Imported Shape"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "First Page Only"
+msgstr "First Page Only"
+
+msgid "Subsequent Pages"
+msgstr "Subsequent Pages"
+
+msgid "All Pages"
+msgstr "All Pages"
+
+msgid "First Page Option"
+msgstr "First Page Option"
+
+msgid "Repeat Count"
+msgstr "Repeat Count"
+
+msgid "Repeat Label Increment"
+msgstr "Repeat Label Increment"
+
+msgid "Repeat Position Increment"
+msgstr "Repeat Position Increment"
+
+msgid "Comment"
+msgstr "Comment"
+
+#, c-format
+msgid "Text '%s'"
+msgstr "Text '%s'"
+
+#, c-format
+msgid "Rectangle, width %s height %s"
+msgstr "Rectangle, width %s height %s"
+
+#, c-format
+msgid "Line, length %s"
+msgstr "Line, length %s"
+
+msgid "Page Limits"
+msgstr "Page Limits"
 
 msgid "clipboard"
 msgstr "clipboard"
@@ -2507,9 +2574,6 @@ msgstr "Circle"
 msgid "Symbol Text"
 msgstr "Symbol Text"
 
-msgid "Rectangle"
-msgstr "Rectangle"
-
 msgid "Polyline"
 msgstr "Polyline"
 
@@ -2527,9 +2591,6 @@ msgstr "Gerber Layout"
 
 msgid "Draw Item"
 msgstr "Draw Item"
-
-msgid "Image"
-msgstr "Image"
 
 msgid "Normal"
 msgstr "Normal"
@@ -2557,9 +2618,6 @@ msgstr "Top"
 
 msgid "Bottom"
 msgstr "Bottom"
-
-msgid "Text"
-msgstr "Text"
 
 msgid "Thickness"
 msgstr "Thickness"
@@ -2802,14 +2860,14 @@ msgstr "Ignore Other Snaps"
 msgid "Project Manager"
 msgstr "Project Manager"
 
-msgid "Eeschema"
-msgstr "Eeschema"
+msgid "Schematic Editor"
+msgstr "Schematic Editor"
 
-msgid "Pcbnew"
-msgstr "Pcbnew"
+msgid "PCB Editor"
+msgstr "PCB Editor"
 
-msgid "Page Layout Editor"
-msgstr "Page Layout Editor"
+msgid "Drawing Sheet Editor"
+msgstr "Drawing Sheet Editor"
 
 msgid "Gestures"
 msgstr "Gestures"
@@ -3139,8 +3197,8 @@ msgstr "Hidden items"
 msgid "Selection highlight"
 msgstr "Selection highlight"
 
-msgid "Worksheet"
-msgstr "Worksheet"
+msgid "Drawing sheet"
+msgstr "Drawing sheet"
 
 msgid "Footprints front"
 msgstr "Footprints front"
@@ -3260,58 +3318,6 @@ msgstr "Unrecognized function '%s'"
 #, c-format
 msgid "Missing units for '%s'| (%s)"
 msgstr "Missing units for '%s'| (%s)"
-
-#, c-format
-msgid "The file \"%s\" was not fully read"
-msgstr "The file “%s” was not fully read"
-
-msgid "Error writing page layout design file"
-msgstr "Error writing page layout design file"
-
-msgid "Line"
-msgstr "Line"
-
-msgid "Imported Shape"
-msgstr "Imported Shape"
-
-msgid "First Page Only"
-msgstr "First Page Only"
-
-msgid "Subsequent Pages"
-msgstr "Subsequent Pages"
-
-msgid "All Pages"
-msgstr "All Pages"
-
-msgid "First Page Option"
-msgstr "First Page Option"
-
-msgid "Repeat Count"
-msgstr "Repeat Count"
-
-msgid "Repeat Label Increment"
-msgstr "Repeat Label Increment"
-
-msgid "Repeat Position Increment"
-msgstr "Repeat Position Increment"
-
-msgid "Comment"
-msgstr "Comment"
-
-#, c-format
-msgid "Text '%s'"
-msgstr "Text '%s'"
-
-#, c-format
-msgid "Rectangle, width %s height %s"
-msgstr "Rectangle, width %s height %s"
-
-#, c-format
-msgid "Line, length %s"
-msgstr "Line, length %s"
-
-msgid "Page Limits"
-msgstr "Page Limits"
 
 msgid "No default editor found, you must choose it"
 msgstr "No default editor found, you must choose it"
@@ -3706,8 +3712,14 @@ msgstr "Performs left mouse button double-click"
 msgid "Pin Library"
 msgstr "Pin Library"
 
+msgid "Keep the library at the top of the list"
+msgstr "Keep the library at the top of the list"
+
 msgid "Unpin Library"
 msgstr "Unpin Library"
+
+msgid "No longer keep the library at the top of the list"
+msgstr "No longer keep the library at the top of the list"
 
 msgid "Pan Up"
 msgstr "Pan Up"
@@ -3850,18 +3862,6 @@ msgstr "Update Schematic from PCB..."
 msgid "Update schematic with changes made to PCB"
 msgstr "Update schematic with changes made to PCB"
 
-msgid "Accelerated Graphics"
-msgstr "Accelerated Graphics"
-
-msgid "Use hardware-accelerated graphics (recommended)"
-msgstr "Use hardware-accelerated graphics (recommended)"
-
-msgid "Standard Graphics"
-msgstr "Standard Graphics"
-
-msgid "Use software graphics (fall-back)"
-msgstr "Use software graphics (fall-back)"
-
 msgid "Configure Paths..."
 msgstr "Configure Paths…"
 
@@ -3980,6 +3980,25 @@ msgstr "Footprint not found."
 
 msgid "No default footprint"
 msgstr "No default footprint"
+
+msgid "Accelerated graphics"
+msgstr "Accelerated graphics"
+
+msgid "Fallback graphics"
+msgstr "Fallback graphics"
+
+msgid "Rendering Engine"
+msgstr "Rendering Engine"
+
+msgid "Hardware-accelerated graphics (recommended)"
+msgstr "Hardware-accelerated graphics (recommended)"
+
+msgid ""
+"Software graphics (for computers which do not support KiCad's hardware "
+"acceleration requirements)"
+msgstr ""
+"Software graphics (for computers which do not support KiCad's hardware "
+"acceleration requirements)"
 
 msgid "Grid Options"
 msgstr "Grid Options"
@@ -4509,12 +4528,12 @@ msgstr "Lib: %s"
 
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
-"Would you like Kicad to attempt to convert them to the new required LIB_ID "
+"Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
 "Some of the assigned footprints are legacy entries with no library names. "
-"Would you like Kicad to attempt to convert them to the new required LIB_ID "
+"Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 
@@ -4741,8 +4760,8 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sheet pin %s has no matching hierarchical label inside the sheet"
 
 #, c-format
-msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
-msgstr "Hierarchical label %s has no matching sheet pin outside the sheet"
+msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
+msgstr "Hierarchical label %s has no matching sheet pin in the parent sheet"
 
 #, c-format
 msgid "%s pin %s found"
@@ -5292,6 +5311,9 @@ msgstr "Remove fields if not in new symbol"
 msgid "Reset fields if empty in new symbol"
 msgstr "Reset fields if empty in new symbol"
 
+msgid "Update field text"
+msgstr "Update field text"
+
 msgid "Update field visibilities"
 msgstr "Update field visibilities"
 
@@ -5300,6 +5322,9 @@ msgstr "Update field sizes and styles"
 
 msgid "Update field positions"
 msgstr "Update field positions"
+
+msgid "Update symbol attributes"
+msgstr "Update symbol attributes"
 
 msgid "Change"
 msgstr "Change"
@@ -5364,6 +5389,9 @@ msgstr "Removes fields that do not occur in the original library symbols"
 
 msgid "Reset fields if empty in library symbol"
 msgstr "Reset fields if empty in library symbol"
+
+msgid "Update/reset field text"
+msgstr "Update/reset field text"
 
 msgid "Update/reset field visibilities"
 msgstr "Update/reset field visibilities"
@@ -5467,6 +5495,16 @@ msgstr ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
+
+msgid "Update symbol fields from new library"
+msgstr "Update symbol fields from new library"
+
+msgid ""
+"Replace current symbols fields by fields from the new library.\n"
+"Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
+msgstr ""
+"Replace current symbols fields by fields from the new library.\n"
+"Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 
 msgid "Symbol Library References"
 msgstr "Symbol Library References"
@@ -6545,8 +6583,8 @@ msgstr ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 
-msgid "PostScript"
-msgstr "PostScript"
+msgid "Postscript"
+msgstr "Postscript"
 
 msgid "PDF"
 msgstr "PDF"
@@ -6560,17 +6598,14 @@ msgstr "DXF"
 msgid "HPGL"
 msgstr "HPGL"
 
-msgid "Output Format"
-msgstr "Output Format"
-
 msgid "Page size:"
 msgstr "Page size:"
 
-msgid "Plot border and title block"
-msgstr "Plot border and title block"
+msgid "Plot drawing sheet"
+msgstr "Plot drawing sheet"
 
-msgid "Print the frame references."
-msgstr "Print the frame references."
+msgid "Plot the drawing sheet border and title block"
+msgstr "Plot the drawing sheet border and title block"
 
 msgid "Black and White"
 msgstr "Black and White"
@@ -6810,6 +6845,9 @@ msgstr "Electrical Rules"
 
 msgid "Project"
 msgstr "Project"
+
+msgid "Net Classes"
+msgstr "Net Classes"
 
 msgid "Text Variables"
 msgstr "Text Variables"
@@ -7970,12 +8008,6 @@ msgstr ""
 msgid "Libraries by Scope"
 msgstr "Libraries by Scope"
 
-msgid "File:"
-msgstr "File:"
-
-msgid "Table Name"
-msgstr "Table Name"
-
 msgid "Global Libraries"
 msgstr "Global Libraries"
 
@@ -8053,8 +8085,8 @@ msgstr "Open Emitter"
 msgid "No Connection"
 msgstr "No Connection"
 
-msgid "Unresolved text variable in worksheet."
-msgstr "Unresolved text variable in worksheet."
+msgid "Unresolved text variable in drawing sheet."
+msgstr "Unresolved text variable in drawing sheet."
 
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
@@ -8290,27 +8322,18 @@ msgstr "All supported formats|"
 msgid "Import Schematic"
 msgstr "Import Schematic"
 
-#, c-format
-msgid "Directory \"%s\" is not writable."
-msgstr "Directory “%s” is not writable."
+msgid "Saving will overwrite existing files."
+msgstr "Saving will overwrite existing files."
 
-msgid ""
-"Saving the project to the new file format will overwrite existing files."
-msgstr ""
-"Saving the project to the new file format will overwrite existing files."
+msgid "Save Warning"
+msgstr "Save Warning"
 
-msgid "Project Save Warning"
-msgstr "Project Save Warning"
-
-#, c-format
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
-"%s"
 msgstr ""
 "The following files will be overwritten:\n"
 "\n"
-"%s"
 
 msgid "Overwrite Files"
 msgstr "Overwrite Files"
@@ -8672,6 +8695,9 @@ msgstr "Not Found"
 msgid "The following libraries were not found:"
 msgstr "The following libraries were not found:"
 
+msgid "KiCad Schematic Editor"
+msgstr "KiCad Schematic Editor"
+
 msgid "New schematic file is unsaved"
 msgstr "New schematic file is unsaved"
 
@@ -8681,11 +8707,11 @@ msgstr "Save changes to “%s” before closing?"
 
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, launch the Kicad shell "
+"mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, launch the Kicad shell "
+"mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 
 msgid "New Schematic"
@@ -8710,9 +8736,15 @@ msgstr "[no file]"
 msgid "[Read Only]"
 msgstr "[Read Only]"
 
+msgid "[Unsaved]"
+msgstr "[Unsaved]"
+
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
+
+msgid "File:"
+msgstr "File:"
 
 msgid "<root sheet>"
 msgstr "<root sheet>"
@@ -10121,6 +10153,9 @@ msgstr "“%s” is not a valid Spice value"
 msgid "Library Editor"
 msgstr "Library Editor"
 
+msgid "KiCad Symbol Editor"
+msgstr "KiCad Symbol Editor"
+
 msgid "Libraries"
 msgstr "Libraries"
 
@@ -10271,8 +10306,8 @@ msgstr ""
 "an integer to ensure no duplicate table entries."
 
 #, c-format
-msgid "%s from schematic"
-msgstr "%s from schematic"
+msgid "%s%s [from schematic]"
+msgstr "%s%s [from schematic]"
 
 msgid "[Read Only Library]"
 msgstr "[Read Only Library]"
@@ -10484,8 +10519,8 @@ msgstr ""
 msgid "(failed to load)"
 msgstr "(failed to load)"
 
-msgid "<none>"
-msgstr "<none>"
+msgid "KiCad Symbol Library Viewer"
+msgstr "KiCad Symbol Library Viewer"
 
 #, c-format
 msgid "Unit %c"
@@ -10832,12 +10867,6 @@ msgstr "Add Sheet"
 msgid "Add a hierarchical sheet"
 msgstr "Add a hierarchical sheet"
 
-msgid "Add Sheet Pin"
-msgstr "Add Sheet Pin"
-
-msgid "Add a sheet pin"
-msgstr "Add a sheet pin"
-
 msgid "Import Sheet Pin"
 msgstr "Import Sheet Pin"
 
@@ -11090,8 +11119,8 @@ msgstr "Schematic Setup..."
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr "Edit schematic setup including annotation styles and electrical rules"
 
-msgid "Edit Page Number..."
-msgstr "Edit Page Number..."
+msgid "Edit Sheet Page Number..."
+msgstr "Edit Sheet Page Number..."
 
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Edit the page number of the current or selected sheet"
@@ -11361,11 +11390,14 @@ msgstr ""
 msgid "Couldn't load image from \"%s\""
 msgstr "Couldn't load image from “%s”"
 
-msgid "Click over a sheet."
-msgstr "Click over a sheet."
-
 msgid "No new hierarchical labels found."
 msgstr "No new hierarchical labels found."
+
+msgid "Junction location contains no joinable wires and/or pins."
+msgstr "Junction location contains no joinable wires and/or pins."
+
+msgid "Click over a sheet."
+msgstr "Click over a sheet."
 
 msgid "Symbol Unit"
 msgstr "Symbol Unit"
@@ -11396,8 +11428,8 @@ msgstr "Do you wish to delete the unreferenced pins from this sheet?"
 msgid "Enter page number for sheet path%s"
 msgstr "Enter page number for sheet path%s"
 
-msgid "Edit Page Number"
-msgstr "Edit Page Number"
+msgid "Edit Sheet Page Number"
+msgstr "Edit Sheet Page Number"
 
 msgid "Reached end of schematic."
 msgstr "Reached end of schematic."
@@ -11637,8 +11669,8 @@ msgstr "Unknown Excellon G Code: &lt;%s&gt;"
 msgid "Cannot create file \"%s\""
 msgstr "Cannot create file “%s”"
 
-msgid "<b>No more available layers</b> in Gerbview to load files"
-msgstr "<b>No more available layers</b> in Gerbview to load files"
+msgid "<b>No more available layers</b> in GerbView to load files"
+msgstr "<b>No more available layers</b> in GerbView to load files"
 
 #, c-format
 msgid ""
@@ -11813,6 +11845,9 @@ msgstr "Clear Recent Drill Files"
 msgid "Clear Recent Job Files"
 msgstr "Clear Recent Job Files"
 
+msgid "KiCad Gerber Viewer"
+msgstr "KiCad Gerber Viewer"
+
 msgid "Layers Manager"
 msgstr "Layers Manager"
 
@@ -11820,8 +11855,8 @@ msgstr "Layers Manager"
 msgid "Drawing layer %d not in use"
 msgstr "Drawing layer %d not in use"
 
-msgid "GerbView"
-msgstr "GerbView"
+msgid "Gerber Viewer"
+msgstr "Gerber Viewer"
 
 msgid "(with X2 attributes)"
 msgstr "(with X2 attributes)"
@@ -11833,8 +11868,8 @@ msgstr "Image name: “%s”  Layer name: “%s”"
 msgid "X2 attr"
 msgstr "X2 attr"
 
-msgid "Gerbview"
-msgstr "Gerbview"
+msgid "GerbView"
+msgstr "GerbView"
 
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr "This job file uses an outdated format. Please recreate it."
@@ -11958,11 +11993,11 @@ msgstr "Show Source..."
 msgid "Show source file for the current layer"
 msgstr "Show source file for the current layer"
 
-msgid "Export to Pcbnew..."
-msgstr "Export to Pcbnew..."
+msgid "Export to PCB Editor..."
+msgstr "Export to PCB Editor..."
 
-msgid "Export data in Pcbnew format"
-msgstr "Export data in Pcbnew format"
+msgid "Export data as a KiCad PCB file"
+msgstr "Export data as a KiCad PCB file"
 
 msgid "Clear Current Layer..."
 msgstr "Clear Current Layer..."
@@ -12095,8 +12130,11 @@ msgstr "Show negative objects in this color"
 msgid "Show the (x,y) grid dots"
 msgstr "Show the (x,y) grid dots"
 
-msgid "Show worksheet"
-msgstr "Show worksheet"
+msgid "Drawing Sheet"
+msgstr "Drawing Sheet"
+
+msgid "Show drawing sheet border and title block"
+msgstr "Show drawing sheet border and title block"
 
 msgid "PCB Background"
 msgstr "PCB Background"
@@ -12212,9 +12250,11 @@ msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr "Show tools for calculating resistance, current capacity, etc."
 
 msgid ""
-"Edit worksheet borders and title blocks for use in schematics and PCB designs"
+"Edit drawing sheet borders and title blocks for use in schematics and PCB "
+"designs"
 msgstr ""
-"Edit worksheet borders and title blocks for use in schematics and PCB designs"
+"Edit drawing sheet borders and title blocks for use in schematics and PCB "
+"designs"
 
 msgid "KiCad project file"
 msgstr "KiCad project file"
@@ -12502,26 +12542,17 @@ msgstr "Close Project"
 msgid "Close the current project"
 msgstr "Close the current project"
 
-msgid "Schematic Editor"
-msgstr "Schematic Editor"
-
 msgid "Edit schematic"
 msgstr "Edit schematic"
 
 msgid "Edit schematic symbols"
 msgstr "Edit schematic symbols"
 
-msgid "PCB Editor"
-msgstr "PCB Editor"
-
 msgid "Edit PCB"
 msgstr "Edit PCB"
 
 msgid "Edit PCB footprints"
 msgstr "Edit PCB footprints"
-
-msgid "Gerber Viewer"
-msgstr "Gerber Viewer"
 
 msgid "Preview Gerber output files"
 msgstr "Preview Gerber output files"
@@ -12538,11 +12569,8 @@ msgstr "Calculator Tools"
 msgid "Run component calculations, track width calculations, etc."
 msgstr "Run component calculations, track width calculations, etc."
 
-msgid "Worksheet Editor"
-msgstr "Worksheet Editor"
-
-msgid "Edit worksheet graphics and text"
-msgstr "Edit worksheet graphics and text"
+msgid "Edit drawing sheet borders and title block"
+msgstr "Edit drawing sheet borders and title block"
 
 msgid "Open Text Editor"
 msgstr "Open Text Editor"
@@ -12821,8 +12849,8 @@ msgstr "File “%s” loaded"
 msgid "The current page layout has been modified.  Save changes?"
 msgstr "The current page layout has been modified.  Save changes?"
 
-msgid "Append Existing Page Layout File"
-msgstr "Append Existing Page Layout File"
+msgid "Append Existing Drawing Sheet"
+msgstr "Append Existing Drawing Sheet"
 
 #, c-format
 msgid "Unable to load %s file"
@@ -12848,6 +12876,9 @@ msgstr "Unable to create “%s”"
 
 msgid "Layout file is read only."
 msgstr "Layout file is read only."
+
+msgid "KiCad Drawing Sheet Editor"
+msgstr "KiCad Drawing Sheet Editor"
 
 msgid "coord origin: Right Bottom page corner"
 msgstr "coord origin: Right Bottom page corner"
@@ -12924,11 +12955,11 @@ msgstr "Add Bitmap"
 msgid "Add a bitmap image"
 msgstr "Add a bitmap image"
 
-msgid "Append Existing Page Layout File..."
-msgstr "Append Existing Page Layout File..."
+msgid "Append Existing Drawing Sheet..."
+msgstr "Append Existing Drawing Sheet..."
 
-msgid "Append an existing page layout design file to current file"
-msgstr "Append an existing page layout design file to current file"
+msgid "Append an existing drawing sheet file to current file"
+msgstr "Append an existing drawing sheet file to current file"
 
 msgid "Show Design Inspector"
 msgstr "Show Design Inspector"
@@ -13105,9 +13136,6 @@ msgstr "3 Terminal Type"
 
 msgid "Formula"
 msgstr "Formula"
-
-msgid "Vout = Vref * (R1 + R2) / R2"
-msgstr "Vout = Vref * (R1 + R2) / R2"
 
 msgid "R1:"
 msgstr "R1:"
@@ -16388,6 +16416,9 @@ msgstr "CSV"
 msgid "Gerber (very experimental)"
 msgstr "Gerber (very experimental)"
 
+msgid "Format"
+msgstr "Format"
+
 msgid "Separate files for front, back"
 msgstr "Separate files for front, back"
 
@@ -16521,6 +16552,9 @@ msgstr ""
 
 msgid "Gerber X2"
 msgstr "Gerber X2"
+
+msgid "PostScript"
+msgstr "PostScript"
 
 msgid "Gerber"
 msgstr "Gerber"
@@ -17056,9 +17090,6 @@ msgstr "Create Report…"
 
 msgid "Net Inspector"
 msgstr "Net Inspector"
-
-msgid "Rebuild Ratsnest"
-msgstr "Rebuild Ratsnest"
 
 msgid "Select Netlist"
 msgstr "Select Netlist"
@@ -17711,8 +17742,8 @@ msgstr "Plot file “%s” created."
 msgid "Plot format:"
 msgstr "Plot format:"
 
-msgid "Postscript"
-msgstr "Postscript"
+msgid "Plot border and title block"
+msgstr "Plot border and title block"
 
 msgid "Plot footprint values"
 msgstr "Plot footprint values"
@@ -17805,6 +17836,9 @@ msgstr ""
 
 msgid "Board setup"
 msgstr "Board setup"
+
+msgid "File > Board Setup..."
+msgstr "File > Board Setup..."
 
 msgid "Gerber Options"
 msgstr "Gerber Options"
@@ -17923,15 +17957,15 @@ msgstr "Plot graphic items using their contours"
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Uncheck to plot graphic items using their center lines"
 
-msgid "Use Pcbnew font to plot texts"
-msgstr "Use Pcbnew font to plot texts"
+msgid "Use KiCad font to plot texts"
+msgstr "Use KiCad font to plot texts"
 
 msgid ""
-"Check to use Pcbnew stroke font\n"
-"Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
+"Check to use KiCad stroke font\n"
+"Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Check to use Pcbnew stroke font\n"
-"Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
+"Check to use KiCad stroke font\n"
+"Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 
 msgid "Export units:"
 msgstr "Export units:"
@@ -20165,9 +20199,8 @@ msgid "OK to load recovery file \"%s\""
 msgstr "OK to load recovery file \"%s\""
 
 #, c-format
-msgid "Current board will be closed, save changes to \"%s\" before continuing?"
-msgstr ""
-"Current board will be closed, save changes to \"%s\" before continuing?"
+msgid "Current board will be closed, save changes to '%s' before continuing?"
+msgstr "Current board will be closed, save changes to '%s' before continuing?"
 
 msgid "Current Board will be closed. Continue?"
 msgstr "Current Board will be closed. Continue?"
@@ -20178,12 +20211,12 @@ msgstr "noname"
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous Kicad versions which used "
+"This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous Kicad versions which used "
+"This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
 msgid "Edge Clearance Warning"
@@ -20274,6 +20307,9 @@ msgstr "Attributes:"
 msgid "3D-Shape: %s"
 msgstr "3D-Shape: %s"
 
+msgid "<none>"
+msgstr "<none>"
+
 #, c-format
 msgid "Doc: %s"
 msgstr "Doc: %s"
@@ -20308,6 +20344,9 @@ msgstr "Thermal Gap"
 msgid "footprint %s"
 msgstr "footprint %s"
 
+msgid "KiCad Footprint Editor"
+msgstr "KiCad Footprint Editor"
+
 msgid "Inner layers"
 msgstr "Inner layers"
 
@@ -20322,11 +20361,8 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Editing %s from board.  Saving will update the board only."
 
 #, c-format
-msgid "%s [from %s.%s]"
-msgstr "%s [from %s.%s]"
-
-msgid "[Unsaved]"
-msgstr "[Unsaved]"
+msgid "%s%s [from %s.%s]"
+msgstr "%s%s [from %s.%s]"
 
 msgid "Updating Footprint Libraries"
 msgstr "Updating Footprint Libraries"
@@ -20473,6 +20509,9 @@ msgstr "New Footprint"
 
 msgid "No footprint name defined."
 msgstr "No footprint name defined."
+
+msgid "KiCad Footprint Library Viewer"
+msgstr "KiCad Footprint Library Viewer"
 
 msgid ""
 "Filter on footprint name, keywords, description and pad count.\n"
@@ -20714,8 +20753,8 @@ msgstr "Insert footprint onto current board"
 msgid "Resc&ue"
 msgstr "Resc&ue"
 
-msgid "Clear board and get last rescue file automatically saved by Pcbnew"
-msgstr "Clear board and get last rescue file automatically saved by Pcbnew"
+msgid "Clear board and get last rescue file automatically saved by PCB editor"
+msgstr "Clear board and get last rescue file automatically saved by PCB editor"
 
 msgid "Graphics..."
 msgstr "Graphics..."
@@ -20870,11 +20909,11 @@ msgstr "Read descr shape file"
 msgid "File not found"
 msgstr "File not found"
 
-msgid "Shape has a null size!"
-msgstr "Shape has a null size!"
+msgid "Shape has a null size."
+msgstr "Shape has a null size."
 
-msgid "Shape has no points!"
-msgstr "Shape has no points!"
+msgid "Shape has no points."
+msgstr "Shape has no points."
 
 msgid "Place microwave feature"
 msgstr "Place microwave feature"
@@ -21224,6 +21263,9 @@ msgstr "Round Radius Ratio"
 msgid "Error loading project footprint libraries"
 msgstr "Error loading project footprint libraries"
 
+msgid "KiCad PCB Editor"
+msgstr "KiCad PCB Editor"
+
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
@@ -21241,13 +21283,13 @@ msgid "The schematic for this board cannot be found."
 msgstr "The schematic for this board cannot be found."
 
 msgid ""
-"Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
-"to create or update PCBs from schematics, you must launch the KiCad project "
-"manager and create a project."
+"Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
+"order to create or update PCBs from schematics, you must launch the KiCad "
+"project manager and create a project."
 msgstr ""
-"Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
-"to create or update PCBs from schematics, you must launch the KiCad project "
-"manager and create a project."
+"Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
+"order to create or update PCBs from schematics, you must launch the KiCad "
+"project manager and create a project."
 
 msgid "Eeschema netlist"
 msgstr "Eeschema netlist"
@@ -22560,8 +22602,8 @@ msgstr ""
 "Microvias can only be placed between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
 
-msgid "Tracks on Copper layers only"
-msgstr "Tracks on Copper layers only"
+msgid "Tracks on Copper layers only."
+msgstr "Tracks on Copper layers only."
 
 msgid "The selected item is locked."
 msgstr "The selected item is locked."
@@ -23313,6 +23355,9 @@ msgstr "Export Footprint..."
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
 
+msgid "Edit footprint properties"
+msgstr "Edit footprint properties"
+
 msgid "Show the footprint checker window"
 msgstr "Show the footprint checker window"
 
@@ -23353,6 +23398,9 @@ msgstr "Move tracks or drawings from one layer to another"
 
 msgid "Edit Track & Via Properties..."
 msgstr "Edit Track & Via Properties..."
+
+msgid "Edit track and via properties globally across board"
+msgstr "Edit track and via properties globally across board"
 
 msgid "Edit Text and graphics properties globally across board"
 msgstr "Edit Text and graphics properties globally across board"
@@ -23516,14 +23564,26 @@ msgstr "Create bill of materials from board"
 msgid "Switch Track Width to Next"
 msgstr "Switch Track Width to Next"
 
+msgid "Change track width to next pre-defined size"
+msgstr "Change track width to next pre-defined size"
+
 msgid "Switch Track Width to Previous"
 msgstr "Switch Track Width to Previous"
+
+msgid "Change track width to previous pre-defined size"
+msgstr "Change track width to previous pre-defined size"
 
 msgid "Increase Via Size"
 msgstr "Increase Via Size"
 
+msgid "Change via size to next pre-defined size"
+msgstr "Change via size to next pre-defined size"
+
 msgid "Decrease Via Size"
 msgstr "Decrease Via Size"
+
+msgid "Change via size to previous pre-defined size"
+msgstr "Change via size to previous pre-defined size"
 
 msgid "Merge Zones"
 msgstr "Merge Zones"
@@ -23558,11 +23618,23 @@ msgstr "Place origin point for drill files and component placement files"
 msgid "Toggle Lock"
 msgstr "Toggle Lock"
 
-msgid "Add the selected items to a new group"
-msgstr "Add the selected items to a new group"
+msgid "Lock or unlock selected items"
+msgstr "Lock or unlock selected items"
+
+msgid "Prevent items from being moved and/or resized on the canvas"
+msgstr "Prevent items from being moved and/or resized on the canvas"
+
+msgid "Allow items to be moved and/or resized on the canvas"
+msgstr "Allow items to be moved and/or resized on the canvas"
+
+msgid "Group the selected items so that they are treated as a single item"
+msgstr "Group the selected items so that they are treated as a single item"
 
 msgid "Ungroup"
 msgstr "Ungroup"
+
+msgid "Ungroup any selected groups"
+msgstr "Ungroup any selected groups"
 
 msgid "Remove Items"
 msgstr "Remove Items"
@@ -23585,6 +23657,9 @@ msgstr "Leave the current group"
 msgid "Append Board..."
 msgstr "Append Board..."
 
+msgid "Open another board and append its contents to this board"
+msgstr "Open another board and append its contents to this board"
+
 msgid "Highlight the selected net"
 msgstr "Highlight the selected net"
 
@@ -23596,6 +23671,9 @@ msgstr "Toggle between last two highlighted nets"
 
 msgid "Clear Net Highlighting"
 msgstr "Clear Net Highlighting"
+
+msgid "Clear any existing net highlighting"
+msgstr "Clear any existing net highlighting"
 
 msgid "Highlight all copper items of a net"
 msgstr "Highlight all copper items of a net"
@@ -23642,8 +23720,8 @@ msgstr "Show/hide the appearance manager"
 msgid "Flip Board View"
 msgstr "Flip Board View"
 
-msgid "Flip (mirror) the board view"
-msgstr "Flip (mirror) the board view"
+msgid "View board from the opposite side"
+msgstr "View board from the opposite side"
 
 msgid "Show Ratsnest"
 msgstr "Show Ratsnest"
@@ -24289,6 +24367,9 @@ msgstr "DRC violations which have been individually excluded"
 msgid "Show footprint and text origins as a cross"
 msgstr "Show footprint and text origins as a cross"
 
+msgid "Show drawing sheet borders and title block"
+msgstr "Show drawing sheet borders and title block"
+
 msgid "No Layers"
 msgstr "No Layers"
 
@@ -24793,6 +24874,214 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Eeschema (.lib file)"
+#~ msgstr "Eeschema (.lib file)"
+
+#~ msgid "Pcbnew (.kicad_mod file)"
+#~ msgstr "Pcbnew (.kicad_mod file)"
+
+#~ msgid "Logo for title block (.kicad_wks file)"
+#~ msgstr "Logo for title block (.kicad_wks file)"
+
+#~ msgid "Net Class Memberships"
+#~ msgstr "Net Class Memberships"
+
+#~ msgid "Eeschema"
+#~ msgstr "Eeschema"
+
+#~ msgid "Pcbnew"
+#~ msgstr "Pcbnew"
+
+#~ msgid "Page Layout Editor"
+#~ msgstr "Page Layout Editor"
+
+#~ msgid "Worksheet"
+#~ msgstr "Worksheet"
+
+#~ msgid "Accelerated Graphics"
+#~ msgstr "Accelerated Graphics"
+
+#~ msgid "Use hardware-accelerated graphics (recommended)"
+#~ msgstr "Use hardware-accelerated graphics (recommended)"
+
+#~ msgid "Standard Graphics"
+#~ msgstr "Standard Graphics"
+
+#~ msgid "Use software graphics (fall-back)"
+#~ msgstr "Use software graphics (fall-back)"
+
+#~ msgid ""
+#~ "Some of the assigned footprints are legacy entries with no library names. "
+#~ "Would you like Kicad to attempt to convert them to the new required "
+#~ "LIB_ID format? (If you answer no, then these assignments will be cleared "
+#~ "and you will need to re-assign them manually.)"
+#~ msgstr ""
+#~ "Some of the assigned footprints are legacy entries with no library names. "
+#~ "Would you like Kicad to attempt to convert them to the new required "
+#~ "LIB_ID format? (If you answer no, then these assignments will be cleared "
+#~ "and you will need to re-assign them manually.)"
+
+#, c-format
+#~ msgid "Hierarchical label %s has no matching sheet pin outside the sheet"
+#~ msgstr "Hierarchical label %s has no matching sheet pin outside the sheet"
+
+#~ msgid "Print the frame references."
+#~ msgstr "Print the frame references."
+
+#~ msgid "Table Name"
+#~ msgstr "Table Name"
+
+#~ msgid "Unresolved text variable in worksheet."
+#~ msgstr "Unresolved text variable in worksheet."
+
+#, c-format
+#~ msgid "Directory \"%s\" is not writable."
+#~ msgstr "Directory “%s” is not writable."
+
+#~ msgid ""
+#~ "Saving the project to the new file format will overwrite existing files."
+#~ msgstr ""
+#~ "Saving the project to the new file format will overwrite existing files."
+
+#~ msgid "Project Save Warning"
+#~ msgstr "Project Save Warning"
+
+#, c-format
+#~ msgid ""
+#~ "The following files will be overwritten:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "The following files will be overwritten:\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Cannot update the PCB, because the Schematic Editor is opened in stand-"
+#~ "alone mode. In order to create/update PCBs from schematics, launch the "
+#~ "Kicad shell and create a project."
+#~ msgstr ""
+#~ "Cannot update the PCB, because the Schematic Editor is opened in stand-"
+#~ "alone mode. In order to create/update PCBs from schematics, launch the "
+#~ "Kicad shell and create a project."
+
+#, c-format
+#~ msgid "%s from schematic"
+#~ msgstr "%s from schematic"
+
+#~ msgid "Add Sheet Pin"
+#~ msgstr "Add Sheet Pin"
+
+#~ msgid "Add a sheet pin"
+#~ msgstr "Add a sheet pin"
+
+#~ msgid "Edit Page Number..."
+#~ msgstr "Edit Page Number..."
+
+#~ msgid "Edit Page Number"
+#~ msgstr "Edit Page Number"
+
+#~ msgid "<b>No more available layers</b> in Gerbview to load files"
+#~ msgstr "<b>No more available layers</b> in Gerbview to load files"
+
+#~ msgid "Gerbview"
+#~ msgstr "Gerbview"
+
+#~ msgid "Export to Pcbnew..."
+#~ msgstr "Export to Pcbnew..."
+
+#~ msgid "Export data in Pcbnew format"
+#~ msgstr "Export data in Pcbnew format"
+
+#~ msgid "Show worksheet"
+#~ msgstr "Show worksheet"
+
+#~ msgid ""
+#~ "Edit worksheet borders and title blocks for use in schematics and PCB "
+#~ "designs"
+#~ msgstr ""
+#~ "Edit worksheet borders and title blocks for use in schematics and PCB "
+#~ "designs"
+
+#~ msgid "Worksheet Editor"
+#~ msgstr "Worksheet Editor"
+
+#~ msgid "Edit worksheet graphics and text"
+#~ msgstr "Edit worksheet graphics and text"
+
+#~ msgid "Append Existing Page Layout File"
+#~ msgstr "Append Existing Page Layout File"
+
+#~ msgid "Append Existing Page Layout File..."
+#~ msgstr "Append Existing Page Layout File..."
+
+#~ msgid "Append an existing page layout design file to current file"
+#~ msgstr "Append an existing page layout design file to current file"
+
+#~ msgid "Vout = Vref * (R1 + R2) / R2"
+#~ msgstr "Vout = Vref * (R1 + R2) / R2"
+
+#~ msgid "Rebuild Ratsnest"
+#~ msgstr "Rebuild Ratsnest"
+
+#~ msgid "Use Pcbnew font to plot texts"
+#~ msgstr "Use Pcbnew font to plot texts"
+
+#~ msgid ""
+#~ "Check to use Pcbnew stroke font\n"
+#~ "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
+#~ msgstr ""
+#~ "Check to use Pcbnew stroke font\n"
+#~ "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
+
+#, c-format
+#~ msgid ""
+#~ "Current board will be closed, save changes to \"%s\" before continuing?"
+#~ msgstr ""
+#~ "Current board will be closed, save changes to \"%s\" before continuing?"
+
+#~ msgid ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous Kicad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+#~ msgstr ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous Kicad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+
+#, c-format
+#~ msgid "%s [from %s.%s]"
+#~ msgstr "%s [from %s.%s]"
+
+#~ msgid "Clear board and get last rescue file automatically saved by Pcbnew"
+#~ msgstr "Clear board and get last rescue file automatically saved by Pcbnew"
+
+#~ msgid "Shape has a null size!"
+#~ msgstr "Shape has a null size!"
+
+#~ msgid "Shape has no points!"
+#~ msgstr "Shape has no points!"
+
+#~ msgid ""
+#~ "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In "
+#~ "order to create or update PCBs from schematics, you must launch the KiCad "
+#~ "project manager and create a project."
+#~ msgstr ""
+#~ "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In "
+#~ "order to create or update PCBs from schematics, you must launch the KiCad "
+#~ "project manager and create a project."
+
+#~ msgid "Tracks on Copper layers only"
+#~ msgstr "Tracks on Copper layers only"
+
+#~ msgid "Add the selected items to a new group"
+#~ msgstr "Add the selected items to a new group"
+
+#~ msgid "Flip (mirror) the board view"
+#~ msgstr "Flip (mirror) the board view"
 
 #, c-format
 #~ msgid "Render time %.0f ms ( %.1f fps)"
@@ -33776,9 +34065,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "&Footprint Properties..."
 #~ msgstr "&Footprint Properties…"
-
-#~ msgid "Edit footprint properties"
-#~ msgstr "Edit footprint properties"
 
 #~ msgid "Edit default pad properties"
 #~ msgstr "Edit default pad properties"
