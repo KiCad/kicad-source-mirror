@@ -174,6 +174,13 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         }
         else if( evt->IsActivate() )
         {
+            if( component && evt->IsMoveTool() )
+            {
+                // we're already moving our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
             if( component )
                 cleanup();
 
@@ -400,6 +407,13 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
+            if( image && evt->IsMoveTool() )
+            {
+                // we're already moving our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
             if( image )
                 cleanup();
 
@@ -966,6 +980,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
+            if( item && evt->IsMoveTool() )
+            {
+                // we're already moving our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
             if( item )
                 cleanup();
 
@@ -1177,6 +1198,13 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
+            if( sheet && evt->IsMoveTool() )
+            {
+                // we're already drawing our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
             if( sheet )
                 cleanup();
 
