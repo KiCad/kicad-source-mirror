@@ -422,12 +422,14 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
     for( int i : { WIRES, BUSES } )
     {
         bool removed_overlapping = false;
-        bool mid_point = false;
 
         for( auto line = lines[i].begin(); line < lines[i].end(); line++ )
         {
+            /// A line with a midpoint should be counted as two endpoints for this calculation
+            /// because the junction will split the line into two if there is another item
+            /// present at the point.
             if( !(*line)->IsEndPoint( aPosition ) )
-                mid_point = true;
+                end_count[i] += 2;
             else
                 end_count[i]++;
 
@@ -442,12 +444,6 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
                 }
             }
         }
-
-        /// A line with a midpoint should be counted as two endpoints for this calculation
-        /// because the junction will split the line into two if there is another item
-        /// present at the point.
-        if( mid_point )
-            end_count[i] += 2;
 
         ///Overlapping lines that point in the same direction should not be counted
         /// as extra end_points.
