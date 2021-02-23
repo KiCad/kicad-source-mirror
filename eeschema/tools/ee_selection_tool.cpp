@@ -1601,7 +1601,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
                 {
                     selectAll       = false;
                     current         = nullptr;
-                    expandSelection = true;
+                    expandSelection = false;
                 }
             }
             else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
