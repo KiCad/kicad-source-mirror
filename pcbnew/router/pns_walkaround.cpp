@@ -61,7 +61,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
     if( !current_obs )
         return DONE;
 
-    SHAPE_LINE_CHAIN path_pre[2], path_walk[2], path_post[2];
+    SHAPE_LINE_CHAIN path_walk[2];
 
     if( aPath.PointCount() > 1 )
     {
@@ -81,14 +81,14 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
         }
     }
 
-    aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
-                      path_post[0], aWindingDirection );
-    aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
-                      path_post[1], !aWindingDirection );
+    aPath.Walkaround( current_obs->m_hull, path_walk[0],
+                      aWindingDirection );
+    aPath.Walkaround( current_obs->m_hull, path_walk[1],
+                      !aWindingDirection );
 
-    if( !aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
-                      path_post[1], !aWindingDirection ) )
+    if( !aPath.Walkaround( current_obs->m_hull, path_walk[1], !aWindingDirection ) )
         return STUCK;
+
     auto l =aPath.CLine();
 
 #if 0
@@ -105,11 +105,13 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
 
     if ( Dbg() )
     {
+        Dbg()->BeginGroup("hull/walk");
         char name[128];
         snprintf(name, sizeof(name), "hull-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( current_obs->m_hull, 0, 1, name);
+        Dbg()->AddLine( current_obs->m_hull, 1, 1, name);
         snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
-        Dbg()->AddLine( aPath.CLine(), 1, 1, name );
+        Dbg()->AddLine( aPath.CLine(), 2, 1, name );
+        Dbg()->EndGroup();
     }
 
     int len_pre = path_walk[0].Length();
@@ -134,19 +136,8 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
     }
     else*/
     {
-        pnew = path_pre[0];
-        pnew.Append( path_walk[0] );
-        pnew.Append( path_post[0] );
-
-        if( path_post[0].PointCount() == 0 || path_walk[0].PointCount() == 0 )
-            current_obs = nearestObstacle( LINE( aPath, path_pre[0] ) );
-        else
-            current_obs = nearestObstacle( LINE( aPath, path_walk[0] ) );
-
-        if( !current_obs )
-        {
-            current_obs = nearestObstacle( LINE( aPath, path_post[0] ) );
-        }
+        pnew = path_walk[0];
+        current_obs = nearestObstacle( LINE( aPath, path_walk[0] ) );
     }
 
     pnew.Simplify();
