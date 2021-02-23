@@ -201,11 +201,14 @@ void GRID_CELL_LAYER_SELECTOR::Reset()
 
 void GRID_CELL_LAYER_SELECTOR::onComboDropDown( wxCommandEvent& aEvent )
 {
+    // On other platforms this is done in BeginEdit()
+#if defined(__WXGTK20__)
     auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
 
     // Once the combobox is dropped, reset the flag to allow the focus-loss handler
     // to function and close the editor.
     evtHandler->SetInSetFocus( false );
+#endif
 }
 
 
