@@ -780,6 +780,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     m_view->ClearPreview();
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->ForceCursorPosition( false );
     m_inSingleClickPlace = false;
     return 0;
 }
@@ -1134,6 +1135,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->ForceCursorPosition( false );
     m_inTwoClickPlace = false;
     return 0;
 }
