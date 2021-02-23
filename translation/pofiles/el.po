@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 15:32-0800\n"
 "PO-Revision-Date: 2021-02-23 18:38+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -20779,9 +20779,8 @@ msgid "Update schematic"
 msgstr "Ενημέρωση σχηματικού"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:212
-#, fuzzy
 msgid "Front reference start:"
-msgstr "Αναφορές αποτυπωμάτων"
+msgstr "Έναρξη μπροστινής αναφοράς:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
 msgid "Starting reference designation for front."
@@ -20807,9 +20806,8 @@ msgid "Default is 1"
 msgstr "Προκαθορισμένο είναι 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:224
-#, fuzzy
 msgid "Back reference start:"
-msgstr "αναφορά %s"
+msgstr "Έναρξη πίσω αναφοράς:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:226
 msgid ""
