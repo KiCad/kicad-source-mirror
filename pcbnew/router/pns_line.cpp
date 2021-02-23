@@ -219,6 +219,19 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
         return nullptr;
     };
 
+    // make sure all points that lie on the edge of the hull also exist as vertices in the path
+    for( int i = 0; i < pnew.PointCount(); i++ )
+    {
+        const VECTOR2I &p = pnew.CPoint(i);
+
+        if( hnew.PointOnEdge( p ) )
+        {
+            SHAPE_LINE_CHAIN::INTERSECTION ip;
+            ip.p = p;
+            ips.push_back( ip );
+        }
+    }
+
     // insert all intersections found into the new hull/path SLCs
     for( auto ip : ips )
     {
@@ -232,19 +245,6 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
         if( hnew.Find( ip.p ) < 0 )
         {
             hnew.Split(ip.p);
-        }
-    }
-
-    // make sure all points that lie on the edge of the hull also exist as vertices in the path
-    for( int i = 0; i < pnew.PointCount(); i++ )
-    {
-        const VECTOR2I &p = pnew.CPoint(i);
-
-        if( hnew.PointOnEdge( p ) )
-        {
-            SHAPE_LINE_CHAIN::INTERSECTION ip;
-            ip.p = p;
-            ips.push_back( ip );
         }
     }
 
