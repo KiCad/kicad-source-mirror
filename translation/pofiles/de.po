@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-23 18:38+0000\n"
-"Last-Translator: Flo082002 <flos6323@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-02-24 10:29+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -763,9 +763,8 @@ msgid "3D Display Options"
 msgstr "3D-Anzeigeoptionen"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D-Betrachter"
+msgstr "KiCad-3D-Betrachter"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1341,23 +1340,20 @@ msgid "Export to Clipboard"
 msgstr "Export in Zwischenablage"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Bauteilfüllungen"
+msgstr "Symbol (.lib-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod Datei)"
+msgstr "Footprint (.kicad_mod-Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Logo für den Titelblock (.kicad_wks Datei)"
+msgstr "Zeichnungsblatt (.kicad_wks Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2191,14 +2187,12 @@ msgid "Reset Grid Origin"
 msgstr "Rasterursprung rücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Rasterursprung rücksetzen"
+msgstr "Rastergrößen zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Auf 0 setzen um Vorgabe zu benutzen"
+msgstr "Liste von Rastergrößen auf die Standardwerte zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -4635,9 +4629,8 @@ msgstr "Leiterplatten-Editor"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Arbeitsblatt-Editor"
+msgstr "Zeichnungsblatt-Editor"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5079,9 +5072,8 @@ msgid "Selection highlight"
 msgstr "Hervorhebung Auswahl"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Zeichnungen"
+msgstr "Zeichnungsblatt"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5804,18 +5796,16 @@ msgid "Pin Library"
 msgstr "Bibliothek anheften"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Auswahl der Bibliothekstabelle um eine Bibliothek hinzuzufügen zu:"
+msgstr "Die Bibliothek in der Liste oben halten"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Bibliothek lösen"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Auswahl der Bibliothekstabelle um eine Bibliothek hinzuzufügen zu:"
+msgstr "Die Bibliothek in der Liste nicht mehr oben halten"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6181,30 +6171,28 @@ msgid "No default footprint"
 msgstr "Kein Standard-Footprint"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Beschleunigte Grafik:"
+msgstr "Beschleunigte Grafik"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Rückfallmodus Grafik:"
+msgstr "Langsame Grafik"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Wiedergabezeit %.3f s"
+msgstr "Rendering-Engine"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Benutze Hardware-beschleunigter Grafik (empfohlen)"
+msgstr "Hardwarebeschleunigte Grafik (empfohlen)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Software-Rendering (für Computer, die die Anforderungen für KiCad-"
+"Grafikbeschleunigung nicht erfüllen)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6952,18 +6940,16 @@ msgid "Lib: %s"
 msgstr "Bibliothek: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Einige der zugewiesenen Footprints sind alte Einträge (sind fehlende "
-"Bibliotheken Kurznamen). Möchten Sie Kicad versuchen lassen diese in das "
-"neue Footprint-ID Format umzuwandeln? (Wenn Sie mit Nein antworten dann "
-"werden die Zuweisungen aufgehoben und Sie müssen diese Footprints neu "
-"zuweisen.)"
+"Einige der zugewiesenen Footprints sind veralte Einträge ohne "
+"Bibliotheksnamen. Soll KiCad versuchen, diese in das neue LIB_ID-Format "
+"umzuwandeln? (Wenn Sie Nein antworten, werden die Zuweisungen aufgehoben und "
+"Sie müssen diese Footprints manuell neu zuweisen.)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -7255,11 +7241,11 @@ msgstr ""
 "Schaltplanblatt"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin "
-"außerhalb des Schaltplanblatts"
+"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin im "
+"übergeordneten Schaltplanblatt"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8011,9 +7997,8 @@ msgstr "Zurücksetzen der Felder die im Bibliothekssymbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Felder aktualisieren/zurücksetzen"
+msgstr "Feld-Texte aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
