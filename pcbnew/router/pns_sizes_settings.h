@@ -62,9 +62,7 @@ public:
 
     int DiffPairViaGap() const
     {
-        int netClassGap = m_diffPairViaGapSameAsTraceGap ? m_diffPairGap : m_diffPairViaGap;
-
-        return std::max( netClassGap, m_holeToHole - m_viaDiameter );
+        return m_diffPairViaGapSameAsTraceGap ? m_diffPairGap : m_diffPairViaGap;
     }
 
     bool DiffPairViaGapSameAsTraceGap() const { return m_diffPairViaGapSameAsTraceGap; }
