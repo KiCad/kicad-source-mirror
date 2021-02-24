@@ -68,7 +68,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     finishDialogSettings();
 
     m_buttonResetSizes->Bind( wxEVT_BUTTON,
-            [&]( wxCommandEvent )
+            [&]( wxCommandEvent& )
             {
                 APP_SETTINGS_BASE* settings   = m_parent->config();
                 settings->m_Window.grid.sizes = settings->DefaultGridSizeList();
