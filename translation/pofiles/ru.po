@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-20 14:54+0000\n"
+"PO-Revision-Date: 2021-02-24 10:29+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -756,7 +756,6 @@ msgid "3D Display Options"
 msgstr "Параметры отображения 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
 msgstr "Просмотрщик 3D"
 
@@ -1333,23 +1332,20 @@ msgid "Export to Clipboard"
 msgstr "Экспорт в буфер обмена"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Заливки символов"
+msgstr "Символ (.lib файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod файл)"
+msgstr "Посад.место (.kicad_mod файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Логотип для штампа (.kicad_wks файл)"
+msgstr "Форматная рамка (.kicad_wks файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2174,14 +2170,12 @@ msgid "Reset Grid Origin"
 msgstr "Сброс начала координат сетки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Сброс начала координат сетки"
+msgstr "Сбросить сетки"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Установите 0 для использования значения по умолчанию"
+msgstr "Сбросить перечень размеров сетки к значениям по умолчанию"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3172,7 +3166,7 @@ msgstr "Импорт файла горячих клавиш:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Действие | Клавиша | Описание"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -4611,7 +4605,6 @@ msgstr "Редактор печатной платы"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
 msgstr "Редактор форматных рамок"
 
@@ -5055,9 +5048,8 @@ msgid "Selection highlight"
 msgstr "Выделение"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Графика"
+msgstr "Форматная рамка"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5574,7 +5566,7 @@ msgstr "Копировать выделенные элементы в буфер
 
 #: common/tool/actions.cpp:164
 msgid "Paste items(s) from clipboard"
-msgstr "Вставить элемент(ы) из буфера"
+msgstr "Вставить элементы из буфера"
 
 #: common/tool/actions.cpp:170
 msgid "Select all items on screen"
@@ -5586,7 +5578,7 @@ msgstr "Вставить как..."
 
 #: common/tool/actions.cpp:174
 msgid "Paste item(s) from clipboard with options"
-msgstr "Вставить элемент(ы) из буфера с параметрами"
+msgstr "Вставить элементы из буфера с параметрами"
 
 #: common/tool/actions.cpp:179
 msgid "Duplicate"
@@ -5594,7 +5586,7 @@ msgstr "Дублировать"
 
 #: common/tool/actions.cpp:179
 msgid "Duplicates the selected item(s)"
-msgstr "Дублировать выбранный(ые) элемент(ы)"
+msgstr "Дублировать выбранные элементы"
 
 #: common/tool/actions.cpp:190 kicad/project_tree_pane.cpp:781
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678 pcbnew/tools/edit_tool.cpp:1820
@@ -5603,7 +5595,7 @@ msgstr "Удалить"
 
 #: common/tool/actions.cpp:190
 msgid "Deletes selected item(s)"
-msgstr "Удалить выбранный(ые) элемент(ы)"
+msgstr "Удалить выбранные элементы"
 
 #: common/tool/actions.cpp:195
 msgid "Interactive Delete Tool"
@@ -5777,18 +5769,16 @@ msgid "Pin Library"
 msgstr "Закрепить библиотеку"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Выберите таблицу для добавления библиотеки:"
+msgstr "Держать библиотеку вверху списка"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Открепить библиотеку"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Выберите таблицу для добавления библиотеки:"
+msgstr "Не держать библиотеку вверху списка"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -5930,7 +5920,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:540
 msgid "Select item(s)"
-msgstr "Выбрать элемент(ы)"
+msgstr "Выбрать элементы"
 
 #: common/tool/actions.cpp:547
 msgid "Measure Tool"
@@ -6154,30 +6144,28 @@ msgid "No default footprint"
 msgstr "Нет посад.места по умолчанию"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Ускоренная графика:"
+msgstr "Ускоренная графика"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Обычная графика:"
+msgstr "Обычная графика"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Время визуализации %.3f с"
+msgstr "Графический движок"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Использовать аппаратное ускорение графической карты (рекомендуется)"
+msgstr "Использовать аппаратное ускорение графического адаптера (рекомендуется)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Использовать программный движок (для компьютеров не имеющих требуемого "
+"графического адаптера)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6914,17 +6902,16 @@ msgid "Lib: %s"
 msgstr "Библиотека: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Некоторые из назначенных посад.мест используют устаревшие записи "
-"(отсутствует уникальное имя библиотеки). Желаете ли, чтобы KiCad попыталась "
+"Некоторые из назначенных посад.мест используют устаревшие записи ("
+"отсутствует уникальное имя библиотеки). Желаете ли, чтобы KiCad попыталась "
 "преобразовать их в новый требуемый формат LIB_ID? (Если ответите нет, по "
-"завершении эти назначения будут убраны и можно будет самостоятельно "
+"завершении эти назначения будут убраны и нужно будет самостоятельно "
 "переназначить данные посад.места.)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
@@ -7212,7 +7199,7 @@ msgstr ""
 "Выводу листа %s не соответствует ни одна иерархическая метка внутри листа"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Иерархическая метка %s не соответствует ни одному выводу листа"
 
@@ -7833,9 +7820,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Очистить поля, если они пусты в новых символах"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "Обновить поля"
+msgstr "Обновить текст полей"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
@@ -7850,9 +7836,8 @@ msgid "Update field positions"
 msgstr "Сбросить положение полей"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Обновить/сбросить свойства символа"
+msgstr "Обновить свойства символа"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7949,9 +7934,8 @@ msgstr "Очистить поля, которые в библиотеке пус
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Обновить/сбросить поля"
+msgstr "Обновить/сбросить текст полей"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -8091,15 +8075,16 @@ msgstr ""
 "библиотек символов."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Обновить символы из библиотеки"
+msgstr "Обновить поля символа из новой библиотеки"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Заменить поля текущего символа полями из новой библиотеки.\n"
+"Предупреждение: поля \"Значение\" и \"Посад.место\" тоже будут заменены."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9808,14 +9793,12 @@ msgid "Page size:"
 msgstr "Размер листа:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Завершить черчение листа"
+msgstr "Чертить форматную рамку"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Печатать рамку и осн.надпись"
+msgstr "Чертить форматную рамку и осн.надпись"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11947,7 +11930,6 @@ msgid "No Connection"
 msgstr "Не соединено"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
 msgstr "Неопределённая текстовая переменная в форматной рамке."
 
@@ -12248,26 +12230,20 @@ msgid "Import Schematic"
 msgstr "Импорт схемы"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr ""
-"При сохранении проекта с новым форматом файлов будут перезаписаны "
-"существующие файлы."
+msgstr "При сохранении будут перезаписаны существующие файлы."
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "Предупреждение о сохранении проекта"
+msgstr "Предупреждение о сохранении"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "Следующие файлы будут перезаписаны:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12779,9 +12755,8 @@ msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Редактор схем"
+msgstr "Редактор схем KiCad"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -12796,7 +12771,6 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Сохранить изменения в \"%s\" перед закрытием?"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -14017,37 +13991,37 @@ msgstr ""
 #: eeschema/sch_validators.cpp:106
 #, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Обозначение не может содержать символ(ы) %s."
+msgstr "Обозначение не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:110
 #, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "Значение не может содержать символ(ы) %s."
+msgstr "Значение не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:114
 #, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Посад.место не может содержать символ(ы) %s."
+msgstr "Посад.место не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:118
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Документация не может содержать символ(ы) %s."
+msgstr "Документация не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:122
 #, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Имя листа не может содержать символ(ы) %s."
+msgstr "Имя листа не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:126
 #, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Имя файла листа не может содержать символ(ы) %s."
+msgstr "Имя файла листа не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:130
 #, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr "Поле не может содержать символ(ы) %s."
+msgstr "Поле не может содержать символы %s."
 
 #: eeschema/sch_validators.cpp:142
 msgid "The name of the field cannot be empty."
@@ -14541,9 +14515,8 @@ msgid "Library Editor"
 msgstr "Редактор библиотек"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Редактор символов"
+msgstr "Редактор символов KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -14743,9 +14716,9 @@ msgstr ""
 "чтобы избежать дублирования имён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s из схемы"
+msgstr "%s%s [из схемы]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -15031,9 +15004,8 @@ msgid "(failed to load)"
 msgstr "(не удалось загрузить)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Файлы библиотек символов KiCad"
+msgstr "Просмотр библиотек символов KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15541,7 +15513,7 @@ msgstr "Повернуть по ч.ст."
 
 #: eeschema/tools/ee_actions.cpp:364 pcbnew/tools/pcb_actions.cpp:289
 msgid "Rotates selected item(s) clockwise"
-msgstr "Вращать выбранный(ые) элемент(ы) по часовой стрелке"
+msgstr "Вращать выбранные элементы по часовой стрелке"
 
 #: eeschema/tools/ee_actions.cpp:370 pcbnew/tools/edit_tool.cpp:1339
 msgid "Rotate"
@@ -15832,7 +15804,6 @@ msgstr ""
 "Править параметры схемы, включая стиль аннотации и электрические правила"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
 msgstr "Править номер листа..."
 
@@ -16201,6 +16172,8 @@ msgstr "Новые иерархические метки не найдены."
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
+"В месте соединения имеются проводники и/или выводы, которые нельзя "
+"подключить."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -16246,7 +16219,6 @@ msgid "Enter page number for sheet path%s"
 msgstr "Введите номер для листа %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Правка номера листа"
 
@@ -16598,9 +16570,8 @@ msgid "Cannot create file \"%s\""
 msgstr "Не удалось создать файл \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr "<b>Нет свободных графических слоёв</b> в Gerbview для загрузки файлов"
+msgstr "<b>Нет свободных слоёв</b> для загрузки файлов в Gerbview"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -16673,7 +16644,7 @@ msgstr "Главный слой конт.пл. снизу (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:171
 msgid "Open Gerber File(s)"
-msgstr "Открыть файл(ы) Gerber"
+msgstr "Открыть файлы Gerber"
 
 #: gerbview/files.cpp:228
 msgid "File not found:"
@@ -16833,9 +16804,8 @@ msgid "Clear Recent Job Files"
 msgstr "Очистить список недавних файлов заданий"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Просмотр Gerber-файлов"
+msgstr "Просмотр Gerber-файлов KiCad"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -16966,23 +16936,23 @@ msgstr "<Не выбрано>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr "Открыть файл(ы) Gerber..."
+msgstr "Открыть файлы Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
-msgstr "Открыть Gerber файл(ы) в текущем слое. Предыдущие данные будут удалены"
+msgstr "Открыть Gerber файлы в текущем слое. Предыдущие данные будут удалены"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
-msgstr "Открыть файл(ы) сверловки Excellon..."
+msgstr "Открыть файлы сверловки Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
 msgstr ""
-"Открыть Excellon файл(ы) сверловки в текущий слой. Предыдущие данные будут "
+"Открыть Excellon файлы сверловки в текущий слой. Предыдущие данные будут "
 "удалены"
 
 #: gerbview/tools/gerbview_actions.cpp:51
@@ -17026,13 +16996,12 @@ msgid "Show source file for the current layer"
 msgstr "Показать содержимое файла для текущего слоя"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Перейти к редактору платы"
+msgstr "Экспорт редактору плат..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Экспортировать данные как файл платы KiCad"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17214,14 +17183,12 @@ msgstr "Показать точки сетки"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Режим отображения"
+msgstr "Форматная рамка"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Печатать рамку и осн.надпись"
+msgstr "Показать форматную рамку и осн.надпись"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17383,7 +17350,6 @@ msgstr ""
 "Показать инструменты для вычисления сопротивления, плотности тока и прочего."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
@@ -17798,9 +17764,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "Рассчитать параметры компонентов, дорожек и т.п."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Печатать рамку и осн.надпись"
+msgstr "Редактировать форматную рамку и основную надпись"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18204,7 +18169,6 @@ msgid "The current page layout has been modified.  Save changes?"
 msgstr "Текущая форматная рамка изменена. Сохранить изменения?"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
 msgstr "Добавить существующую форматную рамку"
 
@@ -18243,7 +18207,7 @@ msgstr "Файл форматной рамки доступен только д�
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "Редактор форматных рамок KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18344,12 +18308,10 @@ msgid "Add a bitmap image"
 msgstr "Добавить изображение"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
 msgstr "Дополнить существующей форматной рамкой..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
 msgstr "Добавить существующий файл форматной рамки в текущий файл"
 
@@ -25087,9 +25049,8 @@ msgid "Board setup"
 msgstr "Параметры платы"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Параметры платы..."
+msgstr "Файл > Параметры платы..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -25241,19 +25202,17 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Чертить графические элементы в контурном режиме"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "Использовать шрифт Pcbnew для черчения текста"
+msgstr "Использовать шрифт KiCad для черчения текста"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Отметьте, чтобы использовать встроенный шрифт Pcbnew.\n"
+"Отметьте, чтобы использовать встроенный шрифт KiCad.\n"
 "Снимите отметку, чтобы чертить однострочный ASCII текст как редактируемый "
-"текст (использовать шрифт DXF)"
+"текст (используя шрифт DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -26210,7 +26169,7 @@ msgstr "Без клавиш"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:105
 #: pcbnew/dialogs/panel_edit_options_base.cpp:186
 msgid "Select item(s)."
-msgstr "Выбрать элемент(ы)."
+msgstr "Выбрать элементы."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:115
 #: pcbnew/dialogs/panel_edit_options_base.cpp:196
@@ -28402,10 +28361,10 @@ msgid "OK to load recovery file \"%s\""
 msgstr "Загрузить файл резервного копирования \"%s\"?"
 
 #: pcbnew/files.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
-"Текущая плата будет закрыта. Сохранить изменения в \"%s\" перед продолжением?"
+"Текущая плата будет закрыта. Сохранить изменения в '%s' перед продолжением?"
 
 #: pcbnew/files.cpp:378
 msgid "Current Board will be closed. Continue?"
@@ -28416,16 +28375,15 @@ msgid "noname"
 msgstr "безымянный"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Если перезалить зоны меди, то будет использован параметр \"Зазор у края платы"
-"\" (см. Параметры платы > Правила проектирования > Ограничения).\n"
-"При этом новая форма зоны, может отличаться от той, что была сделана в "
+"Если перезалить зоны меди, то будет использован параметр \"Зазор у края "
+"платы\" (см. Параметры платы > Правила проектирования > Ограничения).\n"
+"При этом новая форма зоны может отличаться от той, что была сделана в "
 "предыдущих версиях KiCad, где в качестве зазора использовалась толщина "
 "контура платы."
 
@@ -28589,9 +28547,8 @@ msgid "footprint %s"
 msgstr "посад.место %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Редактор посад.мест"
+msgstr "Редактор посад.мест KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -28612,9 +28569,9 @@ msgstr ""
 "Редактируется посад.место %s из платы. Сохранение коснётся только платы."
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [из %s.%s]"
+msgstr "%s%s [из %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -28800,9 +28757,8 @@ msgid "No footprint name defined."
 msgstr "Имя посад.места не определено."
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "Обозреватель библиотек посад.мест"
+msgstr "Просмотр библиотек посад.мест KiCad"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -29118,11 +29074,10 @@ msgid "Resc&ue"
 msgstr "Спасти"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
 "Очистить плату и загрузить последний спасённый файл, автоматически "
-"сохранённый Pcbnew"
+"сохранённый редактором плат"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -29328,14 +29283,12 @@ msgid "File not found"
 msgstr "Файл не найден"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Форма имеет нулевой размер!"
+msgstr "Форма имеет нулевой размер."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Форма не имеет контура!"
+msgstr "Форма не имеет вершин."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -29786,9 +29739,8 @@ msgid "Error loading project footprint libraries"
 msgstr "Ошибка загрузки библиотек посад.мест проекта"
 
 #: pcbnew/pcb_edit_frame.cpp:192
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "Редактор печатной платы"
+msgstr "Редактор печатных плат KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -29812,7 +29764,6 @@ msgid "The schematic for this board cannot be found."
 msgstr "Не удалось найти схему для этой платы."
 
 #: pcbnew/pcb_edit_frame.cpp:1374
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -31467,9 +31418,8 @@ msgstr ""
 "Cu) и теми, которые непосредственно прилегают к ним."
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Дорожки разрешены только на слоях меди"
+msgstr "Дорожки разрешены только на слоях меди."
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
@@ -32352,7 +32302,7 @@ msgstr "Переместить по обозначению"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr "Переместить выбранный(ые) элемент(ы) относительно указанной точки"
+msgstr "Переместить выбранные элементы относительно указанной точки"
 
 #: pcbnew/tools/pcb_actions.cpp:263
 msgid "Copy with Reference"
@@ -32360,7 +32310,7 @@ msgstr "Копировать по обозначению"
 
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "Копировать выбранный(ые) элемент(ы) в буфер с указанной опорной точкой"
+msgstr "Копировать выбранные элементы в буфер с указанной опорной точкой"
 
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Duplicate and Increment"
@@ -32376,7 +32326,7 @@ msgstr "Переместить точно..."
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Moves the selected item(s) by an exact amount"
-msgstr "Переместить выбранный(ые) элемент(ы) на точное расстояние"
+msgstr "Переместить выбранные элементы на точное расстояние"
 
 #: pcbnew/tools/pcb_actions.cpp:282
 msgid "Create Array..."
@@ -32392,11 +32342,11 @@ msgstr "Повернуть против ч.ст."
 
 #: pcbnew/tools/pcb_actions.cpp:295
 msgid "Rotates selected item(s) counterclockwise"
-msgstr "Вращать выбранные элементы против часовой стрелки"
+msgstr "Повернуть выделенные элементы по часовой стрелке"
 
 #: pcbnew/tools/pcb_actions.cpp:301
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Разместить выбранный(ые) элемент(ы) на другую сторону"
+msgstr "Разместить выбранные элементы на другую сторону"
 
 #: pcbnew/tools/pcb_actions.cpp:306
 msgid "Mirrors selected item"
@@ -32483,9 +32433,8 @@ msgid "Footprint Properties..."
 msgstr "Свойства посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "Изменить свойства посад.мест"
+msgstr "Изменить свойства посад.места"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Show the footprint checker window"
@@ -32543,9 +32492,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Параметры дорожек и перех.отв..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "Править свойства текста и графических элементов на всей плате"
+msgstr "Править свойства дорожек и перех.отв. на всей плате"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -32728,7 +32676,7 @@ msgstr "Файл сверловки (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:566
 msgid "Generate Excellon drill file(s)"
-msgstr "Сформировать файл(ы) сверловки в формате Excellon"
+msgstr "Сформировать файлы сверловки в формате Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:571
 msgid "Component Placement (.pos)..."
@@ -32769,7 +32717,7 @@ msgstr "Выбрать следующую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "Изменить ширину дорожки на следующий пред.определённый размер"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -32777,7 +32725,7 @@ msgstr "Выбрать предыдущую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "Изменить ширину дорожки на предыдущий пред.определённый размер"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -32785,7 +32733,7 @@ msgstr "Увеличить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Изменить размер перех.отв. на следующий пред.определённый размер"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -32793,7 +32741,7 @@ msgstr "Уменьшить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Изменить размер перех.отв. на предыдущий пред.определённый размер"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -32841,31 +32789,29 @@ msgid "Toggle Lock"
 msgstr "Заблокировать/разблокировать"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Показать связи выбранных цепей"
+msgstr "Блокировать/разблокировать выбранные элементы"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "Запретить перемещение и/или изменение размера элементов в редакторе"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr ""
+msgstr "Разрешить перемещение и/или изменение размера элементов в редакторе"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Переместить выбранный(ые) элемент(ы) относительно указанной точки"
+msgstr ""
+"Группировать выбранные элементы, чтобы работать с ними как с одним целым"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
 msgstr "Разгруппировать"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "библиотека не выбрана"
+msgstr "Разгруппировать выбранные группы"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -32897,7 +32843,7 @@ msgstr "Добавить плату..."
 
 #: pcbnew/tools/pcb_actions.cpp:686
 msgid "Open another board and append its contents to this board"
-msgstr ""
+msgstr "Открыть другую плату и добавить её содержимое к текущей плате"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Highlight the selected net"
@@ -32916,7 +32862,6 @@ msgid "Clear Net Highlighting"
 msgstr "Очистить подсветку цепей"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Clear any existing net highlighting"
 msgstr "Очистить подсветку цепей"
 
@@ -32982,7 +32927,7 @@ msgstr "Перевернуть плату"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "Вид платы с обратной стороны"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
@@ -33345,8 +33290,7 @@ msgstr "Переместить относительно..."
 #: pcbnew/tools/pcb_actions.cpp:1141
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
-"Переместить выбранный(ые) элемент(ы) на точное расстояние относительно "
-"другого"
+"Переместить выбранные элементы на точное расстояние относительно другого"
 
 #: pcbnew/tools/pcb_actions.cpp:1177
 msgid "Select/Expand Connection"
@@ -33398,7 +33342,7 @@ msgstr "Убрать элементы из выделенного по их ти
 
 #: pcbnew/tools/pcb_actions.cpp:1213
 msgid "Fill zone(s)"
-msgstr "Залить зону(ы)"
+msgstr "Залить зоны"
 
 #: pcbnew/tools/pcb_actions.cpp:1219
 msgid "Fill All"
@@ -33414,7 +33358,7 @@ msgstr "Отменить заливку"
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 msgid "Unfill zone(s)"
-msgstr "Отменить заливку зон(ы)"
+msgstr "Отменить заливку зон"
 
 #: pcbnew/tools/pcb_actions.cpp:1230
 msgid "Unfill All"
@@ -33839,9 +33783,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Показать точку привязки посад.мест и текста крестиком"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Печатать рамку и осн.надпись"
+msgstr "Показать форматную рамку и осн.надпись"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
