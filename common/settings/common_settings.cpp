@@ -46,12 +46,14 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Input(),
         m_Graphics(),
         m_Session(),
-        m_System()
+        m_System(),
+        m_NetclassPanel()
 {
     // This only effect the first time KiCad is run.  The user's setting will be used for all
     // subsequent runs.
     // Menu icons are off by default on OSX and on for all other platforms.
-    // Use automatic canvas scaling on OSX, but not on the other platforms (their detection isn't as good).
+    // Use automatic canvas scaling on OSX, but not on the other platforms (their detection
+    // isn't as good).
 #if defined( __WXMAC__ )
     bool   defaultUseIconsInMenus = false;
     double canvasScale = 0.0;
@@ -267,8 +269,9 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>( aCfg,    "IconScale",       "appearance.icon_scale" );
     ret &= fromLegacy<bool>( aCfg,   "UseIconsInMenus", "appearance.use_icons_in_menus" );
 
-// Force OSX to automatically scale the canvas. Before v6, the user setting wasn't used on OSX and was
-// set to 1.0. In v6, the setting is now used by OSX and should default to automatic scaling.
+// Force OSX to automatically scale the canvas. Before v6, the user setting wasn't used on OSX
+// and was set to 1.0. In v6, the setting is now used by OSX and should default to automatic
+// scaling.
 #ifdef __WXMAC__
     ( *this )[PointerFromString( "appearance.canvas_scale" )] = 0.0;
 #endif
