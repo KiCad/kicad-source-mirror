@@ -27,7 +27,7 @@
 #include <kiway_express.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <schematic.h>
 #include <reporter.h>
 #include <kicad_string.h>

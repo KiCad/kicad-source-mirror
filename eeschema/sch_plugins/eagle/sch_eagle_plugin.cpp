@@ -44,7 +44,7 @@
 #include <lib_text.h>
 #include <project.h>
 #include <sch_bus_entry.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>

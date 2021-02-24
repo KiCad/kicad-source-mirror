@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 CERN
+ * Copyright (C) 2020-2021 CERN
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -28,7 +28,7 @@
 
 #include <core/kicad_algo.h>
 #include <dialog_change_symbols.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ class SCH_COMPONENT;
 #include <eda_rect.h>
 #include <lib_item.h>
 #include <pin_type.h>
-#include <lib_part.h>
+#include <lib_symbol.h>
 
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   Mils2iu( 15 )

@@ -22,7 +22,7 @@
 
 #include <core/kicad_algo.h>
 #include <dialog_update_symbol_fields.h>
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <symbol_edit_frame.h>
 #include <template_fieldnames.h>
 

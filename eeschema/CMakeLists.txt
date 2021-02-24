@@ -164,7 +164,6 @@ set( EESCHEMA_SRCS
     autoplace_fields.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
-    lib_part.cpp
     class_library.cpp
     cmp_library_lexer.cpp
     component_references_lister.cpp
@@ -188,6 +187,7 @@ set( EESCHEMA_SRCS
     lib_pin.cpp
     lib_polyline.cpp
     lib_rectangle.cpp
+    lib_symbol.cpp
     lib_text.cpp
     symbol_viewer_frame.cpp
     libarch.cpp
@@ -205,7 +205,6 @@ set( EESCHEMA_SRCS
     sch_bitmap.cpp
     sch_bus_entry.cpp
     ee_collectors.cpp
-    sch_component.cpp
     sch_connection.cpp
     sch_plugins/eagle/sch_eagle_plugin.cpp
     sch_field.cpp
@@ -225,6 +224,7 @@ set( EESCHEMA_SRCS
     sch_sheet.cpp
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
+    sch_symbol.cpp
     sch_text.cpp
     sch_validators.cpp
     schematic.cpp

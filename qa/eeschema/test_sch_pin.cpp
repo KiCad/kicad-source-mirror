@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 
 // Code under test
 #include <sch_pin.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <eda_rect.h>
 
 
@@ -36,10 +36,10 @@ public:
     TEST_SCH_PIN_FIXTURE()
     {
         m_parent_part = new LIB_PART( "parent_part", nullptr );
-        
+
         m_lib_pin = new LIB_PIN( m_parent_part );
         m_parent_part->AddDrawItem( m_lib_pin );
-        
+
         // give the pin some kind of data we can use to test
         m_lib_pin->SetNumber( "42" );
         m_lib_pin->SetName( "pinname" );
@@ -51,7 +51,7 @@ public:
                                              &path, 0, 0, wxPoint( 1, 2 ) );
         m_parent_symbol->SetRef( &path, "U2" );
         m_parent_symbol->UpdatePins();
-        
+
         m_sch_pin = m_parent_symbol->GetPins( &path )[0];
     }
 

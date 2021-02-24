@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015, 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015, 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@
 
 #include <sch_edit_frame.h>
 #include <hotkeys_basic.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_line.h>
 #include <lib_pin.h>
 #include <sch_draw_panel.h>

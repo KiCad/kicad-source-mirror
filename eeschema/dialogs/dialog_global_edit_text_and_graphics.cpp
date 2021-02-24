@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 #include <connection_graph.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
 #include <kicad_string.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>

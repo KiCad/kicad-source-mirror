@@ -27,7 +27,7 @@
 #include <general.h>
 #include <lib_item.h>
 #include <sch_bus_entry.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_line.h>

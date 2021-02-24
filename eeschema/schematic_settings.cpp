@@ -19,7 +19,7 @@
  */
 
 #include <base_screen.h>
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <convert_to_biu.h>
 #include <default_values.h>
 #include <eda_text.h>

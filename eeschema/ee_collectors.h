@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2011-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #ifndef EE_COLLECTORS_H
 #define EE_COLLECTORS_H
 
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <collector.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <sch_item.h>

@@ -30,7 +30,7 @@
 #include <tool/tool_menu.h>
 #include <tools/ee_selection.h>
 #include <ee_collectors.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <cursors.h>
 
 class SCH_BASE_FRAME;

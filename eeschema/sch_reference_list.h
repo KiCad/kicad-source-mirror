@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2021 KiCad Developers, see authors.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -28,9 +28,9 @@
 
 #include <map>
 
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <sch_sheet_path.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_text.h>
 #include <erc_settings.h>
 

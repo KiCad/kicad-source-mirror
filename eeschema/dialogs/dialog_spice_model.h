@@ -31,7 +31,7 @@
 #include "netlist_exporter_pspice.h"
 
 #include <sim/spice_value.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_field.h>
 #include <lib_field.h>
 

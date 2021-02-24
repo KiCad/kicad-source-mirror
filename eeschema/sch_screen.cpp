@@ -44,7 +44,7 @@
 #include <class_library.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>

@@ -34,7 +34,7 @@
 #include <widgets/infobar.h>
 #include <view/view_controls.h>
 #include <view/view.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_no_connect.h>
 #include <sch_line.h>
 #include <sch_junction.h>

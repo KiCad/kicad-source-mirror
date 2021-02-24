@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see change_log.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
  */
 
 #include <lib_pin.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>
 #include <sch_edit_frame.h>

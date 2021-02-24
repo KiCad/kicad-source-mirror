@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <general.h>
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <transform.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>

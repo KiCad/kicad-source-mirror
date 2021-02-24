@@ -42,7 +42,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <properties.h>
-#include <lib_part.h>
+#include <lib_symbol.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <class_draw_panel_gal.h>
 

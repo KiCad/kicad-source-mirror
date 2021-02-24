@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include <base_units.h>
 #include <sch_validators.h>
 #include <wx/grid.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <grid_tricks.h>
 #include <validators.h>
 

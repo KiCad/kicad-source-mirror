@@ -42,7 +42,7 @@
 #include <lib_text.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_edit_frame.h>          // CMP_ORIENT_XXX
 #include <sch_field.h>
 #include <sch_line.h>

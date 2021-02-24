@@ -45,7 +45,7 @@
 #include <title_block.h>
 
 #include <lib_id.h>
-#include <sch_component.h>         // COMPONENT_INSTANCE_REFERENCE
+#include <sch_symbol.h>         // COMPONENT_INSTANCE_REFERENCE
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>

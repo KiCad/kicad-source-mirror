@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,7 +36,7 @@
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>
 #include <sch_io_mgr.h>
-#include <sch_component.h>
+#include <sch_symbol.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
