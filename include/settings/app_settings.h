@@ -155,8 +155,13 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
-    /// Override in child classes to define the default for the window.grid.sizes parameter
-    virtual const std::vector<wxString> DefaultGridSizeList() const { return {}; }
+    /**
+     * By default, this returns the list of grids available in PcbNew-based applications.
+     * Eeschema does not allow customization of the grid.  If it ever does, override this in
+     * Eeschema settings to provide a different set of defaults.
+     * @return a default value for the the window.grid.sizes parameter
+     */
+    virtual const std::vector<wxString> DefaultGridSizeList() const;
 
 public:
     CROSS_PROBING_SETTINGS m_CrossProbing;

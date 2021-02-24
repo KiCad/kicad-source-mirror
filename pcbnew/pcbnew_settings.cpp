@@ -790,30 +790,3 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     return ret;
 }
-
-
-const std::vector<wxString> PCBNEW_SETTINGS::DefaultGridSizeList() const
-{
-    return { "1000 mil",
-             "500 mil",
-             "250 mil",
-             "200 mil",
-             "100 mil",
-             "50 mil",
-             "25 mil",
-             "20 mil",
-             "10 mil",
-             "5 mil",
-             "2 mil",
-             "1 mil",
-             "5.0 mm",
-             "2.5 mm",
-             "1.0 mm",
-             "0.5 mm",
-             "0.25 mm",
-             "0.2 mm",
-             "0.1 mm",
-             "0.05 mm",
-             "0.025 mm",
-             "0.01 mm" };
-}
