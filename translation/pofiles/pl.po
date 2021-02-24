@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-20 14:54+0000\n"
+"PO-Revision-Date: 2021-02-24 10:29+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -737,9 +737,8 @@ msgid "3D Display Options"
 msgstr "Opcje wyświetlania 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "Podgląd 3D"
+msgstr "Przeglądarka 3D programu KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1314,23 +1313,20 @@ msgid "Export to Clipboard"
 msgstr "Eksportuj do schowka"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Wypełnienia ciała symbolu"
+msgstr "Symbol (plik .lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Format S-expression Pcbnew (.kicad_mod)"
+msgstr "Footprint (plik .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (plik .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Grafika do układu strony (.kicad_wks)"
+msgstr "Grafika układu strony (plik .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2159,14 +2155,12 @@ msgid "Reset Grid Origin"
 msgstr "Zresetuj punkt bazowy"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Zresetuj punkt bazowy"
+msgstr "Zresetuj rozmiary siatek"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Ustaw 0 by użyć wart. domyślnych"
+msgstr "Resetuje listę rozmiarów siatki do jej wartości domyślnych"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3142,7 +3136,7 @@ msgstr "Importowanie klawiszy skrótów:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Akcja | Domyślny klawisz skrótu | Opis"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -4582,7 +4576,6 @@ msgstr "Edytor obwodów drukowanych"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
 msgstr "Edytor obramowań strony"
 
@@ -5025,9 +5018,8 @@ msgid "Selection highlight"
 msgstr "Podświetlenie zaznaczenia"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Rysunkowa"
+msgstr "Arkusz rysunkowy"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5750,18 +5742,16 @@ msgid "Pin Library"
 msgstr "Przypnij bibliotekę"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Wybiera docelową Tabelę Bibliotek, do której dodać bibliotekę:"
+msgstr "Przypina bibliotekę by pojawiała się na początku listy"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Odepnij bibliotekę"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Wybiera docelową Tabelę Bibliotek, do której dodać bibliotekę:"
+msgstr "Odpina bibliotekę by nie pojawiała się na początku listy"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6130,31 +6120,28 @@ msgid "No default footprint"
 msgstr "Brak domyślnego footprintu"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Grafika akcelerowana:"
+msgstr "Grafika akcelerowana"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Grafika emulowana:"
+msgstr "Grafika emulowana"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Czas renderowania %.3f s"
+msgstr "Silnik renderowania"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
-"Używa nowoczesnego zestawu narzędzi ze sprzętową akceleracją (zalecane)"
+msgstr "Grafika ze sprzętową akceleracją (zalecane)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Grafika emulowana (dla komputerów, które nie spełniają wymagań sprzętowych "
+"programu KiCad co do przyspieszenia grafiki)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6898,7 +6885,6 @@ msgid "Lib: %s"
 msgstr "Biblioteka: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
@@ -7203,11 +7189,11 @@ msgstr ""
 "wewnątrz arkusza"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Etykieta hierarchiczna %s nie ma odpowiednika w pinach hierarchicznych na "
-"zewnątrz arkusza"
+"Etykieta hierarchiczna %s nie ma odpowiednika w pinach arkusza na arkuszu "
+"nadrzędnym"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7833,9 +7819,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Zresetuj pola jeśli są puste w nowym symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "Uaktualnij pola"
+msgstr "Uaktualnij tekst pola"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
@@ -7850,9 +7835,8 @@ msgid "Update field positions"
 msgstr "Uaktualnij pozycje pól"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Uaktualnij/zresetuj atrybuty symbolu"
+msgstr "Uaktualnij atrybuty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7949,9 +7933,8 @@ msgstr "Zresetuj pola jeśli są puste w symbolu bibliotecznym"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Uaktualnij/zresetuj pola"
+msgstr "Uaktualnij/zresetuj tekst pola"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -8092,15 +8075,16 @@ msgstr ""
 "bibliotek symboli."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Uaktualnij symbole z biblioteki"
+msgstr "Uaktualnij pola symbolu z nowej biblioteki"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Zastąp bieżące pola symboli polami z nowej biblioteki.\n"
+"Ostrzeżenie: pola Wartość oraz Footprint zostaną zastąpione."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9820,14 +9804,12 @@ msgid "Page size:"
 msgstr "Rozmiar strony:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Kończy rysowanie symbolu arkusza"
+msgstr "Rysuj obramowanie strony"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Rysuje obramowanie arkusza i jego tabliczkę tytułową"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11967,7 +11949,6 @@ msgid "No Connection"
 msgstr "Nie podłączony"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
 msgstr "Nierozwiązana zmienna tekstowa na arkuszu."
 
@@ -12278,24 +12259,20 @@ msgid "Import Schematic"
 msgstr "Importuj Schemat"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "Zapisując projekt w nowej wersji zastąpi istniejące pliki."
+msgstr "Zapis zastąpi istniejące pliki."
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "Ostrzeżenie o zapisywaniu projektu"
+msgstr "Ostrzeżenie przed zapisem"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "Następujące pliki zostaną nadpisane:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12810,9 +12787,8 @@ msgid "The following libraries were not found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Edytor Schematów"
+msgstr "Edytor Schematów programu KiCad"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -14792,9 +14768,9 @@ msgstr ""
 "z liczbą całkowitą zapewniającą brak duplikatów w wpisach tabeli."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s ze schematu"
+msgstr "%s%s [ze schematu]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -16259,7 +16235,7 @@ msgstr "Nie znaleziono nowych etykiet hierarchicznych."
 
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "W miejscu umieszczenia węzła nie ma połączeń lub wyprowadzeń."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -17093,13 +17069,12 @@ msgid "Show source file for the current layer"
 msgstr "Pokaż plik źródłowy dla bieżącej warstwy"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Przełącz do edytora PCB"
+msgstr "Eksportuj do edytora PCB..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Eksportuj dane jako plik KiCad PCB"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -18317,7 +18292,7 @@ msgstr "Plik z układem strony jest tylko do odczytu."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "Edytor obramowań stron programu KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -28737,9 +28712,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Edycja %s z płytki.  Zapis spowoduje wyłącznie zapisanie płytki."
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [z %s %s]"
+msgstr "%s%s [z %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -29458,14 +29433,12 @@ msgid "File not found"
 msgstr "Nie znaleziono pliku"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Kształt ma zerowy rozmiar!"
+msgstr "Kształt ma zerowy rozmiar."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Kształt nie ma punktów!"
+msgstr "Kształt nie posiada punktów."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -31628,9 +31601,8 @@ msgstr ""
 "Cu/B.Cu) oraz wewnętrznymi warstwami przylegającymi bezpośrednio do siebie."
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Tylko ścieżki na warstwach miedzi"
+msgstr "Tylko ścieżki na warstwach miedzi."
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
@@ -32930,7 +32902,7 @@ msgstr "Przełącz na następną szerokość ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "Zmień szerokość ścieżki na następny wstępnie zdefiniowany rozmiar"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -32938,7 +32910,7 @@ msgstr "Przełącz na poprzednią szerokość ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "Zmień szerokość ścieżki na poprzednio zdefiniowany rozmiar"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -32946,7 +32918,7 @@ msgstr "Zwiększ rozmiar przelotki"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Zmień rozmiar przelotki na następny zdefiniowany rozmiar"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -32954,7 +32926,7 @@ msgstr "Zmniejsz rozmiar przelotki"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Zmień rozmiar przelotki na poprzedni zdefiniowany rozmiar"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -33007,11 +32979,11 @@ msgstr "Pokaż nitki wspomagające dla zaznaczonego(-ych) elementów"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "Zapobiegaj przenoszeniu i/lub zmianie rozmiaru elementów na kanwie"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr ""
+msgstr "Zezwól na przenoszenie i/lub zmianę rozmiaru elementów na kanwie"
 
 #: pcbnew/tools/pcb_actions.cpp:661
 #, fuzzy
@@ -33057,7 +33029,7 @@ msgstr "Dołącz płytkę..."
 
 #: pcbnew/tools/pcb_actions.cpp:686
 msgid "Open another board and append its contents to this board"
-msgstr ""
+msgstr "Otwórz inną płytkę i dołącz jej zawartość do tej płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Highlight the selected net"
@@ -33142,7 +33114,7 @@ msgstr "Odwróć widok płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "Podgląd płytki od strony przeciwnej"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
