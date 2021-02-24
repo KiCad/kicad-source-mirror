@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-23 18:38+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-02-24 10:29+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -732,9 +732,8 @@ msgid "3D Display Options"
 msgstr "3D 显示选项"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D 查看器"
+msgstr "KiCad 3D 查看器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1302,23 +1301,20 @@ msgid "Export to Clipboard"
 msgstr "导出到剪贴板"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "符号主体填充"
+msgstr "符号 （.lib 文件）"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod 文件)"
+msgstr "封装 (.kicad_mod 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "标题栏标志 (.kicad_wks 文件)"
+msgstr "图框 (.kicad_wks 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2132,14 +2128,12 @@ msgid "Reset Grid Origin"
 msgstr "复位网格原点"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "重置尺寸"
+msgstr "重置网格尺寸"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "设置为 0 以使用默认值"
+msgstr "重置网格列表尺寸到默认值"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2335,7 +2329,7 @@ msgstr "图框"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Title Block"
-msgstr "标题块"
+msgstr "工程图明细表"
 
 #: common/dialogs/dialog_page_settings.cpp:248
 #: common/dialogs/dialog_page_settings.cpp:695
@@ -3090,7 +3084,7 @@ msgstr "导入快捷键文件："
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| 操作 | 默认热键 | 描述"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -4508,9 +4502,8 @@ msgstr "PCB 编辑器"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "图框编辑器"
+msgstr "图纸编辑器"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -4950,9 +4943,8 @@ msgid "Selection highlight"
 msgstr "选择高亮"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "图形"
+msgstr "图纸"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5670,18 +5662,16 @@ msgid "Pin Library"
 msgstr "置顶库"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "选择库表添加到以下库："
+msgstr "将库保持在列表顶部"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "取消置顶库"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "选择库表添加到以下库："
+msgstr "不再将库保持在列表顶部"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6044,30 +6034,26 @@ msgid "No default footprint"
 msgstr "没有默认的封装"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "硬件加速图形："
+msgstr "硬件加速图形"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "软件加速图形："
+msgstr "备用图形"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "渲染时间 %.3f s"
+msgstr "渲染引擎"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "使用硬件加速图形 (推荐)"
+msgstr "硬件加速图形 (推荐)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr ""
+msgstr "软件图形 （适用于不支持 KiCad 硬件加速要求的计算机）"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6795,16 +6781,14 @@ msgid "Lib: %s"
 msgstr "库：%s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"一些分配的封装是没有库名的遗留项。你希望 Kicad 试着将它们转换为新的必需的 "
-"LIB_ID 格式吗？（如果你回答否，这些分配将被清除，你必须自己手动重新分配它"
-"们。）"
+"一些分配的封装是没有库名的旧条目。你希望 Kicad 试着将它们转换为新的必需的 LIB_ID "
+"格式吗？（如果你回答否，这些分配将被清除，你必须自己手动重新分配它们。）"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -7079,9 +7063,9 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图框引脚 %s 在图框内没有匹配的分层标签"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "层次标签 %s 在图框外没有匹配的图框引脚"
+msgstr "层次标签 %s 在父图框内没有匹配的图框引脚"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7667,9 +7651,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "如果新符号中为空，则重置字段"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "更新字段"
+msgstr "更新字段文本"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
@@ -7684,9 +7667,8 @@ msgid "Update field positions"
 msgstr "更新字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "更新/重置符号属性"
+msgstr "更新符号属性"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7783,9 +7765,8 @@ msgstr "如果库符号中为空，则重置字段"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "更新/重置字段"
+msgstr "更新/重置字段文本"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -7924,15 +7905,16 @@ msgstr ""
 "尝试在加载的符号库之中找到具有相同名称的候选者。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "从库中更新符号"
+msgstr "从新库更新符号字段"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"用新库中的字段替换当前符号字段。\n"
+"警告：“值” 和“封装”字段将因此被替换。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9629,14 +9611,12 @@ msgid "Page size:"
 msgstr "图框尺寸："
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "完成图框"
+msgstr "绘制图纸"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "打印边框和标题栏"
+msgstr "绘制图纸边框和工程图明细表"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11734,9 +11714,8 @@ msgid "No Connection"
 msgstr "未连接"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "图框中未解析的文本变量。"
+msgstr "图纸中未解析的文本变量。"
 
 #: eeschema/erc.cpp:293
 #, c-format
@@ -12030,24 +12009,20 @@ msgid "Import Schematic"
 msgstr "导入原理图"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "将项目保存为新文件格式将覆盖现有文件。"
+msgstr "保存将覆盖现有文件。"
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "工程保存警告"
+msgstr "保存警告"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
-"以下文件将被覆盖：\n"
+"下列文件将被覆盖：\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12554,9 +12529,8 @@ msgid "The following libraries were not found:"
 msgstr "未找到以下库："
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "原理图编辑器"
+msgstr "KiCad 原理图编辑器"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -12571,14 +12545,11 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "是否在 \"%s\" 关闭之前保存更改？"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
-msgstr ""
-"无法更新 PCB,因为架构编辑器在独立模式下打开。为了从原理图创建/更新 PCB,请启"
-"动 KiCad Shell 并创建项目。"
+msgstr "无法更新 PCB，因为原理图编辑器在独立模式下打开。为了从原理图创建/更新 PCB，请启动 KiCad Shell 并创建一个项目。"
 
 #: eeschema/sch_edit_frame.cpp:937
 msgid "New Schematic"
@@ -14271,9 +14242,8 @@ msgid "Library Editor"
 msgstr "库编辑器"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "符号编辑器"
+msgstr "KiCad 符号编辑器"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -14469,9 +14439,9 @@ msgstr ""
 "一个整数，以确保没有重复的表条目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s 来自原理图"
+msgstr "%s%s [来自原理图]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -14752,9 +14722,8 @@ msgid "(failed to load)"
 msgstr "(加载失败)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad 符号库文件"
+msgstr "KiCad 符号库查看器"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15546,9 +15515,8 @@ msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr "编辑原理图设置，包括标注样式和电气规则"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "编辑页码..."
+msgstr "编辑图纸页码..."
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Edit the page number of the current or selected sheet"
@@ -15903,7 +15871,7 @@ msgstr "没有找到新的层次标签。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "连接点位置不包含可连接的电线和/或引脚。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -15949,9 +15917,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "输入图框路径 %s 的页码"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "编辑图框编号"
+msgstr "编辑图纸页码"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16298,9 +16265,8 @@ msgid "Cannot create file \"%s\""
 msgstr "无法创建文件 \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr "在 Gerbview 中 <b>没有更多可用的层</b> 来加载文件"
+msgstr "Gerbview 中 <b>没有更多可用的层</b> 来加载文件"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -16533,9 +16499,8 @@ msgid "Clear Recent Job Files"
 msgstr "清除最近的作业文件"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Gerber 文件查看器"
+msgstr "KiCad Gerber 文件查看器"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -16724,13 +16689,12 @@ msgid "Show source file for the current layer"
 msgstr "当前层显示源码"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "切换到 PCB 编辑器"
+msgstr "导出到 PCB 编辑器..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "将数据导出为 KiCad PCB 文件"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -16912,14 +16876,12 @@ msgstr "(X,Y) 显示格点"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "绘图模式"
+msgstr "图纸"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "打印边框和标题栏"
+msgstr "显示图纸边框和工程图明细表"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17078,11 +17040,10 @@ msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr "显示计算电阻、电容等的工具。"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr "编辑用于原理图和 PCB 设计的工作表边框和标题栏"
+msgstr "编辑用于原理图和 PCB 设计的图纸边框和工程图明细表"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17488,9 +17449,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "运行元件计算，布线宽度计算等。"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "打印边框和标题栏"
+msgstr "编辑图纸边框和工程图明细表"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -17892,9 +17852,8 @@ msgid "The current page layout has been modified.  Save changes?"
 msgstr "当前图框文件已被修改。  是否保存更改？"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "添加现有的图框文件"
+msgstr "附加现有的图纸"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -17931,7 +17890,7 @@ msgstr "布局文件为只读。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "KiCad工程图编辑器"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18032,14 +17991,12 @@ msgid "Add a bitmap image"
 msgstr "添加一个位图图像"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "添加现有的图框文件..."
+msgstr "添加现有的图纸..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "添加现有的图框设计文件追加到当前文件"
+msgstr "追加一个现有的图纸文件到当前文件"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -24643,9 +24600,8 @@ msgid "Board setup"
 msgstr "电路板设置"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "电路板设置..."
+msgstr "文件 > 板设置..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -24790,17 +24746,15 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "取消选中以使用图形项目的中心线绘制图形项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "使用 Pcbnew 字体绘制文本"
+msgstr "使用 KiCad 字体绘制文本"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"检查并使用 Pcbnew 笔画字体\n"
+"勾选来使用 KiCad 笔画字体\n"
 "取消选中将单列 ASCII 文本绘制为可编辑文本(使用 DXF 字体)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
@@ -27887,9 +27841,9 @@ msgid "OK to load recovery file \"%s\""
 msgstr "确定加载恢复文件 \"%s\""
 
 #: pcbnew/files.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "当前电路板将关闭，是否在继续之前保存对 \"%s\" 的更改？"
+msgstr "当前电路板将被关闭，是否在继续之前保存对 \"%s\" 的更改？"
 
 #: pcbnew/files.cpp:378
 msgid "Current Board will be closed. Continue?"
@@ -27900,17 +27854,14 @@ msgid "noname"
 msgstr "无名称"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此电路板上的区域被重新填充，将使用 Copper Edge Clearance 设置 （见电路板"
-"配置 > 设计规则 >限制）。\n"
-"这可能导致来自先前 Kicad 版本的不同填充，它们在 Edge Cuts 层上使用板边界的线"
-"厚度。"
+"如果此电路板上的区域被重新填充，将应用铜边缘间隙设置 （见电路板配置 > 设计规则 >限制）。\n"
+"这可能导致来自先前 KiCad 版本的不同填充，这些版本会将板子边缘的线路厚度用于 Edge Cuts 层。"
 
 #: pcbnew/files.cpp:540
 msgid "Edge Clearance Warning"
@@ -28069,9 +28020,8 @@ msgid "footprint %s"
 msgstr "封装 %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "封装编辑器"
+msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -28091,9 +28041,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "正在从电路板编辑 %s。保存只会更新电路板。"
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [从 %s.%s]"
+msgstr "%s%s [来自 %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -28279,9 +28229,8 @@ msgid "No footprint name defined."
 msgstr "没有定义封装名称."
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "封装库浏览"
+msgstr "KiCad 封装库查看器"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -28589,9 +28538,8 @@ msgid "Resc&ue"
 msgstr "恢复 (&U)"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
-msgstr "清除电路板以便恢复最后的自动备份 Pcbnew 文件"
+msgstr "清除电路板并获得 PCB 编辑器自动保存的上个救援文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -28795,14 +28743,12 @@ msgid "File not found"
 msgstr "文件未找到"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "形状大小为空!"
+msgstr "形状尺寸为空。"
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "形状不包含任何点!"
+msgstr "形状没有点。"
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -29248,9 +29194,8 @@ msgid "Error loading project footprint libraries"
 msgstr "加载工程封装库时出错"
 
 #: pcbnew/pcb_edit_frame.cpp:192
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "PCB 编辑器"
+msgstr "KiCad PCB 编辑器"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -29274,14 +29219,12 @@ msgid "The schematic for this board cannot be found."
 msgstr "找不到该电路板的原理图。"
 
 #: pcbnew/pcb_edit_frame.cpp:1374
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"无法更新 PCB, 因为 Pcbnew 是在独立模式下打开的。为了从原理图创建或更新 PCB, "
-"您必须启动 KiCad 工程管理器并创建一个工程。"
+"无法更新 PCB, 因为 PCB 编辑器是在独立模式下打开的。为了从原理图创建或更新 PCB, 你必须启动 KiCad 工程管理器并创建一个工程。"
 
 #: pcbnew/pcb_edit_frame.cpp:1388
 msgid "Eeschema netlist"
@@ -30827,9 +30770,8 @@ msgid ""
 msgstr "微孔只能放置在外层 (顶层铜层/底层铜层) 和与其直接相邻的层之间。"
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "布线只能出现在铜层"
+msgstr "仅铜层上的布线。"
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
@@ -31834,9 +31776,8 @@ msgid "Footprint Properties..."
 msgstr "封装属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "修改封装属性"
+msgstr "编辑封装属性"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Show the footprint checker window"
@@ -31892,9 +31833,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "编辑布线与过孔属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "全局编辑文本和图形属性"
+msgstr "编辑电路板全局布线和过孔属性"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -32114,7 +32054,7 @@ msgstr "切换下一个布线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "将布线宽度更改为下一个预定义尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -32122,7 +32062,7 @@ msgstr "切换上一个布线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "将布线宽度更改为前一个预定义尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -32130,7 +32070,7 @@ msgstr "增大过孔尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "将过孔尺寸更改为下一个预定义尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -32138,7 +32078,7 @@ msgstr "减小过孔尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "将过孔尺寸更改为上一个预定义尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -32185,31 +32125,28 @@ msgid "Toggle Lock"
 msgstr "切换锁定"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "显示所选项目的飞线"
+msgstr "锁定或解锁选中项目"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "防止项目在画布上被移动和/或调整大小"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr ""
+msgstr "允许项目在画布上被移动和/或调整大小"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "移动具有指定精确的选定项目"
+msgstr "将选中的项分组，以便将它们作为单个项处理"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
 msgstr "解组"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "没有选择库"
+msgstr "解散任意选中的组"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -32240,9 +32177,8 @@ msgid "Append Board..."
 msgstr "添加电路板..."
 
 #: pcbnew/tools/pcb_actions.cpp:686
-#, fuzzy
 msgid "Open another board and append its contents to this board"
-msgstr "追加另一块电路板到当前加载的电路板"
+msgstr "打开另一块板并将其内容附加到这块板上"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Highlight the selected net"
@@ -32261,9 +32197,8 @@ msgid "Clear Net Highlighting"
 msgstr "清除网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "清除网络高亮"
+msgstr "清除任何现有的网络高亮"
 
 #: pcbnew/tools/pcb_actions.cpp:703 pcbnew/tools/pcb_actions.cpp:710
 msgid "Highlight all copper items of a net"
@@ -32327,7 +32262,7 @@ msgstr "翻转电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "从另一侧查看板"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
@@ -33178,9 +33113,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "在封装和文字中央显示一个小十字"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "打印边框和标题栏"
+msgstr "显示图纸边框和工程图明细表"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
