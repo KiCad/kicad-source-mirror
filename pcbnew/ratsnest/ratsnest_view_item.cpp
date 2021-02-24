@@ -88,9 +88,17 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     LSET visibleLayers;
 
-    for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
-        if( aView->IsLayerVisible( layer ) )
-            visibleLayers.set( layer );
+    // If we are in "other layers off" mode, the active layer is the only visible layer
+    if( rs->GetContrastModeDisplay() == HIGH_CONTRAST_MODE::HIDDEN )
+    {
+        visibleLayers.set( rs->GetPrimaryHighContrastLayer() );
+    }
+    else
+    {
+        for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
+            if( aView->IsLayerVisible( layer ) )
+                visibleLayers.set( layer );
+    }
 
     const bool curved_ratsnest = rs->GetCurvedRatsnestLinesEnabled();
 
