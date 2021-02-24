@@ -14,10 +14,9 @@
         <property name="file">properties_frame_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
-        <property name="name">properties_frame</property>
+        <property name="name">properties_frame_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Panel" expanded="1">
@@ -45,7 +43,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_PROPERTIES_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">309,888</property>
             <property name="subclass"></property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -4016,7 +4014,6 @@
                                             <property name="aui_name"></property>
                                             <property name="aui_position"></property>
                                             <property name="aui_row"></property>
-                                            <property name="auth_needed">0</property>
                                             <property name="best_size"></property>
                                             <property name="bg"></property>
                                             <property name="bitmap"></property>
@@ -4979,7 +4976,6 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
-                                                    <property name="auth_needed">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
                                                     <property name="bitmap"></property>
@@ -5869,7 +5865,6 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
-                                                    <property name="auth_needed">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
                                                     <property name="bitmap"></property>

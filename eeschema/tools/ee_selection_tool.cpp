@@ -324,22 +324,73 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         bool displayBusCursor = false;
         bool displayLineCursor = false;
         KIID rolloverItem = lastRolloverItem;
-        m_additive = m_subtractive = m_exclusive_or = false;
 
-        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_SHIFT ) )
-            m_additive = true;
-        else if( evt->Modifier( MD_CTRL ) )
-            m_exclusive_or = true;
+        // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+        // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
+        // actions are different on OSX and others OS
+        // Especially, ALT key cannot be used to force showing the full selection choice
+        // context menu (the menu is immediately closed on Windows )
+        //
+        // No modifier = select items and deselect previous selection
+        // ALT (on OSX) = skip heuristic and show full selection choice
+        // ALT (on others) = exclusive OR of selected items (inverse selection)
+        //
+        // CTRL/CMD (on OSX) = exclusive OR of selected items (inverse selection)
+        // CTRL (on others) = skip heuristic and show full selection choice
+        //
+        // SHIFT = add selected items to the current selection
+        //
+        // CTRL/CMD+SHIFT (on OSX) = remove selected items to the current selection
+        // CTRL+SHIFT (on others) = unused (can be used for a new action)
+        //
+        // CTRL/CMT+ALT (on OSX) = unused (can be used for a new action)
+        // CTRL+ALT (on others) = do nothing (same as no modifier)
+        //
+        // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
+        // SHIFT+ALT (on others) = remove selected items to the current selection
 
-        bool              modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
-        MOUSE_DRAG_ACTION drag_action = m_frame->GetDragAction();
+#ifdef __WXOSX_MAC__
+        m_subtractive = evt->Modifier( MD_CTRL ) &&
+                        evt->Modifier( MD_SHIFT ) &&
+                        !evt->Modifier( MD_ALT );
+
+        m_additive = evt->Modifier( MD_SHIFT ) &&
+                     !evt->Modifier( MD_CTRL ) &&
+                     !evt->Modifier( MD_ALT );
+
+        m_exclusive_or = evt->Modifier( MD_CTRL ) &&
+                         !evt->Modifier( MD_SHIFT ) &&
+                         !evt->Modifier( MD_ALT );
+
+        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
+                            !evt->Modifier( MD_SHIFT ) &&
+                            !evt->Modifier( MD_CTRL );
+
+#else
+        m_subtractive = evt->Modifier( MD_SHIFT )
+                        && !evt->Modifier( MD_CTRL )
+                        && evt->Modifier( MD_ALT );
+
+        m_additive = evt->Modifier( MD_SHIFT )
+                     && !evt->Modifier( MD_CTRL )
+                     && !evt->Modifier( MD_ALT );
+
+        m_exclusive_or = !evt->Modifier( MD_SHIFT )
+                         && !evt->Modifier( MD_CTRL )
+                         && evt->Modifier( MD_ALT );
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
-        m_skip_heuristics = !!evt->Modifier( MD_ALT );
+        // Cannot use the Alt key on windows or the disambiguation context menu is immediately
+        // dismissed rendering it useless.
+        m_skip_heuristics = evt->Modifier( MD_CTRL )
+                            && !evt->Modifier( MD_SHIFT )
+                            && !evt->Modifier( MD_ALT );
+#endif
 
+        bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
+
+        MOUSE_DRAG_ACTION drag_action = m_frame->GetDragAction();
         EE_GRID_HELPER grid( m_toolMgr );
 
         // Single click? Select single object

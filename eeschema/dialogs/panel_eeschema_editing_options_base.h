@@ -80,7 +80,7 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public wxPanel
 
 	public:
 
-		PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 661,584 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 661,649 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_EESCHEMA_EDITING_OPTIONS_BASE();
 
 };

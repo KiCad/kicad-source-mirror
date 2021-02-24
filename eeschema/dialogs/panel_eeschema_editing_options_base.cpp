@@ -105,7 +105,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText101->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText101, 0, wxALL, 5 );
 
-	m_staticText131 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText131 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText131->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText131, 0, wxALL, 5 );
 
@@ -113,7 +113,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText141->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText141, 0, wxALL, 5 );
 
-	m_staticText151 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText151->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText151, 0, wxALL, 5 );
 
@@ -121,7 +121,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText161->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText161, 0, wxALL, 5 );
 
-	m_staticText111 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText111 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText111->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText111, 0, wxALL, 5 );
 
