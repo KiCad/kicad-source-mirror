@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -155,6 +155,23 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	wxBoxSizer* bSizerBrdThickness;
 	bSizerBrdThickness = new wxBoxSizer( wxHORIZONTAL );
+
+	m_lblCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblCopperLayers->Wrap( -1 );
+	m_lblCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
+
+	bSizerBrdThickness->Add( m_lblCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_choiceCopperLayersChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
+	int m_choiceCopperLayersNChoices = sizeof( m_choiceCopperLayersChoices ) / sizeof( wxString );
+	m_choiceCopperLayers = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCopperLayersNChoices, m_choiceCopperLayersChoices, 0 );
+	m_choiceCopperLayers->SetSelection( 0 );
+	m_choiceCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
+
+	bSizerBrdThickness->Add( m_choiceCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerBrdThickness->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextCT = new wxStaticText( this, wxID_ANY, _("Board thickness from stackup:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_staticTextCT->Wrap( -1 );

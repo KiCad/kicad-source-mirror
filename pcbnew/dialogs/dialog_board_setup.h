@@ -65,6 +65,7 @@ protected:
 
 private:
     int m_physicalStackupPage;      // the page index of the PANEL_SETUP_BOARD_STACKUP page
+    int m_layerSetupPage;           // the page index of the PANEL_SETUP_LAYERS page
 };
 
 

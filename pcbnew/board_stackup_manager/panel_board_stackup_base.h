@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,11 +65,13 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxChoice* m_choiceFinish;
 		wxStaticText* m_staticTextEdgeConn;
 		wxChoice* m_choiceEdgeConn;
+		wxStaticText* m_lblCopperLayers;
+		wxChoice* m_choiceCopperLayers;
 		wxStaticText* m_staticTextCT;
 		wxTextCtrl* m_tcCTValue;
 		wxButton* m_buttonExport;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onAddDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRemoveDielectricLayer( wxCommandEvent& event ) { event.Skip(); }

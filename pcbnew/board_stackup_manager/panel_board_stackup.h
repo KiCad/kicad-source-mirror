@@ -93,6 +93,9 @@ public:
      */
     void OnLayersOptionsChanged( LSET aNewLayerSet );
 
+    /// @return the number of copper layers configured for the board stackup
+    int GetCopperLayerCount() const;
+
     /// @return the BOARD_STACKUP_ITEM managed by the row aRow
     BOARD_STACKUP_ITEM* GetStackupItem( int aRow );
     /// @return the BOARD_STACKUP_ITEM sublayermanaged by the row aRow
@@ -169,6 +172,11 @@ private:
     /** Transfer current UI settings to m_stackup but not to the board
      */
     bool transferDataFromUIToStackup();
+
+    /**
+     * Updates the enabled copper layers when the dropdown is changed
+     */
+    void updateCopperLayerCount();
 
     void onUpdateThicknessValue( wxUpdateUIEvent& event ) override;
     void onColorSelected( wxCommandEvent& event );

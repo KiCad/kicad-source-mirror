@@ -32,6 +32,7 @@
 class PCB_EDIT_FRAME;
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
+class PANEL_SETUP_BOARD_STACKUP;
 
 
 /**
@@ -78,30 +79,33 @@ public:
     ///< @return the layer name within the UI wxTextCtrl
     wxString GetLayerName( LAYER_NUM layer );
 
-private:
-    PAGED_DIALOG*   m_Parent;
-    PCB_EDIT_FRAME* m_frame;
+    /**
+     * Called when switching to this tab to make sure that any changes to the copper layer count
+     * made on the physical stackup page are reflected here
+     * @param aNumCopperLayers is the number of copper layers in the board
+     */
+    void SyncCopperLayers( int aNumCopperLayers );
 
-    BOARD*          m_pcb;
-    LSET            m_enabledLayers;
+    void SetPhysicalStackupPanel( PANEL_SETUP_BOARD_STACKUP* aPanel )
+    {
+        m_physicalStackup = aPanel;
+    }
+
+private:
 
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
     void setMandatoryLayerCheckBoxes();
     void setUserDefinedLayerCheckBoxes();
 
-    void showCopperChoice( int copperCount );
     void showBoardLayerNames();
     void showSelectedLayerCheckBoxes( LSET enableLayerMask );
     void showLayerTypes();
-    void showPresets( LSET enabledLayerMask );
 
     int getLayerTypeIndex( LAYER_NUM layer );
 
     void OnCheckBox( wxCommandEvent& event ) override;
     void DenyChangeCheckBox( wxCommandEvent& event ) override;
-    void OnPresetsChoice( wxCommandEvent& event ) override;
-    void OnCopperLayersChoice( wxCommandEvent& event ) override;
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     virtual void addUserDefinedLayer( wxCommandEvent& aEvent ) override;
@@ -126,6 +130,12 @@ private:
     wxControl*  getName( LAYER_NUM aLayer );
     wxCheckBox* getCheckBox( LAYER_NUM aLayer );
     wxChoice*   getChoice( LAYER_NUM aLayer );
+
+    PAGED_DIALOG*              m_parentDialog;
+    PCB_EDIT_FRAME*            m_frame;
+    PANEL_SETUP_BOARD_STACKUP* m_physicalStackup;
+    BOARD*                     m_pcb;
+    LSET                       m_enabledLayers;
 };
 
 

@@ -80,6 +80,8 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_brdSettings = &m_board->GetDesignSettings();
     m_units = aFrame->GetUserUnits();
 
+    m_panelLayers->SetPhysicalStackupPanel( this );
+
     m_enabledLayers = m_board->GetEnabledLayers() & BOARD_STACKUP::StackupAllowedBrdLayers();
 
     // Calculates a good size for color swatches (icons) in this dialog
@@ -112,6 +114,14 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
 
     buildLayerStackPanel( true );
     synchronizeWithBoard( true );
+
+    m_choiceCopperLayers->Bind( wxEVT_CHOICE,
+            [&]( wxCommandEvent )
+            {
+                updateCopperLayerCount();
+                showOnlyActiveLayers();
+                Layout();
+            } );
 }
 
 
@@ -329,12 +339,34 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
 }
 
 
+int PANEL_SETUP_BOARD_STACKUP::GetCopperLayerCount() const
+{
+    return ( m_choiceCopperLayers->GetSelection() + 1 ) * 2;
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::updateCopperLayerCount()
+{
+    int copperCount = GetCopperLayerCount();
+
+    wxASSERT( copperCount >= 2 );
+
+    m_enabledLayers |= LSET::ExternalCuMask();
+    m_enabledLayers &= ~LSET::InternalCuMask();
+
+    for( int i = 1; i < copperCount - 1; i++ )
+        m_enabledLayers.set( F_Cu + i );
+}
+
+
 void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 {
     const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
     if( aFullSync )
     {
+        m_choiceCopperLayers->SetSelection( ( m_board->GetCopperLayerCount() / 2 ) - 1 );
+
         m_rbDielectricConstraint->SetSelection( brd_stackup.m_HasDielectricConstrains ? 1 : 0 );
         m_choiceEdgeConn->SetSelection( brd_stackup.m_EdgeConnectorConstraints );
         m_cbCastellatedPads->SetValue( brd_stackup.m_CastellatedPads );
@@ -1040,6 +1072,10 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
 {
     if( !transferDataFromUIToStackup() )
         return false;
+
+    // NOTE: Copper layer count is transferred via PANEL_SETUP_LAYERS even though it is configured
+    // on this page, because the logic for confirming deletion of board items on deleted layers is
+    // on that panel and it doesn't make sense to split it up.
 
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 

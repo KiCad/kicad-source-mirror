@@ -32,6 +32,7 @@
 #include <board.h>
 #include <collectors.h>
 #include <panel_setup_layers.h>
+#include <board_stackup_manager/panel_board_stackup.h>
 
 #include <wx/choicdlg.h>
 
@@ -118,35 +119,9 @@ static LSEQ dlg_layers()
 }
 
 
-// Layer bit masks for each defined "Preset Layer Grouping"
-static const LSET presets[] =
-{
-    LSET(),     // shift the array index up by one, matches with "Custom".
-
-    // "Two layers, parts on Front only"
-    LSET( 2, F_Cu, B_Cu ) | LSET::FrontTechMask() | LSET( 1, B_Mask ) | LSET::UserMask(),
-
-    // "Two layers, parts on Back only",
-    LSET( 2, F_Cu, B_Cu ) | LSET::BackTechMask() | LSET( 1, F_Mask ) | LSET::UserMask(),
-
-    // "Two layers, parts on Front and Back",
-    LSET( 2, F_Cu, B_Cu ) | LSET::FrontTechMask() | LSET::BackTechMask() | LSET::UserMask(),
-
-    // "Four layers, parts on Front only"
-    LSET( 4, F_Cu, B_Cu, In1_Cu, In2_Cu ) | LSET::FrontTechMask() | LSET::UserMask(),
-
-    // "Four layers, parts on Front and Back"
-    LSET( 4, F_Cu, B_Cu, In1_Cu, In2_Cu ) | LSET::FrontTechMask() | LSET::BackTechMask() |
-        LSET::UserMask(),
-
-    //  "All layers on",
-    LSET().set(),
-};
-
-
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
-        m_Parent( aParent ), m_frame( aFrame )
+        m_parentDialog( aParent ), m_frame( aFrame )
 {
     m_pcb = aFrame->GetBoard();
 }
@@ -256,17 +231,22 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
     // Rescue may be enabled, but should not be shown in this dialog
     m_enabledLayers.reset( Rescue );
 
-    showCopperChoice( m_pcb->GetCopperLayerCount() );
     setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
 
     showBoardLayerNames();
     showSelectedLayerCheckBoxes( m_enabledLayers );
-    showPresets( m_enabledLayers );
+
     showLayerTypes();
     setMandatoryLayerCheckBoxes();
     setUserDefinedLayerCheckBoxes();
 
     return true;
+}
+
+
+void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
+{
+    setCopperLayerCheckBoxes( aNumCopperLayers );
 }
 
 
@@ -306,27 +286,6 @@ void PANEL_SETUP_LAYERS::setUserDefinedLayerCheckBoxes()
 }
 
 
-void PANEL_SETUP_LAYERS::showCopperChoice( int copperCount )
-{
-    if( copperCount > MAX_CU_LAYERS )
-        copperCount = MAX_CU_LAYERS;
-
-    if( copperCount < 2 )
-        copperCount = 2;
-
-    for( int lyrCnt = 2; lyrCnt <= MAX_CU_LAYERS; lyrCnt += 2 )
-    {
-        // Note: This will change a 1 layer board to 2
-        if( copperCount <= lyrCnt )
-        {
-            int idx = lyrCnt/2 - 1;
-            m_CopperLayersChoice->SetSelection(idx);
-            break;
-        }
-    }
-}
-
-
 void PANEL_SETUP_LAYERS::showBoardLayerNames()
 {
     // Set all the board's layer names into the dialog by calling BOARD::GetLayerName(),
@@ -358,23 +317,6 @@ void PANEL_SETUP_LAYERS::showSelectedLayerCheckBoxes( LSET enabledLayers )
         PCB_LAYER_ID layer = *seq;
         setLayerCheckBox( layer, enabledLayers[layer] );
     }
-}
-
-
-void PANEL_SETUP_LAYERS::showPresets( LSET enabledLayers )
-{
-    int presetsNdx = 0; // The "Custom" setting, matches nothing
-
-    for( unsigned i=1; i<arrayDim( presets );  ++i )
-    {
-        if( enabledLayers == presets[i] )
-        {
-            presetsNdx = i;
-            break;
-        }
-    }
-
-    m_PresetsChoice->SetSelection( presetsNdx );
 }
 
 
@@ -459,8 +401,6 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
 {
     m_enabledLayers = GetUILayerMask();
-
-    showPresets( m_enabledLayers );
 }
 
 
@@ -475,13 +415,8 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 
         if( source == copper )
         {
-            wxString controlLabel = m_staticTextCopperLayers->GetLabel();
-            // Knock the ':' off the end
-            controlLabel = controlLabel.substr( 0, controlLabel.size() - 1 );
-
-            msg.Printf( _( "Use the \"%s\" control to change the number of copper layers." ),
-                        controlLabel );
-            DisplayError( this, msg );
+            DisplayError( this,
+                    _( "Use the Physical Stackup page to change the number of copper layers." ) );
 
             copper->SetValue( true );
             return;
@@ -503,41 +438,13 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 }
 
 
-void PANEL_SETUP_LAYERS::OnPresetsChoice( wxCommandEvent& event )
-{
-    int presetNdx = m_PresetsChoice->GetCurrentSelection();
-
-    if( presetNdx <= 0 )        // the Custom setting controls nothing.
-        return;
-
-    if( presetNdx < (int) arrayDim(presets) )
-    {
-        m_enabledLayers = presets[ presetNdx ];
-        LSET copperSet = m_enabledLayers & LSET::AllCuMask();
-        int copperCount = copperSet.count();
-
-        showCopperChoice( copperCount );
-        showSelectedLayerCheckBoxes( m_enabledLayers );
-        setCopperLayerCheckBoxes( copperCount );
-    }
-
-    // Ensure mandatory layers are activated
-    setMandatoryLayerCheckBoxes();
-}
-
-
-void PANEL_SETUP_LAYERS::OnCopperLayersChoice( wxCommandEvent& event )
-{
-    setCopperLayerCheckBoxes( m_CopperLayersChoice->GetCurrentSelection() * 2 + 2 );
-    m_enabledLayers = GetUILayerMask();
-    showPresets( m_enabledLayers );
-}
-
-
 bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 {
     if( !testLayerNames() )
         return false;
+
+    // Make sure we have the latest copper layer count
+    SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
 
     wxString msg;
     bool     modified = false;
@@ -739,20 +646,20 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 
         if( !name )
         {
-            m_Parent->SetError( _( "Layer must have a name." ), this, ctl );
+            m_parentDialog->SetError( _( "Layer must have a name." ), this, ctl );
             return false;
         }
 
         if( hasOneOf( name, badchars ) )
         {
             auto msg = wxString::Format(_( "\"%s\" are forbidden in layer names." ), badchars );
-            m_Parent->SetError( msg, this, ctl );
+            m_parentDialog->SetError( msg, this, ctl );
             return false;
         }
 
         if( name == wxT( "signal" ) )
         {
-            m_Parent->SetError( _( "Layer name \"signal\" is reserved." ), this, ctl );
+            m_parentDialog->SetError( _( "Layer name \"signal\" is reserved." ), this, ctl );
             return false;
         }
 
@@ -761,7 +668,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
             if( name == existingName )
             {
                 auto msg = wxString::Format(_( "Layer name \"%s\" is already in use." ), name );
-                m_Parent->SetError( msg, this, ctl );
+                m_parentDialog->SetError( msg, this, ctl );
                 return false;
             }
         }

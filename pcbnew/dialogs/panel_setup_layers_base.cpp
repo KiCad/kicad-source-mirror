@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,25 +19,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	wxBoxSizer* bSizerLayerCnt;
 	bSizerLayerCnt = new wxBoxSizer( wxHORIZONTAL );
-
-	wxString m_PresetsChoiceChoices[] = { _("Custom layer set"), _("Two layers, parts on Front"), _("Two layers, parts on Back"), _("Two layers, parts on Front & Back"), _("Four layers, parts on Front"), _("Four layers, parts on Front & Back"), _("All layers on") };
-	int m_PresetsChoiceNChoices = sizeof( m_PresetsChoiceChoices ) / sizeof( wxString );
-	m_PresetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PresetsChoiceNChoices, m_PresetsChoiceChoices, 0 );
-	m_PresetsChoice->SetSelection( 0 );
-	bSizerLayerCnt->Add( m_PresetsChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextCopperLayers->Wrap( -1 );
-	bSizerLayerCnt->Add( m_staticTextCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
-
-	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
-	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
-	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
-	m_CopperLayersChoice->SetSelection( 0 );
-	bSizerLayerCnt->Add( m_CopperLayersChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	bSizerLayerCnt->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -832,8 +813,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_PresetsChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
-	m_CopperLayersChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
 	m_addUserDefinedLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
 	m_addUserDefinedLayerButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
@@ -900,8 +879,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 PANEL_SETUP_LAYERS_BASE::~PANEL_SETUP_LAYERS_BASE()
 {
 	// Disconnect Events
-	m_PresetsChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnPresetsChoice ), NULL, this );
-	m_CopperLayersChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::OnCopperLayersChoice ), NULL, this );
 	m_addUserDefinedLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::addUserDefinedLayer ), NULL, this );
 	m_addUserDefinedLayerButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_LAYERS_BASE::onUpdateAddUserDefinedLayer ), NULL, this );
 	m_CrtYdFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_LAYERS_BASE::DenyChangeCheckBox ), NULL, this );
