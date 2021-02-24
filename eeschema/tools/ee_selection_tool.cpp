@@ -1591,17 +1591,23 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
                     selectAll = true;
                     current   = nullptr;
                 }
+                else if( id == limit + 2 )
+                {
+                    selectAll       = false;
+                    current         = nullptr;
+                    expandSelection = true;
+                }
                 // User has selected an item, so this one will be returned
                 else if( id && ( *id > 0 ) && ( *id <= limit ) )
                 {
                     selectAll = false;
                     current   = ( *aCollector )[*id - 1];
                 }
+                // User has cancelled the menu (either by <esc> or clicking out of it)
                 else
                 {
-                    selectAll       = false;
-                    current         = nullptr;
-                    expandSelection = false;
+                    selectAll = false;
+                    current   = nullptr;
                 }
             }
             else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
