@@ -88,7 +88,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     Activate();
 
     // Prime the pump
-    if( aEvent.HasPosition() )
+    if( aEvent.HasPosition() || isText )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =

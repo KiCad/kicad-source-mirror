@@ -924,7 +924,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     Activate();
 
     // Prime the pump
-    if( aEvent.HasPosition() )
+    if( aEvent.HasPosition() || isText || isGlobalLabel || isHierLabel || isNetLabel )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
