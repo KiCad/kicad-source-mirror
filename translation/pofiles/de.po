@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 14:06+0000\n"
+"PO-Revision-Date: 2021-02-24 22:37+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -1897,7 +1897,7 @@ msgstr "Der Name %s ist reserviert und kann hier nicht benutzt werden"
 
 #: common/dialogs/dialog_configure_paths.cpp:494
 msgid "File Browser..."
-msgstr "Datei Auswahl..."
+msgstr "Dateibrowser..."
 
 #: common/dialogs/dialog_configure_paths.cpp:497
 #: common/widgets/grid_text_button_helpers.cpp:385
@@ -2381,7 +2381,7 @@ msgstr "Vorschau Papier"
 
 #: common/dialogs/dialog_page_settings.cpp:97
 msgid "Preview Title Block Data"
-msgstr "Vorschau Infoblock"
+msgstr "Vorschau Schriftfeld-Daten"
 
 #: common/dialogs/dialog_page_settings.cpp:101
 #: common/dialogs/dialog_page_settings_base.h:141
@@ -2395,7 +2395,7 @@ msgstr "Papier"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Title Block"
-msgstr "Titelblock"
+msgstr "Schriftfeld"
 
 #: common/dialogs/dialog_page_settings.cpp:248
 #: common/dialogs/dialog_page_settings.cpp:695
@@ -2569,7 +2569,7 @@ msgstr "In andere Schaltpläne exportieren"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 msgid "Title Block Parameters"
-msgstr "Betitelungsparameter"
+msgstr "Schriftfeld-Parameter"
 
 #: common/dialogs/dialog_page_settings_base.cpp:144
 #, c-format
@@ -2760,7 +2760,7 @@ msgstr "Schwarz-Weiß"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Ränder und Schriftfeld drucken"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -2883,15 +2883,15 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Skalierung für Canvas setzen.\n"
+"Skalierung für Zeichenfläche setzen.\n"
 "\n"
 "Die Erkennung von Anzeigen mit hoher Auflösung funktioniert auf manchen "
 "Plattformen nicht zuverlässig. Dadurch kann es nötig sein diesen Wert auf "
-"den Systemweiten Faktor für die Anzeigeskalierung zu setzen, typischerweise "
-"2.0.\n"
+"den Systemweiten Faktor für die Anzeigeskalierung zu setzen, typischerweise 2"
+".0.\n"
 "\n"
 "Wenn dieser Wert nicht mit der Systemeinstellung übereinstimmt, wird die "
-"Arbeitsfläche die falsche Größe haben und die Mauszeigerposition an der "
+"Zeichenfläche die falsche Größe haben und die Mauszeigerposition an der "
 "falschen Stelle gezeigt."
 
 #: common/dialogs/panel_common_settings.cpp:62
@@ -2901,7 +2901,7 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"Benutzen eines automatischen Wertes für die Canvas Skalierung.\n"
+"Automatischen Wertes für die Zeichenflächen-Skalierung benutzen.\n"
 "\n"
 "Auf manchen Plattformen ist der automatische Wert nicht korrekt und sollte "
 "manuell gesetzt werden."
@@ -3028,7 +3028,7 @@ msgstr "Automatisch"
 
 #: common/dialogs/panel_common_settings_base.cpp:172
 msgid "Canvas scale:"
-msgstr "Canvas Skalierung:"
+msgstr "Zeichenflächen-Skalierung:"
 
 #: common/dialogs/panel_common_settings_base.cpp:183
 msgid "Show icons in menus"
@@ -3177,7 +3177,7 @@ msgstr "Import Tastaturbefehledatei:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Aktion | Standard-Tastaturbefehl | Beschreibung"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -3348,7 +3348,7 @@ msgstr "Links/Rechts mit Horizontalbewegung schwenken"
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Bildausschnitt nach links und rechts verschieben, wenn Sie auf dem Touchpad "
+"Zeichenfläche nach links und rechts verschieben, wenn Sie auf dem Touchpad "
 "von links nach rechts scrollen"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
@@ -4646,8 +4646,8 @@ msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
 msgid ""
 "Could not read instance name and version symbol form kiface library \"%s\"."
 msgstr ""
-"Konnte den Instanzierungsnamen und die Bauteilversionsform nicht von der "
-"kiface Bibliothek \"%s\" lesen."
+"Konnte den Instanznamen und die Symbolversion nicht von der kiface-"
+"Bibliothek \"%s\" lesen."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -4969,23 +4969,23 @@ msgstr "Pinnamen"
 
 #: common/layer_id.cpp:114
 msgid "Symbol references"
-msgstr "Bauteilreferenzen"
+msgstr "Symbolreferenzen"
 
 #: common/layer_id.cpp:115
 msgid "Symbol values"
-msgstr "Bauteilwerte"
+msgstr "Symbolwerte"
 
 #: common/layer_id.cpp:116
 msgid "Symbol fields"
-msgstr "Bauteilfelder"
+msgstr "Symbolfelder"
 
 #: common/layer_id.cpp:117
 msgid "Symbol body outlines"
-msgstr "Bauteilumrisse"
+msgstr "Symbolkörper-Umrisse"
 
 #: common/layer_id.cpp:118
 msgid "Symbol body fills"
-msgstr "Bauteilfüllungen"
+msgstr "Symbolkörper-Füllungen"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
@@ -5535,7 +5535,7 @@ msgstr "Seite einrichten..."
 
 #: common/tool/actions.cpp:95
 msgid "Settings for paper size and title block info"
-msgstr "Einstellungen für Seitengröße und Infoblock"
+msgstr "Einstellungen für Seitengröße und Schriftfeld-Informationen"
 
 #: common/tool/actions.cpp:101 kicad/project_tree_pane.cpp:790
 msgid "Print..."
@@ -5962,17 +5962,17 @@ msgstr "Im 3D-Betrachter anzeigen"
 #: common/tool/actions.cpp:561 eeschema/symbol_viewer_frame.cpp:100
 #: eeschema/symbol_viewer_frame.cpp:902
 msgid "Symbol Library Browser"
-msgstr "Betrachter Bauteilbibliotheken"
+msgstr "Symbolbibliotheks-Browser"
 
 #: common/tool/actions.cpp:561
 msgid "Browse symbol libraries"
-msgstr "Bauteilbibliotheken durchsuchen"
+msgstr "Symbolbibliotheken durchsuchen"
 
 #: common/tool/actions.cpp:566 eeschema/eeschema_config.cpp:218
 #: eeschema/symbol_editor/symbol_editor.cpp:157
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Symbol Editor"
-msgstr "Bauteileditor"
+msgstr "Symboleditor"
 
 #: common/tool/actions.cpp:566
 msgid "Create, delete and edit symbols"
@@ -5981,7 +5981,7 @@ msgstr "Schaltplansymbole erstellen, löschen oder verändern"
 #: common/tool/actions.cpp:571 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1014
 msgid "Footprint Library Browser"
-msgstr "Footprint Bibliotheksbrowser"
+msgstr "Footprintbibliotheks-Browser"
 
 #: common/tool/actions.cpp:571
 msgid "Browse footprint libraries"
@@ -6025,7 +6025,7 @@ msgstr "Umgebungsvariablen zur Pfadkonfiguration bearbeiten"
 
 #: common/tool/actions.cpp:597
 msgid "Manage Symbol Libraries..."
-msgstr "Verwalten Bauteilbibliotheken..."
+msgstr "Symbolbibliotheken verwalten..."
 
 #: common/tool/actions.cpp:598
 msgid "Edit the global and project symbol library lists"
@@ -6056,7 +6056,7 @@ msgstr "Hilfe"
 
 #: common/tool/actions.cpp:616
 msgid "Open product documentation in a web browser"
-msgstr "Produktinformation im Webbrowser öffnen"
+msgstr "Produktdokumentation im Webbrowser öffnen"
 
 #: common/tool/actions.cpp:622
 msgid "List Hotkeys..."
@@ -6103,7 +6103,8 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "Der Standardbrowser konnte nicht geöffnet werden.\n"
-"Für mehr Informationen für Hilfe am KiCad Projekt besuchen Sie %s"
+"Weitere Informationen darüber, wie Sie das KiCad-Projekt unterstützen "
+"können, finden Sie unter %s"
 
 #: common/tool/common_control.cpp:237
 msgid "Get involved with KiCad"
@@ -6396,19 +6397,19 @@ msgstr "Alle Dateien"
 
 #: common/wildcards_and_files_ext.cpp:181
 msgid "KiCad drawing symbol files"
-msgstr "KiCad Zeichnungsbauteildateien"
+msgstr "KiCad-Symbolzeichnungsdateien"
 
 #: common/wildcards_and_files_ext.cpp:187
 msgid "KiCad symbol library files"
-msgstr "KiCad Bauteilbibliotheksdateien"
+msgstr "KiCad-Symbolbibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:193
 msgid "KiCad legacy symbol library files"
-msgstr "KiCad Legacy Bauteilbibliotheksdateien"
+msgstr "KiCad-Legacy-Symbolbibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:199
 msgid "All KiCad symbol library files"
-msgstr "Alle KiCad Bauteilbibliotheksdateien"
+msgstr "Alle KiCad-Symbolbibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:205
 msgid "KiCad project files"
@@ -6517,7 +6518,7 @@ msgstr "Seitenlayoutbeschreibungsdateien"
 
 #: common/wildcards_and_files_ext.cpp:361
 msgid "KiCad symbol footprint link files"
-msgstr "KiCad Bauteil/Footprint-Zuordnungsdatei"
+msgstr "KiCad Symbol-Footprint-Zuordnungsdatei"
 
 #: common/wildcards_and_files_ext.cpp:368 gerbview/files.cpp:66
 msgid "Drill files"
@@ -6585,7 +6586,7 @@ msgstr "CadStar Netzlistendatei"
 
 #: common/wildcards_and_files_ext.cpp:464
 msgid "Symbol footprint association files"
-msgstr "Bauteil Footprintassoziierung Dateien"
+msgstr "Symbol-Footprint-Zuordnungsdateien"
 
 #: common/wildcards_and_files_ext.cpp:470
 msgid "Zip file"
@@ -6694,7 +6695,7 @@ msgstr "Footprintbibliotheken"
 
 #: cvpcb/cvpcb_mainframe.cpp:103
 msgid "Symbol : Footprint Assignments"
-msgstr "Bauteil : Footprint Zuordnungen"
+msgstr "Symbol-Footprint-Zuordnungen"
 
 #: cvpcb/cvpcb_mainframe.cpp:106
 msgid "Filtered Footprints"
@@ -6712,7 +6713,7 @@ msgstr "Schaltplan zu Footprintänderungen sind nicht gespeichert"
 #: cvpcb/cvpcb_mainframe.cpp:387
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr ""
-"Die Zuordnung von Footprints zu Bauteilen wurde verändert. Änderungen "
+"Die Zuordnung von Symbolen zu Footprints wurde verändert. Änderungen "
 "speichern?"
 
 #: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:207
@@ -6811,7 +6812,7 @@ msgstr "Datei \"%s\" existiert bereits in der Liste"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Bauteil-zu-Footprint-Zuordnungsdateien (.equ)"
+msgstr "Symbol-zu-Footprint-Zuordnungsdateien (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
@@ -6899,8 +6900,8 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Die Footprintzordnungen aus der Netzliste des Schaltplans und der Datei für "
-"Bauteilzuordnungen (.cmp) stehen im Konflikt.\n"
+"Die Footprintzuordnungen aus der Netzliste des Schaltplans und der Datei für "
+"Symbolzuordnungen (.cmp) stehen im Konflikt.\n"
 "\n"
 "Bitte wählen Sie die Zuordnung."
 
@@ -7019,8 +7020,8 @@ msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Bearbeiten der Footprint Assoziierungsdatei (.equ). Diese Dateien werden "
-"benutzt um automatisch Footprintnamen aus Bauteilfeldern zuzuordnen."
+"Liste von Footprint-Zuordnungsdateien (.equ) konfigurieren. Diese Dateien "
+"werden benutzt, um automatisch Footprintnamen aus Symbolfeldern zuzuordnen."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7029,24 +7030,24 @@ msgstr "Im Schaltplan speichern"
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
-"Speichere die Footprintzuweisung in den Footprintfeldern der Bauteile im "
-"Schaltplan"
+"Speichere die Footprintzuordnungen in den Footprintfeldern der "
+"Schaltplansymbole"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
-msgstr "Nächstes nicht zugeordnetes Bauteil auswählen"
+msgstr "Nächstes nicht zugeordnetes Symbol auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
 msgid "Select next symbol with no footprint assignment"
-msgstr "Nächstes Bauteil ohne Footprint-Zuordnung auswählen"
+msgstr "Nächstes Symbol ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select previous unassigned symbol"
-msgstr "Vorheriges nicht zugeordnetes Bauteil auswählen"
+msgstr "Vorheriges nicht zugeordnetes Symbol auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Vorheriges Bauteil ohne Footprint-Zuordnung auswählen"
+msgstr "Vorheriges Symbol ohne Footprint-Zuordnung auswählen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
@@ -7054,7 +7055,7 @@ msgstr "Footprint zuweisen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
 msgid "Assign footprint to selected symbols"
-msgstr "Footprints ausgewählten Bauteilen zuordnen"
+msgstr "Footprint den ausgewählten Symbolen zuordnen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Automatically assign footprints"
@@ -7078,13 +7079,12 @@ msgstr "Alle Footprint Zuordnungen (Verknüpfungen) entfernen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Use symbol footprint filters"
-msgstr "Benutze Bauteil Footprintfilter"
+msgstr "Benutze Symbol-Footprintfilter"
 
 #: cvpcb/tools/cvpcb_actions.cpp:136
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
-"Gefilterte Footprintliste nach den in den Bauteilen definierten "
-"Footprintfiltern"
+"Filtere Footprintliste nach den in den Symbolen definierten Footprint-Filtern"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Filter by pin count"
@@ -7161,7 +7161,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:900
 #: eeschema/symbol_tree_model_adapter.cpp:64
 msgid "Loading Symbol Libraries"
-msgstr "Bauteilbibliotheken laden"
+msgstr "Symbolbibliotheken laden"
 
 #: eeschema/class_library.cpp:513
 msgid "Loading "
@@ -7173,7 +7173,7 @@ msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
-"Bauteilbibliothek \"%s\" wurde nicht geladen.Fehler:\n"
+"Symbolbibliothek \"%s\" wurde nicht geladen. Fehler:\n"
 "%s"
 
 #: eeschema/class_library.cpp:580
@@ -7182,7 +7182,7 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
-"Bauteilbibliothek \"%s\" wurde nicht geladen.\n"
+"Symbolbibliothek \"%s\" wurde nicht geladen.\n"
 "Fehler: %s"
 
 #: eeschema/component_references_lister.cpp:525
@@ -7199,7 +7199,7 @@ msgstr "Element ist nicht annotiert: %s%s\n"
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Fehler: Bauteil %s%s%s (Einheit %d) überschreitet definierte Einheiten (%d)\n"
+"Fehler: Symbol %s%s%s (Einheit %d) überschreitet definierte Einheiten (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
@@ -7880,26 +7880,24 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Zurücksetzen der Felder die im neuen Symbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "aktualisiere Felder"
+msgstr "Aktualisiere Feldtexte"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
-msgstr "Ändere die Sichtbarkeit der Felder"
+msgstr "Aktualisiere Feld-Sichtbarkeiten"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field sizes and styles"
-msgstr "Änderung der Testgröße und Textart"
+msgstr "Aktualisiere Feld-Größen und -Stile"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field positions"
-msgstr "Änderung der Position der Felder"
+msgstr "Aktualisiere Feld-Positionen"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Bauteilattribute aktualisieren/zurücksetzen"
+msgstr "Aktualisiere Symbolattribute"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7915,22 +7913,22 @@ msgstr "Aktualisiere"
 #: eeschema/dialogs/dialog_change_symbols.cpp:503
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Bauteil %s aktualisiert von '%s' auf '%s'"
+msgstr "Aktualisiere Symbol %s von '%s' nach '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:510
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Bauteile %s aktualisiert von '%s' auf '%s'"
+msgstr "Aktualisiere Symbole %s von '%s' nach '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:520
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Ändere Bauteil %s von '%s' auf '%s'"
+msgstr "Ändere Symbol %s von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:527
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Ändere Bauteile %s von '%s' auf '%s'"
+msgstr "Ändere Symbole %s von '%s' auf '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:538
 msgid "*** symbol not found ***"
@@ -7938,7 +7936,7 @@ msgstr "*** Symbol nicht gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:547
 msgid "*** new symbol has too few units ***"
-msgstr "*** neues Bauteil hat zu wenige Einheiten ***"
+msgstr "*** neues Symbol hat zu wenige Einheiten ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
@@ -7989,7 +7987,8 @@ msgstr "Entferne Felder die nicht im Bibliothekssymbol enthalten sind"
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Removes fields that do not occur in the original library symbols"
 msgstr ""
-"Entfernt Felder welche nicht in den originalen Bibliotheksbauteilen vorkommen"
+"Entfernt Felder, welche nicht in den originalen Bibliotheks-Symbolen "
+"vorkommen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
 msgid "Reset fields if empty in library symbol"
@@ -8017,7 +8016,7 @@ msgstr "Positionen der Felder aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
 msgid "Update/reset symbol attributes"
-msgstr "Bauteilattribute aktualisieren/zurücksetzen"
+msgstr "Symbolattribute aktualisieren/zurücksetzen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:98
 msgid "Update Symbols from Library"
@@ -8026,7 +8025,7 @@ msgstr "Aktualisiere Symbole aus der Bibliothek"
 #: eeschema/dialogs/dialog_choose_symbol.cpp:138
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
 msgid "Select with Browser"
-msgstr "Auswahl mittels Bibliotheksbrowser"
+msgstr "Auswahl mit Browser"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:142
 msgid "Place repeated copies"
@@ -8042,7 +8041,7 @@ msgstr "Alle Einheiten platzieren"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:148
 msgid "Sequentially place all units of the symbol."
-msgstr "Platzieren alle Einheiten des Bauteils nacheinander."
+msgstr "Platziere alle Einheiten des Symbols nacheinander."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:401
 #: eeschema/widgets/symbol_preview_widget.cpp:178
@@ -8052,7 +8051,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch das Bauteil %s aus der Bibliothek %s zu laden ist ein Fehler "
+"Bei dem Versuch das Symbol %s aus der Bibliothek %s zu laden ist ein Fehler "
 "aufgetreten:\n"
 "\n"
 "%s"
@@ -8074,14 +8073,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch das Bauteil %s aus der Bibliothek %s zu laden ist ein Fehler "
-"aufgetreten:\n"
+"Fehler beim Laden von Symbol %s aus der Bibliothek %s.\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:522
 msgid "No symbol selected"
-msgstr "Kein Bauteil gewählt"
+msgstr "Kein Symbol gewählt"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:549
 #, c-format
@@ -8116,7 +8114,7 @@ msgstr "Ungültige Bezeichnung für ein Bibliothekssymbol"
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:82
 msgid "Symbols"
-msgstr "Bauteile"
+msgstr "Symbole"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:38
 msgid "Current Library Reference"
@@ -8131,16 +8129,17 @@ msgid "Map Orphans"
 msgstr "Übersicht Verwaisungen"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:59
+#, fuzzy
 msgid ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Wenn einige Bauteile verwaist sind (das verlinkte Bauteil kann nicht "
+"Wenn einige Bauteile verwaist sind (das verlinkte Symbol kann nicht "
 "gefunden\n"
-"werden) wird versucht ein ein passendes mit einem gleichen Namen in einer "
+"werden), wird versucht ein ein passendes mit einem gleichen Namen in einer "
 "der\n"
-"geladenen Bauteilbibliotheken zu finden."
+"geladenen Symbolbibliotheken zu finden."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -8156,7 +8155,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "Referenzen Bauteilbibliotheken"
+msgstr "Symbolbibliothek-Referenzen"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:58
 msgid "Global Label Properties"
@@ -8574,7 +8573,7 @@ msgstr "Datenblatt"
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:91
 #: eeschema/fields_grid_table.cpp:585
 msgid "Show datasheet in browser"
-msgstr "Anzeige Datenblatt im Browser"
+msgstr "Datenblatt im Browser anzeigen"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:125
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:1041
@@ -8645,11 +8644,11 @@ msgstr "Änderungen speichern?"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:31
 msgid "Group symbols"
-msgstr "Bauteile gruppieren"
+msgstr "Symbole gruppieren"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
 msgid "Group symbols together based on common properties"
-msgstr "Gruppiert Bauteile basierend auf gemeinsamen Eigenschaften"
+msgstr "Gruppiert Symbole basierend auf gemeinsamen Eigenschaften"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:53
 msgid "Add Field..."
@@ -8657,11 +8656,11 @@ msgstr "Feld hinzufügen..."
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.h:76
 msgid "Symbol Fields"
-msgstr "Bauteilfelder"
+msgstr "Symbolfelder"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
-msgstr "Weitere Bauteilfelder"
+msgstr "Weitere Symbolfelder"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
@@ -8703,11 +8702,11 @@ msgstr "Filter Elemente nach übergeordnetem Referenzbezeichner:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
-msgstr "Filter Elemente nach übergeordneter Bauteilbibliothek-ID:"
+msgstr "Filtere Elemente nach übergeordneter Symbolbibliotheks-ID:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 msgid "Filter items by parent symbol type:"
-msgstr "Filtere Elemente nach übergeordnetem Bauteiltyp:"
+msgstr "Filtere Elemente nach übergeordnetem Symboltyp:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 msgid "Non-power symbols"
@@ -8799,14 +8798,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch eine leere Bauteilbibliothek zu schreiben ist ein Fehler "
-"aufgetreten.\n"
+"Fehler beim Versuch eine leere Symbolbibliothekstabelle zu schreiben.\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:74
 msgid "Please select a symbol library table file."
-msgstr "Wähle bitte eine Bauteilbibliotheksdatei."
+msgstr "Wähle Sie bitte eine Symbolbibliotheks-Tabellendatei."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
 #, c-format
@@ -8820,7 +8818,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"\"%s\" ist keine gültige Bauteilbibliothekstabelle.\n"
+"\"%s\" ist keine gültige Symbolbibliotheks-Tabelle.\n"
 "\n"
 "%s"
 
@@ -8835,7 +8833,7 @@ msgstr ""
 #, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"Konnte die globale Bauteilbibliothekstabelle nicht von \"%s\" nach \"%s\" "
+"Konnte die globale Symbolbibliotheks-Tabellendatei \"%s\" nicht nach \"%s\" "
 "kopieren."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
@@ -8845,8 +8843,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Bauteilbibliothekstabelle zu laden ist ein "
-"Fehler aufgetreten:\n"
+"Fehler beim Laden der globalen Symbolbibliothektabelle.\n"
 "\n"
 "%s"
 
@@ -9054,19 +9051,19 @@ msgstr "Eigenschaften Textelement"
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:123
 msgid "Symbol name:"
-msgstr "Bauteilname:"
+msgstr "Symbolname:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:35
 msgid ""
 "This is the symbol name in library,\n"
 "and also the default component value when loaded in the schematic."
 msgstr ""
-"Dies ist der Bauteilname in der Bibliothek und der voreingestellte\n"
+"Dies ist der Symbolname in der Bibliothek und der voreingestellte\n"
 "Bauteilwert für die Verwendung im Schaltplan."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr "Ableiten vom von einem existierenden Bauteil:"
+msgstr "Von einem existierenden Symbol ableiten:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:47
 msgid ""
@@ -9075,10 +9072,10 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
-"Auswahl des Bauteils in der aktuellen Bibliothek als Elternbauteil.\n"
+"Symbol der aktuellen Bibliothek als Elternsymbol auswählen.\n"
 "\n"
-"Dies war früher als Alias bekannt. Wählen Sie kein existierendes\n"
-"Bauteil um ein neues Stammsymbol zu erstellen."
+"Dies war früher als Alias bekannt. Kein existierendes\n"
+"Bauteil wählen um ein neues Wurzelsymbol zu erstellen."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:51
 msgid "Default reference designator:"
@@ -9102,15 +9099,15 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Aktivieren Sie diese Option um für das Bauteil mehrere verschiedene "
+"Aktivieren Sie diese Option, um für das Symbol mehrere unterschiedliche "
 "Einheiten\n"
-"zu erlauben. Deaktivieren Sie die Option wenn alle Bauteileinheiten bis auf "
+"zu erlauben. Deaktivieren Sie die Option, wenn alle Symboleinheiten bis auf "
 "die\n"
-"Pin-Nummern identisch sind."
+"Pin-Nummerierung identisch sind."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
-msgstr "Bauteil mit alternativer Darstellungsform (De Morgan) erstellen"
+msgstr "Symbol mit alternativer Darstellungsform (De Morgan) erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9145,7 +9142,7 @@ msgstr "Innenseitiger Pinname"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.h:74
 msgid "New Symbol"
-msgstr "Neues Bauteil"
+msgstr "Neues Symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:231
 #: eeschema/dialogs/dialog_symbol_properties.cpp:559
@@ -9164,18 +9161,16 @@ msgstr "Für das Alias-Symbol muss ein übergeordnetes Element ausgewählt sein"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:276
 msgid "Delete extra units from symbol?"
-msgstr "Zusätzliche Komponenten des Bauteils ebenfalls entfernen?"
+msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:282
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
 msgstr ""
-"Dem Bauteil neue Pins für alternative Darstellungsform (De Morgan) "
-"hinzufügen?"
+"Dem Symbol neue Pins für alternative Darstellungsform (De Morgan) hinzufügen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
 msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
-msgstr ""
-"Elemente des Bauteils aus alternativer Darstellungsform (De Morgan) löschen?"
+msgstr "Alternative Darstellungsform (De Morgan) von Symbol löschen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:312
 #: eeschema/symbol_editor/symbol_editor.cpp:694
@@ -9273,7 +9268,7 @@ msgstr "Schlüsselwörter:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:145
 msgid "Derive from symbol:"
-msgstr "Ableiten vom Bauteil:"
+msgstr "Ableiten vom Symbol:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid "<None>"
@@ -9289,13 +9284,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"Auswahl des Bauteils, von dem dieses Bauteil abgeleitet werden soll, oder\n"
-"wählen Sie <kein> aus für das Wurzelbauteil.\n"
+"Auswahl des Symbol, von dem dieses Symbol abgeleitet werden\n"
+"soll, oder wählen Sie <kein> aus für ein Wurzelsymbol.\n"
 "\n"
-"Abgeleitete Bauteile wurden früher als Aliase bezeichnet.\n"
+"Abgeleitete Symbole wurden früher als Aliase bezeichnet.\n"
 "Dies ist nicht mehr der Fall und alle Symbole sind entweder\n"
-"abgeleitet von anderen Bauteilen oder sie sind alleinstehend als\n"
-"Wurzelbauteil."
+"abgeleitet von anderen Symbole oder sie sind alleinstehend\n"
+"als Wurzelsymbole."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
@@ -9304,8 +9299,8 @@ msgstr "Hat alternativen Körperstil (De Morgan)"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
-"Wähle diese Option, wenn für das Bauteil eine alternative Darstellungsform "
-"(De Morgan) besteht"
+"Wähle diese Option, wenn für das Symbol eine alternative Darstellungsform ("
+"De Morgan) existiert"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
@@ -9318,11 +9313,10 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Das Setzen dieser Option lässt das fragliche Bauteil im Dialog\n"
-"\"Hinzufügen Spannungsanschluss\" erscheinen. Der gesetzte\n"
-"Wert wird gegen Veränderungen in Eeschema gesperrt. Das\n"
-"Bauteil wird nicht im BOM enthalten sein und kann keinem Footprint "
-"zugewiesen werden."
+"Das Setzen dieser Option lässt das fragliche Symbol im Dialog\n"
+"\"Spannungsquelle hinzufügen\" erscheinen. Der gesetzte Wert wird gegen\n"
+"Veränderungen in Eeschema gesperrt. Das Symbol wird nicht im BOM\n"
+"enthalten sein und kann keinem Footprint zugewiesen werden."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -9331,7 +9325,7 @@ msgstr "Anzahl der Einheiten:"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:189
 msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
-"Geben Sie die Anzahl von Einheiten für ein Bauteil an, welches aus mehreren "
+"Geben Sie die Anzahl von Einheiten für ein Symbol an, welches aus mehreren "
 "Einheiten besteht"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
@@ -9343,8 +9337,8 @@ msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Aktivieren Sie diese Option, wenn alle Bauteileinheiten abgesehen\n"
-"von den Pin-Nummern identisch sind."
+"Aktivieren Sie diese Option, wenn alle Symboleinheiten abgesehen\n"
+"von der Pin-Nummerung identisch sind."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9438,10 +9432,10 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"Eine Liste von Footprintnamen, welche für dieses Bauteil verwendet werden "
+"Eine Liste von Footprintnamen, welche für dieses Symbol verwendet werden "
 "können.\n"
 "Wildcards wie z. B. sm* können genutzt werden, um alle Footprintnamen "
-"beginnend mit sm zu zulassen."
+"beginnend mit sm zuzulassen."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:293
 msgid "Add footprint filter"
@@ -9465,7 +9459,7 @@ msgstr "Spice-Modell bearbeiten..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:110
 msgid "Library Symbol Properties"
-msgstr "Eigenschaften Bauteilbibliothek"
+msgstr "Bibliotheks-Symbol-Eigenschaften"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -9536,11 +9530,12 @@ msgstr "Simulator benötigt einen komplett annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_netlist.cpp:365
 msgid "Reformat passive symbol values"
-msgstr "Passive Bauteilwerte anpassen"
+msgstr "Werte von passiven Symbolen umformatieren"
 
 #: eeschema/dialogs/dialog_netlist.cpp:366
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
-msgstr "Passive Bauteilwerte anpassen (z.B. M -> Meg; 100 nF -> 100n)"
+msgstr ""
+"Werte von passiven Symbolen umformatieren (z.B. M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:371
 msgid "External simulator command:"
@@ -9710,7 +9705,7 @@ msgstr "Grafische Darstellung:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:145
 msgid "Common to all &units in symbol"
-msgstr "Von allen &Einheiten eines Bauteils gemeinsam genutzt"
+msgstr "Von allen &Einheiten eines Symbols gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 msgid "&Visible"
@@ -9890,7 +9885,7 @@ msgstr "Zeichnungsblatt plotten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Plottet den Rahmen des Zeichnungsblattes und den Titelblock"
+msgstr "Plottet den Rahmen des Zeichnungsblattes und das Schriftfeld"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9973,7 +9968,7 @@ msgstr "Drucke Seite %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Drucke Schaltplan&referenz und Schaltplanbetitelung"
+msgstr "Drucke Schaltplan&referenz und Schriftfeld"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -10002,12 +9997,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Dieser Schaltplan wurde mit älteren Bauteilbibliotheken erstellt welche den "
-"Schaltplan unbenutzbar machen können. Manche Bauteile müssen eventuell mit "
-"anderen Bauteilnamen verlinkt werden. Eventuell müssen Bauteile \"gerettet"
-"\" (in eine neue Bibliothek kopiert und umbenannt) werden.\n"
+"Dieser Schaltplan wurde mit älteren Symbolbibliotheken erstellt, welche den "
+"Schaltplan unbenutzbar machen können. Manche Symbole müssen eventuell mit "
+"anderen Symbolnamen verlinkt werden. Eventuell müssen Symbole \"gerettet\" ("
+"in eine neue Bibliothek kopiert und umbenannt) werden.\n"
 "\n"
-"Die folgenden Änderungen werden empfohlen um das Projekt zu aktualisieren."
+"Die folgenden Änderungen werden empfohlen, um das Projekt zu aktualisieren."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 msgid "Accept"
@@ -10015,7 +10010,7 @@ msgstr "OK"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:124
 msgid "Symbol Name"
-msgstr "Bauteilname"
+msgstr "Symbolname"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:128
 msgid "Action Taken"
@@ -10024,7 +10019,7 @@ msgstr "Aktion"
 #: eeschema/dialogs/dialog_rescue_each.cpp:231
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr "Instanzen von diesem Bauteil (%d Elemente):"
+msgstr "Instanzen von diesem Symbol (%d Elemente):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:293
 msgid ""
@@ -11579,7 +11574,7 @@ msgstr "Anzeige Footprintvorschau in der Schaltplanbauteilauswahl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:159
 msgid "Keep hierarchy navigator open"
-msgstr "Hierarchiebrowser geöffnet halten"
+msgstr "Hierarchienavigator geöffnet halten"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
 msgid "Global field name templates:"
@@ -12364,13 +12359,11 @@ msgid "Save Warning"
 msgstr "Speicherwarnung"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "Die folgenden Dateien werden überschrieben:\n"
-"%s\n"
 "\n"
 
 #: eeschema/files-io.cpp:754
@@ -12914,16 +12907,15 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Die Änderungen in \"%s\" vor dem Schließen speichern?"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Die Platine kann nicht aktualisiert werden da der Schaltplaneditor im "
-"Standalone Modus gestartet ist. Um eine Platine aus dem Schaltplan zu "
-"erstellen oder auch zu aktualisieren starten Sie den KiCad Projekt Manager "
-"und erstellen ein neues KiCad Projekt."
+"Die Leiterplatte kann nicht aktualisiert werden, da der Schaltplaneditor im "
+"Standalone-Modus gestartet ist. Um aus dem Schaltplan eine Platine zu "
+"erstellen oder zu aktualisieren starten Sie die KiCad-Oberfläche und "
+"erstellen ein neues KiCad-Projekt."
 
 #: eeschema/sch_edit_frame.cpp:937
 msgid "New Schematic"
@@ -14683,9 +14675,8 @@ msgid "Library Editor"
 msgstr "Bibliothekseditor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Bauteileditor"
+msgstr "KiCad-Symboleditor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -14891,9 +14882,9 @@ msgstr ""
 "um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s vom Schaltplan"
+msgstr "%s%s [vom Schaltplan]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -15194,9 +15185,8 @@ msgid "(failed to load)"
 msgstr "(Laden fehlgeschlagen)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad Bauteilbibliotheksdateien"
+msgstr "KiCad-Symbolbibliotheksbetrachter"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15356,7 +15346,7 @@ msgstr "Schaltung in SPICE simulieren"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr "Datenblatt im Webbrowser öffnen"
+msgstr "Das Datenblatt im Webbrowser öffnen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1116
 msgid "Create Corner"
@@ -15412,7 +15402,7 @@ msgstr "Bauteil bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Show selected symbol on editor canvas"
-msgstr "Ausgewähltes Symbol im Canvas Editor anzeigen"
+msgstr "Ausgewähltes Symbol auf Editor-Zeichenfläche anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Duplicate Symbol"
@@ -16010,9 +16000,8 @@ msgstr ""
 "Annotation und elektrischer Regeln"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Seitenzahl bearbeiten..."
+msgstr "Seitenzahl von Schaltplanblatt bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Edit the page number of the current or selected sheet"
@@ -16129,7 +16118,7 @@ msgstr "Anzeige des Elternblattes im Fenster von Eeschema"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
-msgstr "Hierarchiebrowser"
+msgstr "Hierarchienavigator"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Show schematic sheet hierarchy"
@@ -16383,6 +16372,8 @@ msgstr "Keine neuen hierarchischen Bezeichner gefunden."
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
+"An der Knotenpunkt-Position liegen keine verknüpfbaren Verbindungen oder "
+"Pins."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -16429,9 +16420,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "Seitenzahl für Blattpfad eingeben%s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "Seitenzahl bearbeiten"
+msgstr "Schaltplanblatt-Seitenzahl bearbeiten"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16784,10 +16774,9 @@ msgid "Cannot create file \"%s\""
 msgstr "Datei \"%s\" konnte nicht erstellt werden"
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
-"In Gerbview sind <b>keine freien Lagen mehr vorhanden</b> um Dateien zu laden"
+"In GerbView sind <b>keine freien Lagen mehr vorhanden</b> um Dateien zu laden"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -17022,9 +17011,8 @@ msgid "Clear Recent Job Files"
 msgstr "Zuletzt verwendete Jobdatei löschen"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Gerber-Betrachter"
+msgstr "KiCad-Gerber-Betrachter"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -17221,13 +17209,12 @@ msgid "Show source file for the current layer"
 msgstr "Quelldatei der aktuellen Lage zeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Wechseln zum Platineneditor"
+msgstr "Zum Leiterplatten-Editor exportieren..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Daten als KiCad-Leiterplattendatei exportieren"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17409,14 +17396,12 @@ msgstr "Rasterpunkte anzeigen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Zeichnungsmodus"
+msgstr "Zeichnungsblatt"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Zeichnungsblattränder und Schriftfeld anzeigen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17587,12 +17572,11 @@ msgstr ""
 "anzeigen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Arbeitsblattränder und Schriftfelder zur Verwendung in Schaltplänen und "
+"Zeichnungsblattränder und Schriftfelder zur Verwendung in Schaltplänen und "
 "Leiterplattenentwürfen bearbeiten"
 
 #: kicad/files-io.cpp:43
@@ -18002,9 +17986,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "Durchführen von Bauteilberechnungen, Leiterbahnkalkulationen, etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Zeichnungsblattränder und Schriftfelder bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18418,9 +18401,8 @@ msgstr ""
 "Das derzeitige Layout der Seite wurde verändert.  Änderungen speichern?"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "Seitenlayoutbeschreibung aus Datei hinzufügen"
+msgstr "Bestehendes Zeichnungsblatt hinzufügen"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -18457,7 +18439,7 @@ msgstr "Layoutdatei ist schreibgeschützt."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "KiCad-Zeichnungsblatt-Editor"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18559,14 +18541,12 @@ msgid "Add a bitmap image"
 msgstr "Eine Bitmap Grafik hinzufügen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Vorhandene Seitenlayoutdatei hinzufügen..."
+msgstr "Bestehendes Zeichnungsblatt hinzufügen..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Vorhandene Seitenlayoutbeschreibung in eine Datei einfügen"
+msgstr "Bestehendes Zeichnungsblatt in die aktuelle Datei einfügen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -18582,30 +18562,30 @@ msgstr "Einstellungen Seitevorschau..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "Bearbeiten der Vorschaudaten für Seitengröße und Titelblock"
+msgstr "Bearbeiten der Vorschaudaten für Seitengröße und Schriftfeld"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Titelblock im Vorschaumodus anzeigen"
+msgstr "Schriftfeld im Vorschaumodus anzeigen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Titelblock im Vorschaumodus anzeigen:\n"
+"Schriftfeld im Vorschaumodus anzeigen:\n"
 "Text-Platzhalter werden durch Vorschaudaten ersetzt."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Titelblock im Bearbeitungsmodus anzeigen"
+msgstr "Schriftfeld im Bearbeitungsmodus anzeigen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Titelblock im Bearbeitungsmodus anzeigen:\n"
+"Schriftfeld im Bearbeitungsmodus anzeigen:\n"
 "Text-Platzhalter werden durch ${keyword}-Tokens dargestellt."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:473
@@ -23204,7 +23184,7 @@ msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
 msgstr ""
-"Der Footprint kann frei bewegt und auf der Leinwand ausgerichtet werden, "
+"Der Footprint kann auf der Zeichenfläche frei bewegt und gedreht werden, "
 "aber alle Pads sind in Bezug auf ihre Position innerhalb des Footprints "
 "verriegelt."
 
@@ -23214,9 +23194,9 @@ msgid ""
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"Footprint ist gesperrt: Er kann nicht frei verschoben und ausgerichtet "
-"werden und kann nur ausgewählt werden, wenn das Kontrollkästchen \"Gesperrte "
-"Elemente\" im Auswahlfilter aktiviert ist."
+"Footprint ist gesperrt: Er kann nicht frei verschoben und gedreht werden und "
+"kann nur ausgewählt werden, wenn das Kontrollkästchen \"Gesperrte Elemente\" "
+"im Auswahlfilter aktiviert ist."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -25220,7 +25200,7 @@ msgstr "Plotformat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Umrahmung und Schriftfeld plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
@@ -25348,9 +25328,8 @@ msgid "Board setup"
 msgstr "Platinenkonfiguration"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Platinenkonfiguration..."
+msgstr "Datei > Platinenkonfiguration..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -25501,19 +25480,17 @@ msgstr ""
 "Deaktivieren um grafische Elemente anhand ihrer Mittellinien zu zeichnen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "Benutze Pcbnew-Font zum Plotten von Text"
+msgstr "Benutze KiCad-Schriftart zum Plotten von Text"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Benutze Pcbnew Stroke Font wenn aktiviert,\n"
-"wenn inaktiv plotte einzeiligen ASCII Text als veränderbarer Text (Benutzung "
-"von DXF Font)"
+"Aktivieren, um KiCad-Kontur-Schriftart zu benutzen\n"
+"Deaktivieren, um einzeiligen ASCII-Text als veränderbaren Text zu plotten ("
+"mit DXF-Schriftart)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -28709,11 +28686,11 @@ msgid "OK to load recovery file \"%s\""
 msgstr "Wiederherstellungsdatei \"%s\" laden"
 
 #: pcbnew/files.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
-"Die aktuelle Platine wird geschlossen, möchten Sie die Änderungen in \"%s\" "
-"speichern bevor Sie fortfahren?"
+"Die aktuelle Platine wird geschlossen, Änderungen in \"%s\" speichern bevor "
+"Sie fortfahren?"
 
 #: pcbnew/files.cpp:378
 msgid "Current Board will be closed. Continue?"
@@ -28724,18 +28701,17 @@ msgid "noname"
 msgstr "namenlos"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Wenn die Zonen auf dieser Platine neu gefüllt werden wird die Einstellung "
-"'Abstand minimale Kupferbreite' verwendet (siehe Platinenkonfiguration... > "
-"Design-Regeln > Einschränkungen).\n"
+"Wenn die Zonen auf dieser Platine neu gefüllt werden, wird die Einstellung "
+"'Kupfer-Randabstand' verwendet (siehe Platinenkonfiguration... > Design-"
+"Regeln > Einschränkungen).\n"
 "Dies kann zu anderen Füllungen als in früheren KiCad-Versionen führen, bei "
-"denen die Linienstärke der Platinenbegrenzung auf der Edge Cuts-Lage "
+"denen die Linienstärke der Platinenbegrenzung auf der Edge-Cuts-Lage "
 "verwendet wurde."
 
 #: pcbnew/files.cpp:540
@@ -28898,9 +28874,8 @@ msgid "footprint %s"
 msgstr "Footprint %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Footprinteditor"
+msgstr "KiCad-Footprinteditor"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -28922,9 +28897,9 @@ msgstr ""
 "aktualisiert."
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [von %s.%s]"
+msgstr "%s%s [von %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -29118,9 +29093,8 @@ msgid "No footprint name defined."
 msgstr "Es wurde kein Footprintname definiert."
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "Footprint Bibliotheksbrowser"
+msgstr "KiCad-Footprint-Bibliotheksbetrachter"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -29446,10 +29420,10 @@ msgid "Resc&ue"
 msgstr "Wieder&herstellen"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Platine entfernen und zuletzt gespeicherte Wiederherstellungsdatei öffnen"
+"Platine leeren und zuletzt vom Leiterplatten-Editor automatisch gespeicherte "
+"Wiederherstellungsdatei öffnen"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -29657,14 +29631,12 @@ msgid "File not found"
 msgstr "Datei nicht gefunden"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Die Form hat eine Größe von Null!"
+msgstr "Die Form hat eine Größe von Null."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Die Form hat keine Punkte!"
+msgstr "Die Form hat keine Punkte."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -30121,9 +30093,8 @@ msgid "Error loading project footprint libraries"
 msgstr "Beim Laden der Footprintbibliotheken ist ein Fehler aufgetreten"
 
 #: pcbnew/pcb_edit_frame.cpp:192
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "Leiterplatten-Editor"
+msgstr "KiCad-Leiterplatten-Editor"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -30148,16 +30119,15 @@ msgid "The schematic for this board cannot be found."
 msgstr "Der Schaltplan für diese Platine kann nicht gefunden werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1374
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Die Platine kann nicht aktualisiert werden da Pcbnew im Standalone Modus "
-"gestartet ist. Um eine Platine aus dem Schaltplan zu erstellen oder auch zu "
-"aktualisieren starten Sie den KiCad Projekt Manager und erstellen ein neues "
-"KiCad Projekt."
+"Die Leiterplatte kann nicht aktualisiert werden da der Leiterplatten-Editor "
+"im Standalone-Modus gestartet ist. Um aus dem Schaltplan eine Platine zu "
+"erstellen oder zu aktualisieren starten Sie den KiCad-Projekt-Manager und "
+"erstellen ein neues Projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1388
 msgid "Eeschema netlist"
@@ -31842,9 +31812,8 @@ msgstr ""
 "den direkt anliegenden Lagen platziert werden."
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Leiterbahnen nur auf Kupferlagen"
+msgstr "Leiterbahnen nur auf Kupferlagen."
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
@@ -32840,7 +32809,7 @@ msgstr "Bearbeite Footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:350
 msgid "Show selected footprint on editor canvas"
-msgstr "Ausgewählten Footprint im Canvas Editor anzeigen"
+msgstr "Ausgewählten Footprint auf der Editor-Zeichenfläche anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:355
 msgid "Delete Footprint from Library"
@@ -32871,9 +32840,8 @@ msgid "Footprint Properties..."
 msgstr "Footprint Eigenschaften..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "Footprinteigenschaften ändern"
+msgstr "Footprinteigenschaften bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Show the footprint checker window"
@@ -32935,9 +32903,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Leiterbahn- & Via-Eigenschaften bearbeiten..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "Bearbeiten Text- und Grafikeigenschaften global für die Platine"
+msgstr "Leiterbahn- und Via-Eigenschaften auf der ganzen Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -33168,7 +33135,7 @@ msgstr "Auf nächste Leiterbahnbreite schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "Leiterbahn-Breite auf die nächste vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -33176,7 +33143,7 @@ msgstr "Auf vorherige Leiterbahnbreite schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "Leiterbahn-Breite auf die vorhergehende vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -33184,7 +33151,7 @@ msgstr "Via-Größe erhöhen"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Via-Größe auf die nächste vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -33192,7 +33159,7 @@ msgstr "Via-Größe verkleinern"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Via-Größe auf die vorhergehende vordefinierte Größe setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -33239,31 +33206,34 @@ msgid "Toggle Lock"
 msgstr "Sperrung umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Anzeige Netzlinien der ausgewählte(n) Element(e)"
+msgstr "Ausgewählte Elemente sperren oder entsperren"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
+"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
+"werden"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
+"Erlaubt, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
+"werden"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Verschiebt die ausgewählten Elemente mit einem bestimmten Startpunkt"
+msgstr ""
+"Gruppiert die ausgewählten Elemente, sodass diese als ein Element behandelt "
+"werden"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
 msgstr "Gruppierung aufheben"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "Keine Bibliothek ausgewählt"
+msgstr "Ausgewählte Gruppierungen aufheben"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -33294,9 +33264,8 @@ msgid "Append Board..."
 msgstr "Platine hinzufügen..."
 
 #: pcbnew/tools/pcb_actions.cpp:686
-#, fuzzy
 msgid "Open another board and append its contents to this board"
-msgstr "Eine andere Platine zur aktuellen Platine hinzufügen"
+msgstr "Eine andere Platine öffnen und zur aktuellen Platine hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Highlight the selected net"
@@ -33315,9 +33284,8 @@ msgid "Clear Net Highlighting"
 msgstr "Netz-Hervorhebung löschen"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "Netz-Hervorhebung löschen"
+msgstr "Jede bestehende Netz-Hervorhebung löschen"
 
 #: pcbnew/tools/pcb_actions.cpp:703 pcbnew/tools/pcb_actions.cpp:710
 msgid "Highlight all copper items of a net"
@@ -33381,7 +33349,7 @@ msgstr "Platinenansicht wenden"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "Platine von der gegenüberliegenden Seite anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
@@ -34252,9 +34220,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Footprint- und Textbeginn mit Kreuz anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Zeichnungsblattränder und Schriftfeld anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
