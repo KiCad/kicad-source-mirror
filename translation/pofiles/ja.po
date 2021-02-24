@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 22:37+0000\n"
+"PO-Revision-Date: 2021-02-25 17:52+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -731,9 +731,8 @@ msgid "3D Display Options"
 msgstr "3D 表示オプション"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D ビューアー"
+msgstr "KiCad 3D ビューアー"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1304,9 +1303,8 @@ msgid "Export to Clipboard"
 msgstr "クリップボードにエクスポート"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "シンボルの塗潰し"
+msgstr "シンボル (.libファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1317,9 +1315,8 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps ファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "タイトルブロック用ロゴ (.kicad_wksファイル)"
+msgstr "ワークシート (.kicad_wksファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -5724,18 +5721,16 @@ msgid "Pin Library"
 msgstr "ライブラリーをピン留め"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "ライブラリーを追加するライブラリー テーブルを選択:"
+msgstr "一覧の一番上にライブラリーを固定する"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "ライブラリーのピン留めを外す"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "ライブラリーを追加するライブラリー テーブルを選択:"
+msgstr "一覧の一番上にライブラリーを固定しない"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -7801,9 +7796,8 @@ msgid "Update field positions"
 msgstr "フィールドの位置を更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "シンボルの属性を更新/リセット"
+msgstr "シンボルの属性を更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:158
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -8043,9 +8037,8 @@ msgstr ""
 "ロードされたシンボル ライブラリー内にある同じ名前を持つ候補の検索を試みます。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "ライブラリーからシンボルを更新"
+msgstr "新しいライブラリーからシンボルのフィールドを更新"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
@@ -12223,14 +12216,12 @@ msgid "Save Warning"
 msgstr "プロジェクト 保存の警告"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "次のファイルが上書きされます:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12743,9 +12734,8 @@ msgid "The following libraries were not found:"
 msgstr "ライブラリーは見つかりませんでした:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "回路図エディター"
+msgstr "KiCad 回路図エディター"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -14514,9 +14504,8 @@ msgid "Library Editor"
 msgstr "ライブラリー エディター"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "シンボル エディター"
+msgstr "KiCad シンボル エディター"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -15014,9 +15003,8 @@ msgid "(failed to load)"
 msgstr "(ロードに失敗しました)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad シンボル ライブラリー ファイル"
+msgstr "KiCad シンボル ライブラリー ビューアー"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15819,9 +15807,8 @@ msgstr ""
 "を編集"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "ページ番号を編集..."
+msgstr "シートのページ番号を編集..."
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Edit the page number of the current or selected sheet"
@@ -16231,9 +16218,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "シートパス %s のページ番号を入力します"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "ページ番号を編集"
+msgstr "シートのページ番号を編集"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16820,9 +16806,8 @@ msgid "Clear Recent Job Files"
 msgstr "最近開いたジョブ ファイルをクリア"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "ガーバー ビューアー"
+msgstr "KiCad ガーバー ビューアー"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -17017,9 +17002,8 @@ msgid "Show source file for the current layer"
 msgstr "現在のレイヤーのソースファイルを表示する"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "PCBエディターに切替"
+msgstr "PCBエディターへエクスポート..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -25172,19 +25156,16 @@ msgstr ""
 "中心線を使用してグラフィック アイテムをプロットする時はチェックを外します"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "テキストのプロットに Pcbnew のフォントを使用"
+msgstr "テキストのプロットに KiCad のフォントを使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Pcbnewのストロークフォントを使用する場合はチェックします\n"
-"編集可能なテキストとして一行の ASCII テキストをプロットする場合はチェックを外"
-"します (DXFフォントを使用します)"
+"KiCad のストロークフォントを使用する場合はチェックします\n"
+"編集可能なテキストとして一行の ASCII テキストをプロットする場合はチェックを外します (DXFフォントを使用します)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -28321,9 +28302,9 @@ msgid "OK to load recovery file \"%s\""
 msgstr "リカバリー ファイル \"%s\" をロードするには OK"
 
 #: pcbnew/files.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "現在の基板を閉じ、続行する前に \"%s\" へ変更を保存しますか？"
+msgstr "現在の基板を閉じ、続行する前に '%s' へ変更を保存しますか？"
 
 #: pcbnew/files.cpp:378
 msgid "Current Board will be closed. Continue?"
@@ -28507,9 +28488,8 @@ msgid "footprint %s"
 msgstr "フットプリント %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "フットプリント エディター"
+msgstr "KiCad フットプリント エディター"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -28719,9 +28699,8 @@ msgid "No footprint name defined."
 msgstr "フットプリント名が定義されていません。"
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "フットプリント ライブラリー ブラウザー"
+msgstr "KiCad フットプリント ライブラリー ブラウザー"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -29034,10 +29013,8 @@ msgid "Resc&ue"
 msgstr "レスキュー (&u)"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
-msgstr ""
-"基板をクリアし、Pcbnew で保存された直近のレスキュー ファイルを取得します"
+msgstr "基板をクリアし、PCBエディターで保存された直近のレスキュー ファイルを取得します"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -29243,14 +29220,12 @@ msgid "File not found"
 msgstr "ファイルが見つかりません"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "形状が無効なサイズです！"
+msgstr "形状が無効なサイズです。"
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "形状に点がありません！"
+msgstr "形状に点がありません。"
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -29707,9 +29682,8 @@ msgid "Error loading project footprint libraries"
 msgstr "プロジェクト フットプリント ライブラリーのロード エラー"
 
 #: pcbnew/pcb_edit_frame.cpp:192
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "PCBエディター"
+msgstr "KiCad PCBエディター"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -32403,9 +32377,8 @@ msgid "Footprint Properties..."
 msgstr "フットプリント プロパティ..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "フットプリントのプロパティを変更"
+msgstr "フットプリントのプロパティを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Show the footprint checker window"
@@ -32462,9 +32435,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "配線とビアのプロパティを編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "基板全般で使用するテキストとグラフィックのプロパティを編集"
+msgstr "基板全体にわたって配線とビアのプロパティを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -32757,9 +32729,8 @@ msgid "Toggle Lock"
 msgstr "ロックを切替"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "選択されたアイテムのラッツネストを表示"
+msgstr "選択されたアイテムをロック/ロック解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -32779,9 +32750,8 @@ msgid "Ungroup"
 msgstr "グループ解除"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "ライブラリーが未選択です"
+msgstr "選択されたグループをグループ化を解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
