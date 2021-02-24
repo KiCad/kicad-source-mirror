@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 10:29+0000\n"
+"PO-Revision-Date: 2021-02-24 14:06+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -8143,15 +8143,16 @@ msgstr ""
 "geladenen Bauteilbibliotheken zu finden."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Aktualisiere Symbole aus der Bibliothek"
+msgstr "Aktualisiere Symbolfelder aus der neuen Bibliothek"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Ersetzt aktuelle Symbolfelder durch Felder der neuen Bibliothek.\n"
+"Achtung: Felder \"Wert\" und \"Footprint\" werden dadurch ersetzt."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9884,14 +9885,12 @@ msgid "Page size:"
 msgstr "Seitengröße:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Die Zeichnung beenden"
+msgstr "Zeichnungsblatt plotten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Schaltplanumrahmung und -betitelung drucken"
+msgstr "Plottet den Rahmen des Zeichnungsblattes und den Titelblock"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -12045,9 +12044,8 @@ msgid "No Connection"
 msgstr "Keine Verbindung"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "Nicht aufgelöste Textvariable in Schaltplan."
+msgstr "Nicht aufgelöste Textvariable in Zeichnungsblatt."
 
 #: eeschema/erc.cpp:293
 #, c-format
@@ -12358,16 +12356,12 @@ msgid "Import Schematic"
 msgstr "Schaltplanimport"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr ""
-"Durch Speichern des Projekts im neuen Dateiformat werden vorhandene Dateien "
-"überschrieben."
+msgstr "Speichern wird vorhandene Dateien überschreiben."
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "Projekt-Speicherwarnung"
+msgstr "Speicherwarnung"
 
 #: eeschema/files-io.cpp:753
 #, fuzzy
@@ -12375,9 +12369,9 @@ msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
-"Die folgenden Verzeichnisse werden überschrieben:\n"
+"Die folgenden Dateien werden überschrieben:\n"
+"%s\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12904,9 +12898,8 @@ msgid "The following libraries were not found:"
 msgstr "Die folgenden Bibliotheken konnten nicht gefunden werden:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Schaltplan-Editor"
+msgstr "KiCad-Schaltplan-Editor"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
