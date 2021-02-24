@@ -56,7 +56,17 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
 OPENGL_COMPOSITOR::~OPENGL_COMPOSITOR()
 {
     if( m_initialized )
-        clean();
+    {
+        try
+        {
+            clean();
+        }
+        catch( const std::runtime_error& exc )
+        {
+            wxLogError( wxT( "Run time exception `%s` occurred in OPENGL_COMPOSITOR destructor." ),
+                        exc.what() );
+        }
+    }
 }
 
 
