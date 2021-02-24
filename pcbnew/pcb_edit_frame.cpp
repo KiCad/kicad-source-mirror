@@ -1081,6 +1081,9 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     // Display the loaded board:
     Zoom_Automatique( false );
 
+    // Invalidate painting as loading the DRC engine will cause clearances to become valid
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+
     Refresh();
 
     SetMsgPanel( GetBoard() );
