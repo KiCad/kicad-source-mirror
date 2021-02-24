@@ -83,6 +83,7 @@ void TOOLS_HOLDER::PopTool( const std::string& actionName )
 
                     TOOL_EVENT evt = action->MakeEvent();
                     evt.SetHasPosition( false );
+                    evt.SetReactivate( true );
                     GetToolManager()->PostEvent( evt );
                 }
             }

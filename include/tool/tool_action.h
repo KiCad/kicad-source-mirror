@@ -136,6 +136,8 @@ public:
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
+    void* GetParam() const { return m_param; }
+
     /**
      * Return name of the tool associated with the action. It is basically the action name
      * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is

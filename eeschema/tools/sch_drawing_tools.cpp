@@ -84,7 +84,7 @@ bool SCH_DRAWING_TOOLS::Init()
 }
 
 
-int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
+int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
 {
     SCH_COMPONENT*              component = aEvent.Parameter<SCH_COMPONENT*>();
     SCHLIB_FILTER               filter;
@@ -130,7 +130,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
-    else
+    else if( !aEvent.IsReactivate() )
     {
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
     }
@@ -357,7 +357,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( image )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
-    else if( aEvent.HasPosition() )
+    else if( !aEvent.IsReactivate() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
@@ -903,7 +903,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             item = nullptr;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
-
     if( m_inTwoClickPlace )
         return 0;
     else
@@ -924,8 +923,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     Activate();
 
     // Prime the pump
-    if( aEvent.HasPosition() || isText || isGlobalLabel || isHierLabel || isNetLabel )
+    // If the tool isn't being re-activated
+    if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
+            && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
+    {
         m_toolMgr->RunAction( ACTIONS::cursorClick );
+    }
 
     auto setCursor =
             [&]()
@@ -997,7 +1000,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsMoveTool() )
             {
-                // leave ourselves on the stack so we come back after the move
                 break;
             }
             else

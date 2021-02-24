@@ -63,6 +63,7 @@ void TOOL_EVENT::init()
         m_hasPosition = false;
 
     m_forceImmediate = false;
+    m_reactivate = false;
 }
 
 

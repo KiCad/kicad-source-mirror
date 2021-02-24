@@ -436,7 +436,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     Activate();
 
     // Prime the pump
-    m_toolMgr->RunAction( ACTIONS::cursorClick );
+    if( !aEvent.IsReactivate() )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     auto setCursor =
             [&]()
