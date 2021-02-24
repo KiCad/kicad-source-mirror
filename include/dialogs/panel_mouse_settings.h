@@ -25,7 +25,7 @@
 
 
 class COMMON_SETTINGS;
-class DIALOG_SHIM;
+class PAGED_DIALOG;
 
 
 struct SCROLL_MOD_SET
@@ -39,7 +39,7 @@ struct SCROLL_MOD_SET
 class PANEL_MOUSE_SETTINGS : public PANEL_MOUSE_SETTINGS_BASE
 {
 public:
-    PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent );
+    PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aParent );
 
     ~PANEL_MOUSE_SETTINGS();
 
@@ -52,7 +52,7 @@ protected:
 
     void OnScrollRadioButton( wxCommandEvent& event ) override;
 
-    DIALOG_SHIM*  m_dialog;
+    PAGED_DIALOG*  m_dialog;
 
 private:
     void applySettingsToPanel( const COMMON_SETTINGS& aSettings );

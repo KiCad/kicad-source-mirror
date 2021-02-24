@@ -233,10 +233,12 @@ bool PAGED_DIALOG::TransferDataToWindow()
 
 bool PAGED_DIALOG::TransferDataFromWindow()
 {
+    bool ret = true;
+
     // Call TransferDataFromWindow() only once:
     // this is enough on wxWidgets 3.1
     if( !DIALOG_SHIM::TransferDataFromWindow() )
-        return false;
+        ret = false;
 
     // On wxWidgets 3.0, TransferDataFromWindow() is not called recursively
     // so we have to call it for each page
@@ -246,11 +248,17 @@ bool PAGED_DIALOG::TransferDataFromWindow()
         wxWindow* page = m_treebook->GetPage( i );
 
         if( !page->TransferDataFromWindow() )
-            return false;
+        {
+            ret = false;
+            break;
+        }
     }
 #endif
 
-    return true;
+    if( !ret && !m_errorMessage.IsEmpty() )
+        m_infoBar->ShowMessage( m_errorMessage, wxICON_WARNING );
+
+    return ret;
 }
 
 

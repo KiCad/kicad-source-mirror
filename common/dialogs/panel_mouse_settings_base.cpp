@@ -144,9 +144,20 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scroll Gestures") ), wxVERTICAL );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_staticText21 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Vertical touchpad or scroll wheel movement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
-	sbSizer3->Add( m_staticText21, 0, wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_scrollWarning = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_scrollWarning->SetToolTip( _("Only one action can be assigned to each column") );
+
+	bSizer4->Add( m_scrollWarning, 0, wxALL, 5 );
+
+
+	sbSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 5, 5, 0 );

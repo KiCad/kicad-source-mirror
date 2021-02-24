@@ -18,14 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialog_shim.h>
+#include <bitmaps.h>
 #include <dialogs/panel_mouse_settings.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
+#include <widgets/paged_dialog.h>
 #include <wx/defs.h>
 
 
-PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
+PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aParent ) :
         PANEL_MOUSE_SETTINGS_BASE( aParent ),
         m_dialog( aDialog ),
         m_currentScrollMod( {} )
@@ -45,6 +46,9 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aPar
 
     m_lblCtrl->SetLabel( _( "Cmd" ) );
 #endif
+
+    m_scrollWarning->SetBitmap( KiBitmap( small_warning_xpm ) );
+    m_scrollWarning->Hide();
 
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
             [&]( wxCommandEvent& aEvt )
@@ -76,7 +80,11 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
     m_currentScrollMod = getScrollModSet();
 
     if( !isScrollModSetValid( m_currentScrollMod ) )
+    {
+        m_dialog->SetError( _( "Only one action can be assigned to each vertical scroll setting" ),
+                            this, nullptr );
         return false;
+    }
 
     switch( m_choiceLeftButtonDrag->GetSelection() )
     {
@@ -183,10 +191,9 @@ void PANEL_MOUSE_SETTINGS::OnScrollRadioButton( wxCommandEvent& event )
 
     SCROLL_MOD_SET newSet = getScrollModSet();
 
-    if( isScrollModSetValid( newSet ) )
-        m_currentScrollMod = newSet;
-    else
-        updateScrollModButtons();
+    m_scrollWarning->Show( !isScrollModSetValid( newSet ) );
+
+    m_currentScrollMod = newSet;
 }
 
 
