@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-20 14:54+0000\n"
+"PO-Revision-Date: 2021-02-24 22:37+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1309,9 +1309,8 @@ msgid "Symbol (.lib file)"
 msgstr "シンボルの塗潰し"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_modファイル)"
+msgstr "フットプリント (.kicad_modファイル)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
@@ -29734,15 +29733,13 @@ msgid "The schematic for this board cannot be found."
 msgstr "この基板の回路図が見つけられません。"
 
 #: pcbnew/pcb_edit_frame.cpp:1374
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Pcbnewがスタンドアローン モードで開かれているため、基板 (PCB) を更新できませ"
-"ん。回路図から基板を作成または更新するには、KiCad プロジェクト マネージャーを"
-"起動して、プロジェクトを作成しなければなりません。"
+"PCBエディターがスタンドアローン モードで開かれているため、基板 (PCB) を更新できません。回路図から基板を作成または更新するには、KiCad "
+"プロジェクト マネージャーを起動して、プロジェクトを作成しなければなりません。"
 
 #: pcbnew/pcb_edit_frame.cpp:1388
 msgid "Eeschema netlist"
@@ -31397,9 +31394,8 @@ msgstr ""
 "置できます。"
 
 #: pcbnew/router/router_tool.cpp:954
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "配線は導体レイヤーのみです"
+msgstr "配線は導体レイヤーのみです。"
 
 #: pcbnew/router/router_tool.cpp:1343 pcbnew/router/router_tool.cpp:1757
 msgid "The selected item is locked."
