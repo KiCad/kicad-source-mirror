@@ -240,7 +240,8 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* 
 
     for( int i = aVertex1; i < aVertex2; i++ )
     {
-        int dist = aCurrentPath.CSegment(i).Distance( m_v );
+        SEG::ecoord dist = aCurrentPath.CSegment(i).SquaredDistance( m_v );
+
         if ( dist <= 1 )
         {
             cv = true;
@@ -604,7 +605,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 
     if ( m_effortLevel & RESTRICT_AREA )
     {
-        auto c = new AREA_CONSTRAINT( m_world, m_restrictArea );
+        auto c = new AREA_CONSTRAINT( m_world, m_restrictArea, m_restrictAreaIsStrict );
         AddConstraint( c );
     }
 
