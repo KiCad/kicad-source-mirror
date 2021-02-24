@@ -10,24 +10,21 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wx/statline.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/statbmp.h>
-#include <wx/sizer.h>
-#include <wx/scrolwin.h>
-#include <wx/radiobox.h>
 #include <wx/button.h>
-#include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/statbox.h>
+#include <wx/sizer.h>
+#include <wx/statbmp.h>
+#include <wx/scrolwin.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
 
@@ -42,8 +39,11 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 	private:
 
 	protected:
-		wxStaticLine* m_staticline;
-		wxBoxSizer* m_sizerStackup;
+		wxStaticText* m_lblCopperLayers;
+		wxChoice* m_choiceCopperLayers;
+		wxCheckBox* m_impedanceControlled;
+		wxButton* m_buttonAddDielectricLayer;
+		wxButton* m_buttonRemoveDielectricLayer;
 		wxScrolledWindow* m_scGridWin;
 		wxFlexGridSizer* m_fgGridSizer;
 		wxStaticText* m_staticTextLayer;
@@ -55,18 +55,6 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxStaticText* m_staticTextColor;
 		wxStaticText* m_staticTextEpsilonR;
 		wxStaticText* m_staticTextLossTg;
-		wxRadioBox* m_rbDielectricConstraint;
-		wxButton* m_buttonAddDielectricLayer;
-		wxButton* m_buttonRemoveDielectricLayer;
-		wxStaticLine* m_staticline2;
-		wxCheckBox* m_cbCastellatedPads;
-		wxCheckBox* m_cbEgdesPlated;
-		wxStaticText* m_staticTextFinish;
-		wxChoice* m_choiceFinish;
-		wxStaticText* m_staticTextEdgeConn;
-		wxChoice* m_choiceEdgeConn;
-		wxStaticText* m_lblCopperLayers;
-		wxChoice* m_choiceCopperLayers;
 		wxStaticText* m_staticTextCT;
 		wxTextCtrl* m_tcCTValue;
 		wxButton* m_buttonExport;

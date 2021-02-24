@@ -24,6 +24,7 @@
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
+#include <../board_stackup_manager/panel_board_finish.h>
 #include <confirm.h>
 #include <kiface_i.h>
 #include <drc/drc_item.h>
@@ -58,6 +59,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
+    m_boardFinish = new PANEL_SETUP_BOARD_FINISH( this, board );
 
     m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
                                                bds.m_DRCSeverities );
@@ -84,6 +86,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_physicalStackup,  _( "Physical Stackup" ) );
     // Change this value if m_physicalStackup is not the page 2 of m_treebook
     m_physicalStackupPage = 2;  // The page number (from 0) to select the m_physicalStackup panel
+    m_treebook->AddSubPage( m_boardFinish, _( "Board Finish" ) );
     m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Text & Graphics" ) );

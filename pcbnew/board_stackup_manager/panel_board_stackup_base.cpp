@@ -14,17 +14,52 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	wxBoxSizer* bTopSizer;
+	bTopSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_sizerStackup = new wxBoxSizer( wxHORIZONTAL );
+	m_lblCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblCopperLayers->Wrap( -1 );
+	m_lblCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
 
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	bTopSizer->Add( m_lblCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
-	m_scGridWin = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	wxString m_choiceCopperLayersChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
+	int m_choiceCopperLayersNChoices = sizeof( m_choiceCopperLayersChoices ) / sizeof( wxString );
+	m_choiceCopperLayers = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCopperLayersNChoices, m_choiceCopperLayersChoices, 0 );
+	m_choiceCopperLayers->SetSelection( 0 );
+	m_choiceCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
+
+	bTopSizer->Add( m_choiceCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bTopSizer->Add( 40, 0, 1, wxEXPAND, 5 );
+
+	m_impedanceControlled = new wxCheckBox( this, wxID_ANY, _("Impedance controlled"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_impedanceControlled->SetToolTip( _("If Impedance Controlled option is set,\nLoss tangent and EpsilonR will be added to constraints.") );
+
+	bTopSizer->Add( m_impedanceControlled, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bTopSizer->Add( 40, 0, 1, wxEXPAND, 5 );
+
+	m_buttonAddDielectricLayer = new wxButton( this, wxID_ANY, _("Add Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bTopSizer->Add( m_buttonAddDielectricLayer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_buttonRemoveDielectricLayer = new wxButton( this, wxID_ANY, _("Remove Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bTopSizer->Add( m_buttonRemoveDielectricLayer, 0, wxEXPAND|wxALL, 5 );
+
+
+	bMainSizer->Add( bTopSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* m_sizerStackup;
+	m_sizerStackup = new wxBoxSizer( wxVERTICAL );
+
+	m_scGridWin = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN|wxHSCROLL|wxVSCROLL );
 	m_scGridWin->SetScrollRate( 5, 5 );
-	m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 2 );
+	wxBoxSizer* bMargins;
+	bMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 4 );
 	m_fgGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_fgGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -80,129 +115,35 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	m_fgGridSizer->Add( m_staticTextLossTg, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
 
-	m_scGridWin->SetSizer( m_fgGridSizer );
+	bMargins->Add( m_fgGridSizer, 1, wxEXPAND|wxLEFT, 5 );
+
+
+	m_scGridWin->SetSizer( bMargins );
 	m_scGridWin->Layout();
-	m_fgGridSizer->Fit( m_scGridWin );
-	bSizer5->Add( m_scGridWin, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bMargins->Fit( m_scGridWin );
+	m_sizerStackup->Add( m_scGridWin, 1, wxEXPAND|wxRIGHT, 10 );
 
 
-	m_sizerStackup->Add( bSizer5, 3, wxEXPAND, 5 );
+	bMainSizer->Add( m_sizerStackup, 3, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
-	wxBoxSizer* bSizerRight;
-	bSizerRight = new wxBoxSizer( wxVERTICAL );
-
-	wxString m_rbDielectricConstraintChoices[] = { _("No constraint"), _("Impedance controlled") };
-	int m_rbDielectricConstraintNChoices = sizeof( m_rbDielectricConstraintChoices ) / sizeof( wxString );
-	m_rbDielectricConstraint = new wxRadioBox( this, wxID_ANY, _("Impedance Control"), wxDefaultPosition, wxDefaultSize, m_rbDielectricConstraintNChoices, m_rbDielectricConstraintChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbDielectricConstraint->SetSelection( 0 );
-	m_rbDielectricConstraint->SetToolTip( _("If Impedance Controlled option is set,\nLoss tangent and EpsilonR will be added to constraints.") );
-
-	bSizerRight->Add( m_rbDielectricConstraint, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_buttonAddDielectricLayer = new wxButton( this, wxID_ANY, _("Add Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonAddDielectricLayer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	m_buttonRemoveDielectricLayer = new wxButton( this, wxID_ANY, _("Remove Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonRemoveDielectricLayer, 0, wxTOP|wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
-
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerRight->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-	wxStaticBoxSizer* sbSizerBrdOptions;
-	sbSizerBrdOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Finish") ), wxVERTICAL );
-
-	m_cbCastellatedPads = new wxCheckBox( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Has castellated pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerBrdOptions->Add( m_cbCastellatedPads, 0, wxTOP|wxBOTTOM, 5 );
-
-	m_cbEgdesPlated = new wxCheckBox( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Plated board edge"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerBrdOptions->Add( m_cbEgdesPlated, 0, wxBOTTOM, 5 );
-
-	m_staticTextFinish = new wxStaticText( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Copper finish:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextFinish->Wrap( -1 );
-	sbSizerBrdOptions->Add( m_staticTextFinish, 0, wxTOP|wxRIGHT, 10 );
-
-	wxArrayString m_choiceFinishChoices;
-	m_choiceFinish = new wxChoice( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFinishChoices, 0 );
-	m_choiceFinish->SetSelection( 0 );
-	sbSizerBrdOptions->Add( m_choiceFinish, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
-
-	m_staticTextEdgeConn = new wxStaticText( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Edge card connectors:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextEdgeConn->Wrap( -1 );
-	sbSizerBrdOptions->Add( m_staticTextEdgeConn, 0, wxTOP, 10 );
-
-	wxString m_choiceEdgeConnChoices[] = { _("None"), _("Yes"), _("Yes, bevelled") };
-	int m_choiceEdgeConnNChoices = sizeof( m_choiceEdgeConnChoices ) / sizeof( wxString );
-	m_choiceEdgeConn = new wxChoice( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceEdgeConnNChoices, m_choiceEdgeConnChoices, 0 );
-	m_choiceEdgeConn->SetSelection( 0 );
-	m_choiceEdgeConn->SetToolTip( _("Options for edge card connectors.") );
-
-	sbSizerBrdOptions->Add( m_choiceEdgeConn, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
-
-
-	bSizerRight->Add( sbSizerBrdOptions, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
-
-
-	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_sizerStackup->Add( bSizerRight, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-
-	bMainSizer->Add( m_sizerStackup, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizerBrdThickness;
-	bSizerBrdThickness = new wxBoxSizer( wxHORIZONTAL );
-
-	m_lblCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lblCopperLayers->Wrap( -1 );
-	m_lblCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
-
-	bSizerBrdThickness->Add( m_lblCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-	wxString m_choiceCopperLayersChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
-	int m_choiceCopperLayersNChoices = sizeof( m_choiceCopperLayersChoices ) / sizeof( wxString );
-	m_choiceCopperLayers = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCopperLayersNChoices, m_choiceCopperLayersChoices, 0 );
-	m_choiceCopperLayers->SetSelection( 0 );
-	m_choiceCopperLayers->SetToolTip( _("Select the number of copper layers in the stackup") );
-
-	bSizerBrdThickness->Add( m_choiceCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-
-	bSizerBrdThickness->Add( 0, 0, 1, wxEXPAND, 5 );
+	wxBoxSizer* bBottomSizer;
+	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticTextCT = new wxStaticText( this, wxID_ANY, _("Board thickness from stackup:"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	m_staticTextCT->Wrap( -1 );
-	bSizerBrdThickness->Add( m_staticTextCT, 2, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bBottomSizer->Add( m_staticTextCT, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcCTValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bSizerBrdThickness->Add( m_tcCTValue, 1, wxALL, 5 );
+	bBottomSizer->Add( m_tcCTValue, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer6->Add( bSizerBrdThickness, 2, wxEXPAND|wxALL, 5 );
-
-
-	bSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
+	bBottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonExport = new wxButton( this, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bBottomSizer->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	bSizer6->Add( bSizer7, 1, wxEXPAND, 5 );
-
-
-	bMainSizer->Add( bSizer6, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bBottomSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );

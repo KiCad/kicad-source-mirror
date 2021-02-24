@@ -188,6 +188,8 @@ endif()
 set( PCBNEW_BRDSTACKUP_MGR
     board_stackup_manager/dielectric_material.cpp
     board_stackup_manager/stackup_predefined_prms.cpp
+    board_stackup_manager/panel_board_finish.cpp
+    board_stackup_manager/panel_board_finish_base.cpp
     board_stackup_manager/panel_board_stackup.cpp
     board_stackup_manager/panel_board_stackup_base.cpp
     board_stackup_manager/board_stackup_reporter.cpp
