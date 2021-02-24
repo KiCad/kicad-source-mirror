@@ -160,6 +160,11 @@ public:
      */
     bool m_HotkeysDumper;
 
+    /**
+     * Draw GAL bounding boxes in painters
+     */
+    bool m_DrawBoundingBoxes;
+
 private:
     ADVANCED_CFG();
 

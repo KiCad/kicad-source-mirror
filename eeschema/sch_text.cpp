@@ -792,9 +792,8 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
-    int      margin = GetTextOffset();
 
-    rect.Inflate( margin );
+    rect.Offset( 0, -GetTextOffset() );
 
     if( GetTextAngle() != 0.0 )
     {
@@ -1291,10 +1290,10 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     int y  = GetTextPos().y;
     int penWidth = GetEffectiveTextPenWidth();
     int margin = GetTextOffset();
-    int height = ( (GetTextHeight() * 15) / 10 ) + penWidth + 2 * margin;
+    int height   = ( ( GetTextHeight() * 15 ) / 10 ) + penWidth + margin;
     int length = LenSize( GetShownText(), penWidth )
                  + height                 // add height for triangular shapes
-                 + 2 * margin;
+                 - margin;                // margin added to height not needed here
 
     int dx, dy;
 
@@ -1304,7 +1303,6 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     case LABEL_SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
-        x += margin;
         y -= height / 2;
         break;
 
@@ -1312,13 +1310,11 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = -length;
         x -= height / 2;
-        y += margin;
         break;
 
     case LABEL_SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
-        x -= margin;
         y -= height / 2;
         break;
 
@@ -1326,7 +1322,6 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = length;
         x -= height / 2;
-        y -= margin;
         break;
     }
 
@@ -1457,10 +1452,9 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     int x  = GetTextPos().x;
     int y  = GetTextPos().y;
 
-    int height = GetTextHeight() + penWidth + 2 * margin;
+    int height = GetTextHeight() + penWidth + margin;
     int length = LenSize( GetShownText(), penWidth )
-                 + height                 // add height for triangular shapes
-                 + 2 * margin;
+                 + height;                // add height for triangular shapes
 
     int dx, dy;
 

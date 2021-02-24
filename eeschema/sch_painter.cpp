@@ -193,6 +193,21 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
 #endif
 
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+    {
+        BOX2I box = item->GetBoundingBox();
+
+        if( item->Type() == SCH_COMPONENT_T )
+            box = static_cast<const SCH_COMPONENT*>( item )->GetBodyBoundingBox();
+
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
+                               COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+        m_gal->SetLineWidth( Mils2iu( 3 ) );
+        m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+    }
+
     switch( item->Type() )
     {
     HANDLE_ITEM( LIB_PART_T, LIB_PART );
