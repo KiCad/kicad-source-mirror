@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-23 18:38+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-02-24 14:06+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3157,7 +3157,7 @@ msgstr "Εισαγωγή Αρχείου Συντομεύσεων:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Δράση | Προεπιλεγμένο πλήκτρο πρόσβασης | Περιγραφή"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -6178,6 +6178,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Γραφικά λογισμικού (για υπολογιστές που δεν υποστηρίζουν τις απαιτήσεις "
+"επιτάχυνσης υλικού του KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -17173,7 +17175,7 @@ msgstr "Μετάβαση σε Επεξεργαστή PCB"
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Εξαγωγή δεδομένων ως αρχείο KiCad PCB"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
