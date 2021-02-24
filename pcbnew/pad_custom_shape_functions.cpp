@@ -59,6 +59,7 @@ void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, b
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -72,6 +73,7 @@ void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int a
     item->SetStart( aStart );
     item->SetEnd( aEnd );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -87,6 +89,7 @@ void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aA
     item->SetArcStart( aStart );
     item->SetAngle( aArcAngle );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -103,6 +106,7 @@ void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const w
     item->SetBezControl1( aCtrl1 );
     item->SetBezControl2( aCtrl2 );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -116,6 +120,7 @@ void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThicknes
     item->SetStart( aCenter );
     item->SetEnd( wxPoint( aCenter.x + aRadius, aCenter.y ) );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -130,6 +135,7 @@ void PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThi
     item->SetStart( aStart );
     item->SetEnd( aEnd );
     item->SetWidth( aThickness );
+    item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
 }
@@ -160,6 +166,7 @@ void PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrim
 
 void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 {
+    aPrimitive->SetParent( this );
     m_editPrimitives.emplace_back( aPrimitive );
 
     SetDirty();
