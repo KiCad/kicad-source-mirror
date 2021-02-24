@@ -86,7 +86,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_warningsBadge->SetMaximumNumber( 999 );
     m_exclusionsBadge->SetMaximumNumber( 999 );
 
-    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
+    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*,
+                                     SCH_REFERENCE* ) {} ) )
     {
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
                                                        _("Show Annotation dialog"),
@@ -280,7 +281,8 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_saveReport->Enable( false );
 
     sch->GetSheets().AnnotatePowerSymbols();
-    m_parent->CheckAnnotate(
+
+    int itemsNotAnnotated = m_parent->CheckAnnotate(
             []( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA, SCH_REFERENCE* aItemB )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aType );
@@ -297,10 +299,14 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     testErc();
 
+    if( itemsNotAnnotated )
+        m_messages->ReportHead( wxString::Format( _( "%d symbol(s) require annotation.<br><br>" ),
+                                                  itemsNotAnnotated ), RPT_SEVERITY_INFO );
+
     if( m_cancelled )
-        m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ) );
+        m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
-        m_messages->Report( _( "Done.<br><br>" ) );
+        m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
 
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
