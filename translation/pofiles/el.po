@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
 "PO-Revision-Date: 2021-02-25 11:40+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -34042,9 +34042,8 @@ msgid "Origin X"
 msgstr "Προέλευση Χ"
 
 #: pcbnew/track.cpp:1067 pcbnew/track.cpp:1084
-#, fuzzy
 msgid "Origin Y"
-msgstr "Προέλευση"
+msgstr "Προέλευση Ψ"
 
 #: pcbnew/track.cpp:1103
 #, fuzzy
@@ -34106,9 +34105,8 @@ msgid "Through-hole Pads"
 msgstr "Διαμπερείς τρύπες"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
-#, fuzzy
 msgid "Show through-hole pads"
-msgstr "Προβολή 3Δ μοντέλων για διαμπερείς τρύπες"
+msgstr "Εμφάνιση through-hole pads"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprint values"
