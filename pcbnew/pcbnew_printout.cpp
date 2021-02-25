@@ -132,14 +132,17 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
-    for( LSEQ layerSeq = m_settings.m_LayerSet.Seq(); layerSeq; ++layerSeq )
+    for( PCB_LAYER_ID layer : m_settings.m_LayerSet.Seq() )
     {
-        aView.SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
+        aView.SetLayerVisible( PCBNEW_LAYER_ID_START + layer, true );
 
         // Enable the corresponding zone layer
-        if( IsCopperLayer( *layerSeq ) )
-            aView.SetLayerVisible( LAYER_ZONE_START + *layerSeq, true );
+        if( IsCopperLayer( layer ) )
+            aView.SetLayerVisible( LAYER_ZONE_START + layer, true );
     }
+
+    RENDER_SETTINGS* renderSettings = aView.GetPainter()->GetSettings();
+    COLOR4D          backgroundColor = renderSettings->GetLayerColor( LAYER_PCB_BACKGROUND );
 
     if( m_pcbnewSettings.m_asItemCheckboxes )
     {
@@ -147,7 +150,9 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                 [&]( GAL_LAYER_ID aLayer )
                 {
                     if( m_board->IsElementVisible( aLayer ) )
-                        aView.SetLayerVisible( aLayer );
+                        aView.SetLayerVisible( aLayer, true );
+                    else
+                        renderSettings->SetLayerColor( aLayer, backgroundColor );
                 };
 
         setVisibility( LAYER_MOD_FR );
@@ -180,25 +185,29 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                     LAYER_VIA_THROUGH
                 };
 
-        for( int item : alwaysEnabled )
-            aView.SetLayerVisible( item, true );
+        for( int layer : alwaysEnabled )
+            aView.SetLayerVisible( layer, true );
     }
     else
     {
         // Enable pad layers corresponding to the selected copper layers
         if( aLayerSet.test( F_Cu ) )
             aView.SetLayerVisible( LAYER_PAD_FR, true );
+        else
+            renderSettings->SetLayerColor( LAYER_PAD_FR, backgroundColor );
 
         if( aLayerSet.test( B_Cu ) )
             aView.SetLayerVisible( LAYER_PAD_BK, true );
+        else
+            renderSettings->SetLayerColor( LAYER_PAD_BK, backgroundColor );
 
-        if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
+        // Enable items on copper layers, but do not draw holes
+        for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH } )
         {
-            // Enable items on copper layers, but do not draw holes
-            for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIA_THROUGH } )
-            {
-                aView.SetLayerVisible( item, true );
-            }
+            if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
+                aView.SetLayerVisible( layer, true );
+            else
+                renderSettings->SetLayerColor( layer, backgroundColor );
         }
 
         // Keep certain items always enabled/disabled and just rely on the layer visibility
@@ -209,18 +218,17 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                     LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND
                 };
 
-        for( int item : alwaysEnabled )
-            aView.SetLayerVisible( item, true );
+        for( int layer : alwaysEnabled )
+            aView.SetLayerVisible( layer, true );
     }
 
     if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
     {
         // Enable hole layers to draw drill marks
-        for( GAL_LAYER_ID holeLayer : { LAYER_PAD_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
-                                        LAYER_VIA_HOLES } )
+        for( int layer : { LAYER_PAD_PLATEDHOLES, LAYER_NON_PLATEDHOLES, LAYER_VIA_HOLES } )
         {
-            aView.SetLayerVisible( holeLayer, true );
-            aView.SetTopLayer( holeLayer, true );
+            aView.SetLayerVisible( layer, true );
+            aView.SetTopLayer( layer, true );
         }
     }
 }
