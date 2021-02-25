@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
 "PO-Revision-Date: 2021-02-25 09:42+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -23066,7 +23066,7 @@ msgstr "\"%s\" βρέθηκε"
 #: pcbnew/dialogs/dialog_find.cpp:356
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr "Επιτυχία(ες): %ld / %lu"
+msgstr "Επιτυχία(-ες): %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
