@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-25 09:42+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-02-25 10:54+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -23729,7 +23729,7 @@ msgstr "Περιοχές Αποτυπωμάτων"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Fab Layers"
-msgstr "Fab Layers"
+msgstr "Επίπεδα Κατασκευής"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
@@ -34579,9 +34579,8 @@ msgid "Save Layer Preset"
 msgstr "Αποθήκευση Προεπιλεγμένης Ρύθμισης Επιπέδου"
 
 #: pcbnew/widgets/appearance_controls.cpp:2336
-#, fuzzy
 msgid "Presets"
-msgstr "Επαναφορά"
+msgstr "Προκαθορισμένα"
 
 #: pcbnew/widgets/appearance_controls.cpp:2348
 #, fuzzy
