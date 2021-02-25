@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 14:06+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-02-25 09:26+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -749,7 +749,7 @@ msgstr "Επιλογές 3Δ Προβολής"
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
 #, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3Δ Προβολή"
+msgstr "KiCad 3D Viewer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1320,23 +1320,20 @@ msgid "Export to Clipboard"
 msgstr "Εξαγωγή στο Πρόχειρο"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Γεμίσματα σώματος συμβόλου"
+msgstr "Σύμβολο (αρχείο *.lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod αρχείο)"
+msgstr "Αποτύπωμα (αρχείο *.kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps αρχείο)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Λογότυπο για το μπλοκ τίτλου (αρχείο .kicad_wks)"
+msgstr "Φύλλο εργασίας (αρχείο *.kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2175,9 +2172,8 @@ msgid "Reset Grid Sizes"
 msgstr "Μέγεθος Πλέγματος &Χρήστη"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "0: χρήση προκαθορισμένων τιμών"
+msgstr "Επαναφορά λίστας μεγεθών πλέγματος στις προκαθορισμένες τιμές"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -5778,18 +5774,16 @@ msgid "Pin Library"
 msgstr "Καρφίτσωμα Βιβλιοθήκης"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Επιλογή Καταλόγου Βιβλιοθήκης όπου θα προστεθεί η βιβλιοθήκη:"
+msgstr "Διατήρηση βιβλιοθήκης στην κορυφή της λίστας"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Ξεκαρφίτσωμα Βιβλιοθήκης"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Επιλογή Καταλόγου Βιβλιοθήκης όπου θα προστεθεί η βιβλιοθήκη:"
+msgstr "Όχι πλέον διατήρηση βιβλιοθήκης στην κορυφή της λίστας"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6154,24 +6148,20 @@ msgid "No default footprint"
 msgstr "Κανένα προκαθορισμένο αποτύπωμα"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Γραφικά με Επιτάχυνση:"
+msgstr "Γραφικά με επιτάχυνση"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Εναλλακτικά Γραφικά:"
+msgstr "Εναλλακτικά γραφικά"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "Μηχανή Απόδοσης"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Χρησιμοποιήστε γραφικά με επιτάχυνση υλικού (συνιστάται)"
+msgstr "Γραφικά με επιτάχυνση υλικού (συνιστάται)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
@@ -6923,7 +6913,6 @@ msgid "Lib: %s"
 msgstr "Βιβλιοθήκη: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
@@ -7226,10 +7215,11 @@ msgstr ""
 "ταιριάζει"
 
 #: eeschema/connection_graph.cpp:2877
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Η ιεραρχική ετικέτα %s δεν έχει pin φύλλου που να ταιριάζει εκτός του φύλλου"
+"Η ιεραρχική ετικέτα %s δεν έχει pin φύλλου που να ταιριάζει με το γονικό "
+"φύλλο"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7859,9 +7849,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Επαναφορά πεδίων που είναι κενά στο νέο σύμβολο"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field text"
-msgstr "Ενημέρωση Πεδίων"
+msgstr "Ενημέρωση πεδίων κειμένων"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Update field visibilities"
@@ -7876,7 +7865,6 @@ msgid "Update field positions"
 msgstr "Ενημέρωση θέσης πεδίων"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
-#, fuzzy
 msgid "Update symbol attributes"
 msgstr "Ενημέρωση/επαναφορά ιδιοτήτων συμβόλου"
 
@@ -7976,9 +7964,8 @@ msgstr "Επαναφορά πεδίων που είναι κενά στη βιβ
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Ενημέρωση/επαναφορά Πεδίων"
+msgstr "Ενημέρωση/επαναφορά πεδίων κειμένου"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -8119,15 +8106,17 @@ msgstr ""
 "φορτωμένες βιβλιοθήκες συμβόλων."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Ενημέρωση Συμβόλων από Βιβλιοθήκη"
+msgstr "Ενημέρωση πεδίων συμβόλων από νέα βιβλιοθήκη"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Αντικαταστήστε τα τρέχοντα πεδία συμβόλων με πεδία από τη νέα βιβλιοθήκη.\n"
+"Προειδοποίηση: Ως εκ τούτου, τα πεδία \"Value\" και \"Footprints\" θα "
+"αντικατασταθούν."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9860,9 +9849,8 @@ msgid "Plot drawing sheet"
 msgstr "Ολοκλήρωση σχεδίαση φύλλου"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Σχεδιογράφηση πλαισίου φύλλου και μπλοκ τίτλου"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11711,9 +11699,8 @@ msgstr "Συνδέσεις Ακροδέκτη με Ακροδέκτη"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
-#, fuzzy
 msgid "Color Theme"
-msgstr "Ορισμός Συν&δυασμού Χρωμάτων"
+msgstr "Χρώμα Θεματικού"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use Eeschema color theme"
@@ -12015,7 +12002,6 @@ msgid "No Connection"
 msgstr "Μη Σύνδεση"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
 msgstr "Μη επιλυμένη μεταβλητή κειμένου στο φύλλο εργασίας."
 
@@ -12323,26 +12309,20 @@ msgid "Import Schematic"
 msgstr "Εισαγωγή Σχηματικού"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr ""
-"Η αποθήκευση του έργου στη νέα μορφή αρχείου θα αντικαταστήσει τα υπάρχοντα "
-"αρχεία."
+msgstr "Η αποθήκευση θα αντικαταστήσει τα υπάρχοντα αρχεία."
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "Προειδοποίηση Αποθήκευσης Έργου"
+msgstr "Προειδοποίηση Αποθήκευσης"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "Τα ακόλουθα αρχεία θα αντικατασταθούν:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12858,9 +12838,8 @@ msgid "The following libraries were not found:"
 msgstr "Δε βρέθηκαν οι ακόλουθες βιβλιοθήκες:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Επεξεργαστής Σχηματικού"
+msgstr "Επεξεργαστής Σχηματικού KiCad"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -12875,15 +12854,14 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Αποθήκευση αλλαγών στο \"%s\" πριν το κλείσιμο;"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Αδυναμία ενημέρωσης του PCB, επειδή ο Επεξεργαστής Σχηματικού έχει ανοιχτεί "
-"σε αυτόνομη λειτουργία. Για να είναι εφικτή η δημιουργία/ενημέρωση των PCB "
-"από σχηματικά , πρέπει να εκτελέσετε το Kicad και να δημιουργήσετε ένα έργο."
+"Αδυναμία ενημέρωσης του PCB, επειδή ο Επεξεργαστής Σχηματικού τρέχει σε "
+"αυτόνομη λειτουργία. Για να είναι εφικτή η δημιουργία/ενημέρωση των PCB από "
+"σχηματικά , πρέπει να εκτελέσετε το Kicad και να δημιουργήσετε ένα έργο."
 
 #: eeschema/sch_edit_frame.cpp:937
 msgid "New Schematic"
@@ -14639,9 +14617,8 @@ msgid "Library Editor"
 msgstr "Επεξεργαστής Βιβλιοθήκης"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Επεξεργαστής Συμβόλων"
+msgstr "Επεξεργαστής Συμβόλων KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -14849,9 +14826,9 @@ msgstr ""
 "πίνακα."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s από σχηματικό"
+msgstr "%s%s [από σχηματικό]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -15959,9 +15936,8 @@ msgstr ""
 "ηλεκτρικών κανόνων"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Επεξεργασία Αριθμού Σελίδας..."
+msgstr "Επεξεργασία Αριθμού Σελίδας Φύλλου..."
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Edit the page number of the current or selected sheet"
@@ -16332,6 +16308,7 @@ msgstr "Δεν βρέθηκαν νέες ιεραρχικές ετικέτες."
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
+"Η θέση επαφής/σύνδεσης δεν περιλαμβάνει συνδεόμενα καλώδια ή / και pins."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1043
 msgid "Click over a sheet."
@@ -16378,9 +16355,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "Εισαγωγή αριθμού σελίδας για τη διαδρομή φύλλου%s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "Επεξεργασία Αριθμού Σελίδας"
+msgstr "Επεξεργασία Αριθμού Σελίδας Φύλλου"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16732,10 +16708,9 @@ msgid "Cannot create file \"%s\""
 msgstr "Αδυναμία δημιουργίας αρχείου \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
-"<b>Δεν υπάρχει άλλο διαθέσιμο επίπεδο γραφικών</b> στο Gerbview ώστε να "
+"<b>Δεν υπάρχει άλλο διαθέσιμο επίπεδο γραφικών</b> στο GerbView ώστε να "
 "φορτωθούν αρχεία"
 
 #: gerbview/files.cpp:40
@@ -17169,9 +17144,8 @@ msgid "Show source file for the current layer"
 msgstr "Προβολή του πηγαίου αρχείου για το τρέχον επίπεδο"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Μετάβαση σε Επεξεργαστή PCB"
+msgstr "Μετάβαση σε Επεξεργαστή PCB..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -17362,9 +17336,8 @@ msgid "Drawing Sheet"
 msgstr "Σύρσιμο Φύλλου"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Προβολή πλαισίου φύλλου και μπλοκ τίτλου"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17943,9 +17916,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "Εκτέλεση υπολογισμών εξαρτημάτων, πλάτους δρόμου, κλπ."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Επεξεργασία πλαισίων φύλλου και μπλοκ τίτλου"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18350,7 +18322,6 @@ msgid "The current page layout has been modified.  Save changes?"
 msgstr "Η σχεδίαση σελίδας έχει τροποποιηθεί. Αποθήκευση αλλαγών;"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
 msgstr "Προσθήκη Υπάρχοντος Αρχείου Σχεδίασης Σελίδας"
 
@@ -18389,7 +18360,7 @@ msgstr "Το αρχείο layout είναι μόνο για ανάγνωση."
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "Πρόγραμμα επεξεργασίας φύλλων σχεδίασης KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18491,12 +18462,10 @@ msgid "Add a bitmap image"
 msgstr "Προσθήκη εικόνας bitmap"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
 msgstr "Προσθήκη Υπάρχοντος Αρχείου Σχεδίασης Σελίδας..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
 msgstr "Προσθήκη ενός υπάρχοντος αρχείου σχεδίασης σελίδας στο τρέχον αρχείο"
 
@@ -21935,6 +21904,8 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
+"Μονάδες αυτής της διάστασης (\"αυτόματη\" για να εφαρμοσούν οι μονάδες που "
+"έχουν επιλεγεί στον επεξεργαστή)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
@@ -24403,6 +24374,9 @@ msgid ""
 "Display a warning if a pad in a footprint does not appear in netlist.\n"
 "Only pads on a copper layer and having a name are tested."
 msgstr ""
+"Εμφανίστε μια προειδοποίηση εάν ένα pad ενός αποτυπώματος δεν εμφανίζεται "
+"στο netlist.\n"
+"Ελέγχονται μόνο pads σε στρώμα χαλκού που έχουν όνομα."
 
 #: pcbnew/dialogs/dialog_netlist_base.h:69
 msgid "Import Netlist"
@@ -24566,6 +24540,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1254
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
+"Προειδοποίηση: Οι αρνητικές τιμές τοπικού διακένου δεν θα έχουν καμία "
+"επίδραση."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
 #, fuzzy
@@ -24581,6 +24557,8 @@ msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Προειδοποίηση: Αρνητικό διάκενο μάσκας κόλλησης μεγαλύτερο από το pad. Δεν "
+"θα δημιουργηθεί μάσκα συγκόλλησης."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
 #, fuzzy
@@ -24627,10 +24605,11 @@ msgstr "Προειδοποίηση: Η SMD έδρα δεν έχει εξωτερ
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1349
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr ""
+"Προειδοποίηση: Η βασική ιδιότητα των Fiducial δεν έχει νόημα στα pads NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1355
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr ""
+msgstr "Προειδοποίηση: Η ιδιότητα Testpoint δεν έχει νόημα στα pads NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
@@ -24639,7 +24618,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
 msgid "Warning: Castellated property is for PTH pads."
-msgstr ""
+msgstr "Προειδοποίηση: Η ιδιότητα Castellated προορίζεται για PTH pads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: BGA property is for SMD pads."
@@ -24647,7 +24626,7 @@ msgstr "Προειδοποίηση: Η ιδιότητα BGA προορίζετα
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Σφάλμα: Το μέγεθος της γωνίας δεν είναι αριθμός."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1390
 msgid "Error: Negative corner size."
@@ -24655,11 +24634,13 @@ msgstr "Σφάλμα: Αρνητικό μέγεθος γωνίας."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1392
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Προειδοποίηση: Το μέγεθος της γωνίας θα κάνει το pad κυκλικό."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
+"Σφάλμα: Το προσαρμοσμένο σχήμα του pad πρέπει να σχηματιστεί σαν ένα "
+"πολύγωνο."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1409
 #, fuzzy
@@ -24723,6 +24704,8 @@ msgstr "Αριθμός έδρας:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
+"Να μην επιτρέπετε την αλλαγή της θέσης του pad σε σχέση με το γονικό "
+"αποτύπωμα"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -24945,6 +24928,17 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
+"Προαιρετική ιδιότητα για καθορισμό ειδικού σκοπού ή περιορισμού στα αρχεία "
+"παραγωγής:\n"
+"Το χαρακτηριστικό BGA είναι για pads σε αποτυπώματα BGA\n"
+"Το τοπικό Fiducial είναι ένα βασικό στοιχείο για το γονικό αποτύπωμα\n"
+"Το καθολικό Fiducial είναι ένα βασικό στοιχείο για ολόκληρη την πλακέτα\n"
+"Το Test Point pad είναι χρήσιμο για τον καθορισμό σημείων δοκιμής σε αρχεία "
+"Gerber\n"
+"Το pad Heatsink καθορίζει ένα θερμικό pad\n"
+"Το Castellated καθορίζει την castellated διαμπερή οπή του pad στην άκρη της "
+"πλακέτας\n"
+"Αυτές οι ιδιότητες καθορίζονται σε αρχεία Gerber X2."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1441
 msgid "BGA pad"
@@ -24957,7 +24951,7 @@ msgstr "Αναπαραγωγή αποτυπωμάτων"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1442
 msgid "Fiducial, global to board"
-msgstr ""
+msgstr "Fiducial, καθολικό πλακέτας"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1444
 msgid "Test point pad"
@@ -24965,7 +24959,7 @@ msgstr "Pad σημείο ελέγχου"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563 pcbnew/pad.cpp:1445
 msgid "Heatsink pad"
-msgstr ""
+msgstr "Heatsink pad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Castellated pad (through hole only)"
@@ -25228,6 +25222,8 @@ msgstr "Σχεδιασμός pads στα fab επίπεδα"
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr ""
+"Συμπεριλάβετε τα περιγράμματα των pads στα επίπεδα F.Fab και B.Fab κατά τη "
+"σχεδιογράφηση"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -25523,6 +25519,10 @@ msgid ""
 "User unit is 10^-<N> mm or 10^-<N> inch.\n"
 "Choose 6 if you are not sure."
 msgstr ""
+"Πόσο μεγάλη είναι η μονάδα χρήστη SVG.\n"
+"Ο αριθμός καθορίζει πόσα ψηφία εξάγονται κάτω από 1 mm ή 1 ίντσα.\n"
+"Η μονάδα χρήστη είναι 10 ^ - <N> mm ή 10 ^ - <N> ίντσα.\n"
+"Επιλέξτε 6 εάν δεν είστε σίγουροι."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
