@@ -535,7 +535,7 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
 int DIFF_PAIR_PLACER::viaGap() const
 {
     return std::max( m_sizes.DiffPairViaGap(),
-                     m_sizes.GetHoleToHole() + m_viaDrill - m_viaDiameter );
+                     m_sizes.GetHoleToHole() + m_sizes.ViaDrill() - m_sizes.ViaDiameter() );
 }
 
 

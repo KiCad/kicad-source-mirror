@@ -485,7 +485,16 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetDiffPairGap( diffPairGap );
     aSizes.SetDiffPairViaGap( diffPairViaGap );
 
-    aSizes.SetHoleToHole( bds.m_HoleToHoleMin );
+    int      holeToHoleMin = bds.m_HoleToHoleMin;
+    PNS::VIA dummyVia;
+
+    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
+                                         &dummyVia, UNDEFINED_LAYER, &constraint ) )
+    {
+        holeToHoleMin = constraint.m_Value.Min();
+    }
+
+    aSizes.SetHoleToHole( holeToHoleMin );
 
     aSizes.ClearLayerPairs();
 
