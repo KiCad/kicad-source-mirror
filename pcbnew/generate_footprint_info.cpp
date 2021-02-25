@@ -49,7 +49,8 @@ class FOOTPRINT_INFO_GENERATOR
     wxString      m_html;
     FP_LIB_TABLE* m_fp_lib_table;
     LIB_ID const  m_lib_id;
-    FOOTPRINT*    m_footprint;
+
+    const FOOTPRINT*    m_footprint;
 
 public:
     FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )
@@ -71,8 +72,8 @@ public:
 
         try
         {
-            m_footprint = m_fp_lib_table->FootprintLoad( m_lib_id.GetLibNickname(),
-                                                         m_lib_id.GetLibItemName() );
+            m_footprint = m_fp_lib_table->GetEnumeratedFootprint( m_lib_id.GetLibNickname(),
+                                                                  m_lib_id.GetLibItemName() );
         }
         catch( const IO_ERROR& ioe )
         {

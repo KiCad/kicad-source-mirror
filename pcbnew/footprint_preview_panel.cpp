@@ -138,7 +138,12 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 
     try
     {
-        m_currentFootprint.reset( fptbl->FootprintLoadWithOptionalNickname( aFPID ) );
+        const FOOTPRINT* fp = fptbl->GetEnumeratedFootprint( aFPID.GetLibNickname(), aFPID.GetLibItemName() );
+
+        if( fp )
+            m_currentFootprint.reset( static_cast<FOOTPRINT*>( fp->Duplicate() ) );
+        else
+            m_currentFootprint.reset();
     }
     catch( ... )
     {

@@ -2284,7 +2284,7 @@ FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& 
 
     if( footprint )
     {
-        FOOTPRINT* copy = (FOOTPRINT*) footprint->Duplicate();
+        FOOTPRINT* copy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
         copy->SetParent( nullptr );
         return copy;
     }
