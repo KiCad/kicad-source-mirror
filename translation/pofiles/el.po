@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
 "PO-Revision-Date: 2021-02-25 10:54+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -1902,9 +1902,9 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"Για να εξασφαλιστεί ότι τα ονόματα μεταβλητών περιβάλλοντος ισχύουν σε όλες "
-"τις πλατφόρμες, το πεδίο του ονόματος θα δέχεται μόνο κεφαλαία γράμματα, "
-"ψηφία, και τον χαρακτήρα υπογράμμισης _."
+"Για να εξασφαλιστεί ότι τα ονόματα μεταβλητών περιβάλλοντος ισχύουν σε όλα "
+"τα πλατύβαθρα (πλατφόρμες), το πεδίο του ονόματος θα δέχεται μόνο κεφαλαία "
+"γράμματα, ψηφία, και τον χαρακτήρα υπογράμμισης _."
 
 #: common/dialogs/dialog_configure_paths.cpp:597
 msgid "Environment Variable Help"
@@ -2167,9 +2167,8 @@ msgid "Reset Grid Origin"
 msgstr "Επαναφορά Αρχής Πλέγματος"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Μέγεθος Πλέγματος &Χρήστη"
+msgstr "Επαναφορά Μεγεθών Πλέγματος"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
@@ -2861,10 +2860,10 @@ msgid ""
 msgstr ""
 "Ρύθμιση κλίμακας για τον χώρο σχεδίασης.\n"
 "\n"
-"Σε οθόνες υψηλής DPI σε ορισμένες πλατφόρμες, το KiCad δεν μπορεί να "
-"καθορίσει τον συντελεστή κλίμακας. Σε αυτή την περίπτωση ίσως χρειαστεί "
-"ρύθμιση αυτής της τιμής σε μια τιμή που να ταιριάζει με την κλίμακα DPI του "
-"συστήματός σας. Το 2.0 είναι μια κοινή τιμή.\n"
+"Σε οθόνες υψηλής DPI σε ορισμένα πλατύβαθρα (πλατφόρμες), το KiCad δεν "
+"μπορεί να καθορίσει τον συντελεστή κλίμακας. Σε αυτή την περίπτωση ίσως "
+"χρειαστεί ρύθμιση αυτής της τιμής σε μια τιμή που να ταιριάζει με την "
+"κλίμακα DPI του συστήματός σας. Το 2.0 είναι μια κοινή τιμή.\n"
 "\n"
 "Εάν αυτό δεν ταιριάζει με την κλίμακα DPI του συστήματος, ο χώρος σχεδίασης "
 "δεν θα ταιριάζει με το μέγεθος του παραθύρου και τη θέση του δρομέα."
@@ -2878,8 +2877,8 @@ msgid ""
 msgstr ""
 "Χρήση αυτόματης τιμής για την κλίμακα του χώρου σχεδίασης.\n"
 "\n"
-"Σε ορισμένες πλατφόρμες, η αυτόματη τιμή είναι λανθασμένη και πρέπει να "
-"οριστεί χειροκίνητα."
+"Σε ορισμένα πλατύβαθρα (πλατφόρμες), η αυτόματη τιμή είναι λανθασμένη και "
+"πρέπει να οριστεί χειροκίνητα."
 
 #: common/dialogs/panel_common_settings.cpp:283
 msgid "Executable files ("
@@ -5048,9 +5047,8 @@ msgid "Selection highlight"
 msgstr "Τονισμός επιλογής"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Σύρσιμο Φύλλου"
+msgstr "Φύλλο σχεδίασης"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -15121,9 +15119,8 @@ msgid "(failed to load)"
 msgstr "(Αποτυχία φόρτωσης)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Αρχεία KiCad βιβλιοθήκης εξαρτημάτων"
+msgstr "Πρόγραμμα Προβολής Βιβλιοθήκης Συμβόλων KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -16271,15 +16268,13 @@ msgstr "Δεν βρέθηκαν προβλήματα με το σύμβολο."
 #: eeschema/tools/ee_selection_tool.cpp:1519
 #: pagelayout_editor/tools/pl_selection_tool.cpp:583
 #: pcbnew/tools/pcb_selection_tool.cpp:1785
-#, fuzzy
 msgid "Select &All\tA"
-msgstr "Επιλογή Όλων"
+msgstr "Επιλογή &Όλων\tA"
 
 #: eeschema/tools/ee_selection_tool.cpp:1522
 #: pcbnew/tools/pcb_selection_tool.cpp:1788
-#, fuzzy
 msgid "&Expand Selection\tE"
-msgstr "Επέκταση Επιλεγμένης Σύνδεσης"
+msgstr "&Επέκταση Επιλεγμένης Σύνδεσης\tE"
 
 #: eeschema/tools/reannotate.cpp:74
 msgid "Errors reported by Eeschema:\n"
@@ -16946,7 +16941,6 @@ msgid "Clear Recent Job Files"
 msgstr "Διαγραφή Πρόσφατων Αρχείων Εργασιών"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
 msgstr "Πρόγραμμα Προβολής Αρχείων Gerber"
 
@@ -17331,9 +17325,8 @@ msgstr "Εμφάνιση των κουκκίδων του πλέγματος (x,
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Σύρσιμο Φύλλου"
+msgstr "Φύλλο Σχεδίασης"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 msgid "Show drawing sheet border and title block"
@@ -20460,7 +20453,6 @@ msgid "Empty"
 msgstr "Κενό"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:93
-#, fuzzy
 msgid "Invalid"
 msgstr "Άκυρη Είσοδος"
 
@@ -20469,9 +20461,8 @@ msgid "Excluded"
 msgstr "Αποκλείσθηκε"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:118
-#, fuzzy
 msgid "Reannotate PCB"
-msgstr "Ονοματοδοσία"
+msgstr "Επανα-σχολιασμός PCB"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
@@ -20526,9 +20517,8 @@ msgstr ""
 "Τα κάτω ίχνη θα ξεκινήσουν στο %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
-#, fuzzy
 msgid "the last front footprint + 1"
-msgstr "Διαγραφή τρέχοντος αποτυπώματος"
+msgstr "το τελευταίο μπροστινό αποτύπωμα + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -20573,6 +20563,9 @@ msgid ""
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
+"\n"
+"Πριν από την ταξινόμηση κατά %s, οι συντεταγμένες των οποίων θα "
+"στρογγυλοποιηθούν σε πλέγμα %s, %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "footprint location"
@@ -20777,9 +20770,8 @@ msgid "Vertically: bottom right to top left"
 msgstr "Κάθετα: κάτω δεξιά προς πάνω αριστερά"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
-#, fuzzy
 msgid "Based on location of:"
-msgstr "Σύνδεση έδρας:"
+msgstr "Με βάση τη θέση του:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136
 msgid "Reference Designator"
@@ -23376,7 +23368,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Use drill/place file origin as origin"
-msgstr "Χρήση αρχικού σημείου αρχείου διάτρησης/τοποθέτησης σαν αρχικό σημείο"
+msgstr "Χρήση αρχικού σημείου αρχείου διάτρησης/τοποθέτησης ως αρχικό σημείο"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Save the origin coordinates in the file"
@@ -24093,7 +24085,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "Επεξεργασία Χαρτογράφησης Εισαχθέντων Επιπέδων"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:120
 msgid "Top/Front layer:"
@@ -30910,7 +30902,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:499
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Αναμένονται τιμές μεγέθους pad αλλά βρέθηκαν %s : %s στη γραμμή %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:519
 #, c-format
@@ -30920,7 +30912,7 @@ msgstr "Άκυρο μέγεθος έδρας στη γραμμή %zu"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:554
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr ""
+msgstr "Αναμένονται τιμές μετατόπισης pad αλλά βρέθηκαν %s : %s στη γραμμή %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:597
 #, c-format
@@ -30936,6 +30928,7 @@ msgstr ""
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
 msgstr ""
+"Δεν ήταν δυνατή η εισαγωγή του γραφικού στοιχείου %d στη στοίβα pad «%s»"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:957
 #, c-format
@@ -34583,9 +34576,8 @@ msgid "Presets"
 msgstr "Προκαθορισμένα"
 
 #: pcbnew/widgets/appearance_controls.cpp:2348
-#, fuzzy
 msgid "Delete Preset"
-msgstr "Διαγραφή Φύλλου"
+msgstr "Διαγραφή Προεπιλογής"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
 msgid "Select preset:"
@@ -34727,9 +34719,9 @@ msgid "Corner Count"
 msgstr "Πλήθος Γωνιών"
 
 #: pcbnew/zone.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "Ιδιότητες Καθαρής Περιοχής"
+msgstr "Περιδιευθετημένο μέρος Περιοχής Κανόνων σε %s"
 
 #: pcbnew/zone.cpp:874
 #, fuzzy, c-format
