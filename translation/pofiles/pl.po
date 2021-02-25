@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 10:29+0000\n"
+"PO-Revision-Date: 2021-02-25 17:52+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -2322,15 +2322,15 @@ msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8.5x11in"
+msgstr "USLetter 8.5x11cali"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8.5x14in"
+msgstr "USLegal 8.5x14cali"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11x17cali"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "User (Custom)"
@@ -12803,7 +12803,6 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Zapisać zmiany w \"%s\" przed zamknięciem?"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -14566,9 +14565,8 @@ msgid "Library Editor"
 msgstr "Edytor bibliotek"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Edytor bibliotek symboli"
+msgstr "Edytor bibliotek symboli programu KiCad"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:716
@@ -15059,9 +15057,8 @@ msgid "(failed to load)"
 msgstr "(nie można załadować)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Pliki bibliotek symboli"
+msgstr "Przeglądarka symboli bibliotecznych programu KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -15867,9 +15864,8 @@ msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr "Zmienia konfigurację schematu, w tym style opisu i reguły elektryczne"
 
 #: eeschema/tools/ee_actions.cpp:580
-#, fuzzy
 msgid "Edit Sheet Page Number..."
-msgstr "Edytuj numer strony..."
+msgstr "Edytuj numer strony arkusza..."
 
 #: eeschema/tools/ee_actions.cpp:581
 msgid "Edit the page number of the current or selected sheet"
@@ -16282,9 +16278,8 @@ msgid "Enter page number for sheet path%s"
 msgstr "Wprowadź numer strony dla ścieżki arkusza %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1800
-#, fuzzy
 msgid "Edit Sheet Page Number"
-msgstr "Edycja numeru strony"
+msgstr "Edycja numeru strony arkusza"
 
 #: eeschema/tools/sch_editor_control.cpp:443
 msgid "Reached end of schematic."
@@ -16635,7 +16630,6 @@ msgid "Cannot create file \"%s\""
 msgstr "Nie mogę utworzyć pliku \"%s\""
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b>Brak dostępnych warstw</b> w GerbView by załadować dalsze pliki"
 
@@ -16872,9 +16866,8 @@ msgid "Clear Recent Job Files"
 msgstr "Wyczyść ostatnie pliki zadań"
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Przeglądarka plików Gerber"
+msgstr "Przeglądarka plików Gerber programu KiCad"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -17257,14 +17250,12 @@ msgstr "Pokaż punkty siatki (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Tryb rysowania"
+msgstr "Ramka arkusza"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Pokazuje opis arkusza i tabliczkę tytułową"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17428,12 +17419,11 @@ msgstr ""
 "Wyświetl narzędzia do obliczania rezystancji, obciążalności prądowej, itp."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Edytuj obramowanie arkusza oraz tabelkę tytułową do wykorzystania na "
+"Edycja obramowania arkusza oraz tabelki tytułowej do wykorzystania na "
 "schematach i projektach PCB"
 
 #: kicad/files-io.cpp:43
@@ -17846,9 +17836,8 @@ msgstr ""
 "Zawiera kilka prostych kalkulatorów: szerokość ścieżek, odległości, itp."
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Edycja obramowania arkusza i tabliczki tytułowej"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18253,9 +18242,8 @@ msgid "The current page layout has been modified.  Save changes?"
 msgstr "Bieżący układ strony został zmodyfikowany.  Zapisać zmiany?"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "Dodaj istniejący plik definicji strony"
+msgstr "Dodaj istniejący rysunek definicji strony"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -18393,14 +18381,13 @@ msgid "Add a bitmap image"
 msgstr "Dodaje obraz w postaci bitmapy"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Dodaj istniejący plik definicji strony..."
+msgstr "Dodaj istniejący rysunek definicji strony..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "Dołącza do obecnego projektu istniejący projekt obramowania strony"
+msgstr ""
+"Dołącza do obecnego projektu istniejący graficzny projekt obramowania strony"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -25155,9 +25142,8 @@ msgid "Board setup"
 msgstr "Ustawienia projektowe płytki"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Ustawienia płytki..."
+msgstr "Plik > Ustawienia płytki..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -25310,17 +25296,15 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Odznacz to pole by rysować elementy graficzne ich linią centralną"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "Użyj czcionek Pcbnew do rysowania tekstu"
+msgstr "Użyj czcionek KiCad-a do rysowania tekstu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Zaznacz by użyć czcionek programu Pcbnew\n"
+"Zaznacz by użyć czcionek wektorowych programu KiCad\n"
 "Odznacz by rysować teksty ASCII jako tekst dający się edytować (używając "
 "czcionki DXF)"
 
@@ -28501,10 +28485,10 @@ msgid "OK to load recovery file \"%s\""
 msgstr "OK by załadować plik odzyskiwania \"%s\""
 
 #: pcbnew/files.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
-"Bieżąca płytka zostanie zamknięta, zapisać zmiany w \"%s\" przed kontynuacją?"
+"Bieżąca płytka zostanie zamknięta, zapisać zmiany w '%s' przed kontynuacją?"
 
 #: pcbnew/files.cpp:378
 msgid "Current Board will be closed. Continue?"
@@ -28515,7 +28499,6 @@ msgid "noname"
 msgstr "bez_nazwy"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -28523,7 +28506,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Gdy strefy na tej płytce są wypełniane ponownie użyta będzie wartość z pola "
-"Prześwit wobec krawędzi (zobacz Ustawienia płytki > Reguły projektowe).\n"
+"Prześwit wobec krawędzi (zobacz Ustawienia płytki > Reguły projektowe -> "
+"Ograniczenia).\n"
 "Może to doprowadzić do sytuacji, gdzie obecne wypełnienie będzie się różnić "
 "od tego jakie używane było w poprzednich wydaniach, które używały wartości "
 "pobranej z grubości linii brzegowych umieszczonych na warstwie Edge.Cuts."
@@ -28690,9 +28674,8 @@ msgid "footprint %s"
 msgstr "footprint %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Edytor Footprintów"
+msgstr "Edytor Footprintów programu KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -28906,9 +28889,8 @@ msgid "No footprint name defined."
 msgstr "Nie zdefiniowana nazwa footprintu."
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "Przeglądarka bibliotek footprintów"
+msgstr "Przeglądarka bibliotek footprintów programu KiCad"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -29225,11 +29207,10 @@ msgid "Resc&ue"
 msgstr "Odzyskaj"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
 "Czyści obszar roboczy i pobiera dane z kopii zapasowej, tworzonej "
-"automatycznie przez Pcbnew"
+"automatycznie przez edytor PCB"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
@@ -29886,9 +29867,8 @@ msgid "Error loading project footprint libraries"
 msgstr "Błąd podczas wczytywania bibliotek footprintów projektu"
 
 #: pcbnew/pcb_edit_frame.cpp:192
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "Edytor obwodów drukowanych"
+msgstr "Edytor obwodów drukowanych programu KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
@@ -29912,15 +29892,14 @@ msgid "The schematic for this board cannot be found."
 msgstr "Schemat dla tej płytki nie może zostać znaleziony."
 
 #: pcbnew/pcb_edit_frame.cpp:1374
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Nie można uaktualnić PCB ponieważ Pcbnew jest uruchomiony jako samodzielna "
-"aplikacja. By utworzyć lub uaktualnić PCB na podstawie schematu należy "
-"uruchomić Menedżer programu KiCad oraz utworzyć projekt."
+"Nie można uaktualnić PCB ponieważ edytor PCB jest uruchomiony jako "
+"samodzielna aplikacja. By utworzyć lub uaktualnić PCB na podstawie schematu "
+"należy uruchomić Menedżer programu KiCad oraz utworzyć projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1388
 msgid "Eeschema netlist"
@@ -32615,7 +32594,6 @@ msgid "Footprint Properties..."
 msgstr "Właściwości footprintu..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
 msgstr "Modyfikuj właściwości footprintu"
 
@@ -32675,9 +32653,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Edytuj właściwości ścieżek i przelotek..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "Zmienia właściwości tekstu oraz elementów graficznych na płytce"
+msgstr "Zmienia właściwości ścieżek oraz przelotek na całej płytce"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -32973,9 +32950,8 @@ msgid "Toggle Lock"
 msgstr "Przełącz blokadę"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Pokaż nitki wspomagające dla zaznaczonego(-ych) elementów"
+msgstr "Blokuj lub odblokuj zaznaczone elementy"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -32986,18 +32962,16 @@ msgid "Allow items to be moved and/or resized on the canvas"
 msgstr "Zezwól na przenoszenie i/lub zmianę rozmiaru elementów na kanwie"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Przenosi wybrane elementy z określonym punktem początkowym"
+msgstr "Grupuje zaznaczone elementy by były traktowane jako pojedynczy element"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
 msgstr "Rozgrupuj"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "nie wybrano biblioteki"
+msgstr "Rozdziela dowolnie wybraną grupę elementów"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -33048,9 +33022,8 @@ msgid "Clear Net Highlighting"
 msgstr "Skasuj podświetlenie"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "Skasuj podświetlenie"
+msgstr "Kasuje istniejące podświetlenie"
 
 #: pcbnew/tools/pcb_actions.cpp:703 pcbnew/tools/pcb_actions.cpp:710
 msgid "Highlight all copper items of a net"
@@ -33979,9 +33952,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Rysuj opis arkusza i tabliczkę tytułową"
+msgstr "Pokaż ramkę arkusza i tabliczkę tytułową"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
