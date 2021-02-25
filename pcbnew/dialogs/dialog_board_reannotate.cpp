@@ -163,17 +163,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );
 
-    // Set the reporter window filename to something sensible
-    if( m_MessageWindow->GetFileName().empty() )
-    {
-        wxFileName fn = m_frame->GetBoard()->GetFileName();
-        fn.SetName( "annotationreport" );
-        fn.SetExt( "txt " );
-        wxString fullname = fn.GetFullPath();
-        m_MessageWindow->SetFileName( fullname );
-    }
-
-    m_MessageWindow->SetPrintInfo( false ); // Suppress the "Info: " prefix
+    m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
     finishDialogSettings();
 }

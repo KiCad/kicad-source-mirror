@@ -25,6 +25,7 @@
  */
 
 #include <bitmaps.h>
+#include <dialogs/wx_html_report_panel.h>
 #include <dialog_plot_schematic.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
@@ -53,6 +54,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
     m_configChanged = false;
 
     m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+
+    m_MessagesBox->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.

@@ -83,6 +83,8 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
 {
     m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
 
+    m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+
     initDialog();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but

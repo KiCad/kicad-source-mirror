@@ -57,6 +57,7 @@ public:
         m_parent( aParent ),
         m_plotOpts( aParent->GetPlotSettings() )
     {
+        m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
         m_reporter = &m_messagesPanel->Reporter();
         initDialog();
 

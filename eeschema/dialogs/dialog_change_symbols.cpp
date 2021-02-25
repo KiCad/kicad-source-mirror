@@ -111,6 +111,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     }
 
     m_messagePanel->SetLazyUpdate( true );
+    m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
     if( aSymbol && aSymbol->IsSelected() )
     {

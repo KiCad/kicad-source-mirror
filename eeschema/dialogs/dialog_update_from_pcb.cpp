@@ -40,6 +40,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
 
 {
     m_messagePanel->SetLabel( _( "Changes To Be Applied" ) );
+    m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
     m_messagePanel->SetLazyUpdate( true );
     m_messagePanel->GetSizer()->SetSizeHints( this );
 

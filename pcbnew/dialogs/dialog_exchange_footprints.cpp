@@ -146,6 +146,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_reset3DModels->SetValue( g_reset3DModels[ m_updateMode ? 0 : 1 ] );
 
     m_MessageWindow->SetLazyUpdate( true );
+    m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.

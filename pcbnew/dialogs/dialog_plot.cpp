@@ -54,6 +54,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_plotOpts = aParent->GetPlotSettings();
     m_DRCWarningTemplate = m_DRCExclusionsWarning->GetLabel();
 
+    m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+
     init_Dialog();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but

@@ -85,9 +85,6 @@ public:
     ///< If the m_showAll option is set, the mask is < 0
     int GetVisibleSeverities() const;
 
-    ///< If true prints Info: at the beginning of each Info severity line (Default)
-    void SetPrintInfo( bool aPrintInfo );
-
     ///< @return the visible severity filter.
     ///< If the m_showAll option is set, the mask is < 0
     void SetShowSeverity( SEVERITY aSeverity, bool aValue );
@@ -126,28 +123,17 @@ private:
 
     void onBtnSaveToFile( wxCommandEvent& event ) override;
 
-    ///< copy of the report, stored for filtering
-    REPORT_LINES m_report;
-
-    ///< Lines to print at the very end of the report, regardless of sorting
-    REPORT_LINES m_reportTail;
-
-    ///< Lines to print at the very beginning of the report, regardless of sorting
-    REPORT_LINES m_reportHead;
-
-    ///< the reporter
+private:
     WX_HTML_PANEL_REPORTER m_reporter;
 
-    ///< message severities to display (mask)
-    int m_severities;
+    REPORT_LINES     m_report;          ///< copy of the report, stored for filtering
+    REPORT_LINES     m_reportTail;      ///< Lines to print at the end, regardless of sorting
+    REPORT_LINES     m_reportHead;      ///< ... and at the beginning, regardless of sorting
 
-    bool m_lazyUpdate;
+    int              m_severities;      ///< message severities to display (mask)
+    bool             m_lazyUpdate;
 
-    ///< Print "Info:" at the front of Info messages (default)
-    bool m_printInfo;
-
-    ///< Use this as the filename instead of /bin/report.txt (default)
-    wxString m_reportFileName;
+    wxString         m_reportFileName;  ///< defaults to the not very useful /bin/report.txt
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__

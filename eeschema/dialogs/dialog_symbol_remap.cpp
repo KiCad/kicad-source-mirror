@@ -73,6 +73,8 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
               "you will be responsible for manually remapping the symbols." );
 
     m_htmlCtrl->AppendToPage( text );
+
+    m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 }
 
 
