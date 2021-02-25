@@ -28,7 +28,7 @@
 #include <wx/log.h>
 
 
-constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
+const wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 
 
 BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
