@@ -100,11 +100,11 @@ public:
         SMART_PADS            = 0x02,   ///< Reroute pad exits
         MERGE_OBTUSE          = 0x04,   ///< Reduce corner cost by merging obtuse segments
         FANOUT_CLEANUP        = 0x08,   ///< Simplify pad-pad and pad-via connections if possible
-        KEEP_TOPOLOGY = 0x10,
-        PRESERVE_VERTEX = 0x20,
+        KEEP_TOPOLOGY         = 0x10,
+        PRESERVE_VERTEX       = 0x20,
         RESTRICT_VERTEX_RANGE = 0x40,
         MERGE_COLINEAR        = 0x80,    ///< Merge co-linear segments
-        RESTRICT_AREA = 0x100
+        RESTRICT_AREA         = 0x100
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -196,20 +196,18 @@ private:
     ITEM* findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const;
 
 private:
-    SHAPE_INDEX_LIST<ITEM*> m_cache;
+    SHAPE_INDEX_LIST<ITEM*>                m_cache;
     std::vector<OPT_CONSTRAINT*>           m_constraints;
     std::unordered_map<ITEM*, CACHED_ITEM> m_cacheTags;
 
-    NODE* m_world;
-    int m_collisionKindMask;
-    int m_effortLevel;
-    bool m_keepPostures;
+    NODE*               m_world;
+    int                 m_collisionKindMask;
+    int                 m_effortLevel;
 
-
-    VECTOR2I m_preservedVertex;
+    VECTOR2I            m_preservedVertex;
     std::pair<int, int> m_restrictedVertexRange;
-    BOX2I m_restrictArea;
-    bool m_restrictAreaIsStrict;
+    BOX2I               m_restrictArea;
+    bool                m_restrictAreaIsStrict;
 };
 
 
@@ -218,9 +216,9 @@ class OPT_CONSTRAINT
 public:
     OPT_CONSTRAINT( NODE* aWorld ) :
         m_world( aWorld )
-        {
-            m_priority = 0;
-        };
+    {
+        m_priority = 0;
+    };
 
     virtual ~OPT_CONSTRAINT()
     {
@@ -235,7 +233,7 @@ public:
 
 protected:
     NODE* m_world;
-    int m_priority;
+    int   m_priority;
 };
 
 class ANGLE_CONSTRAINT_45: public OPT_CONSTRAINT
@@ -275,7 +273,6 @@ public:
 private:
     BOX2I m_allowedArea;
     bool m_allowedAreaStrict;
-
 };
 
 
@@ -306,7 +303,6 @@ public:
                 const SHAPE_LINE_CHAIN& aCurrentPath,
                 const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
-
     VECTOR2I m_v;
 };
 
@@ -325,7 +321,6 @@ public:
                         const SHAPE_LINE_CHAIN& aCurrentPath,
                         const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
-
     int m_start;
     int m_end;
 };

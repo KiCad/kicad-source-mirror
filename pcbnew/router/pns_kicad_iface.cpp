@@ -1623,7 +1623,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     delete m_debugDecorator;
 
-    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR( );
+    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR();
     m_debugDecorator = dec;
 
     if( ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )

@@ -1582,7 +1582,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 void SHOVE::runOptimizer( NODE* aNode )
 {
     OPTIMIZER optimizer( aNode );
-    int optFlags = 0; 
+    int optFlags = 0;
     int n_passes = 0;
 
     PNS_OPTIMIZATION_EFFORT effort = Settings().OptimizerEffort();
@@ -1623,15 +1623,15 @@ void SHOVE::runOptimizer( NODE* aNode )
     }
 
     if( area )
+    {
+        if( Dbg() )
         {
-            if( Dbg() )
-            {
-                Dbg()->AddBox( *area, 1, "opt-area" );
-            }
-
-            optFlags |= OPTIMIZER::RESTRICT_AREA;
-            optimizer.SetRestrictArea( *area, false );
+            Dbg()->AddBox( *area, 1, "opt-area" );
         }
+
+        optFlags |= OPTIMIZER::RESTRICT_AREA;
+        optimizer.SetRestrictArea( *area, false );
+    }
 
     if( Settings().SmartPads() )
         optFlags |= OPTIMIZER::SMART_PADS;

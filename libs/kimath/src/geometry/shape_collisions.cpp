@@ -558,7 +558,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 {
     switch( aA->Type() )
     {
-    case SH_NULL: 
+    case SH_NULL:
         return false;
 
     case SH_RECT:
@@ -612,7 +612,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
-    
+
         case SH_NULL:
             return false;
 
@@ -861,7 +861,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
     {
         return collideSingleShapes( aA, aB, aClearance, aActual, aLocation, aMTV );
     }
-    
+
     if( colliding )
     {
         if( aLocation )

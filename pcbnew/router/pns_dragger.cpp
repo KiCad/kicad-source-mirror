@@ -364,18 +364,18 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
                 if( !ok )
                     return false;
 
-            m_lastNode->Remove( origLine );
+                m_lastNode->Remove( origLine );
                 optimizeAndUpdateDraggedLine( walkLine, origLine, aP );
-        }
+            }
             else
-        {
+            {
                 m_draggedItems.Add( draggedLine );
 
                 m_lastNode->Remove( origLine );
                 m_lastNode->Add( draggedLine );
+            }
         }
     }
-}
 
     return true;
 }

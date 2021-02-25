@@ -1019,7 +1019,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify( bool aRemoveColinear )
                             || SEG( p0, p1 ).Collinear( SEG( p1, pts_unique[n + 2] ) ) ) )
                 n++;
         }
-        
+
         m_points.push_back( p0 );
         m_shapes.push_back( shapes_unique[i] );
 

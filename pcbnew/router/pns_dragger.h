@@ -138,7 +138,7 @@ private:
     int                    m_draggedSegmentIndex;
     bool                   m_dragStatus;
     PNS_MODE               m_currentMode;
-    ITEM_SET m_origViaConnections;
+    ITEM_SET               m_origViaConnections;
     VECTOR2D               m_lastValidPoint;
 
     ///< Contains the list of items that are currently modified by the dragger
@@ -146,7 +146,7 @@ private:
 
     ///< If true, moves the connection lines without maintaining 45 degrees corners
     bool                   m_freeAngleMode;
-    MOUSE_TRAIL_TRACER m_mouseTrailTracer;
+    MOUSE_TRAIL_TRACER     m_mouseTrailTracer;
 };
 
 }

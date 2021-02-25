@@ -298,7 +298,7 @@ private:
      * colliding solid or non-movable items.  Movable segments are ignored, as they'll be
      * handled later by the shove algorithm.
      */
-    bool routeHead( const VECTOR2I& aP, LINE& aNewHead);
+    bool routeHead( const VECTOR2I& aP, LINE& aNewHead );
 
     /**
      * Perform a single routing algorithm step, for the end point \a aP.
@@ -309,10 +309,10 @@ private:
     void routeStep( const VECTOR2I& aP );
 
     ///< Route step walk around mode.
-    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead);
+    bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead );
 
     ///< Route step shove mode.
-    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead);
+    bool rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead );
 
     ///< Route step mark obstacles mode.
     bool rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead );

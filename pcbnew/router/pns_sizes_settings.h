@@ -112,6 +112,6 @@ private:
     std::map<int, int> m_layerPairs;
 };
 
-};
+}
 
 #endif // __PNS_SIZES_SETTINGS_H

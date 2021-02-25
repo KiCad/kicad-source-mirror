@@ -173,7 +173,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     // Double check if it's not on the hull itself as this triggers many unroutable corner cases.
     if( inFirst || inLast )
     {
-	    return false;
+	return false;
     }
 
     enum VERTEX_TYPE { INSIDE = 0, OUTSIDE, ON_EDGE };
@@ -205,8 +205,6 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     SHAPE_LINE_CHAIN pnew( CLine() ), hnew( aObstacle );
 
     std::vector<VERTEX> vts;
-
-    
 
     auto findVertex = [&]( VECTOR2I pos) -> VERTEX*
     {

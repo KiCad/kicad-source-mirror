@@ -102,7 +102,7 @@ void COST_ESTIMATOR::Replace( const LINE& aOldLine, const LINE& aNewLine )
 
 
 bool COST_ESTIMATOR::IsBetter( const COST_ESTIMATOR& aOther, double aLengthTolerance,
-        double aCornerTolerance ) const
+                               double aCornerTolerance ) const
 {
     if( aOther.m_cornerCost < m_cornerCost && aOther.m_lengthCost < m_lengthCost )
         return true;
@@ -195,7 +195,7 @@ void OPTIMIZER::CacheRemove( ITEM* aItem )
 }
 
 
-void OPTIMIZER::ClearCache( bool aStaticOnly  )
+void OPTIMIZER::ClearCache( bool aStaticOnly )
 {
     if( !aStaticOnly )
     {
@@ -299,7 +299,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
         {
             if( (ipNext.x ==aP.x) || ( ip.y == aP.y && ( (ipNext.x >aP.x) == (ip.x <aP.x) ) ) )
                 return true;  // pt on polyground boundary
-	}
+        }
 
         if( (ip.y <aP.y) != (ipNext.y <aP.y) )
         {
@@ -309,9 +309,9 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
                     result = 1 - result;
                 else
                 {
-                    double d = static_cast<double>( ip.x - aP.x ) * 
+                    double d = static_cast<double>( ip.x - aP.x ) *
                                static_cast<double>( ipNext.y - aP.y ) -
-                               static_cast<double>( ipNext.x - aP.x ) * 
+                               static_cast<double>( ipNext.x - aP.x ) *
                                static_cast<double>( ip.y - aP.y );
 
                     if( !d )
@@ -347,7 +347,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
 bool KEEP_TOPOLOGY_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
                                       const SHAPE_LINE_CHAIN& aCurrentPath,
                                       const SHAPE_LINE_CHAIN& aReplacement )
-        {
+{
     SHAPE_LINE_CHAIN encPoly = aOriginLine->CLine().Slice( aVertex1, aVertex2 );
 
     // fixme: this is a remarkably shitty implementation...
@@ -363,20 +363,20 @@ bool KEEP_TOPOLOGY_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aO
         return true;
 
     for( JOINT* j : joints )
-        {
-        if ( j->Net() == aOriginLine->Net() )
+    {
+        if( j->Net() == aOriginLine->Net() )
             continue;
 
-        if ( pointInside2( encPoly, j->Pos() ) )
-            {
+        if( pointInside2( encPoly, j->Pos() ) )
+        {
             bool falsePositive = false;
-            for( int k = 0; k < encPoly.PointCount(); k++)
+            for( int k = 0; k < encPoly.PointCount(); k++ )
             {
-                if(encPoly.CPoint(k) == j->Pos() )
+                if( encPoly.CPoint(k) == j->Pos() )
                 {
                     falsePositive = true;
                     break;
-	        }
+                }
             }
 
             if( !falsePositive )
@@ -409,8 +409,8 @@ void OPTIMIZER::ClearConstraints()
 
 
 void OPTIMIZER::AddConstraint ( OPT_CONSTRAINT *aConstraint )
-    {
-    m_constraints.push_back(aConstraint);
+{
+    m_constraints.push_back( aConstraint );
 }
 
 
@@ -420,7 +420,7 @@ bool OPTIMIZER::checkConstraints( int aVertex1, int aVertex2, LINE* aOriginLine,
 {
     for( OPT_CONSTRAINT* c : m_constraints )
     {
-        if ( !c->Check( aVertex1, aVertex2, aOriginLine, aCurrentPath, aReplacement ) )
+        if( !c->Check( aVertex1, aVertex2, aOriginLine, aCurrentPath, aReplacement ) )
             return false;
     }
 
@@ -590,27 +590,27 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
     bool hasArcs = aLine->ArcCount();
     bool rv = false;
 
-    if ( m_effortLevel & PRESERVE_VERTEX )
+    if( m_effortLevel & PRESERVE_VERTEX )
     {
         auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
         AddConstraint( c );
     }
-    
-    if ( m_effortLevel & RESTRICT_VERTEX_RANGE )
+
+    if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first,
                                                        m_restrictedVertexRange.second );
         AddConstraint( c );
     }
 
-    if ( m_effortLevel & RESTRICT_AREA )
+    if( m_effortLevel & RESTRICT_AREA )
     {
         auto c = new AREA_CONSTRAINT( m_world, m_restrictArea, m_restrictAreaIsStrict );
         AddConstraint( c );
     }
 
 
-    if ( m_effortLevel & KEEP_TOPOLOGY )
+    if( m_effortLevel & KEEP_TOPOLOGY )
     {
         auto c = new KEEP_TOPOLOGY_CONSTRAINT( m_world );
         AddConstraint( c );
@@ -625,7 +625,7 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
         rv |= mergeObtuse( aResult );
 
     if( m_effortLevel & MERGE_COLINEAR )
-    	rv |= mergeColinear( aResult );
+        rv |= mergeColinear( aResult );
 
     // TODO: Fix for arcs
     if( !hasArcs && m_effortLevel & SMART_PADS )
@@ -672,7 +672,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
 
             bool ok = false;
-            if ( !checkColliding( aLine, bypass ) )
+            if( !checkColliding( aLine, bypass ) )
             {
                 //printf("Chk-constraints: %d %d\n", n, n+step+1 );
                 ok = checkConstraints ( n, n + step + 1, aLine, aCurrentPath, bypass );
@@ -712,9 +712,9 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::circleBreakouts( int aWidth, const SHAPE* aS
     for( int angle = 0; angle < 360; angle += 45 )
     {
         const SHAPE_CIRCLE* cir = static_cast<const SHAPE_CIRCLE*>( aShape );
-        SHAPE_LINE_CHAIN l;
-        VECTOR2I p0 = cir->GetCenter();
-        VECTOR2I v0( cir->GetRadius() * M_SQRT2, 0 );
+        SHAPE_LINE_CHAIN    l;
+        VECTOR2I            p0 = cir->GetCenter();
+        VECTOR2I            v0( cir->GetRadius() * M_SQRT2, 0 );
 
         l.Append( p0 );
         l.Append( p0 + v0.Rotate( angle * M_PI / 180.0 ) );
@@ -932,7 +932,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
 
                 DIRECTION_45 dir_bkout( breakout.CSegment( -1 ) );
 
-                if(!connect.SegmentCount())
+                if( !connect.SegmentCount() )
                     continue;
 
                 int ang1 = dir_bkout.Angle( DIRECTION_45( connect.CSegment( 0 ) ) );
@@ -1108,7 +1108,7 @@ int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg,
         SEG s = aCoupled.CSegment( i );
         VECTOR2I projOverCoupled = s.LineProject ( aVertex );
 
-        if( s.ApproxParallel ( aOrigSeg ) )
+        if( s.ApproxParallel( aOrigSeg ) )
         {
             int64_t dist = int64_t{(( projOverCoupled - aVertex ).EuclideanNorm())} - aPair->Width();
 
@@ -1147,15 +1147,15 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
                     const SHAPE_LINE_CHAIN& aRefBypass, const SHAPE_LINE_CHAIN& aCoupled,
                     SHAPE_LINE_CHAIN& aNewCoupled )
 {
-    int vStartIdx[1024]; // fixme: possible overflow
+    int              vStartIdx[1024]; // fixme: possible overflow
     int              nStarts = findCoupledVertices( aRefBypass.CPoint( 0 ), aRefBypass.CSegment( 0 ),
                                                     aCoupled, aPair, vStartIdx );
-    DIRECTION_45 dir( aRefBypass.CSegment( 0 ) );
+    DIRECTION_45     dir( aRefBypass.CSegment( 0 ) );
 
-    int64_t bestLength = -1;
-    bool found = false;
+    int64_t          bestLength = -1;
+    bool             found = false;
     SHAPE_LINE_CHAIN bestBypass;
-    int si, ei;
+    int              si, ei;
 
     for( int i=0; i< nStarts; i++ )
     {
@@ -1240,7 +1240,7 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
 
             deltaUni = aPair->CoupledLength ( newRef, coupledPath ) - clenPre + budget;
 
-            if ( coupledBypass( m_world, aPair, aTryP, newRef, bypass, coupledPath, newCoup ) )
+            if( coupledBypass( m_world, aPair, aTryP, newRef, bypass, coupledPath, newCoup ) )
             {
                 deltaCoupled = aPair->CoupledLength( newRef, newCoup ) - clenPre + budget;
 
@@ -1253,7 +1253,7 @@ bool OPTIMIZER::mergeDpStep( DIFF_PAIR* aPair, bool aTryP, int step )
                     return true;
                 }
             }
-            else if( deltaUni >= 0 &&  verifyDpBypass ( m_world, aPair, aTryP, newRef, coupledPath ) )
+            else if( deltaUni >= 0 && verifyDpBypass( m_world, aPair, aTryP, newRef, coupledPath ) )
             {
                 newRef.Simplify();
                 coupledPath.Simplify();
@@ -1389,7 +1389,7 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
     int da = a.Length();
     int db = b.Length();
 
-    if ( da < db )
+    if( da < db )
         guide = a;
     else
         guide = b;
@@ -1401,9 +1401,9 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
     int current = step;
     SHAPE_LINE_CHAIN snew;
 
-    while (step > 1)
+    while( step > 1 )
     {
-        LINE l ( cur );
+        LINE l( cur );
 
         snew.Clear();
         snew.Append( a.A );
@@ -1444,27 +1444,27 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
 {
     LINE tmp;
 
-    if ( aNewLine.SegmentCount() < 3 )
+    if( aNewLine.SegmentCount() < 3 )
         return;
 
     SHAPE_LINE_CHAIN current ( aNewLine.CLine() );
 
-    for (int step = 0; step < 3; step++)
+    for( int step = 0; step < 3; step++)
     {
         current.Simplify();
 
-        for ( int i = 0; i <= current.SegmentCount() - 3; i++)
+        for( int i = 0; i <= current.SegmentCount() - 3; i++)
         {
             SHAPE_LINE_CHAIN l_in, l_out;
 
             l_in = current.Slice(i, i+3);
 
-            for (int dir = 0; dir < 1; dir++)
+            for( int dir = 0; dir < 1; dir++)
             {
-                if(  tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
+                if( tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
                 {
                     SHAPE_LINE_CHAIN opt = current;
-                    opt.Replace(i, i+3, l_out);
+                    opt.Replace(i, i + 3, l_out);
                     auto optArea = std::abs(shovedArea( aOldLine, opt ));
                     auto prevArea = std::abs(shovedArea( aOldLine, current ));
 

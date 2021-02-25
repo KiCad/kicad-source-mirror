@@ -98,7 +98,7 @@ public:
     void SetFillColor( const COLOR4D& aColor );
     void SetStrokeColor( const COLOR4D& aColor );
     void SetGlyphSize( const VECTOR2D aSize );
-    
+
     void SetLineWidth( double aLineWidth );
 
 private:
