@@ -1,20 +1,21 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020.
+# Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2021-02-25 17:52+0000\n"
+"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -194,9 +195,9 @@ msgstr ""
 "Uw OpenGL versie wordt niet ondersteund. De minimaal benodigde versie is 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Weergavetijd %.3f s"
+msgstr "Laatste rendertijd %.0f s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -490,11 +491,13 @@ msgstr "Clip zeefdruk op via annulus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Gebruik kale koperkleur voor ongeplateerd koper"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
+"Gebruik verschillende kleuren voor geplateerd en ongeplateerd koper. "
+"(Langzaam)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -540,9 +543,8 @@ msgid "Other Options"
 msgstr "Andere opties"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-kartelvorming"
+msgstr "Anti-kartelvorming:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
 msgid "Disabled"
@@ -567,9 +569,8 @@ msgstr ""
 "passen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
-#, fuzzy
 msgid "Selection color:"
-msgstr "Selectiekleuren"
+msgstr "Selectie kleuren:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -631,9 +632,8 @@ msgid "Recursion Level"
 msgstr "Recursief niveau"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "Shadows:"
-msgstr "Schaduwen"
+msgstr "Schaduwen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
 msgid ""
@@ -650,9 +650,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Willekeurige richtingsfactor van de gegoten stralen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
-#, fuzzy
 msgid "Reflections:"
-msgstr "Weerkaatsing"
+msgstr "Weerkaatsingen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -667,9 +666,8 @@ msgstr ""
 "aantal niveaus verbetert de resultaten, vooral op zeer transparante borden)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
-#, fuzzy
 msgid "Refractions:"
-msgstr "Refracties"
+msgstr "Refracties:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -681,19 +679,16 @@ msgstr "Aantal keer dat een straal reflecterende objecten kan raken"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "Lichten configuratie"
+msgstr "Lichten Configuratie"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
-#, fuzzy
 msgid "Ambient camera light:"
-msgstr "Omringend cameralicht"
+msgstr "Omringend cameralicht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
-#, fuzzy
 msgid "Top light:"
-msgstr "Top licht"
+msgstr "Top licht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
 #, fuzzy
@@ -711,44 +706,36 @@ msgid "Azimuth (degrees)"
 msgstr "Azimuth (graden)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
-#, fuzzy
 msgid "1:"
-msgstr "1: 1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
-#, fuzzy
 msgid "2:"
-msgstr "R2:"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
-#, fuzzy
 msgid "3:"
-msgstr "3:2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
 msgid "Reset to defaults"
@@ -759,9 +746,8 @@ msgid "3D Display Options"
 msgstr "3D-weergave-opties"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D Viewer"
+msgstr "KiCad 3D Viewer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1337,23 +1323,20 @@ msgid "Export to Clipboard"
 msgstr "Exporteren naar klembord"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Symbool wordt gevuld"
+msgstr "Symbool (.lib-bestand)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod-bestand)"
+msgstr "Footprint (.kicad_mod-bestand)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps-bestand)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Logo voor titelblok (.kicad_wks-bestand)"
+msgstr "Werkblad (.kicad_wks-bestand)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2184,14 +2167,12 @@ msgid "Reset Grid Origin"
 msgstr "Grid Origin opnieuw instellen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Gebruikers Raster Grootte"
+msgstr "Raster Grootte Opnieuw Instellen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Stel in op 0 om standaardwaarden te gebruiken"
+msgstr "Lijst van raster groottes opnieuw instellen"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2274,7 +2255,7 @@ msgstr "Selecteer Instellingenpad"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Hoe zou je KiCad willen configureren?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
@@ -2282,13 +2263,12 @@ msgid "Import settings from a previous version at:"
 msgstr "Instellingen importeren uit een eerdere versie (geen gevonden)"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Stem de scheeftrekking van een differentieel paar af"
+msgstr "Selecteer een ander pad"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Het geselecteerde pad bevat geen geldige KiCad-instellingen!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 #, fuzzy
@@ -2300,11 +2280,12 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Indien aangevinkt, worden de symbool- en footprintbibliotheektabellen uit de "
+"vorige versie in deze versie geïmporteerd"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Herstel standaardinstellingen"
+msgstr "Starten met standaardinstellingen"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
@@ -3174,7 +3155,7 @@ msgstr "Sneltoetsbestand importeren:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Actie | Standaard sneltoets | Omschrijving"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
@@ -3246,13 +3227,12 @@ msgid "Left button drag:"
 msgstr "Slepen met rechterknop:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Teken een rechthoek"
+msgstr "Teken een selectierechthoek"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Sleep geselecteerde objecten; teken anders een selectierechthoek"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 #, fuzzy
@@ -3302,19 +3282,16 @@ msgstr "Slepen met rechterknop:"
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 #, fuzzy
 msgid "Scroll Gestures"
-msgstr "Gebaren"
+msgstr "Scroll Bewegingen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
 #, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
-"Pan naar links / rechts met horizontale beweging van het touchpad of "
-"scrollwiel"
+msgstr "Verticale touchpad of scrollwiel beweging:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: pcbnew/dialogs/panel_edit_options_base.cpp:140
@@ -3343,9 +3320,8 @@ msgid "Pan up/down:"
 msgstr "Omhoog / omlaag pannen:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:209
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Pan links / rechts:"
+msgstr "Links / rechts pannen:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:243
 #, fuzzy
