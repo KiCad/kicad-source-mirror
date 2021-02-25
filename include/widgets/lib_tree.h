@@ -174,6 +174,8 @@ protected:
     wxTextCtrl*      m_query_ctrl;
     wxDataViewCtrl*  m_tree_ctrl;
     wxHtmlWindow*    m_details_ctrl;
+
+    LIB_ID           m_last_libid;
 };
 
 ///< Custom event sent when a new component is preselected

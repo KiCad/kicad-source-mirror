@@ -117,9 +117,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
         // Force an update of the adapter with the empty text to ensure preselect is done
         Regenerate( false );
     }
-
-    // There may be a part preselected in the model. Make sure it is displayed.
-    postPreselectEvent();
+    else
+    {
+        // There may be a part preselected in the model. Make sure it is displayed.
+        // Regenerate does this in the other branch
+        postPreselectEvent();
+    }
 
     Layout();
     sizer->Fit( this );
@@ -374,7 +377,8 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
 void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
-    postPreselectEvent();
+    if( !m_tree_ctrl->IsFrozen() )
+        postPreselectEvent();
 }
 
 

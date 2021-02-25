@@ -19,6 +19,7 @@
  */
 
 #include <widgets/footprint_preview_widget.h>
+#include <lib_id.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <kiway.h>
@@ -87,15 +88,21 @@ void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
 
 void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprint( const LIB_ID& aFPID )
 {
-    if( !m_prev_panel )
+    if( !m_prev_panel || m_libid == aFPID )
         return;
 
     wxBusyCursor busy;
 
     if( m_prev_panel->DisplayFootprint( aFPID ) )
+    {
         ClearStatus();
+        m_libid = aFPID;
+    }
     else
+    {
         SetStatusText( _( "Footprint not found." ) );
+        m_libid.clear();
+    }
 }
 
 

@@ -24,12 +24,12 @@
 #include <wx/panel.h>
 #include <functional>
 #include <import_export.h>
+#include <lib_id.h>
 
 #include <gal/color4d.h>
 
 class FOOTPRINT_LOAD_EVENT;
 class FOOTPRINT_PREVIEW_PANEL_BASE;
-class LIB_ID;
 class KIWAY;
 class wxStaticText;
 class wxSizer;
@@ -77,6 +77,7 @@ private:
     wxPanel*      m_statusPanel;
     wxSizer*      m_statusSizer;
     wxSizer*      m_outerSizer;
+    LIB_ID        m_libid;
 
 };
 
