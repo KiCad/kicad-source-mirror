@@ -350,13 +350,17 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         return;
     }
 
-    for( const REPORT_LINE& l : m_report )
+    for( REPORT_LINES section : { m_reportHead, m_report, m_reportTail } )
     {
-        wxString s = generatePlainText( l );
+        for( const REPORT_LINE& l : section )
+        {
+            wxString s = generatePlainText( l );
 
-        ConvertSmartQuotesAndDashes( &s );
-        f.Write( s );
+            ConvertSmartQuotesAndDashes( &s );
+            f.Write( s );
+        }
     }
+
     m_reportFileName = fn.GetFullPath();
     f.Close();
 }
