@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
 "PO-Revision-Date: 2021-02-25 09:26+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -20475,11 +20475,11 @@ msgstr "Ονοματοδοσία"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:278
 msgid "No PCB to reannotate!"
-msgstr ""
+msgstr "Δεν υπάρχει PCB για επανα-σχολιασμό!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:289
 msgid "PCB and schematic successfully reannotated"
-msgstr ""
+msgstr "Επιτυχής επανα-σχολιασμός του PCB και του σχηματικού"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 #, c-format
@@ -20702,7 +20702,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:628
 msgid "Reannotate anyway?"
-msgstr ""
+msgstr "Επανα-σχολιασμός ούτως ή άλλως;"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:661
 msgid ""
@@ -20942,7 +20942,7 @@ msgstr "Προσδιορισμοί Αναφοράς"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "Γεωγραφικός Επανα-σχολιασμός"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:47
 msgid "Board Setup"
@@ -25797,7 +25797,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Διόρθωση όλων των τμημάτων με το πάτημα"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -26281,6 +26281,8 @@ msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 msgstr ""
+"Αφαίρεση ξεκλείδωτων αποτυπωμάτων που δεν συνδέονται με σχηματικό σύμβολο "
+"από την πλακέτα."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
@@ -26927,6 +26929,11 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
+"Οι εισαγμένες ρυθμίσεις έχουν λιγότερα επίπεδα χαλκού από την τρέχουσα "
+"πλακέτα (%i αντί για %i).\n"
+"\n"
+"Συνέχεια και διαγραφή των επιπλέων εσωτερικών επιπέδων χαλκού από την "
+"τρέχουσα πλακέτα;"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:870
 msgid "Inner Layers To Be Deleted"
