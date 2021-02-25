@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-24 22:37+0000\n"
+"PO-Revision-Date: 2021-02-25 17:52+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3173,7 +3173,7 @@ msgstr ""
 
 #: common/dialogs/panel_hotkeys_editor.cpp:192
 msgid "Import Hotkeys File:"
-msgstr "Import Tastaturbefehledatei:"
+msgstr "Tastaturbefehlsdatei importieren:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
@@ -8126,20 +8126,18 @@ msgstr "Neue Bibliotheksreferenz"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr "Übersicht Verwaisungen"
+msgstr "Waisen zuordnen"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Wenn einige Bauteile verwaist sind (das verlinkte Symbol kann nicht "
-"gefunden\n"
-"werden), wird versucht ein ein passendes mit einem gleichen Namen in einer "
-"der\n"
-"geladenen Symbolbibliotheken zu finden."
+"Wenn einige Bauteile verwaist sind (das verlinkte Symbol kann nicht gefunden "
+"werden),\n"
+"versuchen einen namensgleichen Kandidaten in einer der geladenen "
+"Symbolbibliotheken zu finden."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -17542,8 +17540,7 @@ msgstr "Projektschaltplan bearbeiten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:108
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr ""
-"Die globalen und/oder projektspezifischen Schaltplan-Bauteilbibliotheken "
-"bearbeiten"
+"Die Schaltzeichen-Bibliotheken (global oder projektspezifisch) bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:111
 msgid "Edit the project PCB design"
@@ -17552,8 +17549,8 @@ msgstr "Das Leiterplatten-Design des Projekts bearbeiten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:114
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr ""
-"Die globalen und/oder der projektspezifischen Leiterplatten-Footprint-"
-"Bibliotheken bearbeiten"
+"Die Footprint-Bibliotheken (global oder projektspezifisch) für Leiterplatten "
+"bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:117
 msgid "Preview Gerber files"
@@ -17562,8 +17559,7 @@ msgstr "Gerberdateien prüfen und betrachten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:121
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr ""
-"Konvertiert Bitmap-Bilder in Schaltplan-Bauteile oder Leiterplatten-"
-"Footprints"
+"Konvertiert Bitmap-Bilder in Schaltplansymbole oder Leiterplatten-Footprints"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:125
 msgid "Show tools for calculating resistance, current capacity, etc."
