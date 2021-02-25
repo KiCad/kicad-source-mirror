@@ -264,8 +264,6 @@ void FP_CACHE::Load()
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_footprints.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
-
-                m_cache_timestamp += fn.GetTimestamp();
             }
             catch( const IO_ERROR& ioe )
             {
@@ -275,6 +273,8 @@ void FP_CACHE::Load()
                 cacheError += ioe.What();
             }
         } while( dir.GetNext( &fullName ) );
+
+        m_cache_timestamp = GetTimestamp( m_lib_raw_path );
 
         if( !cacheError.IsEmpty() )
             THROW_IO_ERROR( cacheError );
