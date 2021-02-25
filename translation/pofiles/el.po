@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-25 10:54+0000\n"
+"PO-Revision-Date: 2021-02-25 11:40+0000\n"
 "Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -24001,9 +24001,8 @@ msgid "Design rules"
 msgstr "Κανόνες σχεδίασης"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Predefined track and via dimensions"
-msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και via:"
+msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και via"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -24451,9 +24450,8 @@ msgid "front side"
 msgstr "μπροστινή όψη"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:693
-#, fuzzy
 msgid "width"
-msgstr "πλάτος %s"
+msgstr "πλάτος"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:699
 #: pcbnew/dialogs/dialog_pad_properties.cpp:705
@@ -24570,9 +24568,8 @@ msgstr ""
 "χαλκού σε τουλάχιστον ένα στρώμα."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1314
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Πολύ μεγάλη τιμή για δέλτα μέγεθος έδρας"
+msgstr "Πολύ μεγάλη τιμή για δέλτα μέγεθος pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1323
 msgid "Warning: Through hole pad has no hole."
@@ -24631,14 +24628,12 @@ msgstr ""
 "πολύγωνο."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1409
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Ιδιότητες Έδρας"
+msgstr "Σφάλματα Ιδιοτήτων Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1410
-#, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "Ιδιότητες Έδρας"
+msgstr "Προειδοποιήσεις Ιδιοτήτων Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1643
 msgid "Modify pad"
@@ -24672,18 +24667,16 @@ msgid "Through-hole"
 msgstr "Διαμπερής τρύπα"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
-#, fuzzy
 msgid "Edge Connector"
-msgstr "Σύνδεσμος"
+msgstr "Ακριανός Σύνδεσμος"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
 msgid "NPTH, Mechanical"
 msgstr "Μηχανική τρύπα (NPTH)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40
-#, fuzzy
 msgid "SMD Aperture"
-msgstr "Άνοιγμα"
+msgstr "Άνοιγμα SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:46
 msgid "Pad number:"
@@ -25306,9 +25299,8 @@ msgid "Board setup"
 msgstr "Ρύθμιση πλακέτας"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "Ρύθμιση Πλακέτας..."
+msgstr "Αρχείο > Ρύθμιση Πλακέτας..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -25461,9 +25453,8 @@ msgstr ""
 "γραμμών τους"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot texts"
-msgstr "Χρήση γραμματοσειράς Pcbnewγια σχεδίαση κειμένων"
+msgstr "Χρήση γραμματοσειράς KiCad για σχεδίαση κειμένων"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 #, fuzzy
@@ -26095,14 +26086,12 @@ msgid "Changing the net will also update %lu connected pads to %s."
 msgstr "Η αλλαγή του net θα ενημερώσει επίσης %lu συνδεδεμένα pads σε %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
-#, fuzzy
 msgid "Change Nets"
-msgstr "Αλλαγή Τύπου"
+msgstr "Αλλαγή των Net"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "Μένει ως έχει"
+msgstr "Τα Net να μείνουν ίδια"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:388
 #, fuzzy
@@ -26133,6 +26122,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Αυτόματη αλλαγή του net αυτού του via όταν τα pad ή οι ζώνες που αγγίζει "
+"αλλάζουν"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -26173,9 +26164,8 @@ msgid "Via diameter:"
 msgstr "Διάμετρος via:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Οπές Via"
+msgstr "Οπές Via:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -27696,13 +27686,12 @@ msgid "Check rule syntax"
 msgstr "Ελέγξτε τη σύνταξη κανόνων"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
 msgstr ""
-"Το κείμενο δεν μπορεί να διαβαστεί με πάχος μεγαλύτερο από\n"
-"το 1/4 του πλάτους ή του ύψους του."
+"Το κείμενο δεν μπορεί να διαβαστεί με πάχος μεγαλύτερο από το 1/4 του "
+"πλάτους ή του ύψους του."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -28691,7 +28680,6 @@ msgid "noname"
 msgstr "ανώνυμο"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -28699,11 +28687,11 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Αν οι ζώνες αυτής της πλακέτας ξαναγεμίσουν θα γίνει χρήση της ρύθμισης "
-"Διάκενο Άκρης Χαλκού\n"
-" (βλ. Ρύθμιση Πλακέτας > Κανόνες Σχεδίασης). Αυτό μπορεί\n"
-"να καταλήγει σε διαφορετικά γεμίσματα από τις προηγούμενες εκδόσεις του "
-"Kicad που χρησιμοποιούσαν\n"
-"το πάχος γραμμής του ορίου πλακέτας στο επίπεδο Όρια Άκρων."
+"Διάκενο Άκρης Χαλκού (βλ. Ρύθμιση Πλακέτας > Κανόνες Σχεδίασης > "
+"Περιορισμοί).\n"
+"Αυτό μπορεί να καταλήγει σε διαφορετικά γεμίσματα από τις προηγούμενες "
+"εκδόσεις του Kicad που χρησιμοποιούσαν το πάχος γραμμής του ορίου πλακέτας "
+"στο επίπεδο Όρια Άκρων."
 
 #: pcbnew/files.cpp:540
 msgid "Edge Clearance Warning"
@@ -28733,12 +28721,10 @@ msgstr ""
 "αποτυπώματος για το συγκεκριμένο έργο: %s"
 
 #: pcbnew/files.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
-"Σφάλμα κατά τη δημιουργία καταλόγου βιβλιοθήκης αποτυπωμάτων για το έργο:\n"
-"\n"
-"%s"
+"Σφάλμα κατά τη δημιουργία καταλόγου βιβλιοθήκης αποτυπωμάτων για το έργο: %s"
 
 #: pcbnew/files.cpp:926 pcbnew/files.cpp:1072
 #, c-format
@@ -28914,29 +28900,29 @@ msgid "Edit Zone"
 msgstr "Επεξεργασία Zone"
 
 #: pcbnew/footprint_editor_utils.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει βιβλιοθήκη με το\n"
-"ψευδώνυμο \"%s\". Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων\n"
-"για να επεξεργαστείτε τη διαμόρφωση."
+"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει βιβλιοθήκη με το ψευδώνυμο «%s».\n"
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
+"τη διαμόρφωση."
 
 #: pcbnew/footprint_editor_utils.cpp:284
 msgid "Library not found in footprint library table."
 msgstr "Βιβλιοθήκη δεν βρέθηκε στον πίνακα βιβλιοθηκών αποτυπωμάτων."
 
 #: pcbnew/footprint_editor_utils.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη\n"
-"στην τρέχουσα διαμόρφωση. Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών "
-"Αποτυπωμάτων για να \n"
-"επεξεργαστείτε τη διαμόρφωση."
+"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη στην τρέχουσα "
+"διαμόρφωση.\n"
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
+"τη διαμόρφωση."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:940
 msgid "Footprint library not enabled."
@@ -29114,13 +29100,12 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων\n"
-"\"%s\".\n"
+"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων «%s». "
 "Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
 "τη διαμόρφωση."
 
@@ -32633,14 +32618,12 @@ msgid "Close the in progress outline"
 msgstr "Κλείσιμο το υπο επεξεργασία περίγραμμα"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Limit Lines to 45 deg"
-msgstr "Περ&ιορισμός γραμμών γραφικών σε Οριζ, Καθ και 45 μοίρες"
+msgstr "Περιορισμός γραμμών γραφικών σε 45 μοίρες"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Limit graphic lines to H, V and 45 degrees"
-msgstr "Περ&ιορισμός γραμμών γραφικών σε Οριζ, Καθ και 45 μοίρες"
+msgstr "Περιορισμός γραμμών γραφικών σε Οριζ, Καθ και 45 μοίρες"
 
 #: pcbnew/tools/pcb_actions.cpp:229
 msgid "Design Rules Checker"
@@ -32659,7 +32642,6 @@ msgid "Opens the selected footprint in the Footprint Editor"
 msgstr "Άνοιγμα του επιλεγμένου αποτυπώματος στον Επεξεργαστή Αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:246
-#, fuzzy
 msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
@@ -32668,9 +32650,8 @@ msgstr ""
 "μετακίνηση"
 
 #: pcbnew/tools/pcb_actions.cpp:257
-#, fuzzy
 msgid "Move with Reference"
-msgstr "Μετακίνηση Αναφοράς"
+msgstr "Μετακίνηση με Αναφορά"
 
 #: pcbnew/tools/pcb_actions.cpp:258
 #, fuzzy
@@ -32678,9 +32659,8 @@ msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Μετακίνηση των επιλεγμένων αντικειμένων κατά μία ακριβή απόσταση"
 
 #: pcbnew/tools/pcb_actions.cpp:263
-#, fuzzy
 msgid "Copy with Reference"
-msgstr "Μετακίνηση Αναφοράς"
+msgstr "Μετακίνηση με Αναφορά"
 
 #: pcbnew/tools/pcb_actions.cpp:264
 #, fuzzy
@@ -32732,9 +32712,8 @@ msgid "Change Track Width"
 msgstr "Αλλαγή Πλάτους Δρόμου"
 
 #: pcbnew/tools/pcb_actions.cpp:311
-#, fuzzy
 msgid "Updates selected track & via sizes"
-msgstr "Ορισμός προσαρμοσμένων μεγεθών δρόμων και via"
+msgstr "Ενημέρωση μεγεθών των επιλεγμένων διαδρομών & via"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -32809,14 +32788,12 @@ msgid "Footprint Properties..."
 msgstr "Ιδιότητες Αποτυπώματος..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
 msgstr "Επεξεργασία ιδιοτήτων αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:390
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "Εμφάνιση του Ελεγκτή Κανόνων Σχεδίασης"
+msgstr "Εμφάνιση παραθύρου του ελεγκτή αποτυπωμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:397
 msgid "Update Footprint..."
@@ -32836,9 +32813,8 @@ msgstr ""
 "Ενημέρωση αποτυπωμάτων για να συμπεριλάβετε τυχόν αλλαγές από τη βιβλιοθήκη"
 
 #: pcbnew/tools/pcb_actions.cpp:409
-#, fuzzy
 msgid "Remove Unused Pads..."
-msgstr "Επαναρίθμηση εδρών..."
+msgstr "Αφαίρεση Αχρησιμοποίητων Pad…"
 
 #: pcbnew/tools/pcb_actions.cpp:410
 msgid ""
@@ -32872,10 +32848,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Επεξεργασία Ιδιοτήτων Δρόμων & Via..."
 
 #: pcbnew/tools/pcb_actions.cpp:431
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr ""
-"Επεξεργασία ιδιοτήτων Κειμένου και γραφικών, καθολικά για όλη την πλακέτα"
+msgstr "Επεξεργασία ιδιοτήτων διαδρόμου και via, καθολικά για όλη την πλακέτα"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Text and graphics properties globally across board"
@@ -32949,18 +32923,16 @@ msgid "Create line of specified length for microwave applications"
 msgstr "Δημιουργία γραμμής ορισμένου μήκους για εφαρμογές μικροκυμάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Copy Pad Properties to Default"
-msgstr "Αντιγραφή Ιδιοτήτων Έδρας"
+msgstr "Αντιγραφή Ιδιοτήτων Pad σε Προεπιλεγμένο"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy current pad's properties"
 msgstr "Αντιγραφή ιδιοτήτων τρέχουσας έδρας"
 
 #: pcbnew/tools/pcb_actions.cpp:495
-#, fuzzy
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Αντιγραφή Τρεχουσών Ρυθμίσεων σε Έδρες"
+msgstr "Επικόλληση Προεπιλεγμένων Ιδιοτήτων Pad σε Επιλεγμένο"
 
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Replace the current pad's properties with those copied earlier"
@@ -32969,9 +32941,8 @@ msgstr ""
 "νωρίτερα"
 
 #: pcbnew/tools/pcb_actions.cpp:501
-#, fuzzy
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Σπρώξιμο Ιδιότητων Έδρας..."
+msgstr "Σπρώξιμο Ιδιότητων Pad σε Άλλα Pad…"
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Copy the current pad's properties to other pads"
@@ -33004,9 +32975,8 @@ msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr "Μετατρέπει προσαρμοσμένες έδρες σε ένα σύνολο γραφικών σχημάτων"
 
 #: pcbnew/tools/pcb_actions.cpp:526
-#, fuzzy
 msgid "Finish Pad Edit"
-msgstr "Επεξεργασία Πεδίου"
+msgstr "Τέλος Επεξεργασίας Pad"
 
 #: pcbnew/tools/pcb_actions.cpp:527
 msgid "Regroups all touching graphic shapes into the edited pad"
@@ -33116,7 +33086,7 @@ msgstr "Αλλαγή Πλάτους Δρόμου (Επόμενο)"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "Αλλαγή πλάτους διαδρόμου σε επόμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -33124,7 +33094,7 @@ msgstr "Αλλαγή Πλάτους Δρόμου (Προηγούμενο)"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "Αλλαγή πλάτους διαδρόμου σε προηγούμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -33132,7 +33102,7 @@ msgstr "Αύξηση Μεγέθους Via"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Αλλαγή μεγέθους via σε επόμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -33140,7 +33110,7 @@ msgstr "Μείωση Μεγέθους Via"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Αλλαγή μεγέθους via σε προηγούμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -33187,31 +33157,30 @@ msgid "Toggle Lock"
 msgstr "Εναλλαγή κλειδώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Εμφάνιση φωλιάς συνδέσεων του επιλεγμένου στοιχείου"
+msgstr "Κλείδωμα ή ξεκλείδωμα επιλεγμένων αντικειμένων"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "Αποτροπή μετακίνησης και/ή αλλαγής μεγέθους αντικειμένων στον καμβά"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
+"Να επιτρέπεται η μετακίνηση και/ή αλλαγή μεγέθους αντικειμένων στον καμβά"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Μετακίνηση των επιλεγμένων αντικειμένων κατά μία ακριβή απόσταση"
+msgstr ""
+"Ομαδοποίηση των επιλεγμένων αντικειμένων ώστε να αντιμετωπίζονται σαν ένα"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
 msgstr "Αποομαδοποίηση"
 
 #: pcbnew/tools/pcb_actions.cpp:666
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "δεν έχει επιλεχθεί βιβλιοθήκη"
+msgstr "Αποεπιλογή τυχόν επιλεγμένων ομάδων"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -33329,7 +33298,7 @@ msgstr "Αναστροφή Προβολής Πλακέτας"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "Προβολή πλακέτας από την αντίθετη πλευρά"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
@@ -33386,9 +33355,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Εμφάνιση κειμένων αποτυπώματος σε λειτουργία γραμμής"
 
 #: pcbnew/tools/pcb_actions.cpp:808
-#, fuzzy
 msgid "Automatically zoom to fit"
-msgstr "Αυτόματη Δρομολόγηση Δικτύου"
+msgstr "Αυτόματη μεγέθυνση για προσαρμογή"
 
 #: pcbnew/tools/pcb_actions.cpp:808
 msgid "Zoom to fit when changing footprint"
@@ -33614,11 +33582,11 @@ msgstr "Εμφάνιση ανάλυσης περιορισμών για το ε�
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 msgid "Geographical Reannotate..."
-msgstr ""
+msgstr "Γεωγραφικός Επανα-σχολιασμός…"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 msgid "Reannotate PCB in geographical order"
-msgstr ""
+msgstr "Επανα-σχολιασμός του PCB με γεωγραφική σειρά"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Repair Board"
@@ -33965,7 +33933,6 @@ msgid "Position Relative"
 msgstr "Σχετική Θέση"
 
 #: pcbnew/tools/position_relative_tool.cpp:169
-#, fuzzy
 msgid "Click on reference item..."
 msgstr "Επιλογή αντικειμένου αναφοράς..."
 
@@ -34554,18 +34521,16 @@ msgid "Hide all other netclasses"
 msgstr "Απόκρυψη όλων των άλλων netclasses"
 
 #: pcbnew/widgets/appearance_controls.cpp:2218
-#, fuzzy
 msgid "Save preset..."
-msgstr "Αποθήκευση Ως..."
+msgstr "Αποθήκευση προεπιλογής..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2219
 msgid "Delete preset..."
 msgstr "Διαγραφή προεπιλογής..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2297
-#, fuzzy
 msgid "Layer preset name:"
-msgstr "Επιλογή επιπέδου:"
+msgstr "Προεπιλεγμένο όνομα επιπέδου:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2297
 msgid "Save Layer Preset"
@@ -34573,7 +34538,7 @@ msgstr "Αποθήκευση Προεπιλεγμένης Ρύθμισης Επ�
 
 #: pcbnew/widgets/appearance_controls.cpp:2336
 msgid "Presets"
-msgstr "Προκαθορισμένα"
+msgstr "Προεπιλογές"
 
 #: pcbnew/widgets/appearance_controls.cpp:2348
 msgid "Delete Preset"
