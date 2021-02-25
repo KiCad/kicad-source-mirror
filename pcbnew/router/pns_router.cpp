@@ -435,7 +435,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
                     clearance = aNode->GetClearance( currentItem, itemToMark );
 
                 if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer() )
-                    itemToMark->SetLayer( currentItem->Layer() );
+                    tmp->SetLayer( currentItem->Layer() );
 
                 if( itemToMark->Kind() == ITEM::SOLID_T )
                 {
