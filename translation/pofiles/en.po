@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-23 10:42-0800\n"
+"POT-Creation-Date: 2021-02-25 09:53-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1959,6 +1959,9 @@ msgstr "| Action | Default Hotkey | Description"
 msgid "Cmd"
 msgstr "Cmd"
 
+msgid "Only one action can be assigned to each vertical scroll setting"
+msgstr "Only one action can be assigned to each vertical scroll setting"
+
 msgid "Pan and Zoom"
 msgstr "Pan and Zoom"
 
@@ -2034,6 +2037,9 @@ msgstr "Scroll Gestures"
 
 msgid "Vertical touchpad or scroll wheel movement:"
 msgstr "Vertical touchpad or scroll wheel movement:"
+
+msgid "Only one action can be assigned to each column"
+msgstr "Only one action can be assigned to each column"
 
 msgid "--"
 msgstr "--"
@@ -2824,6 +2830,12 @@ msgstr "Paste"
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Paste clipboard cells to matrix at current cell"
 
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Delete selected cells"
+msgstr "Delete selected cells"
+
 msgid "Select All"
 msgstr "Select All"
 
@@ -3579,9 +3591,6 @@ msgstr "Duplicate"
 
 msgid "Duplicates the selected item(s)"
 msgstr "Duplicates the selected item(s)"
-
-msgid "Delete"
-msgstr "Delete"
 
 msgid "Deletes selected item(s)"
 msgstr "Deletes selected item(s)"
@@ -4888,6 +4897,9 @@ msgstr ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 
+msgid "Reset the list of BOM generator scripts to the default settings"
+msgstr "Reset the list of BOM generator scripts to the default settings"
+
 msgid "Bill of Material"
 msgstr "Bill of Material"
 
@@ -5629,6 +5641,10 @@ msgstr "Errors and Warnings Only"
 
 msgid "Errors, Warnings and Exclusions"
 msgstr "Errors, Warnings and Exclusions"
+
+#, c-format
+msgid "%d symbol(s) require annotation.<br><br>"
+msgstr "%d symbol(s) require annotation.<br><br>"
 
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC cancelled by user.<br><br>"
@@ -7731,6 +7747,41 @@ msgstr ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 
+msgid "Left Click Mouse Commands"
+msgstr "Left Click Mouse Commands"
+
+msgid ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Ctrl."
+msgstr ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Ctrl."
+
+msgid "Add item(s) to selection."
+msgstr "Add item(s) to selection."
+
+msgid "Toggle selected state of item(s)."
+msgstr "Toggle selected state of item(s)."
+
+msgid "Alt+Shift"
+msgstr "Alt+Shift"
+
+msgid "Remove item(s) from selection."
+msgstr "Remove item(s) from selection."
+
+msgid "Clarify selection from menu."
+msgstr "Clarify selection from menu."
+
+msgid ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Cmd."
+msgstr ""
+"Left click (and drag) actions depend on 3 modifier keys:\n"
+"Alt, Shift and Cmd."
+
+msgid "Cmd+Shift"
+msgstr "Cmd+Shift"
+
 msgid "Symbol Field Automatic Placement"
 msgstr "Symbol Field Automatic Placement"
 
@@ -8653,32 +8704,6 @@ msgstr "Bus"
 msgid "Bus Entry Type"
 msgstr "Bus Entry Type"
 
-msgid "Power symbol"
-msgstr "Power symbol"
-
-msgid "flags"
-msgstr "flags"
-
-msgid "Missing parent"
-msgstr "Missing parent"
-
-msgid "Undefined!!!"
-msgstr "Undefined!!!"
-
-msgid "<Unknown>"
-msgstr "<Unknown>"
-
-msgid "No library defined!"
-msgstr "No library defined!"
-
-#, c-format
-msgid "Symbol not found in %s!"
-msgstr "Symbol not found in %s!"
-
-#, c-format
-msgid "Symbol %s [%s]"
-msgstr "Symbol %s [%s]"
-
 msgid "Connection Name"
 msgstr "Connection Name"
 
@@ -9430,6 +9455,32 @@ msgstr "(Deleted Item)"
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchical Sheet Pin %s"
+
+msgid "Power symbol"
+msgstr "Power symbol"
+
+msgid "flags"
+msgstr "flags"
+
+msgid "Missing parent"
+msgstr "Missing parent"
+
+msgid "Undefined!!!"
+msgstr "Undefined!!!"
+
+msgid "<Unknown>"
+msgstr "<Unknown>"
+
+msgid "No library defined!"
+msgstr "No library defined!"
+
+#, c-format
+msgid "Symbol not found in %s!"
+msgstr "Symbol not found in %s!"
+
+#, c-format
+msgid "Symbol %s [%s]"
+msgstr "Symbol %s [%s]"
 
 msgid "Tri-State"
 msgstr "Tri-State"
@@ -12295,11 +12346,21 @@ msgstr ""
 "Do you want to create a new empty directory for the project?"
 
 msgid ""
-"Error creating new directory. Please try a different path. The project was "
-"not imported."
+"Error creating new directory. Please try a different path. The project "
+"cannot be imported."
 msgstr ""
-"Error creating new directory. Please try a different path. The project was "
-"not imported."
+"Error creating new directory. Please try a different path. The project "
+"cannot be imported."
+
+#, c-format
+msgid ""
+"Cannot copy file '%s'\n"
+"to '%s'\n"
+"The project cannot be imported."
+msgstr ""
+"Cannot copy file '%s'\n"
+"to '%s'\n"
+"The project cannot be imported."
 
 msgid "Import CADSTAR Archive Project Files"
 msgstr "Import CADSTAR Archive Project Files"
@@ -14147,6 +14208,24 @@ msgstr "Available materials:"
 msgid "Dielectric Materials"
 msgstr "Dielectric Materials"
 
+msgid "Has castellated pads"
+msgstr "Has castellated pads"
+
+msgid "Plated board edge"
+msgstr "Plated board edge"
+
+msgid "Copper finish:"
+msgstr "Copper finish:"
+
+msgid "Edge card connectors:"
+msgstr "Edge card connectors:"
+
+msgid "Yes, bevelled"
+msgstr "Yes, bevelled"
+
+msgid "Options for edge card connectors."
+msgstr "Options for edge card connectors."
+
 msgid "Core"
 msgstr "Core"
 
@@ -14187,17 +14266,62 @@ msgstr ""
 msgid "A layer thickness is < 0. Fix it"
 msgstr "A layer thickness is < 0. Fix it"
 
-msgid "Id"
-msgstr "Id"
+msgid "Copper layers:"
+msgstr "Copper layers:"
 
-msgid "No constraint"
-msgstr "No constraint"
+msgid "Select the number of copper layers in the stackup"
+msgstr "Select the number of copper layers in the stackup"
+
+msgid "2"
+msgstr "2"
+
+msgid "4"
+msgstr "4"
+
+msgid "6"
+msgstr "6"
+
+msgid "8"
+msgstr "8"
+
+msgid "10"
+msgstr "10"
+
+msgid "12"
+msgstr "12"
+
+msgid "14"
+msgstr "14"
+
+msgid "16"
+msgstr "16"
+
+msgid "18"
+msgstr "18"
+
+msgid "20"
+msgstr "20"
+
+msgid "22"
+msgstr "22"
+
+msgid "24"
+msgstr "24"
+
+msgid "26"
+msgstr "26"
+
+msgid "28"
+msgstr "28"
+
+msgid "30"
+msgstr "30"
+
+msgid "32"
+msgstr "32"
 
 msgid "Impedance controlled"
 msgstr "Impedance controlled"
-
-msgid "Impedance Control"
-msgstr "Impedance Control"
 
 msgid ""
 "If Impedance Controlled option is set,\n"
@@ -14212,26 +14336,8 @@ msgstr "Add Dielectric Layer"
 msgid "Remove Dielectric Layer"
 msgstr "Remove Dielectric Layer"
 
-msgid "Board Finish"
-msgstr "Board Finish"
-
-msgid "Has castellated pads"
-msgstr "Has castellated pads"
-
-msgid "Plated board edge"
-msgstr "Plated board edge"
-
-msgid "Copper finish:"
-msgstr "Copper finish:"
-
-msgid "Edge card connectors:"
-msgstr "Edge card connectors:"
-
-msgid "Yes, bevelled"
-msgstr "Yes, bevelled"
-
-msgid "Options for edge card connectors."
-msgstr "Options for edge card connectors."
+msgid "Id"
+msgstr "Id"
 
 msgid "Board thickness from stackup:"
 msgstr "Board thickness from stackup:"
@@ -14782,6 +14888,9 @@ msgstr "Board Editor Layers"
 
 msgid "Physical Stackup"
 msgstr "Physical Stackup"
+
+msgid "Board Finish"
+msgstr "Board Finish"
 
 msgid "Solder Mask/Paste"
 msgstr "Solder Mask/Paste"
@@ -15360,9 +15469,6 @@ msgid ""
 msgstr ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into “Count” portions."
-
-msgid "4"
-msgstr "4"
 
 msgid "How many items in the array."
 msgstr "How many items in the array."
@@ -16084,9 +16190,6 @@ msgid ""
 msgstr ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
-
-msgid "Copper layers:"
-msgstr "Copper layers:"
 
 msgid "Technical layers:"
 msgstr "Technical layers:"
@@ -18681,49 +18784,20 @@ msgstr "&Rotation angle:"
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "Set increment (in degrees) for context menu and hotkey rotation."
 
-msgid "Left Click Mouse Commands"
-msgstr "Left Click Mouse Commands"
-
-msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Ctrl."
-msgstr ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Ctrl."
-
 msgid "No modifier"
 msgstr "No modifier"
 
 msgid "Select item(s)."
 msgstr "Select item(s)."
 
-msgid "Add item(s) to selection."
-msgstr "Add item(s) to selection."
-
 msgid "Shift+Alt"
 msgstr "Shift+Alt"
-
-msgid "Remove item(s) from selection."
-msgstr "Remove item(s) from selection."
-
-msgid "Toggle selected state of item(s)."
-msgstr "Toggle selected state of item(s)."
-
-msgid "Clarify selection from menu."
-msgstr "Clarify selection from menu."
 
 msgid "Ctrl+Shift"
 msgstr "Ctrl+Shift"
 
 msgid "Highlight net (for pads or tracks)."
 msgstr "Highlight net (for pads or tracks)."
-
-msgid ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Cmd."
-msgstr ""
-"Left click (and drag) actions depend on 3 modifier keys:\n"
-"Alt, Shift and Cmd."
 
 msgid "Shift+Cmd"
 msgstr "Shift+Cmd"
@@ -18991,9 +19065,8 @@ msgstr "Silkscreen"
 msgid "Minimum item clearance:"
 msgstr "Minimum item clearance:"
 
-#, c-format
-msgid "Use the \"%s\" control to change the number of copper layers."
-msgstr "Use the “%s” control to change the number of copper layers."
+msgid "Use the Physical Stackup page to change the number of copper layers."
+msgstr "Use the Physical Stackup page to change the number of copper layers."
 
 #, c-format
 msgid "The %s layer is mandatory."
@@ -19051,72 +19124,6 @@ msgstr "Inner Layers To Be Deleted"
 
 msgid "Select user defined layer to add to board layer set"
 msgstr "Select user defined layer to add to board layer set"
-
-msgid "Custom layer set"
-msgstr "Custom layer set"
-
-msgid "Two layers, parts on Front"
-msgstr "Two layers, parts on Front"
-
-msgid "Two layers, parts on Back"
-msgstr "Two layers, parts on Back"
-
-msgid "Two layers, parts on Front & Back"
-msgstr "Two layers, parts on Front & Back"
-
-msgid "Four layers, parts on Front"
-msgstr "Four layers, parts on Front"
-
-msgid "Four layers, parts on Front & Back"
-msgstr "Four layers, parts on Front & Back"
-
-msgid "All layers on"
-msgstr "All layers on"
-
-msgid "2"
-msgstr "2"
-
-msgid "6"
-msgstr "6"
-
-msgid "8"
-msgstr "8"
-
-msgid "10"
-msgstr "10"
-
-msgid "12"
-msgstr "12"
-
-msgid "14"
-msgstr "14"
-
-msgid "16"
-msgstr "16"
-
-msgid "18"
-msgstr "18"
-
-msgid "20"
-msgstr "20"
-
-msgid "22"
-msgstr "22"
-
-msgid "24"
-msgstr "24"
-
-msgid "26"
-msgstr "26"
-
-msgid "28"
-msgstr "28"
-
-msgid "30"
-msgstr "30"
-
-msgid "32"
-msgstr "32"
 
 msgid "Add User Defined Layer"
 msgstr "Add User Defined Layer"
@@ -22577,6 +22584,24 @@ msgstr "Width %s, gap %s"
 msgid "Width %s, gap %s, via gap %s"
 msgstr "Width %s, gap %s, via gap %s"
 
+#, c-format
+msgid ""
+"Event file: %s\n"
+"Board dump: %s"
+msgstr ""
+"Event file: %s\n"
+"Board dump: %s"
+
+msgid "Save router log"
+msgstr "Save router log"
+
+msgid ""
+"Would you like to save the router\n"
+"event log for debugging purposes?"
+msgstr ""
+"Would you like to save the router\n"
+"event log for debugging purposes?"
+
 msgid "Show board setup"
 msgstr "Show board setup"
 
@@ -24874,6 +24899,44 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "Error creating new directory. Please try a different path. The project "
+#~ "was not imported."
+#~ msgstr ""
+#~ "Error creating new directory. Please try a different path. The project "
+#~ "was not imported."
+
+#~ msgid "No constraint"
+#~ msgstr "No constraint"
+
+#~ msgid "Impedance Control"
+#~ msgstr "Impedance Control"
+
+#, c-format
+#~ msgid "Use the \"%s\" control to change the number of copper layers."
+#~ msgstr "Use the “%s” control to change the number of copper layers."
+
+#~ msgid "Custom layer set"
+#~ msgstr "Custom layer set"
+
+#~ msgid "Two layers, parts on Front"
+#~ msgstr "Two layers, parts on Front"
+
+#~ msgid "Two layers, parts on Back"
+#~ msgstr "Two layers, parts on Back"
+
+#~ msgid "Two layers, parts on Front & Back"
+#~ msgstr "Two layers, parts on Front & Back"
+
+#~ msgid "Four layers, parts on Front"
+#~ msgstr "Four layers, parts on Front"
+
+#~ msgid "Four layers, parts on Front & Back"
+#~ msgstr "Four layers, parts on Front & Back"
+
+#~ msgid "All layers on"
+#~ msgstr "All layers on"
 
 #~ msgid "Eeschema (.lib file)"
 #~ msgstr "Eeschema (.lib file)"
