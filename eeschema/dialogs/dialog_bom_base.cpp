@@ -109,6 +109,17 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReset->SetToolTip( _("Reset the list of BOM generator scripts to the default settings") );
+
+	bSizer8->Add( m_buttonReset, 0, wxALL, 5 );
+
+
+	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -118,7 +129,10 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_sdbSizer->AddButton( m_sdbSizerHelp );
 	m_sdbSizer->Realize();
 
-	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bSizer8->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+
+
+	bMainSizer->Add( bSizer8, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

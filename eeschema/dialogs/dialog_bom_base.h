@@ -57,6 +57,7 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlCommand;
 		wxCheckBox* m_checkBoxShowConsole;
 		wxStaticLine* m_staticline;
+		wxButton* m_buttonReset;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

@@ -33,6 +33,8 @@
 
 #include <memory>
 
+extern const wxChar BOM_TRACE[];
+
 /**
  * Bill of material output generator.
  *
@@ -77,6 +79,16 @@ public:
     {
         return m_file;
     }
+
+    /**
+     * Returns the calculated path to the plugin: if the path is already absolute and exists,
+     * just return it.  Otherwise if the path is just a filename, look for that file in the user
+     * and system plugin directories and return the first one found. If neither is found, just
+     * return m_file.
+     *
+     * @return the full path to the plugin
+     */
+    wxFileName FindFilePath() const;
 
     /**
      * Return the customisable plugin name.
@@ -140,7 +152,7 @@ protected:
     bool m_isOk;
 
     ///< Path to the plugin
-    const wxFileName m_file;
+    wxFileName m_file;
 
     ///< User customisable name
     wxString m_name;

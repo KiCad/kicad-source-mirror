@@ -21,6 +21,9 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
+#include <functional>
+
+#include <dialogs/dialog_bom_cfg_lexer.h>
 #include <eeschema_settings.h>
 #include <layers_id_colors_and_visibility.h>
 #include <symbol_editor_settings.h>
@@ -32,8 +35,22 @@
 #include <widgets/ui_common.h>
 #include <default_values.h>    // For some default values
 
+using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
+
 ///! Update the schema version whenever a migration is required
-const int eeschemaSchemaVersion = 0;
+const int eeschemaSchemaVersion = 1;
+
+/// Default value for bom.plugins
+const nlohmann::json defaultBomPlugins = {
+        {
+            { "name", "bom_csv_grouped_by_value" },
+            { "path", "bom_csv_grouped_by_value.py" }
+        },
+        {
+            { "name", "bom_csv_grouped_by_value_with_fp" },
+            { "path", "bom_csv_grouped_by_value_with_fp.py" }
+        },
+    };
 
 
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
@@ -184,8 +201,18 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "bom.selected_plugin",
             &m_BomPanel.selected_plugin, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "bom.plugins",
-            &m_BomPanel.plugins, "" ) );
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "bom.plugins",
+            std::bind( &EESCHEMA_SETTINGS::bomSettingsToJson, this ),
+            [&]( const nlohmann::json& aObj )
+            {
+                if( !aObj.is_array() )
+                    return;
+
+                const nlohmann::json& list = aObj.empty() ? defaultBomPlugins : aObj;
+
+                m_BomPanel.plugins = bomSettingsFromJson( list );
+            },
+            defaultBomPlugins ) );
 
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_paper",
             &m_PageSettings.export_paper, false ) );
@@ -352,6 +379,15 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "system.last_symbol_lib_dir",
             &m_lastSymbolLibDir, "" ) );
 
+
+    // Migrations
+
+    registerMigration( 0, 1,
+            [&]() -> bool
+            {
+                // Version 0 to 1: BOM plugin settings moved from sexpr to JSON
+                return migrateBomSettings();
+            } );
 }
 
 
@@ -414,6 +450,8 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ret &= fromLegacyString( aCfg, "bom_plugin_selected",     "bom.selected_plugin" );
     ret &= fromLegacyString( aCfg, "bom_plugins",             "bom.plugins" );
+
+    migrateBomSettings();
 
     ret &= fromLegacyString( aCfg, "SymbolFieldsShownColumns",
             "edit_sch_component.visible_columns" );
@@ -594,4 +632,192 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     libedit->Load();
 
     return ret;
+}
+
+
+/**
+ * Used for parsing legacy-format bom plugin configurations.  Only used for migrating into
+ * EESCHEMA_SETTINGS JSON format.
+ */
+class BOM_CFG_PARSER : public DIALOG_BOM_CFG_LEXER
+{
+    std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS>* m_pluginList;
+
+public:
+    BOM_CFG_PARSER( std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS>* aPluginList,
+                    const char* aData, const wxString& aSource );
+
+    void Parse();
+
+private:
+    void parseGenerator();
+};
+
+
+std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS> EESCHEMA_SETTINGS::DefaultBomPlugins()
+{
+    return bomSettingsFromJson( defaultBomPlugins );
+}
+
+
+bool EESCHEMA_SETTINGS::migrateBomSettings()
+{
+    nlohmann::json::json_pointer ptr = PointerFromString( "bom.plugins" );
+
+    if( !contains( ptr ) )
+        return false;
+
+    wxString list = at( ptr ).get<wxString>();
+
+    BOM_CFG_PARSER cfg_parser( &m_BomPanel.plugins, TO_UTF8( list ), wxT( "plugins" ) );
+
+    try
+    {
+        cfg_parser.Parse();
+    }
+    catch( const IO_ERROR& )
+    {
+        return false;
+    }
+
+    // Parser will have loaded up our array, let's dump it out to JSON
+    at( ptr ) = bomSettingsToJson();
+
+    return true;
+}
+
+
+nlohmann::json EESCHEMA_SETTINGS::bomSettingsToJson() const
+{
+    nlohmann::json js = nlohmann::json::array();
+
+    for( const BOM_PLUGIN_SETTINGS& plugin : m_BomPanel.plugins )
+    {
+        nlohmann::json pluginJson;
+
+        pluginJson["name"]    = plugin.name.ToUTF8();
+        pluginJson["path"]    = plugin.path.ToUTF8();
+        pluginJson["command"] = plugin.command.ToUTF8();
+
+        js.push_back( pluginJson );
+    }
+
+    return js;
+}
+
+
+std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS> EESCHEMA_SETTINGS::bomSettingsFromJson(
+        const nlohmann::json& aObj )
+{
+    std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS> ret;
+
+    wxASSERT( aObj.is_array() );
+
+    for( const nlohmann::json& entry : aObj )
+    {
+        if( entry.empty() || !entry.is_object() )
+            continue;
+
+        if( !entry.contains( "name" ) || !entry.contains( "path" ) )
+            continue;
+
+        BOM_PLUGIN_SETTINGS plugin( entry.at( "name" ).get<wxString>(),
+                                    entry.at( "path" ).get<wxString>() );
+
+        if( entry.contains( "command" ) )
+            plugin.command = entry.at( "command" ).get<wxString>();
+
+        ret.emplace_back( plugin );
+    }
+
+    return ret;
+}
+
+
+BOM_CFG_PARSER::BOM_CFG_PARSER( std::vector<EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS>* aPluginList,
+                                const char* aLine, const wxString& aSource ) :
+        DIALOG_BOM_CFG_LEXER( aLine, aSource )
+{
+    wxASSERT( aPluginList );
+    m_pluginList = aPluginList;
+}
+
+
+void BOM_CFG_PARSER::Parse()
+{
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+            break;
+
+        if( token == T_LEFT )
+            token = NextTok();
+
+        if( token == T_plugins )
+            continue;
+
+        switch( token )
+        {
+        case T_plugin:   // Defines a new plugin
+            parseGenerator();
+            break;
+
+        default:
+//            Unexpected( CurText() );
+            break;
+        }
+    }
+}
+
+
+void BOM_CFG_PARSER::parseGenerator()
+{
+    wxString str;
+    EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS settings;
+
+    NeedSYMBOLorNUMBER();
+    settings.path = FromUTF8();
+
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        if( token == T_EOF)
+            break;
+
+        switch( token )
+        {
+        case T_LEFT:
+            break;
+
+        case T_cmd:
+            NeedSYMBOLorNUMBER();
+
+            settings.command = FromUTF8();
+
+            NeedRIGHT();
+            break;
+
+        case T_opts:
+        {
+            NeedSYMBOLorNUMBER();
+
+            wxString option = FromUTF8();
+
+            if( option.StartsWith( "nickname=", &str ) )
+                settings.name = str;
+
+            NeedRIGHT();
+            break;
+        }
+
+        default:
+            Unexpected( CurText() );
+            break;
+        }
+    }
+
+    m_pluginList->emplace_back( settings );
 }

@@ -46,129 +46,16 @@
 #include <schematic.h>
 #include <paths.h>
 
-#include <dialogs/dialog_bom_cfg_lexer.h>
-
 #include <wx/filedlg.h>
 #include <wx/textdlg.h>
-
-static constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 
 wxString s_bomHelpInfo =
 #include <dialog_bom_help_md.h>
 ;
 
-using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
-
 // BOM "plugins" are not actually plugins. They are external tools
 // (scripts or executables) called by this dialog.
 typedef std::vector<BOM_GENERATOR_HANDLER::PTR> BOM_GENERATOR_ARRAY;
-
-
-/**
- * Holds data and functions pertinent to parsing a S-expression file
- */
-class BOM_CFG_PARSER : public DIALOG_BOM_CFG_LEXER
-{
-    BOM_GENERATOR_ARRAY* m_generatorsList;
-
-public:
-    BOM_CFG_PARSER( BOM_GENERATOR_ARRAY* aGenerators, const char* aData, const wxString& aSource );
-    void Parse();
-
-private:
-    void parseGenerator();
-};
-
-
-BOM_CFG_PARSER::BOM_CFG_PARSER( BOM_GENERATOR_ARRAY* aGenerators, const char* aLine,
-                                const wxString& aSource ) :
-    DIALOG_BOM_CFG_LEXER( aLine, aSource )
-{
-    m_generatorsList = aGenerators;
-}
-
-
-void BOM_CFG_PARSER::Parse()
-{
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
-    {
-        if( token == T_EOF)
-           break;
-
-        if( token == T_LEFT )
-            token = NextTok();
-
-        if( token == T_plugins )
-            continue;
-
-        switch( token )
-        {
-        case T_plugin:   // Defines a new plugin
-            parseGenerator();
-            break;
-
-        default:
-//            Unexpected( CurText() );
-            break;
-        }
-    }
-}
-
-
-void BOM_CFG_PARSER::parseGenerator()
-{
-    NeedSYMBOLorNUMBER();
-    wxString name = FromUTF8();
-    auto plugin = std::make_unique<BOM_GENERATOR_HANDLER>( name );
-
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
-    {
-        if( token == T_EOF)
-           break;
-
-        switch( token )
-        {
-        case T_LEFT:
-            break;
-
-        case T_cmd:
-            NeedSYMBOLorNUMBER();
-
-            if( plugin )
-                plugin->SetCommand( FromUTF8() );
-
-            NeedRIGHT();
-            break;
-
-        case T_opts:
-            NeedSYMBOLorNUMBER();
-
-            if( plugin )
-            {
-                wxString option = FromUTF8();
-
-                if( option.StartsWith( "nickname=", &name ) )
-                    plugin->SetName( name );
-                else
-                    plugin->Options().Add( option );
-            }
-
-            NeedRIGHT();
-            break;
-
-        default:
-            Unexpected( CurText() );
-            break;
-        }
-    }
-
-    if( plugin )
-        m_generatorsList->push_back( std::move( plugin ) );
-}
 
 
 // The main dialog frame to run scripts to build bom
@@ -251,56 +138,44 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    m_buttonReset->Bind( wxEVT_BUTTON,
+            [&]( wxCommandEvent& )
+            {
+                EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+                cfg->m_BomPanel.selected_plugin = wxEmptyString;
+                cfg->m_BomPanel.plugins         = cfg->DefaultBomPlugins();
+
+                installGeneratorsList();
+            } );
 }
+
 
 DIALOG_BOM::~DIALOG_BOM()
 {
     if( m_helpWindow )
         m_helpWindow->Destroy();
 
-    // TODO(JE) maybe unpack this into JSON instead of sexpr
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
-    // Save the plugin descriptions in config.
-    // The config stores only one string, so we save the plugins inside a S-expr:
-    // ( plugins
-    //    ( plugin "plugin name 1" (cmd "command line 1") )
-    //    ( plugin "plugin name 2" (cmd "command line 2") (opts "option1") (opts "option2") )
-    //     ....
-    // )
+    cfg->m_BomPanel.plugins.clear();
 
-    STRING_FORMATTER writer;
-    writer.Print( 0, "(plugins" );
-
-    for( auto& plugin : m_generators )
+    for( const std::unique_ptr<BOM_GENERATOR_HANDLER>& plugin : m_generators )
     {
-        writer.Print( 1, "(plugin %s (cmd %s)",
-                      writer.Quotew( plugin->GetFile().GetFullPath() ).c_str(),
-                      writer.Quotew( plugin->GetCommand() ).c_str() );
+        wxString   name = plugin->GetName();
+        wxFileName path = plugin->GetFile();
 
-        for( unsigned jj = 0; jj < plugin->Options().GetCount(); jj++ )
-        {
-            writer.Print( 1, "(opts %s)",
-                          writer.Quotew( plugin->Options().Item( jj ) ).c_str() );
-        }
+        // handle empty nickname by stripping path
+        if( name.IsEmpty() )
+            name = path.GetName();
 
-        if( !plugin->GetName().IsEmpty() )
-        {
-            wxString option = wxString::Format( "nickname=%s", plugin->GetName() );
+        EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS setting( name, path.GetFullPath() );
+        setting.command = plugin->GetCommand();
 
-            writer.Print( 1, "(opts %s)",
-                          writer.Quotew( option ).c_str() );
-        }
-
-        writer.Print( 0, ")" );
+        cfg->m_BomPanel.plugins.emplace_back( setting );
     }
 
-    writer.Print( 0, ")" );
-
-    wxString list( FROM_UTF8( writer.GetString().c_str() ) );
-
-    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    cfg->m_BomPanel.plugins = list.ToStdString();
     cfg->m_BomPanel.selected_plugin = m_lbGenerators->GetStringSelection().ToStdString();
 }
 
@@ -308,33 +183,36 @@ DIALOG_BOM::~DIALOG_BOM()
 // Read the initialized plugins in config and fill the list of names
 void DIALOG_BOM::installGeneratorsList()
 {
-    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
-    wxString list               = cfg->m_BomPanel.plugins;
     wxString active_plugin_name = cfg->m_BomPanel.selected_plugin;
 
-    if( !list.IsEmpty() )
+    m_generators.clear();
+
+    for( EESCHEMA_SETTINGS::BOM_PLUGIN_SETTINGS& setting : cfg->m_BomPanel.plugins )
     {
-        BOM_CFG_PARSER cfg_parser( &m_generators, TO_UTF8( list ), wxT( "plugins" ) );
+        auto plugin = std::make_unique<BOM_GENERATOR_HANDLER>( setting.path );
 
-        try
-        {
-            cfg_parser.Parse();
-        }
-        catch( const IO_ERROR& )
-        {
-//            wxLogMessage( ioe.What() );
-        }
-        catch( std::runtime_error& e )
-        {
-            DisplayError( nullptr, e.what() );
-        }
+        plugin->SetName( setting.name );
 
-        // Populate list box
+        if( !setting.command.IsEmpty() )
+            plugin->SetCommand( setting.command );
+
+        m_generators.emplace_back( std::move( plugin ) );
+    }
+
+    m_lbGenerators->Clear();
+
+    if( !m_generators.empty() )
+    {
         for( unsigned ii = 0; ii < m_generators.size(); ii++ )
         {
-            if( !m_generators[ii]->GetFile().Exists( wxFILE_EXISTS_REGULAR ) )
+            if( !m_generators[ii]->FindFilePath().Exists( wxFILE_EXISTS_REGULAR ) )
+            {
+                wxLogTrace( BOM_TRACE, "BOM plugin %s not found",
+                            m_generators[ii]->FindFilePath().GetFullName() );
                 continue;
+            }
 
             m_lbGenerators->Append( m_generators[ii]->GetName() );
 
@@ -342,53 +220,6 @@ void DIALOG_BOM::installGeneratorsList()
                 m_lbGenerators->SetSelection( ii );
         }
     }
-
-    if( m_generators.empty() ) // No plugins found?
-    {
-        // Load plugins from the default locations
-        std::vector<wxString> pluginPaths = {
-#if defined(__WXGTK__)
-            "/usr/share/kicad/plugins",
-            "/usr/local/share/kicad/plugins",
-#elif defined(__WXMSW__)
-            wxString::Format( "%s\\scripting\\plugins", Pgm().GetExecutablePath() ),
-#elif defined(__WXMAC__)
-            wxString::Format( "%s/plugins", PATHS::GetOSXKicadDataDir() ),
-#endif
-        };
-
-        wxFileName pluginPath;
-
-        for( const auto& path : pluginPaths )
-        {
-            wxDir dir( path );
-
-            if( !dir.IsOpened() )
-                continue;
-
-            pluginPath.AssignDir( dir.GetName() );
-            wxString fileName;
-            bool cont = dir.GetFirst( &fileName, wxFileSelectorDefaultWildcardStr, wxDIR_FILES );
-
-            while( cont )
-            {
-                try
-                {
-                    wxLogTrace( BOM_TRACE,"Checking if %s is a BOM generator", fileName );
-
-                    if( BOM_GENERATOR_HANDLER::IsValidGenerator( fileName ) )
-                    {
-                        pluginPath.SetFullName( fileName );
-                        addGenerator( pluginPath.GetFullPath() );
-                    }
-                }
-                catch( ... ) { /* well, no big deal */ }
-
-                cont = dir.GetNext( &fileName );
-            }
-        }
-    }
-
 
     pluginInit();
 }

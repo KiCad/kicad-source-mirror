@@ -23,14 +23,23 @@
  */
 
 #include "bom_plugins.h"
+#include <paths.h>
 #include <wx/ffile.h>
+#include <wx/log.h>
+
+
+constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
+
 
 BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     : m_file( aFile )
 {
     m_isOk = false;
 
-    if( !wxFile::Exists( aFile ) )
+    if( !wxFile::Exists( m_file.GetFullPath() ) )
+        m_file = FindFilePath();
+
+    if( !wxFile::Exists( m_file.GetFullPath() ) )
     {
         m_info.Printf( _("Script file:\n%s\nnot found. Script not available."), aFile );
         return;
@@ -77,6 +86,8 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     {
         m_cmd = m_file.GetFullPath();
     }
+
+    wxLogTrace( BOM_TRACE, "%s: extracted command line %s", m_name, m_cmd );
 }
 
 
@@ -146,4 +157,37 @@ wxString BOM_GENERATOR_HANDLER::getOutputExtension( const wxString& aHeader )
         return wxEmptyString;
 
     return aHeader.SubString( strstart, strend - 1 );
+}
+
+
+wxFileName BOM_GENERATOR_HANDLER::FindFilePath() const
+{
+    if( m_file.IsAbsolute() && m_file.Exists( wxFILE_EXISTS_REGULAR ) )
+    {
+        wxLogTrace( BOM_TRACE, "%s found directly", m_file.GetFullPath() );
+        return m_file;
+    }
+
+    wxFileName test( PATHS::GetUserPluginsPath(), m_file.GetName(), m_file.GetExt() );
+
+    if( test.Exists( wxFILE_EXISTS_REGULAR ) )
+    {
+        wxLogTrace( BOM_TRACE, "%s found in user plugins path %s", m_file.GetFullName(),
+                    PATHS::GetUserPluginsPath() );
+        return test;
+    }
+
+    test = wxFileName( PATHS::GetStockPluginsPath(), m_file.GetName(), m_file.GetExt() );
+
+    if( test.Exists( wxFILE_EXISTS_REGULAR ) )
+    {
+        wxLogTrace( BOM_TRACE, "%s found in stock plugins path %s", m_file.GetFullName(),
+                    PATHS::GetStockPluginsPath() );
+        return test;
+    }
+
+    wxLogTrace( BOM_TRACE, "Could not find %s (checked %s, %s)", m_file.GetFullName(),
+                PATHS::GetUserPluginsPath(), PATHS::GetStockPluginsPath() );
+
+    return m_file;
 }

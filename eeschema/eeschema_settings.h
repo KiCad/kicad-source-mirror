@@ -57,6 +57,20 @@ public:
         bool align_to_grid;
     };
 
+    struct BOM_PLUGIN_SETTINGS
+    {
+        BOM_PLUGIN_SETTINGS() = default;
+
+        BOM_PLUGIN_SETTINGS( const wxString& aName, const wxString& aPath ) :
+                name( aName ),
+                path( aPath )
+        {}
+
+        wxString name;
+        wxString path;
+        wxString command;
+    };
+
     struct DRAWING
     {
         int      default_bus_thickness;
@@ -126,7 +140,7 @@ public:
     struct PANEL_BOM
     {
         wxString selected_plugin;
-        wxString plugins;
+        std::vector<BOM_PLUGIN_SETTINGS> plugins;
     };
 
     struct PANEL_FIELD_EDITOR
@@ -188,6 +202,8 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+    static std::vector<BOM_PLUGIN_SETTINGS> DefaultBomPlugins();
+
     APPEARANCE m_Appearance;
 
     AUTOPLACE_FIELDS m_AutoplaceFields;
@@ -223,6 +239,14 @@ public:
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "SchematicFrame"; }
+
+private:
+
+    bool migrateBomSettings();
+
+    nlohmann::json bomSettingsToJson() const;
+
+    static std::vector<BOM_PLUGIN_SETTINGS> bomSettingsFromJson( const nlohmann::json& aObj );
 };
 
 
