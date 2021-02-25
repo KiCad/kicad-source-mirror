@@ -55,7 +55,8 @@ KICADCURVE::~KICADCURVE()
 bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
 {
     if( CURVE_LINE != aCurveType && CURVE_ARC != aCurveType
-        && CURVE_CIRCLE != aCurveType && CURVE_BEZIER != aCurveType )
+        && CURVE_CIRCLE != aCurveType && CURVE_BEZIER != aCurveType
+        && CURVE_POLYGON != aCurveType )
     {
         wxLogMessage( "* Unsupported curve type: %d\n", aCurveType );
         return false;
@@ -68,7 +69,8 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
     if( ( CURVE_CIRCLE == aCurveType && nchild < 5 )
         || ( CURVE_ARC == aCurveType && nchild < 6 )
         || ( CURVE_LINE == aCurveType && nchild < 5 )
-        || ( CURVE_BEZIER == aCurveType && nchild < 5 ) )
+        || ( CURVE_BEZIER == aCurveType && nchild < 5 )
+        || ( CURVE_POLYGON == aCurveType && nchild < 5 ) )
     {
         wxLogMessage( "* bad curve data; not enough parameters\n" );
         return false;
@@ -92,19 +94,18 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
             SEXPR::PARSER parser;
             std::unique_ptr<SEXPR::SEXPR> prms = parser.Parse( child->AsString() );
 
-            // We need 4 XY parametres (and "pts" that is the firast parameter)
-            if( prms->GetNumberOfChildren() != 5 )
+            // We need 4 XY parameters (and "pts" that is the first parameter)
+            if( ( aCurveType == CURVE_BEZIER && prms->GetNumberOfChildren() != 5 )
+                    || ( aCurveType == CURVE_POLYGON && prms->GetNumberOfChildren() < 4 ) )
                 return false;
 
             // Extract xy coordintes from pts list
             SEXPR::SEXPR_VECTOR const* list = prms->GetChildren();
-            int ii = 0;
 
             // The first parameter is "pts", so skip it.
-            for( std::vector<SEXPR::SEXPR*>::const_iterator it = list->begin()+1;
-                 it != list->end(); ++it, ++ii )
+            for( SEXPR::SEXPR_VECTOR::size_type ii = 1; ii < list->size(); ++ii  )
             {
-                SEXPR::SEXPR* sub_child = (*it);
+                SEXPR::SEXPR* sub_child = ( *list )[ii];
                 text = sub_child->GetChild( 0 )->GetSymbol();
 
                 if( text == "xy" )
@@ -114,13 +115,20 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     if( !Get2DCoordinate( sub_child, coord ) )
                         return false;
 
-                    switch( ii )
+                    if( aCurveType == CURVE_BEZIER )
                     {
-                    case 0: m_start = coord; break;
-                    case 1: m_bezierctrl1 = coord; break;
-                    case 2: m_bezierctrl2 = coord; break;
-                    case 3:  m_end = coord; break;
+                        switch( ii )
+                        {
+                        case 0: m_start = coord; break;
+                        case 1: m_bezierctrl1 = coord; break;
+                        case 2: m_bezierctrl2 = coord; break;
+                        case 3:  m_end = coord; break;
+                        default:
+                            break;
+                        }
                     }
+                    else
+                        m_poly.push_back( coord );
                 }
             }
         }

@@ -234,6 +234,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
                 result = result && parseCurve( child, CURVE_LINE );
             else if( symname == "gr_rect" )
                 result = result && parseRect( child );
+            else if( symname == "gr_poly" )
+                result = result && parsePolygon( child );
             else if( symname == "gr_circle" )
                 result = result && parseCurve( child, CURVE_CIRCLE );
             else if( symname == "gr_curve" )
@@ -426,6 +428,47 @@ bool KICADPCB::parseRect( SEXPR::SEXPR* data )
 
     left->m_end.x = top->m_start.x;
     m_curves.push_back( left );
+
+    return true;
+}
+
+
+bool KICADPCB::parsePolygon( SEXPR::SEXPR* data )
+{
+    KICADCURVE* poly = new KICADCURVE();
+
+    if( !poly->Read( data, CURVE_POLYGON ) )
+    {
+        delete poly;
+        return false;
+    }
+
+    // reject any curves not on the Edge.Cuts layer
+    if( poly->GetLayer() != LAYER_EDGE )
+    {
+        delete poly;
+        return true;
+    }
+
+    auto pts = poly->m_poly;
+
+    for( std::size_t ii = 1; ii < pts.size(); ++ii )
+    {
+        KICADCURVE* seg = new KICADCURVE();
+        seg->m_form = CURVE_LINE;
+        seg->m_layer = poly->GetLayer();
+        seg->m_start = pts[ii - 1];
+        seg->m_end = pts[ii];
+        m_curves.push_back( seg );
+    }
+
+    KICADCURVE* seg = new KICADCURVE();
+    seg->m_form = CURVE_LINE;
+    seg->m_layer = poly->GetLayer();
+    seg->m_start = pts.back();
+    seg->m_end = pts.front();
+    m_curves.push_back( seg );
+
 
     return true;
 }

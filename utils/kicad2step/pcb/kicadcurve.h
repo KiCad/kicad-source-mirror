@@ -62,6 +62,8 @@ public:
     double     m_angle;         // subtended angle of arc
     double     m_startangle;
     double     m_endangle;
+
+    std::vector<DOUBLET> m_poly; // vector of polygon points
 };
 
 #endif  // KICADCURVE_H

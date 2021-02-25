@@ -81,6 +81,8 @@ private:
     bool parseModule( SEXPR::SEXPR* data );
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
     bool parseRect( SEXPR::SEXPR* data );
+    bool parsePolygon( SEXPR::SEXPR* data );
+
 
 public:
     KICADPCB();
