@@ -121,7 +121,9 @@ static LSEQ dlg_layers()
 
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
-        m_parentDialog( aParent ), m_frame( aFrame )
+        m_parentDialog( aParent ),
+        m_frame( aFrame ),
+        m_physicalStackup( nullptr )
 {
     m_pcb = aFrame->GetBoard();
 }
@@ -442,6 +444,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 {
     if( !testLayerNames() )
         return false;
+
+    wxASSERT( m_physicalStackup );
 
     // Make sure we have the latest copper layer count
     SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );

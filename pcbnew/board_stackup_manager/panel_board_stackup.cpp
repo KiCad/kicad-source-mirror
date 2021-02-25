@@ -116,7 +116,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     synchronizeWithBoard( true );
 
     m_choiceCopperLayers->Bind( wxEVT_CHOICE,
-            [&]( wxCommandEvent )
+            [&]( wxCommandEvent& )
             {
                 updateCopperLayerCount();
                 showOnlyActiveLayers();
@@ -1216,6 +1216,8 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     case BS_ITEM_TYPE_SILKSCREEN: item_mat_list = &m_silkscreenMatList; break;
     default:                      item_mat_list = nullptr;              break;
     }
+
+    wxCHECK( item_mat_list, /* void */ );
 
     DIALOG_DIELECTRIC_MATERIAL dlg( this, *item_mat_list );
 
