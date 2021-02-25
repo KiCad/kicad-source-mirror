@@ -246,7 +246,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             m_hasChange = true;
         }
 
-        if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
+        if( m_vAlign->GetStringSelection() != INDETERMINATE_ACTION )
         {
             eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
             m_hasChange = true;
