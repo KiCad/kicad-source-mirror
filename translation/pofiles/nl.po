@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-25 17:52+0000\n"
+"PO-Revision-Date: 2021-03-01 15:51+0000\n"
 "Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3339,11 +3339,8 @@ msgid "Pan left/right:"
 msgstr "Links / rechts pannen:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:254
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr ""
-"Pan naar links / rechts met horizontale beweging van het touchpad of "
-"scrollwiel"
+msgstr "Pan naar links / rechts met horizontale beweging"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:255
 msgid ""
@@ -3390,14 +3387,12 @@ msgid "Netclass name already in use."
 msgstr "Netclass-naam al in gebruik."
 
 #: common/dialogs/panel_setup_netclasses.cpp:472
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Minimale vrije ruimte:"
+msgstr "Minimale koper afstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
-#, fuzzy
 msgid "Minimum track width"
-msgstr "Minimale spoorbreedte:"
+msgstr "Minimale spoorbreedte"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
 #, fuzzy
@@ -3420,34 +3415,30 @@ msgid "Microvia plated hole diameter"
 msgstr "Via pad-diameter:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Differentieel paar skew-afstemming"
+msgstr "Differentieel paar spoorbreedte"
 
 #: common/dialogs/panel_setup_netclasses.cpp:479
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Differentiële paren"
+msgstr "Differentieel paar opening"
 
 #: common/dialogs/panel_setup_netclasses.cpp:480
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Schema blad eigenschappen"
+msgstr "Draaddikte schema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 #, fuzzy
 msgid "Bus wire thickness"
-msgstr "Dikte bus"
+msgstr "Dikte busdraad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Schematisch veld"
+msgstr "Schema draadkleur"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 #, fuzzy
 msgid "Schematic wire line style"
-msgstr "Schema Bestanden"
+msgstr "Schema draad lijnstijl"
 
 #: common/dialogs/panel_setup_netclasses.cpp:534
 msgid "The default net class is required."
@@ -3476,9 +3467,8 @@ msgid "Via Size"
 msgstr "Via maat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
-#, fuzzy
 msgid "Via Hole"
-msgstr "Via gaten"
+msgstr "Via gat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
@@ -3486,9 +3476,8 @@ msgid "uVia Size"
 msgstr "uVia-grootte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Via gaten"
+msgstr "uVia gat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "DP Width"
@@ -4372,33 +4361,29 @@ msgstr ""
 "projectspecifieke footprintbibliotheek met de naam footprints.pretty."
 
 #: common/env_vars.cpp:88
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Een map met projectsjablonen die met KiCad zijn geïnstalleerd."
+msgstr "Een map met systeembrede scripts die met KiCad zijn geïnstalleerd"
 
 #: common/env_vars.cpp:90
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Een map met projectsjablonen die met KiCad zijn geïnstalleerd."
+msgstr ""
+"Een map met gebruikersspecifieke scripts die met KiCad zijn geïnstalleerd"
 
 #: common/env_vars.cpp:94
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Verouderde versie van KICAD_TEMPLATE_DIR."
 
 #: common/env_vars.cpp:96
-#, fuzzy
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "Verouderde versie van KICAD_TEMPLATE_DIR."
+msgstr "Verouderde versie van KICAD6_3DMODEL_DIR."
 
 #: common/env_vars.cpp:98
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "Verouderde versie van KICAD_TEMPLATE_DIR."
+msgstr "Verouderde versie van KICAD6_FOOTPRINT_DIR."
 
 #: common/env_vars.cpp:100
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "Verouderde versie van KICAD_TEMPLATE_DIR."
+msgstr "Verouderde versie van KICAD_SYMBOL_DIR."
 
 #: common/exceptions.cpp:61 common/exceptions.cpp:89
 #, c-format
@@ -4635,23 +4620,20 @@ msgstr "Projectbeheer"
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:64
 #: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1256
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Schema Editor Opties"
+msgstr "Schematische Editor"
 
 #: common/hotkey_store.cpp:68 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:188 pcbnew/pcb_edit_frame.cpp:1201
 #: pcbnew/pcbnew_config.cpp:54
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Schakel over naar PCB Editor"
+msgstr "PCB Editor"
 
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Werkblad"
+msgstr "Tekenblad Editor"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5092,9 +5074,8 @@ msgid "Selection highlight"
 msgstr "Selectie hoogtepunt"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Tekeningen"
+msgstr "Tekenblad"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5172,17 +5153,16 @@ msgstr "Via gaten"
 #: common/layer_id.cpp:158
 #, fuzzy
 msgid "Via hole walls"
-msgstr "Via gaten"
+msgstr "Via gat muren"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Plated holes"
-msgstr "Niet-geplateerde gaten"
+msgstr "Geplateerde gaten"
 
 #: common/layer_id.cpp:160
 #, fuzzy
 msgid "Plated hole walls"
-msgstr "Niet-geplateerde gaten"
+msgstr "Geplateerde gat muren"
 
 #: common/layer_id.cpp:161
 msgid "Non-plated holes"
@@ -5304,9 +5284,8 @@ msgid "Select Preferred Editor"
 msgstr "Selecteer Preferred Editor"
 
 #: common/pgm_base.cpp:224
-#, fuzzy
 msgid "Environmental variable HOME is empty.  Unable to continue."
-msgstr "Naam omgevingsvariabele mag niet leeg zijn."
+msgstr "Omgevingsvariabele HOME is leeg. Kan niet verder gaan."
 
 #: common/pgm_base.cpp:235
 #, c-format
@@ -5463,11 +5442,12 @@ msgstr "KiCad Classic"
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
+"Windows 7 en ouder wordt niet langer ondersteund door KiCad en zijn "
+"afhankelijkheden."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:300
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Niet ondersteunde via vorm: %s"
+msgstr "Niet Ondersteund Besturingssysteem"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -5814,18 +5794,16 @@ msgid "Pin Library"
 msgstr "Pin Bibliotheek"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Kies de bibliotheektabel om de bibliotheek aan toe te voegen:"
+msgstr "Houd de bibliotheek bovenaan de lijst"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Bibliotheek losmaken"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Kies de bibliotheektabel om de bibliotheek aan toe te voegen:"
+msgstr "Houd de bibliotheek niet meer bovenaan de lijst"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6188,30 +6166,28 @@ msgid "No default footprint"
 msgstr "Geen standaard footprint"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Versnelde graphics:"
+msgstr "Versnelde graphics"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Fallback-afbeeldingen:"
+msgstr "Fallback-graphics"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Render"
+msgstr "Rendering Engine"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Gebruik hardwareversnelde grafische afbeeldingen (aanbevolen)"
+msgstr "Gebruik hardware-versnelde graphics (aanbevolen)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Software graphics (voor computers die de hardwareversnellingsvereisten van "
+"KiCad niet ondersteunen)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6566,9 +6542,8 @@ msgid "Report files"
 msgstr "Rapportbestand"
 
 #: common/wildcards_and_files_ext.cpp:410
-#, fuzzy
 msgid "Component placement files"
-msgstr "Component bibliotheek bestanden"
+msgstr "Component plaatsingsbestanden"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
@@ -6589,7 +6564,7 @@ msgstr "Legacy footprint exportbestanden"
 #: common/wildcards_and_files_ext.cpp:440
 #, fuzzy
 msgid "Electrical rule check file"
-msgstr "Bestand met elektronische regelcontrole"
+msgstr "Bestand met elektronische regels"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -6951,7 +6926,6 @@ msgid "Lib: %s"
 msgstr "Lib: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
@@ -7211,25 +7185,25 @@ msgstr "Item niet geannoteerd: %s %s\n"
 #, fuzzy, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Fout: symbool %s %s eenheid %d en symbool heeft slechts %d eenheden "
+"Fout: symbool %s%s%s (eenheid %d) overschrijdt eenheden (%d) eenheden "
 "gedefinieerd\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Meerdere artikelen %s %s\n"
+msgstr "Dubbele items %s%s%s\n"
 
 #: eeschema/component_references_lister.cpp:596
 #: eeschema/component_references_lister.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s\n"
-msgstr "Meerdere artikelen %s %s\n"
+msgstr "Dubbele items %s%s\n"
 
 #: eeschema/component_references_lister.cpp:640
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "Verschillende waarden voor %s %d %s (%s) en %s %d %s (%s)"
+msgstr "Verschillende waarden voor %s%d%s (%s) en %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:2236
 #, c-format
@@ -14960,9 +14934,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s van schematisch"
+msgstr "%s%s [van schema]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -17733,11 +17707,9 @@ msgid "Load File to Edit"
 msgstr "Laad bestand om te bewerken"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr ""
-"\n"
-"Project: "
+msgstr "Project: %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -23041,12 +23013,13 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP-export is mislukt! Bewaar de printplaat en probeer het opnieuw"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Bordomtrek ontbreekt of is misvormd. Voer DRC uit voor een volledige analyse."
+"Bordomtrek ontbreekt of is niet gesloten met %.3f mm tolerantie.\n"
+"Voer DRC uit voor een volledige analyse."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:280
 #, c-format
@@ -26320,19 +26293,19 @@ msgid "Parent footprint description"
 msgstr "Beschrijving van de voetafdruk van de ouder"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "Toon footprints referenties"
+msgstr "Aanpassen net zal ook %s pad %s aanpassen naar %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "Toon footprints referenties"
+msgstr "Aanpassen net zal ook %s pad %s en %s pad %s aanpassen naar %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "Toon footprints referenties"
+msgstr "Aanpassen net zal ook %lu verbonden pads aanpassen naar %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:367
 #, fuzzy
@@ -28803,15 +28776,13 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" bestaat niet. Wilt u deze aanmaken?"
 
 #: pcbnew/files.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr ""
-"Er is een fout opgetreden bij het opslaan van de projectspecifieke "
-"footprintbibliotheektabel:\n"
-"\n"
-"%s"
+"Er is een fout opgetreden bij het opslaan van de footprint '%s' naar de "
+"projectspecifieke footprintbibliotheek: %s"
 
 #: pcbnew/files.cpp:836
 #, fuzzy, c-format
@@ -28972,9 +28943,9 @@ msgstr ""
 "Bewerken %s vanaf bord. Door op te slaan wordt alleen het bord bijgewerkt."
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [van %s. %s]"
+msgstr "%s%s [van %s. %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -30069,9 +30040,9 @@ msgid "Pad of %s on %s"
 msgstr "Pad van %s op %s"
 
 #: pcbnew/pad.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Doorlopende pads"
+msgstr "Doorgaand pad van %s"
 
 #: pcbnew/pad.cpp:1115
 #, c-format
@@ -30079,9 +30050,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s van %s op %s"
 
 #: pcbnew/pad.cpp:1122
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Doorlopende pads"
+msgstr "Doorgaand pad %s van %s"
 
 #: pcbnew/pad.cpp:1433
 msgid "Edge connector"
@@ -30208,9 +30179,8 @@ msgid "Edit design rules"
 msgstr "Ontwerpregels"
 
 #: pcbnew/pcb_edit_frame.cpp:1663
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC onvolledig: kon geen ontwerpregels opstellen.  "
+msgstr "Kon geen aangepaste ontwerpregels compileren."
 
 #: pcbnew/pcb_edit_frame.cpp:1691
 msgid "Export Hyperlynx Layout"
@@ -31008,9 +30978,9 @@ msgid "Expecting pad size values but found %s : %s at line %zu"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid pad size on line %zu"
-msgstr "Ongeldige maat %ll d: te groot"
+msgstr "Ongeldige pad grootte op regel %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:554
 #, c-format
