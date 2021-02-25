@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-25 11:42+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2021-02-25 17:52+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -22214,9 +22214,9 @@ msgid "Unconnected Items (%d)"
 msgstr "Μη συνδεδεμένα Αντικείμενα (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Σχηματικό σώθηκε"
+msgstr "Ισοτιμία Σχηματικού (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 msgid "Delete Marker"
@@ -24170,9 +24170,8 @@ msgid "Via Count"
 msgstr "Πλήθος Via"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:74
-#, fuzzy
 msgid "Via Length"
-msgstr "Μήκος via:"
+msgstr "Μήκος Via"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
 msgid "Board Length"
@@ -28879,9 +28878,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [από %s.%s]"
+msgstr "%s%s [από %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -29100,28 +29099,27 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:930
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαρρύθμιση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων '%s'.\n"
+"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων «%s». "
 "Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
-"τη διαρρύθμιση."
+"τη διαμόρφωση."
 
 #: pcbnew/footprint_viewer_frame.cpp:933
 msgid "Footprint library not found."
 msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
 
 #: pcbnew/footprint_viewer_frame.cpp:937
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη\n"
-"στην τρέχουσα διαμόρφωση. Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών "
-"Αποτυπωμάτων για να \n"
+"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη στην τρέχουσα "
+"διαμόρφωση. Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να "
 "επεξεργαστείτε τη διαμόρφωση."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
@@ -34687,9 +34685,9 @@ msgid "Rule Area Cutout on %s"
 msgstr "Περιδιευθετημένο μέρος Περιοχής Κανόνων σε %s"
 
 #: pcbnew/zone.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout on %s"
-msgstr "Ζώνη (%08lX) [%s] στο %s"
+msgstr "Περιδιευθετημένο μέρος Ζώνης στο %s"
 
 #: pcbnew/zone.cpp:879
 #, c-format
