@@ -287,21 +287,22 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     PNS::CONSTRAINT constraint;
     int rv = 0;
+    int layer;
+
+    if( !aA->Layers().IsMultilayer() || !aB || aB->Layers().IsMultilayer() )
+        layer = aA->Layer();
+    else
+        layer = aB->Layer();
 
     if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
     {
-        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
-                             &constraint ) )
-        {
-            if( constraint.m_Value.Min() > rv )
-                rv = constraint.m_Value.Min();
-        }
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
+            rv = constraint.m_Value.Min();
     }
 
     if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
     {
-        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, aA->Layer(),
-                             &constraint ) )
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
         {
             if( constraint.m_Value.Min() > rv )
                 rv = constraint.m_Value.Min();
@@ -323,12 +324,15 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITE
 
     PNS::CONSTRAINT constraint;
     int rv = 0;
+    int layer;
 
-    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, aA->Layer(),
-                         &constraint ) )
-    {
+    if( !aA->Layers().IsMultilayer() || !aB || aB->Layers().IsMultilayer() )
+        layer = aA->Layer();
+    else
+        layer = aB->Layer();
+
+    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
         rv = constraint.m_Value.Min();
-    }
 
     m_holeClearanceCache[ key ] = rv;
     return rv;
@@ -345,12 +349,15 @@ int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PN
 
     PNS::CONSTRAINT constraint;
     int rv = 0;
+    int layer;
 
-    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, aA->Layer(),
-                         &constraint ) )
-    {
+    if( !aA->Layers().IsMultilayer() || !aB || aB->Layers().IsMultilayer() )
+        layer = aA->Layer();
+    else
+        layer = aB->Layer();
+
+    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
         rv = constraint.m_Value.Min();
-    }
 
     m_holeToHoleClearanceCache[ key ] = rv;
     return rv;
