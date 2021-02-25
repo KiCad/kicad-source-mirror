@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 10:42-0800\n"
-"PO-Revision-Date: 2021-02-25 11:40+0000\n"
+"PO-Revision-Date: 2021-02-25 11:42+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -29100,14 +29100,14 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:930
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων «%s». "
+"Η τρέχουσα διαρρύθμιση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων '%s'.\n"
 "Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
-"τη διαμόρφωση."
+"τη διαρρύθμιση."
 
 #: pcbnew/footprint_viewer_frame.cpp:933
 msgid "Footprint library not found."
