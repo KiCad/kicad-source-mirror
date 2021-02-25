@@ -36,6 +36,7 @@ enum
     GRIDTRICKS_FIRST_ID = 901,
     GRIDTRICKS_ID_CUT,
     GRIDTRICKS_ID_COPY,
+    GRIDTRICKS_ID_DELETE,
     GRIDTRICKS_ID_PASTE,
     GRIDTRICKS_ID_SELECT,
 
@@ -75,7 +76,7 @@ protected:
 
     virtual void paste_clipboard();
     virtual void paste_text( const wxString& cb_text );
-    virtual void cutcopy( bool doCut );
+    virtual void cutcopy( bool doCopy, bool doDelete );
 
     WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
 

@@ -241,15 +241,17 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu )
     menu.Append( GRIDTRICKS_ID_CUT,    _( "Cut" ) + "\tCtrl+X",         _( "Clear selected cells placing original contents on clipboard" ) );
     menu.Append( GRIDTRICKS_ID_COPY,   _( "Copy" ) + "\tCtrl+C",        _( "Copy selected cells to clipboard" ) );
     menu.Append( GRIDTRICKS_ID_PASTE,  _( "Paste" ) + "\tCtrl+V",       _( "Paste clipboard cells to matrix at current cell" ) );
+    menu.Append( GRIDTRICKS_ID_DELETE, _( "Delete" ) + "\tDel",         _( "Delete selected cells" ) );
     menu.Append( GRIDTRICKS_ID_SELECT, _( "Select All" ) + "\tCtrl+A",  _( "Select all cells" ) );
 
     getSelectedArea();
 
-    // if nothing is selected, disable cut and copy.
+    // if nothing is selected, disable cut, copy and delete.
     if( !m_sel_row_count && !m_sel_col_count )
     {
         menu.Enable( GRIDTRICKS_ID_CUT,  false );
         menu.Enable( GRIDTRICKS_ID_COPY, false );
+        menu.Enable( GRIDTRICKS_ID_DELETE, false );
     }
 
     menu.Enable( GRIDTRICKS_ID_PASTE, false );
@@ -284,8 +286,15 @@ void GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     switch( menu_id )
     {
     case GRIDTRICKS_ID_CUT:
+        cutcopy( true, true );
+        break;
+
     case GRIDTRICKS_ID_COPY:
-        cutcopy( menu_id == GRIDTRICKS_ID_CUT );
+        cutcopy( true, false );
+        break;
+
+    case GRIDTRICKS_ID_DELETE:
+        cutcopy( false, true );
         break;
 
     case GRIDTRICKS_ID_PASTE:
@@ -320,7 +329,7 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'C' )
     {
         getSelectedArea();
-        cutcopy( false );
+        cutcopy( true, false );
         return;
     }
     else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )
@@ -332,7 +341,13 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'X' )
     {
         getSelectedArea();
-        cutcopy( true );
+        cutcopy( true, true );
+        return;
+    }
+    else if( !ev.GetModifiers() && ev.GetKeyCode() == WXK_DELETE )
+    {
+        getSelectedArea();
+        cutcopy( false, true );
         return;
     }
 
@@ -588,40 +603,44 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 }
 
 
-void GRID_TRICKS::cutcopy( bool doCut )
+void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
 {
     wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-    if( wxTheClipboard->Open() )
+    if( doCopy && !wxTheClipboard->Open() )
+        return;
+
+    wxGridTableBase*    tbl = m_grid->GetTable();
+    wxString            txt;
+
+    // fill txt with a format that is compatible with most spreadsheets
+    for( int row = m_sel_row_start;  row < m_sel_row_start + m_sel_row_count;  ++row )
     {
-        wxGridTableBase*    tbl = m_grid->GetTable();
-        wxString            txt;
-
-        // fill txt with a format that is compatible with most spreadsheets
-        for( int row = m_sel_row_start;  row < m_sel_row_start + m_sel_row_count;  ++row )
+        for( int col = m_sel_col_start;  col < m_sel_col_start + m_sel_col_count; ++col )
         {
-            for( int col = m_sel_col_start;  col < m_sel_col_start + m_sel_col_count; ++col )
+            txt += tbl->GetValue( row, col );
+
+            if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
+                txt += COL_SEP;
+
+            if( doDelete )
             {
-                txt += tbl->GetValue( row, col );
-
-                if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
-                    txt += COL_SEP;
-
-                if( doCut )
-                {
-                    if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
-                        tbl->SetValue( row, col, wxEmptyString );
-                }
+                if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) )
+                    tbl->SetValue( row, col, wxEmptyString );
             }
-            txt += ROW_SEP;
         }
 
+        txt += ROW_SEP;
+    }
+
+    if( doCopy )
+    {
         wxTheClipboard->SetData( new wxTextDataObject( txt ) );
         wxTheClipboard->Close();
-
-        if( doCut )
-            m_grid->ForceRefresh();
     }
+
+    if( doDelete )
+        m_grid->ForceRefresh();
 }
 
 
