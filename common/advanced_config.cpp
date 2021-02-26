@@ -141,8 +141,6 @@ static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
 
 static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
 
-static const wxChar SkipBoundingBoxFpLoad[] = wxT( "SkipBoundingBoxFpLoad" );
-
 /**
  * The diameter of the drill marks on print and plot outputs (in mm),
  * when the "Drill marks" option is set to "Small mark"
