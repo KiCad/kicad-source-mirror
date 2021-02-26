@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
 "PO-Revision-Date: 2021-02-28 14:57+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3095,7 +3095,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "只能分配一个动作给每个垂直滚动设置"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3217,7 +3217,7 @@ msgstr "垂直触控板或滚动轮运动："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "每列只能分配一个动作"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -4455,9 +4455,8 @@ msgid "Delete"
 msgstr "删除"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "删除选择项"
+msgstr "删除所选槽"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -7256,9 +7255,8 @@ msgstr ""
 "设置此选项以显示正在运行的命令的窗口。"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "重置网格列表尺寸到默认值"
+msgstr "重置 BOM 生成器脚本到默认设置"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -8158,7 +8156,7 @@ msgstr "错误，警告和排除"
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d 个符号需要注解。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -11283,9 +11281,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "切换是否选中项目。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -11311,9 +11308,8 @@ msgstr ""
 "Alt、Shift 和 Cmd。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
@@ -17187,11 +17183,10 @@ msgstr ""
 "您要创建一个与工程同名的新目录吗?"
 
 #: kicad/import_project.cpp:113
-#, fuzzy
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
-msgstr "创建新目录时出错。请尝试其他路径。未导入该项目。"
+msgstr "创建新目录时出错。请尝试不同路径。无法导入该项目。"
 
 #: kicad/import_project.cpp:137 kicad/import_project.cpp:154
 #, c-format
@@ -17200,6 +17195,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"无法复制文件 '%s'\n"
+"到 '%s'\n"
+"无法导入该项目。"
 
 #: kicad/import_project.cpp:216
 msgid "Import CADSTAR Archive Project Files"
@@ -19831,7 +19829,7 @@ msgstr "铜层："
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "选择压板中的铜层数目"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -26207,9 +26205,8 @@ msgid "Minimum item clearance:"
 msgstr "最小项目间隙："
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
-#, fuzzy
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "使用 \"%s\" 控制更改铜层数。"
+msgstr "使用物理压板页更改铜层数。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -30784,17 +30781,20 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"事件文件：%s\n"
+"电路板转储：%s"
 
 #: pcbnew/router/router_tool.cpp:503
-#, fuzzy
 msgid "Save router log"
-msgstr "将工程保存到"
+msgstr "保存布线器日志"
 
 #: pcbnew/router/router_tool.cpp:503
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"你想为了调试目的\n"
+"保存布线器事件日志吗？"
 
 #: pcbnew/router/router_tool.cpp:812 pcbnew/router/router_tool.cpp:834
 msgid "Show board setup"
