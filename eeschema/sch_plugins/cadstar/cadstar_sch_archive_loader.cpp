@@ -481,28 +481,50 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             {
                 SYMDEF_ID symID  = sym.SymdefID;
                 LIB_PART* kiPart = nullptr;
-                //KiCad requires parts to be named the same as the net:
-                wxString partName = sym.SymbolVariant.Reference;
 
-                partName = LIB_ID::FixIllegalChars( partName );
+                // In CADSTAR "GlobalSignal" is a special type of symbol which defines
+                // a Power Symbol. The "Alternate" name defines the default net name of
+                // the power symbol but this can be overriden in the design itself.
+                wxString libraryNetName = Library.SymbolDefinitions.at( symID ).Alternate;
 
-                if( m_powerSymLibMap.find( symID ) == m_powerSymLibMap.end()
-                        || m_powerSymLibMap.at( symID )->GetName() != partName )
+                // Name of the net that the symbol instance in CADSTAR refers to:
+                wxString symbolInstanceNetName = sym.SymbolVariant.Reference;
+                symbolInstanceNetName = LIB_ID::FixIllegalChars( symbolInstanceNetName );
+
+                // Name of the symbol we will use for saving the part in KiCad
+                // Note: In CADSTAR all power symbols will start have the reference name be
+                // "GLOBALSIGNAL" followed by the default net name, so it makes sense to save
+                // the symbol in KiCad as the default net name as well.
+                wxString libPartName = libraryNetName;
+
+                // In CADSTAR power symbol instances can refer to a different net to that defined
+                // in the library. This causes problems in KiCad v6 as it breaks connectivity when
+                // the user decides to update all symbols from library. We handle this by creating
+                // individual versions of the power symbol for each net name.
+                if( libPartName != symbolInstanceNetName )
                 {
-                    kiPart = new LIB_PART( partName );
+                    libPartName += wxT( " (" ) + symbolInstanceNetName + wxT( ")" );
+                }
+
+                if( m_powerSymLibMap.find( libPartName ) == m_powerSymLibMap.end() )
+                {
+                    SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( symID );
+
+                    kiPart = new LIB_PART( libPartName );
                     kiPart->SetPower();
                     loadSymDefIntoLibrary( symID, nullptr, "A", kiPart );
 
-                    kiPart->GetValueField().SetText( partName );
-                    SYMDEF_SCM symbolDef = Library.SymbolDefinitions.at( symID );
+                    kiPart->GetValueField().SetText( symbolInstanceNetName );
 
                     if( symbolDef.TextLocations.find( SIGNALNAME_ORIGIN_ATTRID )
                             != symbolDef.TextLocations.end() )
                     {
-                        TEXT_LOCATION signameOrigin =
+                        TEXT_LOCATION txtLoc =
                                 symbolDef.TextLocations.at( SIGNALNAME_ORIGIN_ATTRID );
-                        kiPart->GetValueField().SetPosition(
-                                getKiCadLibraryPoint( signameOrigin.Position, symbolDef.Origin ) );
+
+                        wxPoint valPos = getKiCadLibraryPoint( txtLoc.Position, symbolDef.Origin );
+
+                        kiPart->GetValueField().SetPosition( valPos );
                         kiPart->GetValueField().SetVisible( true );
                     }
                     else
@@ -513,18 +535,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     kiPart->GetReferenceField().SetText( "#PWR" );
                     kiPart->GetReferenceField().SetVisible( false );
                     ( *m_plugin )->SaveSymbol( m_libraryFileName.GetFullPath(), kiPart );
-                    m_powerSymLibMap.insert( { symID, kiPart } );
+                    m_powerSymLibMap.insert( { libPartName, kiPart } );
                 }
                 else
                 {
-                    kiPart = m_powerSymLibMap.at( symID );
+                    kiPart = m_powerSymLibMap.at( libPartName );
+                    wxASSERT( kiPart->GetValueField().GetText() == symbolInstanceNetName );
                 }
 
-                double compOrientationTenthDegree = 0.0;
-
-                SCH_COMPONENT* component =
-                        loadSchematicSymbol( sym, *kiPart, compOrientationTenthDegree );
-
+                double returnedOrientation = 0.0;
+                SCH_COMPONENT* component = loadSchematicSymbol( sym, *kiPart, returnedOrientation );
                 m_powerSymMap.insert( { sym.ID, component } );
             }
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
