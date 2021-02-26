@@ -1220,7 +1220,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogError( wxString::Format( _( "Unhandled graphic item '%s' "
+            wxLogDebug( wxString::Format( _( "Unhandled graphic item '%s' "
                                              "in Geometric definition row %zu" ),
                     gr_data.graphic_dataname.c_str(), geo_tag.c_str(), rownum ) );
             continue;
@@ -1404,7 +1404,7 @@ size_t FABMASTER::processTraces( size_t aRow )
 
         if( !gr_item )
         {
-            wxLogError( wxString::Format( _( "Unhandled graphic item '%s' "
+            wxLogDebug( wxString::Format( _( "Unhandled graphic item '%s' "
                                              "in Traces definition row %zu" ),
                     gr_data.graphic_dataname.c_str(), rownum ) );
             continue;
