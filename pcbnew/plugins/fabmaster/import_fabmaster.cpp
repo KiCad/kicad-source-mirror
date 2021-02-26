@@ -1795,7 +1795,7 @@ bool FABMASTER::loadZones( BOARD* aBoard )
 
     for( auto& zone : zones )
     {
-        if( IsCopperLayer( getLayer( zone->layer ) ) )
+        if( IsCopperLayer( getLayer( zone->layer ) ) || zone->layer == "ALL" )
             loadZone( aBoard, zone );
         else
         {
@@ -1856,12 +1856,17 @@ bool FABMASTER::loadZones( BOARD* aBoard )
 
             for( auto& pt1 : outline1.CPoints() )
             {
-                if( !outline2.PointOnEdge( pt1, 1 ) )
-                    continue;
-
                 /// We're looking for the netcode with the most overlaps to the un-netted zone
-                overlaps[ zone2->GetNetCode() ]++;
-                break;
+                if( outline2.PointOnEdge( pt1, 1 ) )
+                    overlaps[ zone2->GetNetCode() ]++;
+            }
+
+            for( auto& pt2 : outline2.CPoints() )
+            {
+                /// The overlap between outline1 and outline2 isn't perfect, so look for overlaps
+                /// in both directions
+                if( outline1.PointOnEdge( pt2,  1 ) )
+                    overlaps[ zone2->GetNetCode() ]++;
             }
         }
 
@@ -2509,7 +2514,10 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     if( net_it != netinfo.end() )
         zone->SetNet( net_it->second );
 
-    zone->SetLayer( layer );
+    if( aLine->layer == "ALL" )
+        zone->SetLayerSet( aBoard->GetLayerSet() & LSET::AllCuMask() );
+    else
+        zone->SetLayer( layer );
 
     zone->SetIsRuleArea( false );
     zone->SetDoNotAllowTracks( false );
@@ -2517,6 +2525,17 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     zone->SetDoNotAllowPads( false );
     zone->SetDoNotAllowFootprints( false );
     zone->SetDoNotAllowCopperPour( false );
+
+    if( aLine->lclass == "ROUTE KEEPOUT")
+    {
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowTracks( true );
+    }
+    else if( aLine->lclass == "VIA KEEPOUT")
+    {
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowVias( true );
+    }
 
     zone->SetPriority( 50 );
     zone->SetLocalClearance( 0 );
