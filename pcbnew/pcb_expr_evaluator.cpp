@@ -177,8 +177,17 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 else
                     footprintCourtyard = footprint->GetPolyCourtyardFront();
 
-                if( !footprint->GetBoundingBox().Intersects( itemBBox ) )
-                    return false;
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                {
+                    // A zone must be entirely inside the courtyard to be considered
+                    if( !footprint->GetBoundingBox().Contains( itemBBox ) )
+                        return false;
+                }
+                else
+                {
+                    if( !footprint->GetBoundingBox().Intersects( itemBBox ) )
+                        return false;
+                }
 
                 if( !shape )
                     shape = item->GetEffectiveShape( context->GetLayer() );
