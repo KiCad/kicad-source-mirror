@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
 "PO-Revision-Date: 2021-03-01 15:51+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -3163,7 +3163,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "Μόνο μία ενέργεια μπορεί να εκχωρηθεί σε κάθε ρύθμιση κάθετης κύλισης"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3292,7 +3292,7 @@ msgstr "Κάθετη κίνηση στην επιφάνεια αφής ή κίν
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Μόνο μία ενέργεια μπορεί να εκχωρηθεί σε κάθε στήλη"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -8359,7 +8359,7 @@ msgstr "Σφάλματα, Προειδοποιήσεις και Εξαιρέσε
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d το/τα σύμβολο/-α απαιτούν σχολιασμό.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -17655,6 +17655,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Δεν είναι δυνατή η αντιγραφή του αρχείου «%s»\n"
+"σε «%s»\n"
+"Δεν είναι δυνατή η εισαγωγή του έργου."
 
 #: kicad/import_project.cpp:216
 msgid "Import CADSTAR Archive Project Files"
@@ -24424,7 +24427,7 @@ msgstr "Μπαλαντέρ"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "RegEx Substr"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
@@ -26839,7 +26842,7 @@ msgstr "Άξονας Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
-msgstr ""
+msgstr "Επιλέξτε ποια κατεύθυνση στην οθόνη στην οποία αυξάνεται ο άξονας Ψ."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:20
 msgid "Allowed features"
@@ -28340,12 +28343,12 @@ msgstr "(%s μέγιστο αποδιαζευγμένο μήκος: %s; πραγ
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:480
 #, c-format
 msgid "minimum gap: %s; "
-msgstr ""
+msgstr "ελάχιστο κενό: %s· "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:484
 #, c-format
 msgid "maximum gap: %s; "
-msgstr ""
+msgstr "μέγιστο κενό: %s· "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:487
 #, c-format
@@ -28398,17 +28401,19 @@ msgstr "Λείπει αποτύπωμα %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:139
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "Δεν βρέθηκε αντίστοιχο pin στο σχηματικό."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:148
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "Net που λείπει από το pad δίνεται από το σχηματικό (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:158
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
 msgstr ""
+"Το net του pad (%s) δεν ταιριάζει με το net που δίνεται από το σχηματικό "
+"(%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:178
 #, c-format
@@ -28421,7 +28426,7 @@ msgstr "Έλεγχος ισοτιμίας PCB ως προς το σχηματι�
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:221
 msgid "No netlist provided, skipping LVS."
-msgstr ""
+msgstr "Δεν παρέχεται netlist, παρακάμπτεται το LVS."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
 #, c-format
@@ -28903,6 +28908,7 @@ msgstr "Αλλαγές στο αποτύπωμα δεν είναι αποθηκ�
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
+"Επεξεργασία %s από την πλακέτα. Η αποθήκευση θα ενημερώσει μόνο την πλακέτα."
 
 #: pcbnew/footprint_edit_frame.cpp:753
 #, c-format
@@ -31738,6 +31744,8 @@ msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"Να αποθηκευτεί το καταγραφολόγιο συμβάντων\n"
+"του δρομολογητή για περιπτώσεις εκσφαλμάτωσης;"
 
 #: pcbnew/router/router_tool.cpp:812 pcbnew/router/router_tool.cpp:834
 msgid "Show board setup"
