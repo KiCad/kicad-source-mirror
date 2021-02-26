@@ -919,7 +919,7 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Inflate( aAccuracy );
 
     if( aContained )
-        return arect.Contains( false, false );
+        return arect.Contains( GetBoundingBox( false, false ) );
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
