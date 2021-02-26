@@ -689,6 +689,16 @@ private:
     int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
 
+    // Bounding box caching strategy:
+    // While we attempt to notice the low-hanging fruit operations and update the bounding boxes
+    // accordingly, we rely mostly on a "if anything changed then the caches are stale" approach.
+    // We implement this by having PCB_BASE_FRAME's OnModify() method increment an operation
+    // counter, and storing that as a timestamp for the various caches.
+    // This means caches will get regenerated often -- but still far less often than if we had no
+    // caches at all.  The principal opitmization would be to change to dirty flag and make sure
+    // that any edit that could affect the bounding boxes (including edits to the footprint
+    // children) marked the bounding boxes dirty.  It would definitely be faster -- but also more
+    // fragile.
     mutable EDA_RECT       m_cachedBoundingBox;
     mutable int            m_boundingBoxCacheTimeStamp;
     mutable EDA_RECT       m_cachedVisibleBBox;
