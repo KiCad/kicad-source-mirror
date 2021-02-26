@@ -810,6 +810,9 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
         rect.Normalize();
     }
 
+    // Labels have a position point that is outside of the TextBox
+    rect.Merge( GetPosition() );
+
     return rect;
 }
 

@@ -490,16 +490,14 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
-        if( sheetPin && SCH_CONNECTION::MightBeBusLabel( sheetPin->GetText() )
-                && sheetPin->IsConnected( aPosition ) )
+        if( sheetPin && sheetPin->IsConnected( aPosition ) )
         {
             return true;
         }
 
         SCH_TEXT* label = GetLabel( aPosition );
 
-        if( label && SCH_CONNECTION::MightBeBusLabel( label->GetText() )
-                && label->IsConnected( aPosition ) && label->Type() != SCH_LABEL_T )
+        if( label && label->IsConnected( aPosition ) )
         {
             return true;
         }
@@ -515,13 +513,10 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
     case LAYER_WIRE:
     {
-        if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_WIRE_ENTRY_T) )
+        if( GetItem( aPosition, 1, SCH_BUS_WIRE_ENTRY_T) )
             return true;
 
-        if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_BUS_ENTRY_T) )
-            return true;
-
-        if( GetItem( aPosition, Schematic()->Settings().m_JunctionSize, SCH_JUNCTION_T ) )
+        if( GetItem( aPosition, 1, SCH_JUNCTION_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )
@@ -530,18 +525,16 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         if( GetWire( aPosition ) )
             return true;
 
-        SCH_TEXT* label = GetLabel( aPosition );
+        SCH_TEXT* label = GetLabel( aPosition, 1 );
 
-        if( label && !SCH_CONNECTION::MightBeBusLabel( label->GetText() )
-                && label->IsConnected( aPosition ) && label->Type() != SCH_LABEL_T )
+        if( label && label->IsConnected( aPosition ) )
         {
             return true;
         }
 
         SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
-        if( sheetPin && sheetPin->IsConnected( aPosition )
-            && !SCH_CONNECTION::MightBeBusLabel( sheetPin->GetText() ) )
+        if( sheetPin && sheetPin->IsConnected( aPosition ) )
         {
             return true;
         }
