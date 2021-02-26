@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-25 17:52+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-03-01 15:51+0000\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2360,7 +2360,7 @@ msgstr "Προεπισκόπηση Χαρτιού"
 
 #: common/dialogs/dialog_page_settings.cpp:97
 msgid "Preview Title Block Data"
-msgstr "Προεπισκόπηση Δεδομένων Μπλοκ Τίτλου"
+msgstr "Προεπισκόπηση Δεδομένων Πλαισίου Τίτλου"
 
 #: common/dialogs/dialog_page_settings.cpp:101
 #: common/dialogs/dialog_page_settings_base.h:141
@@ -2374,7 +2374,7 @@ msgstr "Χαρτί"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Title Block"
-msgstr "Μπλοκ Τίτλου"
+msgstr "Πλαίσιο Τίτλου"
 
 #: common/dialogs/dialog_page_settings.cpp:248
 #: common/dialogs/dialog_page_settings.cpp:695
@@ -2548,7 +2548,7 @@ msgstr "Εξαγωγή σε άλλα φύλλα"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 msgid "Title Block Parameters"
-msgstr "Παράμετροι Μπλοκ Τίτλου"
+msgstr "Παράμετροι Πλαισίου Τίτλου"
 
 #: common/dialogs/dialog_page_settings_base.cpp:144
 #, c-format
@@ -2737,7 +2737,7 @@ msgstr "Ασπρόμαυρο"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Εκτύπωση περιγράμματος και πλαισίου τίτλου"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -4629,9 +4629,8 @@ msgstr "Επεξεργαστής Σχεδίασης PCB"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Επεξεργαστής Σχεδίασης Φύλλου Εργασίας"
+msgstr "Επεξεργαστής φύλλου σχεδίασης"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5538,7 +5537,7 @@ msgstr "Ρυθμίσεις Σελίδας..."
 
 #: common/tool/actions.cpp:95
 msgid "Settings for paper size and title block info"
-msgstr "Ρυθμίσεις για το μέγεθος του χαρτιού και πληροφορίες μπλοκ τίτλου"
+msgstr "Ρυθμίσεις για το μέγεθος του χαρτιού και πλαισίου τίτλου πληροφοριών"
 
 #: common/tool/actions.cpp:101 kicad/project_tree_pane.cpp:790
 msgid "Print..."
@@ -9872,13 +9871,12 @@ msgid "Page size:"
 msgstr "Μέγεθος σελίδας:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Ολοκλήρωση σχεδίαση φύλλου"
+msgstr "Σχεδίαση φύλλου σχεδίασης"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Σχεδιογράφηση πλαισίου φύλλου και μπλοκ τίτλου"
+msgstr "Σχεδίαση περιγράμματος φύλλου σχεδίασης και πλαισίου τίτλου"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9886,7 +9884,7 @@ msgstr "Ασπρόμαυρο"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr "Σχεδιογράφηση χρώματος παρασκηνίου"
+msgstr "Σχεδίαση χρώματος παρασκηνίου"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -9961,7 +9959,7 @@ msgstr "Εκτύπωση σελίδας %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "Εκτύπωση της &αναφοράς φύλλου και του μπλοκ τίτλου"
+msgstr "Εκτύπωση της &αναφοράς φύλλου και του πλαισίου τίτλου"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -16049,12 +16047,12 @@ msgid "Remap Legacy Library Symbols..."
 msgstr "Μετατροπή Συμβόλων..."
 
 #: eeschema/tools/ee_actions.cpp:593
-#, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Μετατροπή παλαιών συμβόλων βιβλιοθήκης σε κατάλογο βιβλιοθήκης συμβόλων"
+"Αντιστοίχιση αναφορών συμβόλων βιβλιοθήκης σε παλαιού τύπου σχέδια στον "
+"κατάλογο βιβλιοθήκης συμβόλων"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Bus Definitions..."
@@ -17425,7 +17423,7 @@ msgstr "Φύλλο Σχεδίασης"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 msgid "Show drawing sheet border and title block"
-msgstr "Προβολή πλαισίου φύλλου και μπλοκ τίτλου"
+msgstr "Εμφάνιση περιγράμματος φύλλου σχεδίασης και πλαισίου τίτλου"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17588,12 +17586,11 @@ msgstr ""
 "χωρητικότητας κ.λπ."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Επεξεργασία περιγραμμάτων φύλλων εργασίας και μπλοκ τίτλου για χρήση σε "
+"Επεξεργασία περιγραμμάτων φύλλων εργασίας και πλαισίων τίτλου για χρήση σε "
 "σχηματικά και σχέδια PCB"
 
 #: kicad/files-io.cpp:43
@@ -18014,7 +18011,7 @@ msgstr "Εκτέλεση υπολογισμών εξαρτημάτων, πλάτ
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit drawing sheet borders and title block"
-msgstr "Επεξεργασία πλαισίων φύλλου και μπλοκ τίτλου"
+msgstr "Επεξεργασία περιγραμμάτων φύλλου σχεδίασης και πλαισίου τίτλου"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18581,31 +18578,31 @@ msgstr "Ρυθμίσεις Προεπισκόπησης Σελίδας..."
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
 msgstr ""
-"Επεξεργασία δεδομένων προεπισκόπησης για μέγεθος σελίδας και μπλοκ τίτλου"
+"Επεξεργασία δεδομένων προεπισκόπησης για μέγεθος σελίδας και πλαίσιο τίτλου"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "Εμφάνιση μπλοκ τίτλου κατά τη λειτουργία προεπισκόπησης"
+msgstr "Εμφάνιση πλαισίου τίτλου σε λειτουργία προεπισκόπησης"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Εμφάνιση του μπλοκ τίτλου σε λειτουργία προεπισκόπησης:\n"
-"τα προσωρινά κείμενα θα αντικατασταθούν με δεδομένα προεπισκόπησης."
+"Εμφάνιση πλαισίου τίτλου σε λειτουργία προεπισκόπησης:\n"
+"τα σύμβολα κράτησης θέσης θα αντικατασταθούν με τα δεδομένα προεπισκόπησης."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "Εμφάνιση μπλοκ τίτλου κατά τη λειτουργία επεξεργασίας"
+msgstr "Εμφάνιση πλαισίου τίτλου σε λειτουργία επεξεργασίας"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Εμφάνιση του μπλοκ τίτλου σε λειτουργία επεξεργασίας:\n"
-"τα προσωρινά κείμενα θα εμφανιστούν σαν ${keyword} tokens."
+"Εμφάνιση πλαισίου τίτλου σε λειτουργία επεξεργασίας:\n"
+"τα σύμβολα κράτησης θέσης κειμένου εμφανίζονται ως διακριτικά ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:473
 msgid "Error writing objects to clipboard"
@@ -20317,7 +20314,7 @@ msgstr "Επίπεδα χαλκού:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Επιλέξτε τον αριθμό των στρώσεων χαλκού στη στοίβα"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -23073,7 +23070,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr "Σελίδα με πλαίσιο και μπλοκ τίτλου"
+msgstr "Σελίδα με πλαίσιο και πλαίσιο τίτλου"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -25336,7 +25333,7 @@ msgstr "Μορφή σχεδιογράφησης:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Σχεδίαση περιγράμματος και πλαισίου τίτλου"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
@@ -29639,14 +29636,12 @@ msgid "File not found"
 msgstr "Το αρχείο δεν βρέθηκε"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Το σχήμα έχει μηδενικό μέγεθος!"
+msgstr "Το σχήμα έχει μηδενικό μέγεθος."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Το σχήμα δεν έχει σημεία!"
+msgstr "Το σχήμα δεν έχει σημεία."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -31778,9 +31773,8 @@ msgstr ""
 "Cu/B.Cu) και των γειτονικών επιπέδων τους."
 
 #: pcbnew/router/router_tool.cpp:989
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Δρόμοι μόνο σε επίπεδα Χαλκού"
+msgstr "Δρόμοι μόνο σε επίπεδα Χαλκού."
 
 #: pcbnew/router/router_tool.cpp:1378 pcbnew/router/router_tool.cpp:1794
 msgid "The selected item is locked."
@@ -33027,6 +33021,8 @@ msgstr "Τέλος Επεξεργασίας Pad"
 #: pcbnew/tools/pcb_actions.cpp:527
 msgid "Regroups all touching graphic shapes into the edited pad"
 msgstr ""
+"Επαναομαδοποιεί όλα τα γραφικά σχήματα που αγγίζουν το ένα το άλλο στο "
+"επεξεργασμένο pad"
 
 #: pcbnew/tools/pcb_actions.cpp:532
 msgid "Default Pad Properties..."
@@ -34219,9 +34215,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Προβολή αποτυπώματος και προέλευσης κειμένου σε αντιστοίχηση"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Σχεδιογράφηση πλαισίου και μπλοκ τίτλου"
+msgstr "Εμφάνιση περιγραμμάτων φύλλου σχεδίασης και πλαισίου τίτλου"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
