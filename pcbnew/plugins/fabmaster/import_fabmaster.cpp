@@ -86,9 +86,22 @@ bool FABMASTER::Read( const std::string& aFile )
 
     m_filename = aFile;
 
+    // Read/ignore all bytes in the file to find the size and then go back to the beginning
+    ifs.ignore( std::numeric_limits<std::streamsize>::max() );
+    std::streamsize length = ifs.gcount();
+    ifs.clear();
+    ifs.seekg( 0, std::ios_base::beg );
+
     std::string buffer( std::istreambuf_iterator<char>{ ifs }, {} );
+
     std::vector < std::string > row;
+
+    // Reserve an estimate of the number of rows to prevent continual re-allocation
+    // crashing (Looking at you MSVC)
+    row.reserve( length / 100 );
     std::string cell;
+    cell.reserve( 100 );
+
     bool quoted = false;
 
     for( auto ch : buffer )
@@ -159,6 +172,9 @@ FABMASTER::section_type FABMASTER::detectType( size_t aOffset )
     }
 
     if( row.size() < 3 )
+        return UNKNOWN_EXTRACT;
+
+    if( row[0].back() != 'A' )
         return UNKNOWN_EXTRACT;
 
     std::string row1 = row[1];
