@@ -642,7 +642,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
-    const int delta = 25;  // This is the number of tests between 2 calls to the progress bar
+    const int delta = 50;  // This is the number of tests between 2 calls to the progress bar
 
     size_t count = 0;
 
