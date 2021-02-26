@@ -2433,24 +2433,15 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 }
 
 
-bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+SHAPE_POLY_SET FABMASTER::loadShapePolySet( const graphic_element& aElement )
 {
-    if( aLine->segment.size() < 3 )
-        return false;
-
-    PCB_LAYER_ID layer = Cmts_User;
+    SHAPE_POLY_SET poly_outline;
     int last_subseq = 0;
     int hole_idx = -1;
-    SHAPE_POLY_SET poly_outline;
 
     poly_outline.NewOutline();
 
-    auto new_layer = getLayer( aLine->layer );
-
-    if( IsValidLayer( new_layer ) )
-        layer = new_layer;
-
-    for( const auto& seg : aLine->segment )
+    for( const auto& seg : aElement )
     {
         if( seg->subseq > 0 || seg->subseq != last_subseq )
             hole_idx = poly_outline.AddHole( SHAPE_LINE_CHAIN{} );
@@ -2474,6 +2465,23 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     }
 
     poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+    return poly_outline;
+}
+
+
+bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
+{
+    if( aLine->segment.size() < 3 )
+        return false;
+
+    PCB_LAYER_ID layer = Cmts_User;
+
+    auto new_layer = getLayer( aLine->layer );
+
+    if( IsValidLayer( new_layer ) )
+        layer = new_layer;
+
+    SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
 
     if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
         return false;
@@ -2680,15 +2688,38 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
     {
         PCB_LAYER_ID layer;
 
-        if( geom.subclass == "SILKSCREEN_TOP" )
-            layer = F_SilkS;
-        else if( geom.subclass == "SILKSCREEN_BOTTOM" )
-            layer = B_SilkS;
         // The pin numbers are not useful for us outside of the footprints
-        else if( geom.subclass == "PIN_NUMBER" )
+        if( geom.subclass == "PIN_NUMBER" )
             continue;
-        else
+
+        layer = getLayer( geom.subclass );
+
+        if( layer == UNDEFINED_LAYER )
             layer = Cmts_User;
+
+        if( !geom.elements->empty() )
+        {
+            /// Zero-width segments/arcs are polygon outlines
+            if( ( *( geom.elements->begin() ) )->width == 0 )
+            {
+                SHAPE_POLY_SET poly_outline = loadShapePolySet( *( geom.elements ) );
+
+                if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
+                    continue;
+
+                PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
+
+                new_poly->SetShape( S_POLYGON );
+                new_poly->SetLayer( layer );
+                new_poly->SetPolyShape( poly_outline );
+                new_poly->SetWidth( 0 );
+
+                if( layer == F_SilkS || layer == B_SilkS )
+                    new_poly->SetFilled( true );
+
+                aBoard->Add( new_poly, ADD_MODE::APPEND );
+            }
+        }
 
         for( auto& seg : *geom.elements )
         {

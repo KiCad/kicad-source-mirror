@@ -568,6 +568,8 @@ private:
     bool loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine);
     bool loadFootprints( BOARD* aBoard );
 
+    SHAPE_POLY_SET loadShapePolySet( const graphic_element& aLine);
+
 };
 
 
