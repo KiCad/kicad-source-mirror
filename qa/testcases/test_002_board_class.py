@@ -69,10 +69,6 @@ class TestBoardClass(unittest.TestCase):
         pad.SetSize(wxSizeMM(2.0, 3.0))
         pad.SetPosition(wxPointMM(0,0))
 
-        #Update the footprint bounding box, because
-        #the new pad must be inside the bounding box to be located
-        module.CalculateBoundingBox()
-
         # easy case
         p1 = pcb.GetPad(wxPointMM(0,0))
 
