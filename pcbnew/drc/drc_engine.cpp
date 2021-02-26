@@ -678,6 +678,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
             m_errorLimits[ ii ] = INT_MAX;
     }
 
+    m_board->IncrementTimeStamp();      // Invalidate all caches
+
     for( ZONE* zone : m_board->Zones() )
     {
         zone->CacheBoundingBox();

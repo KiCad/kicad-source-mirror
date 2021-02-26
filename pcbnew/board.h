@@ -267,7 +267,13 @@ public:
      */
     BOARD_USE GetBoardUse() const { return m_boardUse; }
 
-    void IncrementTimeStamp() { m_timeStamp++; }
+    void IncrementTimeStamp()
+    {
+        m_timeStamp++;
+        m_InsideAreaCache.clear();
+        m_InsideCourtyardCache.clear();
+    }
+
     int GetTimeStamp() { return m_timeStamp; }
 
     /**
@@ -1130,5 +1136,10 @@ public:
      * @return bit field of legal ops.
      */
     GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
+
+public:
+    // While this is a significant encapsulation leak, it's also a significant performance win.
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool> m_InsideCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool> m_InsideAreaCache;
 };
 #endif      // CLASS_BOARD_H_
