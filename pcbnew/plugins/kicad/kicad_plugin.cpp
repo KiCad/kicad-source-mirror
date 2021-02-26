@@ -1749,8 +1749,15 @@ void PCB_IO::format( const TRACK* aTrack, int aNestLevel ) const
                       FormatInternalUnits( aTrack->GetStart() ).c_str(),
                       FormatInternalUnits( aTrack->GetWidth() ).c_str() );
 
+        // Old boards were using UNDEFINED_DRILL_DIAMETER value in file for via drill when
+        // via drill was the netclass value.
+        // recent boards always set the via drill to the actual value, but now we need to
+        // always store the drill value, because netclass value is not stored in the board file.
+        // Otherwise the drill value of some (old) vias can be unknown
         if( via->GetDrill() != UNDEFINED_DRILL_DIAMETER )
             m_out->Print( 0, " (drill %s)", FormatInternalUnits( via->GetDrill() ).c_str() );
+        else    // Probably old board!
+            m_out->Print( 0, " (drill %s)", FormatInternalUnits( via->GetDrillValue() ).c_str() );
 
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( LSET::Name( layer1 ) ).c_str(),
