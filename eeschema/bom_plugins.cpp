@@ -32,9 +32,10 @@ const wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 
 
 BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
-    : m_file( aFile )
+    : m_storedPath( aFile )
 {
     m_isOk = false;
+    m_file = wxFileName( aFile );
 
     if( !wxFile::Exists( m_file.GetFullPath() ) )
         m_file = FindFilePath();

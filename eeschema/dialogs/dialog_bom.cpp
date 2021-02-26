@@ -164,7 +164,7 @@ DIALOG_BOM::~DIALOG_BOM()
     for( const std::unique_ptr<BOM_GENERATOR_HANDLER>& plugin : m_generators )
     {
         wxString   name = plugin->GetName();
-        wxFileName path = plugin->GetFile();
+        wxFileName path( plugin->GetStoredPath() );
 
         // handle empty nickname by stripping path
         if( name.IsEmpty() )
@@ -207,16 +207,21 @@ void DIALOG_BOM::installGeneratorsList()
     {
         for( unsigned ii = 0; ii < m_generators.size(); ii++ )
         {
+            wxString name = m_generators[ii]->GetName();
+
             if( !m_generators[ii]->FindFilePath().Exists( wxFILE_EXISTS_REGULAR ) )
             {
                 wxLogTrace( BOM_TRACE, "BOM plugin %s not found",
                             m_generators[ii]->FindFilePath().GetFullName() );
-                continue;
+                name.Append( wxT( " " ) + _( "(file missing)" ) );
+
+                if( active_plugin_name == name )
+                    active_plugin_name.Clear();
             }
 
-            m_lbGenerators->Append( m_generators[ii]->GetName() );
+            m_lbGenerators->Append( name );
 
-            if( active_plugin_name == m_generators[ii]->GetName() )
+            if( active_plugin_name == name )
                 m_lbGenerators->SetSelection( ii );
         }
     }
@@ -269,13 +274,33 @@ void DIALOG_BOM::OnGeneratorSelected( wxCommandEvent& event )
 
 void DIALOG_BOM::pluginInit()
 {
-    auto plugin = selectedGenerator();
+    BOM_GENERATOR_HANDLER* plugin = selectedGenerator();
 
     if( !plugin )
     {
         m_textCtrlName->SetValue( wxEmptyString );
         m_textCtrlCommand->SetValue( wxEmptyString );
         m_Messages->SetValue( wxEmptyString );
+        return;
+    }
+
+    if( !plugin->FindFilePath().Exists( wxFILE_EXISTS_REGULAR ) )
+    {
+        m_textCtrlName->SetValue( wxEmptyString );
+        m_textCtrlCommand->SetValue( wxEmptyString );
+
+        wxString msg =
+                wxString::Format( _( "The selected BOM generator script %s could not be found." ),
+                                  plugin->GetFile().GetFullPath() );
+
+        if( !plugin->GetFile().IsAbsolute() )
+        {
+            msg.Append( wxString::Format( _( "\n\nSearched:\n\t%s\n\t%s" ),
+                                          PATHS::GetUserPluginsPath(),
+                                          PATHS::GetStockPluginsPath() ) );
+        }
+
+        m_Messages->SetValue( msg );
         return;
     }
 
@@ -390,13 +415,7 @@ wxString DIALOG_BOM::chooseGenerator()
     static wxString lastPath;
 
     if( lastPath.IsEmpty() )
-    {
-#ifndef __WXMAC__
-        lastPath = Pgm().GetExecutablePath();
-#else
-        lastPath = PATHS::GetOSXKicadDataDir() + "/plugins";
-#endif
-    }
+        lastPath = PATHS::GetUserPluginsPath();
 
     wxString fullFileName = EDA_FILE_SELECTOR( _( "Generator files:" ), lastPath, wxEmptyString,
                                                wxEmptyString, wxFileSelectorDefaultWildcardStr,
@@ -461,6 +480,9 @@ void DIALOG_BOM::OnCommandLineEdited( wxCommandEvent& event )
 
 void DIALOG_BOM::OnNameEdited( wxCommandEvent& event )
 {
+    if( m_textCtrlName->GetValue().IsEmpty() )
+        return;
+
     int ii = m_lbGenerators->GetSelection();
 
     if( ii < 0 )

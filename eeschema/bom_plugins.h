@@ -80,6 +80,8 @@ public:
         return m_file;
     }
 
+    wxString GetStoredPath() const { return m_storedPath; }
+
     /**
      * Returns the calculated path to the plugin: if the path is already absolute and exists,
      * just return it.  Otherwise if the path is just a filename, look for that file in the user
@@ -153,6 +155,9 @@ protected:
 
     ///< Path to the plugin
     wxFileName m_file;
+
+    ///< Path to the plugin stored in config (can be absolute or just a filename)
+    const wxString m_storedPath;
 
     ///< User customisable name
     wxString m_name;
