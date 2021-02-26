@@ -2200,11 +2200,27 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                     poly_outline.Move( -newpad->GetPosition() );
 
                                     if( src->mirror )
+                                    {
+                                        poly_outline.Mirror( false, true, VECTOR2I( 0, ( pin->pin_y - src->y ) ) );
                                         poly_outline.Rotate( ( -src->rotate + pin->rotation ) * M_PI / 180.0 );
+                                    }
                                     else
+                                    {
                                         poly_outline.Rotate( ( src->rotate - pin->rotation ) * M_PI / 180.0 );
+                                    }
 
                                     newpad->AddPrimitivePoly( poly_outline, 0, true );
+                                }
+
+                                SHAPE_POLY_SET mergedPolygon;
+                                newpad->MergePrimitivesAsPolygon( &mergedPolygon, UNDEFINED_LAYER );
+
+                                if( mergedPolygon.OutlineCount() > 1 )
+                                {
+                                    wxLogError( wxString::Format(
+                                            _( "Invalid custom pad named '%s'. Replacing with circular pad." ),
+                                            custom_name.c_str() ) );
+                                    newpad->SetShape( PAD_SHAPE_CIRCLE );
                                 }
                             }
                             else
