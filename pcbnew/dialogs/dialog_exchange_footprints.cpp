@@ -558,7 +558,6 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
     aNew->SetProperties( aExisting->GetProperties() );
     aNew->SetPath( aExisting->GetPath() );
-    aNew->CalculateBoundingBox();
 
     aCommit.Remove( aExisting );
     aCommit.Add( aNew );

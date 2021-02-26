@@ -69,7 +69,7 @@ void fillRectList( CSubRectArray& vecSubRects, std::vector <FOOTPRINT*>& aFootpr
 
     for( unsigned ii = 0; ii < aFootprintList.size(); ii++ )
     {
-        EDA_RECT fpBox = aFootprintList[ii]->GetFootprintRect();
+        EDA_RECT fpBox = aFootprintList[ii]->GetBoundingBox( false, false );
         TSubRect fpRect( ( fpBox.GetWidth() + PADDING ) / scale,
                          ( fpBox.GetHeight() + PADDING ) / scale, ii );
         vecSubRects.push_back( fpRect );
@@ -167,7 +167,7 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <FOOTPRIN
 
         FOOTPRINT* footprint = aFootprintList[vecSubRects[it].n];
 
-        EDA_RECT fpBBox = footprint->GetFootprintRect();
+        EDA_RECT fpBBox = footprint->GetBoundingBox( false, false );
         wxPoint mod_pos = pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
                           + aFreeArea.GetOrigin();
 
@@ -197,7 +197,6 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadArea
         if( footprint->IsLocked() )
             continue;
 
-        footprint->CalculateBoundingBox();
         footprintList.push_back( footprint );
     }
 
@@ -240,7 +239,7 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadArea
             subsurface += footprint->GetArea( PADDING );
 
             // Calculate min size of placement area:
-            EDA_RECT bbox = footprint->GetFootprintRect();
+            EDA_RECT bbox = footprint->GetBoundingBox( false, false );
             fp_max_width = std::max( fp_max_width, bbox.GetWidth() );
             fp_max_height = std::max( fp_max_height, bbox.GetHeight() );
 

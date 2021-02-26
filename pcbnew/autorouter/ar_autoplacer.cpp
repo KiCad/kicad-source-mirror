@@ -557,7 +557,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
         side = AR_SIDE_BOTTOM; otherside = AR_SIDE_TOP;
     }
 
-    EDA_RECT    fpBBox = aFootprint->GetFootprintRect();
+    EDA_RECT    fpBBox = aFootprint->GetBoundingBox( false, false );
     fpBBox.Move( -aOffset );
 
     buildFpAreas( aFootprint, 0 );
@@ -591,12 +591,10 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     double  min_cost, curr_cost, Score;
     bool    testOtherSide;
 
-    aFootprint->CalculateBoundingBox();
-
     lastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
     wxPoint  fpPos = aFootprint->GetPosition();
-    EDA_RECT fpBBox  = aFootprint->GetFootprintRect();
+    EDA_RECT fpBBox  = aFootprint->GetBoundingBox( false, false );
 
     // Move fpBBox to have the footprint position at (0,0)
     fpBBox.Move( -fpPos );
@@ -785,10 +783,7 @@ FOOTPRINT* AR_AUTOPLACER::pickFootprint( )
 
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        footprint->CalculateBoundingBox();
         fpList.push_back( footprint );
-    }
 
     sort( fpList.begin(), fpList.end(), sortFootprintsByComplexity );
 
@@ -1049,7 +1044,6 @@ end_of_tst:
         // Place footprint.
         placeFootprint( footprint, true, m_curPosition );
 
-        footprint->CalculateBoundingBox();
         genModuleOnRoutingMatrix( footprint );
         footprint->SetIsPlaced( true );
         footprint->SetNeedsPlaced( false );
@@ -1074,9 +1068,6 @@ end_of_tst:
     m_curPosition = memopos;
 
     m_matrix.UnInitRoutingMatrix();
-
-    for( FOOTPRINT* fp : m_board->Footprints() )
-        fp->CalculateBoundingBox();
 
     return cancelled ? AR_CANCELLED : AR_COMPLETED;
 }

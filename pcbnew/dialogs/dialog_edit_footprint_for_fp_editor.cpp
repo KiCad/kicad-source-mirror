@@ -718,8 +718,6 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 
-    m_footprint->CalculateBoundingBox();
-
     commit.Push( _( "Modify footprint properties" ) );
 
     return true;

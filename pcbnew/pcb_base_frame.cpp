@@ -691,6 +691,8 @@ void PCB_BASE_FRAME::OnModify()
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
+    GetBoard()->IncrementTimeStamp();
+
     UpdateStatusBar();
     UpdateMsgPanel();
 }

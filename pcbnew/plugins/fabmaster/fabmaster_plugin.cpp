@@ -24,7 +24,7 @@
 
 /**
  * @file pcad_plugin.cpp
- * @brief Pcbnew PLUGIN for FABMASTER ASCII *.txt/*.fab format.
+ * @brief Pcbnew PLUGIN for FABMASTER ASCII *.txt / *.fab format.
  */
 
 #include "fabmaster_plugin.h"

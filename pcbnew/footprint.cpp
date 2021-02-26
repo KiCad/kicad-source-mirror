@@ -45,13 +45,16 @@
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
+        m_boundingBoxCacheTimeStamp( 0 ),
+        m_visibleBBoxCacheTimeStamp( 0 ),
+        m_textExcludedBBoxCacheTimeStamp( 0 ),
+        m_hullCacheTimeStamp( 0 ),
         m_initial_comments( 0 )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
     m_orient       = 0;
     m_fpStatus     = FP_PADS_are_LOCKED;
-    m_hullDirty    = true;
     m_arflag       = 0;
     m_rot90Cost    = m_rot180Cost = 0;
     m_link         = 0;
@@ -69,8 +72,6 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
 
     m_3D_Drawings.clear();
-
-    UpdateBoundingHull();
 }
 
 
@@ -82,22 +83,28 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_attributes   = aFootprint.m_attributes;
     m_fpStatus     = aFootprint.m_fpStatus;
     m_orient       = aFootprint.m_orient;
-    m_boundingBox  = aFootprint.m_boundingBox;
-    m_hullDirty    = aFootprint.m_hullDirty;
-    m_hull         = aFootprint.m_hull;
     m_rot90Cost    = aFootprint.m_rot90Cost;
     m_rot180Cost   = aFootprint.m_rot180Cost;
     m_lastEditTime = aFootprint.m_lastEditTime;
     m_link         = aFootprint.m_link;
     m_path         = aFootprint.m_path;
 
-    m_localClearance = aFootprint.m_localClearance;
-    m_localSolderMaskMargin = aFootprint.m_localSolderMaskMargin;
-    m_localSolderPasteMargin = aFootprint.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio = aFootprint.m_localSolderPasteMarginRatio;
-    m_zoneConnection = aFootprint.m_zoneConnection;
-    m_thermalWidth = aFootprint.m_thermalWidth;
-    m_thermalGap = aFootprint.m_thermalGap;
+    m_cachedBoundingBox              = aFootprint.m_cachedBoundingBox;
+    m_boundingBoxCacheTimeStamp      = aFootprint.m_boundingBoxCacheTimeStamp;
+    m_cachedVisibleBBox              = aFootprint.m_cachedVisibleBBox;
+    m_visibleBBoxCacheTimeStamp      = aFootprint.m_visibleBBoxCacheTimeStamp;
+    m_cachedTextExcludedBBox         = aFootprint.m_cachedTextExcludedBBox;
+    m_textExcludedBBoxCacheTimeStamp = aFootprint.m_textExcludedBBoxCacheTimeStamp;
+    m_cachedHull                     = aFootprint.m_cachedHull;
+    m_hullCacheTimeStamp             = aFootprint.m_hullCacheTimeStamp;
+
+    m_localClearance                 = aFootprint.m_localClearance;
+    m_localSolderMaskMargin          = aFootprint.m_localSolderMaskMargin;
+    m_localSolderPasteMargin         = aFootprint.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio    = aFootprint.m_localSolderPasteMarginRatio;
+    m_zoneConnection                 = aFootprint.m_zoneConnection;
+    m_thermalWidth                   = aFootprint.m_thermalWidth;
+    m_thermalGap                     = aFootprint.m_thermalGap;
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -170,9 +177,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     m_initial_comments = aFootprint.m_initial_comments ?
                          new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;
-
-    if( m_hullDirty )
-        UpdateBoundingHull();
 }
 
 
@@ -221,22 +225,28 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_attributes    = aOther.m_attributes;
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
-    m_boundingBox   = aOther.m_boundingBox;
-    m_hull          = aOther.m_hull;
-    m_hullDirty     = aOther.m_hullDirty;
     m_rot90Cost     = aOther.m_rot90Cost;
     m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
 
-    m_localClearance                = aOther.m_localClearance;
-    m_localSolderMaskMargin         = aOther.m_localSolderMaskMargin;
-    m_localSolderPasteMargin        = aOther.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio   = aOther.m_localSolderPasteMarginRatio;
-    m_zoneConnection                = aOther.m_zoneConnection;
-    m_thermalWidth                  = aOther.m_thermalWidth;
-    m_thermalGap                    = aOther.m_thermalGap;
+    m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
+    m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
+    m_cachedVisibleBBox              = aOther.m_cachedVisibleBBox;
+    m_visibleBBoxCacheTimeStamp      = aOther.m_visibleBBoxCacheTimeStamp;
+    m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
+    m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
+    m_cachedHull                     = aOther.m_cachedHull;
+    m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
+
+    m_localClearance                 = aOther.m_localClearance;
+    m_localSolderMaskMargin          = aOther.m_localSolderMaskMargin;
+    m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
+    m_zoneConnection                 = aOther.m_zoneConnection;
+    m_thermalWidth                   = aOther.m_thermalWidth;
+    m_thermalGap                     = aOther.m_thermalGap;
 
     // Move reference and value
     m_reference = aOther.m_reference;
@@ -292,10 +302,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_keywords    = aOther.m_keywords;
     m_properties  = aOther.m_properties;
 
-    // Ensure auxiliary data is up to date
-    CalculateBoundingBox();
-    UpdateBoundingHull();
-
     m_initial_comments = aOther.m_initial_comments;
 
     // Clear the other item's containers since this is a move
@@ -319,22 +325,28 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_attributes    = aOther.m_attributes;
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
-    m_boundingBox   = aOther.m_boundingBox;
-    m_hull          = aOther.m_hull;
-    m_hullDirty     = aOther.m_hullDirty;
     m_rot90Cost     = aOther.m_rot90Cost;
     m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
 
-    m_localClearance                = aOther.m_localClearance;
-    m_localSolderMaskMargin         = aOther.m_localSolderMaskMargin;
-    m_localSolderPasteMargin        = aOther.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio   = aOther.m_localSolderPasteMarginRatio;
-    m_zoneConnection                = aOther.m_zoneConnection;
-    m_thermalWidth                  = aOther.m_thermalWidth;
-    m_thermalGap                    = aOther.m_thermalGap;
+    m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
+    m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
+    m_cachedVisibleBBox              = aOther.m_cachedVisibleBBox;
+    m_visibleBBoxCacheTimeStamp      = aOther.m_visibleBBoxCacheTimeStamp;
+    m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
+    m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
+    m_cachedHull                     = aOther.m_cachedHull;
+    m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
+
+    m_localClearance                 = aOther.m_localClearance;
+    m_localSolderMaskMargin          = aOther.m_localSolderMaskMargin;
+    m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
+    m_zoneConnection                 = aOther.m_zoneConnection;
+    m_thermalWidth                   = aOther.m_thermalWidth;
+    m_thermalGap                     = aOther.m_thermalGap;
 
     // Copy reference and value
     *m_reference = *aOther.m_reference;
@@ -400,10 +412,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_doc         = aOther.m_doc;
     m_keywords     = aOther.m_keywords;
     m_properties  = aOther.m_properties;
-
-    // Ensure auxiliary data is up to date
-    CalculateBoundingBox();
-    UpdateBoundingHull();
 
     m_initial_comments = aOther.m_initial_comments ?
                             new wxArrayString( *aOther.m_initial_comments ) : nullptr;
@@ -504,9 +512,6 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
     }
 
-    if( aBoardItem->Type() != PCB_FP_TEXT_T )
-        m_hullDirty = true;
-
     aBoardItem->ClearEditFlags();
     aBoardItem->SetParent( this );
 }
@@ -586,49 +591,16 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
     if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
         parentGroup->RemoveItem( aBoardItem );
-
-    if( aBoardItem->Type() != PCB_FP_TEXT_T )
-        m_hullDirty = true;
-}
-
-
-void FOOTPRINT::CalculateBoundingBox()
-{
-    m_boundingBox = GetFootprintRect();
 }
 
 
 double FOOTPRINT::GetArea( int aPadding ) const
 {
-    double w = std::abs( static_cast<double>( m_boundingBox.GetWidth() ) ) + aPadding;
-    double h = std::abs( static_cast<double>( m_boundingBox.GetHeight() ) ) + aPadding;
+    EDA_RECT bbox = GetBoundingBox( false, false );
+
+    double w = std::abs( static_cast<double>( bbox.GetWidth() ) ) + aPadding;
+    double h = std::abs( static_cast<double>( bbox.GetHeight() ) ) + aPadding;
     return w * h;
-}
-
-
-EDA_RECT FOOTPRINT::GetFootprintRect() const
-{
-    EDA_RECT area;
-
-    area.SetOrigin( m_pos );
-    area.SetEnd( m_pos );
-    area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
-
-    for( BOARD_ITEM* item : m_drawings )
-    {
-        if( item->Type() == PCB_FP_SHAPE_T )
-            area.Merge( item->GetBoundingBox() );
-    }
-
-    for( PAD* pad : m_pads )
-        area.Merge( pad->GetBoundingBox() );
-
-    for( FP_ZONE* zone : m_fp_zones )
-        area.Merge( zone->GetBoundingBox() );
-
-    // Groups do not contribute to the rect, only their members
-
-    return area;
 }
 
 
@@ -657,61 +629,122 @@ EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
 
 const EDA_RECT FOOTPRINT::GetBoundingBox() const
 {
-    return GetBoundingBox( true );
+    return GetBoundingBox( true, true );
 }
 
 
-const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeInvisibleText ) const
+const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
 {
-    EDA_RECT area = GetFootprintRect();
-
-    // Add in items not collected by GetFootprintRect():
-    for( BOARD_ITEM* item : m_drawings )
-    {
-        if( item->Type() != PCB_FP_SHAPE_T )
-            area.Merge( item->GetBoundingBox() );
-    }
-
-    // This can be further optimized when aIncludeInvisibleText is true, but currently
-    // leaving this as is until it's determined there is a noticeable speed hit.
-    bool   valueLayerIsVisible = true;
-    bool   refLayerIsVisible   = true;
-    BOARD* board               = GetBoard();
+    BOARD* board = GetBoard();
 
     if( board )
     {
-        // The first "&&" conditional handles the user turning layers off as well as layers
-        // not being present in the current PCB stackup.  Values, references, and all
-        // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
-        // 3rd "&&" conditionals handle that.
-        valueLayerIsVisible = board->IsLayerVisible( m_value->GetLayer() )
-                              && board->IsElementVisible( LAYER_MOD_VALUES )
-                              && board->IsElementVisible( LAYER_MOD_TEXT_FR );
-
-        refLayerIsVisible = board->IsLayerVisible( m_reference->GetLayer() )
-                            && board->IsElementVisible( LAYER_MOD_REFERENCES )
-                            && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+        if( aIncludeText && aIncludeInvisibleText )
+        {
+            if( m_boundingBoxCacheTimeStamp >= board->GetTimeStamp() )
+                return m_cachedBoundingBox;
+        }
+        else if( aIncludeText )
+        {
+            if( m_visibleBBoxCacheTimeStamp >= board->GetTimeStamp() )
+                return m_cachedVisibleBBox;
+        }
+        else
+        {
+            if( m_textExcludedBBoxCacheTimeStamp >= board->GetTimeStamp() )
+                return m_cachedTextExcludedBBox;
+        }
     }
 
+    EDA_RECT area;
 
-    if(( m_value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
-        area.Merge( m_value->GetBoundingBox() );
+    area.SetOrigin( m_pos );
+    area.SetEnd( m_pos );
+    area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
-    if(( m_reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
-        area.Merge( m_reference->GetBoundingBox() );
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->Type() == PCB_FP_SHAPE_T )
+            area.Merge( item->GetBoundingBox() );
+    }
+
+    for( PAD* pad : m_pads )
+        area.Merge( pad->GetBoundingBox() );
+
+    for( FP_ZONE* zone : m_fp_zones )
+        area.Merge( zone->GetBoundingBox() );
+
+    // Groups do not contribute to the rect, only their members
+
+    if( aIncludeText )
+    {
+        for( BOARD_ITEM* item : m_drawings )
+        {
+            if( item->Type() == PCB_FP_TEXT_T )
+                area.Merge( item->GetBoundingBox() );
+        }
+
+        // This can be further optimized when aIncludeInvisibleText is true, but currently
+        // leaving this as is until it's determined there is a noticeable speed hit.
+        bool   valueLayerIsVisible = true;
+        bool   refLayerIsVisible   = true;
+
+        if( board )
+        {
+            // The first "&&" conditional handles the user turning layers off as well as layers
+            // not being present in the current PCB stackup.  Values, references, and all
+            // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
+            // 3rd "&&" conditionals handle that.
+            valueLayerIsVisible = board->IsLayerVisible( m_value->GetLayer() )
+                                  && board->IsElementVisible( LAYER_MOD_VALUES )
+                                  && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+
+            refLayerIsVisible = board->IsLayerVisible( m_reference->GetLayer() )
+                                && board->IsElementVisible( LAYER_MOD_REFERENCES )
+                                && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+        }
+
+
+        if( ( m_value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
+            area.Merge( m_value->GetBoundingBox() );
+
+        if( ( m_reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
+            area.Merge( m_reference->GetBoundingBox() );
+    }
+
+    if( board )
+    {
+        if( aIncludeText && aIncludeInvisibleText )
+        {
+            m_boundingBoxCacheTimeStamp = board->GetTimeStamp();
+            m_cachedBoundingBox = area;
+        }
+        else if( aIncludeText )
+        {
+            m_visibleBBoxCacheTimeStamp = board->GetTimeStamp();
+            m_cachedVisibleBBox = area;
+        }
+        else
+        {
+            m_textExcludedBBoxCacheTimeStamp = board->GetTimeStamp();
+            m_cachedTextExcludedBBox = area;
+        }
+    }
 
     return area;
 }
 
 
-void FOOTPRINT::UpdateBoundingHull()
+SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 {
-    m_hull = CalculateBoundingHull();
-    m_hullDirty = false;
-}
+    BOARD* board = GetBoard();
 
-SHAPE_POLY_SET FOOTPRINT::CalculateBoundingHull() const
-{
+    if( board )
+    {
+        if( m_hullCacheTimeStamp >= board->GetTimeStamp() )
+            return m_cachedHull;
+    }
+
     SHAPE_POLY_SET rawPolys;
     SHAPE_POLY_SET hull;
 
@@ -765,34 +798,16 @@ SHAPE_POLY_SET FOOTPRINT::CalculateBoundingHull() const
     std::vector<wxPoint> convex_hull;
     BuildConvexHull( convex_hull, rawPolys );
 
-    SHAPE_POLY_SET hullPoly;
-    hullPoly.NewOutline();
+    m_cachedHull.RemoveAllContours();
+    m_cachedHull.NewOutline();
 
     for( const wxPoint& pt : convex_hull )
-        hullPoly.Append( pt );
+        m_cachedHull.Append( pt );
 
-    return hullPoly;
-}
+    if( board )
+        m_hullCacheTimeStamp = board->GetTimeStamp();
 
-
-SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
-{
-    if( m_hullDirty )
-        return CalculateBoundingHull();
-
-    return m_hull;
-}
-
-
-SHAPE_POLY_SET FOOTPRINT::GetBoundingHull()
-{
-    if( m_hullDirty )
-    {
-        m_hull = CalculateBoundingHull();
-        m_hullDirty = false;
-    }
-
-    return m_hull;
+    return m_cachedHull;
 }
 
 
@@ -887,7 +902,7 @@ bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 bool FOOTPRINT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = m_boundingBox;//.GetBoundingBoxRotated( GetPosition(), m_Orient );
+    EDA_RECT rect = GetBoundingBox( false, false );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -904,11 +919,11 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     arect.Inflate( aAccuracy );
 
     if( aContained )
-        return arect.Contains( m_boundingBox );
+        return arect.Contains( false, false );
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
-        if( !aRect.Intersects( GetBoundingBox() ) )
+        if( !aRect.Intersects( GetBoundingBox( false, false ) ) )
             return false;
 
         // Determine if any elements in the FOOTPRINT intersect the rect
@@ -926,7 +941,7 @@ bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
         for( BOARD_ITEM* item : m_drawings )
         {
-            if( item->HitTest( arect, false, 0 ) )
+            if( item->Type() != PCB_FP_TEXT_T && item->HitTest( arect, false, 0 ) )
                 return true;
         }
 
@@ -1274,11 +1289,7 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I FOOTPRINT::ViewBBox() const
 {
-    EDA_RECT area = GetFootprintRect();
-
-    // Calculate extended area including text fields
-    area.Merge( m_reference->GetBoundingBox() );
-    area.Merge( m_value->GetBoundingBox() );
+    EDA_RECT area = GetBoundingBox( true, true );
 
     // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
     // optimized, but the draw cost is small (perhaps smaller than optimization).
@@ -1344,6 +1355,11 @@ void FOOTPRINT::Rotate( const wxPoint& aRotCentre, double aAngle )
         if( item->Type() == PCB_FP_TEXT_T )
             static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
     }
+
+    m_boundingBoxCacheTimeStamp = 0;
+    m_visibleBBoxCacheTimeStamp = 0;
+    m_textExcludedBBoxCacheTimeStamp = 0;
+    m_hullCacheTimeStamp = 0;
 }
 
 
@@ -1408,12 +1424,11 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     if( aFlipLeftRight )
         Rotate( aCentre, 1800.0 );
 
-    CalculateBoundingBox();
+    m_boundingBoxCacheTimeStamp = 0;
+    m_visibleBBoxCacheTimeStamp = 0;
+    m_textExcludedBBoxCacheTimeStamp = 0;
 
-    if( m_hullDirty )
-        UpdateBoundingHull();
-    else
-        m_hull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
+    m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
 
     std::swap( m_poly_courtyard_front, m_poly_courtyard_back );
 }
@@ -1458,12 +1473,10 @@ void FOOTPRINT::SetPosition( const wxPoint& aPos )
         }
     }
 
-    m_boundingBox.Move( delta );
-
-    if( m_hullDirty )
-        UpdateBoundingHull();
-    else
-        m_hull.Move( delta );
+    m_cachedBoundingBox.Move( delta );
+    m_cachedVisibleBBox.Move( delta );
+    m_cachedTextExcludedBBox.Move( delta );
+    m_cachedHull.Move( delta );
 }
 
 
@@ -1520,8 +1533,10 @@ void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
         }
     }
 
-    CalculateBoundingBox();
-    m_hull.Move( moveVector );
+    m_cachedBoundingBox.Move( moveVector );
+    m_cachedVisibleBBox.Move( moveVector );
+    m_cachedTextExcludedBBox.Move( moveVector );
+    m_cachedHull.Move( moveVector );
 }
 
 
@@ -1561,8 +1576,11 @@ void FOOTPRINT::SetOrientation( double aNewAngle )
         }
     }
 
-    CalculateBoundingBox();
-    m_hull.Rotate( -DECIDEG2RAD( angleChange ), GetPosition() );
+    m_boundingBoxCacheTimeStamp = 0;
+    m_visibleBBoxCacheTimeStamp = 0;
+    m_textExcludedBBoxCacheTimeStamp = 0;
+
+    m_cachedHull.Rotate( -DECIDEG2RAD( angleChange ), GetPosition() );
 }
 
 

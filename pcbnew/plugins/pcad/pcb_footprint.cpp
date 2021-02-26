@@ -611,9 +611,6 @@ void PCB_FOOTPRINT::AddToBoard()
         if( m_FootprintItems[i]->m_objType == wxT( 'V' ) )
             ((PCB_VIA*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_rotation, false );
     }
-
-    footprint->CalculateBoundingBox();
-    footprint->UpdateBoundingHull();
 }
 
 

@@ -95,7 +95,8 @@ ALIGNMENT_RECTS GetBoundingBoxes( const T& aItems )
         if( item->Type() == PCB_FOOTPRINT_T )
         {
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-            rects.emplace_back( std::make_pair( boardItem, footprint->GetFootprintRect() ) );
+            rects.emplace_back( std::make_pair( boardItem,
+                                                footprint->GetBoundingBox( false, false ) ) );
         }
         else
         {

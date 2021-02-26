@@ -59,6 +59,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD::BOARD() :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
         m_boardUse( BOARD_USE::NORMAL ),
+        m_timeStamp( 1 ),
         m_paper( PAGE_INFO::A4 ),
         m_project( nullptr ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
@@ -1061,7 +1062,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
         else
         {
-            area.Merge( footprint->GetBoundingBox( showInvisibleText ) );
+            area.Merge( footprint->GetBoundingBox( true, showInvisibleText ) );
         }
     }
 
@@ -1725,7 +1726,7 @@ FOOTPRINT* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLa
         // Filter non visible footprints if requested
         if( !aVisibleOnly || IsFootprintLayerVisible( layer ) )
         {
-            EDA_RECT bb = candidate->GetFootprintRect();
+            EDA_RECT bb = candidate->GetBoundingBox( false, false );
 
             int offx = bb.GetX() + bb.GetWidth() / 2;
             int offy = bb.GetY() + bb.GetHeight() / 2;

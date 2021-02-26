@@ -193,6 +193,7 @@ class BOARD : public BOARD_ITEM_CONTAINER
 private:
     /// What is this board being used for
     BOARD_USE           m_boardUse;
+    int                 m_timeStamp;                // actually a modification counter
 
     wxString            m_fileName;
     MARKERS             m_markers;
@@ -213,9 +214,9 @@ private:
     std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
 
     PAGE_INFO           m_paper;
-    TITLE_BLOCK         m_titles;               // text in lower right of screen and plots
+    TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots
     PCB_PLOT_PARAMS     m_plotOptions;
-    PROJECT*            m_project;              // project this board is a part of
+    PROJECT*            m_project;                  // project this board is a part of
 
     /**
      * All of the board design settings are stored as a JSON object inside the project file.  The
@@ -265,6 +266,9 @@ public:
      * @return what the board is being used for
      */
     BOARD_USE GetBoardUse() const { return m_boardUse; }
+
+    void IncrementTimeStamp() { m_timeStamp++; }
+    int GetTimeStamp() { return m_timeStamp; }
 
     /**
      * Find out if the board is being used to hold a single footprint for editing/viewing.

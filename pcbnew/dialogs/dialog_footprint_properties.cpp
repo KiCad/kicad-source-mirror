@@ -780,8 +780,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 
-    m_footprint->CalculateBoundingBox();
-
     // This is a simple edit, we must create an undo entry
     if( m_footprint->GetEditFlags() == 0 )    // i.e. not edited, or moved
         commit.Push( _( "Modify footprint properties" ) );

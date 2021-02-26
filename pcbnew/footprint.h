@@ -140,26 +140,6 @@ public:
     void ClearAllNets();
 
     /**
-     * Calculate the bounding box in board coordinates.
-     */
-    void CalculateBoundingBox();
-
-    /**
-     * Build and returns the boundary box of the footprint excluding any text.
-     *
-     * @return The rectangle containing the footprint.
-     */
-    EDA_RECT GetFootprintRect() const;
-
-    /**
-     * Return the last calculated bounding box of the footprint (does not recalculate it).
-     * (call CalculateBoundingBox() to recalculate it).
-     *
-     * @return The rectangle containing the footprint.
-     */
-    EDA_RECT GetBoundingBoxBase() const { return m_boundingBox; }
-
-    /**
      * Return the bounding box containing pads when the footprint is on the front side,
      * orientation 0, position 0,0.
      *
@@ -175,19 +155,11 @@ public:
      *
      * This operation is slower but more accurate than calculating a bounding box.
      */
-    SHAPE_POLY_SET GetBoundingHull();
     SHAPE_POLY_SET GetBoundingHull() const;
-
-    /**
-     * Update the cached bounding Hull with current data
-     */
-    SHAPE_POLY_SET CalculateBoundingHull() const;
-
-    void UpdateBoundingHull();
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
-    const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
+    const EDA_RECT GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
     PADS& Pads()             { return m_pads; }
     const PADS& Pads() const { return m_pads; }
@@ -716,11 +688,15 @@ private:
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
     int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
-    EDA_RECT        m_boundingBox;       // Bounding box : coordinates on board, real orientation.
 
-
-    mutable bool    m_hullDirty;         // If the hull needs to be re-calculated
-    SHAPE_POLY_SET  m_hull;              // Convex wrapping hull of the footprint
+    mutable EDA_RECT       m_cachedBoundingBox;
+    mutable int            m_boundingBoxCacheTimeStamp;
+    mutable EDA_RECT       m_cachedVisibleBBox;
+    mutable int            m_visibleBBoxCacheTimeStamp;
+    mutable EDA_RECT       m_cachedTextExcludedBBox;
+    mutable int            m_textExcludedBBoxCacheTimeStamp;
+    mutable SHAPE_POLY_SET m_cachedHull;
+    mutable int            m_hullCacheTimeStamp;
 
     ZONE_CONNECTION m_zoneConnection;
     int             m_thermalWidth;

@@ -490,11 +490,11 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( position, ORIGIN | SNAPPABLE, footprint );
 
             // Add the footprint center point if it is markedly different from the origin
-            VECTOR2I center = footprint->GetFootprintRect().Centre();
+            VECTOR2I center = footprint->GetBoundingBox( false, false ).Centre();
             VECTOR2I grid( GetGrid() );
 
             if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
-                addAnchor( footprint->GetFootprintRect().Centre(), ORIGIN | SNAPPABLE, footprint );
+                addAnchor( center, ORIGIN | SNAPPABLE, footprint );
 
             break;
         }

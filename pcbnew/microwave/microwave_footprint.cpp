@@ -175,7 +175,6 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     }
 
     // Update the footprint and board
-    footprint->CalculateBoundingBox();
     editFrame.OnModify();
 
     return footprint;

@@ -251,7 +251,6 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_DebugZoneFiller           = false;
     m_DebugPDFWriter            = false;
-    m_SkipBoundingBoxOnFpLoad   = false;
     m_SmallDrillMarkSize        = 0.35;
     m_HotkeysDumper             = false;
     m_DrawBoundingBoxes         = false;
@@ -336,9 +335,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugPDFWriter,
                                                 &m_DebugPDFWriter, false ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::SkipBoundingBoxFpLoad,
-                                                &m_SkipBoundingBoxOnFpLoad, false ) );
-    
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
                                                   &m_SmallDrillMarkSize, 0.35, 0.0, 3.0 ) );
 

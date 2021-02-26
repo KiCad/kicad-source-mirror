@@ -388,7 +388,9 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     // Calculate the elements.
     std::vector <wxPoint> buffer;
     const INDUCTOR_S_SHAPE_RESULT res = BuildCornersList_S_Shape( buffer, aInductorPattern.m_Start,
-                                                                  aInductorPattern.m_End, aInductorPattern.m_Length, aInductorPattern.m_Width );
+                                                                  aInductorPattern.m_End,
+                                                                  aInductorPattern.m_Length,
+                                                                  aInductorPattern.m_Width );
 
     switch( res )
     {
@@ -471,6 +473,5 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     valPos.y += footprint->Value().GetTextSize().y;
     footprint->Value().SetPosition( valPos );
 
-    footprint->CalculateBoundingBox();
     return footprint;
 }

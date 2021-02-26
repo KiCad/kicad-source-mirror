@@ -349,7 +349,6 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     shape->SetWidth( 0 );
     PolyEdges.clear();
 
-    footprint->CalculateBoundingBox();
     editFrame.OnModify();
     return footprint;
 }

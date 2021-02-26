@@ -1448,7 +1448,7 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
 #if 0   // For debug purpose only: draw the footing bounding box
         double bboxThickness = 1.0 / m_gal->GetWorldScale();
         m_gal->SetLineWidth( bboxThickness );
-        EDA_RECT rect = aFootprint->GetBoundingBoxBase();
+        EDA_RECT rect = aFootprint->GetBoundingBox();
         m_gal->DrawRectangle( VECTOR2D( rect.GetOrigin() ), VECTOR2D( rect.GetEnd() ) );
 
         double bboxThickness = 3.0 / m_gal->GetWorldScale();

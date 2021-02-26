@@ -471,13 +471,6 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     m_board->GetDesignSettings().m_AuxOrigin += movementVector;
     m_board->GetDesignSettings().m_GridOrigin += movementVector;
 
-    // Finish Board by recalculating footprint boundingboxes
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        footprint->CalculateBoundingBox();
-        footprint->UpdateBoundingHull();
-    }
-    // Otherwise we cannot save the imported board
     m_board->SetModified();
 }
 

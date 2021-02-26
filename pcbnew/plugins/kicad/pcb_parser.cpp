@@ -3212,17 +3212,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     footprint->SetFPID( fpid );
     footprint->SetProperties( properties );
 
-    // We want to calculate the bounding box in most cases except if the advanced config is set
-    // and its a general footprint load.  This improves debugging greatly under MSVC where full
-    // STL iterator debugging is present and loading a massive amount of footprints can lead to
-    // 2 minute load times.
-    if( !ADVANCED_CFG::GetCfg().m_SkipBoundingBoxOnFpLoad || m_board != nullptr
-            || reader->GetSource().Contains( "clipboard" ) )
-    {
-        footprint->CalculateBoundingBox();
-        footprint->UpdateBoundingHull();
-    }
-
     return footprint.release();
 }
 
