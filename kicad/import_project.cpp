@@ -130,35 +130,39 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
     wxFileName schCopy( pro );
     schCopy.SetExt( aSchFileExtension );
 
-    if( sch.Exists() && !schCopy.SameAs( sch )
-      && wxCopyFile( sch.GetFullPath(), schCopy.GetFullPath(), true ) )
+    if( sch.Exists() && !schCopy.SameAs( sch ) )
     {
-        ///< @todo Should we remove the newly created folder?
-        msg.Printf( _( "Cannot copy file '%s'\n"
-                       "to '%s'\n"
-                       "The project cannot be imported." ),
-                    sch.GetFullPath(), schCopy.GetFullPath() );
+        if( !wxCopyFile( sch.GetFullPath(), schCopy.GetFullPath(), true ) )
+        {
+            ///< @todo Should we remove the newly created folder?
+            msg.Printf( _( "Cannot copy file '%s'\n"
+                           "to '%s'\n"
+                           "The project cannot be imported." ),
+                        sch.GetFullPath(), schCopy.GetFullPath() );
 
-        wxMessageDialog schCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-        schCopyErrorDlg.ShowModal();
-        return;
+            wxMessageDialog schCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
+            schCopyErrorDlg.ShowModal();
+            return;
+        }
     }
 
     wxFileName pcbCopy( pro );
     pcbCopy.SetExt( aPcbFileExtension );
 
-    if( pcb.Exists() && !pcbCopy.SameAs( pcb )
-      && wxCopyFile( pcb.GetFullPath(), pcbCopy.GetFullPath(), true ) )
+    if( pcb.Exists() && !pcbCopy.SameAs( pcb ) )
     {
-        ///< @todo Should we remove copied schematic file and the newly created folder?
-        msg.Printf( _( "Cannot copy file '%s'\n"
-                       "to '%s'\n"
-                       "The project cannot be imported." ),
-                    sch.GetFullPath(), schCopy.GetFullPath() );
+        if( !wxCopyFile( pcb.GetFullPath(), pcbCopy.GetFullPath(), true ) )
+        {
+            ///< @todo Should we remove copied schematic file and the newly created folder?
+            msg.Printf( _( "Cannot copy file '%s'\n"
+                           "to '%s'\n"
+                           "The project cannot be imported." ),
+                        pcb.GetFullPath(), pcbCopy.GetFullPath() );
 
-        wxMessageDialog brdCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-        brdCopyErrorDlg.ShowModal();
-        return;
+            wxMessageDialog brdCopyErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
+            brdCopyErrorDlg.ShowModal();
+            return;
+        }
     }
 
     // Close the project and make the new one
