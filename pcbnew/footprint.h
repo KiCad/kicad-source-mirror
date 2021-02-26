@@ -420,7 +420,7 @@ public:
     /**
      * @return reference designator text.
      */
-    const wxString GetReference() const
+    const wxString& GetReference() const
     {
         return m_reference->GetText();
     }
@@ -442,7 +442,7 @@ public:
     /**
      * @return the value text.
      */
-    const wxString GetValue() const
+    const wxString& GetValue() const
     {
         return m_value->GetText();
     }
