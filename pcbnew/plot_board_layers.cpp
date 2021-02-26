@@ -277,6 +277,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( onSolderPasteLayer )
                 margin = pad->GetSolderPasteMargin();
 
+            // not all shapes can have a different margin for x and y axis
+            // in fact only oval and rect shapes can have different values.
+            // Round shape have always the same x,y margin
+            // so define a unique value for other shapes that do not support different values
+            int mask_clearance = margin.x;
+
             // Now offset the pad size by margin + width_adj
             wxSize padPlotsSize = pad->GetSize() + margin * 2 + wxSize( width_adj, width_adj );
 
@@ -308,23 +314,56 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             case PAD_SHAPE_RECT:
                 pad->SetSize( padPlotsSize );
 
-                if( margin.x > 0 )
+                if( mask_clearance > 0 )
                 {
                     pad->SetShape( PAD_SHAPE_ROUNDRECT );
-                    pad->SetRoundRectCornerRadius( margin.x );
+                    pad->SetRoundRectCornerRadius( mask_clearance );
                 }
 
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
             case PAD_SHAPE_TRAPEZOID:
-            {
-                wxSize scale( padPlotsSize.x / padSize.x, padPlotsSize.y / padSize.y );
-                pad->SetDelta( wxSize( padDelta.x * scale.x, padDelta.y * scale.y ) );
-                pad->SetSize( padPlotsSize );
+                // inflate/deflate a trapezoid is a bit complex.
+                // so if the margin is not null, build a similar polygonal pad shape,
+                // and inflate/deflate the polygonal shape
+                // because inflating/deflating using different values for y and y
+                // we are using only margin.x as inflate/deflate value
+                if( mask_clearance == 0 )
+                    itemplotter.PlotPad( pad, color, padPlotMode );
+                else
+                {
+                    PAD dummy( *pad );
+                    dummy.SetAnchorPadShape( PAD_SHAPE_CIRCLE );
+                    dummy.SetShape( PAD_SHAPE_CUSTOM );
+                    SHAPE_POLY_SET outline;
+                    outline.NewOutline();
+                    int dx = padSize.x / 2;
+                    int dy = padSize.y / 2;
+                    int ddx = padDelta.x / 2;
+                    int  ddy = padDelta.y / 2;
 
-                itemplotter.PlotPad( pad, color, padPlotMode );
-            }
+                    outline.Append( -dx - ddy,  dy + ddx );
+                    outline.Append(  dx + ddy,  dy - ddx );
+                    outline.Append(  dx - ddy, -dy + ddx );
+                    outline.Append( -dx + ddy, -dy - ddx );
+
+                    // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
+                    // which can create bad shapes if margin.x is < 0
+                    int maxError = aBoard->GetDesignSettings().m_MaxError;
+                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                    outline.InflateWithLinkedHoles( mask_clearance, numSegs, SHAPE_POLY_SET::PM_FAST );
+                    dummy.DeletePrimitivesList();
+                    dummy.AddPrimitivePoly( outline, 0, true );
+
+                    // Be sure the anchor pad is not bigger than the deflated shape because this
+                    // anchor will be added to the pad shape when plotting the pad. So now the
+                    // polygonal shape is built, we can clamp the anchor size
+                    dummy.SetSize( wxSize( 0,0 ) );
+
+                    itemplotter.PlotPad( &dummy, color, padPlotMode );
+                }
+
                 break;
 
             case PAD_SHAPE_ROUNDRECT:
@@ -344,15 +383,15 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                 // which can create bad shapes if margin.x is < 0
                 int maxError = aBoard->GetDesignSettings().m_MaxError;
-                int numSegs = GetArcToSegmentCount( margin.x, maxError, 360.0 );
-                shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
+                int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                shape.InflateWithLinkedHoles( mask_clearance, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitivePoly( shape, 0, true );
 
                 // Be sure the anchor pad is not bigger than the deflated shape because this
                 // anchor will be added to the pad shape when plotting the pad. So now the
                 // polygonal shape is built, we can clamp the anchor size
-                if( margin.x < 0 )  // we expect margin.x = margin.y for custom pads
+                if( mask_clearance < 0 )  // we expect margin.x = margin.y for custom pads
                     dummy.SetSize( padPlotsSize );
 
                 itemplotter.PlotPad( &dummy, color, padPlotMode );
