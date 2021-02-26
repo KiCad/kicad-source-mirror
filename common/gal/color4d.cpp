@@ -431,10 +431,10 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
     return *this;
 }
 
-constexpr COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
-constexpr COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
-constexpr COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
-constexpr COLOR4D COLOR4D::CLEAR( 1, 0, 1, 0 );
+const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
+const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
+const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
+const COLOR4D COLOR4D::CLEAR( 1, 0, 1, 0 );
 
 
 EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )

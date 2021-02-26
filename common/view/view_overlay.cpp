@@ -245,9 +245,9 @@ struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
         aView->GetGAL()->BitmapText( m_text, m_pos, m_angle );
     }
 
-    double m_angle;
     wxString m_text;
     VECTOR2D m_pos;
+    double m_angle;
 };
 
 VIEW_OVERLAY::VIEW_OVERLAY()
