@@ -57,7 +57,7 @@
 double FABMASTER::readDouble( const std::string aStr ) const
 {
     std::istringstream istr( aStr );
-    istr.imbue( std::locale( "C" ) );
+    istr.imbue( std::locale::classic() );
 
     double doubleValue;
     istr >> doubleValue;
@@ -68,7 +68,7 @@ double FABMASTER::readDouble( const std::string aStr ) const
 int FABMASTER::readInt( const std::string aStr ) const
 {
     std::istringstream istr( aStr );
-    istr.imbue( std::locale( "C" ) );
+    istr.imbue( std::locale::classic() );
 
     int intValue;
     istr >> intValue;
