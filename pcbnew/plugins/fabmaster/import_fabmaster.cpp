@@ -2099,7 +2099,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             rect->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
                         }
 
-                        rect->SetWidth( 0 );
+                        rect->SetWidth( ds.GetLineThickness( rect->GetLayer() ) );
                         rect->SetLocalCoord();
 
                         fp->Add( rect, ADD_MODE::APPEND );
@@ -2679,6 +2679,9 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             line->SetEnd( wxPoint( src->end_x, src->end_y ) );
             line->SetWidth( src->width );
 
+            if( line->GetWidth() == 0 )
+                line->SetWidth( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+
             aBoard->Add( line, ADD_MODE::APPEND );
             break;
         }
@@ -2694,6 +2697,9 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             arc->SetAngle( src->result.GetCentralAngle() * 10.0 );
             arc->SetWidth( src->width );
 
+            if( arc->GetWidth() == 0 )
+                arc->SetWidth( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+
             aBoard->Add( arc, ADD_MODE::APPEND );
             break;
         }
@@ -2707,7 +2713,8 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             rect->SetLayer( layer );
             rect->SetStart( wxPoint( src->start_x, src->start_y ) );
             rect->SetEnd( wxPoint( src->end_x, src->end_y ) );
-            rect->SetWidth( 0 );
+            rect->SetWidth( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+
             aBoard->Add( rect, ADD_MODE::APPEND );
             break;
         }
