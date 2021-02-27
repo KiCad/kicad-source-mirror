@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 05:10+0000\n"
+"PO-Revision-Date: 2021-02-27 05:14+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3283,15 +3283,15 @@ msgstr "ズーム:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:204
 msgid "Pan up/down:"
-msgstr "パン 上／下:"
+msgstr "上下にパン:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:220
 msgid "Pan left/right:"
-msgstr "パン 左／右:"
+msgstr "左右にパン:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:254
 msgid "Pan left/right with horizontal movement"
-msgstr "水平方向の移動でパン 左／右"
+msgstr "水平方向の移動で左右にパン"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:255
 msgid ""
@@ -4522,11 +4522,11 @@ msgstr "すべてのセルを選択"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr "パン 左／右"
+msgstr "左右にパン"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr "パン 上／下"
+msgstr "上下にパン"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:250
 msgid "Finish Drawing"
@@ -5939,7 +5939,7 @@ msgstr "フットプリントを作成、削除、編集"
 
 #: common/tool/actions.cpp:582
 msgid "Update PCB from Schematic..."
-msgstr "回路図から基板 (PCB) を更新..."
+msgstr "回路図から基板を更新..."
 
 #: common/tool/actions.cpp:582
 msgid "Update PCB with changes made to schematic"
@@ -5947,11 +5947,11 @@ msgstr "回路図で行われた変更で基板 (PCB) を更新"
 
 #: common/tool/actions.cpp:587
 msgid "Update Schematic from PCB..."
-msgstr "基板 (PCB) から回路図を更新..."
+msgstr "基板から回路図を更新..."
 
 #: common/tool/actions.cpp:587
 msgid "Update schematic with changes made to PCB"
-msgstr "基板 (PCB) に加えられた変更を使用して回路図を更新"
+msgstr "基板 (PCB) で行われた変更で回路図を更新"
 
 #: common/tool/actions.cpp:592
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
