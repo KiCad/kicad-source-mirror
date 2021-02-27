@@ -73,46 +73,60 @@ private:
 
 bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 {
-    if( !reportPhase( _( "Checking pad holes..." ) ) )
-        return false;
-
-    m_board = m_drcEngine->GetBoard();
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
     {
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
-            break;
+        if( !reportPhase( _( "Checking pad holes..." ) ) )
+            return false;   // DRC cancelled
 
-        for( PAD* pad : footprint->Pads() )
+        m_board = m_drcEngine->GetBoard();
+
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
                 break;
 
-            checkPad( pad );
+            for( PAD* pad : footprint->Pads() )
+            {
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
+                    break;
+
+                checkPad( pad );
+            }
         }
     }
 
-    if( !reportPhase( _( "Checking via holes..." ) ) )
-        return false;
-
-    std::vector<VIA*> vias;
-
-    for( TRACK* track : m_board->Tracks() )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
     {
-        if( track->Type() == PCB_VIA_T )
-            vias.push_back( static_cast<VIA*>( track ) );
-    }
+        if( !m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
+        {
+            if( !reportPhase( _( "Checking via holes..." ) ) )
+                return false;   // DRC cancelled
+        }
+        else
+        {
+            if( !reportPhase( _( "Checking micro-via holes..." ) ) )
+                return false;   // DRC cancelled
+        }
 
+        std::vector<VIA*> vias;
 
-    for( VIA* via : vias )
-    {
-        bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
-        bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
+        for( TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+                vias.push_back( static_cast<VIA*>( track ) );
+        }
 
-        if( exceedMicro && exceedStd )
-            break;
+        for( VIA* via : vias )
+        {
+            bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
+            bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
 
-        checkVia( via, exceedMicro, exceedStd );
+            if( exceedMicro && exceedStd )
+                break;
+
+            checkVia( via, exceedMicro, exceedStd );
+        }
     }
 
     reportRuleStatistics();

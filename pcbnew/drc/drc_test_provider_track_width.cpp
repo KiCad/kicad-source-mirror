@@ -67,14 +67,20 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
+    {
+        reportAux( "Track width violations ignored. Tests not run." );
+        return true;        // continue with other tests
+    }
+
     if( !m_drcEngine->HasRulesForConstraintType( TRACK_WIDTH_CONSTRAINT ) )
     {
-        reportAux( "No track width constraints found. Skipping check." );
-        return false;
+        reportAux( "No track width constraints found. Tests not run." );
+        return true;        // continue with other tests
     }
 
     if( !reportPhase( _( "Checking track widths..." ) ) )
-        return false;
+        return false;       // DRC cancelled
 
     auto checkTrackWidth =
             [&]( BOARD_ITEM* item ) -> bool

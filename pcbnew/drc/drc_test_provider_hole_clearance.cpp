@@ -95,6 +95,12 @@ static std::shared_ptr<SHAPE_CIRCLE> getDrilledHoleShape( BOARD_ITEM* aItem )
 
 bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 {
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+    {
+        reportAux( "Hole-to-hole violations ignored. Tests not run." );
+        return true;        // continue with other tests
+    }
+
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
@@ -106,9 +112,12 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
     }
     else
     {
-        reportAux( "No hole to hole constraints found..." );
-        return false;
+        reportAux( "No hole to hole constraints found. Skipping check." );
+        return true;        // continue with other tests
     }
+
+    if( !reportPhase( _( "Checking hole to hole clearances..." ) ) )
+        return false;   // DRC cancelled
 
     // This is the number of tests between 2 calls to the progress bar
     const size_t delta = 50;
@@ -154,9 +163,6 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                 return true;
             };
 
-    if( !reportPhase( _( "Checking hole to hole clearances..." ) ) )
-        return false;
-
     forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(), countItems );
 
     count *= 2;  // One for adding to tree; one for checking
@@ -173,7 +179,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
         VIA* via = static_cast<VIA*>( track );
 
         if( !reportProgress( ii++, count, delta ) )
-            break;
+            return false;   // DRC cancelled
 
         // We only care about mechanically drilled (ie: non-laser) holes
         if( via->GetViaType() == VIATYPE::THROUGH )
@@ -218,7 +224,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
         for( PAD* pad : footprint->Pads() )
         {
             if( !reportProgress( ii++, count, delta ) )
-                break;
+                return false;   // DRC cancelled
 
             // We only care about drilled (ie: round) holes
             if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )

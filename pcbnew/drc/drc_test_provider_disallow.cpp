@@ -64,14 +64,20 @@ public:
 
 bool DRC_TEST_PROVIDER_DISALLOW::Run()
 {
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
+    {
+        reportAux( "Disallow violations ignored. Tests not run." );
+        return true;    // continue with other tests
+    }
+
     if( !m_drcEngine->HasRulesForConstraintType( DISALLOW_CONSTRAINT ) )
     {
         reportAux( "No disallow constraints found. Skipping check." );
-        return false;
+        return true;    // continue with other tests
     }
 
     if( !reportPhase( _( "Checking keepouts & disallow constraints..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     auto doCheckItem =
             [&]( BOARD_ITEM* item )

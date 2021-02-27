@@ -117,6 +117,22 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
 bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 {
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_EDGE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
+            return false;    // DRC cancelled
+    }
+    else if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking silk to board edge clearances..." ) ) )
+            return false;    // DRC cancelled
+    }
+    else
+    {
+        reportAux( "Edge clearance violations ignored. Tests not run." );
+        return true;         // continue with other tests
+    }
+
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
@@ -126,9 +142,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
-    if( !reportPhase( _( "Checking board edge clearances..." ) ) )
-        return false;
-    
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;          // we own these
     DRC_RTREE                               edgesTree;
     std::vector<BOARD_ITEM*>                boardItems;     // we don't own these
@@ -216,7 +229,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
             break;
 
         if( !reportProgress( ii++, boardItems.size(), delta ) )
-            break;
+            return false;   // DRC cancelled
 
         const std::shared_ptr<SHAPE>& itemShape = item->GetEffectiveShape();
 

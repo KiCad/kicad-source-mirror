@@ -69,16 +69,22 @@ public:
 
 bool DRC_TEST_PROVIDER_ANNULUS::Run()
 {
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_ANNULAR_WIDTH ) )
+    {
+        reportAux( "Annular width violations ignored. Skipping check." );
+        return true;    // continue with other tests
+    }
+
     const int delta = 250;  // This is the number of tests between 2 calls to the progress bar
 
     if( !m_drcEngine->HasRulesForConstraintType( ANNULAR_WIDTH_CONSTRAINT ) )
     {
-        reportAux( "No annulus constraints found. Skipping check." );
-        return false;
+        reportAux( "No annulus constraints found. Tests not run." );
+        return true;    // continue with other tests
     }
 
     if( !reportPhase( _( "Checking via annular rings..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     auto checkAnnulus =
             [&]( BOARD_ITEM* item ) -> bool
@@ -148,7 +154,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
             break;
 
         if( !checkAnnulus( item ) )
-            break;
+            return false;   // DRC cancelled
     }
 
     reportRuleStatistics();

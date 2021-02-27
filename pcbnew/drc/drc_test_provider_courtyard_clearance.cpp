@@ -66,26 +66,40 @@ public:
     int GetNumPhases() const override;
 
 private:
-    void testFootprintCourtyardDefinitions();
+    bool testFootprintCourtyardDefinitions();
 
-    void testCourtyardClearances();
+    bool testCourtyardClearances();
 };
 
 
-void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
+bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
     // Detects missing (or malformed) footprint courtyards
-    if( !reportPhase( _( "Checking footprint courtyard definitions..." ) ) )
-        return;
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD)
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_COURTYARD) )
+    {
+        if( !reportPhase( _( "Checking footprint courtyard definitions..." ) ) )
+            return false;   // DRC cancelled
+    }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
+    {
+        if( !reportPhase( _( "Gathering footprint courtyards..." ) ) )
+            return false;   // DRC cancelled
+    }
+    else
+    {
+        reportAux( "All courtyard violations ignored. Tests not run." );
+        return true;        // continue with other tests
+    }
 
     int ii = 0;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
-            return;
+            return false;   // DRC cancelled
 
         if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
         {
@@ -120,22 +134,27 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
             footprint->GetPolyCourtyardBack().BuildBBoxCaches();
         }
     }
+
+    return true;
 }
 
 
-void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
+bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
+        return true;   // continue with other tests
+
     if( !reportPhase( _( "Checking footprints for overlapping courtyards..." ) ) )
-        return;
+        return false;   // DRC cancelled
 
     int ii = 0;
 
     for( auto it1 = m_board->Footprints().begin(); it1 != m_board->Footprints().end(); it1++ )
     {
         if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
-            break;
+            return false;   // DRC cancelled
 
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
             break;
@@ -218,6 +237,8 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             }
         }
     }
+
+    return true;
 }
 
 
@@ -231,9 +252,11 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 
     reportAux( "Worst courtyard clearance : %d nm", m_largestClearance );
 
-    testFootprintCourtyardDefinitions();
+    if( !testFootprintCourtyardDefinitions() )
+        return false;
 
-    testCourtyardClearances();
+   if( !testCourtyardClearances() )
+       return false;
 
     return true;
 }

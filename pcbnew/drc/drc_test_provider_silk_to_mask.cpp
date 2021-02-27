@@ -84,8 +84,8 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_SILK_MASK_CLEARANCE ) )
     {
-        reportAux( "Silkscreen clipping tests not run." );
-        return true;
+        reportAux( "Silkscreen clipping violations ignored. Tests not run." );
+        return true;    // continue with other tests
     }
 
     DRC_CONSTRAINT worstClearanceConstraint;
@@ -97,7 +97,7 @@ bool DRC_TEST_PROVIDER_SILK_TO_MASK::Run()
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
     if( !reportPhase( _( "Checking silkscreen for potential soldermask clipping..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     DRC_RTREE maskTree, silkTree;
 

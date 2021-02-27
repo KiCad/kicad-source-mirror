@@ -72,7 +72,7 @@ public:
 bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 {
     if( !reportPhase( _( "Checking pad, via and zone connections..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     BOARD* board = m_drcEngine->GetBoard();
 
@@ -126,7 +126,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             continue;
 
         if( !reportProgress( ii++, count, delta ) )
-            break;
+            return false;   // DRC cancelled
 
         int netcode = zone->GetNetCode();
         // a netcode < 0 or > 0 and no pad in net is a error or strange
@@ -142,8 +142,11 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         }
     }
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_UNCONNECTED_ITEMS ) )
+        return true;    // continue with other tests
+
     if( !reportPhase( _( "Checking net connections..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     connectivity->RecalculateRatsnest();
     std::vector<CN_EDGE> edges;
@@ -159,7 +162,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             break;
 
         if( !reportProgress( ii++, count, delta ) )
-            break;
+            return false;   // DRC cancelled
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );

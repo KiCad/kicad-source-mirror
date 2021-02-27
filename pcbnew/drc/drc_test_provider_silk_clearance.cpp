@@ -85,16 +85,16 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     // This is the number of tests between 2 calls to the progress bar
     const int delta = 2000;
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
+    {
+        reportAux( "Overlapping silk violations ignored.  Tests not run." );
+        return true;    // continue with other tests
+    }
+
     m_board = m_drcEngine->GetBoard();
 
     DRC_CONSTRAINT worstClearanceConstraint;
     m_largestClearance = 0;
-
-    if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_SILK ) )
-    {
-        reportAux( "Silkscreen clearance testing not run." );
-        return true;
-    }
 
     if( m_drcEngine->QueryWorstConstraint( SILK_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
         m_largestClearance = worstClearanceConstraint.m_Value.Min();
@@ -102,7 +102,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
     reportAux( "Worst clearance : %d nm", m_largestClearance );
 
     if( !reportPhase( _( "Checking silkscreen for overlapping items..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     DRC_RTREE silkTree;
     DRC_RTREE targetTree;

@@ -104,18 +104,15 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     DRC_CONSTRAINT worstConstraint;
 
     if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, worstConstraint ) )
-    {
         m_largestClearance = worstConstraint.GetValue().Min();
-    }
-    else
-    {
-        reportAux( "No Clearance constraints found..." );
-        return false;
-    }
 
     if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
-    {
         m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
+
+    if( m_largestClearance <= 0 )
+    {
+        reportAux( "No Clearance constraints found. Tests not run." );
+        return true;   // continue with other tests
     }
 
     m_drcEpsilon = m_board->GetDesignSettings().GetDRCEpsilon();
@@ -173,7 +170,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
             };
 
     if( !reportPhase( _( "Gathering copper items..." ) ) )
-        return false;
+        return false;   // DRC cancelled
 
     static const std::vector<KICAD_T> itemTypes = {
         PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T, PCB_FP_SHAPE_T,
@@ -186,20 +183,51 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
     reportAux( "Testing %d copper items and %d zones...", count, m_zones.size() );
 
-    if( !reportPhase( _( "Checking track & via clearances..." ) ) )
-        return false;
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking track & via clearances..." ) ) )
+            return false;   // DRC cancelled
 
-    testTrackClearances();
+        testTrackClearances();
+    }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking hole clearances..." ) ) )
+            return false;   // DRC cancelled
 
-    if( !reportPhase( _( "Checking pad clearances..." ) ) )
-        return false;
+        testTrackClearances();
+    }
 
-    testPadClearances();
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking pad clearances..." ) ) )
+            return false;   // DRC cancelled
 
-    if( !reportPhase( _( "Checking copper zone clearances..." ) ) )
-        return false;
+        testPadClearances();
+    }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS )
+            || !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking pads..." ) ) )
+            return false;   // DRC cancelled
 
-    testZones();
+        testPadClearances();
+    }
+
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking copper zone clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        testZones();
+    }
+    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT ) )
+    {
+        if( !reportPhase( _( "Checking zones..." ) ) )
+            return false;   // DRC cancelled
+
+        testZones();
+    }
 
     reportRuleStatistics();
 

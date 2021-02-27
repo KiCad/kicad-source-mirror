@@ -66,14 +66,20 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
+    if( m_drcEngine->IsErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
+    {
+        reportAux( "Via diameter violations ignored. Tests not run." );
+        return true;        // continue with other tests
+    }
+
     if( !m_drcEngine->HasRulesForConstraintType( VIA_DIAMETER_CONSTRAINT ) )
     {
-        reportAux( "No diameter constraints found. Skipping check." );
-        return false;
+        reportAux( "No via diameter constraints found. Tests not run." );
+        return true;        // continue with other tests
     }
 
     if( !reportPhase( _( "Checking via diameters..." ) ) )
-        return false;
+        return false;       // DRC cancelled
 
     auto checkViaDiameter =
             [&]( BOARD_ITEM* item ) -> bool

@@ -213,20 +213,29 @@ bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    if( !reportPhase( _( "Checking board outline..." ) ) )
-        return false;
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_INVALID_OUTLINE ) )
+    {
+        if( !reportPhase( _( "Checking board outline..." ) ) )
+            return false;   // DRC cancelled
 
-    testOutline();
+        testOutline();
+    }
 
-    if( !reportPhase( _( "Checking disabled layers..." ) ) )
-        return false;
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_DISABLED_LAYER_ITEM ) )
+    {
+        if( !reportPhase( _( "Checking disabled layers..." ) ) )
+            return false;   // DRC cancelled
 
-    testDisabledLayers();
+        testDisabledLayers();
+    }
 
-    if( !reportPhase( _( "Checking text variables..." ) ) )
-        return false;
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
+    {
+        if( !reportPhase( _( "Checking text variables..." ) ) )
+            return false;   // DRC cancelled
 
-    testTextVars();
+        testTextVars();
+    }
 
     return true;
 }
