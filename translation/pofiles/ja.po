@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 03:22+0000\n"
+"PO-Revision-Date: 2021-02-27 05:10+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -3125,7 +3125,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr "縦のスクロールに対しては一つのアクションしか指定できません"
+msgstr "各垂直スクロール設定に割り当てることができるアクションは1つだけです"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3249,7 +3249,7 @@ msgstr "垂直方向タッチパッドまたはスクロールホイールの移
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "各列に割り当てることができるアクションは1つだけです"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -4486,7 +4486,7 @@ msgstr "コピー"
 
 #: common/grid_tricks.cpp:242
 msgid "Copy selected cells to clipboard"
-msgstr "選択範囲をコピー"
+msgstr "選択したセルをクリップボードへコピー"
 
 #: common/grid_tricks.cpp:243 common/tool/actions.cpp:164
 msgid "Paste"
@@ -4494,7 +4494,7 @@ msgstr "貼り付け"
 
 #: common/grid_tricks.cpp:243
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "現在のセル位置へ、クリップボードの内容を貼り付け"
+msgstr "現在のセル位置へ、クリップボードのセルを貼り付け"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:190
 #: kicad/project_tree_pane.cpp:781 pcbnew/plugins/kicad/pcb_parser.cpp:678
@@ -4503,9 +4503,8 @@ msgid "Delete"
 msgstr "削除"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "選択したアイテムを削除"
+msgstr "選択したセルを削除"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4576,9 +4575,8 @@ msgstr "PCBエディター"
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "図面エディター"
+msgstr "図面シートエディター"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5020,9 +5018,8 @@ msgid "Selection highlight"
 msgstr "ハイライトを選択"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "線画"
+msgstr "図面シート"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -6132,7 +6129,7 @@ msgstr "ハードウェア アクセラレーター有効のグラフィック�
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr "ソフトウェア グラフィックス (KiCadのグラフィック アクセラレーターのハード要件を満たさないコンピューター向け)"
+msgstr "ソフトウェア グラフィックス（KiCadのハードウェア アクセラレーション要件を満たさないコンピューター向け）"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -7170,9 +7167,9 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "シートピン %s に対応する階層ラベルがシート内にありません"
 
 #: eeschema/connection_graph.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "階層ラベル %s がシートラベルに接続されていません"
+msgstr "階層ラベル %s と対応するシートピンが親シートにありません"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -8058,6 +8055,8 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"現在のシンボルのフィールドを新しいライブラリーのフィールドで置き換えます。\n"
+"警告: \"定数\" と \"フットプリント\" のフィールドは置き換えられます。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -9781,14 +9780,12 @@ msgid "Page size:"
 msgstr "ページ サイズ:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "シートの作図を終了"
+msgstr "図面シートを描画"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "境界線とタイトル ブロックを印刷"
+msgstr "図面シートの境界線とタイトル ブロックを描画"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11980,9 +11977,8 @@ msgid "No Connection"
 msgstr "未接続"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "ワークシート上に未解決のテキスト変数。"
+msgstr "図面シート上のテキスト変数が未解決。"
 
 #: eeschema/erc.cpp:293
 #, c-format
@@ -16245,7 +16241,7 @@ msgstr "新しい階層ラベルが見つかりません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:658
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "ジャンクションの位置には、接続可能なワイヤーやピンがありません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1046
 msgid "Click over a sheet."
@@ -16642,9 +16638,8 @@ msgid "Cannot create file \"%s\""
 msgstr "ファイル \"%s\" を作成できません"
 
 #: gerbview/files.cpp:39
-#, fuzzy
 msgid "<b>No more available layers</b> in GerbView to load files"
-msgstr "<b>これ以上の有効なレイヤーなし</b> ファイルをロードしたGerbview 内"
+msgstr "GerbViewにファイルをロードするための <b>有効なレイヤーはこれ以上ありません</b>"
 
 #: gerbview/files.cpp:40
 #, c-format
@@ -17080,7 +17075,7 @@ msgstr "PCBエディターへエクスポート..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr "KiCad基板ファイルとしてエクスポート"
+msgstr "KiCad基板ファイルとしてデータをエクスポート"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17262,14 +17257,12 @@ msgstr "(x,y) グリッドのドットを表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "描画モード"
+msgstr "図面シート"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
-#, fuzzy
 msgid "Show drawing sheet border and title block"
-msgstr "境界線とタイトル ブロックを印刷"
+msgstr "図面シートの境界線とタイトル ブロックを表示"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "PCB Background"
@@ -17431,13 +17424,10 @@ msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr "抵抗や電流容量などを計算するためのツールを表示します。"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:129
-#, fuzzy
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr ""
-"回路図とプリント基板デザインで使われるワークシートの枠線とタイトルブロックを"
-"編集します"
+msgstr "回路図とプリント基板デザインで使われる図面シートの枠線とタイトルブロックを編集します"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17498,6 +17488,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"ファイル '%s' を\n"
+"'%s' にコピーできません\n"
+"プロジェクトをインポートできません。"
 
 #: kicad/import_project.cpp:216
 msgid "Import CADSTAR Archive Project Files"
@@ -17854,9 +17847,8 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "コンポーネントの計算、トラック幅の計算などを実行します。"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
-#, fuzzy
 msgid "Edit drawing sheet borders and title block"
-msgstr "境界線とタイトル ブロックを印刷"
+msgstr "図面シートの境界線とタイトル ブロックを編集"
 
 #: kicad/tools/kicad_manager_actions.cpp:111
 msgid "Open Text Editor"
@@ -18261,9 +18253,8 @@ msgid "The current page layout has been modified.  Save changes?"
 msgstr "現在のページレイアウトは変更されています。  保存しますか?"
 
 #: pagelayout_editor/files.cpp:118
-#, fuzzy
 msgid "Append Existing Drawing Sheet"
-msgstr "既存のページレイアウト ファイルを追加"
+msgstr "既存の図面シートを追加"
 
 #: pagelayout_editor/files.cpp:129 pagelayout_editor/files.cpp:154
 #, c-format
@@ -18300,7 +18291,7 @@ msgstr "レイアウト ファイルは読み込み専用です。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr ""
+msgstr "KiCad 図面シートエディター"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
@@ -18401,14 +18392,12 @@ msgid "Add a bitmap image"
 msgstr "ビットマップ イメージを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "既存のページレイアウト ファイルを追加..."
+msgstr "既存の図面シートを追加..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
-#, fuzzy
 msgid "Append an existing drawing sheet file to current file"
-msgstr "現在のファイルに既存のページレイアウト デザイン ファイルを追加"
+msgstr "現在のファイルに既存の図面シート ファイルを追加"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
@@ -19855,11 +19844,11 @@ msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:154
 msgid "Ω"
-msgstr "Ω"
+msgstr "Ω"
 
 #: pcb_calculator/widgets/unit_selector.cpp:155
 msgid "kΩ"
-msgstr "kΩ"
+msgstr "kΩ"
 
 #: pcbnew/array_creator.cpp:188
 msgid "Create an array"
@@ -32685,7 +32674,7 @@ msgstr "配線幅を次に変更"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change track width to next pre-defined size"
-msgstr ""
+msgstr "配線幅を次の[定義済みのサイズ]の値に切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Switch Track Width to Previous"
@@ -32693,7 +32682,7 @@ msgstr "配線幅を前に変更"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Change track width to previous pre-defined size"
-msgstr ""
+msgstr "配線幅を前の[定義済みのサイズ]の値に切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
@@ -32701,7 +32690,7 @@ msgstr "ビア サイズを増加"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "ビア サイズを次の[定義済みのサイズ]の値に切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Decrease Via Size"
@@ -32709,7 +32698,7 @@ msgstr "ビア サイズを減少"
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "ビア サイズを前の[定義済みのサイズ]の値に切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Merge Zones"
@@ -32761,16 +32750,15 @@ msgstr "選択されたアイテムをロック/ロック解除する"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
-msgstr ""
+msgstr "キャンバス上でアイテムが移動やサイズ変更されないようにする"
 
 #: pcbnew/tools/pcb_actions.cpp:656
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr ""
+msgstr "キャンバス上でのアイテムの移動やサイズ変更を許可する"
 
 #: pcbnew/tools/pcb_actions.cpp:661
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "指定された開始位置で選択されたアイテムを移動"
+msgstr "選択したアイテムをグループ化して、1つのアイテムとして扱う"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup"
@@ -32809,9 +32797,8 @@ msgid "Append Board..."
 msgstr "基板を追加..."
 
 #: pcbnew/tools/pcb_actions.cpp:686
-#, fuzzy
 msgid "Open another board and append its contents to this board"
-msgstr "現在ロードされている基板に別の基板を追加"
+msgstr "別の基板を開いて、その内容を現在の基板に追加する"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Highlight the selected net"
@@ -32830,9 +32817,8 @@ msgid "Clear Net Highlighting"
 msgstr "ネットのハイライトをクリア"
 
 #: pcbnew/tools/pcb_actions.cpp:699
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "ネットのハイライトをクリア"
+msgstr "既存のネットハイライトをクリアする"
 
 #: pcbnew/tools/pcb_actions.cpp:703 pcbnew/tools/pcb_actions.cpp:710
 msgid "Highlight all copper items of a net"
@@ -33752,9 +33738,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "フットプリントとテキストの原点を十字で表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "境界線とタイトル ブロックを印刷"
+msgstr "図面シートの境界線とタイトル ブロックを表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:373
 msgid "No Layers"
