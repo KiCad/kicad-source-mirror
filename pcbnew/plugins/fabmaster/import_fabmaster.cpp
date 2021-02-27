@@ -911,7 +911,8 @@ size_t FABMASTER::processCustomPads( size_t aRow )
         // and we don't process other pad shape records
         std::string prefix( "FIG_SHAPE " );
 
-        if( !std::equal( prefix.begin(), prefix.end(), pad_shape_name.begin() ) )
+        if( pad_shape_name.length() <= prefix.length()
+                || !std::equal( prefix.begin(), prefix.end(), pad_shape_name.begin() ) )
         {
             continue;
         }
@@ -1420,7 +1421,14 @@ size_t FABMASTER::processTraces( size_t aRow )
         gr_item->seq = seq;
         gr_item->subseq = subseq;
 
-        if( gr_item->width == 0 )
+        // Collect the reference designator positions for the footprints later
+        if( new_trace->lclass == "REF DES" )
+        {
+            auto result = refdes.emplace( std::move( new_trace ) );
+            auto& ref   = *result.first;
+            ref->segment.emplace( std::move( gr_item ) );
+        }
+        else if( gr_item->width == 0 )
         {
             auto result = zones.emplace( std::move( new_trace ) );
             auto& zone  = *result.first;
@@ -1934,10 +1942,58 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             wxString reference = src->refdes;
 
             if( !std::isalpha( src->refdes[0] ) )
-             reference.Prepend( "UNK" );
+                reference.Prepend( "UNK" );
 
             fp->SetReference( reference );
+
             fp->SetValue( src->value );
+            fp->Value().SetLayer( F_Fab );
+            fp->Value().SetVisible( false );
+
+            for( auto& ref : refdes )
+            {
+                const GRAPHIC_TEXT *lsrc =
+                        static_cast<const GRAPHIC_TEXT*>( ( *( ref->segment.begin() ) ).get() );
+
+                if( lsrc->text == src->refdes )
+                {
+                    FP_TEXT* txt = nullptr;
+                    PCB_LAYER_ID layer = getLayer( ref->layer );
+
+                    if( !IsPcbLayer( layer ) )
+                    {
+                        printf("The layer %s is not mapped?\n", ref->layer.c_str() );
+                        continue;
+                    }
+
+                    if( layer == F_SilkS || layer == B_SilkS )
+                        txt = &( fp->Reference() );
+                    else
+                        txt = new FP_TEXT( fp );
+
+                    if( src->mirror )
+                    {
+                        txt->SetLayer( FlipLayer( layer ) );
+                        txt->SetTextPos( wxPoint( lsrc->start_x, 2 * src->y - ( lsrc->start_y - lsrc->height / 2 ) ) );
+                    }
+                    else
+                    {
+                        txt->SetLayer( layer );
+                        txt->SetTextPos( wxPoint( lsrc->start_x, lsrc->start_y - lsrc->height / 2 ) );
+                    }
+
+                    txt->SetText( lsrc->text );
+                    txt->SetItalic( lsrc->ital );
+                    txt->SetTextThickness( lsrc->thickness );
+                    txt->SetTextHeight( lsrc->height );
+                    txt->SetTextWidth( lsrc->width );
+                    txt->SetHorizJustify( lsrc->orient );
+                    txt->SetLocalCoord();
+
+                    if( txt != &fp->Reference() )
+                        fp->Add( txt, ADD_MODE::APPEND );
+                }
+            }
 
             /// Always set the module to the top and flip later if needed
             /// When flipping later, we get the full coordinate transform for free
@@ -1959,7 +2015,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                 {
                     PCB_LAYER_ID layer = Dwgs_User;
 
-                    if( IsValidLayer( getLayer( seg->layer ) ) )
+                    if( IsPcbLayer( getLayer( seg->layer ) ) )
                         layer = getLayer( seg->layer );
 
                     switch( seg->shape )
@@ -2478,7 +2534,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     auto new_layer = getLayer( aLine->layer );
 
-    if( IsValidLayer( new_layer ) )
+    if( IsPcbLayer( new_layer ) )
         layer = new_layer;
 
     SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
@@ -2513,7 +2569,7 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     PCB_LAYER_ID layer = Cmts_User;
     auto new_layer = getLayer( aLine->layer );
 
-    if( IsValidLayer( new_layer ) )
+    if( IsPcbLayer( new_layer ) )
         layer = new_layer;
 
     zone = new ZONE( aBoard );
@@ -2669,6 +2725,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             txt->SetTextHeight( src->height );
             txt->SetTextWidth( src->width );
             txt->SetHorizJustify( src->orient );
+
             aBoard->Add( txt, ADD_MODE::APPEND );
             break;
         }
@@ -2694,7 +2751,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
         layer = getLayer( geom.subclass );
 
-        if( layer == UNDEFINED_LAYER )
+        if( !IsPcbLayer( layer ) )
             layer = Cmts_User;
 
         if( !geom.elements->empty() )
