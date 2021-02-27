@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-25 17:52+0000\n"
+"PO-Revision-Date: 2021-02-27 03:22+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2141,14 +2141,12 @@ msgid "Reset Grid Origin"
 msgstr "グリッド原点をリセット"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "サイズをリセット"
+msgstr "グリッドサイズをリセット"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "デフォルト値を使用するために 0 を設定"
+msgstr "グリッドサイズの一覧をデフォルト値にリセット"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3117,7 +3115,7 @@ msgstr "インポートするホットキー ファイル:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| アクション | デフォルトのホットキー | 説明"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
@@ -3127,7 +3125,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "縦のスクロールに対しては一つのアクションしか指定できません"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -4580,7 +4578,7 @@ msgstr "PCBエディター"
 #: pagelayout_editor/pl_editor_frame.cpp:531
 #, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "ワークシート エディター"
+msgstr "図面エディター"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -6115,30 +6113,26 @@ msgid "No default footprint"
 msgstr "デフォルトのフットプリントがありません"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "アクセラレーター グラフィックス:"
+msgstr "アクセラレーター有効のグラフィックス:"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "代替グラフィックス:"
+msgstr "代替グラフィックス"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "レンダリング エンジン"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "ハードウェア アクセラレーター グラフィックスを使用 (推奨)"
+msgstr "ハードウェア アクセラレーター有効のグラフィックス (推奨)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr ""
+msgstr "ソフトウェア グラフィックス (KiCadのグラフィック アクセラレーターのハード要件を満たさないコンピューター向け)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -6879,17 +6873,14 @@ msgid "Lib: %s"
 msgstr "ライブラリー: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"割り当てられフットプリントのいくつかは、ライブラリー名がない古い形式です。"
-"KiCadで必要な新しい LIB_ID フォーマットへの変換を試しますか？(いいえを選択し"
-"た場合、これらの割り当ては消去され、手動で各々のフットプリントの再割り当てを"
-"する必要があります。)"
+"割り当てられフットプリントのいくつかは、ライブラリー名がない古い形式です。KiCadで必要な新しい LIB_ID "
+"フォーマットへの変換を試しますか？(いいえを選択した場合、これらの割り当ては消去され、手動で各々のフットプリントの再割り当てをする必要があります。)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -7354,9 +7345,8 @@ msgstr ""
 "コマンド実行のウィンドウを表示するには、このオプションをセットします。"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "デフォルト値を使用するために 0 を設定"
+msgstr "BOM ジェネレーター スクリプトのリストをデフォルト値にリセットします"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -7804,9 +7794,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "新しいシンボルで空となっているフィールドをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "フィールドを更新"
+msgstr "フィールドのテキストを更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -7919,9 +7908,8 @@ msgstr "ライブラリーのシンボルで空となっているフィールド
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "フィールドを更新"
+msgstr "フィールドのテキストを更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -8289,7 +8277,7 @@ msgstr "エラー、警告、および除外されたマーカー"
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d個のシンボルにアノテーションが必要です。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -11455,9 +11443,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "アイテムの選択状態を切り替えます。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -11483,9 +11470,8 @@ msgstr ""
 "3つの修飾キーに依存します。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
@@ -12297,16 +12283,12 @@ msgid "Import Schematic"
 msgstr "回路図をインポート"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr ""
-"新しいファイル フォーマットでのプロジェクトの保存は既存のファイルを上書きしま"
-"す。"
+msgstr "既存のファイルを上書きして保存します。"
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "プロジェクト 保存の警告"
+msgstr "保存時の警告"
 
 #: eeschema/files-io.cpp:753
 msgid ""
@@ -12809,15 +12791,13 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "閉じる前に \"%s\" へ変更を保存しますか?"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"回路図エディターがスタンドアローン モードで開かれているため、基板 (PCB) を更"
-"新できません。回路図から基板を作成または更新するには、KiCad シェルから起動し"
-"て、プロジェクトを作成して下さい。"
+"回路図エディターがスタンドアローン モードで開かれているため、基板 (PCB) を更新できません。回路図から基板を作成または更新するには、KiCad "
+"シェルから起動して、プロジェクトを作成して下さい。"
 
 #: eeschema/sch_edit_frame.cpp:937
 msgid "New Schematic"
@@ -14800,9 +14780,9 @@ msgstr ""
 "重複しないよう整数を接尾辞に付いています。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "回路図の %s"
+msgstr "回路図の %s%s"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -17100,7 +17080,7 @@ msgstr "PCBエディターへエクスポート..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "KiCad基板ファイルとしてエクスポート"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17506,13 +17486,10 @@ msgstr ""
 "このプロジェクトのために新しい空のディレクトリーを作成しますか？"
 
 #: kicad/import_project.cpp:113
-#, fuzzy
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
-msgstr ""
-"新しいディレクトリーの作成中にエラーが発生しました。別のパスを試してくださ"
-"い。プロジェクトはインポートされませんでした。"
+msgstr "新しいディレクトリーの作成中にエラーが発生しました。別のパスを試してください。プロジェクトはインポートできませんでした。"
 
 #: kicad/import_project.cpp:137 kicad/import_project.cpp:154
 #, c-format
@@ -20165,7 +20142,7 @@ msgstr "導体レイヤー:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "スタックアップに含む導体レイヤーの数を選択します"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -25172,9 +25149,8 @@ msgid "Board setup"
 msgstr "基板セットアップ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
-#, fuzzy
 msgid "File > Board Setup..."
-msgstr "基板セットアップ..."
+msgstr "ファイル > 基板セットアップ..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -26648,9 +26624,8 @@ msgid "Minimum item clearance:"
 msgstr "アイテムの最小クリアランス:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
-#, fuzzy
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "導体レイヤーの番号変更に \"%s\" コントロールを使用."
+msgstr "導体レイヤーの数の変更は [物理的スタックアップ] のページで行います。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -28346,17 +28321,14 @@ msgid "noname"
 msgstr "名前なし"
 
 #: pcbnew/files.cpp:535
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗り潰される場合には、板端クリアランス設定が使用されます (基板"
-"セットアップ > デザイン ルール > 制約 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗り潰しの結果となります。"
+"基板のゾーンが塗り潰される場合には、基板端クリアランス設定が使用されます (基板セットアップ > デザイン ルール > 制約 を参照)。\n"
+"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前のバージョンの KiCad とは異なった塗り潰しの結果となります。"
 
 #: pcbnew/files.cpp:540
 msgid "Edge Clearance Warning"
@@ -28540,9 +28512,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "基板の %s を編集します。 保存するとボードのみが更新されます。"
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [%s.%s から]"
+msgstr "%s%s [%s.%s から]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -29720,7 +29692,7 @@ msgstr "KiCad PCBエディター"
 
 #: pcbnew/pcb_edit_frame.cpp:329
 msgid "New PCB file is unsaved"
-msgstr "新しい基板 (PCB) ファイルは保存されていません"
+msgstr "新しい基板ファイルは保存されていません"
 
 #: pcbnew/pcb_edit_frame.cpp:849
 #, c-format
@@ -29733,7 +29705,7 @@ msgstr "基板ファイルは読み込み専用です。"
 
 #: pcbnew/pcb_edit_frame.cpp:1092
 msgid "PCB file changes are unsaved"
-msgstr "基板 (PCB) ファイルの変更は保存されていません"
+msgstr "基板ファイルの変更は保存されていません"
 
 #: pcbnew/pcb_edit_frame.cpp:1343
 msgid "The schematic for this board cannot be found."
@@ -31376,17 +31348,20 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Event file: %s\n"
+"Board dump: %s"
 
 #: pcbnew/router/router_tool.cpp:503
-#, fuzzy
 msgid "Save router log"
-msgstr "名前を付けてプロジェクトを保存"
+msgstr "ルーターのログを保存"
 
 #: pcbnew/router/router_tool.cpp:503
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"デバッグに使うルーターの\n"
+"イベントログを保存しますか？"
 
 #: pcbnew/router/router_tool.cpp:812 pcbnew/router/router_tool.cpp:834
 msgid "Show board setup"
@@ -32921,7 +32896,7 @@ msgstr "基板ビューを反転"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "View board from the opposite side"
-msgstr ""
+msgstr "基板を反対側から表示に切り替える"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Show Ratsnest"
