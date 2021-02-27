@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 05:53+0000\n"
+"PO-Revision-Date: 2021-02-27 06:09+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -8461,7 +8461,7 @@ msgstr "マーカーを削除"
 
 #: eeschema/dialogs/dialog_erc_base.h:87 eeschema/tools/ee_actions.cpp:45
 msgid "Electrical Rules Checker"
-msgstr "エレクトリカル ルール チェック(ERC)"
+msgstr "エレクトリカル ルール チェッカー(ERC)"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:84
 #: eeschema/fields_grid_table.cpp:578
@@ -9022,7 +9022,7 @@ msgstr "電源シンボルとしてシンボルを作成"
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Exclude from schematic bill of materials"
-msgstr "部品表 (BOM) から除外"
+msgstr "部品表から除外"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
@@ -18128,7 +18128,7 @@ msgstr "コメント:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:190
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
-msgstr "ポジション"
+msgstr "位置"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:220
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
