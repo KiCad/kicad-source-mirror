@@ -167,15 +167,14 @@ wxString PATHS::GetStockPluginsPath()
     wxFileName fn;
 
 #if defined( __WXMAC__ )
-    fn.Assign( Pgm().GetExecutablePath() );
-    fn.AppendDir( wxT( "Contents" ) );
-    fn.AppendDir( wxT( "PlugIns" ) );
+    fn.Assign( PATHS::GetOSXKicadDataDir() );
+    fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMSW__ )
     fn.Assign( Pgm().GetExecutablePath() + wxT( "/plugins/" ) );
 #else
     // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
-    wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
+    wxString tfname = wxString::FromUTF8Unchecked( KICAD_DATA );
     fn.Assign( tfname, "" );
     fn.AppendDir( "kicad" );    // linux use lowercase
     fn.AppendDir( wxT( "plugins" ) );
