@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 05:14+0000\n"
+"PO-Revision-Date: 2021-02-27 05:28+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -8937,11 +8937,11 @@ msgstr "Y 位置:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:145
 msgid "H Align:"
-msgstr "H 揃え:"
+msgstr "水平揃え:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:175
 msgid "V Align:"
-msgstr "V 揃え:"
+msgstr "垂直揃え:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:191
 msgid "Common to all units"
@@ -9119,14 +9119,14 @@ msgstr "フィールド"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:55
 #: eeschema/fields_grid_table.cpp:198
 msgid "H Align"
-msgstr "H 揃え"
+msgstr "水平揃え"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:54
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/fields_grid_table.cpp:199
 msgid "V Align"
-msgstr "V 揃え"
+msgstr "垂直揃え"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:62
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:57
@@ -18086,11 +18086,11 @@ msgstr "以降のページのみ"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:81
 msgid "H align:"
-msgstr "H 揃え:"
+msgstr "水平揃え:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:97
 msgid "V align:"
-msgstr "V 揃え:"
+msgstr "垂直揃え:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:125
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:424
