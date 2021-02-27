@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 30 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,27 +40,39 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizerRight->Add( m_staticTextBasicRules, 0, wxALL, 5 );
 
 	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTracksCtrl->SetToolTip( _("Prevent tracks from routing into this area") );
+
 	bSizerRight->Add( m_cbTracksCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbViasCtrl->SetToolTip( _("Prevent vias from being placed in this area") );
+
 	bSizerRight->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_cbPadsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPadsCtrl->SetToolTip( _("Raise a DRC error if a pad overlaps this area") );
+
 	bSizerRight->Add( m_cbPadsCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out copper pours"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out copper fill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopperPourCtrl->SetToolTip( _("Zones will not fill copper into this area") );
+
 	bSizerRight->Add( m_cbCopperPourCtrl, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_cbFootprintsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFootprintsCtrl->SetToolTip( _("Raise a DRC error if a footprint courtyard overlaps this area") );
+
 	bSizerRight->Add( m_cbFootprintsCtrl, 0, wxALL, 5 );
 
 
 	bSizerRight->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_cbConstrainCtrl = new wxCheckBox( this, wxID_ANY, _("Constrain outline to H, V and 45 deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbConstrainCtrl->SetToolTip( _("Draw the area using horizontal, verical and 45 degree lines only") );
+
 	bSizerRight->Add( m_cbConstrainCtrl, 0, wxALL, 5 );
 
 
