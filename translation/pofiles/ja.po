@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 06:25+0000\n"
+"PO-Revision-Date: 2021-02-27 06:40+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -5766,11 +5766,11 @@ msgstr "右にパン"
 
 #: common/tool/actions.cpp:443
 msgid "Switch to Fast Grid 1"
-msgstr "高速グリッド１に切替"
+msgstr "高速グリッド1に切替"
 
 #: common/tool/actions.cpp:448
 msgid "Switch to Fast Grid 2"
-msgstr "高速グリッド２に切替"
+msgstr "高速グリッド2に切替"
 
 #: common/tool/actions.cpp:453
 msgid "Switch to Next Grid"
@@ -22307,7 +22307,7 @@ msgstr "回路図にない"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:199
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:292
 msgid "Exclude from position files"
-msgstr "位置ファイルから除外"
+msgstr "部品配置ファイルから除外"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
@@ -32982,123 +32982,123 @@ msgstr "部品レイヤー (F.Cu) へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Switch to Inner layer 1"
-msgstr "内層レイヤー１へ切替"
+msgstr "内層レイヤー1へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Switch to Inner layer 2"
-msgstr "内層レイヤー２へ切替"
+msgstr "内層レイヤー2へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:856
 msgid "Switch to Inner layer 3"
-msgstr "内層レイヤー３へ切替"
+msgstr "内層レイヤー3へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:862
 msgid "Switch to Inner layer 4"
-msgstr "内層レイヤー４へ切替"
+msgstr "内層レイヤー4へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:868
 msgid "Switch to Inner layer 5"
-msgstr "内層レイヤー５へ切替"
+msgstr "内層レイヤー5へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Switch to Inner layer 6"
-msgstr "内層レイヤー６へ切替"
+msgstr "内層レイヤー6へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:879
 msgid "Switch to Inner layer 7"
-msgstr "内層レイヤー７へ切替"
+msgstr "内層レイヤー7へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Switch to Inner layer 8"
-msgstr "内層レイヤー８へ切替"
+msgstr "内層レイヤー8へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Switch to Inner layer 9"
-msgstr "内層レイヤー９へ切替"
+msgstr "内層レイヤー9へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:894
 msgid "Switch to Inner layer 10"
-msgstr "内層レイヤー１０へ切替"
+msgstr "内層レイヤー10へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:899
 msgid "Switch to Inner layer 11"
-msgstr "内層レイヤー１１へ切替"
+msgstr "内層レイヤー11へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:904
 msgid "Switch to Inner layer 12"
-msgstr "内層レイヤー１２へ切替"
+msgstr "内層レイヤー12へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:909
 msgid "Switch to Inner layer 13"
-msgstr "内層レイヤー１３へ切替"
+msgstr "内層レイヤー13へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:914
 msgid "Switch to Inner layer 14"
-msgstr "内層レイヤー１４へ切替"
+msgstr "内層レイヤー14へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:919
 msgid "Switch to Inner layer 15"
-msgstr "内層レイヤー１５へ切替"
+msgstr "内層レイヤー15へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:924
 msgid "Switch to Inner layer 16"
-msgstr "内層レイヤー１６へ切替"
+msgstr "内層レイヤー16へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:929
 msgid "Switch to Inner layer 17"
-msgstr "内層レイヤー１７へ切替"
+msgstr "内層レイヤー17へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:934
 msgid "Switch to Inner layer 18"
-msgstr "内層レイヤー１８へ切替"
+msgstr "内層レイヤー18へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:939
 msgid "Switch to Inner layer 19"
-msgstr "内層レイヤー１９へ切替"
+msgstr "内層レイヤー19へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:944
 msgid "Switch to Inner layer 20"
-msgstr "内層レイヤー２０へ切替"
+msgstr "内層レイヤー20へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:949
 msgid "Switch to Inner layer 21"
-msgstr "内層レイヤー２１へ切替"
+msgstr "内層レイヤー21へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:954
 msgid "Switch to Inner layer 22"
-msgstr "内層レイヤー２２へ切替"
+msgstr "内層レイヤー22へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:959
 msgid "Switch to Inner layer 23"
-msgstr "内層レイヤー２３へ切替"
+msgstr "内層レイヤー23へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:964
 msgid "Switch to Inner layer 24"
-msgstr "内層レイヤー２４へ切替"
+msgstr "内層レイヤー24へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:969
 msgid "Switch to Inner layer 25"
-msgstr "内層レイヤー２５へ切替"
+msgstr "内層レイヤー25へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:974
 msgid "Switch to Inner layer 26"
-msgstr "内層レイヤー２６へ切替"
+msgstr "内層レイヤー26へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:979
 msgid "Switch to Inner layer 27"
-msgstr "内層レイヤー２７へ切替"
+msgstr "内層レイヤー27へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:984
 msgid "Switch to Inner layer 28"
-msgstr "内層レイヤー２８へ切替"
+msgstr "内層レイヤー28へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:989
 msgid "Switch to Inner layer 29"
-msgstr "内層レイヤー２９へ切替"
+msgstr "内層レイヤー29へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:994
 msgid "Switch to Inner layer 30"
-msgstr "内層レイヤー３０へ切替"
+msgstr "内層レイヤー30へ切替"
 
 #: pcbnew/tools/pcb_actions.cpp:1000
 msgid "Switch to Copper (B.Cu) layer"
