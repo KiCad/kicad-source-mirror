@@ -26,14 +26,6 @@
 #include "panel_kicad_launcher.h"
 
 
-#ifdef __WXMAC__
-constexpr int ICON_PADDING = 4;
-constexpr int CELL_MARGINS = 0;
-#else
-constexpr int ICON_PADDING = 5;
-constexpr int CELL_MARGINS = 3;
-#endif
-
 PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
         PANEL_KICAD_LAUNCHER_BASE( aParent )
 {
@@ -51,7 +43,9 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     }
 
     wxFont titleFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+#ifndef __WXGTK__
     titleFont.SetPointSize( titleFont.GetPointSize() + 2 );
+#endif
     titleFont.SetWeight( wxFONTWEIGHT_BOLD );
 
     wxFont helpFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -62,7 +56,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
         {
             BITMAP_BUTTON* btn = new BITMAP_BUTTON( this, wxID_ANY );
             btn->SetBitmap( aBitmap );
-            btn->SetPadding( ICON_PADDING );
+            btn->SetPadding( 5 );
             btn->SetToolTip( aAction.GetDescription() );
 
             auto handler =
@@ -87,18 +81,16 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
             int row = m_toolsSizer->GetRows();
 
-            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxALL, CELL_MARGINS );
-#ifdef __WXGTK__
+            m_toolsSizer->Add( btn, wxGBPosition( row, 0 ), wxGBSpan( 2, 1 ), wxBOTTOM, 12 );
+
             // Due to https://trac.wxwidgets.org/ticket/16088?cversion=0&cnum_hist=7 GTK fails to
-            // correctly set the BestSize of non-default-size text so we need to make sure that the
-            // BestSize isn't needed.
-            // However, another bug on OSX causes this to make the text top-aligned, so we have to
-            // do it only on GTK.  Sigh.
-            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM|wxEXPAND, 0 );
-#else
-            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxALIGN_BOTTOM, 0 );
-#endif
-            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP, 0 );
+            // correctly set the BestSize of non-default-size or styled text so we need to make
+            // sure that the BestSize isn't needed by setting wxEXPAND.  Unfortunately this makes
+            // wxALIGN_BOTTOM non-functional, so we have to jump through a bunch more hoops to
+            // try and align the title and help text in the middle of the icon.
+            m_toolsSizer->Add( label, wxGBPosition( row, 1 ), wxGBSpan( 1, 1 ), wxTOP|wxEXPAND, 10 );
+
+            m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP|wxTOP, 1 );
         };
 
     addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ),
