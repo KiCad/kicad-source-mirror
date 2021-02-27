@@ -2546,6 +2546,21 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
     new_poly->SetShape( S_POLYGON );
     new_poly->SetLayer( layer );
+
+    // Polygons on the silk layer are filled but other layers are not/fill doesn't make sense
+    if( layer == F_SilkS || layer == B_SilkS )
+    {
+        new_poly->SetFilled( true );
+        new_poly->SetWidth( 0 );
+    }
+    else
+    {
+        new_poly->SetWidth( ( *( aLine->segment.begin() ) )->width );
+
+        if( new_poly->GetWidth() == 0 )
+            new_poly->SetWidth( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+    }
+
     new_poly->SetPolyShape( poly_outline );
     aBoard->Add( new_poly, ADD_MODE::APPEND );
 
