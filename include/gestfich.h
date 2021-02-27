@@ -112,18 +112,6 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
 void AddDelimiterString( wxString& string );
 
 /**
- * Return the data path common to KiCad.
- *
- * If environment variable KICAD is defined (KICAD = path to KiCad)
- * Returns \<KICAD\> /;
- * Otherwise returns \<path of binaries\> / (if "kicad" is in the path name)
- * Otherwise returns /usr /share/kicad/
- *
- * @note The \\ path separators are replaced by / (a la Unix).
- */
-wxString KicadDatasPath();
-
-/**
  * Search the executable file shortname in KiCad binary path and return full file
  * name if found or shortname if the kicad binary path is kicad/bin.
  *
