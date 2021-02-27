@@ -95,8 +95,6 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
                             const wxPoint&  aPosition = wxDefaultPosition,
                             wxString*       aMruPath = nullptr );
 
-EDA_LIST_DIALOG* GetFileNames( char* Directory, char* Mask );
-
 
 /**
  * Call the executable file \a ExecFile with the command line parameters \a param.
