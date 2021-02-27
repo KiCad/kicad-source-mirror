@@ -31,14 +31,6 @@
 #ifndef __INCLUDE__EDA_DOC_H__
 #define __INCLUDE__EDA_DOC_H__ 1
 
-
-/**
- * Search \a aKeyList for any words found in \a aDatabase.
- *
- * @return true if keyword is found.
- */
-bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase );
-
 /**
  * Open a document (file) with the suitable browser.
  *

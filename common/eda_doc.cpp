@@ -204,29 +204,3 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 
     return success;
 }
-
-
-bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase )
-{
-    if( aKeys.IsEmpty() )
-        return false;
-
-    wxStringTokenizer keyTokenizer( aKeys, wxT( ", \t\n\r" ), wxTOKEN_STRTOK );
-
-    while( keyTokenizer.HasMoreTokens() )
-    {
-        wxString key = keyTokenizer.GetNextToken();
-
-        // Search for key in aDatabase:
-        wxStringTokenizer dataTokenizer( aDatabase, wxT( ", \t\n\r" ), wxTOKEN_STRTOK );
-
-        while( dataTokenizer.HasMoreTokens() )
-        {
-            if( dataTokenizer.GetNextToken() == key )
-                return true;
-        }
-    }
-
-    // keyword not found
-    return false;
-}
