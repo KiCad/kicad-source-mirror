@@ -1807,7 +1807,7 @@ bool FABMASTER::loadZones( BOARD* aBoard )
             loadZone( aBoard, zone );
         else
         {
-            if( zone->layer == "OUTLINE" )
+            if( zone->layer == "OUTLINE" || zone->layer == "DESIGN_OUTLINE" )
             {
                 loadOutline( aBoard, zone );
             }
