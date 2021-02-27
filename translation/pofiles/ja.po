@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 06:40+0000\n"
+"PO-Revision-Date: 2021-02-28 03:30+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -9816,9 +9816,7 @@ msgstr "デフォルトの線幅:"
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
-msgstr ""
-"太さが０に設定されている場合、アイテムを描画するデフォルトのペンの太さを選択"
-"します。"
+msgstr "太さが0に設定されている場合、アイテムを描画するデフォルトのペンの太さを選択します。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
@@ -15989,7 +15987,7 @@ msgstr "Eeschema ウィンドウに選択されたシートの内容を表示"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
-msgstr "シートから退出"
+msgstr "シートから抜ける"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Display the parent sheet in the Eeschema window"
@@ -18634,7 +18632,7 @@ msgid ""
 "Should not be 0."
 msgstr ""
 "レギュレーター内部での基準電圧です。\n"
-"０を設定することはできません。"
+"0を設定することはできません。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:157
 msgid "For 3 terminal regulators only, the  Adjust pin current."
@@ -22322,7 +22320,7 @@ msgstr "クリアランス"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:223
 msgid "Set values to 0 to use netclass values."
-msgstr "ネットクラスの値を使用するため、値を０に設定します。"
+msgstr "ネットクラスの値を使用するため、値を0に設定します。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:229
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:325
@@ -23086,7 +23084,7 @@ msgstr "フットプリント ライブラリーを編集..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 msgid "Set values to 0 to use Board Setup values."
-msgstr "基板セットアップの値を使用するため、値を０に設定します。"
+msgstr "基板セットアップの値を使用するため、値を0に設定します。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 msgid ""
@@ -23834,7 +23832,7 @@ msgstr "図形のプロパティを変更"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:412
 msgid "The arc angle cannot be zero."
-msgstr "円弧の角度は０にできません。"
+msgstr "円弧の角度は0にできません。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:419
 msgid "The radius cannot be zero."
@@ -27257,9 +27255,8 @@ msgid ""
 msgstr ""
 "２つのパッド領域間の最小距離。\n"
 "この値より近い２つのパッド領域はプロット中にマージされます。\n"
-"このパラメーターはハンダ マスク レイヤーをプロットするためにのみ使用されま"
-"す。\n"
-"何をしているか知らないなら、０のままにしておいて下さい。"
+"このパラメーターはハンダ マスク レイヤーをプロットするためにのみ使用されます。\n"
+"何をしているか知らないなら、0のままにしておいて下さい。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid ""
