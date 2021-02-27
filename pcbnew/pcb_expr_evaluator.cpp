@@ -347,16 +347,15 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                 {
-                    ZONE* testZone = static_cast<ZONE*>( item );
+                    ZONE*      itemZone = static_cast<ZONE*>( item );
+                    DRC_RTREE* itemRTree = board->m_CopperZoneRTrees[ itemZone ].get();
 
                     for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                     {
-                        if( testZone->IsOnLayer( layer ) )
+                        if( itemRTree->QueryColliding( zone->GetCachedBoundingBox(), &zoneOutline,
+                                                       layer, 0, nullptr, nullptr ) )
                         {
-                            const SHAPE_POLY_SET& fill = testZone->GetFilledPolysList( layer );
-
-                            if( zoneOutline.Collide( &fill ) )
-                                return true;
+                            return true;
                         }
                     }
 

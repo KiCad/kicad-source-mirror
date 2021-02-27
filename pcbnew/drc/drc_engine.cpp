@@ -659,7 +659,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     if( m_progressReporter )
     {
-        int phases = 0;
+        int phases = 1;
 
         for( DRC_TEST_PROVIDER* provider : m_testProviders )
         {
@@ -680,10 +680,20 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     m_board->IncrementTimeStamp();      // Invalidate all caches
 
+    if( !ReportPhase( _( "Tessellating copper zones..." ) ) )
+        return;
+
+    // Number of zones between progress bar updates
+    int                delta = 5;
+    std::vector<ZONE*> copperZones;
+
     for( ZONE* zone : m_board->Zones() )
     {
         zone->CacheBoundingBox();
         zone->CacheTriangulation();
+
+        if( !zone->GetIsRuleArea() )
+            copperZones.push_back( zone );
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -692,9 +702,33 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         {
             zone->CacheBoundingBox();
             zone->CacheTriangulation();
+
+            if( !zone->GetIsRuleArea() )
+                copperZones.push_back( zone );
         }
 
         footprint->BuildPolyCourtyards();
+    }
+
+    int zoneCount = copperZones.size();
+
+    for( int ii = 0; ii < zoneCount; ++ii )
+    {
+        ZONE* zone = copperZones[ ii ];
+
+        if( ( ii % delta ) == 0 || ii == zoneCount -  1 )
+        {
+            if( !ReportProgress( (double) ii / (double) zoneCount ) )
+                return;
+        }
+
+        m_board->m_CopperZoneRTrees[ zone ] = std::make_unique<DRC_RTREE>();
+
+        for( int layer : zone->GetLayerSet().Seq() )
+        {
+            if( IsCopperLayer( layer ) )
+                m_board->m_CopperZoneRTrees[ zone ]->Insert( zone, layer );
+        }
     }
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )

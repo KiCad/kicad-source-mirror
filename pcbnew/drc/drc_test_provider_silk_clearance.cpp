@@ -83,7 +83,7 @@ private:
 bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 {
     // This is the number of tests between 2 calls to the progress bar
-    const int delta = 1000;
+    const int delta = 2000;
 
     m_board = m_drcEngine->GetBoard();
 

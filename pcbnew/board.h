@@ -35,6 +35,7 @@
 #include <pcb_plot_params.h>
 #include <title_block.h>
 #include <tools/pcb_selection.h>
+#include <drc/drc_rtree.h>
 
 class BOARD_COMMIT;
 class PCB_BASE_FRAME;
@@ -272,6 +273,7 @@ public:
         m_timeStamp++;
         m_InsideAreaCache.clear();
         m_InsideCourtyardCache.clear();
+        m_CopperZoneRTrees.clear();
     }
 
     int GetTimeStamp() { return m_timeStamp; }
@@ -1138,8 +1140,11 @@ public:
     GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
 
 public:
-    // While this is a significant encapsulation leak, it's also a significant performance win.
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool> m_InsideCourtyardCache;
-    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool> m_InsideAreaCache;
+    // ------------ Run-time caches -------------
+
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
+
+    std::map< ZONE*, std::unique_ptr<DRC_RTREE> >         m_CopperZoneRTrees;
 };
 #endif      // CLASS_BOARD_H_

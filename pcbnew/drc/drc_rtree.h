@@ -279,8 +279,11 @@ public:
 
         if( collision )
         {
-            *aActual = std::max( 0, actual );
-            *aPos = pos;
+            if( aActual )
+                *aActual = std::max( 0, actual );
+
+            if( aPos )
+                *aPos = pos;
 
             return true;
         }
