@@ -306,7 +306,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     if( m_cancelled )
         m_messages->Report( _( "-------- ERC cancelled by user.<br><br>" ), RPT_SEVERITY_INFO );
     else
-        m_messages->Report( _( "Done.<br><br>" ), RPT_SEVERITY_INFO );
+        m_messages->Report( _( "ERC completed.<br><br>" ), RPT_SEVERITY_INFO );
 
     Raise();
     wxYield();                                    // Allow time slice to refresh Messages
@@ -424,9 +424,6 @@ void DIALOG_ERC::testErc()
     }
 
     m_parent->GetCanvas()->Refresh();
-
-    // Display message
-    Report( _( "Done.<br><br>" ) );
 }
 
 
