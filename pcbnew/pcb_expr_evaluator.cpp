@@ -200,8 +200,9 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( !footprint )
                     return false;
 
+                std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
                 std::pair<BOARD_ITEM*, BOARD_ITEM*> key( footprint, item );
-                auto i = board->m_InsideCourtyardCache.find( key );
+                auto                                i = board->m_InsideCourtyardCache.find( key );
 
                 if( i != board->m_InsideCourtyardCache.end() )
                     return i->second;
@@ -347,7 +348,11 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                 {
-                    ZONE*      itemZone = static_cast<ZONE*>( item );
+                    ZONE* itemZone = static_cast<ZONE*>( item );
+
+                    if( !itemZone->IsFilled() )
+                        return false;
+
                     DRC_RTREE* itemRTree = board->m_CopperZoneRTrees[ itemZone ].get();
 
                     for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
@@ -376,15 +381,16 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( !zone || zone == item || zone->GetParent() == item )
                     return false;
 
+                std::unique_lock<std::mutex>        cacheLock( board->m_CachesMutex );
                 std::pair<BOARD_ITEM*, BOARD_ITEM*> key( zone, item );
-                auto i = board->m_InsideAreaCache.find( key );
+                auto                                i = board->m_InsideAreaCache.find( key );
 
                 if( i != board->m_InsideAreaCache.end() )
                     return i->second;
 
                 bool result = realInsideZone( zone );
 
-                board->m_InsideCourtyardCache[ key ] = result;
+                board->m_InsideAreaCache[ key ] = result;
                 return result;
             };
 

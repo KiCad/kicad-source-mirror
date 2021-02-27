@@ -271,8 +271,13 @@ public:
     void IncrementTimeStamp()
     {
         m_timeStamp++;
-        m_InsideAreaCache.clear();
-        m_InsideCourtyardCache.clear();
+
+        {
+            std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
+            m_InsideAreaCache.clear();
+            m_InsideCourtyardCache.clear();
+        }
+
         m_CopperZoneRTrees.clear();
     }
 
@@ -1142,6 +1147,7 @@ public:
 public:
     // ------------ Run-time caches -------------
 
+    std::mutex                                            m_CachesMutex;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideCourtyardCache;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
 
