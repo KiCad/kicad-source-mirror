@@ -626,7 +626,10 @@ public:
         return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||
                 ( aItem->Type() == SCH_NO_CONNECT_T ) ||
                 ( aItem->Type() == SCH_JUNCTION_T ) ||
-                ( aItem->Type() == SCH_COMPONENT_T ) ;
+                ( aItem->Type() == SCH_COMPONENT_T ) ||
+                ( aItem->Type() == SCH_LABEL_T ) ||
+                ( aItem->Type() == SCH_HIER_LABEL_T ) ||
+                ( aItem->Type() == SCH_GLOBAL_LABEL_T );
     }
 
     /**
