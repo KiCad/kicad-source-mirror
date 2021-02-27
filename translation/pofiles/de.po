@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-25 17:52+0000\n"
+"PO-Revision-Date: 2021-03-01 15:50+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3189,6 +3189,7 @@ msgstr "Befehl"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Jeder vertikalen Bildlaufeinstellung kann nur eine Aktion zugewiesen werden"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3315,7 +3316,7 @@ msgstr "Vertikale Touchpad- oder Scrollradbewegung:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Jeder Spalte kann nur eine Aktion zugewiesen werden"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -4582,9 +4583,8 @@ msgid "Delete"
 msgstr "Entfernen"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Gewählte(s) Element(e) abwählen"
+msgstr "Ausgewählte Zellen löschen"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -7173,7 +7173,7 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a "
 "schematic."
 msgstr ""
-"Bauteilbibliothek \"%s\" hat einen doppelten Eintrag \"%s\".\n"
+"Symbolbibliothek \"%s\" hat einen doppelten Eintrag \"%s\".\n"
 "Dies könnte zu unerwartetem Verhalten beim Laden von Komponenten im "
 "Schaltplan führen."
 
@@ -7441,9 +7441,9 @@ msgstr ""
 "das laufende Kommando zu sehen."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Liste von Rastergrößen auf die Standardwerte zurücksetzen"
+msgstr ""
+"Liste der Skripte zur Stücklistenerzeugung auf Standardwerte zurücksetzen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -8394,7 +8394,7 @@ msgstr "Fehler, Warnungen und Ausschlüsse"
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d Symbol(e) benötigen Annotation.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8908,13 +8908,12 @@ msgstr "Füllart"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
 msgid "Common to all &units in component"
-msgstr "Von allen &Einheiten eines Bauteils gemeinsam genutzt"
+msgstr "Von allen &Einheiten eines Symbols gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:148
 msgid "Common to all body &styles (DeMorgan)"
-msgstr ""
-"Von allen Darstellungs&formen (DeMorgan) für Bauteile gemeinsam genutzt"
+msgstr "Von allen Darstellungs&formen (DeMorgan) für Symbole gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.h:52
 msgid "Drawing Properties"
@@ -9070,7 +9069,7 @@ msgstr "Von allen Einheiten gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:194
 msgid "Common to all body styles"
-msgstr "Von allen Bauteileformen gemeinsam genutzt"
+msgstr "Von allen Symboleformen gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:81
 msgid "Text Item Properties"
@@ -9087,7 +9086,7 @@ msgid ""
 "and also the default component value when loaded in the schematic."
 msgstr ""
 "Dies ist der Symbolname in der Bibliothek und der voreingestellte\n"
-"Bauteilwert für die Verwendung im Schaltplan."
+"Symbolwert für die Verwendung im Schaltplan."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:42
 msgid "Derive from existing symbol:"
@@ -9103,7 +9102,7 @@ msgstr ""
 "Symbol der aktuellen Bibliothek als Elternsymbol auswählen.\n"
 "\n"
 "Dies war früher als Alias bekannt. Kein existierendes\n"
-"Bauteil wählen um ein neues Wurzelsymbol zu erstellen."
+"Symbol wählen um ein neues Wurzelsymbol zu erstellen."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:51
 msgid "Default reference designator:"
@@ -9206,7 +9205,7 @@ msgstr "Alternative Darstellungsform (De Morgan) von Symbol löschen?"
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr ""
 "Der Name \"%s\" erzeugt einen Konflikt mit einem existierenden Eintrag in "
-"der Bauteilbibliothek \"%s\"."
+"der Symbolbibliothek \"%s\"."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:425
 #: eeschema/dialogs/dialog_symbol_properties.cpp:780
@@ -10057,32 +10056,31 @@ msgid ""
 "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
-"Dieses Tool soll nicht weiter angezeigt werden?\n"
-"Es werden dann auch keine Veränderungen durchgeführt!\n"
+"Soll dieses Werkzeug nicht mehr angezeigt werden?\n"
+"Keine Veränderungen werden durchgeführt.\n"
 "\n"
-"Diese Einstellung kann im Dialog \"Bauteilbibliotheksdateien\" verändert "
-"werden,\n"
-"das Tool kann manuell im \"Werkzeug\" Menü wieder aktiviert werden."
+"Diese Einstellung kann im Dialog \"Symbolbibliotheken\" verändert werden\n"
+"und das Werkzeug kann manuell im \"Werkzeug\"-Menü wieder aktiviert werden."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
 msgid "Rescue Symbols"
-msgstr "Bauteile wiederherstellen"
+msgstr "Symbole wiederherstellen"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
-msgstr "Bauteile zum Aktualisieren:"
+msgstr "Symbole zum Aktualisieren:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:37
 msgid "Instances of this symbol:"
-msgstr "Instanzen von diesem Bauteil:"
+msgstr "Instanzen von diesem Symbol:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
 msgid "Cached Symbol:"
-msgstr "Bauteil im Schaltplan:"
+msgstr "Symbol im Schaltplan:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:76
 msgid "Library Symbol:"
-msgstr "Bauteil in Bibliothek:"
+msgstr "Symbol in Bibliothek:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:100
 msgid "Never Show Again"
@@ -10652,7 +10650,7 @@ msgstr "Benutzerdefiniert"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:426
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Passive Bauteilwerte anpassen (z.B. M -> Meg; 100 nF -> 100n)"
+msgstr "Passive Symbolwerte anpassen (z.B. M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429
 msgid "Add full path for .include library directives"
@@ -10781,13 +10779,11 @@ msgid ""
 "Values can use Spice unit symbols."
 msgstr ""
 "Der Dezimaltrenner in Spicewerten ist der Punkt.\n"
-"Werte können Einheiten aus den Spice-Bauteilen benutzen."
+"Werte können Einheiten aus den Spice-Symbolen benutzen."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr ""
-"Bauteile der Spice-Einheiten in den Werten (Groß-/"
-"Kleinschreibungsunabhängig):"
+msgstr "Spice-Einheit-Symbole in Werten (groß-/kleinschreibungsunabhängig):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -11057,7 +11053,7 @@ msgstr "Quelle"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:936
 msgid "Disable symbol for simulation"
-msgstr "Bauteil in der Simulation deaktivieren"
+msgstr "Symbol in der Simulation deaktivieren"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:942
 msgid "Alternate node sequence:"
@@ -11174,20 +11170,20 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
-msgstr "Aktualisiere Bauteil aus Bibliothek..."
+msgstr "Aktualisiere Symbol aus Bibliothek..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:429
 msgid "Change Symbol..."
-msgstr "Bauteil ändern..."
+msgstr "Symbol ändern..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 msgid "Edit Symbol..."
-msgstr "Bauteil bearbeiten..."
+msgstr "Symbol bearbeiten..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 msgid "Edit Library Symbol..."
-msgstr "Bibliotheks-Bauteil bearbeiten..."
+msgstr "Bibliotheks-Symbol bearbeiten..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:263
 msgid "Pin Number"
@@ -11212,7 +11208,7 @@ msgstr "Spice-Modell..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:99
 msgid "Symbol Properties"
-msgstr "Bauteileigenschaften"
+msgstr "Symboleigenschaften"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:58
 #, c-format
@@ -11234,20 +11230,20 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Dieser Schaltplan benutzt derzeit die alte Form der Bauteilbibliotheksliste "
-"um Bauteilsymbole zu laden. KiCad wird versuchen, die verwendeten Bauteile "
-"über die neue Bauteilbibliothekstabelle neu zuzuordnen. Diese Änderung der "
-"Projekt- und Schaltplandateien macht diese eventuell inkompatibel mit alten "
-"Versionen von KiCad. Unveränderte Kopien aller veränderten Dateien werden im "
-"\"remap_backup\"-Ordner erstellt, falls Sie Änderungen zurücknehmen wollen. "
-"Sollten Sie die automatische Neuzuordnung überspringen müssen Sie die "
-"Bauteilsymbole manuell neu zuordnen."
+"Dieser Schaltplan benutzt derzeit die alte Form der Symbolbibliotheksliste "
+"um Bibliothekssymbole zu laden. KiCad wird versuchen, die verwendeten "
+"Schaltzeichen über die neue Symbolbibliothekstabelle neu zuzuordnen. Diese "
+"Änderung der Projekt- und Schaltplandateien macht diese eventuell "
+"inkompatibel mit alten Versionen von KiCad. Unveränderte Kopien aller "
+"veränderten Dateien werden im \"remap_backup\"-Ordner erstellt, falls Sie "
+"Änderungen zurücknehmen wollen. Sollten Sie die automatische Neuzuordnung "
+"überspringen müssen Sie die Schaltzeichen manuell neu zuordnen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:210
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
-"Füge Bibliothek \"%s\", Datei \"%s\" der Bauteilbibliothekstabelle des "
+"Füge Bibliothek \"%s\", Datei \"%s\" der Symbolbibliothekstabelle des "
 "Projektes hinzu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:219
@@ -11261,27 +11257,26 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
-"Konnte die Bauteilsymboltabelle des Projektes nicht erstellen.\n"
-"Fehler: %s"
+"Konnte die Symbolbibliothekstabelle des Projektes nicht erstellen. Fehler:\n"
+"%s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241
 msgid "Created project symbol library table.\n"
-msgstr "Erstellt eine leere projektspezifische Bauteilbibliothekstabelle.\n"
+msgstr "Erstellt eine leere projektspezifische Symbolbibliothekstabelle.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:262
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
-msgstr ""
-"Bauteilsymbol \"%s\" wurde in der Bauteilbibliothekstabelle nicht gefunden."
+msgstr "Symbol \"%s\" in der Symbolbibliothekstabelle nicht gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:268
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
-msgstr "Bauteilsymbol \"%s\" wurde der Bibliothek \"%s\" zugeordnet."
+msgstr "Symbol \"%s\" wurde der Symbolbibliothek \"%s\" zugeordnet."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:277
 msgid "Symbol library table mapping complete!"
-msgstr "Kartierung der Bauteilbibliothekstabelle ist fertig gestellt!"
+msgstr "Kartierung der Symbolbibliothekstabelle ist fertig gestellt!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:347
 #, c-format
@@ -11336,7 +11331,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
 msgid "Remap Symbols"
-msgstr "Bauteile neu zuordnen"
+msgstr "Symbole neu zuordnen"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:81 pcbnew/dialogs/dialog_update_pcb.cpp:53
@@ -11362,16 +11357,16 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Normalerweise werden Footprints über ihre eindeutigen IDs mit den Bauteilen "
-"verknüpft. Wählen Sie diese Option nur aus, wenn Sie die "
+"Normalerweise werden Footprints über ihre eindeutigen IDs mit den "
+"Schaltplansymbolen verknüpft. Wählen Sie diese Option nur aus, wenn Sie die "
 "Footprintverknüpfungen basierend auf ihren Referenzbezeichnern zurücksetzen "
 "möchten."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
 msgstr ""
-"Aktualisiert die Referenzen von Bauteilen welche im PCB-Editor geändert "
-"worden sind."
+"Aktualisiert die Referenzen von Schaltplansymbolen welche im PCB-Editor "
+"geändert worden sind."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11382,13 +11377,14 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"Aktualisieren von Footprintzuordnungen von Bauteilen bei denen die "
-"Footprints mit anderen Footprints auf der Platine ausgetauscht worden sind."
+"Footprintzuordnungen von Symbolen aktualisieren, bei denen die Footprints "
+"auf der Platine ersetzt worden sind."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
 msgstr ""
-"Aktualisierung der Bauteilwerte welche im PCB Editor bearbeitet worden sind."
+"Aktualisierung der Symbolwerte, welche im Leiterplatten-Editor bearbeitet "
+"worden sind."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
 msgid "Update Schematic from PCB"
@@ -11396,19 +11392,19 @@ msgstr "Aktualisiere Schaltplan von PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
-msgstr "Übergeordnetes Bauteil:"
+msgstr "Übergeordnetes Symbol:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
-msgstr "Entferne Felder, die nicht im übergeordneten Bauteil sind"
+msgstr "Entferne Felder, die nicht im übergeordneten Symbol sind"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr "Felder zurücksetzen, die im übergeordneten Bauteil leer sind"
+msgstr "Felder zurücksetzen, die im übergeordneten Symbol leer sind"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
-msgstr "Bauteilfelder aktualisieren"
+msgstr "Symbolfelder aktualisieren"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -11422,7 +11418,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:205
 msgid "(symbol editor only)"
-msgstr "(nur Bauteileditor)"
+msgstr "(nur Symboleditor)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:241
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:494
@@ -11542,7 +11538,7 @@ msgstr "Blatthintergrund:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
 msgid "Clicking on a pin selects the symbol"
-msgstr "Klick auf Pin wählt Bauteil"
+msgstr "Klick auf Pin wählt Symbol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:76
 msgid ""
@@ -11551,8 +11547,8 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "Im Schaltplaneditor:\n"
-"Wenn eingeschaltet bewirkt das Klicken auf einen Pin eine Auswahl des "
-"Elternbauteils.\n"
+"Wenn aktiviert bewirkt das Klicken auf einen Pin die Auswahl des "
+"übergeordneten Symbols.\n"
 "Wenn deaktiviert bewirkt das Klicken auf einen Pin nur die Auswahl dieses "
 "Pins."
 
@@ -11587,9 +11583,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "Auswahlzustand von Element(en) umschalten."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Strg+Umschalt"
+msgstr "Alt+Umschalt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -11615,13 +11610,12 @@ msgstr ""
 "Alt, Umschalt und Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "Strg+Umschalt"
+msgstr "Cmd+Umschalt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
-msgstr "Automatische Platzierung Bauteilfelder"
+msgstr "Symbolfelder automatisch platzieren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:196
 msgid "A&utomatically place symbol fields"
@@ -11661,7 +11655,7 @@ msgstr "Dialog Einstellungen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "Anzeige Footprintvorschau in der Schaltplanbauteilauswahl"
+msgstr "Footprintvorschau in der Schaltplansymbol-Auswahl anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:263
 msgid "Keep hierarchy navigator open"
@@ -11696,7 +11690,7 @@ msgstr "Annotatierungen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:26
 msgid "Symbol unit notation:"
-msgstr "Bauteil Elementanmerkungen:"
+msgstr "Symbol-Einheits-Notation:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid ".A"
@@ -11888,7 +11882,7 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 " %s"
 msgstr ""
-"Bauteilbibliothek \"%s\" wurde nicht geladen.\n"
+"Symbolbibliothek \"%s\" wurde nicht geladen.\n"
 "%s"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:422
@@ -11955,7 +11949,7 @@ msgstr "Bibliothek \"%s\" wurde nicht gefunden."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:757
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Fehler beim Speichern der Bauteilbibliotheksdatei \"%s\"."
+msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:989
 msgid ""
@@ -11963,14 +11957,14 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"An einer oder mehrerer Bauteilbibliotheken wurden Veränderungen "
-"durchgeführt. Diese Änderungen\n"
+"An einer oder mehrerer Symbolbibliotheken wurden Veränderungen durchgeführt. "
+"Diese Änderungen\n"
 "müssen gespeichert oder verworfen werden bevor Änderungen an der Tabelle der "
-"Bauteilbibliotheken durchgeführt werden können."
+"Symbolbibliotheken durchgeführt werden können."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1003
 msgid "Symbol Libraries"
-msgstr "Bauteilbibliotheken"
+msgstr "Symbolbibliotheken"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1024
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1065
@@ -11980,7 +11974,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Bauteilbibliothekstabelle zu speichern ist ein "
+"Bei dem Versuch die globale Symbolbibliothekstabelle zu speichern ist ein "
 "Fehler aufgetreten:\n"
 "\n"
 "%s"
@@ -12003,8 +11997,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Bauteilbibliothekstabelle zu "
-"speichern ist ein Fehler aufgetreten:\n"
+"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
+"ist ein Fehler aufgetreten:\n"
 "\n"
 "%s"
 
@@ -12057,9 +12051,9 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"Bei dem Versuch die globale Bauteilbibliothekstabelle zu laden ist ein "
-"Fehler aufgetreten.\n"
-"Bitte die globale Bauteilbibliothekstabelle im Menü 'Einstellungen' anpassen."
+"Bei dem Versuch die globale Symbolbibliothekstabelle zu laden ist ein Fehler "
+"aufgetreten.\n"
+"Bitte die globale Symbolbibliothekstabelle im Menü 'Einstellungen' anpassen."
 
 #: eeschema/eeschema_config.cpp:66 eeschema/eeschema_config.cpp:220
 #: gerbview/gerbview_frame.cpp:1003
@@ -12078,7 +12072,7 @@ msgstr "Farben"
 #, c-format
 msgid "An error occurred loading the symbol library table \"%s\"."
 msgstr ""
-"Bei dem Versuch die Bauteilbibliothekstabelle \"%s\" zu laden ist ein Fehler "
+"Bei dem Versuch die Symbolbibliothekstabelle \"%s\" zu laden ist ein Fehler "
 "aufgetreten."
 
 #: eeschema/erc.cpp:57 eeschema/erc.cpp:74
@@ -12225,14 +12219,14 @@ msgstr "Bezeichner sind gleich (Unterschiede nur in Groß-/Kleinschreibung)"
 #: eeschema/erc_item.cpp:94
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr ""
-"Unterschiedlicher Footprint in einer anderen Einheit des gleichen Bauteils "
+"Unterschiedlicher Footprint in einer anderen Einheit des gleichen Symbols "
 "zugewiesen"
 
 #: eeschema/erc_item.cpp:98
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr ""
-"Anderes Netz einem gemeinsamen Pin in einer anderen Einheit des gleichen "
-"Bauteils zugewiesen"
+"Einem gemeinsamen Pin in einer anderen Einheit des Symbols ist ein anderes "
+"Netz zugewiesen"
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -12271,19 +12265,19 @@ msgstr "Elektrische Verbindungen sind nirgendwo angeschlossen"
 
 #: eeschema/erc_item.cpp:134
 msgid "Library symbol issue"
-msgstr "Problem mit dem Bibliotheksbauteil"
+msgstr "Problem mit Bibliotheks-Symbol"
 
 #: eeschema/erc_item.cpp:138
 msgid "Symbol is not annotated"
-msgstr "Bauteil ist nicht annotiert"
+msgstr "Symbol ist nicht annotiert"
 
 #: eeschema/erc_item.cpp:142
 msgid "Symbol has more units than are defined"
-msgstr "Bauteil hat mehr Einheiten als definiert sind"
+msgstr "Symbol hat mehr Einheiten als definiert sind"
 
 #: eeschema/erc_item.cpp:146
 msgid "Units of same symbol have different values"
-msgstr "Einheiten des gleichen Bauteils haben unterschiedliche Werte"
+msgstr "Einheiten des gleichen Symbols haben unterschiedliche Werte"
 
 #: eeschema/erc_item.cpp:150
 msgid "Duplicate reference designators"
@@ -12382,8 +12376,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:460
 msgid "Illegal entry found in project file symbol library list."
-msgstr ""
-"Ungültige Einträge in der projektspezifischen Bauteilbibliothekstabelle."
+msgstr "Ungültige Einträge in der projektspezifischen Symbolbibliothekstabelle."
 
 #: eeschema/files-io.cpp:461
 msgid "Project Load Warning"
@@ -12396,11 +12389,11 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"Bauteilbibliotheken die in der projektspezifischen Bauteilbibliothekstabelle "
+"Symbolbibliotheken die in der projektspezifischen Symbolbibliothekstabelle "
 "definiert sind, werden nicht mehr unterstützt und daher entfernt.\n"
 "\n"
 "Dies kann unter bestimmten Umständen zu fehlerhaften "
-"Bauteilbibliotheksverknüpfungen führen."
+"Symbolbibliotheksverknüpfungen führen."
 
 #: eeschema/files-io.cpp:467
 msgid "Do not show this dialog again."
@@ -12502,13 +12495,13 @@ msgstr "Spannungssymbol wählen (%d Elemente geladen)"
 #: eeschema/getpart.cpp:154 eeschema/symbol_viewer_frame.cpp:837
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "Bauteilauswahl (%d Elemente geladen)"
+msgstr "Symbolauswahl (%d Elemente geladen)"
 
 #: eeschema/getpart.cpp:248
 #, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
 msgstr ""
-"Keine alternative Körperform für Bauteil \"%s\" in der Bibliothek \"%s\" "
+"Keine alternative Körperform für Symbol \"%s\" in der Bibliothek \"%s\" "
 "gefunden."
 
 #: eeschema/hierarch.cpp:89
@@ -12614,8 +12607,7 @@ msgstr "Grafischer Text '%s'"
 #: eeschema/libarch.cpp:100
 #, c-format
 msgid "Failed to add symbol \"%s\" to library file \"%s\"."
-msgstr ""
-"Konnte das Bauteil \"%s\" nicht zur Bauteilbibliothek \"%s\" hinzufügen."
+msgstr "Konnte das Symbol \"%s\" nicht zur Symbolbibliothek \"%s\" hinzufügen."
 
 #: eeschema/libarch.cpp:108
 msgid "Unexpected exception occurred."
@@ -12624,18 +12616,17 @@ msgstr "Ein nicht erwarteter Fehler ist aufgetreten."
 #: eeschema/libarch.cpp:123
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr ""
-"Bauteil '%s' konnte in keiner Bibliothek oder dem Cache gefunden werden."
+msgstr "Symbol '%s' konnte in keiner Bibliothek oder dem Cache gefunden werden."
 
 #: eeschema/libarch.cpp:139
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "Ein Fehler ist aufgetreten beim Erstellen der Bauteilbibliothek '%s'."
+msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek '%s'."
 
 #: eeschema/libarch.cpp:151 eeschema/libarch.cpp:157
 #, c-format
 msgid "Failed to save symbol library file \"%s\""
-msgstr "Fehler beim Speichern der Bauteilbibliothek \"%s\""
+msgstr "Fehler beim Speichern der Symbolbibliothek \"%s\""
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
 #: pagelayout_editor/menubar.cpp:58 pcbnew/menubar_pcb_editor.cpp:70
@@ -12838,20 +12829,20 @@ msgstr "Umbenennen %s in %s"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
-"Das Bauteil %s kann nicht gesichert werden, es ist nicht in einer Bibliothek "
-"oder dem Cache vorhanden."
+"Das Symbol %s kann nicht wiederhergestellt werden, es ist nicht in einer "
+"Bibliothek oder dem Cache vorhanden."
 
 #: eeschema/project_rescue.cpp:304 eeschema/project_rescue.cpp:465
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
 msgstr ""
-"Gesichertes Bauteil %s konnte nur in der zwischengespeicherten Bibliothek %s "
+"Gesichertes Symbol %s konnte nur in der zwischengespeicherten Bibliothek %s "
 "gefunden werden."
 
 #: eeschema/project_rescue.cpp:307 eeschema/project_rescue.cpp:468
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Rette das modifizierte Bauteil %s nach %s"
+msgstr "Rette das modifizierte Symbol %s nach %s"
 
 #: eeschema/project_rescue.cpp:560
 msgid "This project has nothing to rescue."
@@ -12859,7 +12850,7 @@ msgstr "In diesem Projekt ist nichts wiederherzustellen."
 
 #: eeschema/project_rescue.cpp:575
 msgid "No symbols were rescued."
-msgstr "Keine Bauteile wiederhergestellt."
+msgstr "Keine Symbole wurden wiederhergestellt."
 
 #: eeschema/project_rescue.cpp:683
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:183
@@ -12875,15 +12866,15 @@ msgstr "Konnte die Sicherungsbibliothek '%s' nicht laden."
 #: eeschema/project_rescue.cpp:831
 msgid "Error occurred saving project specific symbol library table."
 msgstr ""
-"Bei dem Versuch die projektspezifische Bauteilbibliothekstabelle zu "
-"speichern ist ein Fehler aufgetreten."
+"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
+"ist ein Fehler aufgetreten."
 
 #: eeschema/sch_base_frame.cpp:70
 #, c-format
 msgid "Error loading symbol '%s' from library '%s'."
 msgstr ""
-"Bei dem Versuch das Bauteil \"%s\" aus der Bibliothek \"%s\" zu laden ist "
-"ein Fehler aufgetreten."
+"Bei dem Versuch das Symbol \"%s\" aus der Bibliothek \"%s\" zu laden ist ein "
+"Fehler aufgetreten."
 
 #: eeschema/sch_base_frame.cpp:217
 #, c-format
@@ -12891,7 +12882,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Bauteilbibliothekstabelle zu speichern ist ein "
+"Bei dem Versuch die globale Symbolbibliothekstabelle zu speichern ist ein "
 "Fehler aufgetreten:\n"
 "%s"
 
@@ -12901,7 +12892,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Bauteilbliothekstabelle zu speichern "
+"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
 "ist ein Fehler aufgetreten:\n"
 "%s"
 
@@ -13130,12 +13121,12 @@ msgstr "Keine-Verbindung"
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
-"Ermöglicht <b>Debug</b> Logging für die Bauteil*() Funktionen in diesem "
-"SCH_PLUGIN."
+"<b>Debug</b>-Logging für die Symbol*()-Funktionen in diesem SCH_PLUGIN "
+"aktivieren."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "Regulärer Ausdruck <b>Bauteilname</b> für einen Filter."
+msgstr "Regulärer Ausdruck <b>Symbolname</b>-Filter."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:160
 msgid ""
@@ -13389,7 +13380,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Unzulässiger Bauteilname in\n"
+"Unzulässiger Symbolname in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13415,7 +13406,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültiges Bauteil erweitert den Namen in\n"
+"Ungültiges Symbol erweitert den Namen in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13428,7 +13419,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Kein übergeordnetes Element für erweitertes Bauteil %s in\n"
+"Kein übergeordnetes Element für erweitertes Symbol %s in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13441,7 +13432,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültiger Name für Bauteileinheit in\n"
+"Ungültiger Name für Symboleinheit in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13454,7 +13445,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültiger Namenspräfix für Bauteileinheit %s in\n"
+"Ungültiger Namenspräfix für Symboleinheit %s in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13467,7 +13458,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültiger Namenssuffix für Bauteileinheit %s in\n"
+"Ungültiger Namenssuffix für Symboleinheit %s in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13480,7 +13471,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültige Nummer für Bauteileinheit %s in\n"
+"Ungültige Nummer für Symboleinheit %s in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -13493,7 +13484,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültige Bauteilkonvertierungsnummer %s in\n"
+"Ungültige Symbolkonvertierungsnummer %s in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -13686,7 +13677,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültiger Bauteilbilbiotheksname in\n"
+"Ungültiger Symbolbibliotheksname in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13699,7 +13690,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ungültige Bauteilbibliotheks-ID in\n"
+"Ungültige Symbolbibliotheks-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Offset: %d"
@@ -13714,14 +13705,14 @@ msgstr "Bibliotheksdatei \"%s\" wurde nicht gefunden."
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4165
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "Bibliothek %s enthält kein Bauteil mit dem Namen %s"
+msgstr "Bibliothek %s enthält kein Symbol mit dem Namen %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2204
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4350
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
-"Bauteilbibliothek \"%s\" existiert bereits, neue Bibliothek kann nicht "
+"Symbolbibliothek \"%s\" existiert bereits, neue Bibliothek kann nicht "
 "erstellt werden"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2232
@@ -13785,7 +13776,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2671
 msgid "symbol document library file is empty"
-msgstr "Bauteil Dokumentationsbibliothek ist leer"
+msgstr "Symbol-Dokumentbibliotheksdatei ist leer"
 
 #: eeschema/sch_screen.cpp:593
 #, c-format
@@ -13824,13 +13815,13 @@ msgstr ""
 #: eeschema/sch_screen.cpp:690
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Setze Bibliothekskennung des Bauteils '%s %s' auf '%s'."
+msgstr "Setze Bibliothekskennung des Schaltplansymbols '%s %s' auf '%s'."
 
 #: eeschema/sch_screen.cpp:701
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
-"Für das Schaltplan-Bauteil '%s %s' konnte kein Bibliotheks-Bauteil gefunden "
+"Für das Schaltplansymbol '%s %s' konnte kein Bibliothekssymbol gefunden "
 "werden."
 
 #: eeschema/sch_sheet.cpp:55
@@ -13894,12 +13885,12 @@ msgstr "Keine Bibliothek angegeben!"
 #: eeschema/sch_symbol.cpp:1429
 #, c-format
 msgid "Symbol not found in %s!"
-msgstr "Bauteil %s nicht gefunden!"
+msgstr "Symbol nicht in %s gefunden!"
 
 #: eeschema/sch_symbol.cpp:1621
 #, c-format
 msgid "Symbol %s [%s]"
-msgstr "Bauteil %s [%s]"
+msgstr "Symbol %s [%s]"
 
 #: eeschema/sch_text.cpp:491
 msgid "Tri-State"
@@ -14334,7 +14325,7 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"Die Bauteilbibliothekstabelle des Schaltplans \"%s\" ist noch nicht neu "
+"Die Symbolbibliothekstabelle des Schaltplans \"%s\" ist noch nicht neu "
 "zugeordnet worden. Das Projekt, zu dem der Schaltplan gehört, muss zuerst "
 "neu zugeordnet werden bevor er ins aktuelle Projekt importiert werden kann."
 
@@ -14380,7 +14371,7 @@ msgid ""
 msgstr ""
 "Der geladenen Schaltplan enthält Bibliotheksnamen die in der "
 "Projektbibliothekstabelle nicht enthalten sind. Dies kann zu fehlerhaften "
-"Bauteilbibliotheksverknüpfungen im geladenen Schaltplan führen. Möchten Sie "
+"Symbolbibliotheksverknüpfungen im geladenen Schaltplan führen. Möchten Sie "
 "fortfahren?"
 
 #: eeschema/sheet.cpp:224 eeschema/sheet.cpp:265 eeschema/sheet.cpp:314
@@ -14395,7 +14386,7 @@ msgid ""
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
 "Die Projektbibliothekstabelle '%s' existiert nicht oder kann nicht gelesen "
-"werden. Dies kann zu fehlerhaften Bauteilbibliotheksverknüpfungen im "
+"werden. Dies kann zu fehlerhaften Symbolbibliotheksverknüpfungen im "
 "Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:310
@@ -14406,7 +14397,7 @@ msgid ""
 msgstr ""
 "Im geladenen Schaltplan sind Bibliotheksnamen enthalten die nicht in der "
 "Projektbibliothekstabelle enthalten sind. Dies kann zu fehlerhaften "
-"Bauteilbibliotheksverknüpfungen im Schaltplan führen. Möchten Sie fortfahren?"
+"Symbolbibliotheksverknüpfungen im Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:371
 msgid ""
@@ -14416,7 +14407,7 @@ msgid ""
 msgstr ""
 "In der aktuellen Bibliothekstabelle ist ein doppelter Bibliotheksname "
 "vorhanden, der auf eine andere Bibliothek verweist. Dies Konflikt kann nicht "
-"behoben werden und kann zu fehlerhaften Bauteilbibliotheksverknüpfungen im "
+"behoben werden und kann zu fehlerhaften Symbolbibliotheksverknüpfungen im "
 "Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:564
@@ -14630,7 +14621,7 @@ msgstr "Sonde vom Schaltplan"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:62
 msgid "Tune Component Value"
-msgstr "Bauteilwert ändern"
+msgstr "Symbolwert ändern"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:67
 msgid "Show SPICE Netlist..."
@@ -14798,7 +14789,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:722
 msgid "Manage symbol libraries"
-msgstr "Bauteilbibliotheken verwalten"
+msgstr "Symbolbibliotheken verwalten"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:733
 msgid ""
@@ -14867,7 +14858,7 @@ msgstr "Auswahl der Bibliothekstabelle um eine Bibliothek hinzuzufügen zu:"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:989
 #: pcbnew/footprint_libraries_utils.cpp:501
 msgid "Add To Library Table"
-msgstr "Hinzufügen zu Bauteilbibliothekstabelle"
+msgstr "Hinzufügen zu Symbolbibliothekstabelle"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1021
 #, c-format
@@ -14881,14 +14872,14 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Die aktuelle Konfiguration beinhaltet keine Bauteilbibliothek \"%s\".\n"
-"Benutzen Sie die Verwaltung von Bauteilbibliotheken um die Konfiguration zu "
+"Die aktuelle Konfiguration beinhaltet keine Symbolbibliothek \"%s\".\n"
+"Benutzen Sie die Verwaltung von Symbolbibliotheken um die Konfiguration zu "
 "bearbeiten."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1168
 #: eeschema/symbol_viewer_frame.cpp:392
 msgid "Library not found in symbol library table."
-msgstr "Bibliothek wurde nicht in der Bauteilbibliothekstabelle gefunden."
+msgstr "Bibliothek wurde nicht in der Symbolbibliothekstabelle gefunden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1176
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -14899,13 +14890,13 @@ msgid ""
 msgstr ""
 "Die Bibliothek mit dem Aliasnamen \"%s\" ist nicht in der aktuellen "
 "Konfiguration aktiviert.\n"
-"Benutzen Sie die Verwaltung von Bauteilbibliotheken um die Konfiguration zu "
+"Benutzen Sie die Verwaltung von Symbolbibliotheken um die Konfiguration zu "
 "bearbeiten."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1179
 #: eeschema/symbol_viewer_frame.cpp:399
 msgid "Symbol library not enabled."
-msgstr "Bauteilbibliothek nicht aktiviert."
+msgstr "Symbolbibliothek nicht aktiviert."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1368
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1423
@@ -14935,7 +14926,7 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
-"Bauteilbibliothekseintrag mit neuer Bibliothek ersetzen.\n"
+"Symbolbibliothekseintrag mit neuer Bibliothek ersetzen.\n"
 "\n"
 "Die Originalbibliothek wird nicht mehr verwendbar sein."
 
@@ -14950,9 +14941,9 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Fügt der globalen Bauteilbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Fügt der globalen Symbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
 "\n"
-"Das Kürzel der Bauteilbibliothekstabelle wird mit einem Ganzzahl-Suffix "
+"Das Kürzel der Symbolbibliothekstabelle wird mit einem Ganzzahl-Suffix "
 "versehen\n"
 "um sicherzustellen, dass es keine doppelten Tabelleneinträge geben wird."
 
@@ -14967,9 +14958,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Füge der Projektbauteilbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Fügt der Projekt-Symbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
 "\n"
-"Das Kürzel der Bauteilbibliothekstabelle wird mit dem Suffix versehen\n"
+"Das Kürzel der Symbolbibliothekstabelle wird mit einem Ganzzahl-Suffix "
+"versehen,\n"
 "um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
@@ -14983,34 +14975,33 @@ msgstr "[Schreibgeschützte Bibliothek]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:182
 msgid "No symbol libraries are loaded."
-msgstr "Es wurden keine Bauteilbibliotheken geladen."
+msgstr "Es wurden keine Symbolbibliotheken geladen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:208
 msgid "Select Symbol Library"
-msgstr "Wähle Bauteilbibliothek"
+msgstr "Wähle Symbolbibliothek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:256
 msgid "The current symbol has been modified.  Save changes?"
 msgstr ""
-"Das aktuelle Bauteil wurde modifiziert. Möchten Sie die Änderungen speichern?"
+"Das aktuelle Symbol wurde modifiziert. Möchten Sie die Änderungen speichern?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:282
 #, c-format
 msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 msgstr ""
-"Bei dem Versuch das Bauteil \"%s\" aus der Bibliothek \"%s\" zu laden ist "
-"ein Fehler aufgetreten."
+"Bei dem Versuch das Symbol \"%s\" aus der Bibliothek \"%s\" zu laden ist ein "
+"Fehler aufgetreten."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:402
 msgid "This new symbol has no name and cannot be created."
 msgstr ""
-"Dieses neue Bauteil besitzt keinen Namen und kann somit nicht erstellt "
-"werden."
+"Dieses neue Symbol besitzt keinen Namen und kann somit nicht erstellt werden."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:413
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
-msgstr "Bauteil \"%s\" existiert bereits in Bibliothek \"%s\""
+msgstr "Symbol \"%s\" existiert bereits in Bibliothek \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:518
 #: eeschema/tools/symbol_editor_control.cpp:464
@@ -15021,7 +15012,7 @@ msgstr "Gegenwärtig ist kein Schaltplan geöffnet."
 #: eeschema/symbol_editor/symbol_editor.cpp:1132
 #, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "Bauteilbibliothek '%s' ist nicht beschreibbar."
+msgstr "Symbolbibliothek '%s' ist nicht beschreibbar."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:540
 #: eeschema/symbol_editor/symbol_editor.cpp:1133
@@ -15036,7 +15027,7 @@ msgstr "Aliasname"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:603
 msgid "Save Symbol As"
-msgstr "Bauteil speichern unter"
+msgstr "Symbol speichern unter"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:604
 #: pcbnew/footprint_libraries_utils.cpp:954
@@ -15045,19 +15036,19 @@ msgstr "Speichere in Bibliothek:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:636
 msgid "No library specified.  Symbol could not be saved."
-msgstr "Keine Bibliothek ausgewählt. Bauteil konnte nicht gespeichert werden."
+msgstr "Keine Bibliothek ausgewählt. Symbol konnte nicht gespeichert werden."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:645
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Das abgeleitete Bauteil muss in der gleichen Bibliothek abgespeichert sein "
-"in der auch der überordnete Bauteil abgelegt ist."
+"Das abgeleitete Symbol muss in der gleichen Bibliothek abgespeichert sein in "
+"der auch der überordnete Symbol abgelegt ist."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:664
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Bauteil \"%s\" existiert bereits in Bibliothek \"%s\""
+msgstr "Symbol \"%s\" existiert bereits in Bibliothek \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:736
 #, c-format
@@ -15067,20 +15058,20 @@ msgid ""
 "\n"
 "Do you wish to delete this symbol and all of it's derivatives?"
 msgstr ""
-"Das Bauteil \"%s\" wird verwendet, um andere Bauteile abzuleiten.\n"
-"Durch das Löschen dieses Bauteils werden alle daraus abgeleiteten Bauteile "
+"Das Symbol \"%s\" wird verwendet, um andere Symbole abzuleiten.\n"
+"Durch das Löschen dieses Symbols werden alle daraus abgeleiteten Symbole "
 "gelöscht.\n"
 "\n"
-"Möchten Sie dieses Bauteile und alle seine Ableitungen löschen?"
+"Möchten Sie dieses Symbol und alle abgeleiteten löschen?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:741
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Delete Symbol"
-msgstr "Bauteil löschen"
+msgstr "Symbol löschen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:742
 msgid "Keep Symbol"
-msgstr "Bauteil behalten"
+msgstr "Symbol behalten"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:884
 #: pcbnew/footprint_libraries_utils.cpp:1056
@@ -15091,7 +15082,7 @@ msgstr "\"%s\" zur letzten gespeicherten Version zurücksetzen?"
 #: eeschema/symbol_editor/symbol_editor.cpp:952
 #, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
-msgstr "Bauteilname \"%s\" nicht in der Bibliothek \"%s\" gefunden"
+msgstr "Symbolname \"%s\" nicht in der Bibliothek \"%s\" gefunden"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:979
 msgid "No library specified."
@@ -15105,7 +15096,7 @@ msgstr "Bibliothek \"%s\" speichern als..."
 #: eeschema/symbol_editor/symbol_editor.cpp:1037
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
-msgstr "Fehler beim Speichern der Bauteilbibliothekstabelle \"%s\""
+msgstr "Fehler beim Speichern der Symbolbibliothekstabelle \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1039
 msgid "Error saving library"
@@ -15141,7 +15132,7 @@ msgstr "Spannungssymbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:52
 msgid "Import Symbol"
-msgstr "Bauteil importieren"
+msgstr "Symbol importieren"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:77
 #, c-format
@@ -15151,20 +15142,20 @@ msgstr "Kann Schaltplansymboltabelle \"%s\" nicht importieren."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:84
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr "Die Bauteilbibliothek \"%s\" ist leer."
+msgstr "Die Symbolbibliothek \"%s\" ist leer."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:94
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\"."
-msgstr "Bauteilsymbol \"%s\" existiert bereits in Bibliothek \"%s\"."
+msgstr "Symbol \"%s\" existiert bereits in Bibliothek \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:112
 msgid "There is no symbol selected to save."
-msgstr "Es wurde kein Bauteil zum Speichern ausgewählt."
+msgstr "Es wurde kein Symbol zum Speichern ausgewählt."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
 msgid "Export Symbol"
-msgstr "Bauteil exportieren"
+msgstr "Symbol exportieren"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:142
 #, c-format
@@ -15175,7 +15166,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:150
 #, c-format
 msgid "Symbol \"%s\" already exists in \"%s\"."
-msgstr "Bauteil \"%s\" existiert bereits in \"%s\"."
+msgstr "Symbol \"%s\" existiert bereits in \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #: kicad/tools/kicad_manager_control.cpp:258
@@ -15194,35 +15185,35 @@ msgstr "Keine Schreibrechte zum Speichern der Bibliothek \"%s\"."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:185
 #, c-format
 msgid "Error creating symbol library \"%s\""
-msgstr "Ein Fehler ist aufgetreten beim Erstellen der Bauteilbibliothek \"%s\""
+msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
 #, c-format
 msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr "Bauteilsymbol \"%s\" wurde in der Bibliothek \"%s\" gespeichert"
+msgstr "Symbol \"%s\" wurde in der Bibliothek \"%s\" gespeichert"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:119
 #, c-format
 msgid "Cannot find library \"%s\" in the Symbol Library Table (%s)"
 msgstr ""
-"Bauteilbibliothek \"%s\" konnte nicht in der Tabelle der Bauteilbibliotheken "
+"Symbolbibliothek \"%s\" konnte nicht in der Tabelle der Symbolbibliotheken "
 "(%s) gefunden werden"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:342
 msgid "Symbol not found."
-msgstr "Bauteil nicht gefunden."
+msgstr "Symbol nicht gefunden."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:373
 #, c-format
 msgid "Error loading symbol \"%s\" from library \"%s\". (%s)"
 msgstr ""
-"Bei dem Versuch das Bauteil \"%s\" aus der Bibliothek \"%s\" zu laden ist "
-"ein Fehler aufgetreten. (%s)"
+"Bei dem Versuch das Symbol \"%s\" aus der Bibliothek \"%s\" zu laden ist ein "
+"Fehler aufgetreten. (%s)"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:559
 #, c-format
 msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
-msgstr "Konnte Bauteil \"%s\" aus Bibliothek \"%s\" (%s) nicht laden"
+msgstr "Konnte Symbol \"%s\" aus Bibliothek \"%s\" (%s) nicht laden"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:708
 #, c-format
@@ -15233,7 +15224,7 @@ msgstr "Kann Bibliothek \"%s\" (%s) nicht auflisten"
 #, c-format
 msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr ""
-"Ein Fehler \"%s\" ist aufgetreten beim Versuch das Bauteil \"%s\" in der "
+"Ein Fehler \"%s\" ist aufgetreten beim Versuch das Symbol \"%s\" in der "
 "Bibliothek \"%s\" zu speichern"
 
 #: eeschema/symbol_editor/symbol_library_manager.h:85
@@ -15241,17 +15232,17 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Es konnten nicht alle Bauteilbibliotheken geladen werden. Benutzen Sie die "
+"Es konnten nicht alle Symbolbibliotheken geladen werden. Benutzen Sie die "
 "Verwaltung\n"
-"von Bauteilbibliotheken um den Pfad zu korrigieren oder um die "
-"Bibliothek(en) zu entfernen."
+"von Symbolbibliotheken um den Pfad zu korrigieren oder um die Bibliothek(en) "
+"zu entfernen."
 
 #: eeschema/symbol_lib_table.cpp:228
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Doppelter Bibliothek Aliasname \"%s\" in der Tabelle der Bauteilbibliotheken "
+"Doppelter Bibliothek-Aliasname \"%s\" in der Tabelle der Symbolbibliotheken "
 "in Zeile %d gefunden"
 
 #: eeschema/symbol_tree_model_adapter.cpp:74
@@ -15266,8 +15257,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die Bauteilbibliothek %s zu laden ist ein Fehler "
-"aufgetreten.\n"
+"Bei dem Versuch die Symbolbibliothek %s zu laden ist ein Fehler aufgetreten."
+"\n"
 "\n"
 "%s"
 
@@ -15290,23 +15281,23 @@ msgstr "Keine Bibliothek ausgewählt"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Choose symbol"
-msgstr "Bauteil auswählen"
+msgstr "Symbol wählen"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
-msgstr "Vorheriges Bauteil anzeigen"
+msgstr "Vorheriges Symbol anzeigen"
 
 #: eeschema/toolbars_symbol_viewer.cpp:59
 msgid "Display next symbol"
-msgstr "Nächstes Bauteil anzeigen"
+msgstr "Nächstes Symbol anzeigen"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
-msgstr "Bauteilbetrachter"
+msgstr "Symbolbetrachter"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
-msgstr "Laden einer Bauteil-Footprint-Zuordnungsdatei"
+msgstr "Symbol-Footprint-Zuordnungsdatei laden"
 
 #: eeschema/tools/assign_footprints.cpp:215
 msgid "Keep existing footprint field visibility"
@@ -15331,7 +15322,7 @@ msgstr "Sichtbarkeit umstellen"
 #: eeschema/tools/assign_footprints.cpp:230
 #, c-format
 msgid "Failed to open component-footprint link file \"%s\""
-msgstr "Konnte Bauteil-Footprint Zuordnungsdatei \"%s\" nicht öffnen"
+msgstr "Konnte Symbol-Footprint Zuordnungsdatei \"%s\" nicht öffnen"
 
 #: eeschema/tools/backannotate.cpp:71
 msgid "Select at least one property to back annotate."
@@ -15349,17 +15340,17 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:162
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "Footprint \"%s\" hat kein zugeordnetes Bauteil."
+msgstr "Footprint \"%s\" hat kein zugeordnetes Symbol."
 
 #: eeschema/tools/backannotate.cpp:195
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Footprints \"%s\" und \"%s\" sind mit dem gleichen Bauteil verknüpft."
+msgstr "Footprints \"%s\" und \"%s\" sind mit dem gleichen Symbol verknüpft."
 
 #: eeschema/tools/backannotate.cpp:260
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "Konnte das Bauteil für den Footprint \"%s\" nicht finden."
+msgstr "Konnte das Symbol für den Footprint \"%s\" nicht finden."
 
 #: eeschema/tools/backannotate.cpp:289
 #, c-format
@@ -15421,11 +15412,11 @@ msgstr "Electrical Rules Check ausführen"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
-msgstr "Bauteilprüfer"
+msgstr "Symbol-Prüfer"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Show the symbol checker window"
-msgstr "Zeigt das Bauteilprüfungsfenster"
+msgstr "Das Fenster für die Symbolprüfung anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -15481,15 +15472,15 @@ msgstr "Die aktuelle Bibliothek in einer neuen Datei speichern."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "New Symbol..."
-msgstr "Neues Bauteil..."
+msgstr "Neues Symbol..."
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "Create a new symbol"
-msgstr "Neues Bauteil erstellen"
+msgstr "Neues Symbol (Schaltzeichen) erstellen"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Edit Symbol"
-msgstr "Bauteil bearbeiten"
+msgstr "Symbol bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:128
 msgid "Show selected symbol on editor canvas"
@@ -15497,31 +15488,31 @@ msgstr "Ausgewähltes Symbol auf Editor-Zeichenfläche anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Duplicate Symbol"
-msgstr "Dupliziere Bauteil"
+msgstr "Dupliziere Symbol"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Make a copy of the selected symbol"
-msgstr "Aktuelles Bauteil als Kopie speichern unter"
+msgstr "Kopie des ausgewählten Symbols erzeugen"
 
 #: eeschema/tools/ee_actions.cpp:138
 msgid "Save the current symbol to a different library."
-msgstr "Das aktuelle Bauteil in einer anderen Bibliothek speichern."
+msgstr "Das aktuelle Symbol in einer anderen Bibliothek speichern."
 
 #: eeschema/tools/ee_actions.cpp:143
 msgid "Remove the selected symbol from its library"
-msgstr "Entfernt das ausgewählte Bauteil aus der Bibliothek"
+msgstr "Entfernt das ausgewählte Symbol aus seiner Bibliothek"
 
 #: eeschema/tools/ee_actions.cpp:158
 msgid "Paste Symbol"
-msgstr "Einfügen Bauteil"
+msgstr "Symbol einfügen"
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import Symbol..."
-msgstr "Bauteil importieren..."
+msgstr "Symbol importieren..."
 
 #: eeschema/tools/ee_actions.cpp:163
 msgid "Import a symbol to the current library"
-msgstr "Ein Bauteil in die aktive Bibliothek einfügen"
+msgstr "Ein Symbol in die aktive Bibliothek importieren"
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export..."
@@ -15529,21 +15520,21 @@ msgstr "Exportieren..."
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export a symbol to a new library file"
-msgstr "Ein Bauteil in eine neue Bibliothek einfügen"
+msgstr "Ein Symbol in eine neue Bibliotheksdatei exportieren"
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update Symbol Fields..."
-msgstr "Bauteilfelder aktualisieren..."
+msgstr "Symbolfelder aktualisieren..."
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
-"Bauteil aktualisieren um alle Änderungen vom übergeordneten Bauteil zu "
+"Symbol aktualisieren um alle Änderungen vom übergeordneten Symbol zu "
 "übernehmen"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
-msgstr "Bauteil zu Schaltplan hinzufügen"
+msgstr "Symbol zu Schaltplan hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Show Pin Electrical Types"
@@ -15555,7 +15546,7 @@ msgstr "Annotieren der Pins mit deren elektrischen Typen"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Show Symbol Tree"
-msgstr "Anzeige Bauteilbaum"
+msgstr "Symbolbaum anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:193
 msgid "Export View as PNG..."
@@ -15567,11 +15558,11 @@ msgstr "Eine PNG-Datei von aktueller Ansicht erstellen"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export Symbol as SVG..."
-msgstr "Exportiere Bauteil als SVG-Datei..."
+msgstr "Symbol als SVG-Datei exportieren..."
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Create SVG file from the current symbol"
-msgstr "Eine SVG-Datei vom gegenwärtigen Bauteil erstellen"
+msgstr "Eine SVG-Datei vom aktuellen Symbol erstellen"
 
 #: eeschema/tools/ee_actions.cpp:203
 msgid "Synchronized Pins Edit Mode"
@@ -15639,11 +15630,11 @@ msgstr "Grafische Linien hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:245
 msgid "Move Symbol Anchor"
-msgstr "Bauteilanker verschieben"
+msgstr "Symbolanker verschieben"
 
 #: eeschema/tools/ee_actions.cpp:245
 msgid "Specify a new location for the symbol anchor"
-msgstr "Spezifizieren Sie eine neue Position für den Anker des Bauteils"
+msgstr "Spezifizieren Sie eine neue Position für den Anker des Bausteils"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Finish drawing shape"
@@ -15655,7 +15646,7 @@ msgstr "Pinlänge übertragen"
 
 #: eeschema/tools/ee_actions.cpp:257
 msgid "Copy pin length to other pins in symbol"
-msgstr "Kopieren der Pinlänge zu anderen Pins vom Bauteil"
+msgstr "Pinlänge zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Push Pin Name Size"
@@ -15663,7 +15654,7 @@ msgstr "Größe Pinnamen übertragen"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Copy pin name size to other pins in symbol"
-msgstr "Kopieren der Pinnamengröße zu anderen Pins vom Bauteil"
+msgstr "Pinnamengröße zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Push Pin Number Size"
@@ -15671,15 +15662,15 @@ msgstr "Größe Pinnummern übertragen"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin number size to other pins in symbol"
-msgstr "Kopieren der Pinnummerngröße zu anderen Pins vom Bauteil"
+msgstr "Pinnummerngröße zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:276
 msgid "Add Symbol"
-msgstr "Bauteil hinzufügen"
+msgstr "Symbol hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:276
 msgid "Add a symbol"
-msgstr "Bauteil hinzufügen"
+msgstr "Ein Symbol hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:282
 msgid "Add Power"
@@ -15854,38 +15845,37 @@ msgstr "Felder autoplatzieren"
 #: eeschema/tools/ee_actions.cpp:412
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
 msgstr ""
-"Den automatischen Platzierungsalgorithmus auf den Bauteilen oder "
-"Schaltplanfeldern anwenden"
+"Den automatischen Platzierungsalgorithmus auf den Feldern von Schaltplan-"
+"Symbolen und -Blättern anwenden"
 
 #: eeschema/tools/ee_actions.cpp:417
 msgid "Change Symbols..."
-msgstr "Bauteile ändern..."
+msgstr "Symbole ändern..."
 
 #: eeschema/tools/ee_actions.cpp:418
 msgid "Assign different symbols from the library"
-msgstr "Unterschiedliche Bauteile aus der Bibliothek zuweisen"
+msgstr "Andere Symbole aus der Bibliothek zuweisen"
 
 #: eeschema/tools/ee_actions.cpp:423
 msgid "Update Symbols from Library..."
-msgstr "Aktualisiere Bauteile aus Bibliothek..."
+msgstr "Aktualisiere Symbole aus Bibliothek..."
 
 #: eeschema/tools/ee_actions.cpp:424
 msgid "Update symbols to include any changes from the library"
-msgstr ""
-"Aktualisieren der Bauteile um alle Änderungen der Bibliothek zu speichern"
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "Assign a different symbol from the library"
-msgstr "Anderes Bauteil aus der Bibliothek zuweisen"
+msgstr "Anderes Symbol aus der Bibliothek zuweisen"
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "Update Symbol..."
-msgstr "Bauteil aktualisieren..."
+msgstr "Symbol aktualisieren..."
 
 #: eeschema/tools/ee_actions.cpp:436
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Bauteil aktualisieren um alle Änderungen aus der Bibliothek zu übernehmen"
+"Symbol aktualisieren um alle Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/ee_actions.cpp:441
 msgid "Assign Netclass..."
@@ -15971,11 +15961,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:491
 msgid "Symbol Properties..."
-msgstr "Bauteileigenschaften..."
+msgstr "Symboleigenschaften..."
 
 #: eeschema/tools/ee_actions.cpp:491
 msgid "Displays symbol properties dialog"
-msgstr "Anzeige des Dialogs der Bauteileigenschaften"
+msgstr "Anzeige des Dialogs der Symboleigenschaften"
 
 #: eeschema/tools/ee_actions.cpp:496
 msgid "Pin Table..."
@@ -16032,31 +16022,31 @@ msgstr "Hebt alle Verbindungen und Pins hervor die zu einem Netz gehören"
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Edit with Symbol Editor"
-msgstr "Bearbeiten mit Bauteileditor"
+msgstr "Mit Symboleditor bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Open the symbol editor to edit the symbol"
-msgstr "Bauteileditor öffnen um das Bauteil zu bearbeiten"
+msgstr "Symboleditor öffnen, um das Schaltzeichen zu bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Edit Symbol Fields..."
-msgstr "Bauteilfelder bearbeiten..."
+msgstr "Symbolfelder bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Massenbearbeitung der Felder von allen Bauteilen im Schaltplan"
+msgstr "Massenbearbeitung der Felder von allen Symbolen im Schaltplan"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Edit Symbol Library Links..."
-msgstr "Verknüpfungen Bauteilbibliotheken bearbeiten ..."
+msgstr "Verknüpfungen Symbolbibliotheken bearbeiten ..."
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Edit links between schematic and library symbols"
-msgstr "Bearbeitet die Zuordnung von Schaltplan- und Bibliotheksbauteilen"
+msgstr "Bearbeitet die Zuordnung zwischen Schaltplan- und Bibliothekssymbolen"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Assign Footprints..."
-msgstr "Bauteilfootprints zuweisen..."
+msgstr "Symbolfootprints zuweisen..."
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Run footprint assignment tool"
@@ -16069,8 +16059,8 @@ msgstr "Importieren Footprint Zuordnungen..."
 #: eeschema/tools/ee_actions.cpp:564
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
-"Importieren von Bauteil Footprint Assoziierungen durch eine von Pcbnew "
-"erstellte .cmp Datei"
+"Importieren von Symbol-Footprint-Zuordnungen durch eine von Pcbnew erstellte "
+".cmp-Datei"
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Annotate Schematic..."
@@ -16078,7 +16068,7 @@ msgstr "Annotation des Schaltplans..."
 
 #: eeschema/tools/ee_actions.cpp:569
 msgid "Fill in schematic symbol reference designators"
-msgstr "Füllt die Referenzbezeichner der Bauteilsymbole aus"
+msgstr "Füllt die Referenzbezeichner der Schaltplansymbole aus"
 
 #: eeschema/tools/ee_actions.cpp:574
 msgid "Schematic Setup..."
@@ -16100,23 +16090,23 @@ msgstr "Seitenzahl des aktuellen Schaltplanblatts bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:586
 msgid "Rescue Symbols..."
-msgstr "Bauteile wiederherstellen..."
+msgstr "Symbole wiederherstellen..."
 
 #: eeschema/tools/ee_actions.cpp:587
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Alte Bauteile im Projekt finden und diese umbenennen/sichern"
+msgstr "Alte Symbole im Projekt finden und diese umbenennen/sichern"
 
 #: eeschema/tools/ee_actions.cpp:592
 msgid "Remap Legacy Library Symbols..."
-msgstr "Legacy-Bibliotheksbauteile neu zuordnen..."
+msgstr "Legacy-Bibliothekssymbole neu zuordnen..."
 
 #: eeschema/tools/ee_actions.cpp:593
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Bibliotheksbauteilverweise in älteren Schaltplänen der "
-"Bauteilbibliothekstabelle neu zuordnen"
+"Bibliothekssymbol-Verweise in alten Schaltplänen der "
+"Symbolbibliothekstabelle neu zuordnen"
 
 #: eeschema/tools/ee_actions.cpp:598
 msgid "Bus Definitions..."
@@ -16306,7 +16296,7 @@ msgstr "Verschieben aktivieren"
 
 #: eeschema/tools/ee_actions.cpp:740
 msgid "Symbol Move Activate"
-msgstr "Bauteil verschieben aktivieren"
+msgstr "Symbol verschieben aktivieren"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Align Elements to Grid"
@@ -16314,7 +16304,7 @@ msgstr "Am Gitter ausrichten"
 
 #: eeschema/tools/ee_inspection_tool.cpp:218
 msgid "Symbol Warnings"
-msgstr "Bauteilwarnungen"
+msgstr "Symbolwarnungen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:249
 #, c-format
@@ -16423,7 +16413,7 @@ msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:418
 msgid "No symbol issues found."
-msgstr "Keine Bauteilprobleme gefunden."
+msgstr "Keine Symbolprobleme gefunden."
 
 #: eeschema/tools/ee_selection_tool.cpp:1570
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
@@ -16472,15 +16462,15 @@ msgstr "Klicken Sie auf ein Blatt."
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
-msgstr "Bauteileinheit"
+msgstr "Symboleinheit"
 
 #: eeschema/tools/sch_edit_tool.cpp:97
 msgid "no symbol selected"
-msgstr "Kein Bauteil gewählt"
+msgstr "kein Symbol gewählt"
 
 #: eeschema/tools/sch_edit_tool.cpp:106
 msgid "symbol is not multi-unit"
-msgstr "Bauteil ist keine Multi-Einheit"
+msgstr "Symbol ist keine Multi-Einheit"
 
 #: eeschema/tools/sch_edit_tool.cpp:946
 msgid "Label value cannot go below zero"
@@ -16570,7 +16560,7 @@ msgstr "Bus hat keine Mitglieder"
 #: eeschema/tools/symbol_editor_control.cpp:344
 #: eeschema/tools/symbol_editor_control.cpp:384
 msgid "No symbol to export"
-msgstr "Kein Bauteil zum exportieren"
+msgstr "Kein Symbol zum exportieren"
 
 #: eeschema/tools/symbol_editor_control.cpp:355
 msgid "Image File Name"
@@ -16587,11 +16577,11 @@ msgstr "Dateiname:"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:537
 msgid "Edit Symbol Name"
-msgstr "Bauteilname bearbeiten"
+msgstr "Symbolname bearbeiten"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr "Bauteil ist nicht von anderem Bauteil abgeleitet."
+msgstr "Symbol ist nicht von anderem Symbol abgeleitet."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -17213,7 +17203,7 @@ msgstr "RS274X: KNOCKOUT-Befehl wurde von GerbView ignoriert"
 
 #: gerbview/toolbars_gerber.cpp:121
 msgid "Highlight items belonging to this component"
-msgstr "Hebt alle Elemente hervor die zu dem Bauteil gehören"
+msgstr "Hebt alle Elemente hervor die zu dem Symbol gehören"
 
 #: gerbview/toolbars_gerber.cpp:135
 msgid "Highlight items belonging to this net"
@@ -17440,7 +17430,7 @@ msgstr "Hervorhebung"
 #: gerbview/tools/gerbview_selection_tool.cpp:74
 #, c-format
 msgid "Highlight Items of Component \"%s\""
-msgstr "Elemente vom Bauteil \"%s\" hervorheben"
+msgstr "Elemente vom Symbol \"%s\" hervorheben"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:82
 #, c-format
@@ -17715,13 +17705,12 @@ msgstr ""
 "Möchten Sie ein neues Verzeichnis für das Projekt anlegen?"
 
 #: kicad/import_project.cpp:113
-#, fuzzy
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
 "Fehler beim Erstellen eines neuen Verzeichnisses. Bitte versuchen Sie einen "
-"anderen Pfad. Das Projekt wurde nicht importiert."
+"anderen Pfad. Das Projekt kann nicht importiert werden."
 
 #: kicad/import_project.cpp:137 kicad/import_project.cpp:154
 #, c-format
@@ -17730,6 +17719,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Datei '%s' kann nicht kopiert werden\n"
+"nach '%s'\n"
+"Das Projekt kann nicht importiert werden."
 
 #: kicad/import_project.cpp:216
 msgid "Import CADSTAR Archive Project Files"
@@ -18053,7 +18045,7 @@ msgstr "Schaltplan bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Edit schematic symbols"
-msgstr "Schaltplanbauteile bearbeiten"
+msgstr "Schaltplansymbole bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:76
 msgid "Edit PCB"
@@ -20399,7 +20391,7 @@ msgstr "Kupferlagen:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Anzahl Kupferlagen im Lagenaufbau wählen"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -24510,13 +24502,13 @@ msgstr "Lese Netzliste \"%s\".\n"
 #: pcbnew/dialogs/dialog_netlist.cpp:229
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr ""
-"Verwenden von Referenzbezeichnern für den Abgleich von Bauteilen mit "
+"Verwenden von Referenzbezeichnern für den Abgleich von Symbolen mit "
 "Footprints.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:231
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
-"Verwende Zeitstempel (Eindeutige IDs) für den Abgleich von Bauteilen mit "
+"Verwende Zeitstempel (Eindeutige IDs) für den Abgleich von Symbolen mit "
 "Footprints.\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
@@ -24543,9 +24535,10 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
-"Wählen Sie aus, ob die Footprint Referenzen aktualisiert werden sollen damit "
-"diese mit den aktuell zugewiesenen Bauteilen übereinstimmen, oder ob Sie den "
-"Footprints die Bauteilen zuweisen die deren aktuellen Referenzen entsprechen."
+"Wählen Sie aus, ob die Footprint-Referenzen aktualisiert werden sollen damit "
+"diese mit den aktuell zugewiesenen Symbolen übereinstimmen, oder ob den "
+"Footprints die Symbole zugewiesen werden sollen, die deren aktuellen "
+"Referenzen entsprechen."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
@@ -26443,7 +26436,7 @@ msgstr "Ungenutzte Pads entfernen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
-msgstr "Alle Footprints ohne Bauteile entfernen"
+msgstr "Alle Footprints ohne Schaltplansymbole entfernen"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:33
 msgid ""
@@ -26780,7 +26773,7 @@ msgstr "Die folgenden Verzeichnisse konnten nicht geöffnet werden:\n"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:827
 msgid "Failed to open directories to look for libraries"
 msgstr ""
-"Fehler beim Öffnen von Verzeichnissen in denen nach Bauteilbibliotheken "
+"Fehler beim Öffnen von Verzeichnissen in denen nach Symbolbibliotheken "
 "gesucht wird"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:853
@@ -26993,10 +26986,10 @@ msgid "Minimum item clearance:"
 msgstr "Mindestabstand:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
-#, fuzzy
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
-"Benutzen Sie die Einstellung \"%s\" um die Anzahl der Kupferlagen zu ändern."
+"Benutzen Sie die Seite \"Physikalischer Lagenaufbau\" um die Anzahl der "
+"Kupferlagen zu ändern."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -29704,7 +29697,7 @@ msgstr "%s kann nicht aktualisiert werden (Footprint \"%s\" nicht gefunden)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:228
 #, c-format
 msgid "Change %s footprint from \"%s\" to \"%s\"."
-msgstr "Ändere Bauteil-Footprint %s von \"%s\" nach \"%s\"."
+msgstr "Ändere Symbol-Footprint %s von \"%s\" nach \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:263
 #, c-format
@@ -29719,7 +29712,7 @@ msgstr "Ändere Wert %s von %s zu %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:297
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Aktualisiere %s Bauteilverknüpfung von %s auf %s."
+msgstr "Aktualisiere %s Symbolverknüpfung von %s auf %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:312
 #, c-format
@@ -29744,7 +29737,7 @@ msgstr "Entferne %s Pin %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:412
 #, c-format
 msgid "No net for symbol %s pin %s."
-msgstr "Kein Netz für Bauteil %s Pin %s."
+msgstr "Kein Netz für Symbol %s Pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:462
 #, c-format
@@ -29794,7 +29787,7 @@ msgstr "%s Pad %s nicht gefunden in %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:804
 #, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Verarbeite Bauteil \"%s:%s\"."
+msgstr "Verarbeite Symbol \"%s:%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -29847,38 +29840,37 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
 msgstr ""
-"Konnte einen Zeitstempel in der Bauteilsektion der Netzliste nicht parsen."
+"Konnte einen Zeitstempel in der Symbol-Sektion der Netzliste nicht parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:128
 msgid "Cannot parse footprint name in symbol section of netlist."
 msgstr ""
-"Konnte einen Footprintnamen in der Bauteilsektion der Netzliste nicht parsen."
+"Konnte einen Footprintnamen in der Symbol-Sektion der Netzliste nicht parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:142
 msgid "Cannot parse reference designator in symbol section of netlist."
 msgstr ""
-"Konnte einen Referenzbezeichner in der Bauteilsektion der Netzliste nicht "
+"Konnte einen Referenzbezeichner in der Symbol-Sektion der Netzliste nicht "
 "parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:152
 msgid "Cannot parse value in symbol section of netlist."
-msgstr "Konnte einen Wert in der Bauteilsektion der Netzliste nicht parsen."
+msgstr "Konnte einen Wert in der Symbol-Sektion der Netzliste nicht parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
-"Konnte einen Pinnamen in der Bauteilsektion der Netzliste nicht parsen."
+msgstr "Konnte einen Pinnamen in der Symbol-Sektion der Netzliste nicht parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:198
 msgid "Cannot parse net name in symbol net section of netlist."
 msgstr ""
-"Konnte einen Netznamen in der Bauteilsektion der Netzliste nicht parsen."
+"Konnte einen Netznamen in der Symbol-Sektion der Netzliste nicht parsen."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
 #, c-format
 msgid "Cannot find symbol \"%s\" in footprint filter section of netlist."
 msgstr ""
-"Konnte das Bauteil \"%s\" in der Footprintfiltersektion der Netzliste nicht "
+"Konnte das Symbol \"%s\" nicht in der Footprintfilter-Sektion der Netzliste "
 "finden."
 
 #: pcbnew/netlist_reader/netlist.cpp:66
@@ -29906,7 +29898,7 @@ msgstr "Fehler beim Laden der Netzliste"
 #: pcbnew/netlist_reader/netlist.cpp:154
 #, c-format
 msgid "No footprint defined for symbol \"%s\".\n"
-msgstr "Es wurde kein Footprint für das Bauteil \"%s\" definiert.\n"
+msgstr "Es wurde kein Footprint für das Symbol \"%s\" definiert.\n"
 
 #: pcbnew/netlist_reader/netlist.cpp:181
 #, c-format
@@ -31812,17 +31804,20 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Ereignisdatei: %s\n"
+"Platinenausgabe: %s"
 
 #: pcbnew/router/router_tool.cpp:503
-#, fuzzy
 msgid "Save router log"
-msgstr "Projekt speichern zu"
+msgstr "Router-Protokoll speichern"
 
 #: pcbnew/router/router_tool.cpp:503
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"Möchten Sie das Router-Ereignisprotokoll\n"
+"für Debugging-Zwecke speichern?"
 
 #: pcbnew/router/router_tool.cpp:812 pcbnew/router/router_tool.cpp:834
 msgid "Show board setup"
@@ -31887,12 +31882,12 @@ msgstr "Export nicht möglich, bitte das Problem beheben und erneut versuchen"
 #: pcbnew/specctra_import_export/specctra_export.cpp:914
 #, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
-msgstr "Das Bauteil mit dem Wert \"%s\" hat keine Referenz-ID."
+msgstr "Das Symbol mit dem Wert \"%s\" hat keine Referenz-ID."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:924
 #, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
-msgstr "Mehrere Bauteile verfügen über die selbe Referenz-ID \"%s\"."
+msgstr "Mehrere Symbole verfügen über die selbe Referenz-ID \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:69
 msgid ""
