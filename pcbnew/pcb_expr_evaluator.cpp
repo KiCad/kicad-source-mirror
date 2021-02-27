@@ -206,10 +206,10 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideCourtyardCache.end() )
                     return i->second;
 
-                bool result = realInsideFootprint( footprint );
+                bool insideFootprint = realInsideFootprint( footprint );
 
                 board->m_InsideCourtyardCache[ key ] = result;
-                return result;
+                return insideFootprint;
             };
 
     if( arg->AsString() == "A" )
