@@ -110,9 +110,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
 
-    if( Prj().IsReadOnly() )
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ) );
-
     finishDialogSettings();
 }
 
@@ -127,9 +124,20 @@ DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     if( event.GetSelection() == m_physicalStackupPage )
+    {
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
+        m_infoBar->Dismiss();
+    }
     else if( event.GetSelection() == m_layerSetupPage )
+    {
         m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+        m_infoBar->Dismiss();
+    }
+    else if( Prj().IsReadOnly() )
+    {
+        m_infoBar->ShowMessage(
+                _( "Project is missing or read-only. Changes will not be saved." ) );
+    }
 
 #ifdef __WXMAC__
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
