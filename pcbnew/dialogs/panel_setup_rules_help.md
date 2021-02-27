@@ -156,3 +156,14 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule "Max Drill Hole Size PTH"  
         (constraint hole (max 6.35mm))
         (condition "A.Pad_Type == 'Through-hole'"))
+
+
+    # Specify a larger clearance around a particular diff-pair
+    (rule "dp clearance"
+        (constraint clearance (min "1.5mm"))
+        (condition "A.NetClass == 'diffPairClass' && B.NetClass != 'diffPairClass'"))
+
+    # Specify a larger clearance around any diff-pair
+    (rule "dp clearance"
+        (constraint clearance (min "1.5mm"))
+        (condition "A.isDiffPair() && A.NetClass != B.NetClass"))
