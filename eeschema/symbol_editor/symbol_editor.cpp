@@ -1160,6 +1160,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
         }
     }
 
+    updateTitle();
     return retv;
 }
 
