@@ -396,6 +396,8 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
     # Avoid fatal error because /GF + swig wrapper exceed standard obj file limits
     string( APPEND CMAKE_CXX_FLAGS " /bigobj" )
+    # /EHsc: ensure standard exception C++ unwinding is enabled
+    string( APPEND CMAKE_CXX_FLAGS " /EHsc" )
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
