@@ -483,7 +483,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         break;
     }
 
-    if( Settings().SmartPads() )
+    if( Settings().SmartPads() && !m_mouseTrailTracer.IsManuallyForced() )
         effort |= OPTIMIZER::SMART_PADS;
 
     if( wr.statusCw == WALKAROUND::STUCK || wr.statusCcw == WALKAROUND::STUCK )
