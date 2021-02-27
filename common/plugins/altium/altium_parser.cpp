@@ -142,7 +142,7 @@ double ALTIUM_PARSER::PropertiesReadDouble(
 
     // Locale independent str -> double conversation
     std::istringstream istr( (const char*) value->second.mb_str() );
-    istr.imbue( std::locale( "C" ) );
+    istr.imbue( std::locale::classic() );
 
     double doubleValue;
     istr >> doubleValue;

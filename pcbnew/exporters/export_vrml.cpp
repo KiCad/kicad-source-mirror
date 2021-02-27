@@ -1686,7 +1686,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
                 throw( std::runtime_error( ostr.str().c_str() ) );
             }
 
-            output_file.imbue( std::locale( "C" ) );
+            output_file.imbue( std::locale::classic() );
 
             // Begin with the usual VRML boilerplate
             wxString fn = aFullFileName;

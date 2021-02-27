@@ -103,7 +103,7 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
         return false;
     }
 
-    op.imbue( std::locale( "C" ) );
+    op.imbue( std::locale::classic() );
     op << "#VRML V2.0 utf8\n";
 
     if( renameNodes )
