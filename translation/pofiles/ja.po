@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 05:40+0000\n"
+"PO-Revision-Date: 2021-02-27 05:53+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -11017,14 +11017,14 @@ msgstr "属性"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:194
 msgid "Exclude from bill of materials"
-msgstr "部品表 (BOM) から除外"
+msgstr "部品表から除外"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:195
 msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"これは、基準点やロゴのように、部品表に出したくない\n"
+"基準点やロゴのように、部品表(Bill of materials)に出したくない\n"
 "シンボルを追加するのに便利です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
@@ -11033,8 +11033,8 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"これは、メカニカルファスナーや筐体のように基板のレイアウトには不要で、\n"
-"部品表 (BOM) にのみエクスポートしたいシンボルを追加するのに便利です"
+"メカニカルファスナーや筐体のように、基板のレイアウトには不要で\n"
+"部品表 (Bill of materials) にのみエクスポートしたいシンボルを追加するのに便利です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
@@ -15941,7 +15941,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Generate BOM..."
-msgstr "部品表 (BOM) を生成..."
+msgstr "部品表を生成..."
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Generate a bill of materials for the current schematic"
@@ -22312,7 +22312,7 @@ msgstr "位置ファイルから除外"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:295
 msgid "Exclude from BOM"
-msgstr "部品表 (BOM) から除外"
+msgstr "部品表から除外"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:221
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
@@ -24571,7 +24571,7 @@ msgstr "円"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:369 pcbnew/pad.cpp:1071
 #: pcbnew/pad.cpp:1439
 msgid "Oval"
-msgstr "楕円"
+msgstr "長円"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Rectangular"
@@ -28416,7 +28416,7 @@ msgstr "部品配置ファイルから除外"
 
 #: pcbnew/footprint.cpp:848
 msgid "exclude from BOM"
-msgstr "部品表(BOM)から除外"
+msgstr "部品表から除外"
 
 #: pcbnew/footprint.cpp:850
 msgid "Status: "
@@ -29287,12 +29287,12 @@ msgstr "%s のプロパティを更新します。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:331
 #, c-format
 msgid "Setting %s 'exclude from BOM' fabrication attribute."
-msgstr "%s に[部品表(BOM)から除外]の製造属性を設定しています。"
+msgstr "%s に[部品表から除外]の製造属性を設定しています。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:337
 #, c-format
 msgid "Removing %s 'exclude from BOM' fabrication attribute."
-msgstr "%s の[部品表(BOM)から除外]の製造属性を削除しています。"
+msgstr "%s の[部品表から除外]の製造属性を削除しています。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:404
 #, c-format
@@ -32662,11 +32662,11 @@ msgstr "IPC-D-356形式ネットリストを生成"
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "BOM..."
-msgstr "BOM..."
+msgstr "部品表..."
 
 #: pcbnew/tools/pcb_actions.cpp:588
 msgid "Create bill of materials from board"
-msgstr "基板から BOM(部品表)を作成"
+msgstr "基板から 部品表(Bill of materials)を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Switch Track Width to Next"
