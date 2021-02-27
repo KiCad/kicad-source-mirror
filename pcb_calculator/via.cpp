@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,24 +102,25 @@ void PCB_CALCULATOR_FRAME::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
 void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
 {
     #define DEFAULT_UNIT_SEL_MM 0
+    #define DEFAULT_UNIT_SEL_OHM 0
 
-    m_textCtrlHoleDia->SetValue( wxT( "0.4" ) );
+    m_textCtrlHoleDia->SetValue( wxString::Format( "%g", 0.4 ) );
     m_choiceHoleDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlPlatingThickness->SetValue( wxT( "0.035" ) );
+    m_textCtrlPlatingThickness->SetValue( wxString::Format( "%g", 0.035 ) );
     m_choicePlatingThickness->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlViaLength->SetValue( wxT( "1.6" ) );
+    m_textCtrlViaLength->SetValue( wxString::Format( "%g", 1.6 ) );
     m_choiceViaLength->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlViaPadDia->SetValue( wxT( "0.6" ) );
+    m_textCtrlViaPadDia->SetValue( wxString::Format( "%g", 0.6 ) );
     m_choiceViaPadDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlClearanceDia->SetValue( wxT( "1.0" ) );
+    m_textCtrlClearanceDia->SetValue( wxString::Format( "%g", 1.0 ) );
     m_choiceClearanceDia->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlImpedance->SetValue( wxT( "50" ) );
-    m_choiceImpedance->SetSelection( DEFAULT_UNIT_SEL_MM );
-    m_textCtrlAppliedCurrent->SetValue( wxT( "1" ) );
-    m_textCtrlPlatingResistivity->SetValue( wxT( "1.72e-8" ) );
-    m_textCtrlPlatingPermittivity->SetValue( wxT( "4.5" ) );
-    m_textCtrlTemperatureDiff->SetValue( wxT( "10" ) );
-    m_textCtrlRiseTime->SetValue( wxT( "1" ) );
+    m_textCtrlImpedance->SetValue( wxString::Format( "%g", 50.0 ) );
+    m_choiceImpedance->SetSelection( DEFAULT_UNIT_SEL_OHM );
+    m_textCtrlAppliedCurrent->SetValue( wxString::Format( "%g", 1.0 ) );
+    m_textCtrlPlatingResistivity->SetValue( wxString::Format( "%g", 1.72e-8 ) );
+    m_textCtrlPlatingPermittivity->SetValue( wxString::Format( "%g", 4.5 ) );
+    m_textCtrlTemperatureDiff->SetValue( wxString::Format( "%g", 10.0 ) );
+    m_textCtrlRiseTime->SetValue( wxString::Format( "%g", 1.0 ) );
 }
 
 

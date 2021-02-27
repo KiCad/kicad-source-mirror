@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,11 +18,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
+/**
  * @file units_scales.h
  */
 
- // Inside calculations, units are always meter, Hz, Ohm and Radian
+// Inside calculations, units are always meter, Hz, Ohm and Radian
 // These units are not very easy to handle, so we use conversion constants
 
 #ifndef UNITS_SCALES_H
