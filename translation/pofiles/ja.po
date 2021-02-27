@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 05:28+0000\n"
+"PO-Revision-Date: 2021-02-27 05:40+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -4576,7 +4576,7 @@ msgstr "PCBエディター"
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
 msgid "Drawing Sheet Editor"
-msgstr "図面シートエディター"
+msgstr "図面シート エディター"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -18291,7 +18291,7 @@ msgstr "レイアウト ファイルは読み込み専用です。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad 図面シートエディター"
+msgstr "KiCad 図面シート エディター"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
