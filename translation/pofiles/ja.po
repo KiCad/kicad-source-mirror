@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-27 06:09+0000\n"
+"PO-Revision-Date: 2021-02-27 06:25+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -28167,7 +28167,7 @@ msgstr "VRML エクスポート エラー: 外形へ穴を追加できません�
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:66
 msgid "Generate Position File"
-msgstr "座標ファイルを生成"
+msgstr "部品配置ファイルを生成"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:270
 #: pcbnew/exporters/gen_footprints_placefile.cpp:383
