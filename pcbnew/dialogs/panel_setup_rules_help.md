@@ -94,6 +94,14 @@ True if any part of `A` lies within the given zone's outline.
     A.isPlated()
 True if `A` has a hole which is plated.
 
+    A.isDiffPair()
+True if `A` has a net that is part of a differential pair.
+
+    A.inDiffPair('<net_name>')
+True if `A` has net that is part of the specified differential pair.
+`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('CLK')`
+matches items in the `CLK_P` and `CLK_N` nets.
+
     A.memberOf('<group_name>')
 True if `A` is a member of the given group. Includes nested membership.
 
@@ -161,7 +169,7 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     # Specify a larger clearance around a particular diff-pair
     (rule "dp clearance"
         (constraint clearance (min "1.5mm"))
-        (condition "A.NetClass == 'diffPairClass' && B.NetClass != 'diffPairClass'"))
+        (condition "A.inDiffPair('CLK')"))
 
     # Specify a larger clearance around any diff-pair
     (rule "dp clearance"

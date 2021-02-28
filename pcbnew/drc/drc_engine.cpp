@@ -1155,8 +1155,8 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
 
 
 // fixme: move two functions below to pcbcommon?
-static int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
-                          wxString& aBaseDpName )
+int DRC_ENGINE::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
+                               wxString& aBaseDpName )
 {
     int rv = 0;
 
@@ -1219,7 +1219,7 @@ bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, 
     wxString refName = aNet->GetNetname();
     wxString dummy, coupledNetName;
 
-    if( int polarity = matchDpSuffix( refName, coupledNetName, dummy ) )
+    if( int polarity = MatchDpSuffix( refName, coupledNetName, dummy ) )
     {
         NETINFO_ITEM* net = aBoard->FindNet( coupledNetName );
 

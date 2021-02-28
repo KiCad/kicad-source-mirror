@@ -566,6 +566,41 @@ static void isDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE*   arg    = aCtx->Pop();
+    PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item   = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+                                             wxT( "inDiffPair()" ) ) );
+        return;
+    }
+
+    if( item && item->IsConnected() )
+    {
+        NETINFO_ITEM* netinfo = static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
+
+        wxString refName = netinfo->GetNetname();
+        wxString baseName, coupledNet;
+
+        int polarity = DRC_ENGINE::MatchDpSuffix( refName, coupledNet, baseName );
+
+        if( polarity == 0 )
+            return;
+
+        if( baseName.Matches( arg->AsString() ) )
+            result->Set( 1.0 );
+    }
+}
+
+
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
@@ -584,6 +619,7 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "memberOf('x')", memberOf );
     RegisterFunc( "fromTo('x','y')", exprFromTo );
     RegisterFunc( "isDiffPair()", isDiffPair );
+    RegisterFunc( "inDiffPair('x')", inDiffPair );
 }
 
 

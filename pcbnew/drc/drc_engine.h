@@ -167,6 +167,16 @@ public:
 
     static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
+    /**
+     * Checks if the given net is a diff pair, returning its polarity and complement if so
+     * @param aNetName is the input net name, like DIFF_P
+     * @param aComplementNet will be filled with the complement, like DIFF_N
+     * @param aBaseDpName will be filled with the base name, like DIFF
+     * @return 1 if aNetName is the positive half of a pair, -1 if negative, 0 if not a diff pair
+     */
+    static int MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
+                              wxString& aBaseDpName );
+
     static bool IsNetTie( BOARD_ITEM* aItem );
 
     static std::shared_ptr<SHAPE> GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
