@@ -470,6 +470,21 @@ void PCB_IO::formatSetup( const BOARD* aBoard, int aNestLevel ) const
 
     BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
+    m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
+                  FormatInternalUnits( dsnSettings.m_SolderMaskMargin ).c_str() );
+
+    if( dsnSettings.m_SolderMaskMinWidth )
+        m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
+                      FormatInternalUnits( dsnSettings.m_SolderMaskMinWidth ).c_str() );
+
+    if( dsnSettings.m_SolderPasteMargin != 0 )
+        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
+                      FormatInternalUnits( dsnSettings.m_SolderPasteMargin ).c_str() );
+
+    if( dsnSettings.m_SolderPasteMarginRatio != 0 )
+        m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
+                      Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
+
     if( dsnSettings.m_AuxOrigin != wxPoint( 0, 0 ) )
         m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                       FormatInternalUnits( dsnSettings.m_AuxOrigin.x ).c_str(),

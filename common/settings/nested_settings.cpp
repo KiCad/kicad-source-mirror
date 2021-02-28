@@ -22,7 +22,6 @@
 
 #include <settings/nested_settings.h>
 
-
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
                                   const std::string& aPath ) :
         JSON_SETTINGS( aName, SETTINGS_LOC::NESTED, aVersion ),
@@ -54,8 +53,7 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             {
                 update( ( *m_parent )[ptr] );
 
-                wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d",
-                        GetFilename(), m_schemaVersion );
+                wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s", GetFilename() );
 
                 success = true;
             }
@@ -71,21 +69,14 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
     {
         int filever = -1;
 
-        if( count( PointerFromString( "meta.version" ) ) )
+        try
         {
-            try
-            {
-                filever = at( PointerFromString( "meta.version" ) ).get<int>();
-            }
-            catch( ... )
-            {
-                wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
-                        m_filename );
-                success = false;
-            }
+            filever = at( PointerFromString( "meta.version" ) ).get<int>();
         }
-        else
+        catch( ... )
         {
+            wxLogTrace( traceSettings, "%s: nested settings version could not be read!",
+                        m_filename );
             success = false;
         }
 
@@ -105,6 +96,10 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             wxLogTrace( traceSettings,
                         "%s: warning: nested settings version %d is newer than latest (%d)",
                         m_filename, filever, m_schemaVersion );
+        }
+        else if( filever >= 0 )
+        {
+            wxLogTrace( traceSettings, "%s: schema version %d is current", m_filename, filever );
         }
     }
 

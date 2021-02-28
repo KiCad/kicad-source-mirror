@@ -1823,25 +1823,21 @@ void PCB_PARSER::parseSetup()
 
         case T_pad_to_mask_clearance:
             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
-            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_solder_mask_min_width:
             designSettings.m_SolderMaskMinWidth = parseBoardUnits( T_solder_mask_min_width );
-            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pad_to_paste_clearance:
             designSettings.m_SolderPasteMargin = parseBoardUnits( T_pad_to_paste_clearance );
-            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
         case T_pad_to_paste_clearance_ratio:
             designSettings.m_SolderPasteMarginRatio = parseDouble( T_pad_to_paste_clearance_ratio );
-            m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
 
