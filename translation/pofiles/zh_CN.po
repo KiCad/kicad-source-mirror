@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-24 10:29+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-02-28 14:57+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -597,7 +597,7 @@ msgstr "过程纹理"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:256
 msgid "Add floor"
-msgstr "显示背景板"
+msgstr "添加基板"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
@@ -918,7 +918,7 @@ msgstr "使用每个 3D 模型文件中的所有材质属性"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
-msgstr "只使用漫反射"
+msgstr "仅使用漫反射"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
@@ -942,11 +942,11 @@ msgstr "切换直插元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr "切换贴片 3D 模型"
+msgstr "切换贴片(SMD) 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "切换贴片元件的 3D 模型"
+msgstr "切换表贴元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
@@ -978,7 +978,7 @@ msgstr "添加层"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:242
 msgid "Adds a floor plane below the board (slow)"
-msgstr "在线路板下面添加一块反光板 (慢)"
+msgstr "在电路板下面添加一块基板 (慢)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
 msgid "Refractions"
@@ -1020,7 +1020,7 @@ msgstr "显示 3D 轴线"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
-msgstr "切换覆铜显示"
+msgstr "切换区域显示"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle adhesive display"
@@ -1592,7 +1592,7 @@ msgstr "报告或检查 Bug - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
 msgid "KiCad users group and community"
-msgstr "KiCad 用户组和社区"
+msgstr "KiCad 用户群和社区"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -3936,7 +3936,7 @@ msgstr "网络信息"
 #: common/eda_item.cpp:280 pcbnew/pcb_group.cpp:305
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Group"
-msgstr "组"
+msgstr "组合"
 
 #: common/eda_item.cpp:282
 msgid "Schematic Marker"
@@ -23530,19 +23530,19 @@ msgstr "图形项属性"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:112
 msgid "Modified group"
-msgstr "修改组"
+msgstr "修改组合"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 msgid "Group name:"
-msgstr "组名称："
+msgstr "组合名称："
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:38
 msgid "Group members:"
-msgstr "组成员："
+msgstr "组合成员："
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:62
 msgid "Group Properties"
-msgstr "组属性"
+msgstr "组合属性"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:51
 #: pcbnew/dialogs/dialog_import_settings.cpp:100
@@ -23772,7 +23772,7 @@ msgstr "网络 '%s' 正在使用中。仍要删除吗？"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1945
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "删除组 '%s' 中的所有网？"
+msgstr "删除组合 '%s' 中的所有网？"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1968
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1969
@@ -24119,7 +24119,7 @@ msgstr "警告：雉堞状属性用于镀通孔 (PTH) 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: BGA property is for SMD pads."
-msgstr "警告：“球状网格阵列”属性用于表面组装设备（SMD）焊盘。"
+msgstr "警告：BGA 属性适用于 SMD 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
@@ -25216,17 +25216,17 @@ msgstr "优化正在拖动的布线"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr "使用鼠标路径设置轨迹姿势"
+msgstr "使用鼠标路径设置布线形态"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr "启用时，布线的方式将由鼠标从起始位置移动的方式来引导"
+msgstr "启用时，布线的形态将由鼠标从起始位置移动的方式来引导"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr "修复点击时的所有线段"
+msgstr "点击时固定所有线段"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -28472,11 +28472,11 @@ msgstr "导入比例："
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:163
 msgid "Group items"
-msgstr "组项目"
+msgstr "组合项目"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
-msgstr "将所有导入的项目添加到新组中"
+msgstr "将所有导入的项目添加到新组合中"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 msgid "DXF Parameters"
@@ -28706,11 +28706,11 @@ msgstr "间隙大小："
 
 #: pcbnew/microwave/microwave_footprint.cpp:60
 msgid "Stub Size:"
-msgstr "尺寸："
+msgstr "短截线尺寸："
 
 #: pcbnew/microwave/microwave_footprint.cpp:67
 msgid "Arc Stub Radius Value:"
-msgstr "圆弧半径值："
+msgstr "圆弧短截线半径值："
 
 #: pcbnew/microwave/microwave_footprint.cpp:78
 #: pcbnew/microwave/microwave_footprint.cpp:93
@@ -28949,7 +28949,7 @@ msgstr "总计警告：%d，错误：%d。"
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:271
 #, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "找不到网表中带 ref '%s' 的组件。"
+msgstr "在网表中找不到位号为 '%s' 的元件。"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:439
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2913
@@ -29317,12 +29317,12 @@ msgstr "单位必须为 mm、in 或 mil"
 #: pcbnew/pcb_group.cpp:287
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "未命名组 %zu 成员"
+msgstr "未命名组合 %zu 成员"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "组 \"%s\", %zu 成员"
+msgstr "组合 \"%s\", %zu 成员"
 
 #: pcbnew/pcb_group.cpp:305
 msgid "<unnamed>"
@@ -29632,9 +29632,7 @@ msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via orroute keepout area. The area was not "
 "imported."
-msgstr ""
-"库组件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 Kicad 等价物。该区域既不是通道警"
-"戒区，也不是路线警戒区。该区域不是导入的。"
+msgstr "库元件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 KiCad 等价物。该区域既不是过孔也不是布线禁止区。该地区没有导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
 #, c-format
@@ -29650,14 +29648,14 @@ msgstr ""
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
-msgstr "该文件似乎已损坏。无法在组定义中查找组 ID %s。"
+msgstr "该文件似乎已损坏。无法在组合定义中查找组合 ID %s。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1060
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
 "(parent group ID=%s, Name=%s)."
-msgstr "该文件似乎已损坏。无法在组映射中查找子组 %s（父组 ID=%s，名称=%s）。"
+msgstr "该文件似乎已损坏。无法在组合映射中查找子组合 %s（父组合 ID = %s，名称 = %s）。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1133
 #, c-format
@@ -30158,13 +30156,13 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"请报告此错误。验证组结构时出错：%s。\n"
+"请报告此错误。验证组合结构时出错：%s。\n"
 "\n"
 "还是要保存吗？"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:337
 msgid "Internal group data structure corrupt"
-msgstr "内部组数据结构损坏"
+msgstr "内部组合数据结构损坏"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:339
 msgid "Save Anyway"
@@ -30424,11 +30422,11 @@ msgstr "KiCad 仅支持 32 个信号层"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "New Track"
-msgstr "新布线"
+msgstr "新建布线"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Starts laying a new track."
-msgstr "开始新布线。"
+msgstr "开始新的布线。"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "End Track"
@@ -30453,7 +30451,7 @@ msgstr "增大间距"
 # 此处需要考证step的真正位置以便匹配其翻译
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Increase meander spacing by one step."
-msgstr "一个步长增加弯曲间距。"
+msgstr "将弯曲间距增加一级。"
 
 #: pcbnew/router/length_tuner_tool.cpp:80
 msgid "Decrease Spacing"
@@ -30461,7 +30459,7 @@ msgstr "减小间距"
 
 #: pcbnew/router/length_tuner_tool.cpp:80
 msgid "Decrease meander spacing by one step."
-msgstr "一个步长减少弯曲幅度。"
+msgstr "将弯曲间距降低一级。"
 
 #: pcbnew/router/length_tuner_tool.cpp:86
 msgid "Increase Amplitude"
@@ -30469,7 +30467,7 @@ msgstr "增大幅度"
 
 #: pcbnew/router/length_tuner_tool.cpp:86
 msgid "Increase meander amplitude by one step."
-msgstr "一个步长增加弯曲幅度。"
+msgstr "将弯曲幅度增加一级。"
 
 #: pcbnew/router/length_tuner_tool.cpp:92
 msgid "Decrease Amplitude"
@@ -30477,7 +30475,7 @@ msgstr "减小幅度"
 
 #: pcbnew/router/length_tuner_tool.cpp:92
 msgid "Decrease meander amplitude by one step."
-msgstr "一个步长降低曲折幅度。"
+msgstr "将弯曲幅度降低一级。"
 
 #: pcbnew/router/length_tuner_tool.cpp:114
 msgid "Length Tuner"
@@ -30610,7 +30608,7 @@ msgstr "无法在空白区域开始差分对布线。"
 
 #: pcbnew/router/router_tool.cpp:86
 msgid "Undo last segment"
-msgstr "撤消最后一段"
+msgstr "撤消最后一段布线"
 
 #: pcbnew/router/router_tool.cpp:86 pcbnew/router/router_tool.cpp:92
 msgid "Stops laying the current track."
@@ -30682,11 +30680,11 @@ msgstr "显示修改导线宽度和过孔尺寸的会话."
 
 #: pcbnew/router/router_tool.cpp:148
 msgid "Switch Track Posture"
-msgstr "切换布线状态"
+msgstr "切换布线形态"
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Switches posture of the currently routed track."
-msgstr "切换当前布线方向。"
+msgstr "切换当前交互式布线的形态。"
 
 #: pcbnew/router/router_tool.cpp:155
 msgid "Switch Corner Rounding"
@@ -31127,7 +31125,7 @@ msgstr "间隙报告"
 #: pcbnew/tools/board_inspection_tool.cpp:300
 #: pcbnew/tools/board_inspection_tool.cpp:313
 msgid "Cannot generate clearance report on empty group."
-msgstr "无法为空组生成许可报告。"
+msgstr "无法为空组合生成间隙报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:354
 msgid "Silkscreen clearance resolution for:"
@@ -31357,7 +31355,7 @@ msgstr "输入圆角半径："
 #: pcbnew/tools/edit_tool.cpp:1034 pcbnew/tools/edit_tool.cpp:1197
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Fillet Tracks"
-msgstr "圆角布线"
+msgstr "弧形布线"
 
 #: pcbnew/tools/edit_tool.cpp:1044
 msgid ""
@@ -31377,7 +31375,7 @@ msgstr "某些布线段无法圆角。"
 
 #: pcbnew/tools/edit_tool.cpp:1606 pcbnew/tools/pcb_actions.cpp:301
 msgid "Change Side / Flip"
-msgstr "更改 Side / Flip"
+msgstr "更改侧面/翻转"
 
 #: pcbnew/tools/edit_tool.cpp:1746 pcbnew/tools/zone_filler_tool.cpp:174
 msgid "Fill Zone"
@@ -31414,7 +31412,7 @@ msgstr "分组"
 
 #: pcbnew/tools/group_tool.cpp:63
 msgid "Group is in inconsistent state:"
-msgstr "组处于不一致状态："
+msgstr "组合处于不一致状态："
 
 #: pcbnew/tools/group_tool.cpp:146
 msgid "Click on new member..."
@@ -31641,11 +31639,11 @@ msgstr "减少线宽"
 
 #: pcbnew/tools/pcb_actions.cpp:207
 msgid "Switch Arc Posture"
-msgstr "切换弧形态"
+msgstr "切换圆弧形态"
 
 #: pcbnew/tools/pcb_actions.cpp:207
 msgid "Switch the arc posture"
-msgstr "交换圆弧位置"
+msgstr "切换圆弧形态"
 
 #: pcbnew/tools/pcb_actions.cpp:212
 msgid "Delete Last Point"
@@ -31771,11 +31769,11 @@ msgstr "删除所选项目和铜连接"
 
 #: pcbnew/tools/pcb_actions.cpp:334
 msgid "Show Footprint Tree"
-msgstr "显示封装树"
+msgstr "显示封装树形工作区"
 
 #: pcbnew/tools/pcb_actions.cpp:334
 msgid "Toggles the footprint tree visibility"
-msgstr "切换封装树可见性"
+msgstr "切换封装树形工作区可见性"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "New Footprint..."
@@ -31924,23 +31922,23 @@ msgstr "添加微波间隙"
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Create gap of specified length for microwave applications"
-msgstr "创建指定长度的高频设计缺口"
+msgstr "为微波应用创建指定长度的高频设计间隙"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Add Microwave Stub"
-msgstr "添加微波存根"
+msgstr "添加微波短截线 (Stub)"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Create stub of specified length for microwave applications"
-msgstr "创建指定长度的高频设计短截线"
+msgstr "为微波应用创建指定长度的高频设计短截线 (Stub)"
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Add Microwave Arc Stub"
-msgstr "添加微波弧形存根"
+msgstr "添加微波弧形短截线 (Stub)"
 
 #: pcbnew/tools/pcb_actions.cpp:472
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "为微波应用创建指定大小的存根(弧形)"
+msgstr "为微波应用创建指定尺寸的高频设计短截线 (弧线)"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Add Microwave Polygonal Shape"
@@ -31956,7 +31954,7 @@ msgstr "添加微波线"
 
 #: pcbnew/tools/pcb_actions.cpp:482
 msgid "Create line of specified length for microwave applications"
-msgstr "创建指定长度的高频设计线"
+msgstr "为微波应用创建指定长度的高频设计线"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy Pad Properties to Default"
@@ -31976,7 +31974,7 @@ msgstr "将先前复制的属性替换为当前焊盘属性"
 
 #: pcbnew/tools/pcb_actions.cpp:501
 msgid "Push Pad Properties to Other Pads..."
-msgstr "将焊盘属性推送到其他焊盘."
+msgstr "将焊盘属性推送到其他焊盘..."
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Copy the current pad's properties to other pads"
@@ -32200,7 +32198,7 @@ msgstr "解组"
 
 #: pcbnew/tools/pcb_actions.cpp:666
 msgid "Ungroup any selected groups"
-msgstr "解散任意选中的组"
+msgstr "解散任意选中的组合"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove Items"
@@ -32208,7 +32206,7 @@ msgstr "删除项目"
 
 #: pcbnew/tools/pcb_actions.cpp:671
 msgid "Remove items from group"
-msgstr "从组中删除项目"
+msgstr "从组合中删除项目"
 
 #: pcbnew/tools/pcb_actions.cpp:676
 msgid "Enter Group"
@@ -32216,15 +32214,15 @@ msgstr "编辑组合"
 
 #: pcbnew/tools/pcb_actions.cpp:676
 msgid "Enter the group to edit items"
-msgstr "输入要编辑项目的组"
+msgstr "输入要编辑项目的组合"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Leave Group"
-msgstr "离开组"
+msgstr "离开组合"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Leave the current group"
-msgstr "离开当前组"
+msgstr "离开当前组合"
 
 #: pcbnew/tools/pcb_actions.cpp:686
 msgid "Append Board..."
@@ -32568,11 +32566,11 @@ msgstr "减小图层不透明度"
 
 #: pcbnew/tools/pcb_actions.cpp:1041
 msgid "Show Board Statistics"
-msgstr "显示板统计信息"
+msgstr "显示电路板统计信息"
 
 #: pcbnew/tools/pcb_actions.cpp:1041
 msgid "Shows board statistics"
-msgstr "显示板统计信息"
+msgstr "显示电路板统计信息"
 
 #: pcbnew/tools/pcb_actions.cpp:1045
 msgid "Clearance Resolution..."
