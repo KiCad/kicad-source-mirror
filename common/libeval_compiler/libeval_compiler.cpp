@@ -841,8 +841,19 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
             if( node->leaf[0]->op != TR_IDENTIFIER )
             {
-                reportError( CST_CODEGEN,  _( "Unknown parent of property" ),
-                             node->leaf[0]->srcPos - (int) node->leaf[0]->value.str->length() );
+                int pos = node->leaf[0]->srcPos;
+
+                if( node->leaf[0]->value.str )
+                    pos -= static_cast<int>( node->leaf[0]->value.str->length() );
+
+                reportError( CST_CODEGEN,  _( "Unknown parent of property" ), pos );
+
+                node->leaf[0]->isVisited = true;
+                node->leaf[1]->isVisited = true;
+
+                node->SetUop( TR_UOP_PUSH_VALUE, 0.0 );
+                node->isTerminal = true;
+                break;
             }
 
             switch( node->leaf[1]->op )
