@@ -270,125 +270,126 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( crossProbingSettings.center_on_items && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
     {
-
+        if( crossProbingSettings.zoom_to_fit )
+        {
 //#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm
-#ifdef DEFAULT_PCBNEW_CODE
-        auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-        auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+ #ifdef DEFAULT_PCBNEW_CODE
+            auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
 
-        // The "fabs" on x ensures the right answer when the view is flipped
-        screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
-        screenSize.y = std::max( 10.0, screenSize.y );
-        double ratio = std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+            // The "fabs" on x ensures the right answer when the view is flipped
+            screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
+            screenSize.y = std::max( 10.0, screenSize.y );
+            double ratio = std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
 
-        // Try not to zoom on every cross-probe; it gets very noisy
-        if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
-            view->SetScale( view->GetScale() / ratio );
-#endif // DEFAULT_PCBNEW_CODE
+            // Try not to zoom on every cross-probe; it gets very noisy
+            if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
+                view->SetScale( view->GetScale() / ratio );
+ #endif // DEFAULT_PCBNEW_CODE
 
 #ifndef DEFAULT_PCBNEW_CODE  // Do the scaled zoom
-        auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-        auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+            auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
 
-        // This code tries to come up with a zoom factor that doesn't simply zoom in
-        // to the cross probed component, but instead shows a reasonable amount of the
-        // circuit around it to provide context.  This reduces or eliminates the need
-        // to manually change the zoom because it's too close.
+            // This code tries to come up with a zoom factor that doesn't simply zoom in
+            // to the cross probed component, but instead shows a reasonable amount of the
+            // circuit around it to provide context.  This reduces or eliminates the need
+            // to manually change the zoom because it's too close.
 
-        // Using the default text height as a constant to compare against, use the
-        // height of the bounding box of visible items for a footprint to figure out
-        // if this is a big footprint (like a processor) or a small footprint (like a resistor).
-        // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
-        // provide good scaling at varying component sizes.  Bigger components need less
-        // scaling than small ones.
-        double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
+            // Using the default text height as a constant to compare against, use the
+            // height of the bounding box of visible items for a footprint to figure out
+            // if this is a big footprint (like a processor) or a small footprint (like a resistor).
+            // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
+            // provide good scaling at varying component sizes.  Bigger components need less
+            // scaling than small ones.
+            double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
 
-        double compRatio     = bbSize.y / currTextHeight; // Ratio of component to text height
-        double compRatioBent = 1.0; // This will end up as the scaling factor we apply to "ratio"
+            double compRatio     = bbSize.y / currTextHeight; // Ratio of component to text height
+            double compRatioBent = 1.0; // This will end up as the scaling factor we apply to "ratio"
 
-        // This is similar to the original KiCad code that scaled the zoom to make sure components
-        // were visible on screen.  It's simply a ratio of screen size to component size, and its
-        // job is to zoom in to make the component fullscreen.  Earlier in the code the
-        // component BBox is given a 20% margin to add some breathing room. We compare
-        // the height of this enlarged component bbox to the default text height.  If a component
-        // will end up with the sides clipped, we adjust later to make sure it fits on screen.
-        //
-        // The "fabs" on x ensures the right answer when the view is flipped
-        screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
-        screenSize.y = std::max( 10.0, screenSize.y );
-        double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
-        // Original KiCad code for how much to scale the zoom
-        double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
-                                      fabs( bbSize.y / screenSize.y ) );
+            // This is similar to the original KiCad code that scaled the zoom to make sure components
+            // were visible on screen.  It's simply a ratio of screen size to component size, and its
+            // job is to zoom in to make the component fullscreen.  Earlier in the code the
+            // component BBox is given a 20% margin to add some breathing room. We compare
+            // the height of this enlarged component bbox to the default text height.  If a component
+            // will end up with the sides clipped, we adjust later to make sure it fits on screen.
+            //
+            // The "fabs" on x ensures the right answer when the view is flipped
+            screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
+            screenSize.y = std::max( 10.0, screenSize.y );
+            double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+            // Original KiCad code for how much to scale the zoom
+            double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
+                                          fabs( bbSize.y / screenSize.y ) );
 
-        // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
-        // with footprints of varying sizes (e.g. 0402 package and 200 pin BGA).
-        // "first" is used as the input and "second" as the output
-        //
-        // "first" = compRatio (footprint height / default text height)
-        // "second" = Amount to scale ratio by
-        std::vector<std::pair<double, double>> lut{
-            { 1, 8 },
-            { 1.5, 5 },
-            { 3, 3 },
-            { 4.5, 2.5 },
-            { 8, 2.0 },
-            { 12, 1.7 },
-            { 16, 1.5 },
-            { 24, 1.3 },
-            { 32, 1.0 },
-        };
+            // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
+            // with footprints of varying sizes (e.g. 0402 package and 200 pin BGA).
+            // "first" is used as the input and "second" as the output
+            //
+            // "first" = compRatio (footprint height / default text height)
+            // "second" = Amount to scale ratio by
+            std::vector<std::pair<double, double>> lut{
+                { 1, 8 },
+                { 1.5, 5 },
+                { 3, 3 },
+                { 4.5, 2.5 },
+                { 8, 2.0 },
+                { 12, 1.7 },
+                { 16, 1.5 },
+                { 24, 1.3 },
+                { 32, 1.0 },
+            };
 
 
-        std::vector<std::pair<double, double>>::iterator it;
+            std::vector<std::pair<double, double>>::iterator it;
 
-        compRatioBent = lut.back().second; // Large component default
+            compRatioBent = lut.back().second; // Large component default
 
-        if( compRatio >= lut.front().first )
-        {
-            // Use LUT to do linear interpolation of "compRatio" within "first", then
-            // use that result to linearly interpolate "second" which gives the scaling
-            // factor needed.
-
-            for( it = lut.begin(); it < lut.end() - 1; it++ )
+            if( compRatio >= lut.front().first )
             {
-                if( it->first <= compRatio && next( it )->first >= compRatio )
-                {
-                    double diffx = compRatio - it->first;
-                    double diffn = next( it )->first - it->first;
+                // Use LUT to do linear interpolation of "compRatio" within "first", then
+                // use that result to linearly interpolate "second" which gives the scaling
+                // factor needed.
 
-                    compRatioBent =
-                            it->second + ( next( it )->second - it->second ) * diffx / diffn;
-                    break; // We have our interpolated value
+                for( it = lut.begin(); it < lut.end() - 1; it++ )
+                {
+                    if( it->first <= compRatio && next( it )->first >= compRatio )
+                    {
+                        double diffx = compRatio - it->first;
+                        double diffn = next( it )->first - it->first;
+
+                        compRatioBent =
+                                it->second + ( next( it )->second - it->second ) * diffx / diffn;
+                        break; // We have our interpolated value
+                    }
                 }
             }
-        }
-        else
-            compRatioBent = lut.front().second; // Small component default
+            else
+                compRatioBent = lut.front().second; // Small component default
 
-        // If the width of the part we're probing is bigger than what the screen width will be
-        // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
-        // part's width will be encompassed within the screen.  This will apply to parts that are
-        // much wider than they are tall.
+            // If the width of the part we're probing is bigger than what the screen width will be
+            // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
+            // part's width will be encompassed within the screen.  This will apply to parts that are
+            // much wider than they are tall.
 
-        if( bbSize.x > screenSize.x * ratio * compRatioBent )
-        {
-            ratio = kicadRatio; // Use standard KiCad zoom algorithm for parts too wide to fit screen
-            compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
-            wxLogTrace( "CROSS_PROBE_SCALE",
-                    "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
-        }
+            if( bbSize.x > screenSize.x * ratio * compRatioBent )
+            {
+                ratio = kicadRatio; // Use standard KiCad zoom algorithm for parts too wide to fit screen
+                compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
+                wxLogTrace( "CROSS_PROBE_SCALE",
+                        "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
+            }
 
-        // Now that "compRatioBent" holds our final scaling factor we apply it to the original
-        // fullscreen zoom ratio to arrive at the final ratio itself.
-        ratio *= compRatioBent;
+            // Now that "compRatioBent" holds our final scaling factor we apply it to the original
+            // fullscreen zoom ratio to arrive at the final ratio itself.
+            ratio *= compRatioBent;
 
-        bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
-        // Try not to zoom on every cross-probe; it gets very noisy
-        if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
-            view->SetScale( view->GetScale() / ratio );
+            bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+            // Try not to zoom on every cross-probe; it gets very noisy
+            if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
+                view->SetScale( view->GetScale() / ratio );
 #endif // ifndef DEFAULT_PCBNEW_CODE
-
+        }
         view->SetCenter( bbox.Centre() );
     }
 
