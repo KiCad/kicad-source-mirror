@@ -127,16 +127,17 @@ bool PGM_KICAD::OnPgmInit()
                 m_bm.m_search.AddPaths( fn.GetPath() );
         }
 
-        m_bm.m_search.AddPaths( PATHS::GetUserTemplatesPath() );
-
         // The KICAD6_TEMPLATE_DIR takes precedence over the search stack template path.
         ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
             m_bm.m_search.Insert( it->second.GetValue(), 0 );
 
-        // The KICAD_USER_TEMPLATE_DIR takes precedence over KICAD6_TEMPLATE_DIR and the search
-        // stack template path.
+        // We've been adding system (installed default) search paths so far, now for user paths
+        // The default user search path is inside KIPLATFORM::ENV::GetDocumentsPath()
+        m_bm.m_search.Insert( PATHS::GetUserTemplatesPath(), 0 );
+
+        // ...but the user can override that default with the KICAD_USER_TEMPLATE_DIR env var
         it = GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
