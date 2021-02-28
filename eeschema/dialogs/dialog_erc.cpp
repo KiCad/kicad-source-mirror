@@ -142,10 +142,9 @@ bool DIALOG_ERC::updateUI()
 
 void DIALOG_ERC::AdvancePhase( const wxString& aMessage )
 {
+    // Will also call Report( aMessage ):
     PROGRESS_REPORTER::AdvancePhase( aMessage );
     SetCurrentProgress( 0.0 );
-
-    m_messages->Report( aMessage );
 }
 
 
@@ -732,9 +731,9 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 
 void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( "./ERC." + ReportFileExtension );
+    wxFileName fn( "erc." + ReportFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
