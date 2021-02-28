@@ -37,6 +37,7 @@
 #include <filehistory.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
+#include <paths.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <wildcards_and_files_ext.h>
@@ -125,6 +126,8 @@ bool PGM_KICAD::OnPgmInit()
             if( fn.DirExists() && fn.IsDirReadable() )
                 m_bm.m_search.AddPaths( fn.GetPath() );
         }
+
+        m_bm.m_search.AddPaths( PATHS::GetUserTemplatesPath() );
 
         // The KICAD6_TEMPLATE_DIR takes precedence over the search stack template path.
         ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );

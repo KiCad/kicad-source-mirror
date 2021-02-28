@@ -26,6 +26,7 @@
 #include <wx/stdpaths.h>
 
 #include <common.h>
+#include <kiplatform/environment.h>
 #include <search_stack.h>
 #include <pgm_base.h>
 #include <config.h>     // to define DEFAULT_INSTALL_PATH
@@ -70,7 +71,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // According to wxWidgets documentation:
     // Unix: ~/.appname
     // Windows: C:\Documents and Settings\username\Application Data\appname
-    maybe.AddPaths( wxStandardPaths::Get().GetUserDataDir() );
+    maybe.AddPaths( KIPLATFORM::ENV::GetDocumentsPath() );
 
     {
         // Should be full path to this program executable.
