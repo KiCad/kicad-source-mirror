@@ -207,10 +207,10 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideCourtyardCache.end() )
                     return i->second;
 
-                bool insideFootprint = realInsideFootprint( footprint );
+                bool isInside = realInsideFootprint( footprint );
 
-                board->m_InsideCourtyardCache[ key ] = result;
-                return insideFootprint;
+                board->m_InsideCourtyardCache[ key ] = isInside;
+                return isInside;
             };
 
     if( arg->AsString() == "A" )
@@ -388,10 +388,10 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideAreaCache.end() )
                     return i->second;
 
-                bool result = realInsideZone( zone );
+                bool isInside = realInsideZone( zone );
 
-                board->m_InsideAreaCache[ key ] = result;
-                return result;
+                board->m_InsideAreaCache[ key ] = isInside;
+                return isInside;
             };
 
     if( arg->AsString() == "A" )
