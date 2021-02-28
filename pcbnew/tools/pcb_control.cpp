@@ -56,8 +56,8 @@ using namespace std::placeholders;
 
 
 // files.cpp
-extern bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName,
-                                    bool aKicadFilesOnly = false );
+extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileName,
+                                  bool aKicadFilesOnly = false );
 extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 

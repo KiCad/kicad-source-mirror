@@ -73,7 +73,8 @@
  * @param aKicadFilesOnly true to list KiCad pcb files plugins only, false to list import plugins.
  * @return  true if chosen, else false if user aborted.
  */
-bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bool aKicadFilesOnly )
+bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileName,
+                           bool aKicadFilesOnly )
 {
     // This is a subset of all PLUGINs which are trusted to be able to
     // load a BOARD. User may occasionally use the wrong plugin to load a
@@ -168,7 +169,10 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     }
     else
     {
-        path = PATHS::GetDefaultUserProjectsPath();
+        path = aParent->GetMruPath();
+
+        if( path.IsEmpty() )
+            path = PATHS::GetDefaultUserProjectsPath();
         // leave name empty
     }
 
@@ -184,6 +188,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         // Other cases are clear because of unique file extensions.
         *aCtl = aKicadFilesOnly ? 0 : KICTL_EAGLE_BRD;
         *aFileName = dlg.GetPath();
+        aParent->SetMruPath( wxFileName( dlg.GetPath() ).GetPath() );
         return true;
     }
     else
