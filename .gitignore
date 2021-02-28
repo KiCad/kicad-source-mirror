@@ -117,8 +117,9 @@ CMakeSettings.json
 i18n_status.svg
 i18n_status.csv
 
-# Project local settings files (in demos and qa tests)
+# Project local settings files and backups (in demos and qa tests)
 *.kicad_prl
+*-backups
 
 # Don't actually ignore any of these files, since we need them in the tree
 !resources/linux/icons/hicolor/**/**/*

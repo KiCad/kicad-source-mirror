@@ -94,6 +94,20 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
                 return
     %}
 }
+%extend std::deque<TRACK *>
+{
+    %pythoncode
+    %{
+        def __iter__(self):
+            it = self.iterator()
+            try:
+                while True:
+                    item = it.next()  # throws StopIteration when iterator reached the end.
+                    yield item.Cast()
+            except StopIteration:
+                return
+    %}
+}
 
 %extend BOARD
 {
