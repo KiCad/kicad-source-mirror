@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-23 18:38+0000\n"
+"PO-Revision-Date: 2021-03-01 15:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -740,9 +740,8 @@ msgid "3D Display Options"
 msgstr "3D zobrazení možnosti"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D prohlížeč"
+msgstr "KiCad 3D prohlížeč"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1316,23 +1315,20 @@ msgid "Export to Clipboard"
 msgstr "Export do schránky"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Výplň těla symbolu"
+msgstr "Symbol (.lib soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod soubor)"
+msgstr "Pouzdro (.kicad_mod soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "PostScript (.ps soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Logo pro rohové razítko (.kicad_wks soubor)"
+msgstr "Pracovní list (.kicad_wks soubor)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2157,14 +2153,12 @@ msgid "Reset Grid Origin"
 msgstr "Reset počátku mřížky"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Velikost uživatelské mřížky"
+msgstr "Obnovit velikosti mřížky"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Nastavit na 0 pro výchozí použití"
+msgstr "Obnoví seznam velikostí mřížky na výchozí hodnoty"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3135,7 +3129,7 @@ msgstr "Import souboru kl. zkratek:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Akce | Výchozí klávesová zkratka | Popis"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
@@ -3145,7 +3139,7 @@ msgstr "Přík"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "Ke každému nastavení svislého posouvání lze přiřadit pouze jednu akci"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3269,7 +3263,7 @@ msgstr "Vertikální pohyb touchpadu nebo kolečka:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Každému sloupci lze přiřadit pouze jednu akci"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -4518,9 +4512,8 @@ msgid "Delete"
 msgstr "Smazat"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Odstraní vybranou položku(y)"
+msgstr "Odstranit vybrané buňky"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4579,23 +4572,20 @@ msgstr "Manažer projektu"
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:64
 #: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1256
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Volby editoru schémat"
+msgstr "Editor schémat"
 
 #: common/hotkey_store.cpp:68 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:188 pcbnew/pcb_edit_frame.cpp:1201
 #: pcbnew/pcbnew_config.cpp:54
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Návrh DPS"
+msgstr "Editor DPS"
 
 #: common/hotkey_store.cpp:69 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Editor návrhu stránky"
+msgstr "Editor výkresových listů"
 
 #: common/hotkey_store.cpp:135
 msgid "Gestures"
@@ -5035,9 +5025,8 @@ msgid "Selection highlight"
 msgstr "Výběr Zvýraznit"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:169
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Uchopit list"
+msgstr "List kreslení"
 
 #: common/layer_id.cpp:143
 msgid "Footprints front"
@@ -5750,18 +5739,16 @@ msgid "Pin Library"
 msgstr "Knihovny vývodů"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Keep the library at the top of the list"
-msgstr "Zvolte tabulku knihovny kam chcete knihovnu přidat:"
+msgstr "Připněte knihovnu tak, aby se zobrazovala v horní části seznamu"
 
 #: common/tool/actions.cpp:412
 msgid "Unpin Library"
 msgstr "Uvolnit knihovny"
 
 #: common/tool/actions.cpp:413
-#, fuzzy
 msgid "No longer keep the library at the top of the list"
-msgstr "Zvolte tabulku knihovny kam chcete knihovnu přidat:"
+msgstr "Uvolněte knihovnu, aby se nezobrazila v horní části seznamu"
 
 #: common/tool/actions.cpp:418
 msgid "Pan Up"
@@ -6124,30 +6111,28 @@ msgid "No default footprint"
 msgstr "Žádné výchozí pouzdro"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Accelerated graphics"
-msgstr "Akcelerovaná grafika:"
+msgstr "Akcelerovaná grafika"
 
 #: common/widgets/gal_options_panel.cpp:83
-#, fuzzy
 msgid "Fallback graphics"
-msgstr "Nouzová grafika:"
+msgstr "Emulovaná grafika"
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "Vykreslovací jádro"
 
 #: common/widgets/gal_options_panel.cpp:88
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Použít hardwarově akcelerovanou grafikou (doporučeno)"
+msgstr "Hardwarově akcelerovaná grafika (doporučeno)"
 
 #: common/widgets/gal_options_panel.cpp:89
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Emulovaná grafika (pro počítače, které nesplňují požadavky na grafickou "
+"akceleraci KiCadu)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -7178,9 +7163,10 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Vývod listu %s nemá uvnitř listu odpovídající hierarchické označení"
 
 #: eeschema/connection_graph.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Hierarchické označení %s nemá odpovídající vývod listu mimo list"
+msgstr ""
+"Hierarchické označení %s nemá v nadřazeném listu odpovídající vývod listu"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7351,9 +7337,8 @@ msgstr ""
 "Povolením této možnosti zobrazíte běžící konzoli."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Nastavit na 0 pro výchozí použití"
+msgstr "Resetovat seznam skriptů BOM generátoru na výchozí nastavení"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -7803,9 +7788,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Resetovat pole, pokud jsou v novém symbolu prázdná"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "Aktualizovat pole"
+msgstr "Aktualizovat pole text"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -7820,9 +7804,8 @@ msgid "Update field positions"
 msgstr "Aktualizovat pozice polí"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Aktualizovat/resetovat atributy symbolu"
+msgstr "Aktualizovat atributy symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
@@ -7919,9 +7902,8 @@ msgstr "Resetujte pole, pokud jsou v symbolu knihovny prázdná"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Aktualizovat/resetovat pole"
+msgstr "Aktualizovat/resetovat pole text"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -8062,15 +8044,16 @@ msgstr ""
 "součástek."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Aktualizovat symboly z knihovny"
+msgstr "Aktualizovat pole symbolů z nové knihovny"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Nahradí aktuální pole symbolů poli z nové knihovny.\n"
+"Varování: pole \"Hodnota\" a \"Pouzdra\" budou proto nahrazena."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -8288,7 +8271,7 @@ msgstr "Chyby, varování a vyloučení"
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "Symbol(y) %d vyžadují očíslování.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -9781,14 +9764,12 @@ msgid "Page size:"
 msgstr "Velikost stránky:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Smazat kresby"
+msgstr "Vykreslit ohraničení stránky"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Tisknout okraj a rohové razítko"
+msgstr "Vykreslí okraj listu a rohové razítko"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -11421,7 +11402,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:84
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Příkazy myši levým tlačítkem myši"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:88
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
@@ -11429,12 +11410,13 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
+"Akce levého kliknutí (a tažení) závisí na 3 modifikačních klávesách:\n"
+"Alt, Shift a Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:104
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:153
 #: pcbnew/dialogs/panel_edit_options_base.cpp:115
 #: pcbnew/dialogs/panel_edit_options_base.cpp:196
-#, fuzzy
 msgid "Add item(s) to selection."
 msgstr "Přidat položku(y) do výběru."
 
@@ -11446,15 +11428,13 @@ msgid "Toggle selected state of item(s)."
 msgstr "Přepnout stav výběru položku(y)."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "CTRL+SHIFT"
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
 #: pcbnew/dialogs/panel_edit_options_base.cpp:125
 #: pcbnew/dialogs/panel_edit_options_base.cpp:206
-#, fuzzy
 msgid "Remove item(s) from selection."
 msgstr "Odebrat položku(y) z výběru."
 
@@ -11462,7 +11442,6 @@ msgstr "Odebrat položku(y) z výběru."
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:177
 #: pcbnew/dialogs/panel_edit_options_base.cpp:145
 #: pcbnew/dialogs/panel_edit_options_base.cpp:226
-#, fuzzy
 msgid "Clarify selection from menu."
 msgstr "Objasnit výběr z menu."
 
@@ -11472,11 +11451,12 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
+"Akce levého kliknutí (a tažení) závisí na 3 modifikačních klávesách:\n"
+"Alt, Shift a Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "CTRL+SHIFT"
+msgstr "Přík.+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
@@ -11981,9 +11961,8 @@ msgid "No Connection"
 msgstr "Nezapojeno"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "Nevyřešená textová proměnná v listu."
+msgstr "Nevyřešená textová proměnná v listu výkresu."
 
 #: eeschema/erc.cpp:293
 #, c-format
@@ -12282,9 +12261,8 @@ msgid "Import Schematic"
 msgstr "Importovat schéma"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "Uložení projektu do nového formátu souborů přepíše existující soubory."
+msgstr "Uložení přepíše existující soubory."
 
 #: eeschema/files-io.cpp:751
 #, fuzzy
@@ -12292,14 +12270,12 @@ msgid "Save Warning"
 msgstr "Upozornění na uložení projektu"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
 "Následující soubory budou přepsány:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12778,9 +12754,8 @@ msgid "The following libraries were not found:"
 msgstr "Následující knihovny nebyly nalezeny:"
 
 #: eeschema/sch_edit_frame.cpp:219
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Volby editoru schémat"
+msgstr "KiCad editor schémat"
 
 #: eeschema/sch_edit_frame.cpp:299
 msgid "New schematic file is unsaved"
@@ -12795,15 +12770,14 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Uložit změny do \"%s\" před zavřením?"
 
 #: eeschema/sch_edit_frame.cpp:806
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Nemohu aktualizovat DPS, protože je editor schémat otevřen v samostatném "
-"režimu. Aby bylo možno vytvořit/aktualizovat schéma, musíte spustit základní "
-"program Kicad a vytvořit projekt DPS."
+"Nemohu aktualizovat DPS, protože editor schémat je otevřen v samostatném "
+"režimu. Chcete-li vytvořit/aktualizovat DPS ze schémat, spusťte Kicad a "
+"vytvořte projekt."
 
 #: eeschema/sch_edit_frame.cpp:937
 msgid "New Schematic"
@@ -13615,6 +13589,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
 "link library symbol."
 msgstr ""
+"ID knihovny pro vyhledávání symbolů ve schématu '%s' je neplatné. Nelze "
+"propojit se symbolem knihovny."
 
 #: eeschema/sch_screen.cpp:626
 #, c-format
@@ -14152,14 +14128,12 @@ msgid "Tune component values"
 msgstr "Ladit hodnoty součástek"
 
 #: eeschema/sim/sim_plot_frame.cpp:191
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Parametry"
+msgstr "Parametry simulace"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Nastavení simulace"
+msgstr "Parametry a nastavení simulace"
 
 #: eeschema/sim/sim_plot_frame.cpp:216
 msgid "Welcome!"
@@ -14610,9 +14584,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from schematic]"
-msgstr "%s ze schématu"
+msgstr "%s%s [ze schématu]"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "[Read Only Library]"
@@ -16913,9 +16887,8 @@ msgid "Show source file for the current layer"
 msgstr "Zobrazit zdrojový soubor aktuální vrstvy"
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Přepnout do editoru DPS"
+msgstr "Export do editoru DPS..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -28526,9 +28499,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s [from %s.%s]"
-msgstr "%s [od %s.%s]"
+msgstr "%s%s [od %s.%s]"
 
 #: pcbnew/footprint_edit_frame.cpp:838
 msgid "Updating Footprint Libraries"
@@ -29244,14 +29217,12 @@ msgid "File not found"
 msgstr "Soubor nenalezen"
 
 #: pcbnew/microwave/microwave_polygon.cpp:272
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Tvar má nulovou velikost!"
+msgstr "Tvar má nulovou velikost."
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Tvar neobsahuje žádné body!"
+msgstr "Tvar nemá žádné body."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -31284,9 +31255,8 @@ msgstr ""
 "ty, které s nimi přímo sousedí."
 
 #: pcbnew/router/router_tool.cpp:989
-#, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Spoje pouze na vrstvách mědi"
+msgstr "Spoje pouze na vrstvách mědi."
 
 #: pcbnew/router/router_tool.cpp:1378 pcbnew/router/router_tool.cpp:1794
 msgid "The selected item is locked."
@@ -32659,9 +32629,8 @@ msgid "Switch Track Width to Next"
 msgstr "Přepnout šířku spoje na další"
 
 #: pcbnew/tools/pcb_actions.cpp:595
-#, fuzzy
 msgid "Change track width to next pre-defined size"
-msgstr "Změnit šířku spoje (celá síť)?"
+msgstr "Změnit šířku spoje na další předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 #, fuzzy
@@ -32669,9 +32638,8 @@ msgid "Switch Track Width to Previous"
 msgstr "Přepnout šířku spoje na předchozí"
 
 #: pcbnew/tools/pcb_actions.cpp:600
-#, fuzzy
 msgid "Change track width to previous pre-defined size"
-msgstr "Změnit šířku spoje (celá síť)?"
+msgstr "Změnit šířku spoje na předchozí předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:605
 msgid "Increase Via Size"
