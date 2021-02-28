@@ -1208,9 +1208,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const LIB_FIELD* field : partFields )
     {
-        component->GetField( field->GetId() )->ImportValues( *field );
-        component->GetField( field->GetId() )->SetTextPos( component->GetPosition()
-                                                            + field->GetTextPos() );
+        component->GetFieldById( field->GetId() )->ImportValues( *field );
+        component->GetFieldById( field->GetId() )->SetTextPos( component->GetPosition()
+                                                                    + field->GetTextPos() );
     }
 
     // If there is no footprint assigned, then prepend the reference value
@@ -1236,8 +1236,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         component->GetField( VALUE_FIELD )->SetText( kisymbolname );
 
     // Set the visibility of fields.
-    component->GetField( REFERENCE_FIELD )->SetVisible( part->GetField( REFERENCE_FIELD )->IsVisible() );
-    component->GetField( VALUE_FIELD )->SetVisible( part->GetField( VALUE_FIELD )->IsVisible() );
+    component->GetField( REFERENCE_FIELD )->SetVisible( part->GetFieldById( REFERENCE_FIELD )->IsVisible() );
+    component->GetField( VALUE_FIELD )->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
 
     for( const auto& a : epart->attribute )
     {
@@ -1408,7 +1408,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
             kpart->SetUnitCount( gates_count );
             kpart->LockUnits( true );
 
-            LIB_FIELD* reference = kpart->GetField( REFERENCE_FIELD );
+            LIB_FIELD* reference = kpart->GetFieldById( REFERENCE_FIELD );
 
             if( prefix.length() == 0 )
                 reference->SetVisible( false );
@@ -1550,13 +1550,13 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
 
             if( libtext->GetText().Upper() == ">NAME" )
             {
-                LIB_FIELD* field = aPart->GetField( REFERENCE_FIELD );
+                LIB_FIELD* field = aPart->GetFieldById( REFERENCE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
                 foundName = true;
             }
             else if( libtext->GetText().Upper() == ">VALUE" )
             {
-                LIB_FIELD* field = aPart->GetField( VALUE_FIELD );
+                LIB_FIELD* field = aPart->GetFieldById( VALUE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
                 foundValue = true;
             }
@@ -1595,10 +1595,10 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
     }
 
     if( foundName == false )
-        aPart->GetField( REFERENCE_FIELD )->SetVisible( false );
+        aPart->GetFieldById( REFERENCE_FIELD )->SetVisible( false );
 
     if( foundValue == false )
-        aPart->GetField( VALUE_FIELD )->SetVisible( false );
+        aPart->GetFieldById( VALUE_FIELD )->SetVisible( false );
 
     return pincount == 1 ? ispower : false;
 }

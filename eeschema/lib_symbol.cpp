@@ -343,13 +343,13 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
         // Now add the inherited part mandatory field (this) information.
         for( int i = 0; i < MANDATORY_FIELDS; i++ )
         {
-            wxString tmp = GetField( i )->GetText();
+            wxString tmp = GetFieldById( i )->GetText();
 
             // If the field isn't defined then inherit the parent field value.
             if( tmp.IsEmpty() )
-                retv->GetField( i )->SetText( parent->GetField( i )->GetText() );
+                retv->GetFieldById( i )->SetText( parent->GetFieldById( i )->GetText() );
             else
-                *retv->GetField( i ) = *GetField( i );
+                *retv->GetFieldById( i ) = *GetFieldById( i );
         }
 
         // Grab all the rest of derived symbol fields.
@@ -893,9 +893,9 @@ void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
 
 void LIB_PART::GetFields( std::vector<LIB_FIELD*>& aList )
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum NumFieldType
+    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
-        aList.push_back( GetField( id ) );
+        aList.push_back( GetFieldById( id ) );
 
     // Now grab all the rest of fields.
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
@@ -910,9 +910,9 @@ void LIB_PART::GetFields( std::vector<LIB_FIELD*>& aList )
 
 void LIB_PART::GetFields( std::vector<LIB_FIELD>& aList )
 {
-    // Grab the MANDATORY_FIELDS first, in expected order given by enum NumFieldType
+    // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
-        aList.push_back( *GetField( id ) );
+        aList.push_back( *GetFieldById( id ) );
 
     // Now grab all the rest of fields.
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
@@ -925,7 +925,7 @@ void LIB_PART::GetFields( std::vector<LIB_FIELD>& aList )
 }
 
 
-LIB_FIELD* LIB_PART::GetField( int aId ) const
+LIB_FIELD* LIB_PART::GetFieldById( int aId ) const
 {
     for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
@@ -965,7 +965,7 @@ const LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName ) const
 
 LIB_FIELD& LIB_PART::GetValueField()
 {
-    LIB_FIELD* field = GetField( VALUE_FIELD );
+    LIB_FIELD* field = GetFieldById( VALUE_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -973,7 +973,7 @@ LIB_FIELD& LIB_PART::GetValueField()
 
 LIB_FIELD& LIB_PART::GetReferenceField()
 {
-    LIB_FIELD* field = GetField( REFERENCE_FIELD );
+    LIB_FIELD* field = GetFieldById( REFERENCE_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -981,7 +981,7 @@ LIB_FIELD& LIB_PART::GetReferenceField()
 
 LIB_FIELD& LIB_PART::GetFootprintField()
 {
-    LIB_FIELD* field = GetField( FOOTPRINT_FIELD );
+    LIB_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -989,7 +989,7 @@ LIB_FIELD& LIB_PART::GetFootprintField()
 
 LIB_FIELD& LIB_PART::GetDatasheetField()
 {
-    LIB_FIELD* field = GetField( DATASHEET_FIELD );
+    LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }

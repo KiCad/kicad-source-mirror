@@ -377,13 +377,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         {
             for( int i = 2; i < component->GetFieldCount(); ++i )
             {
-                SCH_FIELD* field = component->GetField( i );
-                const wxString& fieldName = field->GetName();
+                SCH_FIELD&      field = component->GetFields()[i];
+                const wxString& fieldName = field.GetName();
 
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, field );
+                    processItem( aSheetPath, &field );
                 }
             }
         }

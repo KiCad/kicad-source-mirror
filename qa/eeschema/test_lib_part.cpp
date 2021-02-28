@@ -102,15 +102,15 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
     BOOST_CHECK_PREDICATE( KI_TEST::AreDefaultFieldsCorrect, ( fields ) );
 
     // but no more (we didn't set them)
-    BOOST_CHECK_EQUAL( fields.size(), NumFieldType::MANDATORY_FIELDS );
+    BOOST_CHECK_EQUAL( fields.size(), MANDATORY_FIELD_T::MANDATORY_FIELDS );
 
     // also check the default field accessors
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetReferenceField() )( "Reference" )( NumFieldType::REFERENCE_FIELD ) );
+            ( m_part_no_data.GetReferenceField() )( "Reference" )( MANDATORY_FIELD_T::REFERENCE_FIELD ) );
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetValueField() )( "Value" )( NumFieldType::VALUE_FIELD ) );
+            ( m_part_no_data.GetValueField() )( "Value" )( MANDATORY_FIELD_T::VALUE_FIELD ) );
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetFootprintField() )( "Footprint" )( NumFieldType::FOOTPRINT_FIELD ) );
+            ( m_part_no_data.GetFootprintField() )( "Footprint" )( MANDATORY_FIELD_T::FOOTPRINT_FIELD ) );
 }
 
 
@@ -134,14 +134,14 @@ BOOST_AUTO_TEST_CASE( AddedFields )
     BOOST_CHECK_PREDICATE( KI_TEST::AreDefaultFieldsCorrect, ( fields ) );
 
     // and our new one
-    BOOST_REQUIRE_EQUAL( fields.size(), NumFieldType::MANDATORY_FIELDS + 1 );
+    BOOST_REQUIRE_EQUAL( fields.size(), MANDATORY_FIELD_T::MANDATORY_FIELDS + 1 );
 
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( fields[NumFieldType::MANDATORY_FIELDS] )( newFieldName )( 42 ) );
+            ( fields[MANDATORY_FIELD_T::MANDATORY_FIELDS] )( newFieldName )( 42 ) );
 
     // Check by-id lookup
 
-    LIB_FIELD* gotNewField = m_part_no_data.GetField( 42 );
+    LIB_FIELD* gotNewField = m_part_no_data.GetFieldById( 42 );
 
     BOOST_REQUIRE_NE( gotNewField, nullptr );
 

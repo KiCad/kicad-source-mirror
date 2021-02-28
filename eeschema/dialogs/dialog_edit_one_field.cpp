@@ -465,7 +465,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
                     else if( fieldType == FOOTPRINT_FIELD )
                         otherUnit->SetFootprint( m_text );
                     else
-                        otherUnit->GetField( fieldType )->SetText( m_text );
+                        otherUnit->GetField( DATASHEET_FIELD )->SetText( m_text );
 
                     editFrame->UpdateItem( otherUnit );
                 }

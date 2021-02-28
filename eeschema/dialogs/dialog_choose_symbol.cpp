@@ -407,7 +407,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
     if( !symbol )
         return;
 
-    LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT_FIELD );
+    LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     ShowFootprint( fp_name );
@@ -468,7 +468,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
     if( symbol != nullptr )
     {
         LIB_PINS   temp_pins;
-        LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT_FIELD );
+        LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         symbol->GetPins( temp_pins );

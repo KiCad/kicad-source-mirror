@@ -797,7 +797,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 
     if( field->GetId() < MANDATORY_FIELDS )
     {
-        existingField = aSymbol->GetField( field->GetId() );
+        existingField = aSymbol->GetFieldById( field->GetId() );
 
         *existingField = *field;
     }
@@ -830,7 +830,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     }
     else
     {
-        existingField = aSymbol->GetField( field->GetId() );
+        existingField = aSymbol->GetFieldById( field->GetId() );
 
         if( !existingField )
         {
@@ -2313,8 +2313,8 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                     symbol->SetPrefix( prefix );
             }
 
-            if( symbol->GetField( field->GetId() ) )
-                *symbol->GetField( field->GetId() ) = *field;
+            if( symbol->GetFieldById( field->GetId() ) )
+                *symbol->GetFieldById( field->GetId() ) = *field;
             else
                 symbol->AddField( *field );
 

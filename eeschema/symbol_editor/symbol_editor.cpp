@@ -463,14 +463,14 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
         new_part.SetParent( parent );
 
         // Inherit the parent mandatory field attributes.
-        for( int id=0;  id<MANDATORY_FIELDS;  ++id )
+        for( int id = 0; id < MANDATORY_FIELDS; ++id )
         {
-            LIB_FIELD* field = new_part.GetField( id );
+            LIB_FIELD* field = new_part.GetFieldById( id );
 
             // the MANDATORY_FIELDS are exactly that in RAM.
             wxCHECK( field, /* void */ );
 
-            LIB_FIELD* parentField = parent->GetField( id );
+            LIB_FIELD* parentField = parent->GetFieldById( id );
 
             wxCHECK( parentField, /* void */ );
 

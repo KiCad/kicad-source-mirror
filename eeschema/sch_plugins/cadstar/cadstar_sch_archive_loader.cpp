@@ -46,6 +46,9 @@
 #include <wildcards_and_files_ext.h>
 
 
+constexpr int PART_NAME = MANDATORY_FIELDS; // First field after mandatory ones
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName )
 {
@@ -403,14 +406,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
             if( sym.HasPartRef )
             {
-                SCH_FIELD* partField = component->GetField( FIELD1 );
+                SCH_FIELD* partField = component->GetFieldById( PART_NAME );
 
                 if( !partField )
                 {
-                    component->AddField(
-                            SCH_FIELD( wxPoint(), FIELD1, component, wxT( "Part Name" ) ) );
+                    component->AddField( SCH_FIELD( wxPoint(), PART_NAME, component,
+                                                    wxT( "Part Name" ) ) );
 
-                    partField = component->GetField( FIELD1 );
+                    partField = component->GetFieldById( PART_NAME );
                 }
 
                 wxString partname = getPart( sym.PartRef.RefID ).Name;
@@ -425,7 +428,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 partField->SetVisible( SymbolPartNameColor.IsVisible );
             }
 
-            int fieldIdx = FIELD1;
+            int fieldId = PART_NAME;
 
             for( auto attr : sym.AttributeValues )
             {
@@ -440,10 +443,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
                     if( !attrField )
                     {
-                        component->AddField(
-                                SCH_FIELD( wxPoint(), ++fieldIdx, component, attrName ) );
+                        component->AddField( SCH_FIELD( wxPoint(), ++fieldId, component,
+                                                        attrName ) );
 
-                        attrField = component->GetField( fieldIdx );
+                        attrField = component->GetFieldById( fieldId );
                     }
 
                     attrVal.Value.Replace( wxT( "\n" ), wxT( "\\n" ) );
@@ -1242,11 +1245,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     if( symbol.TextLocations.find( PART_NAME_ATTRID ) != symbol.TextLocations.end() )
     {
         TEXT_LOCATION textLoc = symbol.TextLocations.at( PART_NAME_ATTRID );
-        LIB_FIELD*    field   = aPart->GetField( FIELD1 );
+        LIB_FIELD*    field   = aPart->GetFieldById( PART_NAME );
 
         if( !field )
         {
-            field = new LIB_FIELD( aPart, FIELD1 );
+            field = new LIB_FIELD( aPart, PART_NAME );
             aPart->AddField( field );
         }
 
@@ -1268,7 +1271,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
     if( aCadstarPart )
     {
-        int      fieldIdx = FIELD1;
+        int      fieldId = PART_NAME;
         wxString footprintRefName = wxEmptyString;
         wxString footprintAlternateName = wxEmptyString;
 
@@ -1315,8 +1318,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
 
                 if( !attrField )
                 {
-                    aPart->AddField( new LIB_FIELD( aPart, ++fieldIdx ) );
-                    attrField = aPart->GetField( fieldIdx );
+                    aPart->AddField( new LIB_FIELD( aPart, ++fieldId ) );
+                    attrField = aPart->GetFieldById( fieldId );
                     attrField->SetName( attrName );
                 }
 

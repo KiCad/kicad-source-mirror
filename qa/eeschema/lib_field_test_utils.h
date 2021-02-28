@@ -97,7 +97,7 @@ bool FieldNameIdMatches( const LIB_FIELD& aField, const std::string& aExpectedNa
  */
 bool AreDefaultFieldsCorrect( const std::vector<LIB_FIELD>& aFields )
 {
-    const unsigned expectedCount = NumFieldType::MANDATORY_FIELDS;
+    const unsigned expectedCount = MANDATORY_FIELD_T::MANDATORY_FIELDS;
     if( aFields.size() < expectedCount )
     {
         BOOST_TEST_INFO(
@@ -107,10 +107,10 @@ bool AreDefaultFieldsCorrect( const std::vector<LIB_FIELD>& aFields )
 
     bool ok = true;
 
-    ok &= FieldNameIdMatches( aFields[0], "Reference", NumFieldType::REFERENCE_FIELD );
-    ok &= FieldNameIdMatches( aFields[1], "Value",     NumFieldType::VALUE_FIELD );
-    ok &= FieldNameIdMatches( aFields[2], "Footprint", NumFieldType::FOOTPRINT_FIELD );
-    ok &= FieldNameIdMatches( aFields[3], "Datasheet", NumFieldType::DATASHEET_FIELD );
+    ok &= FieldNameIdMatches( aFields[0], "Reference", MANDATORY_FIELD_T::REFERENCE_FIELD );
+    ok &= FieldNameIdMatches( aFields[1], "Value", MANDATORY_FIELD_T::VALUE_FIELD );
+    ok &= FieldNameIdMatches( aFields[2], "Footprint", MANDATORY_FIELD_T::FOOTPRINT_FIELD );
+    ok &= FieldNameIdMatches( aFields[3], "Datasheet", MANDATORY_FIELD_T::DATASHEET_FIELD );
 
     return ok;
 }

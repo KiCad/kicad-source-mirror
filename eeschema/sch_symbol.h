@@ -367,15 +367,26 @@ public:
     //-----<Fields>-----------------------------------------------------------
 
     /**
+     * Returns a mandatory field in this symbol.
+     *
+     * NB: If you need to fetch a user field, use GetFieldById.
+     *
+     * @param aFieldType is one of the mandatory field types (REFERENCE_FIELD, VALUE_FIELD, etc.).
+     *
+     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     */
+    SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldType );
+    const SCH_FIELD* GetField( MANDATORY_FIELD_T aFieldNdx ) const;
+
+    /**
      * Returns a field in this symbol.
      *
-     * @param aFieldNdx is the index into the array of fields, not a field id.
+     * @param aFieldId is the id of the field requested.  Note that this id ONLY SOMETIMES equates
+     * to the field's position in the vector.
      *
-     * @return is the field at \a aFieldNdx or NULL if the field does not exist.
+     * @return is the field at \a aFieldType or NULL if the field does not exist.
      */
-    SCH_FIELD* GetField( int aFieldNdx );
-
-    const SCH_FIELD* GetField( int aFieldNdx ) const;
+    SCH_FIELD* GetFieldById( int aFieldId );
 
     /**
      * Search for a field named \a aFieldName and returns text associated with this field.
@@ -396,6 +407,7 @@ public:
      * Returns a vector of fields from the component
      */
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
+    const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
 
     /**
      * Add a field to the symbol.

@@ -1671,6 +1671,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 component->AddField( field );
             }
 
+            SCH_FIELD& field = component->GetFields()[index];
+
             // Prior to version 2 of the schematic file format, none of the following existed.
             if( m_version > 1 )
             {
@@ -1683,9 +1685,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 parseQuotedString( name, aReader, line, &line, true );
 
                 if( hjustify == 'L' )
-                    component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
                 else if( hjustify == 'R' )
-                    component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
                 else if( hjustify != 'C' )
                     SCH_PARSE_ERROR( "component field text horizontal justification must be "
                                      "L, R, or C", aReader, line );
@@ -1693,9 +1695,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 // We are guaranteed to have a least one character here for older file formats
                 // otherwise an exception would have been raised..
                 if( textAttrs[0] == 'T' )
-                    component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    field.SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
                 else if( textAttrs[0] == 'B' )
-                    component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    field.SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
                 else if( textAttrs[0] != 'C' )
                     SCH_PARSE_ERROR( "component field text vertical justification must be "
                                      "B, T, or C", aReader, line );
@@ -1708,36 +1710,35 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                                          aReader, line );
 
                     if( textAttrs[1] == 'I' )
-                        component->GetField( index )->SetItalic( true );
+                        field.SetItalic( true );
                     else if( textAttrs[1] != 'N' )
                         SCH_PARSE_ERROR( "component field text italics indicator must be I or N",
                                          aReader, line );
 
                     if( textAttrs[2] == 'B' )
-                        component->GetField( index )->SetBold( true );
+                        field.SetBold( true );
                     else if( textAttrs[2] != 'N' )
                         SCH_PARSE_ERROR( "component field text bold indicator must be B or N",
                                          aReader, line );
                 }
             }
 
-            component->GetField( index )->SetText( text );
-            component->GetField( index )->SetTextPos( pos );
-            component->GetField( index )->SetVisible( !attributes );
-            component->GetField( index )->SetTextSize( wxSize( size, size ) );
+            field.SetText( text );
+            field.SetTextPos( pos );
+            field.SetVisible( !attributes );
+            field.SetTextSize( wxSize( size, size ) );
 
             if( orientation == 'H' )
-                component->GetField( index )->SetTextAngle( TEXT_ANGLE_HORIZ );
+                field.SetTextAngle( TEXT_ANGLE_HORIZ );
             else if( orientation == 'V' )
-                component->GetField( index )->SetTextAngle( TEXT_ANGLE_VERT );
+                field.SetTextAngle( TEXT_ANGLE_VERT );
             else
-                SCH_PARSE_ERROR( "component field orientation must be H or V",
-                                 aReader, line );
+                SCH_PARSE_ERROR( "component field orientation must be H or V", aReader, line );
 
             if( name.IsEmpty() )
                 name = TEMPLATE_FIELDNAME::GetDefaultFieldName( index );
 
-            component->GetField( index )->SetName( name );
+            field.SetName( name );
         }
         else if( strCompare( "$EndComp", line ) )
         {
@@ -2062,15 +2063,15 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
         }
     }
 
-    // update the ugly field index, which I would like to see go away someday soon.
+    // update the ugly field id, which I would like to see go away someday soon.
     for( int i = 0;  i < aComponent->GetFieldCount();  ++i )
-        aComponent->GetField( i )->SetId( i );
+        aComponent->GetFields()[i].SetId( i );
 
     // Fixed fields:
     // Save mandatory fields even if they are blank,
     // because the visibility, size and orientation are set from library editor.
-    for( unsigned i = 0;  i < MANDATORY_FIELDS;  ++i )
-        saveField( aComponent->GetField( i ) );
+    for( unsigned i = 0; i < MANDATORY_FIELDS; ++i )
+        saveField( &aComponent->GetFields()[i] );
 
     // User defined fields:
     // The *policy* about which user defined fields are part of a symbol is now
@@ -2078,7 +2079,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     // save all the user defined fields, they are present because a dialog editor
     // thought they should be.  If you disagree, go fix the dialog editors.
     for( int i = MANDATORY_FIELDS;  i < aComponent->GetFieldCount();  ++i )
-        saveField( aComponent->GetField( i ) );
+        saveField( &aComponent->GetFields()[i] );
 
     // Unit number, position, box ( old standard )
     m_out->Print( 0, "\t%-4d %-4d %-4d\n", aComponent->GetUnit(),
@@ -2122,10 +2123,8 @@ void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
                   aField->IsBold() ? 'B' : 'N' );
 
     // Save field name, if the name is user definable
-    if( aField->GetId() >= FIELD1 )
-    {
+    if( aField->GetId() >= MANDATORY_FIELDS )
         m_out->Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
-    }
 
     m_out->Print( 0, "\n" );
 }
@@ -2728,7 +2727,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
             case 'F':
                 if( symbol )
-                    symbol->GetField( DATASHEET_FIELD )->SetText( text );
+                    symbol->GetFieldById( DATASHEET_FIELD )->SetText( text );
                 break;
 
             case 0:
@@ -2963,14 +2962,14 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
             LIB_PART* newPart = new LIB_PART( newAliasName );
 
             // Inherit the parent mandatory field attributes.
-            for( int id=0;  id<MANDATORY_FIELDS;  ++id )
+            for( int id = 0; id < MANDATORY_FIELDS; ++id )
             {
-                LIB_FIELD* field = newPart->GetField( id );
+                LIB_FIELD* field = newPart->GetFieldById( id );
 
                 // the MANDATORY_FIELDS are exactly that in RAM.
                 wxASSERT( field );
 
-                LIB_FIELD* parentField = aPart->GetField( id );
+                LIB_FIELD* parentField = aPart->GetFieldById( id );
 
                 wxASSERT( parentField );
 
@@ -3008,7 +3007,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
     if( id >= 0 && id < MANDATORY_FIELDS )
     {
-        field = aPart->GetField( id );
+        field = aPart->GetFieldById( id );
 
         // this will fire only if somebody broke a constructor or editor.
         // MANDATORY_FIELDS are always present in ram resident components, no
@@ -3982,7 +3981,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTE
      */
     wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 
-    if( id >= FIELD1 && !aField->m_name.IsEmpty() && aField->m_name != defName )
+    if( id >= MANDATORY_FIELDS && !aField->m_name.IsEmpty() && aField->m_name != defName )
         aFormatter.Print( 0, " %s", EscapedUTF8( aField->m_name ).c_str() );
 
     aFormatter.Print( 0, "\n" );

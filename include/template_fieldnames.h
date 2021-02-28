@@ -39,7 +39,7 @@ class TEMPLATE_FIELDNAMES_LEXER;
  * The first fields are fixed fields and are defined by #MANDATORY_FIELDS.  After that come
  * an unlimited number of user defined fields, only some of which have indices defined here.
  */
-enum  NumFieldType {
+enum  MANDATORY_FIELD_T {
     REFERENCE_FIELD = 0,          ///< Field Reference of part, i.e. "IC21"
     VALUE_FIELD,                  ///< Field Value of part, i.e. "3.3K"
     FOOTPRINT_FIELD,              ///< Field Name Module PCB, i.e. "16DIP300"
@@ -47,16 +47,7 @@ enum  NumFieldType {
 
     /// The first 4 are mandatory, and must be instantiated in SCH_COMPONENT
     /// and LIB_PART constructors
-    MANDATORY_FIELDS,
-
-    FIELD1 = MANDATORY_FIELDS,
-    FIELD2,
-    FIELD3,
-    FIELD4,
-    FIELD5,
-    FIELD6,
-    FIELD7,
-    FIELD8
+    MANDATORY_FIELDS
 };
 
 

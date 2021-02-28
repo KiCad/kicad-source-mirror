@@ -54,11 +54,11 @@ class SCH_LEGACY_PLUGIN_CACHE;
  *  others = free fields
  * </p>
  *
- * @see enum NumFieldType
+ * @see enum MANDATORY_FIELD_T
  */
 class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
 {
-    int      m_id;           ///< @see enum NumFieldType
+    int      m_id;           ///< @see enum MANDATORY_FIELD_T
     wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
 
     /**

@@ -50,7 +50,7 @@ class LIB_FIELD;
 
 class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
-    int      m_id;         ///< Field index, @see enum NumFieldType
+    int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T
 
     wxString m_name;
 

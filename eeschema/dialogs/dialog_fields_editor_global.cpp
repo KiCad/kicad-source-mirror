@@ -945,7 +945,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
         SCH_COMPONENT* symbol = m_symbolsList[ i ].GetSymbol();
 
         for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
-            userFieldNames.insert( symbol->GetField( j )->GetName() );
+            userFieldNames.insert( symbol->GetFields()[j].GetName() );
     }
 
     // Force References to always be shown

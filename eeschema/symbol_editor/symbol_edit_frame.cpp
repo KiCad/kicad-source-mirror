@@ -1269,15 +1269,15 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol )
 
     for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
     {
-        SCH_FIELD* field = aSymbol->GetField( i );
-        wxPoint    pos = field->GetPosition() - aSymbol->GetPosition();
-        LIB_FIELD  libField( part.get(), field->GetId() );
+        const SCH_FIELD& field = aSymbol->GetFields()[i];
+        wxPoint          pos = field.GetPosition() - aSymbol->GetPosition();
+        LIB_FIELD        libField( part.get(), field.GetId() );
 
-        if( i >= MANDATORY_FIELDS && !field->GetName( false ).IsEmpty() )
-            libField.SetName( field->GetName( false ) );
+        if( i >= MANDATORY_FIELDS && !field.GetName( false ).IsEmpty() )
+            libField.SetName( field.GetName( false ) );
 
-        libField.SetText( field->GetText() );
-        libField.SetEffects( *field );
+        libField.SetText( field.GetText() );
+        libField.SetEffects( field );
         libField.SetPosition( wxPoint( pos.x, -pos.y ) );
 
         fullSetOfFields.emplace_back( std::move( libField ) );
@@ -1289,7 +1289,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol )
         SetCurPart( nullptr, false );
 
     m_isSymbolFromSchematic = true;
-    m_reference = part->GetField( REFERENCE_FIELD )->GetText();
+    m_reference = part->GetFieldById( REFERENCE_FIELD )->GetText();
     m_unit = std::max( 1, aSymbol->GetUnit() );
     m_convert = std::max( 1, aSymbol->GetConvert() );
 

@@ -573,16 +573,16 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
 
     for( unsigned i = 0; i < aSymbol->GetFields().size(); ++i )
     {
-        SCH_FIELD* field = aSymbol->GetField( (int) i ) ;
+        SCH_FIELD& field = aSymbol->GetFields()[i];
         LIB_FIELD* libField = nullptr;
 
-        if( !alg::contains( m_updateFields, field->GetName() ) )
+        if( !alg::contains( m_updateFields, field.GetName() ) )
             continue;
 
         if( i < MANDATORY_FIELDS )
-            libField = libSymbol->GetField( (int) i );
+            libField = libSymbol->GetFieldById( (int) i );
         else
-            libField = libSymbol->FindField( field->GetName() );
+            libField = libSymbol->FindField( field.GetName() );
 
         if( libField )
         {
@@ -598,30 +598,30 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
                 else if( i == FOOTPRINT_FIELD )
                     aSymbol->SetFootprint( aInstance, libField->GetText() );
                 else
-                    field->SetText( libField->GetText() );
+                    field.SetText( libField->GetText() );
             }
 
             if( resetVis )
-                field->SetVisible( libField->IsVisible() );
+                field.SetVisible( libField->IsVisible() );
 
             if( resetEffects )
             {
                 // Careful: the visible bit and position are also in Effects
-                bool    visible = field->IsVisible();
-                wxPoint pos = field->GetPosition();
+                bool    visible = field.IsVisible();
+                wxPoint pos = field.GetPosition();
 
-                field->SetEffects( *libField );
+                field.SetEffects( *libField );
 
-                field->SetVisible( visible );
-                field->SetPosition( pos );
+                field.SetVisible( visible );
+                field.SetPosition( pos );
             }
 
             if( resetPositions )
-                field->SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
+                field.SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
         }
         else if( i >= MANDATORY_FIELDS && removeExtras )
         {
-            aSymbol->RemoveField( field->GetName() );
+            aSymbol->RemoveField( field.GetName() );
             i--;
         }
     }

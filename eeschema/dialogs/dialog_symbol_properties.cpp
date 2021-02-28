@@ -412,7 +412,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     // Push a copy of each field into m_updateFields
     for( int i = 0; i < m_comp->GetFieldCount(); ++i )
     {
-        SCH_FIELD field( *m_comp->GetField( i ) );
+        SCH_FIELD field( m_comp->GetFields()[i] );
 
         // change offset to be symbol-relative
         field.Offset( -m_comp->GetPosition() );

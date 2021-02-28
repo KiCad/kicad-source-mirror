@@ -136,9 +136,9 @@ SCH_COMPONENT::SCH_COMPONENT( const LIB_PART& aPart, const SCH_SHEET_PATH* aShee
     SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
     // Set any fields that were modified as part of the component selection
-    for( auto const& i : aSel.Fields )
+    for( const std::pair<int, wxString>& i : aSel.Fields )
     {
-        auto field = this->GetField( i.first );
+        SCH_FIELD* field = GetFieldById( i.first );
 
         if( field )
             field->SetText( i.second );
@@ -684,19 +684,25 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
 }
 
 
-SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx )
+SCH_FIELD* SCH_COMPONENT::GetField( MANDATORY_FIELD_T aFieldType )
 {
-    if( (unsigned) aFieldNdx < m_fields.size() )
-        return &m_fields[aFieldNdx];
-
-    return nullptr;
+    return &m_fields[aFieldType];
 }
 
 
-const SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
+const SCH_FIELD* SCH_COMPONENT::GetField( MANDATORY_FIELD_T aFieldType ) const
 {
-    if( (unsigned) aFieldNdx < m_fields.size() )
-        return &m_fields[aFieldNdx];
+    return &m_fields[aFieldType];
+}
+
+
+SCH_FIELD* SCH_COMPONENT::GetFieldById( int aFieldId )
+{
+    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    {
+        if( m_fields[ii].GetId() == aFieldId )
+            return &m_fields[ii];
+    }
 
     return nullptr;
 }
@@ -771,15 +777,15 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
         for( const LIB_FIELD* libField : fields )
         {
-            int idx = libField->GetId();
+            int id = libField->GetId();
             SCH_FIELD* schField;
 
-            if( idx == REFERENCE_FIELD && !aResetRef )
+            if( id == REFERENCE_FIELD && !aResetRef )
                 continue;
 
-            if( idx >= 0 && idx < MANDATORY_FIELDS )
+            if( id >= 0 && id < MANDATORY_FIELDS )
             {
-                schField = GetField( idx );
+                schField = GetFieldById( id );
             }
             else
             {
@@ -799,12 +805,12 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
-            if( idx == VALUE_FIELD )
+            if( id == VALUE_FIELD )
             {
                 schField->SetText( m_lib_id.GetLibItemName() ); // fetch alias-specific value
                 symbolName = m_lib_id.GetLibItemName();
             }
-            else if( idx == DATASHEET_FIELD )
+            else if( id == DATASHEET_FIELD )
             {
                 schField->SetText( GetDatasheet() );            // fetch alias-specific value
             }
@@ -1265,7 +1271,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " ref=\"" << TO_UTF8( GetField( 0 )->GetName() )
+                                 << " ref=\"" << TO_UTF8( GetField( REFERENCE_FIELD )->GetName() )
                                  << '"' << " chipName=\""
                                  << GetLibId().Format() << '"' << m_pos
                                  << " layer=\"" << m_layer
@@ -1274,12 +1280,12 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
     // skip the reference, it's been output already.
     for( int i = 1; i < GetFieldCount();  ++i )
     {
-        wxString value = GetField( i )->GetText();
+        const wxString& value = GetFields()[i].GetText();
 
         if( !value.IsEmpty() )
         {
             NestedSpace( nestLevel + 1, os ) << "<field" << " name=\""
-                                             << TO_UTF8( GetField( i )->GetName() )
+                                             << TO_UTF8( GetFields()[i].GetName() )
                                              << '"' << " value=\""
                                              << TO_UTF8( value ) << "\"/>\n";
         }
@@ -1727,7 +1733,7 @@ bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aComponent ) const
 
     for( int i = VALUE_FIELD; i < GetFieldCount(); i++ )
     {
-        if( GetField( i )->GetText().Cmp( aComponent.GetField( i )->GetText() ) != 0 )
+        if( GetFields()[i].GetText().Cmp( aComponent.GetFields()[i].GetText() ) != 0 )
             return false;
     }
 

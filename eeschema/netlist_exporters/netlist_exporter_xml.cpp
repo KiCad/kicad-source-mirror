@@ -143,17 +143,17 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol
                         fields.datasheet = comp2->GetField( DATASHEET_FIELD )->GetText();
                 }
 
-                for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
+                for( int ii = MANDATORY_FIELDS; ii < comp2->GetFieldCount(); ++ii )
                 {
-                    SCH_FIELD* f = comp2->GetField( fldNdx );
+                    const SCH_FIELD& f = comp2->GetFields()[ ii ];
 
-                    if( f->GetText().size()
-                        && ( unit < minUnit || fields.f.count( f->GetName() ) == 0 ) )
+                    if( f.GetText().size()
+                        && ( unit < minUnit || fields.f.count( f.GetName() ) == 0 ) )
                     {
                         if( m_resolveTextVars )
-                            fields.f[ f->GetName() ] = f->GetShownText();
+                            fields.f[ f.GetName() ] = f.GetShownText();
                         else
-                            fields.f[ f->GetName() ] = f->GetText();
+                            fields.f[ f.GetName() ] = f.GetText();
                     }
                 }
 
@@ -171,16 +171,16 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol
         else
             fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
 
-        for( int fldNdx = MANDATORY_FIELDS; fldNdx < aSymbol->GetFieldCount(); ++fldNdx )
+        for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
-            SCH_FIELD*  f = aSymbol->GetField( fldNdx );
+            const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
 
-            if( f->GetText().size() )
+            if( f.GetText().size() )
             {
                 if( m_resolveTextVars )
-                    fields.f[ f->GetName() ] = f->GetShownText();
+                    fields.f[ f.GetName() ] = f.GetShownText();
                 else
-                    fields.f[ f->GetName() ] = f->GetText();
+                    fields.f[ f.GetName() ] = f.GetText();
             }
         }
     }
