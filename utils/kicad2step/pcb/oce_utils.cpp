@@ -31,6 +31,7 @@
 #include <wx/filefn.h>
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include <decompress.hpp>
 
@@ -1020,14 +1021,11 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             }
 
             {
+                bool success = false;
                 wxFFileOutputStream ofile( outFile.GetFullPath() );
 
                 if( !ofile.IsOk() )
-                {
-                    ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
-                                                     outFile.GetFullPath() ) );
                     return false;
-                }
 
                 char *buffer = new char[size];
 
@@ -1037,17 +1035,33 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
                 try
                 {
                     expanded = gzip::decompress( buffer, size );
+                    success = true;
                 }
                 catch(...)
+                {}
+
+                if( expanded.empty() )
                 {
-                    delete[] buffer;
-                    return false;
+                    ifile.Reset();
+                    ifile.SeekI( 0 );
+                    wxZipInputStream izipfile( ifile );
+                    std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
+
+                    if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
+                    {
+                        izipfile.Read( ofile );
+                        success = true;
+                    }
+                }
+                else
+                {
+                    ofile.Write( expanded.data(), expanded.size() );
                 }
 
                 delete[] buffer;
-
-                ofile.Write( expanded.data(), expanded.size() );
                 ofile.Close();
+
+                return success;
             }
 
             return getModelLabel( outFile.GetFullPath().ToStdString(), aScale, aLabel );

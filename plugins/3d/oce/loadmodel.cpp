@@ -33,6 +33,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include <decompress.hpp>
 
@@ -473,6 +474,7 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         return false;
 
     {
+        bool success = false;
         wxFFileOutputStream ofile( outFile.GetFullPath() );
 
         if( !ofile.IsOk() )
@@ -486,17 +488,33 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         try
         {
             expanded = gzip::decompress( buffer, size );
+            success = true;
         }
         catch(...)
+        {}
+
+        if( expanded.empty() )
         {
-            delete[] buffer;
-            return false;
+            ifile.Reset();
+            ifile.SeekI( 0 );
+            wxZipInputStream izipfile( ifile );
+            std::unique_ptr<wxZipEntry> zip_file( izipfile.GetNextEntry() );
+
+            if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
+            {
+                izipfile.Read( ofile );
+                success = true;
+            }
+        }
+        else
+        {
+            ofile.Write( expanded.data(), expanded.size() );
         }
 
         delete[] buffer;
-
-        ofile.Write( expanded.data(), expanded.size() );
         ofile.Close();
+
+        return success;
     }
 
     bool retval = readSTEP( m_doc, outFile.GetFullPath().mb_str() );
