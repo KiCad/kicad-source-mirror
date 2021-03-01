@@ -45,8 +45,7 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     if( !IsOnCopperLayer() )
         aNetCode = 0;
 
-    // if aNetCode < 0 ( typically NETINFO_LIST::FORCE_ORPHANED )
-    // or no parent board,
+    // if aNetCode < 0 (typically NETINFO_LIST::FORCE_ORPHANED) or no parent board,
     // set the m_netinfo to the dummy NETINFO_LIST::ORPHANED
 
     BOARD* board = GetBoard();
@@ -63,7 +62,10 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 }
 
 
-// This method returns the Default netclass for nets which don't have their own.
+/*
+ * This method returns the Default netclass for nets which don't have their own, and the
+ * Orphaned netclass for unassigned nets (netCode == 0)
+ */
 NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 {
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
