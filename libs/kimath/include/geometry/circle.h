@@ -55,6 +55,15 @@ public:
     CIRCLE& ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, const VECTOR2I& aP );
 
     /**
+     * Return true if aP is on the circumference of this circle. Note that there is an accepted
+     * margin of error of SHAPE::MIN_PRECISION_IU to account for integer rounding errors.
+     *
+     * @param aP A point to test
+     * @return true if aP is on the circumference.
+    */
+    bool Contains( const VECTOR2I& aP ) const;
+
+    /**
      * Compute the point on the circumference of the circle that is the closest to aP.
      *
      * In other words: finds the intersection point of this circle and a line that passes through

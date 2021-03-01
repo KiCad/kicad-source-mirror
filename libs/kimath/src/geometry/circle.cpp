@@ -185,6 +185,15 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
 }
 
 
+bool CIRCLE::Contains( const VECTOR2I& aP ) const
+{
+    int distance = ( aP - Center ).EuclideanNorm();
+
+    return distance <= ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU )
+           && distance >= ( (int64_t) Radius - SHAPE::MIN_PRECISION_IU );
+}
+
+
 VECTOR2I CIRCLE::NearestPoint( const VECTOR2I& aP ) const
 {
     VECTOR2I vec = aP - Center;

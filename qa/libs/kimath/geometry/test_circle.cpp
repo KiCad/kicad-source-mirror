@@ -23,6 +23,7 @@
 #include <geometry/seg.h>    // for SEG
 #include <geometry/shape.h>  // for MIN_PRECISION_IU
 
+const int MIN_PRECISION_45DEG = KiROUND( (double) SHAPE::MIN_PRECISION_IU * 0.7071 );
 
 bool CompareLength( int aLengthA, int aLengthB )
 {
@@ -70,6 +71,112 @@ BOOST_AUTO_TEST_CASE( ParameterCtorMod )
     BOOST_CHECK_EQUAL( circle.Center, VECTOR2I( 20, 30 ) );
     BOOST_CHECK_EQUAL( circle.Radius, 30 );
 }
+
+
+/**
+ * Struct to hold test cases for a given circle, a point and an expected return boolean
+ */
+struct CIR_PT_BOOL_CASE
+{
+    std::string m_case_name;
+    CIRCLE      m_circle;
+    VECTOR2I    m_point;
+    bool        m_exp_result;
+};
+
+// clang-format off
+/**
+ * Test cases for #CIRCLE::Contains
+ */
+static const std::vector<CIR_PT_BOOL_CASE> contains_cases = {
+    {
+        "on center",
+        { { 100, 100 }, 200 },
+        { 100, 100 },
+        false,
+    },
+    {
+        "0 deg",
+        { { 100, 100 }, 200 },
+        { 300, 100 },
+        true,
+    },
+    {
+        "0 deg, allowed tolerance pos",
+        { { 100, 100 }, 200 },
+        { 100, 300 + SHAPE::MIN_PRECISION_IU },
+        true,
+    },
+    {
+        "0 deg, allowed tolerance neg",
+        { { 100, 100 }, 200 },
+        { 100, 300 - SHAPE::MIN_PRECISION_IU },
+        true,
+    },
+    {
+        "0 deg, allowed tolerance pos + 1",
+        { { 100, 100 }, 200 },
+        { 100, 300 + SHAPE::MIN_PRECISION_IU + 1 },
+        false,
+    },
+    {
+        "0 deg, allowed tolerance neg - 1",
+        { { 100, 100 }, 200 },
+        { 100, 300 - SHAPE::MIN_PRECISION_IU - 1 },
+        false,
+    },
+    {
+        "45 deg",
+        { { 100, 100 }, 200 },
+        { 241, 241 },
+        true,
+    },
+    {
+        "45 deg, allowed tolerance pos",
+        { { 100, 100 }, 200 },
+        { 241 + MIN_PRECISION_45DEG, 241 + MIN_PRECISION_45DEG },
+        true,
+    },
+    {
+        "45 deg, allowed tolerance pos + 1",
+        { { 100, 100 }, 200 },
+        { 241 + MIN_PRECISION_45DEG + 1, 241 + MIN_PRECISION_45DEG + 1 },
+        false,
+    },
+    {
+        "90 deg",
+        { { 100, 100 }, 200 },
+        { 100, 300 },
+        true,
+    },
+    {
+        "180 deg",
+        { { 100, 100 }, 200 },
+        { -100, 100 },
+        true,
+    },
+    {
+        "270 deg",
+        { { 100, 100 }, 200 },
+        { 100, -100 },
+        true,
+    },
+};
+// clang-format on
+
+
+BOOST_AUTO_TEST_CASE( Contains )
+{
+    for( const auto& c : contains_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            bool ret = c.m_circle.Contains( c.m_point );
+            BOOST_CHECK_EQUAL( ret, c.m_exp_result );
+        }
+    }
+}
+
 
 
 /**
