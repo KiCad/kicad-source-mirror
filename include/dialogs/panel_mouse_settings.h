@@ -51,8 +51,8 @@ protected:
     bool TransferDataToWindow() override;
 
     void OnScrollRadioButton( wxCommandEvent& event ) override;
-
-    PAGED_DIALOG*  m_dialog;
+    void onMouseDefaults( wxCommandEvent& event ) override;
+    void onTrackpadDefaults( wxCommandEvent& event ) override;
 
 private:
     void applySettingsToPanel( const COMMON_SETTINGS& aSettings );
@@ -63,6 +63,10 @@ private:
 
     bool isScrollModSetValid( const SCROLL_MOD_SET& aSet );
 
+protected:
+    PAGED_DIALOG*  m_dialog;
+
+private:
     SCROLL_MOD_SET m_currentScrollMod;
 };
 

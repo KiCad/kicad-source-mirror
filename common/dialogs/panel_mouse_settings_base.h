@@ -28,6 +28,7 @@
 #include <wx/icon.h>
 #include <wx/statbmp.h>
 #include <wx/radiobut.h>
+#include <wx/button.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,9 +80,13 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbPanHShift;
 		wxRadioButton* m_rbPanHAlt;
 		wxCheckBox* m_checkEnablePanH;
+		wxButton* m_mouseDefaults;
+		wxButton* m_trackpadDefaults;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnScrollRadioButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMouseDefaults( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTrackpadDefaults( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

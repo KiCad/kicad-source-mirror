@@ -142,7 +142,10 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizer1->Add( sbSizer2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scroll Gestures") ), wxVERTICAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scroll Gestures") ), wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeft;
+	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -154,13 +157,13 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_scrollWarning = new wxStaticBitmap( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_scrollWarning->SetToolTip( _("Only one action can be assigned to each column") );
 
-	bSizer4->Add( m_scrollWarning, 0, wxALL, 5 );
+	bSizer4->Add( m_scrollWarning, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizer3->Add( bSizer4, 1, wxEXPAND, 5 );
+	bSizerLeft->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 5, 5, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 5, 8, 0 );
 	fgSizer2->AddGrowableCol( 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -187,7 +190,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_staticText10 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Zoom:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer2->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT, 5 );
+	fgSizer2->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_rbZoomNone = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizer2->Add( m_rbZoomNone, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -203,7 +206,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_staticText11 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan up/down:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	fgSizer2->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT, 5 );
+	fgSizer2->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_rbPanVNone = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizer2->Add( m_rbPanVNone, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -219,7 +222,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_staticText20 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left/right:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
-	fgSizer2->Add( m_staticText20, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_rbPanHNone = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizer2->Add( m_rbPanHNone, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -234,7 +237,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizer2->Add( m_rbPanHAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer2->Add( 0, 12, 1, wxEXPAND, 5 );
+	fgSizer2->Add( 0, 10, 1, wxEXPAND, 5 );
 
 
 	fgSizer2->Add( 42, 0, 1, wxEXPAND, 5 );
@@ -249,12 +252,27 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizer2->Add( 42, 0, 1, wxEXPAND, 5 );
 
 
-	sbSizer3->Add( fgSizer2, 0, wxRIGHT|wxLEFT, 24 );
+	bSizerLeft->Add( fgSizer2, 0, wxRIGHT|wxLEFT, 24 );
 
 	m_checkEnablePanH = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Pan left/right with horizontal movement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnablePanH->SetToolTip( _("Pan the canvas left and right when scrolling left to right on the touchpad") );
 
-	sbSizer3->Add( m_checkEnablePanH, 0, wxALL, 5 );
+	bSizerLeft->Add( m_checkEnablePanH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizer3->Add( bSizerLeft, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRight;
+	bSizerRight = new wxBoxSizer( wxVERTICAL );
+
+	m_mouseDefaults = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Reset to Mouse Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_mouseDefaults, 0, wxALL|wxEXPAND, 5 );
+
+	m_trackpadDefaults = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Reset to Trackpad Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_trackpadDefaults, 0, wxALL|wxEXPAND, 5 );
+
+
+	sbSizer3->Add( bSizerRight, 0, wxEXPAND, 5 );
 
 
 	bSizer1->Add( sbSizer3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -277,6 +295,8 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_rbPanHCtrl->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
 	m_rbPanHShift->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
 	m_rbPanHAlt->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
+	m_mouseDefaults->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::onMouseDefaults ), NULL, this );
+	m_trackpadDefaults->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::onTrackpadDefaults ), NULL, this );
 }
 
 PANEL_MOUSE_SETTINGS_BASE::~PANEL_MOUSE_SETTINGS_BASE()
@@ -294,5 +314,7 @@ PANEL_MOUSE_SETTINGS_BASE::~PANEL_MOUSE_SETTINGS_BASE()
 	m_rbPanHCtrl->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
 	m_rbPanHShift->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
 	m_rbPanHAlt->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::OnScrollRadioButton ), NULL, this );
+	m_mouseDefaults->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::onMouseDefaults ), NULL, this );
+	m_trackpadDefaults->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MOUSE_SETTINGS_BASE::onTrackpadDefaults ), NULL, this );
 
 }

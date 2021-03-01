@@ -256,3 +256,27 @@ void PANEL_MOUSE_SETTINGS::updateScrollModButtons()
     set_wheel_buttons( m_currentScrollMod.panv, m_rbPanVNone, m_rbPanVCtrl, m_rbPanVShift,
                        m_rbPanVAlt );
 }
+
+
+void PANEL_MOUSE_SETTINGS::onMouseDefaults( wxCommandEvent& event )
+{
+    m_currentScrollMod.zoom = 0;
+    m_currentScrollMod.panh = WXK_CONTROL;
+    m_currentScrollMod.panv = WXK_SHIFT;
+
+    updateScrollModButtons();
+
+    m_checkEnablePanH->SetValue( false );
+}
+
+
+void PANEL_MOUSE_SETTINGS::onTrackpadDefaults( wxCommandEvent& event )
+{
+    m_currentScrollMod.zoom = WXK_CONTROL;
+    m_currentScrollMod.panh = WXK_SHIFT;
+    m_currentScrollMod.panv = 0;
+
+    updateScrollModButtons();
+
+    m_checkEnablePanH->SetValue( true );
+}
