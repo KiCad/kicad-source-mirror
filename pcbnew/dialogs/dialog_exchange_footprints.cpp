@@ -513,9 +513,10 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         if( oldPad )
         {
             pad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
-            pad->SetNetCode( oldPad->GetNetCode() );
             pad->SetPinFunction( oldPad->GetPinFunction() );
         }
+
+        pad->SetNetCode( oldPad ? oldPad->GetNetCode() : NETINFO_LIST::UNCONNECTED );
     }
 
     // Copy reference
