@@ -377,6 +377,7 @@ struct ACOMPONENT6
     bool         commenton;
     wxString     sourcedesignator;
     wxString     sourcefootprintlibrary;
+    wxString     pattern;
     wxString     sourcecomponentlibrary;
     wxString     sourcelibreference;
 
