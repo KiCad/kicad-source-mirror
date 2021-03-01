@@ -264,6 +264,8 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     wxCHECK_RET( m_settings, "Call to SYMBOL_EDIT_FRAME::LoadSettings with null m_settings" );
 
+    GetGalDisplayOptions().m_axesEnabled = true;
+
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;

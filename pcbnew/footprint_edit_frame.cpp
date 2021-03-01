@@ -527,6 +527,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
+    GetGalDisplayOptions().m_axesEnabled = true;
+
     // aCfg will be the PCBNEW_SETTINGS
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 

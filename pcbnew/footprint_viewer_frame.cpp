@@ -794,6 +794,8 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 
+    GetGalDisplayOptions().m_axesEnabled = true;
+
     // We don't want to store anything other than the window settings
     PCB_BASE_FRAME::SaveSettings( cfg );
 
