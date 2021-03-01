@@ -29,6 +29,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <Python.h>
 #include <python_scripting.h>
 #include <sstream>
 
