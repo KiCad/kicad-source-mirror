@@ -765,11 +765,6 @@ public:
     bool TestStandalone( void );
 
     /**
-     * An automated version of UpdatePCBFromNetlist which skips the UI dialog.
-     */
-    void DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps );
-
-    /**
      * Read a netlist from a file into a #NETLIST object.
      *
      * @param aFilename is the netlist to load.

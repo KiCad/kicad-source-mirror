@@ -1374,17 +1374,25 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 {
     if( !TestStandalone() )
     {
-        DisplayError( this, _( "Cannot update the PCB because PCB editor is opened in stand-alone "
-                               "mode. In order to create or update PCBs from schematics, you "
-                               "must launch the KiCad project manager and create a project." ) );
-        return false;       //Not in standalone mode
+        DisplayErrorMessage( this, _( "Cannot update the PCB because PCB editor is opened in "
+                                      "stand-alone mode. In order to create or update PCBs from "
+                                      "schematics, you must launch the KiCad project manager and "
+                                      "create a project." ) );
+        return false;       // Not in standalone mode
     }
 
-    Raise();                //Show
+    Raise();                // Show
 
     std::string payload( aAnnotateMessage );
 
     Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, this );
+
+    if( payload == aAnnotateMessage )
+    {
+        Raise();
+        DisplayErrorMessage( this, aAnnotateMessage );
+        return false;
+    }
 
     try
     {
@@ -1394,23 +1402,12 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
     }
     catch( const IO_ERROR& )
     {
+        Raise();
         assert( false ); // should never happen
         return false;
     }
 
     return true;
-}
-
-
-void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps )
-{
-    BOARD_NETLIST_UPDATER updater( this, GetBoard() );
-    updater.SetLookupByTimestamp( aUseTimestamps );
-    updater.SetDeleteUnusedComponents( false );
-    updater.SetReplaceFootprints( true );
-    updater.SetDeleteSinglePadNets( false );
-    updater.SetWarnPadNoNetInNetlist( false );
-    updater.UpdateNetlist( aNetlist );
 }
 
 
