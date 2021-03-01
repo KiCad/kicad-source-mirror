@@ -736,9 +736,6 @@ void ORTHOGONAL_DIMENSION::updateGeometry()
 
     addShape( SHAPE_SEGMENT( extStart, extStart + extension.Resize( extensionHeight ) ) );
 
-    //##
-    //UpdateHeight(m_crossBarStart, m_crossBarEnd);
-
     // Update text after calculating crossbar position but before adding crossbar lines
     updateText();
 
@@ -806,12 +803,9 @@ void ORTHOGONAL_DIMENSION::updateText()
         VECTOR2D height( m_crossBarStart - GetStart() );
         VECTOR2D crossBar( m_crossBarEnd - m_crossBarStart );
 
-        if( height.Cross( crossBar ) > 0 )
-            m_height = height.EuclideanNorm();
-        else
-            m_height = -height.EuclideanNorm();
+        double sign = height.Cross( crossBar ) > 0 ? 1 : -1;
+        double rotation = sign * DEG2RAD( -90 );
 
-        double rotation = sign( m_height ) * DEG2RAD( -90 );
         VECTOR2I textOffset = crossbarCenter.Rotate( rotation ).Resize( textOffsetDistance );
         textOffset += crossbarCenter;
 
