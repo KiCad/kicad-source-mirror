@@ -172,7 +172,7 @@ wxString PATHS::GetStockPluginsPath()
 #elif defined( __WXMSW__ )
     fn.Assign( Pgm().GetExecutablePath() + wxT( "/plugins/" ) );
 #else
-    // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
+    // KICAD_DATA is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
     wxString tfname = wxString::FromUTF8Unchecked( KICAD_DATA );
     fn.Assign( tfname, "" );
@@ -187,7 +187,17 @@ wxString PATHS::GetStockPlugins3DPath()
 {
     wxFileName fn;
 
+#ifdef __UNIX__
+    // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
+    // corresponding to the install path used for constructing KICAD_USER_PLUGIN
+    wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
+    fn.Assign( tfname, "" );
+    fn.AppendDir( wxT( "kicad" ) );
+    fn.AppendDir( wxT( "plugins" ) );
+#else
     fn.Assign( PATHS::GetStockPluginsPath() );
+#endif
+
     fn.AppendDir( "3d" );
 
     return fn.GetPathWithSep();
