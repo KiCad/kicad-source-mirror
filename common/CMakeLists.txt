@@ -210,6 +210,7 @@ set( COMMON_DLG_SRCS
 
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
+    widgets/aui_art_provider.cpp
     widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
