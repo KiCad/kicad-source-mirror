@@ -906,25 +906,29 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnEditSymbol( wxCommandEvent&  )
 {
-    EndQuasiModal( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
+    if( TransferDataFromWindow() )
+        EndQuasiModal( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnEditLibrarySymbol( wxCommandEvent&  )
 {
-    EndQuasiModal( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
+    if( TransferDataFromWindow() )
+        EndQuasiModal( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnUpdateSymbol( wxCommandEvent&  )
 {
-    EndQuasiModal( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
+    if( TransferDataFromWindow() )
+        EndQuasiModal( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnExchangeSymbol( wxCommandEvent&  )
 {
-    EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
+    if( TransferDataFromWindow() )
+        EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
 }
 
 

@@ -203,29 +203,41 @@ DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 
 void DIALOG_FOOTPRINT_PROPERTIES::EditFootprint( wxCommandEvent&  )
 {
-    m_returnValue = FP_PROPS_EDIT_BOARD_FP;
-    Close();
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = FP_PROPS_EDIT_BOARD_FP;
+        Close();
+    }
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::EditLibraryFootprint( wxCommandEvent&  )
 {
-    m_returnValue = FP_PROPS_EDIT_LIBRARY_FP;
-    Close();
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = FP_PROPS_EDIT_LIBRARY_FP;
+        Close();
+    }
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::UpdateFootprint( wxCommandEvent&  )
 {
-    m_returnValue = FP_PROPS_UPDATE_FP;
-    Close();
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = FP_PROPS_UPDATE_FP;
+        Close();
+    }
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::ChangeFootprint( wxCommandEvent&  )
 {
-    m_returnValue = FP_PROPS_CHANGE_FP;
-    Close();
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = FP_PROPS_CHANGE_FP;
+        Close();
+    }
 }
 
 
