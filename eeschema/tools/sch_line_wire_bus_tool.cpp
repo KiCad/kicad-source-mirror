@@ -519,8 +519,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 grid.ClearMaskFlag( GRID_HELPER::HORIZONTAL );
         }
 
-        wxPoint cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
-                                           : (wxPoint) controls->GetMousePosition();
+        wxPoint cursorPos = static_cast<wxPoint>( evt->HasPosition() ?
+                                                  evt->Position() :
+                                                  controls->GetMousePosition() );
 
         cursorPos = (wxPoint) grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, segment );
         controls->ForceCursorPosition( true, cursorPos );
