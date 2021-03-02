@@ -274,8 +274,6 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
     sourcedesignator = ALTIUM_PARSER::PropertiesReadString( properties, "SOURCEDESIGNATOR", "" );
     sourcefootprintlibrary =
             ALTIUM_PARSER::PropertiesReadString( properties, "SOURCEFOOTPRINTLIBRARY", "" );
-    
-    // Actual footprint is under "PATTERN"
     pattern = ALTIUM_PARSER::PropertiesReadString( properties, "PATTERN", "" );
 
     sourcecomponentlibrary =
