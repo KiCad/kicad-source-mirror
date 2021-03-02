@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-03-01 15:51+0000\n"
+"PO-Revision-Date: 2021-03-03 23:36+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -4582,7 +4582,7 @@ msgstr "設定語言"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr "頂層銅層"
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
@@ -4706,7 +4706,7 @@ msgstr "內層 30"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr "底層銅層"
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
@@ -4718,11 +4718,11 @@ msgstr "頂層膠粘層"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "底層錫膏層"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "頂層錫膏層"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
@@ -4734,11 +4734,11 @@ msgstr "頂層絲印層"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr "底層阻焊層"
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr "頂層阻焊層"
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
@@ -4758,11 +4758,11 @@ msgstr "使用者自定義 2 層"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr "電路板邊框輪廓層"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:660
 msgid "Margin"
-msgstr "電路板電氣邊界層"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -4774,47 +4774,47 @@ msgstr "底層外框層"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr "頂層製造層"
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr "底層製造層"
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr "使用者 1 層"
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr "使用者 2 層"
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr "使用者 3 層"
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr "使用者 4 層"
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr "使用者 5 層"
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr "使用者 6 層"
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr "使用者 7 層"
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr "使用者 8 層"
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr "使用者 9 層"
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Rescue"
@@ -19664,7 +19664,7 @@ msgstr "鎖定"
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:305
 #, c-format
 msgid "Dielectric %d"
-msgstr "介電 %d"
+msgstr "Dielectric %d"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:525
 msgid "Top Silk Screen"
