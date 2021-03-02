@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/clipbrd.h>
+#include <kicad_string.h>
 #include <dialogs/html_messagebox.h>
 
-#include <kicad_string.h>
 
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
                                     const wxPoint& aPosition, const wxSize& aSize ) :
@@ -135,6 +136,23 @@ void HTML_MESSAGE_BOX::OnCharHook( wxKeyEvent& aEvent )
     if( aEvent.GetKeyCode() == WXK_ESCAPE )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        return;
+    }
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'A' )
+    {
+        m_htmlWindow->SelectAll();
+        return;
+    }
+    else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'C' )
+    {
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->SetData( new wxTextDataObject( m_htmlWindow->SelectionToText() ) );
+            wxTheClipboard->Close();
+        }
+
         return;
     }
 
