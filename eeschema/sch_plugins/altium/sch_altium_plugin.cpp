@@ -1983,7 +1983,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
 
     filenameField.SetPosition( elem.location + m_sheetOffset );
     elem.text.RemoveLast( 6 );
-	elem.text += "kicad_sch";
+    elem.text += "kicad_sch";
     filenameField.SetText( elem.text );
     filenameField.SetVisible( !elem.isHidden );
 
