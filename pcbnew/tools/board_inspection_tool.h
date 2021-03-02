@@ -115,6 +115,13 @@ private:
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 
+    /**
+     * Look for a #BOARD_CONNECTED_ITEM in a given spot and if one is found - it enables
+     * highlight for its net.
+     *
+     * @param aPosition is the point where an item is expected (world coordinates).
+     * @param aUseSelection is true if we should use the current selection to pick the netcode
+     */
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
 
     void doHideNet( int aNetCode, bool aHide );

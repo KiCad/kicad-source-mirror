@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,6 +317,9 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         b = *bg->GetItems().begin();
     }
 
+    // a and b could be null after group tests above.
+    wxCHECK( a && b, 0 );
+
     if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
     {
         layer = a->GetLayer();
@@ -474,9 +477,10 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         m_inspectConstraintsDialog = std::make_unique<DIALOG_CONSTRAINTS_REPORTER>( m_frame );
         m_inspectConstraintsDialog->SetTitle( _( "Constraints Report" ) );
 
-        m_inspectConstraintsDialog->Connect( wxEVT_CLOSE_WINDOW,
-                    wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
-                    nullptr, this );
+        m_inspectConstraintsDialog->Connect(
+                wxEVT_CLOSE_WINDOW,
+                wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
+                nullptr, this );
     }
 
     m_inspectConstraintsDialog->DeleteAllPages();
@@ -740,13 +744,6 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 }
 
 
-/**
- * Look for a BOARD_CONNECTED_ITEM in a given spot and if one is found - it enables
- * highlight for its net.
- *
- * @param aPosition is the point where an item is expected (world coordinates).
- * @param aUseSelection is true if we should use the current selection to pick the netcode
- */
  bool BOARD_INSPECTION_TOOL::highlightNet( const VECTOR2D& aPosition, bool aUseSelection )
 {
     BOARD*                  board         = static_cast<BOARD*>( m_toolMgr->GetModel() );
@@ -840,8 +837,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     if( net > 0 && netcodes.count( net ) )
         enableHighlight = !settings->IsHighlightEnabled();
 
-    if( enableHighlight != settings->IsHighlightEnabled()
-            || !netcodes.count( net ) )
+    if( enableHighlight != settings->IsHighlightEnabled() || !netcodes.count( net ) )
     {
         if( !netcodes.empty() )
             m_lastNetcode = *netcodes.begin();
@@ -1181,7 +1177,8 @@ void BOARD_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
 void BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed( wxCommandEvent& event )
 {
     m_inspectClearanceDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ), nullptr, this );
+            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed ),
+                                          nullptr, this );
 
     m_inspectClearanceDialog->Destroy();
     m_inspectClearanceDialog.release();
@@ -1191,7 +1188,8 @@ void BOARD_INSPECTION_TOOL::onInspectClearanceDialogClosed( wxCommandEvent& even
 void BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed( wxCommandEvent& event )
 {
     m_inspectConstraintsDialog->Disconnect( wxEVT_CLOSE_WINDOW,
-            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ), nullptr, this );
+            wxCommandEventHandler( BOARD_INSPECTION_TOOL::onInspectConstraintsDialogClosed ),
+                                            nullptr, this );
 
     m_inspectConstraintsDialog->Destroy();
     m_inspectConstraintsDialog.release();
@@ -1252,18 +1250,24 @@ void BOARD_INSPECTION_TOOL::setTransitions()
     Go( &BOARD_INSPECTION_TOOL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
     Go( &BOARD_INSPECTION_TOOL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
 
-    Go( &BOARD_INSPECTION_TOOL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest,PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::LocalRatsnestTool,
+        PCB_ACTIONS::localRatsnestTool.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HideDynamicRatsnest,
+        PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::UpdateSelectionRatsnest,
+        PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
 
     Go( &BOARD_INSPECTION_TOOL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::ShowStatisticsDialog,   PCB_ACTIONS::boardStatistics.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectClearance,       PCB_ACTIONS::inspectClearance.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::InspectConstraints,     PCB_ACTIONS::inspectConstraints.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::InspectConstraints,
+        PCB_ACTIONS::inspectConstraints.MakeEvent() );
 
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::highlightNetSelection.MakeEvent() );
-    Go( &BOARD_INSPECTION_TOOL::HighlightNet,           PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,
+        PCB_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::HighlightNet,
+        PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::HighlightNetTool,       PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );

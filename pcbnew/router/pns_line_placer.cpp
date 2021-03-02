@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -39,18 +39,18 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
     PLACEMENT_ALGO( aRouter )
 {
     m_initial_direction = DIRECTION_45::N;
-    m_world = NULL;
-    m_shove = NULL;
-    m_currentNode = NULL;
+    m_world = nullptr;
+    m_shove = nullptr;
+    m_currentNode = nullptr;
     m_idle = true;
 
     // Init temporary variables (do not leave uninitialized members)
-    m_lastNode = NULL;
+    m_lastNode = nullptr;
     m_placingVia = false;
     m_currentNet = 0;
     m_currentLayer = 0;
     m_currentMode = RM_MarkObstacles;
-    m_startItem = NULL;
+    m_startItem = nullptr;
     m_chainedPlacement = false;
     m_orthoMode = false;
     m_placementCorrect = false;
@@ -195,6 +195,7 @@ bool LINE_PLACER::handlePullback()
     const std::vector<ssize_t>& tailShapes = tail.CShapes();
 
     wxASSERT( tail.PointCount() >= 2 );
+
     if( headShapes[0] == -1 )
         first_head = DIRECTION_45( head.CSegment( 0 ) );
     else
@@ -236,7 +237,7 @@ bool LINE_PLACER::handlePullback()
         }
 
         wxLogTrace( "PNS", "Placer: pullback triggered [%d] [%s %s]",
-                n, last_tail.Format().c_str(), first_head.Format().c_str() );
+                    n, last_tail.Format().c_str(), first_head.Format().c_str() );
 
         // erase the last point in the tail, hoping that the next iteration will
         // result with a head trace that starts with a segment following our
@@ -391,7 +392,8 @@ bool LINE_PLACER::mergeHead()
 
     head.Remove( 0, -1 );
 
-    wxLogTrace( "PNS", "Placer: merge %d, new direction: %s", n_head, m_direction.Format().c_str() );
+    wxLogTrace( "PNS", "Placer: merge %d, new direction: %s", n_head,
+                m_direction.Format().c_str() );
 
     head.Simplify();
     tail.Simplify();
@@ -408,7 +410,7 @@ VECTOR2I closestProjectedPoint( const SHAPE_LINE_CHAIN& line, const VECTOR2I& p 
 
     for( int i = 0; i < line.SegmentCount(); i++ )
     {
-        const SEG& s = line.CSegment(i);
+        const SEG& s = line.CSegment( i );
         VECTOR2I   a = s.NearestPoint( p );
         int        d_sq = (a - p).SquaredEuclideanNorm();
 
@@ -586,8 +588,8 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     l.Line().Simplify();
 
-    // in certain, uncommon cases there may be loops in the head+tail, In such case, we don't shove to avoid
-    // screwing up the database.
+    // in certain, uncommon cases there may be loops in the head+tail, In such case, we don't
+    // shove to avoid screwing up the database.
     if( l.HasLoops() )
     {
         aNewHead = m_head;
@@ -759,13 +761,12 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             n_iter++;
             go_back = true;
         }
-
     }
 
     if( !fail )
     {
-       if( optimizeTailHeadTransition() )
-          return;
+        if( optimizeTailHeadTransition() )
+            return;
 
         mergeHead();
     }
@@ -864,7 +865,7 @@ bool LINE_PLACER::SetLayer( int aLayer )
         m_tail.Line().Clear();
         m_head.SetLayer( m_currentLayer );
         m_tail.SetLayer( m_currentLayer );
-        Move( m_currentEnd, NULL );
+        Move( m_currentEnd, nullptr );
         return true;
     }
 
@@ -963,7 +964,7 @@ void LINE_PLACER::initPlacement()
                 m_direction.Format().c_str(),
                 m_currentLayer );
 
-    m_lastNode = NULL;
+    m_lastNode = nullptr;
     m_currentNode = m_world;
     m_currentMode = Settings().Mode();
 
@@ -986,7 +987,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     if( m_lastNode )
     {
         delete m_lastNode;
-        m_lastNode = NULL;
+        m_lastNode = nullptr;
     }
 
     bool reachesEnd = route( p );
@@ -1068,8 +1069,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         if( !pl.EndsWithVia() )
             return false;
 
-        m_lastNode->Add( Clone( pl.Via() ) );
-        m_currentNode = NULL;
+        ///< @todo Determine what to do if m_lastNode is a null pointer.  I'm guessing return
+        ///<       false but someone with more knowledge of the code will need to determine that..
+        if( m_lastNode )
+            m_lastNode->Add( Clone( pl.Via() ) );
+
+        m_currentNode = nullptr;
 
         m_idle = true;
         m_placementCorrect = true;
@@ -1150,7 +1155,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
         m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
 
-        m_startItem = NULL;
+        m_startItem = nullptr;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
 
@@ -1195,7 +1200,7 @@ bool LINE_PLACER::UnfixRoute()
 
     m_head.Line().Clear();
     m_tail.Line().Clear();
-    m_startItem = NULL;
+    m_startItem = nullptr;
     m_p_start = st.pts[0].p;
     m_direction = st.pts[0].direction;
     m_placingVia = st.pts[0].placingVias;
@@ -1235,8 +1240,8 @@ bool LINE_PLACER::CommitPlacement()
     if( m_lastNode )
         Router()->CommitRouting( m_lastNode );
 
-    m_lastNode = NULL;
-    m_currentNode = NULL;
+    m_lastNode = nullptr;
+    m_currentNode = nullptr;
     return true;
 }
 
@@ -1438,20 +1443,24 @@ bool LINE_PLACER::AbortPlacement()
     return true;
 }
 
+
 FIXED_TAIL::FIXED_TAIL( int aLineCount )
 {
 
 }
+
 
 FIXED_TAIL::~FIXED_TAIL()
 {
 
 }
 
+
 void FIXED_TAIL::Clear()
 {
     m_stages.clear();
 }
+
 
 void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
                            NODE *aNode )
@@ -1469,6 +1478,7 @@ void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECT
 
     m_stages.push_back( st );
 }
+
 
 bool FIXED_TAIL::PopStage( FIXED_TAIL::STAGE& aStage )
 {
