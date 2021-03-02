@@ -658,7 +658,7 @@ endfunction()
 # Function bitmap_dir
 # converts all the basenames in bmapList found in hardcoded 'sources' dir
 # and and puts them into cpp_${pngHeight} and png_${pngHeight} directories.
-function( bitmap_dir pngWidth pngHeight bmapList )
+function( bitmap_dir pngWidth pngHeight bmapList theme )
 
     set( cppDir "${CMAKE_CURRENT_SOURCE_DIR}/cpp_${pngHeight}" )
     set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png_${pngHeight}" )
@@ -671,12 +671,13 @@ function( bitmap_dir pngWidth pngHeight bmapList )
     #svg2png( inputFile outFile pngWidth pngHeight )
 
     foreach( bmn ${bmapList} )
+        set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/${bmn}.svg" )
         set( pngFile "${pngDir}/${bmn}.png" )
         set( cppFile "${cppDir}/${bmn}.cpp" )
         set( tmpFile "${TMP_DIR}/${bmn}_${pngHeight}.png" )
 
         #svg2png( inputFile outFile pngWidth pngHeight )
-        svg2png( ${CMAKE_CURRENT_SOURCE_DIR}/sources/${bmn}.svg ${tmpFile} ${pngWidth} ${pngHeight} )
+        svg2png( ${svgFile} ${tmpFile} ${pngWidth} ${pngHeight} )
 
         #png2png( inputFile outFile )
         png2png( ${tmpFile} ${pngFile} )
@@ -724,23 +725,28 @@ if( MAINTAIN_PNGS )
         endif( NOT pngcrush_EXECUTABLE )
     endif( NOT pngcrush_FOUND )
 
+    if( NOT KICAD_ICON_THEME )
+        set( KICAD_ICON_THEME "light" CACHE STRING "Name of the theme directory for icon sources" )
+    endif()
+
+    message( STATUS "Creating icons for ${KICAD_ICON_THEME} theme" )
 
     # these 3 cmake commands for each desired bitmap size set, repeat as needed:
-    bitmap_dir( 16 16 "${BMAPS_SMALL}" )
+    bitmap_dir( 16 16 "${BMAPS_SMALL}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 24 24 "${BMAPS_MID}" )
+    bitmap_dir( 24 24 "${BMAPS_MID}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 32 32 "${BMAPS_32}" )
+    bitmap_dir( 32 32 "${BMAPS_32}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 22 22 "${BMAPS_22}" )
+    bitmap_dir( 22 22 "${BMAPS_22}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 24 24 "${BMAPS_24}" )
+    bitmap_dir( 24 24 "${BMAPS_24}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 64 64 "${BMAPS_64}" )
+    bitmap_dir( 64 64 "${BMAPS_64}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 128 128 "${BMAPS_128}" )
+    bitmap_dir( 128 128 "${BMAPS_128}" ${KICAD_ICON_THEME} )
 
-    bitmap_dir( 48 48 "${BMAPS_BIG}" )
+    bitmap_dir( 48 48 "${BMAPS_BIG}" ${KICAD_ICON_THEME} )
 
 endif( MAINTAIN_PNGS )
 
