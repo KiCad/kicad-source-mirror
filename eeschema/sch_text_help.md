@@ -104,9 +104,9 @@
         <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>
     </tr>
     <tr>
-        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>
+        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>
+        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>
     </tr>
     <tr>
         <td><br></td>
