@@ -18,20 +18,21 @@
  */
 
 #include <wx/aui/aui.h>
+#include <wx/aui/framemanager.h>
 #include <wx/bitmap.h>
 #include <wx/dc.h>
 #include <wx/settings.h>
 
 #include <kiplatform/ui.h>
-#include <widgets/aui_art_provider.h>
+#include <widgets/wx_aui_art_providers.h>
 
 /**
  * wxAuiDefaultToolBarArt::DrawButton except with dark-mode awareness based on BITMAP_BUTTON
  * Unfortunately, wx 3.0 does not provide any hooks that would make it possible to do this in a way
  * other than just copy/pasting the upstream implementation and modifying it...
  */
-void AUI_ART_PROVIDER::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
-                                   const wxRect& aRect )
+void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
+                                     const wxRect& aRect )
 {
     bool darkMode   = KIPLATFORM::UI::IsDarkTheme();
     int  textWidth  = 0;
@@ -120,4 +121,21 @@ void AUI_ART_PROVIDER::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTool
     {
         aDc.DrawText( aItem.GetLabel(), textX, textY );
     }
+}
+
+
+WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
+{
+#if defined( _WIN32 )
+    #if wxCHECK_VERSION( 3, 1, 0 )
+    // Use normal control font, wx likes to use "small"
+    m_captionFont = *wxNORMAL_FONT;
+
+    // Increase the box the caption rests in size a bit
+    m_captionSize = wxWindow::FromDIP( 20, NULL );
+#endif
+#endif
+
+    // Turn off the ridiculous looking gradient
+    m_gradientType = wxAUI_GRADIENT_NONE;
 }

@@ -17,25 +17,34 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_AUI_ART_PROVIDER_H
-#define KICAD_AUI_ART_PROVIDER_H
+#ifndef KICAD_WX_AUI_ART_PROVIDERS_H
+#define KICAD_WX_AUI_ART_PROVIDERS_H
 
 #include <wx/aui/auibar.h>
+#include <wx/aui/dockart.h>
 
 /**
  * wxWidgets 3.1 has support for dark mode detection, but 3.0 doesn't.
  * The main purpose of this replacement art provider is to backport that functionality
  * so that it is available in Linux systems that will likely be stuck on 3.0 for a while.
  */
-class AUI_ART_PROVIDER : public wxAuiDefaultToolBarArt
+class WX_AUI_TOOLBAR_ART : public wxAuiDefaultToolBarArt
 {
 public:
-    AUI_ART_PROVIDER() : wxAuiDefaultToolBarArt() {}
+    WX_AUI_TOOLBAR_ART() : wxAuiDefaultToolBarArt() {}
 
-    virtual ~AUI_ART_PROVIDER() = default;
+    virtual ~WX_AUI_TOOLBAR_ART() = default;
 
     void DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                      const wxRect& aRect ) override;
 };
 
-#endif // KICAD_AUI_ART_PROVIDER_H
+
+class WX_AUI_DOCK_ART : public wxAuiDefaultDockArt
+{
+public:
+    WX_AUI_DOCK_ART();
+};
+
+
+#endif // KICAD_WX_AUI_ART_PROVIDERS_H

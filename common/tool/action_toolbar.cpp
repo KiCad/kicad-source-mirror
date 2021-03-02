@@ -35,8 +35,8 @@
 #include <tool/tool_event.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
-#include <widgets/aui_art_provider.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/wx_aui_art_providers.h>
 #include <wx/popupwin.h>
 #include <wx/renderer.h>
 
@@ -175,7 +175,7 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 #ifdef NOTYET
 #if !wxCHECK_VERSION( 3, 1, 0 )
     // Custom art provider makes dark mode work on wx < 3.1
-    AUI_ART_PROVIDER* newArt = new AUI_ART_PROVIDER();
+    WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
     SetArtProvider( newArt );
 #endif
 #endif

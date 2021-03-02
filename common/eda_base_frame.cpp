@@ -48,7 +48,7 @@
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/infobar.h>
-#include <widgets/wx_aui_dock_art.h>
+#include <widgets/wx_aui_art_providers.h>
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>

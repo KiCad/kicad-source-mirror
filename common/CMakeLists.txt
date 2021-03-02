@@ -210,7 +210,6 @@ set( COMMON_DLG_SRCS
 
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
-    widgets/aui_art_provider.cpp
     widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
@@ -242,9 +241,9 @@ set( COMMON_WIDGET_SRCS
     widgets/unit_binder.cpp
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
+    widgets/wx_aui_art_providers.cpp
     widgets/wx_busy_indicator.cpp
     widgets/wx_grid.cpp
-    widgets/wx_aui_dock_art.cpp
     )
 
 set( COMMON_DRAWING_SHEET_SRCS
