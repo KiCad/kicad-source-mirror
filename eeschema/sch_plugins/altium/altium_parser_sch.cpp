@@ -678,6 +678,27 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aPropertie
             -PropertiesReadKiCadUnitFrac( aProperties, "LOCATION.Y" ) );
 }
 
+ASCH_IMPLEMENTATION::ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::IMPLEMENTATION );
+
+    // "OWNERINDEX" points to unknown item. Use ASCH_IMPLEMENTATION_LIST -> OWNERINDEX prior in order to get real ownerindex for this particular implementation
+    //ownerindex =
+    //        ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+  
+    name = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELNAME", "" );
+    type = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELTYPE", "" );
+    libname = ALTIUM_PARSER::PropertiesReadString( aProperties, "MODELDATAFILE0", "" );
+    isCurrent = ALTIUM_PARSER::PropertiesReadBool( aProperties, "ISCURRENT", false );
+}
+    
+ASCH_IMPLEMENTATION_LIST::ASCH_IMPLEMENTATION_LIST( const std::map<wxString, wxString>& aProperties )
+{
+    wxASSERT( PropertiesReadRecord( aProperties ) == ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST );
+
+    ownerindex =
+            ALTIUM_PARSER::PropertiesReadInt( aProperties, "OWNERINDEX", ALTIUM_COMPONENT_NONE );
+}
 
 ASCH_BUS_ENTRY::ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProperties )
 {
