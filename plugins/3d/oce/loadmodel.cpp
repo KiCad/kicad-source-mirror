@@ -32,6 +32,7 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/utils.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
@@ -469,6 +470,7 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
     outFile.SetExt( "STEP" );
 
     wxFileOffset size = ifile.GetLength();
+    wxBusyCursor busycursor;
 
     if( size == wxInvalidOffset )
         return false;
@@ -514,7 +516,8 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         delete[] buffer;
         ofile.Close();
 
-        return success;
+        if( !success )
+            return false;
     }
 
     bool retval = readSTEP( m_doc, outFile.GetFullPath().mb_str() );
