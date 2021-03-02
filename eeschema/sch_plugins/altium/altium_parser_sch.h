@@ -646,25 +646,6 @@ struct ASCH_DESIGNATOR
     explicit ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProperties );
 };
 
-struct ASCH_IMPLEMENTATION
-{
-	// IMPLEMENTATION_LIST -> ownerindex must be read and used for these IMPLEMENTATIONs
-    // int ownerindex;
-
-    wxString name;
-    wxString type;
-    wxString libname;
-
-    bool isCurrent;
-
-    explicit ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aProperties );
-};
-
-struct ASCH_IMPLEMENTATION_LIST
-{
-    int ownerindex;
-    explicit ASCH_IMPLEMENTATION_LIST( const std::map<wxString, wxString>& aProperties );
-};	
 
 struct ASCH_BUS_ENTRY
 {

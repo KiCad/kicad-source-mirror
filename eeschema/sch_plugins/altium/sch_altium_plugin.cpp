@@ -302,9 +302,7 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
 
     m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
 
-    // Track implementation_list ownerindex, because subsequent implementations will depend on it
-    int implementationlistindex = -1;
-    // index is required to resolve OWNERINDEX
+    // index is required required to resolve OWNERINDEX
     for( int index = 0; reader.GetRemainingBytes() > 0; index++ )
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
@@ -411,13 +409,8 @@ void SCH_ALTIUM_PLUGIN::Parse( const CFB::CompoundFileReader& aReader )
         case ALTIUM_SCH_RECORD::WARNING_SIGN:
             break;
         case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
-        {
-            ASCH_IMPLEMENTATION_LIST elem( properties );
-            implementationlistindex = elem.ownerindex;
-        }
             break;
         case ALTIUM_SCH_RECORD::IMPLEMENTATION:
-            ParseImplementation( properties, implementationlistindex );
             break;
         case ALTIUM_SCH_RECORD::RECORD_46:
             break;
@@ -2086,7 +2079,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         const wxPoint position = elem.location + m_sheetOffset;
 
         SCH_FIELD* field = nullptr;
-        if( elem.name == "Comment" )
+        if( elem.name == "Value" )
         {
             field = component->GetField( VALUE_FIELD );
             field->SetPosition( position );
@@ -2115,35 +2108,5 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         default:
             break;
         }
-    }
-}
-void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>& aProperties,
-                                             int                                 ownerindex )
-{
-    ASCH_IMPLEMENTATION elem( aProperties );
-   // wxLogWarning( "Current footprint is: %i, %s, %s, %i, last impl list index was: %i\n",
-   //               elem.ownerindex, TO_UTF8( elem.name ), TO_UTF8( elem.type ), (int) elem.isCurrent,
-   //               ownerindex );
-    // Only get footprint, currently assigned only
-    if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
-    {
-        const auto& symbol = m_symbols.find( ownerindex );
-        if( symbol == m_symbols.end() )
-        {
-            wxLogWarning(
-                    wxString::Format( "Footprint has non-existent ownerindex %d", ownerindex ) );
-            return;
-        }
-        const auto& component = m_components.at( symbol->first );
-        if( elem.libname != "" )
-        {
-//            component->SetFootprint( elem.libname + wxT( ":" ) + elem.name );
-        }
-        else
-        {
- //           component->SetFootprint( elem.name );
-        }
-		
-		component->SetFootprint(elem.name);
     }
 }
