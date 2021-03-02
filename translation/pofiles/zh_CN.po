@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-02-28 14:57+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-03-02 13:02+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4587,7 +4587,7 @@ msgstr "设置语言"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr "顶层铜层"
+msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
@@ -4711,7 +4711,7 @@ msgstr "内层 30"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr "底层铜层"
+msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
@@ -4723,11 +4723,11 @@ msgstr "顶层胶粘层"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "底层锡膏层"
+msgstr "B.Paste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "顶层锡膏层"
+msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
@@ -4739,11 +4739,11 @@ msgstr "顶层丝印层"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
-msgstr "底层阻焊层"
+msgstr "B.Mask"
 
 #: common/layer_id.cpp:73
 msgid "F.Mask"
-msgstr "顶层阻焊层"
+msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
@@ -4763,11 +4763,11 @@ msgstr "用户自定义 2 层"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr "电路板边框轮廓层"
+msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:660
 msgid "Margin"
-msgstr "电路板电气边界层"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -4779,47 +4779,47 @@ msgstr "底层外框层"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
-msgstr "顶层制造层"
+msgstr "F.Fab"
 
 #: common/layer_id.cpp:87
 msgid "B.Fab"
-msgstr "底层制造层"
+msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr "用户 1 层"
+msgstr "User.1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr "用户 2 层"
+msgstr "User.2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr "用户 3 层"
+msgstr "User.3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr "用户 4 层"
+msgstr "User.4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr "用户 5 层"
+msgstr "User.5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr "用户 6 层"
+msgstr "User.6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr "用户 7 层"
+msgstr "User.7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr "用户 8 层"
+msgstr "User.8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr "用户 9 层"
+msgstr "User.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:678
 msgid "Rescue"
