@@ -1982,7 +1982,9 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     SCH_FIELD& filenameField = sheet->second->GetFields()[SHEETFILENAME];
 
     filenameField.SetPosition( elem.location + m_sheetOffset );
-    filenameField.SetText( elem.text ); // TODO: use kicad_sch
+    elem.text.RemoveLast( 6 );
+	elem.text += "kicad_sch";
+    filenameField.SetText( elem.text );
     filenameField.SetVisible( !elem.isHidden );
 
     filenameField.SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
