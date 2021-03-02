@@ -226,7 +226,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 
 	m_connectionLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Pad connections:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_connectionLabel->Wrap( -1 );
-	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
+	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local pad settings") );
 
 	gbSizerSettings->Add( m_connectionLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -282,7 +282,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticTextGridFillType->Wrap( -1 );
 	gbSizer3->Add( m_staticTextGridFillType, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_GridStyleCtrlChoices[] = { _("Solid shape"), _("Hatch pattern") };
+	wxString m_GridStyleCtrlChoices[] = { _("Solid fill"), _("Hatch pattern") };
 	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
 	m_GridStyleCtrl = new wxChoice( sbSizerZoneStyle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
 	m_GridStyleCtrl->SetSelection( 0 );

@@ -620,7 +620,7 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
 
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",
-        _( "Highlight on PCB" ), _( "Highlight corresponding items in board editor" ),
+        _( "Highlight on PCB" ), _( "Highlight corresponding items in PCB editor" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
@@ -643,13 +643,13 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
 //
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.NavigateTool.enterSheet",
         AS_GLOBAL, 0, "",
-        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
+        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the schematic editor" ),
         enter_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.NavigateTool.leaveSheet",
         AS_GLOBAL,
         MD_ALT + WXK_BACK, LEGACY_HK_NAME( "Leave Sheet" ),
-        _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
+        _( "Leave Sheet" ), _( "Display the parent sheet in the schematic editor" ),
         leave_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.NavigateTool.navigateHierarchy",

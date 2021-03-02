@@ -64,7 +64,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerUnits;
 	bSizerUnits = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText32 = new wxStaticText( m_passive, wxID_ANY, _("In Spice values,the decimal separator is the point.\nValues can use Spice unit symbols."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32 = new wxStaticText( m_passive, wxID_ANY, _("In Spice values, the decimal separator is the point.\nValues can use Spice unit symbols."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
 	bSizerUnits->Add( m_staticText32, 0, wxALL, 5 );
 

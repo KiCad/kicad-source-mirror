@@ -2465,7 +2465,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Optional prefix for component side reference designations (i.e. F_)</property>
+                                                            <property name="tooltip">Optional prefix for component side reference designations (e.g. F_)</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2528,7 +2528,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Optional prefix for component side reference designations (i.e. F_)</property>
+                                                            <property name="tooltip">Optional prefix for component side reference designations (e.g. F_)</property>
                                                             <property name="validator_data_type"></property>
                                                             <property name="validator_style">wxFILTER_ALPHA</property>
                                                             <property name="validator_type">wxGenericValidator</property>
@@ -2597,7 +2597,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Optional prefix for solder side reference designations (i.e. B_)</property>
+                                                            <property name="tooltip">Optional prefix for solder side reference designations (e.g. B_)</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2660,7 +2660,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Optional prefix for solder side reference designations (i.e. B_)</property>
+                                                            <property name="tooltip">Optional prefix for solder side reference designations (e.g. B_)</property>
                                                             <property name="validator_data_type"></property>
                                                             <property name="validator_style">wxFILTER_ALPHA|wxFILTER_NONE</property>
                                                             <property name="validator_type">wxGenericValidator</property>

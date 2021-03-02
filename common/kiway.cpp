@@ -234,7 +234,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // Failure: error reporting UI was done via wxLogSysError().
             // No further reporting required here.  Assume the same thing applies here as
             // above with the Load() call.  This has not been tested.
-            msg.Printf( _( "Could not read instance name and version symbol form kiface "
+            msg.Printf( _( "Could not read instance name and version symbol from kiface "
                            "library \"%s\"." ),
                         dname );
             THROW_IO_ERROR( msg );

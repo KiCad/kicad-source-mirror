@@ -81,7 +81,7 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
 	m_ModeColorOption = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
-	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
+	m_ModeColorOption->SetToolTip( _("Export as black elements on a white background") );
 
 	sbOptionsSizer->Add( m_ModeColorOption, 0, wxEXPAND|wxALL, 5 );
 

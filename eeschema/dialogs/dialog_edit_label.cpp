@@ -324,7 +324,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     }
     else if( !m_CurrentText->IsNew() )
     {
-        DisplayError( this, _( "Empty Text!" ) );
+        DisplayError( this, _( "Label requires non-empty text." ) );
         return false;
     }
 

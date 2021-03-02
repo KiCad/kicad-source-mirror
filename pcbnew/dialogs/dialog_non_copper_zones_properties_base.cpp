@@ -114,7 +114,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	m_staticTextGridFillType->Wrap( -1 );
 	fgSizer1->Add( m_staticTextGridFillType, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_GridStyleCtrlChoices[] = { _("Solid shape"), _("HatchBorder pattern") };
+	wxString m_GridStyleCtrlChoices[] = { _("Solid fill"), _("HatchBorder pattern") };
 	int m_GridStyleCtrlNChoices = sizeof( m_GridStyleCtrlChoices ) / sizeof( wxString );
 	m_GridStyleCtrl = new wxChoice( sbFill->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_GridStyleCtrlNChoices, m_GridStyleCtrlChoices, 0 );
 	m_GridStyleCtrl->SetSelection( 0 );

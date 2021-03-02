@@ -285,7 +285,7 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
     Pgm().ReadPdfBrowserInfos();
     wxFileName fn = Pgm().GetPdfBrowserName();
 
-    wxFileDialog dlg( this, _( "Select Preferred PDF Browser" ), fn.GetPath(), fn.GetFullPath(),
+    wxFileDialog dlg( this, _( "Select Preferred PDF Viewer" ), fn.GetPath(), fn.GetFullPath(),
                       wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

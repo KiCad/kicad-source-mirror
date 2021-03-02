@@ -245,23 +245,23 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 
 	m_FrontPrefixText = new wxStaticText( m_Advanced, wxID_ANY, _("Front prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FrontPrefixText->Wrap( -1 );
-	m_FrontPrefixText->SetToolTip( _("Optional prefix for component side reference designations (i.e. F_)") );
+	m_FrontPrefixText->SetToolTip( _("Optional prefix for component side reference designations (e.g. F_)") );
 
 	gbSizer1->Add( m_FrontPrefixText, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_FrontPrefix = new wxTextCtrl( m_Advanced, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FrontPrefix->SetToolTip( _("Optional prefix for component side reference designations (i.e. F_)") );
+	m_FrontPrefix->SetToolTip( _("Optional prefix for component side reference designations (e.g. F_)") );
 
 	gbSizer1->Add( m_FrontPrefix, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_BackPrefixText = new wxStaticText( m_Advanced, wxID_ANY, _("Back prefix:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BackPrefixText->Wrap( -1 );
-	m_BackPrefixText->SetToolTip( _("Optional prefix for solder side reference designations (i.e. B_)") );
+	m_BackPrefixText->SetToolTip( _("Optional prefix for solder side reference designations (e.g. B_)") );
 
 	gbSizer1->Add( m_BackPrefixText, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_BackPrefix = new wxTextCtrl( m_Advanced, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_BackPrefix->SetToolTip( _("Optional prefix for solder side reference designations (i.e. B_)") );
+	m_BackPrefix->SetToolTip( _("Optional prefix for solder side reference designations (e.g. B_)") );
 
 	gbSizer1->Add( m_BackPrefix, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
