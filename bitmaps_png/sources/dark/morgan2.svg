@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="morgan2.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="8.7987038"
+     inkscape:cy="10.865477"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25759">
+    <style
+       id="style25757">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
+  </defs>
+  <title
+     id="title25761">morgan2</title>
+  <path
+     class="cls-1"
+     d="m 5.5,18.5 h 8.3546 c 0,0 3.8724,-1.407 4.6809,-7 -0.8085,-5.593 -4.723339,-7 -4.723339,-7 H 5.4575613 c 2.3469528,1.3274619 4.1537421,4.3038107 4.1838387,7 -0.030097,2.696189 -1.7944472,5.672538 -4.1414,7 z"
+     id="path25763"
+     sodipodi:nodetypes="ccccccc" />
+  <line
+     class="cls-1"
+     x1="18.5355"
+     y1="11.5"
+     x2="21.5"
+     y2="11.5"
+     id="line25765" />
+  <ellipse
+     class="cls-1"
+     cx="7.0984001"
+     cy="8.5497999"
+     rx="1.6339"
+     ry="1.7612"
+     id="ellipse25767" />
+  <line
+     class="cls-1"
+     x1="5.4645"
+     y1="8.5497999"
+     x2="2.5"
+     y2="8.5497999"
+     id="line25769" />
+  <path
+     class="cls-1"
+     d="m 8.7323,14.4869 c 0.033835,0.937042 -0.6969556,1.72477 -1.6339,1.7612 -2.1786183,-0.163458 -2.1786183,-3.358842 0,-3.5223 0.9369039,0.03643 1.6676788,0.824097 1.6339,1.7611 z"
+     id="path25771"
+     sodipodi:nodetypes="cccc" />
+  <line
+     class="cls-1"
+     x1="5.4645"
+     y1="14.4869"
+     x2="2.5"
+     y2="14.4869"
+     id="line25773" />
+</svg>

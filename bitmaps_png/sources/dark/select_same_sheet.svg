@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="select_same_sheet.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="15.995752"
+     inkscape:cx="10.229962"
+     inkscape:cy="12.305898"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs159699">
+    <style
+       id="style159697">.cls-1,.cls-2,.cls-4{fill:none;stroke-linejoin:round;}.cls-1,.cls-2{stroke:#8f8f8f;stroke-linecap:round;}.cls-2{stroke-dasharray:5 5;}.cls-3{fill:#F4EFF3;}.cls-4{stroke:#F4EFF3;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f29100;}.cls-7{fill:#8f8f8f;}</style>
+  </defs>
+  <title
+     id="title159701">select_same_sheet</title>
+  <polyline
+     class="cls-1"
+     points="23.5 20.5 23.5 23.5 20.5 23.5"
+     id="polyline159703"
+     transform="translate(-2,-2)"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <line
+     class="cls-2"
+     x1="14.5"
+     y1="21.5"
+     x2="7"
+     y2="21.5"
+     id="line159705"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <polyline
+     class="cls-1"
+     points="5.5 23.5 2.5 23.5 2.5 20.5"
+     id="polyline159707"
+     transform="translate(0,-2)"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <line
+     class="cls-2"
+     x1="2.5"
+     y1="14.5"
+     x2="2.5"
+     y2="7"
+     id="line159709"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <polyline
+     class="cls-1"
+     points="2.5 5.5 2.5 2.5 5.5 2.5"
+     id="polyline159711"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <line
+     class="cls-2"
+     x1="9.5"
+     y1="2.5"
+     x2="17"
+     y2="2.5"
+     id="line159713"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <polyline
+     class="cls-1"
+     points="20.5 2.5 23.5 2.5 23.5 5.5"
+     id="polyline159715"
+     transform="translate(-2)"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <line
+     class="cls-2"
+     x1="21.5"
+     y1="9.5"
+     x2="21.5"
+     y2="17"
+     id="line159717"
+     style="stroke:#8f8f8f;stroke-opacity:1" />
+  <rect
+     class="cls-3"
+     x="1"
+     y="20"
+     width="3"
+     height="3"
+     id="rect159719"
+     style="stroke-width:0.999998;stroke:none" />
+  <rect
+     class="cls-3"
+     x="1"
+     y="1"
+     width="3"
+     height="3"
+     id="rect159721"
+     style="stroke-width:0.999998" />
+  <rect
+     class="cls-3"
+     x="20"
+     y="20"
+     width="3"
+     height="3"
+     id="rect159723"
+     style="stroke-width:0.999998;stroke:none" />
+  <rect
+     class="cls-3"
+     x="20"
+     y="1"
+     width="3"
+     height="3"
+     id="rect159725"
+     style="stroke-width:0.999998" />
+  <line
+     class="cls-4"
+     x1="12"
+     y1="18.0334"
+     x2="12"
+     y2="20.138"
+     id="line159727" />
+  <rect
+     class="cls-5"
+     x="15"
+     y="13.9666"
+     width="3.9999995"
+     height="6.0333991"
+     id="rect159729"
+     style="stroke-width:0.999997" />
+  <path
+     class="cls-6"
+     d="M 13.97,16.5382 A 1.9716,1.9716 0 1 1 12.0708,14.497 1.9716,1.9716 0 0 1 13.97,16.5382 Z"
+     id="path159731" />
+  <path
+     class="cls-7"
+     d="m 12.8757,16.4988 a 0.8763,0.8763 0 1 1 -0.8441,-0.9072 0.8761,0.8761 0 0 1 0.8441,0.9072 z"
+     id="path159733" />
+  <rect
+     class="cls-5"
+     x="15"
+     y="4"
+     width="3.9999995"
+     height="5.9999995"
+     id="rect159735"
+     style="stroke-width:0.999998" />
+  <line
+     class="cls-4"
+     x1="6.4678998"
+     y1="9.5179005"
+     x2="6.4678998"
+     y2="14.0229"
+     id="line159737" />
+  <rect
+     class="cls-5"
+     x="5"
+     y="13.9666"
+     width="4"
+     height="6.0333991"
+     id="rect159739"
+     style="stroke-width:0.999997" />
+  <polyline
+     class="cls-4"
+     points="9.685 7.35 12.36 7.35 14.067 9.057 14.067 11.594 15.413 12.941 18.308 12.941 18.308 14.988"
+     id="polyline159743"
+     transform="translate(-1,-1)" />
+  <rect
+     class="cls-5"
+     x="5"
+     y="4"
+     width="4"
+     height="5.9999995"
+     id="rect159741"
+     style="stroke-width:1" />
+</svg>

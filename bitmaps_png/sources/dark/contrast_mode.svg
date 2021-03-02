@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="contrast_mode.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:export-filename="/home/seth/code/kicad/kicad_bitmaps/bitmaps_png/sources/contrast_mode.png"
+   inkscape:export-xdpi="1890.4615"
+   inkscape:export-ydpi="1890.4615">
+  <metadata
+     id="metadata3145">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>contrast_mode</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="995"
+     id="namedview3143"
+     showgrid="true"
+     inkscape:zoom="24.408623"
+     inkscape:cx="11.458471"
+     inkscape:cy="13.139804"
+     inkscape:window-x="1280"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3708"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#c1c1ff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <defs
+     id="defs3124">
+    <linearGradient
+       id="linearGradient6193"
+       x1="18"
+       y1="21.4931"
+       x2="5.1177"
+       y2="21.4931"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop6189" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop6191"
+         style="stop-color:#F4EFF3;stop-opacity:1" />
+    </linearGradient>
+    <style
+       id="style3116">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2,.cls-3{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#42B8EB;}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#DC7A8C;}.cls-5{stroke:#F4EFF3;}</style>
+    <linearGradient
+       id="Безымянный_градиент_19"
+       x1="18"
+       y1="21.4931"
+       x2="5.1177"
+       y2="21.4931"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop3118"
+         style="stop-color:#c6c6c5;stop-opacity:1" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop3120"
+         style="stop-color:#F4EFF3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="Безымянный_градиент_19-2"
+       x1="23"
+       y1="9"
+       x2="17"
+       y2="9"
+       xlink:href="#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19" />
+  </defs>
+  <title
+     id="title3126">contrast_mode</title>
+  <path
+     id="polyline3128"
+     style="fill:none;stroke:#848484;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 16.5,22.5 14,17.491366 H 5.118"
+     sodipodi:nodetypes="ccc" />
+  <path
+     id="polyline3130"
+     style="fill:none;stroke:#DC7A8C;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 11.092,12.505366 H 17 l 5,9"
+     sodipodi:nodetypes="ccc" />
+  <polyline
+     class="cls-2"
+     points="3 3 7 14 12.092 14"
+     id="polyline3132"
+     transform="translate(-1,-1.4946319)"
+     style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke:#DC7A8C;stroke-opacity:1" />
+  <line
+     class="cls-3"
+     x1="15.160109"
+     y1="7.5238228"
+     x2="22.5"
+     y2="7.5238228"
+     id="line3134"
+     style="stroke:#848484;stroke-width:3.09707;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <path
+     class="cls-4"
+     d="m 15.047108,8.4818142 -5,-0.0049 C 9.6167807,8.4771034 9.2347098,8.2016514 9.0989078,7.7933142 l -2,-5.9951 c -0.4710159,-1.28838267 1.4993519,-1.94586453 1.8964,-0.6328 l 1.7725002,5.3115 6.476528,0.025711 C 17.797031,6.5048193 16.5,6.9764461 16,7.4764461 15.792741,7.8304469 15.314225,8.1704919 15.047108,8.4818142 Z"
+     id="path3136"
+     style="stroke:#42B8EB;stroke-opacity:1;fill:#42B8EB;fill-opacity:1"
+     sodipodi:nodetypes="ccccccscc" />
+  <path
+     class="cls-4"
+     d="m 4.490928,18.517313 -4.52339084,-0.01728 c -1.33332286,-0.0051 -1.28238706,-1.953388 0.05088291,-1.96632 l 7.06634683,-0.06854 c 0.5526746,-0.0054 -2.041143,2.054254 -2.5938389,2.052142 z"
+     id="path3138"
+     sodipodi:nodetypes="sssss"
+     style="fill:#42B8EB;fill-opacity:1;stroke:#42B8EB;stroke-linecap:square;stroke-opacity:1" />
+  <line
+     class="cls-3"
+     x1="0.5"
+     y1="23.5"
+     x2="23.5"
+     y2="0.5"
+     id="line158655"
+     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+</svg>

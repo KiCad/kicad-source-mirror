@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="general_deletions.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1850" inkscape:window-height="1211" id="namedview157361" showgrid="true" inkscape:zoom="30.291667" inkscape:cx="11.705353" inkscape:cy="13.615998" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid240608" spacingx="0.5" spacingy="0.5" color="#b0b0ff" opacity="0.1254902" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs157330">
+      <style id="style157321">.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{fill:none;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;}.cls-1,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{stroke-linecap:round;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-8{stroke-width:2px;}.cls-2{stroke:url(#Безымянный_градиент_4);}.cls-3{stroke:url(#Безымянный_градиент_19);}.cls-4{stroke:url(#Безымянный_градиент_19-2);}.cls-5,.cls-6{stroke:#8f8f8f;}.cls-6{stroke-dasharray:5.6216 5.6216;}.cls-7{fill:#DC7A8C;}.cls-8{stroke:#545454;}.cls-9{fill:#f29100;}</style>
+      <linearGradient id="Безымянный_градиент_4" x1="13.2608" y1="5.7452" x2="5.9197" y2="5.7452" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop157323" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop157325" />
+      </linearGradient>
+      <linearGradient id="Безымянный_градиент_19" x1="-19.0468" y1="5.3787" x2="-19.0468" y2="-2.0451" gradientTransform="rotate(-90,1.4429,-1.5977)" xlink:href="#Безымянный_градиент_4" />
+      <linearGradient id="Безымянный_градиент_19-2" x1="-20.0376" y1="9.2308" x2="-20.0376" y2="2.7883" gradientTransform="rotate(-90,1.4429,-1.5977)" xlink:href="#Безымянный_градиент_4" />
+      <linearGradient inkscape:collect="always" xlink:href="#Безымянный_градиент_4" id="linearGradient240606" gradientUnits="userSpaceOnUse" x1="13.2608" y1="5.7452" x2="5.9197" y2="5.7452" />
+   </defs>
+   <title id="title157332">general_deletions</title>
+   <polyline class="cls-1" points="1.978 8.328 4.031 10.381 7.058 10.381" id="polyline157334" transform="translate(-1,-1)" />
+   <polyline class="cls-2" points="5.92 4 8.77 4 12.554 7.783" id="polyline157336" style="stroke:url(#linearGradient240606)" transform="translate(-1,-1)" />
+   <polyline class="cls-3" points="1.995 24.014 1.995 18.979 7.419 13.77" id="polyline157338" style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19)" transform="translate(-1,-1)" />
+   <polyline class="cls-4" points="6.829 24.014 6.829 19.979 11.271 15.751" id="polyline157340" style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" transform="translate(-1,-1)" />
+   <line class="cls-1" x1="23.0131" y1="22.988001" x2="16.545799" y2="16.3736" id="line157342" />
+   <line class="cls-5" x1="12" y1="23.432501" x2="12" y2="20.432501" id="line157344" />
+   <line class="cls-6" x1="12" y1="14.8108" x2="12" y2="6.3783998" id="line157346" />
+   <line class="cls-5" x1="12" y1="3.5675001" x2="12" y2="0.5675" id="line157348" />
+   <path class="cls-7" d="m 16.952,16.9519 a 7.0032,7.0032 0 1 1 0,-9.9038 7.0033,7.0033 0 0 1 0,9.9038 z" id="path157350" />
+   <line class="cls-8" x1="14.4715" y1="9.5198002" x2="9.5194998" y2="14.4716" id="line157352" />
+   <line class="cls-8" x1="14.4715" y1="14.4716" x2="9.5194998" y2="9.5198002" id="line157354" />
+   <path class="cls-9" d="M 3,0 A 3,3 0 1 0 6,3 3.0034,3.0034 0 0 0 3,0 Z M 3,5.75 A 2.75,2.75 0 1 1 5.75,3 2.7529,2.7529 0 0 1 3,5.75 Z" id="path157356" />
+   <path class="cls-9" d="M 3,0.6811 A 2.3189,2.3189 0 1 0 5.3189,3 2.3215,2.3215 0 0 0 3,0.6811 Z M 3,4.319 A 1.319,1.319 0 1 1 4.319,3 1.3206,1.3206 0 0 1 3,4.319 Z" id="path157358" />
+</svg>

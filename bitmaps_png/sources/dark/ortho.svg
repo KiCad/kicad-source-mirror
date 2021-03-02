@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="ortho.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs158663">
+    <style
+       id="style158661">.cls-1{fill:#cecece;}.cls-2{fill:#a8a8a8;}.cls-3{fill:#8f8f8f;}.cls-4,.cls-5,.cls-6,.cls-7,.cls-8{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-5,.cls-6,.cls-7{stroke:#8e8e8e;}.cls-5{stroke-dasharray:3.0817 3.0817;}.cls-6{stroke-dasharray:2.8302 2.8302;}.cls-7{stroke-dasharray:2.8252 2.8252;}.cls-8{stroke:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title158665">ortho</title>
+  <polygon
+     class="cls-1"
+     points="13.001,13.745 12.999,13.745 2.499,7.637 2.499,7.608 12.999,1.5 13.001,1.5 23.501,7.608 23.501,7.637 "
+     id="polygon158667"
+     transform="translate(-1,-1)" />
+  <polyline
+     class="cls-2"
+     points="12.999 24.5 2.499 18.392 2.499 7.642 12.992 13.745"
+     id="polyline158669"
+     transform="translate(-1,-1)" />
+  <polyline
+     class="cls-3"
+     points="12.992 13.745 23.501 7.642 23.501 18.392 13.001 24.5 12.999 24.5"
+     id="polyline158671"
+     transform="translate(-1,-1)" />
+  <line
+     class="cls-4"
+     x1="12.0013"
+     y1="0.5"
+     x2="12.0002"
+     y2="2"
+     id="line158673" />
+  <line
+     class="cls-5"
+     x1="11.9978"
+     y1="5.0816998"
+     x2="11.9941"
+     y2="9.7042999"
+     id="line158675" />
+  <polyline
+     class="cls-4"
+     points="12.993 12.245 12.992 13.745 14.364 14.352"
+     id="polyline158677"
+     transform="translate(-1,-1)" />
+  <line
+     class="cls-6"
+     x1="15.952101"
+     y1="14.4963"
+     x2="19.834801"
+     y2="16.212999"
+     id="line158679" />
+  <line
+     class="cls-4"
+     x1="21.129"
+     y1="16.7852"
+     x2="22.5009"
+     y2="17.3918"
+     id="line158681" />
+  <line
+     class="cls-4"
+     x1="1.4991"
+     y1="17.3918"
+     x2="2.8706"
+     y2="16.784401"
+     id="line158683" />
+  <line
+     class="cls-7"
+     x1="5.4538999"
+     y1="15.640499"
+     x2="9.3285999"
+     y2="13.9246"
+     id="line158685" />
+  <line
+     class="cls-4"
+     x1="10.6202"
+     y1="13.3526"
+     x2="11.9918"
+     y2="12.7452"
+     id="line158687" />
+  <polygon
+     class="cls-8"
+     points="13.001,13.745 12.999,13.745 2.499,7.637 2.499,7.608 12.999,1.5 13.001,1.5 23.501,7.608 23.501,7.637 "
+     id="polygon158689"
+     transform="translate(-1,-1)" />
+  <polygon
+     class="cls-8"
+     points="23.501,18.392 13.001,24.5 12.999,24.5 2.499,18.392 2.499,7.642 12.992,13.745 23.501,7.642 "
+     id="polygon158691"
+     transform="translate(-1,-1)" />
+  <line
+     class="cls-8"
+     x1="11.9986"
+     y1="12.7452"
+     x2="11.9986"
+     y2="23.5"
+     id="line158693" />
+</svg>

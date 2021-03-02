@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="router_len_tuner_amplitude_incr.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs27035">
+    <style
+       id="style27033">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;stroke-width:2px;}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title27037">router_len_tuner_amplitude_incr</title>
+  <path
+     class="cls-1"
+     d="M 23.0459,18.3305 V 9.489 A 2.386,2.386 0 0 0 20.7817,6.9977 v 0 A 2.3511,2.3511 0 0 0 18.5175,9.4562 V 20.439 a 2.3857,2.3857 0 0 1 -2.2643,2.491 v 0 A 2.3858,2.3858 0 0 1 13.989,20.439 V 3.5059 A 2.3859,2.3859 0 0 0 11.7248,1.0146 v 0 A 2.3858,2.3858 0 0 0 9.4607,3.5059 v 16.966 a 2.386,2.386 0 0 1 -2.2642,2.4913 v 0 A 2.386,2.386 0 0 1 4.9322,20.4719 v -5.3085 a 1.3179,1.3179 0 0 0 -1.318,-1.3179"
+     id="path27039" />
+  <line
+     class="cls-2"
+     x1="4.4159999"
+     y1="23.5"
+     x2="0.5"
+     y2="23.5"
+     id="line27041" />
+  <line
+     class="cls-2"
+     x1="8.9209995"
+     y1="0.5"
+     x2="0.50409997"
+     y2="0.5"
+     id="line27043" />
+  <line
+     class="cls-2"
+     x1="1.5058999"
+     y1="22.972"
+     x2="1.5058999"
+     y2="5.4267998"
+     id="line27045" />
+  <polygon
+     class="cls-3"
+     points="2.506,1.997 1.053,7.417 3.959,7.417 "
+     id="polygon27047"
+     transform="translate(-1,-1)" />
+</svg>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="create_cmp_file.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="14.221136" inkscape:cy="14.20643" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs785">
+      <style id="style783">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#DC7A8C;}.cls-2,.cls-3,.cls-4{stroke-width:0.9549px;}.cls-3{stroke:#42B8EB;}.cls-4{stroke:#0f71a8;}.cls-5{fill:#42B8EB;}.cls-6{fill:#DC7A8C;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+   </defs>
+   <title id="title787">create_cmp_file</title>
+   <rect class="cls-1" x="0" y="0" width="20.9958" height="20.9958" rx="3.4993" id="rect789" />
+   <polyline class="cls-2" points="12.524 3.317 10.873 4.968 11.81 7.587 7.27 4.917" id="polyline791" transform="translate(-1,-1)" />
+   <line class="cls-2" x1="8.9284" y1="8.4679003" x2="6.2586999" y2="3.9287" id="line793" />
+   <line class="cls-2" x1="8.9166002" y1="8.4797001" x2="4.3773999" y2="5.8099999" id="line795" />
+   <line class="cls-2" x1="7.0354004" y1="10.3609" x2="4.3656998" y2="5.8217001" id="line797" />
+   <line class="cls-2" x1="7.0236998" y1="10.3726" x2="2.4844" y2="7.7028999" id="line799" />
+   <polyline class="cls-2" points="3.473 8.715 4.651 11.19 2.986 12.855" id="polyline801" transform="translate(-1,-1)" />
+   <path class="cls-3" d="m 17.257,7.5741 a 1.2747,1.2747 0 1 1 0,-1.8027 1.2747,1.2747 0 0 1 0,1.8027 z" id="path803" />
+   <circle class="cls-3" cx="7.3188" cy="15.7097" r="1.2747" id="circle805" />
+   <line class="cls-4" x1="15.9958" y1="7.0207996" x2="14.5061" y2="8.5106001" id="line807" />
+   <line class="cls-4" x1="7.6295996" y1="15.386999" x2="9.1194" y2="13.8972" id="line809" />
+   <rect class="cls-5" x="14.271912" y="-4.5898185" width="4.0065999" height="8.4250002" transform="rotate(45.001)" id="rect811" />
+   <circle class="cls-6" cx="17" cy="17" r="7" id="circle813" />
+   <line class="cls-7" x1="17.103701" y1="13.6313" x2="17.103701" y2="20.6313" id="line815" />
+   <polyline class="cls-7" points="15.351 17.164 18.104 14.412 20.856 17.164" id="polyline817" transform="translate(-1,-1)" />
+</svg>

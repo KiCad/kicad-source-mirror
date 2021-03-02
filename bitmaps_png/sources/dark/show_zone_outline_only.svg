@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="show_zone_outline_only.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview42"
+     showgrid="true"
+     inkscape:zoom="19.385992"
+     inkscape:cx="9.9710284"
+     inkscape:cy="11.030906"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid240579"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#b8b8ff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs11">
+    <style
+       id="style3">.cls-1{fill:none;stroke:#42B8EB;stroke-miterlimit:10;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#F4EFF3;}.cls-7{fill:#DC7A8C;}.cls-8{fill:#545454;}</style>
+    <linearGradient
+       id="Безымянный_градиент_19"
+       x1="8.3372"
+       y1="15.5299"
+       x2="8.3372"
+       y2="12.9228"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop7" />
+    </linearGradient>
+    <linearGradient
+       id="Безымянный_градиент_19-2"
+       x1="9.5617"
+       y1="15.5299"
+       x2="9.5617"
+       y2="12.9228"
+       xlink:href="#Безымянный_градиент_19" />
+  </defs>
+  <title
+     id="title13">show_zone_disable копия</title>
+  <circle
+     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="path867"
+     cx="17"
+     cy="11"
+     r="2"
+     sodipodi:insensitive="true" />
+  <rect
+     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="rect869"
+     width="5"
+     height="2"
+     x="17"
+     y="10"
+     sodipodi:insensitive="true" />
+  <path
+     id="polygon838"
+     style="display:inline;fill:none;stroke:#42B8EB;stroke-opacity:1"
+     d="M 8.5 2.5 L 8.5 12.5 L 2.5 12.5 L 2.5 21.5 L 21.5 21.5 L 21.5 14.5 L 19.828125 14.5 A 4.5 4.5 0 0 1 17 15.5 A 4.5 4.5 0 0 1 12.5 11 A 4.5 4.5 0 0 1 17 6.5 A 4.5 4.5 0 0 1 19.828125 7.5 L 21.5 7.5 L 21.5 2.5 L 8.5 2.5 z " />
+</svg>

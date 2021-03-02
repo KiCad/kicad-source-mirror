@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="convert2.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="S:\repos\kicad\bitmaps_png\sources\convert2\convert.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="1173"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="9.8280561"
+     inkscape:cx="25.612657"
+     inkscape:cy="6.0670136"
+     inkscape:window-x="1591"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>convert</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs723">
+    <style
+       id="style721">.cls-1,.cls-4{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke-width:2px;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-5{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title725">convert</title>
+  <line
+     class="cls-1"
+     x1="3.0008001"
+     y1="6.0114999"
+     x2="21.001301"
+     y2="3.0021"
+     id="line727" />
+  <path
+     class="cls-3"
+     d="m 6.0008,6.0115 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path733" />
+  <path
+     class="cls-3"
+     d="m 24.0013,3.0021 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path735" />
+  <path
+     class="cls-3"
+     d="m 15,4.4971 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path737" />
+  <g
+     id="g871"
+     transform="translate(0,1)">
+    <path
+       style="fill:none;stroke:#111111;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 15.000001,9.5 H 10 l 2.500001,3 z"
+       id="path36"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#DC7A8C;fill-opacity:1;stroke:#DC7A8C;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 15,9.5 H 9.999999 L 12.5,12.5 Z"
+       id="path36-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+  </g>
+  <path
+     style="fill:#8f8f8f;fill-opacity:1;stroke:#42B8EB;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 3.5000004,18.463 12.5,23 l 9,-7.5 z"
+     id="path852"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccc" />
+</svg>

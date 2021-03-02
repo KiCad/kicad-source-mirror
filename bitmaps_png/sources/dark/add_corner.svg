@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="add_corner.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1801" inkscape:window-height="1261" id="namedview27970" showgrid="false" inkscape:zoom="30.291667" inkscape:cx="7.2883895" inkscape:cy="14.996103" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" />
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs27951">
+      <style id="style27944">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#42B8EB;}.cls-4{fill:#DC7A8C;}</style>
+      <linearGradient id="Безымянный_градиент_19" x1="16" y1="3" x2="16" y2="23.2387" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop27946" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop27948" />
+      </linearGradient>
+   </defs>
+   <title id="title27953">add_corner</title>
+   <line class="cls-1" x1="15" y1="3" x2="15" y2="21.238701" id="line27955" style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19)" />
+   <polygon class="cls-2" points="4,22.004 4,4.008 16.504,4.008 22.504,12.959 16.504,22.004 " id="polygon27957" transform="translate(-1,-1)" />
+   <path class="cls-3" d="M 6,3 A 3,3 0 1 1 3,0 3,3 0 0 1 6,3 Z" id="path27959" />
+   <path class="cls-3" d="M 6,21 A 3,3 0 1 1 3,18 3,3 0 0 1 6,21 Z" id="path27961" />
+   <path class="cls-3" d="M 18,3 A 3,3 0 1 1 15,0 3,3 0 0 1 18,3 Z" id="path27963" />
+   <path class="cls-4" d="m 24,12 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z" id="path27965" />
+   <path class="cls-3" d="m 18,21 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z" id="path27967" />
+</svg>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="language.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1041"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="30.702139"
+     inkscape:cx="10.844303"
+     inkscape:cy="11.415751"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25507">
+    <style
+       id="style25505">.cls-1{fill:#d8d8d8;}.cls-2,.cls-3{fill:none;stroke:#F4EFF3;}.cls-2{stroke-miterlimit:10;stroke-width:1.5px;}.cls-3{stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#8f8f8f;}.cls-5{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title25509">language</title>
+  <g
+     id="g846"
+     transform="matrix(1.1556846,0,0,1.1556846,-1.8393041,-2.3175082)"
+     style="stroke-width:0.865288">
+    <line
+       class="cls-2"
+       x1="2.4524"
+       y1="4.4120002"
+       x2="11.8143"
+       y2="4.4120002"
+       id="line25513" />
+    <line
+       class="cls-2"
+       x1="7.1447001"
+       y1="4.3439999"
+       x2="7.1447001"
+       y2="2.8706"
+       id="line25515" />
+    <path
+       class="cls-2"
+       d="M 9.689,4.4649 A 16.8986,16.8986 0 0 1 7.339,7.822 14.4193,14.4193 0 0 1 4.12,10.27"
+       id="path25517" />
+    <path
+       class="cls-2"
+       d="M 5.3838,5.9149 A 13.0661,13.0661 0 0 0 6.8633,7.822 14.4175,14.4175 0 0 0 10.0821,10.27"
+       id="path25519" />
+  </g>
+  <path
+     class="cls-3"
+     d="m 6.5,11.99998 v 3.393271 c 0,1.7158 1.391465,3.106729 3.107924,3.106729 h 3.392077"
+     id="path25521"
+     style="stroke-width:1"
+     sodipodi:nodetypes="cssc" />
+  <polyline
+     class="cls-3"
+     points="21.55 6.357 22.803 7.61 24.055 6.357"
+     id="polyline25523"
+     transform="matrix(-1.5090551,0,0,-1.5090551,40.91132,22.983889)"
+     style="stroke-width:0.662666" />
+  <polyline
+     class="cls-3"
+     points="19.305 2.041 18.053 3.293 19.305 4.546"
+     id="polyline25525"
+     transform="matrix(-1.5090551,0,0,-1.5090551,40.632308,23.469298)"
+     style="stroke-width:0.662666" />
+  <path
+     class="cls-5"
+     d="m 20.572224,20.66509 h -3.964172 l -0.806383,2.334911 H 14.0909 l 3.72114,-10 h 1.598749 l 3.68011,10 H 21.372614 Z M 17.09503,19.271047 h 2.997122 L 18.625328,14.99938 h -0.04164 z"
+     id="path25529"
+     style="stroke-width:1" />
+</svg>

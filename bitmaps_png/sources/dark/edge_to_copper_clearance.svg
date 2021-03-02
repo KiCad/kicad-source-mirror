@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="edge_to_copper_clearance.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1614"
+     inkscape:window-height="951"
+     id="namedview116754"
+     showgrid="true"
+     inkscape:zoom="42.434575"
+     inkscape:cx="12.450548"
+     inkscape:cy="10.249909"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid240655"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9e9eff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs116739">
+    <style
+       id="style116732">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#F4EFF3;}.cls-4{stroke:#42B8EB;}</style>
+    <linearGradient
+       id="Безымянный_градиент_19"
+       x1="1"
+       y1="13"
+       x2="25"
+       y2="13"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop116734" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop116736" />
+    </linearGradient>
+  </defs>
+  <title
+     id="title116741">edge_to_copper_clearance</title>
+  <polyline
+     class="cls-1"
+     points="2 24 24 24 24 2 2 2"
+     id="polyline116743"
+     style="stroke:#F4EFF3;stroke-opacity:1"
+     transform="translate(-1,-1)" />
+  <line
+     class="cls-2"
+     x1="18.8785"
+     y1="8.5043001"
+     x2="10.1181"
+     y2="8.5043001"
+     id="line116745" />
+  <path
+     id="polygon116747"
+     style="fill:#F4EFF3;stroke:none;stroke-width:0.801924"
+     transform="matrix(1.0542963,0,0,1.4749263,-2.2266738,-5.5176991)"
+     d="M 18.2365,11.538 V 7.47 l 4.7425,2.034 z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="polygon116749"
+     style="fill:#F4EFF3;stroke:none;stroke-width:0.80203"
+     transform="matrix(1.0540184,0,0,1.4749262,-1.4500659,-5.5176988)"
+     d="M 12.76075,11.538 V 7.47 L 8.017,9.504 Z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
+  <polyline
+     class="cls-4"
+     points="7 6 7 16 2 20"
+     id="polyline116751"
+     transform="translate(-1,-1)" />
+</svg>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 48 48" version="1.1" sodipodi:docname="icon_3d.svg" width="48" height="48" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1695" inkscape:window-height="1307" id="namedview46" showgrid="true" inkscape:zoom="13.980769" inkscape:cx="21.020466" inkscape:cy="28.977039" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid897" spacingx="0.5" spacingy="0.5" color="#8888ff" opacity="0.1254902" empspacing="2" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs5">
+      <style id="style3">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-3,.cls-5{stroke-width:0.75px;}.cls-2{stroke:#F4EFF3;}.cls-3{stroke:#42B8EB;}.cls-4{fill:#42B8EB;}.cls-5{stroke:#DC7A8C;}.cls-6{fill:#DC7A8C;}.cls-7{fill:#111111;}.cls-8{fill:#F4EFF3;}</style>
+   </defs>
+   <title id="title7">icon_3d</title>
+   <line class="cls-1" x1="18" y1="33.852211" x2="18" y2="47" id="line9-3" style="fill:none;stroke:#8f8f8f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+   <line class="cls-1" x1="30" y1="34" x2="30" y2="47.147789" id="line11-6" style="fill:none;stroke:#8f8f8f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+   <rect class="cls-2" x="10.0274" y="3.9363773" width="28.160999" height="20.232588" id="rect13-7" style="fill:#E0E0E0;stroke:none;stroke-width:0.999999" />
+   <polygon class="cls-3" points="3.058,0.98 15.038,0.98 16.088,2.654 2.007,2.654 " id="polygon15-5" style="fill:#F4EFF3;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
+   <polygon class="cls-4" points="15.038,14.337 3.058,14.337 2.007,12.663 16.088,12.663 " id="polygon17-3" style="fill:#686868;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
+   <polygon class="cls-3" points="3.058,14.324 15.038,14.324 16.088,15.997 2.007,15.997 " id="polygon19-5" style="fill:#F4EFF3;stroke:none;stroke-width:0.497346" transform="matrix(2,0,0,2.021399,6.0124006,-1.4288198)" />
+   <rect class="cls-2" x="10.0274" y="30.908312" width="28.160999" height="4.0446172" id="rect21-6" style="fill:#E0E0E0;stroke:none;stroke-width:0.999999" />
+   <rect class="cls-5" x="8" y="37" width="32" height="4.0051999" id="rect23-2" style="fill:#42B8EB;stroke:none;stroke-width:0.999999" />
+</svg>

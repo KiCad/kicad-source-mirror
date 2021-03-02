@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="move_relative.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="14.197719"
+     inkscape:cx="3.3821287"
+     inkscape:cy="15.950488"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25833">
+    <style
+       id="style25831">.cls-1{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title25835">move_relative</title>
+  <polygon
+     class="cls-1"
+     points="24.995,13 20.203,8.208 20.203,17.792 "
+     id="polygon25837"
+     transform="matrix(1.0434057,0,0,1,-2.0799254,-1)"
+     style="stroke-width:0.978979" />
+  <polygon
+     class="cls-1"
+     points="13,1.005 8.208,5.797 17.792,5.797 "
+     id="polygon25839"
+     transform="matrix(1,0,0,1.0434057,-1,-1.0486227)"
+     style="stroke-width:0.978979" />
+  <polygon
+     class="cls-1"
+     points="13,24.995 17.792,20.203 8.208,20.203 "
+     id="polygon25841"
+     transform="matrix(1,0,0,1.0434057,-1,-2.0799254)"
+     style="stroke-width:0.978979" />
+  <polygon
+     class="cls-1"
+     points="5.797,8.208 1.005,13 5.797,17.792 "
+     id="polygon25843"
+     transform="matrix(1.0434057,0,0,1,-1.0436227,-1)"
+     style="stroke-width:0.978979" />
+  <rect
+     class="cls-1"
+     x="10"
+     y="4.289"
+     width="4"
+     height="15.4218"
+     id="rect25845"
+     style="stroke-width:0.999996" />
+  <rect
+     class="cls-1"
+     x="10"
+     y="-19.7111"
+     width="4"
+     height="15.422"
+     transform="rotate(90)"
+     id="rect25847"
+     style="stroke-width:0.999996" />
+</svg>

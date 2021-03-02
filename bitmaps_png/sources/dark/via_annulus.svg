@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="via_annulus.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1996"
+     inkscape:window-height="1673"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="19.771793"
+     inkscape:cx="2.5465456"
+     inkscape:cy="20.104062"
+     inkscape:window-x="1137"
+     inkscape:window-y="191"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs27493">
+    <style
+       id="style27491">.cls-1{fill:#DC7A8C;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f29100;}.cls-4{fill:#8f8f8f;}.cls-5{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title27495">via_annulus</title>
+  <path
+     id="line27479"
+     style="fill:none;stroke:#DC7A8C;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 7.0502996,16.949699 2,22"
+     sodipodi:nodetypes="cc" />
+  <path
+     id="line27481"
+     style="fill:none;stroke:#42B8EB;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 16.949699,7.0502996 22,2"
+     sodipodi:nodetypes="cc" />
+  <circle
+     class="cls-3"
+     cx="12"
+     cy="12"
+     r="6.9998999"
+     id="circle27501" />
+  <circle
+     class="cls-4"
+     cx="12"
+     cy="12"
+     r="3.1111"
+     id="circle27503" />
+  <path
+     class="cls-5"
+     d="M 0.5176,13.4141 C 0.07211907,13.414094 -0.52910116,12.314961 -0.21405704,12 L 12.209743,-0.4238 c 0.471362,-0.45949857 1.544722,0.79630339 1.085157,1.2676 L 0.8711,13.2676 c -0.0936652,0.0939 -0.22087412,0.146615 -0.3535,0.1465 z"
+     id="path27505"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     class="cls-5"
+     d="M 4.0562085,16.952709 C 3.610844,16.952613 2.9477782,15.978839 3.2626509,15.663871 L 15.686451,3.2399713 c 0.471362,-0.4833948 1.630519,0.6711433 1.147058,1.1424372 L 4.4094085,16.806209 c -0.093554,0.09388 -0.2206649,0.146601 -0.3532,0.1465 z"
+     id="path27507"
+     sodipodi:nodetypes="cccccc" />
+  <polygon
+     class="cls-5"
+     points="13.984,16.082 11.178,11.222 16.038,14.028 "
+     id="polygon27511"
+     transform="matrix(1.5920561,-0.59205607,-0.59205607,1.5920561,-0.72803318,-0.83796772)"
+     style="stroke-width:0.676648" />
+  <path
+     class="cls-5"
+     d="M 4.5,5.1251719 A 0.66792456,0.66792456 0 0 1 4.0261274,4.9288417 L 0.08196847,0.98414692 A 0.67006878,0.67006878 0 0 1 1.0294458,0.03666971 L 4.9742747,3.9813646 A 0.67006878,0.67006878 0 0 1 4.5,5.1251719 Z"
+     id="path27513"
+     style="stroke-width:1" />
+  <polygon
+     class="cls-5"
+     points="13.984,16.082 11.178,11.222 16.038,14.028 "
+     id="polygon858"
+     transform="matrix(-1.5920561,0.59205607,0.59205607,-1.5920561,17.65195,17.748051)"
+     style="stroke-width:0.676648" />
+  <path
+     class="cls-5"
+     d="m 16.428472,17.053646 a 0.66792456,0.66792456 0 0 1 -0.473873,-0.19633 L 12.01044,12.912621 a 0.67006878,0.67006878 0 0 1 0.947478,-0.947477 l 3.944829,3.944695 a 0.67006878,0.67006878 0 0 1 -0.474275,1.143807 z"
+     id="path860"
+     style="stroke-width:1" />
+</svg>

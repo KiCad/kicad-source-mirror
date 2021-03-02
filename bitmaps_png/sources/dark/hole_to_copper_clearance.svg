@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="hole_to_copper_clearance.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="32.479099"
+     inkscape:cx="1.0294644"
+     inkscape:cy="23.870499"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25235">
+    <style
+       id="style25233">.cls-1{fill:#42B8EB;}.cls-2{fill:#f29100;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title25237">hole_to_copper_clearance</title>
+  <path
+     class="cls-1"
+     d="M 23.0059,9.958 H 19.6143 A 1,1 0 0 1 18.9922,9.7412 L 9.2393,2 H 3.0049 a 1,1 0 0 1 0,-2 h 6.583 A 1,1 0 0 1 10.21,0.2168 l 9.7529,7.7412 h 3.043 a 1,1 0 0 1 0,2 z"
+     id="path25239" />
+  <path
+     class="cls-2"
+     d="m 0.0083,20.9985 a 3,3 0 1 1 3,3 3,3 0 0 1 -3,-3 z"
+     id="path25241" />
+  <line
+     class="cls-3"
+     x1="12.3193"
+     y1="10.1033"
+     x2="7.8479004"
+     y2="15.3377"
+     id="line25243" />
+  <path
+     id="polygon26709"
+     style="fill:#F4EFF3;stroke:none"
+     d="m 4.971,18.706 0.8962582,-5.761659 4.6093278,3.841106 z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="polygon26709-6"
+     style="fill:#F4EFF3;stroke:none;stroke-linecap:round;stroke-linejoin:round"
+     d="M 15.196,6.735 14.299742,12.496659 9.6904139,8.655553 Z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
+</svg>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="import_project.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <g
+     id="g869">
+    <path
+       id="rect158494"
+       style="fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 4,1 V 23 H 21 V 1 Z"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       class="cls-4"
+       d="M 5.1113,4.9758001 H 3 a 1,1 0 0 1 0,-2 h 2.1113 a 1,1 0 0 1 0,2 z"
+       id="path158496" />
+    <path
+       class="cls-4"
+       d="M 5.1113,9.9963 H 3 A 1,1 0 0 1 3,7.9963001 h 2.1113 a 1,1 0 0 1 0,1.9999999 z"
+       id="path158498" />
+    <path
+       class="cls-4"
+       d="M 5.1113,16.0178 H 3 a 1,1 0 0 1 0,-2 h 2.1113 a 1,1 0 0 1 0,2 z"
+       id="path158500" />
+    <path
+       class="cls-4"
+       d="M 5.1113,21.0392 H 3 a 1,1 0 0 1 0,-2 h 2.1113 a 1,1 0 0 1 0,2 z"
+       id="path158502" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 8,6.5 h 6"
+       id="path3404" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 8,9.5 H 18"
+       id="path3406"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 8,12.5 H 18"
+       id="path3408"
+       sodipodi:nodetypes="cc" />
+  </g>
+  <g
+     id="g1472">
+    <path
+       class="cls-6"
+       d="m 24.0108,16.9961 a 7.0065,7.0065 0 1 1 -7.0066,-7 7.0032,7.0032 0 0 1 7.0066,7 z"
+       id="path25479" />
+    <line
+       class="cls-7"
+       x1="17.108101"
+       y1="20.4079"
+       x2="17.108101"
+       y2="13.4079"
+       id="line25481" />
+    <polyline
+       class="cls-7"
+       points="20.863 18.875 18.108 21.627 15.353 18.875"
+       id="polyline25483"
+       transform="translate(-1,-1)" />
+  </g>
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="12.332452"
+     inkscape:cx="10.543354"
+     inkscape:cy="11.982793"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25455">
+    <style
+       id="style25453">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#DC7A8C;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title25457">import_project</title>
+</svg>

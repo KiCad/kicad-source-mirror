@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="zoom_area.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/zoom_area.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="15.925183"
+     inkscape:cx="-5.6202554"
+     inkscape:cy="10.891747"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs160487">
+    <style
+       id="style160485">.cls-1{fill:#42B8EB;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title160489">zoom_area</title>
+  <path
+     class="cls-3"
+     d="M 6.966314,3.9662778 14.738805,11.118183 11.5,11.322977 c 0.315389,0.71982 0.783472,1.780474 1.191472,2.706961 a 1.1975088,1.1975088 0 0 1 -0.616525,1.579702 v 0 A 1.1974385,1.1974385 0 0 1 10.497303,14.996234 C 10.089037,14.069866 9.6203702,13.007786 9.3037921,12.285556 l -2.3460158,2.243121 z"
+     id="path15"
+     style="fill:#d0d0d0;stroke:none;stroke-width:0.703755;stroke-opacity:1;fill-opacity:1" />
+  <path
+     class="cls-1"
+     d="M 9.9976483,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373769 v 0 A 8.9954858,8.9973549 0 0 1 9.9976483,18.999997 Z m 0,-16.2787299 A 7.2800339,7.2815466 0 1 0 15.148695,4.8510391 7.2612755,7.2627843 0 0 0 9.9976483,2.7216082 Z"
+     id="path160567"
+     style="fill:#F4EFF3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     class="cls-1"
+     d="M 21.941949,23.012172 A 1.071826,1.071826 0 0 1 21.181811,22.69715 l -6.176896,-6.176896 a 1.0927916,1.0927916 0 0 1 1.520275,-1.520382 l 6.177004,6.176896 a 1.075159,1.075159 0 0 1 -0.760245,1.835404 z"
+     id="path160569"
+     style="fill:#F4EFF3;stroke-width:1" />
+</svg>

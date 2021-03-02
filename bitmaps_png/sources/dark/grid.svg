@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="grid.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs157368">
+    <style
+       id="style157366">.cls-1{fill:#F4EFF3;}</style>
+  </defs>
+  <title
+     id="title157370">grid</title>
+  <rect
+     class="cls-1"
+     x="1.416321"
+     y="-1.4134227"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157372" />
+  <rect
+     class="cls-1"
+     x="6.1298695"
+     y="-6.1272392"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect157374" />
+  <rect
+     class="cls-1"
+     x="10.843364"
+     y="-10.841041"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157376" />
+  <rect
+     class="cls-1"
+     x="15.557203"
+     y="-15.55429"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect157378" />
+  <rect
+     class="cls-1"
+     x="6.1338067"
+     y="3.3038428"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157380" />
+  <rect
+     class="cls-1"
+     x="10.847292"
+     y="-1.4098865"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect157382" />
+  <rect
+     class="cls-1"
+     x="15.560921"
+     y="-6.1237044"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157384" />
+  <rect
+     class="cls-1"
+     x="20.274595"
+     y="-10.836909"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect157386" />
+  <rect
+     class="cls-1"
+     x="10.851293"
+     y="8.0211086"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157388" />
+  <rect
+     class="cls-1"
+     x="15.564784"
+     y="3.3073959"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect157390" />
+  <rect
+     class="cls-1"
+     x="20.278406"
+     y="-1.4064386"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157392" />
+  <rect
+     class="cls-1"
+     x="24.991987"
+     y="-6.1195278"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect157394" />
+  <rect
+     class="cls-1"
+     x="15.56885"
+     y="12.738305"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157396" />
+  <rect
+     class="cls-1"
+     x="20.282276"
+     y="8.0246792"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect157398" />
+  <rect
+     class="cls-1"
+     x="24.995892"
+     y="3.3108282"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect157400" />
+  <rect
+     class="cls-1"
+     x="29.709381"
+     y="-1.4021457"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect157402" />
+</svg>

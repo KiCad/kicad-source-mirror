@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="pads_mask_layers.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs158829">
+    <style
+       id="style158827">.cls-1{fill:#e49435;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}</style>
+  </defs>
+  <title
+     id="title158831">pads_mask_layers</title>
+  <path
+     class="cls-1"
+     d="m 12.0539,12.9978 c -6.627,-0.0715 -12.0234,2.109 -12.0532,4.87 -0.0298,2.761 5.3183,5.0576 11.9454,5.1291 6.6271,0.0715 12.0234,-2.1092 12.0532,-4.87 0.0298,-2.7608 -5.3183,-5.0577 -11.9454,-5.1291 z m -0.0761,6.785 C 8.6309,19.7467 5.9264,18.9181 5.937,17.9321 c 0.0106,-0.986 2.7324,-1.7561 6.0793,-1.72 3.3469,0.0361 6.0515,0.8647 6.0409,1.8507 -0.0106,0.986 -2.7324,1.7561 -6.0794,1.72 z"
+     id="path158833" />
+  <ellipse
+     class="cls-2"
+     cx="12"
+     cy="11.9975"
+     rx="12"
+     ry="5"
+     id="ellipse158835" />
+  <ellipse
+     class="cls-3"
+     cx="12"
+     cy="6.0011001"
+     rx="12"
+     ry="5"
+     id="ellipse158837" />
+</svg>

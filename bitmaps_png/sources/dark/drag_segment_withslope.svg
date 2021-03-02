@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="drag_segment_withslope.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2713" inkscape:window-height="1680" id="namedview34" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="1.5316901" inkscape:cy="9.6746486" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+      <inkscape:grid type="xygrid" id="grid1558" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>drag_segment_withslope</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs11">
+      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#DC7A8C;stroke-width:2px;}.cls-5{fill:#42B8EB;}.cls-6{fill:#F4EFF3;}</style>
+      <linearGradient id="Безымянный_градиент_19" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop5" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop7" />
+      </linearGradient>
+      <linearGradient id="Безымянный_градиент_19-2" x1="18.3398" y1="4.006" x2="18.3398" y2="13.6785" xlink:href="#Безымянный_градиент_19" gradientTransform="translate(-0.73099995,-0.63580036)" />
+      <linearGradient inkscape:collect="always" xlink:href="#Безымянный_градиент_19" id="linearGradient1560" gradientUnits="userSpaceOnUse" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientTransform="translate(-0.73099995,-0.63580036)" />
+   </defs>
+   <title id="title13">drag_segment_withslope</title>
+   <path class="cls-1" d="M 7.9678001,10.9885 A 6.3519,6.3519 0 0 1 17.7805,6.7422996" id="path15" />
+   <path class="cls-2" d="m 1.3190001,19.1091 a 1.0426,1.0426 0 0 1 -0.74,-1.7767 l 5.2545,-6.0664 a 1.0425,1.0425 0 1 1 1.48,1.4682 l -5.2538,6.0664 a 1.04,1.04 0 0 1 -0.7407,0.3085 z" id="path17" style="fill:url(#linearGradient1560)" />
+   <path class="cls-3" d="m 14.0004,13.0427 a 1.0426,1.0426 0 0 1 -0.74,-1.7767 L 20.477,3.6783996 a 1.0425,1.0425 0 0 1 1.48,1.4682 L 14.7406,12.7342 a 1.0389,1.0389 0 0 1 -0.7402,0.3085 z" id="path19" style="fill:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" />
+   <line class="cls-4" x1="6.5735002" y1="12" x2="14" y2="12" id="line21" />
+   <path class="cls-5" d="M 14.108104,14.884 A 3,3 0 1 1 17.1082,11.883904 3.0000959,3.0000959 0 0 1 14.108104,14.884 Z" id="path23" style="stroke-width:1" />
+   <path class="cls-6" d="m 14,12 -9.32e-4,10.882159 2.415252,-2.312217 c 0.325669,0.741356 0.803185,1.836142 1.220872,2.791856 a 1.2338,1.2338 0 0 0 1.627633,0.634824 v 0 a 1.2337,1.2337 0 0 0 0.635719,-1.623937 c -0.417615,-0.955901 -0.895724,-2.05243 -1.222119,-2.796018 l 3.337183,-0.213478 z" id="path25" />
+   <path class="cls-6" d="M 4.0169,5.218 H 4.6481 V 5.8869 H 4.0169 v 1.1114 h -0.83 V 5.8869 h -2.144 l -0.02,-0.5082 2.137,-3.3748 h 0.8575 z m -2.1713,0 H 3.1868 V 3.1908 L 3.1662,3.1839 3.0976,3.3314 Z" id="path27" />
+   <path class="cls-6" d="M 5.3581,4.7652 5.6463,2.0039 h 2.6378 v 0.72 H 6.3392 L 6.1883,3.9759 A 1.3233,1.3233 0 0 1 6.5296,3.7959 1.3928,1.3928 0 0 1 6.9669,3.7187 1.37,1.37 0 0 1 8.068,4.1647 1.81,1.81 0 0 1 8.4659,5.403 1.73,1.73 0 0 1 8.0474,6.6035 1.5421,1.5421 0 0 1 6.8366,7.07 1.7311,1.7311 0 0 1 5.7235,6.7081 1.195,1.195 0 0 1 5.2861,5.6807 L 5.293,5.664 6.0716,5.6365 A 0.7393,0.7393 0 0 0 6.2843,6.2 0.77,0.77 0 0 0 6.8366,6.4013 0.6938,0.6938 0 0 0 7.4283,6.1286 1.1763,1.1763 0 0 0 7.6324,5.4065 1.2068,1.2068 0 0 0 7.4231,4.6707 0.6979,0.6979 0 0 0 6.8263,4.3877 0.921,0.921 0 0 0 6.3169,4.5004 0.6326,0.6326 0 0 0 6.0751,4.8234 Z" id="path29" />
+   <path class="cls-6" d="m 9.2514,2.8546 a 0.8992,0.8992 0 0 1 0.2659,-0.65 0.8613,0.8613 0 0 1 0.64,-0.2727 0.8429,0.8429 0 0 1 0.63,0.2727 0.9052,0.9052 0 0 1 0.2624,0.65 0.8764,0.8764 0 0 1 -0.2624,0.6415 0.8559,0.8559 0 0 1 -0.63,0.2641 0.9048,0.9048 0 0 1 -0.9056,-0.9056 z m 0.4768,0 A 0.4065,0.4065 0 0 0 9.8534,3.1582 0.4194,0.4194 0 0 0 10.157,3.28 0.4133,0.4133 0 0 0 10.5755,2.8546 0.4334,0.4334 0 0 0 10.4537,2.5425 0.3956,0.3956 0 0 0 10.157,2.4156 0.4108,0.4108 0 0 0 9.8534,2.5425 0.4274,0.4274 0 0 0 9.7282,2.8546 Z" id="path31" />
+</svg>

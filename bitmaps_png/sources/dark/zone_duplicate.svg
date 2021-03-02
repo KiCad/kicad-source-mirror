@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="zone_duplicate.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="23.146759"
+     inkscape:cx="11.203911"
+     inkscape:cy="13.072069"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs27754">
+    <style
+       id="style27752">.cls-1{fill:#8f8f8f;}.cls-2{fill:#42B8EB;}.cls-3{fill:none;stroke:#DC7A8C;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title27756">zone_duplicate</title>
+  <path
+     id="polygon838"
+     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none"
+     d="M 7,1 V 11 H 1 v 10 h 20 v -4.5 h -2.355469 c -0.730388,0.644142 -1.67068,0.999703 -2.644531,1 -2.209139,0 -4,-5.290861 -4,-7.5 -2.5e-4,-2.1857083 1.753995,-3.9669155 3.939453,-4 0.02018,-1.528e-4 0.04037,-1.528e-4 0.06055,0 0.973851,2.972e-4 1.914143,0.3558583 2.644531,1 H 21 V 1 Z"
+     sodipodi:nodetypes="ccccccccccccccc" />
+  <circle
+     style="display:none;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="path867"
+     cx="16"
+     cy="10"
+     r="2" />
+  <rect
+     style="display:none;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="rect869"
+     width="5"
+     height="2"
+     x="16"
+     y="9" />
+  <path
+     id="polygon838-7"
+     style="fill:#42B8EB;stroke:none"
+     d="M 9,3 V 13 H 3 V 23 H 23 V 15 H 20.644531 A 4,4 0 0 1 18,16 a 4,4 0 0 1 -4,-4 4,4 0 0 1 3.939453,-4 4,4 0 0 1 0.06055,0 4,4 0 0 1 2.644531,1 H 23 V 3 Z" />
+  <circle
+     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="path867-3"
+     cx="18"
+     cy="12.000001"
+     r="2" />
+  <rect
+     style="display:inline;fill:#F4EFF3;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+     id="rect869-7"
+     width="5"
+     height="2"
+     x="18"
+     y="11.000001" />
+</svg>

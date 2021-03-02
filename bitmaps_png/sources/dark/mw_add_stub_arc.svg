@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="mw_add_stub_arc.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs158386">
+    <style
+       id="style158384">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-4{fill:#42B8EB;}</style>
+  </defs>
+  <title
+     id="title158388">mw_add_stub_arc</title>
+  <rect
+     class="cls-1"
+     x="6.0071998"
+     y="20.999901"
+     width="8.9863997"
+     height="3"
+     id="rect158390" />
+  <path
+     class="cls-2"
+     d="m 19.5744,5.1573 a 0.5612,0.5612 0 0 0 0.3968,0.9582 l 3.4743,9e-4 a 0.5613,0.5613 0 1 0 0,-1.1225 l -3.4743,-0.001 a 0.56,0.56 0 0 0 -0.3968,0.1644 z"
+     id="path158392" />
+  <path
+     class="cls-2"
+     d="m 15.4986,20.03 a 0.5612,0.5612 0 0 0 0.3968,0.9582 l 7.5541,0.001 a 0.5613,0.5613 0 1 0 0,-1.1226 l -7.5541,-10e-4 A 0.56,0.56 0 0 0 15.4986,20.03 Z"
+     id="path158394" />
+  <line
+     class="cls-3"
+     x1="22.5026"
+     y1="15.484301"
+     x2="22.5026"
+     y2="10.6059"
+     id="line158396" />
+  <polygon
+     class="cls-2"
+     points="23.503,20.914 22.05,15.494 24.955,15.494 "
+     id="polygon158398"
+     transform="translate(-1,-1)" />
+  <polygon
+     class="cls-2"
+     points="23.503,7.176 22.05,12.597 24.955,12.597 "
+     id="polygon158400"
+     transform="translate(-1,-1)" />
+  <path
+     class="cls-4"
+     d="m 2.0946,6.4673 8.3611,14.5575 8.3717,-14.551 A 16.7084,16.7084 0 0 0 2.0946,6.4673 Z"
+     id="path158402" />
+  <path
+     class="cls-2"
+     d="M 20.9328,3.4646 16.5143,0.0051 16.1204,0.9305 A 21.5019,21.5019 0 0 0 4.8034,0.9259 L 4.41,0 -0.0108,3.4565 5.5461,2.674 5.1973,1.8532 a 20.5213,20.5213 0 0 1 10.5285,0.0043 l -0.3493,0.8207 z"
+     id="path158404" />
+</svg>

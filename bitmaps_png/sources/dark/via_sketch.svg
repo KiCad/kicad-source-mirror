@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="via_sketch.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="755"
+     id="namedview24"
+     showgrid="true"
+     inkscape:zoom="14.848486"
+     inkscape:cx="-5.3656549"
+     inkscape:cy="8.0019311"
+     inkscape:window-x="1535"
+     inkscape:window-y="147"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid846"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9898ff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:#DC7A8C;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f29100;}.cls-5{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
+  </defs>
+  <title
+     id="title7">via_sketch</title>
+  <path
+     id="line27481"
+     style="fill:none;stroke:#42B8EB;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 10,10 2.0000001,2.0000002"
+     sodipodi:nodetypes="cc" />
+  <path
+     class="cls-2"
+     d="m 13.7532,10.8209 -3.0272,2.8628 a 2.1118,2.1118 0 0 0 3.0272,-2.8628 m -0.08,-1.3009 0.5289,0.2821 a 3.1112698,3.1112698 0 1 1 -4.4,4.4 L 9.3557,13.6032 13.6729,9.5205 Z"
+     id="path13" />
+  <path
+     id="line27479"
+     style="fill:none;stroke:#DC7A8C;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 12,12 22,22"
+     sodipodi:nodetypes="cc" />
+  <path
+     class="cls-2"
+     d="m 15.6041,7.8601 -8.0469,7.6648 0.3441,0.8565 a 6,6 0 0 0 8.5628,-8.3917 l -0.86,-0.13 m -0.3352,-1.0618 1.6832,0.2542 a 7.000145,7.000145 0 1 1 -9.9,9.8994 l -0.6763,-1.6828 8.8925,-8.47 z"
+     id="path11" />
+  <path
+     class="cls-4"
+     d="m 16.9521,7.0521 a 7.0003571,7.0003571 0 0 0 -9.9,9.9"
+     id="path17" />
+  <path
+     class="cls-2"
+     d="m 14.2021,9.8021 a 3.1112698,3.1112698 0 0 0 -4.4,4.4"
+     id="path19" />
+  <line
+     class="cls-3"
+     x1="0.5"
+     y1="23.5"
+     x2="23.5"
+     y2="0.5"
+     id="line158655"
+     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+</svg>

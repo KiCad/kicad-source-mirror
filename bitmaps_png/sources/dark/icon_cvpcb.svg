@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="icon_cvpcb.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#111111"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1865"
+     inkscape:window-height="1041"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="33.711355"
+     inkscape:cx="10.078695"
+     inkscape:cy="13.608693"
+     inkscape:window-x="39"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="g924">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25287">
+    <style
+       id="style25285">.cls-1{fill:#d8d8d8;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}</style>
+  </defs>
+  <title
+     id="title25289">icon_cvpcb</title>
+  <g
+     id="g903"
+     transform="translate(-1,2)">
+    <path
+       style="fill:#acbac8;fill-opacity:1;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       d="m 14.5,12.5 h -13 v 2 l 1.158679,1.158679 V 16.5 L 1.5,17.658679 v 1.917181 h 13 V 12.5"
+       id="path854" />
+    <rect
+       class="cls-4"
+       x="3"
+       y="10"
+       width="3"
+       height="4"
+       id="rect25311" />
+    <rect
+       class="cls-4"
+       x="7"
+       y="10"
+       width="3"
+       height="4"
+       id="rect844" />
+    <rect
+       class="cls-4"
+       x="11"
+       y="10"
+       width="3"
+       height="4"
+       id="rect846" />
+    <rect
+       class="cls-4"
+       x="3"
+       y="18"
+       width="3"
+       height="4"
+       id="rect848"
+       style="fill:#42B8EB;fill-opacity:1" />
+    <rect
+       class="cls-4"
+       x="7"
+       y="18"
+       width="3"
+       height="4"
+       id="rect850"
+       style="fill:#42B8EB;fill-opacity:1" />
+    <rect
+       class="cls-4"
+       x="11"
+       y="18"
+       width="3"
+       height="4"
+       id="rect852"
+       style="fill:#42B8EB;fill-opacity:1" />
+  </g>
+  <path
+     style="fill:#acbac8;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
+     d="m 10.5,0.5 v 12 l 9.5,-6 z"
+     id="path928" />
+  <path
+     class="cls-2"
+     d="m 12.5,5 h 1.351 a 0.5808,0.5808 0 1 0 0,-1.1615 H 12.5 A 0.5808,0.5808 0 1 0 12.5,5 Z"
+     id="path25295" />
+  <path
+     class="cls-2"
+     d="M 14,8 V 7.8085 a 0.5808,0.5808 0 0 0 -1.1616,0 V 8 h -0.1911 a 0.5808,0.5808 0 1 0 0,1.1615 h 0.1911 v 0.1912 a 0.5808,0.5808 0 0 0 1.1616,0 V 9.1615 h 0.1912 a 0.5808,0.5808 0 1 0 0,-1.1615 z"
+     id="path25297" />
+  <path
+     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 10.5,2.5 h -2"
+     id="path934" />
+  <path
+     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 10.5,10.5 h -2"
+     id="path936" />
+  <path
+     style="fill:none;stroke:#F4EFF3;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 22,6.5 H 20"
+     id="path938" />
+  <g
+     id="g924">
+    <path
+       class="cls-3"
+       d="m 23.999997,16.993507 a 7,6.9999996 0 1 1 -7,-6.993506 6.9967031,6.9967026 0 0 1 7,6.993506 z"
+       id="path867"
+       style="fill:#DC7A8C;stroke-width:0.999996" />
+    <path
+       id="path852-8-8"
+       style="display:inline;fill:#111111;fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 15.769038,15.450207 c 0,0 -0.0451,0.03565 -0.169472,0.158733 -1.175236,1.16432 -1.183816,3.064464 -0.03177,4.21093 0.002,0.0022 0.0054,0.0054 0.0076,0.0075 l 1.322482,1.307305 c 1.165889,1.153827 3.061988,1.153669 4.227701,0 1.165883,-1.153628 1.165906,-3.030366 0,-4.183974 l -0.674859,-0.700824 -0.587096,1.633757 0.136182,0.155738 c 0.551326,0.545589 0.568562,1.433242 0.0227,1.984169 -0.551273,0.556282 -1.456989,0.560204 -2.012471,0.01048 l -1.320966,-1.308804 c -0.554536,-0.548803 -0.552216,-1.434669 0,-1.981173 0.0728,-0.07193 0.202761,-0.167719 0.202761,-0.167719 z"
+       sodipodi:nodetypes="cccccccccccccccc" />
+    <path
+       id="path852-8-5"
+       style="display:inline;fill:#111111;fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 14.98826,12 c -0.765659,2e-5 -1.530994,0.288713 -2.113851,0.865547 -1.165883,1.153627 -1.165906,3.030366 0,4.183975 l 0.674858,0.700823 0.587097,-1.633756 -0.136182,-0.155739 c -0.551326,-0.545589 -0.568562,-1.433241 -0.0227,-1.984169 0.551273,-0.556282 1.456989,-0.560204 2.012471,-0.01048 l 1.32248,1.308803 c 0.554537,0.548803 0.552217,1.434669 0,1.981173 -0.0728,0.07193 -0.204273,0.167719 -0.204273,0.167719 l 1.122747,1.126109 c 0,0 0.04509,-0.03565 0.169471,-0.158733 1.175236,-1.16432 1.183816,-3.064464 0.03178,-4.21093 -0.002,-0.0022 -0.0054,-0.0054 -0.0076,-0.0075 l -1.322455,-1.30728 C 16.519167,12.288634 15.753919,11.99998 14.98826,12 Z"
+       sodipodi:nodetypes="scccccccccccccccs" />
+  </g>
+</svg>

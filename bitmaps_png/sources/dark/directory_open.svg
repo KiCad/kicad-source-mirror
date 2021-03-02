@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Слой_1"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="directory_open.svg"
+   x="0px"
+   y="0px"
+   viewBox="0 0 24 24"
+   style="enable-background:new 0 0 24 24;"
+   xml:space="preserve"><metadata
+   id="metadata845"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>folder</dc:title><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
+   id="defs843" />
+<style
+   type="text/css"
+   id="style833">
+	.st0{fill:#F4EFF3;}
+	.st1{fill:none;stroke:#111111;}
+</style>
+<sodipodi:namedview
+   bordercolor="#666666"
+   borderopacity="1"
+   gridtolerance="10000"
+   guidetolerance="10"
+   id="namedview9483"
+   inkscape:current-layer="Слой_1"
+   inkscape:cx="15.430411"
+   inkscape:cy="10.531065"
+   inkscape:document-rotation="0"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:snap-global="true"
+   inkscape:window-height="715"
+   inkscape:window-maximized="1"
+   inkscape:window-width="1280"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:zoom="23.957338"
+   objecttolerance="10"
+   pagecolor="#111111"
+   showgrid="true">
+	<inkscape:grid
+   color="#ceceff"
+   empspacing="2"
+   id="grid10046"
+   opacity="0.1254902"
+   spacingx="0.5"
+   spacingy="0.5"
+   type="xygrid">
+		</inkscape:grid>
+</sodipodi:namedview>
+<title
+   id="title9474">folder</title>
+
+
+
+<path
+   id="path843"
+   style="fill:#F4EFF3;fill-opacity:1;stroke-width:0.999996"
+   d="M 1.9511719,3 C 0.86571697,3.026508 -3.2363396e-4,3.914221 0,5 -1.9868853e-4,5.01628 -1.9868853e-4,5.0325481 0,5.0488281 -0.0019972,8.7621821 0,17.712191 0,19.5 L 3.5507812,11.484375 C 4.0884177,10.562723 5.0736222,9.996087 6.140625,9.996094 H 22 V 8 C 22,6.895431 21.104569,6 20,6 H 11.5 L 8.5,3 H 2 C 1.983725,2.999801 1.9674469,2.999801 1.9511719,3 Z m 4.4785156,8 c -0.9433012,-6e-6 -1.8157095,0.50302 -2.2910156,1.322266 l -3,7.173828 C 0.75191169,20.162764 1.2284911,21 1.9960938,21 H 18.572266 c 0.943293,1.7e-5 1.815734,-0.503014 2.291015,-1.322266 l 3,-7.173828 C 24.250091,11.837236 23.771518,11 23.003906,11 Z"
+   sodipodi:nodetypes="cccccccsccccccccscccsc" /></svg>
