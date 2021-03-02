@@ -22,9 +22,6 @@
 #include <board.h>
 
 #include "pns_item.h"
-#include "pns_via.h"
-#include "pns_solid.h"
-#include "pns_node.h"
 #include "pns_sizes_settings.h"
 
 namespace PNS {
@@ -44,20 +41,6 @@ void SIZES_SETTINGS::AddLayerPair( int aL1, int aL2 )
     m_layerPairs[bottom] = top;
     m_layerPairs[top] = bottom;
 }
-
-
-#if 0
-void SIZES_SETTINGS::ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings )
-{
-    m_trackWidth = aSettings.GetCurrentTrackWidth();
-    m_viaDiameter = aSettings.GetCurrentViaSize();
-    m_viaDrill = aSettings.GetCurrentViaDrill();
-
-    m_diffPairWidth = aSettings.GetCurrentDiffPairWidth();
-    m_diffPairGap = aSettings.GetCurrentDiffPairGap();
-    m_diffPairViaGap = aSettings.GetCurrentDiffPairViaGap();
-}
-#endif
 
 
 int SIZES_SETTINGS::GetLayerTop() const

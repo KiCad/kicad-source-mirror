@@ -486,11 +486,11 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
             diffPairViaGap = constraint.m_Value.Opt();
         }
     }
-    else if( bds.UseCustomDiffPairDimensions() )
+    else
     {
-        diffPairWidth  = bds.GetCustomDiffPairWidth();
-        diffPairGap    = bds.GetCustomDiffPairGap();
-        diffPairViaGap = bds.GetCustomDiffPairViaGap();
+        diffPairWidth  = bds.GetCurrentDiffPairWidth();
+        diffPairGap    = bds.GetCurrentDiffPairGap();
+        diffPairViaGap = bds.GetCurrentDiffPairViaGap();
     }
 
     //printf( "DPWidth: %d gap %d\n", diffPairWidth, diffPairGap );
