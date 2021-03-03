@@ -472,7 +472,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     }
 
     // Back up the rescue symbol library document file if it exists.
-    srcFileName.SetExt( "dcm" );
+    srcFileName.SetExt( LegacySymbolDocumentFileExtension );
     destFileName.SetExt( srcFileName.GetExt() );
 
     tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),

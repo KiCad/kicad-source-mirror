@@ -1414,11 +1414,11 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
-    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(), "kicad_sch" );
+    wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(), KiCadSchematicFileExtension );
 
     if( !schematic.FileExists() )
     {
-        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(), "sch" );
+        wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(), LegacySchematicFileExtension );
 
         if( legacySchematic.FileExists() )
         {

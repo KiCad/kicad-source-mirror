@@ -57,6 +57,7 @@
 #include <paths.h>
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
+#include <wildcards_and_files_ext.h>
 
 
 namespace PCB {
@@ -415,26 +416,26 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
 
     destFile.SetPath( destPath );
 
-    if( ext == "kicad_pcb" || ext == "kicad_pcb-bak" )
+    if( ext == KiCadPcbFileExtension || ext == KiCadPcbFileExtension + BackupFileSuffix )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "brd" )
+    else if( ext == LegacyPcbFileExtension )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "mod" || ext == "kicad_mod" )
+    else if( ext == LegacyFootprintLibPathExtension || ext == KiCadFootprintFileExtension )
     {
         // Footprints are not project-specific.  Keep their source names.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "cmp" )
+    else if( ext == ComponentFileExtension )
     {
         // JEY TODO
     }

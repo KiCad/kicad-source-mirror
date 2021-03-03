@@ -79,10 +79,9 @@ void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 
 BOARD* LoadBoard( wxString& aFileName )
 {
-    if( aFileName.EndsWith( wxT( ".kicad_pcb" ) ) )
+    if( aFileName.EndsWith( KiCadPcbFileExtension ) )
         return LoadBoard( aFileName, IO_MGR::KICAD_SEXP );
-
-    else if( aFileName.EndsWith( wxT( ".brd" ) ) )
+    else if( aFileName.EndsWith( LegacyPcbFileExtension ) )
         return LoadBoard( aFileName, IO_MGR::LEGACY );
 
     // as fall back for any other kind use the legacy format

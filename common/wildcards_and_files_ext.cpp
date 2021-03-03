@@ -116,10 +116,12 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
     return files_filter;
 }
 
+const std::string BackupFileSuffix( "-bak" );
 
 const std::string KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string SchematicSymbolFileExtension( "sym" );
 const std::string LegacySymbolLibFileExtension( "lib" );
+const std::string LegacySymbolDocumentFileExtension( "dcm" );
 
 const std::string VrmlFileExtension( "wrl" );
 

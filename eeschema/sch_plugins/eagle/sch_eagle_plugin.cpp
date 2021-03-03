@@ -408,7 +408,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
 
     wxFileName newFilename( m_filename );
-    newFilename.SetExt( "kicad_sch" );
+    newFilename.SetExt( KiCadSchematicFileExtension );
 
     if( aAppendToMe )
     {
@@ -710,7 +710,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     ReplaceIllegalFileNameChars( &filename );
     replace( filename.begin(), filename.end(), ' ', '_' );
 
-    wxString fn = wxString( filename + ".kicad_sch" );
+    wxString fn = wxString( filename + "." + KiCadSchematicFileExtension );
     filenameField.SetText( fn );
     wxFileName fileName( fn );
     m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );

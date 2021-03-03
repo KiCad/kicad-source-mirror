@@ -50,6 +50,7 @@
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
 #include <kicad_string.h>
+#include <wildcards_and_files_ext.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -1241,7 +1242,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sheet->GetFields()[ SHEETNAME ].SetText( "Untitled Sheet" );
-            sheet->GetFields()[ SHEETFILENAME ].SetText( "untitled.kicad_sch" );
+            sheet->GetFields()[ SHEETFILENAME ].SetText( "untitled." + KiCadSchematicFileExtension );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();

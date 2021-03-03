@@ -158,7 +158,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
     wxASSERT( !aFileName || aSchematic != NULL );
 
     wxFileName fileName( aFileName );
-    fileName.SetExt( ".kicad_sch" );
+    fileName.SetExt( KiCadSchematicFileExtension );
     m_schematic = aSchematic;
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
@@ -1987,7 +1987,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     if( ( elem.text.Right( GetFileExtension().length() + 1 ).Lower() ) == ( "." + GetFileExtension().Lower() ))
     {
         elem.text.RemoveLast( 6 );
-        elem.text += "kicad_sch";
+        elem.text += KiCadSchematicFileExtension;
     }
 
     filenameField.SetText( elem.text );

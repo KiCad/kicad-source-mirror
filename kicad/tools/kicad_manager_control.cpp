@@ -366,42 +366,42 @@ public:
             // straight copy
             KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
-        else if( ext == "kicad_sch"
-               || ext == "kicad_sch-bak"
-               || ext == "sch"
-               || ext == "sch-bak"
-               || ext == "sym"
-               || ext == "lib"
-               || ext == "dcm"
-               || ext == "kicad_sym"
-               || ext == "net"
+        else if( ext == KiCadSchematicFileExtension
+               || ext == KiCadSchematicFileExtension + BackupFileSuffix
+               || ext == LegacySchematicFileExtension
+               || ext == LegacySchematicFileExtension + BackupFileSuffix
+               || ext == SchematicSymbolFileExtension
+               || ext == LegacySymbolLibFileExtension
+               || ext == LegacySymbolDocumentFileExtension
+               || ext == KiCadSymbolLibFileExtension
+               || ext == NetlistFileExtension
                || destFile.GetName() == "sym-lib-table" )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
-        else if( ext == "kicad_pcb"
-               || ext == "kicad_pcb-bak"
-               || ext == "brd"
-               || ext == "kicad_mod"
-               || ext == "mod"
-               || ext == "cmp"
+        else if( ext == KiCadPcbFileExtension
+               || ext == KiCadPcbFileExtension + BackupFileSuffix
+               || ext == LegacyPcbFileExtension
+               || ext == KiCadFootprintFileExtension
+               || ext == LegacyFootprintLibPathExtension
+               || ext == ComponentFileExtension
                || destFile.GetName() == "fp-lib-table" )
         {
             KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
             pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                 m_newProjectName, aSrcFilePath, m_errors );
         }
-        else if( ext == "kicad_wks" )
+        else if( ext == PageLayoutDescrFileExtension )
         {
             KIFACE* pleditor = m_frame->Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
             pleditor->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
-        else if( ext == "gbr"
-               || ext == "gbrjob"
-               || ext == "drl"
+        else if( ext == GerberFileExtension
+               || ext == GerberJobFileExtension
+               || ext == DrillFileExtension
                || IsProtelExtension( ext ) )
         {
             KIFACE* gerbview = m_frame->Kiway().KiFACE( KIWAY::FACE_GERBVIEW );

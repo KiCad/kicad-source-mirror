@@ -44,6 +44,7 @@
 #include <kiface_ids.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <wx/ffile.h>
+#include <wildcards_and_files_ext.h>
 
 #include <schematic.h>
 #include <connection_graph.h>
@@ -310,7 +311,8 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
     destFile.SetPath( destPath );
 
-    if( ext == "sch" || ext == "sch-bak" || ext == "kicad_sch" || ext == "kicad_sch-bak" )
+    if( ext == LegacySchematicFileExtension || ext == LegacySchematicFileExtension + BackupFileSuffix ||
+        ext == KiCadSchematicFileExtension || ext == KiCadSchematicFileExtension + BackupFileSuffix )
     {
         if( destFile.GetName() == aProjectName )
             destFile.SetName( aNewProjectName  );
@@ -326,19 +328,20 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "sym" )
+    else if( ext == SchematicSymbolFileExtension )
     {
         // Symbols are not project-specific.  Keep their source names.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "lib" || ext == "dcm" || ext == "kicad_sym" )
+    else if( ext == LegacySymbolLibFileExtension || ext == LegacySymbolDocumentFileExtension ||
+             ext == KiCadSymbolLibFileExtension )
     {
         if( destFile.GetName() == aProjectName + "-cache" )
             destFile.SetName( aNewProjectName + "-cache"  );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == "net" )
+    else if( ext == NetlistFileExtension )
     {
         bool success = false;
 

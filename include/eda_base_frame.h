@@ -567,14 +567,6 @@ protected:
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
     /**
-     * @return the suffix to be appended to the file extension on backup
-     */
-    static wxString GetBackupSuffix()
-    {
-        return wxT( "-bak" );
-    }
-
-    /**
      * @return the string to prepend to a file name for automatic save.
      */
     static wxString GetAutoSaveFilePrefix()
