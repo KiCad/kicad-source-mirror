@@ -76,12 +76,24 @@ FULL_BACK_TRACE=""
 
 def GetUnLoadableWizards():
     global NOT_LOADED_WIZARDS
-    utf8_str = NOT_LOADED_WIZARDS.encode( 'UTF-8' )
+    import sys
+
+    if sys.version_info[0] < 3:
+        utf8_str = NOT_LOADED_WIZARDS.encode( 'UTF-8' )
+    else:
+        utf8_str = NOT_LOADED_WIZARDS
+
     return utf8_str
 
 def GetWizardsSearchPaths():
     global PLUGIN_DIRECTORIES_SEARCH
-    utf8_str = PLUGIN_DIRECTORIES_SEARCH.encode( 'UTF-8' )
+    import sys
+
+    if sys.version_info[0] < 3:
+        utf8_str = PLUGIN_DIRECTORIES_SEARCH.encode( 'UTF-8' )
+    else:
+        utf8_str = PLUGIN_DIRECTORIES_SEARCH
+
     return utf8_str
 
 def GetWizardsBackTrace():
