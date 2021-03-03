@@ -659,7 +659,8 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     default: return;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( msg, GetShownText() ) );
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.push_back( MSG_PANEL_ITEM( msg, UnescapeString( GetText() ) ) );
 
     switch( GetLabelSpinStyle() )
     {

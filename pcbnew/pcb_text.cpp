@@ -32,6 +32,7 @@
 #include <pcb_text.h>
 #include <pcb_painter.h>
 #include <trigo.h>
+#include <kicad_string.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
 
@@ -108,7 +109,8 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     EDA_UNITS units = aFrame->GetUserUnits();
 
-    aList.emplace_back( _( "PCB Text" ), GetShownText() );
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.emplace_back( _( "PCB Text" ), UnescapeString( GetText() ) );
 
     if( IsLocked() )
         aList.emplace_back( _( "Status" ), _( "locked" ) );

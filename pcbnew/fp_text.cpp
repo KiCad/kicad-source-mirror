@@ -31,6 +31,7 @@
 #include <footprint.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <kicad_string.h>
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
@@ -282,7 +283,8 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Footprint" ), fp ? fp->GetReference() : _( "<invalid>" ) );
 
-    aList.emplace_back( _( "Text" ), GetShownText() );
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
 
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
     aList.emplace_back( _( "Type" ), text_type_msg[m_Type] );
