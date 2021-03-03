@@ -538,6 +538,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Russian (RU)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Konstantin Baranovskiy",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Russian (RU)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Pedro Martin del Valle",
                                           wxEmptyString,
                                           wxEmptyString,
@@ -669,10 +673,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       wxEmptyString,
                                       ICON_CONTRIBUTION ) );
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      ICON_CONTRIBUTION ) );
-    aInfo.AddArtist( new CONTRIBUTOR( "Konstantin Baranovskiy",
                                       wxEmptyString,
                                       wxEmptyString,
                                       ICON_CONTRIBUTION ) );
