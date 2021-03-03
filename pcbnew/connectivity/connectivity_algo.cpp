@@ -352,7 +352,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
 
     while( !item_set.empty() )
     {
-        CN_CLUSTER_PTR cluster ( new CN_CLUSTER() );
+        CN_CLUSTER_PTR cluster = std::make_shared<CN_CLUSTER>();
         CN_ITEM*       root;
         auto           it = item_set.begin();
 
