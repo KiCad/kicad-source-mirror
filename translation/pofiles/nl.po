@@ -1,13 +1,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 # Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
+# pimjansen98 <pimjansen1998@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-25 09:53-0800\n"
-"PO-Revision-Date: 2021-03-01 15:51+0000\n"
-"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
+"PO-Revision-Date: 2021-03-03 23:36+0000\n"
+"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -627,7 +628,6 @@ msgid "Spread Factor %"
 msgstr "Verspreidingsfactor%"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
-#, fuzzy
 msgid "Recursion Level"
 msgstr "Recursief niveau"
 
@@ -691,9 +691,8 @@ msgid "Top light:"
 msgstr "Top licht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Bodemlicht"
+msgstr "Bodemlicht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -2261,7 +2260,7 @@ msgstr "Hoe zou je KiCad willen configureren?"
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 #, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Instellingen importeren uit een eerdere versie (geen gevonden)"
+msgstr "Instellingen importeren uit een eerdere versie van:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2272,9 +2271,8 @@ msgid "The selected path does not contain valid KiCad settings!"
 msgstr "Het geselecteerde pad bevat geen geldige KiCad-instellingen!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Instellingen importeren uit een eerdere versie (geen gevonden)"
+msgstr "Instellingen importeren bibliotheek configuratie uit een eerdere versie"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -2291,7 +2289,7 @@ msgstr "Starten met standaardinstellingen"
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Stel locaties in"
+msgstr "Stel KiCad instellingenpad in"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -3167,6 +3165,8 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Er kan slechts een actie worden toegewezen aan elke verticale scroll-"
+"instelling"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3225,12 +3225,11 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings_base.cpp:91
 #, fuzzy
 msgid "Drag Gestures"
-msgstr "Gebaren"
+msgstr "Sleep acties"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Slepen met rechterknop:"
+msgstr "Slepen met linkerknop:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
@@ -3241,9 +3240,8 @@ msgid "Drag selected objects; otherwise draw selection rectangle"
 msgstr "Sleep geselecteerde objecten; teken anders een selectierechthoek"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Sleep het / de geselecteerde item (s)"
+msgstr "Sleep een willekeurig object (geselecteerd of niet)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3291,13 +3289,12 @@ msgid "Scroll Gestures"
 msgstr "Scroll Bewegingen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:150
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr "Verticale touchpad of scrollwiel beweging:"
+msgstr "Verticale touchpad of scrolwiel beweging:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Er kan slechts een actie toegewezen worden aan elke kolom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:172
 msgid "--"
@@ -3332,7 +3329,7 @@ msgstr "Zoom:"
 #: common/dialogs/panel_mouse_settings_base.cpp:204
 #, fuzzy
 msgid "Pan up/down:"
-msgstr "Omhoog / omlaag pannen:"
+msgstr "Beweeg omhoog/omlaag:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:220
 msgid "Pan left/right:"
@@ -3395,9 +3392,8 @@ msgid "Minimum track width"
 msgstr "Minimale spoorbreedte"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Via pad-diameter:"
+msgstr "Via pad-diameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 #, fuzzy
@@ -3405,9 +3401,8 @@ msgid "Via plated hole diameter"
 msgstr "Via pad-diameter:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Via pad-diameter:"
+msgstr "Diameter microvia pad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
 #, fuzzy
@@ -3427,18 +3422,16 @@ msgid "Schematic wire thickness"
 msgstr "Draaddikte schema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Dikte busdraad"
+msgstr "Dikte bus printspoor"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire color"
 msgstr "Schema draadkleur"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Schema draad lijnstijl"
+msgstr "Schematische printspoor lijnstijl"
 
 #: common/dialogs/panel_setup_netclasses.cpp:534
 msgid "The default net class is required."
@@ -4559,9 +4552,8 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Verwijdert geselecteerde item (s)"
+msgstr "Verwijdert geselecteerde cellen"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -6564,7 +6556,7 @@ msgstr "Legacy footprint exportbestanden"
 #: common/wildcards_and_files_ext.cpp:440
 #, fuzzy
 msgid "Electrical rule check file"
-msgstr "Bestand met elektronische regels"
+msgstr "Bestand voor controle elektrische natuurwetten"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -7182,11 +7174,10 @@ msgid "Item not annotated: %s%s\n"
 msgstr "Item niet geannoteerd: %s %s\n"
 
 #: eeschema/component_references_lister.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
-"Fout: symbool %s%s%s (eenheid %d) overschrijdt eenheden (%d) eenheden "
-"gedefinieerd\n"
+"Fout: symbool %s%s%s (eenheid %d) overschrijdt gedefinieerde eenheden (%d)\n"
 
 #: eeschema/component_references_lister.cpp:589
 #: eeschema/component_references_lister.cpp:619
@@ -7227,7 +7218,9 @@ msgstr "Sheet pin %s heeft geen overeenkomend hiërarchisch label in het vel"
 #: eeschema/connection_graph.cpp:2879
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "HLabel %s niet verbonden met SheetLabel"
+msgstr ""
+"Hierarchielabel %s heeft geen corresponderende plaat pin op de originele "
+"plaat"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7331,10 +7324,9 @@ msgid "Generate"
 msgstr "Genereren"
 
 #: eeschema/dialogs/dialog_bom.cpp:320
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
-"Het exporteren van de netlijst vereist een volledig geannoteerd schema."
+"Het exporteren van de stuklijst vereist een volledig geannoteerd schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:357 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
@@ -7402,9 +7394,8 @@ msgstr ""
 "Stel deze optie in om het venster van de lopende opdracht weer te geven."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Lijst van raster groottes opnieuw instellen"
+msgstr "Zet de stuklijst generator terug naar standaard instellingen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -7864,7 +7855,7 @@ msgstr "Reset velden indien leeg in nieuw symbool"
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
 #, fuzzy
 msgid "Update field text"
-msgstr "Update velden"
+msgstr "Update tekst velden"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -7879,9 +7870,8 @@ msgid "Update field positions"
 msgstr "Werk veldposities bij"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Werk de fabricagekenmerken bij / reset deze"
+msgstr "Update symbool attributen"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
@@ -7979,9 +7969,8 @@ msgstr "Reset velden indien leeg in het bibliotheeksymbool"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Velden bijwerken / resetten"
+msgstr "Update/reset tekst velden"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -7999,9 +7988,8 @@ msgid "Update/reset field positions"
 msgstr "Veldposities bijwerken / resetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:145
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Werk de fabricagekenmerken bij / reset deze"
+msgstr "Update/reset symbool attributen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:98
 msgid "Update Symbols from Library"
@@ -8123,15 +8111,17 @@ msgstr ""
 "symboolbibliotheken."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Update symbolen uit bibliotheek"
+msgstr "Update symboolvelden uit nieuwe bibliotheek"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Vervang huidige symboolvelden voor velden van de nieuwe bibliotheek.\n"
+"Waarschuwing: velden \"Waarde\" en \"Voetafdrukken\" zullen dan vervangen "
+"worden."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -8194,7 +8184,7 @@ msgstr "Syntaxis hulp"
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 #, fuzzy
 msgid "Show syntax help window"
-msgstr "Toon consolevenster"
+msgstr "Toon syntax hulpvenster"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
@@ -8328,6 +8318,8 @@ msgstr "Toon annotatiedialoog"
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Schema is niet volledig van aantekeningen voorzien. ERC resultaten zullen "
+"onvolledig zijn."
 
 #: eeschema/dialogs/dialog_erc.cpp:195
 msgid "Delete exclusions too?"
@@ -8350,7 +8342,7 @@ msgstr "Fouten, waarschuwingen en uitsluitingen"
 #: eeschema/dialogs/dialog_erc.cpp:303
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d symbool(en) vereisen annotatie. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:307
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8709,9 +8701,8 @@ msgstr "Filter items op netto:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Verwijdert geselecteerde item (s)"
+msgstr "Bevat alleen geselecteerde items"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -9315,18 +9306,16 @@ msgstr ""
 "Voer het aantal eenheden in voor een symbool dat meer dan één eenheid bevat"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Alle units zijn niet uitwisselbaar"
+msgstr "Alle units zijn uitwisselbaar"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Vink deze optie aan voor power symbolen.\n"
-"Power symbolen hebben specifieke eigenschappen"
+"Vink deze optie aan als alle symbool eenheden identiek zijn behalve\n"
+"de pin nummers."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
 msgid "Pin Text Options"
@@ -9510,10 +9499,8 @@ msgid "Export Netlist"
 msgstr "Netlijst exporteren"
 
 #: eeschema/dialogs/dialog_netlist.cpp:342
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Het exporteren van de netlijst vereist een volledig geannoteerd schema."
+msgstr "De simulator vereist een volledig geannoteerd schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:365
 msgid "Reformat passive symbol values"
@@ -9556,10 +9543,8 @@ msgstr "%s Exporteren"
 
 #: eeschema/dialogs/dialog_netlist.cpp:578
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
-"Het exporteren van de netlijst vereist een volledig geannoteerd schema."
+msgstr "Het exporteren van de netlijst vereist een volledig geannoteerd schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:703
 msgid "This plugin already exists."
@@ -9627,6 +9612,7 @@ msgstr "Alternatieve pinnaam"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:332
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
+"Afwisselende pin toewijzing is niet beschikbaar voor DeMorgan componenten."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9866,12 +9852,11 @@ msgstr "Pagina grootte:"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
 #, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Maak het tekenblad af"
+msgstr "Schets tekening blad"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Print rand en titelblok"
+msgstr "Print de tekenrand en titelblok"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9912,25 +9897,26 @@ msgid "HPGL Options"
 msgstr "HPGL-opties"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Positie X:"
+msgstr "Positie en eenheden:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Links onderin, plot eenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Centreer, plot eenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
+#, fuzzy
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Pagina passend, gebruikerseenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
+#, fuzzy
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Inhoud passend, gebruikerseenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
 msgid "Pen width:"
@@ -10357,9 +10343,8 @@ msgid "Add signal by name:"
 msgstr "Signaal bij naam toevoegen:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:92
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "U moet een DC-bron selecteren (sweep 1)"
+msgstr "U moet een DC bron selecteren"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:180
 msgid "Source 1 and Source 2 must be different"
@@ -10376,9 +10361,8 @@ msgid "Volts"
 msgstr "Volt"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:511
-#, fuzzy
 msgid "Amperes"
-msgstr "jumper"
+msgstr "Ampéres"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:512
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:310
@@ -10436,7 +10420,7 @@ msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 msgid "Enable second source"
-msgstr ""
+msgstr "Schakel tweede bron in"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
@@ -10450,20 +10434,18 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "I"
-msgstr "PI"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:106
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:112
 msgid "TEMP"
-msgstr ""
+msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:108
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:114 eeschema/lib_item.cpp:54
@@ -10483,23 +10465,20 @@ msgid "DC source:"
 msgstr "DC-bron:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Startspanning:"
+msgstr "Startwaarde:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
-#, fuzzy
 msgid "Final value:"
-msgstr "Beginwaarde:"
+msgstr "Eindwaarde:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:168
 msgid "Increment step:"
 msgstr "Verhogingsstap:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
-#, fuzzy
 msgid "Swap sources"
-msgstr "Bron"
+msgstr "Wissel bronnen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:202
 msgid "DC Transfer"
@@ -11359,22 +11338,21 @@ msgstr "Update Schema van PCB"
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 #, fuzzy
 msgid "Parent symbol:"
-msgstr "Stroom symbool"
+msgstr "Bron symbool:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 #, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Verwijder velden als ze niet in een nieuw symbool staan"
+msgstr "Verwijder velden als ze niet in een bronsymbool staan"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 #, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Reset velden indien leeg in nieuw symbool"
+msgstr "Reset velden indien leeg in bronsymbool"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Symboolvelden"
+msgstr "Update symboolvelden"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -11554,9 +11532,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "Schakel de geselecteerde status van item (s) in."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Ctrl + Shift"
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -11583,9 +11560,8 @@ msgstr ""
 "Alt, Shift en Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "Ctrl + Shift"
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
@@ -12066,9 +12042,8 @@ msgid "Passive Pin"
 msgstr "Passieve pin"
 
 #: eeschema/erc.cpp:62 eeschema/erc.cpp:79
-#, fuzzy
 msgid "Free Pin"
-msgstr "Creëer lib"
+msgstr "Vrije Pin"
 
 #: eeschema/erc.cpp:63 eeschema/erc.cpp:80
 msgid "Unspecified Pin"
@@ -12095,7 +12070,6 @@ msgid "No Connection"
 msgstr "Geen verbinding"
 
 #: eeschema/erc.cpp:262
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
 msgstr "Onopgeloste tekstvariabele in werkblad."
 
@@ -12233,14 +12207,12 @@ msgid "Library symbol issue"
 msgstr "Probleem met bibliotheek-symbool"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Symbool eenheid notatie:"
+msgstr "Symbool is niet geannoteerd"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Wijzigingen van symbolen tot footprint worden niet opgeslagen"
+msgstr "Symbool heeft meer eenheden dan gedefineerd"
 
 #: eeschema/erc_item.cpp:146
 #, fuzzy
