@@ -914,16 +914,26 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
         ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
         return false;
     }
+    wxFileName fn( aFileName );
 
     STEPCAFControl_Writer writer;
     writer.SetColorMode( Standard_True );
     writer.SetNameMode( Standard_True );
 
+    // This must be set before we "transfer" the document.
+    // Should default to kicad_pcb.general.title_block.title,
+    // but in the meantime, defaulting to the basename of the output
+    // target is still better than "open cascade step translter v..."
+    // UTF8 should be ok from ISO 10303-21:2016, but... older stuff? use boring ascii
+    if( !Interface_Static::SetCVal("write.step.product.name", fn.GetName().ToAscii()) ) {
+        wxString s("Failed to set step product name, but will attempt to continue");
+        ReportMessage(s);
+    }
+
     if( Standard_False == writer.Transfer( m_doc, STEPControl_AsIs ) )
         return false;
 
     APIHeaderSection_MakeHeader hdr( writer.ChangeWriter().Model() );
-    wxFileName fn( aFileName );
     // Note: use only Ascii7 chars, non Ascii7 chars (therefore UFT8 chars)
     // are creating issues in the step file
     hdr.SetName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
