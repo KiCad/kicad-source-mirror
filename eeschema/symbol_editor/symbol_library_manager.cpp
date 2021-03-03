@@ -133,6 +133,9 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( aFileType ) );
     bool res = true;    // assume all libraries are successfully saved
 
+    PROPERTIES properties;
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+
     auto it = m_libs.find( aLibrary );
 
     if( it != m_libs.end() )
@@ -169,9 +172,6 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     else
     {
         // Handle original library
-        PROPERTIES properties;
-        properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
-
         for( LIB_PART* part : getOriginalParts( aLibrary ) )
         {
             LIB_PART* newSymbol;
@@ -888,12 +888,20 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
-    wxCHECK( part, false );
+    LIB_PART* originalPart = aPartBuf->GetOriginal();
+    wxCHECK( part && originalPart, false );
     SYMBOL_LIB_TABLE::SAVE_T result;
+    PROPERTIES properties;
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+
+    // Delete the original symbol if the symbol name has been changed.
+    if( part->GetName() != originalPart->GetName() )
+    {
+        aLibTable->DeleteSymbol( m_libName, originalPart->GetName() );
+    }
 
     if( part->IsAlias() )
     {
-        LIB_PART* originalPart;
         LIB_PART* newCachedPart = new LIB_PART( *part );
         std::shared_ptr< LIB_PART > bufferedParent = part->GetParent().lock();
 
@@ -967,7 +975,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
-    wxCHECK( part, false );
+    LIB_PART* originalPart = aPartBuf->GetOriginal();
+    wxCHECK( part && originalPart, false );
 
     wxString errorMsg = _( "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\"" );
 
@@ -975,9 +984,14 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
     PROPERTIES properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
+    // Delete the original symbol if the symbol name has been changed.
+    if( part->GetName() != originalPart->GetName() )
+    {
+        aPlugin->DeleteSymbol( m_libName, originalPart->GetName(), &properties );
+    }
+
     if( part->IsAlias() )
     {
-        LIB_PART* originalPart;
         LIB_PART* newCachedPart = new LIB_PART( *part );
         std::shared_ptr< LIB_PART > bufferedParent = part->GetParent().lock();
 
