@@ -2399,8 +2399,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     // I need my own copy for the cache
     FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aFootprint->Clone() );
 
-    // It should have no parent, orientation should be zero, and it should be on the front layer.
-    footprint->SetParent( nullptr );
+    // It's orientation should be zero and it should be on the front layer.
     footprint->SetOrientation( 0 );
 
     if( footprint->GetLayer() != F_Cu )
@@ -2412,6 +2411,9 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
         else
             footprint->Flip( footprint->GetPosition(), false );
     }
+
+    // Detach it from the board
+    footprint->SetParent( nullptr );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
     footprints.insert( footprintName, new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
