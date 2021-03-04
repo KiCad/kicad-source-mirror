@@ -1986,7 +1986,7 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
     // If last symbols are ".sChDoC", change them to ".kicad_sch"
     if( ( elem.text.Right( GetFileExtension().length() + 1 ).Lower() ) == ( "." + GetFileExtension().Lower() ))
     {
-        elem.text.RemoveLast( 6 );
+        elem.text.RemoveLast( GetFileExtension().length() );
         elem.text += KiCadSchematicFileExtension;
     }
 
