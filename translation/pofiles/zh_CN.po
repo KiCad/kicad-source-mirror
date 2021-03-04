@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-03-02 13:13+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-03-04 06:40+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2836,9 +2836,8 @@ msgid "Executable files ("
 msgstr "可执行文件 ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "选择默认 PDF 浏览器"
+msgstr "选择首选 PDF 浏览器"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3268,14 +3267,12 @@ msgid ""
 msgstr "在触摸板上左右滚动时，将画布左右平移"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "重置为默认值"
+msgstr "重置为鼠标默认值"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "重置为默认值"
+msgstr "重置为触控板默认值"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4551,7 +4548,7 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "加载 kiface 库 \"%s\" 失败。"
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr "无法从 kiface 库 \"%s\" 读取实例名和版本符号。"
@@ -7200,14 +7197,13 @@ msgid "Generate"
 msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "该文件缺失。\n"
+msgstr "(文件缺失)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "找不到该电路板的原理图。"
+msgstr "所选的材料表生成器脚本 %s 无法被找到。"
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7218,6 +7214,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"已搜索:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -7999,7 +8000,7 @@ msgstr "文本属性"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "标签需要非空文本。"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8194,9 +8195,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- 用户取消的 ERC。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "完成。<br><br>"
+msgstr "ERC 已完成。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10520,12 +10520,11 @@ msgid "Spice value in simulation"
 msgstr "仿真中的 SPICE 值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"在 Spice 值中，小数点分隔符是点。\n"
+"在 Spice 值中，十进制分隔符是点。\n"
 "值可以使用 Spice 单元符号。"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
@@ -12775,9 +12774,8 @@ msgid "Assigned Netclass"
 msgstr "关联的网络类"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "ERC 错误"
+msgstr "电器规则检查错误"
 
 #: eeschema/sch_marker.h:99
 msgid "ERC Marker"
@@ -15434,7 +15432,6 @@ msgid "Highlight on PCB"
 msgstr "高亮 PCB"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr "在电路板编辑器中高亮显示相应项目"
 
@@ -15467,18 +15464,16 @@ msgid "Enter Sheet"
 msgstr "进入分页"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "在 Eeschema 窗口中显示所选图框的内容"
+msgstr "在原理图编辑器中显示所选图框的内容"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "离开分页"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "在 Eeschema 窗口中显示父级图框"
+msgstr "在原理图编辑器中显示父级图框"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -20325,9 +20320,8 @@ msgstr "顶层前缀："
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "元件侧工位的可选前缀 (例如：F_)"
+msgstr "组件侧引用名称的可选前缀 (如：F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
@@ -20335,7 +20329,6 @@ msgstr "底层前缀："
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr "锡膏侧参考名称的可选前缀 (例如：B_)"
 
@@ -20872,13 +20865,12 @@ msgid "Pad connections:"
 msgstr "焊盘连接："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"默认焊盘与覆铜区连接类型。\n"
-"该设置可以通过本地焊盘设置覆盖"
+"默认焊盘与区域连接类型。\n"
+"该设置可被本地焊盘设置覆盖"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
@@ -20917,9 +20909,8 @@ msgstr "填充类型:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "实心"
+msgstr "实心填充"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -22248,7 +22239,7 @@ msgstr "打印模式"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "导出为白色背景上的黑色元素"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23477,9 +23468,8 @@ msgid "Via Length"
 msgstr "过孔长度"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "调整布线长度 (&T)"
+msgstr "布线长度"
 
 # Die 裸芯片
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
@@ -25161,18 +25151,16 @@ msgid "Keep out tracks"
 msgstr "禁止布线"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "删除短路两个网络的布线"
+msgstr "防止导线被布入这个区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "禁止过孔"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "防止项目在画布上被移动和/或调整大小"
+msgstr "防止过孔被放置在这个区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25180,16 +25168,15 @@ msgstr "保留焊盘"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "如果焊盘与该区域重叠，则会引发 DRC 错误"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "禁止覆铜"
+msgstr "阻止铜充填"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "区域不会将铜填充到该区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25197,16 +25184,15 @@ msgstr "保留封装"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "如果封装外框与该区域重叠，会会引发 DRC 错误"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "限制轮廓线方向水平，垂直或 45 度"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "仅允许水平或垂直绘连线和总线"
+msgstr "仅用水平、垂直或 45 度线绘制该区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -27262,27 +27248,24 @@ msgid "Checking track & via clearances..."
 msgstr "正在检查布线和过孔间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "正在检查通孔到焊盘间隙..."
+msgstr "正在检查孔间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "正在检查焊盘间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "正在检查引脚..."
+msgstr "正在检查焊盘..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "正在检查铜区间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "检查填充区域..."
+msgstr "正在检查区域..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -27310,9 +27293,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "正在检查封装外框定义..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "正在检查封装外框定义..."
+msgstr "正在收集封装外框..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -27347,14 +27329,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "正在检查禁布区和不允许约束..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "正在检查板边缘间隙..."
+msgstr "正在检查铜层到板边缘间隙..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "正在检查丝印到板边缘间隙..."
+msgstr "正在检查 silk 到板边缘间隙..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -27374,7 +27354,6 @@ msgid "Checking via holes..."
 msgstr "正在检查微孔通孔..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
 msgstr "正在检查微孔通孔..."
 
@@ -29440,14 +29419,12 @@ msgstr ""
 "的设计规则。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
-msgstr ""
-"库元件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 KiCad 等价物。该区域既不是过孔也"
-"不是布线禁止区。该地区没有导入。"
+msgstr "库元件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 KiCad 等价物。该区域既不是过孔也不是布线禁止区。该区域没有被导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
 #, c-format
