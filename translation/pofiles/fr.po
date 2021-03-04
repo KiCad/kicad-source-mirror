@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-02-23 20:20+0100\n"
+"POT-Creation-Date: 2021-03-04 10:25+0100\n"
+"PO-Revision-Date: 2021-03-04 10:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1402,8 +1402,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/bitmap2component.desktop:9
+#: resources/linux/launchers/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -2897,7 +2897,6 @@ msgid "Executable files ("
 msgstr "Fichiers exécutables ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Sélection Visualisateur PDF Préféré"
 
@@ -3177,6 +3176,7 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Une seule action peut être assignée à chaque paramètre de défilement vertical"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3301,7 +3301,7 @@ msgstr "Pavé tactile vertical ou mouvement de roue :"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Une seule action peut être attribuée à chaque colonne"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
@@ -3353,14 +3353,12 @@ msgstr ""
 "le pavé tactile"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Réinitialiser aux Défauts"
+msgstr "Réinitialiser aux Défauts de Souris"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Réinitialiser aux Défauts"
+msgstr "Réinitialiser aux Défauts de Trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4580,9 +4578,8 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Supprimer élément(s) sélectionné(s)"
+msgstr "Supprimer cellules sélectionnées"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4666,11 +4663,11 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "Impossible de charger la librairie kiface \"%s\"."
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
-"Impossible de lire les symboles nom de l'instance et la version dans la "
+"Impossible de lire le nom de l'instance et la version du symbole dans la "
 "librairie kiface \"%s\"."
 
 #: common/kiway.cpp:272
@@ -7373,14 +7370,13 @@ msgid "Generate"
 msgstr "Générer"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Il est manquant\n"
+msgstr "(fichier manquant)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "La schématique pour ce circiut imprimé ne peut pas être trouvée."
+msgstr "Le script de génération de BOM sélectionné %s n'a pas pu être trouvé."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7391,6 +7387,10 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"Cherché:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -7463,9 +7463,10 @@ msgstr ""
 "Activez cette option pour afficher la console en cours d'exécution."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Réinitialiser la liste des tailles de grille aux valeurs par défaut"
+msgstr ""
+"Réinitialiser la liste des scripts de génération de BOM aux paramètres par "
+"défaut"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -8226,7 +8227,7 @@ msgstr "Propriétés du Texte"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "L’étiquette nécessite un texte non vide."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8417,16 +8418,15 @@ msgstr "Erreurs, Avertissements et Exclusions"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d symbole (s) nécessitent une numérotation.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC annulé par l’utilisateur.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Fait.<br><br>"
+msgstr "ERC terminé.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10797,7 +10797,6 @@ msgid "Spice value in simulation"
 msgstr "Valeur Spice dans la simulation"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -11608,9 +11607,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "Basculer l’état de sélection de l’élément(s)."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Ctrl+Maj"
+msgstr "Alt+Maj"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -13127,7 +13125,6 @@ msgid "Assigned Netclass"
 msgstr "NetClasses Assignées"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
 msgstr "Contrôle des Règles Electroniques: Erreur"
 
@@ -13974,6 +13971,274 @@ msgstr "Label Hiérarchique '%s'"
 #: eeschema/sch_text.cpp:1541 pcbnew/dialogs/panel_setup_rules.cpp:472
 msgid "Syntax Help"
 msgstr "Aide Syntaxe"
+
+#: eeschema/sch_text_help_md.h:2
+msgid ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp> </td>\n"
+"    </tr>\n"
+"</table>\n"
+msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp> </td>\n"
+"    </tr>\n"
+"</table>\n"
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -15904,7 +16169,6 @@ msgid "Highlight on PCB"
 msgstr "Surbrillance sur PCB"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr ""
 "Mettre en surbrillance les éléments correspondants dans l'éditeur de PCB"
@@ -15938,19 +16202,17 @@ msgid "Enter Sheet"
 msgstr "Entrer dans Feuille"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
 msgstr ""
-"Afficher le contenu de la feuille sélectionnée dans la fenêtre Eeschema"
+"Afficher le contenu de la feuille sélectionnée dans l'éditeur de schéma"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "Quitter sous-feuille"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Afficher la feuille parente dans la fenêtre Eeschema"
+msgstr "Afficher la feuille parente dans la fenêtre  de l'éditeur de schéma"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -16197,17 +16459,17 @@ msgid "Couldn't load image from \"%s\""
 msgstr "Impossible de charger l’image depuis \"%s\""
 
 #: eeschema/tools/sch_drawing_tools.cpp:575
-#: eeschema/tools/sch_drawing_tools.cpp:1059
+#: eeschema/tools/sch_drawing_tools.cpp:1060
 msgid "No new hierarchical labels found."
 msgstr "Pas de nouveau label hiérarchique trouvé."
 
-#: eeschema/tools/sch_drawing_tools.cpp:659
+#: eeschema/tools/sch_drawing_tools.cpp:660
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 "L’emplacement de la jonction ne contient pas de fils et/ou de pins "
 "connectables."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1047
+#: eeschema/tools/sch_drawing_tools.cpp:1048
 msgid "Click over a sheet."
 msgstr "Cliquez sur une feuille."
 
@@ -16872,7 +17134,7 @@ msgid "X2 attr"
 msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1001
-#: resources/linux/launchers/gerbview.desktop.in:10
+#: resources/linux/launchers/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -17448,7 +17710,6 @@ msgstr ""
 "Voulez vous créer un nouveau répertoire vide pour le projet?"
 
 #: kicad/import_project.cpp:113
-#, fuzzy
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
@@ -17463,6 +17724,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Impossible de copier le fichier \"%s\"\n"
+"vers \"%s\"\n"
+"Le projet ne peut pas être importé."
 
 #: kicad/import_project.cpp:220
 msgid "Import CADSTAR Archive Project Files"
@@ -17957,11 +18221,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:49
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19332,8 +19591,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/pcbcalculator.desktop:9
+#: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -20127,7 +20386,7 @@ msgstr "Couches cuivre:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Sélectionnez le nombre de couches de cuivre du PCB"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -20878,7 +21137,6 @@ msgstr "Préfixe pour dessus:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
 "Préfixe optionnel pour les références schématiques coté composant (c.-à-d. "
@@ -20890,7 +21148,6 @@ msgstr "Préfixe pour dessous:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr ""
 "Préfixe optionnel pour les références schématiques coté soudure (c.-à-d. B_)"
@@ -21435,13 +21692,12 @@ msgid "Pad connections:"
 msgstr "Connexions des pads:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
 "Type de connexion par défaut des pads à la zone.\n"
-"Ce paramètre peut être substitué par les paramètres locaux du pad"
+"Ce paramètre peut être outrepassé  par les paramètres locaux du pad"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
@@ -21480,9 +21736,8 @@ msgstr "Style de Remplissage:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "Solide"
+msgstr "Remplissage solide"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -22843,7 +23098,7 @@ msgstr "Mode d'Impression"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Exporter comme éléments noirs sur un fond blanc"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -24112,9 +24367,8 @@ msgid "Via Length"
 msgstr "Longueur de Via"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "Ajuster Longueur de &Segment"
+msgstr "Longueur de Segment"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25873,18 +26127,16 @@ msgid "Keep out tracks"
 msgstr "Sans pistes"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Suppression pistes court-circuitant deux nets"
+msgstr "Empêcher les pistes d'être tracées dans cette zone"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "Sans vias"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "Empêcher les éléments d'être déplacés et/ou redimensionnés"
+msgstr "Empêcher les vias d’être placées dans cette zone"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25892,16 +26144,15 @@ msgstr "Sans pads"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Afficher une erreur DRC si un pad chevauche cette zone"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
 msgstr "Sans zones cuivre"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Les zones ne rempliront pas le cuivre dans cette surface"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25910,15 +26161,18 @@ msgstr "Sans empreintes"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
+"Afficher une erreur DRC si une zone d'occupation d'empreinte chevauche cette "
+"zone"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Contraindre contour à H, V et 45 deg"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
+msgstr ""
+"Tracer la surface en utilisant lignes verticales, horizontales et à 45° "
+"seulement"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -26734,10 +26988,10 @@ msgid "Minimum item clearance:"
 msgstr "Isolation minimum de l'élément:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:421
-#, fuzzy
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
-"Utiliser le contrôle \"%s\" pour modifier le nombre de couches de cuivre."
+"Utilisez la page Stackup physique pour modifier le nombre de couches de "
+"cuivre."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #, c-format
@@ -28053,27 +28307,24 @@ msgid "Checking track & via clearances..."
 msgstr "Vérification des isolations pistes et vias..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Isolations zone à zone...\n"
+msgstr "Vérification marge trous..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "Vérification des isolations des pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Vérification des pins..."
+msgstr "Vérification des pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "Vérification des isolations des zones de cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Verification du remplissage de zones..."
+msgstr "Vérification des zones..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -28101,7 +28352,6 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Vérification des définitions des zone d'occupation des empreintes..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
 msgstr "Vérification des définitions des zone d'occupation des empreintes..."
 
@@ -28139,14 +28389,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Vérification des contraintes des zones d'interdiction et de rejet..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Vérification des isolations du contour de PCB..."
+msgstr "Vérification des isolations cuivre/contour de PCB..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "Isolations pads...\n"
+msgstr "Vérification marge sérigraphie/contour de PCB..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -28166,9 +28414,8 @@ msgid "Checking via holes..."
 msgstr "Vérification perçage des vias..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Vérification perçage des vias..."
+msgstr "Vérification perçage des micro-vias..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:170
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
@@ -30333,14 +30580,15 @@ msgstr ""
 "revoir les règles de conception qui ont été appliquées."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
 "La zone CADSTAR '%s’dans le composant en librairie  '%s’n’a pas d’équivalent "
-"KiCad. La zone n’est mas une zone interdite. La zone n’a pas été importée."
+"KiCad. La zone n’est pas une zone interdite pour via ou piste. La zone n’a "
+"pas été importée."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
 #, c-format
@@ -31575,17 +31823,20 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Fichier évènement: %s\n"
+"Listage du PCB: %s"
 
 #: pcbnew/router/router_tool.cpp:503
-#, fuzzy
 msgid "Save router log"
-msgstr "Sauver Projet vers"
+msgstr "Enregistrer le journal du routeur"
 
 #: pcbnew/router/router_tool.cpp:503
 msgid ""
 "Would you like to save the router\n"
 "event log for debugging purposes?"
 msgstr ""
+"Souhaitez-vous sauver journal des événements\n"
+"du routeur à des fins de débogage?"
 
 #: pcbnew/router/router_tool.cpp:812 pcbnew/router/router_tool.cpp:834
 msgid "Show board setup"
@@ -32065,7 +32316,7 @@ msgstr "Créer arc à partir du segment"
 msgid "Select Via Size"
 msgstr "Sélectionner Taille Via"
 
-#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1466
+#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1468
 msgid "Draw a line segment"
 msgstr "Tracer une ligne"
 
@@ -32085,35 +32336,35 @@ msgstr "Tracer un arc"
 msgid "Place a text"
 msgstr "Placer un texte"
 
-#: pcbnew/tools/drawing_tool.cpp:880
+#: pcbnew/tools/drawing_tool.cpp:882
 msgid "Draw a leader"
 msgstr "Tracer un guide"
 
-#: pcbnew/tools/drawing_tool.cpp:893
+#: pcbnew/tools/drawing_tool.cpp:895
 msgid "Draw a dimension"
 msgstr "Tracer une cote"
 
-#: pcbnew/tools/drawing_tool.cpp:1026
+#: pcbnew/tools/drawing_tool.cpp:1028
 msgid "No graphic items found in file to import"
 msgstr "Pas d'éléments graphiques trouvés dans le fichier à importer"
 
-#: pcbnew/tools/drawing_tool.cpp:1076 pcbnew/tools/drawing_tool.cpp:1147
+#: pcbnew/tools/drawing_tool.cpp:1078 pcbnew/tools/drawing_tool.cpp:1149
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer un dessin DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1213
+#: pcbnew/tools/drawing_tool.cpp:1215
 msgid "Move the footprint reference anchor"
 msgstr "Déplacer l'ancre de référence de l'empreinte"
 
-#: pcbnew/tools/drawing_tool.cpp:1900
+#: pcbnew/tools/drawing_tool.cpp:1902
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Les polygones auto intersectants ne sont pas autorisés"
 
-#: pcbnew/tools/drawing_tool.cpp:2353
+#: pcbnew/tools/drawing_tool.cpp:2356
 msgid "Via location violates DRC."
 msgstr "La position de la via viole le DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2456
+#: pcbnew/tools/drawing_tool.cpp:2459
 msgid "Place via"
 msgstr "Place via"
 
@@ -34592,21 +34843,17 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/launchers/kicad.desktop:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
+#: resources/linux/appdata/kicad.appdata.xml:13
+#: resources/linux/launchers/kicad.desktop:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:37
+#: resources/linux/appdata/kicad.appdata.xml:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -34616,376 +34863,70 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml.in:49
+#: resources/linux/appdata/kicad.appdata.xml:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:54
+#: resources/linux/appdata/kicad.appdata.xml:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:59
+#: resources/linux/appdata/kicad.appdata.xml:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:71
+#: resources/linux/appdata/kicad.appdata.xml:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/bitmap2component.desktop:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/eeschema.desktop:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/eeschema.desktop:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/eeschema.desktop:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/gerbview.desktop:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/gerbview.desktop:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop.in:12
+#: resources/linux/launchers/kicad.desktop:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/pcbcalculator.desktop:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/pcbnew.desktop:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/pcbnew.desktop:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
 
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
-msgid "Gerber File"
-msgstr "Fichiers Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
-msgid "Excellon drill file"
-msgstr "Créer Fichier(s) de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
-msgid "KiCad Project"
-msgstr "Fichier projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
-msgid "KiCad Schematic"
-msgstr "Editeur de Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichiers circuits imprimés KiCad"
-
 #~ msgid "Empty Text!"
 #~ msgstr "Texte Vide!"
-
-#~ msgid "Options:"
-#~ msgstr "Options :"
-
-#~ msgid "Default format"
-#~ msgstr "Format par défaut"
-
-#~ msgid ""
-#~ "<table>\n"
-#~ "    <tr>\n"
-#~ "        <th>Markup</th>\n"
-#~ "        <th></th>\n"
-#~ "        <th>Result</th>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
-#~ "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
-#~ "        <td></td>\n"
-#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
-#~ "td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-#~ "samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
-#~ "        <th>Resultant Nets</th>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-#~ "\t\t<td></td>\n"
-#~ "\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, "
-#~ "MEM.LATCH</samp> </td>\n"
-#~ "    </tr>\n"
-#~ "</table>\n"
-#~ msgstr ""
-#~ "<table>\n"
-#~ "    <tr>\n"
-#~ "        <th>Markup</th>\n"
-#~ "        <th></th>\n"
-#~ "        <th>Result</th>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
-#~ "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
-#~ "        <td></td>\n"
-#~ "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-#~ "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-#~ "samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </"
-#~ "td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-#~ "samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>150K</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
-#~ "        <th>Resultant Nets</th>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
-#~ "\t\t<td></td>\n"
-#~ "\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td><br></td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
-#~ "    </tr>\n"
-#~ "    <tr>\n"
-#~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
-#~ "        <td></td>\n"
-#~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, "
-#~ "MEM.LATCH</samp> </td>\n"
-#~ "    </tr>\n"
-#~ "</table>\n"
-
-#~ msgid "Ω"
-#~ msgstr "Ω"
-
-#~ msgid "kΩ"
-#~ msgstr "kΩ"
 
 #~ msgid "Solid shape"
 #~ msgstr "Forme solide"
@@ -35002,6 +34943,18 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Board Length"
 #~ msgstr "Longueur sur CI"
+
+#~ msgid "Ω"
+#~ msgstr "Ω"
+
+#~ msgid "kΩ"
+#~ msgstr "kΩ"
+
+#~ msgid "Options:"
+#~ msgstr "Options :"
+
+#~ msgid "Default format"
+#~ msgstr "Format par défaut"
 
 #~ msgid "No constraint"
 #~ msgstr "Aucune contrainte"
@@ -35660,6 +35613,10 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
