@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-03-01 15:51+0000\n"
+"PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2904,7 +2904,6 @@ msgid "Executable files ("
 msgstr "Исполняемые файлы ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Выбор предпочитаемого PDF обозревателя"
 
@@ -3358,14 +3357,12 @@ msgstr ""
 "сенсорной панели"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "По умолчанию"
+msgstr "По умолчанию для мыши"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "По умолчанию"
+msgstr "По умолчанию для сенс.панели"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4655,12 +4652,12 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "Не удалось загрузить kiface библиотеку \"%s\"."
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
-"Не удалось прочитать имя экземпляра и символ версии из kiface библиотеки \"%s"
-"\"."
+"Не удалось прочитать имя экземпляра и символ версии из kiface библиотеки \"%"
+"s\"."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -7337,14 +7334,13 @@ msgid "Generate"
 msgstr "Сформировать"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Он отсутствует.\n"
+msgstr "(файл отсутствует)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Не удалось найти схему для этой платы."
+msgstr "Не удалось найти выбранный скрипт формирования перечня элементов %s."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7355,6 +7351,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Просмотрено:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8171,7 +8172,7 @@ msgstr "Свойства текста"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Метка не может быть пустой."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8366,9 +8367,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC отменено пользователем.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Готово.<br><br>"
+msgstr "Проверка выполнена.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10716,7 +10716,6 @@ msgid "Spice value in simulation"
 msgstr "Spice значение в симуляции"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -13003,7 +13002,6 @@ msgid "Assigned Netclass"
 msgstr "Присвоенный класс цепей"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
 msgstr "Ошибка электрических правил"
 
@@ -15725,7 +15723,6 @@ msgid "Highlight on PCB"
 msgstr "Подсветить на плате"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr "Подсветить соответствующие компоненты в редакторе плат"
 
@@ -15760,18 +15757,16 @@ msgid "Enter Sheet"
 msgstr "Открыть лист"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Показать содержимое выбранного листа в окне Eeschema"
+msgstr "Показать содержимое выбранного листа в редакторе схем"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "Покинуть лист"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Показать содержимое родительского листа в окне Eeschema"
+msgstr "Показать содержимое родительского листа в редакторе схем"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -20665,11 +20660,10 @@ msgstr "Префикс для верхних:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
-"Не обязательный префикс для указания стороны расположения в обозначении "
-"(например, F_)"
+"Не обязательный префикс для указания стороны компонентов в обозначении ("
+"например, F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
@@ -20677,11 +20671,10 @@ msgstr "Префикс для нижних:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr ""
-"Не обязательный префикс для указания стороны расположения в обозначении "
-"(например, B_)"
+"Не обязательный префикс для указания стороны пайки в обозначении (например, "
+"B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Exclude locked footprints"
@@ -21223,7 +21216,6 @@ msgid "Pad connections:"
 msgstr "Подкл. к конт.пл.:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
@@ -21268,7 +21260,6 @@ msgstr "Тип заливки:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
 msgstr "Сплошной"
 
@@ -22635,7 +22626,7 @@ msgstr "Режим печати"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Экспортировать элементы чёрным на белом фоне"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23893,9 +23884,8 @@ msgid "Via Length"
 msgstr "Длина перех.отв."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "Полная длина"
+msgstr "Длина дорожки"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25635,18 +25625,16 @@ msgid "Keep out tracks"
 msgstr "Запретить дорожки"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Удалить дорожки, замыкающие разные цепи"
+msgstr "Запретить размещение дорожек в этой области"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "Запретить перех.отв."
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "Запретить перемещение и/или изменение размера элементов в редакторе"
+msgstr "Запретить размещение перех.отв. в этой области"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25654,16 +25642,15 @@ msgstr "Запретить конт.пл."
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Формировать ошибку DRC если конт.пл. пересекается с этой областью"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "Запретить медные зоны"
+msgstr "Запретить заполнение медью"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Зоны не будут заливать эту область медью"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25672,17 +25659,17 @@ msgstr "Запретить посад.места"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
+"Формировать ошибку DRC если область установки посад.места пересекается с "
+"этой областью"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Ограничить контур ортогонально и под углом 45°"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
 msgstr ""
-"При черчении графических линий располагать их горизонтально, вертикально или "
-"под углом 45°."
+"Располагать рёбра зоны только горизонтально, вертикально или под углом 45°"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -27777,27 +27764,24 @@ msgid "Checking track & via clearances..."
 msgstr "Проверка зазоров дорожек и перех.отв..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Зазоры между зонами...\n"
+msgstr "Проверка зазоров между отверстиями..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "Проверка зазоров конт.пл..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Проверка выводов..."
+msgstr "Проверка конт.пл..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "Проверка зазоров зон меди..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Проверка заливки зон..."
+msgstr "Проверка зон..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -27825,9 +27809,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Проверка заявленных областей установки посад.мест..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "Проверка заявленных областей установки посад.мест..."
+msgstr "Сбор данных об областях установки посад.мест..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -27862,14 +27845,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Проверка общих ограничений и ограничений областей запрета..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Проверка зазоров у края платы..."
+msgstr "Проверка зазора между медью и крем платы..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "Проверка зазоров у края платы..."
+msgstr "Проверка зазора между шёлкографией и краем платы..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -27889,9 +27870,8 @@ msgid "Checking via holes..."
 msgstr "Проверка отверстий перех.отв..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Проверка отверстий перех.отв..."
+msgstr "Проверка отверстий перех.микроотв..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:170
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
@@ -30022,7 +30002,7 @@ msgstr ""
 "проектирования."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
