@@ -3528,25 +3528,26 @@ void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel )
 
 void ELEM_HOLDER::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
 {
-    for( int i=0;  i<Length();  ++i )
-    {
+    for( int i = 0; i < Length(); ++i )
         At(i)->Format( out, nestLevel );
-    }
 }
 
 
-int ELEM_HOLDER::FindElem( T     aType, int instanceNum )
+int ELEM_HOLDER::FindElem( T aType, int instanceNum )
 {
     int repeats=0;
-    for( unsigned i=0;  i<kids.size();  ++i )
+
+    for( unsigned i = 0; i < kids.size(); ++i )
     {
         if( kids[i].Type() == aType )
         {
             if( repeats == instanceNum )
                 return i;
+
             ++repeats;
         }
     }
+
     return -1;
 }
 
@@ -3650,15 +3651,17 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
         const char* q1 = out->GetQuoteChar( s1.c_str() );
         const char* q2 = out->GetQuoteChar( s2.c_str() );
         out->Print( nestLevel, "(constant %s%s%s %s%s%s)\n",
-            q1, s1.c_str(), q1,
-            q2, s2.c_str(), q2 );
+                               q1, s1.c_str(), q1,
+                               q2, s2.c_str(), q2 );
     }
 
     if( routes_include_testpoint || routes_include_guides || routes_include_image_conductor )
+    {
         out->Print( nestLevel, "(routes_include%s%s%s)\n",
-                   routes_include_testpoint ? " testpoint" : "",
-                   routes_include_guides ? " guides" : "",
-                   routes_include_image_conductor ? " image_conductor" : "");
+                               routes_include_testpoint ? " testpoint" : "",
+                               routes_include_guides ? " guides" : "",
+                               routes_include_image_conductor ? " image_conductor" : "" );
+    }
 
     if( wires_include_testpoint )
         out->Print( nestLevel, "(wires_include testpoint)\n" );
@@ -3681,8 +3684,9 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
     {
         useMultiLine = true;
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(),
-                                quote, component_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n",
+                               Name(),
+                               quote, component_id.c_str(), quote );
 
         out->Print( nestLevel+1, "%s", "" );
     }
@@ -3690,8 +3694,9 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
     {
         useMultiLine = false;
 
-        out->Print( nestLevel, "(%s %s%s%s", Name(),
-                                quote, component_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s",
+                               Name(),
+                               quote, component_id.c_str(), quote );
     }
 
     if( hasVertex )
@@ -3720,8 +3725,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
     if( logical_part.size() )
     {
         quote = out->GetQuoteChar( logical_part.c_str() );
-        out->Print( 0, "%s(logical_part %s%s%s)", space,
-                   quote, logical_part.c_str(), quote );
+        out->Print( 0, "%s(logical_part %s%s%s)", space, quote, logical_part.c_str(), quote );
         space = "";
     }
 
@@ -3737,15 +3741,15 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
         {
             out->Print( nestLevel+1, "(property \n" );
 
-            for( PROPERTIES::const_iterator i = properties.begin();
-                i != properties.end();  ++i )
-            {
+            for( PROPERTIES::const_iterator i = properties.begin(); i != properties.end(); ++i )
                 i->Format( out, nestLevel+2 );
-            }
+
             out->Print( nestLevel+1, ")\n" );
         }
+
         if( lock_type != T_NONE )
             out->Print( nestLevel+1, "(lock_type %s)\n", GetTokenText(lock_type) );
+
         if( rules )
             rules->Format( out, nestLevel+1 );
 
@@ -3755,8 +3759,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
         if( part_number.size() )
         {
             quote = out->GetQuoteChar( part_number.c_str() );
-            out->Print( nestLevel+1, "(PN %s%s%s)\n",
-                       quote, part_number.c_str(), quote );
+            out->Print( nestLevel+1, "(PN %s%s%s)\n", quote, part_number.c_str(), quote );
         }
     }
     else
@@ -3770,8 +3773,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
         if( part_number.size() )
         {
             quote = out->GetQuoteChar( part_number.c_str() );
-            out->Print( 0, "%s(PN %s%s%s)", space,
-                       quote, part_number.c_str(), quote );
+            out->Print( 0, "%s(PN %s%s%s)", space, quote, part_number.c_str(), quote );
         }
     }
 

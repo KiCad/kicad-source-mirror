@@ -312,34 +312,34 @@ public:
      * returns the number of ELEMs in this ELEM.
      * @return int - the count of children
      */
-    int     Length() const
+    int Length() const
     {
         return kids.size();
     }
 
-    void    Append( ELEM* aElem )
+    void Append( ELEM* aElem )
     {
         kids.push_back( aElem );
     }
 
-    ELEM*   Replace( int aIndex, ELEM* aElem )
+    ELEM* Replace( int aIndex, ELEM* aElem )
     {
         ELEM_ARRAY::auto_type ret = kids.replace( aIndex, aElem );
         return ret.release();
     }
 
-    ELEM*   Remove( int aIndex )
+    ELEM* Remove( int aIndex )
     {
         ELEM_ARRAY::auto_type ret = kids.release( kids.begin()+aIndex );
         return ret.release();
     }
 
-    void    Insert( int aIndex, ELEM* aElem )
+    void Insert( int aIndex, ELEM* aElem )
     {
         kids.insert( kids.begin()+aIndex, aElem );
     }
 
-    ELEM*   At( int aIndex ) const
+    ELEM* At( int aIndex ) const
     {
         // we have varying sized objects and are using polymorphism, so we
         // must return a pointer not a reference.
@@ -419,18 +419,15 @@ public:
         value = 2540000;
     }
 
-    DSN_T   GetEngUnits() const  { return units; }
-    int     GetValue() const  { return value; }
+    DSN_T GetEngUnits() const  { return units; }
+    int GetValue() const  { return value; }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel )  override
     {
         if( type == T_unit )
-            out->Print( nestLevel, "(%s %s)\n", Name(),
-                       GetTokenText(units) );
-
+            out->Print( nestLevel, "(%s %s)\n", Name(), GetTokenText( units ) );
         else    // T_resolution
-            out->Print( nestLevel, "(%s %s %d)\n", Name(),
-                       GetTokenText(units), value );
+            out->Print( nestLevel, "(%s %s %d)\n", Name(), GetTokenText( units ), value );
     }
 };
 
@@ -475,11 +472,11 @@ public:
         const char* quote = out->GetQuoteChar( layer_id.c_str() );
 
         out->Print( nestLevel, "(%s %s%s%s %.6g %.6g %.6g %.6g)%s",
-                   Name(),
-                   quote, layer_id.c_str(), quote,
-                   point0.x, point0.y,
-                   point1.x, point1.y,
-                   newline );
+                    Name(),
+                    quote, layer_id.c_str(), quote,
+                    point0.x, point0.y,
+                    point1.x, point1.y,
+                    newline );
     }
 };
 
@@ -517,8 +514,10 @@ public:
         {
             out->Print( 0, "\n" );
             singleLine = false;
-            for( STRINGS::const_iterator i = rules.begin();  i!=rules.end(); ++i )
+
+            for( STRINGS::const_iterator i = rules.begin();  i != rules.end(); ++i )
                 out->Print( nestLevel+1, "%s\n", i->c_str() );
+
             out->Print( nestLevel, ")" );
         }
 
@@ -532,8 +531,8 @@ class LAYER_RULE : public ELEM
 {
     friend class SPECCTRA_DB;
 
-    STRINGS         layer_ids;
-    RULE*           rule;
+    STRINGS layer_ids;
+    RULE*   rule;
 
 public:
 
@@ -542,6 +541,7 @@ public:
     {
         rule = 0;
     }
+
     ~LAYER_RULE()
     {
         delete rule;
@@ -551,11 +551,12 @@ public:
     {
         out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::const_iterator i=layer_ids.begin();  i!=layer_ids.end();  ++i )
+        for( STRINGS::const_iterator i=layer_ids.begin(); i != layer_ids.end(); ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
+
         out->Print( 0 , "\n" );
 
         if( rule )
@@ -564,6 +565,8 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 };
+
+
 typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
 
 
@@ -616,12 +619,13 @@ public:
 
         const int RIGHTMARGIN = 70;
         int perLine = out->Print( nestLevel, "(%s %s%s%s %.6g",
-                               Name(),
-                               quote, layer_id.c_str(), quote,
-                               aperture_width );
+                                  Name(),
+                                  quote, layer_id.c_str(), quote,
+                                  aperture_width );
 
         int wrapNest = std::max( nestLevel+1, 6 );
-        for( unsigned i=0;  i<points.size();  ++i )
+
+        for( unsigned i = 0; i < points.size(); ++i )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -629,7 +633,9 @@ public:
                 perLine = out->Print( wrapNest, "%s", "" );
             }
             else
+            {
                 perLine += out->Print( 0, "  " );
+            }
 
             perLine += out->Print( 0, "%.6g %.6g", points[i].x, points[i].y );
         }
@@ -691,6 +697,7 @@ public:
             for( PATHS::iterator i=paths.begin();  i!=paths.end();  ++i )
             {
                 POINTS& plist = i->GetPoints();
+
                 for( unsigned jj = 0; jj < plist.size(); jj++ )
                 {
                     aBuffer.push_back( plist[jj].x );
@@ -709,7 +716,7 @@ public:
             rectangle->Format( out, nestLevel+1 );
         else
         {
-            for( PATHS::iterator i=paths.begin();  i!=paths.end();  ++i )
+            for( PATHS::iterator i = paths.begin(); i != paths.end(); ++i )
                 i->Format( out, nestLevel+1 );
         }
 
@@ -800,18 +807,21 @@ public:
     {
         layer_id = aLayerId;
     }
+
     void SetStart( const POINT& aStart )
     {
         vertex[0] = aStart;
         // no -0.0 on the printouts!
         vertex[0].FixNegativeZero();
     }
+
     void SetEnd( const POINT& aEnd )
     {
         vertex[1] = aEnd;
         // no -0.0 on the printouts!
         vertex[1].FixNegativeZero();
     }
+
     void SetCenter( const POINT& aCenter )
     {
         vertex[2] = aCenter;
@@ -855,9 +865,11 @@ public:
 
         if( aShape )
         {
-            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle
-                     || aShape->Type()==T_qarc || aShape->Type()==T_path
-                     || aShape->Type()==T_polygon);
+            wxASSERT( aShape->Type()==T_rect
+                        || aShape->Type()==T_circle
+                        || aShape->Type()==T_qarc
+                        || aShape->Type()==T_path
+                        || aShape->Type()==T_polygon);
 
             aShape->SetParent( this );
         }
@@ -932,9 +944,11 @@ public:
 
         if( aShape )
         {
-            wxASSERT(aShape->Type()==T_rect || aShape->Type()==T_circle
-                     || aShape->Type()==T_qarc || aShape->Type()==T_path
-                     || aShape->Type()==T_polygon);
+            wxASSERT( aShape->Type()==T_rect
+                            || aShape->Type()==T_circle
+                            || aShape->Type()==T_qarc
+                            || aShape->Type()==T_path
+                            || aShape->Type()==T_polygon);
 
             aShape->SetParent( this );
         }
@@ -991,7 +1005,7 @@ public:
             out->Print( 0, "%s", newline );
             newline = "";
 
-            for( WINDOWS::iterator i=windows.begin();  i!=windows.end();  ++i )
+            for( WINDOWS::iterator i = windows.begin(); i != windows.end(); ++i )
                 i->Format( out, nestLevel+1 );
 
             out->Print( nestLevel, ")\n" );
@@ -1031,7 +1045,7 @@ public:
         const int RIGHTMARGIN = 80;
         int perLine = out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
+        for( STRINGS::iterator i = padstacks.begin(); i != padstacks.end(); ++i )
         {
             if( perLine > RIGHTMARGIN )
             {
@@ -1049,13 +1063,14 @@ public:
 
             perLine = out->Print( nestLevel+1, "(spare" );
 
-            for( STRINGS::iterator i=spares.begin();  i!=spares.end();  ++i )
+            for( STRINGS::iterator i = spares.begin(); i != spares.end(); ++i )
             {
                 if( perLine > RIGHTMARGIN )
                 {
                     out->Print( 0, "\n" );
                     perLine = out->Print( nestLevel+2, "%s", "");
                 }
+
                 const char* quote = out->GetQuoteChar( i->c_str() );
                 perLine += out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
             }
@@ -1082,7 +1097,7 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel )  override
     {
-        for( STRINGS::iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
+        for( STRINGS::iterator i = class_ids.begin(); i != class_ids.end(); ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( nestLevel, "%s%s%s\n", quote, i->c_str(), quote );
@@ -1153,19 +1168,15 @@ public:
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
-        //if( via_at_smd )
-        {
-            out->Print( nestLevel+1, "(via_at_smd %s", via_at_smd ? "on" : "off" );
-            if( via_at_smd_grid_on )
-                out->Print( 0, " grid %s", via_at_smd_grid_on ? "on" : "off" );
+        out->Print( nestLevel+1, "(via_at_smd %s", via_at_smd ? "on" : "off" );
 
-            out->Print( 0, ")\n" );
-        }
+        if( via_at_smd_grid_on )
+            out->Print( 0, " grid %s", via_at_smd_grid_on ? "on" : "off" );
 
-        for( int i=0;  i<Length();  ++i )
-        {
+        out->Print( 0, ")\n" );
+
+        for( int i = 0; i < Length(); ++i )
             At(i)->Format( out, nestLevel+1 );
-        }
 
         out->Print( nestLevel, ")\n" );
     }
@@ -1208,8 +1219,9 @@ public:
     {
         const char* quote = out->GetQuoteChar( name.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(),
-                       quote, name.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n",
+                               Name(),
+                               quote, name.c_str(), quote );
 
         out->Print( nestLevel+1, "(type %s)\n", GetTokenText( layer_type ) );
 
@@ -1225,8 +1237,7 @@ public:
         }
 
         if( direction != -1 )
-            out->Print( nestLevel+1, "(direction %s)\n",
-                       GetTokenText( (DSN_T)direction ) );
+            out->Print( nestLevel+1, "(direction %s)\n", GetTokenText( (DSN_T)direction ) );
 
         if( rules )
             rules->Format( out, nestLevel+1 );
@@ -1247,11 +1258,13 @@ public:
         if( use_net.size() )
         {
             out->Print( nestLevel+1, "(use_net" );
-            for( STRINGS::const_iterator i = use_net.begin();  i!=use_net.end(); ++i )
+
+            for( STRINGS::const_iterator i = use_net.begin(); i != use_net.end(); ++i )
             {
                 quote = out->GetQuoteChar( i->c_str() );
                 out->Print( 0, " %s%s%s",  quote, i->c_str(), quote );
             }
+
             out->Print( 0, ")\n" );
         }
 
@@ -1283,10 +1296,11 @@ public:
         const char* quote0 = out->GetQuoteChar( layer_id0.c_str() );
         const char* quote1 = out->GetQuoteChar( layer_id1.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s %s%s%s %.6g)\n", Name(),
-               quote0, layer_id0.c_str(), quote0,
-               quote1, layer_id1.c_str(), quote1,
-               layer_weight );
+        out->Print( nestLevel, "(%s %s%s%s %s%s%s %.6g)\n",
+                               Name(),
+                               quote0, layer_id0.c_str(), quote0,
+                               quote1, layer_id1.c_str(), quote1,
+                               layer_weight );
     }
 };
 typedef boost::ptr_vector<SPECCTRA_LAYER_PAIR>  SPECCTRA_LAYER_PAIRS;
@@ -1309,7 +1323,7 @@ public:
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
-        for( SPECCTRA_LAYER_PAIRS::iterator i=layer_pairs.begin(); i!=layer_pairs.end();  ++i )
+        for( SPECCTRA_LAYER_PAIRS::iterator i = layer_pairs.begin(); i != layer_pairs.end(); ++i )
             i->Format( out, nestLevel+1 );
 
         out->Print( nestLevel, ")\n" );
@@ -1355,8 +1369,9 @@ public:
 
     void Format( OUTPUTFORMATTER* out, int nestLevel )  override
     {
-        out->Print( nestLevel, "(%s %s)\n", Name(),
-                   GetTokenText( value ) );
+        out->Print( nestLevel, "(%s %s)\n",
+                               Name(),
+                               GetTokenText( value ) );
     }
 };
 
@@ -1383,8 +1398,9 @@ public:
     {
         const char* quote = out->GetQuoteChar( value.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s)\n", Name(),
-                                quote, value.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s)\n",
+                               Name(),
+                               quote, value.c_str(), quote );
     }
 };
 
@@ -1459,18 +1475,18 @@ public:
     GRID( ELEM* aParent ) :
         ELEM( T_grid, aParent )
     {
-        grid_type = T_via;
-        direction = T_NONE;
-        dimension = 0.0;
-        offset    = 0.0;
-        image_type= T_NONE;
+        grid_type  = T_via;
+        direction  = T_NONE;
+        dimension  = 0.0;
+        offset     = 0.0;
+        image_type = T_NONE;
     }
 
     void Format( OUTPUTFORMATTER* out, int nestLevel )  override
     {
         out->Print( nestLevel, "(%s %s %.6g",
-                   Name(),
-                   GetTokenText( grid_type ), dimension );
+                    Name(),
+                    GetTokenText( grid_type ), dimension );
 
         if( grid_type == T_place )
         {
@@ -1512,7 +1528,7 @@ public:
 
     void FormatContents( OUTPUTFORMATTER* out, int nestLevel )  override
     {
-        for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
+        for( LAYERS::iterator i = layers.begin(); i != layers.end(); ++i )
             i->Format( out, nestLevel );
 
         if( rules )
@@ -2043,8 +2059,9 @@ public:
 
         const char* quote = out->GetQuoteChar( imageId.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s", Name(),
-                                quote, imageId.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s",
+                               Name(),
+                               quote, imageId.c_str(), quote );
 
         FormatContents( out, nestLevel+1 );
 
@@ -2156,8 +2173,9 @@ public:
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
 
-        out->Print( nestLevel, "(%s %s%s%s\n", Name(),
-                                quote, padstack_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s\n",
+                               Name(),
+                               quote, padstack_id.c_str(), quote );
 
         FormatContents( out, nestLevel+1 );
 
@@ -2179,12 +2197,15 @@ public:
         // spec for <attach_descriptor> says default is on, so
         // print the off condition to override this.
         if( attach == T_off )
+        {
             out->Print( 0, "(attach off)" );
+        }
         else if( attach == T_on )
         {
             const char* quote = out->GetQuoteChar( via_id.c_str() );
+
             out->Print( 0, "(attach on (use_via %s%s%s))",
-                       quote, via_id.c_str(), quote );
+                           quote, via_id.c_str(), quote );
         }
 
         if( rotate == T_off )   // print the non-default
@@ -2331,7 +2352,7 @@ public:
      */
     int FindVia( PADSTACK* aVia )
     {
-        for( unsigned i=0;  i<vias.size();  ++i )
+        for( unsigned i = 0; i < vias.size(); ++i )
         {
             if( 0 == PADSTACK::Compare( aVia, &vias[i] ) )
                 return int( i );
@@ -2389,7 +2410,8 @@ public:
         for( unsigned i=0;  i<padstacks.size();  ++i )
         {
             PADSTACK* ps = &padstacks[i];
-            if( 0 == ps->GetPadstackId().compare( aPadstackId ) )
+
+            if( ps->GetPadstackId().compare( aPadstackId ) == 0 )
                 return ps;
         }
         return NULL;
@@ -2400,13 +2422,13 @@ public:
         if( unit )
             unit->Format( out, nestLevel );
 
-        for( IMAGES::iterator i=images.begin();  i!=images.end();  ++i )
+        for( IMAGES::iterator i = images.begin(); i != images.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( PADSTACKS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
+        for( PADSTACKS::iterator i = padstacks.begin(); i != padstacks.end(); ++i )
             i->Format( out, nestLevel );
 
-        for( PADSTACKS::iterator i=vias.begin();  i!=vias.end();  ++i )
+        for( PADSTACKS::iterator i = vias.begin(); i != vias.end(); ++i )
             i->Format( out, nestLevel );
     }
 
@@ -2450,9 +2472,9 @@ struct PIN_REF : public ELEM
         const char* pquote = out->GetQuoteChar( pin_id.c_str() );
 
         return out->Print( nestLevel, "%s%s%s-%s%s%s%s",
-                cquote, component_id.c_str(), cquote,
-                pquote, pin_id.c_str(), pquote,
-                newline );
+                                      cquote, component_id.c_str(), cquote,
+                                      pquote, pin_id.c_str(), pquote,
+                                      newline );
     }
 };
 typedef std::vector<PIN_REF>   PIN_REFS;
@@ -2515,10 +2537,11 @@ public:
             out->Print( nestLevel, "%s\n", circuit.c_str() );
         */
 
-        for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
+        for( LAYER_RULES::iterator i = layer_rules.begin(); i != layer_rules.end(); ++i )
             i->Format( out, nestLevel+1 );
 
         out->Print( singleLine ? 0 : nestLevel, ")" );
+
         if( nestLevel || !singleLine )
             out->Print( 0, "\n" );
     }
@@ -2546,13 +2569,14 @@ public:
     {
         out->Print( nestLevel, "(%s", Name() );
 
-        for( STRINGS::iterator i=placement_ids.begin();  i!=placement_ids.end();  ++i )
+        for( STRINGS::iterator i = placement_ids.begin(); i != placement_ids.end(); ++i )
         {
             const char* quote = out->GetQuoteChar( i->c_str() );
             out->Print( 0, " %s%s%s", quote, i->c_str(), quote );
         }
 
         out->Print( 0, ")" );
+
         if( nestLevel )
             out->Print( 0, "\n" );
     }
@@ -2617,9 +2641,9 @@ public:
 
     int FindPIN_REF( const std::string& aComponent )
     {
-        for( unsigned i=0;  i<pins.size();  ++i )
+        for( unsigned i = 0; i < pins.size(); ++i )
         {
-            if( 0 == aComponent.compare( pins[i].component_id ) )
+            if( aComponent.compare( pins[i].component_id ) == 0 )
                 return int(i);
         }
         return -1;
@@ -2630,8 +2654,9 @@ public:
         const char* quote = out->GetQuoteChar( net_id.c_str() );
         const char* space = " ";
 
-        out->Print( nestLevel, "(%s %s%s%s", Name(),
-                   quote, net_id.c_str(), quote );
+        out->Print( nestLevel, "(%s %s%s%s",
+                               Name(),
+                               quote, net_id.c_str(), quote );
 
         if( unassigned )
         {
@@ -2660,7 +2685,9 @@ public:
                     perLine = out->Print( nestLevel+2, "%s", "" );
                 }
                 else
+                {
                     perLine += out->Print( 0, " " );
+                }
 
                 perLine += i->FormatIt( out, 0 );
             }
@@ -2676,10 +2703,10 @@ public:
         if( rules )
             rules->Format( out, nestLevel+1 );
 
-        for( LAYER_RULES::iterator i=layer_rules.begin();  i!=layer_rules.end();  ++i )
+        for( LAYER_RULES::iterator i = layer_rules.begin(); i != layer_rules.end(); ++i )
             i->Format( out, nestLevel+1 );
 
-        for( FROMTOS::iterator i=fromtos.begin();  i!=fromtos.end();  ++i )
+        for( FROMTOS::iterator i = fromtos.begin(); i != fromtos.end(); ++i )
             i->Format( out, nestLevel+1 );
 
         out->Print( nestLevel, ")\n" );
