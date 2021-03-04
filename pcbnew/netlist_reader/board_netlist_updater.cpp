@@ -944,6 +944,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         m_board->GetNetInfo().RemoveUnusedNets();
         m_commit.Push( _( "Update netlist" ) );
+
+        m_board->SynchronizeNetsAndNetClasses();
     }
     else if( m_deleteSinglePadNets && !m_newFootprintsCount )
     {
