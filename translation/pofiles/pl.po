@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-03-04 06:40+0000\n"
+"PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -3327,14 +3327,12 @@ msgstr ""
 "prawej na panelu dotykowym"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Resetuj do domyślnych"
+msgstr "Resetuj do domyślnych dla myszy"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Resetuj do domyślnych"
+msgstr "Resetuj do domyślnych dla płytki dotykowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -10729,7 +10727,6 @@ msgid "Spice value in simulation"
 msgstr "Wartość Spice w symulacji"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -13042,7 +13039,6 @@ msgid "Assigned Netclass"
 msgstr "Przydzielona klasa sieci"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
 msgstr "Błąd ERC (Test elektryczny)"
 
@@ -15790,9 +15786,8 @@ msgid "Highlight on PCB"
 msgstr "Podświetl sieć na PCB"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Podświetla odpowiadające elementy w edytorze obwodów drukowanych"
+msgstr "Podświetla tożsame elementy w edytorze obwodów drukowanych"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Show Hidden Pins"
@@ -15823,18 +15818,16 @@ msgid "Enter Sheet"
 msgstr "Wejdź w arkusz"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Wyświetla zawartość wybranego arkusza w oknie programu Eeschema"
+msgstr "Wyświetla zawartość wybranego arkusza w edytorze schematów"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "Opuść arkusz"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Wyświetla nadrzędny arkusz w oknie programu Eeschema"
+msgstr "Wyświetla nadrzędny arkusz w oknie edytora schematów"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -20744,11 +20737,10 @@ msgstr "Przedrostek na warstwie górnej:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
-"Opcjonalne przedrostki dla strony górnej płytki w oznaczeniach komponentów "
-"(np. F_)"
+"Opcjonalne przedrostki dla strony górnej płytki w oznaczeniach komponentów ("
+"np. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
@@ -20756,11 +20748,10 @@ msgstr "Przedrostek na warstwie dolnej:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr ""
-"Opcjonalne przedrostki dla strony dolnej płytki w oznaczeniach komponentów "
-"(np. B_)"
+"Opcjonalne przedrostki dla strony dolnej płytki w oznaczeniach komponentów ("
+"np. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Exclude locked footprints"
@@ -21301,7 +21292,6 @@ msgid "Pad connections:"
 msgstr "Połączenia pól lutowniczych:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
@@ -21346,13 +21336,12 @@ msgstr "Styl wypełnienia:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
 msgstr "Pełny"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
-msgstr "Kreskowane"
+msgstr "Kreskowany"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:302
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:137
@@ -23977,9 +23966,8 @@ msgid "Via Length"
 msgstr "Długość przelotki"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "Dostrajanie długości ścieżki"
+msgstr "Długość ścieżki"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25732,18 +25720,16 @@ msgid "Keep out tracks"
 msgstr "Wyklucz ścieżki"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Usuń ścieżki zwierające różne sieci"
+msgstr "Zapobiegaj trasowaniu ścieżek w tym obszarze"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "Wyklucz przelotki"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "Zapobiegaj przenoszeniu i/lub zmianie rozmiaru elementów na kanwie"
+msgstr "Zapobiegaj stawianiu przelotek w tym obszarze"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25754,13 +25740,12 @@ msgid "Raise a DRC error if a pad overlaps this area"
 msgstr "Zgłoś błąd DRC jeśli pole lutownicze nachodzi na tą strefę"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "Wyklucz strefy miedzi"
+msgstr "Unikaj wypełnień stref"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr "Strefy nie wypełnią miedzi wewnątrz tego obszaru"
+msgstr "Strefy nie wypełnią tego obszaru miedzią"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -27901,27 +27886,24 @@ msgid "Checking track & via clearances..."
 msgstr "Sprawdzam prześwity ścieżek i przelotek..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Sprawdzam prześwit pomiędzy otworami a polami..."
+msgstr "Sprawdzam prześwit pomiędzy otworami..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "Sprawdzam prześwity pól lutowniczych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Sprawdzanie pinów..."
+msgstr "Sprawdzam pola lutownicze..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "Sprawdzam prześwit pomiędzy strefami..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Sprawdzenie wypełnień strefy..."
+msgstr "Sprawdzam wypełnione strefy..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -27949,9 +27931,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Sprawdzam definicje pól zajętości footprintów..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "Sprawdzam definicje pól zajętości footprintów..."
+msgstr "Określanie pól zajętości footprintów..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -27986,14 +27967,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Sprawdzam strefy wykluczone i niedozwolone restrykcje..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Sprawdzanie prześwitu wobec krawędzi..."
+msgstr "Sprawdzanie prześwitu wobec krawędzi płytki..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "Sprawdzam ograniczenia opisów względem krawędzi płytki..."
+msgstr "Sprawdzanie prześwitu opisów względem krawędzi płytki..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -28013,9 +27992,8 @@ msgid "Checking via holes..."
 msgstr "Sprawdzenie otworów w przelotkach..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Sprawdzenie otworów w przelotkach..."
+msgstr "Sprawdzenie otworów w mikroprzelotkach..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:170
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
@@ -30157,14 +30135,14 @@ msgstr ""
 "regułami projektowymi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
 "Obszar '%s' programu CADSTAR w komponencie biblioteki '%s' nie ma "
-"odpowiednika w programie KiCad. Obszar ten nie jest obszarem chronionym lub "
+"odpowiednika w programie KiCad. Obszar ten nie jest obszarem chronionym ani "
 "przelotką. Obszar nie został zaimportowany."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
