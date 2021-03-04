@@ -648,6 +648,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
         }
     }
 
+    aSymbol->SetSchSymbolLibraryName( wxEmptyString );
     screen->Append( aSymbol );
     frame->GetCanvas()->GetView()->Update( aSymbol );
 

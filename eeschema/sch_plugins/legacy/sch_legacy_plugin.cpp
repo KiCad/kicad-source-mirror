@@ -3017,7 +3017,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
     else
     {
         field = new LIB_FIELD( aPart.get(), id );
-        aPart->AddDrawItem( field );
+        aPart->AddDrawItem( field, false );
     }
 
     // Skip to the first double quote.
@@ -3152,36 +3152,39 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
     while( line )
     {
         if( strCompare( "ENDDRAW", line, &line ) )
+        {
+            aPart->GetDrawItems().sort();
             return;
+        }
 
         switch( line[0] )
         {
         case 'A':    // Arc
-            aPart->AddDrawItem( loadArc( aPart, aReader ) );
+            aPart->AddDrawItem( loadArc( aPart, aReader ), false );
             break;
 
         case 'C':    // Circle
-            aPart->AddDrawItem( loadCircle( aPart, aReader ) );
+            aPart->AddDrawItem( loadCircle( aPart, aReader ), false );
             break;
 
         case 'T':    // Text
-            aPart->AddDrawItem( loadText( aPart, aReader, aMajorVersion, aMinorVersion ) );
+            aPart->AddDrawItem( loadText( aPart, aReader, aMajorVersion, aMinorVersion ), false );
             break;
 
         case 'S':    // Square
-            aPart->AddDrawItem( loadRectangle( aPart, aReader ) );
+            aPart->AddDrawItem( loadRectangle( aPart, aReader ), false );
             break;
 
         case 'X':    // Pin Description
-            aPart->AddDrawItem( loadPin( aPart, aReader ) );
+            aPart->AddDrawItem( loadPin( aPart, aReader ), false );
             break;
 
         case 'P':    // Polyline
-            aPart->AddDrawItem( loadPolyLine( aPart, aReader ) );
+            aPart->AddDrawItem( loadPolyLine( aPart, aReader ), false );
             break;
 
         case 'B':    // Bezier Curves
-            aPart->AddDrawItem( loadBezier( aPart, aReader ) );
+            aPart->AddDrawItem( loadBezier( aPart, aReader ), false );
             break;
 
         case '#':    // Comment

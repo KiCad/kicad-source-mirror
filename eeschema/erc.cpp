@@ -683,8 +683,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxCHECK2( symbol, continue );
 
-            wxString  libIdStr = symbol->GetSchSymbolLibraryName();
-            LIB_PART* libSymbolInSchematic = screen->GetLibSymbols()[ libIdStr ];
+            LIB_PART* libSymbolInSchematic = symbol->GetPartRef().get();
 
             wxCHECK2( libSymbolInSchematic, continue );
 

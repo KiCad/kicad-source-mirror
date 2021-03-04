@@ -327,11 +327,12 @@ public:
                         const TRANSFORM& aTransform );
 
     /**
-     * Add a new draw \a aItem to the draw object list.
+     * Add a new draw \a aItem to the draw object list and sort according to \a aSort.
      *
-     * @param aItem - New draw object to add to part.
+     * @param aItem is the new draw object to add to the symbol.
+     * @param aSort is the flag to determine if the newly added item should be sorted.
      */
-    void AddDrawItem( LIB_ITEM* aItem );
+    void AddDrawItem( LIB_ITEM* aItem, bool aSort = true );
 
     /**
      * Remove draw \a aItem from list.

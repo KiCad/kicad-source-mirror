@@ -137,6 +137,8 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
 
             if( symbol->GetPartRef() )
             {
+                symbol->GetPartRef()->GetDrawItems().sort();
+
                 auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
                 if( it == m_libSymbols.end() || !it->second )
@@ -151,6 +153,8 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
                     // must be created for the library symbol list to prevent all of the
                     // other schematic symbols referencing that library symbol from changing.
                     LIB_PART* foundSymbol = it->second;
+
+                    foundSymbol->GetDrawItems().sort();
 
                     if( *foundSymbol != *symbol->GetPartRef() )
                     {
@@ -731,6 +735,17 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 
         m_rtree.insert( symbol );
     }
+}
+
+
+void SCH_SCREEN::SwapSymbolLinks( const SCH_COMPONENT* aOriginalSymbol,
+                                  const SCH_COMPONENT* aNewSymbol )
+{
+    wxCHECK( aOriginalSymbol && aNewSymbol /* && m_rtree.contains( aOriginalSymbol, true ) */,
+             /* void */ );
+
+    if( aOriginalSymbol->GetSchSymbolLibraryName() == aNewSymbol->GetSchSymbolLibraryName() )
+        return;
 }
 
 

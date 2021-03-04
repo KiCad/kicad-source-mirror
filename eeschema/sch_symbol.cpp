@@ -173,6 +173,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
         field.SetParent( this );
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
+    m_schLibSymbolName = aComponent.m_schLibSymbolName;
 }
 
 
@@ -917,6 +918,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     component->m_transform = tmp;
 
     std::swap( m_instanceReferences, component->m_instanceReferences );
+    std::swap( m_schLibSymbolName, component->m_schLibSymbolName );
 }
 
 

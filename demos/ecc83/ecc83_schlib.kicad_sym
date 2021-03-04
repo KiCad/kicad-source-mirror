@@ -130,14 +130,14 @@
       (rectangle (start -2.286 0.508) (end 2.286 0.508)
         (stroke (width 0)) (fill (type none))
       )
-      (rectangle (start 2.286 -0.508) (end -2.286 -1.016)
-        (stroke (width 0)) (fill (type outline))
-      )
       (rectangle (start 2.286 1.016) (end -2.286 1.016)
         (stroke (width 0)) (fill (type none))
       )
       (rectangle (start 2.286 1.016) (end 2.286 0.508)
         (stroke (width 0)) (fill (type none))
+      )
+      (rectangle (start 2.286 -0.508) (end -2.286 -1.016)
+        (stroke (width 0)) (fill (type outline))
       )
       (polyline
         (pts
@@ -204,6 +204,22 @@
         (stroke (width 0)) (fill (type none))
       )
     )
+    (symbol "ECC81_1_0"
+      (polyline
+        (pts
+          (xy -2.54 -5.08)
+          (xy -2.54 -7.62)
+        )
+        (stroke (width 0)) (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 0 5.08)
+          (xy 0 7.62)
+        )
+        (stroke (width 0)) (fill (type none))
+      )
+    )
     (symbol "ECC81_1_1"
       (arc (start 2.54 -5.08) (end -2.54 -5.08) (radius (at 0 -5.715) (length 2.6162) (angles 14.2 165.9))
         (stroke (width 0.254)) (fill (type none))
@@ -255,6 +271,22 @@
       (pin passive line (at -2.54 -10.16 90) (length 2.54)
         (name "K" (effects (font (size 1.016 1.016))))
         (number "8" (effects (font (size 1.016 1.016))))
+      )
+    )
+    (symbol "ECC81_2_0"
+      (polyline
+        (pts
+          (xy -2.54 -5.08)
+          (xy -2.54 -7.62)
+        )
+        (stroke (width 0)) (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 0 5.08)
+          (xy 0 7.62)
+        )
+        (stroke (width 0)) (fill (type none))
       )
     )
     (symbol "ECC81_2_1"
@@ -330,38 +362,6 @@
         (number "9" (effects (font (size 1.016 1.016))))
       )
     )
-    (symbol "ECC81_1_0"
-      (polyline
-        (pts
-          (xy -2.54 -5.08)
-          (xy -2.54 -7.62)
-        )
-        (stroke (width 0)) (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 0 5.08)
-          (xy 0 7.62)
-        )
-        (stroke (width 0)) (fill (type none))
-      )
-    )
-    (symbol "ECC81_2_0"
-      (polyline
-        (pts
-          (xy -2.54 -5.08)
-          (xy -2.54 -7.62)
-        )
-        (stroke (width 0)) (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 0 5.08)
-          (xy 0 7.62)
-        )
-        (stroke (width 0)) (fill (type none))
-      )
-    )
   )
   (symbol "ecc83_schlib:ECC83" (extends "ECC81")
     (property "Reference" "U" (id 0) (at 3.302 7.874 0)
@@ -423,6 +423,12 @@
     (property "Datasheet" "" (id 3) (at 0 0 0)
       (effects (font (size 1.524 1.524)))
     )
+    (symbol "PWR_FLAG_0_0"
+      (pin power_out line (at 0 0 90) (length 0)
+        (name "pwr" (effects (font (size 0.508 0.508))))
+        (number "1" (effects (font (size 0.508 0.508))))
+      )
+    )
     (symbol "PWR_FLAG_0_1"
       (polyline
         (pts
@@ -434,12 +440,6 @@
           (xy 0 1.27)
         )
         (stroke (width 0)) (fill (type none))
-      )
-    )
-    (symbol "PWR_FLAG_0_0"
-      (pin power_out line (at 0 0 90) (length 0)
-        (name "pwr" (effects (font (size 0.508 0.508))))
-        (number "1" (effects (font (size 0.508 0.508))))
       )
     )
   )

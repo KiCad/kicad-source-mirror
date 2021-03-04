@@ -199,6 +199,8 @@ const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
         m_drawings.push_back( newItem );
     }
 
+    m_drawings.sort();
+
     PART_SPTR parent = aPart.m_parent.lock();
 
     if( parent )
@@ -238,11 +240,16 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
     if( m_drawings.size() != aRhs.m_drawings.size() )
         return m_drawings.size() - aRhs.m_drawings.size();
 
-    LIB_ITEMS_CONTAINER::CONST_ITERATOR lhsItem = m_drawings.begin();
-    LIB_ITEMS_CONTAINER::CONST_ITERATOR rhsItem = aRhs.m_drawings.begin();
+    LIB_ITEMS_CONTAINER::CONST_ITERATOR lhsItemIt = m_drawings.begin();
+    LIB_ITEMS_CONTAINER::CONST_ITERATOR rhsItemIt = aRhs.m_drawings.begin();
 
-    while( lhsItem != m_drawings.end() )
+    while( lhsItemIt != m_drawings.end() )
     {
+        const LIB_ITEM* lhsItem = static_cast<const LIB_ITEM*>( &(*lhsItemIt) );
+        const LIB_ITEM* rhsItem = static_cast<const LIB_ITEM*>( &(*rhsItemIt) );
+
+        wxCHECK( lhsItem && rhsItem, lhsItem - rhsItem );
+
         if( lhsItem->Type() != rhsItem->Type() )
             return lhsItem->Type() - rhsItem->Type();
 
@@ -251,8 +258,8 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
         if( retv )
             return retv;
 
-        ++lhsItem;
-        ++rhsItem;
+        ++lhsItemIt;
+        ++rhsItemIt;
     }
 
     if( m_fpFilters.GetCount() != aRhs.m_fpFilters.GetCount() )
@@ -645,12 +652,14 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem )
 }
 
 
-void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
+void LIB_PART::AddDrawItem( LIB_ITEM* aItem, bool aSort )
 {
-    if( !aItem )
-        return;
+    wxCHECK( aItem, /* void */ );
 
     m_drawings.push_back( aItem );
+
+    if( aSort )
+        m_drawings.sort();
 }
 
 
@@ -888,6 +897,8 @@ void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
         field->SetParent( this );
         m_drawings.push_back( field );
     }
+
+    m_drawings.sort();
 }
 
 
@@ -1143,6 +1154,7 @@ void LIB_PART::SetUnitCount( int aCount, bool aDuplicateDrawItems )
             m_drawings.push_back( item );
     }
 
+    m_drawings.sort();
     m_unitCount = aCount;
 }
 
@@ -1201,6 +1213,8 @@ void LIB_PART::SetConversion( bool aSetConvert, bool aDuplicatePins )
                 ++i;
         }
     }
+
+    m_drawings.sort();
 }
 
 

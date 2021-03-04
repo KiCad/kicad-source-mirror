@@ -276,6 +276,8 @@ public:
      */
     void UpdateLocalLibSymbolLinks();
 
+    void SwapSymbolLinks( const SCH_COMPONENT* aOriginalSymbol, const SCH_COMPONENT* aNewSymbol );
+
     /**
      * Print all the items in the screen to \a aDC.
      *

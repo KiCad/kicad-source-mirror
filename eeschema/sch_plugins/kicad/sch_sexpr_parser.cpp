@@ -311,7 +311,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
                     wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
 
                     item->SetParent( symbol.get() );
-                    symbol->AddDrawItem( item );
+                    symbol->AddDrawItem( item, false );
                     break;
 
                 default:
@@ -336,7 +336,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
             wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
 
             item->SetParent( symbol.get() );
-            symbol->AddDrawItem( item );
+            symbol->AddDrawItem( item, false );
             break;
 
         default:
@@ -345,6 +345,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
         }
     }
 
+    symbol->GetDrawItems().sort();
     m_symbolName.clear();
 
     return symbol.release();
@@ -834,7 +835,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 
         if( !existingField )
         {
-            aSymbol->AddDrawItem( field.release() );
+            aSymbol->AddDrawItem( field.release(), false );
         }
         else
         {

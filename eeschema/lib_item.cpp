@@ -98,21 +98,6 @@ bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 
 bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 {
-    int result = m_convert - aOther.m_convert;
-
-    if( result != 0 )
-        return result < 0;
-
-    result = m_unit - aOther.m_unit;
-
-    if( result != 0 )
-        return result < 0;
-
-    result = Type() - aOther.Type();
-
-    if( result != 0 )
-        return result < 0;
-
     return ( compare( aOther ) < 0 );
 }
 

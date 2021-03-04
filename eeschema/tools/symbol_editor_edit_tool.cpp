@@ -768,7 +768,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         newItem->SetUnit( newItem->GetUnit() ? m_frame->GetUnit() : 0 );
         newItem->SetConvert( newItem->GetConvert() ? m_frame->GetConvert() : 0 );
 
-        part->GetDrawItems().push_back( newItem );
+        part->AddDrawItem( newItem );
         getView()->Add( newItem );
     }
 
@@ -815,7 +815,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         newItem->SetParent( part );
         newItems.push_back( newItem );
 
-        part->GetDrawItems().push_back( newItem );
+        part->AddDrawItem( newItem );
         getView()->Add( newItem );
     }
 
