@@ -1,6 +1,8 @@
 // Turn off wxWidgets attempting to use its own manifests
 #define wxUSE_NO_MANIFEST 1
 #include "wx/msw/wx.rc"
+#include <winres.h>
+#include <kicad_build_version.h>
 
 #ifdef ISOLATION_AWARE_ENABLED
 #define MANIFEST_ID ISOLATIONAWARE_MANIFEST_RESOURCE_ID
@@ -29,4 +31,44 @@
 #endif
 
 MANIFEST_ID RT_MANIFEST MANIFEST_FILE
+
+
+#ifndef DEBUG
+#define VER_DEBUG 0
+#else
+#define VER_DEBUG VS_FF_DEBUG
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION KICAD_WIN32_RC_FILEVER
+PRODUCTVERSION KICAD_WIN32_RC_PRODVER
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS (VER_DEBUG)
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            // this gets dispalyed in the windows 10 task manager
+            VALUE "FileDescription", RC_VER_FILE_DESCRIPTION
+            VALUE "FileVersion", KICAD_WIN32_RC_FILEVER_STR
+            //original filename without extension
+            VALUE "InternalName", RC_VER_INTERNALNAME
+            VALUE "LegalCopyright", "Copyright (C) 2021 KiCad Developers"
+            // the exe name
+            VALUE "OriginalFilename", RC_VER_ORIGINALFILENAME
+            // name of distributed package
+            VALUE "ProductName", "KiCad EDA"
+            VALUE "ProductVersion", KICAD_WIN32_RC_PRODVER_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
 //RESOURCE FILES MUST CONTAIN A BLANK LINE AT THE END

@@ -1,3 +1,6 @@
 icon_kicad ICON "../bitmaps_png/icons/icon_kicad.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad EDA"
+#define RC_VER_INTERNALNAME "kicad"
+#define RC_VER_ORIGINALFILENAME "kicad.exe"
 #include "kiwin32.rc"

@@ -1,3 +1,6 @@
 icon_gerbview ICON "../bitmaps_png/icons/icon_gerbview.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad Gerber Viewer"
+#define RC_VER_INTERNALNAME "gerbview"
+#define RC_VER_ORIGINALFILENAME "gerbview.exe"
 #include "kiwin32.rc"

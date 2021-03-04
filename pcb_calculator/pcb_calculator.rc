@@ -1,3 +1,6 @@
 icon_pcbcalculator ICON "../bitmaps_png/icons/icon_pcbcalculator.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad PCB Calculator"
+#define RC_VER_INTERNALNAME "pcb_calculator"
+#define RC_VER_ORIGINALFILENAME "pcb_calculator.exe"
 #include "kiwin32.rc"

@@ -1,3 +1,6 @@
 icon_pcbnew ICON "../bitmaps_png/icons/icon_pcbnew.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad PCB Editor"
+#define RC_VER_INTERNALNAME "pcbnew"
+#define RC_VER_ORIGINALFILENAME "pcbnew.exe"
 #include "kiwin32.rc"

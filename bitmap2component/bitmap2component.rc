@@ -1,3 +1,6 @@
 icon_bitmap2component ICON "../bitmaps_png/icons/icon_bitmap2component.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad Image Converter"
+#define RC_VER_INTERNALNAME "bitmap2component"
+#define RC_VER_ORIGINALFILENAME "bitmap2component.exe"
 #include "kiwin32.rc"

@@ -1,3 +1,6 @@
 icon_pagelayout_editor ICON "../bitmaps_png/icons/icon_pagelayout_editor.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad Drawing Sheet Editor"
+#define RC_VER_INTERNALNAME "pl_editor"
+#define RC_VER_ORIGINALFILENAME "pl_editor.exe"
 #include "kiwin32.rc"

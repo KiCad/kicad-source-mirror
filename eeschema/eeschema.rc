@@ -1,3 +1,7 @@
 icon_eeschema ICON "../bitmaps_png/icons/icon_eeschema.ico"
 
+#define RC_VER_FILE_DESCRIPTION "KiCad Schematic Editor"
+#define RC_VER_INTERNALNAME "eeschema"
+#define RC_VER_ORIGINALFILENAME "eeschema.exe"
+
 #include "kiwin32.rc"

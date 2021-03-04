@@ -37,6 +37,10 @@ if( CMAKE_MATCH_COUNT EQUAL 2 )
     # Match slot 0 is the full string, so we want slots 1 & 2
     set( KICAD_MAJOR_MINOR_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}" )
     set( KICAD_MAJOR_VERSION "${CMAKE_MATCH_1}" )
+    set( KICAD_WIN32_RC_FILEVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.0.0\\0" )
+    set( KICAD_WIN32_RC_FILEVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, 0, 0" )
+    set( KICAD_WIN32_RC_PRODVER_STR "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}\\0" )
+    set( KICAD_WIN32_RC_PRODVER     "${CMAKE_MATCH_1}, ${CMAKE_MATCH_2}, 0, 0" )
 else()
     message( FATAL_ERROR "Unable to extract major and minor version string" )
 endif()
@@ -54,6 +58,10 @@ set( _wvh_new_version_text
 #define KICAD_SEMANTIC_VERSION    \"${KICAD_SEMANTIC_VERSION}\"
 #define KICAD_MAJOR_VERSION       \"${KICAD_MAJOR_VERSION}\"
 #define KICAD_MAJOR_MINOR_VERSION \"${KICAD_MAJOR_MINOR_VERSION}\"
+#define KICAD_WIN32_RC_PRODVER        ${KICAD_WIN32_RC_PRODVER}
+#define KICAD_WIN32_RC_PRODVER_STR    \"${KICAD_WIN32_RC_PRODVER_STR}\"
+#define KICAD_WIN32_RC_FILEVER        ${KICAD_WIN32_RC_FILEVER}
+#define KICAD_WIN32_RC_FILEVER_STR    \"${KICAD_WIN32_RC_FILEVER_STR}\"
 
 #endif  /* __KICAD_VERSION_H__ */
 " )
