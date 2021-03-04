@@ -135,8 +135,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
         if( !filler.Fill( zones_to_refill ) )
         {
-            commit.Revert();
-            return;
+            // User has already OK'ed dialog so we're going to go ahead and commit even if the
+            // fill was cancelled.
         }
     }
 
