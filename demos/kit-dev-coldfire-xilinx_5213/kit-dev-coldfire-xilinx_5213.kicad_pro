@@ -57,7 +57,7 @@
       ],
       "drc_exclusions": [],
       "meta": {
-        "version": 1
+        "version": 2
       },
       "rule_severities": {
         "annular_width": "error",
@@ -113,11 +113,7 @@
         "min_through_hole_diameter": 0.39999999999999997,
         "min_track_width": 0.19812,
         "min_via_annular_width": 0.049999999999999996,
-        "min_via_diameter": 0.5,
-        "solder_mask_clearance": 0.08,
-        "solder_mask_min_width": 0.0,
-        "solder_paste_clearance": 0.0,
-        "solder_paste_margin_ratio": -0.0
+        "min_via_diameter": 0.5
       },
       "track_widths": [
         0.0,
