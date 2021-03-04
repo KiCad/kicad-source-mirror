@@ -222,7 +222,7 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
     int ui_row = 0;     // The row index in m_rowUiItemsList of items in choice list
 
     // Build the list of dielectric layers:
-    for( auto item : m_stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
         if( !item->IsEnabled() || item->GetType() != BS_ITEM_TYPE_DIELECTRIC ||
             item->GetSublayersCount() <= 1 )
@@ -265,7 +265,7 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielUI( wxUpdateUIEvent& event )
 {
     // The m_buttonRemoveDielectricLayer wxButton is enabled only if a dielectric
     // layer can be removed, i.e. if dielectric layers have sublayers
-    for( auto item : m_stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
         if( !item->IsEnabled() || item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
            continue;
@@ -335,7 +335,10 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
         thickness += item_thickness;
     }
 
-    m_tcCTValue->SetValue( StringFromValue( m_units, thickness, true ) );
+    wxString thicknessStr = StringFromValue( m_units, thickness, true );
+
+    if( m_tcCTValue->GetValue() != thicknessStr )
+        m_tcCTValue->SetValue( thicknessStr );
 }
 
 
