@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-02-26 07:02+0000\n"
+"PO-Revision-Date: 2021-03-04 06:40+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2872,7 +2872,6 @@ msgid "Executable files ("
 msgstr "Pliki wykonywalne ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Wybierz preferowaną przeglądarkę PDF"
 
@@ -4627,11 +4626,12 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "Nie można załadować biblioteki KIFACE \"%s\"."
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
-"Nie można odczytać instancji oraz wersji symbolu z biblioteki KIFACE \"%s\"."
+"Nie można odczytać nazwy instancji oraz wersji symbolu z biblioteki KIFACE \""
+"%s\"."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -7331,14 +7331,13 @@ msgid "Generate"
 msgstr "Utwórz listę"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Brakuje.\n"
+msgstr "(brak pliku)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Schemat dla tej płytki nie może zostać znaleziony."
+msgstr "Wybrany skrypt generujący listę materiałową %s nie został znaleziony."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7349,6 +7348,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Szukano:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8171,7 +8175,7 @@ msgstr "Właściwości tekstu"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Etykieta wymaga by tekst nie był pusty."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8368,9 +8372,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC przerwany przez użytkownika.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Wykonano.<br><br>"
+msgstr "Zakończono ERC.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -22711,7 +22714,7 @@ msgstr "Tryb wydruku"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Eksportuj jako czarne elementy na białym tle"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -25748,7 +25751,7 @@ msgstr "Trzymaj się z dala od pól lutowniczych"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Zgłoś błąd DRC jeśli pole lutownicze nachodzi na tą strefę"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
 #, fuzzy
@@ -25757,7 +25760,7 @@ msgstr "Wyklucz strefy miedzi"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Strefy nie wypełnią miedzi wewnątrz tego obszaru"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25765,18 +25768,16 @@ msgstr "Nie umieszczaj footprintów"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "Zgłoś błąd DRC jeśli pole zajętości footprintu nachodzi na ten obszar"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Ogranicz obrys do linii poziomych, pionowych i pod kątem 45 stopni"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
 msgstr ""
-"Podczas rysowania linii graficznych wymuszaj pozycję poziomą, pionową lub "
-"pod kątem 45 stopni."
+"Rysuj obszar wymuszając kierunek poziomy, pionowy lub pod kątem 45 stopni"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
