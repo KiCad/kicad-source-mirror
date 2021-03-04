@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-03-03 23:36+0000\n"
+"PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2912,7 +2912,6 @@ msgid "Executable files ("
 msgstr "Ausführbare Dateien ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Bevorzugten PDF-Betrachter auswählen"
 
@@ -3369,14 +3368,12 @@ msgstr ""
 "von links nach rechts scrollen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Rücksetzen auf Standardeinstellungen"
+msgstr "Auf Maus-Standards zurücksetzen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Rücksetzen auf Standardeinstellungen"
+msgstr "Auf Trackpad-Standards zurücksetzen"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4679,12 +4676,12 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
-"Konnte den Instanznamen und die Symbolversion nicht von der kiface-"
-"Bibliothek \"%s\" lesen."
+"Konnte Instanznamen- und Versions-Symbol nicht von der kiface-Bibliothek \"%"
+"s\" lesen."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -7381,14 +7378,14 @@ msgid "Generate"
 msgstr "Erstellen"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Fehlend.\n"
+msgstr "(Datei fehlt)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Der Schaltplan für diese Platine kann nicht gefunden werden."
+msgstr ""
+"Das ausgewählte Stücklistengeneratorskript %s konnte nicht gefunden werden."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7399,6 +7396,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Gesucht:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8235,7 +8237,7 @@ msgstr "Texteigenschaften"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Bezeicher-Text darf nicht leer sein."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8432,9 +8434,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC vom Benutzer abgebrochen. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Fertig. <br><br>"
+msgstr "ERC abgeschlossen.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10797,7 +10798,6 @@ msgid "Spice value in simulation"
 msgstr "Spice Wert in der Simulation"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -13133,9 +13133,8 @@ msgid "Assigned Netclass"
 msgstr "Zugewiesene Netzklasse"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "Electronic Rule Check Fehler"
+msgstr "Fehler bei der Überprüfung elektrischer Regeln"
 
 #: eeschema/sch_marker.h:99
 msgid "ERC Marker"
@@ -15915,9 +15914,8 @@ msgid "Highlight on PCB"
 msgstr "Auf Platine hervorheben"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
-msgstr "Hebt alle zugehörigen Elemente im Platineneditor hervor"
+msgstr "Hebt alle entsprechenden Elemente im Leiterplatten-Editor hervor"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Show Hidden Pins"
@@ -15948,18 +15946,16 @@ msgid "Enter Sheet"
 msgstr "Schaltplan öffnen"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Anzeige des ausgewählten Blattinhalts im Fenster von Eeschema"
+msgstr "Inhalt des ausgewählten Schaltplanblatts im Schaltplaneditor anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "Schaltplan verlassen"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Anzeige des Elternblattes im Fenster von Eeschema"
+msgstr "Übergeordnetes Schaltplanblatt im Schaltplaneditor anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -20898,7 +20894,6 @@ msgstr "Vorderseiten-Präfix:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
 "Optionales Präfix für komponentenseitige Referenzbezeichnungen (z. B. F_)"
@@ -20909,7 +20904,6 @@ msgstr "Rückseiten-Präfix:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr "Optionales Präfix für lötseitige Referenzbezeichnungen (z. B. B_)"
 
@@ -21453,12 +21447,11 @@ msgid "Pad connections:"
 msgstr "Padverbindungen:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"Der Standardtyp der Padverbindung zur Zone.\n"
+"Standard-Padverbindungtyp zur Zone.\n"
 "Diese Einstellung kann durch lokale Pad-Einstellungen überschrieben werden"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
@@ -21498,9 +21491,8 @@ msgstr "Füllart:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "Solide"
+msgstr "Solide Füllung"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -22875,7 +22867,7 @@ msgstr "Druckmodus"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Als schwarze Elemente auf weißem Hintergrund exportieren"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -24145,9 +24137,8 @@ msgid "Via Length"
 msgstr "Via-Länge"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "Leiterbahnlänge &anpassen"
+msgstr "Leiterbahnlänge"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25906,20 +25897,16 @@ msgid "Keep out tracks"
 msgstr "Leiterbahnen fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Entfernen von Leiterbahnen die mehrere Netze kurzschließen"
+msgstr "Verhindert, dass Leiterbahnen in diesem Bereich verlegt werden"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "Vias fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr ""
-"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
-"werden"
+msgstr "Verhindert, dass Vias in diesem Bereich platziert werden"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25927,16 +25914,15 @@ msgstr "Pads fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Löst einen DRC-Fehler aus, wenn ein Pad diesen Bereich überlappt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "Kupferfüllungen fernhalten"
+msgstr "Kupferfüllungen sperren"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Zonen werden dieses Gebiet nicht mit Kupfer füllen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25945,17 +25931,18 @@ msgstr "Footprints fernhalten"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
+"Löst einen DRC-Fehler aus, wenn eine Footprint-Abstandsfläche diesen Bereich "
+"überlappt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Beschränken der Außenlinien zu H, V und 45 Grad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
 msgstr ""
-"Horizontale, vertikale oder 45-Grad-Winkel beim Zeichnen von grafischen "
-"Linien erzwingen."
+"Nur horizontale, vertikale oder diagonale Linien zum Zeichnen des Bereich "
+"benutzen"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -28091,27 +28078,24 @@ msgid "Checking track & via clearances..."
 msgstr "Prüfe Leiterbahn- & Via-Abstände..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Abstände Flächen zu Flächen...\n"
+msgstr "Prüfe Lochabstände..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "Prüfe Padabstände..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "Prüfe Pins..."
+msgstr "Prüfe Pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "Prüfe Abstände von Kupferzonen..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "Prüfe Füllung der Kupferflächen..."
+msgstr "Prüfe Zonen..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -28139,9 +28123,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "Prüfe Footprint-Abstandsflächendefinitionen..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "Prüfe Footprint-Abstandsflächendefinitionen..."
+msgstr "Ermittele Footprint-Abstandsflächen..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -28176,14 +28159,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "Prüfe Sperrflächen und Verbotseinschränkungen..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "Prüfe Platinenrandabstände..."
+msgstr "Prüfe Kupfer-zu-Platinenrand-Abstände..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "Überprüfen des Siebdrucks auf den Kantenabständen der Platine ..."
+msgstr "Prüfe Bestückungsdruck-zu-Platinenrand-Abstände..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -28203,9 +28184,8 @@ msgid "Checking via holes..."
 msgstr "Prüfe Via-Löcher..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
-msgstr "Prüfe Via-Löcher..."
+msgstr "Prüfe Mikro-Via-Löcher..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:170
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
@@ -30379,7 +30359,7 @@ msgstr ""
 "angewendeten Entwurfsregeln zu überprüfen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
