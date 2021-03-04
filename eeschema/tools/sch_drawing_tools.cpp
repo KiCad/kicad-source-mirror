@@ -592,8 +592,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    cursorPos = aEvent.IsPrime() ? (wxPoint) aEvent.Position()
-                                 : (wxPoint) controls->GetMousePosition();
+    cursorPos = static_cast<wxPoint>( aEvent.HasPosition() ?
+                                      aEvent.Position() :
+                                      controls->GetMousePosition() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

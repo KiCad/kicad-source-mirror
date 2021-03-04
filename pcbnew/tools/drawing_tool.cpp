@@ -701,7 +701,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition();
+
+        VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
+
         cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1920,9 +1922,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( evt->IsPrime() ? evt->Position()
-                                                                 : m_controls->GetMousePosition(),
-                                                  layers );
+
+        VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
+        cursorPos          = grid.BestSnapAnchor( cursorPos, layers );
+
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_CTRL ) )
