@@ -897,7 +897,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
     // Delete the original symbol if the symbol name has been changed.
     if( part->GetName() != originalPart->GetName() )
     {
-        aLibTable->DeleteSymbol( m_libName, originalPart->GetName() );
+        if( aLibTable->LoadSymbol( m_libName, originalPart->GetName() ) )
+            aLibTable->DeleteSymbol( m_libName, originalPart->GetName() );
     }
 
     if( part->IsAlias() )
