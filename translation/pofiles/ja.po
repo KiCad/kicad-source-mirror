@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-02-28 03:30+0000\n"
+"PO-Revision-Date: 2021-03-04 15:20+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2857,9 +2857,8 @@ msgid "Executable files ("
 msgstr "実行ファイル ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "優先する PDF ブラウザーを選択"
+msgstr "優先するPDFビューアーを選択"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3300,14 +3299,12 @@ msgid ""
 msgstr "タッチパッド上で左右にスクロールした時にキャンバスを左右にパン"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "デフォルト値にリセット"
+msgstr "マウスのデフォルト値にリセット"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "デフォルト値にリセット"
+msgstr "トラックパッドのデフォルト値にリセット"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4599,12 +4596,10 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "kiface ライブラリー \"%s\" のロードに失敗しました。"
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
-msgstr ""
-"kiface ライブラリー \"%s\" からインスタンス名とバージョン シンボルを読み込め"
-"ませんでした。"
+msgstr "kiface ライブラリー \"%s\" からインスタンス名とバージョン シンボルを読み込めませんでした。"
 
 #: common/kiway.cpp:272
 #, c-format
@@ -7288,14 +7283,13 @@ msgid "Generate"
 msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "見つかりません。\n"
+msgstr "(ファイルがありません)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "この基板の回路図が見つけられません。"
+msgstr "選択されたBOMジェネレーター スクリプト %s が見つかりません。"
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -10672,7 +10666,6 @@ msgid "Spice value in simulation"
 msgstr "シミュレーションにおける Spice の値"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -12966,9 +12959,8 @@ msgid "Assigned Netclass"
 msgstr "割り当てられたネットクラス"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "エレクトロニクス ルール チェック(ERC) エラー"
+msgstr "エレクトリカル ルール チェックのエラー"
 
 #: eeschema/sch_marker.h:99
 msgid "ERC Marker"
@@ -15715,9 +15707,8 @@ msgid "Highlight on PCB"
 msgstr "PCB上でハイライト"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
-msgstr "基板エディターで対応するアイテムをハイライト表示"
+msgstr "PCBエディターで対応するアイテムをハイライト表示"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Show Hidden Pins"
@@ -15748,18 +15739,16 @@ msgid "Enter Sheet"
 msgstr "シートに入る"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Eeschema ウィンドウに選択されたシートの内容を表示"
+msgstr "回路図エディターで選択されたシートの内容を表示"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "シートから抜ける"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Eeschema ウィンドウに親シートを表示"
+msgstr "回路図エディターに親シートを表示"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -20645,7 +20634,6 @@ msgstr "表面のリファレンス接頭辞:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr "部品面側のリファレンス指定子につけるオプションの接頭辞 (例: F_)"
 
@@ -20655,7 +20643,6 @@ msgstr "裏面のリファレンス接頭辞:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr "ハンダ面側のリファレンス指定子につけるオプションの接頭辞 (例: B_)"
 
@@ -21200,7 +21187,7 @@ msgid ""
 "This setting can be overridden by local pad settings"
 msgstr ""
 "デフォルトのパッド接続タイプはゾーンです。\n"
-"この設定はローカル パッド設定で上書きできます。"
+"この設定はローカル パッド設定で上書きできます"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
@@ -21239,9 +21226,8 @@ msgstr "塗潰しタイプ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "実線"
+msgstr "ベタ塗り"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -23839,7 +23825,6 @@ msgid "Via Length"
 msgstr "ビア長さ"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
 msgstr "配線長"
 
@@ -27696,27 +27681,24 @@ msgid "Checking track & via clearances..."
 msgstr "配線とビアのクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "ゾーンとゾーンのクリアランス...\n"
+msgstr "穴のクリアランスをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "パッドのクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "ピンをチェック..."
+msgstr "パッドをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "導体ゾーンのクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "ゾーンの塗り潰しをチェック中..."
+msgstr "ゾーンをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -27781,14 +27763,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "禁止と不許可の制約をチェック..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "基板端クリアランスをチェック..."
+msgstr "導体から基板端のクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "基板端クリアランスをチェック..."
+msgstr "シルク印刷から基板端クリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -29944,15 +29924,14 @@ msgstr ""
 "ることをお勧めします。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"CADSTAR の ライブラリー コンポーネント '%s' の エリア '%s' は、KiCadに同等の"
-"ものがありません。このエリアは、ビアまたは配線のキープアウト領域ではありませ"
-"ん。その領域はインポートされませんでした。"
+"CADSTAR の エリア '%s' (ライブラリー コンポーネント '%s'の中の) は、KiCadに同等のものがありません。このエリアは、"
+"ビアでも配線のキープアウト エリアでもありません。そのエリアはインポートされませんでした。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
 #, c-format
