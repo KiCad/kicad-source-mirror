@@ -1340,7 +1340,7 @@ __asm (
 
 #endif
 
-#if defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386)
+#if defined(LIBCONTEXT_USE_WINFIBER) && (defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386))
 
 #include <map>
 
@@ -1411,7 +1411,7 @@ void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx )
 };
 #endif
 
-#else // defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386)
+#else // defined(LIBCONTEXT_USE_WINFIBER) && (defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386))
 
 #ifdef __cplusplus
 extern "C" {

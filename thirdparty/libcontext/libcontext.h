@@ -78,9 +78,11 @@
         #define LIBCONTEXT_CALL_CONVENTION
     #endif
     #endif
-#elif defined (_MSC_VER)
+#elif defined (_MSC_VER )
 
+#if defined( LIBCONTEXT_USE_WINFIBER )
 #define LIBCONTEXT_HAS_OWN_STACK
+#endif
 
 #define LIBCONTEXT_CALL_CONVENTION __cdecl
 
