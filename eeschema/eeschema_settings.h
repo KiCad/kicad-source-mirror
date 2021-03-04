@@ -88,6 +88,7 @@ public:
         bool     hv_lines_only;
         int      repeat_label_increment;
         bool     intersheets_ref_show;
+        bool     intersheets_ref_own_page;
         bool     intersheets_ref_short;
         wxString intersheets_ref_prefix;
         wxString intersheets_ref_suffix;

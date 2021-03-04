@@ -44,6 +44,9 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings );
+
+protected:
+    void onCheckBoxIref( wxCommandEvent& event ) override;
 };
 
 

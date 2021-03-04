@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Mar  8 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,7 +31,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 {
+	DECLARE_EVENT_TABLE()
 	private:
+
+		// Private event handlers
+		void _wxFB_onCheckBoxIref( wxCommandEvent& event ){ onCheckBoxIref( event ); }
+
 
 	protected:
 		wxStaticText* m_staticText26;
@@ -51,12 +56,17 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_staticText261;
 		wxChoice* m_choiceJunctionDotSize;
 		wxCheckBox* m_showIntersheetsReferences;
+		wxCheckBox* m_listOwnPage;
 		wxRadioButton* m_radioFormatStandard;
 		wxRadioButton* m_radioFormatAbbreviated;
 		wxStaticText* m_prefixLabel;
 		wxTextCtrl* m_prefixCtrl;
 		wxStaticText* m_suffixLabel;
 		wxTextCtrl* m_suffixCtrl;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void onCheckBoxIref( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

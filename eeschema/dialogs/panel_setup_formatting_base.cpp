@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Mar  8 2021)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,6 +8,10 @@
 #include "panel_setup_formatting_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
+
+BEGIN_EVENT_TABLE( PANEL_SETUP_FORMATTING_BASE, wxPanel )
+	EVT_CHECKBOX( wxID_ANY, PANEL_SETUP_FORMATTING_BASE::_wxFB_onCheckBoxIref )
+END_EVENT_TABLE()
 
 PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
@@ -151,6 +155,10 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
+
+	m_listOwnPage = new wxCheckBox( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Show own page reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_listOwnPage->SetValue(true);
+	bSizerMargins->Add( m_listOwnPage, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_radioFormatStandard = new wxRadioButton( sbSizerIREf->GetStaticBox(), wxID_ANY, _("Standard (1,2,3)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radioFormatStandard->SetValue( true );

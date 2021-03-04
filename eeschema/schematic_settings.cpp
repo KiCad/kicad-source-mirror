@@ -43,6 +43,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
         m_JunctionSizeChoice( 3 ),
         m_IntersheetRefsShow( false ),
+        m_IntersheetRefsListOwnPage( true ),
         m_IntersheetRefsFormatShort( false ),
         m_IntersheetRefsPrefix( DEFAULT_IREF_PREFIX ),
         m_IntersheetRefsSuffix( DEFAULT_IREF_SUFFIX ),
@@ -66,6 +67,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.junction_size_choice : 3;
     bool defaultIntersheetsRefShow =
             appSettings ? appSettings->m_Drawing.intersheets_ref_show : false;
+    bool defaultIntersheetsRefOwnPage =
+            appSettings ? appSettings->m_Drawing.intersheets_ref_own_page : true;
     bool defaultIntersheetsRefFormatShort =
             appSettings ? appSettings->m_Drawing.intersheets_ref_short : false;
     wxString defaultIntersheetsRefPrefix =
@@ -75,6 +78,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_show",
             &m_IntersheetRefsShow, defaultIntersheetsRefShow ) );
+
+    m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_own_page",
+            &m_IntersheetRefsListOwnPage, defaultIntersheetsRefOwnPage ) );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_short",
             &m_IntersheetRefsFormatShort, defaultIntersheetsRefFormatShort ) );

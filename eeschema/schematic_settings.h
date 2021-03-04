@@ -53,6 +53,7 @@ public:
     int       m_JunctionSizeChoice;
 
     bool      m_IntersheetRefsShow;
+    bool      m_IntersheetRefsListOwnPage;
     bool      m_IntersheetRefsFormatShort;
     wxString  m_IntersheetRefsPrefix;
     wxString  m_IntersheetRefsSuffix;

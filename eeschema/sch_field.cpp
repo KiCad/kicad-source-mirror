@@ -469,6 +469,17 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
             std::sort( pageListCopy.begin(), pageListCopy.end() );
 
+            if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
+            {
+                wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
+                pageListCopy.erase( std::remove( pageListCopy.begin(),
+                                                 pageListCopy.end(),
+                                                 currentPage ), pageListCopy.end() );
+
+                if( pageListCopy.empty() )
+                    return;
+            }
+
             for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
             {
                 if( sheet.size() == 1 )

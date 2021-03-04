@@ -41,6 +41,17 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
 {
 }
 
+void PANEL_SETUP_FORMATTING::onCheckBoxIref( wxCommandEvent& event )
+{
+    bool enabled = m_showIntersheetsReferences->GetValue();
+
+    m_radioFormatStandard->Enable( enabled );
+    m_radioFormatAbbreviated->Enable( enabled );
+    m_prefixCtrl->Enable( enabled );
+    m_suffixCtrl->Enable( enabled );
+    m_listOwnPage->Enable( enabled );
+}
+
 
 bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 {
@@ -70,10 +81,18 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
 
     m_showIntersheetsReferences->SetValue( settings.m_IntersheetRefsShow );
+
+    m_radioFormatStandard->Enable( settings.m_IntersheetRefsShow );
+    m_radioFormatAbbreviated->Enable( settings.m_IntersheetRefsShow );
+    m_prefixCtrl->Enable( settings.m_IntersheetRefsShow );
+    m_suffixCtrl->Enable( settings.m_IntersheetRefsShow );
+    m_listOwnPage->Enable( settings.m_IntersheetRefsShow );
+
     m_radioFormatStandard->SetValue( !settings.m_IntersheetRefsFormatShort );
     m_radioFormatAbbreviated->SetValue( settings.m_IntersheetRefsFormatShort );
     m_prefixCtrl->ChangeValue( settings.m_IntersheetRefsPrefix );
     m_suffixCtrl->ChangeValue( settings.m_IntersheetRefsSuffix );
+    m_listOwnPage->SetValue( settings.m_IntersheetRefsListOwnPage );
 
     wxString offsetRatio = wxString::Format( "%f", settings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
@@ -145,6 +164,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();
     settings.m_IntersheetRefsPrefix      = m_prefixCtrl->GetValue();
     settings.m_IntersheetRefsSuffix      = m_suffixCtrl->GetValue();
+    settings.m_IntersheetRefsListOwnPage = m_listOwnPage->GetValue();
 
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();
@@ -175,6 +195,7 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_radioFormatAbbreviated->SetValue( !aSettings.m_IntersheetRefsFormatShort );
     m_prefixCtrl->ChangeValue( aSettings.m_IntersheetRefsPrefix );
     m_suffixCtrl->ChangeValue( aSettings.m_IntersheetRefsSuffix );
+    m_listOwnPage->SetValue( aSettings.m_IntersheetRefsListOwnPage );
 
     wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
