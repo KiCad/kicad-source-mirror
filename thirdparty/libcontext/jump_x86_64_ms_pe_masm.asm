@@ -101,7 +101,7 @@ jump_fcontext PROC EXPORT FRAME
     mov  rax, [r10+01478h]
     push  rax
     ; save fiber local storage
-    mov  rax, [r10+018h]
+    mov  rax, [r10+020h]
     push  rax
 
     ; prepare stack for FPU
@@ -182,7 +182,7 @@ nxt3:
     mov  r10, gs:[030h]
     ; restore fiber local storage
     pop  rax
-    mov  [r10+018h], rax
+    mov  [r10+020h], rax
     ; restore deallocation stack
     pop  rax
     mov  [r10+01478h], rax
