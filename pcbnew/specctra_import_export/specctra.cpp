@@ -3701,11 +3701,11 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel )
 
     if( hasVertex )
     {
-        out->Print( 0, " %.6g %.6g", vertex.x, vertex.y );
+        out->Print( 0, " %.6f %.6f", vertex.x, vertex.y );
 
         out->Print( 0, " %s", GetTokenText( side ) );
 
-        out->Print( 0, " %.6g", rotation );
+        out->Print( 0, " %.6f", rotation );
     }
 
     const char* space = " ";    // one space, as c string.
