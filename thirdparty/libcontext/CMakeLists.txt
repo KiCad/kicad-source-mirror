@@ -18,6 +18,7 @@ if( MSVC )
 
     if( NOT LIBCONTEXT_USE_WINFIBER )
         if ( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
+            set( CMAKE_ASM_MASM_FLAGS "${CMAKE_ASM_MASM_FLAGS} /safeseh" )
             list(APPEND LIBCONTEXT_SOURCES
                 make_i386_ms_pe_masm.asm
                 jump_i386_ms_pe_masm.asm
