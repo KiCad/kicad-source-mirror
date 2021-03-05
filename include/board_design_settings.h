@@ -541,47 +541,21 @@ public:
     /**
      * @return the current diff pair track width, according to the selected options
      * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_DiffPairDimensionsList[0].
      */
-    inline int GetCurrentDiffPairWidth() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_Width;
-        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_Width;
-        else
-            return GetCurrentTrackWidth();
-    }
+    int GetCurrentDiffPairWidth() const;
 
     /**
      * @return the current diff pair gap, according to the selected options
      * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_DiffPairDimensionsList[0].
      */
-    inline int GetCurrentDiffPairGap() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_Gap;
-        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_Gap;
-        else
-            return GetSmallestClearanceValue();
-    }
+    int GetCurrentDiffPairGap() const;
 
     /**
      * @return the current diff pair via gap, according to the selected options
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_DiffPairDimensionsList[0].
      */
-    inline int GetCurrentDiffPairViaGap() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_ViaGap;
-        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_ViaGap;
-        else
-            return GetSmallestClearanceValue();
-    }
+    int GetCurrentDiffPairViaGap() const;
 
     /**
      * @param aValue The minimum distance between the edges of two holes or 0 to disable

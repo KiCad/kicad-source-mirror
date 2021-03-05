@@ -974,6 +974,66 @@ void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( unsigned aIndex )
 }
 
 
+int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairWidth() const
+{
+    if( m_useCustomDiffPair )
+    {
+        return m_customDiffPair.m_Width;
+    }
+    else if( m_diffPairIndex == 0 )
+    {
+        if( GetNetClasses().GetDefaultPtr()->HasDiffPairWidth() )
+            return GetNetClasses().GetDefaultPtr()->GetDiffPairWidth();
+        else
+            return GetNetClasses().GetDefaultPtr()->GetTrackWidth();
+    }
+    else
+    {
+        return m_DiffPairDimensionsList[m_diffPairIndex].m_Width;
+    }
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairGap() const
+{
+    if( m_useCustomDiffPair )
+    {
+        return m_customDiffPair.m_Gap;
+    }
+    else if( m_diffPairIndex == 0 )
+    {
+        if( GetNetClasses().GetDefaultPtr()->HasDiffPairGap() )
+            return GetNetClasses().GetDefaultPtr()->GetDiffPairGap();
+        else
+            return GetNetClasses().GetDefaultPtr()->GetClearance();
+    }
+    else
+    {
+        return m_DiffPairDimensionsList[m_diffPairIndex].m_Gap;
+    }
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairViaGap() const
+{
+    if( m_useCustomDiffPair )
+    {
+        return m_customDiffPair.m_ViaGap;
+    }
+    else if( m_diffPairIndex == 0 )
+    {
+        if( GetNetClasses().GetDefaultPtr()->HasDiffPairViaGap() )
+            return GetNetClasses().GetDefaultPtr()->GetDiffPairViaGap();
+        else
+            return GetCurrentDiffPairGap();
+    }
+    else
+    {
+        return m_DiffPairDimensionsList[m_diffPairIndex].m_ViaGap;
+    }
+}
+
+
 void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
 {
     m_HoleToHoleMin = aDistance;
