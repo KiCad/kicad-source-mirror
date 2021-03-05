@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2021-03-05 18:31+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -3408,18 +3408,16 @@ msgid "Via pad diameter"
 msgstr "Via pad-diameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Via pad-diameter:"
+msgstr "Via plaat gat diameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Microvia pad diameter"
 msgstr "Diameter microvia pad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Via pad-diameter:"
+msgstr "Diameter microvia plaat gat"
 
 #: common/dialogs/panel_setup_netclasses.cpp:478
 msgid "Differential pair track width"
