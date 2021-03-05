@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-03 16:13-0800\n"
-"PO-Revision-Date: 2021-03-01 15:50+0000\n"
+"PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -5400,7 +5400,7 @@ msgstr "KiCad klasik"
 #: common/single_top.cpp:175 kicad/kicad.cpp:303
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr "KiCad a jeho závislosti již nepodporují Windows 7 a starší verze."
+msgstr "Windows 7 a starší již není podporována Kicadem a jeho závislostmi."
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:304
 msgid "Unsupported Operating System"
@@ -7281,14 +7281,13 @@ msgid "Generate"
 msgstr "Generovat"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Chybí.\n"
+msgstr "(chybí soubor)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Schéma této desky nelze nalézt."
+msgstr "Nelze nalézt vybraný skript Bom Generatoru %s."
 
 #: eeschema/dialogs/dialog_bom.cpp:298
 #, c-format
@@ -7299,6 +7298,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Hledáno:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8114,7 +8118,7 @@ msgstr "Vlastnosti textu"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Označení vyžaduje neprázdný text."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -13614,8 +13618,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
 "link library symbol."
 msgstr ""
-"ID knihovny pro vyhledávání symbolů ve schématu '%s' je neplatné. Nelze "
-"propojit se symbolem knihovny."
+"Identifikátor knihovny reference symbolu schématu '%s' není platný. Nelze "
+"propojit symbol knihovny."
 
 #: eeschema/sch_screen.cpp:619
 #, c-format
@@ -13632,7 +13636,7 @@ msgstr "Chyba I/O %s řešení knihovny symbolu %s"
 #: eeschema/sch_screen.cpp:662
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr ""
+msgstr "Využití mezipaměti pro definování symbolu '%s:%s' odkaz '%s'."
 
 #: eeschema/sch_screen.cpp:683
 #, c-format
@@ -13924,6 +13928,9 @@ msgid ""
 "project library table.  This may result in broken symbol library links for "
 "the loaded schematic.  Do you wish to continue?"
 msgstr ""
+"V načteném schématu jsou názvy knihoven, které chybí v tabulce knihoven "
+"projektu. To může mít za následek nefunkční odkazy na knihovnu symbolů pro "
+"načtené schéma. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:224 eeschema/sheet.cpp:265 eeschema/sheet.cpp:314
 #: eeschema/sheet.cpp:375
@@ -15727,9 +15734,8 @@ msgid "Break a wire out of a bus"
 msgstr "Přidá drát do sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:703
-#, fuzzy
 msgid "Finish Wire or Bus"
-msgstr "Konec spoje"
+msgstr "Dokončit spoj nebo sběrnici"
 
 #: eeschema/tools/ee_actions.cpp:703
 #, fuzzy
@@ -15791,14 +15797,12 @@ msgid "Move Activate"
 msgstr "Přesunout položku"
 
 #: eeschema/tools/ee_actions.cpp:740
-#, fuzzy
 msgid "Symbol Move Activate"
-msgstr "Přesunout položku"
+msgstr "Aktivace posunutí symbolů"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Align Elements to Grid"
-msgstr "Zarovnat doprava"
+msgstr "Zarovnat prvky na mřížce"
 
 #: eeschema/tools/ee_inspection_tool.cpp:218
 msgid "Symbol Warnings"
@@ -27811,9 +27815,8 @@ msgid "Checking track & via clearances..."
 msgstr "Kontrola izolační mezery spoje & prokovy..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "Izolační mezera mezi zónami...\n"
+msgstr "Kontrola izolační mezery díry..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
