@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2021-03-05 18:31+0000\n"
-"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
+"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -492,12 +492,12 @@ msgstr "Clip zeefdruk op via annulus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:96
 msgid "Use bare copper color for unplated copper"
-msgstr "Gebruik kale koperkleur voor ongeplateerd koper"
+msgstr "Gebruik kale koperkleur voor niet geplateerd koper"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
-"Gebruik verschillende kleuren voor geplateerd en ongeplateerd koper. "
+"Gebruik verschillende kleuren voor geplateerd en Niet-geplateerd koper. "
 "(Langzaam)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
@@ -629,7 +629,7 @@ msgstr "Verspreidingsfactor%"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
 msgid "Recursion Level"
-msgstr "Recursief niveau"
+msgstr "Recursief Niveau"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "Shadows:"
@@ -692,7 +692,7 @@ msgstr "Top licht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
 msgid "Bottom light:"
-msgstr "Bodemlicht:"
+msgstr "Onder licht:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
@@ -2258,9 +2258,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Hoe zou je KiCad willen configureren?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Instellingen importeren uit een eerdere versie van:"
+msgstr "Instellingen importeren uit een eerdere versie:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2272,8 +2271,7 @@ msgstr "Het geselecteerde pad bevat geen geldige KiCad-instellingen!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr ""
-"Instellingen importeren bibliotheek configuratie uit een eerdere versie"
+msgstr "Importeer instellingen uit een eerdere versie"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -2288,9 +2286,8 @@ msgid "Start with default settings"
 msgstr "Starten met standaardinstellingen"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Stel KiCad instellingenpad in"
+msgstr "Stel KiCad instellingen pad in"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -3225,9 +3222,8 @@ msgstr ""
 "beweegt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Sleep acties"
+msgstr "Bewegingen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
@@ -3243,7 +3239,7 @@ msgstr "Sleep geselecteerde objecten; teken anders een selectierechthoek"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag any object (selected or not)"
-msgstr "Sleep een willekeurig object (geselecteerd of niet)"
+msgstr "Sleep (geselecteerde) item(s)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
@@ -3405,7 +3401,7 @@ msgstr "Minimale spoorbreedte"
 
 #: common/dialogs/panel_setup_netclasses.cpp:474
 msgid "Via pad diameter"
-msgstr "Via pad-diameter"
+msgstr "Via paddiameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:475
 msgid "Via plated hole diameter"
@@ -3413,7 +3409,7 @@ msgstr "Via plaat gat diameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Microvia pad diameter"
-msgstr "Diameter microvia pad"
+msgstr "Microvia paddiameter"
 
 #: common/dialogs/panel_setup_netclasses.cpp:477
 msgid "Microvia plated hole diameter"
