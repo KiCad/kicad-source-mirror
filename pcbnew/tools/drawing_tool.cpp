@@ -913,6 +913,21 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
             case SET_END:
                 dimension->SetEnd( (wxPoint) cursorPos );
+
+                if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
+                {
+                    ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
+
+                    BOX2I bounds( dimension->GetStart(),
+                                  dimension->GetEnd() - dimension->GetStart() );
+
+                    // Create a nice preview by measuring the longer dimension
+                    bool vert = bounds.GetWidth() < bounds.GetHeight();
+
+                    ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
+                                                : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                }
+
                 dimension->Update();
 
                 if( !!evt->Modifier( MD_CTRL ) || dimension->Type() == PCB_DIM_CENTER_T )
@@ -938,16 +953,38 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 {
                     ORTHOGONAL_DIMENSION* ortho = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
 
-                    BOX2I bounds( dimension->GetStart(),
+                    BOX2I    bounds( dimension->GetStart(),
                                   dimension->GetEnd() - dimension->GetStart() );
                     VECTOR2I direction( cursorPos - bounds.Centre() );
-                    bool vert = std::abs( direction.y ) < std::abs( direction.x );
+                    bool     vert;
 
                     // Only change the orientation when we move outside the bounds
                     if( !bounds.Contains( cursorPos ) )
                     {
-                        ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL :
-                                                      ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                        // If the dimension is horizontal or vertical, set correct orientation
+                        // otherwise, test if we're left/right of the bounding box or above/below it
+                        if( bounds.GetWidth() == 0 )
+                        {
+                            vert = true;
+                        }
+                        else if( bounds.GetHeight() == 0 )
+                        {
+                            vert = false;
+                        }
+                        else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
+                        {
+                            vert = false;
+                        }
+                        else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
+                        {
+                            vert = true;
+                        }
+                        else
+                        {
+                            vert = std::abs( direction.y ) < std::abs( direction.x );
+                        }
+                        ortho->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
+                                                    : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
                     }
                     else
                     {

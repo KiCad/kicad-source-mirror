@@ -1375,24 +1375,53 @@ void PCB_POINT_EDITOR::updateItem() const
     {
         ORTHOGONAL_DIMENSION* dimension = static_cast<ORTHOGONAL_DIMENSION*>( item );
 
-        BOX2I bounds( dimension->GetStart(),
-                      dimension->GetEnd() - dimension->GetStart() );
-
-        VECTOR2I direction( m_editedPoint->GetPosition() - bounds.Centre() );
-        bool vert = std::abs( direction.y ) < std::abs( direction.x );
-        VECTOR2D featureLine( m_editedPoint->GetPosition() - dimension->GetStart() );
-
         if( isModified( m_editPoints->Point( DIM_CROSSBARSTART ) ) ||
             isModified( m_editPoints->Point( DIM_CROSSBAREND ) ) )
         {
-            // Only change the orientation when we move outside the bounds
-            if( !bounds.Contains( m_editedPoint->GetPosition() ) )
-            {
-                dimension->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL :
-                                                  ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
-            }
+            BOX2I bounds( dimension->GetStart(), dimension->GetEnd() - dimension->GetStart() );
 
-            vert = dimension->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+            const VECTOR2I& cursorPos = m_editedPoint->GetPosition();
+
+            // Find vector from nearest dimension point to edit position
+            VECTOR2I directionA( cursorPos - dimension->GetStart() );
+            VECTOR2I directionB( cursorPos - dimension->GetEnd() );
+            VECTOR2I direction = ( directionA < directionB ) ? directionA : directionB;
+
+            bool     vert;
+            VECTOR2D featureLine( cursorPos - dimension->GetStart() );
+
+            // Only change the orientation when we move outside the bounds
+            if( !bounds.Contains( cursorPos ) )
+            {
+                // If the dimension is horizontal or vertical, set correct orientation
+                // otherwise, test if we're left/right of the bounding box or above/below it
+                if( bounds.GetWidth() == 0 )
+                {
+                    vert = true;
+                }
+                else if( bounds.GetHeight() == 0 )
+                {
+                    vert = false;
+                }
+                else if( cursorPos.x > bounds.GetLeft() && cursorPos.x < bounds.GetRight() )
+                {
+                    vert = false;
+                }
+                else if( cursorPos.y > bounds.GetTop() && cursorPos.y < bounds.GetBottom() )
+                {
+                    vert = true;
+                }
+                else
+                {
+                    vert = std::abs( direction.y ) < std::abs( direction.x );
+                }
+                dimension->SetOrientation( vert ? ORTHOGONAL_DIMENSION::DIR::VERTICAL
+                                                : ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+            }
+            else
+            {
+                vert = dimension->GetOrientation() == ORTHOGONAL_DIMENSION::DIR::VERTICAL;
+            }
 
             dimension->SetHeight( vert ? featureLine.x : featureLine.y );
         }
