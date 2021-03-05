@@ -529,7 +529,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
             // Middle double click?  Do zoom to fit or zoom to objects
-            if( m_exclusive_or ) // Is CTRL key down?
+            if( evt->Modifier( MD_CTRL ) ) // Is CTRL key down?
                 m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
             else
                 m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
