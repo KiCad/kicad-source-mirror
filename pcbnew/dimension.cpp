@@ -476,6 +476,30 @@ OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aS
 }
 
 
+OPT_VECTOR2I DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart )
+{
+    VECTOR2I start( aStart ? aSeg.A : aSeg.B );
+    VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
+
+    if( aCircle.Contains( start ) )
+        return NULLOPT;
+
+    std::vector<VECTOR2I> intersections = aCircle.Intersect( aSeg );
+
+    for( VECTOR2I& intersection : aCircle.Intersect( aSeg ) )
+    {
+        if( ( intersection - start ).SquaredEuclideanNorm() <
+            ( endpoint - start ).SquaredEuclideanNorm() )
+            endpoint = intersection;
+    }
+
+    if( start == endpoint )
+        return NULLOPT;
+
+    return OPT_VECTOR2I( endpoint );
+}
+
+
 ALIGNED_DIMENSION::ALIGNED_DIMENSION( BOARD_ITEM* aParent, KICAD_T aType ) :
         DIMENSION_BASE( aParent, aType ),
         m_height( 0 )
@@ -886,13 +910,29 @@ void LEADER::updateGeometry()
     VECTOR2I start( m_start );
     start += firstLine.Resize( m_extensionOffset );
 
-    SEG primarySeg( m_start, m_end );
-    OPT_VECTOR2I primaryEndpoint = segPolyIntersection( polyBox, primarySeg );
+    SEG arrowSeg( m_start, m_end );
+    SEG textSeg( m_end, m_text.GetPosition() );
+    OPT_VECTOR2I arrowSegEnd, textSegEnd;
 
-    if( !primaryEndpoint )
-        primaryEndpoint = m_end;
+    if( m_textFrame == DIM_TEXT_FRAME::CIRCLE )
+    {
+        double penWidth = m_text.GetEffectiveTextPenWidth() / 2.0;
+        double radius = ( textBox.GetWidth() / 2.0 ) - penWidth;
+        CIRCLE circle( textBox.GetCenter(), radius );
 
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, *primaryEndpoint ) );
+        arrowSegEnd = segCircleIntersection( circle, arrowSeg );
+        textSegEnd = segCircleIntersection( circle, textSeg );
+    }
+    else
+    {
+        arrowSegEnd = segPolyIntersection( polyBox, arrowSeg );
+        textSegEnd = segPolyIntersection( polyBox, textSeg );
+    }
+
+    if( !arrowSegEnd )
+        arrowSegEnd = m_end;
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( start, *arrowSegEnd ) );
 
     // Add arrows
     VECTOR2I arrowEnd( m_arrowLength, 0 );
@@ -905,8 +945,6 @@ void LEADER::updateGeometry()
     m_shapes.emplace_back( new SHAPE_SEGMENT( start,
                                               start + wxPoint( arrowEnd.Rotate( arrowRotNeg ) ) ) );
 
-    SEG textSeg( m_end, m_text.GetPosition() );
-    OPT_VECTOR2I textEndpoint = segPolyIntersection( polyBox, textSeg );
 
     if( !GetText().IsEmpty() )
     {
@@ -926,15 +964,6 @@ void LEADER::updateGeometry()
             double radius   = ( textBox.GetWidth() / 2.0 ) - penWidth;
             m_shapes.emplace_back( new SHAPE_CIRCLE( textBox.GetCenter(), radius ) );
 
-            // Calculated bbox endpoint won't be right
-            if( textEndpoint )
-            {
-                VECTOR2I totalLength( textBox.GetCenter() - m_end );
-                VECTOR2I circleEndpoint( *textEndpoint - m_end );
-                circleEndpoint = circleEndpoint.Resize( totalLength.EuclideanNorm() - radius );
-                textEndpoint = OPT_VECTOR2I( VECTOR2I( m_end ) + circleEndpoint );
-            }
-
             break;
         }
 
@@ -943,8 +972,8 @@ void LEADER::updateGeometry()
         }
     }
 
-    if( textEndpoint && *primaryEndpoint == m_end )
-        m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *textEndpoint ) );
+    if( textSegEnd && *arrowSegEnd == m_end )
+        m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, *textSegEnd ) );
 }
 
 

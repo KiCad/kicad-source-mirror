@@ -46,6 +46,11 @@ public:
         m_circle( aCenter, aRadius )
     {}
 
+    SHAPE_CIRCLE( const CIRCLE& aCircle ) :
+        SHAPE( SH_CIRCLE ),
+        m_circle( aCircle )
+    {}
+
     SHAPE_CIRCLE( const SHAPE_CIRCLE& aOther ) :
         SHAPE( SH_CIRCLE ),
         m_circle( aOther.m_circle )

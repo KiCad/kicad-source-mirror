@@ -29,7 +29,7 @@
 #include <board_item.h>
 #include <pcb_text.h>
 #include <geometry/shape.h>
-
+#include <geometry/circle.h>
 
 class LINE_READER;
 class MSG_PANEL_ITEM;
@@ -272,6 +272,7 @@ protected:
      * @return a point on aSeg that collides with aPoly closest to the start, if one exists
      */
     static OPT_VECTOR2I segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, bool aStart = true );
+    static OPT_VECTOR2I segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart = true );
 
     // Value format
     bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value

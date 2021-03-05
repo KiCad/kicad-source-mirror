@@ -76,7 +76,7 @@ public:
      *
      * Computes the intersection points between this circle and aCircle.
      *
-     * @param aCircle The other circle to intersect with this.
+     * @param aCircle The other circle to intersect with this
      * @return std::vector containing:
      *           - 0 elements if the circles do not intersect
      *           - 1 element if the circles are tangent
@@ -87,6 +87,16 @@ public:
     /**
      * Function Intersect()
      *
+     * Computes the intersection points between this circle and aSeg.
+     *
+     * @param aSeg The segment to intersect with this circle (end points ignored)
+     * @return std::vector containing up to two intersection points
+     */
+    std::vector<VECTOR2I> Intersect( const SEG& aSeg ) const;
+
+    /**
+     * Function IntersectLine()
+     *
      * Computes the intersection points between this circle and aLine.
      *
      * @param aLine The line to intersect with this circle (end points ignored)
@@ -95,7 +105,17 @@ public:
      *           - 1 element if the line is tangent to the circle
      *           - 2 elements if the line intersects the circle
      */
-    std::vector<VECTOR2I> Intersect( const SEG& aLine ) const;
+    std::vector<VECTOR2I> IntersectLine( const SEG& aLine ) const;
+
+    /**
+     * Function Contains()
+     *
+     * Checks whether point aP is inside this circle.
+     *
+     * @param aP The point to check
+     * @return true if the point is inside, false otherwise
+     */
+    bool Contains( const VECTOR2I& aP );
 };
 
 #endif // __CIRCLE_H

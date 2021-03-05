@@ -97,7 +97,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
         anglebisector = aLineA.ParallelSeg( midPt );
 
         Center = aP; // use this circle as a construction to find the actual centers
-        std::vector<VECTOR2I> possibleCenters = Intersect( anglebisector );
+        std::vector<VECTOR2I> possibleCenters = IntersectLine( anglebisector );
 
         wxCHECK_MSG( possibleCenters.size() > 0, *this, "No solutions exist!" );
         intersectPoint = aLineA.A; // just for the purpose of deciding which solution to return
@@ -138,7 +138,7 @@ CIRCLE& CIRCLE::ConstructFromTanTanPt( const SEG& aLineA, const SEG& aLineB, con
 
         // Find the homothetic image of aP in the construction circle (hSolution)
         SEG                   throughaP( intersectPoint, aP );
-        std::vector<VECTOR2I> hProjections = hSolution.Intersect( throughaP );
+        std::vector<VECTOR2I> hProjections = hSolution.IntersectLine( throughaP );
         wxCHECK_MSG( hProjections.size() > 0, *this, "No solutions exist!" );
 
         // We want to create a fillet, so the projection of homothetic projection of aP
@@ -257,7 +257,33 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const CIRCLE& aCircle ) const
 }
 
 
-std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aLine ) const
+std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aSeg ) const
+{
+    std::vector<VECTOR2I> retval;
+
+    for( VECTOR2I& intersection : IntersectLine( aSeg ) )
+    {
+        VECTOR2I delta = aSeg.B - aSeg.A;
+
+        if( delta.x > delta.y )
+        {
+            if( intersection.x >= std::min( aSeg.A.x, aSeg.B.x )
+            && intersection.x <= std::max( aSeg.A.x, aSeg.B.x ) )
+                retval.push_back( intersection );
+        }
+        else
+        {
+            if( intersection.y >= std::min( aSeg.A.y, aSeg.B.y )
+            && intersection.y <= std::max( aSeg.A.y, aSeg.B.y ) )
+                retval.push_back( intersection );
+        }
+    }
+
+    return retval;
+}
+
+
+std::vector<VECTOR2I> CIRCLE::IntersectLine( const SEG& aLine ) const
 {
     std::vector<VECTOR2I> retval;
 
@@ -311,3 +337,8 @@ std::vector<VECTOR2I> CIRCLE::Intersect( const SEG& aLine ) const
     return retval;
 }
 
+
+bool CIRCLE::Contains( const VECTOR2I& aP )
+{
+    return ( aP - Center ).EuclideanNorm() < Radius;
+}
