@@ -868,7 +868,7 @@ bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
 }
 
 
-int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
+int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
 {
     int            biggest = 0;
     DRC_CONSTRAINT constraint;
@@ -889,7 +889,7 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 }
 
 
-int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
+int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
 {
     int clearance = GetDefault()->GetClearance();
 

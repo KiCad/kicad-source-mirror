@@ -304,12 +304,12 @@ public:
     /**
      * @return the biggest clearance value found in NetClasses list.
      */
-    int GetBiggestClearanceValue();
+    int GetBiggestClearanceValue() const;
 
     /**
      * @return the smallest clearance value found in NetClasses list.
      */
-    int GetSmallestClearanceValue();
+    int GetSmallestClearanceValue() const;
 
     /**
      * @return the current micro via size that is the current netclass value.
@@ -547,8 +547,10 @@ public:
     {
         if( m_useCustomDiffPair )
             return m_customDiffPair.m_Width;
-        else
+        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
             return m_DiffPairDimensionsList[m_diffPairIndex].m_Width;
+        else
+            return GetCurrentTrackWidth();
     }
 
     /**
@@ -560,8 +562,10 @@ public:
     {
         if( m_useCustomDiffPair )
             return m_customDiffPair.m_Gap;
-        else
+        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
             return m_DiffPairDimensionsList[m_diffPairIndex].m_Gap;
+        else
+            return GetSmallestClearanceValue();
     }
 
     /**
@@ -573,8 +577,10 @@ public:
     {
         if( m_useCustomDiffPair )
             return m_customDiffPair.m_ViaGap;
-        else
+        else if( m_diffPairIndex < m_DiffPairDimensionsList.size() )
             return m_DiffPairDimensionsList[m_diffPairIndex].m_ViaGap;
+        else
+            return GetSmallestClearanceValue();
     }
 
     /**
