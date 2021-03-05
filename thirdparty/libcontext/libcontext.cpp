@@ -1398,10 +1398,15 @@ intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext( fcontext_t* ofc, fcontext_t n
 
 void LIBCONTEXT_CALL_CONVENTION release_fcontext( fcontext_t ctx )
 {
+    if( ctx == nullptr )
+		return;
+
 	if( fiberParams.find( ctx ) != fiberParams.end() )
 	{
 		fiberParams.erase( ctx );
 	}
+
+	DeleteFiber( ctx );
 }
 
 

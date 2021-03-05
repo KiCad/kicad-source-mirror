@@ -135,6 +135,10 @@ cmake_dependent_option( KICAD_WIN32_DPI_AWARE
     "Turn on DPI awareness for Windows builds only"
     OFF "WIN32" OFF )
 
+cmake_dependent_option( KICAD_WIN32_CONTEXT_WINFIBER
+    "Use win32 fibers for libcontext"
+    OFF "WIN32" OFF )
+
 option( KICAD_USE_EGL
     "Build KiCad with EGL backend support for Wayland."
     OFF )
@@ -218,6 +222,13 @@ perform_feature_checks()
 
 # Setup the compiler warnings
 include( ${CMAKE_MODULE_PATH}/Warnings.cmake )
+
+if( KICAD_WIN32_CONTEXT_WINFIBER )
+    set(LIBCONTEXT_USE_WINFIBER true)
+    add_compile_definitions(LIBCONTEXT_USE_WINFIBER)
+else()
+    set(LIBCONTEXT_USE_WINFIBER false)
+endif()
 
 if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.
