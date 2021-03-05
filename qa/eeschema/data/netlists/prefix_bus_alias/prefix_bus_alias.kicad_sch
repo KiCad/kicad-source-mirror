@@ -1,0 +1,60 @@
+(kicad_sch (version 20210126) (generator eeschema)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (bus (pts (xy 83.82 43.18) (xy 114.3 43.18))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 5867095a-fa92-4441-9601-461810bd37ed)
+  )
+
+  (sheet (at 60.96 40.64) (size 22.86 11.43)
+    (stroke (width 0.001) (type solid) (color 0 0 0 0))
+    (fill (color 0 0 0 0.0000))
+    (uuid f0fa0db3-6edc-40e8-bad3-f5b79017ea91)
+    (property "Sheet name" "Subsheet 1" (id 0) (at 60.96 40.0041 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsheet1.kicad_sch" (id 1) (at 60.96 52.5789 0)
+      (effects (font (size 1.27 1.27) italic) (justify left top))
+    )
+    (pin "Foo{Bus1}" bidirectional (at 83.82 43.18 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid dc7b6902-3235-4675-b806-691d50add88f)
+    )
+  )
+
+  (sheet (at 114.3 40.64) (size 22.86 11.43)
+    (stroke (width 0.001) (type solid) (color 0 0 0 0))
+    (fill (color 0 0 0 0.0000))
+    (uuid febe4196-6574-438a-acc7-f0fe3ed4f05c)
+    (property "Sheet name" "Subsheet2" (id 0) (at 114.3 40.0041 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsheet2.kicad_sch" (id 1) (at 114.3 52.5789 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "Bar{Bus1}" bidirectional (at 114.3 43.18 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid aa674f68-010d-4915-8a55-f03c9d976749)
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/f0fa0db3-6edc-40e8-bad3-f5b79017ea91/" (page "2"))
+    (path "/febe4196-6574-438a-acc7-f0fe3ed4f05c/" (page "3"))
+  )
+
+  (symbol_instances
+    (path "/f0fa0db3-6edc-40e8-bad3-f5b79017ea91/3931f39c-8ab8-4fed-bea5-f51ad460910c"
+      (reference "J1") (unit 1) (value "Conn_02x05_Odd_Even") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x05_P2.54mm_Vertical")
+    )
+    (path "/febe4196-6574-438a-acc7-f0fe3ed4f05c/4657f001-6170-44af-b9d7-533b2cbe84db"
+      (reference "J2") (unit 1) (value "Conn_02x05_Odd_Even") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x05_P2.54mm_Vertical")
+    )
+  )
+)

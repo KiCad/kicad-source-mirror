@@ -99,7 +99,7 @@ public:
      *
      * @param aOther is the connection to clone
      */
-    void Clone( SCH_CONNECTION& aOther );
+    void Clone( const SCH_CONNECTION& aOther );
 
     SCH_ITEM* Parent() const { return m_parent; }
 
@@ -143,7 +143,7 @@ public:
 
     wxString FullLocalName() const
     {
-        return m_prefix + m_local_name + m_suffix;
+        return m_local_prefix + m_local_name + m_suffix;
     }
 
     void SetName( const wxString& aName )
@@ -266,6 +266,9 @@ private:
 
     /// Prefix if connection is member of a labeled bus group (or "" if not)
     wxString m_prefix;
+
+    /// Local prefix for group bus members (used with m_local_name)
+    wxString m_local_prefix;
 
     /// Optional prefix of a bux group (always empty for nets and vector buses)
     wxString m_bus_prefix;

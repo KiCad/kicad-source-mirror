@@ -128,8 +128,9 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
 {
     m_members.clear();
 
-    m_name       = aLabel;
-    m_local_name = aLabel;
+    m_name         = aLabel;
+    m_local_name   = aLabel;
+    m_local_prefix = m_prefix;
 
     wxString prefix;
     std::vector<wxString> members;
@@ -149,6 +150,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
             member->m_type         = CONNECTION_TYPE::NET;
             member->m_prefix       = m_prefix;
             member->m_local_name   = vector_member;
+            member->m_local_prefix = m_prefix;
             member->m_vector_index = i++;
             member->SetName( vector_member );
             member->SetGraph( m_graph );
@@ -202,6 +204,7 @@ void SCH_CONNECTION::Reset()
     m_type = CONNECTION_TYPE::NONE;
     m_name.Empty();
     m_local_name.Empty();
+    m_local_prefix.Empty();
     m_cached_name.Empty();
     m_cached_name_with_path.Empty();
     m_prefix.Empty();
@@ -221,7 +224,7 @@ void SCH_CONNECTION::Reset()
 }
 
 
-void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
+void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
 {
     m_graph = aOther.m_graph;
     // Note: m_lastDriver is not cloned as it needs to be the last driver of *this* connection
@@ -230,10 +233,13 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_name   = aOther.m_name;
     // Note: m_local_name is not cloned if not set yet
     if( m_local_name.IsEmpty() )
-        m_local_name = aOther.LocalName();
+    {
+        m_local_name   = aOther.LocalName();
+        m_local_prefix = aOther.Prefix();
+    }
 
     m_prefix       = aOther.Prefix();
-    m_bus_prefix   = aOther.BusPrefix();
+    // m_bus_prefix is not cloned; only used for local names
     m_suffix       = aOther.Suffix();
     m_net_code     = aOther.NetCode();
     m_bus_code     = aOther.BusCode();
@@ -245,19 +251,33 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     // Note: subgraph code isn't cloned, it should remain with the original object
 
     // Handle vector bus members: make sure local names are preserved where possible
-    std::vector<std::shared_ptr<SCH_CONNECTION>>& otherMembers = aOther.Members();
+    const std::vector<std::shared_ptr<SCH_CONNECTION>>& otherMembers = aOther.Members();
 
-    if( m_type == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS &&
-        m_members.size() == otherMembers.size() )
+    if( m_type == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS )
     {
-        for( size_t i = 0; i < m_members.size(); ++i )
+        if( m_members.empty() )
         {
-            m_members[i]->Clone( *otherMembers[i] );
+            m_members = otherMembers;
+        }
+        else
+        {
+            size_t cloneLimit = std::min( m_members.size(), otherMembers.size() );
+
+            for( size_t i = 0; i < cloneLimit; ++i )
+                m_members[i]->Clone( *otherMembers[i] );
         }
     }
-    else
+    else if( m_type == CONNECTION_TYPE::BUS_GROUP && aOther.Type() == CONNECTION_TYPE::BUS_GROUP )
     {
-        m_members = otherMembers;
+        if( m_members.empty() || m_members.size() != otherMembers.size() )
+        {
+            m_members = otherMembers;
+        }
+        else
+        {
+            for( size_t i = 0; i < m_members.size(); ++i )
+                m_members[i]->Clone( *otherMembers[i] );
+        }
     }
 
     m_type = aOther.Type();

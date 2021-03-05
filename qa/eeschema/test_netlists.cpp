@@ -278,4 +278,10 @@ BOOST_AUTO_TEST_CASE( NoConnects )
 }
 
 
+BOOST_AUTO_TEST_CASE( PrefixBusAlias )
+{
+    doNetlistTest( "prefix_bus_alias" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
