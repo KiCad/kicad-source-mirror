@@ -905,6 +905,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             item = nullptr;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
+
     if( m_inTwoClickPlace )
         return 0;
     else

@@ -345,6 +345,13 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            // Is another tool already moving a new object?  Don't allow a drag start
+            if( !m_selection.Empty() && m_selection[0]->HasFlag( IS_NEW | IS_MOVED ) )
+            {
+                evt->SetPassEvent();
+                continue;
+            }
+
             // Drag with LMB? Select multiple objects (or at least draw a selection box)
             // or drag them
             m_frame->FocusOnItem( nullptr );

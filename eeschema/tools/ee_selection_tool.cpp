@@ -536,6 +536,13 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            // Is another tool already moving a new object?  Don't allow a drag start
+            if( !m_selection.Empty() && m_selection[0]->HasFlag( IS_NEW | IS_MOVED ) )
+            {
+                evt->SetPassEvent();
+                continue;
+            }
+
             // drag with LMB? Select multiple objects (or at least draw a selection box) or
             // drag them
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
