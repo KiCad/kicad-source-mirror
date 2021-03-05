@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,8 +127,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     UpdatePrecisionOptions();
     m_Check_Minimal->SetValue( m_MinimalHeader );
 
-    if( m_drillOriginIsAuxAxis )
-        m_Choice_Drill_Offset->SetSelection( 1 );
+    m_Choice_Drill_Offset->SetSelection( m_drillOriginIsAuxAxis ? 1 : 0 );
 
     m_Check_Mirror->SetValue( m_Mirror );
     m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
@@ -185,11 +184,11 @@ void DIALOG_GENDRILL::InitDisplayParams()
     }
 
     // Display hole counts:
-    m_PlatedPadsCountInfoMsg->   SetLabel( wxString() << m_platedPadsHoleCount );
+    m_PlatedPadsCountInfoMsg->SetLabel( wxString() << m_platedPadsHoleCount );
     m_NotPlatedPadsCountInfoMsg->SetLabel( wxString() << m_notplatedPadsHoleCount );
-    m_ThroughViasInfoMsg->       SetLabel( wxString() << m_throughViasCount );
-    m_MicroViasInfoMsg->         SetLabel( wxString() << m_microViasCount );
-    m_BuriedViasInfoMsg->        SetLabel( wxString() << m_blindOrBuriedViasCount );
+    m_ThroughViasInfoMsg->SetLabel( wxString() << m_throughViasCount );
+    m_MicroViasInfoMsg->SetLabel( wxString() << m_microViasCount );
+    m_BuriedViasInfoMsg->SetLabel( wxString() << m_blindOrBuriedViasCount );
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -323,7 +322,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     dirStr = m_outputDirectoryName->GetValue();
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
     m_plotOpts.SetOutputDirectory( dirStr );
-    m_drillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection();
+    m_drillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection() == 1;
     m_plotOpts.SetUseAuxOrigin( m_drillOriginIsAuxAxis );
 
     m_mapFileType = m_Choice_Drill_Map->GetSelection();
@@ -345,7 +344,11 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     else
         m_Precision = precisionListForMetric;
 
-    m_board->SetPlotOptions( m_plotOpts );
+    if( !m_plotOpts.IsSameAs( m_board->GetPlotOptions() ) )
+    {
+        m_board->SetPlotOptions( m_plotOpts );
+        m_pcbEditFrame->OnModify();
+    }
 }
 
 
