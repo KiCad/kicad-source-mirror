@@ -199,7 +199,7 @@ std::vector<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
     {
         CONNECTION_SUBGRAPH* subgraph = pair.second[0];
 
-        if( subgraph->GetDriverPriority() > CONNECTION_SUBGRAPH::PRIORITY::PIN )
+        if( subgraph->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
             names.emplace_back( pair.first.first );
     }
 

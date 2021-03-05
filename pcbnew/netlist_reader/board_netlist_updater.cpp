@@ -1,8 +1,3 @@
-/**
- * @file board_netlist_updater.h
- * @brief BOARD_NETLIST_UPDATER class definition
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -11,7 +6,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -946,6 +941,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_commit.Push( _( "Update netlist" ) );
 
         m_board->SynchronizeNetsAndNetClasses();
+        m_frame->SaveProjectSettings();
     }
     else if( m_deleteSinglePadNets && !m_newFootprintsCount )
     {
