@@ -409,8 +409,19 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
     # Avoid fatal error because /GF + swig wrapper exceed standard obj file limits
     string( APPEND CMAKE_CXX_FLAGS " /bigobj" )
-    # /EHsc: ensure standard exception C++ unwinding is enabled
+
+    # Exception handling
+    # Remove the potential default EHsc option cmake doesnt allow us to remove easily
+    string( REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+    if( KICAD_WIN32_CONTEXT_WINFIBER )
+    # /EHsc: ensure standard exception C++ unwinding is enabled, "extern C" can never throw exceptions
     string( APPEND CMAKE_CXX_FLAGS " /EHsc" )
+    else()
+    # the asm libcontext implementation a slight change of rules
+    # /EHs: ensure standard exception C++ unwinding is enabled, "extern C" MAY throw exceptions
+    string( APPEND CMAKE_CXX_FLAGS " /EHs" )
+    endif()
+
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
