@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 16:13-0800\n"
+"POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2021-03-03 23:36+0000\n"
 "Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
@@ -1237,7 +1237,7 @@ msgstr "Fout bij het toewijzen van geheugen voor potrace-bitmap"
 #: common/dialogs/wx_html_report_panel_base.cpp:42
 #: eeschema/dialogs/dialog_erc_base.cpp:76 gerbview/files.cpp:307
 #: gerbview/files.cpp:422 gerbview/readgerb.cpp:72
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1031
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1034
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
 msgid "Errors"
 msgstr "Fouten"
@@ -1575,7 +1575,7 @@ msgstr "Bevestiging"
 #: common/dialog_about/AboutDialog_main.cpp:114
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:281
-#: common/widgets/widget_hotkey_list.cpp:451 eeschema/sch_symbol.cpp:1415
+#: common/widgets/widget_hotkey_list.cpp:451 eeschema/sch_symbol.cpp:1417
 #: eeschema/symbol_editor/symbol_editor.cpp:593
 #: eeschema/symbol_editor/symbol_editor.cpp:1205
 #: eeschema/symbol_viewer_frame.cpp:365 include/lib_table_grid.h:189
@@ -1927,8 +1927,8 @@ msgstr "Omgevingsvariabelen"
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:276
 #: eeschema/fields_grid_table.cpp:195 eeschema/lib_pin.cpp:1001
-#: eeschema/sch_pin.cpp:177 eeschema/sch_symbol.cpp:1384
-#: eeschema/sch_symbol.cpp:1425 eeschema/symbol_editor/symbol_editor.cpp:1177
+#: eeschema/sch_pin.cpp:177 eeschema/sch_symbol.cpp:1386
+#: eeschema/sch_symbol.cpp:1427 eeschema/symbol_editor/symbol_editor.cpp:1177
 #: eeschema/symbol_viewer_frame.cpp:363
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
@@ -3963,7 +3963,7 @@ msgid "Screen"
 msgstr "Beeldscherm"
 
 #: common/eda_item.cpp:262 eeschema/dialogs/dialog_fields_editor_global.cpp:959
-#: eeschema/sch_symbol.cpp:1412
+#: eeschema/sch_symbol.cpp:1414
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:114
 #: pcbnew/fp_text.cpp:284 pcbnew/load_select_footprint.cpp:368
 #: pcbnew/pad.cpp:858
@@ -6713,7 +6713,7 @@ msgid "\"%s\" is not a valid footprint."
 msgstr "\"%s\" is geen geldige footprint."
 
 #: cvpcb/cvpcb_mainframe.cpp:680 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1417 eeschema/symbol_editor/symbol_editor.cpp:1206
+#: eeschema/sch_symbol.cpp:1419 eeschema/symbol_editor/symbol_editor.cpp:1206
 #: eeschema/symbol_viewer_frame.cpp:366 pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
 msgstr "Sleutelwoorden"
@@ -6722,9 +6722,9 @@ msgstr "Sleutelwoorden"
 msgid "Pin Count"
 msgstr "Aantal pinnen"
 
-#: cvpcb/cvpcb_mainframe.cpp:709 eeschema/sch_symbol.cpp:1399
-#: eeschema/sch_symbol.cpp:1403 eeschema/sch_symbol.cpp:1431
-#: eeschema/sch_symbol.cpp:1436 eeschema/symbol_editor/symbol_editor.cpp:188
+#: cvpcb/cvpcb_mainframe.cpp:709 eeschema/sch_symbol.cpp:1401
+#: eeschema/sch_symbol.cpp:1405 eeschema/sch_symbol.cpp:1433
+#: eeschema/sch_symbol.cpp:1438 eeschema/symbol_editor/symbol_editor.cpp:188
 #: pcbnew/tools/pcb_control.cpp:1082
 msgid "Library"
 msgstr "Bibliotheek"
@@ -6845,7 +6845,7 @@ msgstr "Beschikbare omgevingsvariabelen voor relatieve paden:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:277
 #: eeschema/fields_grid_table.cpp:196 eeschema/lib_field.cpp:444
-#: eeschema/sch_symbol.cpp:1374 eeschema/sch_symbol.cpp:1424
+#: eeschema/sch_symbol.cpp:1376 eeschema/sch_symbol.cpp:1426
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -8618,8 +8618,8 @@ msgid "Group By"
 msgstr "Groeperen op"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
-#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1372
-#: eeschema/sch_symbol.cpp:1422 pcbnew/footprint.cpp:2017
+#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2017
 msgid "Reference"
 msgstr "Referentie"
 
@@ -8754,7 +8754,7 @@ msgstr "Tekstgrootte:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:769
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1257
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1279
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:544
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:547
 msgid "..."
 msgstr "..."
 
@@ -12123,12 +12123,12 @@ msgstr "Pinnen van het type %s en %s zijn verbonden"
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s is verbonden met zowel %s als %s"
 
-#: eeschema/erc.cpp:698
+#: eeschema/erc.cpp:697
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "De huidige configuratie omvat niet de bibliotheek '%s'."
 
-#: eeschema/erc.cpp:709
+#: eeschema/erc.cpp:708
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "De bibliotheek '%s' is niet ingeschakeld in de huidige configuratie."
@@ -12450,7 +12450,7 @@ msgstr ""
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Het huidige schema is aangepast. Wijzigingen opslaan?"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1395
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
 msgstr "Alias van"
 
@@ -12886,16 +12886,16 @@ msgstr "Bus"
 msgid "Bus Entry Type"
 msgstr "Type businvoer"
 
-#: eeschema/sch_connection.cpp:374
+#: eeschema/sch_connection.cpp:394
 msgid "Connection Name"
 msgstr "Verbindingsnaam"
 
-#: eeschema/sch_connection.cpp:383 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "Net Code"
 
-#: eeschema/sch_connection.cpp:389 eeschema/sch_connection.cpp:404
+#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Bus Alias %s Leden"
@@ -13453,7 +13453,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:403
 #, fuzzy, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
@@ -13466,7 +13466,7 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:415
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:416
 #: pcbnew/plugins/kicad/pcb_parser.cpp:150
 #, c-format
 msgid ""
@@ -13480,7 +13480,7 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:423
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:424
 #: pcbnew/plugins/kicad/pcb_parser.cpp:159
 #, c-format
 msgid ""
@@ -13494,7 +13494,7 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:715
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:716
 #, c-format
 msgid ""
 "Invalid symbol names definition in\n"
@@ -13507,8 +13507,8 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:738
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1660
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1661
 #, c-format
 msgid ""
 "Invalid property name in\n"
@@ -13521,8 +13521,8 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:747
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1669
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:748
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1670
 #, c-format
 msgid ""
 "Empty property name in\n"
@@ -13535,8 +13535,8 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:757
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1678
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:758
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1679
 #, c-format
 msgid ""
 "Invalid property value in\n"
@@ -13549,7 +13549,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1213
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1214
 #, c-format
 msgid ""
 "Invalid pin name in\n"
@@ -13562,7 +13562,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1248
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1249
 #, c-format
 msgid ""
 "Invalid pin number in\n"
@@ -13575,7 +13575,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1286
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1287
 #, c-format
 msgid ""
 "Invalid alternate pin name in\n"
@@ -13588,7 +13588,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1452
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1453
 #, c-format
 msgid ""
 "Invalid text string in\n"
@@ -13601,13 +13601,13 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1501
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1502
 #: pcbnew/plugins/kicad/pcb_parser.cpp:938
 #, c-format
 msgid "Page type \"%s\" is not valid "
 msgstr "Paginatype \"%s\" is niet geldig "
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1739
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1740
 #, c-format
 msgid ""
 "Invalid sheet pin name in\n"
@@ -13620,7 +13620,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1748
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1749
 #, c-format
 msgid ""
 "Empty sheet pin name in\n"
@@ -13633,7 +13633,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2184
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2185
 #, c-format
 msgid ""
 "Invalid symbol library name in\n"
@@ -13646,7 +13646,7 @@ msgstr ""
 "regel: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2206
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2207
 #, c-format
 msgid ""
 "Invalid symbol library ID in\n"
@@ -13666,20 +13666,20 @@ msgid "Library file \"%s\" not found."
 msgstr "Bibliotheekbestand \"%s\" niet gevonden."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2030
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4164
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4167
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotheek %s bevat geen symbool met de naam %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2204
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4349
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4352
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
 "symboolbibliotheek \"%s\" bestaat al, kan geen nieuwe bibliotheek maken"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2232
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4377
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4380
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, c-format
 msgid "library \"%s\" cannot be deleted"
@@ -13742,12 +13742,12 @@ msgstr ""
 msgid "symbol document library file is empty"
 msgstr "symbool documentbibliotheekbestand is leeg"
 
-#: eeschema/sch_screen.cpp:586
+#: eeschema/sch_screen.cpp:590
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 msgstr "Stel schematisch symbool '%s %s' bibliotheekidentificatie in op '%s'. "
 
-#: eeschema/sch_screen.cpp:603
+#: eeschema/sch_screen.cpp:607
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
@@ -13756,7 +13756,7 @@ msgstr ""
 "Schematische symboolverwijzing '%s' bibliotheek-ID is niet geldig. Kan "
 "bibliotheeksymbool niet koppelen."
 
-#: eeschema/sch_screen.cpp:619
+#: eeschema/sch_screen.cpp:623
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
@@ -13765,22 +13765,22 @@ msgstr ""
 "Symboolbibliotheek '%s' niet gevonden en geen reservecache-bibliotheek "
 "beschikbaar. Kan bibliotheeksymbool niet koppelen."
 
-#: eeschema/sch_screen.cpp:638
+#: eeschema/sch_screen.cpp:642
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
 msgstr "I / O-fout %s bij het oplossen van bibliotheeksymbool %s"
 
-#: eeschema/sch_screen.cpp:662
+#: eeschema/sch_screen.cpp:666
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Terugvallen naar de cache om symbool '%s: %s' link '%s' in te stellen."
 
-#: eeschema/sch_screen.cpp:683
+#: eeschema/sch_screen.cpp:687
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Stel schematisch symbool '%s %s' bibliotheekidentificatie in op '%s'. "
 
-#: eeschema/sch_screen.cpp:694
+#: eeschema/sch_screen.cpp:698
 #, fuzzy, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Geen bibliotheeksymbool gevonden voor schematisch symbool '%s %s'. "
@@ -13819,36 +13819,36 @@ msgstr "(Verwijderd item)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hiërarchische bladpin %s"
 
-#: eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1376
 msgid "Power symbol"
 msgstr "Stroom symbool"
 
-#: eeschema/sch_symbol.cpp:1379
+#: eeschema/sch_symbol.cpp:1381
 msgid "flags"
 msgstr "vlaggen"
 
-#: eeschema/sch_symbol.cpp:1388
+#: eeschema/sch_symbol.cpp:1390
 msgid "Missing parent"
 msgstr "Ontbrekende ouder"
 
-#: eeschema/sch_symbol.cpp:1403
+#: eeschema/sch_symbol.cpp:1405
 msgid "Undefined!!!"
 msgstr "Ongedefinieerd !!!"
 
-#: eeschema/sch_symbol.cpp:1410
+#: eeschema/sch_symbol.cpp:1412
 msgid "<Unknown>"
 msgstr "<Onbekend>"
 
-#: eeschema/sch_symbol.cpp:1431
+#: eeschema/sch_symbol.cpp:1433
 msgid "No library defined!"
 msgstr "Geen bibliotheek gedefinieerd!"
 
-#: eeschema/sch_symbol.cpp:1435
+#: eeschema/sch_symbol.cpp:1437
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbool niet gevonden in %s!"
 
-#: eeschema/sch_symbol.cpp:1627
+#: eeschema/sch_symbol.cpp:1629
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbool %s [%s]"
@@ -14909,7 +14909,7 @@ msgstr "Kan symbool \"%s\" niet laden uit bibliotheek \"%s\" (%s)"
 msgid "Cannot enumerate library \"%s\" (%s)"
 msgstr "Kan bibliotheek \"%s\" (%s) niet inventariseren"
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:981
+#: eeschema/symbol_editor/symbol_library_manager.cpp:982
 #, c-format
 msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr ""
@@ -16110,14 +16110,14 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "Symbool niet gevonden."
 
-#: eeschema/tools/ee_selection_tool.cpp:1570
+#: eeschema/tools/ee_selection_tool.cpp:1577
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
-#: pcbnew/tools/pcb_selection_tool.cpp:1785
+#: pcbnew/tools/pcb_selection_tool.cpp:1792
 msgid "Select &All\tA"
 msgstr "Selecteer & Alles A"
 
-#: eeschema/tools/ee_selection_tool.cpp:1573
-#: pcbnew/tools/pcb_selection_tool.cpp:1788
+#: eeschema/tools/ee_selection_tool.cpp:1580
+#: pcbnew/tools/pcb_selection_tool.cpp:1795
 msgid "&Expand Selection\tE"
 msgstr "& Selectie uitbreiden E"
 
@@ -16141,15 +16141,15 @@ msgid "Couldn't load image from \"%s\""
 msgstr "Kan afbeelding van ‘%s’ niet laden"
 
 #: eeschema/tools/sch_drawing_tools.cpp:575
-#: eeschema/tools/sch_drawing_tools.cpp:1059
+#: eeschema/tools/sch_drawing_tools.cpp:1061
 msgid "No new hierarchical labels found."
 msgstr "Geen nieuwe hiërarchische labels gevonden."
 
-#: eeschema/tools/sch_drawing_tools.cpp:659
+#: eeschema/tools/sch_drawing_tools.cpp:660
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1047
+#: eeschema/tools/sch_drawing_tools.cpp:1049
 msgid "Click over a sheet."
 msgstr "Klik op een blad."
 
@@ -20120,12 +20120,12 @@ msgstr "Selecteer de diëlektrische laag om te verwijderen uit de stapel."
 msgid "Dielectric Layers"
 msgstr "Diëlektrische lagen"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:627
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:630
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:150
 msgid "Copper"
 msgstr "Koper"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:924
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:927
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
@@ -20133,14 +20133,14 @@ msgstr ""
 "Onjuiste waarde voor Epsilon R (Epsilon R moet positief of nul zijn als deze "
 "niet wordt gebruikt)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:944
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:947
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 "Onjuiste waarde voor verlies tg (verlies tg moet positief of nul zijn indien "
 "niet gebruikt)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:991
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:994
 msgid "A layer thickness is < 0. Fix it"
 msgstr "Een laagdikte is <0. Fix it"
 
@@ -21313,23 +21313,23 @@ msgstr "Opschonen van tracks en Vias"
 msgid "Constraints Resolution Report"
 msgstr "Rapport over het oplossen van beperkingen"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:282
+#: pcbnew/dialogs/dialog_copper_zones.cpp:279
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr "Afschuiningsafstand:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:284
+#: pcbnew/dialogs/dialog_copper_zones.cpp:281
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
 msgid "Fillet radius:"
 msgstr "Afrondingsstraal:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
+#: pcbnew/dialogs/dialog_copper_zones.cpp:392
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Thermische spaakbreedte mag niet kleiner zijn dan de minimale breedte."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:431
+#: pcbnew/dialogs/dialog_copper_zones.cpp:420
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
 msgid "No layer selected."
 msgstr "Geen laag geselecteerd."
@@ -29612,7 +29612,7 @@ msgstr "Verwijder ongebruikt net \"%s\"."
 msgid "Update netlist"
 msgstr "Update netlijst"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:968
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:970
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Totaal aantal waarschuwingen: %d, fouten: %d."
@@ -32068,7 +32068,7 @@ msgstr "Maak een boog van lijnsegment"
 msgid "Select Via Size"
 msgstr "Selecteer Via grootte"
 
-#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1466
+#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1468
 msgid "Draw a line segment"
 msgstr "Teken een lijnstuk"
 
@@ -32088,36 +32088,36 @@ msgstr "Teken een boog"
 msgid "Place a text"
 msgstr "Plaats een tekst"
 
-#: pcbnew/tools/drawing_tool.cpp:880
+#: pcbnew/tools/drawing_tool.cpp:882
 msgid "Draw a leader"
 msgstr "Teken een leider"
 
-#: pcbnew/tools/drawing_tool.cpp:893
+#: pcbnew/tools/drawing_tool.cpp:895
 msgid "Draw a dimension"
 msgstr "Teken een dimensie"
 
-#: pcbnew/tools/drawing_tool.cpp:1026
+#: pcbnew/tools/drawing_tool.cpp:1028
 msgid "No graphic items found in file to import"
 msgstr "Geen grafische items gevonden in bestand om te importeren"
 
-#: pcbnew/tools/drawing_tool.cpp:1076 pcbnew/tools/drawing_tool.cpp:1147
+#: pcbnew/tools/drawing_tool.cpp:1078 pcbnew/tools/drawing_tool.cpp:1149
 msgid "Place a DXF_SVG drawing"
 msgstr "Plaats een DXF_SVG-tekening"
 
-#: pcbnew/tools/drawing_tool.cpp:1213
+#: pcbnew/tools/drawing_tool.cpp:1215
 msgid "Move the footprint reference anchor"
 msgstr "Verplaats het footprint-referentieanker"
 
-#: pcbnew/tools/drawing_tool.cpp:1900
+#: pcbnew/tools/drawing_tool.cpp:1902
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Polygonen die zichzelf snijden zijn niet toegestaan"
 
-#: pcbnew/tools/drawing_tool.cpp:2353
+#: pcbnew/tools/drawing_tool.cpp:2356
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Het startpunt van de routering schendt DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2456
+#: pcbnew/tools/drawing_tool.cpp:2459
 msgid "Place via"
 msgstr "Plaats via"
 

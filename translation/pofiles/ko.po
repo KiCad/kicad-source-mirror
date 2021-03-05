@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 16:13-0800\n"
+"POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2007-12-17 15:07+0900\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
@@ -1353,7 +1353,7 @@ msgstr ""
 #: common/dialogs/wx_html_report_panel_base.cpp:42
 #: eeschema/dialogs/dialog_erc_base.cpp:76 gerbview/files.cpp:307
 #: gerbview/files.cpp:422 gerbview/readgerb.cpp:72
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1031
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1034
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
 #, fuzzy
 msgid "Errors"
@@ -1712,7 +1712,7 @@ msgstr "확인"
 #: common/dialog_about/AboutDialog_main.cpp:114
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:281
-#: common/widgets/widget_hotkey_list.cpp:451 eeschema/sch_symbol.cpp:1415
+#: common/widgets/widget_hotkey_list.cpp:451 eeschema/sch_symbol.cpp:1417
 #: eeschema/symbol_editor/symbol_editor.cpp:593
 #: eeschema/symbol_editor/symbol_editor.cpp:1205
 #: eeschema/symbol_viewer_frame.cpp:365 include/lib_table_grid.h:189
@@ -2074,8 +2074,8 @@ msgstr "Cvpcb 설정"
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:43
 #: eeschema/dialogs/panel_sym_lib_table.cpp:276
 #: eeschema/fields_grid_table.cpp:195 eeschema/lib_pin.cpp:1001
-#: eeschema/sch_pin.cpp:177 eeschema/sch_symbol.cpp:1384
-#: eeschema/sch_symbol.cpp:1425 eeschema/symbol_editor/symbol_editor.cpp:1177
+#: eeschema/sch_pin.cpp:177 eeschema/sch_symbol.cpp:1386
+#: eeschema/sch_symbol.cpp:1427 eeschema/symbol_editor/symbol_editor.cpp:1177
 #: eeschema/symbol_viewer_frame.cpp:363
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
@@ -4179,7 +4179,7 @@ msgid "Screen"
 msgstr "Silkscreen Cmp"
 
 #: common/eda_item.cpp:262 eeschema/dialogs/dialog_fields_editor_global.cpp:959
-#: eeschema/sch_symbol.cpp:1412
+#: eeschema/sch_symbol.cpp:1414
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:114
 #: pcbnew/fp_text.cpp:284 pcbnew/load_select_footprint.cpp:368
 #: pcbnew/pad.cpp:858
@@ -7207,7 +7207,7 @@ msgid "\"%s\" is not a valid footprint."
 msgstr "%s 파일은 EESchema 라이브러리가 아닙니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:680 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1417 eeschema/symbol_editor/symbol_editor.cpp:1206
+#: eeschema/sch_symbol.cpp:1419 eeschema/symbol_editor/symbol_editor.cpp:1206
 #: eeschema/symbol_viewer_frame.cpp:366 pcbnew/generate_footprint_info.cpp:36
 #, fuzzy
 msgid "Keywords"
@@ -7218,9 +7218,9 @@ msgstr "키워드:"
 msgid "Pin Count"
 msgstr "패드 커퍼"
 
-#: cvpcb/cvpcb_mainframe.cpp:709 eeschema/sch_symbol.cpp:1399
-#: eeschema/sch_symbol.cpp:1403 eeschema/sch_symbol.cpp:1431
-#: eeschema/sch_symbol.cpp:1436 eeschema/symbol_editor/symbol_editor.cpp:188
+#: cvpcb/cvpcb_mainframe.cpp:709 eeschema/sch_symbol.cpp:1401
+#: eeschema/sch_symbol.cpp:1405 eeschema/sch_symbol.cpp:1433
+#: eeschema/sch_symbol.cpp:1438 eeschema/symbol_editor/symbol_editor.cpp:188
 #: pcbnew/tools/pcb_control.cpp:1082
 msgid "Library"
 msgstr "라이브러리"
@@ -7345,7 +7345,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:53
 #: eeschema/dialogs/panel_sym_lib_table.cpp:277
 #: eeschema/fields_grid_table.cpp:196 eeschema/lib_field.cpp:444
-#: eeschema/sch_symbol.cpp:1374 eeschema/sch_symbol.cpp:1424
+#: eeschema/sch_symbol.cpp:1376 eeschema/sch_symbol.cpp:1426
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -8995,8 +8995,8 @@ msgid "Group By"
 msgstr ""
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
-#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1372
-#: eeschema/sch_symbol.cpp:1422 pcbnew/footprint.cpp:2017
+#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2017
 msgid "Reference"
 msgstr "레퍼런스"
 
@@ -9151,7 +9151,7 @@ msgstr "텍스트 가로 크기"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:769
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1257
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1279
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:544
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:547
 msgid "..."
 msgstr ""
 
@@ -12651,12 +12651,12 @@ msgstr ""
 msgid "Pin %s is connected to both %s and %s"
 msgstr "%s: %s 핀이 %s 핀에 연결되어 있습니다. (%d 네트)"
 
-#: eeschema/erc.cpp:698
+#: eeschema/erc.cpp:697
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr ""
 
-#: eeschema/erc.cpp:709
+#: eeschema/erc.cpp:708
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr ""
@@ -12960,7 +12960,7 @@ msgstr "회로도 라이브러리 열기 시작"
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "현재 시트만 저장"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1395
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 #, fuzzy
 msgid "Alias of"
 msgstr "(다음의 별명: "
@@ -13416,17 +13416,17 @@ msgstr "버스"
 msgid "Bus Entry Type"
 msgstr "버스 설정: 45도"
 
-#: eeschema/sch_connection.cpp:374
+#: eeschema/sch_connection.cpp:394
 #, fuzzy
 msgid "Connection Name"
 msgstr "연결"
 
-#: eeschema/sch_connection.cpp:383 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "네트 코드"
 
-#: eeschema/sch_connection.cpp:389 eeschema/sch_connection.cpp:404
+#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
 #, fuzzy, c-format
 msgid "Bus Alias %s Members"
 msgstr "네트 코드"
@@ -13909,7 +13909,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:402
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:403
 #, fuzzy, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
@@ -13918,7 +13918,7 @@ msgid ""
 "offset: %d"
 msgstr "유효하지 않은 심볼 파일입니다."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:415
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:416
 #: pcbnew/plugins/kicad/pcb_parser.cpp:150
 #, c-format
 msgid ""
@@ -13928,7 +13928,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:423
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:424
 #: pcbnew/plugins/kicad/pcb_parser.cpp:159
 #, c-format
 msgid ""
@@ -13938,7 +13938,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:715
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:716
 #, c-format
 msgid ""
 "Invalid symbol names definition in\n"
@@ -13947,8 +13947,8 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:738
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1660
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:739
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1661
 #, c-format
 msgid ""
 "Invalid property name in\n"
@@ -13957,8 +13957,8 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:747
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1669
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:748
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1670
 #, c-format
 msgid ""
 "Empty property name in\n"
@@ -13967,8 +13967,8 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:757
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1678
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:758
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1679
 #, c-format
 msgid ""
 "Invalid property value in\n"
@@ -13977,7 +13977,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1213
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1214
 #, c-format
 msgid ""
 "Invalid pin name in\n"
@@ -13986,7 +13986,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1248
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1249
 #, c-format
 msgid ""
 "Invalid pin number in\n"
@@ -13995,7 +13995,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1286
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1287
 #, c-format
 msgid ""
 "Invalid alternate pin name in\n"
@@ -14004,7 +14004,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1452
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1453
 #, c-format
 msgid ""
 "Invalid text string in\n"
@@ -14013,13 +14013,13 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1501
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1502
 #: pcbnew/plugins/kicad/pcb_parser.cpp:938
 #, c-format
 msgid "Page type \"%s\" is not valid "
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1739
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1740
 #, c-format
 msgid ""
 "Invalid sheet pin name in\n"
@@ -14028,7 +14028,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1748
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1749
 #, c-format
 msgid ""
 "Empty sheet pin name in\n"
@@ -14037,7 +14037,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2184
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2185
 #, c-format
 msgid ""
 "Invalid symbol library name in\n"
@@ -14046,7 +14046,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2206
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2207
 #, fuzzy, c-format
 msgid ""
 "Invalid symbol library ID in\n"
@@ -14062,19 +14062,19 @@ msgid "Library file \"%s\" not found."
 msgstr "<%s> 라이브러리 파일을 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2030
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4164
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4167
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2204
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4349
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4352
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2232
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4377
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4380
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, fuzzy, c-format
 msgid "library \"%s\" cannot be deleted"
@@ -14138,41 +14138,41 @@ msgstr ""
 msgid "symbol document library file is empty"
 msgstr ""
 
-#: eeschema/sch_screen.cpp:586
+#: eeschema/sch_screen.cpp:590
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 msgstr ""
 
-#: eeschema/sch_screen.cpp:603
+#: eeschema/sch_screen.cpp:607
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid.  Unable to "
 "link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:619
+#: eeschema/sch_screen.cpp:623
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:638
+#: eeschema/sch_screen.cpp:642
 #, fuzzy, c-format
 msgid "I/O error %s resolving library symbol %s"
 msgstr "라이브러리 파일 저장 중 에러"
 
-#: eeschema/sch_screen.cpp:662
+#: eeschema/sch_screen.cpp:666
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:683
+#: eeschema/sch_screen.cpp:687
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "풋프린트 레퍼런스"
 
-#: eeschema/sch_screen.cpp:694
+#: eeschema/sch_screen.cpp:698
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
@@ -14217,39 +14217,39 @@ msgstr "항목 삭제"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "시트에 의한 계층구조 핀"
 
-#: eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1376
 #, fuzzy
 msgid "Power symbol"
 msgstr "전원 심볼"
 
-#: eeschema/sch_symbol.cpp:1379
+#: eeschema/sch_symbol.cpp:1381
 msgid "flags"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:1388
+#: eeschema/sch_symbol.cpp:1390
 #, fuzzy
 msgid "Missing parent"
 msgstr "정렬"
 
-#: eeschema/sch_symbol.cpp:1403
+#: eeschema/sch_symbol.cpp:1405
 msgid "Undefined!!!"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:1410
+#: eeschema/sch_symbol.cpp:1412
 msgid "<Unknown>"
 msgstr ""
 
-#: eeschema/sch_symbol.cpp:1431
+#: eeschema/sch_symbol.cpp:1433
 #, fuzzy
 msgid "No library defined!"
 msgstr "라이브러리가 정의되지 않았습니다."
 
-#: eeschema/sch_symbol.cpp:1435
+#: eeschema/sch_symbol.cpp:1437
 #, fuzzy, c-format
 msgid "Symbol not found in %s!"
 msgstr "파일을 찾을 수 없습니다."
 
-#: eeschema/sch_symbol.cpp:1627
+#: eeschema/sch_symbol.cpp:1629
 #, fuzzy, c-format
 msgid "Symbol %s [%s]"
 msgstr "[%s]에 심볼 저장"
@@ -15313,7 +15313,7 @@ msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 msgid "Cannot enumerate library \"%s\" (%s)"
 msgstr "%s 라이브러리의 %s 컴포넌트가 삭제되었습니다."
 
-#: eeschema/symbol_editor/symbol_library_manager.cpp:981
+#: eeschema/symbol_editor/symbol_library_manager.cpp:982
 #, fuzzy, c-format
 msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr "회로도 라이브러리 열기 시작"
@@ -16601,15 +16601,15 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "파일을 찾을 수 없습니다."
 
-#: eeschema/tools/ee_selection_tool.cpp:1570
+#: eeschema/tools/ee_selection_tool.cpp:1577
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
-#: pcbnew/tools/pcb_selection_tool.cpp:1785
+#: pcbnew/tools/pcb_selection_tool.cpp:1792
 #, fuzzy
 msgid "Select &All\tA"
 msgstr "모두 삭제"
 
-#: eeschema/tools/ee_selection_tool.cpp:1573
-#: pcbnew/tools/pcb_selection_tool.cpp:1788
+#: eeschema/tools/ee_selection_tool.cpp:1580
+#: pcbnew/tools/pcb_selection_tool.cpp:1795
 #, fuzzy
 msgid "&Expand Selection\tE"
 msgstr "연결 삭제"
@@ -16633,16 +16633,16 @@ msgid "Couldn't load image from \"%s\""
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:575
-#: eeschema/tools/sch_drawing_tools.cpp:1059
+#: eeschema/tools/sch_drawing_tools.cpp:1061
 #, fuzzy
 msgid "No new hierarchical labels found."
 msgstr "새 전역 라벨을 찾을 수 없습니다."
 
-#: eeschema/tools/sch_drawing_tools.cpp:659
+#: eeschema/tools/sch_drawing_tools.cpp:660
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr ""
 
-#: eeschema/tools/sch_drawing_tools.cpp:1047
+#: eeschema/tools/sch_drawing_tools.cpp:1049
 msgid "Click over a sheet."
 msgstr ""
 
@@ -20713,24 +20713,24 @@ msgstr ""
 msgid "Dielectric Layers"
 msgstr "%d 레이어 삭제"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:627
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:630
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:150
 #, fuzzy
 msgid "Copper"
 msgstr "Copper"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:924
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:927
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:944
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:947
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:991
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:994
 msgid "A layer thickness is < 0. Fix it"
 msgstr ""
 
@@ -21928,24 +21928,24 @@ msgstr "트랙 및 비아"
 msgid "Constraints Resolution Report"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:282
+#: pcbnew/dialogs/dialog_copper_zones.cpp:279
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:284
+#: pcbnew/dialogs/dialog_copper_zones.cpp:281
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
 #, fuzzy
 msgid "Fillet radius:"
 msgstr "채움"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:403
+#: pcbnew/dialogs/dialog_copper_zones.cpp:392
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:431
+#: pcbnew/dialogs/dialog_copper_zones.cpp:420
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
 #, fuzzy
 msgid "No layer selected."
@@ -30509,7 +30509,7 @@ msgstr "풋프린트 이동"
 msgid "Update netlist"
 msgstr "업데이트 설정"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:968
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:970
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr ""
@@ -32829,7 +32829,7 @@ msgstr "세그먼트 드래그"
 msgid "Select Via Size"
 msgstr "시트 파일"
 
-#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1466
+#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1468
 #, fuzzy
 msgid "Draw a line segment"
 msgstr "세그먼트 드래그"
@@ -32853,40 +32853,40 @@ msgstr "Drawings "
 msgid "Place a text"
 msgstr "시트 설치"
 
-#: pcbnew/tools/drawing_tool.cpp:880
+#: pcbnew/tools/drawing_tool.cpp:882
 #, fuzzy
 msgid "Draw a leader"
 msgstr "드로우 설정"
 
-#: pcbnew/tools/drawing_tool.cpp:893
+#: pcbnew/tools/drawing_tool.cpp:895
 #, fuzzy
 msgid "Draw a dimension"
 msgstr "치수 (&D)"
 
-#: pcbnew/tools/drawing_tool.cpp:1026
+#: pcbnew/tools/drawing_tool.cpp:1028
 #, fuzzy
 msgid "No graphic items found in file to import"
 msgstr "트랙 채움 모드 보이기"
 
-#: pcbnew/tools/drawing_tool.cpp:1076 pcbnew/tools/drawing_tool.cpp:1147
+#: pcbnew/tools/drawing_tool.cpp:1078 pcbnew/tools/drawing_tool.cpp:1149
 #, fuzzy
 msgid "Place a DXF_SVG drawing"
 msgstr "드로잉 삭제"
 
-#: pcbnew/tools/drawing_tool.cpp:1213
+#: pcbnew/tools/drawing_tool.cpp:1215
 msgid "Move the footprint reference anchor"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:1900
+#: pcbnew/tools/drawing_tool.cpp:1902
 msgid "Self-intersecting polygons are not allowed"
 msgstr ""
 
-#: pcbnew/tools/drawing_tool.cpp:2353
+#: pcbnew/tools/drawing_tool.cpp:2356
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "3D 설정"
 
-#: pcbnew/tools/drawing_tool.cpp:2456
+#: pcbnew/tools/drawing_tool.cpp:2459
 #, fuzzy
 msgid "Place via"
 msgstr "비아 설치 (V)"
