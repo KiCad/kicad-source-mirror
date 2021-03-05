@@ -1,4 +1,4 @@
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 # Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
 # pimjansen98 <pimjansen1998@gmail.com>, 2021.
@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
-"PO-Revision-Date: 2021-03-03 23:36+0000\n"
-"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2021-03-05 18:31+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -571,7 +571,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
 msgid "Selection color:"
-msgstr "Selectie kleuren:"
+msgstr "Selectiekleuren:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "While Moving"
@@ -3167,7 +3167,7 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
-"Er kan slechts een actie worden toegewezen aan elke verticale scroll-"
+"Er kan slechts één actie worden toegewezen aan elke verticale scroll-"
 "instelling"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
@@ -3296,7 +3296,7 @@ msgstr "Verticale touchpad of scrolwiel beweging:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr "Er kan slechts een actie toegewezen worden aan elke kolom"
+msgstr "Aan elke kolom kan slechts één actie worden toegewezen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
@@ -7354,6 +7354,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Gezocht:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8151,9 +8156,9 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
-"Vervang huidige symboolvelden voor velden van de nieuwe bibliotheek.\n"
-"Waarschuwing: velden \"Waarde\" en \"Voetafdrukken\" zullen dan vervangen "
-"worden."
+"Vervang de velden met huidige symbolen door velden uit de nieuwe bibliotheek."
+"\n"
+"Let op: de velden \"Waarde\" en \"Footprints\" worden daarom vervangen."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -8183,7 +8188,7 @@ msgstr "Tekst Instellingen"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Label vereist niet-lege tekst."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8350,8 +8355,8 @@ msgstr "Toon annotatiedialoog"
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
-"Schema is niet volledig van aantekeningen voorzien. ERC resultaten zullen "
-"onvolledig zijn."
+"Het schema is niet volledig geannoteerd. ERC-resultaten zullen onvolledig "
+"zijn."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -9637,7 +9642,7 @@ msgstr "Alternatieve pinnaam"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:332
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr ""
-"Afwisselende pin toewijzing is niet beschikbaar voor DeMorgan componenten."
+"Alternatieve pintoewijzingen zijn niet beschikbaar voor DeMorgan-componenten."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:274
 msgid "Alternate pin definitions must have a name."
@@ -9927,19 +9932,17 @@ msgstr "Positie en eenheden:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr "Links onderin, plot eenheden"
+msgstr "Linksonder, plottereenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr "Centreer, plot eenheden"
+msgstr "Gecentreerde plottereenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
-#, fuzzy
 msgid "Page fit, user units"
 msgstr "Pagina passend, gebruikerseenheden"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
-#, fuzzy
 msgid "Content fit, user units"
 msgstr "Inhoud passend, gebruikerseenheden"
 
@@ -13257,6 +13260,8 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1130
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Tekstvariabelen konden niet worden ingesteld omdat er geen project is "
+"bijgevoegd."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1527
 #, c-format
@@ -13294,6 +13299,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"De blok-ID %s (bloknaam: '%s') is getekend op vel '%s' maar is niet "
+"gekoppeld aan een ander vel in het ontwerp. KiCad vereist dat alle "
+"bladsymbolen aan een blad zijn gekoppeld, dus het blok is niet geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1991
 #, c-format
@@ -14614,11 +14622,13 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Normaal opslaan als bewerking"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Do not perform any additional operations after saving library."
 msgstr ""
+"Voer geen aanvullende bewerkingen uit nadat u de bibliotheek heeft "
+"opgeslagen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
 #, fuzzy
@@ -14631,6 +14641,9 @@ msgid ""
 "\n"
 "The original library will no longer be available for use."
 msgstr ""
+"Vervang symboolbibliotheektabelinvoer door een nieuwe bibliotheek.\n"
+"\n"
+"De oorspronkelijke bibliotheek is niet langer beschikbaar voor gebruik."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
 #, fuzzy
@@ -14644,6 +14657,11 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Voeg een nieuw item toe aan de globale symboolbibliotheektabel.\n"
+"\n"
+"De bijnaam van de symboolbibliotheektabel heeft het achtervoegsel\n"
+"een geheel getal om ervoor te zorgen dat er geen dubbele tabelvermeldingen "
+"zijn."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:72
 #, fuzzy
@@ -14657,6 +14675,11 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Voeg een nieuw item toe aan de tabel met de projectsymbolenbibliotheek.\n"
+"\n"
+"De bijnaam van de symboolbibliotheektabel heeft het achtervoegsel\n"
+"een geheel getal om ervoor te zorgen dat er geen dubbele tabelvermeldingen "
+"zijn."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:140
 #, c-format
@@ -15058,7 +15081,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:305
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "Footprint opnieuw koppelen geannuleerd door gebruiker."
 
 #: eeschema/tools/backannotate.cpp:328
 #, c-format
@@ -16075,7 +16098,7 @@ msgstr ""
 #: eeschema/tools/ee_inspection_tool.cpp:362
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr ""
+msgstr "(Verborgen stroompinnen sturen hun pinnamen naar aangesloten netten.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:375
 #, fuzzy, c-format
@@ -16147,7 +16170,7 @@ msgstr "Geen nieuwe hiërarchische labels gevonden."
 
 #: eeschema/tools/sch_drawing_tools.cpp:660
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
+msgstr "De verbindingslocatie bevat geen koppelbare draden en / of pinnen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1049
 msgid "Click over a sheet."
@@ -16272,7 +16295,7 @@ msgstr "Bewerk symboolnaam"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:643
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Symbool is niet afgeleid van een ander symbool."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -16984,7 +17007,7 @@ msgstr "Schakel over naar PCB Editor"
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
-msgstr ""
+msgstr "Exporteer gegevens als een KiCad PCB-bestand"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
@@ -17318,7 +17341,7 @@ msgstr "Bewerk de globale en projectsymboolbibliotheeklijsten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:103
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Bewerk het ontwerp van de printplaat"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:106
 #, fuzzy
@@ -17337,13 +17360,15 @@ msgstr "Converteer bitmapafbeeldingen naar schematische of PCB-componenten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:117
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr ""
+msgstr "Toon tools voor het berekenen van weerstand, stroomcapaciteit, etc."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:121
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
+"Bewerk tekenvelranden en titelblokken voor gebruik in schema's en PCB-"
+"ontwerpen"
 
 #: kicad/files-io.cpp:43
 msgid "KiCad project file"
@@ -17396,6 +17421,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
 msgstr ""
+"Fout bij het maken van een nieuwe map. Probeer een ander pad. Het project "
+"kan niet worden geïmporteerd."
 
 #: kicad/import_project.cpp:138 kicad/import_project.cpp:157
 #, c-format
@@ -17404,6 +17431,9 @@ msgid ""
 "to '%s'\n"
 "The project cannot be imported."
 msgstr ""
+"Kan bestand '%s' niet kopiëren\n"
+"naar '%s'\n"
+"Het project kan niet worden geïmporteerd."
 
 #: kicad/import_project.cpp:220
 msgid "Import CADSTAR Archive Project Files"
@@ -18088,6 +18118,7 @@ msgstr "Delta Stap X"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:361
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
+"Aantal tekens of cijfers om de tekst door te bladeren voor elke herhaling."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:368
 #, fuzzy
