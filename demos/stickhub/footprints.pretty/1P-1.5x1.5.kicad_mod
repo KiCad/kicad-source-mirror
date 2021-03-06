@@ -1,0 +1,17 @@
+(footprint "1P-1.5x1.5" (version 20210126) (generator pcbnew) (layer "F.Cu")
+  (tedit 5F8A801F)
+  (property "Description" "Not Populated")
+  (property "Sheetfile" "StickHub.kicad_sch")
+  (property "Sheetname" "")
+  (attr through_hole)
+  (fp_text reference "REF**" (at 4 -0.3 unlocked) (layer "F.SilkS") hide
+    (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp abca8703-aa1d-4e9f-9c0f-969a91784662)
+  )
+  (fp_text value "EXTGND" (at 0.025 -10.225 unlocked) (layer "F.Fab") hide
+    (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp ad1dae35-907a-42ac-9e01-83e943f3d5dd)
+  )
+  (pad "1" connect roundrect (at 0 0) (locked) (size 1.5 1.5) (layers "F.Cu" "F.Mask") (roundrect_rratio 0.067)
+    (zone_connect 1) (thermal_width 0.5) (thermal_gap 0.25) (tstamp ba836e5d-831e-4793-a703-9e15d85b5a97))
+)
