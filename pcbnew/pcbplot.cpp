@@ -83,7 +83,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
 }
 
 
-const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aLayer )
+const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aLayer )
 {
     wxString attrib;
 
@@ -276,7 +276,7 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
 }
 
 
-void AddGerberX2Header( PLOTTER * aPlotter, const BOARD *aBoard, bool aUseX1CompatibilityMode )
+void AddGerberX2Header( PLOTTER* aPlotter, const BOARD* aBoard, bool aUseX1CompatibilityMode )
 {
     wxString text;
 
@@ -347,8 +347,8 @@ void AddGerberX2Header( PLOTTER * aPlotter, const BOARD *aBoard, bool aUseX1Comp
 }
 
 
-void AddGerberX2Attribute( PLOTTER * aPlotter,
-            const BOARD *aBoard, LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
+void AddGerberX2Attribute( PLOTTER* aPlotter,
+            const BOARD* aBoard, LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
 {
     AddGerberX2Header( aPlotter, aBoard, aUseX1CompatibilityMode );
 
@@ -398,7 +398,7 @@ void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
 }
 
 
-PLOT_CONTROLLER::PLOT_CONTROLLER( BOARD *aBoard )
+PLOT_CONTROLLER::PLOT_CONTROLLER( BOARD* aBoard )
 {
     m_plotter = NULL;
     m_board = aBoard;

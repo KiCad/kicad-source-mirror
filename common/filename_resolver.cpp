@@ -136,7 +136,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
 }
 
 
-wxString FILENAME_RESOLVER::GetProjectDir()
+wxString FILENAME_RESOLVER::GetProjectDir() const
 {
     return m_curProjDir;
 }
@@ -192,7 +192,7 @@ bool FILENAME_RESOLVER::createPathList()
                 lpath.m_Pathexp = fndummy.GetFullPath();
             }
 
-            lpath.m_Alias =  curr_path;
+            lpath.m_Alias   = curr_path;
             lpath.m_Pathvar = curr_path;
 
             if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
@@ -224,17 +224,15 @@ bool FILENAME_RESOLVER::createPathList()
 }
 
 
-bool FILENAME_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
+bool FILENAME_RESOLVER::UpdatePathList( const std::vector< SEARCH_PATH >& aPathList )
 {
     wxUniChar envMarker( '$' );
 
     while( !m_paths.empty() && envMarker != *m_paths.back().m_Alias.rbegin() )
         m_paths.pop_back();
 
-    size_t nI = aPathList.size();
-
-    for( size_t i = 0; i < nI; ++i )
-        addPath( aPathList[i] );
+    for( const SEARCH_PATH& path : aPathList )
+        addPath( path );
 
     return writePathList();
 }
@@ -471,7 +469,6 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 #endif
     }
 
-    wxString pname = path.GetPath();
     std::list< SEARCH_PATH >::iterator sPL = m_paths.begin();
     std::list< SEARCH_PATH >::iterator ePL = m_paths.end();
 
@@ -822,14 +819,14 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
 
 
-const std::list< SEARCH_PATH >* FILENAME_RESOLVER::GetPaths()
+const std::list< SEARCH_PATH >* FILENAME_RESOLVER::GetPaths() const
 {
     return &m_paths;
 }
 
 
 bool FILENAME_RESOLVER::SplitAlias( const wxString& aFileName,
-    wxString& anAlias, wxString& aRelPath )
+    wxString& anAlias, wxString& aRelPath ) const
 {
     anAlias.clear();
     aRelPath.clear();
@@ -839,7 +836,7 @@ bool FILENAME_RESOLVER::SplitAlias( const wxString& aFileName,
 
     size_t tagpos = aFileName.find( wxT( ":" ), 1 );
 
-    if( wxString::npos ==  tagpos || 1 == tagpos )
+    if( wxString::npos == tagpos || 1 == tagpos )
         return false;
 
     if( tagpos + 1 >= aFileName.length() )
@@ -947,7 +944,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 }
 
 
-bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
+bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias ) const
 {
     // Rules:
     // 1. The generic form of an aliased 3D relative path is:
@@ -1005,7 +1002,7 @@ bool FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAl
 }
 
 
-bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths )
+bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths ) const
 {
     paths.clear();
 

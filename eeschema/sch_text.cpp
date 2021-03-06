@@ -599,7 +599,7 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-void SCH_TEXT::Plot( PLOTTER* aPlotter )
+void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
 {
     static std::vector<wxPoint> s_poly;
 
@@ -1214,7 +1214,7 @@ void SCH_GLOBALLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aO
         m_intersheetRefsField.Print( aSettings, aOffset );
 }
 
-void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter )
+void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter ) const
 {
     SCH_TEXT::Plot( aPlotter );
 
@@ -1225,7 +1225,7 @@ void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter )
 }
 
 void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                          std::vector<wxPoint>& aPoints, const wxPoint& Pos )
+                                          std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
 {
     int margin    = GetTextOffset( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
@@ -1432,10 +1432,17 @@ void SCH_HIERLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offs
 }
 
 
-void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& Pos )
+void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
+                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const
 {
-    int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
+    CreateGraphicShape( aSettings, aPoints, aPos, m_shape );
+}
+
+
+void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
+                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos, PINSHEETLABEL_SHAPE aShape ) const
+{
+    int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( m_spin_style )];
     int  halfSize = GetTextHeight() / 2;
     int  imax = *Template;
     Template++;
@@ -1445,10 +1452,10 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
     for( int ii = 0; ii < imax; ii++ )
     {
         wxPoint corner;
-        corner.x = ( halfSize * (*Template) ) + Pos.x;
+        corner.x = ( halfSize * (*Template) ) + aPos.x;
         Template++;
 
-        corner.y = ( halfSize * (*Template) ) + Pos.y;
+        corner.y = ( halfSize * (*Template) ) + aPos.y;
         Template++;
 
         aPoints.push_back( corner );

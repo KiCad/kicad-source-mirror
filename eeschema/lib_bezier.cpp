@@ -160,7 +160,7 @@ void LIB_BEZIER::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform )
+                       const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != NULL );
 

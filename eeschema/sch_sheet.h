@@ -130,7 +130,7 @@ public:
      * @param aPos = Position of the shape
      */
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                             std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
+                             std::vector <wxPoint>& aPoints, const wxPoint& aPos ) const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
@@ -575,7 +575,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter ) override;
+    void Plot( PLOTTER* aPlotter ) const override;
 
     EDA_ITEM* Clone() const override;
 

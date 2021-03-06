@@ -147,27 +147,27 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     switch( aOptions.m_DisplayNetNamesMode )
     {
     case 0:
-        m_netNamesOnPads = false;
+        m_netNamesOnPads   = false;
         m_netNamesOnTracks = false;
-        m_netNamesOnVias = false;
+        m_netNamesOnVias   = false;
         break;
 
     case 1:
-        m_netNamesOnPads = true;
+        m_netNamesOnPads   = true;
         m_netNamesOnTracks = false;
-        m_netNamesOnVias = true;        // Follow pads or tracks?  For now we chose pads....
+        m_netNamesOnVias   = true;        // Follow pads or tracks?  For now we chose pads....
         break;
 
     case 2:
-        m_netNamesOnPads = false;
+        m_netNamesOnPads   = false;
         m_netNamesOnTracks = true;
-        m_netNamesOnVias = false;       // Follow pads or tracks?  For now we chose pads....
+        m_netNamesOnVias   = false;       // Follow pads or tracks?  For now we chose pads....
         break;
 
     case 3:
-        m_netNamesOnPads = true;
+        m_netNamesOnPads   = true;
         m_netNamesOnTracks = true;
-        m_netNamesOnVias = true;
+        m_netNamesOnVias   = true;
         break;
     }
 
@@ -982,7 +982,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
         }
 
-        for( SHAPE* shape : shapes->Shapes() )
+        for( const SHAPE* shape : shapes->Shapes() )
         {
             // Drawing components of compound shapes in outline mode produces a mess.
             if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
@@ -1009,13 +1009,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( simpleShapes )
         {
-            for( SHAPE* shape : shapes->Shapes() )
+            for( const SHAPE* shape : shapes->Shapes() )
             {
                 switch( shape->Type() )
                 {
                 case SH_SEGMENT:
                 {
-                    const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape;
+                    const SHAPE_SEGMENT* seg = (const SHAPE_SEGMENT*) shape;
                     int                  effectiveWidth = seg->GetWidth() + 2 * margin.x;
 
                     if( effectiveWidth > 0 )
@@ -1025,7 +1025,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 case SH_CIRCLE:
                 {
-                    const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
+                    const SHAPE_CIRCLE* circle = (const SHAPE_CIRCLE*) shape;
                     int                 effectiveRadius = circle->GetRadius() + margin.x;
 
                     if( effectiveRadius > 0 )
@@ -1035,7 +1035,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 case SH_RECT:
                 {
-                    const SHAPE_RECT* r = (SHAPE_RECT*) shape;
+                    const SHAPE_RECT* r = (const SHAPE_RECT*) shape;
                     VECTOR2I          position = r->GetPosition();
                     VECTOR2I          effectiveSize = r->GetSize() + margin;
 
@@ -1277,8 +1277,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
     case S_POLYGON:
     {
-        SHAPE_POLY_SET& shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
-        FOOTPRINT*      parentFootprint = aShape->GetParentFootprint();
+        SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
+        const FOOTPRINT* parentFootprint = aShape->GetParentFootprint();
 
         if( shape.OutlineCount() == 0 )
             break;
@@ -1657,8 +1657,8 @@ void PCB_PAINTER::draw( const DIMENSION_BASE* aDimension, int aLayer )
         }
     }
     // Draw text
-    PCB_TEXT& text = aDimension->Text();
-    VECTOR2D  position( text.GetTextPos().x, text.GetTextPos().y );
+    const PCB_TEXT& text = aDimension->Text();
+    VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
 
     if( m_pcbSettings.m_sketchText )
     {

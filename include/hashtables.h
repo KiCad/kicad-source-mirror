@@ -67,7 +67,7 @@ struct fnv_1a
     {
         std::size_t hash = 2166136261u;
 
-        for( ; *it;  ++it )
+        for( ; *it; ++it )
         {
             hash ^= (unsigned char) *it;
             hash *= 16777619;
@@ -84,9 +84,9 @@ struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
     {
         std::size_t hash = 2166136261u;
 
-        for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
+        for( const auto& c : aString )
         {
-            unsigned ch = static_cast<unsigned>( *it );
+            unsigned ch = static_cast<unsigned>( c );
             hash ^= ch;
             hash *= 16777619;
         }

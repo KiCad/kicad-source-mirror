@@ -176,7 +176,7 @@ public:
         return RunAction( aAction, aNow, (void*) NULL );
     }
 
-    const std::map<std::string, TOOL_ACTION*>& GetActions();
+    const std::map<std::string, TOOL_ACTION*>& GetActions() const;
 
     /**
      * Send a cancel event to the tool currently at the top of the tool stack.
@@ -192,9 +192,9 @@ public:
     void PrimeTool( const VECTOR2D& aPosition );
 
     ///< @copydoc ACTION_MANAGER::GetHotKey()
-    int GetHotKey( const TOOL_ACTION& aAction );
+    int GetHotKey( const TOOL_ACTION& aAction ) const;
 
-    ACTION_MANAGER* GetActionManager() { return m_actionMgr; }
+    ACTION_MANAGER* GetActionManager() const { return m_actionMgr; }
 
     /**
      * Search for a tool with given ID.
@@ -213,7 +213,7 @@ public:
     TOOL_BASE* FindTool( const std::string& aName ) const;
 
     /*
-     * Return the tool of given type or NULL if there is no such tool registered.
+     * Return the tool of given type or nullptr if there is no such tool registered.
      */
     template<typename T>
     T* GetTool()
@@ -223,7 +223,7 @@ public:
         if( tool != m_toolTypes.end() )
             return static_cast<T*>( tool->second );
 
-        return NULL;
+        return nullptr;
     }
 
     /**
@@ -290,8 +290,8 @@ public:
 
     KIGFX::VIEW_CONTROLS* GetViewControls() const { return m_viewControls; }
 
-    VECTOR2D GetMousePosition();
-    VECTOR2D GetCursorPosition();
+    VECTOR2D GetMousePosition() const;
+    VECTOR2D GetCursorPosition() const;
 
     EDA_ITEM* GetModel() const { return m_model; }
 
@@ -414,7 +414,7 @@ public:
     /**
      * True while processing a context menu.
      */
-    bool IsContextMenuActive()
+    bool IsContextMenuActive() const
     {
         return m_menuActive;
     }
@@ -443,7 +443,7 @@ public:
      */
     bool DispatchHotKey( const TOOL_EVENT& aEvent );
 
-    VECTOR2D GetMenuCursorPos()
+    VECTOR2D GetMenuCursorPos() const
     {
         return m_menuCursor;
     }
@@ -452,9 +452,9 @@ private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
     /**
-     * Passe an event at first to the active tools, then to all others.
+     * Pass an event at first to the active tools, then to all others.
      */
-    bool dispatchInternal( const TOOL_EVENT& aEvent );
+    bool dispatchInternal( TOOL_EVENT& aEvent );
 
     /**
      * Check if it is a valid activation event and invokes a proper tool.
@@ -509,7 +509,7 @@ private:
      * @param aTool is the tool to be checked.
      * @return True if the tool is on the active tools stack, false otherwise.
      */
-    bool isActive( TOOL_BASE* aTool );
+    bool isActive( TOOL_BASE* aTool ) const;
 
     /**
      * Save the #VIEW_CONTROLS settings to the tool state object.
@@ -521,7 +521,7 @@ private:
     /**
      * Apply #VIEW_CONTROLS settings stored in a #TOOL_STATE object.
      */
-    void applyViewControls( TOOL_STATE* aState );
+    void applyViewControls( const TOOL_STATE* aState );
 
     /**
      * Main function for event processing.
@@ -586,4 +586,4 @@ private:
     TOOL_STATE* m_activeState;
 };
 
-#endif
+#endif // __TOOL_MANAGER_H

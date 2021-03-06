@@ -51,7 +51,7 @@ SHAPE_COMPOUND::SHAPE_COMPOUND( const std::vector<SHAPE*>& aShapes ) :
 SHAPE_COMPOUND::SHAPE_COMPOUND( const SHAPE_COMPOUND& aOther )
     : SHAPE( SH_COMPOUND )
 {
-    for ( auto shape : aOther.Shapes() )
+    for ( const SHAPE* shape : aOther.Shapes() )
         m_shapes.push_back( shape->Clone() );
 
     m_dirty = true;

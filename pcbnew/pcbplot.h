@@ -78,7 +78,7 @@ public:
      * (useful for controlling toner bleeding during direct transfer)
      * added to track width and via/pads size
      */
-    int getFineWidthAdj()
+    int getFineWidthAdj() const
     {
         if( GetFormat() == PLOT_FORMAT::POST )
             return GetWidthAdjust();
@@ -87,22 +87,22 @@ public:
     }
 
     // Basic functions to plot a board item
-    void SetLayerSet( LSET aLayerMask )     { m_layerMask = aLayerMask; }
-    void PlotFootprintGraphicItems( FOOTPRINT* aFootprint );
-    void PlotFootprintGraphicItem( FP_SHAPE* aShape );
-    void PlotFootprintTextItem( FP_TEXT* aText, COLOR4D aColor );
+    void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
+    void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
+    void PlotFootprintGraphicItem( const FP_SHAPE* aShape );
+    void PlotFootprintTextItem( const FP_TEXT* aText, COLOR4D aColor );
 
     /*
      * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
      * Invisible text fields are plotted only if PlotInvisibleText option is set.
      */
-    void PlotFootprintTextItems( FOOTPRINT* aFootprint );
+    void PlotFootprintTextItems( const FOOTPRINT* aFootprint );
 
-    void PlotDimension( DIMENSION_BASE* Dimension );
-    void PlotPcbTarget( PCB_TARGET* PtMire );
-    void PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& aPolysList );
-    void PlotPcbText( PCB_TEXT* aText );
-    void PlotPcbShape( PCB_SHAPE* aShape );
+    void PlotDimension( const DIMENSION_BASE* aDim );
+    void PlotPcbTarget( const PCB_TARGET* aMire );
+    void PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET& aPolysList );
+    void PlotPcbText( const PCB_TEXT* aText );
+    void PlotPcbShape( const PCB_SHAPE* aShape );
 
     /**
      * Plot a pad.
@@ -110,7 +110,7 @@ public:
      * and be drawn as a non filled item although the plot mode is filled
      * color and plot mode are needed by this function
      */
-    void PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
+    void PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
 
     /**
      * plot items like text and graphics,
@@ -134,7 +134,7 @@ public:
      * and in B&W mode, is plotted as white but other colors are plotted in BLACK
      * so the returned color is LIGHTGRAY when the layer color is WHITE
      */
-    COLOR4D getColor( LAYER_NUM aLayer );
+    COLOR4D getColor( LAYER_NUM aLayer ) const;
 
 private:
     /** Helper function to plot a single drill mark. It compensate and clamp
@@ -148,7 +148,7 @@ private:
 };
 
 PLOTTER* StartPlotBoard( BOARD* aBoard,
-                         PCB_PLOT_PARAMS* aPlotOpts,
+                         const PCB_PLOT_PARAMS* aPlotOpts,
                          int aLayer,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc );
@@ -163,7 +163,7 @@ PLOTTER* StartPlotBoard( BOARD* aBoard,
  * @param aLayer = the layer id to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
+void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -198,7 +198,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  * @param aLayerMask = the mask to define the layers to plot
  * @param aPlotOpt = the plot options. Has meaning for some formats only
  */
-void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
+void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
                         LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -236,7 +236,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
  * @param aLayer = the layer number to create the attribute for
  * @return The attribute, as a text string
  */
-const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aLayer );
+const wxString GetGerberFileFunctionAttribute( const BOARD* aBoard, LAYER_NUM aLayer );
 
 /**
  * Calculates some X2 attributes, as defined in the
@@ -252,8 +252,8 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
  * use X1 compatibility (X2 attributes added as structured comments,
  * starting by "G04 #@! " followed by the X2 attribute
  */
-void AddGerberX2Header( PLOTTER * aPlotter,
-            const BOARD *aBoard, bool aUseX1CompatibilityMode = false );
+void AddGerberX2Header( PLOTTER* aPlotter,
+            const BOARD* aBoard, bool aUseX1CompatibilityMode = false );
 
 /**
  * Calculates some X2 attributes, as defined in the Gerber file format
@@ -271,7 +271,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
  * use X1 compatibility (X2 attributes added as structured comments,
  * starting by "G04 #@! " followed by the X2 attribute
  */
-void AddGerberX2Attribute( PLOTTER * aPlotter, const BOARD *aBoard,
+void AddGerberX2Attribute( PLOTTER* aPlotter, const BOARD* aBoard,
                            LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
 
 #endif // PCBPLOT_H_

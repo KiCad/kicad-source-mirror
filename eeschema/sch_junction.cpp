@@ -221,7 +221,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
+void SCH_JUNCTION::Plot( PLOTTER* aPlotter ) const
 {
     auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     COLOR4D color = GetJunctionColor();

@@ -222,11 +222,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     itemplotter.PlotBoardGraphicItems();
 
     // Draw footprint texts:
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    for( const FOOTPRINT* footprint : aBoard->Footprints() )
         itemplotter.PlotFootprintTextItems( footprint );
 
     // Draw footprint other graphic items:
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    for( const FOOTPRINT* footprint : aBoard->Footprints() )
         itemplotter.PlotFootprintGraphicItems( footprint );
 
     // Plot footprint pads
@@ -269,7 +269,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int width_adj = 0;
 
             if( onCopperLayer )
-                width_adj =  itemplotter.getFineWidthAdj();
+                width_adj = itemplotter.getFineWidthAdj();
 
             if( onSolderMaskLayer )
                 margin.x = margin.y = pad->GetSolderMaskMargin();
@@ -288,7 +288,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             // Store these parameters that can be modified to plot inflated/deflated pads shape
             PAD_SHAPE_T padShape = pad->GetShape();
-            wxSize      padSize = pad->GetSize();
+            wxSize      padSize  = pad->GetSize();
             wxSize      padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
             double      padCornerRadius = pad->GetRoundRectCornerRadius();
 
@@ -424,7 +424,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     aPlotter->StartBlock( NULL );
 
-    for( TRACK* track : aBoard->Tracks() )
+    for( const TRACK* track : aBoard->Tracks() )
     {
         const VIA* via = dyn_cast<const VIA*>( track );
 
@@ -487,7 +487,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
     // Plot tracks (not vias) :
-    for( TRACK* track : aBoard->Tracks() )
+    for( const TRACK* track : aBoard->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
             continue;
@@ -505,7 +505,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         if( track->Type() == PCB_ARC_T )
         {
-            ARC* arc = static_cast<ARC*>( track );
+            const ARC* arc = static_cast<const ARC*>( track );
             VECTOR2D center( arc->GetCenter() );
             int radius = arc->GetRadius();
             double start_angle = arc->GetArcAngleStart();
@@ -529,7 +529,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     NETINFO_ITEM nonet( aBoard );
 
-    for( ZONE* zone : aBoard->Zones() )
+    for( const ZONE* zone : aBoard->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
@@ -652,7 +652,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // Now we have one or more basic polygons: plot each polygon
         for( int ii = 0; ii < outlines.OutlineCount(); ii++ )
         {
-            for(int kk = 0; kk <= outlines.HoleCount (ii); kk++ )
+            for( int kk = 0; kk <= outlines.HoleCount(ii); kk++ )
             {
                 cornerList.clear();
                 const SHAPE_LINE_CHAIN& path = (kk == 0) ? outlines.COutline( ii ) : outlines.CHole( ii, kk - 1 );
@@ -943,8 +943,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  *      page size is the 'drawing' page size,
  *      paper size is the physical page size
  */
-static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
-                               PCB_PLOT_PARAMS *aPlotOpts )
+static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
+                               const PCB_PLOT_PARAMS* aPlotOpts )
 {
     PAGE_INFO pageA4( wxT( "A4" ) );
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();
@@ -1042,7 +1042,7 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const EDA_RECT &aBbbox )
 /**
  * Calculate the effective size of HPGL pens and set them in the plotter object
  */
-static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlotOpts )
+static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, const PCB_PLOT_PARAMS *aPlotOpts )
 {
     // Compute penDiam (the value is given in mils) in pcb units, with plot scale (if Scale is 2,
     // penDiam value is always m_HPGLPenDiam so apparent penDiam is actually penDiam / Scale
@@ -1060,7 +1060,7 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlo
  * and prepare the page for plotting.
  * Return the plotter object if OK, NULL if the file is not created (or has a problem)
  */
-PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
+PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
                          const wxString& aFullFileName, const wxString& aSheetDesc )
 {
     // Create the plotter driver and set the few plotter specific options

@@ -263,7 +263,7 @@ void LIB_TEXT::Rotate( const wxPoint& center, bool aRotateCCW )
 
 
 void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                     const TRANSFORM& aTransform )
+                     const TRANSFORM& aTransform ) const
 {
     wxASSERT( plotter != NULL );
 

@@ -245,7 +245,7 @@ public:
      * @param aTransform The plot transform.
      */
     virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform ) = 0;
+                       const TRANSFORM& aTransform ) const = 0;
 
     virtual int GetWidth() const = 0;
     virtual void SetWidth( int aWidth ) = 0;

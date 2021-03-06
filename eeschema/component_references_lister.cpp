@@ -142,11 +142,9 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 }
 
 
-int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
+int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit ) const
 {
-    int NumRef;
-
-    NumRef = flatList[aIndex].m_numRef;
+    int NumRef = flatList[aIndex].m_numRef;
 
     for( size_t ii = 0; ii < flatList.size(); ii++ )
     {
@@ -188,11 +186,11 @@ int SCH_REFERENCE_LIST::FindRef( const wxString& aRef ) const
 }
 
 
-void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId )
+void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId ) const
 {
     aIdList.clear();
 
-    for( SCH_REFERENCE& ref : flatList )
+    for( const SCH_REFERENCE& ref : flatList )
     {
         if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId )
             aIdList.push_back( ref.m_numRef );
@@ -210,11 +208,11 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, 
 }
 
 
-int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue )
+int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue ) const
 {
     int lastNumber = aMinValue;
 
-    for( SCH_REFERENCE& ref : flatList )
+    for( const SCH_REFERENCE& ref : flatList )
     {
         // search only for the current reference prefix:
         if( flatList[aIndex].CompareRef( ref ) != 0 )

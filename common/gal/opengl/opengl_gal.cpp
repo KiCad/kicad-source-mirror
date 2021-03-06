@@ -111,8 +111,8 @@ private:
 
 GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 {
-    for( auto b = m_bitmaps.begin(); b != m_bitmaps.end(); ++b )
-        glDeleteTextures( 1, &b->second.id );
+    for( auto& bitmap : m_bitmaps )
+        glDeleteTextures( 1, &bitmap.second.id );
 }
 
 

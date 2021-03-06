@@ -114,16 +114,16 @@ public:
     }
 
 
-    TRANSLINE_PRM* GetPrm( unsigned aIdx )
+    TRANSLINE_PRM* GetPrm( unsigned aIdx ) const
     {
-        if( aIdx <  m_prms_List.size() )
+        if( aIdx < m_prms_List.size() )
             return m_prms_List[aIdx];
         else
             return NULL;
     }
 
 
-    unsigned GetPrmsCount()
+    unsigned GetPrmsCount() const
     {
         return m_prms_List.size();
     }

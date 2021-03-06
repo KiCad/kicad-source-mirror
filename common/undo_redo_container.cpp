@@ -89,9 +89,9 @@ ITEM_PICKER PICKED_ITEMS_LIST::PopItem()
 
 bool PICKED_ITEMS_LIST::ContainsItem( const EDA_ITEM* aItem ) const
 {
-    for( size_t i = 0;  i < m_ItemsList.size();  i++ )
+    for( const ITEM_PICKER& picker : m_ItemsList )
     {
-        if( m_ItemsList[ i ].GetItem() == aItem )
+        if( picker.GetItem() == aItem )
             return true;
     }
 

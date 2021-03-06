@@ -117,7 +117,7 @@ public:
         m_parent = aParent;
     }
 
-    bool operator==( const DANGLING_END_ITEM& aB )
+    bool operator==( const DANGLING_END_ITEM& aB ) const
     {
         return GetItem() == aB.GetItem()
             && GetPosition() == aB.GetPosition()
@@ -125,7 +125,7 @@ public:
             && GetParent() == aB.GetParent();
     }
 
-    bool operator!=( const DANGLING_END_ITEM& aB )
+    bool operator!=( const DANGLING_END_ITEM& aB ) const
     {
         return GetItem() != aB.GetItem()
                 || GetPosition() != aB.GetPosition()
@@ -485,7 +485,7 @@ public:
      *
      * @param aPlotter A pointer to a #PLOTTER object.
      */
-    virtual void Plot( PLOTTER* aPlotter );
+    virtual void Plot( PLOTTER* aPlotter ) const;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 

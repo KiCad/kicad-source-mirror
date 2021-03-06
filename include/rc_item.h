@@ -45,12 +45,12 @@ class RC_ITEMS_PROVIDER
 public:
     virtual void SetSeverities( int aSeverities ) = 0;
 
-    virtual int GetCount( int aSeverity = -1 ) = 0;
+    virtual int GetCount( int aSeverity = -1 ) const = 0;
 
     /**
      * Retrieve a RC_ITEM by index.
      */
-    virtual std::shared_ptr<RC_ITEM> GetItem( int aIndex ) = 0;
+    virtual std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const = 0;
 
     /**
      * Remove (and optionally deletes) the indexed item from the list.
@@ -276,7 +276,7 @@ public:
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
-    void ValueChanged( RC_TREE_NODE* aNode );
+    void ValueChanged( const RC_TREE_NODE* aNode );
 
     void DeleteCurrentItem( bool aDeep );
 

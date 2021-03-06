@@ -246,10 +246,10 @@ public:
      * If TextInside then the text is been put inside (moving from x1, y1 in
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
-    void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPinPos, int aPinOrient,
-                       int aTextInside, bool aDrawPinNum, bool aDrawPinName );
+    void PlotPinTexts( PLOTTER *aPlotter, const wxPoint& aPinPos, int aPinOrient,
+                       int aTextInside, bool aDrawPinNum, bool aDrawPinName ) const;
 
-    void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
+    void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation ) const;
 
     void Offset( const wxPoint& aOffset ) override;
 
@@ -263,7 +263,7 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aPffset, bool aFill,
-               const TRANSFORM& aTransform ) override;
+               const TRANSFORM& aTransform ) const override;
 
     // Get/SetWidth() not used for pins.  Use GetPenWidth() for drawing.
     int GetWidth() const override { return 1; }

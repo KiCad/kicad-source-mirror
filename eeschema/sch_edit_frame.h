@@ -816,16 +816,16 @@ public:
     /**
      * Clone \a aItem and owns that clone in this container.
      */
-    void SaveCopyForRepeatItem( SCH_ITEM* aItem );
+    void SaveCopyForRepeatItem( const SCH_ITEM* aItem );
 
     /**
      * Return the item which is to be repeated with the insert key.
      *
      * Such object is owned by this container, and must be cloned.
      */
-    SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
+    SCH_ITEM* GetRepeatItem() const { return m_item_to_repeat; }
 
-    EDA_ITEM* GetItem( const KIID& aId ) override;
+    EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     /**
      * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel

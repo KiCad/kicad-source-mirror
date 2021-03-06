@@ -64,7 +64,7 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const wxPoint&  aOffset )
+void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
     SCH_HIERLABEL::Print( aSettings, aOffset );
@@ -251,8 +251,8 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos )
+void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
+                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const
 {
     /*
      * These are the same icon shapes as SCH_HIERLABEL but the graphic icon is slightly
@@ -260,21 +260,20 @@ void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
      * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
      * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
      */
-    PINSHEETLABEL_SHAPE tmp = m_shape;
+    PINSHEETLABEL_SHAPE shape = m_shape;
 
-    switch( m_shape )
+    switch( shape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:  m_shape = PINSHEETLABEL_SHAPE::PS_OUTPUT; break;
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT: m_shape = PINSHEETLABEL_SHAPE::PS_INPUT;  break;
-    default:                                                                       break;
+    case PINSHEETLABEL_SHAPE::PS_INPUT:  shape = PINSHEETLABEL_SHAPE::PS_OUTPUT; break;
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT: shape = PINSHEETLABEL_SHAPE::PS_INPUT;  break;
+    default:                                                                     break;
     }
 
-    SCH_HIERLABEL::CreateGraphicShape( aRenderSettings, aPoints, aPos );
-    m_shape = tmp;
+    SCH_HIERLABEL::CreateGraphicShape( aSettings, aPoints, aPos, shape );
 }
 
 
-void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+void SCH_SHEET_PIN::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     DANGLING_END_ITEM item( SHEET_LABEL_END, this, GetTextPos() );
     aItemList.push_back( item );

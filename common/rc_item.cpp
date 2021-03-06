@@ -412,7 +412,7 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
 }
 
 
-void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
+void RC_TREE_MODEL::ValueChanged( const RC_TREE_NODE* aNode )
 {
     if( aNode->m_Type == RC_TREE_NODE::MAIN_ITEM || aNode->m_Type == RC_TREE_NODE::AUX_ITEM )
     {
@@ -423,7 +423,7 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
     {
         wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
 
-        for( RC_TREE_NODE* child : aNode->m_Children )
+        for( const RC_TREE_NODE* child : aNode->m_Children )
             wxDataViewModel::ValueChanged( ToItem( child ), 0 );
     }
 }
@@ -437,7 +437,7 @@ void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 
 void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep )
 {
-    RC_TREE_NODE*  current_node = ToNode( m_view->GetCurrentItem() );
+    RC_TREE_NODE* current_node = ToNode( m_view->GetCurrentItem() );
     const std::shared_ptr<RC_ITEM> current_item = current_node ? current_node->m_RcItem : nullptr;
 
     /// Keep a vector of elements to free after wxWidgets is definitely done accessing them

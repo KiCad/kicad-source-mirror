@@ -83,12 +83,12 @@ public:
     {
     }
 
-    int  GetCount( int aSeverity = -1 ) override
+    int  GetCount( int aSeverity = -1 ) const override
     {
         return m_sourceVector->size();
     }
 
-    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override
     {
         return m_sourceVector->at( aIndex );
     }

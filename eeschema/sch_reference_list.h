@@ -209,6 +209,11 @@ public:
         return flatList[ aIndex ];
     }
 
+    const SCH_REFERENCE& operator[]( int aIndex ) const
+    {
+        return flatList[ aIndex ];
+    }
+
     void Clear()
     {
         flatList.clear();
@@ -217,8 +222,9 @@ public:
     unsigned GetCount() const { return flatList.size(); }
 
     SCH_REFERENCE& GetItem( int aIdx ) { return flatList[aIdx]; }
+    const SCH_REFERENCE& GetItem( int aIdx ) const { return flatList[aIdx]; }
 
-    void AddItem( SCH_REFERENCE& aItem ) { flatList.push_back( aItem ); }
+    void AddItem( const SCH_REFERENCE& aItem ) { flatList.push_back( aItem ); }
 
     /**
      * Remove an item from the list of references.
@@ -393,7 +399,7 @@ public:
      * @param aUnit = the given unit number to search
      * @return index in aSymbolsList if found or -1 if not found
      */
-    int FindUnit( size_t aIndex, int aUnit );
+    int FindUnit( size_t aIndex, int aUnit ) const;
 
     /**
      * Search the list for a symbol with the given KIID path.
@@ -411,7 +417,7 @@ public:
      * @param aIdList = the buffer to fill
      * @param aMinRefId = the min id value to store. all values < aMinRefId are ignored
      */
-    void GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId );
+    void GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId ) const;
 
     /**
      * Return the last used (greatest) reference number in the reference list for the prefix
@@ -420,7 +426,7 @@ public:
      * @param aIndex The index of the reference item used for the search pattern.
      * @param aMinValue The minimum value for the current search.
      */
-    int GetLastReference( int aIndex, int aMinValue );
+    int GetLastReference( int aIndex, int aMinValue ) const;
 
 #if defined(DEBUG)
     void Show( const char* aPrefix = "" )

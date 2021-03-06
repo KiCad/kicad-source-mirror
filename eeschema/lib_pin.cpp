@@ -510,7 +510,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPo
 }
 
 
-void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
+void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation ) const
 {
     int     MapX1, MapY1, x1, y1;
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_PIN );
@@ -639,8 +639,8 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 }
 
 
-void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, wxPoint& aPinPos, int aPinOrient, int aTextInside,
-                            bool aDrawPinNum, bool aDrawPinName )
+void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinOrient, int aTextInside,
+                            bool aDrawPinNum, bool aDrawPinName ) const
 {
     if( m_name.IsEmpty() || m_name == wxT( "~" ) )
         aDrawPinName = false;
@@ -657,11 +657,11 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, wxPoint& aPinPos, int aPinOrient,
 
     int     namePenWidth = std::max( Clamp_Text_PenSize( GetPenWidth(), m_nameTextSize, false ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
-    int     numPenWidth =  std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, false ),
+    int     numPenWidth  = std::max( Clamp_Text_PenSize( GetPenWidth(), m_numTextSize, false ),
                                      aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) + namePenWidth;
-    int     num_offset = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
+    int     num_offset  = Mils2iu( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
     COLOR4D nameColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_PINNAM );
@@ -978,9 +978,9 @@ void LIB_PIN::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 void LIB_PIN::Plot( PLOTTER* aPlotter, const wxPoint& aPffset, bool aFill,
-                    const TRANSFORM& aTransform )
+                    const TRANSFORM& aTransform ) const
 {
-    if( ! IsVisible() )
+    if( !IsVisible() )
         return;
 
     int     orient = PinDrawOrient( aTransform );

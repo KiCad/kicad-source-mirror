@@ -75,7 +75,7 @@ public:
      */
     bool SetProject( PROJECT* aProject, bool* flgChanged = nullptr );
 
-    wxString GetProjectDir( void );
+    wxString GetProjectDir() const;
 
     /**
      * Set a pointer to the application's #PGM_BASE instance used to extract the local env vars.
@@ -87,7 +87,7 @@ public:
      * Clear the current path list and substitutes the given path list and update the path
      * configuration file on success.
      */
-    bool UpdatePathList( std::vector< SEARCH_PATH >& aPathList );
+    bool UpdatePathList( const std::vector< SEARCH_PATH >& aPathList );
 
     /**
      * Determines the full path of the given file name.
@@ -114,27 +114,27 @@ public:
      *
      * @return pointer to the internal path list.
      */
-    const std::list< SEARCH_PATH >* GetPaths( void );
+    const std::list< SEARCH_PATH >* GetPaths() const;
 
     /**
      * Return true if the given name contains an alias and populates the string \a anAlias
      * with the alias and \a aRelPath with the relative path.
      */
-    bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath );
+    bool SplitAlias( const wxString& aFileName, wxString& anAlias, wxString& aRelPath ) const;
 
     /**
      * Returns true if the given path is a valid aliased relative path.
      *
      * If the path contains an alias then hasAlias is set true.
      */
-    bool ValidateFileName( const wxString& aFileName, bool& hasAlias );
+    bool ValidateFileName( const wxString& aFileName, bool& hasAlias ) const;
 
     /**
      * Return a list of path environment variables local to KiCad.
      *
      * This list always includes KICAD6_3DMODEL_DIR even if it is not defined locally.
      */
-    bool GetKicadPaths( std::list< wxString >& paths );
+    bool GetKicadPaths( std::list< wxString >& paths ) const;
 
 private:
     /**

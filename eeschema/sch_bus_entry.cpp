@@ -292,7 +292,7 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
     bool has_wire[2] = { false };
     bool has_bus[2] = { false };
 
-    for( DANGLING_END_ITEM& each_item : aItemList )
+    for( const DANGLING_END_ITEM& each_item : aItemList )
     {
         if( each_item.GetItem() == this )
             continue;
@@ -351,7 +351,7 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
     // when the end position is found.
     wxPoint seg_start;
 
-    for( DANGLING_END_ITEM& each_item : aItemList )
+    for( const DANGLING_END_ITEM& each_item : aItemList )
     {
         if( each_item.GetItem() == this )
             continue;
@@ -435,7 +435,7 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 }
 
 
-void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
+void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter ) const
 {
     auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
 

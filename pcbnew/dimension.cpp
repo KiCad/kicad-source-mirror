@@ -452,7 +452,7 @@ const BOX2I DIMENSION_BASE::ViewBBox() const
 }
 
 
-OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, bool aStart )
+OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg, bool aStart )
 {
     VECTOR2I start( aStart ? aSeg.A : aSeg.B );
     VECTOR2I endpoint( aStart ? aSeg.B : aSeg.A );
@@ -460,7 +460,7 @@ OPT_VECTOR2I DIMENSION_BASE::segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aS
     if( aPoly.Contains( start ) )
         return NULLOPT;
 
-    for( SHAPE_POLY_SET::SEGMENT_ITERATOR seg = aPoly.IterateSegments(); seg; seg++ )
+    for( SHAPE_POLY_SET::CONST_SEGMENT_ITERATOR seg = aPoly.CIterateSegments(); seg; ++seg )
     {
         if( OPT_VECTOR2I intersection = ( *seg ).Intersect( aSeg ) )
         {

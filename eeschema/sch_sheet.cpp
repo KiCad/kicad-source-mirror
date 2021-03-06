@@ -947,7 +947,7 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-void SCH_SHEET::Plot( PLOTTER* aPlotter )
+void SCH_SHEET::Plot( PLOTTER* aPlotter ) const
 {
     wxString msg;
     wxPoint  pos;

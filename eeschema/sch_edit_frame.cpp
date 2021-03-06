@@ -462,7 +462,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
 }
 
 
-void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
+void SCH_EDIT_FRAME::SaveCopyForRepeatItem( const SCH_ITEM* aItem )
 {
     // we cannot store a pointer to an item in the display list here since
     // that item may be deleted, such as part of a line concatenation or other.
@@ -479,7 +479,7 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
 }
 
 
-EDA_ITEM* SCH_EDIT_FRAME::GetItem( const KIID& aId )
+EDA_ITEM* SCH_EDIT_FRAME::GetItem( const KIID& aId ) const
 {
     return Schematic().GetSheets().GetItem( aId );
 }

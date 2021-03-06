@@ -2411,11 +2411,9 @@ SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFi
 
 SCH_LEGACY_PLUGIN_CACHE::~SCH_LEGACY_PLUGIN_CACHE()
 {
-    std::vector< LIB_PART* > rootParts;
-
     // When the cache is destroyed, all of the alias objects on the heap should be deleted.
-    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
-        delete it->second;
+    for( auto& symbol : m_symbols )
+        delete symbol.second;
 
     m_symbols.clear();
 }

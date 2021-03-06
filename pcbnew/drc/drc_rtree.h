@@ -431,19 +431,19 @@ public:
         }
     };
 
-    DRC_LAYER OnLayer( PCB_LAYER_ID aLayer )
+    DRC_LAYER OnLayer( PCB_LAYER_ID aLayer ) const
     {
         return DRC_LAYER( m_tree[int( aLayer )] );
     }
 
-    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const wxPoint& aPoint, int aAccuracy = 0 )
+    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const wxPoint& aPoint, int aAccuracy = 0 ) const
     {
         EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return DRC_LAYER( m_tree[int( aLayer )], rect );
     }
 
-    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const EDA_RECT& aRect )
+    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const EDA_RECT& aRect ) const
     {
         return DRC_LAYER( m_tree[int( aLayer )], aRect );
     }

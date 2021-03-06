@@ -608,7 +608,7 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-void SCH_FIELD::Plot( PLOTTER* aPlotter )
+void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
 {
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     COLOR4D          color = settings->GetLayerColor( GetLayer() );

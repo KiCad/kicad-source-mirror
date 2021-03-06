@@ -143,7 +143,7 @@ bool SHAPE_POLY_SET::GetRelativeIndices( int aGlobalIdx,
 
 
 bool SHAPE_POLY_SET::GetGlobalIndex( SHAPE_POLY_SET::VERTEX_INDEX aRelativeIndices,
-        int& aGlobalIdx )
+        int& aGlobalIdx ) const
 {
     int selectedVertex = aRelativeIndices.m_vertex;
     unsigned int    selectedContour = aRelativeIndices.m_contour;
@@ -1334,9 +1334,9 @@ bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
     int      actual = INT_MAX;
     VECTOR2I location;
 
-    for( auto& tpoly : m_triangulatedPolys )
+    for( const auto& tpoly : m_triangulatedPolys )
     {
-        for ( auto& tri : tpoly->Triangles() )
+        for ( const auto& tri : tpoly->Triangles() )
         {
             int      triActual;
             VECTOR2I triLocation;

@@ -197,7 +197,7 @@ public:
     }
 
     /**
-     * Create a copy of a of this #BOARD_ITEM.
+     * Create a copy of this #BOARD_ITEM.
      */
     virtual BOARD_ITEM* Duplicate() const
     {
@@ -406,7 +406,7 @@ public:
     }
 
 #if defined(DEBUG)
-    void Show( int , std::ostream&  ) const override {}
+    void Show( int , std::ostream& ) const override {}
 #endif
 };
 

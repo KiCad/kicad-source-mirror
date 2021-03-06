@@ -702,7 +702,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool        restore_state = false;
     VECTOR2I    totalMovement;
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
-    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    TOOL_EVENT* evt = &aEvent;
     VECTOR2I    prevPos;
 
     // Prime the pump

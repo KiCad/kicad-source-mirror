@@ -418,7 +418,7 @@ public:
         /**
          * @return the indices of the current polygon, contour and vertex.
          */
-        VERTEX_INDEX GetIndex()
+        VERTEX_INDEX GetIndex() const
         {
             VERTEX_INDEX index;
 
@@ -434,7 +434,7 @@ public:
          * @return true if both iterators point to the same segment of the same contour of
          *         the same polygon of the same polygon set; false otherwise.
          */
-        bool IsAdjacent( SEGMENT_ITERATOR_TEMPLATE<T> aOther )
+        bool IsAdjacent( SEGMENT_ITERATOR_TEMPLATE<T> aOther ) const
         {
             // Check that both iterators point to the same contour of the same polygon of the
             // same polygon set.
@@ -449,7 +449,7 @@ public:
                 // are adjacent. The only missing case where they also are adjacent is when
                 // the segments are the first and last one, in which case the difference
                 // always equals the total number of segments minus one.
-                int indexDiff = abs( m_currentSegment - aOther.m_currentSegment );
+                int indexDiff = std::abs( m_currentSegment - aOther.m_currentSegment );
 
                 return ( indexDiff == 1 ) || ( indexDiff == (numSeg - 1) );
             }
@@ -495,7 +495,7 @@ public:
 
     ~SHAPE_POLY_SET();
 
-    SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& );
+    SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& aOther );
 
     void CacheTriangulation( bool aPartition = true );
     bool IsTriangulationUpToDate() const;
@@ -530,7 +530,7 @@ public:
      * @return true if the relative indices are correct; false otherwise. The computed
      *         global index is returned in the \p aGlobalIdx reference.
      */
-    bool GetGlobalIndex( VERTEX_INDEX aRelativeIndices, int& aGlobalIdx );
+    bool GetGlobalIndex( VERTEX_INDEX aRelativeIndices, int& aGlobalIdx ) const;
 
     /// @copydoc SHAPE::Clone()
     SHAPE* Clone() const override;
@@ -871,7 +871,13 @@ public:
         return IterateSegments( 0, OutlineCount() - 1 );
     }
 
-    ///< Return an iterator object, for all outlines in the set (with holes).
+    ///< Returns an iterator object, for all outlines in the set (no holes)
+    CONST_SEGMENT_ITERATOR CIterateSegments() const
+    {
+        return CIterateSegments( 0, OutlineCount() - 1 );
+    }
+
+    ///< Returns an iterator object, for all outlines in the set (with holes)
     SEGMENT_ITERATOR IterateSegmentsWithHoles()
     {
         return IterateSegments( 0, OutlineCount() - 1, true );
@@ -1161,7 +1167,7 @@ public:
     ///< Return true if the set is empty (no polygons at all)
     bool IsEmpty() const
     {
-        return m_polys.size() == 0;
+        return m_polys.empty();
     }
 
     /**
@@ -1402,4 +1408,4 @@ private:
     MD5_HASH m_hash;
 };
 
-#endif
+#endif // __SHAPE_POLY_SET_H

@@ -156,14 +156,14 @@ public:
      *
      * @return the contorl that currently has focus
      */
-    CVPCB_MAINFRAME::CONTROL_TYPE GetFocusedControl();
+    CVPCB_MAINFRAME::CONTROL_TYPE GetFocusedControl() const;
 
     /**
      * Get a pointer to the currently focused control
      *
      * @return the control that currently has focus
      */
-    wxControl* GetFocusedControlObject();
+    wxControl* GetFocusedControlObject() const;
 
     /**
      * Set the focus to a specific control.

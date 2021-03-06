@@ -503,7 +503,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
 }
 
 
-bool SCH_SHEET_LIST::NameExists( const wxString& aSheetName )
+bool SCH_SHEET_LIST::NameExists( const wxString& aSheetName ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
@@ -515,7 +515,7 @@ bool SCH_SHEET_LIST::NameExists( const wxString& aSheetName )
 }
 
 
-bool SCH_SHEET_LIST::IsModified()
+bool SCH_SHEET_LIST::IsModified() const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
@@ -537,7 +537,7 @@ void SCH_SHEET_LIST::ClearModifyStatus()
 }
 
 
-SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
+SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
@@ -738,7 +738,7 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 }
 
 
-SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
+SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( const SCH_SCREEN* aScreen )
 {
     for( SCH_SHEET_PATH& sheetpath : *this )
     {

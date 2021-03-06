@@ -368,14 +368,14 @@ public:
      *
      * @return True if the hierarchy is modified otherwise false.
      */
-    bool IsModified();
+    bool IsModified() const;
 
     void ClearModifyStatus();
 
     /**
      * Fetch a SCH_ITEM by ID.  Also returns the sheet the item was found on in \a aPathOut.
      */
-    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr );
+    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr ) const;
 
     /**
      * Fill an item cache for temporary use when many items need to be fetched.
@@ -432,7 +432,7 @@ public:
      * Return a pointer to the first #SCH_SHEET_PATH object (not necessarily the only one) using
      * a particular screen.
      */
-    SCH_SHEET_PATH* FindSheetForScreen( SCH_SCREEN* aScreen );
+    SCH_SHEET_PATH* FindSheetForScreen( const SCH_SCREEN* aScreen );
 
     /**
      * Build the list of sheets and their sheet path from \a aSheet.
@@ -458,7 +458,7 @@ public:
      */
     void SortByPageNumbers( bool aUpdateVirtualPageNums = true );
 
-    bool NameExists( const wxString& aSheetName );
+    bool NameExists( const wxString& aSheetName ) const;
 
     /**
      * Update all of the symbol instance information using \a aSymbolInstances.

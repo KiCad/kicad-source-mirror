@@ -70,7 +70,7 @@ EDA_TEXT_HJUSTIFY_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
     if( aHorizJustify < GR_TEXT_HJUSTIFY_LEFT )
         return GR_TEXT_HJUSTIFY_LEFT;
 
-    return (EDA_TEXT_HJUSTIFY_T) aHorizJustify;
+    return static_cast<EDA_TEXT_HJUSTIFY_T>( aHorizJustify );
 }
 
 
@@ -84,13 +84,13 @@ EDA_TEXT_VJUSTIFY_T EDA_TEXT::MapVertJustify( int aVertJustify )
     if( aVertJustify < GR_TEXT_VJUSTIFY_TOP )
         return GR_TEXT_VJUSTIFY_TOP;
 
-    return (EDA_TEXT_VJUSTIFY_T) aVertJustify;
+    return static_cast<EDA_TEXT_VJUSTIFY_T>( aVertJustify );
 }
 
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
         m_text( text ),
-        m_e( 1<<TE_VISIBLE )
+        m_e( 1 << TE_VISIBLE )
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
@@ -510,9 +510,9 @@ bool EDA_TEXT::IsDefaultFormatting() const
              && GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER
              && GetVertJustify() == GR_TEXT_VJUSTIFY_CENTER
              && GetTextThickness() == 0
-           && !IsItalic()
-           && !IsBold()
-           && !IsMultilineAllowed()
+             && !IsItalic()
+             && !IsBold()
+             && !IsMultilineAllowed()
            );
 }
 

@@ -168,7 +168,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
     const SFVEC2F& rightStart  = aSeg->GetRightStar();
     const SFVEC2F& rightEnd    = aSeg->GetRightEnd();
     const SFVEC2F& rightDir    = aSeg->GetRightDir();
-    const float   radius      = aSeg->GetRadius();
+    const float    radius      = aSeg->GetRadius();
 
     const SFVEC2F& start       = aSeg->GetStart();
     const SFVEC2F& end         = aSeg->GetEnd();
@@ -176,7 +176,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
     const float texture_factor  = ( 12.0f / (float) SIZE_OF_CIRCLE_TEXTURE ) + 1.0f;
     const float texture_factorF = ( 6.0f / (float) SIZE_OF_CIRCLE_TEXTURE ) + 1.0f;
 
-    const float radius_of_the_square = sqrtf( aSeg->GetRadiusSquared() * 2.0f );
+    const float radius_of_the_square   = sqrtf( aSeg->GetRadiusSquared() * 2.0f );
     const float radius_triangle_factor = ( radius_of_the_square - radius ) / radius;
 
     const SFVEC2F factorS = SFVEC2F( -rightDir.y * radius * radius_triangle_factor,
@@ -255,11 +255,9 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateHoles( const LIST_OBJECT2D& aListH
                 new TRIANGLE_DISPLAY_LIST( aListHolesObject2d.size() * 2 );
 
         // Convert the list of objects(filled circles) to triangle layer structure
-        for( LIST_OBJECT2D::const_iterator itemOnLayer = aListHolesObject2d.begin();
-             itemOnLayer != aListHolesObject2d.end();
-             ++itemOnLayer )
+        for( const OBJECT_2D* itemOnLayer : aListHolesObject2d )
         {
-            const OBJECT_2D* object2d_A = static_cast<const OBJECT_2D*>( *itemOnLayer );
+            const OBJECT_2D* object2d_A = itemOnLayer;
 
             wxASSERT( ( object2d_A->GetObjectType() == OBJECT_2D_TYPE::FILLED_CIRCLE )
                       || ( object2d_A->GetObjectType() == OBJECT_2D_TYPE::ROUNDSEG ) );
@@ -327,37 +325,35 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateLayerList( const BVH_CONTAINER_2D*
     m_triangles.push_back( layerTriangles );
 
     // Load the 2D (X,Y axis) component of shapes
-    for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
-         itemOnLayer != listObject2d.end();
-         ++itemOnLayer )
+    for( const OBJECT_2D* itemOnLayer : listObject2d )
     {
-        const OBJECT_2D* object2d_A = static_cast<const OBJECT_2D*>( *itemOnLayer );
+        const OBJECT_2D* object2d_A = itemOnLayer;
 
         switch( object2d_A->GetObjectType() )
         {
         case OBJECT_2D_TYPE::FILLED_CIRCLE:
-            addObjectTriangles( (const FILLED_CIRCLE_2D *)object2d_A, layerTriangles,
-                                layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const FILLED_CIRCLE_2D*>( object2d_A ),
+                                layerTriangles, layer_z_top, layer_z_bot );
             break;
 
         case OBJECT_2D_TYPE::POLYGON4PT:
-            addObjectTriangles( (const POLYGON_4PT_2D*)object2d_A, layerTriangles,
-                                layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const POLYGON_4PT_2D*>( object2d_A ),
+                                layerTriangles, layer_z_top, layer_z_bot );
             break;
 
         case OBJECT_2D_TYPE::RING:
-            addObjectTriangles( (const RING_2D*)object2d_A, layerTriangles, layer_z_top,
-                                layer_z_bot );
+            addObjectTriangles( static_cast<const RING_2D*>( object2d_A ),
+                                layerTriangles, layer_z_top, layer_z_bot );
             break;
 
         case OBJECT_2D_TYPE::TRIANGLE:
-            addObjectTriangles( (const TRIANGLE_2D*)object2d_A, layerTriangles, layer_z_top,
-                                layer_z_bot );
+            addObjectTriangles( static_cast<const TRIANGLE_2D*>( object2d_A ),
+                                layerTriangles, layer_z_top, layer_z_bot );
             break;
 
         case OBJECT_2D_TYPE::ROUNDSEG:
-            addObjectTriangles( (const ROUND_SEGMENT_2D*) object2d_A, layerTriangles,
-                                layer_z_top, layer_z_bot );
+            addObjectTriangles( static_cast<const ROUND_SEGMENT_2D*>( object2d_A ),
+                                layerTriangles, layer_z_top, layer_z_bot );
             break;
 
         default:
@@ -366,7 +362,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateLayerList( const BVH_CONTAINER_2D*
         }
     }
 
-    if( aPolyList &&aPolyList->OutlineCount() > 0 )
+    if( aPolyList && aPolyList->OutlineCount() > 0 )
     {
         layerTriangles->AddToMiddleContourns( *aPolyList, layer_z_bot, layer_z_top,
                                               m_boardAdapter.BiuTo3dUnits(), false, aThroughHoles );
@@ -401,15 +397,13 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardP
                 new TRIANGLE_DISPLAY_LIST( listBoardObject2d.size() );
 
         // Convert the list of objects(triangles) to triangle layer structure
-        for( LIST_OBJECT2D::const_iterator itemOnLayer = listBoardObject2d.begin();
-             itemOnLayer != listBoardObject2d.end();
-             ++itemOnLayer )
+        for( const OBJECT_2D* itemOnLayer : listBoardObject2d )
         {
-            const OBJECT_2D* object2d_A = static_cast<const OBJECT_2D*>( *itemOnLayer );
+            const OBJECT_2D* object2d_A = itemOnLayer;
 
             wxASSERT( object2d_A->GetObjectType() == OBJECT_2D_TYPE::TRIANGLE );
 
-            const TRIANGLE_2D* tri = (const TRIANGLE_2D *)object2d_A;
+            const TRIANGLE_2D* tri = static_cast<const TRIANGLE_2D*>( object2d_A );
 
             const SFVEC2F& v1 = tri->GetP1();
             const SFVEC2F& v2 = tri->GetP2();
@@ -520,10 +514,10 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         float layer_z_bot = 0.0f;
         float layer_z_top = 0.0f;
 
-        for( MAP_POLY::const_iterator ii = outerMapHoles.begin(); ii != outerMapHoles.end(); ++ii )
+        for( const auto ii : outerMapHoles )
         {
-            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
-            const SHAPE_POLY_SET*  poly = static_cast<const SHAPE_POLY_SET*>( ii->second );
+            const PCB_LAYER_ID      layer_id  = ii.first;
+            const SHAPE_POLY_SET*   poly      = ii.second;
             const BVH_CONTAINER_2D* container = map_holes.at( layer_id );
 
             getLayerZPos( layer_id, layer_z_top, layer_z_bot );
@@ -532,10 +526,10 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                                                          layer_z_top, layer_z_bot, false );
         }
 
-        for( MAP_POLY::const_iterator ii = innerMapHoles.begin(); ii != innerMapHoles.end(); ++ii )
+        for( const auto ii : innerMapHoles )
         {
-            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
-            const SHAPE_POLY_SET* poly = static_cast<const SHAPE_POLY_SET*>( ii->second );
+            const PCB_LAYER_ID      layer_id  = ii.first;
+            const SHAPE_POLY_SET*   poly      = ii.second;
             const BVH_CONTAINER_2D* container = map_holes.at( layer_id );
 
             getLayerZPos( layer_id, layer_z_top, layer_z_bot );
@@ -554,16 +548,14 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     const MAP_POLY& map_poly = m_boardAdapter.GetPolyMap();
 
-    for( MAP_CONTAINER_2D_BASE::const_iterator ii = m_boardAdapter.GetLayerMap().begin();
-         ii != m_boardAdapter.GetLayerMap().end();
-         ++ii )
+    for( const auto ii : m_boardAdapter.GetLayerMap() )
     {
-        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
+        const PCB_LAYER_ID layer_id = ii.first;
 
         if( !m_boardAdapter.Is3dLayerEnabled( layer_id ) )
             continue;
 
-        const BVH_CONTAINER_2D* container2d = static_cast<const BVH_CONTAINER_2D*>( ii->second );
+        const BVH_CONTAINER_2D* container2d = ii.second;
 
         SHAPE_POLY_SET polyListSubtracted;
         SHAPE_POLY_SET* aPolyList = nullptr;
@@ -601,7 +593,6 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
                         polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
                                                             SHAPE_POLY_SET::PM_FAST );
                     }
-
                 }
             }
 
@@ -730,7 +721,7 @@ void RENDER_3D_LEGACY::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 
 void RENDER_3D_LEGACY::generateViasAndPads()
 {
-    if( m_boardAdapter.GetViaCount() )
+    if( m_boardAdapter.GetViaCount() > 0 )
     {
         const unsigned int reserve_nr_triangles_estimation =
                 m_boardAdapter.GetCircleSegmentCount(
@@ -743,11 +734,11 @@ void RENDER_3D_LEGACY::generateViasAndPads()
         // Insert plated vertical holes inside the board
 
         // Insert vias holes (vertical cylinders)
-        for( auto track : m_boardAdapter.GetBoard()->Tracks() )
+        for( const TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
             {
-                const VIA* via = static_cast<const VIA*>(track);
+                const VIA* via = static_cast<const VIA*>( track );
 
                 const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
                 const float thickness = m_boardAdapter.GetCopperThickness();
@@ -789,7 +780,7 @@ void RENDER_3D_LEGACY::generateViasAndPads()
         // Insert pads holes (vertical cylinders)
         for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
         {
-            for( PAD* pad : footprint->Pads() )
+            for( const PAD* pad : footprint->Pads() )
             {
                 if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
                 {
@@ -835,15 +826,13 @@ void RENDER_3D_LEGACY::generateViasAndPads()
                     new TRIANGLE_DISPLAY_LIST( listHolesObject2d.size() );
 
             // Convert the list of objects(triangles) to triangle layer structure
-            for( LIST_OBJECT2D::const_iterator itemOnLayer = listHolesObject2d.begin();
-                 itemOnLayer != listHolesObject2d.end();
-                 ++itemOnLayer )
+            for( const OBJECT_2D* itemOnLayer : listHolesObject2d )
             {
-                const OBJECT_2D* object2d_A = static_cast<const OBJECT_2D*>( *itemOnLayer );
+                const OBJECT_2D* object2d_A = itemOnLayer;
 
                 wxASSERT( object2d_A->GetObjectType() == OBJECT_2D_TYPE::TRIANGLE );
 
-                const TRIANGLE_2D* tri = (const TRIANGLE_2D *)object2d_A;
+                const TRIANGLE_2D* tri = static_cast<const TRIANGLE_2D*>( object2d_A );
 
                 const SFVEC2F& v1 = tri->GetP1();
                 const SFVEC2F& v2 = tri->GetP2();
@@ -880,7 +869,7 @@ void RENDER_3D_LEGACY::load3dModels( REPORTER* aStatusReporter )
     }
 
     // Go for all footprints
-    for( FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
+    for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
         for( const FP_3DMODEL& model : footprint->Models() )
         {

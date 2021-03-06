@@ -132,9 +132,6 @@ public:
      */
     friend bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs );
 
-private:
-    friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
-
 protected:
     void ensure_loaded()
     {
@@ -222,7 +219,7 @@ public:
      * @param aIdx index of the given item.
      * @return the aIdx item in list.
      */
-    FOOTPRINT_INFO& GetItem( unsigned aIdx )
+    FOOTPRINT_INFO& GetItem( unsigned aIdx ) const
     {
         return *m_list[aIdx];
     }

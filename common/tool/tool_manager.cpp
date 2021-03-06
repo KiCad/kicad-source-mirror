@@ -293,7 +293,7 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 }
 
 
-VECTOR2D TOOL_MANAGER::GetMousePosition()
+VECTOR2D TOOL_MANAGER::GetMousePosition() const
 {
     if( m_viewControls )
         return m_viewControls->GetMousePosition();
@@ -302,7 +302,7 @@ VECTOR2D TOOL_MANAGER::GetMousePosition()
 }
 
 
-VECTOR2D TOOL_MANAGER::GetCursorPosition()
+VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 {
    if( m_viewControls )
        return m_viewControls->GetCursorPosition();
@@ -361,13 +361,13 @@ void TOOL_MANAGER::PrimeTool( const VECTOR2D& aPosition )
 }
 
 
-const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions()
+const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions() const
 {
     return m_actionMgr->GetActions();
 }
 
 
-int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction )
+int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 {
     return m_actionMgr->GetHotKey( aAction );
 }
@@ -475,7 +475,7 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 
     if( isActive( aTool ) )
     {
-        auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
+        TOOL_MANAGER::ID_LIST::iterator it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
 
         TOOL_STATE* st = m_toolIdIndex[*it];
 
@@ -644,7 +644,7 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
 }
 
 
-bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 {
     bool handled = false;
 
@@ -676,7 +676,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         if( st && st->cofunc && st->pendingWait && st->waitEvents.Matches( aEvent ) )
         {
             if( !aEvent.FirstResponder() )
-                const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
+                aEvent.SetFirstResponder( st->theTool );
 
             // got matching event? clear wait list and wake up the coroutine
             st->wakeupEvent = aEvent;
@@ -711,7 +711,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             ++it;
     }
 
-    for( auto& state : m_toolState )
+    for( const auto& state : m_toolState )
     {
         TOOL_STATE* st = state.second;
         bool finished = false;
@@ -720,14 +720,14 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         // Go() method that match the event.
         if( !st->transitions.empty() )
         {
-            for( TRANSITION& tr : st->transitions )
+            for( const TRANSITION& tr : st->transitions )
             {
                 if( tr.first.Matches( aEvent ) )
                 {
                     auto func_copy = tr.second;
 
                     if( !aEvent.FirstResponder() )
-                        const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
+                        aEvent.SetFirstResponder( st->theTool );
 
                     // if there is already a context, then push it on the stack
                     // and transfer the previous view control settings to the new context
@@ -1040,7 +1040,7 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
 }
 
 
-bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
+bool TOOL_MANAGER::isActive( TOOL_BASE* aTool ) const
 {
     if( !isRegistered( aTool ) )
         return false;
@@ -1090,7 +1090,7 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 }
 
 
-void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
+void TOOL_MANAGER::applyViewControls( const TOOL_STATE* aState )
 {
     m_viewControls->ApplySettings( aState->vcSettings );
 }

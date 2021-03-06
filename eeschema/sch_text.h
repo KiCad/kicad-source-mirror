@@ -254,7 +254,7 @@ public:
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
      */
     virtual void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                     std::vector <wxPoint>& aPoints, const wxPoint& Pos )
+                                     std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
     {
         aPoints.clear();
     }
@@ -315,7 +315,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter ) override;
+    void Plot( PLOTTER* aPlotter ) const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -416,7 +416,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                             std::vector<wxPoint>& aPoints, const wxPoint& aPos ) override;
+                             std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const override;
 
     void UpdateIntersheetRefProps();
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
@@ -437,7 +437,7 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
-    void Plot( PLOTTER* aPlotter ) override;
+    void Plot( PLOTTER* aPlotter ) const override;
 
     SCH_FIELD* GetIntersheetRefs() { return &m_intersheetRefsField; }
     void SetIntersheetRefs( const SCH_FIELD& aField ) { m_intersheetRefsField = aField; }
@@ -490,7 +490,9 @@ public:
     wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
-                             const wxPoint& Pos ) override;
+                             const wxPoint& aPos ) const override;
+    void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
+                             const wxPoint& aPos, PINSHEETLABEL_SHAPE aShape ) const;
 
     const EDA_RECT GetBoundingBox() const override;
 

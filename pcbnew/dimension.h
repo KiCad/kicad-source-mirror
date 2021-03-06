@@ -206,8 +206,8 @@ public:
      */
     const wxString GetText() const;
 
-    PCB_TEXT&      Text() { return m_text; }
-    PCB_TEXT&      Text() const { return *( const_cast<PCB_TEXT*> ( &m_text ) ); }
+    PCB_TEXT& Text() { return m_text; }
+    const PCB_TEXT& Text() const { return m_text; }
 
     /**
      * @return a list of line segments that make up this dimension (for drawing, plotting, etc)
@@ -271,9 +271,9 @@ protected:
      * @param aStart if true will start from aSeg.A, otherwise aSeg.B
      * @return a point on aSeg that collides with aPoly closest to the start, if one exists
      */
-    static OPT_VECTOR2I segPolyIntersection( SHAPE_POLY_SET& aPoly, SEG& aSeg, bool aStart = true );
+    static OPT_VECTOR2I segPolyIntersection( const SHAPE_POLY_SET& aPoly, const SEG& aSeg, bool aStart = true );
     static OPT_VECTOR2I segCircleIntersection( CIRCLE& aCircle, SEG& aSeg, bool aStart = true );
-
+    
     // Value format
     bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
     wxString          m_valueString;     ///< Displayed value when m_overrideValue = true

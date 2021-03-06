@@ -544,7 +544,7 @@ void LIB_PART::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
 
 
 void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-                     const TRANSFORM& aTransform )
+                     const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != NULL );
 
@@ -553,7 +553,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& 
 
     // draw background for filled items using background option
     // Solid lines will be drawn after the background
-    for( LIB_ITEM& item : m_drawings )
+    for( const LIB_ITEM& item : m_drawings )
     {
         // Lib Fields are not plotted here, because this plot function
         // is used to plot schematic items, which have they own fields
@@ -572,7 +572,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& 
 
     // Not filled items and filled shapes are now plotted
     // Items that have BG fills only get re-stroked to ensure the edges are in the foreground
-    for( LIB_ITEM& item : m_drawings )
+    for( const LIB_ITEM& item : m_drawings )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -692,7 +692,7 @@ LIB_ITEM* LIB_PART::GetNextDrawItem( const LIB_ITEM* aItem, KICAD_T aType )
 }
 
 
-void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
+void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
 {
     /* Notes:
      * when aUnit == 0: no unit filtering
@@ -700,7 +700,7 @@ void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
      * when m_unit == 0, the body item is common to units
      * when m_convert == 0, the body item is common to shapes
      */
-    for( LIB_ITEM& item : m_drawings[ LIB_PIN_T ] )
+    for( const LIB_ITEM& item : m_drawings[ LIB_PIN_T ] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
@@ -715,7 +715,7 @@ void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 }
 
 
-LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
+LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert ) const
 {
     LIB_PINS pinList;
 
@@ -733,20 +733,20 @@ LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 }
 
 
-bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
-        bool aTestType, bool aTestOrientation, bool aTestLength )
+bool LIB_PART::PinsConflictWith( const LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
+        bool aTestType, bool aTestOrientation, bool aTestLength ) const
 {
     LIB_PINS thisPinList;
     GetPins( thisPinList, /* aUnit */ 0, /* aConvert */ 0 );
 
-    for( LIB_PIN* eachThisPin : thisPinList )
+    for( const LIB_PIN* eachThisPin : thisPinList )
     {
         wxASSERT( eachThisPin );
         LIB_PINS otherPinList;
         aOtherPart.GetPins( otherPinList, /* aUnit */ 0, /* aConvert */ 0 );
         bool foundMatch = false;
 
-        for( LIB_PIN* eachOtherPin : otherPinList )
+        for( const LIB_PIN* eachOtherPin : otherPinList )
         {
             wxASSERT( eachOtherPin );
 

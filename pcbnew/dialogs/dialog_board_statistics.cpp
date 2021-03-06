@@ -234,7 +234,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 
                 auto it = m_drillTypes.begin();
 
-                for( ; it != m_drillTypes.end(); it++ )
+                for( ; it != m_drillTypes.end(); ++it )
                 {
                     if( *it == drill )
                     {
@@ -272,7 +272,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 
             auto it = m_drillTypes.begin();
 
-            for( ; it != m_drillTypes.end(); it++ )
+            for( ; it != m_drillTypes.end(); ++it )
             {
                 if( *it == drill )
                 {
@@ -348,10 +348,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 
 void DIALOG_BOARD_STATISTICS::updateWidets()
 {
-    int totalPads = 0;
+    int totalPads  = 0;
     int currentRow = 0;
 
-    for( auto& type : m_padsTypes )
+    for( const auto& type : m_padsTypes )
     {
         m_gridPads->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridPads->SetCellValue(
@@ -366,7 +366,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     int totalVias = 0;
     currentRow = 0;
 
-    for( auto& type : m_viasTypes )
+    for( const auto& type : m_viasTypes )
     {
         m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridVias->SetCellValue(
@@ -380,12 +380,12 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
 
     int totalFront = 0;
-    int totalBack = 0;
+    int totalBack  = 0;
 
     // We don't use row 0, as there labels are
     currentRow = 1;
 
-    for( auto& type : m_componentsTypes )
+    for( const auto& type : m_componentsTypes )
     {
         m_gridComponents->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridComponents->SetCellValue(
@@ -395,7 +395,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         m_gridComponents->SetCellValue( currentRow, 3,
                 wxString::Format( wxT( "%i " ), type.frontSideQty + type.backSideQty ) );
         totalFront += type.frontSideQty;
-        totalBack += type.backSideQty;
+        totalBack  += type.backSideQty;
         currentRow++;
     }
 
@@ -439,7 +439,7 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
     BOARD* board = m_parentFrame->GetBoard();
     int    currentRow = 0;
 
-    for( auto& type : m_drillTypes )
+    for( const auto& type : m_drillTypes )
     {
         wxString shapeStr;
         wxString startLayerStr;

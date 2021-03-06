@@ -266,7 +266,7 @@ void ERC_SETTINGS::ResetPinMap()
 }
 
 
-void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER* )> aVisitor )
+void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const
 {
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
@@ -279,16 +279,16 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
         if( firstTime )
             seenScreens.insert( sheetList[i].LastScreen() );
 
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
 
             // Don't show non-specific markers more than once
             if( !firstTime &&
-                !static_cast<ERC_ITEM*>( marker->GetRCItem().get() )->IsSheetSpecific() )
+                !static_cast<const ERC_ITEM*>( marker->GetRCItem().get() )->IsSheetSpecific() )
             {
                 continue;
             }
@@ -323,14 +323,14 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 }
 
 
-int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
+int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
 {
     if( aSeverity < 0 )
         return m_filteredMarkers.size();
 
     int count = 0;
 
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    const ERC_SETTINGS& settings = m_schematic->ErcSettings();
 
     visitMarkers(
             [&]( SCH_MARKER* aMarker )
@@ -350,7 +350,7 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
 }
 
 
-std::shared_ptr<ERC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetERCItem( int aIndex )
+std::shared_ptr<ERC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetERCItem( int aIndex ) const
 {
     SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
 
@@ -358,7 +358,7 @@ std::shared_ptr<ERC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetERCItem( int aIndex )
 }
 
 
-std::shared_ptr<RC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
+std::shared_ptr<RC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex ) const
 {
     return GetERCItem( aIndex );
 }

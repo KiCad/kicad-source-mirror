@@ -1848,7 +1848,7 @@ bool SCH_COMPONENT::IsInNetlist() const
 }
 
 
-void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
+void SCH_COMPONENT::Plot( PLOTTER* aPlotter ) const
 {
     if( m_part )
     {

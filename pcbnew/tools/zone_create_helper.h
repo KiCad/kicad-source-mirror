@@ -104,7 +104,7 @@ public:
      * @param aZone the zone to removed area from
      * @param aCutout the area to remove
      */
-    void performZoneCutout( ZONE& aZone, ZONE& aCutout );
+    void performZoneCutout( ZONE& aZone, const ZONE& aCutout );
 
     /**
      * Commit the current zone-in-progress to the BOARD.
@@ -132,4 +132,4 @@ private:
     std::unique_ptr<ZONE> m_zone;
 };
 
-#endif /* __DRAWING_TOOL_H */
+#endif // TOOLS_ZONE_CREATE_HELPER__H_

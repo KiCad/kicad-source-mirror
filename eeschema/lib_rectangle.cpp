@@ -122,7 +122,7 @@ void LIB_RECTANGLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                          const TRANSFORM& aTransform )
+                          const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != NULL );
 

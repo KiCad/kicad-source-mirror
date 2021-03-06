@@ -112,12 +112,8 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines(wxGrid& grid,
         return logicalLines;
 
     wxArrayString physicalLines;
-    for ( wxArrayString::const_iterator it = logicalLines.begin();
-          it != logicalLines.end();
-          ++it )
+    for ( const wxString& line : logicalLines )
     {
-        const wxString& line = *it;
-
         if ( dc.GetTextExtent(line).x > maxWidth )
         {
             // Line does not fit, break it up.

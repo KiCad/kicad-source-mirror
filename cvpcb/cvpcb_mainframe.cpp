@@ -1058,7 +1058,7 @@ wxWindow* CVPCB_MAINFRAME::GetToolCanvas() const
 }
 
 
-CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl()
+CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl() const
 {
     if( m_libListBox->HasFocus() )
         return CVPCB_MAINFRAME::CONTROL_LIBRARY;
@@ -1071,7 +1071,7 @@ CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl()
 }
 
 
-wxControl* CVPCB_MAINFRAME::GetFocusedControlObject()
+wxControl* CVPCB_MAINFRAME::GetFocusedControlObject() const
 {
     if( m_libListBox->HasFocus() )
         return m_libListBox;

@@ -169,7 +169,7 @@ public:
      */
     wxString GetFullText( int unit = 1 ) const;
 
-    SCH_LAYER_ID GetDefaultLayer();
+    SCH_LAYER_ID GetDefaultLayer() const;
 
     void BeginEdit( const wxPoint aStartPoint ) override;
 
@@ -184,7 +184,7 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform ) override;
+               const TRANSFORM& aTransform ) const override;
 
     int GetWidth() const override { return GetTextThickness(); }
     void SetWidth( int aWidth ) override { SetTextThickness( aWidth ); }

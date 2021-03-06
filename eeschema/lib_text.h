@@ -103,7 +103,7 @@ public:
     void NormalizeJustification( bool inverse );
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform ) override;
+               const TRANSFORM& aTransform ) const override;
 
     int GetWidth() const override { return GetTextThickness(); }
     void SetWidth( int aWidth ) override { SetTextThickness( aWidth ); }

@@ -73,7 +73,7 @@
  * and a group of board items
  */
 
-COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
+COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer ) const
 {
     COLOR4D color = ColorSettings()->GetColor( aLayer );
 
@@ -86,7 +86,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
+void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
 {
     wxPoint shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;
@@ -286,9 +286,9 @@ void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMod
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
+void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 {
-    FP_TEXT*  textItem = &aFootprint->Reference();
+    const FP_TEXT* textItem = &aFootprint->Reference();
     LAYER_NUM textLayer = textItem->GetLayer();
 
     // Reference and value are specfic items, not in graphic items list
@@ -298,7 +298,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
         PlotFootprintTextItem( textItem, getColor( textLayer ) );
     }
 
-    textItem = &aFootprint->Value();
+    textItem  = &aFootprint->Value();
     textLayer = textItem->GetLayer();
 
     if( GetPlotValue() && m_layerMask[textLayer]
@@ -307,9 +307,9 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
         PlotFootprintTextItem( textItem, getColor( textLayer ) );
     }
 
-    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        textItem = dyn_cast<FP_TEXT*>( item );
+        textItem = dyn_cast<const FP_TEXT*>( item );
 
         if( !textItem )
             continue;
@@ -372,7 +372,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     }
 }
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor )
+void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, COLOR4D aColor )
 {
     if( aColor == COLOR4D::WHITE )
         aColor = COLOR4D( LIGHTGRAY );
@@ -380,9 +380,9 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor 
     m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
-    wxSize  size = aTextMod->GetTextSize();
-    wxPoint pos = aTextMod->GetTextPos();
-    double  orient = aTextMod->GetDrawRotation();
+    wxSize  size      = aTextMod->GetTextSize();
+    wxPoint pos       = aTextMod->GetTextPos();
+    double  orient    = aTextMod->GetDrawRotation();
     int     thickness = aTextMod->GetEffectiveTextPenWidth();
 
     if( aTextMod->IsMirrored() )
@@ -396,7 +396,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor 
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    FOOTPRINT* parent = static_cast<FOOTPRINT*> ( aTextMod->GetParent() );
+    const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aTextMod->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     m_plotter->SetCurrentLineWidth( thickness );
@@ -407,7 +407,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor 
 }
 
 
-void BRDITEMS_PLOTTER::PlotDimension( DIMENSION_BASE* aDim )
+void BRDITEMS_PLOTTER::PlotDimension( const DIMENSION_BASE* aDim )
 {
     if( !m_layerMask[aDim->GetLayer()] )
         return;
@@ -462,16 +462,16 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION_BASE* aDim )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
+void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 {
-    int     dx1, dx2, dy1, dy2, radius;
+    int dx1, dx2, dy1, dy2, radius;
 
     if( !m_layerMask[aMire->GetLayer()] )
         return;
 
     m_plotter->SetColor( getColor( aMire->GetLayer() ) );
 
-    PCB_SHAPE  draw;
+    PCB_SHAPE draw;
 
     draw.SetShape( S_CIRCLE );
     draw.SetFilled( false );
@@ -517,11 +517,11 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 
 
 // Plot footprints graphic items (outlines)
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( FOOTPRINT* aFootprint )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 {
-    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        FP_SHAPE* shape = dynamic_cast<FP_SHAPE*>( item );
+        const FP_SHAPE* shape = dynamic_cast<const FP_SHAPE*>( item );
 
         if( shape && m_layerMask[ shape->GetLayer() ] )
             PlotFootprintGraphicItem( shape );
@@ -530,7 +530,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( FOOTPRINT* aFootprint )
 
 
 //* Plot a graphic item (outline) relative to a footprint
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 {
     if( aShape->Type() != PCB_FP_SHAPE_T )
         return;
@@ -544,7 +544,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    FOOTPRINT* parent = static_cast<FOOTPRINT*> ( aShape->GetParent() );
+    const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aShape->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
@@ -627,7 +627,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
             // We must compute board coordinates from m_PolyList which are relative to the parent
             // position at orientation 0
-            FOOTPRINT *parentFootprint = aShape->GetParentFootprint();
+            const FOOTPRINT *parentFootprint = aShape->GetParentFootprint();
 
             std::vector<wxPoint> cornerList;
 
@@ -691,7 +691,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
 
 // Plot a PCB Text, i.e. a text found on a copper or technical layer
-void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
+void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
 {
     wxString shownText( aText->GetShownText() );
 
@@ -734,7 +734,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
 
         aText->GetLinePositions( positions, strings_list.Count() );
 
-        for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
+        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
             m_plotter->Text( positions[ii], color, txt, orient, size, aText->GetHorizJustify(),
@@ -751,7 +751,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
 }
 
 
-void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
+void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET& polysList )
 {
     if( polysList.IsEmpty() )
         return;
@@ -796,7 +796,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
 
     for( int idx = 0; idx < polysList.OutlineCount(); ++idx )
     {
-        SHAPE_LINE_CHAIN& outline = polysList.Outline( idx );
+        const SHAPE_LINE_CHAIN& outline = polysList.Outline( idx );
 
         cornerList.clear();
         cornerList.reserve( outline.PointCount() );
@@ -855,7 +855,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
 
 /* Plot items type PCB_SHAPE on layers allowed by aLayerMask
  */
-void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
+void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 {
     if( !m_layerMask[aShape->GetLayer()] )
         return;

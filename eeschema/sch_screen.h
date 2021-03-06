@@ -162,7 +162,7 @@ public:
     EE_RTREE& Items() { return m_rtree; }
     const EE_RTREE& Items() const { return m_rtree; }
 
-    bool IsEmpty()
+    bool IsEmpty() const
     {
         return m_rtree.empty();
     }
@@ -249,7 +249,7 @@ public:
      * @return The item found that meets the search criteria or NULL if none found.
      */
     SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
-                       KICAD_T aType = SCH_LOCATE_ANY_T );
+                       KICAD_T aType = SCH_LOCATE_ANY_T ) const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
@@ -294,7 +294,7 @@ public:
      *
      * @param aPlotter The plotter object to plot to.
      */
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) const;
 
     /**
      * Remove \a aItem from the schematic associated with this screen.
@@ -322,7 +322,7 @@ public:
      */
     void DeleteItem( SCH_ITEM* aItem );
 
-    bool CheckIfOnDrawList( SCH_ITEM* st );
+    bool CheckIfOnDrawList( const SCH_ITEM* aItem ) const;
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
@@ -330,7 +330,7 @@ public:
      * @param aChangedHandler an optional callback to make on each changed item
      */
     void TestDanglingEnds( const SCH_SHEET_PATH* aPath = nullptr,
-                           std::function<void( SCH_ITEM* )>* aChangedHandler = nullptr );
+                           std::function<void( SCH_ITEM* )>* aChangedHandler = nullptr ) const;
 
     /**
      * Return all wires and junctions connected to \a aSegment which are not connected any
@@ -345,7 +345,7 @@ public:
      */
     void ClearDrawingState();
 
-    size_t CountConnectedItems( const wxPoint& aPos, bool aTestJunctions );
+    size_t CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
 
     /**
      * Test if a junction is required for the items at \a aPosition on the screen.
@@ -362,7 +362,7 @@ public:
      * @param aNew Checks if a _new_ junction is needed, i.e. there isn't one already
      * @return True if a junction is required at \a aPosition.
      */
-    bool IsJunctionNeeded( const wxPoint& aPosition, bool aNew = false );
+    bool IsJunctionNeeded( const wxPoint& aPosition, bool aNew = false ) const;
 
     /**
      * Test if \a aPosition is a connection point on \a aLayer.
@@ -372,7 +372,7 @@ public:
      *               #LAYER_BUS, and #LAYER_WIRE.
      * @return True if \a Position is a connection point on \a aLayer.
      */
-    bool IsTerminalPoint( const wxPoint& aPosition, int aLayer );
+    bool IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const;
 
     /**
      * Test the screen for a component pin item at \a aPosition.
@@ -384,7 +384,7 @@ public:
      * @return The pin item if found, otherwise NULL.
      */
     LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol = NULL,
-                     bool aEndPointOnly = false );
+                     bool aEndPointOnly = false ) const;
 
     /**
      * Test the screen if \a aPosition is a sheet label object.
@@ -392,7 +392,7 @@ public:
      * @param aPosition The position to test.
      * @return The sheet label object if found otherwise NULL.
      */
-    SCH_SHEET_PIN* GetSheetPin( const wxPoint& aPosition );
+    SCH_SHEET_PIN* GetSheetPin( const wxPoint& aPosition ) const;
 
     /**
      * Clear the annotation for the components in \a aSheetPath on the screen.
@@ -418,14 +418,14 @@ public:
      *
      * @param aItems Hierarchical item list to fill.
      */
-    void GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems );
+    void GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const;
 
     /**
      * Similar to Items().OfType( SCH_SHEET_T ), but return the sheets in a
      * deterministic order (L-R, T-B) for sheet numbering.
      * @param aItems
      */
-    void GetSheets( std::vector<SCH_ITEM*>* aItems );
+    void GetSheets( std::vector<SCH_ITEM*>* aItems ) const;
 
     /**
      * Return a line item located at \a aPosition.
@@ -438,16 +438,16 @@ public:
      *         found.
      */
     SCH_LINE* GetLine( const wxPoint& aPosition, int aAccuracy = 0, int aLayer = LAYER_NOTES,
-                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T );
+                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T ) const;
 
     SCH_LINE* GetWire( const wxPoint& aPosition, int aAccuracy = 0,
-                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T )
+                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T ) const
     {
         return GetLine( aPosition, aAccuracy, LAYER_WIRE, aSearchType );
     }
 
     SCH_LINE* GetBus( const wxPoint& aPosition, int aAccuracy = 0,
-                      SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T )
+                      SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T ) const
     {
         return GetLine( aPosition, aAccuracy, LAYER_BUS, aSearchType );
     }
@@ -460,7 +460,7 @@ public:
      * @return The SCH_TEXT* of the label item found at \a aPosition or NULL if item not
      *         found.
      */
-    SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 );
+    SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 ) const;
 
     /**
      * Fetch a list of unique #LIB_PART object pointers required to properly render each
@@ -469,6 +469,7 @@ public:
      * @return The list of unique #LIB_PART object pointers.
      */
     std::map<wxString, LIB_PART*>& GetLibSymbols() { return m_libSymbols; }
+    const std::map<wxString, LIB_PART*>& GetLibSymbols() const { return m_libSymbols; }
 
     /**
      * Add \a aLibSymbol to the the library symbol map.
@@ -497,7 +498,7 @@ public:
     /**
      * Returns a list of bus aliases defined in this screen
      */
-    std::unordered_set< std::shared_ptr<BUS_ALIAS> > GetBusAliases()
+    std::unordered_set< std::shared_ptr<BUS_ALIAS> > GetBusAliases() const
     {
         return m_aliases;
     }

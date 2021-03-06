@@ -156,12 +156,12 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
             if( pitem->Type() != PCB_PAD_T )
                 continue;
 
-            PAD *pad = static_cast<PAD*>( pitem );
+            const PAD *pad = static_cast<const PAD*>( pitem );
 
             wxString toName = pad->GetParent()->GetReference() + "-" + pad->GetName();
 
 
-            for ( auto& endpoint : m_ftEndpoints )
+            for ( const auto& endpoint : m_ftEndpoints )
             {
                 if( pad == endpoint.parent )
                 {
@@ -213,7 +213,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         if( result == PS_NO_PATH )
             continue;
 
-        for( auto item : upath )
+        for( const auto item : upath )
         {
             path.pathItems.insert( item->Parent() );
         }
@@ -222,7 +222,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         newPaths++;
     }
 
-    //reportAux( _("Cached %d paths\n"), newPaths );
+    // reportAux( _("Cached %d paths\n"), newPaths );
 
     return newPaths;
 }

@@ -404,8 +404,8 @@ public:
     /**
      * Convert cross-references back and forth between ${refDes:field} and ${kiid:field}
      */
-    wxString ConvertCrossReferencesToKIIDs( const wxString& aSource );
-    wxString ConvertKIIDsToCrossReferences( const wxString& aSource );
+    wxString ConvertCrossReferencesToKIIDs( const wxString& aSource ) const;
+    wxString ConvertKIIDsToCrossReferences( const wxString& aSource ) const;
 
     /**
      * Return a list of missing connections between components/tracks.
@@ -583,7 +583,7 @@ public:
      * @param aLayer One of the two allowed layers for footprints: F_Cu or B_Cu
      * @return bool - true if the layer is visible, else false.
      */
-    bool IsFootprintLayerVisible( PCB_LAYER_ID aLayer );
+    bool IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
@@ -635,7 +635,7 @@ public:
      * @param aLayer = A copper layer, like B_Cu, etc.
      * @param aOutlines The SHAPE_POLY_SET to fill in with items outline.
      */
-    void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines );
+    void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines ) const;
 
     /**
      * Return the ID of a layer.
@@ -861,7 +861,7 @@ public:
      * Tokens may appear more than once if they were harvested from hierarchical nets
      * (ie: /CLK, /sheet1/CLK).
      */
-    std::vector<wxString> GetNetClassAssignmentCandidates();
+    std::vector<wxString> GetNetClassAssignmentCandidates() const;
 
     /**
      * Copy NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -919,7 +919,7 @@ public:
     /**
      * @return a std::list of pointers to all board zones (possibly including zones in footprints)
      */
-    std::list<ZONE*> GetZoneList( bool aIncludeZonesInFootprints = false );
+    std::list<ZONE*> GetZoneList( bool aIncludeZonesInFootprints = false ) const;
 
     /**
      * @return The number of copper pour areas or ZONEs.
@@ -981,8 +981,8 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask );
-    PAD* GetPad( const wxPoint& aPosition )
+    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask ) const;
+    PAD* GetPad( const wxPoint& aPosition ) const
     {
         return GetPad( aPosition, LSET().set() );
     }
@@ -994,7 +994,7 @@ public:
      * @param aEndPoint The end point of \a aTrace the hit test against.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint );
+    PAD* GetPad( const TRACK* aTrace, ENDPOINT_T aEndPoint ) const;
 
     /**
      * Return pad found at \a aPosition on \a aLayerMask using the fast search method.
@@ -1005,7 +1005,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPadFast( const wxPoint& aPosition, LSET aLayerMask );
+    PAD* GetPadFast( const wxPoint& aPosition, LSET aLayerMask ) const;
 
     /**
      * Locate the pad connected at \a aPosition on \a aLayer starting at list position
@@ -1021,7 +1021,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a PAD object pointer to the connected pad.
      */
-    PAD* GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask );
+    PAD* GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask ) const;
 
     /**
      * Delete a given pad from the BOARD by removing it from its footprint and from the
@@ -1040,7 +1040,7 @@ public:
      *                  = -1 to build the full pad list.
      *                  = a given netcode to build the pad list relative to the given net
      */
-    void GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode = -1 );
+    void GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode = -1 ) const;
 
     /**
      * Returns data on the length and number of track segments connected to a given track.
@@ -1072,7 +1072,7 @@ public:
      * @param aIgnoreLocked Ignore locked footprints when true.
      */
     FOOTPRINT* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
-                             bool aVisibleOnly, bool aIgnoreLocked = false );
+                             bool aVisibleOnly, bool aIgnoreLocked = false ) const;
 
     /**
      * Reset all items' netcodes to 0 (no net).

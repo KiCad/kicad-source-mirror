@@ -100,7 +100,7 @@ public:
     virtual ~LIB_PART();
 
     ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
-    PART_SPTR SharedPtr() { return m_me; }
+    PART_SPTR SharedPtr() const { return m_me; }
 
     /**
      * Create a copy of a LIB_PART and assigns unique KIIDs to the copy and its children.
@@ -169,7 +169,7 @@ public:
 
     const wxString GetLibraryName() const;
 
-    PART_LIB* GetLib()                { return m_library; }
+    PART_LIB* GetLib() const          { return m_library; }
     void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
     timestamp_t GetLastModDate() const { return m_lastModDate; }
@@ -311,7 +311,7 @@ public:
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-               const TRANSFORM& aTransform );
+               const TRANSFORM& aTransform ) const;
 
     /**
      * Plot Lib Fields only of the part to plotter.
@@ -381,7 +381,7 @@ public:
      * @param aConvert - Convert number of pin to add to list.  Set to 0 to
      *                   get pins from any convert of part.
      */
-    void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 );
+    void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
 
     /**
      * Return pin object with the requested pin \a aNumber.
@@ -393,7 +393,7 @@ public:
      *                   no alternate body style is required.
      * @return The pin object if found.  Otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 );
+    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 ) const;
 
     /**
      * Return true if this part's pins do not match another part's pins. This
@@ -407,8 +407,8 @@ public:
      * @param aTestOrientation - Whether two pins at the same point must have the same orientation.
      * @param aTestLength - Whether two pins at the same point must have the same length.
      */
-    bool PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
-                           bool aTestType, bool aTestOrientation, bool aTestLength );
+    bool PinsConflictWith( const LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
+                           bool aTestType, bool aTestOrientation, bool aTestLength ) const;
 
     /**
      * Move the part \a aOffset.
@@ -552,7 +552,7 @@ public:
      * @param aOffset - The offset in mils.
      */
     void SetPinNameOffset( int aOffset ) { m_pinNameOffset = aOffset; }
-    int GetPinNameOffset() { return m_pinNameOffset; }
+    int GetPinNameOffset() const { return m_pinNameOffset; }
 
     /**
      * Set or clear the pin name visibility flag.
@@ -560,7 +560,7 @@ public:
      * @param aShow - True to make the part pin names visible.
      */
     void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
-    bool ShowPinNames() { return m_showPinNames; }
+    bool ShowPinNames() const { return m_showPinNames; }
 
     /**
      * Set or clear the pin number visibility flag.
@@ -568,7 +568,7 @@ public:
      * @param aShow - True to make the part pin numbers visible.
      */
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
-    bool ShowPinNumbers() { return m_showPinNumbers; }
+    bool ShowPinNumbers() const { return m_showPinNumbers; }
 
     /**
      * Set or clear the include in schematic bill of materials flag.

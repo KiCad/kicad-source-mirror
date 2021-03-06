@@ -94,7 +94,7 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform ) override;
+               const TRANSFORM& aTransform ) const override;
 
     int GetWidth() const override { return m_Width; }
     void SetWidth( int aWidth ) override { m_Width = aWidth; }

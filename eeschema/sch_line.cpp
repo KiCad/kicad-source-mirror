@@ -826,7 +826,7 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-void SCH_LINE::Plot( PLOTTER* aPlotter )
+void SCH_LINE::Plot( PLOTTER* aPlotter ) const
 {
     auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     int     penWidth;

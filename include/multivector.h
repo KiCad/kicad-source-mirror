@@ -239,7 +239,7 @@ public:
         }
     }
 
-    bool empty( int aType = UNDEFINED_TYPE )
+    bool empty( int aType = UNDEFINED_TYPE ) const
     {
         return ( size( aType ) == 0 );
     }

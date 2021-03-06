@@ -75,7 +75,7 @@ public:
         }
     }
 
-    int GetCount( int aSeverity = -1 ) override
+    int GetCount( int aSeverity = -1 ) const override
     {
         if( aSeverity < 0 )
             return m_filteredMarkers.size();
@@ -100,7 +100,7 @@ public:
         return count;
     }
 
-    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override
     {
         PCB_MARKER* marker = m_filteredMarkers[ aIndex ];
 
@@ -167,7 +167,7 @@ public:
         }
     }
 
-    int  GetCount( int aSeverity = -1 ) override
+    int GetCount( int aSeverity = -1 ) const override
     {
         if( aSeverity < 0 )
             return m_filteredVector.size();
@@ -187,7 +187,7 @@ public:
         return count;
     }
 
-    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override
     {
         return (m_filteredVector)[aIndex];
     }

@@ -170,7 +170,7 @@ bool SCH_NO_CONNECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
+void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter ) const
 {
     int delta = GetSize() / 2;
     int pX = m_pos.x;

@@ -183,7 +183,7 @@ bool SCH_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 }
 
 
-void SCH_BITMAP::Plot( PLOTTER* aPlotter )
+void SCH_BITMAP::Plot( PLOTTER* aPlotter ) const
 {
     m_image->PlotImage( aPlotter, m_pos, aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
                         aPlotter->RenderSettings()->GetDefaultPenWidth() );

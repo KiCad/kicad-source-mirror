@@ -206,7 +206,7 @@ public:
      */
     virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
 
-    EDA_ITEM* GetItem( const KIID& aId ) override;
+    EDA_ITEM* GetItem( const KIID& aId ) const override;
 
     void FocusOnItem( BOARD_ITEM* aItem );
 

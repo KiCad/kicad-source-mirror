@@ -256,7 +256,7 @@ void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 
 
 void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                      const TRANSFORM& aTransform )
+                      const TRANSFORM& aTransform ) const
 {
     if( GetText().IsEmpty() )
         return;
@@ -350,7 +350,7 @@ void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-SCH_LAYER_ID LIB_FIELD::GetDefaultLayer()
+SCH_LAYER_ID LIB_FIELD::GetDefaultLayer() const
 {
     switch( m_id )
     {

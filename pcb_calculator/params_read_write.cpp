@@ -136,7 +136,7 @@ bool IsSelectedInDialog( enum PRMS_ID aPrmId )
  * @param aPrmId = param id to write
  * @return the value always in normalized unit (meter, Hz, Ohm, radian)
  */
-double PCB_CALCULATOR_FRAME::GetPrmValue( enum PRMS_ID aPrmId )
+double PCB_CALCULATOR_FRAME::GetPrmValue( enum PRMS_ID aPrmId ) const
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
@@ -238,7 +238,7 @@ void PCB_CALCULATOR_FRAME::SetResult( int aLineNumber, const wxString& aText )
  * @return true if the param aPrmId is selected
  * Has meaning only for params that have a radio button
  */
-bool PCB_CALCULATOR_FRAME::IsPrmSelected( enum PRMS_ID aPrmId )
+bool PCB_CALCULATOR_FRAME::IsPrmSelected( enum PRMS_ID aPrmId ) const
 {
     switch( aPrmId )
     {

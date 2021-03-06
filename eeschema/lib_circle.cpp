@@ -163,7 +163,7 @@ void LIB_CIRCLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform )
+                       const TRANSFORM& aTransform ) const
 {
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 

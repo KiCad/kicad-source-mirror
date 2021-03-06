@@ -60,12 +60,11 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
-    void Plot( PLOTTER* aPlotter ) override
+    void Plot( PLOTTER* /* aPlotter */ ) const override
     {
         // SCH_MARKERs should not be plotted. However, SCH_ITEM will fail an
         // assertion if we do not confirm this by locally implementing a no-op
         // Plot().
-        (void) aPlotter;
     }
 
     EDA_RECT const GetBoundingBox() const override;

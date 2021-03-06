@@ -175,7 +175,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 }
 
 
-EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId )
+EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId ) const
 {
     return GetBoard()->GetItem( aId );
 }

@@ -303,19 +303,19 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 }
 
 
-bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
+bool SCH_SCREEN::CheckIfOnDrawList( const SCH_ITEM* aItem ) const
 {
     return m_rtree.contains( aItem, true );
 }
 
 
-SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType )
+SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
 {
     EDA_RECT bbox;
     bbox.SetOrigin( aPosition );
     bbox.Inflate( aAccuracy );
 
-    for( auto item : Items().Overlapping( aType, bbox ) )
+    for( SCH_ITEM* item : Items().Overlapping( aType, bbox ) )
     {
         if( item->HitTest( aPosition, aAccuracy ) )
             return item;
@@ -370,7 +370,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 }
 
 
-bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
+bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
 {
     enum { WIRES, BUSES } layers;
 
@@ -381,7 +381,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 
     std::vector<SCH_LINE*> lines[ sizeof( layers ) ];
 
-    for( SCH_ITEM* item : Items().Overlapping( aPosition ) )
+    for( const SCH_ITEM* item : Items().Overlapping( aPosition ) )
     {
         if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
@@ -427,7 +427,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
     {
         bool removed_overlapping = false;
 
-        for( auto line = lines[i].begin(); line < lines[i].end(); line++ )
+        for( auto line = lines[i].begin(); line < lines[i].end(); ++line )
         {
             /// A line with a midpoint should be counted as two endpoints for this calculation
             /// because the junction will split the line into two if there is another item
@@ -437,7 +437,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
             else
                 end_count[i]++;
 
-            for( auto second_line = lines[i].end() - 1; second_line > line; second_line-- )
+            for( auto second_line = lines[i].end() - 1; second_line > line; --second_line )
             {
                 if( !(*line)->IsParallel( *second_line ) )
                     has_nonparallel[i] = true;
@@ -480,7 +480,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 }
 
 
-bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
+bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const
 {
     wxCHECK_MSG( aLayer == LAYER_NOTES || aLayer == LAYER_BUS || aLayer == LAYER_WIRE, false,
                  wxT( "Invalid layer type passed to SCH_SCREEN::IsTerminalPoint()." ) );
@@ -790,7 +790,7 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 }
 
 
-void SCH_SCREEN::Plot( PLOTTER* aPlotter )
+void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector< SCH_ITEM* > junctions;
@@ -825,19 +825,19 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
     // the bitmap PS command clears the screen
-    for( SCH_ITEM* item : bitmaps )
+    for( const SCH_ITEM* item : bitmaps )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
-    for( SCH_ITEM* item : other )
+    for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
-    for( SCH_ITEM* item : junctions )
+    for( const SCH_ITEM* item : junctions )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
@@ -853,7 +853,7 @@ void SCH_SCREEN::ClearDrawingState()
 
 
 LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
-                             bool aEndPointOnly )
+                             bool aEndPointOnly ) const
 {
     SCH_COMPONENT*  candidate = NULL;
     LIB_PIN*        pin = NULL;
@@ -904,7 +904,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
 }
 
 
-SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition )
+SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition ) const
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
 
@@ -922,11 +922,11 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition )
 }
 
 
-size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions )
+size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const
 {
     size_t count = 0;
 
-    for( SCH_ITEM* item : Items() )
+    for( const SCH_ITEM* item : Items() )
     {
         if( ( item->Type() != SCH_JUNCTION_T || aTestJunctions ) && item->IsConnected( aPos ) )
             count++;
@@ -964,7 +964,7 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 }
 
 
-void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems )
+void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const
 {
     static KICAD_T hierarchicalTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
 
@@ -976,7 +976,7 @@ void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems )
 }
 
 
-void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems )
+void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems ) const
 {
     for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
         aItems->push_back( item );
@@ -993,7 +993,7 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems )
 
 
 void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
-                                   std::function<void( SCH_ITEM* )>* aChangedHandler )
+                                   std::function<void( SCH_ITEM* )>* aChangedHandler ) const
 {
     std::vector<DANGLING_END_ITEM> endPoints;
 
@@ -1012,7 +1012,7 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
 
 
 SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
-                               SCH_LINE_TEST_T aSearchType )
+                               SCH_LINE_TEST_T aSearchType ) const
 {
     // an accuracy of 0 had problems with rounding errors; use at least 1
     aAccuracy = std::max( aAccuracy, 1 );
@@ -1048,7 +1048,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
 }
 
 
-SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
+SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )
     {
@@ -1058,7 +1058,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
             if( item->HitTest( aPosition, aAccuracy ) )
-                return (SCH_TEXT*) item;
+                return static_cast<SCH_TEXT*>( item );
 
             break;
 

@@ -251,7 +251,7 @@ void LIB_ARC::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                    const TRANSFORM& aTransform )
+                    const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != NULL );
 

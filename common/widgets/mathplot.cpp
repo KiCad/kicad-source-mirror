@@ -80,7 +80,7 @@ mpLayer::mpLayer() : m_type( mpLAYER_UNDEF )
 }
 
 
-wxBitmap mpLayer::GetColourSquare( int side )
+wxBitmap mpLayer::GetColourSquare( int side ) const
 {
     wxBitmap    square( side, side, -1 );
     wxColour    filler = m_pen.GetColour();
@@ -193,13 +193,13 @@ void mpInfoLayer::Plot( wxDC& dc, mpWindow& w )
 }
 
 
-wxPoint mpInfoLayer::GetPosition()
+wxPoint mpInfoLayer::GetPosition() const
 {
     return m_dim.GetPosition();
 }
 
 
-wxSize mpInfoLayer::GetSize()
+wxSize mpInfoLayer::GetSize() const
 {
     return m_dim.GetSize();
 }
@@ -963,11 +963,11 @@ mpScaleBase::mpScaleBase()
 }
 
 #if 0
-int mpScaleBase::getLabelDecimalDigits( int maxDigits )
+int mpScaleBase::getLabelDecimalDigits( int maxDigits ) const
 {
     int m = 0;
 
-    for( auto l : m_tickLabels )
+    for( const TickLabel& l : m_tickLabels )
     {
         int k = countDecimalDigits( l.pos );
         m = std::max( k, m );
@@ -975,9 +975,7 @@ int mpScaleBase::getLabelDecimalDigits( int maxDigits )
 
     return std::min( m, maxDigits );
 }
-
-
-#endif
+#endif // 0
 
 void mpScaleBase::computeLabelExtents( wxDC& dc, mpWindow& w )
 {
@@ -1069,9 +1067,8 @@ double mpScaleX::getLabelPos( int n )
 {
     return 0;    // return m_labeledTicks[n];
 }
+#endif // 0
 
-
-#endif
 void mpScaleY::getVisibleDataRange( mpWindow& w, double& minV, double& maxV )
 {
     wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
@@ -2035,7 +2032,7 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
     yMin    -= yExtra;
     yMax    += yExtra;
 
-    if( printSizeX!=NULL && printSizeY!=NULL )
+    if( printSizeX != NULL && printSizeY != NULL )
     {
         // Printer:
         m_scrX  = *printSizeX;
@@ -2052,8 +2049,8 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
     Ax  = xMax - xMin;
     Ay  = yMax - yMin;
 
-    m_scaleX    = (Ax!=0) ? (m_scrX - m_marginLeft - m_marginRight) / Ax : 1;   // m_scaleX = (Ax!=0) ? m_scrX/Ax : 1;
-    m_scaleY    = (Ay!=0) ? (m_scrY - m_marginTop - m_marginBottom) / Ay : 1;   // m_scaleY = (Ay!=0) ? m_scrY/Ay : 1;
+    m_scaleX    = (Ax != 0) ? (m_scrX - m_marginLeft - m_marginRight)  / Ax : 1;   // m_scaleX = (Ax != 0) ? m_scrX / Ax : 1;
+    m_scaleY    = (Ay != 0) ? (m_scrY - m_marginTop  - m_marginBottom) / Ay : 1;   // m_scaleY = (Ay != 0) ? m_scrY / Ay : 1;
 
     if( m_lockaspect )
     {
@@ -2076,7 +2073,7 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
 
     // It is VERY IMPORTANT to DO NOT call Refresh if we are drawing to the printer!!
     // Otherwise, the DC dimensions will be those of the window instead of the printer device
-    if( printSizeX==NULL || printSizeY==NULL )
+    if( printSizeX == NULL || printSizeY == NULL )
         UpdateAll();
 }
 
@@ -2495,7 +2492,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
     // J.L.Blanco @ Aug 2007: Added double buffer support
     if( m_enableDoubleBuffer )
     {
-        if( m_last_lx!=m_scrX || m_last_ly!=m_scrY )
+        if( m_last_lx != m_scrX || m_last_ly != m_scrY )
         {
             if( m_buff_bmp )
                 delete m_buff_bmp;
@@ -2921,7 +2918,7 @@ void mpWindow::OnScrollBottom( wxScrollWinEvent& event )
 
 void mpWindow::SetScaleX( double scaleX )
 {
-    if( scaleX!=0 )
+    if( scaleX != 0 )
         m_scaleX = scaleX;
 
     UpdateAll();
@@ -2930,25 +2927,21 @@ void mpWindow::SetScaleX( double scaleX )
 
 // New methods implemented by Davide Rondini
 
-unsigned int mpWindow::CountLayers()
+unsigned int mpWindow::CountLayers() const
 {
-    // wxNode *node = m_layers.GetFirst();
     unsigned int layerNo = 0;
 
-    for( wxLayerList::iterator li = m_layers.begin(); li != m_layers.end(); li++ )    // while(node)
+    for( const mpLayer* layer : m_layers )
     {
-        if( (*li)->HasBBox() )
+        if( layer->HasBBox() )
             layerNo++;
-
-        // node = node->GetNext();
     }
 
-    ;
     return layerNo;
 }
 
 
-mpLayer* mpWindow::GetLayer( int position )
+mpLayer* mpWindow::GetLayer( int position ) const
 {
     if( ( position >= (int) m_layers.size() ) || position < 0 )
         return NULL;
@@ -2957,18 +2950,17 @@ mpLayer* mpWindow::GetLayer( int position )
 }
 
 
-mpLayer* mpWindow::GetLayerByName( const wxString& name )
+const mpLayer* mpWindow::GetLayerByName( const wxString& name ) const
 {
-    for( wxLayerList::iterator it = m_layers.begin(); it!=m_layers.end(); it++ )
-        if( !(*it)->GetName().Cmp( name ) )
-            return *it;
-
+    for( const mpLayer* layer : m_layers )
+        if( !layer->GetName().Cmp( name ) )
+            return layer;
 
     return NULL;    // Not found
 }
 
 
-void mpWindow::GetBoundingBox( double* bbox )
+void mpWindow::GetBoundingBox( double* bbox ) const
 {
     bbox[0] = m_minX;
     bbox[1] = m_maxX;
@@ -3016,10 +3008,8 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type,
     }
 
     // Draw all the layers:
-    wxLayerList::iterator li;
-
-    for( li = m_layers.begin(); li != m_layers.end(); li++ )
-        (*li)->Plot( screenDC, *this );
+    for( mpLayer* layer : m_layers )
+        layer->Plot( screenDC, *this );
 
     if( imageSize != wxDefaultSize )
     {
@@ -3037,22 +3027,20 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type,
 
 void mpWindow::SetMargins( int top, int right, int bottom, int left )
 {
-    m_marginTop = top;
-    m_marginRight   = right;
-    m_marginBottom  = bottom;
-    m_marginLeft = left;
+    m_marginTop    = top;
+    m_marginRight  = right;
+    m_marginBottom = bottom;
+    m_marginLeft   = left;
 }
 
 
 mpInfoLayer* mpWindow::IsInsideInfoLayer( wxPoint& point )
 {
-    wxLayerList::iterator li;
-
-    for( li = m_layers.begin(); li != m_layers.end(); li++ )
+    for( mpLayer* layer : m_layers )
     {
-        if( (*li)->IsInfo() )
+        if( layer->IsInfo() )
         {
-            mpInfoLayer* tmpLyr = (mpInfoLayer*) (*li);
+            mpInfoLayer* tmpLyr = static_cast<mpInfoLayer*>( layer );
 
             if( tmpLyr->Inside( point ) )
             {
@@ -3077,11 +3065,11 @@ void mpWindow::SetLayerVisible( const wxString& name, bool viewable )
 }
 
 
-bool mpWindow::IsLayerVisible( const wxString& name )
+bool mpWindow::IsLayerVisible( const wxString& name ) const
 {
-    mpLayer* lx = GetLayerByName( name );
+    const mpLayer* lx = GetLayerByName( name );
 
-    return (lx) ? lx->IsVisible() : false;
+    return lx ? lx->IsVisible() : false;
 }
 
 
@@ -3097,7 +3085,7 @@ void mpWindow::SetLayerVisible( const unsigned int position, bool viewable )
 }
 
 
-bool mpWindow::IsLayerVisible( const unsigned int position )
+bool mpWindow::IsLayerVisible( unsigned int position ) const
 {
     mpLayer* lx = GetLayer( position );
 
@@ -3114,23 +3102,22 @@ void mpWindow::SetColourTheme( const wxColour& bgColour,
     m_bgColour  = bgColour;
     m_fgColour  = drawColour;
     m_axColour  = axesColour;
-    // cycle between layers to set colours and properties to them
-    wxLayerList::iterator li;
 
-    for( li = m_layers.begin(); li != m_layers.end(); li++ )
+    // Cycle between layers to set colours and properties to them
+    for( mpLayer* layer : m_layers )
     {
-        if( (*li)->GetLayerType() == mpLAYER_AXIS )
+        if( layer->GetLayerType() == mpLAYER_AXIS )
         {
-            wxPen axisPen = (*li)->GetPen();    // Get the old pen to modify only colour, not style or width
+            wxPen axisPen = layer->GetPen();    // Get the old pen to modify only colour, not style or width
             axisPen.SetColour( axesColour );
-            (*li)->SetPen( axisPen );
+            layer->SetPen( axisPen );
         }
 
-        if( (*li)->GetLayerType() == mpLAYER_INFO )
+        if( layer->GetLayerType() == mpLAYER_INFO )
         {
-            wxPen infoPen = (*li)->GetPen();    // Get the old pen to modify only colour, not style or width
+            wxPen infoPen = layer->GetPen();    // Get the old pen to modify only colour, not style or width
             infoPen.SetColour( drawColour );
-            (*li)->SetPen( infoPen );
+            layer->SetPen( infoPen );
         }
     }
 }
@@ -3203,31 +3190,31 @@ mpFXYVector::mpFXYVector( const wxString& name, int flags ) : mpFXY( name, flags
 }
 
 
-double mpScaleX::TransformToPlot( double x )
+double mpScaleX::TransformToPlot( double x ) const
 {
     return (x + m_offset) * m_scale;
 }
 
 
-double mpScaleX::TransformFromPlot( double xplot )
+double mpScaleX::TransformFromPlot( double xplot ) const
 {
     return xplot / m_scale - m_offset;
 }
 
 
-double mpScaleY::TransformToPlot( double x )
+double mpScaleY::TransformToPlot( double x ) const
 {
     return (x + m_offset) * m_scale;
 }
 
 
-double mpScaleY::TransformFromPlot( double xplot )
+double mpScaleY::TransformFromPlot( double xplot ) const
 {
     return xplot / m_scale - m_offset;
 }
 
 
-double mpScaleXLog::TransformToPlot( double x )
+double mpScaleXLog::TransformToPlot( double x ) const
 {
     double  xlogmin = log10( m_minV );
     double  xlogmax = log10( m_maxV );
@@ -3236,7 +3223,7 @@ double mpScaleXLog::TransformToPlot( double x )
 }
 
 
-double mpScaleXLog::TransformFromPlot( double xplot )
+double mpScaleXLog::TransformFromPlot( double xplot ) const
 {
     double  xlogmin = log10( m_minV );
     double  xlogmax = log10( m_maxV );
@@ -3253,14 +3240,14 @@ mpFSemiLogXVector::mpFSemiLogXVector( wxString name, int flags ) :
 
 
 IMPLEMENT_DYNAMIC_CLASS( mpFSemiLogXVector, mpFXYVector )
-#endif
+#endif // 0
 
 void mpFXYVector::Rewind()
 {
     m_index = 0;
 }
 
-size_t mpFXYVector::GetCount()
+size_t mpFXYVector::GetCount() const
 {
     return m_xs.size();
 }
@@ -3299,31 +3286,29 @@ void mpFXYVector::SetData( const std::vector<double>& xs, const std::vector<doub
     m_ys    = ys;
 
     // Update internal variables for the bounding box.
-    if( xs.size()>0 )
+    if( xs.size() > 0 )
     {
         m_minX  = xs[0];
         m_maxX  = xs[0];
         m_minY  = ys[0];
         m_maxY  = ys[0];
 
-        std::vector<double>::const_iterator it;
-
-        for( it = xs.begin(); it!=xs.end(); it++ )
+        for( const double x : xs )
         {
-            if( *it<m_minX )
-                m_minX = *it;
+            if( x < m_minX )
+                m_minX = x;
 
-            if( *it>m_maxX )
-                m_maxX = *it;
+            if( x > m_maxX )
+                m_maxX = x;
         }
 
-        for( it = ys.begin(); it!=ys.end(); it++ )
+        for( const double y : ys )
         {
-            if( *it<m_minY )
-                m_minY = *it;
+            if( y < m_minY )
+                m_minY = y;
 
-            if( *it>m_maxY )
-                m_maxY = *it;
+            if( y > m_maxY )
+                m_maxY = y;
         }
     }
     else
@@ -3490,7 +3475,7 @@ void mpMovableObject::TranslatePoint( double x, double y, double& out_x, double&
 void mpMovableObject::ShapeUpdated()
 {
     // Just in case...
-    if( m_shape_xs.size()!=m_shape_ys.size() )
+    if( m_shape_xs.size() != m_shape_ys.size() )
     {
     }
     else
@@ -3569,7 +3554,7 @@ void mpMovableObject::Plot( wxDC& dc, mpWindow& w )
             wxCoord cx0 = 0, cy0 = 0;
             bool first  = true;
 
-            while( itX!=m_trans_shape_xs.end() )
+            while( itX != m_trans_shape_xs.end() )
             {
                 wxCoord cx  = w.x2p( *(itX++) );
                 wxCoord cy  = w.y2p( *(itY++) );
@@ -3644,13 +3629,13 @@ void mpCovarianceEllipse::RecalculateShape()
     m_shape_ys.clear();
 
     // Preliminary checks:
-    if( m_quantiles<0 )
+    if( m_quantiles < 0 )
         return;
 
-    if( m_cov_00<0 )
+    if( m_cov_00 < 0 )
         return;
 
-    if( m_cov_11<0 )
+    if( m_cov_11 < 0 )
         return;
 
     m_shape_xs.resize( m_segments, 0 );
@@ -3659,11 +3644,11 @@ void mpCovarianceEllipse::RecalculateShape()
     // Compute the two eigenvalues of the covariance:
     // -------------------------------------------------
     double  b   = -m_cov_00 - m_cov_11;
-    double  c   = m_cov_00 * m_cov_11 - m_cov_01 * m_cov_01;
+    double  c   =  m_cov_00 * m_cov_11 - m_cov_01 * m_cov_01;
 
     double D = b * b - 4 * c;
 
-    if( D<0 )
+    if( D < 0 )
         return;
 
     double  eigenVal0   = 0.5 * ( -b + sqrt( D ) );
@@ -3674,7 +3659,7 @@ void mpCovarianceEllipse::RecalculateShape()
     double  eigenVec0_x, eigenVec0_y;
     double  eigenVec1_x, eigenVec1_y;
 
-    if( fabs( eigenVal0 - m_cov_00 )>1e-6 )
+    if( fabs( eigenVal0 - m_cov_00 ) > 1e-6 )
     {
         double k1x = m_cov_01 / ( eigenVal0 - m_cov_00 );
         eigenVec0_y = 1;
@@ -3687,7 +3672,7 @@ void mpCovarianceEllipse::RecalculateShape()
         eigenVec0_y = eigenVec0_x * k1y;
     }
 
-    if( fabs( eigenVal1 - m_cov_00 )>1e-6 )
+    if( fabs( eigenVal1 - m_cov_00 ) > 1e-6 )
     {
         double k2x = m_cov_01 / ( eigenVal1 - m_cov_00 );
         eigenVec1_y = 1;
@@ -3726,7 +3711,7 @@ void mpCovarianceEllipse::RecalculateShape()
     double  Aang = 6.283185308 / (m_segments - 1);
     int i;
 
-    for( i = 0, ang = 0; i<m_segments; i++, ang += Aang )
+    for( i = 0, ang = 0; i < m_segments; i++, ang += Aang )
     {
         double  ccos    = cos( ang );
         double  csin    = sin( ang );
@@ -3746,12 +3731,12 @@ void mpPolygon::setPoints( const std::vector<double>& points_xs,
         const std::vector<double>& points_ys,
         bool closedShape )
 {
-    if( points_xs.size()==points_ys.size() )
+    if( points_xs.size() == points_ys.size() )
     {
         m_shape_xs  = points_xs;
         m_shape_ys  = points_ys;
 
-        if( closedShape && points_xs.size() )
+        if( closedShape && !points_xs.empty() )
         {
             m_shape_xs.push_back( points_xs[0] );
             m_shape_ys.push_back( points_ys[0] );
@@ -3825,16 +3810,16 @@ void mpBitmapLayer::Plot( wxDC& dc, mpWindow& w )
         // The actual drawn rectangle (dx0,dy0)-(dx1,dy1) is (x0,y0)-(x1,y1) clipped:
         wxCoord dx0 = x0, dx1 = x1, dy0 = y0, dy1 = y1;
 
-        if( dx0<0 )
+        if( dx0 < 0 )
             dx0 = -borderMarginX;
 
-        if( dy0<0 )
+        if( dy0 < 0 )
             dy0 = -borderMarginY;
 
-        if( dx1>w.GetScrX() )
+        if( dx1 > w.GetScrX() )
             dx1 = w.GetScrX() + borderMarginX;
 
-        if( dy1>w.GetScrY() )
+        if( dy1 > w.GetScrY() )
             dy1 = w.GetScrY() + borderMarginY;
 
         // For convenience, compute the width/height of the rectangle to be actually drawn:
@@ -3861,10 +3846,10 @@ void mpBitmapLayer::Plot( wxDC& dc, mpWindow& w )
                 wxRect r( wxRect( offset_x, offset_y, b_width, b_height ) );
 
                 // Just for the case....
-                if( r.x<0 )
+                if( r.x < 0 )
                     r.x = 0;
 
-                if( r.y<0 )
+                if( r.y < 0 )
                     r.y = 0;
 
                 if( r.width>m_bitmap.GetWidth() )

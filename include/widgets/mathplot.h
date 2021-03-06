@@ -153,42 +153,42 @@ public:
     virtual ~mpLayer() {};
 
     /** Check whether this layer has a bounding box.
-     *  The default implementation returns \a TRUE. Override and return
-     *  FALSE if your mpLayer implementation should be ignored by the calculation
+     *  The default implementation returns \a true. Override and return
+     *  false if your mpLayer implementation should be ignored by the calculation
      *  of the global bounding box for all layers in a mpWindow.
-     *  @retval TRUE Has bounding box
-     *  @retval FALSE Has not bounding box
+     *  @retval true Has bounding box
+     *  @retval false Has not bounding box
      */
-    virtual bool   HasBBox() { return TRUE; }
+    virtual bool HasBBox() const { return true; }
 
     /** Check whether the layer is an info box.
-     *  The default implementation returns \a FALSE. It is overrided to \a TRUE for mpInfoLayer
+     *  The default implementation returns \a false. It is overrided to \a true for mpInfoLayer
      *  class and its derivative. It is necessary to define mouse actions behaviour over
      *  info boxes.
      *  @return whether the layer is an info boxes
      *  @sa mpInfoLayer::IsInfo
      */
-    virtual bool IsInfo() { return false; };
+    virtual bool IsInfo() const { return false; };
 
     /** Get inclusive left border of bounding box.
      *  @return Value
      */
-    virtual double GetMinX() { return -1.0; }
+    virtual double GetMinX() const { return -1.0; }
 
     /** Get inclusive right border of bounding box.
      *  @return Value
      */
-    virtual double GetMaxX() { return 1.0; }
+    virtual double GetMaxX() const { return 1.0; }
 
     /** Get inclusive bottom border of bounding box.
      *  @return Value
      */
-    virtual double GetMinY() { return -1.0; }
+    virtual double GetMinY() const { return -1.0; }
 
     /** Get inclusive top border of bounding box.
      *  @return Value
      */
-    virtual double GetMaxY() { return 1.0; }
+    virtual double GetMaxY() const { return 1.0; }
 
     /** Plot given view of layer to the given device context.
      *  An implementation of this function has to transform layer coordinates to
@@ -246,7 +246,7 @@ public:
     /** Get pen set for this layer.
      *  @return Pen
      */
-    const wxPen& GetPen()  const { return m_pen;  }
+    const wxPen& GetPen() const { return m_pen; }
 
     /** Set the 'continuity' property of the layer (true:draws a continuous line, false:draws separate points).
      * @sa GetContinuity
@@ -288,15 +288,15 @@ public:
     /** Get a small square bitmap filled with the colour of the pen used in the layer. Useful to create legends or similar reference to the layers.
      *  @param side side length in pixels
      *  @return a wxBitmap filled with layer's colour */
-    wxBitmap GetColourSquare( int side = 16 );
+    wxBitmap GetColourSquare( int side = 16 ) const;
 
     /** Get layer type: a Layer can be of different types: plot lines, axis, info boxes, etc, this method returns the right value.
      *  @return An integer indicating layer type */
-    mpLayerType GetLayerType() { return m_type; };
+    mpLayerType GetLayerType() const { return m_type; };
 
     /** Checks whether the layer is visible or not.
      *  @return \a true if visible */
-    bool IsVisible() { return m_visible; };
+    bool IsVisible() const { return m_visible; };
 
     /** Sets layer visibility.
      *  @param show visibility bool. */
@@ -354,8 +354,8 @@ public:
     virtual void UpdateInfo( mpWindow& w, wxEvent& event );
 
     /** mpInfoLayer has not bounding box. @sa mpLayer::HasBBox
-     *  @return always \a FALSE */
-    virtual bool HasBBox() override { return false; }
+     *  @return always \a false */
+    virtual bool HasBBox() const override { return false; }
 
     /** Plot method. Can be overidden by derived classes.
      *  @param dc the device content where to plot
@@ -364,9 +364,9 @@ public:
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
     /** Specifies that this is an Info box layer.
-     *  @return always \a TRUE
+     *  @return always \a true
      *  @sa mpLayer::IsInfo */
-    virtual bool IsInfo() override { return true; }
+    virtual bool IsInfo() const override { return true; }
 
     /** Checks whether a point is inside the info box rectangle.
      *  @param point The point to be checked
@@ -382,15 +382,15 @@ public:
 
     /** Returns the position of the upper left corner of the box (in pixels)
      *  @return The rectangle position */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /** Returns the size of the box (in pixels)
      *  @return The rectangle size */
-    wxSize GetSize();
+    wxSize GetSize() const;
 
     /** Returns the current rectangle coordinates.
      *  @return The info layer rectangle */
-    const wxRect& GetRectangle() { return m_dim; };
+    const wxRect& GetRectangle() const { return m_dim; };
 
 protected:
     wxRect m_dim;               // !< The bounding rectangle of the box. It may be resized dynamically by the Plot method.
@@ -534,7 +534,7 @@ public:
      *  @param x Argument
      *  @return Function value
      */
-    virtual double GetY( double x ) = 0;
+    virtual double GetY( double x ) const = 0;
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
@@ -566,7 +566,7 @@ public:
      *  @param y Argument
      *  @return Function value
      */
-    virtual double GetX( double y ) = 0;
+    virtual double GetX( double y ) const = 0;
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
@@ -607,7 +607,7 @@ public:
      */
     virtual bool GetNextXY( double& x, double& y ) = 0;
 
-    virtual size_t GetCount() = 0;
+    virtual size_t GetCount() const = 0;
 
     /** Layer plot handler.
      *  This implementation will plot the locus in the visible area and
@@ -661,7 +661,7 @@ public:
      *  @param x Argument
      *  @return Function value
      */
-    virtual double GetY( double x ) = 0;
+    virtual double GetY( double x ) const = 0;
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
@@ -697,9 +697,9 @@ public:
     mpScaleBase();
     virtual ~mpScaleBase() {};
 
-    virtual bool IsHorizontal() = 0;
+    virtual bool IsHorizontal() const = 0;
 
-    bool HasBBox() override { return FALSE; }
+    bool HasBBox() const override { return false; }
 
     /** Set X axis alignment.
      *  @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER,
@@ -715,9 +715,9 @@ public:
     void SetTicks( bool enable ) { m_ticks = enable; };
 
     /** Get X axis ticks or grid
-     *  @return TRUE if plot is drawing axis ticks, FALSE if the grid is active.
+     *  @return true if plot is drawing axis ticks, false if the grid is active.
      */
-    bool GetTicks() { return m_ticks; };
+    bool GetTicks() const { return m_ticks; };
 
 
     // virtual double X2p( mpWindow &w, double x ) = 0;
@@ -730,7 +730,7 @@ public:
         m_maxV  = maxV;
     }
 
-    void GetDataRange( double& minV, double& maxV )
+    void GetDataRange( double& minV, double& maxV ) const
     {
         minV = m_minV;
         maxV = m_maxV;
@@ -772,8 +772,8 @@ public:
         return m_absVisibleMaxV;
     }
 
-    virtual double TransformToPlot( double x ) { return 0.0; };
-    virtual double TransformFromPlot( double xplot ) { return 0.0; };
+    virtual double TransformToPlot( double x ) const { return 0.0; };
+    virtual double TransformFromPlot( double xplot ) const { return 0.0; };
 
     struct TickLabel
     {
@@ -794,7 +794,7 @@ protected:
     void    updateTickLabels( wxDC& dc, mpWindow& w );
     void    computeLabelExtents( wxDC& dc, mpWindow& w );
 
-    // virtual int getLabelDecimalDigits(int maxDigits);
+    // virtual int getLabelDecimalDigits(int maxDigits) const;
     virtual void getVisibleDataRange( mpWindow& w, double& minV, double& maxV ) {};
     virtual void recalculateTicks( wxDC& dc, mpWindow& w ) {};
 
@@ -811,17 +811,17 @@ protected:
     virtual const wxString formatLabel( double value, int nDigits ) { return wxT( "" ); }
     virtual void formatLabels() {};
 
-    virtual double getTickPos( int n )
+    virtual double getTickPos( int n ) const
     {
         return m_tickValues[n];
     }
 
-    virtual double getLabelPos( int n )
+    virtual double getLabelPos( int n ) const
     {
         return m_tickLabels[n].pos;
     }
 
-    virtual const wxString getLabel( int n )
+    virtual wxString getLabel( int n ) const
     {
         return m_tickLabels[n].label;
     }
@@ -846,14 +846,14 @@ public:
     /** Full constructor.
      *  @param name Label to plot by the ruler
      *  @param flags Set the position of the scale with respect to the window.
-     *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
+     *  @param ticks Select ticks or grid. Give true (default) for drawing axis ticks, false for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds.
      */
     mpScaleXBase( const wxString& name = wxT("X"), int flags = mpALIGN_CENTER,
                   bool ticks = true, unsigned int type = mpX_NORMAL );
     virtual ~mpScaleXBase() {};
 
-    virtual bool IsHorizontal() override { return true; }
+    virtual bool IsHorizontal() const override { return true; }
     /** Layer plot handler.
      *  This implementation will plot the ruler adjusted to the visible area. */
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
@@ -873,7 +873,7 @@ public:
     /** Full constructor.
      *  @param name Label to plot by the ruler
      *  @param flags Set the position of the scale with respect to the window.
-     *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
+     *  @param ticks Select ticks or grid. Give true (default) for drawing axis ticks, false for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
     mpScaleX( const wxString& name = wxT("X"), int flags = mpALIGN_CENTER,
               bool ticks = true, unsigned int type = mpX_NORMAL );
@@ -884,8 +884,8 @@ public:
 
     // virtual double X2p( mpWindow &w, double x );
     // virtual double P2x( mpWindow &w, double x );
-    virtual double  TransformToPlot( double x ) override;
-    virtual double  TransformFromPlot( double xplot ) override;
+    virtual double TransformToPlot( double x ) const override;
+    virtual double TransformFromPlot( double xplot ) const override;
 
 protected:
     virtual void recalculateTicks( wxDC& dc, mpWindow& w ) override;
@@ -901,14 +901,14 @@ public:
     /** Full constructor.
      *  @param name Label to plot by the ruler
      *  @param flags Set the position of the scale with respect to the window.
-     *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
+     *  @param ticks Select ticks or grid. Give true (default) for drawing axis ticks, false for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds.
      */
     mpScaleXLog( const wxString& name = wxT("log(X)"), int flags = mpALIGN_CENTER,
                  bool ticks = true, unsigned int type = mpX_NORMAL );
 
-    virtual double  TransformToPlot( double x ) override;
-    virtual double  TransformFromPlot( double xplot ) override;
+    virtual double TransformToPlot( double x ) const override;
+    virtual double TransformFromPlot( double xplot ) const override;
 
     /** Layer plot handler.
      *  This implementation will plot the ruler adjusted to the visible area.
@@ -944,11 +944,11 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
 public:
     /** @param name Label to plot by the ruler
      *  @param flags Set position of the scale respect to the window.
-     *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid
+     *  @param ticks Select ticks or grid. Give true (default) for drawing axis ticks, false for drawing the grid
      */
-    mpScaleY( const wxString& name = wxT("Y"), int flags = mpALIGN_CENTER, bool ticks = true );
+    mpScaleY( const wxString& name = wxT( "Y" ), int flags = mpALIGN_CENTER, bool ticks = true );
 
-    virtual bool IsHorizontal() override { return false; }
+    virtual bool IsHorizontal() const override { return false; }
 
     /** Layer plot handler.
      *  This implementation will plot the ruler adjusted to the visible area.
@@ -956,25 +956,25 @@ public:
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
     /** Check whether this layer has a bounding box.
-     *  This implementation returns \a FALSE thus making the ruler invisible
+     *  This implementation returns \a false thus making the ruler invisible
      *  to the plot layer bounding box calculation by mpWindow.
      */
-    virtual bool HasBBox() override { return FALSE; }
+    virtual bool HasBBox() const override { return false; }
 
     /** Set Y axis alignment.
      *  @param align alignment (choose between mpALIGN_BORDER_LEFT, mpALIGN_LEFT, mpALIGN_CENTER, mpALIGN_RIGHT, mpALIGN_BORDER_RIGHT) */
     void SetAlign( int align ) { m_flags = align; };
 
     /** Set Y axis ticks or grid
-     *  @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
+     *  @param ticks true to plot axis ticks, false to plot grid. */
     void SetTicks( bool ticks ) { m_ticks = ticks; };
 
     /** Get Y axis ticks or grid
-     *  @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
-    bool GetTicks() { return m_ticks; };
+     *  @return true if plot is drawing axis ticks, false if the grid is active. */
+    bool GetTicks() const { return m_ticks; };
 
-    virtual double  TransformToPlot( double x ) override;
-    virtual double  TransformFromPlot( double xplot ) override;
+    virtual double  TransformToPlot( double x ) const override;
+    virtual double  TransformFromPlot( double xplot ) const override;
 
 
     void SetMasterScale( mpScaleY* masterScale )
@@ -1063,8 +1063,8 @@ public:
      *  @param layer Pointer to layer. The mpLayer object will get under control of mpWindow,
      *  i.e. it will be delete'd on mpWindow destruction
      *  @param refreshDisplay States whether to refresh the display (UpdateAll) after adding the layer.
-     *  @retval TRUE Success
-     *  @retval FALSE Failure due to out of memory.
+     *  @retval true Success
+     *  @retval false Failure due to out of memory.
      */
     bool AddLayer( mpLayer* layer, bool refreshDisplay = true );
 
@@ -1090,19 +1090,23 @@ public:
      *  @param position position of the layer in the layers list
      *  @return pointer to mpLayer
      */
-    mpLayer* GetLayer( int position );
+    mpLayer* GetLayer( int position ) const;
 
     /*! Get the layer by its name (case sensitive).
      *  @param name The name of the layer to retrieve
      *  @return A pointer to the mpLayer object, or NULL if not found.
      */
-    mpLayer* GetLayerByName( const wxString& name );
+    const mpLayer* GetLayerByName( const wxString& name ) const;
+    mpLayer* GetLayerByName( const wxString& name )
+    {
+        return const_cast<mpLayer*>( static_cast<const mpWindow*>( this )->GetLayerByName( name ) );
+    }
 
     /** Get current view's X scale.
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return Scale
      */
-    double GetXscl() { return m_scaleX; }
+    double GetXscl() const { return m_scaleX; }
     double GetScaleX( void ) const { return m_scaleX; };  // Schaling's method: maybe another method esists with the same name
 
     /** Get current view's Y scale.
@@ -1154,7 +1158,7 @@ public:
      */
     void SetScaleY( double scaleY )
     {
-        if( scaleY!=0 )
+        if( scaleY != 0 )
             m_scaleY = scaleY;
 
         UpdateAll();
@@ -1221,13 +1225,13 @@ public:
      *  an unlocked aspect, but any other action changing the view scale will
      *  lock the aspect again.
      */
-    void LockAspect( bool enable = TRUE );
+    void LockAspect( bool enable = true );
 
     /** Checks whether the X/Y scale aspect is locked.
-     *  @retval TRUE Locked
-     *  @retval FALSE Unlocked
+     *  @retval true Locked
+     *  @retval false Unlocked
      */
-    inline bool IsAspectLocked() { return m_lockaspect; }
+    inline bool IsAspectLocked() const { return m_lockaspect; }
 
     /** Set view to fit global bounding box of all plot layers and refresh display.
      *  Scale and position will be set to show all attached mpLayers.
@@ -1283,11 +1287,11 @@ public:
      * which have a bounding box.
      *  \return The number of profiles plotted.
      */
-    unsigned int CountLayers();
+    unsigned int CountLayers() const;
 
     /** Counts the number of plot layers, whether or not they have a bounding box.
      *  \return The number of layers in the mpWindow. */
-    unsigned int CountAllLayers() { return m_layers.size(); };
+    unsigned int CountAllLayers() const { return m_layers.size(); };
 
 #if 0
     /** Draws the mpWindow on a page for printing
@@ -1300,30 +1304,30 @@ public:
      * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
-    double GetDesiredXmin() { return m_desiredXmin; }
+    double GetDesiredXmin() const { return m_desiredXmin; }
 
     /** Returns the right-border layer coordinate that the user wants the mpWindow to show
      * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
-    double GetDesiredXmax() { return m_desiredXmax; }
+    double GetDesiredXmax() const { return m_desiredXmax; }
 
     /** Returns the bottom-border layer coordinate that the user wants the mpWindow to show
      * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
-    double GetDesiredYmin() { return m_desiredYmin; }
+    double GetDesiredYmin() const { return m_desiredYmin; }
 
     /** Returns the top layer-border coordinate that the user wants the mpWindow to show
      * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
-    double GetDesiredYmax() { return m_desiredYmax; }
+    double GetDesiredYmax() const { return m_desiredYmax; }
 
     /** Returns the bounding box coordinates
      *  @param bbox Pointer to a 6-element double array where to store bounding box coordinates.
      */
-    void GetBoundingBox( double* bbox );
+    void GetBoundingBox( double* bbox ) const;
 
     /** Enable/disable scrollbars
      *  @param status Set to true to show scrollbars */
@@ -1331,7 +1335,7 @@ public:
 
     /** Get scrollbars status.
      *  @return true if scrollbars are visible */
-    bool GetMPScrollbars() { return m_enableScrollBars; };
+    bool GetMPScrollbars() const { return m_enableScrollBars; };
 
     /** Draw the window on a wxBitmap, then save it to a file.
      *  @param filename File name where to save the screenshot
@@ -1365,13 +1369,13 @@ public:
     void SetMarginLeft( int left ) { m_marginLeft = left; };
 
     /** @return the top margin. */
-    int GetMarginTop() { return m_marginTop; };
+    int GetMarginTop() const { return m_marginTop; };
     /** @return the right margin. */
-    int GetMarginRight() { return m_marginRight; };
+    int GetMarginRight() const { return m_marginRight; };
     /** @return the bottom margin. */
-    int GetMarginBottom() { return m_marginBottom; };
+    int GetMarginBottom() const { return m_marginBottom; };
     /** @return the left margin. */
-    int GetMarginLeft() { return m_marginLeft; };
+    int GetMarginLeft() const { return m_marginLeft; };
 
 #if 0
     /** Sets whether to show coordinate tooltip when mouse passes over the plot.
@@ -1398,7 +1402,7 @@ public:
     /** Check whether a layer with given name is visible
      *  @param name The layer name
      *  @return layer visibility status */
-    bool IsLayerVisible( const wxString& name );
+    bool IsLayerVisible( const wxString& name ) const;
 
     /** Sets the visibility of a layer by its position in layer list.
      *  @param position The layer position in layer list
@@ -1408,7 +1412,7 @@ public:
     /** Check whether the layer at given position is visible
      *  @param position The layer position in layer list
      *  @return layer visibility status */
-    bool IsLayerVisible( const unsigned int position );
+    bool IsLayerVisible( unsigned int position ) const;
 
     /** Set Color theme. Provide colours to set a new colour theme.
      *  @param bgColour Background colour
@@ -1609,24 +1613,24 @@ protected:
      */
     bool GetNextXY( double& x, double& y ) override;
 
-    size_t GetCount() override;
+    size_t GetCount() const override;
 
 public:
     /** Returns the actual minimum X data (loaded in SetData).
      */
-    double GetMinX() override { return m_minX; }
+    double GetMinX() const override { return m_minX; }
 
     /** Returns the actual minimum Y data (loaded in SetData).
      */
-    double GetMinY() override { return m_minY; }
+    double GetMinY() const override { return m_minY; }
 
     /** Returns the actual maximum X data (loaded in SetData).
      */
-    double GetMaxX() override { return m_maxX; }
+    double GetMaxX() const override { return m_maxX; }
 
     /** Returns the actual maximum Y data (loaded in SetData).
      */
-    double GetMaxY() override { return m_maxY; }
+    double GetMaxY() const override { return m_maxY; }
 
 protected:
 
@@ -1678,7 +1682,7 @@ public:
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
     /** mpText should not be used for scaling decisions. */
-    virtual bool HasBBox() override { return FALSE; }
+    virtual bool HasBBox() const override { return false; }
 
 protected:
     int m_offsetx;      // !< Holds offset for X in percentage
@@ -1758,23 +1762,23 @@ public:
         ShapeUpdated();
     }
 
-    virtual bool HasBBox() override { return m_trans_shape_xs.size()!=0; }
+    virtual bool HasBBox() const override { return m_trans_shape_xs.size()!=0; }
 
     /** Get inclusive left border of bounding box.
      */
-    virtual double GetMinX() override { return m_bbox_min_x; }
+    virtual double GetMinX() const override { return m_bbox_min_x; }
 
     /** Get inclusive right border of bounding box.
      */
-    virtual double GetMaxX() override { return m_bbox_max_x; }
+    virtual double GetMaxX() const override { return m_bbox_max_x; }
 
     /** Get inclusive bottom border of bounding box.
      */
-    virtual double GetMinY() override { return m_bbox_min_y; }
+    virtual double GetMinY() const override { return m_bbox_min_y; }
 
     /** Get inclusive top border of bounding box.
      */
-    virtual double GetMaxY() override { return m_bbox_max_y; }
+    virtual double GetMaxY() const override { return m_bbox_max_y; }
 
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
@@ -1972,23 +1976,23 @@ public:
      */
     void SetBitmap( const wxImage& inBmp, double x, double y, double lx, double ly );
 
-    virtual bool HasBBox() override { return true; }
+    virtual bool HasBBox() const override { return true; }
 
     /** Get inclusive left border of bounding box.
      */
-    virtual double GetMinX() override { return m_min_x; }
+    virtual double GetMinX() const override { return m_min_x; }
 
     /** Get inclusive right border of bounding box.
      */
-    virtual double GetMaxX() override { return m_max_x; }
+    virtual double GetMaxX() const override { return m_max_x; }
 
     /** Get inclusive bottom border of bounding box.
      */
-    virtual double GetMinY() override { return m_min_y; }
+    virtual double GetMinY() const override { return m_min_y; }
 
     /** Get inclusive top border of bounding box.
      */
-    virtual double GetMaxY() override { return m_max_y; }
+    virtual double GetMaxY() const override { return m_max_y; }
 
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 

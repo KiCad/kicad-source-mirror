@@ -344,14 +344,14 @@ public:
      * @param aPrmId = param id to write
      * @return the value always in normalized unit (meter, Hz, Ohm, radian)
      */
-    double GetPrmValue( enum PRMS_ID aPrmId );
+    double GetPrmValue( enum PRMS_ID aPrmId ) const;
 
     /**
      * Function IsPrmSelected
      * @return true if the param aPrmId is selected
      * Has meaning only for params that have a radio button
      */
-    bool IsPrmSelected( enum PRMS_ID aPrmId );
+    bool IsPrmSelected( enum PRMS_ID aPrmId ) const;
 
     // Board classes panel:
     void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
