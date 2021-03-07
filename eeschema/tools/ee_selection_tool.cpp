@@ -1189,8 +1189,8 @@ bool EE_SELECTION_TOOL::selectMultiple()
         if( view->IsMirroredX() )
             windowSelection = !windowSelection;
 
-        m_frame->GetCanvas()->SetCurrentCursor(
-                windowSelection ? KICURSOR::SELECT_WINDOW : KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
+                                                                : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1699,12 +1699,12 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where Eeschema layer/itemtype visibility will be handled
-    SYMBOL_EDIT_FRAME* symEditFrame = dynamic_cast< SYMBOL_EDIT_FRAME* >( m_frame );
+
+    SYMBOL_EDIT_FRAME* symEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
     // Do not allow selection of anything except fields when the current symbol in the symbol
     // editor is a derived symbol.
-    if( symEditFrame && symEditFrame->GetCurPart() && symEditFrame->GetCurPart()->IsAlias()
-      && aItem->Type() != LIB_FIELD_T )
+    if( symEditFrame && symEditFrame->IsSymbolAlias() && aItem->Type() != LIB_FIELD_T )
         return false;
 
     switch( aItem->Type() )
