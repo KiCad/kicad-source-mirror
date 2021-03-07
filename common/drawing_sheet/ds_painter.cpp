@@ -292,6 +292,8 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
     // Use a gray color for the border color
     m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     m_gal->SetIsFill( false );
+    m_gal->SetLineWidth(  m_renderSettings.GetDefaultPenWidth() );
+
     m_gal->DrawRectangle( origin, end );
 
     // Draw the corner marker
