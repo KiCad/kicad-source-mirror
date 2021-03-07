@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,13 @@
 
 
 /* Helper function for sorting hole list.
- * Compare function used for sorting holes type type (plated then not plated)
- * then by increasing diameter value and X then Y position
+ * Compare function used for sorting holes type type:
+ * plated then not plated
+ * then by increasing diameter value
+ * then by attribute type (vias, pad, mechanical)
+ * then by X then Y position
  */
-static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
+static bool cmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
 {
     if( a.m_Hole_NotPlated != b.m_Hole_NotPlated )
         return b.m_Hole_NotPlated;
@@ -44,7 +47,12 @@ static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
     if( a.m_Hole_Diameter != b.m_Hole_Diameter )
         return a.m_Hole_Diameter < b.m_Hole_Diameter;
 
-    // At this point (same diameter), sort by X then Y position.
+    // At this point (same diameter, same plated type), group by attribute
+    // type (via, pad, mechanical, although currently only not plated pads are mechanical)
+    if( a.m_HoleAttribute != b.m_HoleAttribute )
+        return a.m_HoleAttribute < b.m_HoleAttribute;
+
+    // At this point (same diameter, same type), sort by X then Y position.
     // This is optimal for drilling and make the file reproducible as long as holes
     // have not changed, even if the data order has changed.
     if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
@@ -79,6 +87,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                 continue;
 
             new_hole.m_ItemParent = via;
+            new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA;
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
             new_hole.m_Hole_Orient    = 0;
             new_hole.m_Hole_Diameter  = hole_sz;
@@ -122,6 +131,9 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
 
                 new_hole.m_ItemParent     = pad;
                 new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_ATTRIB_NPTH);
+                new_hole.m_HoleAttribute  = new_hole.m_Hole_NotPlated
+                                                ? HOLE_ATTRIBUTE::HOLE_MECHANICAL
+                                                : HOLE_ATTRIBUTE::HOLE_PAD;
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round
@@ -141,26 +153,33 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
     }
 
     // Sort holes per increasing diameter value (and for each dimater, by position)
-    sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleSorting );
+    sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), cmpHoleSorting );
 
     // build the tool list
     int last_hole = -1;     // Set to not initialized (this is a value not used
                             // for m_holeListBuffer[ii].m_Hole_Diameter)
     bool last_notplated_opt = false;
+    HOLE_ATTRIBUTE last_attribute = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
 
     DRILL_TOOL new_tool( 0, false );
     unsigned   jj;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole ||
-            m_holeListBuffer[ii].m_Hole_NotPlated != last_notplated_opt )
+        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole
+            || m_holeListBuffer[ii].m_Hole_NotPlated != last_notplated_opt
+#if USE_ATTRIB_FOR_HOLES
+            || m_holeListBuffer[ii].m_HoleAttribute != last_attribute
+#endif
+            )
         {
             new_tool.m_Diameter = m_holeListBuffer[ii].m_Hole_Diameter;
             new_tool.m_Hole_NotPlated = m_holeListBuffer[ii].m_Hole_NotPlated;
+            new_tool.m_HoleAttribute = m_holeListBuffer[ii].m_HoleAttribute;
             m_toolListBuffer.push_back( new_tool );
             last_hole = new_tool.m_Diameter;
             last_notplated_opt = new_tool.m_Hole_NotPlated;
+            last_attribute = new_tool.m_HoleAttribute;
         }
 
         jj = m_toolListBuffer.size();

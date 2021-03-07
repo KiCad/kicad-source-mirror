@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,11 +50,6 @@
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
-
-// Comment/uncomment this to write or not a comment
-// in drill file when PTH and NPTH are merged to flag
-// tools used for PTH and tools used for NPTH
-// #define WRITE_PTH_NPTH_COMMENT
 
 // Oblong holes can be drilled by a "canned slot" command (G85) or a routing command
 // a linear routing command (G01) is perhaps more usual for drill files
@@ -141,6 +136,47 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 }
 
 
+void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolAttr )
+{
+    // Hole attributes are comments (lines starting by ';') in the drill files
+    // For tools (file header), they are similar to X2 apertures attributes.
+    // for attributes added in coordinate list, they are just comments.
+    if( !m_minimalHeader )
+    {
+        switch( aAttribute )
+        {
+        case HOLE_ATTRIBUTE::HOLE_VIA:
+            if( aToolAttr )
+                fprintf( m_file, "; #@! TA.AperFunction,ViaDrill\n" );
+            else
+                fprintf( m_file, "; via hole\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_PAD:
+            if( aToolAttr )
+                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill\n" );
+            else
+                fprintf( m_file, "; pad hole\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_MECHANICAL:
+            if( aToolAttr )
+                fprintf( m_file, "; #@! TA.AperFunction,MechanicalDrill\n" );
+            else
+                fprintf( m_file, "; mechanical\n" );
+            break;
+
+        case HOLE_ATTRIBUTE::HOLE_UNKNOWN:
+            if( aToolAttr )
+                fprintf( m_file, "; #@! TD\n" );
+            else
+                fprintf( m_file, "; unknown\n" );
+            break;
+        }
+    }
+}
+
+
 int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
                                       bool aGenerateNPTH_list )
 {
@@ -157,35 +193,19 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 
     holes_count = 0;
 
-#ifdef WRITE_PTH_NPTH_COMMENT
-    // if PTH_ and NPTH are merged write a comment in drill file at the
-    // beginning of NPTH section
-    bool writePTHcomment  = m_merge_PTH_NPTH;
-    bool writeNPTHcomment = m_merge_PTH_NPTH;
-#endif
-
     /* Write the tool list */
     for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
     {
         DRILL_TOOL& tool_descr = m_toolListBuffer[ii];
 
-#ifdef WRITE_PTH_NPTH_COMMENT
-        if( writePTHcomment && !tool_descr.m_Hole_NotPlated )
-        {
-            writePTHcomment = false;
-            fprintf( m_file, ";TYPE=PLATED\n" );
-        }
-
-        if( writeNPTHcomment && tool_descr.m_Hole_NotPlated )
-        {
-            writeNPTHcomment = false;
-            fprintf( m_file, ";TYPE=NON_PLATED\n" );
-        }
+#if USE_ATTRIB_FOR_HOLES
+        writeHoleAttribute( tool_descr.m_HoleAttribute, true );
 #endif
-
-        if( m_unitsMetric )    // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
+        // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
+        // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
+        if( m_unitsMetric )
             fprintf( m_file, "T%dC%.3f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
-        else                    // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
+        else
             fprintf( m_file, "T%dC%.4f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
     }
 
@@ -193,9 +213,11 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
     fputs( "G90\n", m_file );                       // Absolute mode
     fputs( "G05\n", m_file );                       // Drill mode
 
-    /* Read the hole file and generate lines for normal holes (oblong
+    /* Read the hole list and generate data for normal holes (oblong
      * holes will be created later) */
     int tool_reference = -2;
+
+    HOLE_ATTRIBUTE last_item_type = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
@@ -209,6 +231,13 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
             tool_reference = hole_descr.m_Tool_Reference;
             fprintf( m_file, "T%d\n", tool_reference );
         }
+
+        HOLE_ATTRIBUTE curr_item_type = hole_descr.m_HoleAttribute;
+
+        if( curr_item_type != last_item_type )
+            writeHoleAttribute( curr_item_type, false );
+
+        last_item_type = curr_item_type;
 
         x0 = hole_descr.m_Hole_Pos.x - m_offset.x;
         y0 = hole_descr.m_Hole_Pos.y - m_offset.y;
@@ -224,10 +253,12 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
         holes_count++;
     }
 
-    /* Read the hole file and generate lines for normal holes (oblong holes
-     * will be created later) */
+    /* Read the hole list and generate data for oblong holes
+     */
     tool_reference = -2;    // set to a value not used for
                             // m_holeListBuffer[ii].m_Tool_Reference
+    last_item_type = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
+
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
         HOLE_INFO& hole_descr = m_holeListBuffer[ii];
@@ -240,6 +271,13 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
             tool_reference = hole_descr.m_Tool_Reference;
             fprintf( m_file, "T%d\n", tool_reference );
         }
+
+        HOLE_ATTRIBUTE curr_item_type = hole_descr.m_HoleAttribute;
+
+        if( curr_item_type != last_item_type )
+            writeHoleAttribute( curr_item_type, false );
+
+        last_item_type = curr_item_type;
 
         diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
 

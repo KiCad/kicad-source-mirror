@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHOR.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 class BOARD;
 class PLOTTER;
 class OUTPUTFORMATTER;
+
 
 /**
  * EXCELLON_WRITER is a class mainly used to create Excellon drill files
@@ -127,7 +128,7 @@ private:
     int  createDrillFile( FILE * aFile, DRILL_LAYER_PAIR aLayerPair, bool aGenerateNPTH_list );
 
 
-    /* Print the DRILL file header. The full header is somethink like:
+    /** Print the DRILL file header. The full header is somethink like:
      * M48
      * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
      * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
@@ -141,11 +142,20 @@ private:
 
     void writeEXCELLONEndOfFile();
 
-    /* Created a line like:
+    /** Created a line like:
      * X48000Y19500
      * According to the selected format
      */
     void writeCoordinates( char* aLine, double aCoordX, double aCoordY );
+
+    /**
+     * write a comment string giving the hole attribute like
+     * "; #@! TO.P,viatype\n"
+     * @param aAttribute is the hole attribute
+     * @param aToolAttr = true if the comment is for a tool,
+     *  false for a hole in coord list
+     */
+    void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolAttr );
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_
