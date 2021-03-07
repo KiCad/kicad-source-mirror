@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2021-03-07 18:42+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -7350,9 +7350,8 @@ msgid "Generate"
 msgstr "Δημιουργία"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
-#, fuzzy
 msgid "(file missing)"
-msgstr "Λείπει.\n"
+msgstr "(το αρχείο λείπει)"
 
 #: eeschema/dialogs/dialog_bom.cpp:293
 #, fuzzy, c-format
@@ -7368,6 +7367,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Αναζητήθηκε:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:345
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8198,7 +8202,7 @@ msgstr "Ιδιότητες Κειμένου"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Η ετικέτα απαιτεί μη κενό κείμενο."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -11549,7 +11553,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:84
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
 msgid "Left Click Mouse Commands"
-msgstr "Εντολές Ποντικιού με Αριστερό Κλικ"
+msgstr "Εντολές Αριστερού Κλικ Ποντικιού"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:88
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
@@ -22820,7 +22824,7 @@ msgstr "Λειτουργία εκτύπωσης"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Εξαγωγή ως μαύρα στοιχεία σε λευκό φόντο"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -24527,7 +24531,7 @@ msgstr "Προειδοποίηση: Η ιδιότητα Castellated προορί
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1373
 msgid "Warning: BGA property is for SMD pads."
-msgstr "Προειδοποίηση: Η ιδιότητα BGA προορίζεται για έδρες SMD."
+msgstr "Προειδοποίηση: Η ιδιότητα BGA προορίζεται για SMD pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
@@ -25309,6 +25313,8 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"Απενεργοποίηση μακροεντολών διαφράγματος σε αρχεία Gerber\n"
+"Χρήση *μόνο* για κατεστραμμένα προγράμματα προβολής Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
