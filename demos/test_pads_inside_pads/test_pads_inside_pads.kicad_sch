@@ -1,6 +1,4 @@
-(kicad_sch (version 20201015) (generator eeschema)
-
-  (page 1 1)
+(kicad_sch (version 20210126) (generator eeschema)
 
   (paper "A4")
 
@@ -42,23 +40,28 @@
   )
 
 
+
   (wire (pts (xy 105.41 36.83) (xy 95.25 36.83))
     (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 719f2e63-0c2b-4a58-bc69-9318855f4e18)
   )
   (wire (pts (xy 105.41 44.45) (xy 95.25 44.45))
     (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid c31b3cc5-1c8c-46f3-ab75-f3a70657abb8)
   )
 
   (label "NET1" (at 97.79 36.83 0)
     (effects (font (size 1.524 1.524)) (justify left bottom))
+    (uuid c0edb6bc-5da8-4326-9ea4-e4ba367b41a6)
   )
   (label "NET2" (at 97.79 44.45 0)
     (effects (font (size 1.524 1.524)) (justify left bottom))
+    (uuid 5f95b744-6a08-47f9-b294-13b17e9d2ed4)
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 91.44 36.83 180) (unit 1)
     (in_bom yes) (on_board yes)
-    (uuid "00000000-0000-0000-0000-00004ee5056c")
+    (uuid 00000000-0000-0000-0000-00004ee5056c)
     (property "Reference" "P3" (id 0) (at 89.408 36.83 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
@@ -71,11 +74,12 @@
     (property "Datasheet" "" (id 3) (at 91.44 36.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (pin "1" (uuid b8ad4eef-d6ed-4840-ae33-c063c8bdbb53))
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 91.44 44.45 180) (unit 1)
     (in_bom yes) (on_board yes)
-    (uuid "00000000-0000-0000-0000-00004edf7cc5")
+    (uuid 00000000-0000-0000-0000-00004edf7cc5)
     (property "Reference" "P1" (id 0) (at 89.408 44.45 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
@@ -88,11 +92,12 @@
     (property "Datasheet" "" (id 3) (at 91.44 44.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (pin "1" (uuid 9adf6b14-a8d6-45d3-89c7-a5c3bd7770c9))
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 109.22 36.83 0) (unit 1)
     (in_bom yes) (on_board yes)
-    (uuid "00000000-0000-0000-0000-00004ee5056d")
+    (uuid 00000000-0000-0000-0000-00004ee5056d)
     (property "Reference" "P4" (id 0) (at 111.252 36.83 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
@@ -105,11 +110,12 @@
     (property "Datasheet" "" (id 3) (at 109.22 36.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (pin "1" (uuid 89815e55-a712-4edd-8370-bdd10c92726d))
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 109.22 44.45 0) (unit 1)
     (in_bom yes) (on_board yes)
-    (uuid "00000000-0000-0000-0000-00004edf7cc0")
+    (uuid 00000000-0000-0000-0000-00004edf7cc0)
     (property "Reference" "P2" (id 0) (at 111.252 44.45 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
@@ -122,6 +128,7 @@
     (property "Datasheet" "" (id 3) (at 109.22 44.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (pin "1" (uuid 445c5ef2-f52e-4b79-ab7e-4feec4e7af63))
   )
 
   (sheet_instances
