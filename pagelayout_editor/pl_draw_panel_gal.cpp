@@ -99,7 +99,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     auto settings = painter->GetSettings();
     settings->SetShowPageLimits( true );
 
-    model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
+    model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), IU_PER_MILS );
 
     // To show the formatted texts instead of raw texts in drawing sheet editor, we need
     // a dummy DS_DRAW_ITEM_LIST.
