@@ -1514,23 +1514,29 @@ void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
-            {
+        {
             FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
-                shape->Move( moveVector );
-            }
+            shape->Move( moveVector );
+        }
             break;
 
         case PCB_FP_TEXT_T:
-            {
+        {
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
             text->SetPos0( text->GetPos0() + moveVector );
             text->SetDrawCoord();
-            }
+        }
             break;
 
         default:
             break;
         }
+    }
+
+    // Update the keepout zones
+    for( ZONE* zone : Zones() )
+    {
+        zone->Move( moveVector );
     }
 
     m_cachedBoundingBox.Move( moveVector );
