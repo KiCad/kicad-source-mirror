@@ -1,18 +1,20 @@
+# ___davidpr <david.pribic95@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
-"PO-Revision-Date: 2020-04-09 22:55+0200\n"
-"Last-Translator: \n"
-"Language-Team: David Pribić\n"
-"Language: sr_RS\n"
+"PO-Revision-Date: 2021-03-08 21:44+0000\n"
+"Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.5.1\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
@@ -20,9 +22,9 @@ msgid "All Files (*.*)|*.*"
 msgstr "Сви фајлови (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Сви фајлови (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
@@ -126,7 +128,7 @@ msgstr "Промјени у изометријску перспективу"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Поново учитај плочу и 3D моделе"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:273
 #, fuzzy
@@ -34546,9 +34548,8 @@ msgid "Excellon drill file"
 msgstr "Drill фајлови"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "Пројект"
+msgstr "KiCad пројект"
 
 #: resources/linux/mime/kicad-kicad.xml.in:11
 #, fuzzy
