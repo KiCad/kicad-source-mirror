@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
-"PO-Revision-Date: 2021-03-07 18:42+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-03-07 18:59+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -28961,14 +28961,14 @@ msgid "Footprint library not found."
 msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
 
 #: pcbnew/footprint_viewer_frame.cpp:939
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη στην τρέχουσα "
-"διαμόρφωση. Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να "
-"επεξεργαστείτε τη διαμόρφωση."
+"Η βιβλιοθήκη '%s' δεν είναι ενεργοποιημένηστην τρέχουσα διαρρύθμιση.\n"
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργαστία της "
+"διαρρύθμισης."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:83
@@ -29834,9 +29834,9 @@ msgid "Pad of %s on %s"
 msgstr "Έδρα του %s στο %s"
 
 #: pcbnew/pad.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad of %s"
-msgstr "Διαμπερείς τρύπες"
+msgstr "Διαμπερές οπή pad του %s"
 
 #: pcbnew/pad.cpp:1115
 #, c-format
@@ -29844,9 +29844,9 @@ msgid "Pad %s of %s on %s"
 msgstr "Έδρα %s από %s στο %s"
 
 #: pcbnew/pad.cpp:1122
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Διαμπερείς τρύπες"
+msgstr "Διαμπερές οπή pad %s του %s"
 
 #: pcbnew/pad.cpp:1433
 msgid "Edge connector"
@@ -30098,9 +30098,8 @@ msgid "Action Plugins"
 msgstr "Πρόσθετα Ενεργειών"
 
 #: pcbnew/pcbnew_config.cpp:61
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Προέλευση"
+msgstr "Αρχικά σημεία και Άξονες"
 
 #: pcbnew/pcbnew_printout.cpp:108
 msgid "Multiple Layers"
