@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
-"PO-Revision-Date: 2021-03-07 18:59+0000\n"
+"PO-Revision-Date: 2021-03-08 21:44+0000\n"
 "Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -2886,9 +2886,8 @@ msgid "Executable files ("
 msgstr "Εκτελέσιμα αρχεία ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Επιλέξτε Προτεινόμενο Πρόγραμμα Προβολής PDF"
+msgstr "Επιλογή Προτεινόμενου Προγράμματος Προβολής PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3345,9 +3344,8 @@ msgstr ""
 "προς τα δεξιά στην επιφάνεια αφής"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Επαναφορά σε Προκαθορισμένες Τιμές"
+msgstr "Επαναφορά Προεπιλεγμένων Τιμών"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 msgid "Reset to Trackpad Defaults"
@@ -6899,7 +6897,7 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Οι αντιστοιχίσεις αποτυπώματος από τη λίστα δικτύων σχηματικόυ και το αρχείο "
+"Οι αντιστοιχίσεις αποτυπώματος από τη λίστα δικτύων σχηματικού και το αρχείο "
 "συσχετισμού αποτυπώματος συμβόλων (.cmp) είναι αντικρουόμενες.\n"
 "\n"
 "Επιλέξτε τη σωστή αντιστοίχιση."
@@ -6992,7 +6990,7 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"Θα πρέπει να τα ξανά-αντιστοιχίσετε χειρωνακτικά αν θέλετε να ενημερωθούν "
+"Θα πρέπει να τα ξανά-αντιστοιχίσετε χειροκίνητα αν θέλετε να ενημερωθούν "
 "σωστά την επόμενη φορά που θα εισάγετε τη λίστα δικτύων στο Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:296
@@ -8369,7 +8367,7 @@ msgstr "Εμφάνιση Διαλόγου Ονοματοδοσίας"
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
-"Το Σχηματικό δεν είναι πλήρως σχολιασμένο. Τα αποτελέσματα ERC θα είναι "
+"Το Σχηματικό δεν είναι πλήρως ονοματισμένο. Τα αποτελέσματα ERC θα είναι "
 "ελλιπή."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
@@ -8400,9 +8398,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- Το ERC ακυρώθηκε από τον χρήστη.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Έγινε.<br><br>"
+msgstr "Ολοκληρώθηκε το ERC. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10768,7 +10765,6 @@ msgid "Spice value in simulation"
 msgstr "Τιμή spice στην προσομοίωση"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
@@ -13086,7 +13082,6 @@ msgid "Assigned Netclass"
 msgstr "Netclass που έχουν Ανατεθεί"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
 msgstr "Σφάλμα Ελέγχου Ηλεκτρικών Κανόνων"
 
@@ -15031,7 +15026,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:71
 msgid "Select at least one property to back annotate."
-msgstr "Επιλέξτε τουλάχιστον μία ιδιότητα για δημιουργία σχολιασμού."
+msgstr "Επιλέξτε τουλάχιστον μία ιδιότητα για ονοματισμό."
 
 #: eeschema/tools/backannotate.cpp:95
 msgid ""
@@ -15857,7 +15852,6 @@ msgid "Highlight on PCB"
 msgstr "Επισήμανση στο PCB"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr "Επισήμανση αντίστοιχων αντικειμένων στον επεξεργαστή πλακέτας"
 
@@ -15891,18 +15885,17 @@ msgid "Enter Sheet"
 msgstr "Είσοδος σε Φύλλο"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Εμφάνιση περιεχομένων του επιλεγμένου φύλλου στο παράθυρο Eeschema"
+msgstr ""
+"Εμφάνιση περιεχομένων του επιλεγμένου φύλλου στον επεξεργαστή σχηματικού"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "Έξοδος από το φύλλο"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Εμφάνιση γονικού φύλλου στο παράθυρο Eeschema"
+msgstr "Εμφάνιση γονικού φύλλου στον σχηματικό επεξεργαστή"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -17400,7 +17393,6 @@ msgstr ""
 "Δημιουργία νέου, κενού φακέλου για το έργο;"
 
 #: kicad/import_project.cpp:113
-#, fuzzy
 msgid ""
 "Error creating new directory. Please try a different path. The project "
 "cannot be imported."
@@ -20395,15 +20387,15 @@ msgstr "Αποκλείσθηκε"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:118
 msgid "Reannotate PCB"
-msgstr "Επανα-σχολιασμός PCB"
+msgstr "Επανα-ονοματισμός PCB"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:268
 msgid "No PCB to reannotate!"
-msgstr "Δεν υπάρχει PCB για επανα-σχολιασμό!"
+msgstr "Δεν υπάρχει PCB για επανα-ονοματισμό!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:279
 msgid "PCB and schematic successfully reannotated"
-msgstr "Επιτυχής επανα-σχολιασμός του PCB και του σχηματικού"
+msgstr "Επιτυχής επανα-ονοματισμός του PCB και του σχηματικού"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:294
 #, c-format
@@ -20412,7 +20404,7 @@ msgid ""
 "%s footprints will be reannotated."
 msgstr ""
 "\n"
-"%s αποτυπώματα θα επανα-τροποποιηθούν."
+"%s αποτυπώματα θα επανα-ονοματιστούν."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:299
 #, c-format
@@ -20421,7 +20413,7 @@ msgid ""
 "Any reference types %s will not be annotated."
 msgstr ""
 "\n"
-"Τυχόν τύποι αναφοράς %s δεν θα τροποποιούνται."
+"Τυχόν τύποι αναφοράς %s δε θα ονοματίζονται."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:304
 msgid ""
@@ -20429,7 +20421,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"Κλειδωμένα αποτυπώματα δεν θα επανα-τροποποιηθούν"
+"Κλειδωμένα αποτυπώματα δε θα επανα-ονοματιστούν"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:308
 #, c-format
@@ -20628,7 +20620,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:618
 msgid "Reannotate anyway?"
-msgstr "Επανα-σχολιασμός ούτως ή άλλως;"
+msgstr "Επανα-ονοματισμός ούτως ή άλλως;"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:651
 msgid ""
@@ -20731,9 +20723,8 @@ msgid "Reannotation Scope"
 msgstr "Πεδίο Επαναπροσδιορισμού"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
-#, fuzzy
 msgid "Reannotate:"
-msgstr "Περιστροφή:"
+msgstr "Επανα-ονοματισμός:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:178
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
@@ -20818,9 +20809,8 @@ msgstr ""
 "στο πίσω πλαίσιο προθέματος εάν υπάρχει"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:246
-#, fuzzy
 msgid "Front prefix:"
-msgstr "Πρόθεμα ονόματος έδρας:"
+msgstr "Μπροστινό πρόθεμα:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
@@ -20829,9 +20819,8 @@ msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr "Αντικατάσταση ενδείξεων αναφοράς εξαρ&τημάτων"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
-#, fuzzy
 msgid "Back prefix:"
-msgstr "Πρόθεμα ονόματος έδρας:"
+msgstr "Πίσω πρόθεμα:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
@@ -20841,14 +20830,12 @@ msgstr ""
 "Προαιρετικό πρόθεμα προσδιορισμών αναφοράς από πλευράς συγκολλήσεως (π.χ. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
-#, fuzzy
 msgid "Exclude locked footprints"
-msgstr "Συμπερίληψη κ&λειδωμένων αποτυπωμάτων"
+msgstr "Αποκλεισμός κλειδωμένων αποτυπωμάτων"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
-#, fuzzy
 msgid "Locked footprints will not be reannotated"
-msgstr "Εξαναγκασμός τροποποίησης κλειδωμένων αποτυπωμάτων"
+msgstr "Τα κλειδωμένα αποτυπώματα δε θα επανα-ονοματίζονται"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:273
 msgid "Exclude references:"
@@ -20923,9 +20910,8 @@ msgstr "Προκαθορισμένα μεγέθη"
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
 #: pcbnew/pcb_edit_frame.cpp:1654
-#, fuzzy
 msgid "Custom Rules"
-msgstr "Προσαρμοσμένο σετ επιπέδων"
+msgstr "Προσαρμοσμένοι Κανόνες"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
 #, c-format
@@ -21015,9 +21001,8 @@ msgid "unknown"
 msgstr "άγνωστο"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:451
-#, fuzzy
 msgid "Round"
-msgstr "Στρογγ/νο ορθογώνιο"
+msgstr "Στρογγυλό"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:454
 msgid "Slot"
@@ -21388,13 +21373,12 @@ msgid "Pad connections:"
 msgstr "Συνδέσεις έδρας:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"Προκαθορισμένος τύπος σύνδεση έδρας με τη ζώνη.\n"
-"Αυτή η ρύθμιση μπορεί να παρακαμφθεί από τις τοπικές ρυθμίσεις έδρας"
+"Προεπιλεγμένος τύπος σύνδεσης pad με τη ζώνη.\n"
+"Αυτή η ρύθμιση μπορεί να παρακαμφθεί από τις τοπικές ρυθμίσεις pad"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
@@ -21433,9 +21417,8 @@ msgstr "Τύπος γεμίσματος:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "Συμπαγής"
+msgstr "Συμπαγές γέμισμα"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -21801,9 +21784,8 @@ msgid "Measured value of this dimension"
 msgstr "Μετρημένη τιμή αυτής της διάστασης"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
-#, fuzzy
 msgid "Override value"
-msgstr "Τρέχουσα τιμή"
+msgstr "Παράκαμψη τιμής"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:107
 msgid ""
@@ -22038,9 +22020,8 @@ msgstr "Μήκος via:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:153
-#, fuzzy
 msgid "Extension line offset:"
-msgstr "Μετατόπιση θέσης:"
+msgstr "Μετατόπιση γραμμής επέκτασης:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:380
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
@@ -22142,9 +22123,9 @@ msgid "Tests Running..."
 msgstr "Λειτουργία Διαγνωστικών Ελέγχων..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%d)"
-msgstr "Προβλήματα / Σημάδια (%d)"
+msgstr "Παραβάσεις (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:117
 #, c-format
@@ -28300,7 +28281,7 @@ msgstr "Έλεγχος μεταξοτυπίας για επικάλυψη αντ
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:211
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "Δοκιμή %d χαρακτηριστικών μεταξοτυπίας έναντι %d στοιχείων πλακέτας."
+msgstr "Δοκιμή %d μεταξοτυπικών χαρακτηριστικών έναντι %d στοιχείων πλακέτας."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
@@ -28766,10 +28747,9 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Η βιβλιοθήκη με το ψευδώνυμο \"%s\" δεν είναι ενεργοποιημένη στην τρέχουσα "
-"διαμόρφωση.\n"
-"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
-"τη διαμόρφωση."
+"Η βιβλιοθήκη «%s» δεν είναι ενεργοποιημένη στην τρέχουσα διαμόρφωση.\n"
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της "
+"διαμόρφωσης."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:942
 msgid "Footprint library not enabled."
@@ -28952,23 +28932,22 @@ msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων «%s». "
-"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για να επεξεργαστείτε "
-"τη διαμόρφωση."
+"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη «%s». Χρησιμοποιήστε τη "
+"Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της διαμόρφωσης."
 
 #: pcbnew/footprint_viewer_frame.cpp:935
 msgid "Footprint library not found."
 msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
 
 #: pcbnew/footprint_viewer_frame.cpp:939
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Η βιβλιοθήκη '%s' δεν είναι ενεργοποιημένηστην τρέχουσα διαρρύθμιση.\n"
-"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργαστία της "
-"διαρρύθμισης."
+"Η βιβλιοθήκη «%s» δεν είναι ενεργοποιημένη στην τρέχουσα διαμόρφωση. "
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της "
+"διαμόρφωσης."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:83
