@@ -1254,6 +1254,16 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     for( SCH_FIELD& field : symbol->GetFields() )
                         children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &field, layer ) );
                 }
+
+                SCH_GLOBALLABEL* gLabel = dynamic_cast<SCH_GLOBALLABEL*>( pair.first );
+
+                if( gLabel )
+                {
+                    int        layer = pair.second;
+                    SCH_FIELD* intersheetRef = gLabel->GetIntersheetRefs();
+
+                    children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( intersheetRef, layer ) );
+                }
             }
 
             selectedItems.insert( selectedItems.end(), children.begin(), children.end() );
