@@ -25,7 +25,7 @@
 #define PIN_TYPE_H_
 
 #include <wx/arrstr.h>
-#include <bitmaps.h>
+#include <bitmap_types.h>
 #include <vector>
 
 /**

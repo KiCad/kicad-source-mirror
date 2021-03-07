@@ -20,14 +20,11 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <bitmaps.h>
-#include <preview_items/ruler_item.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_fpviewer_selection_tool.h>
-#include <view/view.h>
-#include <view/view_controls.h>
+
 
 CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "cvpcb.FootprintViewerInteractiveSelection" ),

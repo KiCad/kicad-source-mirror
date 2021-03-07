@@ -21,9 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pin_type.h>
-#include <lib_pin.h>
+#include <bitmaps.h>
 #include <core/arraydim.h>
+#include <lib_pin.h>
+#include <pin_type.h>
 
 
 // These are true singletons so it's OK for them to be globals.

@@ -24,7 +24,6 @@
 #include <kiway.h>
 #include <kicad_manager_frame.h>
 #include <confirm.h>
-#include <bitmaps.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
 #include <tools/kicad_manager_actions.h>

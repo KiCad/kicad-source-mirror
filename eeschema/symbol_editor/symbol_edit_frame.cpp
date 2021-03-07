@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <wx/hyperlink.h>
 #include <base_screen.h>
 #include <class_library.h>
@@ -40,7 +41,6 @@
 #include <symbol_editor_settings.h>
 #include <paths.h>
 #include <pgm_base.h>
-#include <sch_draw_panel.h>
 #include <sch_painter.h>
 #include <sch_view.h>
 #include <settings/settings_manager.h>

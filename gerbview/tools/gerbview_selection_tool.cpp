@@ -22,20 +22,16 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <eda_item.h>
 #include <bitmaps.h>
+#include <eda_item.h>
 #include <gerber_collectors.h>
 #include <class_draw_panel_gal.h>
 #include <kicad_string.h>
 #include <view/view.h>
-#include <view/view_controls.h>
 #include <view/view_group.h>
 #include <painter.h>
-#include <bitmaps.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <preview_items/ruler_item.h>
-#include <preview_items/selection_area.h>
 #include <gerbview_id.h>
 #include <gerbview_painter.h>
 #include "gerbview_selection_tool.h"

@@ -32,7 +32,6 @@
 
 #include <wx/menu.h>
 #include <wx/menuitem.h>
-#include <bitmaps.h>
 
 class ACTION_MENU;
 class TOOL_INTERACTIVE;

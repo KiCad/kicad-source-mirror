@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013-2019 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -23,13 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <filehistory.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
-#include <tool/selection.h>
 #include <widgets/wx_menubar.h>
 
 #include "pl_editor_frame.h"

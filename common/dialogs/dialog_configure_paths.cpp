@@ -24,6 +24,7 @@
 
 #include <dialogs/dialog_configure_paths.h>
 
+#include <bitmaps.h>
 #include <confirm.h>
 #include <menus_helpers.h>
 #include <validators.h>

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
 #include <tool/action_menu.h>

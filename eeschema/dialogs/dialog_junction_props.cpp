@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <bitmaps.h>
 #include <sch_junction.h>
 #include <dialog_junction_props.h>
 #include <pgm_base.h>

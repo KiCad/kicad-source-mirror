@@ -23,13 +23,10 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <eda_item.h>
 #include <id.h>
 #include <view/view.h>
-#include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
-#include <bitmaps.h>
 
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_actions.h>

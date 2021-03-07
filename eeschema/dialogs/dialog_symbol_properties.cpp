@@ -23,6 +23,7 @@
 
 #include "dialog_symbol_properties.h"
 
+#include <bitmaps.h>
 #include <wx/tooltip.h>
 #include <grid_tricks.h>
 #include <confirm.h>

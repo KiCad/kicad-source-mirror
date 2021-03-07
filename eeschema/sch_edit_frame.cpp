@@ -23,6 +23,7 @@
  */
 
 #include <base_units.h>
+#include <bitmaps.h>
 #include <class_library.h>
 #include <confirm.h>
 #include <connection_graph.h>

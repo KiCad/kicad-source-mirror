@@ -28,6 +28,7 @@
  */
 
 
+#include <bitmaps.h>
 #include <bom_plugins.h>
 #include <confirm.h>
 #include <dialog_bom_base.h>
@@ -38,12 +39,10 @@
 #include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h
 #include <invoke_sch_dialog.h>
 #include <kiface_i.h>
-#include <netlist.h>
 #include <netlist_exporter_xml.h>
 #include <pgm_base.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
-#include <schematic.h>
 #include <paths.h>
 
 #include <wx/filedlg.h>

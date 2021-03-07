@@ -33,7 +33,6 @@ class wxBitmap;     // only to define wxBitmap
 class EDA_DRAW_FRAME;
 class wxWindow;
 
-#include <config.h>
 #include <wx/gdicmn.h>  // wxBitmapType
 
 #include <bitmaps_png/bitmap_def.h>

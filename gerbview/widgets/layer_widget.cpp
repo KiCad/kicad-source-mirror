@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,12 @@
 
 #include "layer_widget.h"
 
+#include <bitmaps.h>
 #include <macros.h>
-#include <common.h>
-
+#include <menus_helpers.h>
 #include <widgets/indicator_icon.h>
 
 #include <algorithm>
-
-#include <menus_helpers.h>
 
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();

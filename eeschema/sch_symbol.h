@@ -43,7 +43,6 @@
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
-#include <bitmaps.h>
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>

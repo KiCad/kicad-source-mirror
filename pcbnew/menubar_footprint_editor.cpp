@@ -26,12 +26,12 @@
 
 #include "footprint_edit_frame.h"
 #include "pcbnew_id.h"
+#include <bitmaps.h>
 #include <menus_helpers.h>
 #include <tool/actions.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <board.h>
 #include <tools/pcb_selection_tool.h>
 #include <widgets/wx_menubar.h>
 
