@@ -21,7 +21,7 @@ set( PYTHON_SCRIPTS_LIST
     python_scripts/bom_csv_sorted_by_ref.py
     python_scripts/bom_html_grouped_by_value.py
     python_scripts/bom_html_with_advanced_grouping.py
-    python_scripts/bom_sorted_by_ref.py
+    python_scripts/bom_txt_sorted_by_ref.py
     )
 
 install( FILES ${XSL_SCRIPTS_LIST} ${PYTHON_SCRIPTS_LIST}
