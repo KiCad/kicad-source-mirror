@@ -3,12 +3,13 @@
 #
 # Example: Sorted and Grouped HTML BOM
 #
+
 """
     @package
-    Generate a HTML BOM list.
-    Components are sorted by ref and grouped by value
-    Fields are (if exist)
-    Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+    Output: HTML
+    Grouped By: Value
+    Sorted By: Ref
+    Fields: Ref, Qnty, Value, Part, Datasheet, Description, Vendor
 
     Command line:
     python "pathToFile/bom_html_grouped_by_value.py" "%I" "%O.html"

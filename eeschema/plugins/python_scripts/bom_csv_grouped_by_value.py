@@ -3,12 +3,15 @@
 #
 # Example: Sorted and Grouped CSV BOM
 #
+
 """
     @package
-    Generate a csv BOM list.
-    Components are sorted by ref and grouped by value
-    Fields are (if exist)
-    Item, Qty, Reference(s), Value, LibPart, Footprint, Datasheet
+    Output: CSV (comma-separated)
+    Grouped By: Value
+    Sorted By: Ref
+    Fields: Item, Qty, Reference(s), Value, LibPart, Footprint, Datasheet, all additional symbol fields
+
+    Outputs ungrouped components first, then outputs grouped components.
 
     Command line:
     python "pathToFile/bom_csv_grouped_by_value.py" "%I" "%O.csv"

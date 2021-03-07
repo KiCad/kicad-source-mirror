@@ -6,10 +6,10 @@
 
 """
     @package
-    Generate a comma delimited list (csv file type).
-    Components are sorted by ref and grouped by value with same footprint
-    Fields are (if exist)
-    'Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'
+    Output: CSV (comma-separated)
+    Grouped By: Value, Footprint
+    Sorted By: Ref
+    Fields: Ref, Qnty, Value, Cmp name, Footprint, Description, Vendor
 
     Command line:
     python "pathToFile/bom_csv_grouped_by_value_with_fp.py" "%I" "%O.csv"

@@ -7,22 +7,17 @@
 	Functionality:
 		Generation of Digi-Key ordering system compatible BOM
 
-    How to use this is explained in eeschema.pdf chapter 14.  You enter a command line into the
-    netlist exporter using a new (custom) tab in the netlist export dialog.
-    The command line is
-        xsltproc -o "%O.csv" "FullPathToFile/bom2groupedCsv.xsl" "%I"
+    How to use this is explained in eeschema.pdf chapter 14.
 -->
 <!--
     @package
-	Functionality:
-    * Generate a comma separated value BOM list (csv file type).
-    * Components are sorted by ref and grouped by same value+footprint
-    One value per line
-    Fields are
-    Reference, Quantity, Value, Footprint, Datasheet
+    Output: CSV (comma-separated)
+    Grouped By: Value, Footprint
+    Sorted By: Ref
+    Fields: Reference, Quantity, Value, Footprint, Datasheet, all additional symbol fields
 
-    The command line is
-        xsltproc -o "%O.csv" "FullPathToFile/bom2groupedCsv.xsl" "%I"
+    Command line:
+    xsltproc -o "%O.csv" "pathToFile/bom2grouped_csv.xsl" "%I"
 -->
 
 

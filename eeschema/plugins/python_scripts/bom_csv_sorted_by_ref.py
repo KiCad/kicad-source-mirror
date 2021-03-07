@@ -6,11 +6,10 @@
 
 """
     @package
-    Generate a csv list file.
-    Components are sorted by ref
-    One component per line
-    Fields are (if exist)
-    Ref, value, Part, footprint, Datasheet, Manufacturer, Vendor
+    Output: CSV (comma-separated)
+    Grouped By: ungrouped, one component per line
+    Sorted By: Ref
+    Fields: Ref, Value, Part, Footprint, Datasheet, Manufacturer, Vendor
 
     Command line:
     python "pathToFile/bom_csv_sorted_by_ref.py" "%I" "%O.csv"

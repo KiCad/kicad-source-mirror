@@ -6,27 +6,17 @@
         Generation of csv table with table head of all existing field names
         and correct assigned cell entries
 
-    How to use this is explained in eeschema.pdf chapter 14.  You enter a command line into the
-    netlist exporter using a new (custom) tab in the netlist export dialog.  The command is
-    similar to
-        on Windows:
-            xsltproc -o "%O.csv" "C:\Program Files (x86)\KiCad\bin\plugins\bom2csv.xsl" "%I"
-        on Linux:
-            xsltproc -o "%O.csv" /usr/local/lib/kicad/plugins/bom2csv.xsl "%I"
-
-    Instead of "%O.csv" you can alternatively use "%O" if you will supply your own file extension when
-    prompted in the UI.  The double quotes are there to account for the possibility of space(s)
-    in the filename.
+    How to use this is explained in eeschema.pdf chapter 14.
 -->
 
 <!--
     @package
-    Generate a Tab delimited list (csv file type).
-    One component per line
-    Fields are
-    Ref,Value, Footprint, Datasheet, Field5, Field4, price
+    Output: CSV (comma-separated)
+    Grouped By: ungrouped, one component per line
+    Sorted By: Ref
+    Fields: Reference, Value, Footprint, Datasheet, all additional symbol fields
 
-    Command line
+    Command line:
     xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
 -->
 

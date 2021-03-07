@@ -6,15 +6,14 @@
 
 """
     @package
-    Generate a HTML BOM list.
-    Components are sorted and grouped by value
-    Fields are (if exist)
-    Ref, Quantity, Value, Part, Footprint, Description, Vendor
+    Output: HTML
+    Grouped By: Value, Part, Footprint, Tolerance, Manufacturer, Voltage
+    Sorted By: Ref
+    Fields: Ref, Qnty, Value, Part, Footprint, Description, Vendor
 
     Command line:
     python "pathToFile/bom_with_advanced_grouping.py" "%I" "%O.html"
 """
-
 
 from __future__ import print_function
 
@@ -79,7 +78,7 @@ kicad_netlist_reader.comp.__eq__ = myEqu
 # <file>.tmp. If the file doesn't exist, execution will stop
 net = kicad_netlist_reader.netlist(sys.argv[1])
 
-# Open a file to write too, if the file cannot be opened output to stdout
+# Open a file to write to, if the file cannot be opened output to stdout
 # instead
 try:
     f = open(sys.argv[2], 'w')

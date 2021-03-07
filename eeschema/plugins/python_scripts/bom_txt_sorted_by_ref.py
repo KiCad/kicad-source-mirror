@@ -1,17 +1,16 @@
 #
 # Example python script to generate a BOM from a KiCad generic netlist
 #
+
 """
     @package
-    Generate a BOM list file (a simple text).
-    Components are sorted by ref
-    One component per line
-    Fields are (if exist)
-    Ref, Quantity, value, Part, footprint, Description, Vendor
-    Fields are separated by tabs
+    Output: text file (tab-separated)
+    Grouped By: ungrouped, one component per line
+    Sorted By: Ref
+    Fields: Ref, Value, Part, Footprint, Description, Vendor
 
     Command line:
-    python "pathToFile/bom_sorted_by_ref.py" "%I" "%O.txt"
+    python "pathToFile/bom_txt_sorted_by_ref.py" "%I" "%O.txt"
 """
 
 from __future__ import print_function

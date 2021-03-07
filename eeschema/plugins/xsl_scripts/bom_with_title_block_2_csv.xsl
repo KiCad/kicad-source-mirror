@@ -24,12 +24,15 @@
 -->
 <!--
     @package
-    Output format
-        Reference, Value, Fields[n], Library, Library Ref
-        U1, PIC32MX, Fields[n], KicadLib, PIC
+    Output: CSV (comma-separated)
+    Grouped By: ungrouped, one component per line
+    Sorted By: Ref
+    Fields: Reference, Value, any additional symbol fields, Library, Library Ref
 
-Command line:
-        xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
+    Includes a title block at the top of the BOM.
+
+    Command line:
+    xsltproc -o "%O.csv" "pathToFile/bom_with_title_block_2_csv.xsl" "%I"
 -->
 
 <!DOCTYPE xsl:stylesheet [
