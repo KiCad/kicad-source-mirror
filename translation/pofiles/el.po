@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
 "PO-Revision-Date: 2021-03-07 18:59+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -24762,7 +24762,7 @@ msgstr "Μέγεθος τρύπας Χ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:409
 msgid "Offset shape from hole"
-msgstr "Μετατόπιση σχήματος από τρύπα"
+msgstr "Μετατόπιση σχήματος από οπή"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
@@ -30572,6 +30572,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2042
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"Δεν ήταν δυνατός ο ορισμός μεταβλητών κειμένου, καθώς δεν έχει φορτωθεί έργο."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2127
 #, c-format
@@ -30694,7 +30695,7 @@ msgstr "Αδυναμία ανάγνωσης αρχείου "
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:232
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr ""
+msgstr "Άγνωστο τμήμα FABMASTER %s:%s στη σειρά %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:247
 #, c-format
@@ -30764,7 +30765,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:974
 #, c-format
 msgid "Unrecognized pad shape primitive \"%s\" in line %zu."
-msgstr ""
+msgstr "Μη αναγνωρίσιμο αρχέγονο σχήματος pad «%s» στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1080
 #, c-format
