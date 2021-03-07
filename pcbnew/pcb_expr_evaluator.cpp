@@ -355,12 +355,12 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                     DRC_RTREE* itemRTree = board->m_CopperZoneRTrees[ itemZone ].get();
 
-                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                    if( itemRTree )
                     {
-                        if( itemRTree->QueryColliding( zone->GetCachedBoundingBox(), &zoneOutline,
-                                                       layer, 0, nullptr, nullptr ) )
+                        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
                         {
-                            return true;
+                            if( itemRTree->QueryColliding( itemBBox,  &zoneOutline, layer, 0 ) )
+                                return true;
                         }
                     }
 

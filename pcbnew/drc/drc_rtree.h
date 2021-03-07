@@ -244,7 +244,7 @@ public:
      * position.
      */
     bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer, int aClearance,
-                         int* aActual, VECTOR2I* aPos ) const
+                         int* aActual = nullptr, VECTOR2I* aPos = nullptr ) const
     {
         aBox.Inflate( aClearance );
 

@@ -106,6 +106,14 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ALLOWED_ITEMS ) )
                     return false;
 
+                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
+                {
+                    ZONE* zone = static_cast<ZONE*>( item );
+
+                    if( zone->GetIsRuleArea() )
+                        return true;
+                }
+
                 item->ClearFlags( HOLE_PROXY );
                 doCheckItem( item );
 
