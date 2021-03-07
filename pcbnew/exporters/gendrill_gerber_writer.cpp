@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,9 @@
 #include <gendrill_gerber_writer.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
+
+// set to 1 to use flashed oblong holes, 0 to draw them by a line.
+#define FLASH_OVAL_HOLE 1
 
 
 GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
@@ -119,8 +122,10 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
         CreateMapFilesSet( aPlotDirectory, aReporter );
 }
 
+#if !FLASH_OVAL_HOLE
 // A helper class to transform an oblong hole to a segment
 static void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoint& aEnd );
+#endif
 
 int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                                     DRILL_LAYER_PAIR aLayerPair )
@@ -134,6 +139,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     // Gerber drill file imply X2 format:
     plotter.UseX2format( true );
     plotter.UseX2NetAttributes( true );
+    plotter.DisableApertMacros( false );
 
     // Add the standard X2 header, without FileFunction
     AddGerberX2Header( &plotter, m_pcb );
@@ -210,9 +216,8 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
         if( hole_descr.m_Hole_Shape )
         {
-            #if 0   // set to 1 to use flashed oblong holes.
-                    // Currently not possible for hole orient != 0 or 90 deg
-            // Use flashed oblong hole
+            #if FLASH_OVAL_HOLE     // set to 1 to use flashed oblong holes,
+                                    // 0 to draw them as a line.
             plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size,
                                   hole_descr.m_Hole_Orient, FILLED, &gbr_metadata );
             #else
@@ -244,6 +249,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 }
 
 
+#if !FLASH_OVAL_HOLE
 void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoint& aEnd )
 {
     wxSize  size( aSize );
@@ -268,7 +274,7 @@ void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoi
     RotatePoint( &cx, &cy, orient );
     aEnd = wxPoint( cx, cy );
 }
-
+#endif
 
 void GERBER_WRITER::SetFormat( int aRightDigits )
 {
