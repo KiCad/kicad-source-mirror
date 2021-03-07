@@ -1,8 +1,7 @@
 // Turn off wxWidgets attempting to use its own manifests
 #define wxUSE_NO_MANIFEST 1
 #include "wx/msw/wx.rc"
-#include <winres.h>
-#include <winver.h> // mingw/msys needs this
+#include <winver.h> // defines VS_VERSION_INFO
 #include <kicad_build_version.h>
 
 #ifdef ISOLATION_AWARE_ENABLED
