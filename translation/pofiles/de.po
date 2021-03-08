@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-05 08:48-0800\n"
-"PO-Revision-Date: 2021-03-05 16:46+0000\n"
+"PO-Revision-Date: 2021-03-08 21:44+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.5.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -17332,12 +17332,12 @@ msgstr "Aktive"
 
 #: include/libeval_compiler/libeval_compiler.h:297
 msgid "Malformed expression"
-msgstr "Missgebildeter Ausdruck"
+msgstr "Fehlerhafter Ausdruck"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr ""
-"Alle Tastaturbefehle auf die in KiCad hinterlegten Standards zurücksetzen"
+"Alle Tastaturbefehle auf die in KiCad integrierten Standards zurücksetzen"
 
 #: include/widgets/infobar.h:111
 msgid "Hide this message."
@@ -17378,12 +17378,13 @@ msgstr "Projektvorlagenauswahl"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:97
 msgid "Edit the project schematic"
-msgstr "Projektschaltplan bearbeiten"
+msgstr "Den Projektschaltplan bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:100
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr ""
-"Die Schaltzeichen-Bibliotheken (global oder projektspezifisch) bearbeiten"
+"Die globalen oder projektspezifischen Bibliotheken der Schaltzeichen "
+"bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:103
 msgid "Edit the project PCB design"
@@ -17392,17 +17393,16 @@ msgstr "Das Leiterplatten-Design des Projekts bearbeiten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:106
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr ""
-"Die Footprint-Bibliotheken (global oder projektspezifisch) für Leiterplatten "
-"bearbeiten"
+"Die globalen oder projektspezifischen Bibliotheken der Leiterplatten-"
+"Footprints bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:109
 msgid "Preview Gerber files"
-msgstr "Gerberdateien prüfen und betrachten"
+msgstr "Gerberdateien anzeigen und prüfen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:113
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr ""
-"Konvertiert Bitmap-Bilder in Schaltplansymbole oder Leiterplatten-Footprints"
+msgstr "Bitmaps in Schaltplansymbole oder Leiterplatten-Footprints konvertieren"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:117
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -18185,7 +18185,7 @@ msgstr "Anwenden"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:409
 msgid "Item Properties"
-msgstr "Element Eigenschaften"
+msgstr "Elementeigenschaften"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:416
 #: pcbnew/footprint_edit_frame.cpp:918
@@ -18400,7 +18400,7 @@ msgstr "Bestehendes Zeichnungsblatt in die aktuelle Datei einfügen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
-msgstr "Anzeige Design Inspektor"
+msgstr "Design-Inspektor anzeigen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in page layout"
