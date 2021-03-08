@@ -378,7 +378,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                             for( EDA_ITEM* item : aCollector )
                             {
-                                if( item->Type() == PCB_ZONE_T )
+                                if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                                 {
                                     ZONE* zone = static_cast<ZONE*>( item );
 
@@ -2419,7 +2419,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         BOARD_ITEM* item = aCollector[i];
         double      area;
 
-        if( item->Type() == PCB_ZONE_T
+        if( ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
                 && static_cast<ZONE*>( item )->HitTestForEdge( where, MAX_SLOP * pixel / 2 ) )
         {
             // Zone borders are very specific, so make them "small"

@@ -250,8 +250,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     }
 
     // Zones should pull from the copper layer
-    if( item && item->Type() == PCB_ZONE_T && IsZoneLayer( aLayer ) )
-        aLayer = aLayer - LAYER_ZONE_START;
+    if( item && ( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T ) )
+    {
+        if( IsZoneLayer( aLayer ) )
+            aLayer = aLayer - LAYER_ZONE_START;
+    }
 
     // Hole walls should pull from the copper layer
     if( aLayer == LAYER_PAD_HOLEWALLS )

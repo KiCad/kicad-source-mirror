@@ -1790,19 +1790,23 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
     if( aEnabled )
     {
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
-        bool isPoly = false;
+        bool       isPoly;
 
-        if( m_editPoints->GetParent()->Type() == PCB_ZONE_T
-                || m_editPoints->GetParent()->Type() == PCB_FP_ZONE_T )
+        switch( m_editPoints->GetParent()->Type() )
         {
+        case PCB_ZONE_T:
+        case PCB_FP_ZONE_T:
             isPoly = true;
-        }
+            break;
 
-        else if( m_editPoints->GetParent()->Type() == PCB_SHAPE_T
-                || m_editPoints->GetParent()->Type() == PCB_FP_SHAPE_T )
-        {
-            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( m_editPoints->GetParent() );
-            isPoly = shape->GetShape() == S_POLYGON;
+        case PCB_SHAPE_T:
+        case PCB_FP_SHAPE_T:
+            isPoly = static_cast<PCB_SHAPE*>( m_editPoints->GetParent() )->GetShape() == S_POLYGON;
+            break;
+
+        default:
+            isPoly = false;
+            break;
         }
 
         if( line && isPoly )
@@ -1929,25 +1933,31 @@ bool PCB_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     if( !m_editPoints || !m_editedPoint )
         return false;
 
-    EDA_ITEM* item = m_editPoints->GetParent();
+    EDA_ITEM*       item = m_editPoints->GetParent();
+    SHAPE_POLY_SET* polyset = nullptr;
 
     if( !item )
         return false;
 
-    if( !( item->Type() == PCB_ZONE_T
-            || item->Type() == PCB_FP_ZONE_T
-            || ( ( item->Type() == PCB_FP_SHAPE_T || item->Type() == PCB_SHAPE_T )
-                    && static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON ) ) )
+    switch( item->Type() )
     {
+    case PCB_ZONE_T:
+    case PCB_FP_ZONE_T:
+        polyset = static_cast<ZONE*>( item )->Outline();
+        break;
+
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
+        if( static_cast<PCB_SHAPE*>( item )->GetShape() == S_POLYGON )
+            polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
+        else
+            return false;
+
+        break;
+
+    default:
         return false;
     }
-
-    SHAPE_POLY_SET *polyset;
-
-    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-        polyset = static_cast<ZONE*>( item )->Outline();
-    else
-        polyset = &static_cast<PCB_SHAPE*>( item )->GetPolyShape();
 
     auto vertex = findVertex( *polyset, *m_editedPoint );
 

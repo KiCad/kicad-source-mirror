@@ -198,7 +198,7 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection() )
     {
-        assert( item->Type() == PCB_ZONE_T );
+        assert( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T );
 
         ZONE* zone = static_cast<ZONE*>( item );
 
