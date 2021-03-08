@@ -155,6 +155,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_simConsole = new wxTextCtrl( m_panelConsole, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY );
 	m_simConsole->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_simConsole->SetMinSize( wxSize( -1,100 ) );
 
 	m_sizerConsole->Add( m_simConsole, 1, wxEXPAND, 5 );
 
@@ -187,7 +188,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticTextSignals = new wxStaticText( m_panelSignals, wxID_ANY, _("Signals"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSignals->Wrap( -1 );
-	bSizer10->Add( m_staticTextSignals, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer10->Add( m_staticTextSignals, 0, wxTOP|wxRIGHT, 5 );
 
 	m_signals = new wxListView( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer10->Add( m_signals, 1, wxEXPAND, 5 );
@@ -215,7 +216,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticTextCursors = new wxStaticText( m_panelCursors, wxID_ANY, _("Cursors"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCursors->Wrap( -1 );
-	bSizer12->Add( m_staticTextCursors, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer12->Add( m_staticTextCursors, 0, wxTOP|wxRIGHT, 5 );
 
 	m_cursors = new wxListCtrl( m_panelCursors, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer12->Add( m_cursors, 1, wxEXPAND, 5 );
@@ -232,7 +233,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticTextTune = new wxStaticText( m_tunePanel, wxID_ANY, _("Tune"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTune->Wrap( -1 );
-	bSizer13->Add( m_staticTextTune, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer13->Add( m_staticTextTune, 0, wxTOP|wxRIGHT, 5 );
 
 	m_tuneSizer = new wxBoxSizer( wxHORIZONTAL );
 

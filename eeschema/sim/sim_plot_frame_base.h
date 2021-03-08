@@ -7,28 +7,28 @@
 
 #pragma once
 
-#include "kiway_player.h"
 #include <wx/artprov.h>
-#include <wx/aui/auibook.h>
-#include <wx/bitmap.h>
-#include <wx/colour.h>
-#include <wx/font.h>
-#include <wx/frame.h>
-#include <wx/gdicmn.h>
-#include <wx/icon.h>
-#include <wx/image.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wx/listctrl.h>
+#include "kiway_player.h"
+#include <wx/string.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/menu.h>
-#include <wx/panel.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/toolbar.h>
+#include <wx/aui/auibook.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
+#include <wx/textctrl.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>
-#include <wx/string.h>
-#include <wx/textctrl.h>
-#include <wx/toolbar.h>
-#include <wx/xrc/xmlres.h>
+#include <wx/listctrl.h>
+#include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
