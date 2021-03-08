@@ -48,7 +48,7 @@
 #include <wx/wupdlock.h>
 #include <wx/dcmemory.h>
 
-#include <python_scripting.h>
+#include "../scripting/python_scripting.h"
 
 
 /* Data to build the layer pair indicator button */

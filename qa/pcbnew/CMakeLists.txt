@@ -73,6 +73,7 @@ target_link_libraries( qa_pcbnew
     gal
     common
     gal
+    scripting
     qa_utils
     dxflib_qcad
     tinyspline_lib

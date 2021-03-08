@@ -98,12 +98,8 @@ install( TARGETS kicad
 if( APPLE )
     # "install( CODE ... )" will launch its own CMake, so no variables from
     # this CMake instance are accessible... use helper to transfer
-    if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-        set( SCRIPTING_HELPER "1" )
-    else()
-        set( SCRIPTING_HELPER "0" )
-    endif()
-
+    set( SCRIPTING_HELPER "1" )
+    
     if( KICAD_SPICE )
         set( SPICE_HELPER "1" )
     else()

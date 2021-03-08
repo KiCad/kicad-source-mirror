@@ -74,29 +74,17 @@ wxString* newWxStringFromPy( PyObject* src )
     PyObject*   uni_str = src;
 
     // if not an str or unicode, try to str(src)
-#if PY_MAJOR_VERSION >= 3
     if( !PyBytes_Check( src ) && !PyUnicode_Check( src ) )
-#else
-    if( !PyString_Check( src ) && !PyUnicode_Check( src ) )
-#endif
     {
         obj = PyObject_Str( src );
-
-#if PY_MAJOR_VERSION >= 3
         uni_str = obj; // in case of Python 3 our string is already correctly encoded
-#endif
-
         must_unref_obj = true;
 
         if( PyErr_Occurred() )
             return NULL;
     }
 
-#if PY_MAJOR_VERSION >= 3
     if( PyBytes_Check( obj ) )
-#else
-    if( PyString_Check( obj ) )
-#endif
     {
         uni_str = PyUnicode_FromEncodedObject( obj, wxPythonEncoding, "strict" );
         must_unref_str = true;
@@ -106,21 +94,11 @@ wxString* newWxStringFromPy( PyObject* src )
     }
 
     result = new wxString();
-#if PY_MAJOR_VERSION >= 3
     size_t len = PyUnicode_GET_LENGTH( uni_str );
-#else
-    size_t len = PyUnicode_GET_SIZE( uni_str );
-#endif
 
     if( len )
     {
-#if PY_MAJOR_VERSION >= 3
-        PyUnicode_AsWideChar( uni_str,
-                              wxStringBuffer( *result, len ), len );
-#else
-        PyUnicode_AsWideChar( (PyUnicodeObject*) uni_str,
-                              wxStringBuffer( *result, len ), len );
-#endif
+        PyUnicode_AsWideChar( uni_str, wxStringBuffer( *result, len ), len );
     }
 
     if( must_unref_str )
@@ -144,11 +122,7 @@ wxString* newWxStringFromPy( PyObject* src )
         if( PyErr_Occurred() )
             return NULL;
     }
-#if PY_MAJOR_VERSION >= 3
     else if( !PyUnicode_Check( src ) )
-#else
-    else if( !PyString_Check( src ) )    // if it's not a string, str(obj)
-#endif
     {
         str = PyObject_Str( src );
         must_unref_str = true;

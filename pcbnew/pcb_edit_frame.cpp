@@ -50,6 +50,7 @@
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
+#include <python_scripting.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -96,8 +97,8 @@
 #include <widgets/panel_selection_filter.h>
 #include <kiplatform/app.h>
 
-#include <python_scripting.h>
 #include <action_plugin.h>
+#include "../scripting/python_scripting.h"
 
 
 using namespace std::placeholders;
@@ -1292,18 +1293,26 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
 void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
 {
-    wxWindow * pythonPanelFrame = findPythonConsole();
-    bool pythonPanelShown = true;
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PYTHON, false );
 
-    if( pythonPanelFrame == NULL )
-        pythonPanelFrame = CreatePythonShellWindow( this, pythonConsoleNameId() );
-    else
-        pythonPanelShown = ! pythonPanelFrame->IsShown();
+    if( !frame )
+    {
+        frame = Kiway().Player( FRAME_PYTHON, true, this );
 
-    if( pythonPanelFrame )
-        pythonPanelFrame->Show( pythonPanelShown );
-    else
-        wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
+        if( !frame->IsVisible() )
+            frame->Show( true );
+
+        // On Windows, Raise() does not bring the window on screen, when iconized
+        if( frame->IsIconized() )
+            frame->Iconize( false );
+
+        frame->Raise();
+
+        return;
+    }
+
+    frame->Show( !frame->IsVisible() );
+
 }
 
 
@@ -1558,7 +1567,7 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
     // Set the environment variables for python scripts
     // note: the string will be encoded UTF8 for python env
     for( auto& var : vars )
-        pcbnewUpdatePythonEnvVar( var.first, var.second.GetValue() );
+        UpdatePythonEnvVar( var.first, var.second.GetValue() );
 
     // Because the env vars can de modified by the python scripts (rewritten in UTF8),
     // regenerate them (in Unicode) for our normal environment
@@ -1571,7 +1580,7 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
 {
     wxString evValue;
     wxGetEnv( PROJECT_VAR_NAME, &evValue );
-    pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
+    UpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
 
     // Because PROJECT_VAR_NAME can be modified by the python scripts (rewritten in UTF8),
     // regenerate it (in Unicode) for our normal environment

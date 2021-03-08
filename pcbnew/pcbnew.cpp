@@ -28,7 +28,6 @@
  * @brief Pcbnew main program.
  */
 
-#include <python_scripting.h>
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -53,6 +52,9 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
+#include <paths.h>
+#include <python_scripting.h>
+
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
 #include <wildcards_and_files_ext.h>
@@ -208,97 +210,6 @@ PGM_BASE* PgmOrNull()
 #endif
 
 
-static bool scriptingSetup()
-{
-#if defined( __WINDOWS__ )
-    // If our python.exe (in kicad/bin) exists, force our kicad python environment
-    wxString kipython = FindKicadFile( "python.exe" );
-
-    // we need only the path:
-    wxFileName fn( kipython  );
-    kipython = fn.GetPath();
-
-    // If our python install is existing inside kicad, use it
-    // Note: this is useful only when another python version is installed
-    if( wxDirExists( kipython ) )
-    {
-        // clear any PYTHONPATH and PYTHONHOME env var definition: the default
-        // values work fine inside Kicad:
-        wxSetEnv( wxT( "PYTHONPATH" ), wxEmptyString );
-        wxSetEnv( wxT( "PYTHONHOME" ), wxEmptyString );
-
-        // Add our python executable path in first position:
-        wxString ppath;
-        wxGetEnv( wxT( "PATH" ), &ppath );
-
-        kipython << wxT( ";" ) << ppath;
-        wxSetEnv( wxT( "PATH" ), kipython );
-    }
-
-#elif defined( __WXMAC__ )
-
-    // Add default paths to PYTHONPATH
-    wxString pypath;
-
-    // Bundle scripting folder (<kicad.app>/Contents/SharedSupport/scripting)
-    pypath += PATHS::GetOSXKicadDataDir() + wxT( "/scripting" );
-
-    // $(KICAD_PATH)/scripting/plugins is always added in kicadplugins.i
-    if( wxGetenv("KICAD_PATH") != NULL )
-    {
-        pypath += wxT( ":" ) + wxString( wxGetenv("KICAD_PATH") );
-    }
-
-    // OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR is provided via the build system.
-
-    pypath += wxT( ":" ) + Pgm().GetExecutablePath() + wxT( OSX_BUNDLE_PYTHON_SITE_PACKAGES_DIR );
-
-    // Original content of $PYTHONPATH
-    if( wxGetenv( wxT( "PYTHONPATH" ) ) != NULL )
-    {
-        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
-    }
-
-    // set $PYTHONPATH
-    wxSetEnv( "PYTHONPATH", pypath );
-
-    wxString pyhome;
-
-    pyhome += Pgm().GetExecutablePath() +
-              wxT( "Contents/Frameworks/Python.framework/Versions/Current" );
-
-    // set $PYTHONHOME
-    wxSetEnv( "PYTHONHOME", pyhome );
-#else
-    wxString pypath;
-
-    // PYTHON_DEST is the scripts install dir as determined by the build system.
-    pypath = Pgm().GetExecutablePath() + wxT( "../" PYTHON_DEST );
-
-    if( !wxIsEmpty( wxGetenv( wxT( "PYTHONPATH" ) ) ) )
-        pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
-
-    wxSetEnv( wxT( "PYTHONPATH" ), pypath );
-
-#endif
-
-    wxFileName path( PyPluginsPath( true ) + wxT("/") );
-
-    // Ensure the user plugin path exists, and create it if not.
-    // However, if it cannot be created, this is not a fatal error.
-    if( !path.DirExists() && !path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        wxLogError( "Warning: could not create user scripting path %s", path.GetPath() );
-
-    if( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ), TO_UTF8( PyScriptingPath( true ) ) ) )
-    {
-        wxLogError( "pcbnewInitPythonScripting() failed." );
-        return false;
-    }
-
-    return true;
-}
-
-
 void PythonPluginsReloadBase()
 {
     // Reload plugin list: reload Python plugins if they are newer than the already loaded,
@@ -371,21 +282,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         }
     }
 
-    scriptingSetup();
-
     return true;
 }
 
 
 void IFACE::OnKifaceEnd()
 {
-    // Restore the thread state and tell Python to cleanup after itself.
-    // wxPython will do its own cleanup as part of that process.
-    // This should only be called if python was setup correctly.
-
-    if( IsWxPythonLoaded() )
-        pcbnewFinishPythonScripting();
-
     end_common();
 }
 

@@ -208,20 +208,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     // Add build settings config (build options):
     aMsg << "Build settings:" << eol;
 
-    aMsg << indent4 << "KICAD_SCRIPTING_PYTHON3=";
-#ifdef KICAD_SCRIPTING_PYTHON3
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
-    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON_PHOENIX=";
-#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
 #ifdef KICAD_USE_OCE
     aMsg << indent4 << "KICAD_USE_OCE=" << ON;
 #endif

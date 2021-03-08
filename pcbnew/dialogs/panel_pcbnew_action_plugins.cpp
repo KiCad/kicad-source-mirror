@@ -30,7 +30,7 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 
-#include <python_scripting.h>
+#include <pcbnew_scripting.h>
 
 #define GRID_CELL_MARGIN 4
 

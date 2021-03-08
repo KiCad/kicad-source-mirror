@@ -29,9 +29,9 @@
 #include <zone.h>
 #include <menus_helpers.h>
 #include <pcbnew_settings.h>
-#include <python_scripting.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
+#include "../../scripting/python_scripting.h"
 
 PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )
 {

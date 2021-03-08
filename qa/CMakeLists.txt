@@ -21,25 +21,21 @@
 
 include(KiCadQABuildUtils)
 
-if( KICAD_SCRIPTING_MODULES )
-
-    if( KICAD_TEST_XML_OUTPUT )
-        # To do this, you will need xmlrunner
-        set( PY_TEST_ARGS --xml=${CMAKE_CURRENT_BINARY_DIR}/python.xunit-results )
-    endif()
-
-    # Test that runs the QA tests through scripting
-    add_test( NAME qa_python
-        COMMAND ${PYTHON_EXECUTABLE} test.py ${PY_TEST_ARGS}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-
-    set_property( TEST qa_python
-        PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew${PYTHON_QA_PATH}"
-    )
-
+if( KICAD_TEST_XML_OUTPUT )
+    # To do this, you will need xmlrunner
+    set( PY_TEST_ARGS --xml=${CMAKE_CURRENT_BINARY_DIR}/python.xunit-results )
 endif()
+
+# Test that runs the QA tests through scripting
+add_test( NAME qa_python
+    COMMAND ${PYTHON_EXECUTABLE} test.py ${PY_TEST_ARGS}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+
+set_property( TEST qa_python
+    PROPERTY ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew${PYTHON_QA_PATH}"
+)
 
 # Shared QA helper libraries
 add_subdirectory( qa_utils )
