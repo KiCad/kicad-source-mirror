@@ -187,7 +187,7 @@ wxString PATHS::GetStockPlugins3DPath()
 {
     wxFileName fn;
 
-#ifdef __UNIX__
+#ifdef __WXGTK__
     // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
     // corresponding to the install path used for constructing KICAD_USER_PLUGIN
     wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
