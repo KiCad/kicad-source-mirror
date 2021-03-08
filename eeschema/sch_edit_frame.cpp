@@ -371,7 +371,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto hasElements =
             [ this ] ( const SELECTION& aSel )
             {
-                return !GetScreen()->Items().empty();
+                return !GetScreen()->Items().empty() || !SELECTION_CONDITIONS::Idle( aSel );
             };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
