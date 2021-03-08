@@ -124,9 +124,9 @@ wxString PCB_TARGET::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF PCB_TARGET::GetMenuImage() const
+BITMAPS PCB_TARGET::GetMenuImage() const
 {
-    return  add_pcb_target_xpm;
+    return  BITMAPS::add_pcb_target;
 }
 
 

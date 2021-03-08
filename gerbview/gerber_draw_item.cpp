@@ -756,17 +756,17 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 }
 
 
-BITMAP_DEF GERBER_DRAW_ITEM::GetMenuImage() const
+BITMAPS GERBER_DRAW_ITEM::GetMenuImage() const
 {
     if( m_Flashed )
-        return pad_xpm;
+        return BITMAPS::pad;
 
     switch( m_Shape )
     {
     case GBR_SEGMENT:
     case GBR_ARC:
     case GBR_CIRCLE:
-        return add_line_xpm;
+        return BITMAPS::add_line;
 
     case GBR_SPOT_OVAL:
     case GBR_SPOT_CIRCLE:
@@ -774,13 +774,13 @@ BITMAP_DEF GERBER_DRAW_ITEM::GetMenuImage() const
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
         // should be handles by m_Flashed == true
-        return pad_xpm;
+        return BITMAPS::pad;
 
     case GBR_POLYGON:
-        return add_graphical_polygon_xpm;
+        return BITMAPS::add_graphical_polygon;
     }
 
-    return info_xpm;
+    return BITMAPS::info;
 }
 
 

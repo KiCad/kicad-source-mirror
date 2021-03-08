@@ -81,7 +81,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
         m_printMirror( false ),
         m_oneFileOnly( false )
 {
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 

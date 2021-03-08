@@ -38,70 +38,70 @@ TOOL_ACTION GERBVIEW_ACTIONS::openGerber( "gerbview.Control.openGerber",
         AS_GLOBAL, 0, "",
         _( "Open Gerber Plot File(s)..." ),
         _( "Open Gerber plot file(s) on the current layer. Previous data will be deleted" ),
-        load_gerber_xpm );
+        BITMAPS::load_gerber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
         AS_GLOBAL, 0, "",
         _( "Open Excellon Drill File(s)..." ),
         _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
-        load_drill_xpm );
+        BITMAPS::load_drill );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
         AS_GLOBAL, 0, "",
         _( "Open Gerber Job File..." ),
         _( "Open a Gerber job file and its associated gerber plot files" ),
-        file_gerber_job_xpm );
+        BITMAPS::file_gerber_job );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
         AS_GLOBAL, 0, "",
         _( "Open Zip Archive File..." ),
         _( "Open a zipped archive (Gerber and Drill) file" ),
-        zip_xpm );
+        BITMAPS::zip );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( "gerbview.Control.toggleLayerManager",
         AS_GLOBAL, 0, "",
         _( "Show Layers Manager" ),
         _( "Show or hide the layer manager" ),
-        layers_manager_xpm );
+        BITMAPS::layers_manager );
 
 TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( "gerbview.Inspection.showDCodes",
         AS_GLOBAL, 0, "",
         _( "List DCodes..." ),
         _( "List D-codes defined in Gerber files" ),
-        show_dcodenumber_xpm );
+        BITMAPS::show_dcodenumber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::showSource( "gerbview.Inspection.showSource",
         AS_GLOBAL, 0, "",
         _( "Show Source..." ),
         _( "Show source file for the current layer" ),
-        tools_xpm );
+        BITMAPS::tools );
 
 TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
         AS_GLOBAL, 0, "",
         _( "Export to PCB Editor..." ),
         _( "Export data as a KiCad PCB file" ),
-        export_to_pcbnew_xpm );
+        BITMAPS::export_to_pcbnew );
 
 TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( "gerbview.Control.clearLayer",
         AS_GLOBAL, 0, "",
         _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
-        delete_sheet_xpm );
+        BITMAPS::delete_sheet );
 
 TOOL_ACTION GERBVIEW_ACTIONS::clearAllLayers( "gerbview.Control.clearAllLayers",
         AS_GLOBAL, 0, "",
         _( "Clear All Layers" ),
         _( "Clear all layers. All data will be deleted" ),
-        delete_gerber_xpm );
+        BITMAPS::delete_gerber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( "gerbview.Control.reloadAllLayers",
         AS_GLOBAL, 0, "",
         _( "Reload All Layers" ),
         _( "Reload all layers. All data will be reloaded" ),
-        reload_xpm );
+        BITMAPS::reload );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0, "", "", "",
-        nullptr, AF_NOTIFY );
+        BITMAPS::INVALID_BITMAP, AF_NOTIFY );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0, "",
@@ -110,17 +110,17 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0, "",
         _( "Highlight Net" ), "",
-        general_ratsnest_xpm );
+        BITMAPS::general_ratsnest );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
         AS_GLOBAL, 0, "",
         _( "Highlight Component" ), "",
-        module_xpm );
+        BITMAPS::module );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
         AS_GLOBAL, 0, "",
         _( "Highlight Attribute" ), "",
-        flag_xpm );
+        BITMAPS::flag );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL,
@@ -136,48 +136,49 @@ TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDispl
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Gbr Lines Display Mode" ),
         _( "Sketch Lines" ), _( "Show lines in outline mode" ),
-        showtrack_xpm );
+        BITMAPS::showtrack );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( "gerbview.Control.flashedDisplayOutlines",
         AS_GLOBAL,
         'F', LEGACY_HK_NAME( "Gbr Flashed Display Mode" ),
         _( "Sketch Flashed Items" ), _( "Show flashed items in outline mode" ),
-        pad_sketch_xpm );
+        BITMAPS::pad_sketch );
 
 TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( "gerbview.Control.polygonsDisplayOutlines",
         AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Gbr Polygons Display Mode" ),
         _( "Sketch Polygons" ), _( "Show polygons in outline mode" ),
-        opt_show_polygon_xpm );
+        BITMAPS::opt_show_polygon );
 
 TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( "gerbview.Control.negativeObjectDisplay",
         AS_GLOBAL,
         'N', LEGACY_HK_NAME( "Gbr Negative Obj Display Mode" ),
         _( "Ghost Negative Objects" ), _( "Show negative objects in ghost color" ),
-        gerbview_show_negative_objects_xpm );
+        BITMAPS::gerbview_show_negative_objects );
 
 TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
         AS_GLOBAL,
         'D', LEGACY_HK_NAME( "DCodes Display Mode" ),
         _( "Show DCodes" ), _( "Show dcode number" ),
-        show_dcodenumber_xpm );
+        BITMAPS::show_dcodenumber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
         AS_GLOBAL, 0, "",
         _( "Show in Differential Mode" ), _( "Show layers in diff (compare) mode" ),
-        gbr_select_mode2_xpm );
+        BITMAPS::gbr_select_mode2 );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( "gerbview.Control.flipGerberView",
         AS_GLOBAL, 0, "",
         _( "Flip Gerber View" ), _( "Show as mirror image" ),
-        flip_board_xpm );
+        BITMAPS::flip_board );
 
 
 // GERBVIEW_SELECTION_TOOL
 //
 TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( "gerbview.InteractiveSelection",
         AS_GLOBAL, 0, "",
-        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+        "", "", // No description, it is not supposed to be shown anywhere
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectItem( "gerbview.InteractiveSelection.SelectItem",
         AS_GLOBAL );

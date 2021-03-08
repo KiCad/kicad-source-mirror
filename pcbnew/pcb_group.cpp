@@ -294,9 +294,9 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF PCB_GROUP::GetMenuImage() const
+BITMAPS PCB_GROUP::GetMenuImage() const
 {
-    return module_xpm;
+    return BITMAPS::module;
 }
 
 

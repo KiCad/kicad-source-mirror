@@ -30,7 +30,7 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
 {
     m_standardButtonsCancel->SetLabel( _( "Quit KiCad" ) );
 
-    m_btnCustomPath->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_btnCustomPath->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     GetSizer()->SetSizeHints( this );
     Centre();

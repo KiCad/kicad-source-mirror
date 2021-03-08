@@ -1146,7 +1146,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
 }
 
 
-BITMAP_DEF LIB_PIN::GetMenuImage() const
+BITMAPS LIB_PIN::GetMenuImage() const
 {
     return ElectricalPinTypeGetBitmap( m_type );
 }

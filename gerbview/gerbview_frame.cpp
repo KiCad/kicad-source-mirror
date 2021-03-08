@@ -113,11 +113,11 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_gerbview ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_gerbview_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_gerbview_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_gerbview_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_gerbview_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

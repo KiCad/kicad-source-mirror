@@ -64,8 +64,8 @@ enum {
 
 
 // These are conceptually constexpr
-std::vector<BITMAP_DEF> g_lineStyleIcons;
-wxArrayString           g_lineStyleNames;
+std::vector<BITMAPS> g_lineStyleIcons;
+wxArrayString        g_lineStyleNames;
 
 
 PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
@@ -79,13 +79,13 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
 {
     if( g_lineStyleIcons.empty() )
     {
-        g_lineStyleIcons.push_back( stroke_solid_xpm );
+        g_lineStyleIcons.push_back( BITMAPS::stroke_solid );
         g_lineStyleNames.push_back( _( "Solid" ) );
-        g_lineStyleIcons.push_back( stroke_dash_xpm );
+        g_lineStyleIcons.push_back( BITMAPS::stroke_dash );
         g_lineStyleNames.push_back( _( "Dashed" ) );
-        g_lineStyleIcons.push_back( stroke_dot_xpm );
+        g_lineStyleIcons.push_back( BITMAPS::stroke_dot );
         g_lineStyleNames.push_back( _( "Dotted" ) );
-        g_lineStyleIcons.push_back( stroke_dashdot_xpm );
+        g_lineStyleIcons.push_back( BITMAPS::stroke_dashdot );
         g_lineStyleNames.push_back( _( "Dash-Dot" ) );
     }
 
@@ -166,8 +166,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     m_splitter->SetSashPosition( cfg->m_NetclassPanel.sash_pos );
 
-    m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_removeButton->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_removeButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,

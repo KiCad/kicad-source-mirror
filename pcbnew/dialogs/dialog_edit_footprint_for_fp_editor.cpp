@@ -74,7 +74,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     SetIcon( icon );
 
     // Give a bit more room for combobox editors
@@ -152,11 +152,11 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_sdbSizerStdButtonsOK->SetDefault();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_button3DShapeAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_button3DShapeBrowse->SetBitmap( KiBitmap( small_folder_xpm ) );
-    m_button3DShapeRemove->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_button3DShapeAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_button3DShapeBrowse->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_button3DShapeRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     // wxFormBuilder doesn't include this event...
     m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );

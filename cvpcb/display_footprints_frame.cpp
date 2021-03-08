@@ -71,7 +71,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 {
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_cvpcb ) );
     SetIcon( icon );
 
     SetBoard( new BOARD() );

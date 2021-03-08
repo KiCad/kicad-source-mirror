@@ -116,11 +116,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_kicad_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_kicad_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

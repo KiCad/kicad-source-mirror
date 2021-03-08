@@ -63,12 +63,12 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_gridWidthsDirty( true ),
     m_helpDialog( nullptr )
 {
-    m_btnAddEnvVar->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_btnDeleteEnvVar->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_btnAddSearchPath->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_btnDeleteSearchPath->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_btnMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
-    m_btnMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_btnAddEnvVar->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_btnDeleteEnvVar->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnAddSearchPath->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_btnDeleteSearchPath->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_btnMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
     m_EnvVars->DeleteRows( 0, m_EnvVars->GetNumberRows() );
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags
@@ -492,7 +492,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
     {
         wxMenu menu;
 
-        AddMenuItem( &menu, 1, _( "File Browser..." ), KiBitmap( small_folder_xpm ) );
+        AddMenuItem( &menu, 1, _( "File Browser..." ), KiBitmap( BITMAPS::small_folder ) );
         if( GetPopupMenuSelectionFromUser( menu ) == 1 )
         {
             wxDirDialog dlg( nullptr, _( "Select Path" ), m_curdir,

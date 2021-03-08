@@ -106,7 +106,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     }
 
     // Show the footprint selection dialog if this is the footprint field.
-    m_TextValueSelectButton->SetBitmap( KiBitmap( small_library_xpm ) );
+    m_TextValueSelectButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
     // Value fields of power components cannot be modified. This will grey out

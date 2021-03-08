@@ -74,7 +74,7 @@ public:
     ZONE_CONTEXT_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( add_zone_xpm );
+        SetIcon( BITMAPS::add_zone );
         SetTitle( _( "Zones" ) );
 
         Add( PCB_ACTIONS::zoneFill );
@@ -105,7 +105,7 @@ public:
     LOCK_CONTEXT_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( locked_xpm );
+        SetIcon( BITMAPS::locked );
         SetTitle( _( "Locking" ) );
 
         Add( PCB_ACTIONS::lock );

@@ -73,7 +73,7 @@ public:
     SYMBOL_UNIT_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( component_select_unit_xpm );
+        SetIcon( BITMAPS::component_select_unit );
         SetTitle( _( "Symbol Unit" ) );
     }
 

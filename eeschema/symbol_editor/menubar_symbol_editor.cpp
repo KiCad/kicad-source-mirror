@@ -68,7 +68,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
-    submenuExport->SetIcon( export_xpm );
+    submenuExport->SetIcon( BITMAPS::export_file );
     submenuExport->Add( EE_ACTIONS::exportSymbol );
     submenuExport->Add( EE_ACTIONS::exportSymbolView );
     submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG );
@@ -121,7 +121,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     // Units submenu
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
     unitsSubMenu->Add( ACTIONS::inchesUnits,      ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,        ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits, ACTION_MENU::CHECK );
@@ -164,7 +164,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );

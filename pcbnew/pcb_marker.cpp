@@ -142,9 +142,9 @@ wxString PCB_MARKER::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF PCB_MARKER::GetMenuImage() const
+BITMAPS PCB_MARKER::GetMenuImage() const
 {
-    return drc_xpm;
+    return BITMAPS::drc;
 }
 
 

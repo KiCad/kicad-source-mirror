@@ -64,7 +64,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
             openRecentMenu = new ACTION_MENU( false );
             openRecentMenu->SetTool( selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
-            openRecentMenu->SetIcon( recent_xpm );
+            openRecentMenu->SetIcon( BITMAPS::recent );
 
             fileHistory.UseMenu( openRecentMenu );
             fileHistory.AddFilesToMenu();
@@ -99,24 +99,24 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( _( "Resc&ue" ),
                    _( "Clear board and get last rescue file automatically saved by PCB editor" ),
                    ID_MENU_RECOVER_BOARD_AUTOSAVE,
-                   rescue_xpm );
+                   BITMAPS::rescue );
 
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
-    submenuImport->SetIcon( import_xpm );
+    submenuImport->SetIcon( BITMAPS::import );
 
     submenuImport->Add( PCB_ACTIONS::importNetlist );
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession );
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
-                        ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
+                        ID_GEN_IMPORT_GRAPHICS_FILE, BITMAPS::import_vector );
 
     if( Kiface().IsSingle() )
     {
         submenuImport->Add( _( "Non-KiCad Board File..." ),
                             _( "Import board file from other applications" ),
-                            ID_IMPORT_NON_KICAD_BOARD, import_brd_file_xpm );
+                            ID_IMPORT_NON_KICAD_BOARD, BITMAPS::import_brd_file );
     }
 
     fileMenu->AppendSeparator();
@@ -126,35 +126,35 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
-    submenuExport->SetIcon( export_xpm );
+    submenuExport->SetIcon( BITMAPS::export_file );
 
     submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN );
     submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
-                        ID_GEN_EXPORT_FILE_GENCADFORMAT, post_gencad_xpm );
+                        ID_GEN_EXPORT_FILE_GENCADFORMAT, BITMAPS::post_gencad );
     submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_VRML, export3d_xpm );
+                        ID_GEN_EXPORT_FILE_VRML, BITMAPS::export3d );
     submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_IDF3, export_idf_xpm );
+                        ID_GEN_EXPORT_FILE_IDF3, BITMAPS::export_idf );
     submenuExport->Add( _( "STEP..." ), _( "Export STEP 3D board representation" ),
-                        ID_GEN_EXPORT_FILE_STEP, export_step_xpm );
+                        ID_GEN_EXPORT_FILE_STEP, BITMAPS::export_step );
     submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
-                        ID_GEN_PLOT_SVG, export_svg_xpm );
+                        ID_GEN_PLOT_SVG, BITMAPS::export_svg );
     submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
                         _( "Export footprint association file (*.cmp) for schematic back annotation" ),
-                        ID_PCB_GEN_CMP_FILE, export_cmp_xpm );
+                        ID_PCB_GEN_CMP_FILE, BITMAPS::export_cmp );
     submenuExport->Add( _( "Hyperlynx..." ), "",
-                        ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
+                        ID_GEN_EXPORT_FILE_HYPERLYNX, BITMAPS::export_step );
 
     submenuExport->AppendSeparator();
     submenuExport->Add( _( "Export Footprints to Library..." ),
                         _( "Add footprints used on board to an existing footprint library\n"
                            "(does not remove other footprints from this library)" ),
-                        ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, library_archive_xpm );
+                        ID_MENU_EXPORT_FOOTPRINTS_TO_LIBRARY, BITMAPS::library_archive );
 
     submenuExport->Add( _( "Export Footprints to New Library..." ),
                         _( "Create a new footprint library containing the footprints used on board\n"
                            "(if the library already exists it will be replaced)" ),
-                        ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, library_archive_as_xpm );
+                        ID_MENU_EXPORT_FOOTPRINTS_TO_NEW_LIBRARY, BITMAPS::library_archive_as );
 
     fileMenu->Add( submenuExport );
 
@@ -162,7 +162,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false );
     submenuFabOutputs->SetTool( selTool );
     submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
-    submenuFabOutputs->SetIcon( fabrication_xpm );
+    submenuFabOutputs->SetIcon( BITMAPS::fabrication );
 
     submenuFabOutputs->Add( PCB_ACTIONS::generateGerbers );
     submenuFabOutputs->Add( PCB_ACTIONS::generateDrillFiles );
@@ -241,7 +241,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Units submenu
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
     unitsSubMenu->Add( ACTIONS::inchesUnits,          ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,            ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,     ACTION_MENU::CHECK );
@@ -257,7 +257,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Drawing Mode Submenu
     ACTION_MENU* drawingModeSubMenu = new ACTION_MENU( false, selTool );
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
-    drawingModeSubMenu->SetIcon( add_zone_xpm );
+    drawingModeSubMenu->SetIcon( BITMAPS::add_zone );
 
     drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayEnable,   ACTION_MENU::CHECK );
     drawingModeSubMenu->Add( PCB_ACTIONS::zoneDisplayDisable,  ACTION_MENU::CHECK );
@@ -277,7 +277,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Contrast Mode Submenu
     ACTION_MENU* contrastModeSubMenu = new ACTION_MENU( false, selTool );
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
-    contrastModeSubMenu->SetIcon( contrast_mode_xpm );
+    contrastModeSubMenu->SetIcon( BITMAPS::contrast_mode );
 
     contrastModeSubMenu->Add( ACTIONS::highContrastMode,    ACTION_MENU::CHECK );
     contrastModeSubMenu->Add( PCB_ACTIONS::layerAlphaDec );
@@ -323,7 +323,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
     autoplaceSubmenu->SetTool( selTool );
-    autoplaceSubmenu->SetIcon( mode_module_xpm );
+    autoplaceSubmenu->SetIcon( BITMAPS::mode_module );
 
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
@@ -403,22 +403,22 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false );
     submenuActionPlugins->SetTool( selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
-    submenuActionPlugins->SetIcon( puzzle_piece_xpm );
+    submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 
     submenuActionPlugins->Add( _( "Refresh Plugins" ),
                                _( "Reload all python plugins and refresh plugin menus" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
-                               reload_xpm );
+                               BITMAPS::reload );
 #ifdef __APPLE__
     submenuActionPlugins->Add( _( "Reveal Plugin Folder in Finder" ),
                                _( "Reveals the plugins folder in a Finder window" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               directory_open_xpm );
+                               BITMAPS::directory_open );
 #else
     submenuActionPlugins->Add( _( "Open Plugin Directory" ),
                                _( "Opens the directory in the default system file manager" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               directory_open_xpm );
+                               BITMAPS::directory_open );
 #endif
     // Populate the Action Plugin sub-menu: Must be done before Add
     // Since the object is cloned by Add
@@ -440,7 +440,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );

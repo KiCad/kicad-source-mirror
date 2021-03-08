@@ -91,7 +91,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::module_wizard ) );
     SetIcon( icon );
 
     m_wizardName.Empty();
@@ -593,20 +593,20 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
-                            KiBitmap( module_wizard_xpm ),
+                            KiBitmap( BITMAPS::module_wizard ),
                             _( "Select wizard script to run" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
-                            KiBitmap( reload_xpm ),
+                            KiBitmap( BITMAPS::reload ),
                             _( "Reset wizard parameters to default") );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
-                            KiBitmap( lib_previous_xpm ),
+                            KiBitmap( BITMAPS::lib_previous ),
                             _( "Select previous parameters page" ) );
     m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
-                            KiBitmap( lib_next_xpm ),
+                            KiBitmap( BITMAPS::lib_next ),
                             _( "Select next parameters page" ) );
 
 #if 0   // Currently: the 3D viewer is not useful
@@ -623,7 +623,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
     // The footprint wizard always can export the current footprint
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
-                            wxEmptyString, KiBitmap( export_footprint_names_xpm ),
+                            wxEmptyString, KiBitmap( BITMAPS::export_footprint_names ),
                             _( "Export footprint to editor" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to

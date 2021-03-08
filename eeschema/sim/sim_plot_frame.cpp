@@ -136,7 +136,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     // Give an icon
     wxIcon icon;
-    icon.CopyFromBitmap( KiBitmap( simulator_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::simulator ) );
     SetIcon( icon );
 
     // Get the previous size and position of windows:
@@ -182,15 +182,15 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     // Toolbar buttons
     m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _( "Run/Stop Simulation" ),
-            KiBitmap( sim_run_xpm ), _( "Run Simulation" ), wxITEM_NORMAL );
+            KiBitmap( BITMAPS::sim_run ), _( "Run Simulation" ), wxITEM_NORMAL );
     m_toolAddSignals = m_toolBar->AddTool( ID_SIM_ADD_SIGNALS, _( "Add Signals" ),
-            KiBitmap( sim_add_signal_xpm ), _( "Add signals to plot" ), wxITEM_NORMAL );
+            KiBitmap( BITMAPS::sim_add_signal ), _( "Add signals to plot" ), wxITEM_NORMAL );
     m_toolProbe = m_toolBar->AddTool( ID_SIM_PROBE,  _( "Probe" ),
-            KiBitmap( sim_probe_xpm ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
+            KiBitmap( BITMAPS::sim_probe ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
     m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
-            KiBitmap( sim_tune_xpm ), _( "Tune component values" ), wxITEM_NORMAL );
+            KiBitmap( BITMAPS::sim_tune ), _( "Tune component values" ), wxITEM_NORMAL );
     m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Sim Parameters" ),
-            KiBitmap( config_xpm ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
+            KiBitmap( BITMAPS::config ), _( "Simulation parameters and settings" ), wxITEM_NORMAL );
 
     Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
              wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
@@ -293,7 +293,7 @@ WINDOW_SETTINGS* SIM_PLOT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 struct BM_MENU_INIT_ITEM
 {
     int m_MenuId;
-    BITMAP_DEF m_Bitmap;
+    BITMAPS m_Bitmap;
 };
 
 
@@ -303,31 +303,31 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
     BM_MENU_INIT_ITEM bm_list[]
     {
         // File menu:
-        { wxID_NEW, simulator_xpm },
-        { wxID_OPEN, directory_open_xpm },
-        { wxID_SAVE, save_xpm},
-        { ID_SAVE_AS_IMAGE, export_xpm},
-        { ID_SAVE_AS_CSV, export_xpm},
-        { wxID_CLOSE, exit_xpm},
+        { wxID_NEW, BITMAPS::simulator },
+        { wxID_OPEN, BITMAPS::directory_open },
+        { wxID_SAVE, BITMAPS::save },
+        { ID_SAVE_AS_IMAGE, BITMAPS::export_file },
+        { ID_SAVE_AS_CSV, BITMAPS::export_file },
+        { wxID_CLOSE, BITMAPS::exit },
 
         // simulator menu:
-        { ID_MENU_RUN_SIM, sim_run_xpm},
-        { ID_MENU_ADD_SIGNAL, sim_add_signal_xpm},
-        { ID_MENU_PROBE_SIGNALS, sim_probe_xpm},
-        { ID_MENU_TUNE_SIGNALS, sim_tune_xpm},
-        { ID_MENU_SHOW_NETLIST, netlist_xpm},
-        { ID_MENU_SET_SIMUL, config_xpm},
+        { ID_MENU_RUN_SIM, BITMAPS::sim_run },
+        { ID_MENU_ADD_SIGNAL, BITMAPS::sim_add_signal },
+        { ID_MENU_PROBE_SIGNALS, BITMAPS::sim_probe },
+        { ID_MENU_TUNE_SIGNALS, BITMAPS::sim_tune },
+        { ID_MENU_SHOW_NETLIST, BITMAPS::netlist },
+        { ID_MENU_SET_SIMUL, BITMAPS::config },
 
         // View menu
-        { wxID_ZOOM_IN, zoom_in_xpm},
-        { wxID_ZOOM_OUT, zoom_out_xpm},
-        { wxID_ZOOM_FIT, zoom_fit_in_page_xpm},
-        { ID_MENU_SHOW_GRID, grid_xpm},
-        { ID_MENU_SHOW_LEGEND, text_xpm},
-        { ID_MENU_DOTTED, add_dashed_line_xpm},
-        { ID_MENU_WHITE_BG, swap_layer_xpm},
+        { wxID_ZOOM_IN, BITMAPS::zoom_in },
+        { wxID_ZOOM_OUT, BITMAPS::zoom_out },
+        { wxID_ZOOM_FIT, BITMAPS::zoom_fit_in_page },
+        { ID_MENU_SHOW_GRID, BITMAPS::grid },
+        { ID_MENU_SHOW_LEGEND, BITMAPS::text },
+        { ID_MENU_DOTTED, BITMAPS::add_dashed_line },
+        { ID_MENU_WHITE_BG, BITMAPS::swap_layer },
 
-        { 0, nullptr }  // Sentinel
+        { 0, BITMAPS::INVALID_BITMAP }  // Sentinel
     };
 
     // wxMenuItems are already created and attached to the m_mainMenu wxMenuBar.
@@ -341,7 +341,7 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
     {
         wxMenuItem* item = m_mainMenu->FindItem( bm_list[ii].m_MenuId );
 
-        if( !item || !bm_list[ii].m_Bitmap)
+        if( !item || ( bm_list[ii].m_Bitmap == BITMAPS::INVALID_BITMAP ) )
             continue;
 
         wxMenu* menu = item->GetMenu();
@@ -1446,14 +1446,14 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSimStarted( wxCommandEvent& aEvent )
 {
-    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( sim_stop_xpm ) );
+    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( BITMAPS::sim_stop ) );
     SetCursor( wxCURSOR_ARROWWAIT );
 }
 
 
 void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
-    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( sim_run_xpm ) );
+    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( BITMAPS::sim_run ) );
     SetCursor( wxCURSOR_ARROW );
 
     SIM_TYPE simType = m_exporter->GetSimType();
@@ -1561,14 +1561,14 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 
     AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ),
                  _( "Erase the signal from plot screen" ),
-                 KiBitmap( trash_xpm ) );
+                 KiBitmap( BITMAPS::trash ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
 
     if( trace->HasCursor() )
-        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( pcb_target_xpm ) );
+        AddMenuItem( this, HIDE_CURSOR, _( "Hide Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
     else
-        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ), KiBitmap( pcb_target_xpm ) );
+        AddMenuItem( this, SHOW_CURSOR, _( "Show Cursor" ), KiBitmap( BITMAPS::pcb_target ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }

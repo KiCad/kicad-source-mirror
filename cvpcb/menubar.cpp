@@ -71,7 +71,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     prefsMenu->Add( CVPCB_ACTIONS::showEquFileTable);

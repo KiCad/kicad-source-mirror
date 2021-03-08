@@ -573,9 +573,9 @@ wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_TEXT::GetMenuImage() const
+BITMAPS SCH_TEXT::GetMenuImage() const
 {
-    return text_xpm;
+    return BITMAPS::text;
 }
 
 
@@ -824,9 +824,9 @@ wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_LABEL::GetMenuImage() const
+BITMAPS SCH_LABEL::GetMenuImage() const
 {
-    return add_line_label_xpm;
+    return BITMAPS::add_line_label;
 }
 
 
@@ -1370,9 +1370,9 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
+BITMAPS SCH_GLOBALLABEL::GetMenuImage() const
 {
-    return add_glabel_xpm;
+    return BITMAPS::add_glabel;
 }
 
 
@@ -1562,9 +1562,9 @@ wxString SCH_HIERLABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_HIERLABEL::GetMenuImage() const
+BITMAPS SCH_HIERLABEL::GetMenuImage() const
 {
-    return add_hierarchical_label_xpm;
+    return BITMAPS::add_hierarchical_label;
 }
 
 

@@ -1127,9 +1127,9 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF PAD::GetMenuImage() const
+BITMAPS PAD::GetMenuImage() const
 {
-    return pad_xpm;
+    return BITMAPS::pad;
 }
 
 

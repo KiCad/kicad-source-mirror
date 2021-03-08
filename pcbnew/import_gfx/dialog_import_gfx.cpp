@@ -128,7 +128,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
     m_choiceDxfUnits->SetSelection( m_dxfUnits );
 
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     SetInitialFocus( m_textCtrlFileName );
     m_sdbSizerOK->SetDefault();

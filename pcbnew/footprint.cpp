@@ -1159,9 +1159,9 @@ wxString FOOTPRINT::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF FOOTPRINT::GetMenuImage() const
+BITMAPS FOOTPRINT::GetMenuImage() const
 {
-    return module_xpm;
+    return BITMAPS::module;
 }
 
 

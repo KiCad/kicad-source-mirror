@@ -740,14 +740,14 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_LINE::GetMenuImage() const
+BITMAPS SCH_LINE::GetMenuImage() const
 {
     if( m_layer == LAYER_NOTES )
-        return add_dashed_line_xpm;
+        return BITMAPS::add_dashed_line;
     else if( m_layer == LAYER_WIRE )
-        return add_line_xpm;
+        return BITMAPS::add_line;
 
-    return add_bus_xpm;
+    return BITMAPS::add_bus;
 }
 
 

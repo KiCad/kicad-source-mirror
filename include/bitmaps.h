@@ -26,7 +26,7 @@
 #ifndef BITMAPS_H_
 #define BITMAPS_H_
 
-#include <bitmaps_png/bitmaps_list.h>
-#include <bitmap_types.h>
+#include <bitmaps/bitmaps_list.h>
+#include <bitmaps/bitmap_types.h>
 
 #endif  // BITMAPS_H_

@@ -90,8 +90,8 @@ public:
         m_html->SetPage( m_initial_help );
 
         // Configure button logos
-        m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
-        m_delete_button->SetBitmap( KiBitmap( small_trash_xpm ) );
+        m_append_button->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+        m_delete_button->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
         // initial focus on the grid please.
         SetInitialFocus( m_grid );

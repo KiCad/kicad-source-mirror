@@ -235,9 +235,9 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter ) const
 }
 
 
-BITMAP_DEF SCH_JUNCTION::GetMenuImage() const
+BITMAPS SCH_JUNCTION::GetMenuImage() const
 {
-    return add_junction_xpm;
+    return BITMAPS::add_junction;
 }
 
 

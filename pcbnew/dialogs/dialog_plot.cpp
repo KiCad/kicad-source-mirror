@@ -84,7 +84,7 @@ void DIALOG_PLOT::init_Dialog()
 
     m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
 
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     // m_PSWidthAdjust is stored in mm in user config
     m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * IU_PER_MM );

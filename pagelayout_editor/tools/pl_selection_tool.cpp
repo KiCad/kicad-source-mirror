@@ -630,12 +630,12 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
     }
 
     menu.AppendSeparator();
-    menu.Add( _( "Select &All\tA" ), limit + 1, nullptr );
+    menu.Add( _( "Select &All\tA" ), limit + 1, BITMAPS::INVALID_BITMAP );
 
     if( aCollector->m_MenuTitle.Length() )
     {
         menu.SetTitle( aCollector->m_MenuTitle );
-        menu.SetIcon( info_xpm );
+        menu.SetIcon( BITMAPS::info );
         menu.DisplayTitle( true );
     }
     else

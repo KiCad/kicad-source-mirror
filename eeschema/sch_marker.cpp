@@ -167,9 +167,9 @@ void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
 }
 
 
-BITMAP_DEF SCH_MARKER::GetMenuImage() const
+BITMAPS SCH_MARKER::GetMenuImage() const
 {
-    return erc_xpm;
+    return BITMAPS::erc;
 }
 
 

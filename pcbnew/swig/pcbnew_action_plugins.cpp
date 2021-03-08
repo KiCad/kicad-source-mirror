@@ -361,7 +361,7 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
     {
         wxMenuItem* item;
         ACTION_PLUGIN* ap = ACTION_PLUGINS::GetAction( ii );
-        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap : KiBitmap( puzzle_piece_xpm );
+        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap : KiBitmap( BITMAPS::puzzle_piece );
 
         item = AddMenuItem( actionMenu, wxID_ANY,  ap->GetName(), ap->GetDescription(), bitmap );
 
@@ -394,7 +394,7 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
             if ( ap->iconBitmap.IsOk() )
                 bitmap = KiScaledBitmap( ap->iconBitmap, this );
             else
-                bitmap = KiScaledBitmap( puzzle_piece_xpm, this );
+                bitmap = KiScaledBitmap( BITMAPS::puzzle_piece, this );
 
             wxAuiToolBarItem* button = m_mainToolBar->AddTool(
                     wxID_ANY, wxEmptyString, bitmap, ap->GetName() );

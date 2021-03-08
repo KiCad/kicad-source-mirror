@@ -418,7 +418,7 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
     helpMenu->Add( ACTIONS::reportBug );
 
     helpMenu->AppendSeparator();
-    helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, about_xpm );
+    helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, BITMAPS::about );
 
     aMenuBar->Append( helpMenu, _( "&Help" ) );
 }

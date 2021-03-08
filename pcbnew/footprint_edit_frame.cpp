@@ -123,11 +123,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_modedit_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_modedit_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

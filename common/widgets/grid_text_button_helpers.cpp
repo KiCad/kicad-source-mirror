@@ -26,7 +26,6 @@
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
 
-#include <bitmap_types.h>
 #include <bitmaps.h>
 #include <kiway.h>
 #include <kiway_player.h>
@@ -176,7 +175,7 @@ public:
             m_dlg( aParentDlg ),
             m_preselect( aPreselect )
     {
-        SetButtonBitmaps( KiBitmap( small_library_xpm ) );
+        SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
     }
 
 protected:
@@ -224,7 +223,7 @@ public:
             m_dlg( aParentDlg ),
             m_preselect( aPreselect )
     {
-        SetButtonBitmaps( KiBitmap( small_library_xpm ) );
+        SetButtonBitmaps( KiBitmap( BITMAPS::small_library ) );
     }
 
 protected:
@@ -278,7 +277,7 @@ public:
             wxComboCtrl( aParent ),
             m_dlg( aParentDlg )
     {
-        SetButtonBitmaps( KiBitmap( www_xpm ) );
+        SetButtonBitmaps( KiBitmap( BITMAPS::www ) );
     }
 
 protected:
@@ -331,7 +330,7 @@ public:
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath )
     {
-        SetButtonBitmaps( KiBitmap( small_folder_xpm ) );
+        SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
     }
 
 protected:

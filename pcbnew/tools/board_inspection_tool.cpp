@@ -63,7 +63,7 @@ class NET_CONTEXT_MENU : public ACTION_MENU
 public:
     NET_CONTEXT_MENU() : ACTION_MENU( true )
     {
-        SetIcon( show_ratsnest_xpm );
+        SetIcon( BITMAPS::show_ratsnest );
         SetTitle( _( "Net Tools" ) );
 
         Add( PCB_ACTIONS::showNet );

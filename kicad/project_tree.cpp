@@ -44,7 +44,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     // icons size is not know (depending on they are built)
     // so get it:
     wxSize iconsize;
-    wxBitmap dummy = KiBitmap( icon_eeschema_24_xpm );
+    wxBitmap dummy = KiBitmap( BITMAPS::icon_eeschema_24 );
     iconsize.x = dummy.GetWidth();
     iconsize.y = dummy.GetHeight();
 
@@ -52,32 +52,32 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList = new wxImageList( iconsize.x, iconsize.y, true,
                                    static_cast<int>( TREE_FILE_TYPE::MAX ) );
 
-    m_imageList->Add( KiBitmap( project_xpm ) );                // TREE_LEGACY_PROJECT
-    m_imageList->Add( KiBitmap( project_kicad_xpm ) );          // TREE_JSON_PROJECT
-    m_imageList->Add( KiBitmap( icon_eeschema_24_xpm ) );       // TREE_LEGACY_SCHEMATIC
-    m_imageList->Add( KiBitmap( icon_eeschema_24_xpm ) );       // TREE_SEXPR_SCHEMATIC
-    m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_LEGACY_PCB
-    m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_SEXPR_PCB
-    m_imageList->Add( KiBitmap( icon_gerbview_24_xpm ) );       // TREE_GERBER
-    m_imageList->Add( KiBitmap( file_gerber_job_xpm ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
-    m_imageList->Add( KiBitmap( file_html_xpm ) );              // TREE_HTML
-    m_imageList->Add( KiBitmap( file_pdf_xpm ) );               // TREE_PDF
-    m_imageList->Add( KiBitmap( editor_xpm ) );                 // TREE_TXT
-    m_imageList->Add( KiBitmap( netlist_xpm ) );                // TREE_NET
-    m_imageList->Add( KiBitmap( unknown_xpm ) );                // TREE_UNKNOWN
-    m_imageList->Add( KiBitmap( directory_xpm ) );              // TREE_DIRECTORY
-    m_imageList->Add( KiBitmap( icon_cvpcb_24_xpm ) );          // TREE_CMP_LINK
-    m_imageList->Add( KiBitmap( tools_xpm ) );                  // TREE_REPORT
-    m_imageList->Add( KiBitmap( file_pos_xpm ) );               // TREE_POS
-    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL
-    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_NC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( file_svg_xpm ) );               // TREE_SVG
-    m_imageList->Add( KiBitmap( icon_pagelayout_editor_24_xpm ) );             // TREE_PAGE_LAYOUT_DESCR
-    m_imageList->Add( KiBitmap( module_xpm ) );                 // TREE_FOOTPRINT_FILE
-    m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SCHEMATIC_LIBFILE
-    m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
-    m_imageList->Add( KiBitmap( editor_xpm ) );                 // DESIGN_RULES
+    m_imageList->Add( KiBitmap( BITMAPS::project ) );                // TREE_LEGACY_PROJECT
+    m_imageList->Add( KiBitmap( BITMAPS::project_kicad ) );          // TREE_JSON_PROJECT
+    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24 ) );       // TREE_LEGACY_SCHEMATIC
+    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24 ) );       // TREE_SEXPR_SCHEMATIC
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24 ) );         // TREE_LEGACY_PCB
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24 ) );         // TREE_SEXPR_PCB
+    m_imageList->Add( KiBitmap( BITMAPS::icon_gerbview_24 ) );       // TREE_GERBER
+    m_imageList->Add( KiBitmap( BITMAPS::file_gerber_job ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
+    m_imageList->Add( KiBitmap( BITMAPS::file_html ) );              // TREE_HTML
+    m_imageList->Add( KiBitmap( BITMAPS::file_pdf ) );               // TREE_PDF
+    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // TREE_TXT
+    m_imageList->Add( KiBitmap( BITMAPS::netlist ) );                // TREE_NET
+    m_imageList->Add( KiBitmap( BITMAPS::unknown ) );                // TREE_UNKNOWN
+    m_imageList->Add( KiBitmap( BITMAPS::directory ) );              // TREE_DIRECTORY
+    m_imageList->Add( KiBitmap( BITMAPS::icon_cvpcb_24 ) );          // TREE_CMP_LINK
+    m_imageList->Add( KiBitmap( BITMAPS::tools ) );                  // TREE_REPORT
+    m_imageList->Add( KiBitmap( BITMAPS::file_pos ) );               // TREE_POS
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL_NC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_svg ) );               // TREE_SVG
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pagelayout_editor_24 ) ); // TREE_PAGE_LAYOUT_DESCR
+    m_imageList->Add( KiBitmap( BITMAPS::module ) );                 // TREE_FOOTPRINT_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SCHEMATIC_LIBFILE
+    m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // DESIGN_RULES
 
     SetImageList( m_imageList );
 }

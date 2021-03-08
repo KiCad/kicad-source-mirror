@@ -111,11 +111,11 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_libedit ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_libedit_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_libedit_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_libedit_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_libedit_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

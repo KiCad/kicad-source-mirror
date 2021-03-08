@@ -93,31 +93,36 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             m_toolsSizer->Add( help, wxGBPosition( row + 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_TOP|wxTOP, 1 );
         };
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic, KiScaledBitmap( icon_eeschema_xpm, this ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editSchematic,
+                 KiScaledBitmap( BITMAPS::icon_eeschema, this, 48 ),
                  _( "Edit the project schematic" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols, KiScaledBitmap( icon_libedit_xpm, this ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editSymbols,
+                 KiScaledBitmap( BITMAPS::icon_libedit, this, 48 ),
                  _( "Edit global and/or project schematic symbol libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editPCB, KiScaledBitmap( icon_pcbnew_xpm, this ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editPCB,
+                 KiScaledBitmap( BITMAPS::icon_pcbnew, this, 48 ),
                  _( "Edit the project PCB design" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints, KiScaledBitmap( icon_modedit_xpm, this ),
+    addLauncher( KICAD_MANAGER_ACTIONS::editFootprints,
+                 KiScaledBitmap( BITMAPS::icon_modedit, this, 48 ),
                  _( "Edit global and/or project PCB footprint libraries" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, KiScaledBitmap( icon_gerbview_xpm, this ),
+    addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers,
+                 KiScaledBitmap( BITMAPS::icon_gerbview, this, 48 ),
                  _( "Preview Gerber files" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::convertImage,
-                 KiScaledBitmap( icon_bitmap2component_xpm, this ),
+                 KiScaledBitmap( BITMAPS::icon_bitmap2component, this, 48 ),
                  _( "Convert bitmap images to schematic symbols or PCB footprints" ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::showCalculator,
-                 KiScaledBitmap( icon_pcbcalculator_xpm, this ),
+                 KiScaledBitmap( BITMAPS::icon_pcbcalculator, this, 48 ),
                  _( "Show tools for calculating resistance, current capacity, etc." ) );
 
     addLauncher( KICAD_MANAGER_ACTIONS::editDrawingSheet,
-                 KiScaledBitmap( icon_pagelayout_editor_xpm, this ),
+                 KiScaledBitmap( BITMAPS::icon_pagelayout_editor, this, 48 ),
                  _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
                     "designs" ) );
 

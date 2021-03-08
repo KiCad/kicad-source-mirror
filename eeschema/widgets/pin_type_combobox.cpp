@@ -28,6 +28,7 @@
 
 #include "pin_type_combobox.h"
 
+#include <bitmaps.h>
 #include <lib_pin.h>
 
 PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
@@ -47,9 +48,9 @@ PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
         ELECTRICAL_PINTYPE type = static_cast<ELECTRICAL_PINTYPE>( ii );
 
         wxString text = ElectricalPinTypeGetText( type );
-        BITMAP_DEF bitmap = ElectricalPinTypeGetBitmap( type );
+        BITMAPS bitmap = ElectricalPinTypeGetBitmap( type );
 
-        if( bitmap == NULL )
+        if( bitmap == BITMAPS::INVALID_BITMAP )
             Append( text );
         else
             Insert( text, KiBitmap( bitmap ), ii );

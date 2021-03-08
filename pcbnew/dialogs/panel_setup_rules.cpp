@@ -57,7 +57,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
     m_netClassRegex.Compile( "NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_netNameRegex.Compile( "NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
-    m_compileButton->SetBitmap( KiBitmap( drc_xpm ) );
+    m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
 
     m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );

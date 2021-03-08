@@ -132,7 +132,7 @@ public:
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;

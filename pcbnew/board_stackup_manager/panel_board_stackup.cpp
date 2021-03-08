@@ -103,7 +103,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
 
     // The grid column containing the lock checkbox is kept to a minimal
     // size. So we use a wxStaticBitmap: set the bitmap itself
-    m_bitmapLockThickness->SetBitmap( KiScaledBitmap( locked_xpm, aFrame ) );
+    m_bitmapLockThickness->SetBitmap( KiScaledBitmap( BITMAPS::locked, aFrame ) );
 
     // Gives a minimal size of wxTextCtrl showing dimensions+units
     m_tcCTValue->SetMinSize( m_numericTextCtrlSize );

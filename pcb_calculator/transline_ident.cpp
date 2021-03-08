@@ -25,7 +25,7 @@
 #include <wx/arrstr.h>
 
 #include <kiface_i.h>
-#include <bitmap_types.h>
+#include <bitmaps.h>
 
 // Bitmaps:
 #include "bitmaps/c_microstrip.cpp"

@@ -25,8 +25,9 @@
 #define PIN_TYPE_H_
 
 #include <wx/arrstr.h>
-#include <bitmap_types.h>
 #include <vector>
+
+enum class BITMAPS : unsigned int;
 
 /**
  * The component library pin object electrical types used in ERC tests.
@@ -72,22 +73,22 @@ enum class GRAPHIC_PINSHAPE
 // UI
 
 wxString PinShapeGetText( GRAPHIC_PINSHAPE shape );
-BITMAP_DEF PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
+BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
 
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
-BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
+BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 
 wxString PinOrientationName( unsigned aPinOrientationCode );
 int PinOrientationCode( int index );
 int PinOrientationIndex( int code );
 
 const wxArrayString& PinTypeNames();
-const std::vector<BITMAP_DEF>& PinTypeIcons();
+const std::vector<BITMAPS>& PinTypeIcons();
 
 const wxArrayString& PinShapeNames();
-const std::vector<BITMAP_DEF>& PinShapeIcons();
+const std::vector<BITMAPS>& PinShapeIcons();
 
 const wxArrayString& PinOrientationNames();
-const std::vector<BITMAP_DEF>& PinOrientationIcons();
+const std::vector<BITMAPS>& PinOrientationIcons();
 
 #endif

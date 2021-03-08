@@ -269,7 +269,7 @@ public:
     int GetWidth() const override { return 1; }
     void SetWidth( int aWidth ) override { };
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

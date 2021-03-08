@@ -353,9 +353,9 @@ wxString LIB_POLYLINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF LIB_POLYLINE::GetMenuImage() const
+BITMAPS LIB_POLYLINE::GetMenuImage() const
 {
-    return add_graphical_segments_xpm;
+    return BITMAPS::add_graphical_segments;
 }
 
 

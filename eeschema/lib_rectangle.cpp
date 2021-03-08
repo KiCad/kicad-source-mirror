@@ -282,9 +282,9 @@ wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF LIB_RECTANGLE::GetMenuImage() const
+BITMAPS LIB_RECTANGLE::GetMenuImage() const
 {
-    return add_rectangle_xpm;
+    return BITMAPS::add_rectangle;
 }
 
 

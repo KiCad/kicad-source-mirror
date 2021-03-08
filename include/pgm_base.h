@@ -31,7 +31,6 @@
 #ifndef  PGM_BASE_H_
 #define  PGM_BASE_H_
 
-#include <bitmaps_png/bitmap_def.h>
 #include <map>
 #include <memory>
 #include <search_stack.h>

@@ -151,14 +151,14 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     AnnotateWhat[m_annotationChoice]->SetValue( true );
 
-    reannotate_down_right_bitmap->SetBitmap( KiBitmap( reannotate_right_down_xpm ) );
-    reannotate_right_down_bitmap->SetBitmap( KiBitmap( reannotate_left_down_xpm ) );
-    reannotate_down_left_bitmap->SetBitmap( KiBitmap( reannotate_right_up_xpm ) );
-    reannotate_left_down_bitmap->SetBitmap( KiBitmap( reannotate_left_up_xpm ) );
-    reannotate_up_right_bitmap->SetBitmap( KiBitmap( reannotate_down_left_xpm ) );
-    reannotate_right_up_bitmap->SetBitmap( KiBitmap( reannotate_up_left_xpm ) );
-    reannotate_up_left_bitmap->SetBitmap( KiBitmap( reannotate_down_right_xpm ) );
-    reannotate_left_up_bitmap->SetBitmap( KiBitmap( reannotate_up_right_xpm ) );
+    reannotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_down ) );
+    reannotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_down ) );
+    reannotate_down_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_up ) );
+    reannotate_left_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_up ) );
+    reannotate_up_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_left ) );
+    reannotate_right_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_left ) );
+    reannotate_up_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_right ) );
+    reannotate_left_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_right ) );
 
     m_ExcludeList->SetToolTip( m_ExcludeListText->GetToolTipText() );
     m_GridChoice->SetToolTip( m_SortGridText->GetToolTipText() );

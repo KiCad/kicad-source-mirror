@@ -286,9 +286,9 @@ wxString SCH_SHEET_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_SHEET_PIN::GetMenuImage() const
+BITMAPS SCH_SHEET_PIN::GetMenuImage() const
 {
-    return add_hierar_pin_xpm;
+    return BITMAPS::add_hierar_pin;
 }
 
 

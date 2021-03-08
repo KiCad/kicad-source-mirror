@@ -528,9 +528,9 @@ void ALIGNED_DIMENSION::SwapData( BOARD_ITEM* aImage )
     Update();
 }
 
-BITMAP_DEF ALIGNED_DIMENSION::GetMenuImage() const
+BITMAPS ALIGNED_DIMENSION::GetMenuImage() const
 {
-    return add_aligned_dimension_xpm;
+    return BITMAPS::add_aligned_dimension;
 }
 
 
@@ -709,9 +709,9 @@ void ORTHOGONAL_DIMENSION::SwapData( BOARD_ITEM* aImage )
 }
 
 
-BITMAP_DEF ORTHOGONAL_DIMENSION::GetMenuImage() const
+BITMAPS ORTHOGONAL_DIMENSION::GetMenuImage() const
 {
-    return add_orthogonal_dimension_xpm;
+    return BITMAPS::add_orthogonal_dimension;
 }
 
 
@@ -881,9 +881,9 @@ void LEADER::SwapData( BOARD_ITEM* aImage )
 }
 
 
-BITMAP_DEF LEADER::GetMenuImage() const
+BITMAPS LEADER::GetMenuImage() const
 {
-    return add_leader_xpm;
+    return BITMAPS::add_leader;
 }
 
 
@@ -1019,9 +1019,9 @@ void CENTER_DIMENSION::SwapData( BOARD_ITEM* aImage )
 }
 
 
-BITMAP_DEF CENTER_DIMENSION::GetMenuImage() const
+BITMAPS CENTER_DIMENSION::GetMenuImage() const
 {
-    return add_center_dimension_xpm;
+    return BITMAPS::add_center_dimension;
 }
 
 

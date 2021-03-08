@@ -677,7 +677,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
 
-    m_bRefresh->SetBitmap( KiBitmap( small_refresh_xpm ) );
+    m_bRefresh->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,

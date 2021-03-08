@@ -918,9 +918,9 @@ wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_SHEET::GetMenuImage() const
+BITMAPS SCH_SHEET::GetMenuImage() const
 {
-    return add_hierarchical_subsheet_xpm;
+    return BITMAPS::add_hierarchical_subsheet;
 }
 
 

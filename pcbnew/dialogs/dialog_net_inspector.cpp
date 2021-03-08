@@ -870,9 +870,9 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
 
     adjustListColumns();
 
-    m_addNet->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_renameNet->SetBitmap( KiBitmap( small_edit_xpm ) );
-    m_deleteNet->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_addNet->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_renameNet->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
+    m_deleteNet->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     m_sdbSizerOK->SetDefault();
     m_renameNet->Disable();

@@ -28,6 +28,7 @@
 
 #include "pin_shape_combobox.h"
 
+#include <bitmaps.h>
 #include <lib_pin.h>
 
 PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
@@ -47,9 +48,9 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
         GRAPHIC_PINSHAPE shape = static_cast<GRAPHIC_PINSHAPE>( ii );
 
         wxString text = PinShapeGetText( shape );
-        BITMAP_DEF bitmap = PinShapeGetBitmap( shape );
+        BITMAPS bitmap = PinShapeGetBitmap( shape );
 
-        if( bitmap == NULL )
+        if( bitmap == BITMAPS::INVALID_BITMAP )
             Append( text );
         else
             Insert( text, KiBitmap( bitmap ), ii );

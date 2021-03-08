@@ -214,8 +214,8 @@ bool WX_COLLAPSIBLE_PANE_HEADER::Create( wxWindow* aParent, wxWindowID aId, cons
     if ( !wxControl::Create( aParent, aId, aPos, aSize, aStyle, aValidator, aName ) )
         return false;
 
-    m_iconRight = KiBitmap( triangle_right_xpm );
-    m_iconDown  = KiBitmap( triangle_down_xpm );
+    m_iconRight = KiBitmap( BITMAPS::triangle_right );
+    m_iconDown  = KiBitmap( BITMAPS::triangle_down );
 
     SetLabel( aLabel );
 

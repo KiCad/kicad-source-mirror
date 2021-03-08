@@ -87,7 +87,7 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool ) :
         CONDITIONAL_MENU( aTool )
 {
-    SetIcon( special_tools_xpm );
+    SetIcon( BITMAPS::special_tools );
     SetTitle( _( "Special Tools" ) );
 
     AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::ShowAlways );

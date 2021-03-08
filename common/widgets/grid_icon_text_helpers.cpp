@@ -26,11 +26,13 @@
 #include <wx/textctrl.h>
 #include <wx/dc.h>
 
+#include <bitmaps.h>
+
 
 //---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
 
 
-GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAP_DEF>& icons,
+GRID_CELL_ICON_TEXT_RENDERER::GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAPS>& icons,
                                                             const wxArrayString& names ) :
     m_icons( icons ),
     m_names( names )
@@ -55,12 +57,12 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     auto position = m_names.Index( value );
     if( position < (int) m_icons.size() && position != wxNOT_FOUND )
     {
-        bitmap = KiBitmap( (BITMAP_DEF) m_icons[ position ] );
+        bitmap = KiBitmap( m_icons[ position ] );
         aDC.DrawBitmap( bitmap, rect.GetLeft() + 3, rect.GetTop() + 2, true );
     }
     // still need a bitmap to fetch the width
     else
-        bitmap = KiBitmap( (BITMAP_DEF) m_icons[ 0 ] );
+        bitmap = KiBitmap( m_icons[ 0 ] );
 
     // draw the text
     rect.SetLeft( rect.GetLeft() + bitmap.GetWidth() + 7 );
@@ -71,7 +73,7 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
 wxSize GRID_CELL_ICON_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                                   int row, int col )
 {
-    wxBitmap bitmap = KiBitmap( (BITMAP_DEF) m_icons[ row ] );
+    wxBitmap bitmap = KiBitmap( m_icons[ row ] );
     wxString text = grid.GetCellValue( row, col );
     wxSize   size = wxGridCellStringRenderer::DoGetBestSize( attr, dc, text );
 
@@ -127,7 +129,7 @@ wxGridCellRenderer* GRID_CELL_ICON_RENDERER::Clone() const
 // Note: this implementation is an adaptation of wxGridCellChoiceEditor
 
 
-GRID_CELL_ICON_TEXT_POPUP::GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAP_DEF>& icons,
+GRID_CELL_ICON_TEXT_POPUP::GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAPS>& icons,
                                                       const wxArrayString& names ) :
     m_icons( icons ),
     m_names( names )

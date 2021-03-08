@@ -56,15 +56,15 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     // TODO: Change these to 16x16 versions when available
     m_images = new wxImageList( 24, 24, false, 9 );
 
-    m_images->Add( KiBitmap( info_xpm ) );              // INFORMATION
-    m_images->Add( KiBitmap( recent_xpm ) );            // VERSION
-    m_images->Add( KiBitmap( preference_xpm ) );        // DEVELOPERS
-    m_images->Add( KiBitmap( editor_xpm ) );            // DOCWRITERS
-    m_images->Add( KiBitmap( library_xpm ) );           // LIBRARIANS
-    m_images->Add( KiBitmap( color_materials_xpm ) );   // ARTISTS
-    m_images->Add( KiBitmap( language_xpm ) );          // TRANSLATORS
-    m_images->Add( KiBitmap( zip_xpm ) );               // PACKAGERS
-    m_images->Add( KiBitmap( tools_xpm ) );             // LICENSE
+    m_images->Add( KiBitmap( BITMAPS::info ) );              // INFORMATION
+    m_images->Add( KiBitmap( BITMAPS::recent ) );            // VERSION
+    m_images->Add( KiBitmap( BITMAPS::preference ) );        // DEVELOPERS
+    m_images->Add( KiBitmap( BITMAPS::editor ) );            // DOCWRITERS
+    m_images->Add( KiBitmap( BITMAPS::library ) );           // LIBRARIANS
+    m_images->Add( KiBitmap( BITMAPS::color_materials ) );   // ARTISTS
+    m_images->Add( KiBitmap( BITMAPS::language ) );          // TRANSLATORS
+    m_images->Add( KiBitmap( BITMAPS::zip ) );               // PACKAGERS
+    m_images->Add( KiBitmap( BITMAPS::tools ) );             // LICENSE
 
     m_notebook->SetImageList( m_images );
 
@@ -76,7 +76,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     else
     {
         wxIcon icon;
-        icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
         SetIcon( icon );
         m_bitmapApp->SetBitmap( icon );
     }
@@ -456,7 +456,7 @@ wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap( wxScrolledWindow* aParent, wxB
     }
     else
     {
-        bitmap->SetBitmap( KiBitmap( right_xpm ) );
+        bitmap->SetBitmap( KiBitmap( BITMAPS::right ) );
     }
 
     return bitmap;

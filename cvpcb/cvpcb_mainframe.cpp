@@ -74,7 +74,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Give an icon
     wxIcon icon;
-    icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_cvpcb ) );
     SetIcon( icon );
 
     SetAutoLayout( true );

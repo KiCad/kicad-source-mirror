@@ -42,22 +42,22 @@
 TOOL_ACTION PL_ACTIONS::drawLine( "plEditor.InteractiveDrawing.drawLine",
         AS_GLOBAL, 0, "",
         _( "Add Line" ), _( "Add a line" ),
-        add_graphical_segments_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_SEGMENT );
+        BITMAPS::add_graphical_segments, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_SEGMENT );
 
 TOOL_ACTION PL_ACTIONS::drawRectangle( "plEditor.InteractiveDrawing.drawRectangle",
         AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
-        add_rectangle_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_RECT );
+        BITMAPS::add_rectangle, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_RECT );
 
 TOOL_ACTION PL_ACTIONS::placeText( "plEditor.InteractiveDrawing.placeText",
         AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
-        text_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_TEXT );
+        BITMAPS::text, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_TEXT );
 
 TOOL_ACTION PL_ACTIONS::placeImage( "plEditor.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",
         _( "Add Bitmap" ), _( "Add a bitmap image" ),
-        image_xpm, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_BITMAP );
+        BITMAPS::image, AF_ACTIVATE, (void*) DS_DATA_ITEM::DS_BITMAP );
 
 
 // PL_EDIT_TOOL
@@ -66,13 +66,13 @@ TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),
-        move_xpm, AF_ACTIVATE );
+        BITMAPS::move, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
         AS_GLOBAL, 0, "",
         _( "Append Existing Drawing Sheet..." ),
         _( "Append an existing drawing sheet file to current file" ),
-        import_xpm, AF_ACTIVATE );
+        BITMAPS::import, AF_ACTIVATE );
 
 
 // PL_EDITOR_CONTROL
@@ -80,33 +80,33 @@ TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appen
 TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
         AS_GLOBAL, 0, "",
         _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),
-        spreadsheet_xpm );
+        BITMAPS::spreadsheet );
 
 TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings",
         AS_GLOBAL, 0, "",
         _( "Page Preview Settings..." ), _( "Edit preview data for page size and title block" ),
-        sheetset_xpm );
+        BITMAPS::sheetset );
 
 TOOL_ACTION PL_ACTIONS::layoutNormalMode( "plEditor.EditorControl.LayoutNormalMode",
         AS_GLOBAL, 0, "",
         _( "Show title block in preview mode" ),
         _( "Show title block in preview mode:\n"
            "text placeholders will be replaced with preview data." ),
-        pagelayout_normal_view_mode_xpm );
+        BITMAPS::pagelayout_normal_view_mode );
 
 TOOL_ACTION PL_ACTIONS::layoutEditMode( "plEditor.EditorControl.LayoutEditMode",
         AS_GLOBAL, 0, "",
         _( "Show title block in edit mode" ),
         _( "Show title block in edit mode:\n"
            "text placeholders are shown as ${keyword} tokens." ),
-        pagelayout_special_view_mode_xpm  );
+        BITMAPS::pagelayout_special_view_mode  );
 
 
 // PL_SELECTION_TOOL
 //
 TOOL_ACTION PL_ACTIONS::selectionActivate( "plEditor.InteractiveSelection",
         AS_GLOBAL, 0, "", "", "",       // No description, not shown anywhere
-        nullptr, AF_ACTIVATE );
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::selectionMenu( "plEditor.InteractiveSelection.SelectionMenu",
         AS_GLOBAL );

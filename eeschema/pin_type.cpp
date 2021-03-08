@@ -29,58 +29,58 @@
 
 // These are true singletons so it's OK for them to be globals.
 
-static std::vector<BITMAP_DEF> g_typeIcons;
-static wxArrayString           g_typeNames;
+static std::vector<BITMAPS> g_typeIcons;
+static wxArrayString        g_typeNames;
 
-static std::vector<BITMAP_DEF> g_shapeIcons;
-static wxArrayString           g_shapeNames;
+static std::vector<BITMAPS> g_shapeIcons;
+static wxArrayString        g_shapeNames;
 
-static std::vector<BITMAP_DEF> g_orientationIcons;
-static wxArrayString           g_orientationNames;
+static std::vector<BITMAPS> g_orientationIcons;
+static wxArrayString        g_orientationNames;
 
 
 struct pinTypeStruct
 {
-    wxString             name;
-    const BITMAP_OPAQUE* bitmap;
+    wxString name;
+    BITMAPS  bitmap;
 };
 
 // clang-format off
 const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
-    { ELECTRICAL_PINTYPE::PT_INPUT,        { _( "Input" ),             pintype_input_xpm } },
-    { ELECTRICAL_PINTYPE::PT_OUTPUT,       { _( "Output" ),            pintype_output_xpm } },
-    { ELECTRICAL_PINTYPE::PT_BIDI,         { _( "Bidirectional" ),     pintype_bidi_xpm } },
-    { ELECTRICAL_PINTYPE::PT_TRISTATE,     { _( "Tri-state" ),         pintype_3states_xpm } },
-    { ELECTRICAL_PINTYPE::PT_PASSIVE,      { _( "Passive" ),           pintype_passive_xpm } },
-    { ELECTRICAL_PINTYPE::PT_NIC,          { _( "Free" ),              pintype_nic_xpm } },
-    { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,  { _( "Unspecified" ),       pintype_notspecif_xpm } },
-    { ELECTRICAL_PINTYPE::PT_POWER_IN,     { _( "Power input" ),       pintype_powerinput_xpm } },
-    { ELECTRICAL_PINTYPE::PT_POWER_OUT,    { _( "Power output" ),      pintype_poweroutput_xpm } },
-    { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,{ _( "Open collector" ),    pintype_opencoll_xpm } },
-    { ELECTRICAL_PINTYPE::PT_OPENEMITTER,  { _( "Open emitter" ),      pintype_openemit_xpm } },
-    { ELECTRICAL_PINTYPE::PT_NC,           { _( "Unconnected" ),       pintype_noconnect_xpm } },
+    { ELECTRICAL_PINTYPE::PT_INPUT,        { _( "Input" ),          BITMAPS::pintype_input } },
+    { ELECTRICAL_PINTYPE::PT_OUTPUT,       { _( "Output" ),         BITMAPS::pintype_output } },
+    { ELECTRICAL_PINTYPE::PT_BIDI,         { _( "Bidirectional" ),  BITMAPS::pintype_bidi } },
+    { ELECTRICAL_PINTYPE::PT_TRISTATE,     { _( "Tri-state" ),      BITMAPS::pintype_3states } },
+    { ELECTRICAL_PINTYPE::PT_PASSIVE,      { _( "Passive" ),        BITMAPS::pintype_passive } },
+    { ELECTRICAL_PINTYPE::PT_NIC,          { _( "Free" ),           BITMAPS::pintype_nic } },
+    { ELECTRICAL_PINTYPE::PT_UNSPECIFIED,  { _( "Unspecified" ),    BITMAPS::pintype_notspecif } },
+    { ELECTRICAL_PINTYPE::PT_POWER_IN,     { _( "Power input" ),    BITMAPS::pintype_powerinput } },
+    { ELECTRICAL_PINTYPE::PT_POWER_OUT,    { _( "Power output" ),   BITMAPS::pintype_poweroutput } },
+    { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,{ _( "Open collector" ), BITMAPS::pintype_opencoll } },
+    { ELECTRICAL_PINTYPE::PT_OPENEMITTER,  { _( "Open emitter" ),   BITMAPS::pintype_openemit } },
+    { ELECTRICAL_PINTYPE::PT_NC,           { _( "Unconnected" ),    BITMAPS::pintype_noconnect } },
 };
 // clang-format on
 
 
 struct pinShapeStruct
 {
-    wxString             name;
-    const BITMAP_OPAQUE* bitmap;
+    wxString name;
+    BITMAPS  bitmap;
 };
 
 
 // clang-format off
 const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
-    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               pinshape_normal_xpm } },
-    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           pinshape_invert_xpm } },
-    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              pinshape_clock_normal_xpm } },
-    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     pinshape_clock_invert_xpm } },
-    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          pinshape_active_low_input_xpm } },
-    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          pinshape_clock_active_low_xpm } },
-    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         pinshape_active_low_output_xpm } },
-    { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), pinshape_clock_fall_xpm } },
-    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           pinshape_nonlogic_xpm } },
+    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               BITMAPS::pinshape_normal } },
+    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           BITMAPS::pinshape_invert } },
+    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              BITMAPS::pinshape_clock_normal } },
+    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     BITMAPS::pinshape_clock_invert } },
+    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          BITMAPS::pinshape_active_low_input } },
+    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          BITMAPS::pinshape_clock_active_low } },
+    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         BITMAPS::pinshape_active_low_output } },
+    { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), BITMAPS::pinshape_clock_fall } },
+    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           BITMAPS::pinshape_nonlogic } },
 };
 // clang-format on
 
@@ -96,12 +96,12 @@ static const int pin_orientation_codes[] =
 
 // bitmaps to show pins orientations in dialog editor
 // must have same order than pin_orientation_names
-static const BITMAP_DEF iconsPinsOrientations[] =
+static const BITMAPS iconsPinsOrientations[] =
 {
-    pinorient_right_xpm,
-    pinorient_left_xpm,
-    pinorient_up_xpm,
-    pinorient_down_xpm,
+    BITMAPS::pinorient_right,
+    BITMAPS::pinorient_left,
+    BITMAPS::pinorient_up,
+    BITMAPS::pinorient_down,
 };
 
 
@@ -188,7 +188,7 @@ const wxArrayString& PinTypeNames()
 }
 
 
-const std::vector<BITMAP_DEF>& PinTypeIcons()
+const std::vector<BITMAPS>& PinTypeIcons()
 {
     if( g_typeIcons.empty() )
         InitTables();
@@ -206,7 +206,7 @@ const wxArrayString& PinShapeNames()
 }
 
 
-const std::vector<BITMAP_DEF>& PinShapeIcons()
+const std::vector<BITMAPS>& PinShapeIcons()
 {
     if( g_shapeIcons.empty() )
         InitTables();
@@ -224,7 +224,7 @@ const wxArrayString& PinOrientationNames()
 }
 
 
-const std::vector<BITMAP_DEF>& PinOrientationIcons()
+const std::vector<BITMAPS>& PinOrientationIcons()
 {
     if( g_orientationIcons.empty() )
         InitTables();
@@ -243,11 +243,12 @@ wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE aType )
 }
 
 
-BITMAP_DEF ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
+BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE aType )
 {
     auto findIt = pinTypes.find( aType );
 
-    wxCHECK_MSG( findIt != pinTypes.end(), nullptr, "Could not find pin type in lookup map" );
+    wxCHECK_MSG( findIt != pinTypes.end(), BITMAPS::INVALID_BITMAP,
+                 "Could not find pin type in lookup map" );
 
     return findIt->second.bitmap;
 }
@@ -263,11 +264,12 @@ wxString PinShapeGetText( GRAPHIC_PINSHAPE aShape )
 }
 
 
-BITMAP_DEF PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
+BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
 {
     auto findIt = pinShapes.find( aShape );
 
-    wxCHECK_MSG( findIt != pinShapes.end(), nullptr, "Could not find pinshape in lookup map" );
+    wxCHECK_MSG( findIt != pinShapes.end(), BITMAPS::INVALID_BITMAP,
+                 "Could not find pinshape in lookup map" );
 
     return findIt->second.bitmap;
 }

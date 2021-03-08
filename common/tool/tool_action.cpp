@@ -26,12 +26,13 @@
 #include <tool/action_manager.h>
 
 #include <algorithm>
+#include <bitmaps.h>
 #include <hotkeys_basic.h>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
                           int aDefaultHotKey, const std::string& aLegacyHotKeyName,
                           const wxString& aLabel, const wxString& aTooltip,
-                          const BITMAP_OPAQUE* aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
+                          BITMAPS aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
         m_name( aName ),
         m_scope( aScope ),
         m_defaultHotKey( aDefaultHotKey ),
@@ -51,7 +52,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
 TOOL_ACTION::TOOL_ACTION() :
         m_scope( AS_GLOBAL ),
         m_defaultHotKey( 0 ),
-        m_icon( nullptr ),
+        m_icon( BITMAPS::INVALID_BITMAP ),
         m_id( -1 ),
         m_flags( AF_NONE ),
         m_param( nullptr )

@@ -120,7 +120,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( library_browser_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::library_browser ) );
     SetIcon( icon );
 
     m_libListWidth = 200;

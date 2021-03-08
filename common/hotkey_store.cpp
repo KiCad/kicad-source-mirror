@@ -193,7 +193,7 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
     // Create a fake "TOOL_ACTION" so we can get the section name for "Common" through the API.
     // Simply declaring a wxString with the value "Common" works, but the goal is to futureproof
     // the code here as much as possible.
-    TOOL_ACTION commonAction( "common.Control.Fake", AS_GLOBAL, 0, "", "", "", nullptr );
+    TOOL_ACTION commonAction( "common.Control.Fake", AS_GLOBAL, 0, "", "", "" );
     wxString    commonName = GetSectionName( &commonAction );
 
     for( HOTKEY_SECTION& section : m_hk_sections )

@@ -31,10 +31,11 @@
 
 #include <core/typeinfo.h>
 #include <wx/fdrepdlg.h>
-#include <bitmap_types.h>
 #include <view/view_item.h>
 #include <kiid.h>
 
+
+enum class BITMAPS : unsigned int;
 
 
 enum class SEARCH_RESULT
@@ -398,7 +399,7 @@ public:
      *
      * @return The menu image associated with the item.
      */
-    virtual BITMAP_DEF GetMenuImage() const;
+    virtual BITMAPS GetMenuImage() const;
 
     /**
      * Compare the item against the search criteria in \a aSearchData.

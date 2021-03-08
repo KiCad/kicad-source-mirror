@@ -358,7 +358,7 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     const wxPoint& GetCrossbarStart() const { return m_crossBarStart; }
 
@@ -438,7 +438,7 @@ public:
 
     void SwapData( BOARD_ITEM* aImage ) override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     /**
      * Sets the orientation of the dimension line (so, perpendicular to the feature lines)
@@ -490,7 +490,7 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     wxString GetClass() const override
     {
@@ -528,7 +528,7 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     wxString GetClass() const override
     {

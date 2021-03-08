@@ -203,11 +203,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbnew ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pcbnew_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbnew_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pcbnew_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbnew_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

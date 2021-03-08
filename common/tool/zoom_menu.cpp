@@ -41,7 +41,7 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) :
         m_parent( aParent )
 {
     SetTitle( _( "Zoom" ) );
-    SetIcon( zoom_selection_xpm );
+    SetIcon( BITMAPS::zoom_selection );
 
     int i = ID_POPUP_ZOOM_LEVEL_START + 1;  // 0 reserved for menus which support auto-zoom
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 #include <wx/menu.h>
 #include <wx/menuitem.h>
 #include <wx/aui/auibar.h>
-#include <wx/dc.h>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 
@@ -37,15 +36,22 @@
 #include <mutex>
 #include <unordered_map>
 
+#include <asset_archive.h>
 #include <bitmaps.h>
+#include <bitmap_store.h>
+#include <bitmaps/bitmap_opaque.h> // for pcb_calculator compatibility shim
 #include <pgm_base.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
+#include <paths.h>
 #include <settings/common_settings.h>
 
 
+static std::unique_ptr<BITMAP_STORE> s_BitmapStore;
+
+
 struct SCALED_BITMAP_ID {
-    BITMAP_DEF bitmap;
+    BITMAPS bitmap;
     int scale;
 
     bool operator==( SCALED_BITMAP_ID const& other ) const noexcept
@@ -68,7 +74,7 @@ namespace std {
             static const size_t offset = sz64 ? 60 : 28;
 
             // The hash only needs to be fast and simple, not necessarily accurate - a collision
-            // only makes things slower, not broken. BITMAP_DEF is a pointer, so the most
+            // only makes things slower, not broken. BITMAPS is a pointer, so the most
             // significant several bits are generally going to be the same for all. Just convert
             // it to an integer and stuff the scale factor into those bits.
             return
@@ -79,7 +85,26 @@ namespace std {
 }
 
 
-wxBitmap KiBitmap( BITMAP_DEF aBitmap )
+BITMAP_STORE* GetStore()
+{
+    if( !s_BitmapStore )
+    {
+        wxFileName path( PATHS::GetStockDataPath() + wxT( "/resources" ), wxT( "images.zip" ) );
+        s_BitmapStore = std::make_unique<BITMAP_STORE>();
+    }
+
+    return s_BitmapStore.get();
+}
+
+
+wxBitmap KiBitmap( BITMAPS aBitmap )
+{
+    return GetStore()->GetBitmap( aBitmap );
+}
+
+
+// TODO: Remove this once pcb_calculator images are moved into the main bitmap system
+wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap )
 {
     wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
     wxImage image( is, wxBITMAP_TYPE_PNG );
@@ -115,14 +140,14 @@ static int get_scale_factor( wxWindow* aWindow )
 }
 
 
-wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, wxWindow* aWindow )
+wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight )
 {
     // Bitmap conversions are cached because they can be slow.
     static std::unordered_map<SCALED_BITMAP_ID, wxBitmap> bitmap_cache;
     static std::mutex bitmap_cache_mutex;
     const int scale = get_scale_factor( aWindow );
 
-    SCALED_BITMAP_ID id = { aBitmap, scale };
+    SCALED_BITMAP_ID id = { static_cast<BITMAPS>( aBitmap ), scale };
 
     std::lock_guard<std::mutex> guard( bitmap_cache_mutex );
     auto it = bitmap_cache.find( id );
@@ -133,16 +158,8 @@ wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, wxWindow* aWindow )
     }
     else
     {
-        wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
-        wxImage image( is, wxBITMAP_TYPE_PNG );
-
-        // Bilinear seems to genuinely look better for these line-drawing icons
-        // than bicubic, despite claims in the wx documentation that bicubic is
-        // "highest quality". I don't recommend changing this. Bicubic looks
-        // blurry and makes me want an eye exam.
-        image.Rescale( scale * image.GetWidth() / 4, scale * image.GetHeight() / 4,
-                wxIMAGE_QUALITY_BILINEAR );
-        return bitmap_cache.emplace( id, wxBitmap( image ) ).first->second;
+        wxBitmap bitmap = GetStore()->GetBitmapScaled( aBitmap, scale, aHeight );
+        return bitmap_cache.emplace( id, bitmap ).first->second;
     }
 }
 
@@ -166,11 +183,9 @@ wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 }
 
 
-wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
+wxBitmap* KiBitmapNew( BITMAPS aBitmap )
 {
-    wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
-    wxImage image( is, wxBITMAP_TYPE_PNG );
-    wxBitmap* bitmap = new wxBitmap( image );
+    wxBitmap* bitmap = new wxBitmap( GetStore()->GetBitmap( aBitmap ) );
 
     return bitmap;
 }

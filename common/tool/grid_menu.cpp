@@ -38,7 +38,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
         m_parent( aParent )
 {
     SetTitle( _( "Grid" ) );
-    SetIcon( grid_select_xpm );
+    SetIcon( BITMAPS::grid_select );
 
     APP_SETTINGS_BASE* settings = m_parent->config();
     wxArrayString      gridsList;

@@ -54,7 +54,7 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
       m_commit( aCommit )
 {
     m_StdButtonsOK->SetDefault();
-    m_image->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
+    m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
 
     // Set keep Through Hole pads on external layers ON by default.
     // Because such a pad does not allow soldering/unsoldering, disable this option
@@ -69,11 +69,11 @@ DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
 void DIALOG_UNUSED_PAD_LAYERS::syncImages( wxCommandEvent& aEvent )
 {
     if( m_rbAction->GetSelection() == PAD_ACTION_RESET )
-        m_image->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
+        m_image->SetBitmap( KiBitmap( BITMAPS::pads_reset_unused ) );
     else if( m_cbPreservePads->IsChecked() )
-        m_image->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
+        m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused_keep_bottom ) );
     else
-        m_image->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
+        m_image->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
 }
 
 

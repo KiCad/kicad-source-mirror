@@ -39,7 +39,7 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
 {
     wxSize sizeNeeded;
 
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     // Button created in wxFormBuilder is an "OK" button. Change label here
     m_sdbSizer1OK->SetLabel( _( "Import Settings" ) );

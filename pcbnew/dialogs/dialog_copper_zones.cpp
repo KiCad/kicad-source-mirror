@@ -119,7 +119,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
                        m_tcIslandThreshold, m_islandThresholdUnits, false )
 {
     m_Parent = aParent;
-    m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+    m_bitmapNoNetWarning->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
     m_ptr = aSettings;
     m_settings = *aSettings;

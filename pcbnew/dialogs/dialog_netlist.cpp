@@ -66,7 +66,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
       m_runDragCommand( false )
 {
     m_NetlistFilenameCtrl->SetValue( m_netlistPath );
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     auto cfg = m_parent->GetPcbNewSettings();
 

@@ -246,7 +246,7 @@ public:
     virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage()
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
                                             // only to calculate aperture macros shapes sizes

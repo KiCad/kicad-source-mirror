@@ -384,9 +384,9 @@ wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF LIB_TEXT::GetMenuImage() const
+BITMAPS LIB_TEXT::GetMenuImage() const
 {
-    return text_xpm;
+    return BITMAPS::text;
 }
 
 

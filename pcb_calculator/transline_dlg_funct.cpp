@@ -21,7 +21,7 @@
 #include <wx/settings.h>
 #include <wx/wx.h>
 
-
+#include <bitmaps/bitmap_types.h>
 #include "common_data.h"
 #include "pcb_calculator_frame.h"
 #include "bitmaps/microstrip_zodd_zeven.cpp"

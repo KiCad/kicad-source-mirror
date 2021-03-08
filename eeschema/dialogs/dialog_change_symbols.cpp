@@ -85,8 +85,8 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
         m_matchSizer->FindItem( m_matchBySelection )->Show( false );
     }
 
-    m_matchIdBrowserButton->SetBitmap( KiBitmap( small_library_xpm ) );
-    m_newIdBrowserButton->SetBitmap( KiBitmap( small_library_xpm ) );
+    m_matchIdBrowserButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
+    m_newIdBrowserButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
 
     if( m_mode == MODE::CHANGE )
     {

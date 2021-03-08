@@ -29,7 +29,7 @@
 #include <wx/bitmap.h>
 #include <wx/dynarray.h>
 
-#include "bitmap_types.h"
+#include <bitmaps/bitmap_types.h>
 
 class CONTRIBUTOR;
 
@@ -115,7 +115,7 @@ public:
     wxIcon& GetAppIcon() { return m_appIcon; }
 
     ///< Wrapper to manage memory allocation for bitmaps
-    wxBitmap* CreateKiBitmap( BITMAP_DEF aBitmap )
+    wxBitmap* CreateKiBitmap( BITMAPS aBitmap )
     {
         m_bitmaps.emplace_back( KiBitmapNew( aBitmap ) );
         return m_bitmaps.back().get();

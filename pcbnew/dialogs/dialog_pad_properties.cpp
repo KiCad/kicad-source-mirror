@@ -157,8 +157,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     m_cbShowPadOutline->SetValue( m_sketchPreview );
 
-    m_FlippedWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
-    m_nonCopperWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+    m_FlippedWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
+    m_nonCopperWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new PAD( (FOOTPRINT*) NULL );
@@ -1167,13 +1167,13 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
         // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
         // wxWidgets needs to have these set when the panel is visible for some reason.
         // https://gitlab.com/kicad/code/kicad/-/issues/5534
-        m_stackupImage0->SetBitmap( KiBitmap( pads_reset_unused_xpm ) );
-        m_stackupImage1->SetBitmap( KiBitmap( pads_remove_unused_keep_bottom_xpm ) );
-        m_stackupImage2->SetBitmap( KiBitmap( pads_remove_unused_xpm ) );
-        m_stackupImage4->SetBitmap( KiBitmap( pads_npth_top_bottom_xpm ) );
-        m_stackupImage5->SetBitmap( KiBitmap( pads_npth_top_xpm ) );
-        m_stackupImage6->SetBitmap( KiBitmap( pads_npth_bottom_xpm ) );
-        m_stackupImage7->SetBitmap( KiBitmap( pads_npth_xpm ) );
+        m_stackupImage0->SetBitmap( KiBitmap( BITMAPS::pads_reset_unused ) );
+        m_stackupImage1->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused_keep_bottom ) );
+        m_stackupImage2->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
+        m_stackupImage4->SetBitmap( KiBitmap( BITMAPS::pads_npth_top_bottom ) );
+        m_stackupImage5->SetBitmap( KiBitmap( BITMAPS::pads_npth_top ) );
+        m_stackupImage6->SetBitmap( KiBitmap( BITMAPS::pads_npth_bottom ) );
+        m_stackupImage7->SetBitmap( KiBitmap( BITMAPS::pads_npth ) );
 
         Layout();
     }

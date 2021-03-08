@@ -97,7 +97,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
 
     // Give it an icon
     wxIcon icon;
-    icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_3d ) );
     SetIcon( icon );
 
     // Create the status line

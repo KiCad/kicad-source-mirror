@@ -562,20 +562,20 @@ wxString SCH_FIELD::GetCanonicalName() const
 }
 
 
-BITMAP_DEF SCH_FIELD::GetMenuImage() const
+BITMAPS SCH_FIELD::GetMenuImage() const
 {
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
         switch( m_id )
         {
-        case REFERENCE_FIELD: return edit_comp_ref_xpm;
-        case VALUE_FIELD:     return edit_comp_value_xpm;
-        case FOOTPRINT_FIELD: return edit_comp_footprint_xpm;
-        default:              return text_xpm;
+        case REFERENCE_FIELD: return BITMAPS::edit_comp_ref;
+        case VALUE_FIELD:     return BITMAPS::edit_comp_value;
+        case FOOTPRINT_FIELD: return BITMAPS::edit_comp_footprint;
+        default:              return BITMAPS::text;
         }
     }
 
-    return text_xpm;
+    return BITMAPS::text;
 }
 
 

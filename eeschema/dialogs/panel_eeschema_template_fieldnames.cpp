@@ -49,8 +49,8 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
         m_topMargin->PrependSpacer( 10 );
     }
 
-    m_addFieldButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteFieldButton->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_deleteFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 

@@ -47,15 +47,15 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
     }
 
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                            KiScaledBitmap( library_browser_xpm, this ),
+                            KiScaledBitmap( BITMAPS::library_browser, this ),
                             _( "Choose symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-                            KiScaledBitmap( lib_previous_xpm, this ),
+                            KiScaledBitmap( BITMAPS::lib_previous, this ),
                             _( "Display previous symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-                            KiScaledBitmap( lib_next_xpm, this ),
+                            KiScaledBitmap( BITMAPS::lib_next, this ),
                             _( "Display next symbol" ) );
 
     m_mainToolBar->AddScaledSeparator( this );

@@ -47,7 +47,7 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aPa
     m_lblCtrl->SetLabel( _( "Cmd" ) );
 #endif
 
-    m_scrollWarning->SetBitmap( KiBitmap( small_warning_xpm ) );
+    m_scrollWarning->SetBitmap( KiBitmap( BITMAPS::small_warning ) );
     m_scrollWarning->Hide();
 
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,

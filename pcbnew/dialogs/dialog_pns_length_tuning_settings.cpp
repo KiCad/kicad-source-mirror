@@ -77,19 +77,19 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
     {
     case PNS::PNS_MODE_TUNE_SINGLE:
         SetTitle( _( "Single Track Length Tuning" ) );
-        m_legend->SetBitmap( KiBitmap( tune_single_track_length_legend_xpm ) );
+        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_single_track_length_legend ) );
         m_targetLength.SetValue( m_settings.m_targetLength );
         break;
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR:
         SetTitle( _( "Differential Pair Length Tuning" ) );
-        m_legend->SetBitmap( KiBitmap( tune_diff_pair_length_legend_xpm ) );
+        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_length_legend ) );
         m_targetLength.SetValue( m_settings.m_targetLength );
         break;
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW:
         SetTitle( _( "Differential Pair Skew Tuning" ) );
-        m_legend->SetBitmap( KiBitmap( tune_diff_pair_skew_legend_xpm ) );
+        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_skew_legend ) );
         m_targetLengthLabel->SetLabel( _( "Target skew:" ) + wxS( " " ) );
         m_targetLength.SetValue( m_settings.m_targetSkew );
         break;

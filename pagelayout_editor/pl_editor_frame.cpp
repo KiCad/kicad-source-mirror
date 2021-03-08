@@ -99,11 +99,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_pagelayout_editor_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pagelayout_editor ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pagelayout_editor_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pagelayout_editor_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pagelayout_editor_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pagelayout_editor_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

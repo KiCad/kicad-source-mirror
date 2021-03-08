@@ -1584,15 +1584,15 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
         }
 
         menu.AppendSeparator();
-        menu.Add( _( "Select &All\tA" ), limit + 1, nullptr );
+        menu.Add( _( "Select &All\tA" ), limit + 1, BITMAPS::INVALID_BITMAP );
 
         if( !expandSelection && aCollector->HasAdditionalItems() )
-            menu.Add( _( "&Expand Selection\tE" ), limit + 2, nullptr );
+            menu.Add( _( "&Expand Selection\tE" ), limit + 2, BITMAPS::INVALID_BITMAP );
 
         if( aCollector->m_MenuTitle.Length() )
         {
             menu.SetTitle( aCollector->m_MenuTitle );
-            menu.SetIcon( info_xpm );
+            menu.SetIcon( BITMAPS::info );
             menu.DisplayTitle( true );
         }
         else

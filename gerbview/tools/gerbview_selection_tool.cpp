@@ -44,7 +44,7 @@ public:
     HIGHLIGHT_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( net_highlight_schematic_xpm );
+        SetIcon( BITMAPS::net_highlight_schematic );
         SetTitle( _( "Highlight" ) );
     }
 
@@ -423,7 +423,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
     if( aCollector->m_MenuTitle.Length() )
     {
         menu.SetTitle( aCollector->m_MenuTitle );
-        menu.SetIcon( info_xpm );
+        menu.SetIcon( BITMAPS::info );
         menu.DisplayTitle( true );
     }
     else

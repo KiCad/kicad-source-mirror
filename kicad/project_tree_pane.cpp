@@ -698,14 +698,14 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER,
                      _( "Switch to this Project" ),
                      _( "Close all editors, and switch to the selected project" ),
-                     KiBitmap( open_project_xpm ) );
+                     KiBitmap( BITMAPS::open_project ) );
         popup_menu.AppendSeparator();
     }
 
     if( can_create_new_directory )
     {
         AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New Directory..." ),
-                     _( "Create a New Directory" ), KiBitmap( directory_xpm ) );
+                     _( "Create a New Directory" ), KiBitmap( BITMAPS::directory ) );
     }
 
     if( can_open_this_directory )
@@ -732,7 +732,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         }
 
         AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
-                     KiBitmap( directory_browser_xpm ) );
+                     KiBitmap( BITMAPS::directory_browser ) );
     }
 
     if( can_edit )
@@ -743,7 +743,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             help_text = _( "Open files in a Text Editor" );
 
         AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ),
-                     help_text, KiBitmap( editor_xpm ) );
+                     help_text, KiBitmap( BITMAPS::editor ) );
     }
 
     if( can_rename )
@@ -759,7 +759,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             help_text = _( "Rename files" );
         }
 
-        AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text, KiBitmap( right_xpm ) );
+        AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text, KiBitmap( BITMAPS::right ) );
     }
 
     if( can_delete )
@@ -779,7 +779,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         }
 
         AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
-                     KiBitmap( trash_xpm ) );
+                     KiBitmap( BITMAPS::trash ) );
     }
 
     if( can_print )
@@ -791,7 +791,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 #else
                 _( "Print" ),
 #endif
-                _( "Print the contents of the file" ), KiBitmap( print_button_xpm ) );
+                _( "Print the contents of the file" ), KiBitmap( BITMAPS::print_button ) );
     }
 
     if( popup_menu.GetMenuItemCount() > 0 )

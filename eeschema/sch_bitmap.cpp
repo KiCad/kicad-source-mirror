@@ -190,9 +190,9 @@ void SCH_BITMAP::Plot( PLOTTER* aPlotter ) const
 }
 
 
-BITMAP_DEF SCH_BITMAP::GetMenuImage() const
+BITMAPS SCH_BITMAP::GetMenuImage() const
 {
-    return image_xpm;
+    return BITMAPS::image;
 }
 
 

@@ -445,9 +445,9 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
 }
 
 
-BITMAP_DEF LIB_FIELD::GetMenuImage() const
+BITMAPS LIB_FIELD::GetMenuImage() const
 {
-    return move_xpm;
+    return BITMAPS::move;
 }
 
 

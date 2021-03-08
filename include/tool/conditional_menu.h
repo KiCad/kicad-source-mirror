@@ -36,6 +36,8 @@ class PCB_SELECTION_TOOL;
 class TOOL_ACTION;
 class TOOL_INTERACTIVE;
 
+enum class BITMAPS : unsigned int;
+
 
 class CONDITIONAL_MENU : public ACTION_MENU
 {
@@ -58,7 +60,7 @@ public:
     void AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                   int aOrder = ANY_ORDER );
 
-    void AddItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAP_DEF aIcon,
+    void AddItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAPS aIcon,
                   const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
@@ -75,7 +77,7 @@ public:
     void AddCheckItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                        int aOrder = ANY_ORDER );
 
-    void AddCheckItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAP_DEF aIcon,
+    void AddCheckItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAPS aIcon,
                        const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
@@ -121,7 +123,7 @@ private:
     public:
         ENTRY( const TOOL_ACTION* aAction, SELECTION_CONDITION aCondition, int aOrder,
                bool aCheckmark ) :
-            m_type( ACTION ), m_icon(nullptr),
+            m_type( ACTION ), m_icon( static_cast<BITMAPS>( 0 ) ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
@@ -130,7 +132,7 @@ private:
         }
 
         ENTRY( ACTION_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
-            m_type( MENU ), m_icon(nullptr),
+            m_type( MENU ), m_icon( static_cast<BITMAPS>( 0 ) ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
@@ -138,9 +140,9 @@ private:
             m_data.menu = aMenu;
         }
 
-        ENTRY( const wxMenuItem& aItem, const BITMAP_OPAQUE* aWxMenuBitmap,
+        ENTRY( const wxMenuItem& aItem, BITMAPS aBitmap,
                SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
-            m_type( WXITEM ), m_icon( aWxMenuBitmap ),
+            m_type( WXITEM ), m_icon( aBitmap ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
@@ -151,7 +153,7 @@ private:
 
         // Separator
         ENTRY( SELECTION_CONDITION aCondition, int aOrder ) :
-            m_type( SEPARATOR ), m_icon(nullptr),
+            m_type( SEPARATOR ), m_icon( static_cast<BITMAPS>( 0 ) ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
@@ -175,7 +177,7 @@ private:
             return m_type;
         }
 
-        inline const BITMAP_OPAQUE* GetIcon() const
+        inline BITMAPS GetIcon() const
         {
             return m_icon;
         }
@@ -220,7 +222,7 @@ private:
 
     private:
         ENTRY_TYPE m_type;
-        const BITMAP_OPAQUE* m_icon;
+        BITMAPS m_icon;
 
         // This class owns the wxItem object and needs to create, copy and delete it accordingly
         // But it does not own the action nor menu item

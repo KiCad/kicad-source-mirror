@@ -44,14 +44,14 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame
         PANEL_PCBNEW_ACTION_PLUGINS_BASE( aWindow->GetTreebook() ),
         m_frame( aFrame )
 {
-    m_genericIcon = KiBitmap( puzzle_piece_xpm );
+    m_genericIcon = KiBitmap( BITMAPS::puzzle_piece );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    m_moveUpButton->SetBitmap( KiBitmap( small_up_xpm ) );
-    m_moveDownButton->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_openDirectoryButton->SetBitmap( KiBitmap( small_folder_xpm ) );
-    m_reloadButton->SetBitmap( KiBitmap( small_refresh_xpm ) );
-    m_showErrorsButton->SetBitmap( KiBitmap( small_warning_xpm ) );
+    m_moveUpButton->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_moveDownButton->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_openDirectoryButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_reloadButton->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
+    m_showErrorsButton->SetBitmap( KiBitmap( BITMAPS::small_warning ) );
 }
 
 

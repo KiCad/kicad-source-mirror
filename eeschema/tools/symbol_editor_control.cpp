@@ -33,6 +33,7 @@
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
+#include <bitmaps/bitmap_types.h>
 #include <confirm.h>
 
 

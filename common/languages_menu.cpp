@@ -34,7 +34,6 @@
 #include <tool/action_menu.h>
 #include <tool/conditional_menu.h>
 #include <bitmaps.h>
-#include <pgm_base.h>
 
 /**
  * Function AddMenuLanguageList
@@ -47,7 +46,7 @@ void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTo
 {
     ACTION_MENU* langsMenu = new ACTION_MENU( false, aControlTool );
     langsMenu->SetTitle( _( "Set Language" ) );
-    langsMenu->SetIcon( language_xpm );
+    langsMenu->SetIcon( BITMAPS::language );
 
     wxString tooltip;
 

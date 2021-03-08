@@ -118,9 +118,9 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
         m_initialized( false ),
         m_helpWindow( nullptr )
 {
-    m_buttonAddGenerator->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonDelGenerator->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
+    m_buttonAddGenerator->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_buttonDelGenerator->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_buttonEdit->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
 
     installGeneratorsList();
 

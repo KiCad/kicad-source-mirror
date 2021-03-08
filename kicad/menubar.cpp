@@ -61,7 +61,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     {
         openRecentMenu = new ACTION_MENU( false, controlTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
-        openRecentMenu->SetIcon( recent_xpm );
+        openRecentMenu->SetIcon( BITMAPS::recent );
 
         fileHistory.UseMenu( openRecentMenu );
         fileHistory.AddFilesToMenu();
@@ -89,17 +89,17 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     //Import Sub-menu
     ACTION_MENU* importMenu = new ACTION_MENU( false, controlTool );
     importMenu->SetTitle( _( "Import Non-KiCad Project..." ) );
-    importMenu->SetIcon( import_project_xpm );
+    importMenu->SetIcon( BITMAPS::import_project );
 
     importMenu->Add( _( "Import CADSTAR Project..." ),
                      _( "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)" ),
                      ID_IMPORT_CADSTAR_ARCHIVE_PROJECT,
-                     import_project_xpm );
+                     BITMAPS::import_project );
 
     importMenu->Add( _( "Import EAGLE Project..." ),
                      _( "Import EAGLE CAD XML schematic and board" ),
                      ID_IMPORT_EAGLE_PROJECT,
-                     import_project_xpm );
+                     BITMAPS::import_project );
 
     fileMenu->Add( importMenu );
 
@@ -107,12 +107,12 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->Add( _( "&Archive Project..." ),
                    _( "Archive all needed project files into zip archive" ),
                    ID_SAVE_AND_ZIP_FILES,
-                   zip_xpm );
+                   BITMAPS::zip );
 
     fileMenu->Add( _( "&Unarchive Project..." ),
                    _( "Unarchive project files from zip archive" ),
                    ID_READ_ZIP_ARCHIVE,
-                   unzip_xpm );
+                   BITMAPS::unzip );
 
     fileMenu->AppendSeparator();
     fileMenu->AddQuitOrClose( nullptr, "KiCad" );
@@ -128,7 +128,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     viewMenu->Add( _( "Browse Project Files" ),
                    _( "Open project directory in file browser" ),
                    ID_BROWSE_IN_FILE_EXPLORER,
-                   directory_browser_xpm );
+                   BITMAPS::directory_browser );
 
 #ifdef __APPLE__
     // Add a separator only on macOS because the OS adds menu items to the view menu after ours
@@ -154,7 +154,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->Add( _( "Edit Local File..." ),
                     _( "Edit local file in text editor" ),
                     ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
-                    editor_xpm );
+                    BITMAPS::editor );
 
     //-- Preferences menu -----------------------------------------------
     //
@@ -166,7 +166,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, controlTool );
@@ -207,11 +207,11 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                            KiScaledBitmap( zip_xpm, this ),
+                            KiScaledBitmap( BITMAPS::zip, this ),
                             _( "Archive all project files" ) );
 
     m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
-                            KiScaledBitmap( unzip_xpm, this ),
+                            KiScaledBitmap( BITMAPS::unzip, this ),
                             _( "Unarchive project files from zip archive" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -219,7 +219,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
-                            KiScaledBitmap( directory_browser_xpm, this ),
+                            KiScaledBitmap( BITMAPS::directory_browser, this ),
 #ifdef __APPLE__
                             _( "Reveal project folder in Finder" ) );
 #else

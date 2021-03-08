@@ -415,9 +415,9 @@ wxString LIB_ARC::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF LIB_ARC::GetMenuImage() const
+BITMAPS LIB_ARC::GetMenuImage() const
 {
-    return add_arc_xpm;
+    return BITMAPS::add_arc;
 }
 
 

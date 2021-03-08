@@ -39,9 +39,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_lastNotebookPage( -1 ),
     m_macHack( true )
 {
-    m_bpButtonCalcAtt->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_bpButtonAnalyze->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_bpButtonSynthetize->SetBitmap( KiBitmap( small_up_xpm ) );
+    m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 
     SetKiway( this, aKiway );
     m_currTransLine     = NULL;
@@ -138,11 +138,11 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbcalculator ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbcalculator_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_pcbcalculator_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

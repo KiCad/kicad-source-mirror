@@ -400,15 +400,15 @@ wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF SCH_BUS_WIRE_ENTRY::GetMenuImage() const
+BITMAPS SCH_BUS_WIRE_ENTRY::GetMenuImage() const
 {
-    return add_line2bus_xpm;
+    return BITMAPS::add_line2bus;
 }
 
 
-BITMAP_DEF SCH_BUS_BUS_ENTRY::GetMenuImage() const
+BITMAPS SCH_BUS_BUS_ENTRY::GetMenuImage() const
 {
-    return add_bus2bus_xpm;
+    return BITMAPS::add_bus2bus;
 }
 
 

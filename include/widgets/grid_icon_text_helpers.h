@@ -29,9 +29,8 @@
 #include <wx/generic/grideditors.h>
 #include <vector>
 
-#include "bitmap_types.h"
-
 class wxGrid;
+enum class BITMAPS : unsigned int;
 
 
 //---- Grid helpers: custom wxGridCellRenderer that renders icon and a label ------------
@@ -39,15 +38,15 @@ class wxGrid;
 class GRID_CELL_ICON_TEXT_RENDERER : public wxGridCellStringRenderer
 {
 public:
-    GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAP_DEF>& icons, const wxArrayString& names );
+    GRID_CELL_ICON_TEXT_RENDERER( const std::vector<BITMAPS>& icons, const wxArrayString& names );
 
     void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC,
                const wxRect& aRect, int aRow, int aCol, bool isSelected ) override;
     wxSize GetBestSize( wxGrid & grid, wxGridCellAttr & attr, wxDC & dc, int row, int col ) override;
 
 private:
-    std::vector<BITMAP_DEF> m_icons;
-    wxArrayString           m_names;
+    std::vector<BITMAPS> m_icons;
+    wxArrayString        m_names;
 };
 
 //---- Grid helpers: custom wxGridCellRenderer that renders just an icon ----------------
@@ -75,7 +74,7 @@ private:
 class GRID_CELL_ICON_TEXT_POPUP : public wxGridCellEditor
 {
 public:
-    GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAP_DEF>& icons, const wxArrayString& names );
+    GRID_CELL_ICON_TEXT_POPUP( const std::vector<BITMAPS>& icons, const wxArrayString& names );
 
     wxGridCellEditor* Clone() const override;
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -92,9 +91,9 @@ public:
 protected:
     wxBitmapComboBox* Combo() const { return static_cast<wxBitmapComboBox*>( m_control ); }
 
-    std::vector<BITMAP_DEF> m_icons;
-    wxArrayString           m_names;
-    wxString                m_value;
+    std::vector<BITMAPS> m_icons;
+    wxArrayString        m_names;
+    wxString             m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_ICON_TEXT_POPUP );
 };

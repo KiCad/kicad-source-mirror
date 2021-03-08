@@ -55,10 +55,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
-                            KiScaledBitmap( lib_previous_xpm, this ),
+                            KiScaledBitmap( BITMAPS::lib_previous, this ),
                             _( "Display previous footprint" ) );
     m_mainToolBar->AddTool( ID_MODVIEW_NEXT, wxEmptyString,
-                            KiScaledBitmap( lib_next_xpm, this ),
+                            KiScaledBitmap( BITMAPS::lib_next, this ),
                             _( "Display next footprint" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
@@ -72,7 +72,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-                            KiScaledBitmap( insert_module_board_xpm, this ),
+                            KiScaledBitmap( BITMAPS::insert_module_board, this ),
                             _( "Insert footprint in board" ) );
 
     m_mainToolBar->AddScaledSeparator( this );

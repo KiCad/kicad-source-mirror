@@ -68,6 +68,11 @@ public:
     static wxString GetDefaultUser3DModelsPath();
 
     /**
+     * Gets the stock (install) data path, which is the base path for things like scripting, etc
+     */
+    static wxString GetStockDataPath();
+
+    /**
      * Gets the stock (install) scripting path
      */
     static wxString GetStockScriptingPath();

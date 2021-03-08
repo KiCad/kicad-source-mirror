@@ -59,7 +59,7 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_placementMenu = new ACTION_MENU( true );
     m_placementMenu->SetTool( this );
-    m_placementMenu->SetIcon( align_items_xpm );
+    m_placementMenu->SetIcon( BITMAPS::align_items );
     m_placementMenu->SetTitle( _( "Align/Distribute" ) );
 
     // Add all align/distribute commands

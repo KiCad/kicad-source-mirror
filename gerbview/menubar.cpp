@@ -65,7 +65,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentGbrMenu = new ACTION_MENU( false );
         openRecentGbrMenu->SetTool( selTool );
         openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
-        openRecentGbrMenu->SetIcon( recent_xpm );
+        openRecentGbrMenu->SetIcon( BITMAPS::recent );
 
         recentGbrFiles.UseMenu( openRecentGbrMenu );
         recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
@@ -84,7 +84,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentDrlMenu = new ACTION_MENU( false );
         openRecentDrlMenu->SetTool( selTool );
         openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
-        openRecentDrlMenu->SetIcon( recent_xpm );
+        openRecentDrlMenu->SetIcon( BITMAPS::recent );
 
         m_drillFileHistory.UseMenu( openRecentDrlMenu );
         m_drillFileHistory.SetClearText( _( "Clear Recent Drill Files" ) );
@@ -103,7 +103,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentJobMenu = new ACTION_MENU( false );
         openRecentJobMenu->SetTool( selTool );
         openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
-        openRecentJobMenu->SetIcon( recent_xpm );
+        openRecentJobMenu->SetIcon( BITMAPS::recent );
 
         m_jobFileHistory.UseMenu( openRecentJobMenu );
         m_jobFileHistory.SetClearText( _( "Clear Recent Job Files" ) );
@@ -122,7 +122,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         openRecentZipMenu = new ACTION_MENU( false );
         openRecentZipMenu->SetTool( selTool );
         openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
-        openRecentZipMenu->SetIcon( recent_xpm );
+        openRecentZipMenu->SetIcon( BITMAPS::recent );
 
         m_zipFileHistory.UseMenu( openRecentZipMenu );
         m_zipFileHistory.SetClearText( _( "Clear Recent Zip Files" ) );
@@ -175,7 +175,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
 
     unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
     unitsSubMenu->Add( ACTIONS::inchesUnits,                  ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,                    ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits,             ACTION_MENU::CHECK );
@@ -213,7 +213,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     preferencesMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                           _( "Show preferences for all open tools" ),
                           wxID_PREFERENCES,
-                          preference_xpm );
+                          BITMAPS::preference );
 
     preferencesMenu->AppendSeparator();
     AddMenuLanguageList( preferencesMenu, selTool );

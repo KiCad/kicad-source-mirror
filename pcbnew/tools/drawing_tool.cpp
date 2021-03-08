@@ -67,7 +67,7 @@ public:
     VIA_SIZE_MENU() :
         ACTION_MENU( true )
     {
-        SetIcon( width_track_via_xpm );
+        SetIcon( BITMAPS::width_track_via );
         SetTitle( _( "Select Via Size" ) );
     }
 

@@ -8,7 +8,7 @@
 
 #include <i18n_utility.h>
 #include <kiface_i.h>
-#include <bitmap_types.h>
+#include <bitmaps/bitmap_types.h>
 
 #include "attenuator_classes.h"
 #include "pcb_calculator_settings.h"

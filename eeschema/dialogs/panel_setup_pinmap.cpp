@@ -72,7 +72,7 @@ void PANEL_SETUP_PINMAP::ResetPanel()
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
-    wxBitmapButton* dummy    = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
+    wxBitmapButton* dummy    = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( BITMAPS::ercerr ) );
     wxSize          bmapSize = dummy->GetSize();
     delete dummy;
 
@@ -132,7 +132,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
-            BITMAP_DEF bitmap_butt = erc_green_xpm;
+            BITMAPS bitmap_butt = BITMAPS::erc_green;
 
             delete m_buttonList[ii][jj];
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, event_id,
@@ -156,23 +156,23 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 
 void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState )
 {
-    BITMAP_DEF bitmap_butt = nullptr;
+    BITMAPS bitmap_butt = BITMAPS::INVALID_BITMAP;
     wxString tooltip;
 
     switch( aState )
     {
     case PIN_ERROR::OK:
-        bitmap_butt = erc_green_xpm;
+        bitmap_butt = BITMAPS::erc_green;
         tooltip = _( "No error or warning" );
         break;
 
     case PIN_ERROR::WARNING:
-        bitmap_butt = ercwarn_xpm;
+        bitmap_butt = BITMAPS::ercwarn;
         tooltip = _( "Generate warning" );
         break;
 
     case PIN_ERROR::PP_ERROR:
-        bitmap_butt = ercerr_xpm;
+        bitmap_butt = BITMAPS::ercerr;
         tooltip = _( "Generate error" );
         break;
 
@@ -180,7 +180,7 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_E
         break;
     }
 
-    if( bitmap_butt )
+    if( bitmap_butt != BITMAPS::INVALID_BITMAP )
     {
         aButton->SetBitmap( KiBitmap( bitmap_butt ) );
         aButton->SetToolTip( tooltip );

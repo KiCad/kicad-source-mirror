@@ -126,7 +126,7 @@ void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorS
 
     AddMenuItem( &menu, ID_CHANGE_LAYER_COLOR,
                  _( "Change Layer Color for" ) + wxS( " " ) + aLayerName,
-                 KiBitmap( color_materials_xpm ) );
+                 KiBitmap( BITMAPS::color_materials ) );
     menu.AppendSeparator();
 
     OnLayerRightClick( menu );
@@ -176,7 +176,7 @@ void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColor
 
     AddMenuItem( &menu, ID_CHANGE_RENDER_COLOR,
                  _( "Change Render Color for" ) + wxS( " " )+ aRenderName,
-                 KiBitmap( color_materials_xpm ) );
+                 KiBitmap( BITMAPS::color_materials ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                [aColorSwatch]( wxCommandEvent& event )

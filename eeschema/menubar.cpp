@@ -63,7 +63,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
             openRecentMenu = new ACTION_MENU( false );
             openRecentMenu->SetTool( selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
-            openRecentMenu->SetIcon( recent_xpm );
+            openRecentMenu->SetIcon( BITMAPS::recent );
 
             fileHistory.UseMenu( openRecentMenu );
             fileHistory.AddFilesToMenu( openRecentMenu );
@@ -89,7 +89,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( _( "Append Schematic Sheet Content..." ),
                    _( "Append schematic sheet content from another project to the current sheet" ),
                    ID_APPEND_PROJECT,
-                   add_document_xpm );
+                   BITMAPS::add_document );
 
     fileMenu->AppendSeparator();
 
@@ -97,11 +97,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
-    submenuImport->SetIcon( import_xpm );
+    submenuImport->SetIcon( BITMAPS::import );
     submenuImport->Add( _( "Import Non KiCad Schematic..." ),
                         _( "Replace current schematic sheet with one imported from another application" ),
                         ID_IMPORT_NON_KICAD_SCH,
-                        import_document_xpm );
+                        BITMAPS::import_document );
 
     submenuImport->Add( EE_ACTIONS::importFPAssignments );
     fileMenu->Add( submenuImport );
@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
-    submenuExport->SetIcon( export_xpm );
+    submenuExport->SetIcon( BITMAPS::export_file );
     submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard );
     submenuExport->Add( EE_ACTIONS::exportNetlist );
     fileMenu->Add( submenuExport );
@@ -178,7 +178,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Units submenu
     ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
     unitsSubMenu->Add( ACTIONS::inchesUnits,      ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::milsUnits,        ACTION_MENU::CHECK );
     unitsSubMenu->Add( ACTIONS::millimetersUnits, ACTION_MENU::CHECK );
@@ -272,7 +272,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );

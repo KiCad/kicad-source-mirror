@@ -1441,9 +1441,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 }
 
 
-BITMAP_DEF SCH_COMPONENT::GetMenuImage() const
+BITMAPS SCH_COMPONENT::GetMenuImage() const
 {
-    return add_component_xpm;
+    return BITMAPS::add_component;
 }
 
 

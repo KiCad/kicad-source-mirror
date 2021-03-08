@@ -935,9 +935,9 @@ wxString PCB_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF PCB_SHAPE::GetMenuImage() const
+BITMAPS PCB_SHAPE::GetMenuImage() const
 {
-    return add_dashed_line_xpm;
+    return BITMAPS::add_dashed_line;
 }
 
 

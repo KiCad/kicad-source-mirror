@@ -84,13 +84,13 @@ static const TOOL_ACTION ACT_UndoLastSegment( "pcbnew.InteractiveRouter.UndoLast
         AS_CONTEXT,
         WXK_BACK, "",
         _( "Undo last segment" ),  _( "Stops laying the current track." ),
-        checked_ok_xpm );
+        BITMAPS::checked_ok );
 
 static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
         AS_CONTEXT,
         WXK_END, "",
         _( "Finish Track" ),  _( "Stops laying the current track." ),
-        checked_ok_xpm );
+        BITMAPS::checked_ok );
 
 static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
         AS_CONTEXT,
@@ -102,20 +102,20 @@ static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia
         'V', LEGACY_HK_NAME( "Add Through Via" ),
         _( "Place Through Via" ),
         _( "Adds a through-hole via at the end of currently routed track." ),
-        via_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::VIA );
+        BITMAPS::via, AF_NONE, (void*) VIA_ACTION_FLAGS::VIA );
 
 static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
         AS_CONTEXT,
         MD_ALT + MD_SHIFT + 'V', LEGACY_HK_NAME( "Add Blind/Buried Via" ),
         _( "Place Blind/Buried Via" ),
         _( "Adds a blind or buried via at the end of currently routed track."),
-        via_buried_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::BLIND_VIA );
+        BITMAPS::via_buried, AF_NONE, (void*) VIA_ACTION_FLAGS::BLIND_VIA );
 
 static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
         AS_CONTEXT,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Add MicroVia" ),
         _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
-        via_microvia_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
+        BITMAPS::via_microvia, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
         "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
@@ -123,7 +123,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
         '<', LEGACY_HK_NAME( "Select Layer and Add Through Via" ),
         _( "Select Layer and Place Through Via..." ),
         _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
-        select_w_layer_xpm, AF_NONE,
+        BITMAPS::select_w_layer, AF_NONE,
         (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
@@ -132,7 +132,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
         MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
         _( "Select Layer and Place Blind/Buried Via..." ),
         _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
-        select_w_layer_xpm, AF_NONE,
+        BITMAPS::select_w_layer, AF_NONE,
         (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
@@ -140,21 +140,21 @@ static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomT
         'Q', LEGACY_HK_NAME( "Custom Track/Via Size" ),
         _( "Custom Track/Via Size..." ),
         _( "Shows a dialog for changing the track width and via size." ),
-        width_track_xpm );
+        BITMAPS::width_track );
 
 static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
         AS_CONTEXT,
         '/', LEGACY_HK_NAME( "Switch Track Posture" ),
         _( "Switch Track Posture" ),
         _( "Switches posture of the currently routed track." ),
-        change_entry_orient_xpm );
+        BITMAPS::change_entry_orient );
 
 static const TOOL_ACTION ACT_SwitchRounding( "pcbnew.InteractiveRouter.SwitchRounding",
         AS_CONTEXT,
         MD_CTRL + '/', LEGACY_HK_NAME( "Switch Corner Rounding" ),
         _( "Switch Corner Rounding" ),
         _( "Switches the corner type of the currently routed track." ),
-        switch_corner_rounding_shape_xpm );
+        BITMAPS::switch_corner_rounding_shape );
 
 #undef _
 #define _(s) wxGetTranslation((s))
@@ -173,7 +173,7 @@ public:
         ACTION_MENU( true ),
         m_frame( aFrame )
     {
-        SetIcon( width_track_via_xpm );
+        SetIcon( BITMAPS::width_track_via );
         SetTitle( _( "Select Track/Via Width" ) );
     }
 
@@ -302,7 +302,7 @@ public:
         ACTION_MENU( true ),
         m_frame( aFrame )
     {
-        SetIcon( width_track_via_xpm );
+        SetIcon( BITMAPS::width_track_via );
         SetTitle( _( "Select Differential Pair Dimensions" ) );
     }
 

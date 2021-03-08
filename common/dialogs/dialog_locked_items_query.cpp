@@ -27,7 +27,7 @@
 DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLockedItemCount ) :
     DIALOG_LOCKED_ITEMS_QUERY_BASE( aParent )
 {
-    m_icon->SetBitmap( KiBitmap( locked_xpm ) );
+    m_icon->SetBitmap( KiBitmap( BITMAPS::locked ) );
 
     m_messageLine1->SetLabel( wxString::Format( m_messageLine1->GetLabel(), aLockedItemCount ) );
 

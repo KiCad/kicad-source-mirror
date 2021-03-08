@@ -52,21 +52,21 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
-                            KiScaledBitmap( import3d_xpm, this ), _( "Reload board" ) );
+                            KiScaledBitmap( BITMAPS::import3d, this ), _( "Reload board" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
-                            KiScaledBitmap( copy_xpm, this ),
+                            KiScaledBitmap( BITMAPS::copy, this ),
                             _( "Copy 3D image to clipboard" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
-                            KiScaledBitmap( config_xpm, this ),
+                            KiScaledBitmap( BITMAPS::config, this ),
                             _( "Set display options, and some layers visibility" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
-                            KiScaledBitmap( render_mode_xpm, this ),
+                            KiScaledBitmap( BITMAPS::render_mode, this ),
                             _( "Render current view using Raytracing" ), wxITEM_CHECK );
 
     m_mainToolBar->AddScaledSeparator( this );

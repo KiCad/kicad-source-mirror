@@ -98,9 +98,9 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF VIA::GetMenuImage() const
+BITMAPS VIA::GetMenuImage() const
 {
-    return via_xpm;
+    return BITMAPS::via;
 }
 
 
@@ -886,9 +886,9 @@ wxString TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF TRACK::GetMenuImage() const
+BITMAPS TRACK::GetMenuImage() const
 {
-    return add_tracks_xpm;
+    return BITMAPS::add_tracks;
 }
 
 void TRACK::SwapData( BOARD_ITEM* aImage )

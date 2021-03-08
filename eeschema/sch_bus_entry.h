@@ -161,7 +161,7 @@ public:
 
     virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
                               const SCH_SHEET_PATH* aPath = nullptr ) override;
@@ -206,7 +206,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
                               const SCH_SHEET_PATH* aPath = nullptr ) override;

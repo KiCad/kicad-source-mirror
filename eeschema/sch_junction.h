@@ -91,7 +91,7 @@ public:
         return wxString( _( "Junction" ) );
     }
 
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }

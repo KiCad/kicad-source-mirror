@@ -140,7 +140,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_panelShowPin->SetBackgroundColour( bgColor.ToColour() );
 
     const wxArrayString&           orientationNames = PinOrientationNames();
-    const std::vector<BITMAP_DEF>& orientationIcons = PinOrientationIcons();
+    const std::vector<BITMAPS>& orientationIcons = PinOrientationIcons();
 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationIcons[ii] ), ii );
@@ -201,8 +201,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinShapeIcons(), PinShapeNames() ) );
     m_alternatesGrid->SetColAttr( COL_SHAPE, attr );
 
-    m_addAlternate->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteAlternate->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_addAlternate->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_deleteAlternate->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     m_sdbSizerButtonsOK->SetDefault();
     SetInitialFocus( m_textPinName );

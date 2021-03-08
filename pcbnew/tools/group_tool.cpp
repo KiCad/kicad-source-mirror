@@ -37,7 +37,7 @@ class GROUP_CONTEXT_MENU : public ACTION_MENU
 public:
     GROUP_CONTEXT_MENU( ) : ACTION_MENU( true )
     {
-        SetIcon( group_xpm ); // fixme
+        SetIcon( BITMAPS::group ); // fixme
         SetTitle( _( "Grouping" ) );
 
         Add( PCB_ACTIONS::group );

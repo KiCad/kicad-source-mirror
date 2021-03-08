@@ -126,9 +126,9 @@ wxString FP_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF FP_SHAPE::GetMenuImage() const
+BITMAPS FP_SHAPE::GetMenuImage() const
 {
-    return show_mod_edge_xpm;
+    return BITMAPS::show_mod_edge;
 }
 
 

@@ -1089,9 +1089,9 @@ int ZONE::GetDefaultHatchPitch()
 }
 
 
-BITMAP_DEF ZONE::GetMenuImage() const
+BITMAPS ZONE::GetMenuImage() const
 {
-    return add_zone_xpm;
+    return BITMAPS::add_zone;
 }
 
 

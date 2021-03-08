@@ -50,12 +50,12 @@ void EDA_3D_VIEWER::CreateMenuBar()
     fileMenu->Add( _( "Export Current View as PNG..." ),
                    "",
                    ID_MENU_SCREENCOPY_PNG,
-                   export_png_xpm );
+                   BITMAPS::export_png );
 
     fileMenu->Add( _( "Export Current View as JPEG..." ),
                    "",
                    ID_MENU_SCREENCOPY_JPEG,
-                   export_xpm );
+                   BITMAPS::export_file );
 
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "3D Viewer" ) );
@@ -69,7 +69,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     editMenu->Add( _( "Copy 3D Image" ),
                    "",
                    ID_TOOL_SCREENCOPY_TOCLIBBOARD,
-                   copy_xpm );
+                   BITMAPS::copy );
 
 
     //-- View menu -------------------------------------------------------
@@ -106,17 +106,17 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     prefsMenu->Add( _( "Display Options" ), "",
                     ID_TOOL_SET_VISIBLE_ITEMS,
-                    config_xpm );
+                    BITMAPS::config );
 
     prefsMenu->Add( _( "Raytracing" ), "",
                     ID_RENDER_CURRENT_VIEW,
-                    tools_xpm,
+                    BITMAPS::tools,
                     ACTION_MENU::CHECK );
 
     // Render options submenu
     ACTION_MENU* optsSubmenu = new ACTION_MENU( false, tool );
     optsSubmenu->SetTitle( _( "Render Options" ) );
-    optsSubmenu->SetIcon( options_3drender_xpm );
+    optsSubmenu->SetIcon( BITMAPS::options_3drender );
 
     // Material properties submenu
     ACTION_MENU* propsSubmenu = new ACTION_MENU( false, tool );
@@ -150,42 +150,42 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Color  submenu
     ACTION_MENU* colorSubmenu = new ACTION_MENU( false, tool );
     colorSubmenu->SetTitle( _( "Choose Colors" ) );
-    colorSubmenu->SetIcon( color_materials_xpm );
+    colorSubmenu->SetIcon( BITMAPS::color_materials );
 
     colorSubmenu->Add( _( "Background Top Color..." ),
                        ID_MENU3D_BGCOLOR_TOP,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Background Bottom Color..." ),
                        ID_MENU3D_BGCOLOR_BOTTOM,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Silkscreen Color..." ),
                        ID_MENU3D_SILKSCREEN_COLOR,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Solder Mask Color..." ),
                        ID_MENU3D_SOLDERMASK_COLOR,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Solder Paste Color..." ),
                        ID_MENU3D_SOLDERPASTE_COLOR,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Copper/Surface Finish Color..." ),
                        ID_MENU3D_COPPER_COLOR,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     colorSubmenu->Add( _( "Board Body Color..." ),
                        ID_MENU3D_PCB_BODY_COLOR,
-                       nullptr );
+                       BITMAPS::INVALID_BITMAP );
 
     // Only allow the stackup to be used in the PCB editor, since it isn't editable in the other frames
     if( Parent()->IsType( FRAME_PCB_EDITOR ) )
     {
         colorSubmenu->Add( _( "Get colors from physical stackup" ),
                            ID_MENU3D_STACKUP_COLORS,
-                           nullptr );
+                           BITMAPS::INVALID_BITMAP );
     }
 
     prefsMenu->Add( colorSubmenu );
@@ -195,7 +195,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Grid submenu
     ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );
     gridSubmenu->SetTitle( _( "3D Grid" ) );
-    gridSubmenu->SetIcon( grid_xpm );
+    gridSubmenu->SetIcon( BITMAPS::grid );
 
     gridSubmenu->Add( EDA_3D_ACTIONS::noGrid,        ACTION_MENU::CHECK);
     gridSubmenu->Add( EDA_3D_ACTIONS::show10mmGrid,  ACTION_MENU::CHECK);
@@ -206,13 +206,13 @@ void EDA_3D_VIEWER::CreateMenuBar()
     prefsMenu->Add( gridSubmenu );
 
     prefsMenu->AppendSeparator();
-    prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, tools_xpm );
+    prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, BITMAPS::tools );
 
 #ifdef __APPLE__    // Note: will get moved to Apple menu by wxWidgets
     prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
                     _( "Show preferences for all open tools" ),
                     wxID_PREFERENCES,
-                    preference_xpm );
+                    BITMAPS::preference );
 #endif
 
     //-- Menubar -------------------------------------------------------------

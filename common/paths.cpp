@@ -137,6 +137,30 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
+wxString PATHS::GetStockDataPath()
+{
+    wxString path;
+
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        // Allow debugging from build dir by placing relevant files/folders in the build root
+        path = Pgm().GetExecutablePath() + wxT( ".." );
+    }
+    else
+    {
+#if defined( __WXMAC__ )
+        path = GetOSXKicadDataDir();
+#elif defined( __WXMSW__ )
+        path = Pgm().GetExecutablePath() + wxT( "../share/kicad" );
+#else
+        path = wxString::FromUTF8Unchecked( KICAD_DATA );
+#endif
+    }
+
+    return path;
+}
+
+
 wxString PATHS::GetStockScriptingPath()
 {
     wxString path;
@@ -148,14 +172,7 @@ wxString PATHS::GetStockScriptingPath()
     }
     else
     {
-        //TODO(snh) break out the directory functions into KIPLATFORM
-#if defined( __WXMAC__ )
-        path = GetOSXKicadDataDir() + wxT( "/scripting" );
-#elif defined( __WXMSW__ )
-        path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
-#else
-        path = wxString( KICAD_DATA ) + wxS( "/scripting" );
-#endif
+        path = GetStockDataPath() + wxT( "/scripting" );
     }
 
     return path;

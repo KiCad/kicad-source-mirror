@@ -225,11 +225,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_eeschema ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_eeschema_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_eeschema_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_eeschema_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_eeschema_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );

@@ -272,9 +272,9 @@ wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF LIB_CIRCLE::GetMenuImage() const
+BITMAPS LIB_CIRCLE::GetMenuImage() const
 {
-    return add_circle_xpm;
+    return BITMAPS::add_circle;
 }
 
 

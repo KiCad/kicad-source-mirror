@@ -74,10 +74,10 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_stdDialogButtonSizerOK->SetDefault();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );

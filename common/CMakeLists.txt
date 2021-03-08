@@ -72,7 +72,6 @@ add_library( gal STATIC ${GAL_SRCS} )
 target_link_libraries( gal
     common          # This is needed until the circular dependency is removed
     kimath
-    bitmaps
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
     ${PIXMAN_LIBRARIES}
@@ -309,10 +308,12 @@ set( COMMON_SRCS
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
+    asset_archive.cpp
     base64.cpp
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
+    bitmap_store.cpp
     board_printout.cpp
     build_version.cpp
     commit.cpp
@@ -478,7 +479,6 @@ add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 target_link_libraries( common
     kimath
     kiplatform
-    bitmaps
     gal
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
@@ -677,8 +677,6 @@ make_lexer(
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
 add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
 target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
-
-target_link_libraries( pcbcommon PUBLIC bitmaps )
 
 
 # _kiway.so

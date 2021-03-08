@@ -234,9 +234,9 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
             m_currPoints.emplace_back( pt );
     }
 
-    m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteButton->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_warningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_warningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
 
     // Test for acceptable polygon (more than 2 corners, and not self-intersecting) and
     // remove any redundant corners.  A warning message is displayed if not OK.

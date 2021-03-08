@@ -167,17 +167,17 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     //Set icon for aspect ratio
     m_AspectRatioLocked = true;
     m_AspectRatio = 1;
-    m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
+    m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::locked ) );
 
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_32_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component_32 ) );
     icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_16_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component_16 ) );
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );
@@ -583,7 +583,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 
     if( m_AspectRatioLocked )
     {
-        m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
+        m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::locked ) );
         //Force display update when aspect ratio is locked
         auto fakeEvent = wxCommandEvent();
         OnSizeChangeX( fakeEvent );
@@ -591,7 +591,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 
     else
     {
-        m_AspectRatioLockButton->SetBitmap( KiBitmap( unlocked_xpm ) );
+        m_AspectRatioLockButton->SetBitmap( KiBitmap( BITMAPS::unlocked ) );
     }
 }
 

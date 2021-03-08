@@ -284,8 +284,8 @@ bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
         // These *should* work in the constructor, and indeed they do if this panel is the
         // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
         // first then the icons will be blank unless they're set here.
-        m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-        m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
+        m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+        m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
     }
 
     if( aShow && m_firstShow )

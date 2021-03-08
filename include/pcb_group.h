@@ -175,7 +175,7 @@ public:
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     ///< @copydoc EDA_ITEM::GetMenuImage
-    BITMAP_DEF GetMenuImage() const override;
+    BITMAPS GetMenuImage() const override;
 
     ///< @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

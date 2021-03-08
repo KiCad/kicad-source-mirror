@@ -72,7 +72,7 @@ public:
         ACTION_MENU( true ),
         m_showTitle( false )
     {
-        SetIcon( add_line2bus_xpm );
+        SetIcon( BITMAPS::add_line2bus );
         SetTitle( _( "Unfold from Bus" ) );
     }
 

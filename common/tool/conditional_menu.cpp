@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <tool/conditional_menu.h>
 #include <tool/action_menu.h>
 #include <menus_helpers.h>
@@ -60,12 +61,12 @@ void CONDITIONAL_MENU::AddCheckItem( const TOOL_ACTION& aAction,
 
 
 void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& aTooltip,
-                                BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
+                                BITMAPS aIcon, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
 
-    if( aIcon )
+    if( aIcon != BITMAPS::INVALID_BITMAP )
         AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
@@ -73,12 +74,12 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
 
 
 void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxString& aTooltip,
-                                     BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
+                                     BITMAPS aIcon, const SELECTION_CONDITION& aCondition,
                                      int aOrder )
 {
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
-    if( aIcon )
+    if( aIcon != BITMAPS::INVALID_BITMAP )
         AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, true ) );
@@ -159,7 +160,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                                            entry.wxItem()->GetHelp(),
                                            entry.wxItem()->GetKind() );
 
-                if( entry.GetIcon() )
+                if( entry.GetIcon() != BITMAPS::INVALID_BITMAP )
                     AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );
 
                 // the wxMenuItem must be append only after the bitmap is set:

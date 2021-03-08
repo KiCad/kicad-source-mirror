@@ -186,7 +186,7 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter ) const
 }
 
 
-BITMAP_DEF SCH_NO_CONNECT::GetMenuImage() const
+BITMAPS SCH_NO_CONNECT::GetMenuImage() const
 {
-    return noconn_xpm;
+    return BITMAPS::noconn;
 }

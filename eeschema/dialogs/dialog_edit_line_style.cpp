@@ -34,8 +34,8 @@
 
 struct lineTypeStruct
 {
-    wxString             name;
-    const BITMAP_OPAQUE* bitmap;
+    wxString      name;
+    const BITMAPS bitmap;
 };
 
 
@@ -43,10 +43,10 @@ struct lineTypeStruct
  * Conversion map between PLOT_DASH_TYPE values and style names displayed
  */
 const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
-    { PLOT_DASH_TYPE::SOLID, { _( "Solid" ), stroke_solid_xpm } },
-    { PLOT_DASH_TYPE::DASH, { _( "Dashed" ), stroke_dash_xpm } },
-    { PLOT_DASH_TYPE::DOT, { _( "Dotted" ), stroke_dot_xpm } },
-    { PLOT_DASH_TYPE::DASHDOT, { _( "Dash-Dot" ), stroke_dashdot_xpm } },
+    { PLOT_DASH_TYPE::SOLID, { _( "Solid" ), BITMAPS::stroke_solid } },
+    { PLOT_DASH_TYPE::DASH, { _( "Dashed" ), BITMAPS::stroke_dash } },
+    { PLOT_DASH_TYPE::DOT, { _( "Dotted" ), BITMAPS::stroke_dot } },
+    { PLOT_DASH_TYPE::DASHDOT, { _( "Dash-Dot" ), BITMAPS::stroke_dashdot } },
 };
 
 

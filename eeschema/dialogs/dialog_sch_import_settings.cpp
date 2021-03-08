@@ -37,7 +37,7 @@ DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_E
         DIALOG_SCH_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {
-    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     m_sdbSizer1OK->SetLabel( _( "Import Settings" ) );
     m_buttonsSizer->Layout();

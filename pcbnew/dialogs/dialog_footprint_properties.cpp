@@ -82,7 +82,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
     SetIcon( icon );
 
     // Give a bit more room for combobox editors
@@ -167,11 +167,11 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_OrientValue = 0;
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
-    m_buttonAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonBrowse->SetBitmap( KiBitmap( small_folder_xpm ) );
-    m_buttonRemove->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_buttonAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_buttonBrowse->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_buttonRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     finishDialogSettings();
 }

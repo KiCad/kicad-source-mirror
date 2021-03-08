@@ -423,10 +423,10 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     createControls();
 
-    m_btnNetInspector->SetBitmap( KiBitmap( list_nets_16_xpm ) );
+    m_btnNetInspector->SetBitmap( KiBitmap( BITMAPS::list_nets_16 ) );
     m_btnNetInspector->SetPadding( 2 );
 
-    m_btnConfigureNetClasses->SetBitmap( KiBitmap( options_generic_16_xpm ) );
+    m_btnConfigureNetClasses->SetBitmap( KiBitmap( BITMAPS::options_generic_16 ) );
     m_btnConfigureNetClasses->SetPadding( 2 );
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );
@@ -496,8 +496,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard, true );
             } );
 
-    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( visibility_xpm ),
-                                                            KiBitmap( visibility_off_xpm ) );
+    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( BITMAPS::visibility ),
+                                                            KiBitmap( BITMAPS::visibility_off ) );
 
     m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
 
@@ -524,7 +524,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     wxSize size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_COLOR, size.x + cellPadding );
 
-    size = KiBitmap( visibility_xpm ).GetSize();
+    size = KiBitmap( BITMAPS::visibility ).GetSize();
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_VISIBILITY, size.x + cellPadding );
 
     m_netsGrid->SetDefaultCellFont( font );
@@ -1390,8 +1390,8 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                                        "right click for menu" ) );
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
-                                                                KiBitmap( visibility_xpm ),
-                                                                KiBitmap( visibility_off_xpm ),
+                                                                KiBitmap( BITMAPS::visibility ),
+                                                                KiBitmap( BITMAPS::visibility_off ),
                                                                 aSetting->visible );
                 btn_visible->SetToolTip( _( "Show or hide this layer" ) );
 
@@ -1566,53 +1566,53 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
     AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS,
                  _( "Show All Copper Layers" ),
-                 KiBitmap( show_all_copper_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_all_copper_layers ) );
     AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS,
                  _( "Hide All Copper Layers" ),
-                 KiBitmap( show_no_copper_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_no_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE,
                  _( "Hide All Layers But Active" ),
-                 KiBitmap( select_w_layer_xpm ) );
+                 KiBitmap( BITMAPS::select_w_layer ) );
 
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER, _( "Show All Non Copper Layers" ),
-                 KiBitmap( show_no_copper_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_no_copper_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER, _( "Hide All Non Copper Layers" ),
-                 KiBitmap( show_all_copper_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_all_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_ALL_LAYERS, _( "Show All Layers" ),
-                 KiBitmap( show_all_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_all_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_NO_LAYERS, _( "Hide All Layers" ),
-                 KiBitmap( show_no_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_no_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
-                 _( "Show Only Front Assembly Layers" ), KiBitmap( show_front_assembly_layers_xpm ) );
+                 _( "Show Only Front Assembly Layers" ), KiBitmap( BITMAPS::show_front_assembly_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
-                 KiBitmap( show_all_front_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_all_front_layers ) );
 
     // Only show the internal layer option if internal layers are enabled
     if( m_frame->GetBoard()->GetCopperLayerCount() > 2 )
     {
         AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER, _( "Show Only Inner Layers" ),
-                     KiBitmap( show_all_copper_layers_xpm ) );
+                     KiBitmap( BITMAPS::show_all_copper_layers ) );
     }
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_BACK, _( "Show Only Back Layers" ),
-                 KiBitmap( show_all_back_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_all_back_layers ) );
 
     AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY, _( "Show Only Back Assembly Layers" ),
-                 KiBitmap( show_back_assembly_layers_xpm ) );
+                 KiBitmap( BITMAPS::show_back_assembly_layers ) );
 }
 
 
@@ -1909,8 +1909,8 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                 }
 
                 BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
-                                                                KiBitmap( visibility_xpm ),
-                                                                KiBitmap( visibility_off_xpm ),
+                                                                KiBitmap( BITMAPS::visibility ),
+                                                                KiBitmap( BITMAPS::visibility_off ),
                                                                 aSetting->visible );
 
                 wxString tip;
@@ -2104,8 +2104,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
                     setting->ctl_color->Hide();
 
                 setting->ctl_visibility =
-                        new BITMAP_TOGGLE( setting->ctl_panel, aId, KiBitmap( visibility_xpm ),
-                                           KiBitmap( visibility_off_xpm ), true );
+                        new BITMAP_TOGGLE( setting->ctl_panel, aId, KiBitmap( BITMAPS::visibility ),
+                                           KiBitmap( BITMAPS::visibility_off ), true );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );
