@@ -87,10 +87,11 @@ vector<string> NGSPICE::AllPlots() const
             noOfPlots++;
 
         retVal.reserve( noOfPlots );
+
         for( int i = 0; i < noOfPlots; i++, allPlots++ )
         {
             string vec = *allPlots;
-            retVal.at( i ) = vec;
+            retVal.push_back( vec );
         }
     }
 
