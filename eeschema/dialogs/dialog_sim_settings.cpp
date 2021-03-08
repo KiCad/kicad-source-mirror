@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2021 CERN
+ * Copyright (C) 2016-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -41,8 +42,22 @@ static bool empty( const wxTextEntryBase* aCtrl )
 }
 
 
-DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
-    : DIALOG_SIM_SETTINGS_BASE( aParent ), m_exporter( nullptr ), m_spiceEmptyValidator( true )
+static void setStringSelection( wxRadioBox* aCtrl, const wxString& aStr )
+{
+    aCtrl->SetSelection( aCtrl->FindString( aStr ) );
+}
+
+
+static wxString getStringSelection( const wxRadioBox* aCtrl )
+{
+    return aCtrl->GetString( aCtrl->GetSelection() );
+}
+
+
+DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent ) :
+        DIALOG_SIM_SETTINGS_BASE( aParent ),
+        m_exporter( nullptr ),
+        m_spiceEmptyValidator( true )
 {
     m_posIntValidator.SetMin( 1 );
 
@@ -148,11 +163,11 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !m_pgAC->Validate() )
             return false;
 
-        m_simCommand = wxString::Format( ".ac %s %s %s %s",
-            scaleToString( m_acScale->GetSelection() ),
-            m_acPointsNumber->GetValue(),
-            SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
-            SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
+        m_simCommand.Printf( ".ac %s %s %s %s",
+                             scaleToString( m_acScale->GetSelection() ),
+                             m_acPointsNumber->GetValue(),
+                             SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
     }
 
 
@@ -162,6 +177,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         wxString simCmd = wxString( ".dc " );
 
         wxString src1 = evaluateDCControls( m_dcSource1, m_dcStart1, m_dcStop1, m_dcIncr1 );
+
         if( src1.IsEmpty() )
             return false;
         else
@@ -170,6 +186,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( m_dcEnable2->IsChecked() )
         {
             wxString src2 = evaluateDCControls( m_dcSource2, m_dcStart2, m_dcStop2, m_dcIncr2 );
+
             if( src2.IsEmpty() )
                 return false;
             else
@@ -193,10 +210,14 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
                 || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )
+        {
             return false;
+        }
 
-        wxString ref = empty( m_noiseRef )
-            ? wxString() : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
+        wxString ref;
+
+        if( !empty( m_noiseRef ) )
+            ref = wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
         wxString noiseSource = m_exporter->GetSpiceDevice( m_noiseSrc->GetValue() );
 
@@ -204,12 +225,12 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
             noiseSource += 'v' + noiseSource;
 
-        m_simCommand = wxString::Format( ".noise v(%d%s) %s %s %s %s %s",
-            netMap.at( m_noiseMeas->GetValue() ), ref,
-            noiseSource, scaleToString( m_noiseScale->GetSelection() ),
-            m_noisePointsNumber->GetValue(),
-            SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
-            SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
+        m_simCommand.Printf( ".noise v(%d%s) %s %s %s %s %s",
+                             netMap.at( m_noiseMeas->GetValue() ), ref,
+                             noiseSource, scaleToString( m_noiseScale->GetSelection() ),
+                             m_noisePointsNumber->GetValue(),
+                             SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
     }
 
 
@@ -226,13 +247,15 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !m_pgTransient->Validate() )
             return false;
 
-        wxString initial = empty( m_transInitial )
-            ? "" : SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
+        wxString initial;
 
-        m_simCommand = wxString::Format( ".tran %s %s %s",
-            SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
-            SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
-            initial );
+        if( !empty( m_transInitial ) )
+            initial = SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
+
+        m_simCommand.Printf( ".tran %s %s %s",
+                             SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
+                             initial );
     }
 
 
@@ -309,9 +332,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
         for( const auto& item : m_exporter->GetSpiceItems() )
         {
             if( item.m_primitive == aType )
-            {
                 sourcesList.push_back( item.m_refName );
-            }
         }
 
         std::sort( sourcesList.begin(), sourcesList.end(),
@@ -333,14 +354,12 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
     aSource->Enable( enableSrcSelection );
 
     aSource->Clear();
+
     for( auto& src : sourcesList )
         aSource->Append( src );
 
     // Try to restore the previous selection, if possible
-    int idx = aSource->FindString( prevSelection );
-
-    if( idx != wxNOT_FOUND )
-        aSource->SetSelection( idx );
+    aSource->SetStringSelection( prevSelection );
 }
 
 
@@ -352,7 +371,8 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
     wxStringTokenizer tokenizer( aCommand, " " );
     wxString tkn = tokenizer.GetNextToken().Lower();
 
-    try {
+    try
+    {
         if( tkn == ".ac" )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
@@ -378,33 +398,32 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
         {
             SPICE_DC_PARAMS src1, src2;
             src2.m_vincrement = SPICE_VALUE( -1 );
+
             if( !m_exporter->ParseDCCommand( aCommand, &src1, &src2 ) )
                 return false;
 
             m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
 
-            if( !src1.m_source.IsSameAs( wxT( "TEMP" ), false ) == 0 )
-                m_dcSourceType1->SetSelection( m_dcSourceType1->FindString( src1.m_source ) );
+            if( src1.m_source.IsSameAs( wxT( "TEMP" ), false ) )
+                setStringSelection( m_dcSourceType1, wxT( "TEMP" ) );
             else
-                m_dcSourceType1->SetSelection(
-                        m_dcSourceType1->FindString( src1.m_source.GetChar( 0 ) ) );
+                setStringSelection( m_dcSourceType1, src1.m_source.GetChar( 0 ) );
 
             updateDCSources( src1.m_source.GetChar( 0 ), m_dcSource1 );
-            m_dcSource1->SetSelection( m_dcSource1->FindString( src1.m_source ) );
+            m_dcSource1->SetStringSelection( src1.m_source );
             m_dcStart1->SetValue( src1.m_vstart.ToSpiceString() );
             m_dcStop1->SetValue( src1.m_vend.ToSpiceString() );
             m_dcIncr1->SetValue( src1.m_vincrement.ToSpiceString() );
 
             if( src2.m_vincrement.ToDouble() != -1 )
             {
-                if( !src2.m_source.IsSameAs( wxT( "TEMP" ), false ) == 0 )
-                    m_dcSourceType2->SetSelection( m_dcSourceType2->FindString( src2.m_source ) );
+                if( src2.m_source.IsSameAs( wxT( "TEMP" ), false ) )
+                    setStringSelection( m_dcSourceType2, wxT( "TEMP" ) );
                 else
-                    m_dcSourceType2->SetSelection(
-                            m_dcSourceType2->FindString( src2.m_source.GetChar( 0 ) ) );
+                    setStringSelection( m_dcSourceType2, src2.m_source.GetChar( 0 ) );
 
                 updateDCSources( src2.m_source.GetChar( 0 ), m_dcSource2 );
-                m_dcSource2->SetSelection( m_dcSource2->FindString( src2.m_source ) );
+                m_dcSource2->SetStringSelection( src2.m_source );
                 m_dcStart2->SetValue( src2.m_vstart.ToSpiceString() );
                 m_dcStop2->SetValue( src2.m_vend.ToSpiceString() );
                 m_dcIncr2->SetValue( src2.m_vincrement.ToSpiceString() );
@@ -471,11 +490,9 @@ void DIALOG_SIM_SETTINGS::onSwapDCSources( wxCommandEvent& event )
     m_dcSourceType1->SetSelection( m_dcSourceType2->GetSelection() );
     m_dcSourceType2->SetSelection( sel );
 
-    wxChar type1 =
-            m_dcSourceType1->GetString( m_dcSourceType1->GetSelection() ).Upper().GetChar( 0 );
+    wxChar type1 = getStringSelection( m_dcSourceType1 ).Upper().GetChar( 0 );
     updateDCSources( type1, m_dcSource1 );
-    wxChar type2 =
-            m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper().GetChar( 0 );
+    wxChar type2 = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
     updateDCSources( type2, m_dcSource2 );
 
     m_dcSource1->SetSelection( src2 );
@@ -489,8 +506,7 @@ void DIALOG_SIM_SETTINGS::onSwapDCSources( wxCommandEvent& event )
 void DIALOG_SIM_SETTINGS::onDCEnableSecondSource( wxCommandEvent& event )
 {
     bool   is2ndSrcEnabled = m_dcEnable2->IsChecked();
-    wxChar type =
-            m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper().GetChar( 0 );
+    wxChar type = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
 
     m_dcSourceType2->Enable( is2ndSrcEnabled );
     m_dcSource2->Enable( is2ndSrcEnabled && type != 'T' );
@@ -508,11 +524,12 @@ void DIALOG_SIM_SETTINGS::updateDCUnits( wxChar aType, wxChoice* aSource,
 
     switch( aType )
     {
-    case 'V': unit = _( "Volts" ); break;
-    case 'I': unit = _( "Amperes" ); break;
-    case 'R': unit = _( "Ohms" ); break;
+    case 'V': unit = _( "Volts" );     break;
+    case 'I': unit = _( "Amperes" );   break;
+    case 'R': unit = _( "Ohms" );      break;
     case 'T': unit = wxT( "\u00B0C" ); break;
     }
+
     aStartValUnit->SetLabel( unit );
     aEndValUnit->SetLabel( unit );
     aStepUnit->SetLabel( unit );
