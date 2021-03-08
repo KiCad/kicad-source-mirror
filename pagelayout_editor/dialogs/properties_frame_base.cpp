@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,15 +24,15 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
+	bSizerButt->Add( m_staticTextType, 1, wxALL|wxALIGN_CENTER_VERTICAL, 4 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 4 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND, 4 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
@@ -576,7 +576,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	this->SetSizer( bSizerpanel );
 	this->Layout();
-	bSizerpanel->Fit( this );
 
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );

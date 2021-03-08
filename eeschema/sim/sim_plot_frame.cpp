@@ -216,6 +216,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_welcomePanel = new SIM_PANEL_BASE( wxEmptyString, m_plotNotebook, wxID_ANY );
     m_plotNotebook->AddPage( m_welcomePanel, _( "Welcome!" ), 1, true );
 
+    // Ensure new items are taken in account by sizers:
+    Layout();
+
     // resize the subwindows size. At least on Windows, calling wxSafeYield before
     // resizing the subwindows forces the wxSplitWindows size events automatically generated
     // by wxWidgets to be executed before our resize code.

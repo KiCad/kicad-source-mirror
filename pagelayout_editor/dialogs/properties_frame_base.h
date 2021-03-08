@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,10 +24,10 @@
 #include <wx/combobox.h>
 #include <wx/statbox.h>
 #include <wx/gbsizer.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -142,7 +142,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 
 	public:
 
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 309,888 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PROPERTIES_BASE();
 
 };
