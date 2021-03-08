@@ -1,5 +1,5 @@
 # Lithuanian translation of kicad.po
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # WhiteChairFromIkea <dainius.mazuika@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 msgid ""
