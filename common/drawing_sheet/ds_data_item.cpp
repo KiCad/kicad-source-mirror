@@ -391,11 +391,11 @@ const wxString DS_DATA_ITEM::GetClassName() const
 
     switch( GetType() )
     {
-        case DS_TEXT:        name = wxT( "Text" );           break;
-        case DS_SEGMENT:     name = wxT( "Line" );           break;
-        case DS_RECT:        name = wxT( "Rectangle" );      break;
-        case DS_POLYPOLYGON: name = wxT( "Imported Shape" ); break;
-        case DS_BITMAP:      name = wxT( "Image" );          break;
+        case DS_TEXT:        name = _( "Text" );           break;
+        case DS_SEGMENT:     name = _( "Line" );           break;
+        case DS_RECT:        name = _( "Rectangle" );      break;
+        case DS_POLYPOLYGON: name = _( "Imported Shape" ); break;
+        case DS_BITMAP:      name = _( "Image" );          break;
     }
 
     return name;
