@@ -70,6 +70,11 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 
     m_buttonOK->SetDefault();
 
+    // ensure sizers are up to date
+    // (fix an issue on GTK but should not create issues on other platforms):
+    m_swItemProperties->Fit();
+    m_swGeneralOpts->Fit();
+
     m_stcText->Bind( wxEVT_STC_CHARADDED, &PROPERTIES_FRAME::onScintillaCharAdded, this );
 }
 
