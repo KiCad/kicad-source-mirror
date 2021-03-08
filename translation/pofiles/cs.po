@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-05 08:48-0800\n"
+"POT-Creation-Date: 2021-03-08 13:46-0800\n"
 "PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -218,12 +218,12 @@ msgid "Load Raytracing: layers"
 msgstr "Načítání Raytracing: vrstvy"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:881
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:653
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:644
 msgid "Loading 3D models"
 msgstr "Načítání 3D modelů"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:1021
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:663
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
 #, c-format
 msgid "Reload time %.3f s"
 msgstr "Čas obnovení %.3f s"
@@ -247,42 +247,42 @@ msgstr "Rendrování: %.0f %%"
 msgid "Rendering: Post processing shader"
 msgstr "Rendrování: následné zpracování stínů"
 
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:454
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:448
 msgid "Load OpenGL: board"
 msgstr "Načítání OpenGL: deska"
 
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:487
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:481
 msgid "Load OpenGL: holes and vias"
 msgstr "Načítání OpenGL: díry a prokovy"
 
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:553
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:547
 msgid "Load OpenGL: layers"
 msgstr "Načítání OpenGL: vrstvy"
 
-#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:895
+#: 3d-viewer/3d_rendering/legacy/create_scene.cpp:884
 #, c-format
 msgid "Loading %s"
 msgstr "Načítání %s"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:49
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
 msgstr "Exportovat aktuální pohled jako PNG..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:54
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
 msgstr "Exportovat aktuální pohled jako JPEG..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:77
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/hotkey_store.cpp:77
 #: common/tool/actions.cpp:556 pcbnew/footprint_viewer_frame.cpp:968
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
 msgstr "3D prohlížeč"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:68
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
 msgstr "Kopírovat 3D obrázek"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:106
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:157
 #: eeschema/eeschema_config.cpp:65 eeschema/eeschema_config.cpp:219
 #: gerbview/gerbview_frame.cpp:1002 pagelayout_editor/pl_editor_frame.cpp:464
@@ -290,132 +290,132 @@ msgstr "Kopírovat 3D obrázek"
 msgid "Display Options"
 msgstr "Nastavení zobrazení"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:110
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:111
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Raytracing"
 msgstr "Raytrasing"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:117
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "Render Options"
 msgstr "Možnosti rendrování"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:122
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:123
 msgid "Material Properties"
 msgstr "Vlastnosti materiálu"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:134
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
 msgstr "Možnosti raytracingu"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:151
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:152
 msgid "Choose Colors"
 msgstr "Vybrat barvu"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:154
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:155
 msgid "Background Top Color..."
 msgstr "Barva pozadí Top..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:158
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:159
 msgid "Background Bottom Color..."
 msgstr "Barva pozadí Bot..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:162
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:163
 msgid "Silkscreen Color..."
 msgstr "Barva potisku..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:166
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:167
 msgid "Solder Mask Color..."
 msgstr "Barva masky..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:170
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:171
 msgid "Solder Paste Color..."
 msgstr "Barva pájecí pasty..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:174
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:175
 msgid "Copper/Surface Finish Color..."
 msgstr "Barva mědi/povrchové úpravy..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:178
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:179
 msgid "Board Body Color..."
 msgstr "Barva těla desky..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:185
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:186
 msgid "Get colors from physical stackup"
 msgstr "Importujte barvy z fyzického zásobníku"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:196
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:197
 msgid "3D Grid"
 msgstr "3D mřížka"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:208
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:209
 msgid "Reset to Default Settings"
 msgstr "Obnovit výchozí nastavení"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:211 cvpcb/menubar.cpp:71
-#: eeschema/menubar.cpp:271
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:163
-#: gerbview/menubar.cpp:212 kicad/menubar.cpp:166
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:212 cvpcb/menubar.cpp:71
+#: eeschema/menubar.cpp:272
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:164
+#: gerbview/menubar.cpp:213 kicad/menubar.cpp:166
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:232
-#: pcbnew/menubar_pcb_editor.cpp:444
+#: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Preferences..."
 msgstr "Předvolby..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:212 cvpcb/menubar.cpp:72
-#: eeschema/menubar.cpp:272
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:164
-#: gerbview/menubar.cpp:213 kicad/menubar.cpp:167
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:72
+#: eeschema/menubar.cpp:273
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:165
+#: gerbview/menubar.cpp:214 kicad/menubar.cpp:167
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:233
-#: pcbnew/menubar_pcb_editor.cpp:445
+#: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Show preferences for all open tools"
 msgstr "Zobrazit předvolby pro všechny otevřené nástroje"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:219 cvpcb/menubar.cpp:84
-#: eeschema/menubar.cpp:282
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:174
-#: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:223
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:220 cvpcb/menubar.cpp:84
+#: eeschema/menubar.cpp:283
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:175
+#: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:224
 #: kicad/menubar.cpp:177 pagelayout_editor/menubar.cpp:165
-#: pcbnew/menubar_footprint_editor.cpp:242 pcbnew/menubar_pcb_editor.cpp:455
+#: pcbnew/menubar_footprint_editor.cpp:242 pcbnew/menubar_pcb_editor.cpp:451
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
 msgstr "&Soubor"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:220 cvpcb/menubar.cpp:85
-#: eeschema/menubar.cpp:283
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:175
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:85
+#: eeschema/menubar.cpp:284
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:176
 #: pagelayout_editor/menubar.cpp:166 pcbnew/menubar_footprint_editor.cpp:243
-#: pcbnew/menubar_pcb_editor.cpp:456
+#: pcbnew/menubar_pcb_editor.cpp:452
 msgid "&Edit"
 msgstr "U&pravit"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:221 eeschema/menubar.cpp:284
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:176
-#: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:224
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:222 eeschema/menubar.cpp:285
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
+#: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:225
 #: kicad/menubar.cpp:178 pagelayout_editor/menubar.cpp:167
-#: pcbnew/menubar_footprint_editor.cpp:244 pcbnew/menubar_pcb_editor.cpp:457
+#: pcbnew/menubar_footprint_editor.cpp:244 pcbnew/menubar_pcb_editor.cpp:453
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
 msgstr "&Pohled"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:86
-#: gerbview/menubar.cpp:226 kicad/menubar.cpp:180
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:223 cvpcb/menubar.cpp:86
+#: gerbview/menubar.cpp:227 kicad/menubar.cpp:180
 msgid "&Preferences"
 msgstr "&Nastavení"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
 msgstr "Znovu načíst desku"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
 msgstr "Kopírovat 3D obrázek do schránky"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Set display options, and some layers visibility"
 msgstr "Nastavení možností zobrazení a viditelnosti vrstev"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:70
 msgid "Render current view using Raytracing"
 msgstr "Rendrování aktuálního pohledu pomocí Raytracingu"
 
@@ -764,11 +764,11 @@ msgstr ""
 "Nedostatek požadovaných oprávnění k uložení souboru\n"
 "%s"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:843 common/confirm.cpp:131
-#: common/confirm.cpp:270 common/dialogs/panel_setup_severities.cpp:40
+#: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:843 common/confirm.cpp:130
+#: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:40
 #: kicad/import_project.cpp:116 kicad/import_project.cpp:143
 #: kicad/import_project.cpp:162 kicad/kicad.cpp:167
-#: kicad/tools/kicad_manager_control.cpp:174
+#: kicad/tools/kicad_manager_control.cpp:173
 msgid "Error"
 msgstr "Chyba"
 
@@ -1405,9 +1405,9 @@ msgstr "cu. mm"
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:226
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:237
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:58
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:97
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:108
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:62
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:101
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:112
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:36
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:67
@@ -1442,7 +1442,7 @@ msgid "cu. in"
 msgstr "cu. in"
 
 #: common/base_units.cpp:519
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:71
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:75
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:529
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:549
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:569
@@ -1480,19 +1480,19 @@ msgstr "Výstupní adresář \"%s\" vytvořen.\n"
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "Nelze vytvořit výstupní adresář \"%s\".\n"
 
-#: common/confirm.cpp:58
+#: common/confirm.cpp:57
 msgid "Do not show again"
 msgstr "Znovu neukazovat"
 
-#: common/confirm.cpp:128
+#: common/confirm.cpp:127
 msgid "Message"
 msgstr "Zprávy"
 
-#: common/confirm.cpp:129
+#: common/confirm.cpp:128
 msgid "Question"
 msgstr "Otázka"
 
-#: common/confirm.cpp:130 common/confirm.cpp:258
+#: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:40
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:155
 #: eeschema/sheet.cpp:571 eeschema/symbol_editor/symbol_editor.cpp:542
@@ -1504,54 +1504,54 @@ msgstr "Otázka"
 msgid "Warning"
 msgstr "Varování"
 
-#: common/confirm.cpp:161 common/confirm.cpp:188
+#: common/confirm.cpp:160 common/confirm.cpp:187
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Nemáte uloženo, všechny vaše změny budou navždy ztraceny."
 
-#: common/confirm.cpp:162 common/confirm.cpp:189 common/tool/actions.cpp:65
+#: common/confirm.cpp:161 common/confirm.cpp:188 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:605
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:955
 msgid "Save"
 msgstr "Uložit"
 
-#: common/confirm.cpp:162 common/confirm.cpp:189
+#: common/confirm.cpp:161 common/confirm.cpp:188
 msgid "Discard Changes"
 msgstr "Zrušit změny"
 
-#: common/confirm.cpp:165 common/confirm.cpp:240
+#: common/confirm.cpp:164 common/confirm.cpp:239
 msgid "Apply to all"
 msgstr "Použít pro vše"
 
-#: common/confirm.cpp:201
+#: common/confirm.cpp:200
 msgid "Your current changes will be permanently lost."
 msgstr "Vaše aktuální změny budou trvale ztraceny."
 
-#: common/confirm.cpp:202 common/tool/actions.cpp:89
+#: common/confirm.cpp:201 common/tool/actions.cpp:89
 msgid "Revert"
 msgstr "Vrátit se"
 
-#: common/confirm.cpp:202 common/confirm.cpp:232 common/tool/actions.cpp:120
+#: common/confirm.cpp:201 common/confirm.cpp:231 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:277
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:188
-#: pcbnew/dialogs/dialog_drc.cpp:242 pcbnew/microwave/microwave_polygon.cpp:125
+#: pcbnew/dialogs/dialog_drc.cpp:241 pcbnew/microwave/microwave_polygon.cpp:125
 #: pcbnew/plugins/kicad/pcb_parser.cpp:678 pcbnew/router/router_tool.cpp:503
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: common/confirm.cpp:229 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
+#: common/confirm.cpp:228 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122 pcbnew/router/router_tool.cpp:503
 msgid "OK"
 msgstr "OK"
 
-#: common/confirm.cpp:286
+#: common/confirm.cpp:285
 msgid "Info"
 msgstr "Info"
 
-#: common/confirm.cpp:299
+#: common/confirm.cpp:298
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:154
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234 kicad/import_project.cpp:92
-#: kicad/tools/kicad_manager_control.cpp:256
+#: kicad/tools/kicad_manager_control.cpp:255
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:366
@@ -1815,27 +1815,27 @@ msgstr "Náhled (starý/nový):"
 msgid "Reset to Default"
 msgstr "Obnovit na výchozí"
 
-#: common/dialogs/dialog_configure_paths.cpp:249
-#: common/dialogs/dialog_configure_paths.cpp:319
+#: common/dialogs/dialog_configure_paths.cpp:250
+#: common/dialogs/dialog_configure_paths.cpp:320
 msgid "Environment variable name cannot be empty."
 msgstr "Jméno proměnné prostředí nemůže být prázdné."
 
-#: common/dialogs/dialog_configure_paths.cpp:257
-#: common/dialogs/dialog_configure_paths.cpp:321
+#: common/dialogs/dialog_configure_paths.cpp:258
+#: common/dialogs/dialog_configure_paths.cpp:322
 msgid "Environment variable path cannot be empty."
 msgstr "Cesta proměnné prostředí nemůže být prázdná."
 
-#: common/dialogs/dialog_configure_paths.cpp:284
-#: common/dialogs/dialog_configure_paths.cpp:326
+#: common/dialogs/dialog_configure_paths.cpp:285
+#: common/dialogs/dialog_configure_paths.cpp:327
 msgid "3D search path alias cannot be empty."
 msgstr "3D alias cesty hledání nemůže být prázdný."
 
-#: common/dialogs/dialog_configure_paths.cpp:292
-#: common/dialogs/dialog_configure_paths.cpp:328
+#: common/dialogs/dialog_configure_paths.cpp:293
+#: common/dialogs/dialog_configure_paths.cpp:329
 msgid "3D search path cannot be empty."
 msgstr "3D vyhledávací cesta nemůže být prázdná."
 
-#: common/dialogs/dialog_configure_paths.cpp:341
+#: common/dialogs/dialog_configure_paths.cpp:342
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
@@ -1844,7 +1844,7 @@ msgstr ""
 "běžící procesu \n"
 "a bude přechodně přepsána."
 
-#: common/dialogs/dialog_configure_paths.cpp:343
+#: common/dialogs/dialog_configure_paths.cpp:344
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -1858,21 +1858,21 @@ msgstr ""
 "neměli v úmyslu, buď  přejmenujte všechny konfliktní položky \n"
 "nebo odeberte definice proměnné externího prostředí z vašeho systému."
 
-#: common/dialogs/dialog_configure_paths.cpp:358
+#: common/dialogs/dialog_configure_paths.cpp:359
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
 msgstr "Název %s je vyhrazen a nelze jej zde použít"
 
-#: common/dialogs/dialog_configure_paths.cpp:494
+#: common/dialogs/dialog_configure_paths.cpp:495
 msgid "File Browser..."
 msgstr "Prohlížeč souborů..."
 
-#: common/dialogs/dialog_configure_paths.cpp:497
+#: common/dialogs/dialog_configure_paths.cpp:498
 #: common/widgets/grid_text_button_helpers.cpp:385
 msgid "Select Path"
 msgstr "Vybrat cestu"
 
-#: common/dialogs/dialog_configure_paths.cpp:576
+#: common/dialogs/dialog_configure_paths.cpp:577
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1886,7 +1886,7 @@ msgstr ""
 "přednost před proměnnými, definovanými v této tabulce.  To znamená, že "
 "hodnoty v této tabulce budou ignorovány."
 
-#: common/dialogs/dialog_configure_paths.cpp:582
+#: common/dialogs/dialog_configure_paths.cpp:583
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -1896,7 +1896,7 @@ msgstr ""
 "platformách, bude v poli název přijímat pouze velká písmena, číslice a znaky "
 "podtržítka."
 
-#: common/dialogs/dialog_configure_paths.cpp:597
+#: common/dialogs/dialog_configure_paths.cpp:598
 msgid "Environment Variable Help"
 msgstr "Proměnné prostředí Nápověda"
 
@@ -2623,8 +2623,8 @@ msgstr "Tisk"
 msgid "Print Preview"
 msgstr "Náhled před tiskem"
 
-#: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:205
-#: eeschema/dialogs/dialog_annotate.cpp:104 eeschema/dialogs/dialog_bom.cpp:133
+#: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:206
+#: eeschema/dialogs/dialog_annotate.cpp:104 eeschema/dialogs/dialog_bom.cpp:132
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
 #: eeschema/dialogs/dialog_netlist.cpp:276
@@ -2635,7 +2635,7 @@ msgstr "Náhled před tiskem"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:67
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:119
 #: pcbnew/dialogs/dialog_board_statistics.cpp:128
-#: pcbnew/dialogs/dialog_drc.cpp:83 pcbnew/dialogs/dialog_drc.cpp:259
+#: pcbnew/dialogs/dialog_drc.cpp:82 pcbnew/dialogs/dialog_drc.cpp:258
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:157
 #: pcbnew/dialogs/dialog_export_step.cpp:129
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
@@ -3231,7 +3231,7 @@ msgstr "Zvětšení"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:57
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
@@ -3465,7 +3465,7 @@ msgid "Bus Thickness"
 msgstr "Tloušťka sběrnice"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
-#: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:886
+#: eeschema/dialogs/dialog_edit_line_style_base.h:65 eeschema/sch_line.cpp:887
 msgid "Line Style"
 msgstr "Styl čáry"
 
@@ -3474,8 +3474,8 @@ msgstr "Styl čáry"
 #: eeschema/dialogs/dialog_edit_line_style.cpp:53
 #: eeschema/dialogs/dialog_edit_line_style.cpp:64
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:66
-#: eeschema/dialogs/dialog_junction_props.cpp:38
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/dialog_junction_props.cpp:37
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: eeschema/tools/sch_editor_control.cpp:934
 msgid "Default"
 msgstr "Výchozí"
@@ -3566,7 +3566,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/dialogs/wx_html_report_panel.cpp:329
-#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:616
+#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:615
 msgid "Save Report to File"
 msgstr "Uložit report do souboru"
 
@@ -3631,28 +3631,9 @@ msgstr "Nelze použít OpenGL"
 msgid "The file \"%s\" was not fully read"
 msgstr "Soubor \"%s\" nebyl zcela načten"
 
-#: common/drawing_sheet/ds_data_model_io.cpp:94
-#: common/drawing_sheet/ds_data_model_io.cpp:122
-msgid "Error writing page layout design file"
-msgstr "Chyba zápisu souboru popisu stránky"
-
-#: common/drawing_sheet/ds_draw_item.cpp:113 eeschema/pin_type.cpp:74
-#: gerbview/gerber_draw_item.cpp:230 pcbnew/board_item.cpp:35
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:144
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
-msgid "Line"
-msgstr "Čára"
-
-#: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:310
-#: eeschema/lib_rectangle.h:54
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1438
-#: pcbnew/pcb_shape.cpp:534
-msgid "Rectangle"
-msgstr "Obdélník"
-
+#: common/drawing_sheet/ds_data_item.cpp:394
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_text.cpp:658
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:43 eeschema/lib_text.h:59
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:47 eeschema/lib_text.h:59
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:145
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 pcbnew/fp_text.cpp:281
@@ -3660,16 +3641,40 @@ msgstr "Obdélník"
 msgid "Text"
 msgstr "Text"
 
+#: common/drawing_sheet/ds_data_item.cpp:395
+#: common/drawing_sheet/ds_draw_item.cpp:113 eeschema/pin_type.cpp:75
+#: gerbview/gerber_draw_item.cpp:230 pcbnew/board_item.cpp:35
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:144
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
+msgid "Line"
+msgstr "Čára"
+
+#: common/drawing_sheet/ds_data_item.cpp:396
+#: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:310
+#: eeschema/lib_rectangle.h:54
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1438
+#: pcbnew/pcb_shape.cpp:534
+msgid "Rectangle"
+msgstr "Obdélník"
+
+#: common/drawing_sheet/ds_data_item.cpp:397
 #: common/drawing_sheet/ds_draw_item.cpp:126
 #: common/drawing_sheet/ds_draw_item.cpp:298
 msgid "Imported Shape"
 msgstr "Importovaný tvar"
 
+#: common/drawing_sheet/ds_data_item.cpp:398
 #: common/drawing_sheet/ds_draw_item.cpp:130
 #: common/drawing_sheet/ds_draw_item.cpp:476 common/eda_item.cpp:318
 #: eeschema/sch_bitmap.h:133
 msgid "Image"
 msgstr "Obrázek"
+
+#: common/drawing_sheet/ds_data_model_io.cpp:94
+#: common/drawing_sheet/ds_data_model_io.cpp:122
+msgid "Error writing page layout design file"
+msgstr "Chyba zápisu souboru popisu stránky"
 
 #: common/drawing_sheet/ds_draw_item.cpp:136
 msgid "First Page Only"
@@ -3978,7 +3983,7 @@ msgstr "Ortogonální rozměr"
 msgid "Center Dimension"
 msgstr "Středová kóta"
 
-#: common/eda_item.cpp:275 pcbnew/dimension.cpp:955
+#: common/eda_item.cpp:275 pcbnew/dimension.cpp:984
 msgid "Leader"
 msgstr "Vedoucí"
 
@@ -4168,7 +4173,7 @@ msgstr "Tučné+kurzíva"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:149
 #: eeschema/fields_grid_table.cpp:156 eeschema/fields_grid_table.cpp:391
-#: eeschema/fields_grid_table.cpp:482 eeschema/pin_type.cpp:123
+#: eeschema/fields_grid_table.cpp:482 eeschema/pin_type.cpp:124
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:85
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
@@ -4176,7 +4181,7 @@ msgid "Left"
 msgstr "Vlevo"
 
 #: common/eda_text.cpp:649 common/eda_text.cpp:653 common/tool/actions.cpp:328
-#: common/widgets/mathplot.cpp:1762
+#: common/widgets/mathplot.cpp:1759
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:249
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:149
@@ -4199,7 +4204,7 @@ msgstr "Na střed"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:149
 #: eeschema/fields_grid_table.cpp:158 eeschema/fields_grid_table.cpp:393
-#: eeschema/fields_grid_table.cpp:486 eeschema/pin_type.cpp:122
+#: eeschema/fields_grid_table.cpp:486 eeschema/pin_type.cpp:123
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:85
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
@@ -4269,7 +4274,7 @@ msgstr "Šířka"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:665
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
-#: pcbnew/dimension.cpp:655 pcbnew/fp_text.cpp:312
+#: pcbnew/dimension.cpp:679 pcbnew/fp_text.cpp:312
 #: pcbnew/fp_text_grid_table.cpp:92 pcbnew/pad.cpp:901 pcbnew/pcb_shape.cpp:540
 #: pcbnew/pcb_text.cpp:126
 msgid "Height"
@@ -4384,44 +4389,44 @@ msgstr ""
 msgid "No Files"
 msgstr "Žádné soubory"
 
-#: common/filename_resolver.cpp:453
+#: common/filename_resolver.cpp:451
 msgid "The given path does not exist"
 msgstr "Tato daná cesta neexistuje"
 
-#: common/filename_resolver.cpp:456
+#: common/filename_resolver.cpp:454
 msgid "3D model search path"
 msgstr "Konfigurace prohledávaných cest pro 3D"
 
-#: common/filename_resolver.cpp:482
+#: common/filename_resolver.cpp:479
 msgid "Alias: "
 msgstr "Alias: "
 
-#: common/filename_resolver.cpp:485
+#: common/filename_resolver.cpp:482
 msgid "This path:"
 msgstr "Tato cesta:"
 
-#: common/filename_resolver.cpp:488
+#: common/filename_resolver.cpp:485
 msgid "Existing path:"
 msgstr "Existující cesta:"
 
-#: common/filename_resolver.cpp:490
+#: common/filename_resolver.cpp:487
 msgid "Bad alias (duplicate name)"
 msgstr "Špatný alias (duplicitní název)"
 
-#: common/filename_resolver.cpp:612
+#: common/filename_resolver.cpp:609
 msgid "3D configuration directory is unknown"
 msgstr "Adresář 3D konfigurace není znám"
 
-#: common/filename_resolver.cpp:615 common/filename_resolver.cpp:640
-#: common/filename_resolver.cpp:665
+#: common/filename_resolver.cpp:612 common/filename_resolver.cpp:637
+#: common/filename_resolver.cpp:662
 msgid "Write 3D search path list"
 msgstr "Zapsat seznam 3D prohledávaných cest"
 
-#: common/filename_resolver.cpp:637
+#: common/filename_resolver.cpp:634
 msgid "Could not open configuration file"
 msgstr "Nelze otevřít konfigurační soubor"
 
-#: common/filename_resolver.cpp:664
+#: common/filename_resolver.cpp:661
 msgid "Problems writing configuration file"
 msgstr "Problémy zápisu konfiguračního souboru"
 
@@ -4581,13 +4586,13 @@ msgid "Project Manager"
 msgstr "Manažer projektu"
 
 #: common/hotkey_store.cpp:74 eeschema/eeschema_config.cpp:64
-#: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1256
+#: eeschema/menubar.cpp:128 eeschema/sch_edit_frame.cpp:1257
 #: kicad/tools/kicad_manager_actions.cpp:64
 msgid "Schematic Editor"
 msgstr "Editor schémat"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:76
-#: pcbnew/menubar_pcb_editor.cpp:188 pcbnew/pcb_edit_frame.cpp:1201
+#: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1201
 #: pcbnew/pcbnew_config.cpp:54
 msgid "PCB Editor"
 msgstr "Editor DPS"
@@ -5005,7 +5010,7 @@ msgid "Helper items"
 msgstr "Položky nápovědy"
 
 #: common/layer_id.cpp:132 common/layer_id.cpp:172 common/tool/grid_menu.cpp:40
-#: gerbview/widgets/gerbview_layer_widget.cpp:103
+#: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Grid"
 msgstr "Mřížka"
@@ -5015,7 +5020,7 @@ msgid "Axes"
 msgstr "Osy"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:174
-#: gerbview/widgets/gerbview_layer_widget.cpp:105
+#: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "Background"
 msgstr "Pozadí"
 
@@ -5227,36 +5232,36 @@ msgstr "Nerozpoznaná funkce '%s'"
 msgid "Missing units for '%s'| (%s)"
 msgstr "Chybějící jednotky pro '%s'| (%s)"
 
-#: common/pgm_base.cpp:176
+#: common/pgm_base.cpp:177
 msgid "No default editor found, you must choose it"
 msgstr "Výchozí editor nenalezen, je třeba jej zvolit"
 
-#: common/pgm_base.cpp:196
+#: common/pgm_base.cpp:197
 msgid "Executable file (*.exe)|*.exe"
 msgstr "Spustitelný soubor (*.exe)|*.exe"
 
-#: common/pgm_base.cpp:198
+#: common/pgm_base.cpp:199
 msgid "Executable file (*)|*"
 msgstr "Spustitelný soubor (*)|*"
 
-#: common/pgm_base.cpp:208
+#: common/pgm_base.cpp:209
 msgid "Select Preferred Editor"
 msgstr "Vybrat preferovaný editor"
 
-#: common/pgm_base.cpp:224
+#: common/pgm_base.cpp:225
 msgid "Environmental variable HOME is empty.  Unable to continue."
 msgstr "Proměnná prostředí HOME je prázdná.  Nelze pokračovat."
 
-#: common/pgm_base.cpp:235
+#: common/pgm_base.cpp:236
 #, c-format
 msgid "%s is already running. Continue?"
 msgstr "%s je již spuštěno. Pokračovat?"
 
-#: common/pgm_base.cpp:625
+#: common/pgm_base.cpp:626
 msgid "This language is not supported by the operating system."
 msgstr "Tento jazyk není operačním systémem podporován."
 
-#: common/pgm_base.cpp:676 common/pgm_base.cpp:714
+#: common/pgm_base.cpp:677 common/pgm_base.cpp:715
 msgid "The KiCad language file for this language is not installed."
 msgstr "Jazykový soubor KiCadu pro tento jazyk není nainstalován."
 
@@ -5406,21 +5411,21 @@ msgstr "Windows 7 a starší již není podporována Kicadem a jeho závislostmi
 msgid "Unsupported Operating System"
 msgstr "Nepodporovaný operační systém"
 
-#: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
+#: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:58
 #, c-format
 msgid "Field%d"
 msgstr "Pole%d"
 
-#: common/tool/action_menu.cpp:206
+#: common/tool/action_menu.cpp:207
 #, c-format
 msgid "Close %s"
 msgstr "Zavřít %s"
 
-#: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
+#: common/tool/action_menu.cpp:219 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Ukončit"
 
-#: common/tool/action_menu.cpp:219
+#: common/tool/action_menu.cpp:220
 #, c-format
 msgid "Quit %s"
 msgstr "Ukončit %s"
@@ -5683,12 +5688,12 @@ msgstr "Přiblížení kurzoru"
 msgid "Zoom Out at Cursor"
 msgstr "Oddálení kurzoru"
 
-#: common/tool/actions.cpp:316 common/widgets/mathplot.cpp:1764
+#: common/tool/actions.cpp:316 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:79
 msgid "Zoom In"
 msgstr "Zvětšit"
 
-#: common/tool/actions.cpp:322 common/widgets/mathplot.cpp:1765
+#: common/tool/actions.cpp:322 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Zoom Out"
 msgstr "Zmenšit"
@@ -6231,23 +6236,23 @@ msgstr "Vždy zobrazit nitkový kříž"
 msgid "Select a File"
 msgstr "Vybrat soubor"
 
-#: common/widgets/mathplot.cpp:1762
+#: common/widgets/mathplot.cpp:1759
 msgid "Center plot view to this position"
 msgstr "Vycentrovat zobrazení na tuto pozici"
 
-#: common/widgets/mathplot.cpp:1763 eeschema/sim/sim_plot_frame_base.cpp:87
+#: common/widgets/mathplot.cpp:1760 eeschema/sim/sim_plot_frame_base.cpp:87
 msgid "Fit on Screen"
 msgstr "Na celou obrazovku"
 
-#: common/widgets/mathplot.cpp:1763
+#: common/widgets/mathplot.cpp:1760
 msgid "Set plot view to show all items"
 msgstr "Nastavit graf, aby zobrazoval všechny položky"
 
-#: common/widgets/mathplot.cpp:1764
+#: common/widgets/mathplot.cpp:1761
 msgid "Zoom in plot view."
 msgstr "Přiblížit zobrazení pohledu."
 
-#: common/widgets/mathplot.cpp:1765
+#: common/widgets/mathplot.cpp:1762
 msgid "Zoom out plot view."
 msgstr "Oddálit zobrazení pohledu."
 
@@ -6802,7 +6807,7 @@ msgstr "Dostupné proměnné prostředí pro relativní cesty:"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2019 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "Hodnota"
@@ -7122,35 +7127,35 @@ msgstr ""
 "Knihovna součástek \"%s\" načtení selhalo.\n"
 "Chyba: %s"
 
-#: eeschema/component_references_lister.cpp:525
+#: eeschema/component_references_lister.cpp:523
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
 msgstr "Neočíslované položky: %s%s (část %d)\n"
 
-#: eeschema/component_references_lister.cpp:532
+#: eeschema/component_references_lister.cpp:530
 #, c-format
 msgid "Item not annotated: %s%s\n"
 msgstr "Neočíslované položky: %s%s\n"
 
-#: eeschema/component_references_lister.cpp:552
+#: eeschema/component_references_lister.cpp:550
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
 "Chyba: symbol %s%s%s (jednotka %d) překračuje definované jednotky (%d)\n"
 
-#: eeschema/component_references_lister.cpp:589
-#: eeschema/component_references_lister.cpp:619
+#: eeschema/component_references_lister.cpp:587
+#: eeschema/component_references_lister.cpp:617
 #, c-format
 msgid "Duplicate items %s%s%s\n"
 msgstr "Duplicitní prvky %s%s%s\n"
 
-#: eeschema/component_references_lister.cpp:596
-#: eeschema/component_references_lister.cpp:626
+#: eeschema/component_references_lister.cpp:594
+#: eeschema/component_references_lister.cpp:624
 #, c-format
 msgid "Duplicate items %s%s\n"
 msgstr "Duplikovat položky %s%s\n"
 
-#: eeschema/component_references_lister.cpp:640
+#: eeschema/component_references_lister.cpp:638
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Různé hodnoty pro %s%d%s (%s) a %s%d%s (%s)"
@@ -7276,20 +7281,20 @@ msgstr "Vyčistit očíslování"
 msgid "Annotate Schematic"
 msgstr "Očíslování součástek"
 
-#: eeschema/dialogs/dialog_bom.cpp:132
+#: eeschema/dialogs/dialog_bom.cpp:131
 msgid "Generate"
 msgstr "Generovat"
 
-#: eeschema/dialogs/dialog_bom.cpp:216
+#: eeschema/dialogs/dialog_bom.cpp:215
 msgid "(file missing)"
 msgstr "(chybí soubor)"
 
-#: eeschema/dialogs/dialog_bom.cpp:293
+#: eeschema/dialogs/dialog_bom.cpp:292
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
 msgstr "Nelze nalézt vybraný skript Bom Generatoru %s."
 
-#: eeschema/dialogs/dialog_bom.cpp:298
+#: eeschema/dialogs/dialog_bom.cpp:297
 #, c-format
 msgid ""
 "\n"
@@ -7304,36 +7309,36 @@ msgstr ""
 "%s\n"
 "%s"
 
-#: eeschema/dialogs/dialog_bom.cpp:345
+#: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr "Generování BOM vyžaduje plně očíslované schéma."
 
-#: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
+#: eeschema/dialogs/dialog_bom.cpp:381 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
 msgstr "Generátor krátkých jmen:"
 
-#: eeschema/dialogs/dialog_bom.cpp:382
+#: eeschema/dialogs/dialog_bom.cpp:381
 msgid "Add Generator"
 msgstr "Přidat generátor"
 
-#: eeschema/dialogs/dialog_bom.cpp:391
+#: eeschema/dialogs/dialog_bom.cpp:390
 #, c-format
 msgid "Nickname \"%s\" already in use."
 msgstr "Přezdívka \"%s\" se již používá."
 
-#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:687
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:687
 msgid "Generator files:"
 msgstr "Soubory generátoru:"
 
-#: eeschema/dialogs/dialog_bom.cpp:439
+#: eeschema/dialogs/dialog_bom.cpp:438
 msgid "Generator file name not found."
 msgstr "Název souboru generátoru nebyl nalezen."
 
-#: eeschema/dialogs/dialog_bom.cpp:449
+#: eeschema/dialogs/dialog_bom.cpp:448
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Není definován textový editor v KiCadu. Prosím vyberte některý."
 
-#: eeschema/dialogs/dialog_bom.cpp:461
+#: eeschema/dialogs/dialog_bom.cpp:460
 msgid "Bill of Material Generation Help"
 msgstr "Nápověda generace kusovníku"
 
@@ -8005,7 +8010,7 @@ msgid "Invalid footprint specified"
 msgstr "Uvedeno neplatné pouzdro"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:460
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:740
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:736
 #: eeschema/generate_alias_info.cpp:81
 #, c-format
 msgid ""
@@ -8021,37 +8026,37 @@ msgstr ""
 msgid "No symbol selected"
 msgstr "Není vybrán žádný symbol"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:549
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:545
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid."
 msgstr "Identifikátor knihovny symbolů \"%s\" není platný."
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:645
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:641
 #, c-format
 msgid "Available Candidates for %s "
 msgstr "K dispozici kandidáti pro %s "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:649
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:645
 #, c-format
 msgid "Candidates count %d "
 msgstr "Počet kandidátů %d "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:659
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:655
 #, c-format
 msgid "%u link(s) mapped, %u not found"
 msgstr "%u odkaz(y) mapovány, %u nenalezeno"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:664
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:660
 #, c-format
 msgid "All %u link(s) resolved"
 msgstr "Všechny %u odkazy vyřešeny"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:694
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:690
 msgid "Invalid symbol library identifier"
 msgstr "Neplatný identifikátor knihovny symbolů"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:37
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:82
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:86
 msgid "Symbols"
 msgstr "Symboly"
 
@@ -8167,13 +8172,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
-#: eeschema/pin_type.cpp:124
+#: eeschema/pin_type.cpp:125
 msgid "Up"
 msgstr "Nahoru"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
-#: eeschema/pin_type.cpp:125
+#: eeschema/pin_type.cpp:126
 msgid "Down"
 msgstr "Dolů"
 
@@ -8188,7 +8193,7 @@ msgstr "Dolů"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2021 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "Orientace"
@@ -8205,31 +8210,31 @@ msgid "Style"
 msgstr "Styl"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:35 eeschema/pin_type.cpp:49
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:35 eeschema/pin_type.cpp:50
 #: eeschema/sch_text.cpp:488
 msgid "Input"
 msgstr "Vstup"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:50
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
 #: eeschema/sch_text.cpp:489
 msgid "Output"
 msgstr "Výstup"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:51
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
 #: eeschema/sch_text.cpp:490
 msgid "Bidirectional"
 msgstr "Obousměrný"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
-#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:52
+#: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 msgid "Tri-state"
 msgstr "Tří-stavový"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39
-#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:53
+#: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:54
 #: eeschema/sch_text.cpp:492
 msgid "Passive"
 msgstr "Pasivní"
@@ -8265,11 +8270,11 @@ msgstr "Styl:"
 msgid "Combo!"
 msgstr "Kombinace!"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:227
+#: eeschema/dialogs/dialog_edit_one_field.cpp:228
 msgid "Illegal reference designator value!"
 msgstr "Nepovolená hodnota označení reference!"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:235
+#: eeschema/dialogs/dialog_edit_one_field.cpp:236
 msgid "Value may not be empty."
 msgstr "Hodnota nemůže být prázdná."
 
@@ -8289,7 +8294,7 @@ msgstr "Schéma není plně očíslované. Výsledky ERC budou neúplné."
 msgid "Delete exclusions too?"
 msgstr "Smazat také vyloučení?"
 
-#: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:867
+#: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:866
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Delete All Markers"
@@ -8353,57 +8358,57 @@ msgstr "Kontrola, zda nejsou připojeny piny \"žádné připojení\"..."
 msgid "Checking for library symbol issues..."
 msgstr "Kontrola problémů se symboly knihovny..."
 
-#: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:429
+#: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "errors"
 msgstr "chyby"
 
-#: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:430
+#: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:429
 msgid "warnings"
 msgstr "varování"
 
-#: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:431
+#: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:430
 msgid "appropriate"
 msgstr "odpovídající"
 
-#: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:436
+#: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "Remove exclusion for this violation"
 msgstr "Odeberte vyloučení z tohoto porušení"
 
-#: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:437
+#: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:436
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Bude vráceno zpět do seznamu %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:441
+#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "Exclude this violation"
 msgstr "Vyloučit toto porušení"
 
-#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:442
+#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:441
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Bude vyloučeno ze seznamu %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:449
+#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "U všech porušení „%s“ změňte závažnost na chybu"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
-#: pcbnew/dialogs/dialog_drc.cpp:451 pcbnew/dialogs/dialog_drc.cpp:458
+#: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "Závažnost porušení lze také upravit v Nastavení desky... dialog"
 
-#: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:456
+#: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Změňte závažnost na Varování pro všechna porušení pravidel „%s“"
 
-#: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:462
+#: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:461
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignorovat všechna '%s' porušení"
 
-#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:464
+#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:463
 msgid "Violations will not be checked or reported"
 msgstr "Porušení nebude zkontrolováno ani nahlášeno"
 
@@ -8411,7 +8416,7 @@ msgstr "Porušení nebude zkontrolováno ani nahlášeno"
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Upravit mapu konfliktů pin-to-pin ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:469
+#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Edit violation severities..."
 msgstr "Upravit závažnosti porušení..."
 
@@ -8426,7 +8431,7 @@ msgstr "Připnout mapu konfliktů"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
-#: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/dialogs/dialog_drc.cpp:563
+#: pcbnew/dialogs/dialog_board_setup.cpp:101 pcbnew/dialogs/dialog_drc.cpp:562
 msgid "Violation Severity"
 msgstr "Závažnost porušení"
 
@@ -8549,7 +8554,7 @@ msgstr "Skupiny"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2017
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
 msgid "Reference"
 msgstr "Reference"
 
@@ -8828,7 +8833,7 @@ msgstr "Vlastnosti kresby"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:52
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:45
-#: eeschema/dialogs/dialog_symbol_properties.cpp:135 eeschema/lib_pin.cpp:1002
+#: eeschema/dialogs/dialog_symbol_properties.cpp:136 eeschema/lib_pin.cpp:1002
 #: eeschema/sch_pin.cpp:179
 msgid "Number"
 msgstr "Číslo"
@@ -8837,7 +8842,7 @@ msgstr "Číslo"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
 #: eeschema/dialogs/dialog_pin_properties.cpp:51
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:202
-#: eeschema/dialogs/dialog_symbol_properties.cpp:138
+#: eeschema/dialogs/dialog_symbol_properties.cpp:139
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
 msgid "Electrical Type"
 msgstr "Elektrický typ"
@@ -8846,7 +8851,7 @@ msgstr "Elektrický typ"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties.cpp:52
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:203
-#: eeschema/dialogs/dialog_symbol_properties.cpp:139
+#: eeschema/dialogs/dialog_symbol_properties.cpp:140
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:267
 msgid "Graphic Style"
 msgstr "Grafický styl"
@@ -9079,13 +9084,13 @@ msgid "New Symbol"
 msgstr "Nový symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:231
-#: eeschema/dialogs/dialog_symbol_properties.cpp:559
+#: eeschema/dialogs/dialog_symbol_properties.cpp:560
 msgid "References must start with a letter."
 msgstr "Reference musí začínat písmenem."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:251
 #: eeschema/dialogs/dialog_sheet_properties.cpp:200
-#: eeschema/dialogs/dialog_symbol_properties.cpp:576
+#: eeschema/dialogs/dialog_symbol_properties.cpp:577
 msgid "Fields must have a name."
 msgstr "Pole musí mít název."
 
@@ -9112,14 +9117,14 @@ msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr "Název '%s' koliduje s existujícím záznamem v knihovně '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:425
-#: eeschema/dialogs/dialog_symbol_properties.cpp:780
+#: eeschema/dialogs/dialog_symbol_properties.cpp:781
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "Název '%s' se již používá."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:494
 #: eeschema/dialogs/dialog_sheet_properties.cpp:676
-#: eeschema/dialogs/dialog_symbol_properties.cpp:838
+#: eeschema/dialogs/dialog_symbol_properties.cpp:839
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "První pole %d jsou povinná."
@@ -9551,7 +9556,7 @@ msgid "Alternate Pin Name"
 msgstr "Alternativní název vývodu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:188
-#: eeschema/dialogs/dialog_symbol_properties.cpp:332
+#: eeschema/dialogs/dialog_symbol_properties.cpp:333
 msgid "Alternate pin assignments are not available for DeMorgan components."
 msgstr "Alternativní definice vývodů nejsou u komponent DeMorgan k dispozici."
 
@@ -9645,14 +9650,14 @@ msgstr "Kreslit aktuální stránku"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:155
 #: pcbnew/dialogs/dialog_export_svg.cpp:192
-#: pcbnew/dialogs/dialog_gendrill.cpp:292 pcbnew/dialogs/dialog_plot.cpp:376
+#: pcbnew/dialogs/dialog_gendrill.cpp:291 pcbnew/dialogs/dialog_plot.cpp:376
 #: pcbnew/exporters/gen_footprints_placefile.cpp:183
 #: pcbnew/exporters/gen_footprints_placefile.cpp:506
 msgid "Select Output Directory"
 msgstr "Výběr výstupního adresáře"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:172
-#: pcbnew/dialogs/dialog_gendrill.cpp:301 pcbnew/dialogs/dialog_plot.cpp:393
+#: pcbnew/dialogs/dialog_gendrill.cpp:300 pcbnew/dialogs/dialog_plot.cpp:393
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -9664,8 +9669,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:174
 #: pcbnew/dialogs/dialog_export_svg.cpp:199
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
-#: pcbnew/dialogs/dialog_gendrill.cpp:303
-#: pcbnew/dialogs/dialog_gendrill.cpp:310 pcbnew/dialogs/dialog_plot.cpp:395
+#: pcbnew/dialogs/dialog_gendrill.cpp:302
+#: pcbnew/dialogs/dialog_gendrill.cpp:309 pcbnew/dialogs/dialog_plot.cpp:395
 #: pcbnew/exporters/gen_footprints_placefile.cpp:191
 #: pcbnew/exporters/gen_footprints_placefile.cpp:200
 msgid "Plot Output Directory"
@@ -9706,7 +9711,7 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:234
 #: eeschema/dialogs/dialog_plot_schematic.cpp:245
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1405
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1515
@@ -9730,7 +9735,7 @@ msgid "E"
 msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:375
-#: eeschema/sch_edit_frame.cpp:920
+#: eeschema/sch_edit_frame.cpp:921
 msgid "Schematic"
 msgstr "Schéma"
 
@@ -10200,7 +10205,7 @@ msgid "Invalid Schematic File"
 msgstr "Neplatný soubor schématu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:421
-#: kicad/tools/kicad_manager_control.cpp:523
+#: kicad/tools/kicad_manager_control.cpp:522
 #, c-format
 msgid "\"%s\" already exists."
 msgstr "\"%s\" již existuje."
@@ -10278,15 +10283,15 @@ msgstr "Vlastnosti listu"
 msgid "Add signal by name:"
 msgstr "Přidat signál podle názvu:"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:92
+#: eeschema/dialogs/dialog_sim_settings.cpp:107
 msgid "You need to select DC source"
 msgstr "Musíte vybrat zdroj stejnosměrného proudu"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:180
+#: eeschema/dialogs/dialog_sim_settings.cpp:197
 msgid "Source 1 and Source 2 must be different"
 msgstr "Zdroj 1 a zdroj 2 musí být odlišné"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:510
+#: eeschema/dialogs/dialog_sim_settings.cpp:530
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:157
@@ -10296,11 +10301,11 @@ msgstr "Zdroj 1 a zdroj 2 musí být odlišné"
 msgid "Volts"
 msgstr "Voltů"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:511
+#: eeschema/dialogs/dialog_sim_settings.cpp:531
 msgid "Amperes"
 msgstr "Ampéry"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:512
+#: eeschema/dialogs/dialog_sim_settings.cpp:532
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:310
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:321
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:359
@@ -10947,11 +10952,11 @@ msgstr "Alternativní sekvence uzlů:"
 msgid "Spice Model Editor"
 msgstr "Spice Editor modelu"
 
-#: eeschema/dialogs/dialog_symbol_properties.cpp:136
+#: eeschema/dialogs/dialog_symbol_properties.cpp:137
 msgid "Base Name"
 msgstr "Základní název"
 
-#: eeschema/dialogs/dialog_symbol_properties.cpp:137
+#: eeschema/dialogs/dialog_symbol_properties.cpp:138
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
 msgid "Alternate Assignment"
 msgstr "Alternativní přiřazení"
@@ -11554,121 +11559,126 @@ msgstr "Šablony názvů polí:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:21
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 #: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Annotations"
 msgstr "Očíslování"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:26
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
 msgstr "Zápis pro jednotku:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
 msgstr ".A"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
 msgstr "-A"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
 msgstr "_A"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
 msgstr ".1"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
 msgstr "-1"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:30
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
 msgstr "_1"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:51
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:40
 msgid "Default text size:"
 msgstr "Výchozí velikost textu:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:62
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Text offset ratio:"
 msgstr "Poměr odsazení textu:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:64
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
 "Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:90
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 msgid "Default line thickness:"
 msgstr "Výchozí tloušťka čary:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:101
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:105
 msgid "Pin symbol size:"
 msgstr "Velikost vývodu symbolu:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:119
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:123
 #: eeschema/erc_item.cpp:41
 msgid "Connections"
 msgstr "Připojení"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:124
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Junction dot size:"
 msgstr "Velikost spojovací tečky:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Smallest"
 msgstr "Nejmenší"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Small"
 msgstr "Malý"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Large"
 msgstr "Velký"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:128
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Largest"
 msgstr "Největší"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:147
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:151
 #, fuzzy
 msgid "Inter-sheet References"
 msgstr "Reference"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:149
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:153
 msgid "Show inter-sheet references"
 msgstr "Připojit reference mezi listy"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:155
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:159
+#, fuzzy
+msgid "Show own page reference"
+msgstr "Zobrazit reference pouzder"
+
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
 msgstr "Standardní (1,2,3)"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:159
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:167
 msgid "Abbreviated (1..3)"
 msgstr "Zkráceno (1..3)"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:168
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:128
 msgid "Prefix:"
 msgstr "Prefix:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:172
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:180
 msgid "["
 msgstr "["
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:175
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:153
 msgid "Suffix:"
 msgstr "Sufix:"
 
-#: eeschema/dialogs/panel_setup_formatting_base.cpp:179
+#: eeschema/dialogs/panel_setup_formatting_base.cpp:187
 msgid "]"
 msgstr "]"
 
@@ -12480,71 +12490,71 @@ msgstr "Došlo k chybám při vytváření knihovny symbolů %s."
 msgid "Failed to save symbol library file \"%s\""
 msgstr "Selhalo uložení souboru knihovny symbolů \"%s\""
 
-#: eeschema/menubar.cpp:64 kicad/menubar.cpp:63
-#: pagelayout_editor/menubar.cpp:58 pcbnew/menubar_pcb_editor.cpp:70
+#: eeschema/menubar.cpp:65 kicad/menubar.cpp:63
+#: pagelayout_editor/menubar.cpp:58 pcbnew/menubar_pcb_editor.cpp:66
 msgid "Open Recent"
 msgstr "Naposledy otevřené"
 
-#: eeschema/menubar.cpp:88
+#: eeschema/menubar.cpp:89
 msgid "Append Schematic Sheet Content..."
 msgstr "Připojit obsah listu schématu..."
 
-#: eeschema/menubar.cpp:89
+#: eeschema/menubar.cpp:90
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
 msgstr "Přidává schématický obsah listu z jiného projektu do aktuálního listu"
 
-#: eeschema/menubar.cpp:98 pcbnew/menubar_footprint_editor.cpp:69
-#: pcbnew/menubar_pcb_editor.cpp:111
+#: eeschema/menubar.cpp:99 pcbnew/menubar_footprint_editor.cpp:69
+#: pcbnew/menubar_pcb_editor.cpp:107
 msgid "Import"
 msgstr "Import"
 
-#: eeschema/menubar.cpp:100
+#: eeschema/menubar.cpp:101
 msgid "Import Non KiCad Schematic..."
 msgstr "Import jiného souboru schématu, než KiCad...."
 
-#: eeschema/menubar.cpp:101
+#: eeschema/menubar.cpp:102
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr "Nahradit aktuální list schématu za importovaný z jiné aplikace"
 
-#: eeschema/menubar.cpp:112 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
+#: eeschema/menubar.cpp:113 eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 #: pcbnew/dialogs/dialog_export_step.cpp:130
 #: pcbnew/dialogs/dialog_export_svg.cpp:92
-#: pcbnew/menubar_footprint_editor.cpp:81 pcbnew/menubar_pcb_editor.cpp:132
+#: pcbnew/menubar_footprint_editor.cpp:81 pcbnew/menubar_pcb_editor.cpp:128
 msgid "Export"
 msgstr "Export"
 
-#: eeschema/menubar.cpp:179
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:122
-#: gerbview/menubar.cpp:176 pagelayout_editor/menubar.cpp:117
-#: pcbnew/menubar_footprint_editor.cpp:145 pcbnew/menubar_pcb_editor.cpp:247
+#: eeschema/menubar.cpp:180
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:123
+#: gerbview/menubar.cpp:177 pagelayout_editor/menubar.cpp:117
+#: pcbnew/menubar_footprint_editor.cpp:145 pcbnew/menubar_pcb_editor.cpp:243
 msgid "&Units"
 msgstr "&Jednotky"
 
-#: eeschema/menubar.cpp:285
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:177
+#: eeschema/menubar.cpp:286
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
 #: pagelayout_editor/menubar.cpp:168 pcbnew/menubar_footprint_editor.cpp:245
-#: pcbnew/menubar_pcb_editor.cpp:458
+#: pcbnew/menubar_pcb_editor.cpp:454
 msgid "&Place"
 msgstr "&Umístit"
 
-#: eeschema/menubar.cpp:286
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
+#: eeschema/menubar.cpp:287
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:246
-#: pcbnew/menubar_pcb_editor.cpp:460
+#: pcbnew/menubar_pcb_editor.cpp:456
 msgid "&Inspect"
 msgstr "&Kontrola"
 
-#: eeschema/menubar.cpp:287 gerbview/menubar.cpp:225 kicad/menubar.cpp:179
-#: pcbnew/menubar_footprint_editor.cpp:247 pcbnew/menubar_pcb_editor.cpp:461
+#: eeschema/menubar.cpp:288 gerbview/menubar.cpp:226 kicad/menubar.cpp:179
+#: pcbnew/menubar_footprint_editor.cpp:247 pcbnew/menubar_pcb_editor.cpp:457
 msgid "&Tools"
 msgstr "&Nástroje"
 
-#: eeschema/menubar.cpp:288
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
+#: eeschema/menubar.cpp:289
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:248
-#: pcbnew/menubar_pcb_editor.cpp:462
+#: pcbnew/menubar_pcb_editor.cpp:458
 msgid "P&references"
 msgstr "N&astavení"
 
@@ -12584,65 +12594,65 @@ msgstr "Chybové zprávy:"
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Chyba: duplicitní názvy listu. Pokračovat?"
 
-#: eeschema/pin_type.cpp:54
+#: eeschema/pin_type.cpp:55
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:135
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Free"
 msgstr "Volné"
 
-#: eeschema/pin_type.cpp:55
+#: eeschema/pin_type.cpp:56
 msgid "Unspecified"
 msgstr "Nespecifikováno"
 
-#: eeschema/pin_type.cpp:56
+#: eeschema/pin_type.cpp:57
 msgid "Power input"
 msgstr "Vstup napájení"
 
-#: eeschema/pin_type.cpp:57
+#: eeschema/pin_type.cpp:58
 msgid "Power output"
 msgstr "Výstup napájení"
 
-#: eeschema/pin_type.cpp:58
+#: eeschema/pin_type.cpp:59
 msgid "Open collector"
 msgstr "Otevřený kolektor"
 
-#: eeschema/pin_type.cpp:59
+#: eeschema/pin_type.cpp:60
 msgid "Open emitter"
 msgstr "Otevřený emitor"
 
-#: eeschema/pin_type.cpp:60
+#: eeschema/pin_type.cpp:61
 msgid "Unconnected"
 msgstr "Nezapojeno"
 
-#: eeschema/pin_type.cpp:75
+#: eeschema/pin_type.cpp:76
 msgid "Inverted"
 msgstr "Negovaný"
 
-#: eeschema/pin_type.cpp:76
+#: eeschema/pin_type.cpp:77
 msgid "Clock"
 msgstr "Hodiny"
 
-#: eeschema/pin_type.cpp:77
+#: eeschema/pin_type.cpp:78
 msgid "Inverted clock"
 msgstr "Negované hodiny"
 
-#: eeschema/pin_type.cpp:78
+#: eeschema/pin_type.cpp:79
 msgid "Input low"
 msgstr "Vstup"
 
-#: eeschema/pin_type.cpp:79
+#: eeschema/pin_type.cpp:80
 msgid "Clock low"
 msgstr "Hodiny"
 
-#: eeschema/pin_type.cpp:80
+#: eeschema/pin_type.cpp:81
 msgid "Output low"
 msgstr "Výstup"
 
-#: eeschema/pin_type.cpp:81
+#: eeschema/pin_type.cpp:82
 msgid "Falling edge clock"
 msgstr "Hodiny na sestupné hraně"
 
-#: eeschema/pin_type.cpp:82
+#: eeschema/pin_type.cpp:83
 msgid "NonLogic"
 msgstr "Žádná logika"
 
@@ -12747,11 +12757,11 @@ msgstr "Vstup spoje do sběrnice"
 msgid "Bus to Bus Entry"
 msgstr "Vstup sběrnice do sběrnice"
 
-#: eeschema/sch_bus_entry.cpp:463 eeschema/sch_line.cpp:874
+#: eeschema/sch_bus_entry.cpp:463 eeschema/sch_line.cpp:875
 msgid "Wire"
 msgstr "Spoj"
 
-#: eeschema/sch_bus_entry.cpp:464 eeschema/sch_line.cpp:875
+#: eeschema/sch_bus_entry.cpp:464 eeschema/sch_line.cpp:876
 msgid "Bus"
 msgstr "Sběrnice"
 
@@ -12773,23 +12783,23 @@ msgstr "Kód sítě"
 msgid "Bus Alias %s Members"
 msgstr "Obsah aliasu sběrnice %s"
 
-#: eeschema/sch_edit_frame.cpp:165 pcbnew/board_connected_item.cpp:136
+#: eeschema/sch_edit_frame.cpp:166 pcbnew/board_connected_item.cpp:136
 msgid "Not Found"
 msgstr "Nenalezeno"
 
-#: eeschema/sch_edit_frame.cpp:167
+#: eeschema/sch_edit_frame.cpp:168
 msgid "The following libraries were not found:"
 msgstr "Následující knihovny nebyly nalezeny:"
 
-#: eeschema/sch_edit_frame.cpp:219
+#: eeschema/sch_edit_frame.cpp:220
 msgid "KiCad Schematic Editor"
 msgstr "KiCad editor schémat"
 
-#: eeschema/sch_edit_frame.cpp:299
+#: eeschema/sch_edit_frame.cpp:300
 msgid "New schematic file is unsaved"
 msgstr "Nový soubor schématu není uložen"
 
-#: eeschema/sch_edit_frame.cpp:642
+#: eeschema/sch_edit_frame.cpp:643
 #: eeschema/symbol_editor/symbol_editor.cpp:1109
 #: pagelayout_editor/pl_editor_frame.cpp:352
 #: pcbnew/footprint_edit_frame.cpp:612 pcbnew/pcb_edit_frame.cpp:798
@@ -12797,7 +12807,7 @@ msgstr "Nový soubor schématu není uložen"
 msgid "Save changes to \"%s\" before closing?"
 msgstr "Uložit změny do \"%s\" před zavřením?"
 
-#: eeschema/sch_edit_frame.cpp:806
+#: eeschema/sch_edit_frame.cpp:807
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -12807,42 +12817,42 @@ msgstr ""
 "režimu. Chcete-li vytvořit/aktualizovat DPS ze schémat, spusťte Kicad a "
 "vytvořte projekt."
 
-#: eeschema/sch_edit_frame.cpp:937
+#: eeschema/sch_edit_frame.cpp:938
 msgid "New Schematic"
 msgstr "Nové schéma"
 
-#: eeschema/sch_edit_frame.cpp:949
+#: eeschema/sch_edit_frame.cpp:950
 #, c-format
 msgid "Schematic file \"%s\" already exists."
 msgstr "Soubor schématu \"%s\" již existuje."
 
-#: eeschema/sch_edit_frame.cpp:970
+#: eeschema/sch_edit_frame.cpp:971
 msgid "Open Schematic"
 msgstr "Otevřít schéma"
 
-#: eeschema/sch_edit_frame.cpp:1034
+#: eeschema/sch_edit_frame.cpp:1035
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Přiřazení pouzder vyžaduje kompletně očíslované schéma."
 
-#: eeschema/sch_edit_frame.cpp:1053
+#: eeschema/sch_edit_frame.cpp:1054
 msgid "Could not open CvPcb"
 msgstr "Nelze otevřít CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1243
+#: eeschema/sch_edit_frame.cpp:1244
 msgid "[no file]"
 msgstr "[žádný soubor]"
 
-#: eeschema/sch_edit_frame.cpp:1260 kicad/kicad_manager_frame.cpp:614
+#: eeschema/sch_edit_frame.cpp:1261 kicad/kicad_manager_frame.cpp:614
 #: pcbnew/footprint_edit_frame.cpp:776 pcbnew/pcb_edit_frame.cpp:1204
 msgid "[Read Only]"
 msgstr "[Pouze pro čtení]"
 
-#: eeschema/sch_edit_frame.cpp:1261 pcbnew/footprint_edit_frame.cpp:784
+#: eeschema/sch_edit_frame.cpp:1262 pcbnew/footprint_edit_frame.cpp:784
 #: pcbnew/pcb_edit_frame.cpp:1205
 msgid "[Unsaved]"
 msgstr "[Neuloženo]"
 
-#: eeschema/sch_edit_frame.cpp:1436
+#: eeschema/sch_edit_frame.cpp:1437
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Zvýrazněná síť: %s"
@@ -12851,23 +12861,23 @@ msgstr "Zvýrazněná síť: %s"
 msgid "File:"
 msgstr "Soubor:"
 
-#: eeschema/sch_field.cpp:475
+#: eeschema/sch_field.cpp:486
 msgid "<root sheet>"
 msgstr "<kořenový list>"
 
-#: eeschema/sch_field.cpp:482
+#: eeschema/sch_field.cpp:493
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Přejít na stránku %s (%s)"
 
-#: eeschema/sch_field.cpp:488
+#: eeschema/sch_field.cpp:499
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:560
 msgid "Back"
 msgstr "Dole"
 
-#: eeschema/sch_field.cpp:516
+#: eeschema/sch_field.cpp:527
 #, fuzzy
 msgid "Intersheet References"
 msgstr "Reference"
@@ -12887,64 +12897,64 @@ msgstr "Plugin typu \"%s\" nenalezen."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Neznámá SCH_FILE_T hodnota: %d"
 
-#: eeschema/sch_line.cpp:713
+#: eeschema/sch_line.cpp:714
 #, c-format
 msgid "Vertical Wire, length %s"
 msgstr "Vertikální drát, délka %s"
 
-#: eeschema/sch_line.cpp:714
+#: eeschema/sch_line.cpp:715
 #, c-format
 msgid "Vertical Bus, length %s"
 msgstr "Vertikální sběrnice, délka %s"
 
-#: eeschema/sch_line.cpp:715
+#: eeschema/sch_line.cpp:716
 #, c-format
 msgid "Vertical Graphic Line, length %s"
 msgstr "Vertikální grafická čára, délka %s"
 
-#: eeschema/sch_line.cpp:722
+#: eeschema/sch_line.cpp:723
 #, c-format
 msgid "Horizontal Wire, length %s"
 msgstr "Horizontální drát, délka %s"
 
-#: eeschema/sch_line.cpp:723
+#: eeschema/sch_line.cpp:724
 #, c-format
 msgid "Horizontal Bus, length %s"
 msgstr "Horizontální sběrnice, délka %s"
 
-#: eeschema/sch_line.cpp:724
+#: eeschema/sch_line.cpp:725
 #, c-format
 msgid "Horizontal Graphic Line, length %s"
 msgstr "Vodorovná grafická čára, délka %s"
 
-#: eeschema/sch_line.cpp:731
+#: eeschema/sch_line.cpp:732
 #, c-format
 msgid "Wire, length %s"
 msgstr "Drát, délka %s"
 
-#: eeschema/sch_line.cpp:732
+#: eeschema/sch_line.cpp:733
 #, c-format
 msgid "Bus, length %s"
 msgstr "Sběrnice, délka %s"
 
-#: eeschema/sch_line.cpp:733
+#: eeschema/sch_line.cpp:734
 #, c-format
 msgid "Graphic Line, length %s"
 msgstr "Grafická čára, délka %s"
 
-#: eeschema/sch_line.cpp:876
+#: eeschema/sch_line.cpp:877
 msgid "Graphical"
 msgstr "Grafika"
 
-#: eeschema/sch_line.cpp:879
+#: eeschema/sch_line.cpp:880
 msgid "Line Type"
 msgstr "Typ čáry"
 
-#: eeschema/sch_line.cpp:882
+#: eeschema/sch_line.cpp:883
 msgid "from netclass"
 msgstr "z třídy spojů"
 
-#: eeschema/sch_line.cpp:903 eeschema/sch_text.cpp:712
+#: eeschema/sch_line.cpp:904 eeschema/sch_text.cpp:712
 msgid "Assigned Netclass"
 msgstr "Přiřazená třída spojů"
 
@@ -12953,7 +12963,7 @@ msgstr "Přiřazená třída spojů"
 msgid "Electrical Rule Check Error"
 msgstr "Chyba kontroly pravidel elektrického návrhu"
 
-#: eeschema/sch_marker.h:99
+#: eeschema/sch_marker.h:98
 msgid "ERC Marker"
 msgstr "ERC značka"
 
@@ -13528,25 +13538,25 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1470
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2563
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2561
 #, c-format
 msgid "Library file \"%s\" not found."
 msgstr "Soubor knihovny \"%s\" nenalezen."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2030
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4167
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4165
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "knihovna %s neobsahuje symbol s názvem %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2204
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4352
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4350
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr "knihovna symbolů \"%s\" již existuje, nelze vytvořit novou knihovnu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2232
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4380
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4378
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, c-format
 msgid "library \"%s\" cannot be deleted"
@@ -13562,7 +13572,7 @@ msgstr "knihovnu \"%s\" nelze odstranit"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:408
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:427
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1030
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3028
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3026
 msgid "unexpected end of line"
 msgstr "neočekávaný konec řádku"
 
@@ -13582,7 +13592,7 @@ msgstr "Chybí 'EELAYER END'"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:885
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1153
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1161
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2577
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2575
 msgid "unexpected end of file"
 msgstr "neočekávaný konec souboru"
 
@@ -13598,12 +13608,12 @@ msgstr "očekávané 'Kurzíva' nebo '~'"
 msgid "component field text attributes must be 3 characters wide"
 msgstr "atributy textových částí pole musí mít šířku 3 znaky"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2662
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2660
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr "uživatel nemá oprávnění ke čtení souboru dokumentace knihovny \"%s\""
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2670
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2668
 msgid "symbol document library file is empty"
 msgstr "soubor knihovny dokumentů symbolů je prázdný"
 
@@ -13648,27 +13658,27 @@ msgstr "Nastavení symbolu schématu '%s %s' identifikátor knihovny na '%s'."
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Nenalezena knihovna symbolů pro symbol schématu '%s %s'."
 
-#: eeschema/sch_sheet.cpp:55
+#: eeschema/sch_sheet.cpp:56
 msgid "Sheet name"
 msgstr "Název listu"
 
-#: eeschema/sch_sheet.cpp:56
+#: eeschema/sch_sheet.cpp:57
 msgid "Sheet file"
 msgstr "Soubor listu"
 
-#: eeschema/sch_sheet.cpp:708
+#: eeschema/sch_sheet.cpp:709
 msgid "Sheet Name"
 msgstr "Název listu"
 
-#: eeschema/sch_sheet.cpp:715
+#: eeschema/sch_sheet.cpp:716
 msgid "Hierarchical Path"
 msgstr "Hierarchická cesta"
 
-#: eeschema/sch_sheet.cpp:718
+#: eeschema/sch_sheet.cpp:719
 msgid "File Name"
 msgstr "Název souboru"
 
-#: eeschema/sch_sheet.cpp:915
+#: eeschema/sch_sheet.cpp:916
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarchický list %s"
@@ -13677,7 +13687,7 @@ msgstr "Hierarchický list %s"
 msgid "(Deleted Item)"
 msgstr "(Smazaná položka)"
 
-#: eeschema/sch_sheet_pin.cpp:286
+#: eeschema/sch_sheet_pin.cpp:285
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchický vývod listu %s"
@@ -13765,19 +13775,155 @@ msgstr "Velikost"
 msgid "Label '%s'"
 msgstr "Označení '%s'"
 
-#: eeschema/sch_text.cpp:1340
+#: eeschema/sch_text.cpp:1348
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Globální označení '%s'"
 
-#: eeschema/sch_text.cpp:1525
+#: eeschema/sch_text.cpp:1540
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchické označení '%s'"
 
-#: eeschema/sch_text.cpp:1541 pcbnew/dialogs/panel_setup_rules.cpp:472
+#: eeschema/sch_text.cpp:1556 pcbnew/dialogs/panel_setup_rules.cpp:472
 msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
+
+#: eeschema/sch_text_help_md.h:2
+msgid ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Result</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</"
+"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp> </td>\n"
+"    </tr>\n"
+"</table>\n"
+msgstr ""
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14015,7 +14161,7 @@ msgstr "Sonda"
 msgid "Probe signals on the schematic"
 msgstr "Signály sondy na schématu"
 
-#: eeschema/sim/sim_plot_frame.cpp:190 eeschema/sim/sim_plot_frame_base.cpp:233
+#: eeschema/sim/sim_plot_frame.cpp:190 eeschema/sim/sim_plot_frame_base.cpp:234
 msgid "Tune"
 msgstr "Ladit"
 
@@ -14035,61 +14181,61 @@ msgstr "Parametry a nastavení simulace"
 msgid "Welcome!"
 msgstr "Vítejte!"
 
-#: eeschema/sim/sim_plot_frame.cpp:401 eeschema/sim/sim_plot_frame.cpp:1263
+#: eeschema/sim/sim_plot_frame.cpp:404 eeschema/sim/sim_plot_frame.cpp:1266
 msgid "There were errors during netlist export, aborted."
 msgstr "Během exportu netlistu došlo k chybám, přerušeno."
 
-#: eeschema/sim/sim_plot_frame.cpp:407
+#: eeschema/sim/sim_plot_frame.cpp:410
 msgid "You need to select the simulation settings first."
 msgstr "Nejprve musíte zvolit nastavení simulace."
 
-#: eeschema/sim/sim_plot_frame.cpp:459
+#: eeschema/sim/sim_plot_frame.cpp:462
 #, c-format
 msgid "Plot%u - "
 msgstr "Kreslit%u - "
 
-#: eeschema/sim/sim_plot_frame.cpp:552
+#: eeschema/sim/sim_plot_frame.cpp:555
 msgid "Error: simulation type not defined!\n"
 msgstr "Chyba: typ simulace není definován!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:558
+#: eeschema/sim/sim_plot_frame.cpp:561
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Chyba: typ simulace nepodporuje vykreslování!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:761 eeschema/sim/sim_plot_frame.cpp:1410
+#: eeschema/sim/sim_plot_frame.cpp:764 eeschema/sim/sim_plot_frame.cpp:1413
 msgid "Signal"
 msgstr "Signál"
 
-#: eeschema/sim/sim_plot_frame.cpp:1002
+#: eeschema/sim/sim_plot_frame.cpp:1005
 msgid "Open simulation workbook"
 msgstr "Otevřít záznamy simulaci"
 
-#: eeschema/sim/sim_plot_frame.cpp:1011
+#: eeschema/sim/sim_plot_frame.cpp:1014
 msgid "There was an error while opening the workbook file"
 msgstr "Při otevírání záznamů simulací nastala chyba"
 
-#: eeschema/sim/sim_plot_frame.cpp:1020
+#: eeschema/sim/sim_plot_frame.cpp:1023
 msgid "Save Simulation Workbook"
 msgstr "Uložit záznamy simulace"
 
-#: eeschema/sim/sim_plot_frame.cpp:1029
+#: eeschema/sim/sim_plot_frame.cpp:1032
 msgid "There was an error while saving the workbook file"
 msgstr "Při ukládání souboru sešitu došlo k chybě"
 
-#: eeschema/sim/sim_plot_frame.cpp:1038
+#: eeschema/sim/sim_plot_frame.cpp:1041
 msgid "Save Plot as Image"
 msgstr "Uložit kresbu jako obrázek"
 
-#: eeschema/sim/sim_plot_frame.cpp:1055
+#: eeschema/sim/sim_plot_frame.cpp:1058
 msgid "Save Plot Data"
 msgstr "Uložit data vykreslení"
 
-#: eeschema/sim/sim_plot_frame.cpp:1297
+#: eeschema/sim/sim_plot_frame.cpp:1300
 #, fuzzy
 msgid "You need to run plot-providing simulation first."
 msgstr "Nejprve musíte spustit simulaci."
 
-#: eeschema/sim/sim_plot_frame.cpp:1496
+#: eeschema/sim/sim_plot_frame.cpp:1499
 msgid ""
 "\n"
 "\n"
@@ -14101,19 +14247,19 @@ msgstr ""
 "Výsledky simulace:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:1559
+#: eeschema/sim/sim_plot_frame.cpp:1562
 msgid "Hide Signal"
 msgstr "Skrýt signál"
 
-#: eeschema/sim/sim_plot_frame.cpp:1560
+#: eeschema/sim/sim_plot_frame.cpp:1563
 msgid "Erase the signal from plot screen"
 msgstr "Vymazat signál z obrazovky výkresu"
 
-#: eeschema/sim/sim_plot_frame.cpp:1566
+#: eeschema/sim/sim_plot_frame.cpp:1569
 msgid "Hide Cursor"
 msgstr "Skrýt kurzor"
 
-#: eeschema/sim/sim_plot_frame.cpp:1568
+#: eeschema/sim/sim_plot_frame.cpp:1571
 msgid "Show Cursor"
 msgstr "Zobrazit kurzor"
 
@@ -14194,11 +14340,11 @@ msgstr "Bílé pozadí"
 msgid "View"
 msgstr "Pohled"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:188
+#: eeschema/sim/sim_plot_frame_base.cpp:189
 msgid "Signals"
 msgstr "Signály"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:216
+#: eeschema/sim/sim_plot_frame_base.cpp:217
 msgid "Cursors"
 msgstr "Kurzor"
 
@@ -14285,7 +14431,7 @@ msgstr "Prosím, vyplňte povinná pole"
 msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" není platná hodnota Spice"
 
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:78
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:95
 msgid "Library Editor"
 msgstr "Editor knihoven"
@@ -14672,7 +14818,7 @@ msgid "Symbol \"%s\" already exists in \"%s\"."
 msgstr "Symbol \"%s\" již existuje v \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
-#: kicad/tools/kicad_manager_control.cpp:258
+#: kicad/tools/kicad_manager_control.cpp:257
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/footprint_libraries_utils.cpp:452
@@ -15909,13 +16055,13 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "Symbol nenalezen."
 
-#: eeschema/tools/ee_selection_tool.cpp:1577
+#: eeschema/tools/ee_selection_tool.cpp:1587
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
 #: pcbnew/tools/pcb_selection_tool.cpp:1792
 msgid "Select &All\tA"
 msgstr "Vybrat &vše\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1580
+#: eeschema/tools/ee_selection_tool.cpp:1590
 #: pcbnew/tools/pcb_selection_tool.cpp:1795
 msgid "&Expand Selection\tE"
 msgstr "&Rozbalit výběr\tE"
@@ -16234,7 +16380,7 @@ msgstr "Výběr vrstvy: %s"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:967 pcbnew/footprint.cpp:2012 pcbnew/footprint.cpp:2015
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -16573,15 +16719,15 @@ msgstr "Vyrovnat ofset obrázku"
 msgid "Graphic layer %d"
 msgstr "Grafická vrstva %d"
 
-#: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:127
+#: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:128
 msgid "Clear Recent Zip Files"
 msgstr "Vymazat poslední soubory ZIP"
 
-#: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:89
+#: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:90
 msgid "Clear Recent Drill Files"
 msgstr "Vymazat poslední soubory vrtání"
 
-#: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:108
+#: gerbview/gerbview_frame.cpp:76 gerbview/menubar.cpp:109
 msgid "Clear Recent Job Files"
 msgstr "Vymazat poslední soubory Job"
 
@@ -16599,7 +16745,7 @@ msgstr "Správce vrstev"
 msgid "Drawing layer %d not in use"
 msgstr "Vrstva kresby %d není použita"
 
-#: gerbview/gerbview_frame.cpp:616 gerbview/menubar.cpp:148
+#: gerbview/gerbview_frame.cpp:616 gerbview/menubar.cpp:149
 #: kicad/tools/kicad_manager_actions.cpp:88
 #, fuzzy
 msgid "Gerber Viewer"
@@ -16631,23 +16777,23 @@ msgstr "Tento job soubor používá zastaralý formát. Prosím, vytvořte znovu
 msgid "Open Gerber Job File"
 msgstr "Otevřít soubor Gerber Job"
 
-#: gerbview/menubar.cpp:66
+#: gerbview/menubar.cpp:67
 msgid "Open Recent Gerber File"
 msgstr "Otevřít poslení soubor Gerber"
 
-#: gerbview/menubar.cpp:70
+#: gerbview/menubar.cpp:71
 msgid "Clear Recent Gerber Files"
 msgstr "Vymazat poslední soubory Gerber"
 
-#: gerbview/menubar.cpp:85
+#: gerbview/menubar.cpp:86
 msgid "Open Recent Drill File"
 msgstr "Otevřít nedávný soubor vrtání"
 
-#: gerbview/menubar.cpp:104
+#: gerbview/menubar.cpp:105
 msgid "Open Recent Job File"
 msgstr "Otevřete soubor Job"
 
-#: gerbview/menubar.cpp:123
+#: gerbview/menubar.cpp:124
 msgid "Open Recent Zip File"
 msgstr "Otevřít poslední soubor ZIP"
 
@@ -16924,105 +17070,105 @@ msgstr "Není definován editor. Prosím vyberte některý"
 msgid "No file loaded on the active layer %d"
 msgstr "Nenačten žádný soubor na aktivní vrstvu %d"
 
-#: gerbview/tools/gerbview_selection_tool.cpp:52
+#: gerbview/tools/gerbview_selection_tool.cpp:48
 msgid "Highlight"
 msgstr "Zvýraznění"
 
-#: gerbview/tools/gerbview_selection_tool.cpp:74
+#: gerbview/tools/gerbview_selection_tool.cpp:70
 #, fuzzy, c-format
 msgid "Highlight Items of Component \"%s\""
 msgstr "Součástka %s nenalezena"
 
-#: gerbview/tools/gerbview_selection_tool.cpp:82
+#: gerbview/tools/gerbview_selection_tool.cpp:78
 #, c-format
 msgid "Highlight Items of Net \"%s\""
 msgstr "Zvýraznit položky sítě \"%s\""
 
-#: gerbview/tools/gerbview_selection_tool.cpp:92
+#: gerbview/tools/gerbview_selection_tool.cpp:88
 #, fuzzy, c-format
 msgid "Highlight Aperture Type \"%s\""
 msgstr "Typ stránky \"%s\" není platný"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:79
-#: gerbview/widgets/layer_widget.cpp:525
+#: gerbview/widgets/gerbview_layer_widget.cpp:80
+#: gerbview/widgets/layer_widget.cpp:523
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:44
 #: pcbnew/widgets/appearance_controls_base.cpp:33
 msgid "Layers"
 msgstr "Vrstvy"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:80
-#: gerbview/widgets/layer_widget.cpp:545
+#: gerbview/widgets/gerbview_layer_widget.cpp:81
+#: gerbview/widgets/layer_widget.cpp:543
 msgid "Items"
 msgstr "Položky"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:100
+#: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "DCodes"
 msgstr "D-kódy"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:100
+#: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show DCodes identification"
 msgstr "Zobrazit identifikace D-kódů"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:101
+#: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Negative Objects"
 msgstr "Negativní objekty"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:101
+#: gerbview/widgets/gerbview_layer_widget.cpp:102
 msgid "Show negative objects in this color"
 msgstr "Zobrazit negativní objekty v této barvě"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:103
+#: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show the (x,y) grid dots"
 msgstr "Zobrazit (x, y) bodů mřížky"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:104
+#: gerbview/widgets/gerbview_layer_widget.cpp:105
 #: pcbnew/widgets/appearance_controls.cpp:353
 #, fuzzy
 msgid "Drawing Sheet"
 msgstr "Uchopit list"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:104
+#: gerbview/widgets/gerbview_layer_widget.cpp:105
 #, fuzzy
 msgid "Show drawing sheet border and title block"
 msgstr "Tisknout okraj a rohové razítko"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:105
+#: gerbview/widgets/gerbview_layer_widget.cpp:106
 msgid "PCB Background"
 msgstr "DPS pozadí"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:124
+#: gerbview/widgets/gerbview_layer_widget.cpp:125
 #: pcbnew/widgets/appearance_controls.cpp:1590
 msgid "Show All Layers"
 msgstr "Zobrazit všechny vrstvy"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:128
+#: gerbview/widgets/gerbview_layer_widget.cpp:129
 #: pcbnew/widgets/appearance_controls.cpp:1577
 msgid "Hide All Layers But Active"
 msgstr "Skrýt všechny vrstvy kromě aktivních"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:132
+#: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Always Hide All Layers But Active"
 msgstr "Vždy skrýt všechny vrstvy kromě aktivních"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:135
+#: gerbview/widgets/gerbview_layer_widget.cpp:136
 #: pcbnew/widgets/appearance_controls.cpp:1593
 msgid "Hide All Layers"
 msgstr "Skrýt všechny vrstvy"
 
-#: gerbview/widgets/gerbview_layer_widget.cpp:139
+#: gerbview/widgets/gerbview_layer_widget.cpp:140
 msgid "Sort Layers if X2 Mode"
 msgstr "Řazení vrstev je-li X2 mód"
 
-#: gerbview/widgets/layer_widget.cpp:130
+#: gerbview/widgets/layer_widget.cpp:128
 msgid "Change Layer Color for"
 msgstr "Změna barvy vrstvy pro"
 
-#: gerbview/widgets/layer_widget.cpp:180
+#: gerbview/widgets/layer_widget.cpp:178
 msgid "Change Render Color for"
 msgstr "Změnit barvu rendrování na"
 
-#: gerbview/widgets/layer_widget.cpp:337
+#: gerbview/widgets/layer_widget.cpp:335
 #: pcbnew/widgets/appearance_controls.cpp:887
 #: pcbnew/widgets/appearance_controls.cpp:1894
 #: pcbnew/widgets/appearance_controls.cpp:2096
@@ -17031,11 +17177,11 @@ msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr "Levým výběr, prostřední pro změnu barvy, pravé pro menu"
 
-#: gerbview/widgets/layer_widget.cpp:345
+#: gerbview/widgets/layer_widget.cpp:343
 msgid "Enable this for visibility"
 msgstr "Povolit pro viditelnost"
 
-#: gerbview/widgets/layer_widget.cpp:436
+#: gerbview/widgets/layer_widget.cpp:434
 #, fuzzy
 msgid "Left double click or middle click for color change"
 msgstr "Kliknutím levým nebo prostředním tlačítkem pro změnu barvy"
@@ -17413,7 +17559,7 @@ msgstr ""
 msgid "Open Directory in File Explorer"
 msgstr "Otevřít adresář v Průzkumníku souborů"
 
-#: kicad/project_tree_pane.cpp:720 pcbnew/menubar_pcb_editor.cpp:423
+#: kicad/project_tree_pane.cpp:720 pcbnew/menubar_pcb_editor.cpp:419
 msgid "Opens the directory in the default system file manager"
 msgstr ""
 
@@ -17596,17 +17742,17 @@ msgstr "Otevřít textový editor"
 msgid "Launch preferred text editor"
 msgstr "Spustit preferovaný textový editor"
 
-#: kicad/tools/kicad_manager_control.cpp:45
+#: kicad/tools/kicad_manager_control.cpp:44
 msgid "Create a new directory for the project"
 msgstr "Vytvořit nový adresář projektu"
 
-#: kicad/tools/kicad_manager_control.cpp:85
+#: kicad/tools/kicad_manager_control.cpp:84
 msgid "Create New Project"
 msgstr "Vytvořit nový projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:118
-#: kicad/tools/kicad_manager_control.cpp:215
-#: kicad/tools/kicad_manager_control.cpp:530
+#: kicad/tools/kicad_manager_control.cpp:117
+#: kicad/tools/kicad_manager_control.cpp:214
+#: kicad/tools/kicad_manager_control.cpp:529
 #, c-format
 msgid ""
 "Directory \"%s\" could not be created.\n"
@@ -17617,7 +17763,7 @@ msgstr ""
 "\n"
 "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
-#: kicad/tools/kicad_manager_control.cpp:127
+#: kicad/tools/kicad_manager_control.cpp:126
 #, fuzzy
 msgid ""
 "The selected directory is not empty.  It is recommended that you create "
@@ -17630,96 +17776,96 @@ msgstr ""
 "\n"
 "Chcete vytvořit nový prázdný adresář pro projekt?"
 
-#: kicad/tools/kicad_manager_control.cpp:155
+#: kicad/tools/kicad_manager_control.cpp:154
 msgid "System Templates"
 msgstr "Systémové šablony"
 
-#: kicad/tools/kicad_manager_control.cpp:164
+#: kicad/tools/kicad_manager_control.cpp:163
 msgid "User Templates"
 msgstr "Uživatelské šablony"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:172
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Není vybrána šablona projektu.  Nelze vygenerovat nový projekt."
 
-#: kicad/tools/kicad_manager_control.cpp:181
+#: kicad/tools/kicad_manager_control.cpp:180
 msgid "New Project Folder"
 msgstr "Nová složka projektu"
 
-#: kicad/tools/kicad_manager_control.cpp:227
-#: kicad/tools/kicad_manager_control.cpp:539
+#: kicad/tools/kicad_manager_control.cpp:226
+#: kicad/tools/kicad_manager_control.cpp:538
 #, c-format
 msgid "Cannot write to folder \"%s\"."
 msgstr "Nelze zapisovat do složky \"%s\"."
 
-#: kicad/tools/kicad_manager_control.cpp:228
-#: kicad/tools/kicad_manager_control.cpp:540
+#: kicad/tools/kicad_manager_control.cpp:227
+#: kicad/tools/kicad_manager_control.cpp:539
 msgid "Error!"
 msgstr "Chyba!"
 
-#: kicad/tools/kicad_manager_control.cpp:229
-#: kicad/tools/kicad_manager_control.cpp:541
+#: kicad/tools/kicad_manager_control.cpp:228
+#: kicad/tools/kicad_manager_control.cpp:540
 msgid "Please check your access permissions to this folder and try again."
 msgstr ""
 "Zkontrolujte prosím přístupová oprávnění k této složce a zkuste to znovu."
 
-#: kicad/tools/kicad_manager_control.cpp:250
+#: kicad/tools/kicad_manager_control.cpp:249
 msgid "Overwriting files:"
 msgstr "Přepsání souborů:"
 
-#: kicad/tools/kicad_manager_control.cpp:255
+#: kicad/tools/kicad_manager_control.cpp:254
 msgid "Similar files already exist in the destination folder."
 msgstr "Podobné soubory již existují v cílové složce."
 
-#: kicad/tools/kicad_manager_control.cpp:273
+#: kicad/tools/kicad_manager_control.cpp:272
 msgid "A problem occurred creating new project from template!"
 msgstr "Problém při vytvoření nového projektu ze šablony!"
 
-#: kicad/tools/kicad_manager_control.cpp:274
+#: kicad/tools/kicad_manager_control.cpp:273
 msgid "Template Error"
 msgstr "Chyba šablony"
 
-#: kicad/tools/kicad_manager_control.cpp:296
+#: kicad/tools/kicad_manager_control.cpp:295
 msgid "Open Existing Project"
 msgstr "Načíst existující projekt"
 
-#: kicad/tools/kicad_manager_control.cpp:467
+#: kicad/tools/kicad_manager_control.cpp:466
 #, c-format
 msgid "Cannot copy folder \"%s\"."
 msgstr "Nelze kopírovat složku \"%s\"."
 
-#: kicad/tools/kicad_manager_control.cpp:510
+#: kicad/tools/kicad_manager_control.cpp:509
 msgid "Save Project To"
 msgstr "Uložit projekt do"
 
-#: kicad/tools/kicad_manager_control.cpp:599
+#: kicad/tools/kicad_manager_control.cpp:598
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Vytvořit (nebo otevřít) projekt pro úpravu schématu."
 
-#: kicad/tools/kicad_manager_control.cpp:605
+#: kicad/tools/kicad_manager_control.cpp:604
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Vytvořit (nebo otevřít) projekt pro úpravu DPS."
 
-#: kicad/tools/kicad_manager_control.cpp:622
+#: kicad/tools/kicad_manager_control.cpp:621
 msgid "Application failed to load:\n"
 msgstr "Načtení aplikace se nezdařilo:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:622
-#: kicad/tools/kicad_manager_control.cpp:629 pcbnew/pcb_edit_frame.cpp:1430
+#: kicad/tools/kicad_manager_control.cpp:621
+#: kicad/tools/kicad_manager_control.cpp:628 pcbnew/pcb_edit_frame.cpp:1430
 #: pcbnew/pcb_edit_frame.cpp:1461
 msgid "KiCad Error"
 msgstr "KiCad chyba"
 
-#: kicad/tools/kicad_manager_control.cpp:629
+#: kicad/tools/kicad_manager_control.cpp:628
 msgid "Application failed to load."
 msgstr "Načtení aplikace se nezdařilo."
 
-#: kicad/tools/kicad_manager_control.cpp:697
+#: kicad/tools/kicad_manager_control.cpp:696
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s zavřeno [pid=%d]\n"
 
-#: kicad/tools/kicad_manager_control.cpp:759
+#: kicad/tools/kicad_manager_control.cpp:758
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s otevřeno [pid=%ld]\n"
@@ -21836,20 +21982,20 @@ msgstr ""
 msgid "Dimension Properties"
 msgstr "Vlastnosti rozměru"
 
-#: pcbnew/dialogs/dialog_drc.cpp:82
+#: pcbnew/dialogs/dialog_drc.cpp:81
 msgid "Run DRC"
 msgstr "Spustit DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:191 pcbnew/tools/board_inspection_tool.cpp:45
+#: pcbnew/dialogs/dialog_drc.cpp:190 pcbnew/tools/board_inspection_tool.cpp:45
 #: pcbnew/tools/zone_filler_tool.cpp:116
 msgid "Rules"
 msgstr "Pravidla"
 
-#: pcbnew/dialogs/dialog_drc.cpp:216
+#: pcbnew/dialogs/dialog_drc.cpp:215
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:218 pcbnew/tools/board_inspection_tool.cpp:231
+#: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/tools/board_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:530
 #: pcbnew/tools/board_inspection_tool.cpp:567
 #: pcbnew/tools/board_inspection_tool.cpp:602
@@ -21858,38 +22004,38 @@ msgstr ""
 msgid "Show design rules."
 msgstr "Zobrazit pravidla návrhu."
 
-#: pcbnew/dialogs/dialog_drc.cpp:251
+#: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC zrušeno uživatelem.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:253
+#: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
 msgstr "Hotovo.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:469
+#: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
 msgstr "Otevřít Nastavení desky... dialog"
 
-#: pcbnew/dialogs/dialog_drc.cpp:635
+#: pcbnew/dialogs/dialog_drc.cpp:634
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Soubor hlášení '%s' vytvořen<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:640
+#: pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
 msgid "Unable to create report file '%s'<br>"
 msgstr "Nelze vytvořit soubor hlášení '%s'<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:866
+#: pcbnew/dialogs/dialog_drc.cpp:865
 #, fuzzy
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Chcete vyčistit tento list?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:869
+#: pcbnew/dialogs/dialog_drc.cpp:868
 msgid "Delete exclusions"
 msgstr "Odstranit vyloučení"
 
-#: pcbnew/dialogs/dialog_drc.cpp:940
+#: pcbnew/dialogs/dialog_drc.cpp:939
 msgid "not run"
 msgstr "neběží"
 
@@ -23089,30 +23235,30 @@ msgstr "Generovat soubor pro vrtání"
 msgid "Generate Map File"
 msgstr "Vygenerovat soubor mapy"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:309
+#: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
 "desky)!"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:379
+#: pcbnew/dialogs/dialog_gendrill.cpp:382
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
 msgstr "Nelze zapisovat soubory vrtání a/nebo map vrtání do složky \"%s\"."
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:428
+#: pcbnew/dialogs/dialog_gendrill.cpp:431
 msgid "Save Drill Report File"
 msgstr "Uložit soubor hlášení vrtání"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:454
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:120
-#: pcbnew/exporters/gendrill_file_writer_base.cpp:319
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:100
+#: pcbnew/dialogs/dialog_gendrill.cpp:457
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:115
+#: pcbnew/exporters/gendrill_file_writer_base.cpp:338
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:103
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Nelze vytvořit %s **\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:459
+#: pcbnew/dialogs/dialog_gendrill.cpp:462
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Soubor hlášení %s vytvořen\n"
@@ -26311,7 +26457,7 @@ msgid "Category"
 msgstr "Kategorie"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:75
-#: pcbnew/menubar_pcb_editor.cpp:422
+#: pcbnew/menubar_pcb_editor.cpp:418
 msgid "Open Plugin Directory"
 msgstr "Otevřít adresář pluginu"
 
@@ -28177,9 +28323,9 @@ msgstr ""
 msgid "Footprint Report"
 msgstr "Report pouzdra"
 
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
-#: pcbnew/exporters/gendrill_file_writer_base.cpp:329
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:109
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:124
+#: pcbnew/exporters/gendrill_file_writer_base.cpp:348
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:112
 #, c-format
 msgid "Create file %s\n"
 msgstr "Vytvořit soubor %s\n"
@@ -28398,25 +28544,25 @@ msgstr "<bez referenčního označení>"
 msgid "Footprint %s"
 msgstr "Pouzdro %s"
 
-#: pcbnew/footprint.cpp:2024 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
 msgid "Local Clearance"
 msgstr "Místní izolační mezera"
 
-#: pcbnew/footprint.cpp:2027 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
 #, fuzzy
 msgid "Local Solderpaste Margin"
 msgstr "Zobrazit vrstvy pájecí pasty"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2032
+#: pcbnew/footprint.cpp:2038
 #, fuzzy
 msgid "Thermal Width"
 msgstr "Šířka spoje"
 
-#: pcbnew/footprint.cpp:2035
+#: pcbnew/footprint.cpp:2041
 msgid "Thermal Gap"
 msgstr "Teplotní mezera"
 
@@ -28923,11 +29069,11 @@ msgstr "Exportovat pohled jako &PNG..."
 msgid "Create a PNG file from the current view"
 msgstr "Vytvoří soubor PNG z aktuálního pohledu"
 
-#: pcbnew/menubar_footprint_editor.cpp:157 pcbnew/menubar_pcb_editor.cpp:263
+#: pcbnew/menubar_footprint_editor.cpp:157 pcbnew/menubar_pcb_editor.cpp:259
 msgid "&Drawing Mode"
 msgstr "Režim &kreslení"
 
-#: pcbnew/menubar_footprint_editor.cpp:167 pcbnew/menubar_pcb_editor.cpp:283
+#: pcbnew/menubar_footprint_editor.cpp:167 pcbnew/menubar_pcb_editor.cpp:279
 msgid "&Contrast Mode"
 msgstr "Režim &kontrastu"
 
@@ -28947,89 +29093,89 @@ msgstr "&Vložit pouzdro na desku"
 msgid "Insert footprint onto current board"
 msgstr "Vloží pouzdro na aktuální desku"
 
-#: pcbnew/menubar_pcb_editor.cpp:103
+#: pcbnew/menubar_pcb_editor.cpp:99
 msgid "Resc&ue"
 msgstr "Zách&rana"
 
-#: pcbnew/menubar_pcb_editor.cpp:104
+#: pcbnew/menubar_pcb_editor.cpp:100
 #, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr "Vyčistit desku a načíst poslední zálohu automaticky uloženou Pcbnew"
 
-#: pcbnew/menubar_pcb_editor.cpp:116
+#: pcbnew/menubar_pcb_editor.cpp:112
 msgid "Graphics..."
 msgstr "Grafika..."
 
-#: pcbnew/menubar_pcb_editor.cpp:116
+#: pcbnew/menubar_pcb_editor.cpp:112
 msgid "Import 2D drawing file"
 msgstr "Importovat soubor 2D kresby"
 
-#: pcbnew/menubar_pcb_editor.cpp:121
+#: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Non-KiCad Board File..."
 msgstr "Soubor desky jiné než KiCad..."
 
-#: pcbnew/menubar_pcb_editor.cpp:122
+#: pcbnew/menubar_pcb_editor.cpp:118
 msgid "Import board file from other applications"
 msgstr "Importovat soubor desky z jiných aplikací"
 
-#: pcbnew/menubar_pcb_editor.cpp:136
+#: pcbnew/menubar_pcb_editor.cpp:132
 msgid "GenCAD..."
 msgstr "GenCAD..."
 
-#: pcbnew/menubar_pcb_editor.cpp:136
+#: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export GenCAD board representation"
 msgstr "GenCAD export prezentace desky"
 
-#: pcbnew/menubar_pcb_editor.cpp:138
+#: pcbnew/menubar_pcb_editor.cpp:134
 msgid "VRML..."
 msgstr "VRML..."
 
-#: pcbnew/menubar_pcb_editor.cpp:138
+#: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export VRML 3D board representation"
 msgstr "VRML 3D export prezentace desky"
 
-#: pcbnew/menubar_pcb_editor.cpp:140
+#: pcbnew/menubar_pcb_editor.cpp:136
 msgid "IDFv3..."
 msgstr "IDFv3..."
 
-#: pcbnew/menubar_pcb_editor.cpp:140
+#: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export IDF 3D board representation"
 msgstr "IDF 3D export prezentace desky"
 
-#: pcbnew/menubar_pcb_editor.cpp:142
+#: pcbnew/menubar_pcb_editor.cpp:138
 msgid "STEP..."
 msgstr "STEP..."
 
-#: pcbnew/menubar_pcb_editor.cpp:142
+#: pcbnew/menubar_pcb_editor.cpp:138
 msgid "Export STEP 3D board representation"
 msgstr "STEP 3D export prezentace desky"
 
-#: pcbnew/menubar_pcb_editor.cpp:144
+#: pcbnew/menubar_pcb_editor.cpp:140
 msgid "SVG..."
 msgstr "SVG..."
 
-#: pcbnew/menubar_pcb_editor.cpp:144
+#: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Export SVG board representation"
 msgstr "SVG export prezentace desky"
 
-#: pcbnew/menubar_pcb_editor.cpp:146
+#: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Footprint Association (.cmp) File..."
 msgstr "Soubor přiřazení pouzder (.cmp)..."
 
-#: pcbnew/menubar_pcb_editor.cpp:147
+#: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr "Export souboru přiřazení pouzder (*.cmp) pro zpětnou anotaci schématu"
 
-#: pcbnew/menubar_pcb_editor.cpp:149
+#: pcbnew/menubar_pcb_editor.cpp:145
 msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
-#: pcbnew/menubar_pcb_editor.cpp:153
+#: pcbnew/menubar_pcb_editor.cpp:149
 #, fuzzy
 msgid "Export Footprints to Library..."
 msgstr "Aktualizovat pouzdra z knihovny..."
 
-#: pcbnew/menubar_pcb_editor.cpp:154
+#: pcbnew/menubar_pcb_editor.cpp:150
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
@@ -29037,12 +29183,12 @@ msgstr ""
 "Přidat pouzdra použité nadesce do existující knihovny pouzder\n"
 "(neodstraní další pouzdra z této knihovny)"
 
-#: pcbnew/menubar_pcb_editor.cpp:158
+#: pcbnew/menubar_pcb_editor.cpp:154
 #, fuzzy
 msgid "Export Footprints to New Library..."
 msgstr "Aktualizovat pouzdra z knihovny..."
 
-#: pcbnew/menubar_pcb_editor.cpp:159
+#: pcbnew/menubar_pcb_editor.cpp:155
 #, fuzzy
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
@@ -29051,37 +29197,37 @@ msgstr ""
 "Archivovat všechna pouzdra do nové knihovny\n"
 "(pokud knihovna existuje, bude nahrazena)"
 
-#: pcbnew/menubar_pcb_editor.cpp:168
+#: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
 msgstr "Výstupy pro výrobu"
 
-#: pcbnew/menubar_pcb_editor.cpp:328
+#: pcbnew/menubar_pcb_editor.cpp:324
 msgid "Auto-Place Footprints"
 msgstr "Automatické umístění pouzdra"
 
-#: pcbnew/menubar_pcb_editor.cpp:409
+#: pcbnew/menubar_pcb_editor.cpp:405
 msgid "External Plugins"
 msgstr "Externí pluginy"
 
-#: pcbnew/menubar_pcb_editor.cpp:412
+#: pcbnew/menubar_pcb_editor.cpp:408
 msgid "Refresh Plugins"
 msgstr "Obnovit zásuvné moduly"
 
-#: pcbnew/menubar_pcb_editor.cpp:413
+#: pcbnew/menubar_pcb_editor.cpp:409
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr "Znovu načíst všechny pluginy pythonu a aktualizovat nabídky pluginů"
 
-#: pcbnew/menubar_pcb_editor.cpp:417
+#: pcbnew/menubar_pcb_editor.cpp:413
 #, fuzzy
 msgid "Reveal Plugin Folder in Finder"
 msgstr "Otevřít adresář projektu Průzkumníku souborů"
 
-#: pcbnew/menubar_pcb_editor.cpp:418
+#: pcbnew/menubar_pcb_editor.cpp:414
 #, fuzzy
 msgid "Reveals the plugins folder in a Finder window"
 msgstr "Otevřít adresář projektu Průzkumníku souborů"
 
-#: pcbnew/menubar_pcb_editor.cpp:459
+#: pcbnew/menubar_pcb_editor.cpp:455
 msgid "Ro&ute"
 msgstr "Pro&pojit"
 
@@ -29185,151 +29331,151 @@ msgstr "Na desce"
 msgid "In Package"
 msgstr "V pouzdře"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:145
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:140
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
 msgstr "Nelze přidat %s (není přiřazeno pouzdro)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:157
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:152
 #, c-format
 msgid "Cannot add %s (footprint \"%s\" not found)."
 msgstr "Nelze přidat %s (pouzdro \"%s\" nenalezeno)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:165
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:160
 #, c-format
 msgid "Add %s (footprint \"%s\")."
 msgstr "Přidat %s (pouzdro \"%s\")."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:208
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:203
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "Nelze aktualizovat %s (nepřiřazeno pouzdro)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:220
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:215
 #, c-format
 msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Nelze aktualizovat %s (pouzdro \"%s\" nenalezeno)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:228
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:223
 #, c-format
 msgid "Change %s footprint from \"%s\" to \"%s\"."
 msgstr "Změnit %s pouzdro z \"%s\" na \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:263
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:258
 #, fuzzy, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Změna %s reference na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:278
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
 msgid "Change %s value from %s to %s."
 msgstr "Změna %s hodnoty z %s na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:297
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:292
 #, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "Aktualizovat přiřazení symbolu %s z %s na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:312
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:307
 #, c-format
 msgid "Update %s properties."
 msgstr "Aktualizovat %s vlastnosti."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:331
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:326
 #, c-format
 msgid "Setting %s 'exclude from BOM' fabrication attribute."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:337
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:332
 #, c-format
 msgid "Removing %s 'exclude from BOM' fabrication attribute."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:404
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:399
 #, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Odpojit %s vývod %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:412
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:407
 #, fuzzy, c-format
 msgid "No net for symbol %s pin %s."
 msgstr "Žádná síť pro součástku %s vývod %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:462
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:457
 #, c-format
 msgid "Add net %s."
 msgstr "Přidat síť %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:470
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:465
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Znovu připojte %s pin %s z %s na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:478
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:473
 #, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Připojit %s pin %s na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:550
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:545
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Přepojit prokov z %s na %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:571
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:566
 #, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Prokov připojený k neznámé síti (%s)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:610
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:605
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "Znovu připojte zónu mědi od %s do %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:631
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:626
 #, c-format
 msgid "Copper zone (%s) has no pads connected."
 msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:691
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:686
 #, c-format
 msgid "Remove single pad net %s."
 msgstr "Smazat nepřipojené plošky sítě \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:753
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:748
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s ploška %s nenalezena v %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:804
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:799
 #, fuzzy, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Zpracování komponenty \"%s:%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:871
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:866
 #, fuzzy, c-format
 msgid "Multiple footprints found for \"%s\"."
 msgstr "Nalezeno více pouzder pro \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:902
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:897
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Nelze odstranit nepoužité pouzdro %s (uzamčeno)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:910
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:905
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "Odstranění nepoužitého pouzdra %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:939
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:934
 #, c-format
 msgid "Remove unused net \"%s\"."
 msgstr "Odstranit nepoužitou síť \"%s\"."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:946
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:941
 msgid "Update netlist"
 msgstr "Aktualizovat netlist"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:970
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:966
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Celkem varování: %d, chyb: %d."
@@ -31296,17 +31442,17 @@ msgstr "Reference '%s' nenalezena."
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "U reference drátové propojky chybí prvky vrstev \"%s\""
 
-#: pcbnew/swig/pcbnew_action_plugins.cpp:67
+#: pcbnew/swig/pcbnew_action_plugins.cpp:68
 msgid "Exception on python action plugin code"
 msgstr "Výjimka v kódu pluginů pro akce Python"
 
-#: pcbnew/swig/pcbnew_action_plugins.cpp:79
+#: pcbnew/swig/pcbnew_action_plugins.cpp:80
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:82
 #, c-format
 msgid "Method \"%s\" not found, or not callable"
 msgstr "Metoda \"%s\" nebyla nalezena nebo nelze zavolat"
 
-#: pcbnew/swig/pcbnew_action_plugins.cpp:80
+#: pcbnew/swig/pcbnew_action_plugins.cpp:81
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:83
 msgid "Unknown Method"
 msgstr "Neznámá metoda"
@@ -31661,7 +31807,7 @@ msgstr "Táhnout obrys segmentu"
 msgid "Select Via Size"
 msgstr "Vybrat velikost prokovu"
 
-#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1468
+#: pcbnew/tools/drawing_tool.cpp:269 pcbnew/tools/drawing_tool.cpp:1505
 #, fuzzy
 msgid "Draw a line segment"
 msgstr "Táhnout obrys segmentu"
@@ -31691,29 +31837,29 @@ msgstr "Kreslit čáru"
 msgid "Draw a dimension"
 msgstr "Nakreslit rozměr"
 
-#: pcbnew/tools/drawing_tool.cpp:1028
+#: pcbnew/tools/drawing_tool.cpp:1065
 #, fuzzy
 msgid "No graphic items found in file to import"
 msgstr "Zobrazit pouze obrys grafických prvků"
 
-#: pcbnew/tools/drawing_tool.cpp:1078 pcbnew/tools/drawing_tool.cpp:1149
+#: pcbnew/tools/drawing_tool.cpp:1115 pcbnew/tools/drawing_tool.cpp:1186
 msgid "Place a DXF_SVG drawing"
 msgstr "Umístit DXF_SVG kresby"
 
-#: pcbnew/tools/drawing_tool.cpp:1215
+#: pcbnew/tools/drawing_tool.cpp:1252
 #, fuzzy
 msgid "Move the footprint reference anchor"
 msgstr "Umístit ukotvení reference pouzdra"
 
-#: pcbnew/tools/drawing_tool.cpp:1902
+#: pcbnew/tools/drawing_tool.cpp:1939
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Protínající se polygony nejsou povoleny"
 
-#: pcbnew/tools/drawing_tool.cpp:2356
+#: pcbnew/tools/drawing_tool.cpp:2393
 msgid "Via location violates DRC."
 msgstr "Poloha prokovu porušuje DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:2459
+#: pcbnew/tools/drawing_tool.cpp:2496
 msgid "Place via"
 msgstr "Umístit prokov"
 
@@ -33389,15 +33535,15 @@ msgstr "Protínající se polygony nejsou povoleny."
 msgid "Drag a corner"
 msgstr "Táhnout roh"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2030
+#: pcbnew/tools/pcb_point_editor.cpp:2069
 msgid "Add a zone corner"
 msgstr "Přidat roh zóny"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2068
+#: pcbnew/tools/pcb_point_editor.cpp:2107
 msgid "Split segment"
 msgstr "Rozdělit segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2139
+#: pcbnew/tools/pcb_point_editor.cpp:2178
 msgid "Remove a zone/polygon corner"
 msgstr "Smazat roh zóny/mnohoúhelníku"
 
