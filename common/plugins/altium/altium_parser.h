@@ -47,6 +47,7 @@ class ALTIUM_PARSER
 {
 public:
     ALTIUM_PARSER( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
     ~ALTIUM_PARSER() = default;
 
     template <typename Type>

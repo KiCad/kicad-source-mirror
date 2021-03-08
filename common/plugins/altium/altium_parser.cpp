@@ -27,7 +27,6 @@
 #include <ki_exception.h>
 #include <sstream>
 #include <utf.h>
-#include <wx/translation.h>
 #include <wx/wx.h>
 
 
@@ -78,6 +77,16 @@ ALTIUM_PARSER::ALTIUM_PARSER(
 }
 
 
+ALTIUM_PARSER::ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize )
+{
+    m_subrecord_end = nullptr;
+    m_size = aSize;
+    m_error = false;
+    m_content = std::move( aContent );
+    m_pos = m_content.get();
+}
+
+
 std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
 {
     std::map<wxString, wxString> kv;
@@ -89,17 +98,23 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         return kv;
     }
 
+    if( length == 0 )
+    {
+        return kv;
+    }
+
     // There is one case by kliment where Board6 ends with "|NEARDISTANCE=1000mi".
     // Both the 'l' and the null-byte are missing, which looks like Altium swallowed two bytes.
-    if( m_pos[length - 1] != '\0' )
+    bool hasNullByte = m_pos[length - 1] == '\0';
+    if( !hasNullByte )
     {
         wxLogError( "For Altium import, we assumes a null byte at the end of a list of properties. "
                     "Because this is missing, imported data might be malformed or missing." );
     }
 
-    //we use std::string because std::string can handle NULL-bytes
-    //wxString would end the string at the first NULL-byte
-    std::string str = std::string( m_pos, length - 1 );
+    // we use std::string because std::string can handle NULL-bytes
+    // wxString would end the string at the first NULL-byte
+    std::string str = std::string( m_pos, length - ( hasNullByte ? 1 : 0 ) );
     m_pos += length;
 
     std::size_t token_end = 0;
@@ -107,18 +122,28 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
     {
         std::size_t token_start = str.find( '|', token_end );
         std::size_t token_equal = str.find( '=', token_start );
-        token_end               = str.find( '|', token_equal );
+        token_end = str.find( '|', token_start + 1 );
+
+        if( token_equal >= token_end )
+        {
+            continue; // this looks like an error: skip the entry. Also matches on std::string::npos
+        }
+
+        if( token_end == std::string::npos )
+        {
+            token_end = str.size() + 1; // this is the correct offset
+        }
 
         std::string keyS   = str.substr( token_start + 1, token_equal - token_start - 1 );
         std::string valueS = str.substr( token_equal + 1, token_end - token_equal - 1 );
 
-        //convert the strings to wxStrings, since we use them everywhere
-        //value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
+        // convert the strings to wxStrings, since we use them everywhere
+        // value can have non-ASCII characters, so we convert them from LATIN1/ISO8859-1
         wxString key( keyS.c_str(), wxConvISO8859_1 );
         wxString value( valueS.c_str(), wxConvISO8859_1 );
 
         // Altium stores keys either in Upper, or in CamelCase. Lets unify it.
-        kv.insert( { key.Trim().MakeUpper(), value.Trim() } );
+        kv.insert( { key.Trim( false ).Trim( true ).MakeUpper(), value.Trim() } );
     }
 
     return kv;

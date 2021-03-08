@@ -215,4 +215,89 @@ BOOST_AUTO_TEST_CASE( PropertiesReadKicadUnit )
     }
 }
 
+struct READ_PROPERTIES_CASE
+{
+    std::string                  input;
+    std::map<wxString, wxString> exp_result;
+};
+
+/**
+ * A list of valid test strings and the expected result map
+ */
+static const std::vector<READ_PROPERTIES_CASE> read_properties = {
+    // Empty
+    { "", {} },
+    { "\0", {} },
+    { "|", {} },
+    { "|\0", {} },
+    { "||", {} },
+    { "||\0", {} },
+    // Empty key-value pair
+    { "|=", { { "", "" } } },
+    { "|=\0", { { "", "" } } },
+    { "|  =  ", { { "", "" } } },
+    { "|  =  \0", { { "", "" } } },
+    // Single key-value pair
+    { "|A=\0", { { "A", "" } } },
+    { "|A=B", { { "A", "B" } } },
+    { "|A=B\0", { { "A", "B" } } },
+    { "|A=B|", { { "A", "B" } } },
+    { "|A=B|\0", { { "A", "B" } } },
+    // Multiple key-value pairs
+    { "|A=B|C=D|\0", { { "A", "B" }, { "C", "D" } } },
+    // Same key multiple times
+    { "|A=B|A=C\0", { { "A", "B" } } },
+    { "|A=B|A=C|A=D|A=E|A=F\0", { { "A", "B" } } },
+    // Always upper case key
+    { "|a=b\0", { { "A", "b" } } },
+    { "|abc123=b\0", { { "ABC123", "b" } } },
+    // Trim whitespaces, TODO: correct?
+    { "|A=  B\0", { { "A", "  B" } } },
+    { "|A=B  \0", { { "A", "B" } } },
+    { "|  A=B\0", { { "A", "B" } } },
+    { "|A  =B\0", { { "A", "B" } } },
+    { "|A=\nB\n\0", { { "A", "\nB" } } },
+    // Escaping and other special cases, TODO: extend
+    //{ "|A=||\0", {{"A", "|"}} },
+    { "|A==\0", { { "A", "=" } } },
+    { "|A=a\na\0", { { "A", "a\na" } } },
+    { "|A=a\ta\0", { { "A", "a\ta" } } },
+    // Encoding, TODO: extend
+    // Correct reading errors
+    { "|A|B=C\0", { { "B", "C" } } },
+    { "|A=B|C\0", { { "A", "B" } } },
+};
+
+/**
+ * Test conversation from binary to properties
+ */
+BOOST_AUTO_TEST_CASE( ReadProperties )
+{
+    for( const auto& c : read_properties )
+    {
+        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s'" ), c.input ) )
+        {
+            size_t                  size = 4 + c.input.size();
+            std::unique_ptr<char[]> content = std::make_unique<char[]>( size );
+
+            *content.get() = c.input.size();
+            std::memcpy( content.get() + 4, c.input.c_str(), c.input.size() );
+
+            ALTIUM_PARSER parser( content, size );
+
+            std::map<wxString, wxString> result = parser.ReadProperties();
+
+            BOOST_CHECK_EQUAL( parser.HasParsingError(), false );
+            BOOST_CHECK_EQUAL( parser.GetRemainingBytes(), 0 );
+
+            BOOST_CHECK_EQUAL( result.size(), c.exp_result.size() );
+            for( const auto& kv : c.exp_result )
+            {
+                BOOST_CHECK_EQUAL( 1, result.count( kv.first ) );
+                BOOST_CHECK_EQUAL( result.at( kv.first ), kv.second );
+            }
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
