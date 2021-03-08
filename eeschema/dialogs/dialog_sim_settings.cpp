@@ -322,8 +322,11 @@ int DIALOG_SIM_SETTINGS::ShowModal()
 
 void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 {
-    wxString              prevSelection = aSource->GetCount() ?
-        aSource->GetString( aSource->GetSelection() ) : wxEmptyString;
+    wxString prevSelection;
+
+    if( aSource->GetCount() )
+        aSource->GetString( aSource->GetSelection() );
+
     std::vector<wxString> sourcesList;
     bool                  enableSrcSelection = true;
 
@@ -336,7 +339,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
         }
 
         std::sort( sourcesList.begin(), sourcesList.end(),
-                [](wxString& a, wxString& b) -> bool 
+                [](wxString& a, wxString& b) -> bool
                 {
                     return a.Len() < b.Len() || b.Cmp( a ) > 0;
                 } );
