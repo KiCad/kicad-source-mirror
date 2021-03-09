@@ -470,7 +470,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
 
-        m_frame->SchematicCleanUp();
+        m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
@@ -843,7 +843,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
     m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
 
-    m_frame->SchematicCleanUp();
+    m_frame->RecalculateConnections( LOCAL_CLEANUP );
     m_frame->TestDanglingEnds();
 
     m_frame->OnModify();

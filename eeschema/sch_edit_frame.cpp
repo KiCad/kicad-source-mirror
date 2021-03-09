@@ -1286,7 +1286,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     }
     else if( aCleanupFlags == GLOBAL_CLEANUP )
     {
-        for( const auto& sheet : list )
+        for( const SCH_SHEET_PATH& sheet : list )
             SchematicCleanUp( sheet.LastScreen() );
     }
 

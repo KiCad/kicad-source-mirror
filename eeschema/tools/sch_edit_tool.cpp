@@ -949,14 +949,11 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             newItem->Move( wxPoint( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
                                     Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
         }
-
     }
 
     newItem->SetFlags( IS_NEW );
     m_frame->AddToScreen( newItem, m_frame->GetScreen() );
     m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, false );
-
-    m_selectionTool->AddItemToSel( newItem );
 
     // Components need to be handled by the move tool.  The move tool will handle schematic
     // cleanup routines
@@ -967,15 +964,19 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     if( !performDrag && newItem->IsConnectable() )
     {
-        EE_SELECTION new_sel = m_selectionTool->GetSelection();
+        EE_SELECTION new_sel;
         new_sel.Add( newItem );
 
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
-        m_frame->SchematicCleanUp();
+
+        m_frame->RecalculateConnections( LOCAL_CLEANUP );
         m_frame->TestDanglingEnds();
     }
 
-    // newItem newItem, now that it has been moved, thus saving new position.
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
+
+    // Save newItem at the new position.
     m_frame->SaveCopyForRepeatItem( newItem );
 
     return 0;

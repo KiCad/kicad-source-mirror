@@ -665,9 +665,10 @@ TOOL_ACTION EE_ACTIONS::hypertextCommand( "eeschema.NavigateTool.hypertextComman
 
 // SCH_LINE_WIRE_BUS_TOOL
 //
-TOOL_ACTION EE_ACTIONS::addNeededJunctions(
-        "eeschema.InteractiveDrawingLineWireBus.addNeededJunctions", AS_ACTIVE, 0, "",
-        _( "Add Junctions to Selection where needed" ), "", nullptr, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::addNeededJunctions( "eeschema.InteractiveDrawingLineWireBus.addNeededJunctions",
+        AS_ACTIVE, 0, "",
+        _( "Add Junctions to Selection where needed" ), "",
+        nullptr, AF_ACTIVATE );
 
 
 const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false };
