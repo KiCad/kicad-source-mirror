@@ -1338,6 +1338,9 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     }
 
     EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
+
+    box.Merge( m_intersheetRefsField.GetBoundingBox() );
+
     box.Normalize();
     return box;
 }
