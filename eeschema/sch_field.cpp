@@ -496,7 +496,7 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             }
 
             menu.AppendSeparator();
-            menu.Append( 999, _( "Back" ) );
+            menu.Append( 999, _( "Back to Previous Selected Sheet" ) );
 
             int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
             void* param = nullptr;
