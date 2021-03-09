@@ -25,7 +25,7 @@
     <tr>
         <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>
         <td></td>
-        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>
+        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>
     </tr>
     <tr>
         <td></td>
@@ -119,6 +119,6 @@
     <tr>
         <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>
         <td></td>
-        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>
+        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>
     </tr>
 </table>
