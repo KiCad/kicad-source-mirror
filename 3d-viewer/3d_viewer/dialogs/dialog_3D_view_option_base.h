@@ -81,7 +81,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxDisableMoveHoles;
 		wxPanel* m_panelRaytracing;
 		wxNotebook* m_notebook2;
-		wxPanel* m_panel4;
+		wxPanel* m_panelRaytracingCfg;
 		wxCheckBox* m_checkBoxRaytracing_proceduralTextures;
 		wxCheckBox* m_checkBoxRaytracing_addFloor;
 		wxCheckBox* m_checkBoxRaytracing_antiAliasing;
@@ -100,7 +100,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrl_NrSamples_Refractions;
 		wxSpinCtrlDouble* m_spinCtrlDouble_SpreadFactor_Refractions;
 		wxSpinCtrl* m_spinCtrlRecursiveLevel_Refractions;
-		wxPanel* m_lightsConfig;
+		wxPanel* m_panelLightsConfig;
 		wxStaticText* m_staticText17;
 		wxColourPickerCtrl* m_colourPickerCameraLight;
 		wxStaticText* m_staticText5;
@@ -156,7 +156,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 810,567 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 810,484 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
 
 };

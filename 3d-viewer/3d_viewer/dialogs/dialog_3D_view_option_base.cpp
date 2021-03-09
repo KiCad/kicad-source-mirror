@@ -28,13 +28,13 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbModelVisibility = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("3D Model Visibility") ), wxVERTICAL );
 
 	m_checkBox3DshapesTH = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D through hole models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesTH, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbModelVisibility->Add( m_checkBox3DshapesTH, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBox3DshapesSMD = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D SMD models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesSMD, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbModelVisibility->Add( m_checkBox3DshapesSMD, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBox3DshapesVirtual = new wxCheckBox( sbModelVisibility->GetStaticBox(), wxID_ANY, _("Show 3D virtual models"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbModelVisibility->Add( m_checkBox3DshapesVirtual, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbModelVisibility->Add( m_checkBox3DshapesVirtual, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizeLeft->Add( sbModelVisibility, 0, wxALL|wxEXPAND, 5 );
@@ -43,16 +43,16 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbBoardLayers = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Board Layers") ), wxVERTICAL );
 
 	m_checkBoxSilkscreen = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSilkscreen, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardLayers->Add( m_checkBoxSilkscreen, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxSolderMask = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSolderMask, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardLayers->Add( m_checkBoxSolderMask, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxSolderpaste = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSolderpaste, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardLayers->Add( m_checkBoxSolderpaste, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxAdhesive = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxAdhesive, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbBoardLayers->Add( m_checkBoxAdhesive, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizeLeft->Add( sbBoardLayers, 0, wxALL|wxEXPAND, 5 );
@@ -61,13 +61,13 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbUserLayers = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
 
 	m_checkBoxComments = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbUserLayers->Add( m_checkBoxComments, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbUserLayers->Add( m_checkBoxComments, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxECO = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbUserLayers->Add( m_checkBoxECO, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbUserLayers->Add( m_checkBoxECO, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizeLeft->Add( sbUserLayers, 1, wxALL|wxEXPAND, 5 );
+	bSizeLeft->Add( sbUserLayers, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerDisplayOptions->Add( bSizeLeft, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -79,24 +79,24 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Render Options") ), wxVERTICAL );
 
 	m_checkBoxRealisticMode = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Realistic mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxRealisticMode, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxRealisticMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxBoardBody = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Show board body"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxBoardBody, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxBoardBody, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxAreas = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxAreas, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxAreas, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxSubtractMaskFromSilk, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxSubtractMaskFromSilk, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annulus"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Use bare copper color for unplated copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRenderPlatedPadsAsPlated->SetToolTip( _("Use different colors for plated and unplated copper. (Slow)") );
 
-	sbRenderOptions->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbRenderOptions->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerRight->Add( sbRenderOptions, 0, wxALL|wxEXPAND, 5 );
@@ -139,13 +139,13 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sliderAnimationSpeed = new wxSlider( sbCameraOptions->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sliderAnimationSpeed->SetMinSize( wxSize( 100,-1 ) );
 
-	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbCameraOptions->Add( bSizerSlider, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerRight->Add( sbCameraOptions, 1, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbCameraOptions, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerDisplayOptions->Add( bSizerRight, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -157,10 +157,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_notebook->AddPage( m_panelDspOpt, _("Display Options"), true );
 	m_panelOpenGL = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerOpenGL;
-	bSizerOpenGL = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
+	bSizerOpenGL = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerOpenGLRenderoptions;
 	sbSizerOpenGLRenderoptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("OpenGL Render Options") ), wxVERTICAL );
@@ -172,7 +169,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizerOpenGLRenderoptions->Add( m_checkBoxCuThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer7->Add( sbSizerOpenGLRenderoptions, 0, wxALL|wxEXPAND, 5 );
+	bSizerOpenGL->Add( sbSizerOpenGLRenderoptions, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerOtherOptions;
 	sbSizerOtherOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("Other Options") ), wxVERTICAL );
@@ -199,13 +196,13 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer7->Add( m_staticText231, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_colourPickerSelection = new wxColourPickerCtrl( sbSizerOtherOptions->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
-	fgSizer7->Add( m_colourPickerSelection, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer7->Add( m_colourPickerSelection, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizerOtherOptions->Add( fgSizer7, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizer7->Add( sbSizerOtherOptions, 0, wxALL|wxEXPAND, 5 );
+	bSizerOpenGL->Add( sbSizerOtherOptions, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerWhileMoving;
 	sbSizerWhileMoving = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("While Moving") ), wxVERTICAL );
@@ -223,10 +220,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizerWhileMoving->Add( m_checkBoxDisableMoveHoles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer7->Add( sbSizerWhileMoving, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizerOpenGL->Add( bSizer7, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerOpenGL->Add( sbSizerWhileMoving, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_panelOpenGL->SetSizer( bSizerOpenGL );
@@ -238,12 +232,12 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer14 = new wxBoxSizer( wxVERTICAL );
 
 	m_notebook2 = new wxNotebook( m_panelRaytracing, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_panel4 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelRaytracingCfg = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerRaytracing;
 	bSizerRaytracing = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerRaytracingRenderOptions;
-	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panel4, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
+	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracingCfg, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
 
 	sbSizerRaytracingRenderOptions->SetMinSize( wxSize( -1,32 ) );
 	wxBoxSizer* bSizer16;
@@ -278,15 +272,15 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	m_staticText19 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Number of Samples"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
-	fgSizer111->Add( m_staticText19, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer111->Add( m_staticText19, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText201 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Spread Factor %"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText201->Wrap( -1 );
-	fgSizer111->Add( m_staticText201, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer111->Add( m_staticText201, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText211 = new wxStaticText( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Recursion Level"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText211->Wrap( -1 );
-	fgSizer111->Add( m_staticText211, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer111->Add( m_staticText211, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_checkBoxRaytracing_renderShadows = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Shadows:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRaytracing_renderShadows->SetValue(true);
@@ -347,25 +341,22 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer111->Add( m_spinCtrlRecursiveLevel_Refractions, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerRaytracingRenderOptions->Add( fgSizer111, 1, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	sbSizerRaytracingRenderOptions->Add( fgSizer111, 0, wxTOP|wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 
 
-	sbSizerRaytracingRenderOptions->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerRaytracing->Add( sbSizerRaytracingRenderOptions, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
-	bSizerRaytracing->Add( sbSizerRaytracingRenderOptions, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	m_panel4->SetSizer( bSizerRaytracing );
-	m_panel4->Layout();
-	bSizerRaytracing->Fit( m_panel4 );
-	m_notebook2->AddPage( m_panel4, _("Render Options"), true );
-	m_lightsConfig = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelRaytracingCfg->SetSizer( bSizerRaytracing );
+	m_panelRaytracingCfg->Layout();
+	bSizerRaytracing->Fit( m_panelRaytracingCfg );
+	m_notebook2->AddPage( m_panelRaytracingCfg, _("Render Options"), true );
+	m_panelLightsConfig = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerRaytracingLightConfiguration;
-	sbSizerRaytracingLightConfiguration = new wxStaticBoxSizer( new wxStaticBox( m_lightsConfig, wxID_ANY, _("Lights Configuration") ), wxVERTICAL );
+	sbSizerRaytracingLightConfiguration = new wxStaticBoxSizer( new wxStaticBox( m_panelLightsConfig, wxID_ANY, _("Lights Configuration") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -384,7 +375,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer11->Add( 0, 0, 1, 0, 5 );
 
 
-	sbSizerRaytracingLightConfiguration->Add( bSizer11, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerRaytracingLightConfiguration->Add( bSizer11, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
@@ -575,24 +566,24 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizer19->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer19->Add( 0, 0, 0, wxEXPAND, 5 );
 
 	m_buttonLightsResetToDefaults = new wxButton( sbSizerRaytracingLightConfiguration->GetStaticBox(), wxID_ANY, _("Reset to defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer19->Add( m_buttonLightsResetToDefaults, 0, wxALL, 5 );
 
 
-	sbSizerRaytracingLightConfiguration->Add( bSizer19, 1, wxEXPAND|wxALL, 5 );
+	sbSizerRaytracingLightConfiguration->Add( bSizer19, 0, wxALL, 5 );
 
 
-	bSizer17->Add( sbSizerRaytracingLightConfiguration, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer17->Add( sbSizerRaytracingLightConfiguration, 0, wxEXPAND|wxALL, 5 );
 
 
-	m_lightsConfig->SetSizer( bSizer17 );
-	m_lightsConfig->Layout();
-	bSizer17->Fit( m_lightsConfig );
-	m_notebook2->AddPage( m_lightsConfig, _("Lights Configuration"), false );
+	m_panelLightsConfig->SetSizer( bSizer17 );
+	m_panelLightsConfig->Layout();
+	bSizer17->Fit( m_panelLightsConfig );
+	m_notebook2->AddPage( m_panelLightsConfig, _("Lights Configuration"), false );
 
-	bSizer14->Add( m_notebook2, 1, wxEXPAND | wxALL, 5 );
+	bSizer14->Add( m_notebook2, 0, wxEXPAND | wxALL, 5 );
 
 
 	m_panelRaytracing->SetSizer( bSizer14 );
