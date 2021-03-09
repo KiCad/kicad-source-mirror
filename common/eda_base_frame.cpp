@@ -963,7 +963,8 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
             aFileName.GetFullName()
         );
 
-    int response = wxMessageBox( msg, Pgm().App().GetAppName(), wxYES_NO | wxICON_QUESTION, this );
+    int response = wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxYES_NO | wxICON_QUESTION,
+                                 this );
 
     // Make a backup of the current file, delete the file, and rename the auto save file to
     // the file name.
@@ -972,7 +973,7 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
         if( !wxRenameFile( autoSaveFileName.GetFullPath(), aFileName.GetFullPath() ) )
         {
             wxMessageBox( _( "The auto save file could not be renamed to the board file name." ),
-                          Pgm().App().GetAppName(), wxOK | wxICON_EXCLAMATION, this );
+                          Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION, this );
         }
     }
     else

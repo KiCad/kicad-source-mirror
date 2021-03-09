@@ -408,6 +408,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     Kiway.SetTop( frame );
 
     App().SetTopWindow( frame );      // wxApp gets a face.
+    App().SetAppDisplayName( frame->GetAboutTitle() );
 
     // Allocate a slice of time to show the frame and update wxWidgets widgets
     // (especially setting valid sizes) after creating frame and before calling
