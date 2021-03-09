@@ -453,6 +453,8 @@ wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 {
+    constexpr int START_ID = 1;
+
     static wxString back = "HYPERTEXT_BACK";
     wxMenu          menu;
     SCH_TEXT*       label = dynamic_cast<SCH_TEXT*>( m_parent );
@@ -490,15 +492,15 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 
             for( int i = 0; i < (int) pageListCopy.size(); ++i )
             {
-                menu.Append( i, wxString::Format( _( "Go to Page %s (%s)" ),
-                                                  pageListCopy[i],
-                                                  sheetNames[ pageListCopy[i] ] ) );
+                menu.Append( i + START_ID, wxString::Format( _( "Go to Page %s (%s)" ),
+                                                             pageListCopy[i],
+                                                             sheetNames[ pageListCopy[i] ] ) );
             }
 
             menu.AppendSeparator();
             menu.Append( 999, _( "Back to Previous Selected Sheet" ) );
 
-            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
+            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu ) - START_ID;
             void* param = nullptr;
 
             if( sel >= 0 && sel < (int) pageListCopy.size() )
