@@ -426,6 +426,8 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
         aDest.SetEffects( aSrc );
         aDest.SetVisible( visible );
     }
+
+    aDest.SetLocked( aSrc.IsLocked() );
 }
 
 
@@ -514,6 +516,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         {
             pad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
             pad->SetPinFunction( oldPad->GetPinFunction() );
+            pad->SetLocked( oldPad->IsLocked() );
         }
 
         pad->SetNetCode( oldPad ? oldPad->GetNetCode() : NETINFO_LIST::UNCONNECTED );
