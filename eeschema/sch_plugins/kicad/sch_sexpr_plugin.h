@@ -147,10 +147,9 @@ private:
 
 protected:
     int                  m_version;    ///< Version of file being loaded.
-    int                  m_fieldId;    ///< Non-mandatory schematic field ID counter.
+    int                  m_nextFreeFieldId;
 
-    /** For throwing exceptions or errors on partial schematic loads. */
-    wxString             m_error;
+    wxString             m_error;      ///< For throwing exceptions or errors on partial loads.
 
     wxString             m_path;       ///< Root project path for loading child sheets.
     std::stack<wxString> m_currentPath;///< Stack to maintain nested sheet paths

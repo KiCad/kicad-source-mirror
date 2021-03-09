@@ -378,13 +378,13 @@ SCH_SEXPR_PLUGIN::~SCH_SEXPR_PLUGIN()
 
 void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aProperties )
 {
-    m_version   = 0;
-    m_rootSheet = nullptr;
-    m_props     = aProperties;
-    m_schematic = aSchematic;
-    m_cache     = nullptr;
-    m_out       = nullptr;
-    m_fieldId   = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
+    m_version         = 0;
+    m_rootSheet       = nullptr;
+    m_props           = aProperties;
+    m_schematic       = aSchematic;
+    m_cache           = nullptr;
+    m_out             = nullptr;
+    m_nextFreeFieldId = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
 }
 
 SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
@@ -957,7 +957,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aShee
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSymbol->m_Uuid.AsString() ) );
 
-    m_fieldId = MANDATORY_FIELDS;
+    m_nextFreeFieldId = MANDATORY_FIELDS;
 
     for( SCH_FIELD& field : aSymbol->GetFields() )
     {
@@ -1006,8 +1006,12 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 
     if( aField->GetId() == -1 /* undefined ID */ )
     {
-        aField->SetId( m_fieldId );
-        m_fieldId += 1;
+        aField->SetId( m_nextFreeFieldId );
+        m_nextFreeFieldId += 1;
+    }
+    else if( aField->GetId() >= m_nextFreeFieldId )
+    {
+        m_nextFreeFieldId = aField->GetId() + 1;
     }
 
     m_out->Print( aNestLevel, "(property %s %s (id %d) (at %s %s %s)",
@@ -1106,7 +1110,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aSheet->m_Uuid.AsString() ) );
 
-    m_fieldId = SHEET_MANDATORY_FIELDS;
+    m_nextFreeFieldId = SHEET_MANDATORY_FIELDS;
 
     for( SCH_FIELD& field : aSheet->GetFields() )
     {
