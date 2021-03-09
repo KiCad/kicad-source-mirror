@@ -594,7 +594,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     // Display the gerber filename
     if( gerber == NULL )
     {
-        SetTitle( "GerbView" );
+        SetTitle( _("Gerber Viewer") );
 
         SetStatusText( wxEmptyString, 0 );
 
