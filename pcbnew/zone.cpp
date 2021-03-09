@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     SetDoNotAllowPads( true );          // has meaning only if m_isRuleArea == true
     SetDoNotAllowFootprints( false );   // has meaning only if m_isRuleArea == true
     m_cornerRadius = 0;
-    SetLocalFlags( 0 );                 // flags tempoarry used in zone calculations
+    SetLocalFlags( 0 );                 // flags temporary used in zone calculations
     m_Poly = new SHAPE_POLY_SET();      // Outlines
     m_fillVersion = 5;                  // set the "old" way to build filled polygon areas (< 6.0.x)
     m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
@@ -1072,9 +1072,11 @@ void ZONE::HatchBorder()
                 int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
                 int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
 
-                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
+                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y,
+                                                      x1, y1 ) );
 
-                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
+                m_borderHatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y,
+                                                      x2, y2 ) );
             }
         }
     }
@@ -1282,11 +1284,6 @@ double ZONE::CalculateFilledArea()
 }
 
 
-/**
- * Function TransformSmoothedOutlineToPolygon
- * Convert the smoothed outline to polygons (optionally inflated by \a aClearance) and copy them
- * into \a aCornerBuffer.
- */
 void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
                                               SHAPE_POLY_SET* aBoardOutline ) const
 {
@@ -1310,6 +1307,20 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
+}
+
+
+bool ZONE::IsKeepout() const
+{
+    return m_doNotAllowCopperPour || m_doNotAllowVias || m_doNotAllowTracks || m_doNotAllowPads ||
+           m_doNotAllowFootprints;
+}
+
+
+bool ZONE::KeepoutAll() const
+{
+    return m_doNotAllowCopperPour && m_doNotAllowVias && m_doNotAllowTracks && m_doNotAllowPads &&
+           m_doNotAllowFootprints;
 }
 
 
