@@ -67,6 +67,10 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrlDouble* m_canvasScaleCtrl;
 		wxCheckBox* m_canvasScaleAuto;
 		wxCheckBox* m_checkBoxIconsInMenus;
+		wxStaticText* m_stIconTheme;
+		wxRadioButton* m_rbIconThemeLight;
+		wxRadioButton* m_rbIconThemeDark;
+		wxRadioButton* m_rbIconThemeAuto;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;
 		wxCheckBox* m_cbBackupEnabled;

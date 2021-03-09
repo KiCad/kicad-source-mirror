@@ -68,6 +68,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "appearance.icon_scale",
             &m_Appearance.icon_scale, 0 ) );
 
+    m_params.emplace_back( new PARAM_ENUM<ICON_THEME>( "appearance.icon_theme",
+            &m_Appearance.icon_theme, ICON_THEME::AUTO, ICON_THEME::LIGHT, ICON_THEME::AUTO ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.use_icons_in_menus",
             &m_Appearance.use_icons_in_menus, defaultUseIconsInMenus ) );
 

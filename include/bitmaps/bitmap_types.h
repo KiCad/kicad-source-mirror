@@ -33,10 +33,13 @@ class wxBitmap;     // only to define wxBitmap
 class EDA_DRAW_FRAME;
 class wxWindow;
 struct BITMAP_OPAQUE;
+class BITMAP_STORE;
 
 enum class BITMAPS : unsigned int;
 
 #include <wx/gdicmn.h>  // wxBitmapType
+
+BITMAP_STORE* GetBitmapStore();
 
 /**
  * Construct a wxBitmap from an image identifier
@@ -50,6 +53,11 @@ wxBitmap KiBitmap( BITMAPS aBitmap );
  */
 wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap );
 
+/**
+ * Wipes out the scaled bitmap cache so that the icon theme can be changed.
+ * TODO: move scaling system into BITMAP_STORE so this global doesn't need to exist
+ */
+void ClearScaledBitmapCache();
 
 /**
  * Construct a wxBitmap from a memory record, scaling it if device DPI demands it.

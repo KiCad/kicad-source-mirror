@@ -85,7 +85,12 @@ namespace std {
 }
 
 
-BITMAP_STORE* GetStore()
+static std::unordered_map<SCALED_BITMAP_ID, wxBitmap> s_ScaledBitmapCache;
+
+static std::mutex s_BitmapCacheMutex;
+
+
+BITMAP_STORE* GetBitmapStore()
 {
     if( !s_BitmapStore )
     {
@@ -99,7 +104,7 @@ BITMAP_STORE* GetStore()
 
 wxBitmap KiBitmap( BITMAPS aBitmap )
 {
-    return GetStore()->GetBitmap( aBitmap );
+    return GetBitmapStore()->GetBitmap( aBitmap );
 }
 
 
@@ -143,24 +148,29 @@ static int get_scale_factor( wxWindow* aWindow )
 wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight )
 {
     // Bitmap conversions are cached because they can be slow.
-    static std::unordered_map<SCALED_BITMAP_ID, wxBitmap> bitmap_cache;
-    static std::mutex bitmap_cache_mutex;
     const int scale = get_scale_factor( aWindow );
 
     SCALED_BITMAP_ID id = { static_cast<BITMAPS>( aBitmap ), scale };
 
-    std::lock_guard<std::mutex> guard( bitmap_cache_mutex );
-    auto it = bitmap_cache.find( id );
+    std::lock_guard<std::mutex> guard( s_BitmapCacheMutex );
+    auto it = s_ScaledBitmapCache.find( id );
 
-    if( it != bitmap_cache.end() )
+    if( it != s_ScaledBitmapCache.end() )
     {
         return it->second;
     }
     else
     {
-        wxBitmap bitmap = GetStore()->GetBitmapScaled( aBitmap, scale, aHeight );
-        return bitmap_cache.emplace( id, bitmap ).first->second;
+        wxBitmap bitmap = GetBitmapStore()->GetBitmapScaled( aBitmap, scale, aHeight );
+        return s_ScaledBitmapCache.emplace( id, bitmap ).first->second;
     }
+}
+
+
+void ClearScaledBitmapCache()
+{
+    std::lock_guard<std::mutex> guard( s_BitmapCacheMutex );
+    s_ScaledBitmapCache.clear();
 }
 
 
@@ -168,7 +178,7 @@ wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 {
     const int scale = get_scale_factor( aWindow );
 
-    if( scale == 4)
+    if( scale == 4 )
     {
         return wxBitmap( aBitmap );
     }
@@ -185,7 +195,7 @@ wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 
 wxBitmap* KiBitmapNew( BITMAPS aBitmap )
 {
-    wxBitmap* bitmap = new wxBitmap( GetStore()->GetBitmap( aBitmap ) );
+    wxBitmap* bitmap = new wxBitmap( GetBitmapStore()->GetBitmap( aBitmap ) );
 
     return bitmap;
 }

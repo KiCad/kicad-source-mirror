@@ -284,6 +284,11 @@ public:
      */
     bool KiRealize();
 
+    /**
+     * Reload all the bitmaps for the tools (e.g. when switching icon themes)
+     */
+    void RefreshBitmaps();
+
     static constexpr bool TOGGLE = true;
     static constexpr bool CANCEL = true;
 

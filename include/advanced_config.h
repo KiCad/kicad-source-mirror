@@ -160,6 +160,11 @@ public:
      */
     bool m_DrawBoundingBoxes;
 
+    /**
+     * Enable detection of dark mode and automatic switch to dark-mode icon theme
+     */
+    bool m_AllowDarkMode;
+
 private:
     ADVANCED_CFG();
 

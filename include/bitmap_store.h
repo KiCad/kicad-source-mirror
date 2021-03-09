@@ -26,6 +26,7 @@
 #include <bitmaps/bitmap_info.h>
 
 class ASSET_ARCHIVE;
+class wxImage;
 
 
 namespace std
@@ -72,8 +73,11 @@ public:
     /**
      * Notifies the store that the icon theme has been changed by the user, so caches must be
      * invalidated.
+     * @return true if the new theme is different than what was previously in use
      */
-    void ThemeChanged();
+    bool ThemeChanged();
+
+    bool IsDarkTheme() const { return m_theme == wxT( "dark" ); }
 
 private:
 

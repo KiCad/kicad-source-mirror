@@ -35,15 +35,23 @@ enum class MOUSE_DRAG_ACTION
     NONE
 };
 
+enum class ICON_THEME
+{
+    LIGHT,
+    DARK,
+    AUTO
+};
+
 
 class COMMON_SETTINGS : public JSON_SETTINGS
 {
 public:
     struct APPEARANCE
     {
-        double canvas_scale;
-        int icon_scale;
-        bool use_icons_in_menus;
+        double     canvas_scale;
+        int        icon_scale;
+        ICON_THEME icon_theme;
+        bool       use_icons_in_menus;
     };
 
     struct AUTO_BACKUP

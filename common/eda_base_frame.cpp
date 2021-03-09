@@ -24,6 +24,7 @@
  */
 
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <dialog_shim.h>
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
@@ -41,6 +42,7 @@
 #include <project/project_local_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
+#include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
@@ -53,6 +55,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 
 #include <functional>
 
@@ -444,6 +447,19 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     {
         int historySize = settings->m_System.file_history_size;
         m_fileHistory->SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+    }
+
+    if( GetBitmapStore()->ThemeChanged() )
+    {
+        ClearScaledBitmapCache();
+
+        wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
+
+        for( size_t i = 0; i < panes.GetCount(); ++i )
+        {
+            if( ACTION_TOOLBAR* toolbar = dynamic_cast<ACTION_TOOLBAR*>( panes[i].window ) )
+                toolbar->RefreshBitmaps();
+        }
     }
 
     if( GetMenuBar() )

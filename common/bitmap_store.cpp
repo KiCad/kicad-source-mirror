@@ -23,12 +23,15 @@
 #include <wx/mstream.h>
 #include <wx/stdpaths.h>
 
+#include <advanced_config.h>
 #include <asset_archive.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <bitmaps/bitmap_info.h>
 #include <kiplatform/ui.h>
 #include <paths.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 
 
 /// A question-mark icon shown when we can't find a given bitmap in the archive
@@ -102,9 +105,9 @@ BITMAP_STORE::BITMAP_STORE()
 
     m_archive = std::make_unique<ASSET_ARCHIVE>( path.GetFullPath() );
 
-    m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" );
-
     buildBitmapInfoCache();
+
+    ThemeChanged();
 }
 
 
@@ -158,9 +161,31 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 }
 
 
-void BITMAP_STORE::ThemeChanged()
+bool BITMAP_STORE::ThemeChanged()
 {
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    wxString oldTheme = m_theme;
+
+    if( ADVANCED_CFG::GetCfg().m_AllowDarkMode )
+    {
+        switch( settings->m_Appearance.icon_theme )
+        {
+        case ICON_THEME::LIGHT:     m_theme = wxT( "light" );   break;
+        case ICON_THEME::DARK:      m_theme = wxT( "dark" );    break;
+        case ICON_THEME::AUTO:
+            m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" );
+            break;
+        }
+    }
+    else
+    {
+        m_theme = wxT( "light" );
+    }
+
     m_bitmapNameCache.clear();
+
+    return !oldTheme.IsSameAs( m_theme );
 }
 
 

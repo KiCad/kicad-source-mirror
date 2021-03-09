@@ -23,6 +23,7 @@
  */
 
 #include <algorithm>
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 #include <functional>
@@ -170,14 +171,13 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 {
     m_paletteTimer = new wxTimer( this );
 
-    // Enable this once dark icon switching is available.  Without dark theme icons, this just
-    // makes things (even) harder to see
-#ifdef NOTYET
 #if !wxCHECK_VERSION( 3, 1, 0 )
     // Custom art provider makes dark mode work on wx < 3.1
-    WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
-    SetArtProvider( newArt );
-#endif
+    if( ADVANCED_CFG::GetCfg().m_AllowDarkMode )
+    {
+        WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
+        SetArtProvider( newArt );
+    }
 #endif
 
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
@@ -758,4 +758,20 @@ bool ACTION_TOOLBAR::KiRealize()
 
     Refresh( false );
     return retval;
+}
+
+
+void ACTION_TOOLBAR::RefreshBitmaps()
+{
+    for( const std::pair<int, const TOOL_ACTION*> pair : m_toolActions )
+    {
+        wxAuiToolBarItem* tool = FindTool( pair.first );
+
+        wxBitmap bmp = KiScaledBitmap( pair.second->GetIcon(), GetParent() );
+
+        tool->SetBitmap( bmp );
+        tool->SetDisabledBitmap( bmp.ConvertToDisabled() );
+    }
+
+    Refresh();
 }
