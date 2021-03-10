@@ -155,12 +155,12 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignLabel->Wrap( -1 );
 	m_assignLabel->SetMinSize( wxSize( 120,-1 ) );
 
-	bSizer11->Add( m_assignLabel, 0, wxALL, 5 );
+	bSizer11->Add( m_assignLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_assignNetClassChoices;
 	m_assignNetClass = new wxChoice( sbEdit->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_assignNetClassChoices, 0 );
 	m_assignNetClass->SetSelection( 0 );
-	bSizer11->Add( m_assignNetClass, 1, wxALL, 5 );
+	bSizer11->Add( m_assignNetClass, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbEdit->Add( bSizer11, 0, wxEXPAND, 5 );
