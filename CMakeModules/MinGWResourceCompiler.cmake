@@ -12,7 +12,7 @@ macro(mingw_resource_compiler _NAME)
     dbg_msg("CMAKE_RC_COMPILER: ${CMAKE_RC_COMPILER}")
 
     # Input file.
-    set(_IN "${CMAKE_CURRENT_SOURCE_DIR}/${_NAME}.rc")
+    set(_IN "${CMAKE_SOURCE_DIR}/resources/msw/${_NAME}.rc")
     dbg_msg("_IN: ${_IN}")
 
     # Output file.

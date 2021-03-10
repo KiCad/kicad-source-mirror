@@ -309,7 +309,7 @@ if( MINGW )
     # EESCHEMA_RESOURCES variable is set by the macro.
     mingw_resource_compiler( eeschema )
 else()
-    set( EESCHEMA_RESOURCES eeschema.rc )
+    set( EESCHEMA_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/eeschema.rc )
 endif()
 
 # Create a C++ compilable string initializer containing markdown text into a *.h file:

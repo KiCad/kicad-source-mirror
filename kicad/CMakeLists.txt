@@ -37,7 +37,7 @@ if( MINGW )
     # KICAD_RESOURCES variable is set by the macro.
     mingw_resource_compiler( kicad )
 else()
-    set( KICAD_RESOURCES kicad.rc )
+    set( KICAD_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/kicad.rc )
 endif()
 
 if( APPLE )

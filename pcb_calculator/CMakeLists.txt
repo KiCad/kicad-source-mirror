@@ -41,7 +41,7 @@ if( MINGW )
     # PCB_CALCULATOR_RESOURCES variable is set by the macro.
     mingw_resource_compiler( pcb_calculator )
 else()
-    set( PCB_CALCULATOR_RESOURCES pcb_calculator.rc )
+    set( PCB_CALCULATOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcb_calculator.rc )
 endif()
 
 if( APPLE )

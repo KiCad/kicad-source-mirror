@@ -49,7 +49,7 @@ if( MINGW )
     # CVPCB_RESOURCES variable is set by the macro.
     mingw_resource_compiler( cvpcb )
 else()
-    set( CVPCB_RESOURCES cvpcb.rc )
+    set( CVPCB_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/cvpcb.rc )
 endif()
 
 

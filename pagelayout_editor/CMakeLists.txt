@@ -56,7 +56,7 @@ if( MINGW )
     # PL_EDITOR_RESOURCES variable is set by the macro.
     mingw_resource_compiler( pl_editor )
 else()
-    set( PL_EDITOR_RESOURCES pl_editor.rc )
+    set( PL_EDITOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pl_editor.rc )
 endif()
 
 

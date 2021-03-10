@@ -30,7 +30,7 @@ if( MINGW )
     # BITMAP2COMPONENT_RESOURCES variable is set by the macro.
     mingw_resource_compiler( bitmap2component )
 else()
-    set( BITMAP2COMPONENT_RESOURCES bitmap2component.rc )
+    set( BITMAP2COMPONENT_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/bitmap2component.rc )
 endif()
 
 if( APPLE )

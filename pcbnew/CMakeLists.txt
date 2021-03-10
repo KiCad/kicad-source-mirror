@@ -570,7 +570,7 @@ if( MINGW )
     # PCBNEW_RESOURCES variable is set by the macro.
     mingw_resource_compiler( pcbnew )
 else()
-    set( PCBNEW_RESOURCES pcbnew.rc )
+    set( PCBNEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcbnew.rc )
 endif()
 
 

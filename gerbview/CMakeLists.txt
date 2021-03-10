@@ -83,7 +83,7 @@ if( MINGW )
     # GERBVIEW_RESOURCES variable is set by the macro.
     mingw_resource_compiler( gerbview )
 else()
-    set( GERBVIEW_RESOURCES gerbview.rc )
+    set( GERBVIEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/gerbview.rc )
 endif()
 
 if( APPLE )
