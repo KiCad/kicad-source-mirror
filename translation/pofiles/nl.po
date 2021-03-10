@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 13:46-0800\n"
-"PO-Revision-Date: 2021-03-05 18:31+0000\n"
-"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2021-03-11 15:02+0000\n"
+"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2886,9 +2886,8 @@ msgid "Executable files ("
 msgstr "Uitvoerbare bestanden ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Selecteer Preferred PDF Browser"
+msgstr "Selecteer voorkeurs PDF-viewer"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3284,7 +3283,7 @@ msgstr "Slepen met rechterknop:"
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 #, fuzzy
 msgid "Scroll Gestures"
-msgstr "Scroll Bewegingen"
+msgstr "Scroll Acties"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:153
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -3325,7 +3324,6 @@ msgid "Zoom:"
 msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
-#, fuzzy
 msgid "Pan up/down:"
 msgstr "Beweeg omhoog/omlaag:"
 
@@ -3345,14 +3343,12 @@ msgstr ""
 "op het touchpad"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Standaardinstellingen herstellen"
+msgstr "Terugzetten standaardinstellingen muis"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Standaardinstellingen herstellen"
+msgstr "Terugzetten standaardinstellingen trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4652,7 +4648,8 @@ msgstr "Kan kiface-bibliotheek \"%s\" niet laden."
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr ""
-"Kan instantienaam en versiesymbool uit kiface-bibliotheek \"%s\" niet lezen."
+"Kan instantie naam en versie symbool uit kiface bibliotheek \"%s\" niet "
+"lezen."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -7227,11 +7224,10 @@ msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sheet pin %s heeft geen overeenkomend hiërarchisch label in het vel"
 
 #: eeschema/connection_graph.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Hierarchielabel %s heeft geen corresponderende plaat pin op de originele "
-"plaat"
+"Hierarchielabel %s heeft geen corresponderende pin op de originele plaat"
 
 #: eeschema/cross-probing.cpp:252 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7335,14 +7331,13 @@ msgid "Generate"
 msgstr "Genereren"
 
 #: eeschema/dialogs/dialog_bom.cpp:215
-#, fuzzy
 msgid "(file missing)"
-msgstr "Het ontbreekt.\n"
+msgstr "(bestand ontbreekt)"
 
 #: eeschema/dialogs/dialog_bom.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Het schema voor dit bord is niet gevonden."
+msgstr "Het geselecteerde BOM generator script %s kon niet gevonden worden."
 
 #: eeschema/dialogs/dialog_bom.cpp:297
 #, c-format
@@ -7889,7 +7884,6 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Reset velden indien leeg in nieuw symbool"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
 msgstr "Update tekst velden"
 
@@ -8218,7 +8212,6 @@ msgstr "Syntaxis hulp"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
 msgstr "Toon syntax hulpvenster"
 
@@ -8385,9 +8378,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC geannuleerd door gebruiker.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Klaar.<br><br>"
+msgstr "ERC voltooid.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -9879,9 +9871,8 @@ msgid "Page size:"
 msgstr "Pagina grootte:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Schets tekening blad"
+msgstr "Schets tekeningblad"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
@@ -10749,12 +10740,11 @@ msgid "Spice value in simulation"
 msgstr "Kruidwaarde in simulatie"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"In Spice-waarden is het decimaalteken het punt.\n"
+"Bij Spice-waarden, is het decimaalteken een punt.\n"
 "Waarden kunnen Spice-eenheidssymbolen gebruiken."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
@@ -11364,19 +11354,16 @@ msgid "Update Schematic from PCB"
 msgstr "Update Schema van PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
 msgstr "Bron symbool:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Verwijder velden als ze niet in een bronsymbool staan"
+msgstr "Verwijder velden als ze niet in het bronsymbool staan"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Reset velden indien leeg in bronsymbool"
+msgstr "Reset velden indien leeg in het bronsymbool"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
 msgid "Update Symbol Fields"
@@ -11752,9 +11739,8 @@ msgid "Show inter-sheet references"
 msgstr "Toon referenties tussen de bladen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Toon footprint-referenties"
+msgstr "Toon eigen pagina referentie"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -12248,14 +12234,12 @@ msgid "Symbol has more units than are defined"
 msgstr "Symbool heeft meer eenheden dan gedefineerd"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Verander geen pads met afwijkende lagen"
+msgstr "Eenheden van hetzelfde symbool hebben verschillende waardes"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Plot referentie-aanduidingen"
+msgstr "Dubbele referentie aanduidingen"
 
 #: eeschema/fields_grid_table.cpp:133 eeschema/files-io.cpp:94
 msgid "Schematic Files"
@@ -12377,19 +12361,16 @@ msgid "Do not show this dialog again."
 msgstr "Toon dit venster niet opnieuw."
 
 #: eeschema/files-io.cpp:490 eeschema/files-io.cpp:507 pcbnew/files.cpp:771
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Dit bestand is gemaakt door een oudere versie van Pcbnew.\n"
-"Het wordt opgeslagen in het nieuwe bestandsformaat wanneer u dit bestand "
-"opnieuw opslaat."
+"Dit bestand is gemaakt met een oudere versie van KiCad. Het wordt opgeslagen "
+"in het nieuwe bestandsformaat wanneer u dit bestand opslaat."
 
 #: eeschema/files-io.cpp:563
-#, fuzzy
 msgid "Schematic file is read only."
-msgstr "Schematisch bestand \"%s\" is al geopend."
+msgstr "Schematisch bestand is alleen lezen."
 
 #: eeschema/files-io.cpp:588
 msgid "Append Schematic"
@@ -12415,26 +12396,20 @@ msgid "Import Schematic"
 msgstr "Schematisch importeren"
 
 #: eeschema/files-io.cpp:750
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr ""
-"Als u het project in de nieuwe bestandsindeling opslaat, worden bestaande "
-"bestanden overschreven."
+msgstr "Opslaan zal bestaande bestanden overschrijven."
 
 #: eeschema/files-io.cpp:751
-#, fuzzy
 msgid "Save Warning"
-msgstr "Waarschuwing voor opslaan van projecten"
+msgstr "Opslaan waarschuwing"
 
 #: eeschema/files-io.cpp:753
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
-"De volgende bestanden worden overschreven:\n"
+"De volgende bestanden zullen overschreven worden:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:754
 msgid "Overwrite Files"
@@ -12916,9 +12891,8 @@ msgid "The following libraries were not found:"
 msgstr "De volgende bibliotheken zijn niet gevonden:"
 
 #: eeschema/sch_edit_frame.cpp:220
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Schema Editor Opties"
+msgstr "KiCad schematische editor"
 
 #: eeschema/sch_edit_frame.cpp:300
 msgid "New schematic file is unsaved"
@@ -12933,15 +12907,14 @@ msgid "Save changes to \"%s\" before closing?"
 msgstr "Sla wijzigen aan '%s' op voor het afsluiten?"
 
 #: eeschema/sch_edit_frame.cpp:807
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 "Kan de printplaat niet updaten, omdat de schematische editor in stand-alone "
-"modus wordt geopend. Om PCB's van schema's te maken / bij te werken, start u "
-"de Kicad-shell en maakt u een project."
+"modus is geopend. Om PCB's van schema's te maken / bij te werken, start de "
+"Kicad-shell en maak een project."
 
 #: eeschema/sch_edit_frame.cpp:938
 msgid "New Schematic"
@@ -12957,10 +12930,8 @@ msgid "Open Schematic"
 msgstr "Schema Openen"
 
 #: eeschema/sch_edit_frame.cpp:1035
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
-"Het exporteren van de netlijst vereist een volledig geannoteerd schema."
+msgstr "Het toewijzen van footprints vereist een volledig geannoteerd schema."
 
 #: eeschema/sch_edit_frame.cpp:1054
 msgid "Could not open CvPcb"
@@ -13264,7 +13235,7 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1130
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
-"Tekstvariabelen konden niet worden ingesteld omdat er geen project is "
+"Tekstvariabelen konden niet worden ingesteld, omdat er geen project is "
 "bijgevoegd."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1527
@@ -13303,7 +13274,7 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"De blok-ID %s (bloknaam: '%s') is getekend op vel '%s' maar is niet "
+"Het blok-ID %s (bloknaam: '%s') is getekend op vel '%s' maar is niet "
 "gekoppeld aan een ander vel in het ontwerp. KiCad vereist dat alle "
 "bladsymbolen aan een blad zijn gekoppeld, dus het blok is niet geladen."
 
@@ -13466,14 +13437,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Floating point number with incorrect local in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ongeldig drijvende-kommagetal in\n"
+"Ongeldig zwevend kommagetal in\n"
 "bestand: \"%s\"\n"
 "regel: %d\n"
 "offset: %d"
@@ -13788,14 +13759,14 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Terugvallen naar de cache om symbool '%s: %s' link '%s' in te stellen."
 
 #: eeschema/sch_screen.cpp:687
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Stel schematisch symbool '%s %s' bibliotheekidentificatie in op '%s'. "
+msgstr "Stel schematisch symbool '%s %s' bibliotheekidentificatie in op '%s'."
 
 #: eeschema/sch_screen.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Geen bibliotheeksymbool gevonden voor schematisch symbool '%s %s'. "
+msgstr "Geen bibliotheeksymbool gevonden voor schematisch symbool '%s %s'."
 
 #: eeschema/sch_sheet.cpp:56
 msgid "Sheet name"
@@ -14468,14 +14439,12 @@ msgid "Tune component values"
 msgstr "Stem componentwaarden af"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "Parameters"
+msgstr "Sim Parameters"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
-#, fuzzy
 msgid "Simulation parameters and settings"
-msgstr "Simulatie-instellingen"
+msgstr "Simulatie-parameters en instellingen"
 
 #: eeschema/sim/sim_plot_frame.cpp:217
 msgid "Welcome!"
@@ -14680,19 +14649,16 @@ msgid "Voltage (swept)"
 msgstr "Spanning (geveegd)"
 
 #: eeschema/sim/sim_plot_panel.cpp:399
-#, fuzzy
 msgid "Current (swept)"
-msgstr "Huidig Net:"
+msgstr "Stroom (geveegd)"
 
 #: eeschema/sim/sim_plot_panel.cpp:402
-#, fuzzy
 msgid "Resistance (swept)"
-msgstr "Weerstand:"
+msgstr "Weerstand (geveegd)"
 
 #: eeschema/sim/sim_plot_panel.cpp:406
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Temperatuurstijging:"
+msgstr "Temperatuur (geveegd)"
 
 #: eeschema/sim/sim_plot_panel.cpp:411
 msgid "Voltage (measured)"
@@ -14741,9 +14707,8 @@ msgid "Library Editor"
 msgstr "Bibliotheek-editor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Symbool-editor"
+msgstr "KiCad Symbool-Editor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:718
@@ -14816,7 +14781,7 @@ msgid "Could not open the library file."
 msgstr "Kan het bibliotheekbestand niet openen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
 msgstr "Bibliotheek \"%s\" laden"
 
@@ -14882,21 +14847,13 @@ msgstr "Symboolbibliotheek niet ingeschakeld."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1370
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1425
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Fout bij opslaan van globale bibliotheektabel:\n"
-"\n"
-"%s"
+msgstr "Fout bij opslaan van globale bibliotheektabel."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1371
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1426
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Fout bij het opslaan van projectspecifieke bibliotheektabel:\n"
-"\n"
-"%s"
+msgstr "Fout bij opslaan van bibliotheek tabel."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -14909,9 +14866,8 @@ msgstr ""
 "opgeslagen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:61
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Verwijder de bibliotheek van de tabel"
+msgstr "Vervang ingang van bibliotheektabel"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 msgid ""
@@ -14924,9 +14880,8 @@ msgstr ""
 "De oorspronkelijke bibliotheek is niet langer beschikbaar voor gebruik."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:66
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "Toevoegen aan globale bibliotheektabel"
+msgstr "Toevoegen nieuwe ingang aan globale bibliotheektabel"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid ""
@@ -14942,9 +14897,8 @@ msgstr ""
 "zijn."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:72
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Bibliotheektabel voor projectsymbolen gemaakt.\n"
+msgstr "Toevoegen nieuwe ingang aan project bibliotheektabel"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
 msgid ""
@@ -15019,9 +14973,8 @@ msgid "Nickname"
 msgstr "Bijnaam"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:603
-#, fuzzy
 msgid "Save Symbol As"
-msgstr "Symbolen wijzigen ..."
+msgstr "Symbool opslaan als"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:604
 #: pcbnew/footprint_libraries_utils.cpp:954
@@ -15256,9 +15209,8 @@ msgid "(failed to load)"
 msgstr "(Laden mislukt)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "KiCad-symboolbibliotheekbestanden"
+msgstr "KiCad Symbool Bibliotheek Weergever"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -17608,9 +17560,8 @@ msgid "Project Template Selector"
 msgstr "Selectie van projectsjablonen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:97
-#, fuzzy
 msgid "Edit the project schematic"
-msgstr "op het het gehele schema?"
+msgstr "Pas project schema's aan"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:100
 #, fuzzy
@@ -17722,11 +17673,13 @@ msgid "Import Eagle Project Files"
 msgstr "Importeer Eagle-projectbestanden"
 
 #: kicad/kicad.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
-msgstr "<%s> lijkt geen valide kicad component bibliotheek te zijn."
+msgstr ""
+"Bestand '%s'\n"
+"blijkt niet een geldig KiCad project bestand te zijn."
 
 #: kicad/kicad_manager_frame.cpp:154
 #, fuzzy
@@ -18714,7 +18667,6 @@ msgstr ""
 "* ___R2 = Z <sub> 0 </sub> / (L - 1) ___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### PI Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18728,12 +18680,12 @@ msgid ""
 "* ___R1 = 1 / (A / Zin - 1 / R2)___\n"
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
-"## Pi verzwakker\n"
+"## Pi Demper\n"
 "__Zin__ gewenste ingangsimpedantie in & # x2126; <br>\n"
 "__Zout__ gewenste uitgangsimpedantie <br>\n"
 "__Zin = Zout__ <br> <br>\n"
 "\n"
-"* __a__ verzwakking in dB\n"
+"* __a__ demping in dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (het verlies)\n"
 "* __A = (L + 1) / (L - 1) __ <br> <br>\n"
 "* ___R2 = (L- 1) / 2 \\ * & radic; ((Zin \\ * Zout) / L) ___\n"
@@ -18760,7 +18712,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z <sub> uit </sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18775,7 +18726,7 @@ msgid ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
-"## T-verzwakker\n"
+"## Tee Demper\n"
 "__Zin__ gewenste ingangsimpedantie in & # x2126; <br>\n"
 "__Zout__ gewenste uitgangsimpedantie <br>\n"
 "__Zin = Zout__ <br> <br>\n"
@@ -24838,13 +24789,12 @@ msgid "Warning: Through hole pad has no hole."
 msgstr "Fout: doorgaand gat: boordiameter ingesteld op 0"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1330
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
 msgstr ""
-"Fout: connectorpads bevinden zich niet op de soldeerpastalaag\n"
-"Gebruik in plaats daarvan SMD-pads"
+"Fout: Connector paden hebben normaal geen soldeerpasta. Gebruik in plaats "
+"daarvan SMD-paden."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 #, fuzzy
@@ -27813,13 +27763,12 @@ msgid "Check rule syntax"
 msgstr "Controleer de syntaxis van de regel"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:178
-#, fuzzy
 msgid ""
 "Text will not be readable with a thickness greater than 1/4 its width or "
 "height."
 msgstr ""
-"Tekst is niet leesbaar met een dikte groter dan\n"
-"1/4 van de breedte of hoogte."
+"Tekst zal niet leesbaar zijn met een dikte groter dan 1/4 van de breedte of "
+"hoogte."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:74
 msgid "Default properties for new dimension objects:"
@@ -28876,13 +28825,11 @@ msgstr ""
 "projectspecifieke footprintbibliotheek: %s"
 
 #: pcbnew/files.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
-"Er is een fout opgetreden bij het opslaan van de projectspecifieke "
-"footprintbibliotheektabel:\n"
-"\n"
-"%s"
+"Er is een fout opgetreden bij het opslaan van de project specifieke "
+"footprint bibliotheek tabel: %s"
 
 #: pcbnew/files.cpp:931 pcbnew/files.cpp:1077
 #, c-format
