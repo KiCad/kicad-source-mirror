@@ -206,9 +206,12 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
        	m_viaBitmap->SetBitmap( KiBitmap( viacalc_xpm ) );
+       	m_panelViaSize->Layout();
+
         m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
        	m_bitmapRegul3pins->SetBitmap( KiBitmap( regul_3pins_xpm ) );
        	m_bitmapRegul4pins->SetBitmap( KiBitmap( regul_xpm ) );
+       	m_panelRegulators->Layout();
 
        	m_attenuatorBitmap->GetParent()->Layout();
        	m_attenuatorBitmap->GetParent()->Refresh();
