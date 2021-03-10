@@ -481,7 +481,7 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
     idx[2] = 2;
     WRLVEC3F tnorm;
 
-    if( aVertexOrder != ORD_CLOCKWISE )
+    if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
     {
         aVertexList.push_back( vertices[idx[0]] );
         aVertexList.push_back( vertices[idx[1]] );
@@ -492,7 +492,7 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
         aNormalsList.push_back( norms[idx[2]] );
     }
 
-    if( aVertexOrder != ORD_CCW )
+    if( aVertexOrder != WRL1_ORDER::ORD_CCW )
     {
         aVertexList.push_back( vertices[idx[0]] );
         aVertexList.push_back( vertices[idx[2]] );
@@ -529,14 +529,14 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
 
         if( perVC )
         {
-            if( aVertexOrder != ORD_CLOCKWISE )
+            if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
             {
                 aColorsList.push_back( colors[idx[0]] );
                 aColorsList.push_back( colors[idx[1]] );
                 aColorsList.push_back( colors[idx[2]] );
             }
 
-            if( aVertexOrder != ORD_CCW )
+            if( aVertexOrder != WRL1_ORDER::ORD_CCW )
             {
                 aColorsList.push_back( colors[idx[0]] );
                 aColorsList.push_back( colors[idx[2]] );
@@ -545,14 +545,14 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
         }
         else
         {
-            if( aVertexOrder != ORD_CLOCKWISE )
+            if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
             {
                 aColorsList.push_back( colors[0] );
                 aColorsList.push_back( colors[0] );
                 aColorsList.push_back( colors[0] );
             }
 
-            if( aVertexOrder != ORD_CCW )
+            if( aVertexOrder != WRL1_ORDER::ORD_CCW )
             {
                 aColorsList.push_back( colors[0] );
                 aColorsList.push_back( colors[0] );
@@ -568,7 +568,7 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
         idx[1] = idx[2];
         ++idx[2];
 
-        if( aVertexOrder != ORD_CLOCKWISE )
+        if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
         {
             aVertexList.push_back( vertices[idx[0]] );
             aVertexList.push_back( vertices[idx[1]] );
@@ -579,7 +579,7 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
             aNormalsList.push_back( norms[idx[2]] );
         }
 
-        if( aVertexOrder != ORD_CCW )
+        if( aVertexOrder != WRL1_ORDER::ORD_CCW )
         {
             aVertexList.push_back( vertices[idx[0]] );
             aVertexList.push_back( vertices[idx[2]] );
@@ -608,14 +608,14 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
         {
             if( perVC )
             {
-                if( aVertexOrder != ORD_CLOCKWISE )
+                if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
                 {
                     aColorsList.push_back( colors[idx[0]] );
                     aColorsList.push_back( colors[idx[1]] );
                     aColorsList.push_back( colors[idx[2]] );
                 }
 
-                if( aVertexOrder != ORD_CCW )
+                if( aVertexOrder != WRL1_ORDER::ORD_CCW )
                 {
                     aColorsList.push_back( colors[idx[0]] );
                     aColorsList.push_back( colors[idx[2]] );
@@ -624,14 +624,14 @@ bool FACET::GetData( std::vector< WRLVEC3F >& aVertexList, std::vector< WRLVEC3F
             }
             else
             {
-                if( aVertexOrder != ORD_CLOCKWISE )
+                if( aVertexOrder != WRL1_ORDER::ORD_CLOCKWISE )
                 {
                     aColorsList.push_back( colors[0] );
                     aColorsList.push_back( colors[0] );
                     aColorsList.push_back( colors[0] );
                 }
 
-                if( aVertexOrder != ORD_CCW )
+                if( aVertexOrder != WRL1_ORDER::ORD_CCW )
                 {
                     aColorsList.push_back( colors[0] );
                     aColorsList.push_back( colors[0] );

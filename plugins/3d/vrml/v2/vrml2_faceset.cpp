@@ -915,9 +915,9 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
     SGNODE* np = NULL;
 
     if( ccw )
-        np = lShape.CalcShape( aParent, NULL, ORD_CCW, creaseLimit, true );
+        np = lShape.CalcShape( aParent, NULL, WRL1_ORDER::ORD_CCW, creaseLimit, true );
     else
-        np = lShape.CalcShape( aParent, NULL, ORD_CLOCKWISE, creaseLimit, true );
+        np = lShape.CalcShape( aParent, NULL, WRL1_ORDER::ORD_CLOCKWISE, creaseLimit, true );
 
     return np;
 }

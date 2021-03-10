@@ -107,7 +107,7 @@ enum class WRL1_BINDING
     BIND_END
 };
 
-enum WRL1_ORDER
+enum class WRL1_ORDER
 {
     ORD_UNKNOWN = 0,
     ORD_CLOCKWISE,

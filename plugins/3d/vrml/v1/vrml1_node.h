@@ -97,7 +97,7 @@ struct WRL1STATUS
         normbind = WRL1_BINDING::BIND_DEFAULT;
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
-        order = ORD_UNKNOWN;
+        order = WRL1_ORDER::ORD_UNKNOWN;
         creaseLimit = 0.878f;
         return;
     }

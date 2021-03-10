@@ -34,7 +34,7 @@
 
 WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_order = ORD_UNKNOWN;
+    m_order = WRL1_ORDER::ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
     m_crease = 0.733f; // approx 42 degrees; this is larger than VRML spec.
     return;
@@ -44,7 +44,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDiction
 WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_order = ORD_UNKNOWN;
+    m_order = WRL1_ORDER::ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
     m_crease = 0.733f; // approx 42 degrees; this is larger than VRML spec.
     m_Parent = aParent;
@@ -200,11 +200,11 @@ bool WRL1SHAPEHINTS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             }
 
             if( !glob.compare( "UNKNOWN_ORDERING" ) )
-                m_order = ORD_UNKNOWN;
+                m_order = WRL1_ORDER::ORD_UNKNOWN;
             else if( !glob.compare( "CLOCKWISE" ) )
-                m_order = ORD_CLOCKWISE;
+                m_order = WRL1_ORDER::ORD_CLOCKWISE;
             else if( !glob.compare( "COUNTERCLOCKWISE" ) )
-                m_order = ORD_CCW;
+                m_order = WRL1_ORDER::ORD_CCW;
             else
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
