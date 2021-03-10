@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 13:46-0800\n"
-"PO-Revision-Date: 2021-03-03 23:36+0000\n"
+"PO-Revision-Date: 2021-03-11 15:03+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -2831,9 +2831,8 @@ msgid "Executable files ("
 msgstr "可執行檔案 ("
 
 #: common/dialogs/panel_common_settings.cpp:288
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "選擇預設 PDF 瀏覽器"
+msgstr "選擇首選 PDF 瀏覽器"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -3263,14 +3262,12 @@ msgid ""
 msgstr "在觸控板上左右滾動時，將畫布左右平移"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "重置為預設值"
+msgstr "重置為滑鼠預設值"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "重置為預設值"
+msgstr "重置為觸控板預設值"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4551,7 +4548,7 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "載入 kiface 庫 \"%s\" 失敗。"
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
 msgstr "無法從 kiface 庫 \"%s\" 讀取例項名和版本符號。"
@@ -4602,123 +4599,123 @@ msgstr "F.Cu"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
-msgstr "內層 1"
+msgstr "In1.Cu"
 
 #: common/layer_id.cpp:34
 msgid "In2.Cu"
-msgstr "內層 2"
+msgstr "In2.Cu"
 
 #: common/layer_id.cpp:35
 msgid "In3.Cu"
-msgstr "內層 3"
+msgstr "In3.Cu"
 
 #: common/layer_id.cpp:36
 msgid "In4.Cu"
-msgstr "內層 4"
+msgstr "In4.Cu"
 
 #: common/layer_id.cpp:37
 msgid "In5.Cu"
-msgstr "內層 5"
+msgstr "In5.Cu"
 
 #: common/layer_id.cpp:38
 msgid "In6.Cu"
-msgstr "內層 6"
+msgstr "In6.Cu"
 
 #: common/layer_id.cpp:39
 msgid "In7.Cu"
-msgstr "內層 7"
+msgstr "In7.Cu"
 
 #: common/layer_id.cpp:40
 msgid "In8.Cu"
-msgstr "內層 8"
+msgstr "In8.Cu"
 
 #: common/layer_id.cpp:41
 msgid "In9.Cu"
-msgstr "內層 9"
+msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
 msgid "In10.Cu"
-msgstr "內層 10"
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
 msgid "In11.Cu"
-msgstr "內層 11"
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
 msgid "In12.Cu"
-msgstr "內層 12"
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
 msgid "In13.Cu"
-msgstr "內層 13"
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
 msgid "In14.Cu"
-msgstr "內層 14"
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
 msgid "In15.Cu"
-msgstr "內層 15"
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
 msgid "In16.Cu"
-msgstr "內層 16"
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
 msgid "In17.Cu"
-msgstr "內層 17"
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
 msgid "In18.Cu"
-msgstr "內層 18"
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
 msgid "In19.Cu"
-msgstr "內層 19"
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
 msgid "In20.Cu"
-msgstr "內層 20"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
 msgid "In21.Cu"
-msgstr "內層 21"
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
 msgid "In22.Cu"
-msgstr "內層 22"
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
 msgid "In23.Cu"
-msgstr "內層 23"
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
 msgid "In24.Cu"
-msgstr "內層 24"
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
 msgid "In25.Cu"
-msgstr "內層 25"
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
 msgid "In26.Cu"
-msgstr "內層 26"
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
 msgid "In27.Cu"
-msgstr "內層 27"
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
 msgid "In28.Cu"
-msgstr "內層 28"
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
 msgid "In29.Cu"
-msgstr "內層 29"
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
 msgid "In30.Cu"
-msgstr "內層 30"
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
@@ -4726,11 +4723,11 @@ msgstr "B.Cu"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr "底層膠粘層"
+msgstr "B.Adhesive"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
-msgstr "頂層膠粘層"
+msgstr "F.Adhesive"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
@@ -4742,11 +4739,11 @@ msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "底層絲印層"
+msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "頂層絲印層"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4758,19 +4755,19 @@ msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr "使用者繪圖層"
+msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "使用者註釋層"
+msgstr "User.Comments"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
-msgstr "使用者自定義 1 層"
+msgstr "User.Eco1"
 
 #: common/layer_id.cpp:79
 msgid "User.Eco2"
-msgstr "使用者自定義 2 層"
+msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
@@ -4782,11 +4779,11 @@ msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "頂層外框層"
+msgstr "F.Courtyard"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "底層外框層"
+msgstr "B.Courtyard"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -7200,14 +7197,13 @@ msgid "Generate"
 msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:215
-#, fuzzy
 msgid "(file missing)"
-msgstr "該檔案缺失。\n"
+msgstr "(檔案缺失)"
 
 #: eeschema/dialogs/dialog_bom.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "找不到該電路板的原理圖。"
+msgstr "所選的材料表生成器指令碼 %s 無法被找到。"
 
 #: eeschema/dialogs/dialog_bom.cpp:297
 #, c-format
@@ -7218,6 +7214,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"已搜尋:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
@@ -7999,7 +8000,7 @@ msgstr "文字屬性"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "標籤需要非空文字。"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8194,9 +8195,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- 使用者取消的 ERC。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "完成。<br><br>"
+msgstr "ERC 已完成。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -10520,12 +10520,11 @@ msgid "Spice value in simulation"
 msgstr "模擬中的 SPICE 值"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"在 Spice 值中，小數點分隔符是點。\n"
+"在 Spice 值中，十進位制分隔符是點。\n"
 "值可以使用 Spice 單元符號。"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
@@ -11492,9 +11491,8 @@ msgid "Show inter-sheet references"
 msgstr "顯示錶間參考"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "顯示封裝位號"
+msgstr "顯示自頁面參考"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -12777,9 +12775,8 @@ msgid "Assigned Netclass"
 msgstr "關聯的網路類"
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "ERC 錯誤"
+msgstr "電器規則檢查錯誤"
 
 #: eeschema/sch_marker.h:98
 msgid "ERC Marker"
@@ -13577,7 +13574,6 @@ msgid "Syntax Help"
 msgstr "語法幫助"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13719,7 +13715,7 @@ msgstr ""
 "        <th>結果</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td>&nbsp;<br><samp>^{上標}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp><sup>上標</sup>&nbsp;</samp></td>\n"
 "    </tr>\n"
@@ -13732,7 +13728,7 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td>&nbsp;<br><samp>_{下標}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp><sub>下標</sub>&nbsp;</samp></td>\n"
 "    </tr>\n"
@@ -13756,9 +13752,9 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td>&nbsp;<br><samp>${變數}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>變數值</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
@@ -13771,8 +13767,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>欄位值</i> of symbol <i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -13787,12 +13782,12 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>匯流排定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Resultant Nets</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>合成網</th>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"        <td>&nbsp;<br><samp>字首[m..n]</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\n"
 "    </tr>\n"
@@ -13823,9 +13818,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -13838,10 +13833,11 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> "
+"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>"
+"\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -15705,7 +15701,6 @@ msgid "Highlight on PCB"
 msgstr "高亮 PCB"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr "在電路板編輯器中高亮顯示相應專案"
 
@@ -15738,18 +15733,16 @@ msgid "Enter Sheet"
 msgstr "進入分頁"
 
 #: eeschema/tools/ee_actions.cpp:646
-#, fuzzy
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "在 Eeschema 視窗中顯示所選圖框的內容"
+msgstr "在原理圖編輯器中顯示所選圖框的內容"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Leave Sheet"
 msgstr "離開分頁"
 
 #: eeschema/tools/ee_actions.cpp:652
-#, fuzzy
 msgid "Display the parent sheet in the schematic editor"
-msgstr "在 Eeschema 視窗中顯示父級圖框"
+msgstr "在原理圖編輯器中顯示父級圖框"
 
 #: eeschema/tools/ee_actions.cpp:657
 msgid "Hierarchy Navigator"
@@ -18218,7 +18211,7 @@ msgid ""
 "* ___R3 = 1 / (A / Zout - 1 / R2)___"
 msgstr ""
 "### Pi 衰減器\n"
-"__Zin__ &#x2126 中期望的輸入阻抗;<br>\n"
+"__Zin__ 期望的輸入阻抗 &#x2126;<br>\n"
 "__Zout__ 期望的輸出阻抗<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
@@ -18263,7 +18256,7 @@ msgid ""
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
 "### T 形衰減器\n"
-"__Zin__ &#x2126 中期望的輸入阻抗;<br>\n"
+"__Zin__ 期望的輸入阻抗 &#x2126;<br>\n"
 "__Zout__ 期望的輸出阻抗<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
@@ -18457,11 +18450,11 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr "Zin:"
+msgstr "輸入阻抗 (Zin):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 msgid "Zout:"
-msgstr "輸出阻抗(Zout)："
+msgstr "輸出阻抗 (Zout):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
 msgid "R3:"
@@ -18558,7 +18551,7 @@ msgstr "乘數"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
 msgid "Color Code"
-msgstr "色環"
+msgstr "色環電阻"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Microstrip Line"
@@ -19478,19 +19471,19 @@ msgstr "有效 %s (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:324
 msgid "Conductor losses (even):"
-msgstr "導體損耗 （偶數）:"
+msgstr "導體損耗 (偶模):"
 
 #: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor losses (odd):"
-msgstr "導體損耗 （奇數）："
+msgstr "導體損耗 (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:326
 msgid "Dielectric losses (even):"
-msgstr "介電損耗 （偶數）："
+msgstr "介電損耗 (偶模):"
 
 #: pcb_calculator/transline_ident.cpp:327
 msgid "Dielectric losses (odd):"
-msgstr "介電損耗 （奇數）："
+msgstr "介電損耗 (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -19506,7 +19499,7 @@ msgstr "Zodd (奇模阻抗)"
 
 #: pcb_calculator/transline_ident.cpp:356
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr "奇模阻抗（透過驅動線相反 (差分) 電壓）"
+msgstr "奇模阻抗 (透過驅動線相反 (差分) 電壓)"
 
 #: pcb_calculator/transline_ident.cpp:374
 msgid "Distance between strip and top metal"
@@ -20596,9 +20589,8 @@ msgstr "頂層字首："
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr "元件側工位的可選字首 (例如：F_)"
+msgstr "元件側引用名稱的可選字首 (如：F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 msgid "Back prefix:"
@@ -20606,7 +20598,6 @@ msgstr "底層字首："
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
-#, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
 msgstr "錫膏側參考名稱的可選字首 (例如：B_)"
 
@@ -21143,13 +21134,12 @@ msgid "Pad connections:"
 msgstr "焊盤連線："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"預設焊盤與覆銅區連線型別。\n"
-"該設定可以透過本地焊盤設定覆蓋"
+"預設焊盤與區域連線型別。\n"
+"該設定可被本地焊盤設定覆蓋"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
 msgid "Thermal reliefs"
@@ -21188,9 +21178,8 @@ msgstr "填充型別:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
-#, fuzzy
 msgid "Solid fill"
-msgstr "實心"
+msgstr "實心填充"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:285
 msgid "Hatch pattern"
@@ -22519,7 +22508,7 @@ msgstr "列印模式"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "匯出為白色背景上的黑色元素"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23747,9 +23736,8 @@ msgid "Via Length"
 msgstr "過孔長度"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "調整走線長度 (&T)"
+msgstr "佈線長度"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25429,18 +25417,16 @@ msgid "Keep out tracks"
 msgstr "禁止佈線"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:43
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "刪除短路兩個網路的佈線"
+msgstr "防止導線被布入這個區域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:47
 msgid "Keep out vias"
 msgstr "禁止過孔"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "防止專案在畫布上被移動和/或調整大小"
+msgstr "防止過孔被放置在這個區域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:52
 msgid "Keep out pads"
@@ -25448,16 +25434,15 @@ msgstr "保留焊盤"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "如果焊盤與該區域重疊，則會引發 DRC 錯誤"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "禁止覆銅"
+msgstr "阻止銅充填"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "區域不會將銅填充到該區域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -25465,16 +25450,15 @@ msgstr "保留封裝"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "如果封裝外框與該區域重疊，會會引發 DRC 錯誤"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "限制輪廓線方向水平，垂直或 45 度"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "僅允許水平或垂直繪畫接線和排線"
+msgstr "僅用水平、垂直或 45 度線繪製該區域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:100
 msgid "Area name:"
@@ -27528,27 +27512,24 @@ msgid "Checking track & via clearances..."
 msgstr "正在檢查佈線和過孔間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:195
-#, fuzzy
 msgid "Checking hole clearances..."
-msgstr "覆銅區域與覆銅區域間隙... \n"
+msgstr "正在檢查孔間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:203
 msgid "Checking pad clearances..."
 msgstr "正在檢查焊盤間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:211
-#, fuzzy
 msgid "Checking pads..."
-msgstr "正在檢查引腳..."
+msgstr "正在檢查焊盤..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
 msgstr "正在檢查銅區間隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
-#, fuzzy
 msgid "Checking zones..."
-msgstr "檢查填充區域..."
+msgstr "正在檢查區域..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:289
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:337
@@ -27576,9 +27557,8 @@ msgid "Checking footprint courtyard definitions..."
 msgstr "正在檢查封裝外框定義..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:88
-#, fuzzy
 msgid "Gathering footprint courtyards..."
-msgstr "正在檢查封裝外框定義..."
+msgstr "正在收集封裝外框..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:149
 msgid "Checking footprints for overlapping courtyards..."
@@ -27613,14 +27593,12 @@ msgid "Checking keepouts & disallow constraints..."
 msgstr "正在檢查禁布區和不允許約束..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:122
-#, fuzzy
 msgid "Checking copper to board edge clearances..."
-msgstr "正在檢查板邊緣間隙..."
+msgstr "正在檢查銅層到板邊緣間隙..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:127
-#, fuzzy
 msgid "Checking silk to board edge clearances..."
-msgstr "正在檢查板邊緣間隙..."
+msgstr "正在檢查 silk 到板邊緣間隙..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:119
 msgid "Checking hole to hole clearances..."
@@ -27640,7 +27618,6 @@ msgid "Checking via holes..."
 msgstr "正在檢查微孔通孔..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:108
-#, fuzzy
 msgid "Checking micro-via holes..."
 msgstr "正在檢查微孔通孔..."
 
@@ -28138,7 +28115,7 @@ msgstr "KiCad 封裝編輯器"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
-msgstr "內部圖層"
+msgstr "Inner layers"
 
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:270
 msgid "Selection Filter"
@@ -29704,14 +29681,12 @@ msgstr ""
 "的設計規則。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
-msgstr ""
-"庫元件 '%s' 中的 CADSTAR 區域 '%s' 沒有一個 KiCad 等價物。該區域既不是過孔也"
-"不是佈線禁止區。該地區沒有匯入。"
+msgstr "庫元件 '%s' 中的 CADSTAR 區域 '%s' 沒有一個 KiCad 等價物。該區域既不是過孔也不是佈線禁止區。該區域沒有被匯入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:992
 #, c-format
@@ -33668,7 +33643,7 @@ msgstr "所有專案"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Locked items"
-msgstr "鎖定項"
+msgstr "鎖定專案"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
 msgid "Allow selection of locked items"
