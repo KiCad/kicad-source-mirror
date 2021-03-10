@@ -1349,13 +1349,16 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBoxBase() const
 const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 {
     // build the bounding box on the global label only, including the intersheets references
-    // full bounding box
+    // full bounding box if they are shown
 
     EDA_RECT box( GetBoundingBoxBase() );
 
-    box.Merge( m_intersheetRefsField.GetBoundingBox() );
+    if( Schematic()->Settings().m_IntersheetRefsShow )
+    {
+        box.Merge( m_intersheetRefsField.GetBoundingBox() );
+        box.Normalize();
+    }
 
-    box.Normalize();
     return box;
 }
 
