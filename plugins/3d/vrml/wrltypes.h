@@ -94,7 +94,7 @@ enum WRL1NODES
 
 // VRML1 Material/Normal Binding values
 // note: PART/FACE have the same meaning in the specification
-enum WRL1_BINDING
+enum class WRL1_BINDING
 {
     BIND_DEFAULT = 0,
     BIND_OVERALL,

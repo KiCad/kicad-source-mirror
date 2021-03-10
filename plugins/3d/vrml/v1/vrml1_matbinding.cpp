@@ -33,7 +33,7 @@
 
 WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_binding = BIND_OVERALL;
+    m_binding = WRL1_BINDING::BIND_OVERALL;
     m_Type = WRL1_MATERIALBINDING;
     return;
 }
@@ -42,7 +42,7 @@ WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary ) : WRL1NODE( aDiction
 WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_binding = BIND_OVERALL;
+    m_binding = WRL1_BINDING::BIND_OVERALL;
     m_Type = WRL1_MATERIALBINDING;
     m_Parent = aParent;
 
@@ -218,35 +218,35 @@ bool WRL1MATBINDING::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 
         if( !glob.compare( "DEFAULT" ) )
         {
-            m_binding = BIND_DEFAULT;
+            m_binding = WRL1_BINDING::BIND_DEFAULT;
         }
         else if( !glob.compare( "OVERALL" ) )
         {
-            m_binding = BIND_OVERALL;
+            m_binding = WRL1_BINDING::BIND_OVERALL;
         }
         else if( !glob.compare( "PER_PART" ) )
         {
-            m_binding = BIND_PER_PART;
+            m_binding = WRL1_BINDING::BIND_PER_PART;
         }
         else if( !glob.compare( "PER_PART_INDEXED" ) )
         {
-            m_binding = BIND_PER_PART_INDEXED;
+            m_binding = WRL1_BINDING::BIND_PER_PART_INDEXED;
         }
         else if( !glob.compare( "PER_FACE" ) )
         {
-            m_binding = BIND_PER_FACE;
+            m_binding = WRL1_BINDING::BIND_PER_FACE;
         }
         else if( !glob.compare( "PER_FACE_INDEXED" ) )
         {
-            m_binding = BIND_PER_FACE_INDEXED;
+            m_binding = WRL1_BINDING::BIND_PER_FACE_INDEXED;
         }
         else if( !glob.compare( "PER_VERTEX" ) )
         {
-            m_binding = BIND_PER_VERTEX;
+            m_binding = WRL1_BINDING::BIND_PER_VERTEX;
         }
         else if( !glob.compare( "PER_VERTEX_INDEXED" ) )
         {
-            m_binding = BIND_PER_VERTEX_INDEXED;
+            m_binding = WRL1_BINDING::BIND_PER_VERTEX_INDEXED;
         }
         else
         {
@@ -261,7 +261,7 @@ bool WRL1MATBINDING::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             } while( 0 );
             #endif
 
-            m_binding = BIND_OVERALL;
+            m_binding = WRL1_BINDING::BIND_OVERALL;
         }
     }   // while( true ) -- reading contents of MaterialBinding{}
 

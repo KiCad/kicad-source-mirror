@@ -343,12 +343,12 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
     switch( mbind )
     {
-    case BIND_PER_FACE:
-    case BIND_PER_VERTEX:
-    case BIND_PER_VERTEX_INDEXED:
+    case WRL1_BINDING::BIND_PER_FACE:
+    case WRL1_BINDING::BIND_PER_VERTEX:
+    case WRL1_BINDING::BIND_PER_VERTEX_INDEXED:
         break;
 
-    case BIND_PER_FACE_INDEXED:
+    case WRL1_BINDING::BIND_PER_FACE_INDEXED:
 
         if( matIndex.empty() )
         {
@@ -357,7 +357,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             #endif
 
             // support bad models by temporarily switching bindings
-            mbind = BIND_OVERALL;
+            mbind = WRL1_BINDING::BIND_OVERALL;
             sgcolor = m_current.mat->GetAppearance( 0 );
         }
 
@@ -379,7 +379,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     size_t  cidx = 0;   // color index
     SGCOLOR pc1;
 
-    if( mbind == BIND_OVERALL || mbind == BIND_DEFAULT )
+    if( mbind == WRL1_BINDING::BIND_OVERALL || mbind == WRL1_BINDING::BIND_DEFAULT )
     {
         // no per-vertex colors; we can save a few CPU cycles
         for( iCoord = 0; iCoord < vsize; ++iCoord )
@@ -433,7 +433,8 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
                         fp->Init();
                 }
 
-                if( mbind == BIND_PER_FACE || mbind == BIND_PER_FACE_INDEXED )
+                if( mbind == WRL1_BINDING::BIND_PER_FACE
+                    || mbind == WRL1_BINDING::BIND_PER_FACE_INDEXED )
                     ++cidx;
 
                 continue;
@@ -459,7 +460,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
             // push the color if appropriate
             switch( mbind )
             {
-            case BIND_PER_FACE:
+            case WRL1_BINDING::BIND_PER_FACE:
 
                 if( !fp->HasColors() )
                 {
@@ -469,12 +470,12 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
                 break;
 
-            case BIND_PER_VERTEX:
+            case WRL1_BINDING::BIND_PER_VERTEX:
                 m_current.mat->GetColor( &pc1, idx );
                 fp->AddColor( pc1 );
                 break;
 
-            case BIND_PER_FACE_INDEXED:
+            case WRL1_BINDING::BIND_PER_FACE_INDEXED:
                 if( !fp->HasColors() )
                 {
                     if( cidx >= matSize )
@@ -487,7 +488,7 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 
                 break;
 
-            case BIND_PER_VERTEX_INDEXED:
+            case WRL1_BINDING::BIND_PER_VERTEX_INDEXED:
 
                 if( matIndex.empty() )
                 {

@@ -92,9 +92,9 @@ struct WRL1STATUS
     void Init()
     {
         mat = NULL;
-        matbind = BIND_OVERALL;
+        matbind = WRL1_BINDING::BIND_OVERALL;
         norm = NULL;
-        normbind = BIND_DEFAULT;
+        normbind = WRL1_BINDING::BIND_DEFAULT;
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         order = ORD_UNKNOWN;
