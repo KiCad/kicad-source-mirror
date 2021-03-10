@@ -779,6 +779,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                         append_undo = true;
 
                         moveItem( dragItem, gridpt );
+                        dragItem->ClearFlags( IS_MOVED );
                         updateItem( dragItem, true );
                     }
                 }
@@ -795,6 +796,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
                 moveItem( item, gridpt );
                 updateItem( item, true );
+                item->ClearFlags( IS_MOVED );
             }
         }
         else
@@ -834,6 +836,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     append_undo = true;
 
                     moveItem( dragItem, most_common );
+                    dragItem->ClearFlags( IS_MOVED );
                     updateItem( dragItem, true );
                 }
             }
