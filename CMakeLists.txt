@@ -43,7 +43,7 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 # and more than 3Gb for the full kicad suite)
 # This option create binaries using link option -g1 that create much smaller files, but
 # there are less info in debug (but the file names and line numbers are available)
-option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller binaries." OFF )
+cmake_dependent_option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller binaries." OFF "NOT MSVC" OFF )
 
 
 #
