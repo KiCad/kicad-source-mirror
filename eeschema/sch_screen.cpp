@@ -646,15 +646,11 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             }
         }
 
-        if( !tmp && legacyLibs )
+        if( !tmp && legacyLibs && legacyLibs->GetLibraryCount() )
         {
-            // If here, only the cache library should be loaded if the loaded schematic
-            // is the legacy file format.
-            wxCHECK2( legacyLibs->GetLibraryCount() == 1, continue );
-
             PART_LIB& legacyCacheLib = legacyLibs->at( 0 );
 
-            // ...and it better be the cache library.
+            // It better be the cache library.
             wxCHECK2( legacyCacheLib.IsCache(), continue );
 
             wxString id = symbol->GetLibId().Format();

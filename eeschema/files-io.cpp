@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -462,8 +462,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                 wxOK | wxCENTER | wxICON_EXCLAMATION );
                         invalidLibDlg.ShowDetailedText(
                                 _( "Symbol libraries defined in the project file symbol library "
-                                   "list are no longer supported and will be removed.\n\nThis may "
-                                   "cause broken symbol library links under certain conditions." ) );
+                                   "list are no longer supported and will be removed.\n\n"
+                                   "This may cause broken symbol library links under certain "
+                                   "conditions." ) );
                         invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
                         invalidLibDlg.ShowModal();
                         eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog =
@@ -479,6 +480,41 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 {
                     SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
                     editor->RescueSymbolLibTableProject( false );
+                }
+            }
+
+            // Ensure there is only one legacy library loaded and that it is the cache library.
+            PART_LIBS* legacyLibs = Schematic().Prj().SchLibs();
+
+            if( legacyLibs->GetLibraryCount() == 0 )
+            {
+                wxString extMsg;
+                wxFileName cacheFn = pro;
+
+                cacheFn.SetName( cacheFn.GetName() + "-cache" );
+                cacheFn.SetExt( LegacySymbolLibFileExtension );
+
+                msg.Printf( _( "The project symbol library cache file '%s' was not found." ),
+                            cacheFn.GetFullName() );
+                extMsg = _( "This can result in a broken schematic under certain conditions.  "
+                            "If the schematic does not have any missing symbols upon opening, "
+                            "save it immediately before making any changes to prevent data "
+                            "loss.  If there are missing symbols, either manual recovery of "
+                            "the schematic or recovery of the symbol cache library file and "
+                            "reloading the schematic is required." );
+
+                wxMessageDialog dlgMissingCache( this, msg, _( "Warning" ),
+                                                 wxOK | wxCANCEL | wxICON_EXCLAMATION | wxCENTER );
+                dlgMissingCache.SetExtendedMessage( extMsg );
+                dlgMissingCache.SetOKCancelLabels(
+                        wxMessageDialog::ButtonLabel( _( "Load Without Cache File" ) ),
+                        wxMessageDialog::ButtonLabel( _( "Abort" ) ) );
+
+                if( dlgMissingCache.ShowModal() == wxID_CANCEL )
+                {
+                    Schematic().Reset();
+                    CreateScreens();
+                    return false;
                 }
             }
 
@@ -631,15 +667,17 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     bool setProject = Prj().GetProjectFullName().IsEmpty();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    // clang-format off
     std::list<std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>> loaders;
 
+    // Import Altium schematic files.
     if( ADVANCED_CFG::GetCfg().m_PluginAltiumSch )
-        loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM ); // Import Altium schematic files
+        loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM );
 
-    loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::SCH_CADSTAR_ARCHIVE ); //Import CADSTAR Schematic Archive files
-    loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE ); // Import Eagle schematic files
-    // clang-format on
+    // Import CADSTAR Schematic Archive files.
+    loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::SCH_CADSTAR_ARCHIVE );
+
+    // Import Eagle schematic files.
+    loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE );
 
     wxString fileFilters;
     wxString allWildcards;
@@ -659,7 +697,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     fileFilters = _( "All supported formats|" ) + allWildcards + "|" + fileFilters;
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -749,7 +787,8 @@ bool SCH_EDIT_FRAME::SaveProject()
 
         wxRichMessageDialog dlg( this, _( "Saving will overwrite existing files." ),
                                  _( "Save Warning" ),
-                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_EXCLAMATION );
+                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER |
+                                 wxICON_EXCLAMATION );
         dlg.ShowDetailedText( _( "The following files will be overwritten:\n\n" ) + msg );
         dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Overwrite Files" ) ),
                                wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
