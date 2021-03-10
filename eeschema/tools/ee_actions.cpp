@@ -355,7 +355,11 @@ TOOL_ACTION EE_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
 //
 TOOL_ACTION EE_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
         AS_GLOBAL,
+#ifdef __WXMAC__
+        'I', LEGACY_HK_NAME( "Repeat Last Item" ),
+#else
         WXK_INSERT, LEGACY_HK_NAME( "Repeat Last Item" ),
+#endif
         _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ),
         nullptr );
 
