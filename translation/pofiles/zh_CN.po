@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-08 13:46-0800\n"
-"PO-Revision-Date: 2021-03-10 03:41+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-03-10 06:39+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18458,11 +18458,11 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr "Zin:"
+msgstr "输入阻抗 (Zin):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 msgid "Zout:"
-msgstr "输出阻抗(Zout)："
+msgstr "输出阻抗 (Zout):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
 msgid "R3:"
@@ -18559,7 +18559,7 @@ msgstr "乘数"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
 msgid "Color Code"
-msgstr "色环"
+msgstr "色环电阻"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:692
 msgid "Microstrip Line"
@@ -19479,19 +19479,19 @@ msgstr "有效 %s (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:324
 msgid "Conductor losses (even):"
-msgstr "导体损耗 （偶数）:"
+msgstr "导体损耗 (偶模):"
 
 #: pcb_calculator/transline_ident.cpp:325
 msgid "Conductor losses (odd):"
-msgstr "导体损耗 （奇数）："
+msgstr "导体损耗 (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:326
 msgid "Dielectric losses (even):"
-msgstr "介电损耗 （偶数）："
+msgstr "介电损耗 (偶模):"
 
 #: pcb_calculator/transline_ident.cpp:327
 msgid "Dielectric losses (odd):"
-msgstr "介电损耗 （奇数）："
+msgstr "介电损耗 (奇模):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -19507,7 +19507,7 @@ msgstr "Zodd (奇模阻抗)"
 
 #: pcb_calculator/transline_ident.cpp:356
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr "奇模阻抗（通过驱动线相反 (差分) 电压）"
+msgstr "奇模阻抗 (通过驱动线相反 (差分) 电压)"
 
 #: pcb_calculator/transline_ident.cpp:374
 msgid "Distance between strip and top metal"
