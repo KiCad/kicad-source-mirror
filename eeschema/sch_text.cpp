@@ -165,7 +165,7 @@ bool SCH_TEXT::IncrementLabel( int aIncrement )
 {
     wxString text = GetText();
     bool ReturnVal = IncrementLabelMember( text, aIncrement );
-    
+
     if( ReturnVal )
         SetText( text );
 
@@ -1105,7 +1105,7 @@ void SCH_GLOBALLABEL::UpdateIntersheetRefProps()
 void SCH_GLOBALLABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     int margin = GetTextOffset();
-    int labelLen = GetBoundingBox().GetSizeMax();
+    int labelLen = GetBoundingBoxBase().GetSizeMax();
     int penOffset = GetPenWidth() / 2;
 
     // Set both axes to penOffset; we're going to overwrite the text axis below
@@ -1296,8 +1296,10 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 }
 
 
-const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
+const EDA_RECT SCH_GLOBALLABEL::GetBoundingBoxBase() const
 {
+    // build the bounding box on the global label only, without taking in account
+    // the intersheets references, just the bounding box of the graphic shape
     int x  = GetTextPos().x;
     int y  = GetTextPos().y;
     int penWidth = GetEffectiveTextPenWidth();
@@ -1338,6 +1340,18 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     }
 
     EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
+
+    box.Normalize();
+    return box;
+}
+
+
+const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
+{
+    // build the bounding box on the global label only, including the intersheets references
+    // full bounding box
+
+    EDA_RECT box( GetBoundingBoxBase() );
 
     box.Merge( m_intersheetRefsField.GetBoundingBox() );
 

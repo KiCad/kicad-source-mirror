@@ -413,6 +413,15 @@ public:
 
     wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
+    /**
+     * Returns the bounding box on the global label only, without taking in account
+     * the intersheets references
+     */
+    const EDA_RECT GetBoundingBoxBase() const;
+
+    /**
+     * Returns the bounding box on the global label only, including the intersheets references
+     */
     const EDA_RECT GetBoundingBox() const override;
 
     void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
