@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,8 @@ using namespace DSN;
 // that can create issues.
 // Especially Freerouter does not handle them very well:
 // - too complex shapes are not accepted, especially shapes with holes (dsn files are not loaded).
-// - and Freerouter actually uses something like a convex hull of the shape (that works not very well).
+// - and Freerouter actually uses something like a convex hull of the shape (that works not very
+// well).
 // I am guessing non convex polygons with holes linked could create issues with any Router.
 #define EXPORT_CUSTOM_PADS_CONVEX_HULL
 
@@ -95,7 +96,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
     // temporarily flip any footprints which are on the back side of the board to the front,
     // and record this in the FOOTPRINT's flag field.
-    db.FlipFOOTPRINTs( GetBoard());
+    db.FlipFOOTPRINTs( GetBoard() );
 
     try
     {
@@ -115,7 +116,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     }
 
     // done assuredly, even if an exception was thrown and caught.
-    db.RevertFOOTPRINTs( GetBoard());
+    db.RevertFOOTPRINTs( GetBoard() );
 
     // The two calls below to FOOTPRINT::Flip(), both set the
     // modified flag, yet their actions cancel each other out, so it should
@@ -147,8 +148,7 @@ const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
 
 
 /**
- * Function scale
- * converts a distance from PCBNEW internal units to the reported specctra dsn units
+ * Convert a distance from Pcbnew internal units to the reported Specctra DSN units
  * in floating point format.
  */
 static inline double scale( int kicadDist )
@@ -158,7 +158,7 @@ static inline double scale( int kicadDist )
 }
 
 
-// / Convert integer internal units to float um
+///< Convert integer internal units to float um
 static inline double IU2um( int kicadDist )
 {
     return kicadDist * (1000.0 / IU_PER_MM);
@@ -178,10 +178,10 @@ static inline double mapY( int y )
 
 
 /**
- * Function mapPt
- * converts a KiCad point into a DSN file point.  Kicad's BOARD coordinates
- * are in nanometers (called Internal Units or IU)and we are exporting in units
- * of mils, so we have to scale them.
+ * Convert a KiCad point into a DSN file point.
+ *
+ * Kicad's #BOARD coordinates are in nanometers (called Internal Units or IU) and we are
+ * exporting in units of mils, so we have to scale them.
  */
 static POINT mapPt( const wxPoint& pt )
 {
@@ -195,13 +195,11 @@ static POINT mapPt( const wxPoint& pt )
 
 
 /**
- * Function isRoundKeepout
- * decides if the pad is a copper-less through hole which needs to be made into
- * a round keepout.
+ * Decide if the pad is a copper-less through hole which needs to be made into a round keepout.
  */
 static bool isRoundKeepout( PAD* aPad )
 {
-    if( aPad->GetShape()==PAD_SHAPE_CIRCLE )
+    if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
     {
         if( aPad->GetDrillSize().x >= aPad->GetSize().x )
             return true;
@@ -215,8 +213,7 @@ static bool isRoundKeepout( PAD* aPad )
 
 
 /**
- * Function makePath
- * creates a PATH element with a single straight line, a pair of vertices.
+ * Create a PATH element with a single straight line, a pair of vertices.
  */
 static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string& aLayerName )
 {
@@ -568,7 +565,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
                 for( unsigned idx = 0; idx < polygonal_shape.size(); idx++ )
                 {
-                    POINT corner( scale( polygonal_shape[idx].x ), scale( -polygonal_shape[idx].y ) );
+                    POINT corner( scale( polygonal_shape[idx].x ),
+                                  scale( -polygonal_shape[idx].y ) );
                     corner += dsnOffset;
                     polygon->AppendPoint( corner );
                 }
@@ -578,9 +576,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             MD5_HASH hash  = pad_shape.GetHash();
             EDA_RECT rect = aPad->GetBoundingBox();
             snprintf( name, sizeof(name), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um_%s",
-                     uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
-                     IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ),
-                     (int)polygonal_shape.size(), hash.Format( true ).c_str() );
+                      uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
+                      IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ),
+                      (int)polygonal_shape.size(), hash.Format( true ).c_str() );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -606,7 +604,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
     // get all the FOOTPRINT's pads.
     fpItems.Collect( aFootprint, scanPADs );
 
-    IMAGE*  image = new IMAGE(0);
+    IMAGE*  image = new IMAGE( 0 );
 
     image->image_id = aFootprint->GetFPID().Format().c_str();
 
@@ -668,7 +666,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             padName     = pad->GetName();
             pin->pin_id = TO_UTF8( padName );
 
-            if( padName!=wxEmptyString && pinmap.find( padName )==pinmap.end() )
+            if( padName != wxEmptyString && pinmap.find( padName ) == pinmap.end() )
             {
                 pinmap[ padName ] = 0;
             }
@@ -699,7 +697,6 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
-#if 1    // enable image (outline) scopes.
     static const KICAD_T scanEDGEs[] = { PCB_FP_SHAPE_T, EOT };
 
     // get all the FOOTPRINT's FP_SHAPEs and convert those to DSN outlines.
@@ -775,14 +772,130 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         }
     }
 
-#endif
+    for( FP_ZONE* zone : aFootprint->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            continue;
+
+        // IMAGE object coordinates are relative to the IMAGE not absolute board coordinates.
+        ZONE untransformedZone( *zone );
+
+        double angle = -aFootprint->GetOrientation();
+        NORMALIZE_ANGLE_POS( angle );
+        untransformedZone.Rotate( aFootprint->GetPosition(), angle );
+
+        // keepout areas have a type. types are
+        // T_place_keepout, T_via_keepout, T_wire_keepout,
+        // T_bend_keepout, T_elongate_keepout, T_keepout.
+        // Pcbnew knows only T_keepout, T_via_keepout and T_wire_keepout
+        DSN_T keepout_type;
+
+        if( zone->GetDoNotAllowVias() && zone->GetDoNotAllowTracks() )
+            keepout_type = T_keepout;
+        else if( zone->GetDoNotAllowVias() )
+            keepout_type = T_via_keepout;
+        else if( zone->GetDoNotAllowTracks() )
+            keepout_type = T_wire_keepout;
+        else
+            keepout_type = T_keepout;
+
+        // Now, build keepout polygon on each copper layer where the zone
+        // keepout is living (keepout zones can live on many copper layers)
+        const int copperCount = aBoard->GetCopperLayerCount();
+
+        for( int layer = 0; layer < copperCount; layer++ )
+        {
+            if( layer == copperCount-1 )
+                layer = B_Cu;
+
+            if( !zone->IsOnLayer( PCB_LAYER_ID( layer ) ) )
+                continue;
+
+            KEEPOUT* keepout = new KEEPOUT( m_pcb->structure, keepout_type );
+            image->keepouts.push_back( keepout );
+
+            PATH* mainPolygon = new PATH( keepout, T_polygon );
+            keepout->SetShape( mainPolygon );
+
+            mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
+
+            // Handle the main outlines
+            SHAPE_POLY_SET::ITERATOR iterator;
+            bool is_first_point = true;
+            wxPoint startpoint;
+
+            for( iterator = untransformedZone.IterateWithHoles(); iterator; iterator++ )
+            {
+                wxPoint point( iterator->x, iterator->y );
+
+                point -= aFootprint->GetPosition();
+
+                if( is_first_point )
+                {
+                    startpoint = point;
+                    is_first_point = false;
+                }
+
+                mainPolygon->AppendPoint( mapPt( point ) );
+
+                // this was the end of the main polygon
+                if( iterator.IsEndContour() )
+                {
+                    mainPolygon->AppendPoint( mapPt( startpoint ) );
+                    break;
+                }
+            }
+
+            WINDOW* window = nullptr;
+            PATH*   cutout = nullptr;
+            bool    isStartContour = true;
+
+            // handle the cutouts
+            for( iterator++; iterator; iterator++ )
+            {
+                if( isStartContour )
+                {
+                    is_first_point = true;
+                    window = new WINDOW( keepout );
+                    keepout->AddWindow( window );
+
+                    cutout = new PATH( window, T_polygon );
+
+                    window->SetShape( cutout );
+
+                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                }
+
+                isStartContour = iterator.IsEndContour();
+
+                wxASSERT( window );
+                wxASSERT( cutout );
+
+                wxPoint point( iterator->x, iterator->y );
+
+                point -= aFootprint->GetPosition();
+
+                if( is_first_point )
+                {
+                    startpoint = point;
+                    is_first_point = false;
+                }
+
+                cutout->AppendPoint( mapPt( point ) );
+
+                // Close the polygon
+                if( iterator.IsEndContour() )
+                    cutout->AppendPoint( mapPt( startpoint ) );
+            }
+        }
+    }
 
     return image;
 }
 
 
 PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
-                               int aTopLayer, int aBotLayer )
+                                int aTopLayer, int aBotLayer )
 {
     char        name[48];
     PADSTACK*   padstack = new PADSTACK();
@@ -802,11 +915,10 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
         circle->SetLayerId( m_layerIds[layer].c_str() );
     }
 
-    snprintf( name, sizeof(name), "Via[%d-%d]_%.6g:%.6g_um",
+    snprintf( name, sizeof( name ), "Via[%d-%d]_%.6g:%.6g_um",
               aTopLayer, aBotLayer, dsnDiameter,
               // encode the drill value into the name for later import
-              IU2um( aDrillDiameter )
-              );
+              IU2um( aDrillDiameter ) );
 
     name[ sizeof(name) - 1 ] = 0;
     padstack->SetPadstackId( name );
@@ -956,12 +1068,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             case LT_SIGNAL: layerType = T_signal;       break;
             case LT_POWER:  layerType = T_power;        break;
 
-#if 1       // Freerouter does not support type "mixed", only signal and power.
+            // Freerouter does not support type "mixed", only signal and power.
             // Remap "mixed" to "signal".
             case LT_MIXED:  layerType = T_signal;       break;
-#else
-            case LT_MIXED:  layerType = T_mixed;        break;
-#endif
             case LT_JUMPER: layerType = T_jumper;       break;
             }
 
@@ -988,7 +1097,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         m_pcb->unit->units = T_um;
         m_pcb->resolution->units  = T_um;
         m_pcb->resolution->value  = 10;       // tenths of a um
-        // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
     }
 
     //-----<boundary_descriptor>------------------------------------------
@@ -1001,7 +1109,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         m_pcb->structure->SetBOUNDARY( boundary );
         fillBOUNDARY( aBoard, boundary );
     }
-
 
     //-----<rules>--------------------------------------------------------
     {
@@ -1038,29 +1145,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         rules.push_back( rule );
 
-        /* see: http://www.freerouting.net/usren/viewtopic.php?f=5&t=339#p474
-        sprintf( rule, "(clearance %.6g (type pad_to_turn_gap))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type smd_to_turn_gap))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type via_via))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type via_smd))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type via_pin))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type pin_pin))", clearance + safetyMargin );
-        rules.push_back( rule );
-
-        sprintf( rule, "(clearance %.6g (type smd_pin))", clearance + safetyMargin );
-        rules.push_back( rule );
-        */
-
         // Pad to pad spacing on a single SMT part can be closer than our
         // clearance, we don't want freerouter complaining about that, so
         // output a significantly smaller pad to pad clearance to freerouter.
@@ -1070,9 +1154,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         rules.push_back( rule );
     }
 
-
     //-----<zones (not keepout areas) become planes>--------------------------------
-    // Note: only zones are output here, keepout areas be be created later
+    // Note: only zones are output here, keepout areas are created later.
     {
         int netlessZones = 0;
 
@@ -1183,7 +1266,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     is_first_point = false;
                 }
 
-                cutout->AppendPoint( mapPt(point) );
+                cutout->AppendPoint( mapPt( point ) );
 
                 // Close the polygon
                 if( iterator.IsEndContour() )
@@ -1225,7 +1308,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             for( int layer = 0; layer < copperCount; layer++ )
             {
-                if( layer == copperCount-1)
+                if( layer == copperCount - 1 )
                     layer = B_Cu;
 
                 if( !item->IsOnLayer( PCB_LAYER_ID( layer ) ) )
@@ -1254,7 +1337,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                         is_first_point = false;
                     }
 
-                    mainPolygon->AppendPoint( mapPt(point) );
+                    mainPolygon->AppendPoint( mapPt( point ) );
 
                     // this was the end of the main polygon
                     if( iterator.IsEndContour() )
@@ -1374,7 +1457,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 }
             }
 
-
             IMAGE* registered = m_pcb->library->LookupIMAGE( image );
 
             if( registered != image )
@@ -1432,7 +1514,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
-
     //-----< output vias used in netclasses >-----------------------------------
     {
         NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
@@ -1442,19 +1523,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // the netclass dialog, or such control in the specctra export dialog.
 
 
-        // if( aBoard->GetDesignSettings().m_CurrentViaType == VIA_THROUGH )
-        {
-            m_top_via_layer = 0;       // first specctra cu layer is number zero.
-            m_bot_via_layer = aBoard->GetCopperLayerCount()-1;
-        }
-        /*
-        else
-        {
-            // again, should be in the BOARD:
-            topLayer = kicadLayer2pcb[ GetScreen()->m_Route_Layer_TOP ];
-            botLayer = kicadLayer2pcb[ GetScreen()->m_Route_Layer_BOTTOM ];
-        }
-        */
+        m_top_via_layer = 0;       // first specctra cu layer is number zero.
+        m_bot_via_layer = aBoard->GetCopperLayerCount()-1;
 
         // Add the via from the Default netclass first.  The via container
         // in pcb->library preserves the sequence of addition.
@@ -1469,29 +1539,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // we'll have to use LookupVia().
         wxASSERT( m_pcb->library->vias.size() == 0 );
         m_pcb->library->AppendVia( via );
-
-#if 0
-        // I've seen no way to make stock vias useable by freerouter.  Also the
-        // zero based diameter was leading to duplicates in the LookupVia() function.
-        // User should use netclass based vias when going to freerouter.
-
-        // Output the stock vias, but preserve uniqueness in the via container by
-        // using LookupVia().
-        for( unsigned i = 0; i < aBoard->m_ViasDimensionsList.size(); ++i )
-        {
-            int viaSize     = aBoard->m_ViasDimensionsList[i].m_Diameter;
-            int viaDrill    = aBoard->m_ViasDimensionsList[i].m_Drill;
-
-            via = makeVia( viaSize, viaDrill,
-                           m_top_via_layer, m_bot_via_layer );
-
-            // maybe add 'via' to the library, but only if unique.
-            PADSTACK* registered = pcb->library->LookupVia( via );
-
-            if( registered != via )
-                delete via;
-        }
-#endif
 
         // set the "spare via" index at the start of the
         // pcb->library->spareViaIndex = pcb->library->vias.size();
@@ -1511,9 +1558,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 delete via;
         }
     }
-
-
-#if 1    // do existing wires and vias
 
     //-----<create the wires from tracks>-----------------------------------
     {
@@ -1540,11 +1584,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( netcode == 0 )
                 continue;
 
-            if( old_netcode != netcode ||
-                old_width   != track->GetWidth() ||
-                old_layer   != track->GetLayer() ||
-                (path && path->points.back() != mapPt(track->GetStart()) )
-              )
+            if( old_netcode != netcode || old_width != track->GetWidth() ||
+                old_layer != track->GetLayer() ||
+                ( path && path->points.back() != mapPt(track->GetStart() ) ) )
             {
                 old_width   = track->GetWidth();
                 old_layer   = track->GetLayer();
@@ -1581,7 +1623,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 path->AppendPoint( mapPt( track->GetEnd() ) );
         }
     }
-
 
     //-----<export the existing real BOARD instantiated vias>-----------------
     {
@@ -1626,8 +1667,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
-#endif    // do existing wires and vias
-
     //-----<via_descriptor>-------------------------------------------------
     {
         // The pcb->library will output <padstack_descriptors> which is a combined
@@ -1643,7 +1682,6 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             vias->AppendVia( m_pcb->library->vias[viaNdx].padstack_id.c_str() );
         }
     }
-
 
     //-----<output NETCLASSs>----------------------------------------------------
     NETCLASSES& nclasses = aBoard->GetDesignSettings().GetNetClasses();
@@ -1743,6 +1781,7 @@ void SPECCTRA_DB::FlipFOOTPRINTs( BOARD* aBoard )
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         footprint->SetFlag( 0 );
+
         if( footprint->GetLayer() == B_Cu )
         {
             footprint->Flip( footprint->GetPosition(), false );
