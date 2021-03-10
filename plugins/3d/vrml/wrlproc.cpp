@@ -48,7 +48,7 @@
 
 WRLPROC::WRLPROC( LINE_READER* aLineReader )
 {
-    m_fileVersion = VRML_INVALID;
+    m_fileVersion = WRLVERSION::VRML_INVALID;
     m_eof = false;
     m_fileline = 0;
     m_bufpos = 0;
@@ -78,7 +78,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
 
     if( m_buf.compare( 0, 16, "#VRML V1.0 ascii"  ) == 0 )
     {
-        m_fileVersion = VRML_V1;
+        m_fileVersion = WRLVERSION::VRML_V1;
         // nothing < 0x20, and no:
         // single or double quote
         // backslash
@@ -91,7 +91,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
 
     if( m_buf.compare( 0, 15, "#VRML V2.0 utf8" ) == 0 )
     {
-        m_fileVersion = VRML_V2;
+        m_fileVersion = WRLVERSION::VRML_V2;
         // nothing < 0x20, and no:
         // single or double quotes
         // sharp (#)
@@ -112,7 +112,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     }
 
     m_buf.clear();
-    m_fileVersion = VRML_INVALID;
+    m_fileVersion = WRLVERSION::VRML_INVALID;
     m_eof = true;
 
     m_error = "not a valid VRML file: '";
@@ -158,7 +158,7 @@ bool WRLPROC::getRawLine( void )
     while( !m_buf.empty() && ( *m_buf.rbegin() == '\r' || *m_buf.rbegin() == '\n' ) )
         m_buf.erase( --m_buf.end() );
 
-    if( VRML_V1 == m_fileVersion && !m_buf.empty() )
+    if( WRLVERSION::VRML_V1 == m_fileVersion && !m_buf.empty() )
     {
         std::string::iterator sS = m_buf.begin();
         std::string::iterator eS = m_buf.end();
@@ -633,7 +633,7 @@ bool WRLPROC::ReadString( std::string& aSFString )
             break;
     }
 
-    if( VRML_V2 == m_fileVersion && '"' != m_buf[m_bufpos] )
+    if( WRLVERSION::VRML_V2 == m_fileVersion && '"' != m_buf[m_bufpos] )
     {
         m_error = "invalid VRML2 file (string not quoted)";
         return false;

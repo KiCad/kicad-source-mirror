@@ -105,7 +105,7 @@ bool WRL1BASE::SetName( const std::string& aName )
 
 bool WRL1BASE::Read( WRLPROC& proc )
 {
-    if( proc.GetVRMLType() != VRML_V1 )
+    if( proc.GetVRMLType() != WRLVERSION::VRML_V1 )
     {
         #ifdef DEBUG_VRML1
         do {

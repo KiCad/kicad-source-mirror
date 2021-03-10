@@ -228,7 +228,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     if( tmpfilename.IsOk() )
         wxRemoveFile( tmpfilename.GetFullPath() );
 
-    if( proc.GetVRMLType() == VRML_V1 )
+    if( proc.GetVRMLType() == WRLVERSION::VRML_V1 )
     {
         wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file\n" );
 

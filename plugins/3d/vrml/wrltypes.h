@@ -37,7 +37,7 @@
 #define MASK_VRML "PLUGIN_VRML"
 
 // version of the VRML file being parsed
-enum WRLVERSION
+enum class WRLVERSION
 {
     VRML_INVALID = 0,   // not a valid VRML file
     VRML_V1,
