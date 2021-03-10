@@ -62,7 +62,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	m_selWidthCtrl = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT|wxSP_ARROW_KEYS, 0, 50, 0, 1 );
 	m_selWidthCtrl->SetDigits( 0 );
-	fgSizer321->Add( m_selWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizer321->Add( m_selWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	sbSizer3->Add( fgSizer321, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -72,7 +72,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer3->Add( m_highlightColorNote, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bRightColumn->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
+	bRightColumn->Add( sbSizer3, 0, wxTOP|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer31;
 	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Cross-probing") ), wxVERTICAL );
