@@ -36,7 +36,7 @@ WRL2APPEARANCE::WRL2APPEARANCE() : WRL2NODE()
     material = NULL;
     texture = NULL;
     textureTransform = NULL;
-    m_Type = WRL2_APPEARANCE;
+    m_Type = WRL2NODES::WRL2_APPEARANCE;
     return;
 }
 
@@ -46,7 +46,7 @@ WRL2APPEARANCE::WRL2APPEARANCE( WRL2NODE* aParent ) : WRL2NODE()
     material = NULL;
     texture = NULL;
     textureTransform = NULL;
-    m_Type = WRL2_APPEARANCE;
+    m_Type = WRL2NODES::WRL2_APPEARANCE;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -74,11 +74,11 @@ bool WRL2APPEARANCE::checkNodeType( WRL2NODES aType )
 {
     switch( aType )
     {
-    case WRL2_MATERIAL:
-    case WRL2_IMAGETEXTURE:
-    case WRL2_PIXELTEXTURE:
-    case WRL2_MOVIETEXTURE:
-    case WRL2_TEXTURETRANSFORM:
+    case WRL2NODES::WRL2_MATERIAL:
+    case WRL2NODES::WRL2_IMAGETEXTURE:
+    case WRL2NODES::WRL2_PIXELTEXTURE:
+    case WRL2NODES::WRL2_MOVIETEXTURE:
+    case WRL2NODES::WRL2_TEXTURETRANSFORM:
         break;
 
     default:
@@ -94,7 +94,7 @@ bool WRL2APPEARANCE::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_SHAPE )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -134,7 +134,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_MATERIAL == type )
+    if( WRL2NODES::WRL2_MATERIAL == type )
     {
         if( NULL != material )
         {
@@ -154,7 +154,7 @@ bool WRL2APPEARANCE::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( WRL2_TEXTURETRANSFORM == type )
+    if( WRL2NODES::WRL2_TEXTURETRANSFORM == type )
     {
         if( NULL != textureTransform )
         {
@@ -226,7 +226,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_MATERIAL == type )
+    if( WRL2NODES::WRL2_MATERIAL == type )
     {
         if( NULL != material )
         {
@@ -246,7 +246,7 @@ bool WRL2APPEARANCE::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( WRL2_TEXTURETRANSFORM == type )
+    if( WRL2NODES::WRL2_TEXTURETRANSFORM == type )
     {
         if( NULL != textureTransform )
         {

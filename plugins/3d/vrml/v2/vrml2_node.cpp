@@ -46,7 +46,7 @@ WRL2NODE::WRL2NODE()
 {
     m_sgNode = NULL;
     m_Parent = NULL;
-    m_Type = WRL2_END;
+    m_Type = WRL2NODES::WRL2_END;
 
     if( badNames.empty() )
     {
@@ -68,60 +68,60 @@ WRL2NODE::WRL2NODE()
 
     if( nodenames.empty() )
     {
-        nodenames.insert( NODEITEM( "Anchor", WRL2_ANCHOR ) );
-        nodenames.insert( NODEITEM( "Appearance", WRL2_APPEARANCE ) );
-        nodenames.insert( NODEITEM( "Audioclip", WRL2_AUDIOCLIP ) );
-        nodenames.insert( NODEITEM( "Background", WRL2_BACKGROUND ) );
-        nodenames.insert( NODEITEM( "Billboard", WRL2_BILLBOARD ) );
-        nodenames.insert( NODEITEM( "Box", WRL2_BOX ) );
-        nodenames.insert( NODEITEM( "Collision", WRL2_COLLISION ) );
-        nodenames.insert( NODEITEM( "Color", WRL2_COLOR ) );
-        nodenames.insert( NODEITEM( "ColorInterpolator", WRL2_COLORINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "Cone", WRL2_CONE ) );
-        nodenames.insert( NODEITEM( "Coordinate", WRL2_COORDINATE ) );
-        nodenames.insert( NODEITEM( "CoordinateInterpolator", WRL2_COORDINATEINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "Cylinder", WRL2_CYLINDER ) );
-        nodenames.insert( NODEITEM( "CylinderSensor", WRL2_CYLINDERSENSOR ) );
-        nodenames.insert( NODEITEM( "DirectionalLight", WRL2_DIRECTIONALLIGHT ) );
-        nodenames.insert( NODEITEM( "ElevationGrid", WRL2_ELEVATIONGRID ) );
-        nodenames.insert( NODEITEM( "Extrusion", WRL2_EXTRUSION ) );
-        nodenames.insert( NODEITEM( "Fog", WRL2_FOG ) );
-        nodenames.insert( NODEITEM( "FontStyle", WRL2_FONTSTYLE ) );
-        nodenames.insert( NODEITEM( "Group", WRL2_GROUP ) );
-        nodenames.insert( NODEITEM( "ImageTexture", WRL2_IMAGETEXTURE ) );
-        nodenames.insert( NODEITEM( "IndexedFaceSet", WRL2_INDEXEDFACESET ) );
-        nodenames.insert( NODEITEM( "IndexedLineSet", WRL2_INDEXEDLINESET ) );
-        nodenames.insert( NODEITEM( "Inline", WRL2_INLINE ) );
-        nodenames.insert( NODEITEM( "LOD", WRL2_LOD ) );
-        nodenames.insert( NODEITEM( "Material", WRL2_MATERIAL ) );
-        nodenames.insert( NODEITEM( "MovieTexture", WRL2_MOVIETEXTURE ) );
-        nodenames.insert( NODEITEM( "NavigationInfo", WRL2_NAVIGATIONINFO ) );
-        nodenames.insert( NODEITEM( "Normal", WRL2_NORMAL ) );
-        nodenames.insert( NODEITEM( "NormalInterpolator", WRL2_NORMALINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "OrientationInterpolator", WRL2_ORIENTATIONINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "PixelTexture", WRL2_PIXELTEXTURE ) );
-        nodenames.insert( NODEITEM( "PlaneSensor", WRL2_PLANESENSOR ) );
-        nodenames.insert( NODEITEM( "PointLight", WRL2_POINTLIGHT ) );
-        nodenames.insert( NODEITEM( "PointSet", WRL2_POINTSET ) );
-        nodenames.insert( NODEITEM( "PositionInterpolator", WRL2_POSITIONINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "ProximitySensor", WRL2_PROXIMITYSENSOR ) );
-        nodenames.insert( NODEITEM( "ScalarInterpolator", WRL2_SCALARINTERPOLATOR ) );
-        nodenames.insert( NODEITEM( "Script", WRL2_SCRIPT ) );
-        nodenames.insert( NODEITEM( "Shape", WRL2_SHAPE ) );
-        nodenames.insert( NODEITEM( "Sound", WRL2_SOUND ) );
-        nodenames.insert( NODEITEM( "Sphere", WRL2_SPHERE ) );
-        nodenames.insert( NODEITEM( "SphereSensor", WRL2_SPHERESENSOR ) );
-        nodenames.insert( NODEITEM( "SpotLight", WRL2_SPOTLIGHT ) );
-        nodenames.insert( NODEITEM( "Switch", WRL2_SWITCH ) );
-        nodenames.insert( NODEITEM( "Text", WRL2_TEXT ) );
-        nodenames.insert( NODEITEM( "TextureCoordinate", WRL2_TEXTURECOORDINATE ) );
-        nodenames.insert( NODEITEM( "TextureTransform", WRL2_TEXTURETRANSFORM ) );
-        nodenames.insert( NODEITEM( "TimeSensor", WRL2_TIMESENSOR ) );
-        nodenames.insert( NODEITEM( "TouchSensor", WRL2_TOUCHSENSOR ) );
-        nodenames.insert( NODEITEM( "Transform", WRL2_TRANSFORM ) );
-        nodenames.insert( NODEITEM( "ViewPoint", WRL2_VIEWPOINT ) );
-        nodenames.insert( NODEITEM( "VisibilitySensor", WRL2_VISIBILITYSENSOR ) );
-        nodenames.insert( NODEITEM( "WorldInfo", WRL2_WORLDINFO ) );
+        nodenames.insert( NODEITEM( "Anchor", WRL2NODES::WRL2_ANCHOR ) );
+        nodenames.insert( NODEITEM( "Appearance", WRL2NODES::WRL2_APPEARANCE ) );
+        nodenames.insert( NODEITEM( "Audioclip", WRL2NODES::WRL2_AUDIOCLIP ) );
+        nodenames.insert( NODEITEM( "Background", WRL2NODES::WRL2_BACKGROUND ) );
+        nodenames.insert( NODEITEM( "Billboard", WRL2NODES::WRL2_BILLBOARD ) );
+        nodenames.insert( NODEITEM( "Box", WRL2NODES::WRL2_BOX ) );
+        nodenames.insert( NODEITEM( "Collision", WRL2NODES::WRL2_COLLISION ) );
+        nodenames.insert( NODEITEM( "Color", WRL2NODES::WRL2_COLOR ) );
+        nodenames.insert( NODEITEM( "ColorInterpolator", WRL2NODES::WRL2_COLORINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "Cone", WRL2NODES::WRL2_CONE ) );
+        nodenames.insert( NODEITEM( "Coordinate", WRL2NODES::WRL2_COORDINATE ) );
+        nodenames.insert( NODEITEM( "CoordinateInterpolator", WRL2NODES::WRL2_COORDINATEINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "Cylinder", WRL2NODES::WRL2_CYLINDER ) );
+        nodenames.insert( NODEITEM( "CylinderSensor", WRL2NODES::WRL2_CYLINDERSENSOR ) );
+        nodenames.insert( NODEITEM( "DirectionalLight", WRL2NODES::WRL2_DIRECTIONALLIGHT ) );
+        nodenames.insert( NODEITEM( "ElevationGrid", WRL2NODES::WRL2_ELEVATIONGRID ) );
+        nodenames.insert( NODEITEM( "Extrusion", WRL2NODES::WRL2_EXTRUSION ) );
+        nodenames.insert( NODEITEM( "Fog", WRL2NODES::WRL2_FOG ) );
+        nodenames.insert( NODEITEM( "FontStyle", WRL2NODES::WRL2_FONTSTYLE ) );
+        nodenames.insert( NODEITEM( "Group", WRL2NODES::WRL2_GROUP ) );
+        nodenames.insert( NODEITEM( "ImageTexture", WRL2NODES::WRL2_IMAGETEXTURE ) );
+        nodenames.insert( NODEITEM( "IndexedFaceSet", WRL2NODES::WRL2_INDEXEDFACESET ) );
+        nodenames.insert( NODEITEM( "IndexedLineSet", WRL2NODES::WRL2_INDEXEDLINESET ) );
+        nodenames.insert( NODEITEM( "Inline", WRL2NODES::WRL2_INLINE ) );
+        nodenames.insert( NODEITEM( "LOD", WRL2NODES::WRL2_LOD ) );
+        nodenames.insert( NODEITEM( "Material", WRL2NODES::WRL2_MATERIAL ) );
+        nodenames.insert( NODEITEM( "MovieTexture", WRL2NODES::WRL2_MOVIETEXTURE ) );
+        nodenames.insert( NODEITEM( "NavigationInfo", WRL2NODES::WRL2_NAVIGATIONINFO ) );
+        nodenames.insert( NODEITEM( "Normal", WRL2NODES::WRL2_NORMAL ) );
+        nodenames.insert( NODEITEM( "NormalInterpolator", WRL2NODES::WRL2_NORMALINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "OrientationInterpolator", WRL2NODES::WRL2_ORIENTATIONINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "PixelTexture", WRL2NODES::WRL2_PIXELTEXTURE ) );
+        nodenames.insert( NODEITEM( "PlaneSensor", WRL2NODES::WRL2_PLANESENSOR ) );
+        nodenames.insert( NODEITEM( "PointLight", WRL2NODES::WRL2_POINTLIGHT ) );
+        nodenames.insert( NODEITEM( "PointSet", WRL2NODES::WRL2_POINTSET ) );
+        nodenames.insert( NODEITEM( "PositionInterpolator", WRL2NODES::WRL2_POSITIONINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "ProximitySensor", WRL2NODES::WRL2_PROXIMITYSENSOR ) );
+        nodenames.insert( NODEITEM( "ScalarInterpolator", WRL2NODES::WRL2_SCALARINTERPOLATOR ) );
+        nodenames.insert( NODEITEM( "Script", WRL2NODES::WRL2_SCRIPT ) );
+        nodenames.insert( NODEITEM( "Shape", WRL2NODES::WRL2_SHAPE ) );
+        nodenames.insert( NODEITEM( "Sound", WRL2NODES::WRL2_SOUND ) );
+        nodenames.insert( NODEITEM( "Sphere", WRL2NODES::WRL2_SPHERE ) );
+        nodenames.insert( NODEITEM( "SphereSensor", WRL2NODES::WRL2_SPHERESENSOR ) );
+        nodenames.insert( NODEITEM( "SpotLight", WRL2NODES::WRL2_SPOTLIGHT ) );
+        nodenames.insert( NODEITEM( "Switch", WRL2NODES::WRL2_SWITCH ) );
+        nodenames.insert( NODEITEM( "Text", WRL2NODES::WRL2_TEXT ) );
+        nodenames.insert( NODEITEM( "TextureCoordinate", WRL2NODES::WRL2_TEXTURECOORDINATE ) );
+        nodenames.insert( NODEITEM( "TextureTransform", WRL2NODES::WRL2_TEXTURETRANSFORM ) );
+        nodenames.insert( NODEITEM( "TimeSensor", WRL2NODES::WRL2_TIMESENSOR ) );
+        nodenames.insert( NODEITEM( "TouchSensor", WRL2NODES::WRL2_TOUCHSENSOR ) );
+        nodenames.insert( NODEITEM( "Transform", WRL2NODES::WRL2_TRANSFORM ) );
+        nodenames.insert( NODEITEM( "ViewPoint", WRL2NODES::WRL2_VIEWPOINT ) );
+        nodenames.insert( NODEITEM( "VisibilitySensor", WRL2NODES::WRL2_VISIBILITYSENSOR ) );
+        nodenames.insert( NODEITEM( "WorldInfo", WRL2NODES::WRL2_WORLDINFO ) );
     }
 
     return;
@@ -294,14 +294,14 @@ bool WRL2NODE::SetName( const std::string& aName )
 
 const char* WRL2NODE::GetNodeTypeName( WRL2NODES aNodeType ) const
 {
-    if( aNodeType < WRL2_BASE || aNodeType >= WRL2_END )
+    if( aNodeType < WRL2NODES::WRL2_BASE || aNodeType >= WRL2NODES::WRL2_END )
         return "*INVALID_TYPE*";
 
-    if( aNodeType == WRL2_BASE )
+    if( aNodeType == WRL2NODES::WRL2_BASE )
         return "*VIRTUAL_BASE*";
 
     NODEMAP::iterator it = nodenames.begin();
-    advance( it, (aNodeType - WRL2_BEGIN) );
+    advance( it, (static_cast<int>( aNodeType ) - static_cast<int>( WRL2NODES::WRL2_BEGIN ) ) );
 
     return it->first.c_str();
 }
@@ -314,7 +314,7 @@ WRL2NODES WRL2NODE::getNodeTypeID( const std::string& aNodeName )
     if( nodenames.end() != it )
         return it->second;
 
-    return WRL2_INVALID;
+    return WRL2NODES::WRL2_INVALID;
 }
 
 
@@ -379,7 +379,7 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
     if( aNode == NULL )
         return false;
 
-    if( aNode->GetNodeType() == WRL2_BASE )
+    if( aNode->GetNodeType() == WRL2NODES::WRL2_BASE )
     {
         #ifdef DEBUG_VRML2
         do {
@@ -429,7 +429,7 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( aNode->GetNodeType() == WRL2_BASE )
+    if( aNode->GetNodeType() == WRL2NODES::WRL2_BASE )
     {
         #ifdef DEBUG_VRML2
         do {

@@ -50,7 +50,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline );
 WRL2BASE::WRL2BASE() : WRL2NODE()
 {
     m_useInline = false;
-    m_Type = WRL2_BASE;
+    m_Type = WRL2NODES::WRL2_BASE;
     return;
 }
 
@@ -538,28 +538,28 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         //
         // items to be implemented:
         //
-    case WRL2_APPEARANCE:
+    case WRL2NODES::WRL2_APPEARANCE:
 
         if( !readAppearance( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_BOX:
+    case WRL2NODES::WRL2_BOX:
 
         if( !readBox( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_COLOR:
+    case WRL2NODES::WRL2_COLOR:
 
         if( !readColor( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_CONE:
+    case WRL2NODES::WRL2_CONE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
@@ -588,14 +588,14 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
-    case WRL2_COORDINATE:
+    case WRL2NODES::WRL2_COORDINATE:
 
         if( !readCoords( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_CYLINDER:
+    case WRL2NODES::WRL2_CYLINDER:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
@@ -622,7 +622,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
-    case WRL2_ELEVATIONGRID:
+    case WRL2NODES::WRL2_ELEVATIONGRID:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
@@ -651,7 +651,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
-    case WRL2_EXTRUSION:
+    case WRL2NODES::WRL2_EXTRUSION:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
@@ -678,49 +678,49 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
-    case WRL2_INDEXEDFACESET:
+    case WRL2NODES::WRL2_INDEXEDFACESET:
 
         if( !readFaceSet( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_INDEXEDLINESET:
+    case WRL2NODES::WRL2_INDEXEDLINESET:
 
         if( !readLineSet( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_POINTSET:
+    case WRL2NODES::WRL2_POINTSET:
 
         if( !readPointSet( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_MATERIAL:
+    case WRL2NODES::WRL2_MATERIAL:
 
         if( !readMaterial( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_NORMAL:
+    case WRL2NODES::WRL2_NORMAL:
 
         if( !readNorms( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_SHAPE:
+    case WRL2NODES::WRL2_SHAPE:
 
         if( !readShape( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_SPHERE:
+    case WRL2NODES::WRL2_SPHERE:
         // XXX - IMPLEMENT
         if( !proc.DiscardNode() )
         {
@@ -747,22 +747,22 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
         break;
 
-    case WRL2_SWITCH:
+    case WRL2NODES::WRL2_SWITCH:
 
         if( !readSwitch( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_TRANSFORM:
-    case WRL2_GROUP:
+    case WRL2NODES::WRL2_TRANSFORM:
+    case WRL2NODES::WRL2_GROUP:
 
         if( !readTransform( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL2_INLINE:
+    case WRL2NODES::WRL2_INLINE:
 
         if( !readInline( proc, aParent, aNode ) )
             return false;
@@ -772,42 +772,42 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
     //
     // items not implemented or for optional future implementation:
     //
-    case WRL2_ANCHOR:
-    case WRL2_AUDIOCLIP:
-    case WRL2_BACKGROUND:
-    case WRL2_BILLBOARD:
-    case WRL2_COLLISION:
-    case WRL2_COLORINTERPOLATOR:
-    case WRL2_COORDINATEINTERPOLATOR:
-    case WRL2_CYLINDERSENSOR:
-    case WRL2_DIRECTIONALLIGHT:
-    case WRL2_FOG:
-    case WRL2_FONTSTYLE:
-    case WRL2_IMAGETEXTURE:
-    case WRL2_LOD:
-    case WRL2_MOVIETEXTURE:
-    case WRL2_NAVIGATIONINFO:
-    case WRL2_NORMALINTERPOLATOR:
-    case WRL2_ORIENTATIONINTERPOLATOR:
-    case WRL2_PIXELTEXTURE:
-    case WRL2_PLANESENSOR:
-    case WRL2_POINTLIGHT:
-    case WRL2_POSITIONINTERPOLATOR:
-    case WRL2_PROXIMITYSENSOR:
-    case WRL2_SCALARINTERPOLATOR:
-    case WRL2_SCRIPT:
-    case WRL2_SOUND:
-    case WRL2_SPHERESENSOR:
-    case WRL2_SPOTLIGHT:
-    case WRL2_TEXT:
-    case WRL2_TEXTURECOORDINATE:
-    case WRL2_TEXTURETRANSFORM:
-    case WRL2_TIMESENSOR:
-    case WRL2_TOUCHSENSOR:
-    case WRL2_VIEWPOINT:
-    case WRL2_VISIBILITYSENSOR:
-    case WRL2_WORLDINFO:
-    case WRL2_INVALID:
+    case WRL2NODES::WRL2_ANCHOR:
+    case WRL2NODES::WRL2_AUDIOCLIP:
+    case WRL2NODES::WRL2_BACKGROUND:
+    case WRL2NODES::WRL2_BILLBOARD:
+    case WRL2NODES::WRL2_COLLISION:
+    case WRL2NODES::WRL2_COLORINTERPOLATOR:
+    case WRL2NODES::WRL2_COORDINATEINTERPOLATOR:
+    case WRL2NODES::WRL2_CYLINDERSENSOR:
+    case WRL2NODES::WRL2_DIRECTIONALLIGHT:
+    case WRL2NODES::WRL2_FOG:
+    case WRL2NODES::WRL2_FONTSTYLE:
+    case WRL2NODES::WRL2_IMAGETEXTURE:
+    case WRL2NODES::WRL2_LOD:
+    case WRL2NODES::WRL2_MOVIETEXTURE:
+    case WRL2NODES::WRL2_NAVIGATIONINFO:
+    case WRL2NODES::WRL2_NORMALINTERPOLATOR:
+    case WRL2NODES::WRL2_ORIENTATIONINTERPOLATOR:
+    case WRL2NODES::WRL2_PIXELTEXTURE:
+    case WRL2NODES::WRL2_PLANESENSOR:
+    case WRL2NODES::WRL2_POINTLIGHT:
+    case WRL2NODES::WRL2_POSITIONINTERPOLATOR:
+    case WRL2NODES::WRL2_PROXIMITYSENSOR:
+    case WRL2NODES::WRL2_SCALARINTERPOLATOR:
+    case WRL2NODES::WRL2_SCRIPT:
+    case WRL2NODES::WRL2_SOUND:
+    case WRL2NODES::WRL2_SPHERESENSOR:
+    case WRL2NODES::WRL2_SPOTLIGHT:
+    case WRL2NODES::WRL2_TEXT:
+    case WRL2NODES::WRL2_TEXTURECOORDINATE:
+    case WRL2NODES::WRL2_TEXTURETRANSFORM:
+    case WRL2NODES::WRL2_TIMESENSOR:
+    case WRL2NODES::WRL2_TOUCHSENSOR:
+    case WRL2NODES::WRL2_VIEWPOINT:
+    case WRL2NODES::WRL2_VISIBILITYSENSOR:
+    case WRL2NODES::WRL2_WORLDINFO:
+    case WRL2NODES::WRL2_INVALID:
     default:
 
         proc.GetFilePosData( line, column );
@@ -1202,7 +1202,7 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 
         switch( type )
         {
-        case WRL2_SHAPE:
+        case WRL2NODES::WRL2_SHAPE:
             // wrap the shape in a transform
             do
             {
@@ -1218,9 +1218,9 @@ SGNODE* WRL2BASE::TranslateToSG( SGNODE* aParent )
 
             break;
 
-        case WRL2_TRANSFORM:
-        case WRL2_SWITCH:
-        case WRL2_INLINE:
+        case WRL2NODES::WRL2_TRANSFORM:
+        case WRL2NODES::WRL2_SWITCH:
+        case WRL2NODES::WRL2_INLINE:
 
             if( NULL != (*sC)->TranslateToSG( topNode.GetRawPtr() ) )
                 test = true;

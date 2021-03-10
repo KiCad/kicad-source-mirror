@@ -33,7 +33,7 @@
 
 WRL2BOX::WRL2BOX() : WRL2NODE()
 {
-    m_Type = WRL2_BOX;
+    m_Type = WRL2NODES::WRL2_BOX;
     size.x = 2.0;
     size.y = 2.0;
     size.z = 2.0;
@@ -44,7 +44,7 @@ WRL2BOX::WRL2BOX() : WRL2NODE()
 
 WRL2BOX::WRL2BOX( WRL2NODE* aParent ) : WRL2NODE()
 {
-    m_Type = WRL2_BOX;
+    m_Type = WRL2NODES::WRL2_BOX;
     m_Parent = aParent;
     size.x = 2.0;
     size.y = 2.0;
@@ -71,7 +71,7 @@ bool WRL2BOX::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_SHAPE )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;

@@ -37,7 +37,7 @@
 WRL2FACESET::WRL2FACESET() : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_INDEXEDFACESET;
+    m_Type = WRL2NODES::WRL2_INDEXEDFACESET;
 
     return;
 }
@@ -46,7 +46,7 @@ WRL2FACESET::WRL2FACESET() : WRL2NODE()
 WRL2FACESET::WRL2FACESET( WRL2NODE* aParent ) : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_INDEXEDFACESET;
+    m_Type = WRL2NODES::WRL2_INDEXEDFACESET;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -100,10 +100,10 @@ bool WRL2FACESET::checkNodeType( WRL2NODES aType )
 
     switch( aType )
     {
-    case WRL2_COLOR:
-    case WRL2_COORDINATE:
-    case WRL2_NORMAL:
-    case WRL2_TEXTURECOORDINATE:
+    case WRL2NODES::WRL2_COLOR:
+    case WRL2NODES::WRL2_COORDINATE:
+    case WRL2NODES::WRL2_NORMAL:
+    case WRL2NODES::WRL2_TEXTURECOORDINATE:
         break;
 
     default:
@@ -119,7 +119,7 @@ bool WRL2FACESET::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_SHAPE )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -159,7 +159,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_COLOR == type )
+    if( WRL2NODES::WRL2_COLOR == type )
     {
         if( NULL != color )
         {
@@ -179,7 +179,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( WRL2_COORDINATE == type )
+    if( WRL2NODES::WRL2_COORDINATE == type )
     {
         if( NULL != coord )
         {
@@ -199,7 +199,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( WRL2_NORMAL == type )
+    if( WRL2NODES::WRL2_NORMAL == type )
     {
         if( NULL != normal )
         {
@@ -219,7 +219,7 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( WRL2_TEXTURECOORDINATE != type )
+    if( WRL2NODES::WRL2_TEXTURECOORDINATE != type )
     {
         #ifdef DEBUG_VRML2
         do {
@@ -285,7 +285,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_COLOR == type )
+    if( WRL2NODES::WRL2_COLOR == type )
     {
         if( NULL != color )
         {
@@ -305,7 +305,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( WRL2_COORDINATE == type )
+    if( WRL2NODES::WRL2_COORDINATE == type )
     {
         if( NULL != coord )
         {
@@ -325,7 +325,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( WRL2_NORMAL == type )
+    if( WRL2NODES::WRL2_NORMAL == type )
     {
         if( NULL != normal )
         {
@@ -345,7 +345,7 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( WRL2_TEXTURECOORDINATE != type )
+    if( WRL2NODES::WRL2_TEXTURECOORDINATE != type )
     {
         #ifdef DEBUG_VRML2
         do {

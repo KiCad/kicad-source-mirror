@@ -118,11 +118,11 @@ enum WRL1_ORDER
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of
 // a file.
-enum WRL2NODES
+enum class WRL2NODES
 {
     WRL2_BASE = 0,  // not really a VRML node but we need a top level virtual node
     WRL2_BEGIN,
-    WRL2_ANCHOR = WRL2_BEGIN,
+    WRL2_ANCHOR = WRL2NODES::WRL2_BEGIN,
     WRL2_APPEARANCE,
     WRL2_AUDIOCLIP,
     WRL2_BACKGROUND,

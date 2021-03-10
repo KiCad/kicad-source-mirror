@@ -32,14 +32,14 @@
 
 WRL2TRANSFORM::WRL2TRANSFORM() : WRL2NODE()
 {
-    m_Type = WRL2_TRANSFORM;
+    m_Type = WRL2NODES::WRL2_TRANSFORM;
     return;
 }
 
 
 WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 {
-    m_Type = WRL2_TRANSFORM;
+    m_Type = WRL2NODES::WRL2_TRANSFORM;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -345,7 +345,7 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
 
     // take possession if the node is dangling WRL2_SHAPE
 
-    if( WRL2_SHAPE == aNode->GetNodeType() && aNode->isDangling() )
+    if( WRL2NODES::WRL2_SHAPE == aNode->GetNodeType() && aNode->isDangling() )
     {
         WRL2NODE* np = aNode->GetParent();
 
@@ -495,10 +495,10 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
 
             switch( type )
             {
-            case WRL2_SHAPE:
-            case WRL2_SWITCH:
-            case WRL2_INLINE:
-            case WRL2_TRANSFORM:
+            case WRL2NODES::WRL2_SHAPE:
+            case WRL2NODES::WRL2_SWITCH:
+            case WRL2NODES::WRL2_INLINE:
+            case WRL2NODES::WRL2_TRANSFORM:
 
                 if( NULL != (*sC)->TranslateToSG( txNode.GetRawPtr() ) )
                     test = true;

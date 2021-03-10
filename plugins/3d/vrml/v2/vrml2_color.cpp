@@ -32,14 +32,14 @@
 
 WRL2COLOR::WRL2COLOR() : WRL2NODE()
 {
-    m_Type = WRL2_COLOR;
+    m_Type = WRL2NODES::WRL2_COLOR;
     return;
 }
 
 
 WRL2COLOR::WRL2COLOR( WRL2NODE* aParent ) : WRL2NODE()
 {
-    m_Type = WRL2_COLOR;
+    m_Type = WRL2NODES::WRL2_COLOR;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -63,7 +63,7 @@ bool WRL2COLOR::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_INDEXEDFACESET
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_INDEXEDFACESET )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_INDEXEDFACESET )
         return true;
 
     return false;

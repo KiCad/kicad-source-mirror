@@ -32,14 +32,14 @@
 
 WRL2NORMS::WRL2NORMS() : WRL2NODE()
 {
-    m_Type = WRL2_NORMAL;
+    m_Type = WRL2NODES::WRL2_NORMAL;
     return;
 }
 
 
 WRL2NORMS::WRL2NORMS( WRL2NODE* aParent ) : WRL2NODE()
 {
-    m_Type = WRL2_NORMAL;
+    m_Type = WRL2NODES::WRL2_NORMAL;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -63,7 +63,7 @@ bool WRL2NORMS::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_INDEXEDFACESET
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_INDEXEDFACESET )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_INDEXEDFACESET )
         return true;
 
     return false;

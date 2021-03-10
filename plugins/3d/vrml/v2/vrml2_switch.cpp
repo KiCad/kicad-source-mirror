@@ -32,7 +32,7 @@
 
 WRL2SWITCH::WRL2SWITCH() : WRL2NODE()
 {
-    m_Type = WRL2_SWITCH;
+    m_Type = WRL2NODES::WRL2_SWITCH;
     whichChoice = -1;
 
     return;
@@ -41,7 +41,7 @@ WRL2SWITCH::WRL2SWITCH() : WRL2NODE()
 
 WRL2SWITCH::WRL2SWITCH( WRL2NODE* aParent ) : WRL2NODE()
 {
-    m_Type = WRL2_SWITCH;
+    m_Type = WRL2NODES::WRL2_SWITCH;
     m_Parent = aParent;
     whichChoice = -1;
 
@@ -230,7 +230,7 @@ bool WRL2SWITCH::AddRefNode( WRL2NODE* aNode )
     }
 
     // take possession if the node is dangling WRL2_SHAPE
-    if( WRL2_SHAPE == aNode->GetNodeType() && aNode->isDangling() )
+    if( WRL2NODES::WRL2_SHAPE == aNode->GetNodeType() && aNode->isDangling() )
     {
         WRL2NODE* np = aNode->GetParent();
 
@@ -371,10 +371,10 @@ SGNODE* WRL2SWITCH::TranslateToSG( SGNODE* aParent )
 
     switch( type )
     {
-    case WRL2_SHAPE:
-    case WRL2_SWITCH:
-    case WRL2_INLINE:
-    case WRL2_TRANSFORM:
+    case WRL2NODES::WRL2_SHAPE:
+    case WRL2NODES::WRL2_SWITCH:
+    case WRL2NODES::WRL2_INLINE:
+    case WRL2NODES::WRL2_TRANSFORM:
         break;
 
     default:

@@ -34,7 +34,7 @@
 WRL2MATERIAL::WRL2MATERIAL() : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_MATERIAL;
+    m_Type = WRL2NODES::WRL2_MATERIAL;
     return;
 }
 
@@ -42,7 +42,7 @@ WRL2MATERIAL::WRL2MATERIAL() : WRL2NODE()
 WRL2MATERIAL::WRL2MATERIAL( WRL2NODE* aParent ) : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_MATERIAL;
+    m_Type = WRL2NODES::WRL2_MATERIAL;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -85,9 +85,9 @@ void WRL2MATERIAL::setDefaults( void )
 
 bool WRL2MATERIAL::isDangling( void )
 {
-    // this node is dangling unless it has a parent of type WRL2_APPEARANCE
+    // this node is dangling unless it has a parent of type WRL2NODES::WRL2_APPEARANCE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_APPEARANCE )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_APPEARANCE )
         return true;
 
     return false;

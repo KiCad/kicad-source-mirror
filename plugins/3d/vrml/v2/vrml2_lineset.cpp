@@ -36,7 +36,7 @@
 WRL2LINESET::WRL2LINESET() : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_INDEXEDLINESET;
+    m_Type = WRL2NODES::WRL2_INDEXEDLINESET;
 
     return;
 }
@@ -45,7 +45,7 @@ WRL2LINESET::WRL2LINESET() : WRL2NODE()
 WRL2LINESET::WRL2LINESET( WRL2NODE* aParent ) : WRL2NODE()
 {
     setDefaults();
-    m_Type = WRL2_INDEXEDLINESET;
+    m_Type = WRL2NODES::WRL2_INDEXEDLINESET;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -87,8 +87,8 @@ bool WRL2LINESET::checkNodeType( WRL2NODES aType )
 
     switch( aType )
     {
-    case WRL2_COLOR:
-    case WRL2_COORDINATE:
+    case WRL2NODES::WRL2_COLOR:
+    case WRL2NODES::WRL2_COORDINATE:
         break;
 
     default:
@@ -104,7 +104,7 @@ bool WRL2LINESET::isDangling( void )
 {
     // this node is dangling unless it has a parent of type WRL2_SHAPE
 
-    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2_SHAPE )
+    if( NULL == m_Parent || m_Parent->GetNodeType() != WRL2NODES::WRL2_SHAPE )
         return true;
 
     return false;
@@ -144,7 +144,7 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_COLOR == type )
+    if( WRL2NODES::WRL2_COLOR == type )
     {
         if( NULL != color )
         {
@@ -164,7 +164,7 @@ bool WRL2LINESET::AddRefNode( WRL2NODE* aNode )
         return WRL2NODE::AddRefNode( aNode );
     }
 
-    if( WRL2_COORDINATE == type )
+    if( WRL2NODES::WRL2_COORDINATE == type )
     {
         if( NULL != coord )
         {
@@ -221,7 +221,7 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_COLOR == type )
+    if( WRL2NODES::WRL2_COLOR == type )
     {
         if( NULL != color )
         {
@@ -241,7 +241,7 @@ bool WRL2LINESET::AddChildNode( WRL2NODE* aNode )
         return WRL2NODE::AddChildNode( aNode );
     }
 
-    if( WRL2_COORDINATE == type )
+    if( WRL2NODES::WRL2_COORDINATE == type )
     {
         if( NULL != coord )
         {

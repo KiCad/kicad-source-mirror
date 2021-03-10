@@ -34,7 +34,7 @@
 WRL2INLINE::WRL2INLINE() : WRL2NODE()
 {
     m_VRML2Base = NULL;
-    m_Type = WRL2_INLINE;
+    m_Type = WRL2NODES::WRL2_INLINE;
     m_Parent = NULL;
 
     return;
@@ -44,7 +44,7 @@ WRL2INLINE::WRL2INLINE() : WRL2NODE()
 WRL2INLINE::WRL2INLINE( WRL2NODE* aParent ) : WRL2NODE()
 {
     m_VRML2Base = NULL;
-    m_Type = WRL2_INLINE;
+    m_Type = WRL2NODES::WRL2_INLINE;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -73,7 +73,7 @@ bool WRL2INLINE::isDangling( void )
 
 bool WRL2INLINE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 {
-    if( aTopNode == NULL || aTopNode->GetNodeType() != WRL2_BASE )
+    if( aTopNode == NULL || aTopNode->GetNodeType() != WRL2NODES::WRL2_BASE )
         return false;
 
     m_VRML2Base = aTopNode;

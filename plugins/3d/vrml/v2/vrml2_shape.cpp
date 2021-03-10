@@ -36,7 +36,7 @@ WRL2SHAPE::WRL2SHAPE() : WRL2NODE()
 {
     appearance = NULL;
     geometry = NULL;
-    m_Type = WRL2_SHAPE;
+    m_Type = WRL2NODES::WRL2_SHAPE;
     return;
 }
 
@@ -45,7 +45,7 @@ WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
 {
     appearance = NULL;
     geometry = NULL;
-    m_Type = WRL2_SHAPE;
+    m_Type = WRL2NODES::WRL2_SHAPE;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -78,8 +78,8 @@ bool WRL2SHAPE::isDangling( void )
     // WRL2_SWITCH
 
     if( NULL == m_Parent
-        || ( m_Parent->GetNodeType() != WRL2_TRANSFORM
-        && m_Parent->GetNodeType() != WRL2_SWITCH ) )
+        || ( m_Parent->GetNodeType() != WRL2NODES::WRL2_TRANSFORM
+             && m_Parent->GetNodeType() != WRL2NODES::WRL2_SWITCH ) )
         return true;
 
     return false;
@@ -119,7 +119,7 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_APPEARANCE == type )
+    if( WRL2NODES::WRL2_APPEARANCE == type )
     {
         if( NULL != appearance )
         {
@@ -191,7 +191,7 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
         return false;
     }
 
-    if( WRL2_APPEARANCE == type )
+    if( WRL2NODES::WRL2_APPEARANCE == type )
     {
         if( NULL != appearance )
         {
@@ -234,17 +234,17 @@ bool WRL2SHAPE::checkNodeType( WRL2NODES aType )
 {
     switch( aType )
     {
-    case WRL2_APPEARANCE:
-    case WRL2_BOX:
-    case WRL2_CONE:
-    case WRL2_CYLINDER:
-    case WRL2_ELEVATIONGRID:
-    case WRL2_EXTRUSION:
-    case WRL2_INDEXEDFACESET:
-    case WRL2_INDEXEDLINESET:
-    case WRL2_POINTSET:
-    case WRL2_SPHERE:
-    case WRL2_TEXT:
+    case WRL2NODES::WRL2_APPEARANCE:
+    case WRL2NODES::WRL2_BOX:
+    case WRL2NODES::WRL2_CONE:
+    case WRL2NODES::WRL2_CYLINDER:
+    case WRL2NODES::WRL2_ELEVATIONGRID:
+    case WRL2NODES::WRL2_EXTRUSION:
+    case WRL2NODES::WRL2_INDEXEDFACESET:
+    case WRL2NODES::WRL2_INDEXEDLINESET:
+    case WRL2NODES::WRL2_POINTSET:
+    case WRL2NODES::WRL2_SPHERE:
+    case WRL2NODES::WRL2_TEXT:
         break;
 
     default:
@@ -401,9 +401,9 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
 
     switch( geomType )
     {
-    case WRL2_INDEXEDLINESET:
-    case WRL2_POINTSET:
-    case WRL2_TEXT:
+    case WRL2NODES::WRL2_INDEXEDLINESET:
+    case WRL2NODES::WRL2_POINTSET:
+    case WRL2NODES::WRL2_TEXT:
         return NULL;
         break;
 
@@ -423,13 +423,13 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
 
     bool vcolors = false;
 
-    if( WRL2_INDEXEDFACESET == geometry->GetNodeType() )
+    if( WRL2NODES::WRL2_INDEXEDFACESET == geometry->GetNodeType() )
         vcolors = ((WRL2FACESET*)geometry)->HasColors();
 
     // if there is no appearance, make use of the per vertex colors if available
     if( NULL == appearance )
     {
-        if( WRL2_INDEXEDFACESET != geometry->GetNodeType() )
+        if( WRL2NODES::WRL2_INDEXEDFACESET != geometry->GetNodeType() )
             return NULL;
 
         if( !vcolors )
