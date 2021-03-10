@@ -407,6 +407,10 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /Zi" )
     # /GF: enable string pooling
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
+    string( APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " /GF" )
+    # /Gy: Enable Function-Level Linking
+    string( APPEND CMAKE_CXX_FLAGS_RELEASE " /Gy" )
+    string( APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " /Gy" )
     # Avoid fatal error because /GF + swig wrapper exceed standard obj file limits
     string( APPEND CMAKE_CXX_FLAGS " /bigobj" )
 
@@ -427,8 +431,10 @@ if( MSVC )
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
         # /OPT:REF: omit unreferenced code
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF /MANIFEST:NO" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:REF /MANIFEST:NO" )
         # /OPT:ICF: fold common data
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF /MANIFEST:NO" )
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:ICF /MANIFEST:NO" )
     endforeach()
 
     # Let cl.exe parallelize builds
