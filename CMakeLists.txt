@@ -119,9 +119,9 @@ option( KICAD_STDLIB_LIGHT_DEBUG
     "Build KiCad with libstdc++ with -Wp,-D_GLIBCXX_ASSERTIONS flag enabled. Not as intrusive as KICAD_STDLIB_DEBUG"
     OFF )
 
-option( KICAD_BUILD_PARALLEL_CL_MP
+cmake_dependent_option( KICAD_WIN32_BUILD_PARALLEL_CL_MP
     "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
-    OFF )
+    OFF "WIN32" OFF )
 
 option( KICAD_USE_VALGRIND
     "Build KiCad with valgrind stack tracking enabled."
@@ -438,7 +438,7 @@ if( MSVC )
     endforeach()
 
     # Let cl.exe parallelize builds
-    if( KICAD_BUILD_PARALLEL_CL_MP )
+    if( KICAD_WIN32_BUILD_PARALLEL_CL_MP )
         string( APPEND CMAKE_CXX_FLAGS " /MP" )
     endif()
 endif()
