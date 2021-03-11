@@ -64,7 +64,7 @@
    inkscape:window-y="37"
    inkscape:zoom="34.23691"
    objecttolerance="10"
-   pagecolor="#111111"
+   pagecolor="#ffffff"
    showgrid="true">
 	<inkscape:grid
    color="#a1a1ff"
@@ -112,13 +112,13 @@
      class="cls-3"
      d="M 24.877827,13.494 A 7.0063863,7.0065041 0 1 1 17.87144,6.4939954 7.0030865,7.0032042 0 0 1 24.877827,13.494 Z"
      id="path116542"
-     style="fill:#DC7A8C;stroke:none;stroke-width:1.49999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
+     style="fill:#f2647e;stroke:none;stroke-width:1.49999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
      id="polyline116544"
-     style="fill:none;stroke:#111111;stroke-width:1.99999px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#ffffff;stroke-width:1.99999px;stroke-linecap:round;stroke-linejoin:round"
      d="m 21.722378,15.371001 c 0,0 -4.13652,0.640163 -5.590779,-0.814121 -1.322504,-1.322525 -0.579121,-4.7968822 -0.579121,-4.7968822"
      sodipodi:nodetypes="csc" /><polyline
      class="cls-4"
      points="19.473 17.45 21.9 19.877 19.473 22.303"
      id="polyline116546"
      transform="matrix(0.99998378,0,0,1.0000006,-0.12826747,-4.5060109)"
-     style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" /></g></svg>
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" /></g></svg>

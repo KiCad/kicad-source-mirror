@@ -12,9 +12,9 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_pcb_target.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
+     inkscape:window-width="2180"
      inkscape:window-height="1286"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="3.3259971"
      inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="2662"
+     inkscape:window-y="53"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -84,30 +84,32 @@
      cx="11.985212"
      cy="12"
      id="circle115719"
-     style="stroke-width:1"
+     style="stroke-width:1;fill:#545454;fill-opacity:1"
      r="9.9283161" />
   <path
      class="cls-2"
      d="M 21.913429,12.0133 A 9.9282166,9.9282167 0 0 0 11.998512,2.0716845 L 11.985212,12 Z"
      id="path115721"
-     style="stroke-width:1" />
+     style="stroke-width:1;fill:#999999;fill-opacity:1" />
   <path
      class="cls-2"
      d="m 2.0569957,11.956331 a 9.9282166,9.9282167 0 0 0 9.8843493,9.971985 L 11.985215,12 Z"
      id="path115723"
-     style="stroke-width:1" />
+     style="stroke-width:1;fill:#999999;fill-opacity:1" />
   <line
      class="cls-3"
      x1="12.000001"
      y1="1"
      x2="12.000001"
      y2="23"
-     id="line115725" />
+     id="line115725"
+     style="stroke:#f4eff3;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="23"
      y1="12"
      x2="1"
      y2="12"
-     id="line115727" />
+     id="line115727"
+     style="stroke:#f4eff3;stroke-opacity:1" />
 </svg>

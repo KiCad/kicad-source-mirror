@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="library_table.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1599" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="9.3162965" inkscape:cy="14.139015" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="g1561" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1599" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="9.3162965" inkscape:cy="14.139015" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="g1561" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid846" spacingx="0.5" spacingy="0.5" color="#aaaaff" opacity="0.1254902" empspacing="2" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -78,13 +78,13 @@
          <g id="g1009" transform="matrix(0.99907229,0,0,0.99907223,-0.03711142,0.2868779)" style="stroke-width:1.00092">
             <g id="g1561" style="display:inline" transform="matrix(3.7830372,0,0,3.7830374,-17.441616,-0.81990154)">
                <g id="g1652" transform="matrix(0.99905805,0,0,0.99999999,-0.40379397,-0.38833884)" style="stroke-width:1.00139">
-                  <ellipse class="cls-5" cx="5.0288296" cy="5.0270834" rx="1.8538295" ry="1.8520833" id="ellipse41" style="fill:#DC7A8C;stroke-width:0.264708" />
-                  <polygon class="cls-7" points="14.43,14.621 21.416,14.621 21.522,17.173 14.43,17.173 " id="polygon47" style="fill:#111111;stroke-width:0.81912" transform="matrix(0.33576565,0,0,0.31103056,-1.0086401,-0.71111954)" />
-                  <rect class="cls-6" x="3.8364582" y="3.8364582" width="2.3812504" height="2.3812504" id="rect43" style="fill:none;stroke:#111111;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" ry="0.31323582" rx="0.031981137" />
-                  <path id="line45" style="fill:none;stroke:#111111;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="M 3.8364584,5.1593751 H 6.0854168" sodipodi:nodetypes="cc" />
-                  <line class="cls-6" x1="4.8947916" y1="4.3656254" x2="4.8947916" y2="6.1690011" id="line49" style="fill:none;stroke:#111111;stroke-width:0.264709;stroke-linecap:round;stroke-linejoin:round" />
-                  <path id="line51" style="fill:none;stroke:#DC7A8C;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="m 4.1010418,4.1010418 h 1.5875" sodipodi:nodetypes="cc" />
-                  <path id="path1641" style="fill:none;stroke:#111111;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="M 3.8364584,5.6885418 H 6.0854168" sodipodi:nodetypes="cc" />
+                  <ellipse class="cls-5" cx="5.0288296" cy="5.0270834" rx="1.8538295" ry="1.8520833" id="ellipse41" style="fill:#f2647e;stroke-width:0.264708" />
+                  <polygon class="cls-7" points="14.43,14.621 21.416,14.621 21.522,17.173 14.43,17.173 " id="polygon47" style="fill:#ffffff;stroke-width:0.81912" transform="matrix(0.33576565,0,0,0.31103056,-1.0086401,-0.71111954)" />
+                  <rect class="cls-6" x="3.8364582" y="3.8364582" width="2.3812504" height="2.3812504" id="rect43" style="fill:none;stroke:#ffffff;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" ry="0.31323582" rx="0.031981137" />
+                  <path id="line45" style="fill:none;stroke:#ffffff;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="M 3.8364584,5.1593751 H 6.0854168" sodipodi:nodetypes="cc" />
+                  <line class="cls-6" x1="4.8947916" y1="4.3656254" x2="4.8947916" y2="6.1690011" id="line49" style="fill:none;stroke:#ffffff;stroke-width:0.264709;stroke-linecap:round;stroke-linejoin:round" />
+                  <path id="line51" style="fill:none;stroke:#f2647e;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="m 4.1010418,4.1010418 h 1.5875" sodipodi:nodetypes="cc" />
+                  <path id="path1641" style="fill:none;stroke:#ffffff;stroke-width:0.264708;stroke-linecap:round;stroke-linejoin:round" d="M 3.8364584,5.6885418 H 6.0854168" sodipodi:nodetypes="cc" />
                </g>
             </g>
          </g>

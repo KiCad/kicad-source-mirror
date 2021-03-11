@@ -71,7 +71,7 @@
        transform="translate(-1,-1)" />
   </g>
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -132,7 +132,7 @@
   <defs
      id="defs25455">
     <style
-       id="style25453">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#DC7A8C;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style25453">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title25457">import_project</title>

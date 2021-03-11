@@ -12,11 +12,11 @@
    viewBox="0 0 16 16"
    version="1.1"
    sodipodi:docname="icon_libedit_16.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    width="16"
    height="16">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -24,16 +24,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2216"
-     inkscape:window-height="1567"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview1630"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="14.138481"
+     inkscape:cx="6.2168853"
      inkscape:cy="17.442797"
-     inkscape:window-x="4824"
-     inkscape:window-y="196"
-     inkscape:window-maximized="0"
+     inkscape:window-x="2560"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
     <inkscape:grid
@@ -79,42 +79,42 @@
   <defs
      id="defs1617">
     <style
-       id="style1615">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}</style>
+       id="style1615">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
   </defs>
   <title
      id="title1619">icon_libedit</title>
   <path
-     style="fill:#acbac8;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#acbac8;fill-opacity:1;stroke:#e0e0e0;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 3.5,1.5 v 14 l 9.999998,-6.9999812 z"
      id="path2231"
      sodipodi:nodetypes="cccc" />
   <path
-     style="fill:none;stroke:#42B8EB;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 5.5,6.5 H 7.4999998"
      id="path2229"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#e0e0e0;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 13.499998,8.5000188 h 1.953488"
      id="path2233"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#e0e0e0;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 1,5.5 2.4418595,2.3e-6"
      id="path2235"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#F4EFF3;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#e0e0e0;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 1,12.5 H 3.4418598"
      id="path2237"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#42B8EB;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 5.5,10.5 H 7.4999998"
      id="path839"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#42B8EB;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 6.4999998,11.384135 V 9.499997"
      id="path841" />
 </svg>

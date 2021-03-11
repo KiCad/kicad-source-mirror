@@ -14,7 +14,7 @@
    sodipodi:docname="simulator.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,12 +75,12 @@
   <defs
      id="defs159987">
     <style
-       id="style159985">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25px;}.cls-2{stroke:#DC7A8C;}.cls-3{stroke:#42B8EB;}</style>
+       id="style159985">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25px;}.cls-2{stroke:#f2647e;}.cls-3{stroke:#42B8EB;}</style>
   </defs>
   <title
      id="title159989">simulator</title>
   <circle
-     style="fill:#111111;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+     style="fill:#ffffff;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
      id="path841"
      cx="12"
      cy="12"

@@ -7,7 +7,7 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="drag_segment_withslope.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2713" inkscape:window-height="1680" id="namedview34" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="1.5316901" inkscape:cy="9.6746486" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2713" inkscape:window-height="1680" id="namedview34" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="1.5316901" inkscape:cy="9.6746486" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid1558" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -29,7 +29,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs11">
-      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#DC7A8C;stroke-width:2px;}.cls-5{fill:#42B8EB;}.cls-6{fill:#F4EFF3;}</style>
+      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#F4EFF3;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#f2647e;stroke-width:2px;}.cls-5{fill:#42B8EB;}.cls-6{fill:#F4EFF3;}</style>
       <linearGradient id="Безымянный_градиент_19" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientUnits="userSpaceOnUse">
          <stop offset="0" stop-color="#ececec" id="stop5" />
          <stop offset="1" stop-color="#c6c6c5" id="stop7" />

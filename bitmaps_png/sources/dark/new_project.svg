@@ -14,7 +14,7 @@
    sodipodi:docname="new_project.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs158486">
     <style
-       id="style158484">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#DC7A8C;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style158484">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-5{stroke:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title158488">new_project</title>
@@ -119,7 +119,7 @@
     <g
        id="g877">
       <rect
-         style="fill:#111111;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
          id="rect867"
          width="3"
          height="11"
@@ -127,7 +127,7 @@
          y="-24"
          transform="rotate(90)" />
       <rect
-         style="fill:#111111;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
          id="rect869"
          width="3"
          height="11"
@@ -135,7 +135,7 @@
          y="-31.662951"
          transform="rotate(135)" />
       <rect
-         style="fill:#111111;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
          id="rect871"
          width="3"
          height="11"
@@ -143,7 +143,7 @@
          y="-5.5"
          transform="matrix(0.70710678,0.70710678,0.70710678,-0.70710678,0,0)" />
       <rect
-         style="fill:#111111;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
          id="rect863"
          width="3"
          height="11"
@@ -193,7 +193,7 @@
        id="path940"
        sodipodi:nodetypes="cc" />
     <circle
-       style="fill:#111111;fill-opacity:1;stroke:#f29100;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
        id="path855"
        cx="18.499998"
        cy="18.499998"

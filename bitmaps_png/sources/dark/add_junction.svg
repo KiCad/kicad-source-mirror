@@ -14,7 +14,7 @@
    sodipodi:docname="add_junction.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs306">
     <style
-       id="style304">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#DC7A8C;}</style>
+       id="style304">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#f2647e;}</style>
   </defs>
   <title
      id="title308">add_junction</title>

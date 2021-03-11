@@ -14,7 +14,7 @@
    sodipodi:docname="pin_show_etype.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs159073">
     <style
-       id="style159071">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+       id="style159071">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:#fff;}</style>
   </defs>
   <title
      id="title159075">pin_show_etype</title>
@@ -83,7 +83,7 @@
      class="cls-4"
      d="M 17.830812,14.654576 A 3.825444,3.9056565 0 0 1 18.09303,12.994491 4.6817545,4.7799219 0 0 1 19.219543,11.739264 7.2702073,7.4226497 0 0 0 20.20308,10.558212 2.1740521,2.2196377 0 0 0 20.568121,9.3113641 1.640411,1.6748074 0 0 0 20.151058,8.0893184 1.5828429,1.6160322 0 0 0 18.96498,7.6546769 1.7500011,1.7866952 0 0 0 17.847118,8.024088 1.2768118,1.3035841 0 0 0 17.386795,9.1166933 h -1.856706 l -0.02385,-0.048696 a 2.6288282,2.6839497 0 0 1 0.947821,-2.2536118 3.849514,3.9302309 0 0 1 2.510917,-0.8073366 3.7114174,3.7892388 0 0 1 2.598658,0.86815 3.0407887,3.1045483 0 0 1 0.931737,2.4121575 3.2786034,3.3473495 0 0 1 -0.582779,1.9121726 7.2209585,7.3723682 0 0 1 -1.472255,1.611162 1.8175519,1.8556624 0 0 0 -0.566585,0.772004 3.6257864,3.7018121 0 0 0 -0.114803,1.071654 z M 19.790564,18 H 17.82327 v -1.892242 h 1.967294 z"
      id="path159087"
-     style="fill:#DC7A8C;fill-opacity:1;stroke-width:0.999997" />
+     style="fill:#f2647e;fill-opacity:1;stroke-width:0.999997" />
   <path
      style="fill:none;stroke:#F4EFF3;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 2,4 V 20"

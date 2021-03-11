@@ -16,7 +16,7 @@
    height="32"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -77,7 +77,7 @@
   <defs
      id="defs6422">
     <style
-       id="style6420">.cls-1{fill:#f29100;}.cls-2{fill:#8f8f8f;}.cls-3{fill:none;stroke:#111111;stroke-miterlimit:10;}.cls-4{fill:#F4EFF3;}</style>
+       id="style6420">.cls-1{fill:#f29100;}.cls-2{fill:#b9b9b9;}.cls-3{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-4{fill:#545454;}</style>
   </defs>
   <title
      id="title6424">icon_pcbcalculator</title>
@@ -93,7 +93,7 @@
      style="stroke-width:1" />
   <path
      id="line6430"
-     style="fill:none;stroke:#111111;stroke-width:2;stroke-miterlimit:10;stroke-dasharray:none"
+     style="fill:none;stroke:#ffffff;stroke-width:2;stroke-miterlimit:10;stroke-dasharray:none"
      d="m 16,0 c 0,10.666089 0,21.332178 0,31.998266" />
   <line
      class="cls-3"

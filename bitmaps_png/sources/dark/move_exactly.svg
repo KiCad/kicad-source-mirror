@@ -14,7 +14,7 @@
    sodipodi:docname="move_exactly.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs25799">
     <style
-       id="style25797">.cls-1{fill:none;stroke:#8f8f8f;stroke-miterlimit:10;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#DC7A8C;}</style>
+       id="style25797">.cls-1{fill:none;stroke:#8f8f8f;stroke-miterlimit:10;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}</style>
   </defs>
   <title
      id="title25801">move_exactly</title>

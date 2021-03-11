@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="mode_module.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2544" inkscape:window-height="1803" id="namedview30" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="1.1452361" inkscape:cy="21.211996" inkscape:window-x="1077" inkscape:window-y="173" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2544" inkscape:window-height="1803" id="namedview30" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="1.1452361" inkscape:cy="21.211996" inkscape:window-x="1077" inkscape:window-y="173" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid873" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs5">
-      <style id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+      <style id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{fill:#fff;}</style>
    </defs>
    <title id="title7">module_editor</title>
    <polygon class="cls-1" points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 " id="polygon9" transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)" style="stroke-width:0.877906" />
@@ -38,7 +38,7 @@
    <rect class="cls-2" x="2.9605565" y="17.004299" width="5.0280428" height="6.9999995" id="rect879" style="stroke-width:1" />
    <rect class="cls-2" x="9.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect881" style="stroke-width:1" />
    <rect class="cls-2" x="16.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect883" style="stroke-width:1" />
-   <circle class="cls-3" cx="17" cy="17" id="ellipse22" style="fill:#DC7A8C;stroke-width:0.999999" r="7" />
+   <circle class="cls-3" cx="17" cy="17" id="ellipse22" style="fill:#f2647e;stroke-width:0.999999" r="7" />
    <polygon class="cls-1" points="24.995,13 20.203,8.208 20.203,17.792 " id="polygon8-3" style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.59658;stroke-linecap:round;stroke-linejoin:round" transform="matrix(0.62604341,0,0,0.62663367,7.4038626,8.856591)" />
    <polygon class="cls-1" points="17.792,5.797 13,1.005 8.208,5.797 " id="polygon10" style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" transform="matrix(0.6254537,0,0,0.62604341,8.869102,10.370826)" />
    <polygon class="cls-1" points="17.792,20.203 8.208,20.203 13,24.995 " id="polygon12" style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.59809;stroke-linecap:round;stroke-linejoin:round" transform="matrix(0.6254537,0,0,0.62604341,8.8691019,7.352045)" />

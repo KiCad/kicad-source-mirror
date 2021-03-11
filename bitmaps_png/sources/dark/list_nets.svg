@@ -14,7 +14,7 @@
    sodipodi:docname="list_nets.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs158172">
     <style
-       id="style158170">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-miterlimit:10;stroke-width:2px;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+       id="style158170">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-miterlimit:10;stroke-width:2px;}.cls-3{fill:#f2647e;}.cls-4{fill:#fff;}</style>
   </defs>
   <title
      id="title158174">list_nets</title>
@@ -91,7 +91,7 @@
      x2="16.653799"
      y2="4.5"
      id="line158178"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="7.4452"
@@ -99,7 +99,7 @@
      x2="16.653799"
      y2="8.6529999"
      id="line158180"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="7.4452"
@@ -107,7 +107,7 @@
      x2="16.653799"
      y2="12.806"
      id="line158182"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="7.4452"
@@ -115,7 +115,7 @@
      x2="16.653799"
      y2="16.959"
      id="line158184"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="4.6875"
@@ -123,7 +123,7 @@
      x2="4.7351999"
      y2="4.5"
      id="line158186"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="4.6875"
@@ -131,7 +131,7 @@
      x2="4.7351999"
      y2="8.6529999"
      id="line158188"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="4.6875"
@@ -139,7 +139,7 @@
      x2="4.7351999"
      y2="12.806"
      id="line158190"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <line
      class="cls-2"
      x1="4.6875"
@@ -147,7 +147,7 @@
      x2="4.7351999"
      y2="16.959"
      id="line158192"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <path
      class="cls-3"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"

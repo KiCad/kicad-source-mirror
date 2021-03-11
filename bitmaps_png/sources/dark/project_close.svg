@@ -14,7 +14,7 @@
    sodipodi:docname="project_close.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -123,7 +123,7 @@
        x2="17"
        y2="22"
        id="line931"
-       style="display:inline;fill:none;fill-opacity:1;stroke:#DC7A8C;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+       style="display:inline;fill:none;fill-opacity:1;stroke:#f2647e;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <line
        class="cls-6"
        x1="22"
@@ -131,6 +131,6 @@
        x2="17"
        y2="17"
        id="line933"
-       style="display:inline;fill:none;fill-opacity:1;stroke:#DC7A8C;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+       style="display:inline;fill:none;fill-opacity:1;stroke:#f2647e;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   </g>
 </svg>

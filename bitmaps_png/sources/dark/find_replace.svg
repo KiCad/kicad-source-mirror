@@ -14,7 +14,7 @@
    sodipodi:docname="find_replace.svg"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -84,7 +84,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path3051" />
     </marker>
@@ -98,7 +98,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2) translate(-6,0)"
-         style="fill-rule:evenodd;fill:#111111;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1"
+         style="fill-rule:evenodd;fill:#ffffff;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1"
          d="M 0,-7.0710768 L -7.0710894,0 L 0,7.0710589 L 7.0710462,0 L 0,-7.0710768 z "
          id="path3033" />
     </marker>
@@ -112,7 +112,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.2) rotate(180) translate(6,0)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path2918" />
     </marker>
@@ -127,7 +127,7 @@
       <path
          transform="scale(0.3) rotate(180) translate(-2.3,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DC7A8C;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          id="path2936" />
     </marker>
     <marker
@@ -141,7 +141,7 @@
       <path
          transform="scale(0.6) rotate(180) translate(0,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DC7A8C;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          id="path2930" />
     </marker>
     <marker
@@ -154,7 +154,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(0.8) translate(12.5,0)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
          id="path2903" />
     </marker>
@@ -193,10 +193,10 @@
        points="8.803 19.188 11.229 21.614 8.803 24.041"
        id="polyline777-3"
        transform="matrix(1,0,0,0.98912611,23.697,-20.048585)"
-       style="fill:none;stroke:#DC7A8C;stroke-width:2.01096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="fill:none;stroke:#f2647e;stroke-width:2.01096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
     <path
        id="polyline775-6"
-       style="fill:none;stroke:#DC7A8C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#f2647e;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 34.5,1.2309959 c 0,0 -3.302434,0.285416 -4.598796,-1.01094597 C 28.735508,-0.94564707 29,-3.7146351 29,-3.7146351"
        class="cls-3"
        sodipodi:nodetypes="csc" />

@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="wizard_add_fplib_icon.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1626" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="39.543586" inkscape:cx="7.6116565" inkscape:cy="8.9182876" inkscape:window-x="1963" inkscape:window-y="723" inkscape:window-maximized="0" inkscape:current-layer="g981" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1626" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="39.543586" inkscape:cx="7.6116565" inkscape:cy="8.9182876" inkscape:window-x="1963" inkscape:window-y="723" inkscape:window-maximized="0" inkscape:current-layer="g981" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid846" spacingx="0.5" spacingy="0.5" color="#aaaaff" opacity="0.1254902" empspacing="2" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -75,7 +75,7 @@
             <path id="path977" style="fill:none;stroke:#8f8f8f;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" d="m 3.5,9.5 h 2" sodipodi:nodetypes="cc" />
             <path id="path979" style="fill:none;stroke:#8f8f8f;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" d="M 3,19.5 H 6" sodipodi:nodetypes="cc" />
          </g>
-         <polygon class="cls-5" points="13.129,25 13.996,19.948 10.326,16.371 15.397,15.634 17.666,11.038 19.934,15.634 25.005,16.371 21.336,19.948 22.202,25 17.666,22.615 " id="polygon43" transform="translate(-17.836,-0.948)" style="fill:#DC7A8C" />
+         <polygon class="cls-5" points="13.129,25 13.996,19.948 10.326,16.371 15.397,15.634 17.666,11.038 19.934,15.634 25.005,16.371 21.336,19.948 22.202,25 17.666,22.615 " id="polygon43" transform="translate(-17.836,-0.948)" style="fill:#f2647e" />
       </g>
    </g>
 </svg>

@@ -14,7 +14,7 @@
    sodipodi:docname="via_annulus.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,13 +75,13 @@
   <defs
      id="defs27493">
     <style
-       id="style27491">.cls-1{fill:#DC7A8C;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f29100;}.cls-4{fill:#8f8f8f;}.cls-5{fill:#F4EFF3;}</style>
+       id="style27491">.cls-1{fill:#f2647e;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f29100;}.cls-4{fill:#8f8f8f;}.cls-5{fill:#F4EFF3;}</style>
   </defs>
   <title
      id="title27495">via_annulus</title>
   <path
      id="line27479"
-     style="fill:none;stroke:#DC7A8C;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#f2647e;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
      d="M 7.0502996,16.949699 2,22"
      sodipodi:nodetypes="cc" />
   <path

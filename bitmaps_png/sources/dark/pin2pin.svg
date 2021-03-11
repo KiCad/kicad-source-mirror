@@ -14,7 +14,7 @@
    sodipodi:docname="pin2pin.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs26229">
     <style
-       id="style26227">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#DC7A8C;}.cls-4{fill:none;stroke:#111111;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style26227">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title26231">pin2pin</title>

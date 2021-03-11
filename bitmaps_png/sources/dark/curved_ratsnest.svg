@@ -46,7 +46,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -138,7 +138,7 @@
        sodipodi:nodetypes="cc" />
     <circle
        id="path2992-3"
-       style="fill:#111111;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-20.5"
        cy="-20.5"
        transform="scale(-1)"
@@ -156,21 +156,21 @@
        inkscape:connector-curvature="0" />
     <circle
        id="path2992-3-1"
-       style="fill:#111111;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-3.5"
        cy="-20.5"
        transform="scale(-1)"
        r="2" />
     <circle
        id="path2992-3-3"
-       style="fill:#111111;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-20.5"
        cy="-3.5"
        transform="scale(-1)"
        r="2" />
     <ellipse
        id="path2992-3-1-4"
-       style="display:inline;fill:#111111;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        cx="-3.5"
        cy="-3.5"
        transform="scale(-1)"

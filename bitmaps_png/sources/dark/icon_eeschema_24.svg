@@ -17,7 +17,7 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -78,7 +78,7 @@
   <defs
      id="defs116803">
     <style
-       id="style116801">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4,.cls-5{fill:none;stroke-linejoin:round;}.cls-2,.cls-5{stroke:#E0E0E0;}.cls-2,.cls-3{stroke-linecap:round;}.cls-2,.cls-4,.cls-5{stroke-width:2px;}.cls-3,.cls-4{stroke:#F4EFF3;}.cls-5{stroke-linecap:square;}.cls-6{fill:#E0E0E0;}.cls-7{fill:#42B8EB;}</style>
+       id="style116801">.cls-1{fill:#b9b9b9;}.cls-2,.cls-3,.cls-4,.cls-5{fill:none;stroke-linejoin:round;}.cls-2,.cls-5{stroke:#333;}.cls-2,.cls-3{stroke-linecap:round;}.cls-2,.cls-4,.cls-5{stroke-width:2px;}.cls-3,.cls-4{stroke:#545454;}.cls-5{stroke-linecap:square;}.cls-6{fill:#333;}.cls-7{fill:#1a81c4;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath849">
@@ -266,7 +266,7 @@
        x2="7"
        y2="17.118433"
        id="line116819"
-       style="stroke:#E0E0E0;stroke-opacity:1"
+       style="stroke:#333333;stroke-opacity:1"
        clip-path="url(#clipPath885)" />
     <line
        class="cls-2"
@@ -291,7 +291,7 @@
        x2="11"
        y2="21.3134"
        id="line116825"
-       style="stroke:#E0E0E0;stroke-opacity:1"
+       style="stroke:#333333;stroke-opacity:1"
        clip-path="url(#clipPath873)" />
     <path
        class="cls-6"
@@ -306,7 +306,7 @@
        width="4"
        height="5"
        id="rect116829"
-       style="fill:#DC7A8C;fill-opacity:1;stroke-width:1.03829"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:1.03829"
        clip-path="url(#clipPath865)" />
     <rect
        class="cls-7"
@@ -316,11 +316,11 @@
        height="8"
        transform="rotate(90)"
        id="rect116831"
-       style="fill:#DC7A8C;fill-opacity:1;stroke-width:1.0105"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:1.0105"
        clip-path="url(#clipPath861)" />
     <path
        id="line116833"
-       style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
        d="M 11,13 7.2127004,15.638401"
        sodipodi:nodetypes="cc"
        clip-path="url(#clipPath857)" />
@@ -336,7 +336,7 @@
        class="cls-7"
        d="m 8.9826113,20.80519 1.4211947,-2.0158 a 0.7382,0.7382 0 0 1 1.32,0.25 l 0.3829,1.5775 a 0.9,0.9 0 0 1 -0.7489,1.1034 l -1.6680947,0.2377 a 0.7367,0.7367 0 0 1 -0.7071,-1.1528 z"
        id="path116837"
-       style="fill:#DC7A8C;fill-opacity:1"
+       style="fill:#bf2641;fill-opacity:1"
        clip-path="url(#clipPath849)" />
   </g>
 </svg>

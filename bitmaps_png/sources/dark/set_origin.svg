@@ -12,9 +12,9 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="set_origin.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#454545"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.519496"
      inkscape:cx="14.844667"
      inkscape:cy="13.834754"
      inkscape:window-x="0"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -109,26 +109,26 @@
      class="cls-3"
      d="M 8.5,10.0001 A 5.5,5.5 0 1 1 14,15.5 5.5,5.5 0 0 1 8.5,10.0001 Z"
      id="path159763"
-     style="stroke-width:1" />
+     style="stroke-width:1;fill:#545454;fill-opacity:1" />
   <path
      class="cls-2"
      d="M 19.499995,10 A 5.5000946,5.4926439 0 0 0 14.007366,4.5 L 14,9.9924451 Z"
      id="path159765"
-     style="stroke-width:1" />
+     style="stroke-width:1;fill:#8f8f8f;fill-opacity:1" />
   <path
      class="cls-2"
      d="m 8.5000552,10 a 5.4999453,5.4755225 0 0 0 5.4755568,5.5 L 14,10.024577 Z"
      id="path159767"
-     style="stroke-width:0.999995" />
+     style="stroke-width:0.999995;fill:#8f8f8f;fill-opacity:1" />
   <path
      id="line159769"
-     style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#f4eff3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="m 14,3.5 v 13"
      class="cls-4"
      sodipodi:nodetypes="cc" />
   <path
      id="line159771"
-     style="fill:none;stroke:#E0E0E0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#f4eff3;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="M 20.5,10 H 7.5"
      class="cls-4"
      sodipodi:nodetypes="cc" />

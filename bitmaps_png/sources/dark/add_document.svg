@@ -17,7 +17,7 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -78,7 +78,7 @@
   <defs
      id="defs124">
     <style
-       id="style122">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4,.cls-5,.cls-9{fill:none;stroke-linejoin:round;}.cls-2,.cls-5{stroke:#E0E0E0;}.cls-2,.cls-3,.cls-9{stroke-linecap:round;}.cls-2,.cls-4,.cls-5{stroke-width:1.9097px;}.cls-3,.cls-4{stroke:#F4EFF3;}.cls-3{stroke-width:0.9549px;}.cls-5{stroke-linecap:square;}.cls-6{fill:#E0E0E0;}.cls-7{fill:#42B8EB;}.cls-8{fill:#DC7A8C;}.cls-9{stroke:#545454;stroke-width:2px;}</style>
+       id="style122">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3,.cls-4,.cls-5,.cls-9{fill:none;stroke-linejoin:round;}.cls-2,.cls-5{stroke:#E0E0E0;}.cls-2,.cls-3,.cls-9{stroke-linecap:round;}.cls-2,.cls-4,.cls-5{stroke-width:1.9097px;}.cls-3,.cls-4{stroke:#F4EFF3;}.cls-3{stroke-width:0.9549px;}.cls-5{stroke-linecap:square;}.cls-6{fill:#E0E0E0;}.cls-7{fill:#42B8EB;}.cls-8{fill:#f2647e;}.cls-9{stroke:#545454;stroke-width:2px;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath1386">
@@ -242,7 +242,7 @@
        class="cls-8"
        d="M 9,16.986957 A 8.0000039,7.9999997 0 1 1 17.000003,24.999999 8.0065251,8.006521 0 0 1 9,16.986957 Z"
        id="path858"
-       style="display:inline;fill:#111111;fill-opacity:1;stroke-width:0.999998" />
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke-width:0.999998" />
   </g>
   <g
      id="g1427">

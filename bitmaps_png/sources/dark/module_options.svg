@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="module_options.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2544" inkscape:window-height="1803" id="namedview30" showgrid="true" inkscape:zoom="45.254834" inkscape:cx="8.825209" inkscape:cy="22.341449" inkscape:window-x="1077" inkscape:window-y="173" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2544" inkscape:window-height="1803" id="namedview30" showgrid="true" inkscape:zoom="45.254834" inkscape:cx="8.825209" inkscape:cy="22.341449" inkscape:window-x="1077" inkscape:window-y="173" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid873" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs5">
-      <style id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+      <style id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{fill:#fff;}</style>
    </defs>
    <title id="title7">module_editor</title>
    <polygon class="cls-1" points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 " id="polygon9" transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)" style="stroke-width:0.877906" />
@@ -39,7 +39,7 @@
    <rect class="cls-2" x="9.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect881" style="stroke-width:1" />
    <rect class="cls-2" x="16.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect883" style="stroke-width:1" />
    <g id="g843" transform="matrix(0.99997436,0,0,1,-1.9732425,-1.8503)" style="stroke-width:1.00001">
-      <path class="cls-1" d="m 23.284177,18.488232 a 4.0667,4.0667 0 1 1 -4.066601,-4.0661 4.0666,4.0666 0 0 1 4.066601,4.0661 z" id="path11" style="fill:#111111;stroke-width:1.00001" />
-      <path class="cls-4" d="m 25.707301,20.425 -1.2674,-0.907 -0.015,0.0269 a 5.1976,5.1976 0 0 0 0.0693,-0.6877 5.203,5.203 0 0 0 -0.0738,-0.7314 l 0.0074,0.0127 1.2576,-0.92 a 0.67,0.67 0 0 0 0.1848,-0.8745 l -1.1327,-1.9683 a 0.67,0.67 0 0 0 -0.8489,-0.2795 l -1.427701,0.6248 0.0124,0.0215 a 5.2207,5.2207 0 0 0 -1.2774,-0.757 l -0.1694,-1.5388 a 0.67,0.67 0 0 0 -0.6656,-0.5964 h -2.271 a 0.67,0.67 0 0 0 -0.6658,0.5964 l -0.17,1.5453 a 5.2192,5.2192 0 0 0 -1.3209,0.8047 l 0.018,-0.0322 -1.4342,-0.61 a 0.67,0.67 0 0 0 -0.846,0.2886 l -1.1118,1.98 a 0.67,0.67 0 0 0 0.1943,0.8725 l 1.2674,0.907 0.0276,-0.0492 a 5.2141,5.2141 0 0 0 -0.0709,0.7037 5.21,5.21 0 0 0 0.0767,0.7616 l -0.021,-0.0367 -1.2576,0.9205 a 0.67,0.67 0 0 0 -0.1851,0.8744 l 1.1326,1.9685 a 0.67,0.67 0 0 0 0.8489,0.2795 L 16,23 15.9707,22.9493 a 5.22,5.22 0 0 0 1.2933,0.7762 l 0.17,1.5487 a 0.67,0.67 0 0 0 0.6656,0.5964 h 2.271 a 0.67,0.67 0 0 0 0.6656,-0.5964 l 0.17,-1.5484 a 5.2191,5.2191 0 0 0 1.318001,-0.7963 l -0.0154,0.0271 1.4344,0.61 a 0.67,0.67 0 0 0 0.8459,-0.2885 l 1.1117,-1.98 a 0.67,0.67 0 0 0 -0.1935,-0.8731 z M 19.2359,21.3584 a 2.5012,2.5012 0 1 1 2.5012,-2.5012 2.5013,2.5013 0 0 1 -2.5012,2.5012 z" id="path25" style="fill:#DC7A8C;stroke-width:1.00001" />
+      <path class="cls-1" d="m 23.284177,18.488232 a 4.0667,4.0667 0 1 1 -4.066601,-4.0661 4.0666,4.0666 0 0 1 4.066601,4.0661 z" id="path11" style="fill:#ffffff;stroke-width:1.00001" />
+      <path class="cls-4" d="m 25.707301,20.425 -1.2674,-0.907 -0.015,0.0269 a 5.1976,5.1976 0 0 0 0.0693,-0.6877 5.203,5.203 0 0 0 -0.0738,-0.7314 l 0.0074,0.0127 1.2576,-0.92 a 0.67,0.67 0 0 0 0.1848,-0.8745 l -1.1327,-1.9683 a 0.67,0.67 0 0 0 -0.8489,-0.2795 l -1.427701,0.6248 0.0124,0.0215 a 5.2207,5.2207 0 0 0 -1.2774,-0.757 l -0.1694,-1.5388 a 0.67,0.67 0 0 0 -0.6656,-0.5964 h -2.271 a 0.67,0.67 0 0 0 -0.6658,0.5964 l -0.17,1.5453 a 5.2192,5.2192 0 0 0 -1.3209,0.8047 l 0.018,-0.0322 -1.4342,-0.61 a 0.67,0.67 0 0 0 -0.846,0.2886 l -1.1118,1.98 a 0.67,0.67 0 0 0 0.1943,0.8725 l 1.2674,0.907 0.0276,-0.0492 a 5.2141,5.2141 0 0 0 -0.0709,0.7037 5.21,5.21 0 0 0 0.0767,0.7616 l -0.021,-0.0367 -1.2576,0.9205 a 0.67,0.67 0 0 0 -0.1851,0.8744 l 1.1326,1.9685 a 0.67,0.67 0 0 0 0.8489,0.2795 L 16,23 15.9707,22.9493 a 5.22,5.22 0 0 0 1.2933,0.7762 l 0.17,1.5487 a 0.67,0.67 0 0 0 0.6656,0.5964 h 2.271 a 0.67,0.67 0 0 0 0.6656,-0.5964 l 0.17,-1.5484 a 5.2191,5.2191 0 0 0 1.318001,-0.7963 l -0.0154,0.0271 1.4344,0.61 a 0.67,0.67 0 0 0 0.8459,-0.2885 l 1.1117,-1.98 a 0.67,0.67 0 0 0 -0.1935,-0.8731 z M 19.2359,21.3584 a 2.5012,2.5012 0 1 1 2.5012,-2.5012 2.5013,2.5013 0 0 1 -2.5012,2.5012 z" id="path25" style="fill:#f2647e;stroke-width:1.00001" />
    </g>
 </svg>

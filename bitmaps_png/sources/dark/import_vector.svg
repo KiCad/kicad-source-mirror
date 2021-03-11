@@ -14,7 +14,7 @@
    sodipodi:docname="import_vector.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs157891">
     <style
-       id="style157889">.cls-1,.cls-2,.cls-4{fill:none;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke-width:0.9528px;}.cls-2{stroke:#F4EFF3;stroke-miterlimit:10;}.cls-3{fill:#DC7A8C;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
+       id="style157889">.cls-1,.cls-2,.cls-4{fill:none;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke-width:0.9528px;}.cls-2{stroke:#F4EFF3;stroke-miterlimit:10;}.cls-3{fill:#f2647e;}.cls-4{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title157893">import_vector</title>
@@ -159,7 +159,7 @@
      class="cls-3"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
      id="path25329"
-     style="fill:#DC7A8C" />
+     style="fill:#f2647e" />
   <line
      class="cls-4"
      x1="17.103798"

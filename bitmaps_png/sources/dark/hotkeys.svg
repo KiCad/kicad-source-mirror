@@ -14,7 +14,7 @@
    sodipodi:docname="hotkeys.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs157599">
     <style
-       id="style157597">.cls-1,.cls-2,.cls-3{fill:#8f8f8f;}.cls-2,.cls-5{stroke:#42B8EB;}.cls-2,.cls-3,.cls-4,.cls-5{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{stroke:#DC7A8C;}.cls-4,.cls-5{fill:none;}</style>
+       id="style157597">.cls-1,.cls-2,.cls-3{fill:#8f8f8f;}.cls-2,.cls-5{stroke:#42B8EB;}.cls-2,.cls-3,.cls-4,.cls-5{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{stroke:#f2647e;}.cls-4,.cls-5{fill:none;}</style>
   </defs>
   <title
      id="title157601">hotkeys</title>
@@ -144,7 +144,7 @@
   <path
      id="polyline157619"
      transform="translate(-1,-1)"
-     style="fill:none;stroke:#DC7A8C;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round"
      d="m 5,15.5 v 6 h 5.5"
      class="cls-4"
      sodipodi:nodetypes="ccc" />

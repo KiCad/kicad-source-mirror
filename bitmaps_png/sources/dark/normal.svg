@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="normal.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
       <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs158531">
-      <style id="style158529">.cls-1{fill:#F4EFF3;}.cls-2{fill:#DC7A8C;}.cls-3{fill:#8f8f8f;}</style>
+      <style id="style158529">.cls-1{fill:#F4EFF3;}.cls-2{fill:#f2647e;}.cls-3{fill:#8f8f8f;}</style>
    </defs>
    <title id="title158533">normal</title>
    <path class="cls-1" d="m 18.763,13.8466 a 1.3211,1.3211 0 0 1 1.01,-0.92 l 4.2294,-0.928 -4.23,-0.9271 a 1.3214,1.3214 0 0 1 -1.01,-0.92 7.0494,7.0494 0 0 0 -0.84,-1.93 1.3461,1.3461 0 0 1 0.03,-1.4325 L 19.359,4.5841 17.1234,6.0315 A 1.2384,1.2384 0 0 1 15.7798,6.0507 6.9565,6.9565 0 0 0 8.219,6.0514 1.239,1.239 0 0 1 6.8746,6.0325 L 4.639,4.586 6.0452,6.7906 a 1.3461,1.3461 0 0 1 0.031,1.4325 7.0514,7.0514 0 0 0 -0.8392,1.93 1.3214,1.3214 0 0 1 -1.01,0.92 l -4.23,0.9281 4.23,0.927 a 1.3216,1.3216 0 0 1 1.01,0.92 7.05,7.05 0 0 0 0.84,1.93 1.3461,1.3461 0 0 1 -0.03,1.4325 l -1.406,2.2052 2.2356,-1.4475 a 1.2384,1.2384 0 0 1 1.3434,-0.0192 6.956,6.956 0 0 0 7.5608,-7e-4 1.2392,1.2392 0 0 1 1.3444,0.019 L 19.361,19.414 17.9545,17.2093 A 1.3461,1.3461 0 0 1 17.9238,15.7768 7.0535,7.0535 0 0 0 18.763,13.8466 Z M 12,16.8557 A 4.8558,4.8558 0 1 1 16.82,12 4.8378,4.8378 0 0 1 12,16.8557 Z" id="path158535" />

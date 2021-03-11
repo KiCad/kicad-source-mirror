@@ -14,7 +14,7 @@
    sodipodi:docname="general_ratsnest.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -102,7 +102,7 @@
      cy="5.8873"
      r="2"
      id="circle24989"
-     style="fill:#111111;fill-opacity:1" />
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 20.366,7.4359 A 2.8088,2.8088 0 1 1 17.5571,4.6271 2.8088,2.8088 0 0 1 20.366,7.4359 Z"
@@ -114,7 +114,7 @@
      cy="7.4358997"
      r="2"
      id="circle24993"
-     style="fill:#111111;fill-opacity:1" />
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 21.5626,17.8184 A 2.8088,2.8088 0 1 1 18.7538,15.01 2.8087,2.8087 0 0 1 21.5626,17.8184 Z"
@@ -126,7 +126,7 @@
      cy="17.818399"
      r="2"
      id="circle24997"
-     style="fill:#111111;fill-opacity:1" />
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 8.6108,19.2966 A 2.8088,2.8088 0 1 1 5.802,16.4878 2.8087,2.8087 0 0 1 8.6108,19.2966 Z"
@@ -138,5 +138,5 @@
      cy="19.2966"
      r="2"
      id="circle25001"
-     style="fill:#111111;fill-opacity:1" />
+     style="fill:#ffffff;fill-opacity:1" />
 </svg>

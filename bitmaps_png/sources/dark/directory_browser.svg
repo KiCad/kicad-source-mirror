@@ -14,7 +14,7 @@
    sodipodi:docname="directory_browser.svg"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs116534">
     <style
-       id="style116532">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#DC7A8C;}.cls-4{fill:none;stroke:#111111;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style116532">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title116536">directory_browser</title>
@@ -91,7 +91,7 @@
      style="stroke:none;stroke-opacity:1;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      id="polyline116544"
-     style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
      d="m 20.851,18.877 c 0,0 -4.136587,0.640163 -5.59087,-0.81412 C 13.937605,16.740355 14.681,13.266 14.681,13.266"
      sodipodi:nodetypes="csc" />
   <polyline

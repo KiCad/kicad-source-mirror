@@ -63,7 +63,7 @@
      id="path17252"
      sodipodi:nodetypes="cc" />
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -124,7 +124,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#DC7A8C;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title7">add_symbol_to_schematic</title>
@@ -140,11 +140,11 @@
      x2="17"
      y2="20.631201"
      id="line19"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
   <polyline
      class="cls-4"
      points="15.349 17.164 18.104 14.412 20.859 17.164"
      id="polyline21"
      transform="translate(-1,-1)"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

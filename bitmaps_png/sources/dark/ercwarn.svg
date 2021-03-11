@@ -14,7 +14,7 @@
    sodipodi:docname="ercwarn.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs116919">
     <style
-       id="style116917">.cls-1{fill:#f29100;}.cls-2{fill:#111111;}</style>
+       id="style116917">.cls-1{fill:#f29100;}.cls-2{fill:#fff;}</style>
   </defs>
   <title
      id="title116921">ercwarn</title>

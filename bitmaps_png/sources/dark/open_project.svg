@@ -14,7 +14,7 @@
    sodipodi:docname="open_project.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs26011">
     <style
-       id="style26009">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-6{fill:#DC7A8C;}.cls-7{fill:#111111;}</style>
+       id="style26009">.cls-1{fill:#ededed;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#42B8EB;}.cls-5{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}</style>
   </defs>
   <title
      id="title26013">open_project</title>
@@ -123,10 +123,10 @@
        class="cls-4"
        d="m 23.999997,16.993507 a 6.9999998,6.9999994 0 1 1 -7.000101,-6.993506 6.996803,6.9968027 0 0 1 7.000101,6.993506 z"
        id="path25635"
-       style="display:inline;fill:#DC7A8C;stroke-width:0.999999" />
+       style="display:inline;fill:#f2647e;stroke-width:0.999999" />
     <path
        id="path845"
-       style="display:inline;fill:#111111;fill-opacity:1;stroke:none;stroke-width:0.999995"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.999995"
        d="m 14.114864,13.499939 a 1.1428326,1.1666389 0 0 0 -1.114931,1.166638 1.1428326,1.1666389 0 0 0 0,0.02846 v 4.638073 a 1.1428326,1.1666389 0 0 0 1.142832,1.166638 1.1428326,1.1666389 0 0 0 0.02789,0 h 5.686262 a 1.1428326,1.1666389 0 0 0 1.142833,-1.166638 1.1428326,1.1666389 0 0 0 0,-0.02846 v -3.471434 a 1.1428326,1.1666389 0 0 0 -1.142825,-1.166639 h -0.02789 -2.543473 l -1.142849,-1.166638 h -1.999957 a 1.1428326,1.1666389 0 0 0 -0.02789,0 z" />
   </g>
 </svg>

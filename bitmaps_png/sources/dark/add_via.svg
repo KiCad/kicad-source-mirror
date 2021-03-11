@@ -12,9 +12,9 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_via.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1035"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="32.354403"
      inkscape:cx="3.3259971"
      inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -90,6 +90,6 @@
      cx="12"
      cy="12"
      id="circle115778"
-     style="fill:#111111;fill-opacity:1;stroke-width:1"
+     style="fill:#e0e0e0;fill-opacity:1;stroke-width:1"
      r="3" />
 </svg>

@@ -14,7 +14,7 @@
    sodipodi:docname="add_power.svg"
    inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs354">
     <style
-       id="style352">.cls-1{fill:none;stroke:#DC7A8C;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style352">.cls-1{fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title356">add_power</title>

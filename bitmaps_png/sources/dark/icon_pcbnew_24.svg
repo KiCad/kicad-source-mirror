@@ -17,7 +17,7 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -78,7 +78,7 @@
   <defs
      id="defs158935">
     <style
-       id="style158933">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#42B8EB;}</style>
+       id="style158933">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath896">
@@ -265,13 +265,13 @@
      clip-path="url(#clipPath928)"
      transform="translate(0.50068774)" />
   <circle
-     style="fill:#111111;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path936"
      cx="4.3198075"
      cy="14.571527"
      r="1.8317689" />
   <circle
-     style="fill:#111111;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="circle938"
      cx="20.915913"
      cy="9.0609426"

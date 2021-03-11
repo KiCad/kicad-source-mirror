@@ -14,7 +14,7 @@
    sodipodi:docname="libedit.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs117075">
     <style
-       id="style117073">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#DC7A8C;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style117073">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#f2647e;}.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title117077">export_part</title>
@@ -141,11 +141,11 @@
      class="cls-4"
      d="m 21.539701,13.497285 -0.645179,-0.645178 c -0.401772,-0.40166 -1.053055,-0.40166 -1.454827,0 l -5.316089,5.340819 2.100005,2.100133 5.31609,-5.340947 c 0.40166,-0.401771 0.40166,-1.053056 0,-1.454827 z"
      id="path25"
-     style="fill:#111111;stroke-width:1;stroke:none"
+     style="fill:#ffffff;stroke-width:1;stroke:none"
      sodipodi:nodetypes="ccccccc" />
   <path
      id="polygon27"
-     style="fill:#111111;stroke-width:1;stroke:none"
+     style="fill:#ffffff;stroke-width:1;stroke:none"
      d="m 13,21.497285 h 3 C 15.220685,20.72499 13.71612,19.22175 13,18.497284 Z"
      sodipodi:nodetypes="cccc" />
 </svg>

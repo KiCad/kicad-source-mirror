@@ -12,9 +12,9 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="icon_modedit_24.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="958"
-     inkscape:window-height="1008"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="13.99623"
-     inkscape:cx="13.452657"
+     inkscape:cx="-2.3730332"
      inkscape:cy="19.194712"
-     inkscape:window-x="953"
+     inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
     <inkscape:grid
@@ -70,7 +70,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+       id="style3">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#bf2641;}.cls-4{fill:#fff;}</style>
   </defs>
   <title
      id="title7">icon_modedit_24</title>
@@ -79,7 +79,7 @@
      points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 "
      id="polygon9"
      transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)"
-     style="stroke-width:0.877906;fill:#acbac8;fill-opacity:1" />
+     style="stroke-width:0.877906;fill:#acbac8;fill-opacity:1;stroke:#e0e0e0;stroke-opacity:1" />
   <rect
      class="cls-2"
      x="2.9605565"

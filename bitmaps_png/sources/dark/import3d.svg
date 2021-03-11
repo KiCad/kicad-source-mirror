@@ -14,7 +14,7 @@
    sodipodi:docname="import3d.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs157793">
     <style
-       id="style157791">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#DC7A8C;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style157791">.cls-1,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-2{fill:#E0E0E0;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#686868;}.cls-5{fill:#42B8EB;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
   </defs>
   <title
      id="title157795">import3d</title>

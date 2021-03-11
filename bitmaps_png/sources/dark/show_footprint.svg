@@ -17,7 +17,7 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#DC7A8C;}.cls-4{fill:#111111;}</style>
+       id="style3">.cls-1{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#42B8EB;}.cls-3{fill:#f2647e;}.cls-4{fill:#fff;}</style>
   </defs>
   <title
      id="title7">module_editor</title>
@@ -157,12 +157,12 @@
     <g
        id="g851"
        transform="matrix(2.3621654,0,0,2.3621656,-8.8058418,6.9577514)"
-       style="opacity:1;fill:#111111;fill-opacity:0.45098;stroke:none;stroke-width:1.60299">
+       style="opacity:1;fill:#ffffff;fill-opacity:0.45098;stroke:none;stroke-width:1.60299">
       <path
          class="cls-5"
          d="m 4.5707641,2.0043869 a 1.8322519,1.8324268 0 1 1 -2.5912073,0 1.8322519,1.8324268 0 0 1 2.5912073,0 z"
          id="path849"
-         style="fill:#111111;fill-opacity:0.45098;stroke:none;stroke-width:0.25424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ffffff;fill-opacity:0.45098;stroke:none;stroke-width:0.25424;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          inkscape:connector-curvature="0" />
     </g>
     <rect

@@ -12,12 +12,12 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="net_highlight.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/net_highlight.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -25,16 +25,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2478"
-     inkscape:window-height="1573"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview34"
      showgrid="true"
      inkscape:zoom="37.889139"
-     inkscape:cx="8.4228849"
+     inkscape:cx="2.5768824"
      inkscape:cy="10.805587"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0"
      inkscape:measure-start="0,0"
@@ -80,7 +80,7 @@
   <defs
      id="defs15">
     <style
-       id="style3">.cls-1,.cls-2,.cls-5,.cls-6{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#42B8EB;}.cls-2{stroke:#DC7A8C;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#f29100;}.cls-5{stroke:url(#Безымянный_градиент_19);}.cls-6{stroke:url(#Безымянный_градиент_3);}</style>
+       id="style3">.cls-1,.cls-2,.cls-5,.cls-6{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#42B8EB;}.cls-2{stroke:#f2647e;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#f29100;}.cls-5{stroke:url(#Безымянный_градиент_19);}.cls-6{stroke:url(#Безымянный_градиент_3);}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="9.2548"
@@ -124,7 +124,7 @@
      inkscape:connector-curvature="0" />
   <path
      id="polyline21"
-     style="fill:none;stroke:#DC7A8C;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:none;stroke:#f2647e;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
      d="m 6,10.293247 v 8 8 -8 z"
      sodipodi:nodetypes="ccccc"
      inkscape:connector-curvature="0" />
@@ -139,10 +139,10 @@
      d="M 7.122252,11.00002 A 1.130752,1.130752 0 1 1 5.9915,9.8692679 1.130752,1.130752 0 0 1 7.122252,11.00002 Z"
      id="path27"
      inkscape:connector-curvature="0"
-     style="fill:#111111;stroke-width:0.51199996;fill-opacity:1" />
+     style="fill:#ffffff;stroke-width:0.51199996;fill-opacity:1" />
   <path
      id="polyline29"
-     style="fill:none;stroke:#848484;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="fill:none;stroke:#c0c0c0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      d="M -0.5250758,3.007 9,3 14,8 v 17"
      sodipodi:nodetypes="cccc"
      inkscape:connector-curvature="0" />
@@ -150,6 +150,6 @@
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccc"
      d="M 3.4749242,-0.993 12,-1 19,5.6049767 V 24.583204"
-     style="fill:none;stroke:#848484;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     style="fill:none;stroke:#c0c0c0;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      id="path856" />
 </svg>

@@ -47,7 +47,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -86,7 +86,7 @@
     <linearGradient
        id="linearGradient3884">
       <stop
-         style="stop-color:#111111;stop-opacity:1;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="0"
          id="stop3886" />
       <stop
@@ -106,18 +106,18 @@
          offset="0.76190478"
          style="stop-color:#e6e6e6;stop-opacity:1" />
       <stop
-         style="stop-color:#111111;stop-opacity:1;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop3888" />
     </linearGradient>
     <linearGradient
        id="a">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop7" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop9" />
@@ -128,7 +128,7 @@
          offset="0"
          id="stop12" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="1"
          id="stop14" />
     </linearGradient>
@@ -175,11 +175,11 @@
        y1="39.25"
        x1="18.871">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop29" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop31" />
@@ -238,11 +238,11 @@
        y1="41"
        x1="27.006001">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop39" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop41" />
@@ -346,7 +346,7 @@
          offset="0"
          id="stop62" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset=".59524"
          id="stop64" />
       <stop
@@ -366,7 +366,7 @@
          offset="0"
          id="stop69" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="1"
          id="stop71" />
     </linearGradient>
@@ -393,11 +393,11 @@
        y1="16.375"
        x1="18.247">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop79" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop81" />

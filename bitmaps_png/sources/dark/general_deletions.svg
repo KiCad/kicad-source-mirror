@@ -7,7 +7,7 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="general_deletions.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1850" inkscape:window-height="1211" id="namedview157361" showgrid="true" inkscape:zoom="30.291667" inkscape:cx="11.705353" inkscape:cy="13.615998" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1850" inkscape:window-height="1211" id="namedview157361" showgrid="true" inkscape:zoom="30.291667" inkscape:cx="11.705353" inkscape:cy="13.615998" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
       <inkscape:grid type="xygrid" id="grid240608" spacingx="0.5" spacingy="0.5" color="#b0b0ff" opacity="0.1254902" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -29,7 +29,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs157330">
-      <style id="style157321">.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{fill:none;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;}.cls-1,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{stroke-linecap:round;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-8{stroke-width:2px;}.cls-2{stroke:url(#Безымянный_градиент_4);}.cls-3{stroke:url(#Безымянный_градиент_19);}.cls-4{stroke:url(#Безымянный_градиент_19-2);}.cls-5,.cls-6{stroke:#8f8f8f;}.cls-6{stroke-dasharray:5.6216 5.6216;}.cls-7{fill:#DC7A8C;}.cls-8{stroke:#545454;}.cls-9{fill:#f29100;}</style>
+      <style id="style157321">.cls-1,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{fill:none;stroke-linejoin:round;}.cls-1{stroke:#42B8EB;}.cls-1,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{stroke-linecap:round;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-8{stroke-width:2px;}.cls-2{stroke:url(#Безымянный_градиент_4);}.cls-3{stroke:url(#Безымянный_градиент_19);}.cls-4{stroke:url(#Безымянный_градиент_19-2);}.cls-5,.cls-6{stroke:#8f8f8f;}.cls-6{stroke-dasharray:5.6216 5.6216;}.cls-7{fill:#f2647e;}.cls-8{stroke:#545454;}.cls-9{fill:#f29100;}</style>
       <linearGradient id="Безымянный_градиент_4" x1="13.2608" y1="5.7452" x2="5.9197" y2="5.7452" gradientUnits="userSpaceOnUse">
          <stop offset="0" stop-color="#ececec" id="stop157323" />
          <stop offset="1" stop-color="#c6c6c5" id="stop157325" />

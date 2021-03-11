@@ -14,8 +14,8 @@ import re
 # dark mode:  #484848
 
 COLOR_MAP = {
-    "#ffffff": "#111111",  # white
-    "#fff":    "#111111",  # white (short)
+#    "#ffffff": "#111111",  # white
+#    "#fff":    "#111111",  # white (short)
     "#333333": "#E0E0E0",  # off black
     "#333":    "#E0E0E0",  # off black (short)
     "#545454": "#F4EFF3",  # dark grey primary
@@ -27,7 +27,7 @@ COLOR_MAP = {
     "#f5f5f5": "#545454",  # off white 2
     "#1A81C4": "#42B8EB",  # primary blue
     "#39b4ea": "#1A81C4",  # light blue
-    "#bf2641": "#DC7A8C",  # primary red
+    "#bf2641": "#f2647e",  # primary red
 }
 
 

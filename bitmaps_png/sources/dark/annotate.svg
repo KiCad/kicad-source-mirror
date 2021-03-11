@@ -14,7 +14,7 @@
    sodipodi:docname="annotate.svg"
    inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -79,7 +79,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(-0.2)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path4898" />
     </marker>
@@ -93,7 +93,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(-0.2)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path3042" />
     </marker>
@@ -107,7 +107,7 @@
        inkscape:isstock="true">
       <path
          transform="scale(-0.2)"
-         style="fill-rule:evenodd;stroke:#DC7A8C;stroke-width:1pt;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke:#f2647e;stroke-width:1pt;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
          id="path1701" />
     </marker>
@@ -122,7 +122,7 @@
       <path
          transform="scale(0.3) translate(-2.3,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DC7A8C;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          id="path2210" />
     </marker>
     <marker
@@ -136,11 +136,11 @@
       <path
          transform="scale(0.3) translate(-2.3,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#DC7A8C;stroke-opacity:1;fill:#DC7A8C;fill-opacity:1"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#f2647e;stroke-opacity:1;fill:#f2647e;fill-opacity:1"
          id="path1592" />
     </marker>
     <style
-       id="style944">.cls-1{fill:none;stroke:#DC7A8C;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#DC7A8C;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#F4EFF3;}</style>
+       id="style944">.cls-1{fill:none;stroke:#f2647e;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#f2647e;}.cls-3{fill:#8f8f8f;}.cls-4{fill:#F4EFF3;}</style>
   </defs>
   <title
      id="title948">annotate</title>
@@ -165,11 +165,11 @@
          id="tspan1556"
          x="12.987726"
          y="0.09257789"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#111111;fill-opacity:1">R42</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">R42</tspan></text>
   </g>
   <path
      id="line950"
-     style="fill:none;stroke:#DC7A8C;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#marker4900)"
+     style="fill:none;stroke:#f2647e;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#marker4900)"
      d="M 12,13 V 10"
      sodipodi:nodetypes="cc" />
   <g
@@ -185,7 +185,7 @@
        style="fill:#F4EFF3;fill-opacity:1;stroke-width:1" />
     <text
        xml:space="preserve"
-       style="font-size:11.2px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#111111;stroke-width:1"
+       style="font-size:11.2px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;stroke-width:1"
        x="12.532377"
        y="1.0673543"
        id="text1530"><tspan
@@ -193,6 +193,6 @@
    id="tspan1528"
    x="14.312455"
    y="1.0673543"
-   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#111111;fill-opacity:1;stroke-width:1">R??</tspan> </text>
+   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1">R??</tspan> </text>
   </g>
 </svg>

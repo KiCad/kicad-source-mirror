@@ -15,7 +15,7 @@
    sodipodi:docname="show_zone_outline_only.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -76,7 +76,7 @@
   <defs
      id="defs11">
     <style
-       id="style3">.cls-1{fill:none;stroke:#42B8EB;stroke-miterlimit:10;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#F4EFF3;}.cls-7{fill:#DC7A8C;}.cls-8{fill:#545454;}</style>
+       id="style3">.cls-1{fill:none;stroke:#42B8EB;stroke-miterlimit:10;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#F4EFF3;}.cls-7{fill:#f2647e;}.cls-8{fill:#545454;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="8.3372"

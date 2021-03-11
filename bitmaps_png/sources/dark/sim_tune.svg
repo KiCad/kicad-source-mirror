@@ -14,7 +14,7 @@
    sodipodi:docname="sim_tune.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs159987">
     <style
-       id="style159985">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25px;}.cls-2{stroke:#DC7A8C;}.cls-3{stroke:#42B8EB;}</style>
+       id="style159985">.cls-1{fill:#8f8f8f;}.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25px;}.cls-2{stroke:#f2647e;}.cls-3{stroke:#42B8EB;}</style>
   </defs>
   <title
      id="title159989">simulator</title>
@@ -84,17 +84,17 @@
      cx="-38.5"
      cy="-8.499999"
      id="ellipse22-5"
-     style="display:inline;fill:#DC7A8C;stroke-width:0.999999"
+     style="display:inline;fill:#f2647e;stroke-width:0.999999"
      r="7" />
   <path
      class="cls-4"
      d="m -33.960301,-12.5 -0.645181,-0.645178 c -0.401771,-0.40166 -1.053051,-0.40166 -1.454825,0 l -5.316089,5.3408197 2.100006,2.1001322 5.316089,-5.3409459 c 0.401658,-0.401772 0.401658,-1.053056 0,-1.454828 z"
      id="path25-6"
-     style="display:inline;fill:#111111;stroke-width:0.999999"
+     style="display:inline;fill:#ffffff;stroke-width:0.999999"
      sodipodi:nodetypes="ccccccc" />
   <path
      id="polygon27"
-     style="display:inline;fill:#111111;stroke-width:0.999999"
+     style="display:inline;fill:#ffffff;stroke-width:0.999999"
      d="m -42.500002,-4.5000005 h 3 c -0.779315,-0.772295 -2.28388,-2.2755338 -3,-2.9999996 z"
      sodipodi:nodetypes="cccc" />
   <path

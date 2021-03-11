@@ -14,7 +14,7 @@
    sodipodi:docname="filter.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs116686">
     <style
-       id="style116684">.cls-1{fill:#8f8f8f;}.cls-2{fill:#111111;}.cls-2,.cls-3{stroke:#F4EFF3;}.cls-2,.cls-3,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{fill:none;}.cls-4{stroke:#42B8EB;}.cls-5{fill:#F4EFF3;}</style>
+       id="style116684">.cls-1{fill:#8f8f8f;}.cls-2{fill:#fff;}.cls-2,.cls-3{stroke:#F4EFF3;}.cls-2,.cls-3,.cls-4{stroke-linecap:round;stroke-linejoin:round;}.cls-3,.cls-4{fill:none;}.cls-4{stroke:#42B8EB;}.cls-5{fill:#F4EFF3;}</style>
   </defs>
   <title
      id="title116688">drc</title>

@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 48 48" version="1.1" sodipodi:docname="icon_3d.svg" width="48" height="48" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1695" inkscape:window-height="1307" id="namedview46" showgrid="true" inkscape:zoom="13.980769" inkscape:cx="21.020466" inkscape:cy="28.977039" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1695" inkscape:window-height="1307" id="namedview46" showgrid="true" inkscape:zoom="13.980769" inkscape:cx="21.020466" inkscape:cy="28.977039" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
       <inkscape:grid type="xygrid" id="grid897" spacingx="0.5" spacingy="0.5" color="#8888ff" opacity="0.1254902" empspacing="2" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs5">
-      <style id="style3">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-3,.cls-5{stroke-width:0.75px;}.cls-2{stroke:#F4EFF3;}.cls-3{stroke:#42B8EB;}.cls-4{fill:#42B8EB;}.cls-5{stroke:#DC7A8C;}.cls-6{fill:#DC7A8C;}.cls-7{fill:#111111;}.cls-8{fill:#F4EFF3;}</style>
+      <style id="style3">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#8f8f8f;}.cls-1,.cls-3,.cls-5{stroke-width:0.75px;}.cls-2{stroke:#F4EFF3;}.cls-3{stroke:#42B8EB;}.cls-4{fill:#42B8EB;}.cls-5{stroke:#f2647e;}.cls-6{fill:#f2647e;}.cls-7{fill:#fff;}.cls-8{fill:#F4EFF3;}</style>
    </defs>
    <title id="title7">icon_3d</title>
    <line class="cls-1" x1="18" y1="33.852211" x2="18" y2="47" id="line9-3" style="fill:none;stroke:#8f8f8f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />

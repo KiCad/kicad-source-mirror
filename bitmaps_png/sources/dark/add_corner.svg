@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="add_corner.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1801" inkscape:window-height="1261" id="namedview27970" showgrid="false" inkscape:zoom="30.291667" inkscape:cx="7.2883895" inkscape:cy="14.996103" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" />
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1801" inkscape:window-height="1261" id="namedview27970" showgrid="false" inkscape:zoom="30.291667" inkscape:cx="7.2883895" inkscape:cy="14.996103" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" />
    <metadata id="metadata43">
       <rdf:RDF>
          <cc:Work rdf:about="">
@@ -26,7 +26,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs27951">
-      <style id="style27944">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#42B8EB;}.cls-4{fill:#DC7A8C;}</style>
+      <style id="style27944">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#F4EFF3;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f2647e;}</style>
       <linearGradient id="Безымянный_градиент_19" x1="16" y1="3" x2="16" y2="23.2387" gradientUnits="userSpaceOnUse">
          <stop offset="0" stop-color="#ececec" id="stop27946" />
          <stop offset="1" stop-color="#c6c6c5" id="stop27948" />

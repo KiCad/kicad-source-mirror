@@ -14,7 +14,7 @@
    sodipodi:docname="hidden_pin.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,17 +75,17 @@
   <defs
      id="defs3898">
     <style
-       id="style3896">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#DC7A8C;stroke-miterlimit:10;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#DC7A8C;}.cls-5{fill:#545454;}</style>
+       id="style3896">.cls-1{fill:#8f8f8f;}.cls-2{fill:none;stroke:#f2647e;stroke-miterlimit:10;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#f2647e;}.cls-5{fill:#545454;}</style>
   </defs>
   <title
      id="title3900">hidden_pin</title>
   <path
-     style="fill:none;stroke:#DC7A8C;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#f2647e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,22 V 18.5"
      id="path3748"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#DC7A8C;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#f2647e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,5.5 V 2"
      id="path17255-9"
      sodipodi:nodetypes="cc" />

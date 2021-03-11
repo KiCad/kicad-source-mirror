@@ -14,7 +14,7 @@
    sodipodi:docname="file_gerber_job.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs25591">
     <style
-       id="style25589">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#DC7A8C;}.cls-5{fill:#111111;}</style>
+       id="style25589">.cls-1{fill:#F4EFF3;}.cls-2{fill:#8f8f8f;}.cls-3{fill:#42B8EB;}.cls-4{fill:#f2647e;}.cls-5{fill:#fff;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath984">
@@ -238,7 +238,7 @@
        clip-path="none"
        sodipodi:nodetypes="cccc" />
     <circle
-       style="fill:#111111;fill-opacity:1;stroke:none;stroke-linecap:square"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-linecap:square"
        id="path988"
        cx="17"
        cy="17"
@@ -253,7 +253,7 @@
        cx="17"
        cy="17"
        id="ellipse22"
-       style="fill:#DC7A8C;stroke-width:0.999999"
+       style="fill:#f2647e;stroke-width:0.999999"
        r="7" />
     <line
        class="cls-5"
@@ -262,7 +262,7 @@
        x2="20.135098"
        y2="14"
        id="line27"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-5"
        x1="16"
@@ -270,7 +270,7 @@
        x2="20.135098"
        y2="17"
        id="line31"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-5"
        x1="16"
@@ -278,7 +278,7 @@
        x2="20.135098"
        y2="20"
        id="line35"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-5"
        x1="13.550362"
@@ -286,7 +286,7 @@
        x2="13.550362"
        y2="20"
        id="line37"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-5"
        x1="13.506168"
@@ -294,7 +294,7 @@
        x2="13.506168"
        y2="17"
        id="line33"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
     <line
        class="cls-5"
        x1="13.506168"
@@ -302,6 +302,6 @@
        x2="13.506168"
        y2="14"
        id="line29"
-       style="fill:none;stroke:#111111;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   </g>
 </svg>

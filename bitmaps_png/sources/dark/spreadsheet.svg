@@ -43,7 +43,7 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -79,7 +79,7 @@
     <clipPath
        id="ba">
       <path
-         style="fill:#111111"
+         style="fill:#ffffff"
          d="m 0,96 v 60 H 96 V 96 Z m 68,20 c 9.9411,0 18,8.0589 18,18 0,9.9411 -8.0589,18 -18,18 -9.9411,0 -18,-8.0589 -18,-18 0,-9.9411 8.0589,-18 18,-18 z"
          id="path125"
          inkscape:connector-curvature="0" />
@@ -165,16 +165,16 @@
     <linearGradient
        id="an">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop65" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity=".49804"
          offset=".43290"
          id="stop67" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop69" />
@@ -249,7 +249,7 @@
        y1="-3.6324"
        x1="50.153">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop3133"
          style="stop-color:#4754ba;stop-opacity:1;" />
@@ -283,11 +283,11 @@
        y1="19.822001"
        x1="31.177">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop3143" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop3145" />
@@ -330,11 +330,11 @@
        y1="35.688"
        x1="12.005">
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          offset="0"
          id="stop3159" />
       <stop
-         stop-color="#111111"
+         stop-color="#fff"
          stop-opacity="0"
          offset="1"
          id="stop3161" />

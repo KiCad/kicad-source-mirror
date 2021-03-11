@@ -14,7 +14,7 @@
    sodipodi:docname="pad_enumerate.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -74,7 +74,7 @@
   <defs
      id="defs158759">
     <style
-       id="style158754">.cls-1,.cls-5,.cls-6{fill:none;}.cls-2{clip-path:url(#clip-path);}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5,.cls-6{stroke:#8f8f8f;stroke-width:0.25px;}.cls-5{stroke-linecap:round;stroke-linejoin:round;}.cls-6{stroke-miterlimit:10;}.cls-7{fill:#f29100;}.cls-8{fill:#111111;}</style>
+       id="style158754">.cls-1,.cls-5,.cls-6{fill:none;}.cls-2{clip-path:url(#clip-path);}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5,.cls-6{stroke:#8f8f8f;stroke-width:0.25px;}.cls-5{stroke-linecap:round;stroke-linejoin:round;}.cls-6{stroke-miterlimit:10;}.cls-7{fill:#f29100;}.cls-8{fill:#fff;}</style>
     <clipPath
        id="clip-path">
       <rect

@@ -15,7 +15,7 @@
    sodipodi:docname="zone_unfill.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -76,7 +76,7 @@
   <defs
      id="defs160453">
     <style
-       id="style160445">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#F4EFF3;}.cls-6{fill:#DC7A8C;}.cls-7{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style160445">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="8.3372"
@@ -122,7 +122,7 @@
      class="cls-10"
      d="m 13.517974,12.030931 a 1.9450974,1.9566035 0 1 1 0,-2.7670167 1.9449674,1.9564727 0 0 1 0,2.7670167 z"
      id="path117301"
-     style="fill:none;stroke:#111111;stroke-width:0.750001px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+     style="fill:none;stroke:#ffffff;stroke-width:0.750001px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   <line
      class="cls-10"
      x1="10.767228"
@@ -138,9 +138,9 @@
      x2="7.6141195"
      y2="6.0917277"
      id="line117303-5"
-     style="fill:none;stroke:#111111;stroke-width:0.749999px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+     style="fill:none;stroke:#ffffff;stroke-width:0.749999px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   <path
-     style="fill:none;stroke:#DC7A8C;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#f2647e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 1.9999999,22 22,1.9999999"
      id="path2098" />
 </svg>

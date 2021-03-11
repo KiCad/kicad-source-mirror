@@ -14,7 +14,7 @@
    sodipodi:docname="apply_pad_settings.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -66,7 +66,7 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#f29100;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#DC7A8C;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#f29100;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#f2647e;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
   <title
      id="title7">apply_pad_settings</title>
@@ -96,5 +96,5 @@
      points="21.746 16.275 17.173 20.846 14.418 18.093"
      id="polyline21"
      transform="matrix(0.99907229,0,0,0.99907223,-0.98330424,-0.9897938)"
-     style="stroke:#111111;stroke-opacity:1" />
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

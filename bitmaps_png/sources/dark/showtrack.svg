@@ -14,7 +14,7 @@
    sodipodi:docname="showtrack.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs27237">
     <style
-       id="style27235">.cls-1{fill:#DC7A8C;}.cls-2{fill:#42B8EB;}.cls-3{fill:#F4EFF3;}</style>
+       id="style27235">.cls-1{fill:#f2647e;}.cls-2{fill:#42B8EB;}.cls-3{fill:#F4EFF3;}</style>
   </defs>
   <title
      id="title27239">showtrack</title>

@@ -15,7 +15,7 @@
    sodipodi:docname="show_zone.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -76,7 +76,7 @@
   <defs
      id="defs11">
     <style
-       id="style3">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#F4EFF3;}.cls-6{fill:#DC7A8C;}.cls-7{fill:#545454;}</style>
+       id="style3">.cls-1{fill:#42B8EB;}.cls-2{fill:#595959;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{fill:#545454;}</style>
     <linearGradient
        id="Безымянный_градиент_19"
        x1="8.3372"

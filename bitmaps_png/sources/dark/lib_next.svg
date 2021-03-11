@@ -6,7 +6,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="lib_next.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#111111" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1599" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="14.554686" inkscape:cy="15.611268" inkscape:window-x="86" inkscape:window-y="145" inkscape:window-maximized="0" inkscape:current-layer="g981" inkscape:document-rotation="0">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1599" inkscape:window-height="1126" id="namedview42" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="14.554686" inkscape:cy="15.611268" inkscape:window-x="86" inkscape:window-y="145" inkscape:window-maximized="0" inkscape:current-layer="g981" inkscape:document-rotation="0">
       <inkscape:grid type="xygrid" id="grid846" spacingx="0.5" spacingy="0.5" color="#aaaaff" opacity="0.1254902" empspacing="2" />
    </sodipodi:namedview>
    <metadata id="metadata43">
@@ -76,7 +76,7 @@
             <path id="path979" style="fill:none;stroke:#8f8f8f;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" d="M 3,19.5 H 6" sodipodi:nodetypes="cc" />
          </g>
          <g id="g1009" transform="matrix(0.99907229,0,0,0.99907223,-2.0371114,-1.7131221)" style="stroke-width:1.00092">
-            <path class="cls-5" d="m 9.0455,18.724 a 7.0065,7.0065 0 1 1 -7.0065,-7 7.0032,7.0032 0 0 1 7.0065,7 z" id="path41" style="fill:#DC7A8C;stroke-width:1.00092" />
+            <path class="cls-5" d="m 9.0455,18.724 a 7.0065,7.0065 0 1 1 -7.0065,-7 7.0032,7.0032 0 0 1 7.0065,7 z" id="path41" style="fill:#f2647e;stroke-width:1.00092" />
             <line class="cls-6" x1="5.5331011" y1="18.745499" x2="-1.4669003" y2="18.745499" id="line43" style="fill:none;stroke:#545454;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round" />
             <polyline class="cls-6" points="18.961 15.266 21.714 18.022 18.961 20.776" id="polyline45" style="fill:none;stroke:#545454;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round" transform="translate(-15.961,0.724)" />
          </g>

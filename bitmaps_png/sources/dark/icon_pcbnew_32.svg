@@ -19,7 +19,7 @@
    width="32"
    height="32">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -80,12 +80,12 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#8f8f8f;}.cls-2{fill:#F4EFF3;}.cls-3{fill:#42B8EB;}</style>
+       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath1720">
       <rect
-         style="fill:none;fill-opacity:1;stroke:#E0E0E0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;fill-opacity:1;stroke:#333333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect1722"
          width="16"
          height="16"
@@ -97,7 +97,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath1736">
       <rect
-         style="fill:none;fill-opacity:1;stroke:#E0E0E0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;fill-opacity:1;stroke:#333333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect1738"
          width="24"
          height="16"
@@ -109,7 +109,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath1724">
       <rect
-         style="fill:none;fill-opacity:1;stroke:#E0E0E0;stroke-width:1.99999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;fill-opacity:1;stroke:#333333;stroke-width:1.99999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect1726"
          width="24"
          height="24"
@@ -121,7 +121,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath1732">
       <rect
-         style="fill:none;fill-opacity:1;stroke:#E0E0E0;stroke-width:1.99999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;fill-opacity:1;stroke:#333333;stroke-width:1.99999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect1734"
          width="24"
          height="24"
@@ -133,7 +133,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath931">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect933"
          width="32"
          height="32"
@@ -147,7 +147,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath935">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect937"
          width="37.455692"
          height="24.970463"
@@ -161,7 +161,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath939">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect941"
          width="32"
          height="32"
@@ -174,7 +174,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath943">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect945"
          width="32"
          height="32"
@@ -187,7 +187,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath947">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect949"
          width="32"
          height="32"
@@ -200,7 +200,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath951">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect953"
          width="22.849165"
          height="23.991625"
@@ -213,7 +213,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath955">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect957"
          width="32"
          height="32"
@@ -226,7 +226,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath959">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect961"
          width="22.849165"
          height="23.991625"
@@ -239,7 +239,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath963">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect965"
          width="32"
          height="32"
@@ -252,7 +252,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath967">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect969"
          width="32"
          height="32"
@@ -265,7 +265,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath971">
       <rect
-         style="fill:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f3f3f3;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect973"
          width="32"
          height="32"
@@ -348,7 +348,7 @@
            class="cls-1"
            d="M 23.0471,9.671111 A 1,1 0 1 1 22.04717,8.6709 1.0000702,1.0000702 0 0 1 23.0471,9.671111 Z"
            id="path2249"
-           style="fill:#111111;fill-opacity:1;stroke-width:0.731669"
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.731669"
            inkscape:connector-curvature="0" />
       </g>
       <path

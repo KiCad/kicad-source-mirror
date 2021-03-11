@@ -14,7 +14,7 @@
    sodipodi:docname="net_highlight_schematic.svg"
    inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -96,11 +96,11 @@
      points="2 22.01 12.997 22.01 12.997 8.997 24 8.997"
      id="polyline158420-5"
      transform="translate(-1.0013755,-0.99724958)"
-     style="fill:none;stroke:#111111;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-2"
      points="2 22.01 12.997 22.01 12.997 8.997 24 8.997"
      id="polyline158420"
      transform="translate(-1,-1)"
-     style="stroke:#DC7A8C;stroke-opacity:1" />
+     style="stroke:#f2647e;stroke-opacity:1" />
 </svg>

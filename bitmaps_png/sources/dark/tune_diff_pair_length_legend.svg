@@ -37,7 +37,7 @@
          <path id="path1510" d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z " style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1" transform="scale(0.8) translate(12.5,0)" />
       </marker>
       <marker inkscape:stockid="EmptyTriangleInL" orient="auto" refY="0.0" refX="0.0" id="EmptyTriangleInL" style="overflow:visible" inkscape:isstock="true">
-         <path id="path1001" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z " style="fill-rule:evenodd;fill:#111111;stroke:#000000;stroke-width:1pt;stroke-opacity:1" transform="scale(-0.8) translate(-6,0)" />
+         <path id="path1001" d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z " style="fill-rule:evenodd;fill:#ffffff;stroke:#000000;stroke-width:1pt;stroke-opacity:1" transform="scale(-0.8) translate(-6,0)" />
       </marker>
       <marker inkscape:stockid="SquareL" orient="auto" refY="0.0" refX="0.0" id="SquareL" style="overflow:visible" inkscape:isstock="true">
          <path id="path920" d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z " style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1" transform="scale(0.8)" />
@@ -64,7 +64,7 @@
          <path inkscape:connector-curvature="0" transform="matrix(-1.1,0,0,-1.1,-1.1,0)" d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1" id="path4482-0" />
       </marker>
    </defs>
-   <sodipodi:namedview id="base" pagecolor="#111111" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="2.2616192" inkscape:cx="170.44446" inkscape:cy="126.51559" inkscape:document-units="mm" inkscape:current-layer="g9599" showgrid="false" inkscape:window-width="1920" inkscape:window-height="1033" inkscape:window-x="-4" inkscape:window-y="-4" inkscape:window-maximized="1" units="px" showborder="true" />
+   <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="2.2616192" inkscape:cx="170.44446" inkscape:cy="126.51559" inkscape:document-units="mm" inkscape:current-layer="g9599" showgrid="false" inkscape:window-width="1920" inkscape:window-height="1033" inkscape:window-x="-4" inkscape:window-y="-4" inkscape:window-maximized="1" units="px" showborder="true" />
    <metadata id="metadata5">
       <rdf:RDF>
          <cc:Work rdf:about="">

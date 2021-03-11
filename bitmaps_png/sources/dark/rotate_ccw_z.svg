@@ -14,7 +14,7 @@
    sodipodi:docname="rotate_pos_z.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
-     pagecolor="#111111"
+     pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -75,7 +75,7 @@
   <defs
      id="defs26991">
     <style
-       id="style26989">.cls-1{fill:#F4EFF3;}.cls-2{fill:#DC7A8C;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
+       id="style26989">.cls-1{fill:#F4EFF3;}.cls-2{fill:#f2647e;}.cls-3{fill:none;stroke:#F4EFF3;stroke-linecap:round;stroke-linejoin:round;}</style>
   </defs>
   <title
      id="title26993">rotate_pos_z</title>
@@ -89,16 +89,16 @@
      d="M 12,13 3.514718,21.485282"
      id="path3723" />
   <path
-     style="fill:none;stroke:#DC7A8C;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#f2647e;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 12,13 V 1"
      id="path3719"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#111111;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 11,8.5 h 2"
      id="path3715" />
   <path
-     style="fill:none;stroke:#111111;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 11,10.5 h 2"
      id="path3717" />
   <g
