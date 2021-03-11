@@ -1,21 +1,21 @@
 # Slavko <linux@slavino.sk>, 2010, 2011, 2012, 2014.
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # Jakub Janek <shaman.janek@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2020-12-29 21:39+0000\n"
+"PO-Revision-Date: 2021-03-11 21:06+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -226,7 +226,7 @@ msgstr "Načítanie 3D modelov"
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:654
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Čas obnovenia %.3f s"
+msgstr "Čas opätovného načítania %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:178
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:559
@@ -236,16 +236,16 @@ msgstr "Načítavam..."
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:343
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Čas renderovania %.3f s"
+msgstr "Čas vykreslenia %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:397
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Rennderovanie: %.0f %%"
+msgstr "Vykreslenie: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:848
 msgid "Rendering: Post processing shader"
-msgstr "Renderovanie: následné spracovanie tieňov"
+msgstr "Vykreslenie: shader po spracovaní"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:448
 msgid "Load OpenGL: board"
@@ -266,11 +266,11 @@ msgstr "Načítavam %s"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr "Exportovať aktuálny pohľad ako PNG..."
+msgstr "Exportovať aktuálne zobrazenie ako PNG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr "Exportovať aktuálny pohľad ako JPEG..."
+msgstr "Exportovať aktuálne zobrazenie ako JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/hotkey_store.cpp:77
 #: common/tool/actions.cpp:553 pcbnew/footprint_viewer_frame.cpp:968
@@ -315,11 +315,11 @@ msgstr "Výber farieb"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:155
 msgid "Background Top Color..."
-msgstr "Farba pozadia Top..."
+msgstr "Najvyššia farba pozadia ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:159
 msgid "Background Bottom Color..."
-msgstr "Farba pozadia Bot..."
+msgstr "Farba spodnej časti pozadia ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:163
 msgid "Silkscreen Color..."
@@ -327,7 +327,7 @@ msgstr "Farba sieťotlače ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:167
 msgid "Solder Mask Color..."
-msgstr "Farba masky..."
+msgstr "Farba spájkovacej masky ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:171
 msgid "Solder Paste Color..."
@@ -369,7 +369,7 @@ msgstr "Predvoľba..."
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:233
 #: pcbnew/menubar_pcb_editor.cpp:441
 msgid "Show preferences for all open tools"
-msgstr "Zobratiť predvoľby"
+msgstr "Zobraziť predvoľby pre všetky otvorené nástroje"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:220 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:283
@@ -417,7 +417,7 @@ msgstr "Nastavte možnosti zobrazenia a viditeľnosť niektorých vrstiev"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:70
 msgid "Render current view using Raytracing"
-msgstr "Rendrovať aktuálny pohľad pomocou Raytracingu"
+msgstr "Vykresliť aktuálne zobrazenie pomocou Raytracingu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 msgid "3D Model Visibility"
@@ -425,11 +425,11 @@ msgstr "Viditeľnosť 3D modelu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
-msgstr "Zobraziť 3D model s vývodmi"
+msgstr "Ukážte 3D modely s otvormi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:33
 msgid "Show 3D SMD models"
-msgstr "Zobraziť SMD 3D modely"
+msgstr "Zobraziť 3D modely SMD"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show 3D virtual models"
@@ -457,7 +457,7 @@ msgstr "Zobraziť vrstvy lepidla"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:61
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Užívateľské vrstvy (nezobrazujú sa v realistickom režime)"
+msgstr "Používateľské vrstvy (nezobrazené v realistickom režime)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:63
 msgid "Show comments and drawings layers"
@@ -469,7 +469,7 @@ msgstr "Zobraziť vrstvy ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:81
 msgid "Realistic mode"
-msgstr "Realistický mód"
+msgstr "Realistický režim"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:84
 msgid "Show board body"
