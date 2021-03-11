@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-04 10:32+0100\n"
+"POT-Creation-Date: 2021-03-11 20:56+0100\n"
+"PO-Revision-Date: 2021-03-11 21:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1402,8 +1402,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/bitmap2component.desktop:9
+#: resources/linux/launchers/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -3023,18 +3023,16 @@ msgid "Show icons in menus"
 msgstr "Montrer icônes dans Menus"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Thème de couleurs:"
+msgstr "Thème d’icône:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Droite"
+msgstr "Clair"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Utiliser des icônes conçus pour les arrière-plans clairs de fenêtres"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3043,12 +3041,14 @@ msgstr "Sombre"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Utiliser des icônes conçus pour les arrière-plans sombres de fenêtres"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Choisr automatiquement des icônes clairs ou sombres en fonction du thème de "
+"couleur du système"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -11833,9 +11833,8 @@ msgid "Show inter-sheet references"
 msgstr "Monter les références inter-feuilles"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Tracer les références des empreintes"
+msgstr "Afficher la référence de la page du label"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -12465,9 +12464,11 @@ msgid "Do not show this dialog again."
 msgstr "Ne pas montrer de nouveau ce dialogue."
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Impossible de sauver la librairie de symboles \"%s\"."
+msgstr ""
+"Le fichier cache de librairie de symboles de projet \"%s\" n’a pas été "
+"trouvé."
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12477,14 +12478,20 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"Cela peut entraîner un schéma incorrect dans certaines conditions.  Si le "
+"schéma n’a pas de symboles manquants lors de l’ouverture, enregistrez-le "
+"immédiatement avant d’apporter des modifications pour éviter la perte de "
+"données.  S’il manque des symboles, la récupération manuelle du schéma ou la "
+"récupération du fichier de librairie de cache de symbole et le rechargement "
+"du schéma sont nécessaires."
 
 #: eeschema/files-io.cpp:510
 msgid "Load Without Cache File"
-msgstr ""
+msgstr "Charger sans fichier cache"
 
 #: eeschema/files-io.cpp:511
 msgid "Abort"
-msgstr ""
+msgstr "Abandonner"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
@@ -13100,9 +13107,8 @@ msgid "Go to Page %s (%s)"
 msgstr "Accéder à la page %s (%s)"
 
 #: eeschema/sch_field.cpp:501
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Créer Pad a partir de Formes Sélectionnées"
+msgstr "Revenir à la Feuille Sélectionnée Précédente"
 
 #: eeschema/sch_field.cpp:529
 msgid "Intersheet References"
@@ -14061,7 +14067,7 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14160,10 +14166,10 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 msgstr ""
@@ -14194,7 +14200,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14293,10 +14299,10 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -17190,7 +17196,7 @@ msgid "X2 attr"
 msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1001
-#: resources/linux/launchers/gerbview.desktop.in:10
+#: resources/linux/launchers/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -18277,11 +18283,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:49
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19652,8 +19653,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/pcbcalculator.desktop:9
+#: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -29773,7 +29774,7 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "Ajout %s (empreinte:%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
 msgstr "Ajout %s (empreinte:%s)."
 
@@ -29788,14 +29789,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Ne peut mettre à jour %s (empreinte \"%s\" non trouvée)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Change empreinte \"%s\" de \"%s\" en \"%s\""
+msgstr "Change empreinte \"%s\" de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Change empreinte \"%s\" de \"%s\" en \"%s\""
+msgstr "Change empreinte \"%s\" de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -29803,7 +29804,7 @@ msgid "Change %s reference designator to %s."
 msgstr "Change la référence schématique de %s en %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "Change la référence schématique de %s en %s."
 
@@ -29813,7 +29814,7 @@ msgid "Change %s value from %s to %s."
 msgstr "Modifie valeur %s de %s en %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Modifie valeur %s de %s en %s."
 
@@ -29823,7 +29824,7 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "Mise à jour %s association de symbole de %s à %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "Mise à jour %s association de symbole de %s à %s."
 
@@ -29833,23 +29834,23 @@ msgid "Update %s properties."
 msgstr "Mise à jour des propriétés de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
 msgstr "Mise à jour des propriétés de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Set %s 'exclude from BOM' fabrication attribute."
 msgstr "Activation de attribut de fabrication \"exclure de BOM\" pour %s ."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
 
@@ -29859,12 +29860,12 @@ msgid "Disconnect %s pin %s."
 msgstr "Déconnexion \"%s\" pin \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
 msgstr "Déconnexion \"%s\" pin \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
 msgstr "Pas d'équipotentielle pour symbole \"%s\" pin \"%s\"."
 
@@ -29879,7 +29880,7 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Reconnexion \"%s\" pin \"%s\"  de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Reconnexion \"%s\" pin \"%s\"  de \"%s\" en \"%s\"."
 
@@ -29889,7 +29890,7 @@ msgid "Connect %s pin %s to %s."
 msgstr "Connecter %s pin %s à %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "Connecter %s pin %s à %s."
 
@@ -29899,7 +29900,7 @@ msgid "Reconnect via from %s to %s."
 msgstr "Reconnexion via  de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Reconnexion via  de \"%s\" en \"%s\"."
 
@@ -29909,9 +29910,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "Via connecté à une équipotentielle inconnue (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Reconnexion zone de cuivre du net \"%s\" en net \"%s\"."
+msgstr "Reconnexion zone de cuivre \"%s\" de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
@@ -29919,24 +29920,24 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "Reconnexion zone de cuivre du net \"%s\" en net \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Reconnexion zone de cuivre du net \"%s\" en net \"%s\"."
+msgstr "Reconnexion zone de cuivre \"%s\" de \"%s\" en \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Reconnexion zone de cuivre du net \"%s\" en net \"%s\"."
+msgstr "Reconnexion zone de cuivre de \"%s\" en net \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Zone cuivre (\"%s\") n'a pas de pad connecté."
+msgstr "La zone cuivre \"%s\" n'a pas de pad connecté."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Zone cuivre (\"%s\") n'a pas de pad connecté."
+msgstr "La zone cuivre sur couche %s à (%s %s) n'a pas de pad connecté."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -29944,7 +29945,7 @@ msgid "Remove single pad net %s."
 msgstr "Suppression net à pad unique \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
 msgstr "Suppression net à pad unique \"%s\"."
 
@@ -29969,7 +29970,7 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Impossible de supprimer l'empreinte %s inutilisée (verrouillée)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "Impossible de supprimer l'empreinte %s inutilisée (verrouillée)."
 
@@ -29979,12 +29980,12 @@ msgid "Remove unused footprint %s."
 msgstr "Suppression empreinte inutilisée \"%s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
 msgstr "Suppression empreinte inutilisée \"%s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
 msgstr "Suppression net inutilisé \"%s\"."
 
@@ -35001,21 +35002,17 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/launchers/kicad.desktop:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
+#: resources/linux/appdata/kicad.appdata.xml:13
+#: resources/linux/launchers/kicad.desktop:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:37
+#: resources/linux/appdata/kicad.appdata.xml:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -35025,92 +35022,67 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml.in:49
+#: resources/linux/appdata/kicad.appdata.xml:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:54
+#: resources/linux/appdata/kicad.appdata.xml:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:59
+#: resources/linux/appdata/kicad.appdata.xml:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:71
+#: resources/linux/appdata/kicad.appdata.xml:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/bitmap2component.desktop:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/eeschema.desktop:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/eeschema.desktop:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/eeschema.desktop:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/gerbview.desktop:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/gerbview.desktop:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop.in:12
+#: resources/linux/launchers/kicad.desktop:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/pcbcalculator.desktop:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/pcbnew.desktop:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/pcbnew.desktop:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
-msgid "Gerber File"
-msgstr "Fichiers Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
-msgid "Excellon drill file"
-msgstr "Créer Fichier(s) de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
-msgid "KiCad Project"
-msgstr "Fichier projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
-msgid "KiCad Schematic"
-msgstr "Editeur de Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichiers circuits imprimés KiCad"
 
 #, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
@@ -35804,6 +35776,10 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
