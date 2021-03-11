@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-08 13:46-0800\n"
+"POT-Creation-Date: 2021-03-11 08:30-0800\n"
 "PO-Revision-Date: 2011-11-29 21:48+0200\n"
 "Last-Translator: Evgeniy Ivanov <evgeniy_p_ivanov@yahoo.ca>\n"
 "Language-Team: KiCad Team <evgeniy_p_ivanov@yahoo.ca>\n"
@@ -290,7 +290,7 @@ msgid "Export Current View as JPEG..."
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/hotkey_store.cpp:77
-#: common/tool/actions.cpp:556 pcbnew/footprint_viewer_frame.cpp:968
+#: common/tool/actions.cpp:553 pcbnew/footprint_viewer_frame.cpp:968
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
 msgstr "3D Изглед"
@@ -309,13 +309,13 @@ msgid "Display Options"
 msgstr "Опции за изображението"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:111
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:592
 msgid "Raytracing"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:79
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:353
 #, fuzzy
 msgid "Render Options"
 msgstr "Генерални опции"
@@ -571,244 +571,244 @@ msgstr "Разреши автом.изтриване на пътечки"
 msgid "Animation speed:"
 msgstr "Избор на обозначение"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:166
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:163
 #, fuzzy
 msgid "OpenGL Render Options"
 msgstr "Генерални опции"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:165
 #, fuzzy
 msgid "Show model bounding boxes"
 msgstr "Покажи или скрий номерата на изводи"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
 #, fuzzy
 msgid "Show copper thickness"
 msgstr "Дебелина на шината"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:178
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:175
 #, fuzzy
 msgid "Other Options"
 msgstr "Опции:"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:185
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:182
 #, fuzzy
 msgid "Anti-aliasing:"
 msgstr "Италиански"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 #, fuzzy
 msgid "Disabled"
 msgstr "Разрешен"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 #, fuzzy
 msgid "2x"
 msgstr "2"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 #, fuzzy
 msgid "4x"
 msgstr "4"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:189
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:186
 #, fuzzy
 msgid "8x"
 msgstr "8"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:193
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:190
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:197
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:194
 #, fuzzy
 msgid "Selection color:"
 msgstr "Избор на верига"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:208
 msgid "While Moving"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:210
 #, fuzzy
 msgid "Disable anti-aliasing"
 msgstr "Италиански"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:213
 #, fuzzy
 msgid "Disable thickness"
 msgstr "Cu дебелина"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:216
 #, fuzzy
 msgid "Disable vias"
 msgstr "Изчисти прох.отв."
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:222
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:219
 msgid "Disable holes"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:229
 #, fuzzy
 msgid "OpenGL"
 msgstr "Отвори"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:246
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:240
 #, fuzzy
 msgid "Raytracing Render Options"
 msgstr "Опции на страницата"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:252
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:246
 msgid "Procedural textures"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:256
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:250
 #, fuzzy
 msgid "Add floor"
 msgstr "Добави поле"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:254
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 #, fuzzy
 msgid "Anti-aliasing"
 msgstr "Италиански"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:264
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:258
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
 msgid "Post-processing"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:279
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:273
 #, fuzzy
 msgid "Number of Samples"
 msgstr "Количество елементи:"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:283
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:277
 msgid "Spread Factor %"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:287
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:281
 msgid "Recursion Level"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:285
 #, fuzzy
 msgid "Shadows:"
 msgstr "Оказвам"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:290
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:302
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:320
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:340
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:296
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
 msgid "Random direction factor of the cast rays"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:309
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:303
 #, fuzzy
 msgid "Reflections:"
 msgstr "Изтрий избраните"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:314
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:308
 msgid "Number of rays that will be cast to evaluate a reflection point"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:325
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:319
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:329
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 #, fuzzy
 msgid "Refractions:"
 msgstr "връзки"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:334
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:328
 msgid "Number of rays that will be cast to evaluate a refraction point"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:345
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:339
 msgid "Number of bounces that a ray can hit reflective objects"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:368
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:593
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:359
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:584
 #, fuzzy
 msgid "Lights Configuration"
 msgstr "Зареди съществуващ файл с конфиг. горещи клавиши"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:376
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:367
 msgid "Ambient camera light:"
 msgstr ""
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:395
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:386
 #, fuzzy
 msgid "Top light:"
 msgstr "Дясно"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:405
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:396
 #, fuzzy
 msgid "Bottom light:"
 msgstr "Изглед отдолу"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:430
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:447
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:421
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
 #, fuzzy
 msgid "Elevation (degrees)"
 msgstr "Ротация на 90 гр."
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:434
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:451
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:425
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:442
 #, fuzzy
 msgid "Azimuth (degrees)"
 msgstr "Ротация на 90 гр."
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:455
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:446
 #, fuzzy
 msgid "1:"
 msgstr "1:1"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:471
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:462
 #, fuzzy
 msgid "5:"
 msgstr "5"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:484
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:475
 #, fuzzy
 msgid "2:"
 msgstr "R2"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:500
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:491
 #, fuzzy
 msgid "6:"
 msgstr "6"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:513
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:504
 #, fuzzy
 msgid "3:"
 msgstr "3:2"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:529
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #, fuzzy
 msgid "7:"
 msgstr "7"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:542
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:533
 #, fuzzy
 msgid "4:"
 msgstr "4"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:558
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:549
 #, fuzzy
 msgid "8:"
 msgstr "8"
 
-#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:580
+#: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:571
 #, fuzzy
 msgid "Reset to defaults"
 msgstr "Нулирай установяването"
@@ -848,7 +848,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:843 common/confirm.cpp:130
 #: common/confirm.cpp:269 common/dialogs/panel_setup_severities.cpp:40
 #: kicad/import_project.cpp:116 kicad/import_project.cpp:143
-#: kicad/import_project.cpp:162 kicad/kicad.cpp:167
+#: kicad/import_project.cpp:162 kicad/kicad.cpp:169
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "Error"
 msgstr "Грешка"
@@ -1652,7 +1652,8 @@ msgstr "Обозначение"
 #: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:40
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:155
-#: eeschema/sheet.cpp:571 eeschema/symbol_editor/symbol_editor.cpp:542
+#: eeschema/files-io.cpp:506 eeschema/sheet.cpp:571
+#: eeschema/symbol_editor/symbol_editor.cpp:542
 #: eeschema/symbol_editor/symbol_editor.cpp:744
 #: eeschema/symbol_editor/symbol_editor.cpp:1137
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
@@ -1915,7 +1916,7 @@ msgstr ""
 msgid "&Report Bug"
 msgstr "Внеси файлове"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:635
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:632
 #, fuzzy
 msgid "Report a problem with KiCad"
 msgstr "Начало на KiCad"
@@ -2048,7 +2049,7 @@ msgid "File Browser..."
 msgstr "Преглед..."
 
 #: common/dialogs/dialog_configure_paths.cpp:498
-#: common/widgets/grid_text_button_helpers.cpp:385
+#: common/widgets/grid_text_button_helpers.cpp:384
 #, fuzzy
 msgid "Select Path"
 msgstr "<< Избери всички"
@@ -2097,7 +2098,7 @@ msgstr "Редактирай документен файл"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:71
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:442
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:611
-#: pcbnew/zone.cpp:1407
+#: pcbnew/zone.cpp:1418
 msgid "Name"
 msgstr "Име"
 
@@ -2113,7 +2114,7 @@ msgstr "Тип на път"
 msgid "3D Search Paths"
 msgstr "Търси:"
 
-#: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:306
+#: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:290
 msgid "Alias"
 msgstr "Псевдоним"
 
@@ -2253,7 +2254,7 @@ msgstr "Избор на клавиш"
 msgid "Configure Global Library Table"
 msgstr "Библиотечни файлове на комп.отп."
 
-#: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:462
+#: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:459
 #, fuzzy
 msgid "Grid Origin"
 msgstr "Начало на решетката"
@@ -2322,7 +2323,7 @@ msgstr "Горещ клавиш"
 msgid "Grid 2:"
 msgstr "Бърза мрежа 2:"
 
-#: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:468
+#: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:465
 msgid "Reset Grid Origin"
 msgstr "Рестарт на началните коорд. на мрежата"
 
@@ -3065,11 +3066,11 @@ msgid ""
 "manually."
 msgstr ""
 
-#: common/dialogs/panel_common_settings.cpp:283
+#: common/dialogs/panel_common_settings.cpp:305
 msgid "Executable files ("
 msgstr "Изпълними файлове ("
 
-#: common/dialogs/panel_common_settings.cpp:288
+#: common/dialogs/panel_common_settings.cpp:310
 #, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Избор на предпочитан PDF прегледвач"
@@ -3089,7 +3090,7 @@ msgstr ""
 "промяна."
 
 #: common/dialogs/panel_common_settings_base.cpp:39
-#: common/dialogs/panel_common_settings_base.cpp:260
+#: common/dialogs/panel_common_settings_base.cpp:280
 msgid "minutes"
 msgstr ""
 
@@ -3190,6 +3191,7 @@ msgstr "X мащаб:"
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 #: common/dialogs/panel_common_settings_base.cpp:180
+#: common/dialogs/panel_common_settings_base.cpp:200
 #: common/dialogs/panel_mouse_settings_base.cpp:56
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
@@ -3207,105 +3209,133 @@ msgstr "X мащаб:"
 msgid "Show icons in menus"
 msgstr "Покажи микро проходните връзки"
 
+#: common/dialogs/panel_common_settings_base.cpp:186
+#, fuzzy
+msgid "Icon theme:"
+msgstr "Цвят"
+
+#: common/dialogs/panel_common_settings_base.cpp:190
+#, fuzzy
+msgid "Light"
+msgstr "Дясно"
+
+#: common/dialogs/panel_common_settings_base.cpp:191
+msgid "Use icons designed for light window backgrounds"
+msgstr ""
+
+#: common/dialogs/panel_common_settings_base.cpp:195
+#: gerbview/gerber_draw_item.cpp:704
+msgid "Dark"
+msgstr "Тъмно"
+
+#: common/dialogs/panel_common_settings_base.cpp:196
+msgid "Use icons designed for dark window backgrounds"
+msgstr ""
+
 #: common/dialogs/panel_common_settings_base.cpp:202
+msgid ""
+"Automatically choose light or dark icons based on the system color theme"
+msgstr ""
+
+#: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
 #, fuzzy
 msgid "Editing"
 msgstr "Редактирай извод"
 
-#: common/dialogs/panel_common_settings_base.cpp:204
+#: common/dialogs/panel_common_settings_base.cpp:224
 msgid "Warp mouse to origin of moved object"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:207
+#: common/dialogs/panel_common_settings_base.cpp:227
 #, fuzzy
 msgid "First hotkey selects tool"
 msgstr "Редактор на горещи клавиши"
 
-#: common/dialogs/panel_common_settings_base.cpp:208
+#: common/dialogs/panel_common_settings_base.cpp:228
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:216
+#: common/dialogs/panel_common_settings_base.cpp:236
 #, fuzzy
 msgid "Project Backup"
 msgstr ""
 "\n"
 "Проект: "
 
-#: common/dialogs/panel_common_settings_base.cpp:223
+#: common/dialogs/panel_common_settings_base.cpp:243
 msgid "Automatically backup projects"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:224
+#: common/dialogs/panel_common_settings_base.cpp:244
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:228
+#: common/dialogs/panel_common_settings_base.cpp:248
 msgid "Create backups when auto save occurs"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:229
+#: common/dialogs/panel_common_settings_base.cpp:249
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:233
+#: common/dialogs/panel_common_settings_base.cpp:253
 msgid "Maximum backups to keep:"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:235
+#: common/dialogs/panel_common_settings_base.cpp:255
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:242
+#: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Maximum backups per day:"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:244
+#: common/dialogs/panel_common_settings_base.cpp:264
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:251
+#: common/dialogs/panel_common_settings_base.cpp:271
 msgid "Minimum time between backups:"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:253
+#: common/dialogs/panel_common_settings_base.cpp:273
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:264
+#: common/dialogs/panel_common_settings_base.cpp:284
 #, fuzzy
 msgid "Maximum total backup size:"
 msgstr "Мин.диаметър на прох.отв."
 
-#: common/dialogs/panel_common_settings_base.cpp:266
+#: common/dialogs/panel_common_settings_base.cpp:286
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:273
+#: common/dialogs/panel_common_settings_base.cpp:293
 #, fuzzy
 msgid "MB"
 msgstr "B1"
 
-#: common/dialogs/panel_common_settings_base.cpp:284
+#: common/dialogs/panel_common_settings_base.cpp:304
 #, fuzzy
 msgid "Session"
 msgstr "Изменение №"
 
-#: common/dialogs/panel_common_settings_base.cpp:286
+#: common/dialogs/panel_common_settings_base.cpp:306
 msgid "Remember open files for next project launch"
 msgstr ""
 
-#: common/dialogs/panel_common_settings_base.cpp:288
+#: common/dialogs/panel_common_settings_base.cpp:308
 msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
@@ -3466,7 +3496,7 @@ msgstr "Увеличение"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1446
-#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1395
+#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1406
 msgid "None"
 msgstr "Отсъства"
 
@@ -3555,7 +3585,7 @@ msgstr "Нулирай установяването"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:615
-#: pcbnew/zone.cpp:1397
+#: pcbnew/zone.cpp:1408
 msgid "Solid"
 msgstr "Твърд"
 
@@ -3659,7 +3689,7 @@ msgstr "Класът на верига по подразбиране немож�
 msgid "Net Class"
 msgstr "Класове на вериги:"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1409
+#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1420
 msgid "Clearance"
 msgstr "Празнина"
 
@@ -3921,7 +3951,7 @@ msgid "Line"
 msgstr "Линия"
 
 #: common/drawing_sheet/ds_data_item.cpp:396
-#: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:310
+#: common/drawing_sheet/ds_draw_item.cpp:117 common/eda_item.cpp:294
 #: eeschema/lib_rectangle.h:54
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1438
 #: pcbnew/pcb_shape.cpp:534
@@ -3937,7 +3967,7 @@ msgstr "Печат на схемата"
 
 #: common/drawing_sheet/ds_data_item.cpp:398
 #: common/drawing_sheet/ds_draw_item.cpp:130
-#: common/drawing_sheet/ds_draw_item.cpp:476 common/eda_item.cpp:318
+#: common/drawing_sheet/ds_draw_item.cpp:476 common/eda_item.cpp:302
 #: eeschema/sch_bitmap.h:133
 msgid "Image"
 msgstr "Изображение"
@@ -4049,55 +4079,55 @@ msgstr "Un-terminated delimited string"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "String delimiter must be a single character of ', \", or $"
 
-#: common/eda_base_frame.cpp:421
+#: common/eda_base_frame.cpp:424
 msgid "&About KiCad"
 msgstr "Относно KiCad"
 
-#: common/eda_base_frame.cpp:423
+#: common/eda_base_frame.cpp:426
 msgid "&Help"
 msgstr "Помощ"
 
-#: common/eda_base_frame.cpp:822
+#: common/eda_base_frame.cpp:838
 #, fuzzy, c-format
 msgid "File \"%s\" was not found."
 msgstr "Файл %s не е намерен"
 
-#: common/eda_base_frame.cpp:867
+#: common/eda_base_frame.cpp:883
 #, fuzzy
 msgid "Preferences"
 msgstr "Предпочитания"
 
-#: common/eda_base_frame.cpp:870 common/hotkey_store.cpp:72
+#: common/eda_base_frame.cpp:886 common/hotkey_store.cpp:72
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 #, fuzzy
 msgid "Common"
 msgstr "Команда"
 
-#: common/eda_base_frame.cpp:872
+#: common/eda_base_frame.cpp:888
 msgid "Mouse and Touchpad"
 msgstr ""
 
-#: common/eda_base_frame.cpp:875
+#: common/eda_base_frame.cpp:891
 #, fuzzy
 msgid "Hotkeys"
 msgstr "Горещи клавиши"
 
-#: common/eda_base_frame.cpp:919
+#: common/eda_base_frame.cpp:935
 #, fuzzy, c-format
 msgid "You do not have write permissions to folder \"%s\"."
 msgstr "Нямате права за запис в папка <%s>."
 
-#: common/eda_base_frame.cpp:924
+#: common/eda_base_frame.cpp:940
 #, fuzzy, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
 msgstr "Нямате права за запис на файл <%s> в папка <%s>."
 
-#: common/eda_base_frame.cpp:929 pcbnew/plugins/altium/altium_pcb.cpp:1202
+#: common/eda_base_frame.cpp:945 pcbnew/plugins/altium/altium_pcb.cpp:1202
 #, fuzzy, c-format
 msgid "You do not have write permissions to save file \"%s\"."
 msgstr "Нямате права за запис на файл <%s>."
 
-#: common/eda_base_frame.cpp:959
+#: common/eda_base_frame.cpp:975
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -4107,7 +4137,7 @@ msgid ""
 "made?"
 msgstr ""
 
-#: common/eda_base_frame.cpp:974
+#: common/eda_base_frame.cpp:991
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 
@@ -4125,7 +4155,7 @@ msgstr "Файл %s не е намерен"
 msgid "Unknown MIME type for doc file \"%s\""
 msgstr "Неизвестен MIME-тип за документация <%s>"
 
-#: common/eda_draw_frame.cpp:131 common/tool/actions.cpp:485
+#: common/eda_draw_frame.cpp:131 common/tool/actions.cpp:482
 #: pagelayout_editor/pl_editor_frame.cpp:154
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
@@ -4198,12 +4228,12 @@ msgstr "Разреши автом.изтриване на пътечки"
 msgid "&No Thanks"
 msgstr ""
 
-#: common/eda_item.cpp:260
+#: common/eda_item.cpp:244
 #, fuzzy
 msgid "Screen"
 msgstr "Silkscreen Cmp"
 
-#: common/eda_item.cpp:262 eeschema/dialogs/dialog_fields_editor_global.cpp:959
+#: common/eda_item.cpp:246 eeschema/dialogs/dialog_fields_editor_global.cpp:959
 #: eeschema/sch_symbol.cpp:1414
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:114
 #: pcbnew/fp_text.cpp:284 pcbnew/load_select_footprint.cpp:368
@@ -4211,167 +4241,167 @@ msgstr "Silkscreen Cmp"
 msgid "Footprint"
 msgstr "Отпечатък"
 
-#: common/eda_item.cpp:263 pcbnew/dialogs/dialog_board_statistics.cpp:481
+#: common/eda_item.cpp:247 pcbnew/dialogs/dialog_board_statistics.cpp:481
 #: pcbnew/pad.cpp:860
 msgid "Pad"
 msgstr "Подложка"
 
-#: common/eda_item.cpp:264 common/eda_item.cpp:267
+#: common/eda_item.cpp:248 common/eda_item.cpp:251
 #, fuzzy
 msgid "Graphic Shape"
 msgstr "Графичен стил:"
 
-#: common/eda_item.cpp:265
+#: common/eda_item.cpp:249
 #, fuzzy
 msgid "Board Text"
 msgstr "Страна:"
 
-#: common/eda_item.cpp:266 pcbnew/widgets/appearance_controls.cpp:343
+#: common/eda_item.cpp:250 pcbnew/widgets/appearance_controls.cpp:343
 #, fuzzy
 msgid "Footprint Text"
 msgstr "Тест на комп.отп."
 
-#: common/eda_item.cpp:268 common/eda_item.cpp:277
+#: common/eda_item.cpp:252 common/eda_item.cpp:261
 #, fuzzy
 msgid "Zone"
 msgstr "Зона"
 
-#: common/eda_item.cpp:269 pcbnew/track.cpp:649
+#: common/eda_item.cpp:253 pcbnew/track.cpp:649
 msgid "Track"
 msgstr "Пътека"
 
-#: common/eda_item.cpp:270 pcbnew/dialogs/dialog_board_statistics.cpp:481
+#: common/eda_item.cpp:254 pcbnew/dialogs/dialog_board_statistics.cpp:481
 #: pcbnew/track.cpp:704
 msgid "Via"
 msgstr "Проходна връзка"
 
-#: common/eda_item.cpp:271
+#: common/eda_item.cpp:255
 #, fuzzy
 msgid "Board Marker"
 msgstr "Клас на платката"
 
-#: common/eda_item.cpp:272
+#: common/eda_item.cpp:256
 #, fuzzy
 msgid "Aligned Dimension"
 msgstr "Добавяне на размер"
 
-#: common/eda_item.cpp:273
+#: common/eda_item.cpp:257
 #, fuzzy
 msgid "Orthogonal Dimension"
 msgstr "Редактиране на размер"
 
-#: common/eda_item.cpp:274
+#: common/eda_item.cpp:258
 #, fuzzy
 msgid "Center Dimension"
 msgstr "Текущи настройки:"
 
-#: common/eda_item.cpp:275 pcbnew/dimension.cpp:984
+#: common/eda_item.cpp:259 pcbnew/dimension.cpp:984
 msgid "Leader"
 msgstr ""
 
-#: common/eda_item.cpp:276 pcbnew/pcb_target.cpp:123
+#: common/eda_item.cpp:260 pcbnew/pcb_target.cpp:123
 msgid "Target"
 msgstr "Цел"
 
-#: common/eda_item.cpp:278
+#: common/eda_item.cpp:262
 #, fuzzy
 msgid "Item List"
 msgstr "Списък на горещи клавиши"
 
-#: common/eda_item.cpp:279
+#: common/eda_item.cpp:263
 #, fuzzy
 msgid "Net Info"
 msgstr "Инфо:"
 
-#: common/eda_item.cpp:280 pcbnew/pcb_group.cpp:305
+#: common/eda_item.cpp:264 pcbnew/pcb_group.cpp:305
 #: pcbnew/tools/pcb_actions.cpp:661
 msgid "Group"
 msgstr ""
 
-#: common/eda_item.cpp:282
+#: common/eda_item.cpp:266
 #, fuzzy
 msgid "Schematic Marker"
 msgstr "Размер на схемата"
 
-#: common/eda_item.cpp:283 eeschema/sch_junction.h:91
+#: common/eda_item.cpp:267 eeschema/sch_junction.h:91
 msgid "Junction"
 msgstr "Връзка"
 
-#: common/eda_item.cpp:284
+#: common/eda_item.cpp:268
 #, fuzzy
 msgid "No-Connect Flag"
 msgstr "Флаг \"Несвързан\""
 
-#: common/eda_item.cpp:285
+#: common/eda_item.cpp:269
 #, fuzzy
 msgid "Wire Entry"
 msgstr "Добавяне вход на проводник в шина"
 
-#: common/eda_item.cpp:286
+#: common/eda_item.cpp:270
 #, fuzzy
 msgid "Bus Entry"
 msgstr "Добавяне вход на шина в шина"
 
-#: common/eda_item.cpp:287
+#: common/eda_item.cpp:271
 #, fuzzy
 msgid "Graphic Line"
 msgstr "Графичен слой"
 
-#: common/eda_item.cpp:288 eeschema/sch_bitmap.cpp:201
+#: common/eda_item.cpp:272 eeschema/sch_bitmap.cpp:201
 #, fuzzy
 msgid "Bitmap"
 msgstr "Зареди Bitmap"
 
-#: common/eda_item.cpp:289
+#: common/eda_item.cpp:273
 #, fuzzy
 msgid "Schematic Text"
 msgstr "Размер на схемата"
 
-#: common/eda_item.cpp:290
+#: common/eda_item.cpp:274
 #, fuzzy
 msgid "Net Label"
 msgstr "Изтрий етикет"
 
-#: common/eda_item.cpp:291 eeschema/sch_text.cpp:656
+#: common/eda_item.cpp:275 eeschema/sch_text.cpp:656
 msgid "Global Label"
 msgstr "Глобален етикет"
 
-#: common/eda_item.cpp:292 eeschema/sch_text.cpp:657
+#: common/eda_item.cpp:276 eeschema/sch_text.cpp:657
 msgid "Hierarchical Label"
 msgstr "Йерархичен етикет"
 
-#: common/eda_item.cpp:293
+#: common/eda_item.cpp:277
 #, fuzzy
 msgid "Schematic Field"
 msgstr "Схематични файлове"
 
-#: common/eda_item.cpp:294
+#: common/eda_item.cpp:278
 msgid "Component"
 msgstr "Компонент"
 
-#: common/eda_item.cpp:295
+#: common/eda_item.cpp:279
 #, fuzzy
 msgid "Sheet Pin"
 msgstr "Премести извод на листа"
 
-#: common/eda_item.cpp:296 eeschema/dialogs/dialog_migrate_buses.cpp:101
-#: pcbnew/tools/pcb_actions.cpp:1193
+#: common/eda_item.cpp:280 eeschema/dialogs/dialog_migrate_buses.cpp:101
+#: pcbnew/tools/pcb_actions.cpp:1200
 msgid "Sheet"
 msgstr "Лист"
 
-#: common/eda_item.cpp:303
+#: common/eda_item.cpp:287
 #, fuzzy
 msgid "SCH Screen"
 msgstr "Silkscreen Cmp"
 
-#: common/eda_item.cpp:305
+#: common/eda_item.cpp:289
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
 #: eeschema/symbol_editor/symbol_editor.cpp:1202
 #, fuzzy
 msgid "Symbol"
 msgstr "Захранващ символ"
 
-#: common/eda_item.cpp:307 eeschema/lib_arc.h:70
+#: common/eda_item.cpp:291 eeschema/lib_arc.h:70
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/board_item.cpp:37
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:111
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
@@ -4379,7 +4409,7 @@ msgstr "Захранващ символ"
 msgid "Arc"
 msgstr "Дъга"
 
-#: common/eda_item.cpp:308 eeschema/lib_circle.h:53
+#: common/eda_item.cpp:292 eeschema/lib_circle.h:53
 #: gerbview/gerber_draw_item.cpp:236 pcbnew/board_item.cpp:38
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:135 pcbnew/pad.cpp:1070
@@ -4387,38 +4417,38 @@ msgstr "Дъга"
 msgid "Circle"
 msgstr "Кръг"
 
-#: common/eda_item.cpp:309
+#: common/eda_item.cpp:293
 #, fuzzy
 msgid "Symbol Text"
 msgstr "Захранващ символ"
 
-#: common/eda_item.cpp:311
+#: common/eda_item.cpp:295
 #, fuzzy
 msgid "Polyline"
 msgstr "Полилиния"
 
-#: common/eda_item.cpp:312 eeschema/lib_bezier.h:54
+#: common/eda_item.cpp:296 eeschema/lib_bezier.h:54
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:97
 #: pcbnew/dialogs/dialog_pad_properties.cpp:704
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2132
 msgid "Bezier"
 msgstr "Крива на Безие"
 
-#: common/eda_item.cpp:313 eeschema/lib_pin.h:122 eeschema/sch_pin.cpp:159
+#: common/eda_item.cpp:297 eeschema/lib_pin.h:122 eeschema/sch_pin.cpp:159
 msgid "Pin"
 msgstr "Извод"
 
-#: common/eda_item.cpp:314
+#: common/eda_item.cpp:298
 #, fuzzy
 msgid "Symbol Field"
 msgstr "Системни полета:"
 
-#: common/eda_item.cpp:316
+#: common/eda_item.cpp:300
 #, fuzzy
 msgid "Gerber Layout"
 msgstr "Gerber"
 
-#: common/eda_item.cpp:317
+#: common/eda_item.cpp:301
 #, fuzzy
 msgid "Draw Item"
 msgstr "Графичен артикул"
@@ -4481,7 +4511,7 @@ msgstr "Bold+Italic"
 msgid "Left"
 msgstr "Ляво"
 
-#: common/eda_text.cpp:649 common/eda_text.cpp:653 common/tool/actions.cpp:328
+#: common/eda_text.cpp:649 common/eda_text.cpp:653 common/tool/actions.cpp:325
 #: common/widgets/mathplot.cpp:1759
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:227
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:249
@@ -4494,7 +4524,7 @@ msgstr "Ляво"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:85
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:101
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:176
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:144
 msgid "Center"
@@ -4954,7 +4984,7 @@ msgstr "Четене на връзки \"%s\""
 msgid "Unable to switch language to %s"
 msgstr "Невъзможно създаване на <%s>"
 
-#: common/languages_menu.cpp:49
+#: common/languages_menu.cpp:48
 #, fuzzy
 msgid "Set Language"
 msgstr "Език"
@@ -5794,12 +5824,12 @@ msgstr "По подразбиране"
 msgid "KiCad Classic"
 msgstr "2 слоя"
 
-#: common/single_top.cpp:175 kicad/kicad.cpp:303
+#: common/single_top.cpp:175 kicad/kicad.cpp:305
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
 msgstr ""
 
-#: common/single_top.cpp:176 kicad/kicad.cpp:304
+#: common/single_top.cpp:176 kicad/kicad.cpp:306
 #, fuzzy
 msgid "Unsupported Operating System"
 msgstr "Неподдържан вид на прох.отв.: %s"
@@ -6090,211 +6120,211 @@ msgstr "Печат на слоеве"
 msgid "Go to previous marker in Checker window"
 msgstr "Стартирай проверката на правила за проектиране"
 
-#: common/tool/actions.cpp:254
+#: common/tool/actions.cpp:253
 #, fuzzy
 msgid "Next Marker"
 msgstr "Намери Следващ Маркер"
 
-#: common/tool/actions.cpp:254
+#: common/tool/actions.cpp:253
 #, fuzzy
 msgid "Go to next marker in Checker window"
 msgstr "Стартирай проверката на правила за проектиране"
 
-#: common/tool/actions.cpp:260
+#: common/tool/actions.cpp:258
 #, fuzzy
 msgid "Exclude Marker"
 msgstr "Значение на полето"
 
-#: common/tool/actions.cpp:260
+#: common/tool/actions.cpp:258
 msgid "Mark current violation in Checker window as an exclusion"
 msgstr ""
 
-#: common/tool/actions.cpp:272
+#: common/tool/actions.cpp:269
 #, fuzzy
 msgid "Refresh"
 msgstr "Опресни дървото на проекта"
 
-#: common/tool/actions.cpp:283
+#: common/tool/actions.cpp:280
 #, fuzzy
 msgid "Zoom to Fit"
 msgstr "Намаление"
 
-#: common/tool/actions.cpp:288
+#: common/tool/actions.cpp:285
 #, fuzzy
 msgid "Zoom to Objects"
 msgstr "Намаление"
 
-#: common/tool/actions.cpp:299
+#: common/tool/actions.cpp:296
 #, fuzzy
 msgid "Zoom In at Cursor"
 msgstr "Авто увеличение"
 
-#: common/tool/actions.cpp:310
+#: common/tool/actions.cpp:307
 #, fuzzy
 msgid "Zoom Out at Cursor"
 msgstr "Намали"
 
-#: common/tool/actions.cpp:316 common/widgets/mathplot.cpp:1761
+#: common/tool/actions.cpp:313 common/widgets/mathplot.cpp:1761
 #: eeschema/sim/sim_plot_frame_base.cpp:79
 msgid "Zoom In"
 msgstr "Увеличи"
 
-#: common/tool/actions.cpp:322 common/widgets/mathplot.cpp:1762
+#: common/tool/actions.cpp:319 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Zoom Out"
 msgstr "Намали"
 
-#: common/tool/actions.cpp:334
+#: common/tool/actions.cpp:331
 #, fuzzy
 msgid "Zoom to Selection"
 msgstr "Увеличи избора"
 
-#: common/tool/actions.cpp:347
+#: common/tool/actions.cpp:344
 #, fuzzy
 msgid "Cursor Up"
 msgstr "Курсор"
 
-#: common/tool/actions.cpp:353
+#: common/tool/actions.cpp:350
 #, fuzzy
 msgid "Cursor Down"
 msgstr "Gerber Опции"
 
-#: common/tool/actions.cpp:359
+#: common/tool/actions.cpp:356
 #, fuzzy
 msgid "Cursor Left"
 msgstr "Курсор"
 
-#: common/tool/actions.cpp:365
+#: common/tool/actions.cpp:362
 #, fuzzy
 msgid "Cursor Right"
 msgstr "Захранващ вход"
 
-#: common/tool/actions.cpp:372
+#: common/tool/actions.cpp:369
 #, fuzzy
 msgid "Cursor Up Fast"
 msgstr "Курсор"
 
-#: common/tool/actions.cpp:378
+#: common/tool/actions.cpp:375
 #, fuzzy
 msgid "Cursor Down Fast"
 msgstr "Gerber Опции"
 
-#: common/tool/actions.cpp:384
+#: common/tool/actions.cpp:381
 #, fuzzy
 msgid "Cursor Left Fast"
 msgstr "Курсор"
 
-#: common/tool/actions.cpp:390
+#: common/tool/actions.cpp:387
 #, fuzzy
 msgid "Cursor Right Fast"
 msgstr "Промени формата на курсора"
 
-#: common/tool/actions.cpp:396
+#: common/tool/actions.cpp:393
 msgid "Click"
 msgstr ""
 
-#: common/tool/actions.cpp:396
+#: common/tool/actions.cpp:393
 #, fuzzy
 msgid "Performs left mouse button click"
 msgstr "Провери електрическите правила"
 
-#: common/tool/actions.cpp:402
+#: common/tool/actions.cpp:399
 msgid "Double-click"
 msgstr ""
 
-#: common/tool/actions.cpp:402
+#: common/tool/actions.cpp:399
 msgid "Performs left mouse button double-click"
 msgstr ""
 
-#: common/tool/actions.cpp:408
+#: common/tool/actions.cpp:405
 #, fuzzy
 msgid "Pin Library"
 msgstr "Библиотека"
 
-#: common/tool/actions.cpp:409
+#: common/tool/actions.cpp:406
 #, fuzzy
 msgid "Keep the library at the top of the list"
 msgstr "Запамети текущата активна библиотека"
 
-#: common/tool/actions.cpp:412
+#: common/tool/actions.cpp:409
 #, fuzzy
 msgid "Unpin Library"
 msgstr "Нова библиотека"
 
-#: common/tool/actions.cpp:413
+#: common/tool/actions.cpp:410
 #, fuzzy
 msgid "No longer keep the library at the top of the list"
 msgstr "Запамети текущата активна библиотека"
 
-#: common/tool/actions.cpp:418
+#: common/tool/actions.cpp:415
 msgid "Pan Up"
 msgstr ""
 
-#: common/tool/actions.cpp:424
+#: common/tool/actions.cpp:421
 #, fuzzy
 msgid "Pan Down"
 msgstr "Надолу"
 
-#: common/tool/actions.cpp:430
+#: common/tool/actions.cpp:427
 #, fuzzy
 msgid "Pan Left"
 msgstr "Ляво"
 
-#: common/tool/actions.cpp:436
+#: common/tool/actions.cpp:433
 #, fuzzy
 msgid "Pan Right"
 msgstr "Дясно"
 
-#: common/tool/actions.cpp:443
+#: common/tool/actions.cpp:440
 #, fuzzy
 msgid "Switch to Fast Grid 1"
 msgstr "Измени позицията на пътечката"
 
-#: common/tool/actions.cpp:448
+#: common/tool/actions.cpp:445
 #, fuzzy
 msgid "Switch to Fast Grid 2"
 msgstr "Измени позицията на пътечката"
 
-#: common/tool/actions.cpp:453
+#: common/tool/actions.cpp:450
 #, fuzzy
 msgid "Switch to Next Grid"
 msgstr "Измени позицията на пътечката"
 
-#: common/tool/actions.cpp:457
+#: common/tool/actions.cpp:454
 #, fuzzy
 msgid "Switch to Previous Grid"
 msgstr "Измени позицията на пътечката"
 
-#: common/tool/actions.cpp:462
+#: common/tool/actions.cpp:459
 #, fuzzy
 msgid "Set the grid origin point"
 msgstr "Установяване нач.коорд.на решетка"
 
-#: common/tool/actions.cpp:475
+#: common/tool/actions.cpp:472
 #, fuzzy
 msgid "Show Grid"
 msgstr "Покажи решетката"
 
-#: common/tool/actions.cpp:475
+#: common/tool/actions.cpp:472
 msgid "Display grid dots or lines in the edit window"
 msgstr ""
 
-#: common/tool/actions.cpp:480
+#: common/tool/actions.cpp:477
 #, fuzzy
 msgid "Grid Properties..."
 msgstr "Настройки на конт.пл."
 
-#: common/tool/actions.cpp:480
+#: common/tool/actions.cpp:477
 #, fuzzy
 msgid "Set grid dimensions"
 msgstr "Установяване нач.коорд.на решетка"
 
-#: common/tool/actions.cpp:485
+#: common/tool/actions.cpp:482
 #, fuzzy
 msgid "Use inches"
 msgstr "inches"
 
-#: common/tool/actions.cpp:490
+#: common/tool/actions.cpp:487
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
@@ -6302,12 +6332,12 @@ msgstr "inches"
 msgid "Mils"
 msgstr ""
 
-#: common/tool/actions.cpp:490
+#: common/tool/actions.cpp:487
 #, fuzzy
 msgid "Use mils"
 msgstr "mils"
 
-#: common/tool/actions.cpp:495
+#: common/tool/actions.cpp:492
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:54
@@ -6318,219 +6348,219 @@ msgstr "mils"
 msgid "Millimeters"
 msgstr "Милиметри"
 
-#: common/tool/actions.cpp:495
+#: common/tool/actions.cpp:492
 #, fuzzy
 msgid "Use millimeters"
 msgstr "милиметри"
 
-#: common/tool/actions.cpp:504
+#: common/tool/actions.cpp:501
 msgid "Switch units"
 msgstr ""
 
-#: common/tool/actions.cpp:504
+#: common/tool/actions.cpp:501
 #, fuzzy
 msgid "Switch between imperial and metric units"
 msgstr "Различие между йерархически обозначения и изводи на листа"
 
-#: common/tool/actions.cpp:509
+#: common/tool/actions.cpp:506
 #, fuzzy
 msgid "Polar Coordinates"
 msgstr "Показване на полярни координати"
 
-#: common/tool/actions.cpp:509
+#: common/tool/actions.cpp:506
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr ""
 
-#: common/tool/actions.cpp:515
+#: common/tool/actions.cpp:512
 #, fuzzy
 msgid "Reset Local Coordinates"
 msgstr "Показване на полярни координати"
 
-#: common/tool/actions.cpp:521
+#: common/tool/actions.cpp:518
 #, fuzzy
 msgid "Always Show Cursor"
 msgstr "Курсор"
 
-#: common/tool/actions.cpp:521
+#: common/tool/actions.cpp:518
 msgid "Display crosshairs even in selection tool"
 msgstr ""
 
-#: common/tool/actions.cpp:526
+#: common/tool/actions.cpp:523
 msgid "Full-Window Crosshairs"
 msgstr ""
 
-#: common/tool/actions.cpp:526
+#: common/tool/actions.cpp:523
 msgid "Switch display of full-window crosshairs"
 msgstr ""
 
-#: common/tool/actions.cpp:531
+#: common/tool/actions.cpp:528
 #, fuzzy
 msgid "Single Layer View Mode"
 msgstr "Един тип в линия"
 
-#: common/tool/actions.cpp:531
+#: common/tool/actions.cpp:528
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr ""
 
-#: common/tool/actions.cpp:535
+#: common/tool/actions.cpp:532
 msgid "Single Layer View Mode (3-state)"
 msgstr ""
 
-#: common/tool/actions.cpp:536
+#: common/tool/actions.cpp:533
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
 msgstr ""
 
-#: common/tool/actions.cpp:540
+#: common/tool/actions.cpp:537
 #, fuzzy
 msgid "Select item(s)"
 msgstr "Избор на елементи"
 
-#: common/tool/actions.cpp:547
+#: common/tool/actions.cpp:544
 msgid "Measure Tool"
 msgstr ""
 
-#: common/tool/actions.cpp:547
+#: common/tool/actions.cpp:544
 msgid "Interactively measure distance between points"
 msgstr ""
 
-#: common/tool/actions.cpp:556
+#: common/tool/actions.cpp:553
 #, fuzzy
 msgid "Show 3D viewer window"
 msgstr "Покажи платката в 3D изглед"
 
-#: common/tool/actions.cpp:561 eeschema/symbol_viewer_frame.cpp:100
+#: common/tool/actions.cpp:558 eeschema/symbol_viewer_frame.cpp:100
 #: eeschema/symbol_viewer_frame.cpp:902
 #, fuzzy
 msgid "Symbol Library Browser"
 msgstr "Библиотечен обзор"
 
-#: common/tool/actions.cpp:561
+#: common/tool/actions.cpp:558
 #, fuzzy
 msgid "Browse symbol libraries"
 msgstr "Преглевд на библиотечни модули"
 
-#: common/tool/actions.cpp:566 eeschema/eeschema_config.cpp:218
+#: common/tool/actions.cpp:563 eeschema/eeschema_config.cpp:218
 #: eeschema/symbol_editor/symbol_editor.cpp:157
 #: kicad/tools/kicad_manager_actions.cpp:70
 #, fuzzy
 msgid "Symbol Editor"
 msgstr "Библиотечен редактор"
 
-#: common/tool/actions.cpp:566
+#: common/tool/actions.cpp:563
 #, fuzzy
 msgid "Create, delete and edit symbols"
 msgstr "Създай компонент като захр. символ"
 
-#: common/tool/actions.cpp:571 pcbnew/footprint_viewer_frame.cpp:107
+#: common/tool/actions.cpp:568 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1016
 #, fuzzy
 msgid "Footprint Library Browser"
 msgstr "Библиотечен обзор"
 
-#: common/tool/actions.cpp:571
+#: common/tool/actions.cpp:568
 #, fuzzy
 msgid "Browse footprint libraries"
 msgstr "Библиотечни файлове на комп.отп."
 
-#: common/tool/actions.cpp:576 kicad/tools/kicad_manager_actions.cpp:82
+#: common/tool/actions.cpp:573 kicad/tools/kicad_manager_actions.cpp:82
 #: pcbnew/footprint_edit_frame.cpp:787 pcbnew/footprint_edit_frame.cpp:914
 #: pcbnew/menubar_footprint_editor.cpp:96
 #, fuzzy
 msgid "Footprint Editor"
 msgstr "Филтър комп.отп."
 
-#: common/tool/actions.cpp:576
+#: common/tool/actions.cpp:573
 #, fuzzy
 msgid "Create, delete and edit footprints"
 msgstr "Създай компонент като захр. символ"
 
-#: common/tool/actions.cpp:582
+#: common/tool/actions.cpp:579
 msgid "Update PCB from Schematic..."
 msgstr ""
 
-#: common/tool/actions.cpp:582
+#: common/tool/actions.cpp:579
 #, fuzzy
 msgid "Update PCB with changes made to schematic"
 msgstr "Отваряне на схема"
 
-#: common/tool/actions.cpp:587
+#: common/tool/actions.cpp:584
 #, fuzzy
 msgid "Update Schematic from PCB..."
 msgstr "Обозначи схемата"
 
-#: common/tool/actions.cpp:587
+#: common/tool/actions.cpp:584
 #, fuzzy
 msgid "Update schematic with changes made to PCB"
 msgstr "Отваряне на схема"
 
-#: common/tool/actions.cpp:592
+#: common/tool/actions.cpp:589
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 #, fuzzy
 msgid "Configure Paths..."
 msgstr "Конфигурация"
 
-#: common/tool/actions.cpp:592
+#: common/tool/actions.cpp:589
 msgid "Edit path configuration environment variables"
 msgstr ""
 
-#: common/tool/actions.cpp:597
+#: common/tool/actions.cpp:594
 msgid "Manage Symbol Libraries..."
 msgstr ""
 
-#: common/tool/actions.cpp:598
+#: common/tool/actions.cpp:595
 msgid "Edit the global and project symbol library lists"
 msgstr ""
 
-#: common/tool/actions.cpp:603
+#: common/tool/actions.cpp:600
 #, fuzzy
 msgid "Manage Footprint Libraries..."
 msgstr "Библиотечни файлове на комп.отп."
 
-#: common/tool/actions.cpp:604
+#: common/tool/actions.cpp:601
 msgid "Edit the global and project footprint library lists"
 msgstr ""
 
-#: common/tool/actions.cpp:609
+#: common/tool/actions.cpp:606
 #, fuzzy
 msgid "Getting Started with KiCad"
 msgstr "Начало на KiCad"
 
-#: common/tool/actions.cpp:610
+#: common/tool/actions.cpp:607
 #, fuzzy
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Отвори \"Getting Started in KiCad\" ръководство за начинаещи"
 
-#: common/tool/actions.cpp:615
+#: common/tool/actions.cpp:612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
 msgid "Help"
 msgstr "Помощ"
 
-#: common/tool/actions.cpp:616
+#: common/tool/actions.cpp:613
 msgid "Open product documentation in a web browser"
 msgstr ""
 
-#: common/tool/actions.cpp:622
+#: common/tool/actions.cpp:619
 #, fuzzy
 msgid "List Hotkeys..."
 msgstr "Редактор на горещи клавиши"
 
-#: common/tool/actions.cpp:623
+#: common/tool/actions.cpp:620
 #, fuzzy
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "Покажи текущите горещи клавиши и съответните им команди"
 
-#: common/tool/actions.cpp:628
+#: common/tool/actions.cpp:625
 #, fuzzy
 msgid "Get Involved"
 msgstr "Начало на KiCad"
 
-#: common/tool/actions.cpp:629
+#: common/tool/actions.cpp:626
 #, fuzzy
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "Участвайте в KiCad"
 
-#: common/tool/actions.cpp:634
+#: common/tool/actions.cpp:631
 #, fuzzy
 msgid "Report Bug"
 msgstr "Внеси файлове"
@@ -6743,7 +6773,7 @@ msgstr ""
 msgid "Always show crosshairs"
 msgstr ""
 
-#: common/widgets/grid_text_button_helpers.cpp:355
+#: common/widgets/grid_text_button_helpers.cpp:354
 #, fuzzy
 msgid "Select a File"
 msgstr "Избор на клавиш"
@@ -11736,7 +11766,7 @@ msgid "Update Symbol from Library..."
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
-#: eeschema/tools/ee_actions.cpp:429
+#: eeschema/tools/ee_actions.cpp:432
 #, fuzzy
 msgid "Change Symbol..."
 msgstr "Захранващ символ"
@@ -12944,7 +12974,7 @@ msgstr "Файл %s съхранен"
 msgid "File write operation failed."
 msgstr "Операция по запис на файла е неуспешна."
 
-#: eeschema/files-io.cpp:254 eeschema/files-io.cpp:907
+#: eeschema/files-io.cpp:254 eeschema/files-io.cpp:946
 #, fuzzy, c-format
 msgid "Schematic file \"%s\" is already open."
 msgstr "Филтър комп.отп. <%s> е вече определен."
@@ -12973,7 +13003,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:968
+#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:1007
 #, fuzzy, c-format
 msgid "Failed to load \"%s\""
 msgstr "Неуспешно отваряне"
@@ -13003,12 +13033,36 @@ msgid ""
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
 
-#: eeschema/files-io.cpp:467
+#: eeschema/files-io.cpp:468
 #, fuzzy
 msgid "Do not show this dialog again."
 msgstr "Не показвай скритите изводи"
 
-#: eeschema/files-io.cpp:490 eeschema/files-io.cpp:507 pcbnew/files.cpp:771
+#: eeschema/files-io.cpp:497
+#, fuzzy, c-format
+msgid "The project symbol library cache file '%s' was not found."
+msgstr "Грешка при съхранение на библиотечен файл \""
+
+#: eeschema/files-io.cpp:499
+msgid ""
+"This can result in a broken schematic under certain conditions.  If the "
+"schematic does not have any missing symbols upon opening, save it "
+"immediately before making any changes to prevent data loss.  If there are "
+"missing symbols, either manual recovery of the schematic or recovery of the "
+"symbol cache library file and reloading the schematic is required."
+msgstr ""
+
+#: eeschema/files-io.cpp:510
+#, fuzzy
+msgid "Load Without Cache File"
+msgstr "Зареди файл обратна анотация"
+
+#: eeschema/files-io.cpp:511
+#, fuzzy
+msgid "Abort"
+msgstr "Прекъсване\n"
+
+#: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -13017,67 +13071,67 @@ msgstr ""
 "Този файл е създаден със стара версия на PCBnew. Ще бъде съхранен в нов "
 "формат когато го запаметите отново."
 
-#: eeschema/files-io.cpp:563
+#: eeschema/files-io.cpp:599
 #, fuzzy
 msgid "Schematic file is read only."
 msgstr "Филтър комп.отп. <%s> е вече определен."
 
-#: eeschema/files-io.cpp:588
+#: eeschema/files-io.cpp:624
 #, fuzzy
 msgid "Append Schematic"
 msgstr "Отваряне на схема"
 
-#: eeschema/files-io.cpp:614
+#: eeschema/files-io.cpp:650
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
 
-#: eeschema/files-io.cpp:659 pcbnew/files.cpp:158
+#: eeschema/files-io.cpp:697 pcbnew/files.cpp:158
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:248
 msgid "All supported formats|"
 msgstr ""
 
-#: eeschema/files-io.cpp:661
+#: eeschema/files-io.cpp:699
 #, fuzzy
 msgid "Import Schematic"
 msgstr "Печат на схемата"
 
-#: eeschema/files-io.cpp:750
+#: eeschema/files-io.cpp:788
 msgid "Saving will overwrite existing files."
 msgstr ""
 
-#: eeschema/files-io.cpp:751
+#: eeschema/files-io.cpp:789
 #, fuzzy
 msgid "Save Warning"
 msgstr "Предупреждение"
 
-#: eeschema/files-io.cpp:753
+#: eeschema/files-io.cpp:792
 #, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr "Следните библиотеки не са намерени:"
 
-#: eeschema/files-io.cpp:754
+#: eeschema/files-io.cpp:793
 #, fuzzy
 msgid "Overwrite Files"
 msgstr "Gerber файлове"
 
-#: eeschema/files-io.cpp:755
+#: eeschema/files-io.cpp:794
 #, fuzzy
 msgid "Abort Project Save"
 msgstr "Разархивирай проект"
 
-#: eeschema/files-io.cpp:965
+#: eeschema/files-io.cpp:1004
 #, fuzzy, c-format
 msgid ""
 "Error loading schematic \"%s\".\n"
 "%s"
 msgstr "Печат на схема"
 
-#: eeschema/files-io.cpp:991
+#: eeschema/files-io.cpp:1030
 #, fuzzy
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Печатната платка е променена. Отказвате ли промените?"
@@ -13143,7 +13197,7 @@ msgid "Arc, radius %s"
 msgstr "Радиус"
 
 #: eeschema/lib_circle.cpp:256
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:180
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 #: pcbnew/pcb_shape.cpp:506 pcbnew/pcb_shape.cpp:516
 msgid "Radius"
 msgstr "Радиус"
@@ -13617,23 +13671,21 @@ msgstr "Подчертаване на връзка"
 msgid "File:"
 msgstr "Файл:"
 
-#: eeschema/sch_field.cpp:486
+#: eeschema/sch_field.cpp:488
 msgid "<root sheet>"
 msgstr ""
 
-#: eeschema/sch_field.cpp:493
+#: eeschema/sch_field.cpp:495
 #, fuzzy, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Стойност"
 
-#: eeschema/sch_field.cpp:499
-#: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
-#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
-#: pcbnew/dialogs/panel_setup_layers_base.cpp:560
-msgid "Back"
-msgstr "Заден"
+#: eeschema/sch_field.cpp:501
+#, fuzzy
+msgid "Back to Previous Selected Sheet"
+msgstr "Създай PNG файл от екрана"
 
-#: eeschema/sch_field.cpp:527
+#: eeschema/sch_field.cpp:529
 #, fuzzy
 msgid "Intersheet References"
 msgstr "EESchema настройки"
@@ -14155,25 +14207,25 @@ msgid ""
 "offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1470
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1474
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2561
 #, fuzzy, c-format
 msgid "Library file \"%s\" not found."
 msgstr "Библиотека %s ненамерена."
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2030
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2034
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4165
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2204
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2208
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4350
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2232
+#: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2236
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4378
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, fuzzy, c-format
@@ -14263,17 +14315,17 @@ msgstr ""
 msgid "I/O error %s resolving library symbol %s"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: eeschema/sch_screen.cpp:666
+#: eeschema/sch_screen.cpp:662
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:687
+#: eeschema/sch_screen.cpp:683
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Файл <%s> не е валиден библиотечен файл компонентна документация."
 
-#: eeschema/sch_screen.cpp:698
+#: eeschema/sch_screen.cpp:694
 #, fuzzy, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr "Не са намерени компоненти в сиволна библиотека <%s>."
@@ -14407,17 +14459,17 @@ msgstr "Размер"
 msgid "Label '%s'"
 msgstr "Етикетl %s"
 
-#: eeschema/sch_text.cpp:1348
+#: eeschema/sch_text.cpp:1369
 #, fuzzy, c-format
 msgid "Global Label '%s'"
 msgstr "Глобален етикетl %s"
 
-#: eeschema/sch_text.cpp:1540
+#: eeschema/sch_text.cpp:1561
 #, fuzzy, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Йерархичен етикетl %s"
 
-#: eeschema/sch_text.cpp:1556 pcbnew/dialogs/panel_setup_rules.cpp:472
+#: eeschema/sch_text.cpp:1577 pcbnew/dialogs/panel_setup_rules.cpp:472
 msgid "Syntax Help"
 msgstr ""
 
@@ -15350,7 +15402,7 @@ msgid "Symbol \"%s\" already exists in library \"%s\""
 msgstr "Компонент \"%s\" вече съществува в библиотека \"%s\"."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:518
-#: eeschema/tools/symbol_editor_control.cpp:464
+#: eeschema/tools/symbol_editor_control.cpp:465
 #, fuzzy
 msgid "No schematic currently open."
 msgstr "Изчисти текущ слой"
@@ -15778,21 +15830,21 @@ msgstr ""
 msgid "Opens the datasheet in a browser"
 msgstr "Покажи име на извод"
 
-#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1116
+#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1122
 msgid "Create Corner"
 msgstr "Създай ъгъл"
 
-#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1116
+#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1122
 #, fuzzy
 msgid "Create a corner"
 msgstr "Създай ъгъл"
 
-#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1121
+#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1127
 #, fuzzy
 msgid "Remove Corner"
 msgstr "Премести ъгъл"
 
-#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1121
+#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1127
 #, fuzzy
 msgid "Remove corner"
 msgstr "Премести ъгъл"
@@ -16170,463 +16222,463 @@ msgstr "Край"
 msgid "Finish drawing sheet"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:359
+#: eeschema/tools/ee_actions.cpp:363
 msgid "Repeat Last Item"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:359
+#: eeschema/tools/ee_actions.cpp:363
 #, fuzzy
 msgid "Duplicates the last drawn item"
 msgstr "Отрежи избрания елемент"
 
-#: eeschema/tools/ee_actions.cpp:364 pcbnew/tools/pcb_actions.cpp:289
+#: eeschema/tools/ee_actions.cpp:367 pcbnew/tools/pcb_actions.cpp:289
 #, fuzzy
 msgid "Rotate Clockwise"
 msgstr "Завърти блок"
 
-#: eeschema/tools/ee_actions.cpp:364 pcbnew/tools/pcb_actions.cpp:289
+#: eeschema/tools/ee_actions.cpp:367 pcbnew/tools/pcb_actions.cpp:289
 #, fuzzy
 msgid "Rotates selected item(s) clockwise"
 msgstr "Чертай избраните елементи при преместване"
 
-#: eeschema/tools/ee_actions.cpp:370 pcbnew/tools/edit_tool.cpp:1339
+#: eeschema/tools/ee_actions.cpp:373 pcbnew/tools/edit_tool.cpp:1339
 msgid "Rotate"
 msgstr "Завърти"
 
-#: eeschema/tools/ee_actions.cpp:370
+#: eeschema/tools/ee_actions.cpp:373
 #, fuzzy
 msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Чертай избраните елементи при преместване"
 
-#: eeschema/tools/ee_actions.cpp:376
+#: eeschema/tools/ee_actions.cpp:379
 #, fuzzy
 msgid "Mirror Vertically"
 msgstr "Огледално по ос y"
 
-#: eeschema/tools/ee_actions.cpp:376
+#: eeschema/tools/ee_actions.cpp:379
 #, fuzzy
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Копирай избрания елемент"
 
-#: eeschema/tools/ee_actions.cpp:382
+#: eeschema/tools/ee_actions.cpp:385
 #, fuzzy
 msgid "Mirror Horizontally"
 msgstr "Огледално по ос y"
 
-#: eeschema/tools/ee_actions.cpp:382
+#: eeschema/tools/ee_actions.cpp:385
 #, fuzzy
 msgid "Flips selected item(s) from left to right"
 msgstr "Копирай избрания елемент"
 
-#: eeschema/tools/ee_actions.cpp:388 pcbnew/tools/pcb_actions.cpp:326
+#: eeschema/tools/ee_actions.cpp:391 pcbnew/tools/pcb_actions.cpp:326
 #, fuzzy
 msgid "Properties..."
 msgstr "Настройки"
 
-#: eeschema/tools/ee_actions.cpp:388 pcbnew/tools/pcb_actions.cpp:326
+#: eeschema/tools/ee_actions.cpp:391 pcbnew/tools/pcb_actions.cpp:326
 msgid "Displays item properties dialog"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:394
+#: eeschema/tools/ee_actions.cpp:397
 #, fuzzy
 msgid "Edit Reference Designator..."
 msgstr "Обозначение"
 
-#: eeschema/tools/ee_actions.cpp:394
+#: eeschema/tools/ee_actions.cpp:397
 #, fuzzy
 msgid "Displays reference designator dialog"
 msgstr "Обозначение по подразбиране:"
 
-#: eeschema/tools/ee_actions.cpp:400
+#: eeschema/tools/ee_actions.cpp:403
 #, fuzzy
 msgid "Edit Value..."
 msgstr "Опресни стойностите"
 
-#: eeschema/tools/ee_actions.cpp:400
+#: eeschema/tools/ee_actions.cpp:403
 msgid "Displays value field dialog"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:406
+#: eeschema/tools/ee_actions.cpp:409
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:255
 #, fuzzy
 msgid "Edit Footprint..."
 msgstr "Печат на комп.отп."
 
-#: eeschema/tools/ee_actions.cpp:406
+#: eeschema/tools/ee_actions.cpp:409
 #, fuzzy
 msgid "Displays footprint field dialog"
 msgstr "Изобрази документация за комп.отп.(footprint.pdf)"
 
-#: eeschema/tools/ee_actions.cpp:412
+#: eeschema/tools/ee_actions.cpp:415
 #, fuzzy
 msgid "Autoplace Fields"
 msgstr "Автом.поставяне на всички модули"
 
-#: eeschema/tools/ee_actions.cpp:412
+#: eeschema/tools/ee_actions.cpp:415
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:417
+#: eeschema/tools/ee_actions.cpp:420
 #, fuzzy
 msgid "Change Symbols..."
 msgstr "Захранващ символ"
 
-#: eeschema/tools/ee_actions.cpp:418
+#: eeschema/tools/ee_actions.cpp:421
 #, fuzzy
 msgid "Assign different symbols from the library"
 msgstr "Избор на част от акт.библиотека"
 
-#: eeschema/tools/ee_actions.cpp:423
+#: eeschema/tools/ee_actions.cpp:426
 #, fuzzy
 msgid "Update Symbols from Library..."
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/tools/ee_actions.cpp:424
+#: eeschema/tools/ee_actions.cpp:427
 #, fuzzy
 msgid "Update symbols to include any changes from the library"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/tools/ee_actions.cpp:430
+#: eeschema/tools/ee_actions.cpp:433
 #, fuzzy
 msgid "Assign a different symbol from the library"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/tools/ee_actions.cpp:435
+#: eeschema/tools/ee_actions.cpp:438
 #, fuzzy
 msgid "Update Symbol..."
 msgstr "Захранващ символ"
 
-#: eeschema/tools/ee_actions.cpp:436
+#: eeschema/tools/ee_actions.cpp:439
 #, fuzzy
 msgid "Update symbol to include any changes from the library"
 msgstr "Отвори модул компонентен отпечатък от Библиотека"
 
-#: eeschema/tools/ee_actions.cpp:441
+#: eeschema/tools/ee_actions.cpp:444
 #, fuzzy
 msgid "Assign Netclass..."
 msgstr "(използвай клас на връзката)"
 
-#: eeschema/tools/ee_actions.cpp:441
+#: eeschema/tools/ee_actions.cpp:444
 msgid "Assign a netclass to the net of the selected wire"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:445
+#: eeschema/tools/ee_actions.cpp:448
 #, fuzzy
 msgid "DeMorgan Conversion"
 msgstr "Показвай допълнително обозначение по \"De Morgan\""
 
-#: eeschema/tools/ee_actions.cpp:445
+#: eeschema/tools/ee_actions.cpp:448
 msgid "Switch between DeMorgan representations"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:450
+#: eeschema/tools/ee_actions.cpp:453
 #, fuzzy
 msgid "DeMorgan Standard"
 msgstr "Стандарт"
 
-#: eeschema/tools/ee_actions.cpp:450
+#: eeschema/tools/ee_actions.cpp:453
 msgid "Switch to standard DeMorgan representation"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:455
+#: eeschema/tools/ee_actions.cpp:458
 #, fuzzy
 msgid "DeMorgan Alternate"
 msgstr "Изтрий файла"
 
-#: eeschema/tools/ee_actions.cpp:455
+#: eeschema/tools/ee_actions.cpp:458
 msgid "Switch to alternate DeMorgan representation"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:460
+#: eeschema/tools/ee_actions.cpp:463
 msgid "Change to Label"
 msgstr "Промени към етикет"
 
-#: eeschema/tools/ee_actions.cpp:460
+#: eeschema/tools/ee_actions.cpp:463
 #, fuzzy
 msgid "Change existing item to a label"
 msgstr "Промени към етикет"
 
-#: eeschema/tools/ee_actions.cpp:465
+#: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Hierarchical Label"
 msgstr "Промени към йерархичен етикет"
 
-#: eeschema/tools/ee_actions.cpp:465
+#: eeschema/tools/ee_actions.cpp:468
 #, fuzzy
 msgid "Change existing item to a hierarchical label"
 msgstr "Промени към йерархичен етикет"
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/ee_actions.cpp:473
 msgid "Change to Global Label"
 msgstr "Промени към глобален етикет"
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/ee_actions.cpp:473
 #, fuzzy
 msgid "Change existing item to a global label"
 msgstr "Промени към глобален етикет"
 
-#: eeschema/tools/ee_actions.cpp:475
+#: eeschema/tools/ee_actions.cpp:478
 msgid "Change to Text"
 msgstr "Промени към текст"
 
-#: eeschema/tools/ee_actions.cpp:475
+#: eeschema/tools/ee_actions.cpp:478
 msgid "Change existing item to a text comment"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:480
+#: eeschema/tools/ee_actions.cpp:483
 msgid "Cleanup Sheet Pins"
 msgstr "Изчистване на изводи на лист"
 
-#: eeschema/tools/ee_actions.cpp:480
+#: eeschema/tools/ee_actions.cpp:483
 #, fuzzy
 msgid "Delete unreferenced sheet pins"
 msgstr "Обозначение по подразбиране:"
 
-#: eeschema/tools/ee_actions.cpp:485 pcbnew/tools/pcb_actions.cpp:436
+#: eeschema/tools/ee_actions.cpp:487 pcbnew/tools/pcb_actions.cpp:436
 #, fuzzy
 msgid "Edit Text & Graphics Properties..."
 msgstr "Зоневи настройки"
 
-#: eeschema/tools/ee_actions.cpp:486
+#: eeschema/tools/ee_actions.cpp:488
 #, fuzzy
 msgid "Edit text and graphics properties globally across schematic"
 msgstr "Редактирай настройките на модулите"
 
-#: eeschema/tools/ee_actions.cpp:491
+#: eeschema/tools/ee_actions.cpp:493
 #, fuzzy
 msgid "Symbol Properties..."
 msgstr "Настройки на етикет"
 
-#: eeschema/tools/ee_actions.cpp:491
+#: eeschema/tools/ee_actions.cpp:493
 #, fuzzy
 msgid "Displays symbol properties dialog"
 msgstr "Редактирай настройките на модулите"
 
-#: eeschema/tools/ee_actions.cpp:496
+#: eeschema/tools/ee_actions.cpp:498
 #, fuzzy
 msgid "Pin Table..."
 msgstr "Име на извод"
 
-#: eeschema/tools/ee_actions.cpp:496
+#: eeschema/tools/ee_actions.cpp:498
 msgid "Displays pin table for bulk editing of pins"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:501
+#: eeschema/tools/ee_actions.cpp:503
 msgid "Break Wire"
 msgstr "Прекъсни проводник"
 
-#: eeschema/tools/ee_actions.cpp:501
+#: eeschema/tools/ee_actions.cpp:503
 msgid "Divide a wire into segments which can be dragged independently"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:506
+#: eeschema/tools/ee_actions.cpp:508
 msgid "Break Bus"
 msgstr "Прекъсни шина"
 
-#: eeschema/tools/ee_actions.cpp:506
+#: eeschema/tools/ee_actions.cpp:508
 msgid "Divide a bus into segments which can be dragged independently"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:517
+#: eeschema/tools/ee_actions.cpp:519
 #, fuzzy
 msgid "Add a simulator probe"
 msgstr "Добави подобна зона"
 
-#: eeschema/tools/ee_actions.cpp:521
+#: eeschema/tools/ee_actions.cpp:523
 msgid "Select a value to be tuned"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:526 gerbview/tools/gerbview_actions.cpp:112
+#: eeschema/tools/ee_actions.cpp:528 gerbview/tools/gerbview_actions.cpp:112
 #: pcbnew/tools/pcb_actions.cpp:690 pcbnew/tools/pcb_actions.cpp:710
 #, fuzzy
 msgid "Highlight Net"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:526
+#: eeschema/tools/ee_actions.cpp:528
 #, fuzzy
 msgid "Highlight net under cursor"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:539 pcbnew/tools/pcb_actions.cpp:703
 #, fuzzy
 msgid "Highlight Nets"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:537
+#: eeschema/tools/ee_actions.cpp:539
 #, fuzzy
 msgid "Highlight wires and pins of a net"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/ee_actions.cpp:545
 #, fuzzy
 msgid "Edit with Symbol Editor"
 msgstr "Редактирай с библ. редактор"
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/ee_actions.cpp:545
 #, fuzzy
 msgid "Open the symbol editor to edit the symbol"
 msgstr "Библиотечен обзор"
 
-#: eeschema/tools/ee_actions.cpp:548
+#: eeschema/tools/ee_actions.cpp:550
 #, fuzzy
 msgid "Edit Symbol Fields..."
 msgstr "Рерадктиране %s на поле"
 
-#: eeschema/tools/ee_actions.cpp:548
+#: eeschema/tools/ee_actions.cpp:550
 #, fuzzy
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Вмъкни компонент в схемата"
 
-#: eeschema/tools/ee_actions.cpp:553
+#: eeschema/tools/ee_actions.cpp:555
 #, fuzzy
 msgid "Edit Symbol Library Links..."
 msgstr "Библиотечни настройки"
 
-#: eeschema/tools/ee_actions.cpp:553
+#: eeschema/tools/ee_actions.cpp:555
 msgid "Edit links between schematic and library symbols"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:558
+#: eeschema/tools/ee_actions.cpp:560
 #, fuzzy
 msgid "Assign Footprints..."
 msgstr "Назначи комп.отп. на компонента"
 
-#: eeschema/tools/ee_actions.cpp:558
+#: eeschema/tools/ee_actions.cpp:560
 #, fuzzy
 msgid "Run footprint assignment tool"
 msgstr "Документация на комп.отпечатък"
 
-#: eeschema/tools/ee_actions.cpp:563
+#: eeschema/tools/ee_actions.cpp:565
 #, fuzzy
 msgid "Import Footprint Assignments..."
 msgstr "Документация на комп.отпечатък"
 
-#: eeschema/tools/ee_actions.cpp:564
+#: eeschema/tools/ee_actions.cpp:566
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:569
+#: eeschema/tools/ee_actions.cpp:571
 #, fuzzy
 msgid "Annotate Schematic..."
 msgstr "Обозначи схемата"
 
-#: eeschema/tools/ee_actions.cpp:569
+#: eeschema/tools/ee_actions.cpp:571
 #, fuzzy
 msgid "Fill in schematic symbol reference designators"
 msgstr "Обозначение по подразбиране:"
 
-#: eeschema/tools/ee_actions.cpp:574
+#: eeschema/tools/ee_actions.cpp:576
 #, fuzzy
 msgid "Schematic Setup..."
 msgstr "Размер на схемата"
 
-#: eeschema/tools/ee_actions.cpp:575
+#: eeschema/tools/ee_actions.cpp:577
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:580
+#: eeschema/tools/ee_actions.cpp:582
 #, fuzzy
 msgid "Edit Sheet Page Number..."
 msgstr "Параметри"
 
-#: eeschema/tools/ee_actions.cpp:581
+#: eeschema/tools/ee_actions.cpp:583
 #, fuzzy
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Премести избрания клас на верига нагоре с един ред"
 
-#: eeschema/tools/ee_actions.cpp:586
+#: eeschema/tools/ee_actions.cpp:587
 #, fuzzy
 msgid "Rescue Symbols..."
 msgstr "Захранващ символ"
 
-#: eeschema/tools/ee_actions.cpp:587
+#: eeschema/tools/ee_actions.cpp:588
 msgid "Find old symbols in project and rename/rescue them"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:592
+#: eeschema/tools/ee_actions.cpp:593
 #, fuzzy
 msgid "Remap Legacy Library Symbols..."
 msgstr "Запази като..."
 
-#: eeschema/tools/ee_actions.cpp:593
+#: eeschema/tools/ee_actions.cpp:594
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:598
+#: eeschema/tools/ee_actions.cpp:599
 #, fuzzy
 msgid "Bus Definitions..."
 msgstr "Настройка на контурите:"
 
-#: eeschema/tools/ee_actions.cpp:598
+#: eeschema/tools/ee_actions.cpp:599
 msgid "Manage bus definitions"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:603
+#: eeschema/tools/ee_actions.cpp:604
 #, fuzzy
 msgid "Export Drawing to Clipboard"
 msgstr "Експорт на чертежите в clipboard буфера"
 
-#: eeschema/tools/ee_actions.cpp:603
+#: eeschema/tools/ee_actions.cpp:604
 #, fuzzy
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Експорт на чертежите в clipboard буфера"
 
-#: eeschema/tools/ee_actions.cpp:608
+#: eeschema/tools/ee_actions.cpp:609
 #, fuzzy
 msgid "Switch to PCB Editor"
 msgstr "Редактор на Модул"
 
-#: eeschema/tools/ee_actions.cpp:608
+#: eeschema/tools/ee_actions.cpp:609
 #, fuzzy
 msgid "Open PCB in board editor"
 msgstr "Отвори модул редактора"
 
-#: eeschema/tools/ee_actions.cpp:613
+#: eeschema/tools/ee_actions.cpp:614
 #, fuzzy
 msgid "Export Netlist..."
 msgstr "Лист вериги"
 
-#: eeschema/tools/ee_actions.cpp:613
+#: eeschema/tools/ee_actions.cpp:614
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:618
+#: eeschema/tools/ee_actions.cpp:619
 #, fuzzy
 msgid "Generate BOM..."
 msgstr "Общо"
 
-#: eeschema/tools/ee_actions.cpp:618
+#: eeschema/tools/ee_actions.cpp:619
 #, fuzzy
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Създай лист компоненти от схемата"
 
-#: eeschema/tools/ee_actions.cpp:623
+#: eeschema/tools/ee_actions.cpp:624
 #, fuzzy
 msgid "Highlight on PCB"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:623
+#: eeschema/tools/ee_actions.cpp:624
 #, fuzzy
 msgid "Highlight corresponding items in PCB editor"
 msgstr "Подчертаване на връзка"
 
-#: eeschema/tools/ee_actions.cpp:628
+#: eeschema/tools/ee_actions.cpp:629
 #, fuzzy
 msgid "Show Hidden Pins"
 msgstr "Показвай скритите изводи"
 
-#: eeschema/tools/ee_actions.cpp:628
+#: eeschema/tools/ee_actions.cpp:629
 #, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Показвай скритите изводи"
 
-#: eeschema/tools/ee_actions.cpp:633
+#: eeschema/tools/ee_actions.cpp:634
 #, fuzzy
 msgid "Show Hidden Fields"
 msgstr "Показвай скритите изводи"
 
-#: eeschema/tools/ee_actions.cpp:633
+#: eeschema/tools/ee_actions.cpp:634
 #, fuzzy
 msgid "Toggle display of hidden text fields"
 msgstr "Solder paste Copper"
@@ -16673,7 +16725,7 @@ msgstr "Навигация в схемната йерархия"
 msgid "Navigate to page"
 msgstr "Помести в страница"
 
-#: eeschema/tools/ee_actions.cpp:670
+#: eeschema/tools/ee_actions.cpp:669
 msgid "Add Junctions to Selection where needed"
 msgstr ""
 
@@ -16947,33 +16999,33 @@ msgstr "Обозначаване"
 msgid "Label value cannot go below zero"
 msgstr "Класът на верига по подразбиране неможе да бъде премахнат"
 
-#: eeschema/tools/sch_edit_tool.cpp:1117 pcbnew/tools/pcb_control.cpp:487
+#: eeschema/tools/sch_edit_tool.cpp:1118 pcbnew/tools/pcb_control.cpp:487
 #, fuzzy
 msgid "Item locked."
 msgstr "Елементите са заключени"
 
-#: eeschema/tools/sch_edit_tool.cpp:1179
+#: eeschema/tools/sch_edit_tool.cpp:1180
 #: eeschema/tools/symbol_editor_edit_tool.cpp:539
 #, c-format
 msgid "Edit %s Field"
 msgstr "Рерадктиране %s на поле"
 
-#: eeschema/tools/sch_edit_tool.cpp:1733
+#: eeschema/tools/sch_edit_tool.cpp:1734
 #, fuzzy
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "Няма неопределени етикети в този лист за изчистване."
 
-#: eeschema/tools/sch_edit_tool.cpp:1737
+#: eeschema/tools/sch_edit_tool.cpp:1738
 #, fuzzy
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Искате ли да изчистите този лист?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1797
+#: eeschema/tools/sch_edit_tool.cpp:1798
 #, fuzzy, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "има нужда от НОМЕР за '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1800
+#: eeschema/tools/sch_edit_tool.cpp:1801
 #, fuzzy
 msgid "Edit Sheet Page Number"
 msgstr "Редактиране на цел"
@@ -17033,23 +17085,23 @@ msgstr "Не е избран слой"
 msgid "Bus has no members"
 msgstr ""
 
-#: eeschema/tools/symbol_editor_control.cpp:344
-#: eeschema/tools/symbol_editor_control.cpp:384
+#: eeschema/tools/symbol_editor_control.cpp:345
+#: eeschema/tools/symbol_editor_control.cpp:385
 #, fuzzy
 msgid "No symbol to export"
 msgstr "Не експортирай"
 
-#: eeschema/tools/symbol_editor_control.cpp:355
+#: eeschema/tools/symbol_editor_control.cpp:356
 #, fuzzy
 msgid "Image File Name"
 msgstr "3D изглед име на файл:"
 
-#: eeschema/tools/symbol_editor_control.cpp:366
+#: eeschema/tools/symbol_editor_control.cpp:367
 #, fuzzy, c-format
 msgid "Can't save file \"%s\"."
 msgstr "Невъзможност за съхранение на файл <%s>"
 
-#: eeschema/tools/symbol_editor_control.cpp:395
+#: eeschema/tools/symbol_editor_control.cpp:396
 msgid "Filename:"
 msgstr "Име на файл:"
 
@@ -17506,10 +17558,6 @@ msgstr "Графичен слой"
 msgid "Clear"
 msgstr "Светло"
 
-#: gerbview/gerber_draw_item.cpp:704
-msgid "Dark"
-msgstr "Тъмно"
-
 #: gerbview/gerber_draw_item.cpp:705 gerbview/gerber_file_image.cpp:353
 msgid "Polarity"
 msgstr "Полярност"
@@ -17604,16 +17652,16 @@ msgstr "Gerber файлове"
 msgid "Layers Manager"
 msgstr "Скрий менажера на слоевете"
 
+#: gerbview/gerbview_frame.cpp:597 gerbview/gerbview_frame.cpp:616
+#: gerbview/menubar.cpp:149 kicad/tools/kicad_manager_actions.cpp:88
+#, fuzzy
+msgid "Gerber Viewer"
+msgstr "Gerber файлове"
+
 #: gerbview/gerbview_frame.cpp:602
 #, fuzzy, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Слой %d не е в употреба"
-
-#: gerbview/gerbview_frame.cpp:616 gerbview/menubar.cpp:149
-#: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
-msgid "Gerber Viewer"
-msgstr "Gerber файлове"
 
 #: gerbview/gerbview_frame.cpp:618
 #, fuzzy
@@ -18180,41 +18228,41 @@ msgstr "Проектен файл: "
 msgid "Project Template Selector"
 msgstr "Грешка на файл на проекта"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:97
+#: kicad/dialogs/panel_kicad_launcher.cpp:98
 #, fuzzy
 msgid "Edit the project schematic"
 msgstr "цялата схема?"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:100
+#: kicad/dialogs/panel_kicad_launcher.cpp:102
 #, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:103
+#: kicad/dialogs/panel_kicad_launcher.cpp:106
 #, fuzzy
 msgid "Edit the project PCB design"
 msgstr "Редактирай извод на листа"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:106
+#: kicad/dialogs/panel_kicad_launcher.cpp:110
 #, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:109
+#: kicad/dialogs/panel_kicad_launcher.cpp:114
 #, fuzzy
 msgid "Preview Gerber files"
 msgstr "Отвори Gerber файл"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:113
+#: kicad/dialogs/panel_kicad_launcher.cpp:118
 #, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr "Потребителски имена на полета за схемните компоненти"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:117
+#: kicad/dialogs/panel_kicad_launcher.cpp:122
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:121
+#: kicad/dialogs/panel_kicad_launcher.cpp:126
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
@@ -18288,7 +18336,7 @@ msgstr "Архивирай проектни файлове"
 msgid "Import Eagle Project Files"
 msgstr "Запамети Проектов файл"
 
-#: kicad/kicad.cpp:165
+#: kicad/kicad.cpp:167
 #, fuzzy, c-format
 msgid ""
 "File '%s'\n"
@@ -20330,18 +20378,18 @@ msgid ""
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:253
+#: pcb_calculator/pcb_calculator_frame.cpp:256
 #, fuzzy
 msgid "Write Data Failed"
 msgstr "Грешка на файл на проекта"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:257
+#: pcb_calculator/pcb_calculator_frame.cpp:260
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:267
+#: pcb_calculator/pcb_calculator_frame.cpp:270
 #, c-format
 msgid ""
 "Unable to write file '%s'\n"
@@ -21754,6 +21802,12 @@ msgstr "Завърти"
 msgid "Front"
 msgstr "Лицев"
 
+#: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
+#: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
+#: pcbnew/dialogs/panel_setup_layers_base.cpp:560
+msgid "Back"
+msgstr "Заден"
+
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:190
 #, fuzzy
 msgid "Update schematic"
@@ -22444,12 +22498,12 @@ msgid ""
 "This setting can be overridden by local pad settings"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1396
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1407
 #, fuzzy
 msgid "Thermal reliefs"
 msgstr "Термично облекчение"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1398
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1409
 msgid "Reliefs for PTH"
 msgstr ""
 
@@ -22474,7 +22528,7 @@ msgstr "Ширина на медта от терм.облекчение"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:274
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:105
-#: pcbnew/tools/pcb_actions.cpp:1213
+#: pcbnew/tools/pcb_actions.cpp:1220
 #, fuzzy
 msgid "Fill"
 msgstr "Закръгляне"
@@ -25009,57 +25063,57 @@ msgid ""
 "%s"
 msgstr "Неочаквана грешка при съхранение на компонентна библиотека <%s>."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:177
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:175
 #, fuzzy
 msgid "Circle Properties"
 msgstr "Настройки на извод"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:190
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:188
 #, fuzzy
 msgid "Arc Properties"
 msgstr "Настройки"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:201
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:194
 #, fuzzy
 msgid "Polygon Properties"
 msgstr "Настройки на извод"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:214
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:200
 #, fuzzy
 msgid "Rectangle Properties"
 msgstr "Настройки на извод"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:225
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:206
 #, fuzzy
 msgid "Line Segment Properties"
 msgstr "Библ. настройки на компонента"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:296
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:282
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:373
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:359
 #, fuzzy
 msgid "Modify drawing properties"
 msgstr "Настройки за чертане"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:412
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:380
 #, fuzzy
 msgid "The arc angle cannot be zero."
 msgstr "Класът на верига по подразбиране неможе да бъде премахнат"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:419
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:387
 #, fuzzy
 msgid "The radius cannot be zero."
 msgstr "Класът на верига по подразбиране неможе да бъде премахнат"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:425
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:393
 #, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "Класът на верига по подразбиране неможе да бъде премахнат"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:441
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:409
 #, fuzzy
 msgid "Error List"
 msgstr "Грешки"
@@ -25092,7 +25146,7 @@ msgstr "Добави правоъгълник"
 msgid "Filled shape"
 msgstr "Копирай избрания елемент"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:94
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:93
 #, fuzzy
 msgid "Graphic Item Properties"
 msgstr "Настройки на йерархичен етикет"
@@ -27802,23 +27856,23 @@ msgid "Moves the track segment without moving connected tracks"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:353
-#: pcbnew/tools/pcb_actions.cpp:1332
+#: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Drag (45 degree mode)"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:354
-#: pcbnew/tools/pcb_actions.cpp:1333
+#: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:358
-#: pcbnew/tools/pcb_actions.cpp:1339
+#: pcbnew/tools/pcb_actions.cpp:1346
 #, fuzzy
 msgid "Drag (free angle)"
 msgstr "Измени правиъгълник"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:359
-#: pcbnew/tools/pcb_actions.cpp:1340
+#: pcbnew/tools/pcb_actions.cpp:1347
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
@@ -29761,7 +29815,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:302
 #: pcbnew/exporters/export_vrml.cpp:865
-#: pcbnew/specctra_import_export/specctra_export.cpp:841
+#: pcbnew/specctra_import_export/specctra_export.cpp:953
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
 
@@ -30923,144 +30977,235 @@ msgstr ""
 msgid "Cannot add %s (footprint \"%s\" not found)."
 msgstr "%s изводи %s ненамерени"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:160
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, fuzzy, c-format
 msgid "Add %s (footprint \"%s\")."
 msgstr "Комп. отпечатъци"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:203
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:187
+#, fuzzy, c-format
+msgid "Added %s (footprint \"%s\")."
+msgstr "Комп. отпечатъци"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, fuzzy, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr ""
 "\n"
 "Невъзможно опресняване на комп.отп."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:215
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:217
 #, fuzzy, c-format
 msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "%s изводи %s ненамерени"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:223
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:227
 #, fuzzy, c-format
-msgid "Change %s footprint from \"%s\" to \"%s\"."
+msgid "Change %s footprint from '%s' to '%s'."
 msgstr "Покажи обозначенията на комп.отп."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:258
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:239
+#, fuzzy, c-format
+msgid "Changed %s footprint from '%s' to '%s'."
+msgstr "Покажи обозначенията на комп.отп."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, fuzzy, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Покажи обозначенията на комп.отп."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:273
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:275
+#, fuzzy, c-format
+msgid "Changed %s reference designator to %s."
+msgstr "Покажи обозначенията на комп.отп."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:288
 #, fuzzy, c-format
 msgid "Change %s value from %s to %s."
 msgstr "%s шина от (%s,%s) до (%s,%s)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:292
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:298
+#, fuzzy, c-format
+msgid "Changed %s value from %s to %s."
+msgstr "%s шина от (%s,%s) до (%s,%s)"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:315
 #, fuzzy, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:307
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:325
+#, fuzzy, c-format
+msgid "Updated %s symbol association from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:338
 #, fuzzy, c-format
 msgid "Update %s properties."
 msgstr "Редактирай настройките на модулите"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:326
-#, c-format
-msgid "Setting %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:346
+#, fuzzy, c-format
+msgid "Updated %s properties."
+msgstr "Редактирай настройките на модулите"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:332
-#, c-format
-msgid "Removing %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:360
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Set %s 'exclude from BOM' fabrication attribute."
+msgstr "Изходи за производство"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:399
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:365
+#, fuzzy, c-format
+msgid "Remove %s 'exclude from BOM' fabrication attribute."
+msgstr "Изходи за производство"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:382
+#, fuzzy, c-format
+msgid "Removed %s 'exclude from BOM' fabrication attribute."
+msgstr "Изходи за производство"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, fuzzy, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Съхранение на символ в [%s]"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:407
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:455
 #, fuzzy, c-format
-msgid "No net for symbol %s pin %s."
+msgid "Disconnected %s pin %s."
+msgstr "Съхранение на символ в [%s]"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:465
+#, fuzzy, c-format
+msgid "No net found for symbol %s pin %s."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:457
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:515
 #, fuzzy, c-format
 msgid "Add net %s."
 msgstr "Добавяне на зони"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:465
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:525
 #, fuzzy, c-format
 msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:473
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:533
+#, fuzzy, c-format
+msgid "Reconnected %s pin %s from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:544
 #, fuzzy, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:545
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:551
+#, fuzzy, c-format
+msgid "Connected %s pin %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:630
 #, fuzzy, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:566
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:648
+#, fuzzy, c-format
+msgid "Reconnected via from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:658
 #, fuzzy, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Повече от един извод е свързан със символ \"Несвързан\""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:605
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:701
+#, fuzzy, c-format
+msgid "Reconnect copper zone '%s' from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:626
-#, c-format
-msgid "Copper zone (%s) has no pads connected."
-msgstr ""
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:729
+#, fuzzy, c-format
+msgid "Reconnected copper zone '%s' from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:686
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:736
+#, fuzzy, c-format
+msgid "Reconnected copper zone from %s to %s."
+msgstr "Компонент %s %s извод %s : Различни вериги"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:749
+#, fuzzy, c-format
+msgid "Copper zone '%s' has no pads connected."
+msgstr "Свържи към конт.пл."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:757
+#, fuzzy, c-format
+msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+msgstr "Свържи към конт.пл."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, fuzzy, c-format
 msgid "Remove single pad net %s."
 msgstr "Премахни запойващата маска от прох.отв."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:748
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:831
+#, fuzzy, c-format
+msgid "Removed single pad net %s."
+msgstr "Премахни запойващата маска от прох.отв."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, fuzzy, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s изводи %s ненамерени"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:799
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:941
 #, fuzzy, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Компонент %s %s извод %s : Различни вериги"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:866
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1008
 #, fuzzy, c-format
 msgid "Multiple footprints found for \"%s\"."
 msgstr "Не са намерени компонентни отпечатъци"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:897
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1041
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Не са намерени компонентни отпечатъци"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:905
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
+#, fuzzy, c-format
+msgid "Could not remove unused footprint %s (locked)."
+msgstr "Не са намерени компонентни отпечатъци"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
 #, fuzzy, c-format
 msgid "Remove unused footprint %s."
 msgstr "Не са намерени компонентни отпечатъци"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:934
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
 #, fuzzy, c-format
-msgid "Remove unused net \"%s\"."
+msgid "Removed unused footprint %s."
 msgstr "Не са намерени компонентни отпечатъци"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:941
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
+#, fuzzy, c-format
+msgid "Removed unused net %s."
+msgstr "Не са намерени компонентни отпечатъци"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 #, fuzzy
 msgid "Update netlist"
 msgstr "Генерирай лист на веригите"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:966
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1123
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr ""
@@ -32937,8 +33082,8 @@ msgstr "Чертай избраните елементи при преместв
 msgid "Drag Anyway"
 msgstr "Изтегли прох.отв."
 
-#: pcbnew/router/router_tool.cpp:1796 pcbnew/tools/pcb_actions.cpp:1319
-#: pcbnew/tools/pcb_actions.cpp:1325
+#: pcbnew/router/router_tool.cpp:1796 pcbnew/tools/pcb_actions.cpp:1326
+#: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Break Track"
 msgstr "Прекъсни пътека"
 
@@ -32947,21 +33092,21 @@ msgstr "Прекъсни пътека"
 msgid "Warning: top and bottom layers are same."
 msgstr "Предупреждение: Повърхностният и долният слоеве са еднакви."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:128
+#: pcbnew/specctra_import_export/specctra_export.cpp:129
 msgid "BOARD exported OK."
 msgstr "Експорт на платката ОК."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:133
+#: pcbnew/specctra_import_export/specctra_export.cpp:134
 #, fuzzy
 msgid "Unable to export, please fix and try again"
 msgstr "Невъзможност за експорт, моля поправете и опитайте отново."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:914
+#: pcbnew/specctra_import_export/specctra_export.cpp:1026
 #, fuzzy, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
 msgstr "Компонент със стойност \"%s\" има празно обозначение."
 
-#: pcbnew/specctra_import_export/specctra_export.cpp:924
+#: pcbnew/specctra_import_export/specctra_export.cpp:1036
 #, fuzzy, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
 msgstr "Няколко компонента имат единакви идентификатори от \"%s\"."
@@ -34928,358 +35073,358 @@ msgstr "Не на проводящия слой"
 msgid "Switch to Next Layer"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1011
+#: pcbnew/tools/pcb_actions.cpp:1012
 msgid "Switch to Previous Layer"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1016
+#: pcbnew/tools/pcb_actions.cpp:1018
 #, fuzzy
 msgid "Toggle Layer"
 msgstr "Повърхностен сл."
 
-#: pcbnew/tools/pcb_actions.cpp:1016
+#: pcbnew/tools/pcb_actions.cpp:1018
 #, fuzzy
 msgid "Switch between layers in active layer pair"
 msgstr "Смяна на активния чифт слоеве"
 
-#: pcbnew/tools/pcb_actions.cpp:1023
+#: pcbnew/tools/pcb_actions.cpp:1025
 #, fuzzy
 msgid "Increase Layer Opacity"
 msgstr "Изтрий Слой"
 
-#: pcbnew/tools/pcb_actions.cpp:1023 pcbnew/tools/pcb_actions.cpp:1030
+#: pcbnew/tools/pcb_actions.cpp:1025 pcbnew/tools/pcb_actions.cpp:1032
 #, fuzzy
 msgid "Make the current layer more transparent"
 msgstr "Запази текущия зареден модул във файл"
 
-#: pcbnew/tools/pcb_actions.cpp:1030
+#: pcbnew/tools/pcb_actions.cpp:1032
 #, fuzzy
 msgid "Decrease Layer Opacity"
 msgstr "Изтрий Слой"
 
-#: pcbnew/tools/pcb_actions.cpp:1041
+#: pcbnew/tools/pcb_actions.cpp:1043
 #, fuzzy
 msgid "Show Board Statistics"
 msgstr "Покажи всички връзки"
 
-#: pcbnew/tools/pcb_actions.cpp:1041
+#: pcbnew/tools/pcb_actions.cpp:1043
 #, fuzzy
 msgid "Shows board statistics"
 msgstr "Покажи всички връзки"
 
-#: pcbnew/tools/pcb_actions.cpp:1045
+#: pcbnew/tools/pcb_actions.cpp:1047
 #, fuzzy
 msgid "Clearance Resolution..."
 msgstr "Отстояние:"
 
-#: pcbnew/tools/pcb_actions.cpp:1046
+#: pcbnew/tools/pcb_actions.cpp:1048
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1051
+#: pcbnew/tools/pcb_actions.cpp:1053
 #, fuzzy
 msgid "Constraints Resolution..."
 msgstr "Ориентация на комп.отп."
 
-#: pcbnew/tools/pcb_actions.cpp:1052
+#: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Show constraints resolution for the selected object"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1058
+#: pcbnew/tools/pcb_actions.cpp:1060
 msgid "Geographical Reannotate..."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1058
+#: pcbnew/tools/pcb_actions.cpp:1060
 msgid "Reannotate PCB in geographical order"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1063
+#: pcbnew/tools/pcb_actions.cpp:1065
 #, fuzzy
 msgid "Repair Board"
 msgstr "Изчистване на платката"
 
-#: pcbnew/tools/pcb_actions.cpp:1064
+#: pcbnew/tools/pcb_actions.cpp:1066
 msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1072
+#: pcbnew/tools/pcb_actions.cpp:1074
 #, fuzzy
 msgid "Align to Top"
 msgstr "Нагоре"
 
-#: pcbnew/tools/pcb_actions.cpp:1073
+#: pcbnew/tools/pcb_actions.cpp:1075
 #, fuzzy
 msgid "Aligns selected items to the top edge"
 msgstr "Чертай избраните елементи при преместване"
 
-#: pcbnew/tools/pcb_actions.cpp:1077
+#: pcbnew/tools/pcb_actions.cpp:1079
 #, fuzzy
 msgid "Align to Bottom"
 msgstr "Надолу"
 
-#: pcbnew/tools/pcb_actions.cpp:1078
+#: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Aligns selected items to the bottom edge"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1082
+#: pcbnew/tools/pcb_actions.cpp:1084
 #, fuzzy
 msgid "Align to Left"
 msgstr "Наляво"
 
-#: pcbnew/tools/pcb_actions.cpp:1083
+#: pcbnew/tools/pcb_actions.cpp:1085
 #, fuzzy
 msgid "Aligns selected items to the left edge"
 msgstr "Чертай избраните елементи при преместване"
 
-#: pcbnew/tools/pcb_actions.cpp:1087
+#: pcbnew/tools/pcb_actions.cpp:1089
 #, fuzzy
 msgid "Align to Right"
 msgstr "Надясно"
 
-#: pcbnew/tools/pcb_actions.cpp:1088
+#: pcbnew/tools/pcb_actions.cpp:1090
 msgid "Aligns selected items to the right edge"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1092
+#: pcbnew/tools/pcb_actions.cpp:1094
 #, fuzzy
 msgid "Align to Vertical Center"
 msgstr "Централно"
 
-#: pcbnew/tools/pcb_actions.cpp:1093
+#: pcbnew/tools/pcb_actions.cpp:1095
 msgid "Aligns selected items to the vertical center"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1097
+#: pcbnew/tools/pcb_actions.cpp:1099
 #, fuzzy
 msgid "Align to Horizontal Center"
 msgstr "Централно"
 
-#: pcbnew/tools/pcb_actions.cpp:1098
+#: pcbnew/tools/pcb_actions.cpp:1100
 msgid "Aligns selected items to the horizontal center"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1102
+#: pcbnew/tools/pcb_actions.cpp:1104
 msgid "Distribute Horizontally"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1103
+#: pcbnew/tools/pcb_actions.cpp:1105
 msgid "Distributes selected items along the horizontal axis"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1107
+#: pcbnew/tools/pcb_actions.cpp:1109
 msgid "Distribute Vertically"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1108
+#: pcbnew/tools/pcb_actions.cpp:1110
 msgid "Distributes selected items along the vertical axis"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1140
+#: pcbnew/tools/pcb_actions.cpp:1146
 msgid "Position Relative To..."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1141
+#: pcbnew/tools/pcb_actions.cpp:1147
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1177
+#: pcbnew/tools/pcb_actions.cpp:1184
 #, fuzzy
 msgid "Select/Expand Connection"
 msgstr "Изтрий връзка"
 
-#: pcbnew/tools/pcb_actions.cpp:1178
+#: pcbnew/tools/pcb_actions.cpp:1185
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1183
+#: pcbnew/tools/pcb_actions.cpp:1190
 #, fuzzy
 msgid "Select All Tracks in Net"
 msgstr "Големина на пътечка"
 
-#: pcbnew/tools/pcb_actions.cpp:1184
+#: pcbnew/tools/pcb_actions.cpp:1191
 #, fuzzy
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr ""
 "Установи всички пътечки и прох.отв. в стойности от техния клас на веригите"
 
-#: pcbnew/tools/pcb_actions.cpp:1188
+#: pcbnew/tools/pcb_actions.cpp:1195
 #, fuzzy
 msgid "Deselect All Tracks in Net"
 msgstr "Големина на пътечка"
 
-#: pcbnew/tools/pcb_actions.cpp:1189
+#: pcbnew/tools/pcb_actions.cpp:1196
 #, fuzzy
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr ""
 "Установи всички пътечки и прох.отв. в стойности от техния клас на веригите"
 
-#: pcbnew/tools/pcb_actions.cpp:1194
+#: pcbnew/tools/pcb_actions.cpp:1201
 #, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "Запамети всички листи от схемния проект"
 
-#: pcbnew/tools/pcb_actions.cpp:1199
+#: pcbnew/tools/pcb_actions.cpp:1206
 #, fuzzy
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Йерархичен лист"
 
-#: pcbnew/tools/pcb_actions.cpp:1200
+#: pcbnew/tools/pcb_actions.cpp:1207
 #, fuzzy
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Запамети всички листи от схемния проект"
 
-#: pcbnew/tools/pcb_actions.cpp:1205
+#: pcbnew/tools/pcb_actions.cpp:1212
 #, fuzzy
 msgid "Filter Selected Items..."
 msgstr "Избор на модул:"
 
-#: pcbnew/tools/pcb_actions.cpp:1205
+#: pcbnew/tools/pcb_actions.cpp:1212
 #, fuzzy
 msgid "Remove items from the selection by type"
 msgstr "Увеличи избора"
 
-#: pcbnew/tools/pcb_actions.cpp:1213
+#: pcbnew/tools/pcb_actions.cpp:1220
 #, fuzzy
 msgid "Fill zone(s)"
 msgstr "Заливка на зоните...\n"
 
-#: pcbnew/tools/pcb_actions.cpp:1219
+#: pcbnew/tools/pcb_actions.cpp:1226
 #, fuzzy
 msgid "Fill All"
 msgstr "Запълни всички зони"
 
-#: pcbnew/tools/pcb_actions.cpp:1219
+#: pcbnew/tools/pcb_actions.cpp:1226
 #, fuzzy
 msgid "Fill all zones"
 msgstr "Запълни всички зони"
 
-#: pcbnew/tools/pcb_actions.cpp:1224
+#: pcbnew/tools/pcb_actions.cpp:1231
 msgid "Unfill"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1224
+#: pcbnew/tools/pcb_actions.cpp:1231
 #, fuzzy
 msgid "Unfill zone(s)"
 msgstr "Добавяне на зони"
 
-#: pcbnew/tools/pcb_actions.cpp:1230
+#: pcbnew/tools/pcb_actions.cpp:1237
 msgid "Unfill All"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1230
+#: pcbnew/tools/pcb_actions.cpp:1237
 #, fuzzy
 msgid "Unfill all zones"
 msgstr "Запълни всички зони"
 
-#: pcbnew/tools/pcb_actions.cpp:1238
+#: pcbnew/tools/pcb_actions.cpp:1245
 #, fuzzy
 msgid "Place Selected Footprints"
 msgstr "Преглед на избраните комп.отп."
 
-#: pcbnew/tools/pcb_actions.cpp:1239
+#: pcbnew/tools/pcb_actions.cpp:1246
 #, fuzzy
 msgid "Performs automatic placement of selected components"
 msgstr "Изпълни автоматичен избор на комп.отп."
 
-#: pcbnew/tools/pcb_actions.cpp:1243
+#: pcbnew/tools/pcb_actions.cpp:1250
 #, fuzzy
 msgid "Place Off-Board Footprints"
 msgstr "Печат на комп.отп."
 
-#: pcbnew/tools/pcb_actions.cpp:1244
+#: pcbnew/tools/pcb_actions.cpp:1251
 msgid "Performs automatic placement of components outside board area"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1252
+#: pcbnew/tools/pcb_actions.cpp:1259
 #, fuzzy
 msgid "Route Single Track"
 msgstr "Една страница"
 
-#: pcbnew/tools/pcb_actions.cpp:1252
+#: pcbnew/tools/pcb_actions.cpp:1259
 #, fuzzy
 msgid "Route tracks"
 msgstr "Включи пътечки"
 
-#: pcbnew/tools/pcb_actions.cpp:1259
+#: pcbnew/tools/pcb_actions.cpp:1266
 #, fuzzy
 msgid "Route Differential Pair"
 msgstr "Изтр. на размер"
 
-#: pcbnew/tools/pcb_actions.cpp:1259
+#: pcbnew/tools/pcb_actions.cpp:1266
 #, fuzzy
 msgid "Route differential pairs"
 msgstr "Изтр. на размер"
 
-#: pcbnew/tools/pcb_actions.cpp:1265
+#: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Interactive Router Settings..."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1265
+#: pcbnew/tools/pcb_actions.cpp:1272
 msgid "Open Interactive Router settings"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1270
+#: pcbnew/tools/pcb_actions.cpp:1277
 #, fuzzy
 msgid "Differential Pair Dimensions..."
 msgstr "Изтр. на размер"
 
-#: pcbnew/tools/pcb_actions.cpp:1270
+#: pcbnew/tools/pcb_actions.cpp:1277
 msgid "Open Differential Pair Dimension settings"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1275
+#: pcbnew/tools/pcb_actions.cpp:1282
 #, fuzzy
 msgid "Router Highlight Mode"
 msgstr "Подчертаване на връзка"
 
-#: pcbnew/tools/pcb_actions.cpp:1275
+#: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Switch router to highlight mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1280
+#: pcbnew/tools/pcb_actions.cpp:1287
 #, fuzzy
 msgid "Router Shove Mode"
 msgstr "Автом.опров. на модул"
 
-#: pcbnew/tools/pcb_actions.cpp:1280
+#: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Switch router to shove mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1285
+#: pcbnew/tools/pcb_actions.cpp:1292
 #, fuzzy
 msgid "Router Walkaround Mode"
 msgstr "Маркер намерен"
 
-#: pcbnew/tools/pcb_actions.cpp:1285
+#: pcbnew/tools/pcb_actions.cpp:1292
 msgid "Switch router to walkaround mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1290
+#: pcbnew/tools/pcb_actions.cpp:1297
 #, fuzzy
 msgid "Set Layer Pair..."
 msgstr "Избор на двойка слоеве"
 
-#: pcbnew/tools/pcb_actions.cpp:1290
+#: pcbnew/tools/pcb_actions.cpp:1297
 #, fuzzy
 msgid "Change active layer pair for routing"
 msgstr "Смяна на активния чифт слоеве"
 
-#: pcbnew/tools/pcb_actions.cpp:1297
+#: pcbnew/tools/pcb_actions.cpp:1304
 msgid "Tune length of a single track"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1304
+#: pcbnew/tools/pcb_actions.cpp:1311
 msgid "Tune length of a differential pair"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1311
+#: pcbnew/tools/pcb_actions.cpp:1318
 msgid "Tune skew of a differential pair"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:1320 pcbnew/tools/pcb_actions.cpp:1326
+#: pcbnew/tools/pcb_actions.cpp:1327 pcbnew/tools/pcb_actions.cpp:1333
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
@@ -36201,7 +36346,7 @@ msgstr "Комп. отпечатъци"
 msgid "Restrictions"
 msgstr "връзки"
 
-#: pcbnew/zone.cpp:591 pcbnew/zone.cpp:1403
+#: pcbnew/zone.cpp:591 pcbnew/zone.cpp:1414
 #, fuzzy
 msgid "Priority"
 msgstr "Полярност"
@@ -36251,26 +36396,26 @@ msgstr "Настройки на листов извод"
 msgid "Zone %s on %s"
 msgstr "Зоневи Контур"
 
-#: pcbnew/zone.cpp:1394
+#: pcbnew/zone.cpp:1405
 msgid "Inherited"
 msgstr ""
 
-#: pcbnew/zone.cpp:1412
+#: pcbnew/zone.cpp:1423
 #, fuzzy
 msgid "Min Width"
 msgstr "Ширина на линия"
 
-#: pcbnew/zone.cpp:1415
+#: pcbnew/zone.cpp:1426
 #, fuzzy
 msgid "Pad Connections"
 msgstr "Връзка на конт.пл.:"
 
-#: pcbnew/zone.cpp:1417
+#: pcbnew/zone.cpp:1428
 #, fuzzy
 msgid "Thermal Clearance"
 msgstr "Отстояния на дири...\n"
 
-#: pcbnew/zone.cpp:1420
+#: pcbnew/zone.cpp:1431
 #, fuzzy
 msgid "Thermal Spoke Width"
 msgstr "Термично облекчение"
@@ -36419,6 +36564,10 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "Създаване на печатна платка"
+
+#, fuzzy, c-format
+#~ msgid "Change %s footprint from \"%s\" to \"%s\"."
+#~ msgstr "Покажи обозначенията на комп.отп."
 
 #~ msgid "Empty Text!"
 #~ msgstr "Празен текст!"
@@ -37018,10 +37167,6 @@ msgstr "Създаване на печатна платка"
 #, fuzzy
 #~ msgid "Reset text sizes, styles and positions"
 #~ msgstr "Нулирай съществуващите обозначения"
-
-#, fuzzy
-#~ msgid "Reset fabrication attributes"
-#~ msgstr "Изходи за производство"
 
 #, fuzzy
 #~ msgid "Reset 3D models"
@@ -39962,9 +40107,6 @@ msgstr "Създаване на печатна платка"
 #~ msgid "dPair Width"
 #~ msgstr "Ширина на празнината"
 
-#~ msgid "Aborting\n"
-#~ msgstr "Прекъсване\n"
-
 #, fuzzy
 #~ msgid "Drill clearances...\n"
 #~ msgstr "Отстояния на дири...\n"
@@ -41013,10 +41155,6 @@ msgstr "Създаване на печатна платка"
 #, fuzzy
 #~ msgid "Copy selected content to clipboard"
 #~ msgstr "Копирай 3D изображението в буфера Clipboard"
-
-#, fuzzy
-#~ msgid "Create Pad from Selected Shapes"
-#~ msgstr "Създай PNG файл от екрана"
 
 #~ msgid "Add pads"
 #~ msgstr "Добави конт.пл."
@@ -44410,9 +44548,6 @@ msgstr "Създаване на печатна платка"
 
 #~ msgid "Print Board"
 #~ msgstr "Печат на платката"
-
-#~ msgid "Load Back Annotate File"
-#~ msgstr "Зареди файл обратна анотация"
 
 #~ msgid "Field Display Option"
 #~ msgstr "Опции за изобразяване на поле"

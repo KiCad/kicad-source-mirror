@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-08 13:46-0800\n"
+"POT-Creation-Date: 2021-03-11 08:30-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1847,6 +1847,26 @@ msgstr "Canvas scale:"
 
 msgid "Show icons in menus"
 msgstr "Show icons in menus"
+
+msgid "Icon theme:"
+msgstr "Icon theme:"
+
+msgid "Light"
+msgstr "Light"
+
+msgid "Use icons designed for light window backgrounds"
+msgstr "Use icons designed for light window backgrounds"
+
+msgid "Dark"
+msgstr "Dark"
+
+msgid "Use icons designed for dark window backgrounds"
+msgstr "Use icons designed for dark window backgrounds"
+
+msgid ""
+"Automatically choose light or dark icons based on the system color theme"
+msgstr ""
+"Automatically choose light or dark icons based on the system color theme"
 
 msgid "Editing"
 msgstr "Editing"
@@ -8369,6 +8389,29 @@ msgstr ""
 msgid "Do not show this dialog again."
 msgstr "Do not show this dialog again."
 
+#, c-format
+msgid "The project symbol library cache file '%s' was not found."
+msgstr "The project symbol library cache file '%s' was not found."
+
+msgid ""
+"This can result in a broken schematic under certain conditions.  If the "
+"schematic does not have any missing symbols upon opening, save it "
+"immediately before making any changes to prevent data loss.  If there are "
+"missing symbols, either manual recovery of the schematic or recovery of the "
+"symbol cache library file and reloading the schematic is required."
+msgstr ""
+"This can result in a broken schematic under certain conditions.  If the "
+"schematic does not have any missing symbols upon opening, save it "
+"immediately before making any changes to prevent data loss.  If there are "
+"missing symbols, either manual recovery of the schematic or recovery of the "
+"symbol cache library file and reloading the schematic is required."
+
+msgid "Load Without Cache File"
+msgstr "Load Without Cache File"
+
+msgid "Abort"
+msgstr "Abort"
+
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -8802,8 +8845,8 @@ msgstr "<root sheet>"
 msgid "Go to Page %s (%s)"
 msgstr "Go to Page %s (%s)"
 
-msgid "Back"
-msgstr "Back"
+msgid "Back to Previous Selected Sheet"
+msgstr "Back to Previous Selected Sheet"
 
 msgid "Intersheet References"
 msgstr "Intersheet References"
@@ -11859,9 +11902,6 @@ msgstr "Graphic Layer"
 msgid "Clear"
 msgstr "Clear"
 
-msgid "Dark"
-msgstr "Dark"
-
 msgid "Polarity"
 msgstr "Polarity"
 
@@ -11926,12 +11966,12 @@ msgstr "KiCad Gerber Viewer"
 msgid "Layers Manager"
 msgstr "Layers Manager"
 
+msgid "Gerber Viewer"
+msgstr "Gerber Viewer"
+
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Drawing layer %d not in use"
-
-msgid "Gerber Viewer"
-msgstr "Gerber Viewer"
 
 msgid "(with X2 attributes)"
 msgstr "(with X2 attributes)"
@@ -14805,6 +14845,9 @@ msgstr "Reannotate:"
 
 msgid "Front"
 msgstr "Front"
+
+msgid "Back"
+msgstr "Back"
 
 msgid "Update schematic"
 msgstr "Update schematic"
@@ -20995,6 +21038,10 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "Add %s (footprint “%s”)."
 
 #, c-format
+msgid "Added %s (footprint \"%s\")."
+msgstr "Added %s (footprint \"%s\")."
+
+#, c-format
 msgid "Cannot update %s (no footprint assigned)."
 msgstr "Cannot update %s (no footprint assigned)."
 
@@ -21003,40 +21050,68 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Cannot update %s (footprint “%s” not found)."
 
 #, c-format
-msgid "Change %s footprint from \"%s\" to \"%s\"."
-msgstr "Change %s footprint from “%s” to “%s”."
+msgid "Change %s footprint from '%s' to '%s'."
+msgstr "Change %s footprint from '%s' to '%s'."
+
+#, c-format
+msgid "Changed %s footprint from '%s' to '%s'."
+msgstr "Changed %s footprint from '%s' to '%s'."
 
 #, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Change %s reference designator to %s."
 
 #, c-format
+msgid "Changed %s reference designator to %s."
+msgstr "Changed %s reference designator to %s."
+
+#, c-format
 msgid "Change %s value from %s to %s."
 msgstr "Change %s value from %s to %s."
+
+#, c-format
+msgid "Changed %s value from %s to %s."
+msgstr "Changed %s value from %s to %s."
 
 #, c-format
 msgid "Update %s symbol association from %s to %s."
 msgstr "Update %s symbol association from %s to %s."
 
 #, c-format
+msgid "Updated %s symbol association from %s to %s."
+msgstr "Updated %s symbol association from %s to %s."
+
+#, c-format
 msgid "Update %s properties."
 msgstr "Update %s properties."
 
 #, c-format
-msgid "Setting %s 'exclude from BOM' fabrication attribute."
-msgstr "Setting %s 'exclude from BOM' fabrication attribute."
+msgid "Updated %s properties."
+msgstr "Updated %s properties."
 
 #, c-format
-msgid "Removing %s 'exclude from BOM' fabrication attribute."
-msgstr "Removing %s 'exclude from BOM' fabrication attribute."
+msgid "Set %s 'exclude from BOM' fabrication attribute."
+msgstr "Set %s 'exclude from BOM' fabrication attribute."
+
+#, c-format
+msgid "Remove %s 'exclude from BOM' fabrication attribute."
+msgstr "Remove %s 'exclude from BOM' fabrication attribute."
+
+#, c-format
+msgid "Removed %s 'exclude from BOM' fabrication attribute."
+msgstr "Removed %s 'exclude from BOM' fabrication attribute."
 
 #, c-format
 msgid "Disconnect %s pin %s."
 msgstr "Disconnect %s pin %s."
 
 #, c-format
-msgid "No net for symbol %s pin %s."
-msgstr "No net for symbol %s pin %s."
+msgid "Disconnected %s pin %s."
+msgstr "Disconnected %s pin %s."
+
+#, c-format
+msgid "No net found for symbol %s pin %s."
+msgstr "No net found for symbol %s pin %s."
 
 #, c-format
 msgid "Add net %s."
@@ -21047,28 +21122,60 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Reconnect %s pin %s from %s to %s."
 
 #, c-format
+msgid "Reconnected %s pin %s from %s to %s."
+msgstr "Reconnected %s pin %s from %s to %s."
+
+#, c-format
 msgid "Connect %s pin %s to %s."
 msgstr "Connect %s pin %s to %s."
+
+#, c-format
+msgid "Connected %s pin %s to %s."
+msgstr "Connected %s pin %s to %s."
 
 #, c-format
 msgid "Reconnect via from %s to %s."
 msgstr "Reconnect via from %s to %s."
 
 #, c-format
+msgid "Reconnected via from %s to %s."
+msgstr "Reconnected via from %s to %s."
+
+#, c-format
 msgid "Via connected to unknown net (%s)."
 msgstr "Via connected to unknown net (%s)."
+
+#, c-format
+msgid "Reconnect copper zone '%s' from %s to %s."
+msgstr "Reconnect copper zone '%s' from %s to %s."
 
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "Reconnect copper zone from %s to %s."
 
 #, c-format
-msgid "Copper zone (%s) has no pads connected."
-msgstr "Copper zone (%s) has no pads connected."
+msgid "Reconnected copper zone '%s' from %s to %s."
+msgstr "Reconnected copper zone '%s' from %s to %s."
+
+#, c-format
+msgid "Reconnected copper zone from %s to %s."
+msgstr "Reconnected copper zone from %s to %s."
+
+#, c-format
+msgid "Copper zone '%s' has no pads connected."
+msgstr "Copper zone '%s' has no pads connected."
+
+#, c-format
+msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
 
 #, c-format
 msgid "Remove single pad net %s."
 msgstr "Remove single pad net %s."
+
+#, c-format
+msgid "Removed single pad net %s."
+msgstr "Removed single pad net %s."
 
 #, c-format
 msgid "%s pad %s not found in %s."
@@ -21087,12 +21194,20 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Cannot remove unused footprint %s (locked)."
 
 #, c-format
+msgid "Could not remove unused footprint %s (locked)."
+msgstr "Could not remove unused footprint %s (locked)."
+
+#, c-format
 msgid "Remove unused footprint %s."
 msgstr "Remove unused footprint %s."
 
 #, c-format
-msgid "Remove unused net \"%s\"."
-msgstr "Remove unused net \"%s\"."
+msgid "Removed unused footprint %s."
+msgstr "Removed unused footprint %s."
+
+#, c-format
+msgid "Removed unused net %s."
+msgstr "Removed unused net %s."
 
 msgid "Update netlist"
 msgstr "Update netlist"
@@ -24950,6 +25065,30 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid "Change %s footprint from \"%s\" to \"%s\"."
+#~ msgstr "Change %s footprint from “%s” to “%s”."
+
+#, c-format
+#~ msgid "Setting %s 'exclude from BOM' fabrication attribute."
+#~ msgstr "Setting %s 'exclude from BOM' fabrication attribute."
+
+#, c-format
+#~ msgid "Removing %s 'exclude from BOM' fabrication attribute."
+#~ msgstr "Removing %s 'exclude from BOM' fabrication attribute."
+
+#, c-format
+#~ msgid "No net for symbol %s pin %s."
+#~ msgstr "No net for symbol %s pin %s."
+
+#, c-format
+#~ msgid "Copper zone (%s) has no pads connected."
+#~ msgstr "Copper zone (%s) has no pads connected."
+
+#, c-format
+#~ msgid "Remove unused net \"%s\"."
+#~ msgstr "Remove unused net \"%s\"."
 
 #~ msgid "Select Preferred PDF Browser"
 #~ msgstr "Select Preferred PDF Browser"
