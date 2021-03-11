@@ -53,6 +53,7 @@ Linux install tree
   ${prefix}/share/kicad/library            - Symbol libraries.
   ${prefix}/share/kicad/modules            - Module libraries for printed boards.
   ${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
+  ${prefix}/share/kicad/resources          - Resource files (images, etc).
 
   KiCad searches for the libraries, templates, 3D models, etc. bin/../share.
 

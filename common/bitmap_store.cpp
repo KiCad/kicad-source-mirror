@@ -148,6 +148,9 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 
         if( count < 0 )
         {
+            wxLogTrace( traceBitmaps, "Bitmap for %d, %d, %s has an info tag with file %s,"
+                        "but that file could not be found in the archive!",
+                        aBitmapId, aHeight, m_theme );
             data  = s_imageNotFound;
             count = sizeof( s_imageNotFound );
         }

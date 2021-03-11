@@ -23,22 +23,20 @@
 
 # In this directory, a number of different processes are managed:
 #
-# 1) PNG files are created from SVG files
-# 2) CPP files are created from PNG files.
-# 3) Object files are created from CPP files.
-# 4) A static library is created from the object files
+# 1) PNG files are created from SVG files for each icon theme and needed bitmap resolution
+# 2) An images.tar.gz file is created from all the PNG files
 
-# Step 3) is universal and is done for any builder, whereas steps 1) and 2) are
+# Step 2) is universal and is done for any builder, whereas step 1) is
 # optional and depend on MAINTAIN_PNGS being defined in CMake.  The reason we
-# can skip 1) and 2) is that the *.CPP files are part of the source tree so
-# do not need to rebuilt by a typical builder.  However, because the *.CPP files
+# can skip 1) is that the *.PNG files are part of the source tree so
+# do not need to rebuilt by a typical builder.  However, because the *.PNG files
 # are part of the source tree, and subject to version control, they should be built
 # only when needed, otherwise this results in a diff for the version control system.
-# Therefore steps 1) and 2) are driven by CMake (if MAINTAIN_PNGS) which gives
-# us conditional *.CPP building based on an edit to the respective *.SVG file.
+# Therefore step 1) is driven by CMake (if MAINTAIN_PNGS) which gives
+# us conditional *.PNG building based on an edit to the respective *.SVG file.
 
 # If MAINTAIN_PNGS is not defined, then you are a normal builder and no special
-# tools are required.  If MAINTAIN_PNG is defined, then you are a PNG maintainer
+# tools are required.  If MAINTAIN_PNGS is defined, then you are a PNG maintainer
 # and will need the following tools findable in your PATH:
 #
 # 1) inkscape - command line mode is used, must be on your PATH
@@ -54,6 +52,7 @@ option( MAINTAIN_PNGS
 # Used Only to maintain PNG files (and therefore to recreate .cpp files)
 # The png2cpp creates files with native End of Line format.
 
+# List of themes - each corresponds to a folder of SVGS in ./bitmaps_png/sources/
 set( THEMES
     light
     dark )
@@ -608,17 +607,24 @@ function( svg2png inputFile outFile pngWidth pngHeight )
         set( logfile "null" )
     endif()
 
+    if( ${pngWidth} EQUAL -1 )
+        set( sizeArgs --export-area-page )
+    else()
+        set( sizeArgs -w ${pngWidth} -h ${pngHeight} )
+    endif()
+
     add_custom_command(
         OUTPUT ${outFile}
         # this Inkscape command line is for old Inkscape version < 1.0
         # COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile} -w ${pngWidth} -h ${pngHeight} > ${logfile}
 
         # this Inkscape command line is for Inkscape >= 1.0
-        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type="png" ${inputFile} --export-filename ${outFile}
-            -w ${pngWidth} -h ${pngHeight} > ${logfile}
+        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type=png ${inputFile}
+                --export-filename ${outFile} ${sizeArgs} > ${logfile}
 
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
+        VERBATIM
         )
 endfunction()
 
@@ -661,8 +667,10 @@ endfunction()
 
 
 # Function bitmap_dir
-# converts all the basenames in bmapList found in hardcoded 'sources' dir
-# and and puts them into cpp_${pngHeight} and png_${pngHeight} directories.
+# Creates build targets for all the source SVGs in the given list, output at the given resolution
+# Will create targets for each theme in the THEMES list.
+# A height of -1 means to export with the page area rather than scaling to a given resolution.
+# This is used for the BMAPS_OTHER list which have varying output sizes.
 function( bitmap_dir pngWidth pngHeight bmapList )
 
     set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png" )
@@ -679,10 +687,16 @@ function( bitmap_dir pngWidth pngHeight bmapList )
             set( themeTag "" )
         endif()
 
+        if( ${pngHeight} EQUAL -1 )
+            set( heightTag "" )
+        else()
+            set( heightTag "_${pngHeight}" )
+        endif()
+
         foreach( bmn ${bmapList} )
 
             set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/${bmn}.svg" )
-            set( pngFile "${bmn}${themeTag}_${pngHeight}.png" )
+            set( pngFile "${bmn}${themeTag}${heightTag}.png" )
             set( pngPath "${pngDir}/${pngFile}" )
             set( tmpFile "${TMP_DIR}/${pngFile}" )
 
@@ -794,6 +808,8 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 128 128 "${BMAPS_128}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
+
+    bitmap_dir( -1 -1 "${BMAPS_OTHER}" )
 
     configure_file( ${BITMAP_INFO_TEMPLATE} ${BITMAP_INFO_FILE}  NEWLINE_STYLE UNIX )
 
