@@ -186,7 +186,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
             graphic->SetShape( S_POLYGON );
-            graphic->SetFilled( destLayer != Edge_Cuts );
+            graphic->SetFilled( false );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
