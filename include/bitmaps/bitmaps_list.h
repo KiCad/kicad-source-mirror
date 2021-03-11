@@ -561,4 +561,7 @@ enum class BITMAPS : unsigned int
     sim_add_signal
 };
 
+
+inline bool operator!( const BITMAPS& aBitmap ) { return aBitmap == BITMAPS::INVALID_BITMAP; }
+
 #endif // BITMAPS_PNG_BITMAPS_LIST__H

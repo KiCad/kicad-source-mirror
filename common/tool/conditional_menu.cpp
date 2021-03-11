@@ -66,7 +66,7 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
 {
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
 
-    if( aIcon != BITMAPS::INVALID_BITMAP )
+    if( !!aIcon )
         AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
@@ -79,7 +79,7 @@ void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxStr
 {
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
-    if( aIcon != BITMAPS::INVALID_BITMAP )
+    if( !!aIcon )
         AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, true ) );
@@ -160,7 +160,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                                            entry.wxItem()->GetHelp(),
                                            entry.wxItem()->GetKind() );
 
-                if( entry.GetIcon() != BITMAPS::INVALID_BITMAP )
+                if( !!entry.GetIcon() )
                     AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );
 
                 // the wxMenuItem must be append only after the bitmap is set:

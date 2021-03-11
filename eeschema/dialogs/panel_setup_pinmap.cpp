@@ -180,7 +180,7 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_E
         break;
     }
 
-    if( bitmap_butt != BITMAPS::INVALID_BITMAP )
+    if( !!bitmap_butt )
     {
         aButton->SetBitmap( KiBitmap( bitmap_butt ) );
         aButton->SetToolTip( tooltip );

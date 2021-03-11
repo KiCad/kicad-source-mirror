@@ -126,7 +126,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
             InsertSeparator( 0 );
             Insert( 0, new wxMenuItem( this, wxID_NONE, m_title, wxEmptyString, wxITEM_NORMAL ) );
 
-            if( m_icon != BITMAPS::INVALID_BITMAP )
+            if( !!m_icon )
                 AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmap( m_icon ) );
 
             m_titleDisplayed = true;
@@ -141,7 +141,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, BITMAPS aIcon )
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
 
-    if( aIcon != BITMAPS::INVALID_BITMAP )
+    if( !!aIcon )
         AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
@@ -156,7 +156,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip,
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
-    if( aIcon != BITMAPS::INVALID_BITMAP )
+    if( !!aIcon )
         AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
@@ -171,7 +171,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), aAction.GetMenuItem(),
                                        aAction.GetDescription(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
-    if( icon != BITMAPS::INVALID_BITMAP )
+    if( !!icon )
         AddBitmapToMenuItem( item, KiBitmap( icon ) );
 
     m_toolActions[aAction.GetUIId()] = &aAction;
@@ -187,7 +187,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
 
     wxASSERT_MSG( !menuCopy->m_title.IsEmpty(), "Set a title for ACTION_MENU using SetTitle()" );
 
-    if( aMenu->m_icon != BITMAPS::INVALID_BITMAP )
+    if( !!aMenu->m_icon )
     {
         wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
         AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );

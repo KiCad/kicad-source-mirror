@@ -594,7 +594,8 @@ set( TMP_DIR   "${CMAKE_CURRENT_BINARY_DIR}/tmp" )
 set( CREATE_LOG_FILES true )
 
 set( BITMAP_INFO_FILE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h" )
-set( BITMAP_INFO_TEMP_FILE ${TMP_DIR}/bitmap_info_contents.h )
+set( BITMAP_INFO_TEMPLATE "${CMAKE_SOURCE_DIR}/include/bitmaps/bitmap_info.h.in" )
+set( BITMAP_INFO_LIST "" )
 
 set( ALL_PNGS "" )
 
@@ -662,7 +663,7 @@ endfunction()
 # Function bitmap_dir
 # converts all the basenames in bmapList found in hardcoded 'sources' dir
 # and and puts them into cpp_${pngHeight} and png_${pngHeight} directories.
-function( bitmap_dir pngWidth pngHeight bmapList theme )
+function( bitmap_dir pngWidth pngHeight bmapList )
 
     set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png" )
 
@@ -686,6 +687,7 @@ function( bitmap_dir pngWidth pngHeight bmapList theme )
             set( tmpFile "${TMP_DIR}/${pngFile}" )
 
             if( NOT EXISTS ${svgFile} )
+                message( "Warning: Source SVG ${svgFile} does not exist!" )
                 continue()
             endif()
 
@@ -695,31 +697,20 @@ function( bitmap_dir pngWidth pngHeight bmapList theme )
             #png2png( inputFile outFile )
             png2png( ${tmpFile} ${pngPath} )
 
-            set( bitmapInfo "    { BITMAPS::${bmn}, wxT( \"${pngFile}\" ), "
-                            "${pngHeight}, wxT( \"${theme}\" ) },\n" )
-            file( APPEND ${BITMAP_INFO_TEMP_FILE} ${bitmapInfo} )
+            set( bitmapInfo
+            "    { BITMAPS::${bmn}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) },\n"
+            )
+
+            set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )
             list( APPEND ALL_PNGS ${pngPath} )
         endforeach()
     endforeach()
 
     set( ALL_PNGS ${ALL_PNGS} PARENT_SCOPE )
+    set( BITMAP_INFO_LIST ${BITMAP_INFO_LIST} PARENT_SCOPE )
 
 endfunction()
 
-
-# Creates the bitmap_info header file after creating all PNGs
-function( generate_bitmap_info inputFile outputFile )
-    add_custom_command(
-            OUTPUT  ${outputFile}
-
-            COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutputFile=${outputFile}
-                -P ${CMAKE_MODULE_PATH}/BuildSteps/CreateBitmapInfo.cmake
-
-            DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/BuildSteps/CreateBitmapInfo.cmake
-            COMMENT "Creating ${outputFile}"
-            VERBATIM
-    )
-endfunction()
 
 include( FindUnixCommands )
 
@@ -787,43 +778,30 @@ if( MAINTAIN_PNGS )
         endif( NOT pngcrush_EXECUTABLE )
     endif( NOT pngcrush_FOUND )
 
-    if( NOT KICAD_ICON_THEME )
-        set( KICAD_ICON_THEME "light" CACHE STRING "Name of the theme directory for icon sources" )
-    endif()
-
-    message( STATUS "Creating icons for ${KICAD_ICON_THEME} theme" )
-
-    file( WRITE ${BITMAP_INFO_TEMP_FILE} )
-
     # these 3 cmake commands for each desired bitmap size set, repeat as needed:
-    bitmap_dir( 16 16 "${BMAPS_SMALL}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 16 16 "${BMAPS_SMALL}" )
 
-    bitmap_dir( 24 24 "${BMAPS_MID}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 24 24 "${BMAPS_MID}" )
 
-    bitmap_dir( 32 32 "${BMAPS_32}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 32 32 "${BMAPS_32}" )
 
-    bitmap_dir( 22 22 "${BMAPS_22}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 22 22 "${BMAPS_22}" )
 
-    bitmap_dir( 24 24 "${BMAPS_24}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 24 24 "${BMAPS_24}" )
 
-    bitmap_dir( 64 64 "${BMAPS_64}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 64 64 "${BMAPS_64}" )
 
-    bitmap_dir( 128 128 "${BMAPS_128}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 128 128 "${BMAPS_128}" )
 
-    bitmap_dir( 48 48 "${BMAPS_BIG}" ${KICAD_ICON_THEME} )
+    bitmap_dir( 48 48 "${BMAPS_BIG}" )
 
-    generate_bitmap_info( ${BITMAP_INFO_TEMP_FILE} ${BITMAP_INFO_FILE} )
+    configure_file( ${BITMAP_INFO_TEMPLATE} ${BITMAP_INFO_FILE}  NEWLINE_STYLE UNIX )
 
     add_custom_target( generate_pngs ALL
         DEPENDS ${ALL_PNGS}
         COMMENT "Creating PNGs from SVGs"
         )
 
-    add_custom_target( bitmap_info ALL
-        DEPENDS ${BITMAP_INFO_FILE}
-        COMMENT "Creating bitmap_info header"
-        )
-
-    add_dependencies( bitmap_archive generate_pngs bitmap_info )
+    add_dependencies( bitmap_archive generate_pngs )
 
 endif( MAINTAIN_PNGS )
