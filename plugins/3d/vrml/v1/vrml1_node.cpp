@@ -94,46 +94,46 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 {
     m_sgNode = NULL;
     m_Parent = NULL;
-    m_Type = WRL1_END;
+    m_Type = WRL1NODES::WRL1_END;
     m_dictionary = aDictionary;
 
     if( nodenames.empty() )
     {
-        nodenames.insert( NODEITEM( "AsciiText", WRL1_ASCIITEXT ) );
-        nodenames.insert( NODEITEM( "Cone", WRL1_CONE ) );
-        nodenames.insert( NODEITEM( "Coordinate3", WRL1_COORDINATE3 ) );
-        nodenames.insert( NODEITEM( "Cube", WRL1_CUBE ) );
-        nodenames.insert( NODEITEM( "Cylinder", WRL1_CYLINDER ) );
-        nodenames.insert( NODEITEM( "DirectionalLight", WRL1_DIRECTIONALLIGHT ) );
-        nodenames.insert( NODEITEM( "FontStyle", WRL1_FONTSTYLE ) );
-        nodenames.insert( NODEITEM( "Group", WRL1_GROUP ) );
-        nodenames.insert( NODEITEM( "IndexedFaceSet", WRL1_INDEXEDFACESET ) );
-        nodenames.insert( NODEITEM( "IndexedLineSet", WRL1_INDEXEDLINESET ) );
-        nodenames.insert( NODEITEM( "Info", WRL1_INFO ) );
-        nodenames.insert( NODEITEM( "LOD", WRL1_LOD ) );
-        nodenames.insert( NODEITEM( "Material", WRL1_MATERIAL ) );
-        nodenames.insert( NODEITEM( "MaterialBinding", WRL1_MATERIALBINDING ) );
-        nodenames.insert( NODEITEM( "MatrixTransform", WRL1_MATRIXTRANSFORM ) );
-        nodenames.insert( NODEITEM( "Normal", WRL1_NORMAL ) );
-        nodenames.insert( NODEITEM( "NormalBinding", WRL1_NORMALBINDING ) );
-        nodenames.insert( NODEITEM( "OrthographicCamera", WRL1_ORTHOCAMERA ) );
-        nodenames.insert( NODEITEM( "PerspectiveCamera", WRL1_PERSPECTIVECAMERA ) );
-        nodenames.insert( NODEITEM( "PointLight", WRL1_POINTLIGHT ) );
-        nodenames.insert( NODEITEM( "PointSet", WRL1_POINTSET ) );
-        nodenames.insert( NODEITEM( "Rotation", WRL1_ROTATION ) );
-        nodenames.insert( NODEITEM( "Scale", WRL1_SCALE ) );
-        nodenames.insert( NODEITEM( "Separator", WRL1_SEPARATOR ) );
-        nodenames.insert( NODEITEM( "ShapeHints", WRL1_SHAPEHINTS ) );
-        nodenames.insert( NODEITEM( "Sphere", WRL1_SPHERE ) );
-        nodenames.insert( NODEITEM( "SpotLight", WRL1_SPOTLIGHT ) );
-        nodenames.insert( NODEITEM( "Switch", WRL1_SWITCH ) );
-        nodenames.insert( NODEITEM( "Texture2", WRL1_TEXTURE2 ) );
-        nodenames.insert( NODEITEM( "Testure2Transform", WRL1_TEXTURE2TRANSFORM ) );
-        nodenames.insert( NODEITEM( "TextureCoordinate2", WRL1_TEXTURECOORDINATE2 ) );
-        nodenames.insert( NODEITEM( "Transform", WRL1_TRANSFORM ) );
-        nodenames.insert( NODEITEM( "Translation", WRL1_TRANSLATION ) );
-        nodenames.insert( NODEITEM( "WWWAnchor", WRL1_WWWANCHOR ) );
-        nodenames.insert( NODEITEM( "WWWInline", WRL1_WWWINLINE ) );
+        nodenames.insert( NODEITEM( "AsciiText", WRL1NODES::WRL1_ASCIITEXT ) );
+        nodenames.insert( NODEITEM( "Cone", WRL1NODES::WRL1_CONE ) );
+        nodenames.insert( NODEITEM( "Coordinate3", WRL1NODES::WRL1_COORDINATE3 ) );
+        nodenames.insert( NODEITEM( "Cube", WRL1NODES::WRL1_CUBE ) );
+        nodenames.insert( NODEITEM( "Cylinder", WRL1NODES::WRL1_CYLINDER ) );
+        nodenames.insert( NODEITEM( "DirectionalLight", WRL1NODES::WRL1_DIRECTIONALLIGHT ) );
+        nodenames.insert( NODEITEM( "FontStyle", WRL1NODES::WRL1_FONTSTYLE ) );
+        nodenames.insert( NODEITEM( "Group", WRL1NODES::WRL1_GROUP ) );
+        nodenames.insert( NODEITEM( "IndexedFaceSet", WRL1NODES::WRL1_INDEXEDFACESET ) );
+        nodenames.insert( NODEITEM( "IndexedLineSet", WRL1NODES::WRL1_INDEXEDLINESET ) );
+        nodenames.insert( NODEITEM( "Info", WRL1NODES::WRL1_INFO ) );
+        nodenames.insert( NODEITEM( "LOD", WRL1NODES::WRL1_LOD ) );
+        nodenames.insert( NODEITEM( "Material", WRL1NODES::WRL1_MATERIAL ) );
+        nodenames.insert( NODEITEM( "MaterialBinding", WRL1NODES::WRL1_MATERIALBINDING ) );
+        nodenames.insert( NODEITEM( "MatrixTransform", WRL1NODES::WRL1_MATRIXTRANSFORM ) );
+        nodenames.insert( NODEITEM( "Normal", WRL1NODES::WRL1_NORMAL ) );
+        nodenames.insert( NODEITEM( "NormalBinding", WRL1NODES::WRL1_NORMALBINDING ) );
+        nodenames.insert( NODEITEM( "OrthographicCamera", WRL1NODES::WRL1_ORTHOCAMERA ) );
+        nodenames.insert( NODEITEM( "PerspectiveCamera", WRL1NODES::WRL1_PERSPECTIVECAMERA ) );
+        nodenames.insert( NODEITEM( "PointLight", WRL1NODES::WRL1_POINTLIGHT ) );
+        nodenames.insert( NODEITEM( "PointSet", WRL1NODES::WRL1_POINTSET ) );
+        nodenames.insert( NODEITEM( "Rotation", WRL1NODES::WRL1_ROTATION ) );
+        nodenames.insert( NODEITEM( "Scale", WRL1NODES::WRL1_SCALE ) );
+        nodenames.insert( NODEITEM( "Separator", WRL1NODES::WRL1_SEPARATOR ) );
+        nodenames.insert( NODEITEM( "ShapeHints", WRL1NODES::WRL1_SHAPEHINTS ) );
+        nodenames.insert( NODEITEM( "Sphere", WRL1NODES::WRL1_SPHERE ) );
+        nodenames.insert( NODEITEM( "SpotLight", WRL1NODES::WRL1_SPOTLIGHT ) );
+        nodenames.insert( NODEITEM( "Switch", WRL1NODES::WRL1_SWITCH ) );
+        nodenames.insert( NODEITEM( "Texture2", WRL1NODES::WRL1_TEXTURE2 ) );
+        nodenames.insert( NODEITEM( "Testure2Transform", WRL1NODES::WRL1_TEXTURE2TRANSFORM ) );
+        nodenames.insert( NODEITEM( "TextureCoordinate2", WRL1NODES::WRL1_TEXTURECOORDINATE2 ) );
+        nodenames.insert( NODEITEM( "Transform", WRL1NODES::WRL1_TRANSFORM ) );
+        nodenames.insert( NODEITEM( "Translation", WRL1NODES::WRL1_TRANSLATION ) );
+        nodenames.insert( NODEITEM( "WWWAnchor", WRL1NODES::WRL1_WWWANCHOR ) );
+        nodenames.insert( NODEITEM( "WWWInline", WRL1NODES::WRL1_WWWINLINE ) );
     }
 
     return;
@@ -252,7 +252,7 @@ void WRL1NODE::cancelDict( void )
         ++sC;
     }
 
-    if( m_Type == WRL1_BASE && NULL != m_dictionary )
+    if( m_Type == WRL1NODES::WRL1_BASE && NULL != m_dictionary )
         delete m_dictionary;
 
     m_dictionary = NULL;
@@ -377,14 +377,14 @@ bool WRL1NODE::SetName( const std::string& aName )
 
 const char* WRL1NODE::GetNodeTypeName( WRL1NODES aNodeType ) const
 {
-    if( aNodeType < WRL1_BASE || aNodeType >= WRL1_END )
+    if( aNodeType < WRL1NODES::WRL1_BASE || aNodeType >= WRL1NODES::WRL1_END )
         return "*INVALID_TYPE*";
 
-    if( aNodeType == WRL1_BASE )
+    if( aNodeType == WRL1NODES::WRL1_BASE )
         return "*VIRTUAL_BASE*";
 
     NODEMAP::iterator it = nodenames.begin();
-    advance( it, (aNodeType - WRL1_BEGIN) );
+    advance( it, ( static_cast<int>( aNodeType  ) - static_cast<int>( WRL1NODES::WRL1_BEGIN ) ) );
 
     return it->first.c_str();
 }
@@ -397,7 +397,7 @@ WRL1NODES WRL1NODE::getNodeTypeID( const std::string& aNodeName )
     if( nodenames.end() != it )
         return it->second;
 
-    return WRL1_INVALID;
+    return WRL1NODES::WRL1_INVALID;
 }
 
 
@@ -441,7 +441,7 @@ bool WRL1NODE::SetParent( WRL1NODE* aParent, bool doUnlink )
 
 bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
 {
-    if( aNode->GetNodeType() == WRL1_BASE )
+    if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
     {
         #ifdef DEBUG_VRML1
         do {
@@ -492,7 +492,7 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
         return false;
     }
 
-    if( aNode->GetNodeType() == WRL1_BASE )
+    if( aNode->GetNodeType() == WRL1NODES::WRL1_BASE )
     {
         #ifdef DEBUG_VRML1
         do {

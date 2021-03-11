@@ -49,7 +49,7 @@ enum class WRLVERSION
 // These are used to look up node names and to quickly
 // determine what routine to invoke to read a section of
 // a file.
-enum WRL1NODES
+enum class WRL1NODES
 {
     WRL1_BASE = 0,  // not really a VRML node but we need a top level virtual node
     WRL1_BEGIN,

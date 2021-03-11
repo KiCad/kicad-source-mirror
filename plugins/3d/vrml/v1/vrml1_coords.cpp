@@ -32,7 +32,7 @@
 
 WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_COORDINATE3;
+    m_Type = WRL1NODES::WRL1_COORDINATE3;
     return;
 }
 
@@ -40,7 +40,7 @@ WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 WRL1COORDS::WRL1COORDS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_COORDINATE3;
+    m_Type = WRL1NODES::WRL1_COORDINATE3;
     m_Parent = aParent;
 
     if( NULL != m_Parent )

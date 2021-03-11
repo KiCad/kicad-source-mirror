@@ -33,7 +33,7 @@
 
 WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SWITCH;
+    m_Type = WRL1NODES::WRL1_SWITCH;
     whichChild = -1;
 
     return;
@@ -43,7 +43,7 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SWITCH;
+    m_Type = WRL1NODES::WRL1_SWITCH;
     m_Parent = aParent;
     whichChild = -1;
 

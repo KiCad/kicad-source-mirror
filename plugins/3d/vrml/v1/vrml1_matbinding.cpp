@@ -34,7 +34,7 @@
 WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
     m_binding = WRL1_BINDING::BIND_OVERALL;
-    m_Type = WRL1_MATERIALBINDING;
+    m_Type = WRL1NODES::WRL1_MATERIALBINDING;
     return;
 }
 
@@ -43,7 +43,7 @@ WRL1MATBINDING::WRL1MATBINDING( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
     m_binding = WRL1_BINDING::BIND_OVERALL;
-    m_Type = WRL1_MATERIALBINDING;
+    m_Type = WRL1NODES::WRL1_MATERIALBINDING;
     m_Parent = aParent;
 
     if( NULL != m_Parent )

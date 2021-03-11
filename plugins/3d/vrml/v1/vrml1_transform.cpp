@@ -32,7 +32,7 @@
 
 WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_TRANSFORM;
+    m_Type = WRL1NODES::WRL1_TRANSFORM;
     return;
 }
 
@@ -40,7 +40,7 @@ WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionar
 WRL1TRANSFORM::WRL1TRANSFORM( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_TRANSFORM;
+    m_Type = WRL1NODES::WRL1_TRANSFORM;
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -346,7 +346,7 @@ SGNODE* WRL1TRANSFORM::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     if( NULL == m_Parent )
         return NULL;
 
-    if( WRL1_BASE == m_Parent->GetNodeType() )
+    if( WRL1NODES::WRL1_BASE == m_Parent->GetNodeType() )
         return NULL;
 
     if( NULL == sp )

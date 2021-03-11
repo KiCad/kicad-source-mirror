@@ -32,7 +32,7 @@
 
 WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SEPARATOR;
+    m_Type = WRL1NODES::WRL1_SEPARATOR;
     return;
 }
 
@@ -40,7 +40,7 @@ WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionar
 WRL1SEPARATOR::WRL1SEPARATOR( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_SEPARATOR;
+    m_Type = WRL1NODES::WRL1_SEPARATOR;
     m_Parent = aParent;
 
     if( NULL != m_Parent )

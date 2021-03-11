@@ -35,7 +35,7 @@ WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary 
 {
     colors[0] = NULL;
     colors[1] = NULL;
-    m_Type = WRL1_MATERIAL;
+    m_Type = WRL1NODES::WRL1_MATERIAL;
     return;
 }
 
@@ -45,7 +45,7 @@ WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 {
     colors[0] = NULL;
     colors[1] = NULL;
-    m_Type = WRL1_MATERIAL;
+    m_Type = WRL1NODES::WRL1_MATERIAL;
     m_Parent = aParent;
 
     if( NULL != m_Parent )

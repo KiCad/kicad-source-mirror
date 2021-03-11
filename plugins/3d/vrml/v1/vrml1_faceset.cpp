@@ -36,7 +36,7 @@
 
 WRL1FACESET::WRL1FACESET( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_INDEXEDFACESET;
+    m_Type = WRL1NODES::WRL1_INDEXEDFACESET;
 
     return;
 }
@@ -45,7 +45,7 @@ WRL1FACESET::WRL1FACESET( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 WRL1FACESET::WRL1FACESET( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
-    m_Type = WRL1_INDEXEDFACESET;
+    m_Type = WRL1NODES::WRL1_INDEXEDFACESET;
     m_Parent = aParent;
 
     if( NULL != m_Parent )

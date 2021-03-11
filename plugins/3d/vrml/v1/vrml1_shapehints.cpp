@@ -35,7 +35,7 @@
 WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDictionary )
 {
     m_order = WRL1_ORDER::ORD_UNKNOWN;
-    m_Type = WRL1_SHAPEHINTS;
+    m_Type = WRL1NODES::WRL1_SHAPEHINTS;
     m_crease = 0.733f; // approx 42 degrees; this is larger than VRML spec.
     return;
 }
@@ -45,7 +45,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
     WRL1NODE( aDictionary )
 {
     m_order = WRL1_ORDER::ORD_UNKNOWN;
-    m_Type = WRL1_SHAPEHINTS;
+    m_Type = WRL1NODES::WRL1_SHAPEHINTS;
     m_crease = 0.733f; // approx 42 degrees; this is larger than VRML spec.
     m_Parent = aParent;
 

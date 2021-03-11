@@ -40,7 +40,7 @@
 
 WRL1BASE::WRL1BASE() : WRL1NODE( NULL )
 {
-    m_Type = WRL1_BASE;
+    m_Type = WRL1NODES::WRL1_BASE;
     m_dictionary = new NAMEREGISTER;
     return;
 }
@@ -411,66 +411,66 @@ bool WRL1BASE::ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode )
 
     switch( ntype )
     {
-    case WRL1_GROUP:
+    case WRL1NODES::WRL1_GROUP:
 
         if( !readGroup( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_SEPARATOR:
+    case WRL1NODES::WRL1_SEPARATOR:
 
         if( !readSeparator( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_SWITCH:
+    case WRL1NODES::WRL1_SWITCH:
 
         if( !readSwitch( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_MATERIAL:
+    case WRL1NODES::WRL1_MATERIAL:
 
         if( !readMaterial( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_MATERIALBINDING:
+    case WRL1NODES::WRL1_MATERIALBINDING:
 
         if( !readMatBinding( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_COORDINATE3:
+    case WRL1NODES::WRL1_COORDINATE3:
 
         if( !readCoords( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_INDEXEDFACESET:
+    case WRL1NODES::WRL1_INDEXEDFACESET:
 
         if( !readFaceSet( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_TRANSFORM:
-    case WRL1_TRANSLATION:
-    case WRL1_ROTATION:
-    case WRL1_SCALE:
+    case WRL1NODES::WRL1_TRANSFORM:
+    case WRL1NODES::WRL1_TRANSLATION:
+    case WRL1NODES::WRL1_ROTATION:
+    case WRL1NODES::WRL1_SCALE:
 
         if( !readTransform( proc, aParent, aNode ) )
             return false;
 
         break;
 
-    case WRL1_SHAPEHINTS:
+    case WRL1NODES::WRL1_SHAPEHINTS:
 
         if( !readShapeHints( proc, aParent, aNode ) )
             return false;
