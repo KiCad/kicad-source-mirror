@@ -16950,7 +16950,7 @@ msgstr "Įkeliami „Gerber“ failai ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Įkeliama %u / %z u %s"
+msgstr "Įkeliama %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format
@@ -30349,12 +30349,12 @@ msgstr "turi būti mm, coliais arba mil"
 #: pcbnew/pcb_group.cpp:287
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Bevardė grupė, %z u narių"
+msgstr "Bevardė grupė, %zu narių"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Grupė „%s“, %z u narių"
+msgstr "Grupė „%s“, %zu narių"
 
 #: pcbnew/pcb_group.cpp:305
 msgid "<unnamed>"

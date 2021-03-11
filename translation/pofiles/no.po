@@ -17000,7 +17000,7 @@ msgstr "Laster inn Gerber-filer ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Laster %u / %z u %s"
+msgstr "Laster %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format
@@ -30383,12 +30383,12 @@ msgstr "må være mm, in eller mil"
 #: pcbnew/pcb_group.cpp:287
 #, fuzzy, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Anonym gruppe, %z u medlemmer"
+msgstr "Anonym gruppe, %zu medlemmer"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Gruppe \"%s\", %z u medlemmer"
+msgstr "Gruppe \"%s\", %zu medlemmer"
 
 #: pcbnew/pcb_group.cpp:305
 #, fuzzy

@@ -17077,7 +17077,7 @@ msgstr "Ladataan Gerber-tiedostoja ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Ladataan %u / %z u %s"
+msgstr "Ladataan %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format
@@ -30517,12 +30517,12 @@ msgstr "on oltava mm, tuumaa tai mil"
 #: pcbnew/pcb_group.cpp:287
 #, fuzzy, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Nimetön ryhmä, %z u jäsentä"
+msgstr "Nimetön ryhmä, %zu jäsentä"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Ryhmä \"%s\", %z u jäsentä"
+msgstr "Ryhmä \"%s\", %zu jäsentä"
 
 #: pcbnew/pcb_group.cpp:305
 #, fuzzy
@@ -31225,8 +31225,8 @@ msgstr ""
 #, c-format
 msgid "Invalid row size in J row %zu.  Expecting 11 elements but found %zu"
 msgstr ""
-"Virheellinen rivikoko J-rivillä %z u. Odotettavissa 11 elementtiä, mutta "
-"löydetty %z u"
+"Virheellinen rivikoko J-rivillä %zu. Odotettavissa 11 elementtiä, mutta "
+"löydetty %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:269
 msgid "Could not find units value, defaulting to Mils"
@@ -31251,8 +31251,8 @@ msgstr "Kirjastotiedostoa ei löydy %s"
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu"
 msgstr ""
-"Virheellinen rivikoko rivillä %z u. Odotetaan %z u elementtiä, mutta "
-"löydetään %z u"
+"Virheellinen rivikoko rivillä %zu. Odotetaan %zu elementtiä, mutta "
+"löydetään %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:469
 #, c-format
@@ -31262,7 +31262,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:515
 #, c-format
 msgid "Expecting pad size values but found %s : %s at line %zu"
-msgstr "Odotetaan tyynyjen koon arvoja, mutta löydetään %s: %s rivillä %z u"
+msgstr "Odotetaan tyynyjen koon arvoja, mutta löydetään %s: %s rivillä %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:535
 #, fuzzy, c-format
@@ -31272,7 +31272,7 @@ msgstr "Virheellinen koko %ll d: liian suuri"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:570
 #, c-format
 msgid "Expecting pad offset values but found %s : %s at line %zu"
-msgstr "Odotetaan tyynysiirtoarvoja, mutta löydettiin %s: %s riviltä %z u"
+msgstr "Odotetaan tyynysiirtoarvoja, mutta löydettiin %s: %s riviltä %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:613
 #, fuzzy, c-format

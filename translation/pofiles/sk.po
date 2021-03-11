@@ -16977,7 +16977,7 @@ msgstr "Načítavajú sa súbory Gerber ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Načítava sa %u / %z u %s"
+msgstr "Načítava sa %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format

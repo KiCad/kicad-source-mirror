@@ -16961,7 +16961,7 @@ msgstr "Nalaganje datotek Gerber ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Nalaganje %u / %z u %s"
+msgstr "Nalaganje %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format
@@ -30360,12 +30360,12 @@ msgstr "mora biti mm, in ali mil"
 #: pcbnew/pcb_group.cpp:287
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Neimenovana skupina, %z u člani"
+msgstr "Neimenovana skupina, %zu člani"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Skupina \"%s\", %z u članov"
+msgstr "Skupina \"%s\", %zu članov"
 
 #: pcbnew/pcb_group.cpp:305
 msgid "<unnamed>"

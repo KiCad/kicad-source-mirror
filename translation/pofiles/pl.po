@@ -31016,7 +31016,7 @@ msgstr "Nierozpoznany prymityw w kształcie pola \"%s\" w linii %zu."
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1080
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu"
-msgstr "Nieprawidłowa liczba tokenów. Oczekiwano 8, ale znaleziono %z u"
+msgstr "Nieprawidłowa liczba tokenów. Oczekiwano 8, ale znaleziono %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1214
 #, c-format

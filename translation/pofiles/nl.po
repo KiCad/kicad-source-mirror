@@ -16937,7 +16937,7 @@ msgstr "Gerber-bestanden laden ..."
 #: gerbview/files.cpp:242 gerbview/files.cpp:247
 #, c-format
 msgid "Loading %u/%zu %s"
-msgstr "Bezig met laden van %u / %z u %s"
+msgstr "Bezig met laden van %u / %zu %s"
 
 #: gerbview/files.cpp:268
 #, c-format
@@ -30399,12 +30399,12 @@ msgstr "moet mm, in of mil zijn"
 #: pcbnew/pcb_group.cpp:287
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Naamloze groep, %z u leden"
+msgstr "Naamloze groep, %zu leden"
 
 #: pcbnew/pcb_group.cpp:291
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Groep \"%s\", %z u leden"
+msgstr "Groep \"%s\", %zu leden"
 
 #: pcbnew/pcb_group.cpp:305
 msgid "<unnamed>"
