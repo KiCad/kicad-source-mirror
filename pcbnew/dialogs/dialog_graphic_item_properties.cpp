@@ -76,8 +76,6 @@ private:
     }
 
     bool Validate() override;
-
-    void onLayer( wxCommandEvent& event ) override;
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
@@ -189,27 +187,15 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
         m_AngleValue = m_item->GetAngle() / 10.0;
-
         m_filledCtrl->Show( false );
         break;
 
     case S_POLYGON:
-    {
-        LSET graphicPolygonsLayers = LSET::AllLayersMask();
-        graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
-
         SetTitle( _( "Polygon Properties" ) );
         m_sizerLeft->Show( false );
-
         m_filledCtrl->Show( true );
-        m_filledCtrl->Enable( graphicPolygonsLayers.Contains( m_item->GetLayer() ) );
-
-        // Prevent courtyard/edge cuts from being filled
-        if( !graphicPolygonsLayers.Contains( m_item->GetLayer() ) )
-            m_filledCtrl->SetValue( false );
-
         break;
-    }
+
     case S_RECT:
         SetTitle( _( "Rectangle Properties" ) );
 
@@ -217,12 +203,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
 
     case S_SEGMENT:
+        SetTitle( _( "Line Segment Properties" ) );
+
         if( m_item->GetStart().x == m_item->GetEnd().x )
             m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;
         else
             m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
-
-        SetTitle( _( "Line Segment Properties" ) );
 
         m_filledCtrl->Show( false );
         break;
@@ -375,24 +361,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_parent->UpdateMsgPanel();
 
     return true;
-}
-
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::onLayer( wxCommandEvent& event )
-{
-    if( m_item->GetShape() == S_POLYGON )
-    {
-        LSET graphicPolygonsLayers = LSET::AllLayersMask();
-        graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
-
-        m_filledCtrl->Enable( graphicPolygonsLayers.Contains(
-                ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) ) );
-
-        // Prevent courtyard/edge cuts from being filled
-        if( !graphicPolygonsLayers.Contains(
-                    ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) ) )
-            m_filledCtrl->SetValue( false );
-    }
 }
 
 
