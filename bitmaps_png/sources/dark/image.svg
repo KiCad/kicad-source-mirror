@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="image.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    width="24"
    height="24">
   <sodipodi:namedview
@@ -95,13 +95,13 @@
      class="cls-2"
      d="M 3.0543472,19.286103 7.556278,10.530987 C 7.8790546,9.9033241 8.7389262,9.8134818 9.1841546,10.360901 l 4.5760184,5.787618 c 0.37921,0.466165 1.084466,0.483328 1.485844,0.03616 l 1.228586,-1.369359 c 0.430086,-0.479214 1.197164,-0.419163 1.547647,0.121158 l 2.898811,4.307218 c 0.211359,0.325731 -0.02215,0.756384 -0.410086,0.756302 H 3.4890992 C 3.122926,20.000132 2.886562,19.612005 3.0543472,19.286103 Z"
      id="path157783"
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.999998"
+     style="fill:#545454;fill-opacity:1;stroke-width:0.999998"
      sodipodi:nodetypes="ccccccccccc" />
   <circle
      class="cls-2"
      cx="15.5"
      cy="6.5"
      id="circle157785"
-     style="fill:#ffffff;fill-opacity:1;stroke-width:1"
+     style="fill:#545454;fill-opacity:1;stroke-width:1"
      r="2.5" />
 </svg>

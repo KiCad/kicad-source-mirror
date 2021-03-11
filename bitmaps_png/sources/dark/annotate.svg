@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="annotate.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -144,55 +144,47 @@
   </defs>
   <title
      id="title948">annotate</title>
-  <g
-     id="g1560"
-     transform="translate(-1.0190926,22.930015)">
-    <rect
-       class="cls-3"
-       x="2.0190926"
-       y="-8.9300146"
-       width="22"
-       height="10"
-       id="rect1554"
-       style="fill:#42B8EB;fill-opacity:1;stroke-width:1" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:condensed;font-size:11.2px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Condensed';letter-spacing:0px;word-spacing:0px"
-       x="12.987727"
-       y="0.09257789"
-       id="text1558"><tspan
-         sodipodi:role="line"
-         id="tspan1556"
-         x="12.987726"
-         y="0.09257789"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">R42</tspan></text>
-  </g>
+  <rect
+     class="cls-3"
+     x="0.99999994"
+     y="14"
+     width="22"
+     height="10"
+     id="rect1554"
+     style="fill:#1381b1;fill-opacity:1;stroke-width:1" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:condensed;font-size:11.2px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Condensed';letter-spacing:0px;word-spacing:0px"
+     x="11.968635"
+     y="23.022593"
+     id="text1558"><tspan
+       sodipodi:role="line"
+       id="tspan1556"
+       x="11.968634"
+       y="23.022593"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1">R42</tspan></text>
   <path
      id="line950"
      style="fill:none;stroke:#f2647e;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#marker4900)"
      d="M 12,13 V 10"
      sodipodi:nodetypes="cc" />
-  <g
-     id="g1550"
-     transform="translate(-1.019093,7.9300146)">
-    <rect
-       class="cls-3"
-       x="2.019093"
-       y="-7.9300146"
-       width="22"
-       height="10"
-       id="rect954-4"
-       style="fill:#F4EFF3;fill-opacity:1;stroke-width:1" />
-    <text
-       xml:space="preserve"
-       style="font-size:11.2px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;stroke-width:1"
-       x="12.532377"
-       y="1.0673543"
-       id="text1530"><tspan
+  <rect
+     class="cls-3"
+     x="1"
+     y="-1.0290528e-08"
+     width="22"
+     height="10"
+     id="rect954-4"
+     style="fill:#f4eff3;fill-opacity:1;stroke-width:1" />
+  <text
+     xml:space="preserve"
+     style="font-size:11.2px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#545454;stroke-width:1;fill-opacity:1;"
+     x="11.513285"
+     y="8.9973688"
+     id="text1530"><tspan
    sodipodi:role="line"
    id="tspan1528"
-   x="14.312455"
-   y="1.0673543"
-   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke-width:1">R??</tspan> </text>
-  </g>
+   x="13.293363"
+   y="8.9973688"
+   style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.2px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#545454;fill-opacity:1;stroke-width:1;">R??</tspan> </text>
 </svg>

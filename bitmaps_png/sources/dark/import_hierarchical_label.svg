@@ -78,7 +78,7 @@
   <defs
      id="defs25427">
     <style
-       id="style25425">.cls-1{fill:#8f8f8f;}.cls-2{fill:#42B8EB;}.cls-3,.cls-4,.cls-7{fill:none;stroke-linejoin:round;}.cls-3{stroke:#42B8EB;}.cls-4{stroke:#F4EFF3;}.cls-4,.cls-7{stroke-linecap:round;}.cls-5{fill:#F4EFF3;}.cls-6{fill:#f2647e;}.cls-7{stroke:#545454;stroke-width:2px;}</style>
+       id="style25425">.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-3,.cls-4,.cls-7{fill:none;stroke-linejoin:round;}.cls-3{stroke:#1a81c4;}.cls-4{stroke:#545454;}.cls-4,.cls-7{stroke-linecap:round;}.cls-5{fill:#545454;}.cls-6{fill:#bf2641;}.cls-7{stroke:#f5f5f5;stroke-width:2px;}</style>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath855">
@@ -98,7 +98,7 @@
      id="g853"
      clip-path="url(#clipPath855)">
     <rect
-       style="fill:#d0c5ac;fill-opacity:1;stroke:#F4EFF3;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect12834"
        width="19"
        height="18"
@@ -107,7 +107,7 @@
        ry="0" />
     <path
        id="polygon25439"
-       style="fill:none;fill-opacity:1;stroke:#F4EFF3;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 11.5,6 15,9.5 18.5,6 15,2.5 C 13.940063,3.6302691 12.59547,4.9045297 11.5,6 Z"
        class="cls-4"
        sodipodi:nodetypes="ccccc" />
@@ -122,7 +122,7 @@
          id="tspan10710"
          x="1.5720218"
          y="10.637396"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.9066px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#F4EFF3;fill-opacity:1;stroke-width:0.893005">A</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.9066px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#545454;fill-opacity:1;stroke-width:0.893005">A</tspan></text>
     <circle
        style="fill:#ffffff;stroke:none;stroke-linecap:square"
        id="path846"
