@@ -284,4 +284,10 @@ BOOST_AUTO_TEST_CASE( PrefixBusAlias )
 }
 
 
+BOOST_AUTO_TEST_CASE( GroupBusMatching )
+{
+    doNetlistTest( "group_bus_matching" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

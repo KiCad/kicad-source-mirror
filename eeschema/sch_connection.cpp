@@ -269,14 +269,24 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     }
     else if( m_type == CONNECTION_TYPE::BUS_GROUP && aOther.Type() == CONNECTION_TYPE::BUS_GROUP )
     {
-        if( m_members.empty() || m_members.size() != otherMembers.size() )
+        if( m_members.empty() )
         {
             m_members = otherMembers;
         }
         else
         {
+            // TODO: refactor this once we support deep nesting
             for( size_t i = 0; i < m_members.size(); ++i )
-                m_members[i]->Clone( *otherMembers[i] );
+            {
+                auto it = std::find_if( otherMembers.begin(), otherMembers.end(),
+                                        [&]( const std::shared_ptr<SCH_CONNECTION>& aTest )
+                                        {
+                                            return aTest->LocalName() == m_members[i]->LocalName();
+                                        } );
+
+                if( it != otherMembers.end() )
+                    m_members[i]->Clone( **it );
+            }
         }
     }
 

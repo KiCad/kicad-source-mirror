@@ -1,0 +1,77 @@
+(kicad_sch (version 20210126) (generator eeschema)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (bus (pts (xy 127 76.2) (xy 177.8 76.2))
+    (stroke (width 0) (type solid) (color 0 0 0 0))
+    (uuid 69193310-fadd-4f7b-8f7b-3fe960586b6e)
+  )
+
+  (label "{SCL SDA}" (at 156.21 76.2 180)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+    (uuid 03c11db4-37f6-4fbf-9df1-7652ed8747c4)
+  )
+
+  (sheet (at 177.8 63.5) (size 38.1 25.4)
+    (stroke (width 0.001) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid 04eb80a5-3d22-464b-8fb7-e70e01da2cf4)
+    (property "Sheet name" "Subsheet1" (id 0) (at 177.8 62.8641 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsheet1.kicad_sch" (id 1) (at 177.8 89.4089 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "{SCL SDA}" input (at 177.8 76.2 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid f9137936-7c5f-45bf-bcf5-e11d060fbbec)
+    )
+  )
+
+  (sheet (at 88.9 63.5) (size 38.1 25.4)
+    (stroke (width 0.001) (type solid) (color 132 0 132 1))
+    (fill (color 255 255 255 0.0000))
+    (uuid 8903cf94-5bbd-4df7-9bc9-ca711b28d97a)
+    (property "Sheet name" "Subsheet2" (id 0) (at 88.9 62.8641 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "subsheet2.kicad_sch" (id 1) (at 88.9 89.4089 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "{SDA SCL}" input (at 127 76.2 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 4cb5ad84-de98-4f52-87ea-8c568aef5858)
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/04eb80a5-3d22-464b-8fb7-e70e01da2cf4/" (page "2"))
+    (path "/8903cf94-5bbd-4df7-9bc9-ca711b28d97a/" (page "3"))
+  )
+
+  (symbol_instances
+    (path "/04eb80a5-3d22-464b-8fb7-e70e01da2cf4/2d52877c-5f64-4e9b-8318-550f62b8b212"
+      (reference "#PWR01") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/04eb80a5-3d22-464b-8fb7-e70e01da2cf4/7e7dc5ce-6b00-48d2-9c9b-9cc678b3783a"
+      (reference "R1") (unit 1) (value "R") (footprint "")
+    )
+    (path "/04eb80a5-3d22-464b-8fb7-e70e01da2cf4/04ecd82e-109a-4cfb-8016-ccfdc48c1549"
+      (reference "R2") (unit 1) (value "R") (footprint "")
+    )
+    (path "/8903cf94-5bbd-4df7-9bc9-ca711b28d97a/1ab5160b-c46e-4dfc-97f9-e49d72bc401d"
+      (reference "#PWR02") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/8903cf94-5bbd-4df7-9bc9-ca711b28d97a/081a37f8-0ee2-4efb-9b8b-aa87b2ffa46b"
+      (reference "R3") (unit 1) (value "R") (footprint "")
+    )
+    (path "/8903cf94-5bbd-4df7-9bc9-ca711b28d97a/788e5e39-7eb5-4dc0-9e5b-9eac30779d04"
+      (reference "R4") (unit 1) (value "R") (footprint "")
+    )
+  )
+)
