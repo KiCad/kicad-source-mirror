@@ -1353,7 +1353,8 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
     EDA_RECT box( GetBoundingBoxBase() );
 
-    if( Schematic()->Settings().m_IntersheetRefsShow )
+    // Note: Schematic() can be null in preference preview panel
+    if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
     {
         box.Merge( m_intersheetRefsField.GetBoundingBox() );
         box.Normalize();
