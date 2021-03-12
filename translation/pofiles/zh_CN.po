@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-11 15:02+0000\n"
+"PO-Revision-Date: 2021-03-12 02:20+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2961,18 +2961,16 @@ msgid "Show icons in menus"
 msgstr "在菜单中显示图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "颜色主题："
+msgstr "图标主题："
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "向右"
+msgstr "浅色"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "使用专为浅色窗户背景设计的图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -2981,12 +2979,12 @@ msgstr "黑"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "使用专为深色窗户背景设计的图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "根据系统颜色主题自动选择浅色或深色图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -12128,9 +12126,9 @@ msgid "Do not show this dialog again."
 msgstr "不再显示。"
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "未能保存符号库文件 '%s'。"
+msgstr "未找到项目符号库缓存文件 '%s'。"
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12140,15 +12138,16 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"某些情况下，这可能会导致原理图损坏。 如果原理图在打开时没有丢失的符号，请在进行任何更改之前立即保存它，以防止数据丢失。 "
+"如果缺少符号，则需要手动恢复原理图或恢复符号缓存库文件并重新加载原理图。"
 
 #: eeschema/files-io.cpp:510
 msgid "Load Without Cache File"
-msgstr ""
+msgstr "加载时排除缓存文件"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "终止\n"
+msgstr "终止"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
@@ -12748,9 +12747,8 @@ msgid "Go to Page %s (%s)"
 msgstr "转到第 %s 页 (%s)"
 
 #: eeschema/sch_field.cpp:501
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "从选定的形状创建焊盘"
+msgstr "回到先前选中的图框"
 
 #: eeschema/sch_field.cpp:529
 msgid "Intersheet References"
@@ -28934,9 +28932,9 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "添加 %s (封装 \"%s\")。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
-msgstr "添加 %s (封装 \"%s\")。"
+msgstr "添加了 %s (封装 \"%s\")。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, c-format
@@ -28949,14 +28947,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "无法更新 %s (封装 \"%s\" 未找到)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "将封装 %s从 '%s' 更改为 '%s'"
+msgstr "将封装 %s从 '%s' 更改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "将封装 %s从 '%s' 更改为 '%s'"
+msgstr "将封装 %s 从 '%s' 更改为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -28964,9 +28962,9 @@ msgid "Change %s reference designator to %s."
 msgstr "更改 %s 的位号为 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "更改 %s 的位号为 %s。"
+msgstr "更改 %s 的参考位号为 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:288
 #, c-format
@@ -28974,9 +28972,9 @@ msgid "Change %s value from %s to %s."
 msgstr "\"%s\" 的值从 \"%s\" 更改为 \"%s\"。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "\"%s\" 的值从 \"%s\" 更改为 \"%s\"。"
+msgstr "将 %s 的值从 %s 更改为了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:315
 #, c-format
@@ -28984,9 +28982,9 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "更新 %s 符号关联从 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "更新 %s 符号关联从 %s 到 %s。"
+msgstr "将 %s 符号关联从 %s 更新到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:338
 #, c-format
@@ -28994,25 +28992,25 @@ msgid "Update %s properties."
 msgstr "更新 %s 属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "更新 %s 属性。"
+msgstr "更新了 %s 项属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Set %s 'exclude from BOM' fabrication attribute."
-msgstr "设置 %s “从 BOM 中排除”制造属性。"
+msgstr "给 %s 设置“从 BOM 中排除”制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "正在删除 %s “从 BOM 中排除”制造属性。"
+msgstr "删除 %s “从 BOM 中排除”的制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "正在删除 %s “从 BOM 中排除”制造属性。"
+msgstr "删除了 %s “从 BOM 中排除”的制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, c-format
@@ -29020,14 +29018,14 @@ msgid "Disconnect %s pin %s."
 msgstr "断开 %s 引脚 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "断开 %s 引脚 %s。"
+msgstr "断开连接的 %s 引脚 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "符号 %s 引脚 %s 没有网。"
+msgstr "未找到符号 %s 引脚 %s 的网。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:515
 #, c-format
@@ -29040,9 +29038,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "重新连接 %s 的引脚 %s 从 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "重新连接 %s 的引脚 %s 从 %s 到 %s。"
+msgstr "将 %s 引脚 %s 从 %s 重新连接到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:544
 #, c-format
@@ -29050,9 +29048,9 @@ msgid "Connect %s pin %s to %s."
 msgstr "连接 %s 的引脚 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "连接 %s 的引脚 %s 到 %s。"
+msgstr "将 %s 引脚 %s 连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:630
 #, c-format
@@ -29060,9 +29058,9 @@ msgid "Reconnect via from %s to %s."
 msgstr "重新连接过孔从 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "重新连接过孔从 %s 到 %s。"
+msgstr "将过孔从 %s 重新连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:658
 #, c-format
@@ -29070,9 +29068,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "过孔连接到未知网络 (%s)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "将铜区 %s 重新连接到 %s。"
+msgstr "将铜区 '%s' 从 %s 重新连接到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
@@ -29080,24 +29078,24 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "将铜区 %s 重新连接到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "将铜区 %s 重新连接到 %s。"
+msgstr "将铜区 '%s' 从 %s 重新连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "将铜区 %s 重新连接到 %s。"
+msgstr "将铜区从 %s 重新连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "铜区 (%s)没有焊盘连接。"
+msgstr "铜区 '%s' 没有与之连接的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "铜区 (%s)没有焊盘连接。"
+msgstr "坐标 (%s, %s) 层 %s 上的铜区域没有与之相连的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -29105,9 +29103,9 @@ msgid "Remove single pad net %s."
 msgstr "删除单一焊盘网络 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
-msgstr "删除单一焊盘网络 %s。"
+msgstr "删除了单一焊盘网 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, c-format
@@ -29130,7 +29128,7 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "无法删除未使用的封装 %s (已锁定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "无法删除未使用的封装 %s (已锁定)。"
 
@@ -29140,14 +29138,14 @@ msgid "Remove unused footprint %s."
 msgstr "删除未使用封装 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "删除未使用封装 %s。"
+msgstr "删除了未使用的封装 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "删除未使用的网络 \"%s\"。"
+msgstr "删除未使用的网络 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 msgid "Update netlist"
