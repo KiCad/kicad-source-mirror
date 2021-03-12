@@ -116,10 +116,10 @@ protected:
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_EDIT_FRAME* parent ) :
         DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE( parent ),
-        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true ),
-        m_textWidth( parent, m_SizeXlabel, m_SizeXCtrl, m_SizeXunit, true ),
-        m_textHeight( parent, m_SizeYlabel, m_SizeYCtrl, m_SizeYunit, true ),
-        m_thickness( parent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnit, true )
+        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits ),
+        m_textWidth( parent, m_SizeXlabel, m_SizeXCtrl, m_SizeXunit ),
+        m_textHeight( parent, m_SizeYlabel, m_SizeYCtrl, m_SizeYunit ),
+        m_thickness( parent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnit )
 {
     m_parent = parent;
     m_brdSettings = &m_parent->GetDesignSettings();

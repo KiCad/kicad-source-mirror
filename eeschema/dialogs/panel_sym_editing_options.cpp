@@ -35,13 +35,13 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame,
                                                       wxWindow* aWindow ) :
         PANEL_SYM_EDITING_OPTIONS_BASE( aWindow ),
         m_frame( aFrame ),
-        m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
-        m_pinLength( aFrame, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits, true ),
-        m_pinNameSize( aFrame, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits, true ),
-        m_pinNumberSize( aFrame, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits, true ),
-        m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
-        m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
+        m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
+        m_pinLength( aFrame, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
+        m_pinNameSize( aFrame, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
+        m_pinNumberSize( aFrame, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits ),
+        m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits ),
+        m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits )
 {}
 
 

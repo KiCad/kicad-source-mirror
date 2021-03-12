@@ -56,7 +56,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
     m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
     m_OrientValidator( 3, &m_OrientValue ),
-    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, true ),
+    m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
     m_initialFocus( true ),

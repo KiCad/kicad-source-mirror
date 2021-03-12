@@ -74,8 +74,8 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aI
         m_initialized( false ),
         m_pageBitmap( nullptr ),
         m_iuPerMils( aIuPerMils ),
-        m_customSizeX( aParent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false ),
-        m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false )
+        m_customSizeX( aParent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits ),
+        m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits )
 {
     m_projectPath = Prj().GetProjectPath();
     m_maxPageSizeMils = aMaxUserSizeMils;

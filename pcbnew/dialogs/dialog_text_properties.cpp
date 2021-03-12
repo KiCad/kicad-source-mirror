@@ -44,12 +44,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_edaText( nullptr ),
     m_fpText( nullptr ),
     m_pcbText( nullptr ),
-    m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true ),
-    m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true ),
-    m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
+    m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
+    m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
+    m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
-    m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr, false )
+    m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr )
 {
     wxString title;
 

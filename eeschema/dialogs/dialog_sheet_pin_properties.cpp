@@ -40,12 +40,13 @@ static wxString sheetPinTypes[] =
 };
 
 
-DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
+DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent,
+                                                          SCH_SHEET_PIN* aPin ) :
         DIALOG_SHEET_PIN_PROPERTIES_BASE( parent ),
-    m_frame( parent ),
-    m_sheetPin( aPin ),
-    m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
-    m_helpWindow( nullptr )
+        m_frame( parent ),
+        m_sheetPin( aPin ),
+        m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
+        m_helpWindow( nullptr )
 {
     for( const wxString& sheetPinType : sheetPinTypes )
         m_choiceConnectionType->Append( sheetPinType );

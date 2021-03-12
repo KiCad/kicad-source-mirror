@@ -47,8 +47,8 @@
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
-    m_defaultPenSize( aParent, m_hpglPenLabel, m_hpglPenCtrl, m_hpglPenUnits, true ),
-    m_trackWidthCorrection( aParent, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits, true )
+    m_defaultPenSize( aParent, m_hpglPenLabel, m_hpglPenCtrl, m_hpglPenUnits ),
+    m_trackWidthCorrection( aParent, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits )
 {
     SetName( DLG_WINDOW_NAME );
     m_plotOpts = aParent->GetPlotSettings();

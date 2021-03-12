@@ -44,7 +44,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
-    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true ),
+    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
     m_dummySheetNameField( wxDefaultPosition, SHEETNAME, &m_dummySheet )
 {

@@ -86,7 +86,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_endX( aParent, m_endXLabel, m_endXCtrl, m_endXUnits ),
     m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
     m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
-    m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true ),
+    m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
     m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
     m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),

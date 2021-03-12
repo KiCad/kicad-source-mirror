@@ -105,18 +105,15 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
     DIALOG_COPPER_ZONE_BASE( aParent ),
     m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
-    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true ),
-    m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
-    m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true ),
-    m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true ),
-    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true ),
-    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation,
-                         m_staticTextRotUnits, false ),
-    m_gridStyleThickness( aParent, m_staticTextStyleThickness,
-                          m_tcGridStyleThickness, m_GridStyleThicknessUnits, false ),
-    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false ),
-    m_islandThreshold( aParent, m_islandThresholdLabel,
-                       m_tcIslandThreshold, m_islandThresholdUnits, false )
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
+    m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
+    m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits ),
+    m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits ),
+    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
+    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits ),
+    m_gridStyleThickness( aParent, m_staticTextStyleThickness, m_tcGridStyleThickness, m_GridStyleThicknessUnits ),
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
+    m_islandThreshold( aParent, m_islandThresholdLabel, m_tcIslandThreshold, m_islandThresholdUnits )
 {
     m_Parent = aParent;
     m_bitmapNoNetWarning->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );

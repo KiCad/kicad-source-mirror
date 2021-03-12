@@ -34,18 +34,15 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_frame( aParent ),
         m_cbLayerActual( m_cbLayer ),
         m_txtValueActual( m_txtValue ),
-        m_textWidth( aParent, m_lblTextWidth, m_txtTextWidth, m_lblTextWidthUnits, true ),
-        m_textHeight( aParent, m_lblTextHeight, m_txtTextHeight, m_lblTextHeightUnits, true ),
-        m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness,
-                         m_lblTextThicknessUnits, true ),
+        m_textWidth( aParent, m_lblTextWidth, m_txtTextWidth, m_lblTextWidthUnits ),
+        m_textHeight( aParent, m_lblTextHeight, m_txtTextHeight, m_lblTextHeightUnits ),
+        m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness, m_lblTextThicknessUnits ),
         m_textPosX( aParent, m_lblTextPosX, m_txtTextPosX, m_lblTextPosXUnits ),
         m_textPosY( aParent, m_lblTextPosY, m_txtTextPosY, m_lblTextPosYUnits ),
         m_orientValidator( 1, &m_orientValue ),
-        m_lineThickness( aParent, m_lblLineThickness, m_txtLineThickness,
-                         m_lblLineThicknessUnits, true ),
-        m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits, true ),
-        m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset,
-                           m_lblExtensionOffsetUnits )
+        m_lineThickness( aParent, m_lblLineThickness, m_txtLineThickness, m_lblLineThicknessUnits ),
+        m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits ),
+        m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset, m_lblExtensionOffsetUnits )
 {
     wxASSERT( BaseType( aItem->Type() ) == PCB_DIMENSION_T );
     m_dimension = static_cast<DIMENSION_BASE*>( aItem );

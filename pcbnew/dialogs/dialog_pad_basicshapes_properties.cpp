@@ -45,16 +45,16 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
                                                                     PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( aParent ),
         m_shape( aShape ),
-        m_startX( aFrame, m_startXLabel, m_startXCtrl, m_startXUnits, true ),
-        m_startY( aFrame, m_startYLabel, m_startYCtrl, m_startYUnits, true ),
-        m_ctrl1X( aFrame, m_ctrl1XLabel, m_ctrl1XCtrl, m_ctrl1XUnits, true ),
-        m_ctrl1Y( aFrame, m_ctrl1YLabel, m_ctrl1YCtrl, m_ctrl1YUnits, true ),
-        m_ctrl2X( aFrame, m_ctrl2XLabel, m_ctrl2XCtrl, m_ctrl2XUnits, true ),
-        m_ctrl2Y( aFrame, m_ctrl2YLabel, m_ctrl2YCtrl, m_ctrl2YUnits, true ),
-        m_endX( aFrame, m_endXLabel, m_endXCtrl, m_endXUnits, true ),
-        m_endY( aFrame, m_endYLabel, m_endYCtrl, m_endYUnits, true ),
-        m_radius( aFrame, m_radiusLabel, m_radiusCtrl, m_radiusUnits, true ),
-        m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
+        m_startX( aFrame, m_startXLabel, m_startXCtrl, m_startXUnits ),
+        m_startY( aFrame, m_startYLabel, m_startYCtrl, m_startYUnits ),
+        m_ctrl1X( aFrame, m_ctrl1XLabel, m_ctrl1XCtrl, m_ctrl1XUnits ),
+        m_ctrl1Y( aFrame, m_ctrl1YLabel, m_ctrl1YCtrl, m_ctrl1YUnits ),
+        m_ctrl2X( aFrame, m_ctrl2XLabel, m_ctrl2XCtrl, m_ctrl2XUnits ),
+        m_ctrl2Y( aFrame, m_ctrl2YLabel, m_ctrl2YCtrl, m_ctrl2YUnits ),
+        m_endX( aFrame, m_endXLabel, m_endXCtrl, m_endXUnits ),
+        m_endY( aFrame, m_endYLabel, m_endYCtrl, m_endYUnits ),
+        m_radius( aFrame, m_radiusLabel, m_radiusCtrl, m_radiusUnits ),
+        m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {
     SetInitialFocus( m_startXCtrl );
 
@@ -226,7 +226,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
                                                                   PCB_SHAPE* aShape ) :
         DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
         m_shape( aShape ),
-        m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
+        m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {
     if( !m_shape->GetPolyShape().IsEmpty() )
     {
@@ -541,8 +541,8 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aPar
                                                                   bool aShowDuplicate ) :
     DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( aParent ),
     m_list( aList ),
-    m_vectorX( aFrame, m_xLabel, m_xCtrl, m_xUnits, true ),
-    m_vectorY( aFrame, m_yLabel, m_yCtrl, m_yUnits, true ),
+    m_vectorX( aFrame, m_xLabel, m_xCtrl, m_xUnits ),
+    m_vectorY( aFrame, m_yLabel, m_yCtrl, m_yUnits ),
     m_rotation( aFrame, m_rotationLabel, m_rotationCtrl, m_rotationUnits )
 {
     m_rotation.SetUnits( EDA_UNITS::DEGREES );

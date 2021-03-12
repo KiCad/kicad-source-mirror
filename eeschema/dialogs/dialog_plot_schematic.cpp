@@ -48,8 +48,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
           m_parent( parent ),
           m_plotFormat( PLOT_FORMAT::UNDEFINED ),
           m_HPGLPenSize( 1.0 ),
-          m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-          m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
+          m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+          m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits )
 {
     m_configChanged = false;
 

@@ -64,8 +64,8 @@ DIALOG_TARGET_PROPERTIES::DIALOG_TARGET_PROPERTIES( PCB_EDIT_FRAME* aParent, PCB
         DIALOG_TARGET_PROPERTIES_BASE( aParent ),
         m_Parent( aParent ),
         m_Target( aTarget ),
-        m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits, true ),
-        m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
+        m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits ),
+        m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {
     m_sdbSizerButtsOK->SetDefault();
 

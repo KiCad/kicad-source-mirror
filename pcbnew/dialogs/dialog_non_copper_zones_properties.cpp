@@ -73,14 +73,12 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
                                                                 ZONE_SETTINGS* aSettings ) :
     DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( aParent ),
-    m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
-    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits,
-                         false ),
-    m_gridStyleThickness( aParent, m_staticTextStyleThickness,
-                          m_tcGridStyleThickness, m_GridStyleThicknessUnits, false),
-    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false ),
+    m_minWidth( aParent, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits ),
+    m_gridStyleRotation( aParent, m_staticTextGrindOrient, m_tcGridStyleOrientation, m_staticTextRotUnits ),
+    m_gridStyleThickness( aParent, m_staticTextStyleThickness, m_tcGridStyleThickness, m_GridStyleThicknessUnits),
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits ),
     m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
-    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true )
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits )
 {
     m_parent = aParent;
 

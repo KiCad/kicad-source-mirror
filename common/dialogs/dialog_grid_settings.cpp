@@ -36,8 +36,8 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     m_parent( aParent ),
     m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
     m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
-    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits, true ),
-    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits, true )
+    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
+    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits )
 {
     // Configure display origin transforms
     m_gridOriginX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );

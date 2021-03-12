@@ -30,12 +30,12 @@
 #include <eda_draw_frame.h>
 
 DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( EDA_DRAW_FRAME* aParent,
-                        PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode )
-    :
+                                                                      PNS::MEANDER_SETTINGS& aSettings,
+                                                                      PNS::ROUTER_MODE aMode ) :
     DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( aParent ),
-    m_minAmpl( aParent, m_minAmplLabel, m_minAmplText, m_minAmplUnit, true ),
-    m_maxAmpl( aParent, m_maxAmplLabel, m_maxAmplText, m_maxAmplUnit, true ),
-    m_spacing( aParent, m_spacingLabel, m_spacingText, m_spacingUnit, true ),
+    m_minAmpl( aParent, m_minAmplLabel, m_minAmplText, m_minAmplUnit ),
+    m_maxAmpl( aParent, m_maxAmplLabel, m_maxAmplText, m_maxAmplUnit ),
+    m_spacing( aParent, m_spacingLabel, m_spacingText, m_spacingUnit ),
     m_targetLength( aParent, m_targetLengthLabel, m_targetLengthText, m_targetLengthUnit ),
     m_radius( aParent, m_radiusLabel, m_radiusText, m_radiusUnit ),
     m_settings( aSettings ),
