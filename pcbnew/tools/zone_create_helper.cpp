@@ -206,49 +206,58 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
         case ZONE_MODE::ADD:
         case ZONE_MODE::SIMILAR:
         {
-            BOARD_COMMIT bCommit( &m_tool );
+            BOARD_COMMIT commit( &m_tool );
+            BOARD*       board = m_tool.getModel<BOARD>();
 
             aZone->HatchBorder();
-            bCommit.Add( aZone.get() );
+            commit.Add( aZone.get() );
 
-            BOARD* board = m_tool.getModel<BOARD>();
             std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
 
             if( !m_params.m_keepout )
             {
-                ZONE_FILLER filler( board, &bCommit );
+                ZONE_FILLER        filler( board, &commit );
                 std::vector<ZONE*> toFill = { aZone.get() };
 
                 if( !filler.Fill( toFill ) )
                 {
-                    bCommit.Revert();
+                    commit.Revert();
                     break;
                 }
             }
 
-            bCommit.Push( _( "Add a zone" ) );
+            commit.Push( _( "Add a zone" ) );
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
             break;
         }
 
         case ZONE_MODE::GRAPHIC_POLYGON:
         {
-            BOARD_COMMIT bCommit( &m_tool );
-            BOARD_ITEM_CONTAINER* parent = m_tool.m_frame->GetModel();
-            LSET graphicPolygonsLayers = LSET::AllLayersMask();
+            BOARD_COMMIT          commit( &m_tool );
+            BOARD*                board = m_tool.getModel<BOARD>();
+            PCB_LAYER_ID          layer = m_params.m_layer;
+            PCB_SHAPE*            poly;
 
-            graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
+            if( m_tool.m_isFootprintEditor )
+                poly = new FP_SHAPE( static_cast<FOOTPRINT*>( m_tool.m_frame->GetModel() ) );
+            else
+                poly = new PCB_SHAPE();
 
-            auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT*) parent )
-                                                   : new PCB_SHAPE();
             poly->SetShape( S_POLYGON );
-            poly->SetFilled( graphicPolygonsLayers.Contains( m_params.m_layer ) );
-            poly->SetLayer( m_params.m_layer );
+
+            if( layer == Edge_Cuts || layer == F_CrtYd || layer == B_CrtYd )
+                poly->SetFilled( false );
+            else
+                poly->SetFilled( true );
+
+            poly->SetWidth( board->GetDesignSettings().GetLineThickness( m_params.m_layer ) );
+            poly->SetLayer( layer );
             poly->SetPolyShape( *aZone->Outline() );
-            bCommit.Add( poly );
+
+            commit.Add( poly );
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
 
-            bCommit.Push( _( "Add a graphical polygon" ) );
+            commit.Push( _( "Add a graphical polygon" ) );
 
             break;
         }
