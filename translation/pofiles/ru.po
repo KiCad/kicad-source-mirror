@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-11 15:02+0000\n"
+"PO-Revision-Date: 2021-03-12 07:19+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3030,18 +3030,16 @@ msgid "Show icons in menus"
 msgstr "Показывать иконки в меню"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Цветовая тема:"
+msgstr "Тема иконок:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Вправо"
+msgstr "Светлый"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Использовать иконки для окон со светлым фоном"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3050,12 +3048,14 @@ msgstr "Тёмный"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Использовать иконки для окон с тёмным фоном"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Автоматически выбирать светлые или тёмные иконки на основе цветовой темы "
+"системы"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -12349,9 +12349,9 @@ msgid "Do not show this dialog again."
 msgstr "Не показывать снова"
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Не удалось сохранить файл библиотеки символов '%s'."
+msgstr "Файл кэша библиотеки символов проекта '%s' не найден."
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12361,15 +12361,19 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"При определённых условиях это может привести к повреждению схемы. Если после "
+"открытия в схеме не будет пропавших символов, сохраните её перед внесением "
+"каких либо изменений для предотвращения потери данных. Если же пропавшие "
+"символы обнаружатся, либо вручную поправьте схему, либо восстановите файл "
+"кэша библиотеки символов и перезагрузите схему."
 
 #: eeschema/files-io.cpp:510
 msgid "Load Without Cache File"
-msgstr ""
+msgstr "Загрузить без кэша"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "Прервано\n"
+msgstr "Отмена"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
@@ -12977,9 +12981,8 @@ msgid "Go to Page %s (%s)"
 msgstr "Перейти к листу %s (%s)"
 
 #: eeschema/sch_field.cpp:501
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Создать конт.пл. из выбранных форм"
+msgstr "Назад к предыдущему листу"
 
 #: eeschema/sch_field.cpp:529
 msgid "Intersheet References"
@@ -29474,7 +29477,7 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "Добавлено %s (посад.место \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
 msgstr "Добавлено %s (посад.место \"%s\")."
 
@@ -29489,14 +29492,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Не удалось обновить %s (посад.место \"%s\" не найдено)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Заменить посад.место %s с '%s' на '%s'"
+msgstr "Заменить посад.место %s с '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Заменить посад.место %s с '%s' на '%s'"
+msgstr "Заменено посад.место %s с '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -29504,7 +29507,7 @@ msgid "Change %s reference designator to %s."
 msgstr "Обозначение %s изменено на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
 msgstr "Обозначение %s изменено на %s."
 
@@ -29514,7 +29517,7 @@ msgid "Change %s value from %s to %s."
 msgstr "Значение %s изменено с %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Значение %s изменено с %s на %s."
 
@@ -29524,7 +29527,7 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "У символа %s сменилось посад.место с %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
 msgstr "У символа %s сменилось посад.место с %s на %s."
 
@@ -29534,25 +29537,25 @@ msgid "Update %s properties."
 msgstr "Обновлены свойства %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
 msgstr "Обновлены свойства %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Set %s 'exclude from BOM' fabrication attribute."
 msgstr ""
 "Установка производственного атрибута 'исключён из перечня элементов' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr ""
 "Удаление производственного атрибута 'исключён из перечня элементов' из %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr ""
 "Удаление производственного атрибута 'исключён из перечня элементов' из %s."
@@ -29563,12 +29566,12 @@ msgid "Disconnect %s pin %s."
 msgstr "Отключена цепь от %s вывод %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
 msgstr "Отключена цепь от %s вывод %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
 msgstr "Нет цепи у компонента %s, вывод %s."
 
@@ -29583,7 +29586,7 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Переподключено %s вывод %s от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
 msgstr "Переподключено %s вывод %s от %s к %s."
 
@@ -29593,7 +29596,7 @@ msgid "Connect %s pin %s to %s."
 msgstr "Подключено %s вывод %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
 msgstr "Подключено %s вывод %s к %s."
 
@@ -29603,7 +29606,7 @@ msgid "Reconnect via from %s to %s."
 msgstr "Переподключено перех.отв. от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Переподключено перех.отв. от %s к %s."
 
@@ -29613,9 +29616,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "Перех.отв. подключена к неизвестной цепи (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Переподключено зону меди от %s к %s."
+msgstr "Переподключено зону меди '%s' от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
@@ -29623,24 +29626,25 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "Переподключено зону меди от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Переподключено зону меди от %s к %s."
+msgstr "Переподключено зону меди '%s' от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "Переподключено зону меди от %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Зона меди (%s) не подключена ни к одному выводу."
+msgstr "Зона меди '%s' не подключена ни к одному выводу."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Зона меди (%s) не подключена ни к одному выводу."
+msgstr ""
+"Зона меди не слое %s, координаты (%s, %s), не подключена ни к одному выводу."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -29648,7 +29652,7 @@ msgid "Remove single pad net %s."
 msgstr "Удалена цепь %s с одной конт.пл."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
 msgstr "Удалена цепь %s с одной конт.пл."
 
@@ -29673,7 +29677,7 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Не удалось удалить неиспользуемое посад.место %s (заблокировано)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "Не удалось удалить неиспользуемое посад.место %s (заблокировано)."
 
@@ -29683,14 +29687,14 @@ msgid "Remove unused footprint %s."
 msgstr "Удалено неиспользуемое посад.место %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
 msgstr "Удалено неиспользуемое посад.место %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Удалена неиспользуемая цепь \"%s\"."
+msgstr "Удалена неиспользуемая цепь %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 msgid "Update netlist"
