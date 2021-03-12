@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-02-10 14:12+0000\n"
+"PO-Revision-Date: 2021-03-12 18:32+0000\n"
 "Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -207,9 +207,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "Jūsų OpenGL versija nepalaikoma. Reikalinga minimum v1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Atvaizdavimo laikas %.3f s"
+msgstr "Atvaizdavimo laikas %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -1330,23 +1330,20 @@ msgid "Export to Clipboard"
 msgstr "Eksportuoti į mainų sritį"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Simbolio kūnas užpildomas"
+msgstr "Simboliai (.lib byla)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod failas)"
+msgstr "Korpusai (.kicad_mod byla)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "PostScript (.ps failas)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Pavadinimo bloko logotipas (.kicad_wks failas)"
+msgstr "Lapo trafaretas (.kicad_wks byla)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -2178,14 +2175,12 @@ msgid "Reset Grid Origin"
 msgstr "Iš naujo nustatyti tinklelio kilmę"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Vartotojo nurodytas tinklelio žingsnis"
+msgstr "Atstatyti tinklelio žingsnį"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Norėdami naudoti numatytąsias reikšmes, nustatykite 0"
+msgstr "Nustato tinklelio dydžius į numatytas vertes"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2270,9 +2265,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Kaip norėtumėte sukonfigūruoti KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Importuoti nustatymus iš ankstesnės versijos (nerasta)"
+msgstr "Importuoti ankstesnės versijos nustatymus iš:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
@@ -2292,16 +2286,16 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
+"Jei pažymėta, simbolių ir korpusų lentelės bus importuotos iš senos į šią "
+"versiją"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Atstatyti numatytuosius nustatymus"
+msgstr "Pradėti su numatytais nustatymais"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Tinkinti kelius"
+msgstr "Konfigūruoti KiCad nustatymų kelią"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
@@ -2898,7 +2892,6 @@ msgid "Executable files ("
 msgstr "Vykdomieji failai ("
 
 #: common/dialogs/panel_common_settings.cpp:310
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
 msgstr "Pasirinkite pageidaujamą PDF naršyklę"
 
@@ -3023,18 +3016,16 @@ msgid "Show icons in menus"
 msgstr "Rodyti piktogramas meniu"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Spalvų tema:"
+msgstr "Piktogramų tema:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Dešinėje"
+msgstr "Šviesi"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Naudoti piktogramas, skirtas šviesiems langų fonams"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3043,12 +3034,14 @@ msgstr "Tamsi"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Naudokite piktogramas, skirtas tamsiam lango fonui"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Automatiškai pasirinkti šviesias arba tamsias piktogramas pagal sistemos "
+"spalvų temą"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3191,7 +3184,7 @@ msgstr "Importuoti sparčiųjų klavišų failą:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Veiksmas | Numatytasis spartusis klavišas | apibūdinimas"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:157
