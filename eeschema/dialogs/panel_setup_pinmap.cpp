@@ -80,6 +80,11 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
     wxPoint       pos( 0, charSize.y * 2 );
     wxStaticText* text;
 
+#ifdef __WXMAC__
+    bmapSize.y += 2;
+    charSize.y += 2;
+#endif
+
     if( !m_initialized )
     {
         std::vector<wxStaticText*> labels;
@@ -107,7 +112,9 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         pos.x += 5;
     }
     else
+    {
         pos = m_buttonList[0][0]->GetPosition();
+    }
 
     for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
     {
@@ -118,15 +125,15 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             // Add column labels (only once)
             PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
 
-            int x = pos.x + ( jj * ( bmapSize.x + 4 ) );
+            int x = pos.x + ( jj * ( bmapSize.x + 2 ) );
 
             if( ( ii == jj ) && !m_initialized )
             {
-                wxPoint textPos( x + KiROUND( bmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
+                wxPoint textPos( x + KiROUND( bmapSize.x / 2 ) - KiROUND( charSize.x ),
                                  y - charSize.y * 2 );
                 new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
 
-                wxPoint calloutPos( x + KiROUND( bmapSize.x / 2 ) - 2,
+                wxPoint calloutPos( x + KiROUND( bmapSize.x / 2 ) - KiROUND( charSize.x / 2 ),
                                     y - charSize.y );
                 new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }
@@ -138,10 +145,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, event_id,
                                                       KiBitmap( bitmap_butt ), wxPoint( x, y ) );
 
-            // On the mac, the button sizes are reliably 4 pixels smaller (maybe due to corner rounding)
-            // than can be displayed by the bitmap
 #ifdef __WXMAC__
-            btn->SetSize( btn->GetSize().x + 8, btn->GetSize().y + 4 );
+            btn->SetSize( btn->GetSize().x - 1, btn->GetSize().y );
 #else
             btn->SetSize( btn->GetSize().x + 4, btn->GetSize().y );
 #endif

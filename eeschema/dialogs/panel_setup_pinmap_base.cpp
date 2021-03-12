@@ -21,7 +21,7 @@ PANEL_SETUP_PINMAP_BASE::PANEL_SETUP_PINMAP_BASE( wxWindow* parent, wxWindowID i
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin to Pin Connections") ), wxVERTICAL );
 
 	m_matrixPanel = new wxPanel( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_matrixPanel->SetMinSize( wxSize( 500,420 ) );
+	m_matrixPanel->SetMinSize( wxSize( 500,444 ) );
 
 	sbSizer3->Add( m_matrixPanel, 1, wxEXPAND | wxALL, 5 );
 
