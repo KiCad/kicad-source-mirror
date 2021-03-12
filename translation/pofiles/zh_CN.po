@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-12 07:19+0000\n"
+"PO-Revision-Date: 2021-03-12 07:56+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1581,7 +1581,7 @@ msgstr "开发人员网站 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr "KiCad 官方库 - "
+msgstr "KiCad 官方库仓库 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
@@ -1601,7 +1601,7 @@ msgstr "KiCad 用户论坛 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "完整的 KiCad EDA 工具箱发布于"
+msgstr "完整的 KiCad EDA 工具箱在"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -1938,9 +1938,9 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 首次使用新的%s库表来访问库。\n"
-"为了让 KiCad 访问%s库，\n"
-"您必须配置全局%s库表。\n"
+"KiCad 首次使用新的 %s 库表来访问库。\n"
+"为了让 KiCad 访问 %s 库，\n"
+"您必须配置全局 %s 库表。\n"
 "请从以下选项中选择一个。\n"
 "如果您不确定要选择哪个选项，请使用默认选择。"
 
@@ -5373,7 +5373,7 @@ msgstr "KiCad 经典版"
 #: common/single_top.cpp:175 kicad/kicad.cpp:305
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr "KiCad 及其依赖不再支持 Windows 7 及先前系统。"
+msgstr "KiCad 及其依赖不再支持 Windows 7 及更早版本。"
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:306
 msgid "Unsupported Operating System"
@@ -5967,11 +5967,11 @@ msgstr "编辑全局和项目封装库列表"
 
 #: common/tool/actions.cpp:606
 msgid "Getting Started with KiCad"
-msgstr "KiCad 入门指南"
+msgstr "KiCad 入门"
 
 #: common/tool/actions.cpp:607
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "打开“KiCad 入门指南”手册"
+msgstr "打开“KiCad 入门”手册"
 
 #: common/tool/actions.cpp:612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
@@ -6114,7 +6114,7 @@ msgstr "硬件加速图形 (推荐)"
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr "软件图形 （适用于不支持 KiCad 硬件加速要求的计算机）"
+msgstr "软件图形 (适用于不支持 KiCad 硬件加速要求的计算机)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -12442,7 +12442,7 @@ msgstr "终止"
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr "这个文件由Kicad的旧版本所创建。它将被转换成新的格式保存。"
+msgstr "这个文件由 KiCad 的旧版本所创建。它将被转换成新的格式保存。"
 
 #: eeschema/files-io.cpp:599
 msgid "Schematic file is read only."
