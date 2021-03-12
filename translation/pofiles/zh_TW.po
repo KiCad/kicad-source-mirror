@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-11 15:03+0000\n"
+"PO-Revision-Date: 2021-03-12 18:32+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1580,7 +1580,7 @@ msgstr "開發人員網站 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr "KiCad 官方庫 - "
+msgstr "KiCad 官方庫倉庫 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
@@ -1600,7 +1600,7 @@ msgstr "KiCad 使用者論壇 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:179
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "完整的 KiCad EDA 工具箱釋出於"
+msgstr "完整的 KiCad EDA 工具箱在"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -1933,9 +1933,9 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 首次使用新的%s庫表來訪問庫。\n"
-"為了讓 KiCad 訪問%s庫，\n"
-"您必須配置全域性%s庫表。\n"
+"KiCad 首次使用新的 %s 庫表來訪問庫。\n"
+"為了讓 KiCad 訪問 %s 庫，\n"
+"您必須配置全域性 %s 庫表。\n"
 "請從以下選項中選擇一個。\n"
 "如果您不確定要選擇哪個選項，請使用預設選擇。"
 
@@ -2956,18 +2956,16 @@ msgid "Show icons in menus"
 msgstr "在選單中顯示圖示"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "顏色主題："
+msgstr "圖示主題："
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "向右"
+msgstr "淺色"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "使用專為淺色窗戶背景設計的圖示"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -2976,12 +2974,12 @@ msgstr "黑"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "使用專為深色窗戶背景設計的圖示"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "根據系統顏色主題自動選擇淺色或深色圖示"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -5370,7 +5368,7 @@ msgstr "KiCad 經典版"
 #: common/single_top.cpp:175 kicad/kicad.cpp:305
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr "KiCad 及其依賴不再支援 Windows 7 及先前系統。"
+msgstr "KiCad 及其依賴不再支援 Windows 7 及更早版本。"
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:306
 msgid "Unsupported Operating System"
@@ -5964,11 +5962,11 @@ msgstr "編輯全域性和專案封裝庫列表"
 
 #: common/tool/actions.cpp:606
 msgid "Getting Started with KiCad"
-msgstr "KiCad 入門指南"
+msgstr "KiCad 入門"
 
 #: common/tool/actions.cpp:607
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "開啟“KiCad 入門指南”手冊"
+msgstr "開啟“KiCad 入門”手冊"
 
 #: common/tool/actions.cpp:612
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:598
@@ -6111,7 +6109,7 @@ msgstr "硬體加速圖形 (推薦)"
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
-msgstr "軟體圖形 （適用於不支援 KiCad 硬體加速要求的計算機）"
+msgstr "軟體圖形 (適用於不支援 KiCad 硬體加速要求的計算機)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -12121,9 +12119,9 @@ msgid "Do not show this dialog again."
 msgstr "不再顯示。"
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "未能儲存符號庫檔案 '%s'。"
+msgstr "未找到專案符號庫快取檔案 '%s'。"
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12133,22 +12131,22 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"某些情況下，這可能會導致原理圖損壞。 如果原理圖在開啟時沒有丟失的符號，請在進行任何更改之前立即儲存它，以防止資料丟失。 "
+"如果缺少符號，則需要手動恢復原理圖或恢復符號快取庫檔案並重新載入原理圖。"
 
 #: eeschema/files-io.cpp:510
-#, fuzzy
 msgid "Load Without Cache File"
-msgstr "載入但不儲存現有檔案"
+msgstr "載入時排除快取檔案"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "中止\n"
+msgstr "終止"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr "這個檔案由Kicad的舊版本所建立。它將被轉換成新的格式儲存。"
+msgstr "這個檔案由 KiCad 的舊版本所建立。它將被轉換成新的格式儲存。"
 
 #: eeschema/files-io.cpp:599
 msgid "Schematic file is read only."
@@ -12742,9 +12740,8 @@ msgid "Go to Page %s (%s)"
 msgstr "轉到第 %s 頁 (%s)"
 
 #: eeschema/sch_field.cpp:501
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "從選定的形狀建立焊盤"
+msgstr "回到先前選中的圖框"
 
 #: eeschema/sch_field.cpp:529
 msgid "Intersheet References"
@@ -15042,7 +15039,7 @@ msgstr "模擬..."
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulate circuit in SPICE"
-msgstr "SPICE 中的類比電路"
+msgstr "SPICE 中的模擬電路"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
@@ -16575,7 +16572,7 @@ msgstr "D 碼 %d"
 
 #: gerbview/gerber_draw_item.cpp:694
 msgid "Graphic Layer"
-msgstr "圖形層"
+msgstr "繪圖層"
 
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Clear"
@@ -16627,7 +16624,7 @@ msgstr "圖片名稱"
 
 #: gerbview/gerber_file_image.cpp:345
 msgid "Graphic layer"
-msgstr "圖形層"
+msgstr "繪圖層"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
@@ -16648,7 +16645,7 @@ msgstr "影象偏移對齊"
 #: gerbview/gerber_file_image_list.cpp:188
 #, c-format
 msgid "Graphic layer %d"
-msgstr "圖形層 %d"
+msgstr "Graphic layer %d"
 
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:128
 msgid "Clear Recent Zip Files"
@@ -18065,11 +18062,11 @@ msgstr "佈局檔案為只讀。"
 
 #: pagelayout_editor/pl_editor_frame.cpp:96
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad工程圖編輯器"
+msgstr "KiCad 工程圖編輯器"
 
 #: pagelayout_editor/pl_editor_frame.cpp:151
 msgid "coord origin: Right Bottom page corner"
-msgstr "原點位置：圖框左下角"
+msgstr "原點位置：右下頁角"
 
 #: pagelayout_editor/pl_editor_frame.cpp:178
 msgid "Properties"
@@ -18111,23 +18108,23 @@ msgstr "頁高度"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Left Top paper corner"
-msgstr "圖框左上角"
+msgstr "紙張左上角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:75
 msgid "Right Bottom page corner"
-msgstr "圖框右下角"
+msgstr "右下頁角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:76
 msgid "Left Bottom page corner"
-msgstr "圖框左下角"
+msgstr "左下頁角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:77
 msgid "Right Top page corner"
-msgstr "圖框右上角"
+msgstr "右上頁角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:78
 msgid "Left Top page corner"
-msgstr "圖框左上角"
+msgstr "左上頁角"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:89
 msgid "Origin of coordinates displayed to the status bar"
@@ -19167,11 +19164,10 @@ msgstr ""
 "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "此計算器查詢標準 E 系列元件的組合來\n"
-"建立任意值。您可以輸入所需的電阻，範圍從0.0025 到 4000 k?。\n"
+"建立任意值。您可以輸入所需的電阻，範圍從0.0025 到 4000 kΩ。\n"
 "給出的解決方案使用多達 4 個元件。\n"
 "\n"
-"預設情況下，請求值總是被排除在解決方案集之外。也可以指定將最多兩個額外的值排"
-"除在解決方案之外，前提是\n"
+"預設情況下，請求值總是被排除在解決方案集之外。也可以指定將最多兩個額外的值排除在解決方案之外，前提是\n"
 "這些元件值不可用。\n"
 "\n"
 "解決方案依照下列格式提供：\n"
@@ -26845,7 +26841,7 @@ msgstr "註釋層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:700
 msgid "If you want a layer for documentation drawings"
-msgstr "開啟/關閉 文件圖形層"
+msgstr "開啟/關閉 文件繪圖層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:704
 msgid "Drawings"
@@ -28169,7 +28165,7 @@ msgstr "KiCad 封裝編輯器"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "內層"
 
 #: pcbnew/footprint_edit_frame.cpp:243 pcbnew/pcb_edit_frame.cpp:270
 msgid "Selection Filter"
@@ -28572,7 +28568,7 @@ msgstr "匯入引數"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
-msgstr "圖形層："
+msgstr "繪圖層："
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:141
 msgid "Import scale:"
@@ -28921,9 +28917,9 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "新增 %s (封裝 \"%s\")。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
-msgstr "新增 %s (封裝 \"%s\")。"
+msgstr "添加了 %s (封裝 \"%s\")。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, c-format
@@ -28936,14 +28932,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "無法更新 %s (封裝 \"%s\" 未找到)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "將封裝 %s從 '%s' 更改為 '%s'"
+msgstr "將封裝 %s從 '%s' 更改為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "將封裝 %s從 '%s' 更改為 '%s'"
+msgstr "將封裝 %s 從 '%s' 更改為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -28951,9 +28947,9 @@ msgid "Change %s reference designator to %s."
 msgstr "更改 %s 的位號為 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "更改 %s 的位號為 %s。"
+msgstr "更改 %s 的參考位號為 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:288
 #, c-format
@@ -28961,9 +28957,9 @@ msgid "Change %s value from %s to %s."
 msgstr "\"%s\" 的值從 \"%s\" 更改為 \"%s\"。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "\"%s\" 的值從 \"%s\" 更改為 \"%s\"。"
+msgstr "將 %s 的值從 %s 更改為了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:315
 #, c-format
@@ -28971,9 +28967,9 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "更新 %s 符號關聯從 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "更新 %s 符號關聯從 %s 到 %s。"
+msgstr "將 %s 符號關聯從 %s 更新到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:338
 #, c-format
@@ -28981,25 +28977,25 @@ msgid "Update %s properties."
 msgstr "更新 %s 屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "更新 %s 屬性。"
+msgstr "更新了 %s 項屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Set %s 'exclude from BOM' fabrication attribute."
-msgstr "設定 %s “從 BOM 中排除”製造屬性。"
+msgstr "給 %s 設定“從 BOM 中排除”製造屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "正在刪除 %s “從 BOM 中排除”製造屬性。"
+msgstr "刪除 %s “從 BOM 中排除”的製造屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "正在刪除 %s “從 BOM 中排除”製造屬性。"
+msgstr "刪除了 %s “從 BOM 中排除”的製造屬性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, c-format
@@ -29007,14 +29003,14 @@ msgid "Disconnect %s pin %s."
 msgstr "斷開 %s 引腳 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "斷開 %s 引腳 %s。"
+msgstr "斷開連線的 %s 引腳 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "符號 %s 引腳 %s 沒有網。"
+msgstr "未找到符號 %s 引腳 %s 的網。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:515
 #, c-format
@@ -29027,9 +29023,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "重新連線 %s 的引腳 %s 從 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "重新連線 %s 的引腳 %s 從 %s 到 %s。"
+msgstr "將 %s 引腳 %s 從 %s 重新連線到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:544
 #, c-format
@@ -29037,9 +29033,9 @@ msgid "Connect %s pin %s to %s."
 msgstr "連線 %s 的引腳 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "連線 %s 的引腳 %s 到 %s。"
+msgstr "將 %s 引腳 %s 連線到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:630
 #, c-format
@@ -29047,9 +29043,9 @@ msgid "Reconnect via from %s to %s."
 msgstr "重新連線過孔從 %s 到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "重新連線過孔從 %s 到 %s。"
+msgstr "將過孔從 %s 重新連線到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:658
 #, c-format
@@ -29057,9 +29053,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "過孔連線到未知網路 (%s)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "將銅區 %s 重新連線到 %s。"
+msgstr "將銅區 '%s' 從 %s 重新連線到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
@@ -29067,24 +29063,24 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "將銅區 %s 重新連線到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "將銅區 %s 重新連線到 %s。"
+msgstr "將銅區 '%s' 從 %s 重新連線到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "將銅區 %s 重新連線到 %s。"
+msgstr "將銅區從 %s 重新連線到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "銅區 (%s)沒有焊盤連線。"
+msgstr "銅區 '%s' 沒有與之連線的焊盤。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "銅區 (%s)沒有焊盤連線。"
+msgstr "座標 (%s, %s) 層 %s 上的銅區域沒有與之相連的焊盤。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -29092,9 +29088,9 @@ msgid "Remove single pad net %s."
 msgstr "刪除單一焊盤網路 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
-msgstr "刪除單一焊盤網路 %s。"
+msgstr "刪除了單一焊盤網 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, c-format
@@ -29117,7 +29113,7 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "無法刪除未使用的封裝 %s (已鎖定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "無法刪除未使用的封裝 %s (已鎖定)。"
 
@@ -29127,14 +29123,14 @@ msgid "Remove unused footprint %s."
 msgstr "刪除未使用封裝 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "刪除未使用封裝 %s。"
+msgstr "刪除了未使用的封裝 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "刪除未使用的網路 \"%s\"。"
+msgstr "刪除未使用的網路 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 msgid "Update netlist"
