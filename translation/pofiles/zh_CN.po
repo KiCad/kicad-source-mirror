@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-12 02:20+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-03-12 03:16+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16580,7 +16580,7 @@ msgstr "D 码 %d"
 
 #: gerbview/gerber_draw_item.cpp:694
 msgid "Graphic Layer"
-msgstr "图形层"
+msgstr "绘图层"
 
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Clear"
@@ -16632,7 +16632,7 @@ msgstr "图片名称"
 
 #: gerbview/gerber_file_image.cpp:345
 msgid "Graphic layer"
-msgstr "图形层"
+msgstr "绘图层"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
@@ -16653,7 +16653,7 @@ msgstr "图像偏移对齐"
 #: gerbview/gerber_file_image_list.cpp:188
 #, c-format
 msgid "Graphic layer %d"
-msgstr "图形层 %d"
+msgstr "绘图层 %d"
 
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:128
 msgid "Clear Recent Zip Files"
@@ -26853,7 +26853,7 @@ msgstr "注释层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:700
 msgid "If you want a layer for documentation drawings"
-msgstr "开启/关闭 文档图形层"
+msgstr "开启/关闭 文档绘图层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:704
 msgid "Drawings"
@@ -28583,7 +28583,7 @@ msgstr "导入参数"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
-msgstr "图形层："
+msgstr "绘图层："
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:141
 msgid "Import scale:"
