@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-11 21:05+0100\n"
+"POT-Creation-Date: 2021-03-12 20:09+0100\n"
+"PO-Revision-Date: 2021-03-12 20:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1402,8 +1402,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop.in:9
-#: resources/linux/launchers/bitmap2component.desktop.in:10
+#: resources/linux/launchers/bitmap2component.desktop:9
+#: resources/linux/launchers/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -6233,7 +6233,7 @@ msgstr "Moteur Graphique Accéléré"
 
 #: common/widgets/gal_options_panel.cpp:83
 msgid "Fallback graphics"
-msgstr "Moteur Graphique Programmé:"
+msgstr "Moteur Graphique Programmé"
 
 #: common/widgets/gal_options_panel.cpp:84
 msgid "Rendering Engine"
@@ -17196,7 +17196,7 @@ msgid "X2 attr"
 msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1001
-#: resources/linux/launchers/gerbview.desktop.in:10
+#: resources/linux/launchers/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -17362,7 +17362,7 @@ msgstr "Montrer fichier source pour la couche courante"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
-msgstr "Exporter vers Editeur de PCB"
+msgstr "Exporter vers Editeur de PCB..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -18284,11 +18284,6 @@ msgstr "%s fermé [pid=%d]\n"
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
 
-#: libs/kiplatform/msw/environment.cpp:49
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
-
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
 msgstr "Plan"
@@ -19209,11 +19204,11 @@ msgstr "Rugosité:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr "mu de l'isolant"
+msgstr "mu de l'isolant:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Conductor mu:"
-msgstr "mu  du conducteur"
+msgstr "mu  du conducteur:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
 msgid "Component Parameters"
@@ -19308,7 +19303,7 @@ msgstr "Ohm-mètre"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr "Perméabilité relative du substrat"
+msgstr "Perméabilité relative du substrat:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -19658,8 +19653,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop.in:9
-#: resources/linux/launchers/pcbcalculator.desktop.in:10
+#: resources/linux/launchers/pcbcalculator.desktop:9
+#: resources/linux/launchers/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -20559,7 +20554,7 @@ msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
-msgstr "Épaisseur du PCB venant du stackup"
+msgstr "Épaisseur du PCB venant du stackup:"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "ENIG"
@@ -21301,7 +21296,7 @@ msgstr "Contraintes"
 #: pcbnew/dialogs/dialog_board_setup.cpp:98 pcbnew/edit_track_width.cpp:176
 #: pcbnew/edit_track_width.cpp:196
 msgid "Pre-defined Sizes"
-msgstr "Tailles Prédéfinies:"
+msgstr "Tailles Prédéfinies::"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
@@ -21571,7 +21566,7 @@ msgstr "&Supprimer  vias redondantes"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "Supprimer vias sur pads traversants et  vias superposéees"
+msgstr "Supprimer vias sur pads traversants et  vias superposées"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
@@ -28130,7 +28125,7 @@ msgstr "Les zones de cuivre se coupent"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Copper zone net has no pads"
-msgstr "Zone cuivre n'a pas de pad connecté à ce net."
+msgstr "Le net de la zone cuivre n'a pas de pad connecté."
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Via is not connected or connected on only one layer"
@@ -29781,7 +29776,7 @@ msgstr "Ajout %s (empreinte:%s)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
 #, c-format
 msgid "Added %s (footprint \"%s\")."
-msgstr "Ajout %s (empreinte:%s)."
+msgstr "Ajouté %s (empreinte:%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, c-format
@@ -29844,9 +29839,9 @@ msgid "Updated %s properties."
 msgstr "Mise à jour des propriétés de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Activation de attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajout attribut de fabrication \"exclure de BOM\" pour %s ."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
@@ -29854,9 +29849,9 @@ msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Activation de attribut de fabrication \"exclure de BOM\" pour %s ."
+msgstr "Ajouté attribut de fabrication \"exclure de BOM\" pour %s ."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
 #, c-format
@@ -30359,7 +30354,7 @@ msgstr "Editer règles de conception"
 
 #: pcbnew/pcb_edit_frame.cpp:1660
 msgid "Could not compile custom design rules."
-msgstr "Impossible de compiler les règles de conception utilisateur.  "
+msgstr "Impossible de compiler les règles de conception utilisateur."
 
 #: pcbnew/pcb_edit_frame.cpp:1688
 msgid "Export Hyperlynx Layout"
@@ -35011,21 +35006,17 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml.in:6
-#: resources/linux/launchers/kicad.desktop.in:10
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/launchers/kicad.desktop:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:13
-#: resources/linux/launchers/kicad.desktop.in:11
+#: resources/linux/appdata/kicad.appdata.xml:13
+#: resources/linux/launchers/kicad.desktop:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:37
+#: resources/linux/appdata/kicad.appdata.xml:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -35035,92 +35026,67 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml.in:49
+#: resources/linux/appdata/kicad.appdata.xml:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:54
+#: resources/linux/appdata/kicad.appdata.xml:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:59
+#: resources/linux/appdata/kicad.appdata.xml:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml.in:71
+#: resources/linux/appdata/kicad.appdata.xml:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop.in:11
+#: resources/linux/launchers/bitmap2component.desktop:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop.in:10
+#: resources/linux/launchers/eeschema.desktop:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop.in:11
+#: resources/linux/launchers/eeschema.desktop:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop.in:12
+#: resources/linux/launchers/eeschema.desktop:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop.in:11
+#: resources/linux/launchers/gerbview.desktop:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop.in:12
+#: resources/linux/launchers/gerbview.desktop:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop.in:12
+#: resources/linux/launchers/kicad.desktop:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop.in:11
+#: resources/linux/launchers/pcbcalculator.desktop:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop.in:10
+#: resources/linux/launchers/pcbnew.desktop:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop.in:11
+#: resources/linux/launchers/pcbnew.desktop:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop.in:12
+#: resources/linux/launchers/pcbnew.desktop:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
-msgid "Gerber File"
-msgstr "Fichiers Gerber"
-
-#: resources/linux/mime/kicad-gerbers.xml.in:10
-#, fuzzy
-msgid "Excellon drill file"
-msgstr "Créer Fichier(s) de perçage Excellon"
-
-#: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
-msgid "KiCad Project"
-msgstr "Fichier projet KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:11
-#, fuzzy
-msgid "KiCad Schematic"
-msgstr "Editeur de Schématique KiCad"
-
-#: resources/linux/mime/kicad-kicad.xml.in:17
-#, fuzzy
-msgid "KiCad Printed Circuit Board"
-msgstr "Fichiers circuits imprimés KiCad"
 
 #, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
@@ -35814,6 +35780,10 @@ msgstr "Fichiers circuits imprimés KiCad"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
