@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-12 07:56+0000\n"
+"PO-Revision-Date: 2021-03-12 08:03+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -9638,7 +9638,7 @@ msgstr "导出网表"
 
 #: eeschema/dialogs/dialog_netlist.cpp:307
 msgid "Simulator requires a fully annotated schematic."
-msgstr "模拟器需要一张完整批注的原理图。"
+msgstr "仿真器需要一张完整批注的原理图。"
 
 #: eeschema/dialogs/dialog_netlist.cpp:330
 msgid "Reformat passive symbol values"
@@ -14440,7 +14440,7 @@ msgstr "调整元件的值"
 
 #: eeschema/sim/sim_plot_frame.cpp:192
 msgid "Sim Parameters"
-msgstr "模拟参数"
+msgstr "仿真参数"
 
 #: eeschema/sim/sim_plot_frame.cpp:193
 msgid "Simulation parameters and settings"
@@ -14465,11 +14465,11 @@ msgstr "绘制 %u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:555
 msgid "Error: simulation type not defined!\n"
-msgstr "错误：未定义模拟类型！\n"
+msgstr "错误：未定义仿真类型！\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:561
 msgid "Error: simulation type doesn't support plotting!\n"
-msgstr "错误：模拟类型不支持绘制！\n"
+msgstr "错误：仿真类型不支持绘制！\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:764 eeschema/sim/sim_plot_frame.cpp:1413
 msgid "Signal"
@@ -15332,11 +15332,11 @@ msgstr "显示符号检查器窗口"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
-msgstr "模拟..."
+msgstr "仿真..."
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulate circuit in SPICE"
-msgstr "SPICE 中的模拟电路"
+msgstr "SPICE 中的仿真电路"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
