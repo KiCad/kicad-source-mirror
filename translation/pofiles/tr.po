@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-02-17 22:35+0000\n"
-"Last-Translator: Murat Ursavaş <murat.ursavas@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -186,9 +186,9 @@ msgid "Your OpenGL version is not supported. Minimum required is 1.5"
 msgstr "OpenGL sürümünüz desteklenmiyor. En azından 1.5 sürümü gereklidir"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Oluşturma süresi %.3f s"
+msgstr "Son oluşturma süresi %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:737
 #, c-format
@@ -729,9 +729,8 @@ msgid "3D Display Options"
 msgstr "3B Görüntüleme Seçenekleri"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3B Görüntüleyici"
+msgstr "KiCad 3B Görüntüleyici"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -936,23 +935,23 @@ msgstr "Delik İçi 3B Modelleri Aç / Kapa"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "'Delik İçi' özelliği olan 3B Modelleri Aç/Kapa"
+msgstr "'Delik içi' özelliği olan 3B modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr "Yüzey Monte 3B Modelleri Aç/Kapa"
+msgstr "Yüzey monte 3B modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "'Yüzey Monte' özelliği olan 3B modelleri aç/kapa"
+msgstr "'Yüzey monte' özelliği olan 3B modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
-msgstr "Sanal 3B Modelleri Aç/Kapa"
+msgstr "Sanal 3B modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "'Sanal' özelliği olan 3B modelleri aç/kapa"
+msgstr "'Sanal' özelliği olan 3B modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -1300,23 +1299,20 @@ msgid "Export to Clipboard"
 msgstr "Panoya Aktar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.lib file)"
-msgstr "Eeschema (.lib dosyası)"
+msgstr "Sembol (.lib dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (.kicad_mod dosyası)"
+msgstr "İz düşümü (.kicad_mod dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
 msgstr "PostScript (.ps dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Worksheet (.kicad_wks file)"
-msgstr "Başlık bloğu için logo (.kicad_wks dosyası)"
+msgstr "Çalışma sayfası (.kicad_wks dosyası)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
@@ -3337,7 +3333,7 @@ msgstr "Şema bağlantı kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
 msgid "Bus wire thickness"
-msgstr "Veriyolu bağlantı kalınlığı"
+msgstr "Veri yolu bağlantı kalınlığı"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
 msgid "Schematic wire color"
@@ -4429,9 +4425,8 @@ msgid "Delete"
 msgstr ""
 
 #: common/grid_tricks.cpp:244
-#, fuzzy
 msgid "Delete selected cells"
-msgstr "Öge(ler) seç."
+msgstr "Seçili hücreleri sil"
 
 #: common/grid_tricks.cpp:245 common/tool/actions.cpp:170
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -4490,9 +4485,8 @@ msgstr ""
 #: common/hotkey_store.cpp:74 eeschema/eeschema_config.cpp:64
 #: eeschema/menubar.cpp:128 eeschema/sch_edit_frame.cpp:1257
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Eeschema Şema Düzenleyicisi"
+msgstr "Şema Düzenleyici"
 
 #: common/hotkey_store.cpp:75 kicad/tools/kicad_manager_actions.cpp:76
 #: pcbnew/menubar_pcb_editor.cpp:184 pcbnew/pcb_edit_frame.cpp:1201
@@ -4503,9 +4497,8 @@ msgstr ""
 #: common/hotkey_store.cpp:76 kicad/tools/kicad_manager_actions.cpp:105
 #: pagelayout_editor/menubar.cpp:87 pagelayout_editor/pl_editor_frame.cpp:463
 #: pagelayout_editor/pl_editor_frame.cpp:531
-#, fuzzy
 msgid "Drawing Sheet Editor"
-msgstr "Eeschema Şema Düzenleyicisi"
+msgstr "Çizim Sayfası Düzenleyici"
 
 #: common/hotkey_store.cpp:142
 msgid "Gestures"
@@ -6030,9 +6023,8 @@ msgid "Fallback graphics"
 msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:84
-#, fuzzy
 msgid "Rendering Engine"
-msgstr "Oluşturma süresi %.3f s"
+msgstr "Oluşturma Motoru"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Hardware-accelerated graphics (recommended)"
@@ -7480,9 +7472,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:135
-#, fuzzy
 msgid "Update field text"
-msgstr "Alanları güncelle/sıfırla"
+msgstr "Alan metnini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Update field visibilities"
@@ -7497,9 +7488,8 @@ msgid "Update field positions"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Sembol özniteliklerini güncelle/sıfırla"
+msgstr "Sembol özniteliklerini güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:159
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
@@ -7596,9 +7586,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Alanları güncelle/sıfırla"
+msgstr "Alan metnini güncelle/sıfırla"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -7729,9 +7718,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Sembolleri Kütüphaneden Güncelle"
+msgstr "Sembol alanlarını yeni kütüphaneden güncelle"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:64
 msgid ""
@@ -8304,9 +8292,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Öge(ler) seç."
+msgstr "Yalnızca seçili ögeleri dahil et"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:148
 msgid "Set To"
@@ -9966,9 +9953,8 @@ msgid "DC source:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:132
-#, fuzzy
 msgid "Starting value:"
-msgstr "Başlangıç katmanı:"
+msgstr "Başlangıç değeri:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:150
 msgid "Final value:"
@@ -10809,9 +10795,8 @@ msgid "Reset fields if empty in parent symbol"
 msgstr ""
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Alanları güncelle/sıfırla"
+msgstr "Sembol Alanlarını Güncelle"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:151
 msgid ""
@@ -10976,9 +10961,8 @@ msgid "Toggle selected state of item(s)."
 msgstr "Öge(ler)in seçilme durumlarını değiştir."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:116
-#, fuzzy
 msgid "Alt+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Alt+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:169
@@ -11002,9 +10986,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:165
-#, fuzzy
 msgid "Cmd+Shift"
-msgstr "Ctrl+Shift"
+msgstr "Cmd+Shift"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:194
 msgid "Symbol Field Automatic Placement"
@@ -11165,9 +11148,8 @@ msgid "Show inter-sheet references"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:159
-#, fuzzy
 msgid "Show own page reference"
-msgstr "İz düşümü referanslarını göster"
+msgstr "Kendi sayfa referansını göster"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:163
 msgid "Standard (1,2,3)"
@@ -11797,9 +11779,8 @@ msgid "Saving will overwrite existing files."
 msgstr ""
 
 #: eeschema/files-io.cpp:789
-#, fuzzy
 msgid "Save Warning"
-msgstr "Uyarı"
+msgstr "Kaydetme Uyarısı"
 
 #: eeschema/files-io.cpp:792
 msgid ""
@@ -12272,9 +12253,8 @@ msgid "The following libraries were not found:"
 msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:220
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Eeschema Şema Düzenleyicisi"
+msgstr "KiCad Şema Düzenleyici"
 
 #: eeschema/sch_edit_frame.cpp:300
 msgid "New schematic file is unsaved"
@@ -12433,9 +12413,8 @@ msgid "Assigned Netclass"
 msgstr ""
 
 #: eeschema/sch_marker.cpp:165
-#, fuzzy
 msgid "Electrical Rule Check Error"
-msgstr "Elektriksel"
+msgstr "Elektriksel Kural Denetimi Hatası"
 
 #: eeschema/sch_marker.h:98
 msgid "ERC Marker"
@@ -13748,9 +13727,8 @@ msgid "Library Editor"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
-#, fuzzy
 msgid "KiCad Symbol Editor"
-msgstr "Sembol Kütüphanesi Oluştur"
+msgstr "KiCad Sembol Düzenleyici"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:167
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:718
@@ -13815,9 +13793,9 @@ msgid "Could not open the library file."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:909
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'"
-msgstr "%s yükleniyor"
+msgstr "'%s' kütüphanesi yükleniyor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:976
 #: pcbnew/footprint_libraries_utils.cpp:486
@@ -13877,15 +13855,13 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1370
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1425
-#, fuzzy
 msgid "Error saving global library table."
-msgstr "%s sembol kütüphanesi tablosu kaydedilirken hata oluştu."
+msgstr "Genel kütüphane tablosu kaydedilirken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1371
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1426
-#, fuzzy
 msgid "Error saving project library table."
-msgstr "%s sembol kütüphanesi tablosu kaydedilirken hata oluştu."
+msgstr "Proje kütüphane tablosu kaydedilirken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:56
 msgid "Normal save as operation"
@@ -14205,9 +14181,8 @@ msgid "(failed to load)"
 msgstr "(yüklenemedi)"
 
 #: eeschema/symbol_viewer_frame.cpp:114
-#, fuzzy
 msgid "KiCad Symbol Library Viewer"
-msgstr "Sembol Kütüphanesi Oluştur"
+msgstr "KiCad Sembol Kütüphanesi Görüntüleyici"
 
 #: eeschema/symbol_viewer_frame.cpp:459
 #, c-format
@@ -14455,9 +14430,8 @@ msgid "Export a symbol to a new library file"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:173
-#, fuzzy
 msgid "Update Symbol Fields..."
-msgstr "Alanları güncelle/sıfırla"
+msgstr "Sembol Alanlarını Güncelle..."
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update symbol to match changes made in parent symbol"
@@ -15955,9 +15929,8 @@ msgid "Clear Recent Job Files"
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:93
-#, fuzzy
 msgid "KiCad Gerber Viewer"
-msgstr "Gerber Dosyası Görüntüleyici"
+msgstr "KiCad Gerber Görüntüleyici"
 
 #: gerbview/gerbview_frame.cpp:158
 msgid "Layers Manager"
@@ -15965,9 +15938,8 @@ msgstr ""
 
 #: gerbview/gerbview_frame.cpp:597 gerbview/gerbview_frame.cpp:616
 #: gerbview/menubar.cpp:149 kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Gerber Dosyası Görüntüleyici"
+msgstr "Gerber Görüntüleyici"
 
 #: gerbview/gerbview_frame.cpp:602
 #, c-format
@@ -16143,9 +16115,8 @@ msgid "Show source file for the current layer"
 msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:81
-#, fuzzy
 msgid "Export to PCB Editor..."
-msgstr "Panoya Aktar"
+msgstr "PCB Düzenleyiciye Aktar..."
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "Export data as a KiCad PCB file"
@@ -16483,9 +16454,8 @@ msgid "Edit global and/or project PCB footprint libraries"
 msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:114
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Gerber dosyalarını görüntüleyin"
+msgstr "Gerber dosyalarını ön izle"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:118
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -16575,9 +16545,8 @@ msgid "Project Files"
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:158
-#, fuzzy
 msgid "Editors"
-msgstr "Dü&zenle"
+msgstr "Düzenleyiciler"
 
 #: kicad/kicad_manager_frame.cpp:548
 msgid "Load File to Edit"
@@ -16869,9 +16838,8 @@ msgid "Close the current project"
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:64
-#, fuzzy
 msgid "Edit schematic"
-msgstr "KiCad Şeması"
+msgstr "Şemayı düzenle"
 
 #: kicad/tools/kicad_manager_actions.cpp:70
 msgid "Edit schematic symbols"
@@ -16886,9 +16854,8 @@ msgid "Edit PCB footprints"
 msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:88
-#, fuzzy
 msgid "Preview Gerber output files"
-msgstr "Gerber dosyalarını görüntüleyin"
+msgstr "Gerber çıktı dosyalarını ön izle"
 
 #: kicad/tools/kicad_manager_actions.cpp:94
 msgid "Image Converter"
@@ -17733,9 +17700,8 @@ msgid "Zout:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3:"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -18482,7 +18448,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Frequency of the input signal"
-msgstr ""
+msgstr "Giriş sinyalinin frekansı"
 
 #: pcb_calculator/transline_ident.cpp:146
 #: pcb_calculator/transline_ident.cpp:186
@@ -18503,7 +18469,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:367
 #: pcb_calculator/transline_ident.cpp:400
 msgid "Conductor losses:"
-msgstr ""
+msgstr "İletken kayıpları:"
 
 #: pcb_calculator/transline_ident.cpp:148
 #: pcb_calculator/transline_ident.cpp:188
@@ -18512,9 +18478,8 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:289
 #: pcb_calculator/transline_ident.cpp:368
 #: pcb_calculator/transline_ident.cpp:401
-#, fuzzy
 msgid "Dielectric losses:"
-msgstr "Dielektrik Katmanlar"
+msgstr "Dielektrik kayıplar:"
 
 #: pcb_calculator/transline_ident.cpp:149
 #: pcb_calculator/transline_ident.cpp:189
@@ -18574,7 +18539,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:379
 #: pcb_calculator/transline_ident.cpp:408
 msgid "conductor"
-msgstr ""
+msgstr "iletken"
 
 #: pcb_calculator/transline_ident.cpp:166
 #: pcb_calculator/transline_ident.cpp:197
@@ -18650,9 +18615,8 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:261
 #: pcb_calculator/transline_ident.cpp:294
-#, fuzzy
 msgid "insulator"
-msgstr "Çevirenler"
+msgstr "yalıtkan"
 
 #: pcb_calculator/transline_ident.cpp:262
 #: pcb_calculator/transline_ident.cpp:295
@@ -18710,14 +18674,12 @@ msgid "Conductor losses (odd):"
 msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:326
-#, fuzzy
 msgid "Dielectric losses (even):"
-msgstr "Dielektrik Katmanlar"
+msgstr "Dielektrik kayıplar (çift):"
 
 #: pcb_calculator/transline_ident.cpp:327
-#, fuzzy
 msgid "Dielectric losses (odd):"
-msgstr "Dielektrik Katmanlar"
+msgstr "Dielektrik kayıplar (tek):"
 
 #: pcb_calculator/transline_ident.cpp:352
 msgid "Zeven"
@@ -21750,9 +21712,8 @@ msgid "Include &zones"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
-#, fuzzy
 msgid "Filter Selected Items"
-msgstr "Öge(ler) seç."
+msgstr "Seçili Ögeleri Filtrele"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
 msgid "Searching..."
@@ -22250,9 +22211,8 @@ msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
-#, fuzzy
 msgid "Available footprints:"
-msgstr "Kullanılabilir yollar:"
+msgstr "Kullanılabilir iz düşümler:"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:56
 #: pcbnew/tools/pcb_actions.cpp:245
@@ -22802,9 +22762,8 @@ msgid "Via Length"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:75
-#, fuzzy
 msgid "Track Length"
-msgstr "Yol genişliği:"
+msgstr "Yol Uzunluğu"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76
 msgid "Die Length"
@@ -25887,9 +25846,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:83
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Değişiklikleri At"
+msgstr "Değişiklikler İptal Edilsin Mi?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:351
 msgid "DRC rules"
@@ -25973,9 +25931,8 @@ msgid "Via hole diameter less than minimum through hole diameter (%s)."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:288
-#, fuzzy
 msgid "Via hole diameter larger than via diameter."
-msgstr "Geçiş matkap boyutu geçiş çapından küçük olmalıdır"
+msgstr "Geçiş delik çapı, geçiş çapından daha büyük."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:296
 #, c-format
@@ -26928,9 +26885,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/files.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
-msgstr "%s sembol kütüphanesi tablosu kaydedilirken hata oluştu."
+msgstr "Projeye özel iz düşümü kütüphane tablosu kaydedilirken hata oluştu: %s"
 
 #: pcbnew/files.cpp:931 pcbnew/files.cpp:1077
 #, c-format
@@ -27053,9 +27010,8 @@ msgid "footprint %s"
 msgstr ""
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "İz Düşümü Kütüphanesi Oluştur"
+msgstr "KiCad İz Düşümü Düzenleyici"
 
 #: pcbnew/footprint_edit_frame.cpp:204 pcbnew/zone_settings.cpp:216
 msgid "Inner layers"
@@ -27210,9 +27166,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_libraries_utils.cpp:953
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "İz düşümler"
+msgstr "İz Düşümünü Farklı Kaydet"
 
 #: pcbnew/footprint_libraries_utils.cpp:990
 msgid "No library specified.  Footprint could not be saved."
@@ -27250,9 +27205,8 @@ msgid "No footprint name defined."
 msgstr ""
 
 #: pcbnew/footprint_viewer_frame.cpp:119
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "İz Düşümü Kütüphanesi Oluştur"
+msgstr "KiCad İz Düşümü Kütüphanesi Görüntüleyici"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -27801,14 +27755,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "%s sembolünü '%s'den '%s'e güncelle"
+msgstr "%s iz düşümünü '%s'den '%s'e değiştir."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "%s sembolünü '%s'den '%s'e güncelle"
+msgstr "%s iz düşümü '%s'den '%s'e değiştirildi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -27836,9 +27790,9 @@ msgid "Update %s symbol association from %s to %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "%s sembolünü '%s'den '%s'e güncelle"
+msgstr "%s sembol ilişkisi '%s'den '%s'e güncellendi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:338
 #, c-format
@@ -27846,9 +27800,9 @@ msgid "Update %s properties."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "Tüm Özellikleri Kullan"
+msgstr "%s özellikleri güncellendi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #, c-format
@@ -27896,9 +27850,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "%s sembolünü '%s'den '%s'e güncelle"
+msgstr "%s %s pini '%s'den '%s'e yeniden bağlandı."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:544
 #, c-format
@@ -27996,14 +27950,14 @@ msgid "Remove unused footprint %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Kullanılmayan katmanları &kaldır"
+msgstr "Kullanılmayan %s iz düşümü kaldırıldı."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Kullanılmayan katmanları &kaldır"
+msgstr "Kullanılmayan %s ağı kaldırıldı."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 msgid "Update netlist"
@@ -30780,9 +30734,8 @@ msgid "Footprint Properties..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:385
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "İz düşümü referanslarını göster"
+msgstr "İz düşümü özelliklerini düzenle"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Show the footprint checker window"
@@ -31130,9 +31083,8 @@ msgid "Toggle Lock"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:646
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Öge(ler) seç."
+msgstr "Seçili ögeleri kilitle veya kilidini aç"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -31671,11 +31623,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1212
 msgid "Filter Selected Items..."
-msgstr "Seçilmiş Ögeleri Filtrele..."
+msgstr "Seçili Ögeleri Filtrele..."
 
 #: pcbnew/tools/pcb_actions.cpp:1212
 msgid "Remove items from the selection by type"
-msgstr "Ögeleri tipine göre seçimden çıkar"
+msgstr "Ögeleri türüne göre seçimden çıkar"
 
 #: pcbnew/tools/pcb_actions.cpp:1220
 msgid "Fill zone(s)"
@@ -32712,7 +32664,7 @@ msgstr ""
 
 #: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
-msgstr "Eeschema Şema Düzenleyicisi"
+msgstr "Eeschema Şema Düzenleyici"
 
 #: resources/linux/appdata/kicad.appdata.xml.in:54
 msgid "PcbNew PCB Layout"
