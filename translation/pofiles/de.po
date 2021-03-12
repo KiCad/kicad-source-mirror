@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-11 08:30-0800\n"
-"PO-Revision-Date: 2021-03-11 15:02+0000\n"
+"PO-Revision-Date: 2021-03-12 18:32+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3038,32 +3038,30 @@ msgid "Show icons in menus"
 msgstr "Zeige Icons in Menüs"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Farbethema:"
+msgstr "Symbolstil:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Rechts"
+msgstr "Hell"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Symbole für helle Fensterhintergründe verwenden"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Dark"
-msgstr "dunkel"
+msgstr "Dunkel"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Symbole für dunkle Fensterhintergründe verwenden"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "Automatisch helle oder dunkle Symbole je nach Systemfarbschema wählen"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -12464,9 +12462,11 @@ msgid "Do not show this dialog again."
 msgstr "Dialog nicht wieder anzeigen."
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
+msgstr ""
+"Die Projekt-Symbolbibliotheks-Cache-Datei \"%s\" konnte nicht gefunden "
+"werden."
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -12476,15 +12476,20 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"Dies kann unter bestimmten Bedingungen zu einem defekten Schaltplan führen. "
+"Wenn der Schaltplan beim Öffnen keine fehlenden Symbole aufweist, speichern "
+"Sie ihn sofort, bevor Sie Änderungen vornehmen, um Datenverlust zu "
+"vermeiden. Wenn Symbole fehlen, ist entweder eine manuelle Wiederherstellung "
+"des Schaltplans oder eine Wiederherstellung der Symbol-Cache-"
+"Bibliotheksdatei und ein erneutes Laden des Schaltplans erforderlich."
 
 #: eeschema/files-io.cpp:510
 msgid "Load Without Cache File"
-msgstr ""
+msgstr "Ohne Cache-Datei laden"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "Abbruch\n"
+msgstr "Abbrechen"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
@@ -13108,9 +13113,8 @@ msgid "Go to Page %s (%s)"
 msgstr "Gehe zu Seite %s (%s)"
 
 #: eeschema/sch_field.cpp:501
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Erstelle ein Pad aus der gewählten Form"
+msgstr "Zurück zum vorherigen ausgewählten Blatt"
 
 #: eeschema/sch_field.cpp:529
 msgid "Intersheet References"
@@ -20376,7 +20380,7 @@ msgstr "Verfügbare Materialien:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:58
 msgid "Dielectric Materials"
-msgstr "Dielektrikrische Materialen"
+msgstr "Dielektrische Materialien"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -20803,7 +20807,7 @@ msgstr "Keine Leiterplatte zum erneuten Notieren!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:279
 msgid "PCB and schematic successfully reannotated"
-msgstr "Leiterplatte und Schaltplan erfolgreich neu notiert"
+msgstr "Leiterplatte und Schaltplan erfolgreich neu annotiert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:294
 #, c-format
@@ -20829,7 +20833,7 @@ msgid ""
 "Locked footprints will not be annotated"
 msgstr ""
 "\n"
-"Gesperrte Footprints werden nicht mit Anmerkungen benotet"
+"Gesperrte Footprints werden nicht annotiert"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:308
 #, c-format
@@ -20847,7 +20851,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"Die Abseitefootprints beginnen bei %s."
+"Die Rückseiten-Footprints beginnen bei %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:318
 msgid "the last front footprint + 1"
@@ -20869,7 +20873,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den vorderseitig Footprints wird '%s' als Präfix eingefügt."
+"Auf den vorderseitigen Footprints wird '%s' als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -20878,7 +20882,7 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Bei Back Footprints, die mit '%s' beginnen, wird das Präfix entfernt."
+"Bei rückseitigen Footprints, die mit '%s' beginnen, wird das Präfix entfernt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:348
 #, c-format
@@ -29814,12 +29818,12 @@ msgstr "%s kann nicht hinzugefügt werden (Footprint \"%s\" nicht gefunden)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, c-format
 msgid "Add %s (footprint \"%s\")."
-msgstr "Hinzufügen %s (Footprint \"%s\")."
+msgstr "%s hinzufügen (Footprint \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
-msgstr "Hinzufügen %s (Footprint \"%s\")."
+msgstr "%s hinzugefügt (Footprint \"%s\")."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, c-format
@@ -29832,44 +29836,44 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "%s kann nicht aktualisiert werden (Footprint \"%s\" nicht gefunden)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Ändere Footprint %s von \"%s\" in \"%s\""
+msgstr "Footprint %s von \"%s\" in \"%s\" ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Ändere Footprint %s von \"%s\" in \"%s\""
+msgstr "Footprint %s von \"%s\" in \"%s\" geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
 msgid "Change %s reference designator to %s."
-msgstr "Ändere %s Referenzbezeichner zu %s."
+msgstr "Referenzbezeichner %s in %s ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Ändere %s Referenzbezeichner zu %s."
+msgstr "Referenzbezeichner %s in %s geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:288
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr "Ändere Wert %s von %s zu %s."
+msgstr "Wert %s von %s in %s ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "Ändere Wert %s von %s zu %s."
+msgstr "Wert %s von %s in %s geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:315
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Aktualisiere %s Symbolverknüpfung von %s auf %s."
+msgstr "Symbolverknüpfung %s von %s nach %s aktualisieren."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Aktualisiere %s Symbolverknüpfung von %s auf %s."
+msgstr "Symbolverknüpfung %s von %s nach %s aktualisiert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:338
 #, c-format
@@ -29877,25 +29881,25 @@ msgid "Update %s properties."
 msgstr "%s Eigenschaften aktualisieren."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "%s Eigenschaften aktualisieren."
+msgstr "%s Eigenschaften aktualisiert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Set %s 'exclude from BOM' fabrication attribute."
-msgstr "Einstellung %s Herstellungsattribut 'Aus Stückliste ausschließen'."
+msgstr "%s 'Aus Stückliste ausschließen'-Fertigungsattribut setzen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Entfernen des Fertigungsattributs %s 'Aus Stückliste ausschließen'."
+msgstr "%s 'Aus Stückliste ausschließen'-Fertigungsattribut entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Entfernen des Fertigungsattributs %s 'Aus Stückliste ausschließen'."
+msgstr "%s 'Aus Stückliste ausschließen'-Fertigungsattribut entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, c-format
@@ -29903,14 +29907,14 @@ msgid "Disconnect %s pin %s."
 msgstr "Entferne %s Pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "Entferne %s Pin %s."
+msgstr "%s Pin %s getrennt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "Kein Netz für Symbol %s Pin %s."
+msgstr "Kein Netz für Symbol %s Pin %s gefunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:515
 #, c-format
@@ -29923,9 +29927,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Verbinde %s Pin %s von %s Netz %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "Verbinde %s Pin %s von %s Netz %s."
+msgstr "%s Pin %s von %s nach %s wieder verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:544
 #, c-format
@@ -29933,19 +29937,19 @@ msgid "Connect %s pin %s to %s."
 msgstr "Verbinde %s Pin %s zu %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Verbinde %s Pin %s zu %s."
+msgstr "%s Pin %s nach %s verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:630
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Wiederverbinde Via von %s nach %s."
+msgstr "Via von %s nach %s wieder verbinden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Wiederverbinde Via von %s nach %s."
+msgstr "Via von %s nach %s wieder verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:658
 #, c-format
@@ -29953,44 +29957,44 @@ msgid "Via connected to unknown net (%s)."
 msgstr "Via mit unbekannten Netz (%s) verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Verbinde Kupferfläche von Netz %s zu Netz %s."
+msgstr "Kupferzone \"%s\" von %s nach %s wieder verbinden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "Verbinde Kupferfläche von Netz %s zu Netz %s."
+msgstr "Kupferzone von %s nach %s wieder verbinden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Verbinde Kupferfläche von Netz %s zu Netz %s."
+msgstr "Kupferzone \"%s\" von %s nach %s wieder verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Verbinde Kupferfläche von Netz %s zu Netz %s."
+msgstr "Kupferzone von %s nach %s wieder verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Kupferfläche (%s) hat keine verbundenen Pads."
+msgstr "Kupferzone \"%s\" hat keine verbundenen Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Kupferfläche (%s) hat keine verbundenen Pads."
+msgstr "Kupferzone auf Lage %s bei (%s, %s) hat keine verbundenen Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
 msgid "Remove single pad net %s."
-msgstr "Entferne Netz mit nur einem Pad: %s."
+msgstr "Netz %s mit nur einem Pad entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Removed single pad net %s."
-msgstr "Entferne Netz mit nur einem Pad: %s."
+msgstr "Netz %s mit nur einem Pad entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:890
 #, c-format
@@ -30013,24 +30017,24 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Unbenutzter Footprint %s kann nicht entfernt werden (gesperrt)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr "Unbenutzter Footprint %s kann nicht entfernt werden (gesperrt)."
+msgstr "Unbenutzter Footprint %s konnte nicht entfernt werden (gesperrt)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1058
 #, c-format
 msgid "Remove unused footprint %s."
-msgstr "Entferne unbenutzten Footprint %s."
+msgstr "Unbenutzten Footprint %s entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Entferne unbenutzten Footprint %s."
+msgstr "Unbenutzten Footprint %s entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Entferne unbenutztes Netz \"%s\"."
+msgstr "Unbenutztes Netz \"%s\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1098
 msgid "Update netlist"
