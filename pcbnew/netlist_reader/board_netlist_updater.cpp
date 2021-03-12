@@ -357,7 +357,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         {
             if( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) )
             {
-                msg.Printf( _( "Set %s 'exclude from BOM' fabrication attribute." ),
+                msg.Printf( _( "Add %s 'exclude from BOM' fabrication attribute." ),
                             aPcbFootprint->GetReference() );
             }
             else
@@ -373,7 +373,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             if( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) )
             {
                 attributes |= FP_EXCLUDE_FROM_BOM;
-                msg.Printf( _( "Set %s 'exclude from BOM' fabrication attribute." ),
+                msg.Printf( _( "Added %s 'exclude from BOM' fabrication attribute." ),
                             aPcbFootprint->GetReference() );
             }
             else
