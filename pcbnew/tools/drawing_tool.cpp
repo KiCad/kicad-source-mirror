@@ -1209,7 +1209,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         return 0;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
-    PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

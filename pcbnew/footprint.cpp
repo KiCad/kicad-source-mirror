@@ -1539,6 +1539,13 @@ void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
         zone->Move( moveVector );
     }
 
+    // Update the 3D models
+    for( FP_3DMODEL& model : Models() )
+    {
+        model.m_Offset.x += Iu2Millimeter( moveVector.x );
+        model.m_Offset.y -= Iu2Millimeter( moveVector.y );
+    }
+
     m_cachedBoundingBox.Move( moveVector );
     m_cachedVisibleBBox.Move( moveVector );
     m_cachedTextExcludedBBox.Move( moveVector );
