@@ -43,11 +43,9 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( SCH_EDIT_FRAME* 
     m_backgroundColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
 #ifdef __WXOSX_MAC__
-    m_mouseCmdsOSX->Show( true );
-    m_mouseCmdsWinLin->Show( false );
+    m_leftClickCmdsBook->SetSelection( 1 );
 #else
-    m_mouseCmdsWinLin->Show( true );
-    m_mouseCmdsOSX->Show( false );
+    m_leftClickCmdsBook->SetSelection( 0 );
 #endif
 }
 

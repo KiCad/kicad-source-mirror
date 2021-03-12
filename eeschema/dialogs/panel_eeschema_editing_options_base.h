@@ -21,9 +21,10 @@
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
+#include <wx/panel.h>
+#include <wx/simplebook.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
-#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +44,8 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public wxPanel
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundColorSwatch;
 		wxCheckBox* m_cbPinSelectionOpt;
-		wxStaticBoxSizer* m_mouseCmdsWinLin;
+		wxSimplebook* m_leftClickCmdsBook;
+		wxPanel* m_pageWinLin;
 		wxStaticText* m_staticText8;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticText91;
@@ -54,8 +56,9 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public wxPanel
 		wxStaticText* m_staticText161;
 		wxStaticText* m_staticText111;
 		wxStaticText* m_staticText121;
-		wxStaticBoxSizer* m_mouseCmdsOSX;
+		wxPanel* m_pageMac;
 		wxStaticText* m_staticText81;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText10;
 		wxStaticText* m_staticText13;
@@ -80,7 +83,7 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public wxPanel
 
 	public:
 
-		PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 661,649 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_EESCHEMA_EDITING_OPTIONS_BASE();
 
 };

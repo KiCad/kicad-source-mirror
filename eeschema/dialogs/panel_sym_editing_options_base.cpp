@@ -158,7 +158,7 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	repeats->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
-	leftColumn->Add( repeats, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	leftColumn->Add( repeats, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	p1mainSizer->Add( leftColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
