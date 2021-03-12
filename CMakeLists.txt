@@ -239,15 +239,16 @@ if( WIN32 )
     # _USE_MATH_DEFINES is set.
     add_definitions( -D_USE_MATH_DEFINES )
 
-
-    # We need the arch for the resource compiler later
+    # Used for the resource compiler and other arch dependent steps
     if( MSVC )
+        # CMake does not set CMAKE_SYSTEM_PROCESSOR correctly for MSVC 
+        # and it will always return the host instead of the target arch
         if("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "ARM64")
             set( KICAD_BUILD_ARCH "arm64" )
             set( KICAD_BUILD_ARCH_ARM64 1 )
         elseif("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "ARM")
             set( KICAD_BUILD_ARCH "arm" )
-            set( KICAD_BUILD_ARCH_ARM64 1 )
+            set( KICAD_BUILD_ARCH_ARM 1 )
         elseif("${MSVC_C_ARCHITECTURE_ID}" STREQUAL "X86")
             set( KICAD_BUILD_ARCH "x86" )
             set( KICAD_BUILD_ARCH_X86 1 )
