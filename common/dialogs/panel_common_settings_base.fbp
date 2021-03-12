@@ -677,7 +677,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">2</property>
                                     <property name="column">1</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT</property>
                                     <property name="row">4</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxChoice" expanded="0">
@@ -808,7 +808,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">2</property>
                                     <property name="column">1</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT</property>
                                     <property name="row">6</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxChoice" expanded="0">

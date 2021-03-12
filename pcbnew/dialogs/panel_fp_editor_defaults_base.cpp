@@ -23,10 +23,10 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	defaultTextItemsLabel->Wrap( -1 );
 	bSizerMargins->Add( defaultTextItemsLabel, 0, wxTOP|wxLEFT, 5 );
 
-	wxStaticBoxSizer* sbSizerTexts;
-	sbSizerTexts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
+	wxBoxSizer* defaultTextItemsSizer;
+	defaultTextItemsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_textItemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_textItemsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 
 	// Grid
 	m_textItemsGrid->CreateGrid( 2, 3 );
@@ -60,12 +60,12 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_textItemsGrid->SetMinSize( wxSize( -1,140 ) );
 
-	sbSizerTexts->Add( m_textItemsGrid, 1, wxALL|wxBOTTOM|wxEXPAND, 5 );
+	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxALL|wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -73,22 +73,25 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );
-
-
-	bSizerMargins->Add( sbSizerTexts, 1, wxEXPAND|wxLEFT, 20 );
+	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: a blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerMargins->Add( m_staticTextInfo, 0, wxBOTTOM|wxLEFT, 25 );
+	bButtonSize->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	defaultTextItemsSizer->Add( bButtonSize, 0, wxEXPAND, 5 );
+
+
+	bSizerMargins->Add( defaultTextItemsSizer, 1, wxEXPAND|wxLEFT, 20 );
 
 
 	bSizerMargins->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
