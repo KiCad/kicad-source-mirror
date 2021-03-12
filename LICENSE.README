@@ -19,6 +19,7 @@ Licensed under MIT:
 - tinyspline_lib in thirdparty/tinyspline_lib
 - nlohmann/json in thirdparty/nlohmann_json
 - nlohmann/fifo_map in thirdparty/nlohmann_json
+- pboettch/json-schema-validator in thirdparty/json_schema_validator
 - picoSHA2 in thirdparty/picosha2
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
