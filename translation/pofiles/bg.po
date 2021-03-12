@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 08:30-0800\n"
+"POT-Creation-Date: 2021-03-12 10:32-0800\n"
 "PO-Revision-Date: 2011-11-29 21:48+0200\n"
 "Last-Translator: Evgeniy Ivanov <evgeniy_p_ivanov@yahoo.ca>\n"
 "Language-Team: KiCad Team <evgeniy_p_ivanov@yahoo.ca>\n"
@@ -4477,7 +4477,7 @@ msgstr "Нормален/-о"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:121
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 msgid "Italic"
@@ -7418,7 +7418,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2032 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "Стойност"
@@ -8684,7 +8684,7 @@ msgstr "Надолу"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "Ориентация"
@@ -9073,7 +9073,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2030
 msgid "Reference"
 msgstr "Обозначение"
 
@@ -13575,17 +13575,17 @@ msgstr "Шина"
 msgid "Bus Entry Type"
 msgstr "Установи вход на шина /"
 
-#: eeschema/sch_connection.cpp:394
+#: eeschema/sch_connection.cpp:404
 #, fuzzy
 msgid "Connection Name"
 msgstr "Тип на връзката:"
 
-#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "Код на верига"
 
-#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
+#: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, fuzzy, c-format
 msgid "Bus Alias %s Members"
 msgstr "Класове на вериги:"
@@ -14502,7 +14502,7 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14601,10 +14601,10 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 msgstr ""
@@ -17279,7 +17279,7 @@ msgstr "Избор на слой:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2025 pcbnew/footprint.cpp:2028
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -22333,29 +22333,29 @@ msgstr "Изчисти пътечки и пр.отв."
 msgid "Constraints Resolution Report"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:279
+#: pcbnew/dialogs/dialog_copper_zones.cpp:276
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 #, fuzzy
 msgid "Chamfer distance:"
 msgstr "Размер на фаската"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:281
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:278
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 #, fuzzy
 msgid "Fillet radius:"
 msgstr "Радиус на закръглението"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:392
+#: pcbnew/dialogs/dialog_copper_zones.cpp:389
 #, fuzzy
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 "Ширината на термично-отвеждаща връзка трябва да бъде по-голяма от "
 "минималната."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones.cpp:417
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:254
 msgid "No layer selected."
 msgstr "Не е избран слой."
 
@@ -22875,13 +22875,13 @@ msgstr ""
 msgid "Create Array"
 msgstr "Създай ъгъл"
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:200
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:197
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:281
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:278
 #, fuzzy
 msgid "Change dimension properties"
 msgstr "Текстови настройки на комп.отп."
@@ -24857,69 +24857,69 @@ msgid "Delete Items"
 msgstr "Изтрий артикули"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:211
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 #, fuzzy
 msgid "Silk Layers"
 msgstr "2 слоя"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:212
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 #, fuzzy
 msgid "Copper Layers"
 msgstr "Медни слоеве:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 #, fuzzy
 msgid "Edge Cuts"
 msgstr "Граници:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 #, fuzzy
 msgid "Fab Layers"
 msgstr "Заден слой"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 #, fuzzy
 msgid "Other Layers"
 msgstr "Други:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:122
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 #, fuzzy
 msgid "Line Thickness"
 msgstr "Cu дебелина"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:226
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
 #, fuzzy
 msgid "Text Width"
 msgstr "Ширина на текста:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:127
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 #, fuzzy
 msgid "Text Height"
 msgstr "Височина на текста:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:238
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 #, fuzzy
 msgid "Text Thickness"
@@ -27893,18 +27893,18 @@ msgstr ""
 msgid "Default text items for new footprints:"
 msgstr "Вземи и премести комп.отп."
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 #, fuzzy
 msgid "Default properties for new graphic items:"
 msgstr "Път по подразбиране за библиотеките"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Net Class parameters"
 msgstr "Параметри за клас на верига"
@@ -30125,26 +30125,26 @@ msgstr "Обозначение по подразбиране:"
 msgid "Footprint %s"
 msgstr "Комп.отп.:"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2037 pcbnew/pad.cpp:1516
 #, fuzzy
 msgid "Local Clearance"
 msgstr "Празнина"
 
-#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2040 pcbnew/pad.cpp:1493
 #, fuzzy
 msgid "Local Solderpaste Margin"
 msgstr "Отстояние на припойната замаска"
 
-#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2043 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2038
+#: pcbnew/footprint.cpp:2045
 #, fuzzy
 msgid "Thermal Width"
 msgstr "Ширина на пътечка"
 
-#: pcbnew/footprint.cpp:2041
+#: pcbnew/footprint.cpp:2048
 #, fuzzy
 msgid "Thermal Gap"
 msgstr "Термично облекчение"
@@ -31050,14 +31050,18 @@ msgid "Updated %s properties."
 msgstr "Редактирай настройките на модулите"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
 #, fuzzy, c-format
-msgid "Set %s 'exclude from BOM' fabrication attribute."
+msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "Изходи за производство"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, fuzzy, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
+msgstr "Изходи за производство"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "Изходи за производство"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
@@ -35543,7 +35547,7 @@ msgstr "Добави ново поле"
 msgid "Add a zone"
 msgstr "Добавяне на зони"
 
-#: pcbnew/tools/zone_create_helper.cpp:251
+#: pcbnew/tools/zone_create_helper.cpp:260
 #, fuzzy
 msgid "Add a graphical polygon"
 msgstr "Добави графична линия или полигон"

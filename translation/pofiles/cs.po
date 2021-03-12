@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 08:30-0800\n"
+"POT-Creation-Date: 2021-03-12 10:32-0800\n"
 "PO-Revision-Date: 2021-03-05 16:46+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -4176,7 +4176,7 @@ msgstr "Normální"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:121
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 msgid "Italic"
@@ -6837,7 +6837,7 @@ msgstr "Dostupné proměnné prostředí pro relativní cesty:"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2032 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "Hodnota"
@@ -8223,7 +8223,7 @@ msgstr "Dolů"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "Orientace"
@@ -8584,7 +8584,7 @@ msgstr "Skupiny"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2030
 msgid "Reference"
 msgstr "Reference"
 
@@ -12823,16 +12823,16 @@ msgstr "Sběrnice"
 msgid "Bus Entry Type"
 msgstr "Typ vstupu na sběrnici"
 
-#: eeschema/sch_connection.cpp:394
+#: eeschema/sch_connection.cpp:404
 msgid "Connection Name"
 msgstr "Název připojení"
 
-#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "Kód sítě"
 
-#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
+#: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Obsah aliasu sběrnice %s"
@@ -13870,7 +13870,7 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -13969,10 +13969,10 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 msgstr ""
@@ -16432,7 +16432,7 @@ msgstr "Výběr vrstvy: %s"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2025 pcbnew/footprint.cpp:2028
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -21240,24 +21240,24 @@ msgstr "Vyčistit spoje a prokovy"
 msgid "Constraints Resolution Report"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:279
+#: pcbnew/dialogs/dialog_copper_zones.cpp:276
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr "Délka úkosu:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:281
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:278
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
 msgstr "Poloměr zaoblení:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:392
+#: pcbnew/dialogs/dialog_copper_zones.cpp:389
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones.cpp:417
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:254
 msgid "No layer selected."
 msgstr "Není vybrána žádná vrstva."
 
@@ -21748,7 +21748,7 @@ msgstr "Kruhová sestava"
 msgid "Create Array"
 msgstr "Vytvořit matrici"
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:200
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:197
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
@@ -21756,7 +21756,7 @@ msgstr ""
 "Tato položka byla na nepovolené nebo neexistující vrstvě.\n"
 "Byla přesunuta na první povolenou vrstvu."
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:281
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:278
 #, fuzzy
 msgid "Change dimension properties"
 msgstr "Změnit vlastnosti textu"
@@ -23601,62 +23601,62 @@ msgid "Delete Items"
 msgstr "Smazat položky"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:211
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
 msgstr "Vrstvy potisku"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:212
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
 msgstr "Vrstvy mědi"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 msgid "Edge Cuts"
 msgstr "Okraje desky"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 #, fuzzy
 msgid "Courtyards"
 msgstr "Pouzdra osazena na horní straně desek"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Fab Layers"
 msgstr "Výr. vrstvy"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Other Layers"
 msgstr "Ostatní Vrstvy"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:122
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
 msgstr "Tloušťka čáry"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:226
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
 msgid "Text Width"
 msgstr "Text Šířka"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:127
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 msgid "Text Height"
 msgstr "Text Výška"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:238
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
 msgstr "Tloušťka Text"
@@ -26442,18 +26442,18 @@ msgstr ""
 msgid "Default text items for new footprints:"
 msgstr "Výchozí textové položky pro nové pouzdra:"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
 "Poznámka: Prázdné označení reference nebo hodnota použije název pouzdra."
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
 msgstr "Výchozí vlastnosti pro nové grafické položky:"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Net Class parameters"
 msgstr "Parametry třídy spojů"
@@ -28598,25 +28598,25 @@ msgstr "<bez referenčního označení>"
 msgid "Footprint %s"
 msgstr "Pouzdro %s"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2037 pcbnew/pad.cpp:1516
 msgid "Local Clearance"
 msgstr "Místní izolační mezera"
 
-#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2040 pcbnew/pad.cpp:1493
 #, fuzzy
 msgid "Local Solderpaste Margin"
 msgstr "Zobrazit vrstvy pájecí pasty"
 
-#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2043 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2038
+#: pcbnew/footprint.cpp:2045
 #, fuzzy
 msgid "Thermal Width"
 msgstr "Šířka spoje"
 
-#: pcbnew/footprint.cpp:2041
+#: pcbnew/footprint.cpp:2048
 msgid "Thermal Gap"
 msgstr "Teplotní mezera"
 
@@ -29466,14 +29466,18 @@ msgid "Updated %s properties."
 msgstr "Aktualizovat %s vlastnosti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
 #, fuzzy, c-format
-msgid "Set %s 'exclude from BOM' fabrication attribute."
+msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "Výstupy pro &výrobu"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, fuzzy, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
+msgstr "Výstupy pro &výrobu"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "Výstupy pro &výrobu"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
@@ -33749,7 +33753,7 @@ msgstr "Přidat výřez zóny"
 msgid "Add a zone"
 msgstr "Přidat zónu"
 
-#: pcbnew/tools/zone_create_helper.cpp:251
+#: pcbnew/tools/zone_create_helper.cpp:260
 msgid "Add a graphical polygon"
 msgstr "Přidat mnohoúhelník"
 

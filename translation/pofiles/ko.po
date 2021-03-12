@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 08:30-0800\n"
+"POT-Creation-Date: 2021-03-12 10:32-0800\n"
 "PO-Revision-Date: 2007-12-17 15:07+0900\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
@@ -4460,7 +4460,7 @@ msgstr "표준"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:121
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 #, fuzzy
@@ -7387,7 +7387,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2032 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "값"
@@ -8641,7 +8641,7 @@ msgstr "아래쪽"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "방향"
@@ -9031,7 +9031,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2030
 msgid "Reference"
 msgstr "레퍼런스"
 
@@ -13480,17 +13480,17 @@ msgstr "버스"
 msgid "Bus Entry Type"
 msgstr "버스 설정: 45도"
 
-#: eeschema/sch_connection.cpp:394
+#: eeschema/sch_connection.cpp:404
 #, fuzzy
 msgid "Connection Name"
 msgstr "연결"
 
-#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "네트 코드"
 
-#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
+#: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, fuzzy, c-format
 msgid "Bus Alias %s Members"
 msgstr "네트 코드"
@@ -14413,7 +14413,7 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14512,10 +14512,10 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 msgstr ""
@@ -17149,7 +17149,7 @@ msgstr "레이어 선택:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2025 pcbnew/footprint.cpp:2028
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -22128,25 +22128,25 @@ msgstr "트랙 및 비아"
 msgid "Constraints Resolution Report"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:279
+#: pcbnew/dialogs/dialog_copper_zones.cpp:276
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:281
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:278
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 #, fuzzy
 msgid "Fillet radius:"
 msgstr "채움"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:392
+#: pcbnew/dialogs/dialog_copper_zones.cpp:389
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones.cpp:417
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:254
 #, fuzzy
 msgid "No layer selected."
 msgstr "레이어가 선택되지 않았습니다."
@@ -22656,13 +22656,13 @@ msgstr ""
 msgid "Create Array"
 msgstr "만들기 에러 "
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:200
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:197
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:281
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:278
 #, fuzzy
 msgid "Change dimension properties"
 msgstr "시트 속성"
@@ -24582,69 +24582,69 @@ msgid "Delete Items"
 msgstr "항목 삭제"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:211
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 #, fuzzy
 msgid "Silk Layers"
 msgstr "레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:212
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 #, fuzzy
 msgid "Copper Layers"
 msgstr "Copper Layers"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 #, fuzzy
 msgid "Edge Cuts"
 msgstr "에지"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 #, fuzzy
 msgid "Fab Layers"
 msgstr "레이어"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 #, fuzzy
 msgid "Other Layers"
 msgstr "기타"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:122
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 #, fuzzy
 msgid "Line Thickness"
 msgstr "선 설정"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:226
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
 #, fuzzy
 msgid "Text Width"
 msgstr "두께 설정"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:127
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 #, fuzzy
 msgid "Text Height"
 msgstr "텍스트 에디터"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:238
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 #, fuzzy
 msgid "Text Thickness"
@@ -27533,18 +27533,18 @@ msgstr ""
 msgid "Default text items for new footprints:"
 msgstr "풋프린트 삭제"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 #, fuzzy
 msgid "Default properties for new graphic items:"
 msgstr "항목 전환 핀 만들기"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Net Class parameters"
 msgstr ""
@@ -29739,26 +29739,26 @@ msgstr "사용자 지정 에디터:"
 msgid "Footprint %s"
 msgstr "풋프린트: %d"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2037 pcbnew/pad.cpp:1516
 #, fuzzy
 msgid "Local Clearance"
 msgstr "유격"
 
-#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2040 pcbnew/pad.cpp:1493
 #, fuzzy
 msgid "Local Solderpaste Margin"
 msgstr "Solder paste Copper"
 
-#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2043 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2038
+#: pcbnew/footprint.cpp:2045
 #, fuzzy
 msgid "Thermal Width"
 msgstr "트랙 두께"
 
-#: pcbnew/footprint.cpp:2041
+#: pcbnew/footprint.cpp:2048
 #, fuzzy
 msgid "Thermal Gap"
 msgstr "써멀"
@@ -30645,14 +30645,18 @@ msgid "Updated %s properties."
 msgstr "부품 속성 편집"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
 #, fuzzy, c-format
-msgid "Set %s 'exclude from BOM' fabrication attribute."
+msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "속성"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, fuzzy, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
+msgstr "속성"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr "속성"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
@@ -35040,7 +35044,7 @@ msgstr "영역 추가"
 msgid "Add a zone"
 msgstr "영역 추가"
 
-#: pcbnew/tools/zone_create_helper.cpp:251
+#: pcbnew/tools/zone_create_helper.cpp:260
 #, fuzzy
 msgid "Add a graphical polygon"
 msgstr "그래픽 선 또는 다각형 추가"

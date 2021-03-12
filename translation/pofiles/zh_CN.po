@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 08:30-0800\n"
+"POT-Creation-Date: 2021-03-12 10:32-0800\n"
 "PO-Revision-Date: 2021-03-12 08:03+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -4121,7 +4121,7 @@ msgstr "正常"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:121
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 msgid "Italic"
@@ -6764,7 +6764,7 @@ msgstr "可选的相对路径环境变量："
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2032 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "值"
@@ -7516,24 +7516,29 @@ msgid ""
 msgstr ""
 "＃ 1 - 完整文档\n"
 "\n"
-"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网表和 BOM 文件*** 章节）。\n"
+"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网"
+"表和 BOM 文件*** 章节）。\n"
 "\n"
 "＃ 2 - 中间网表文件\n"
 "\n"
 "BOM 文件（和网表文件）可以从 Eeschema 创建的 *中间网表文件* 中创建。\n"
 "\n"
-"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
+"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因"
+"此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
 "\n"
 "根据输出（BOM 或网表），在后期处理中将使用完整的中间网表文件的不同子集。\n"
 "\n"
 "＃ 3 - 转换为新格式\n"
 "\n"
-"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT*"
-" 或任何其他能够将 XML 作为输入的工具来编写此后处理过滤器。\n"
+"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于"
+"此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT* 或任何其他能够将 "
+"XML 作为输入的工具来编写此后处理过滤器。\n"
 "\n"
-"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免费程序。`xsltproc` 程序可用于读取中间 "
-"XML 网表输入文件，应用样式表以转换输入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文件。完整的转换过程由 "
-"Eeschema 处理，将其配置一次以特定的方式运行 `xsltproc`。\n"
+"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免"
+"费程序。`xsltproc` 程序可用于读取中间 XML 网表输入文件，应用样式表以转换输"
+"入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文"
+"件。完整的转换过程由 Eeschema 处理，将其配置一次以特定的方式运行 "
+"`xsltproc`。\n"
 "\n"
 "Python 脚本更容易创建。\n"
 "\n"
@@ -7547,7 +7552,8 @@ msgstr ""
 "* 用于启动转换器的命令行（通常是脚本）。\n"
 "\n"
 "***注意（仅 Windows）：***\n"
-"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
+"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字"
+"段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
 "\n"
 "单击“生成”按钮后，将发生以下情况：\n"
 "\n"
@@ -7556,7 +7562,8 @@ msgstr ""
 "\n"
 "## 4.2 - 通过命令行生成网表文件\n"
 "\n"
-"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc.exe` 将通过以下命令执行。\n"
+"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc."
+"exe` 将通过以下命令执行。\n"
 "\n"
 "```\n"
 "xsltproc.exe -o <输出文件名> <样式表文件名> <输入要转换的 XML 文件>\n"
@@ -7565,8 +7572,8 @@ msgstr ""
 "在 Windows 上，命令行如下。\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
-"I\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
 "```\n"
 "\n"
 "在 Linux 上，命令如下。\n"
@@ -7585,8 +7592,8 @@ msgstr ""
 "或\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
-"O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
+"\"%O\"\n"
 "```\n"
 "\n"
 "命令行格式接受文件名的参数。支持的格式参数是：\n"
@@ -7631,12 +7638,12 @@ msgstr ""
 "\n"
 "在 Linux 上：\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-"pcb.xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+"xsl \"%I\"\n"
 "```\n"
 "\n"
-"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 `<path_to_kicad>/kicad/bin/"
-"plugins/`。\n"
+"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 "
+"`<path_to_kicad>/kicad/bin/plugins/`。\n"
 "\n"
 "\n"
 "### 4.3.3 Python 脚本示例：\n"
@@ -7653,8 +7660,8 @@ msgstr ""
 "\n"
 "在 Windows 上：\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
-".html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.html\"\n"
 "```\n"
 "\n"
 "在 Linux 上：\n"
@@ -7664,24 +7671,29 @@ msgstr ""
 "```\n"
 "\n"
 "\n"
-"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网表和 BOM 文件*** 章节）。\n"
+"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网"
+"表和 BOM 文件*** 章节）。\n"
 "\n"
 "＃ 2 - 中间网表文件\n"
 "\n"
 "BOM 文件（和网表文件）可以从 Eeschema 创建的 *中间网表文件* 中创建。\n"
 "\n"
-"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
+"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因"
+"此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
 "\n"
 "根据输出（BOM 或网表），在后期处理中将使用完整的中间网表文件的不同子集。\n"
 "\n"
 "＃ 3 - 转换为新格式\n"
 "\n"
-"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT*"
-" 或任何其他能够将 XML 作为输入的工具来编写此后处理过滤器。\n"
+"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于"
+"此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT* 或任何其他能够将 "
+"XML 作为输入的工具来编写此后处理过滤器。\n"
 "\n"
-"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免费程序。`xsltproc` 程序可用于读取中间 "
-"XML 网表输入文件，应用样式表以转换输入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文件。完整的转换过程由 "
-"Eeschema 处理，将其配置一次以特定的方式运行 `xsltproc`。\n"
+"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免"
+"费程序。`xsltproc` 程序可用于读取中间 XML 网表输入文件，应用样式表以转换输"
+"入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文"
+"件。完整的转换过程由 Eeschema 处理，将其配置一次以特定的方式运行 "
+"`xsltproc`。\n"
 "\n"
 "Python 脚本更容易创建。\n"
 "\n"
@@ -7695,7 +7707,8 @@ msgstr ""
 "* 用于启动转换器的命令行（通常是脚本）。\n"
 "\n"
 "***注意（仅 Windows）：***\n"
-"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
+"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字"
+"段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
 "\n"
 "单击“生成”按钮后，将发生以下情况：\n"
 "\n"
@@ -7704,7 +7717,8 @@ msgstr ""
 "\n"
 "## 4.2 - 通过命令行生成网表文件\n"
 "\n"
-"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc.exe` 将通过以下命令执行。\n"
+"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc."
+"exe` 将通过以下命令执行。\n"
 "\n"
 "```\n"
 "xsltproc.exe -o <输出文件名> <样式表文件名> <输入要转换的 XML 文件>\n"
@@ -7713,8 +7727,8 @@ msgstr ""
 "在 Windows 上，命令行如下。\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
-"I\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
 "```\n"
 "\n"
 "在 Linux 上，命令如下。\n"
@@ -7733,8 +7747,8 @@ msgstr ""
 "或\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
-"O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
+"\"%O\"\n"
 "```\n"
 "\n"
 "命令行格式接受文件名的参数。支持的格式参数是：\n"
@@ -7779,12 +7793,12 @@ msgstr ""
 "\n"
 "在 Linux 上：\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-"pcb.xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+"xsl \"%I\"\n"
 "```\n"
 "\n"
-"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 `<path_to_kicad>/kicad/bin/"
-"plugins/`。\n"
+"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 "
+"`<path_to_kicad>/kicad/bin/plugins/`。\n"
 "\n"
 "\n"
 "### 4.3.3 Python 脚本示例：\n"
@@ -7801,8 +7815,8 @@ msgstr ""
 "\n"
 "在 Windows 上：\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
-".html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.html\"\n"
 "```\n"
 "\n"
 "在 Linux 上：\n"
@@ -7812,24 +7826,29 @@ msgstr ""
 "```\n"
 "\n"
 "\n"
-"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网表和 BOM 文件*** 章节）。\n"
+"Eeschema 文档（*eeschema.html*）描述了此中间网表并提供了示例（***创建自定义网"
+"表和 BOM 文件*** 章节）。\n"
 "\n"
 "＃ 2 - 中间网表文件\n"
 "\n"
 "BOM 文件（和网表文件）可以从 Eeschema 创建的 *中间网表文件* 中创建。\n"
 "\n"
-"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
+"该文件使用 XML 语法，称为中间网表。中间网表包含有关您的电路板的大量数据，因"
+"此，它可以与后处理一起使用以创建 BOM 或其他报告。\n"
 "\n"
 "根据输出（BOM 或网表），在后期处理中将使用完整的中间网表文件的不同子集。\n"
 "\n"
 "＃ 3 - 转换为新格式\n"
 "\n"
-"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT*"
-" 或任何其他能够将 XML 作为输入的工具来编写此后处理过滤器。\n"
+"通过对中间网表文件应用后处理过滤器，您可以生成外部网表文件以及 BOM 文件。由于"
+"此转换是从文本到文本的转换，因此可以使用 *Python*，*XSLT* 或任何其他能够将 "
+"XML 作为输入的工具来编写此后处理过滤器。\n"
 "\n"
-"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免费程序。`xsltproc` 程序可用于读取中间 "
-"XML 网表输入文件，应用样式表以转换输入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文件。完整的转换过程由 "
-"Eeschema 处理，将其配置一次以特定的方式运行 `xsltproc`。\n"
+"XSLT 本身是适合 XML 转换的 XML 语言。您可以下载并安装一个名为 `xsltproc` 的免"
+"费程序。`xsltproc` 程序可用于读取中间 XML 网表输入文件，应用样式表以转换输"
+"入，并将结果保存在输出文件中。使用 `xsltproc` 需要使用 XSLT 约定的样式表文"
+"件。完整的转换过程由 Eeschema 处理，将其配置一次以特定的方式运行 "
+"`xsltproc`。\n"
 "\n"
 "Python 脚本更容易创建。\n"
 "\n"
@@ -7843,7 +7862,8 @@ msgstr ""
 "* 用于启动转换器的命令行（通常是脚本）。\n"
 "\n"
 "***注意（仅 Windows）：***\n"
-"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
+"*默认情况下，命令行使用隐藏的控制台窗口运行，并且输出重定向到 “插件信息” 字"
+"段。要显示正在运行的命令窗口，请选中 “显示控制台窗口” 复选框。*\n"
 "\n"
 "单击“生成”按钮后，将发生以下情况：\n"
 "\n"
@@ -7852,7 +7872,8 @@ msgstr ""
 "\n"
 "## 4.2 - 通过命令行生成网表文件\n"
 "\n"
-"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc.exe` 将通过以下命令执行。\n"
+"假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc."
+"exe` 将通过以下命令执行。\n"
 "\n"
 "```\n"
 "xsltproc.exe -o <输出文件名> <样式表文件名> <输入要转换的 XML 文件>\n"
@@ -7861,8 +7882,8 @@ msgstr ""
 "在 Windows 上，命令行如下。\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
-"I\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
 "```\n"
 "\n"
 "在 Linux 上，命令如下。\n"
@@ -7881,8 +7902,8 @@ msgstr ""
 "或\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
-"O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
+"\"%O\"\n"
 "```\n"
 "\n"
 "命令行格式接受文件名的参数。支持的格式参数是：\n"
@@ -7927,12 +7948,12 @@ msgstr ""
 "\n"
 "在 Linux 上：\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-"pcb.xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+"xsl \"%I\"\n"
 "```\n"
 "\n"
-"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 `<path_to_kicad>/kicad/bin/"
-"plugins/`。\n"
+"以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 "
+"`<path_to_kicad>/kicad/bin/plugins/`。\n"
 "\n"
 "\n"
 "### 4.3.3 Python 脚本示例：\n"
@@ -7949,8 +7970,8 @@ msgstr ""
 "\n"
 "在 Windows 上：\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
-".html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.html\"\n"
 "```\n"
 "\n"
 "在 Linux 上：\n"
@@ -8392,7 +8413,7 @@ msgstr "向下"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "方向"
@@ -8752,7 +8773,7 @@ msgstr "分组依据"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2030
 msgid "Reference"
 msgstr "位号"
 
@@ -12427,8 +12448,9 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"某些情况下，这可能会导致原理图损坏。 如果原理图在打开时没有丢失的符号，请在进行任何更改之前立即保存它，以防止数据丢失。 "
-"如果缺少符号，则需要手动恢复原理图或恢复符号缓存库文件并重新加载原理图。"
+"某些情况下，这可能会导致原理图损坏。 如果原理图在打开时没有丢失的符号，请在进"
+"行任何更改之前立即保存它，以防止数据丢失。 如果缺少符号，则需要手动恢复原理图"
+"或恢复符号缓存库文件并重新加载原理图。"
 
 #: eeschema/files-io.cpp:510
 msgid "Load Without Cache File"
@@ -12935,16 +12957,16 @@ msgstr "总线"
 msgid "Bus Entry Type"
 msgstr "总线输入类型"
 
-#: eeschema/sch_connection.cpp:394
+#: eeschema/sch_connection.cpp:404
 msgid "Connection Name"
 msgstr "连接名称"
 
-#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "网络码"
 
-#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
+#: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "总线别名 %s 成员"
@@ -13920,6 +13942,7 @@ msgid "Syntax Help"
 msgstr "语法帮助"
 
 #: eeschema/sch_text_help_md.h:2
+#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -13948,7 +13971,7 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14047,10 +14070,10 @@ msgid ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
 msgstr ""
@@ -16612,7 +16635,7 @@ msgstr "选择层： %s"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2025 pcbnew/footprint.cpp:2028
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -19464,7 +19487,8 @@ msgstr ""
 "创建任意值。您可以输入所需的电阻，范围从0.0025 到 4000 kΩ。\n"
 "给出的解决方案使用多达 4 个元件。\n"
 "\n"
-"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排除在解决方案之外，前提是\n"
+"默认情况下，请求值总是被排除在解决方案集之外。也可以指定将最多两个额外的值排"
+"除在解决方案之外，前提是\n"
 "这些组件值不可用。\n"
 "\n"
 "解决方案依照下列格式提供：\n"
@@ -21330,24 +21354,24 @@ msgstr "清除布线和过孔"
 msgid "Constraints Resolution Report"
 msgstr "约束解析报告"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:279
+#: pcbnew/dialogs/dialog_copper_zones.cpp:276
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr "倒角距离："
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:281
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:278
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
 msgstr "圆角半径："
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:392
+#: pcbnew/dialogs/dialog_copper_zones.cpp:389
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "热风焊盘辐射线不能小于最小宽度。"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones.cpp:417
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:254
 msgid "No layer selected."
 msgstr "没有图层被选择。"
 
@@ -21831,7 +21855,7 @@ msgstr "圆形阵列"
 msgid "Create Array"
 msgstr "创建阵列"
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:200
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:197
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
@@ -21839,7 +21863,7 @@ msgstr ""
 "此项目在一个不存在或禁止的层上\n"
 "它以被移动到第一个允许的层。"
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:281
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:278
 msgid "Change dimension properties"
 msgstr "更改标注属性"
 
@@ -23619,61 +23643,61 @@ msgid "Delete Items"
 msgstr "删除项目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:211
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
 msgstr "丝印层"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:212
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
 msgstr "铜层"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 msgid "Edge Cuts"
 msgstr "板框"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
 msgstr "外框"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Fab Layers"
 msgstr "制造层"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Other Layers"
 msgstr "其他层"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:122
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
 msgstr "线宽"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:226
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
 msgid "Text Width"
 msgstr "文本宽度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:127
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 msgid "Text Height"
 msgstr "文本高度"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:238
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
 msgstr "文本线宽"
@@ -26348,17 +26372,17 @@ msgstr ""
 msgid "Default text items for new footprints:"
 msgstr "新封装的默认文本项："
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr "注意：空白的位号或值将使用封装名称。"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
 msgstr "新建图形项目的默认属性："
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Net Class parameters"
 msgstr "网络类参数"
@@ -28436,23 +28460,23 @@ msgstr "< 无位号 >"
 msgid "Footprint %s"
 msgstr "封装 %s"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2037 pcbnew/pad.cpp:1516
 msgid "Local Clearance"
 msgstr "局部间隙"
 
-#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2040 pcbnew/pad.cpp:1493
 msgid "Local Solderpaste Margin"
 msgstr "锡膏间隙"
 
-#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2043 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr "局部焊锡边率"
 
-#: pcbnew/footprint.cpp:2038
+#: pcbnew/footprint.cpp:2045
 msgid "Thermal Width"
 msgstr "热宽度"
 
-#: pcbnew/footprint.cpp:2041
+#: pcbnew/footprint.cpp:2048
 msgid "Thermal Gap"
 msgstr "热间距"
 
@@ -29285,15 +29309,19 @@ msgid "Updated %s properties."
 msgstr "更新了 %s 项属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, c-format
-msgid "Set %s 'exclude from BOM' fabrication attribute."
+#, fuzzy, c-format
+msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "给 %s 设置“从 BOM 中排除”制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "删除 %s “从 BOM 中排除”的制造属性。"
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Added %s 'exclude from BOM' fabrication attribute."
+msgstr "给 %s 设置“从 BOM 中排除”制造属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
 #, c-format
@@ -33452,7 +33480,7 @@ msgstr "添加挖空区域"
 msgid "Add a zone"
 msgstr "添加覆铜"
 
-#: pcbnew/tools/zone_create_helper.cpp:251
+#: pcbnew/tools/zone_create_helper.cpp:260
 msgid "Add a graphical polygon"
 msgstr "添加多边形图形"
 

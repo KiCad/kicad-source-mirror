@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 20:56+0100\n"
+"POT-Creation-Date: 2021-03-12 10:32-0800\n"
 "PO-Revision-Date: 2021-03-11 21:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1402,8 +1402,8 @@ msgstr ""
 "sur la couche de sérigraphie."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#: resources/linux/launchers/bitmap2component.desktop:9
-#: resources/linux/launchers/bitmap2component.desktop:10
+#: resources/linux/launchers/bitmap2component.desktop.in:9
+#: resources/linux/launchers/bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
@@ -4219,7 +4219,7 @@ msgstr "Normal"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:244
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:121
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:129
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_text_grid_table.cpp:94
 msgid "Italic"
@@ -6914,7 +6914,7 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:443 pcbnew/dimension.cpp:311
-#: pcbnew/footprint.cpp:2025 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:2032 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:281 pcbnew/fp_text_grid_table.cpp:110
 msgid "Value"
 msgstr "Valeur"
@@ -8333,7 +8333,7 @@ msgstr "Bas"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:2027 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
 msgstr "Orientation"
@@ -8697,7 +8697,7 @@ msgstr "Grouper Par"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:957
 #: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/sch_symbol.cpp:1374
-#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2023
+#: eeschema/sch_symbol.cpp:1424 pcbnew/footprint.cpp:2030
 msgid "Reference"
 msgstr "Référence"
 
@@ -13005,16 +13005,16 @@ msgstr "Bus"
 msgid "Bus Entry Type"
 msgstr "Type Entrée de Bus"
 
-#: eeschema/sch_connection.cpp:394
+#: eeschema/sch_connection.cpp:404
 msgid "Connection Name"
 msgstr "Nom de Connexion"
 
-#: eeschema/sch_connection.cpp:403 pcbnew/dialogs/dialog_net_inspector.cpp:70
+#: eeschema/sch_connection.cpp:413 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
 msgid "Net Code"
 msgstr "Net Code"
 
-#: eeschema/sch_connection.cpp:409 eeschema/sch_connection.cpp:424
+#: eeschema/sch_connection.cpp:419 eeschema/sch_connection.cpp:434
 #, c-format
 msgid "Bus Alias %s Members"
 msgstr "Membres de l'Alias de Bus %s"
@@ -16817,7 +16817,7 @@ msgstr "Sélection couche: %s"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:350
-#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2018 pcbnew/footprint.cpp:2021
+#: pcbnew/dimension.cpp:996 pcbnew/footprint.cpp:2025 pcbnew/footprint.cpp:2028
 #: pcbnew/fp_text.cpp:298 pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:873
 #: pcbnew/pcb_shape.cpp:562 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:118
 #: pcbnew/tools/board_inspection_tool.cpp:360
@@ -17196,7 +17196,7 @@ msgid "X2 attr"
 msgstr "Attr X2"
 
 #: gerbview/gerbview_frame.cpp:1001
-#: resources/linux/launchers/gerbview.desktop:10
+#: resources/linux/launchers/gerbview.desktop.in:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -18283,6 +18283,11 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
+
+#: libs/kiplatform/msw/environment.cpp:49
+#, fuzzy, c-format
+msgid "Error code: %d"
+msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19653,8 +19658,8 @@ msgid "Board Classes"
 msgstr "Classes de Circuits Imprimés"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:421
-#: resources/linux/launchers/pcbcalculator.desktop:9
-#: resources/linux/launchers/pcbcalculator.desktop:10
+#: resources/linux/launchers/pcbcalculator.desktop.in:9
+#: resources/linux/launchers/pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -21606,26 +21611,26 @@ msgstr "Nettoyer Pistes et Vias"
 msgid "Constraints Resolution Report"
 msgstr "Rapport de Résolution des Contraintes"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:279
+#: pcbnew/dialogs/dialog_copper_zones.cpp:276
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:102
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:85
 msgid "Chamfer distance:"
 msgstr "Distance de chanfreinage:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:281
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
+#: pcbnew/dialogs/dialog_copper_zones.cpp:278
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:104
 msgid "Fillet radius:"
 msgstr "Rayon de l'arrondi:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:392
+#: pcbnew/dialogs/dialog_copper_zones.cpp:389
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 "La largeur des freins thermique ne peut pas être plus petite que la largeur "
 "minimum."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:420
-#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:256
+#: pcbnew/dialogs/dialog_copper_zones.cpp:417
+#: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:254
 msgid "No layer selected."
 msgstr "Pas de couche sélectionnée."
 
@@ -22118,7 +22123,7 @@ msgstr "Réseau Circulaire"
 msgid "Create Array"
 msgstr "Créer Matrice"
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:200
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:197
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
@@ -22126,7 +22131,7 @@ msgstr ""
 "Cet élément était sur une couche non autorisée ou non existante.\n"
 "Il a été déplacé sur la premiere couche autorisée."
 
-#: pcbnew/dialogs/dialog_dimension_properties.cpp:281
+#: pcbnew/dialogs/dialog_dimension_properties.cpp:278
 msgid "Change dimension properties"
 msgstr "Modifie les propriétés de la cote"
 
@@ -23960,61 +23965,61 @@ msgid "Delete Items"
 msgstr "Suppression d'Éléments"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:211
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
 msgstr "Couches Sérigraphie"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:212
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
 msgstr "Couches Cuivre"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 msgid "Edge Cuts"
 msgstr "Couche Contours"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:214
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:138
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:58
 msgid "Courtyards"
 msgstr "Zones d'occupation"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:139
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
 msgid "Fab Layers"
 msgstr "Couches Fab"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:216
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:140
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:60
 msgid "Other Layers"
 msgstr "Autres Couches"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:218
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:122
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:44
 msgid "Line Thickness"
 msgstr "Epaisseur de Ligne"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:226
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:123
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:45
 msgid "Text Width"
 msgstr "Largeur Texte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:124
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:127
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:46
 msgid "Text Height"
 msgstr "Hauteur Texte"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:238
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:125
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:128
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
 msgstr "Épaisseur du Texte"
@@ -26807,19 +26812,19 @@ msgstr ""
 msgid "Default text items for new footprints:"
 msgstr "Textes par défaut pour les nouvelle empreintes:"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:84
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
 "Note: une référence ou valeur schematique vide utilisera le nom de "
 "l'empreinte."
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:103
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
 msgstr "Valeurs par défaut pour les nouveaux élements graphiques:"
 
-#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
+#: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:67
 msgid "Net Class parameters"
 msgstr "Paramètres de NeClass"
@@ -28967,23 +28972,23 @@ msgstr "<pas de référence schématique>"
 msgid "Footprint %s"
 msgstr "Empreinte %s"
 
-#: pcbnew/footprint.cpp:2030 pcbnew/pad.cpp:1516
+#: pcbnew/footprint.cpp:2037 pcbnew/pad.cpp:1516
 msgid "Local Clearance"
 msgstr "Isolation Locale"
 
-#: pcbnew/footprint.cpp:2033 pcbnew/pad.cpp:1493
+#: pcbnew/footprint.cpp:2040 pcbnew/pad.cpp:1493
 msgid "Local Solderpaste Margin"
 msgstr "Marge pate à souder locale"
 
-#: pcbnew/footprint.cpp:2036 pcbnew/pad.cpp:1496
+#: pcbnew/footprint.cpp:2043 pcbnew/pad.cpp:1496
 msgid "Local Solderpaste Margin Ratio"
 msgstr "Coefficient Local de Marge de Soudure"
 
-#: pcbnew/footprint.cpp:2038
+#: pcbnew/footprint.cpp:2045
 msgid "Thermal Width"
 msgstr "Largeur Frein Thermique"
 
-#: pcbnew/footprint.cpp:2041
+#: pcbnew/footprint.cpp:2048
 msgid "Thermal Gap"
 msgstr "Longueur Frein Thermique"
 
@@ -29839,15 +29844,19 @@ msgid "Updated %s properties."
 msgstr "Mise à jour des propriétés de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, c-format
-msgid "Set %s 'exclude from BOM' fabrication attribute."
+#, fuzzy, c-format
+msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr "Activation de attribut de fabrication \"exclure de BOM\" pour %s ."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr "Suppression attribut de fabrication \"exclure de BOM\"  pour %s."
+
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:376
+#, fuzzy, c-format
+msgid "Added %s 'exclude from BOM' fabrication attribute."
+msgstr "Activation de attribut de fabrication \"exclure de BOM\" pour %s ."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
 #, c-format
@@ -34201,7 +34210,7 @@ msgstr "Ajouter une découpe de zone"
 msgid "Add a zone"
 msgstr "Ajoutez une zone"
 
-#: pcbnew/tools/zone_create_helper.cpp:251
+#: pcbnew/tools/zone_create_helper.cpp:260
 msgid "Add a graphical polygon"
 msgstr "Addition de polygones graphiques"
 
@@ -35002,17 +35011,21 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: resources/linux/appdata/kicad.appdata.xml:6
-#: resources/linux/launchers/kicad.desktop:10
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr ""
+
+#: resources/linux/appdata/kicad.appdata.xml.in:6
+#: resources/linux/launchers/kicad.desktop.in:10
 msgid "KiCad"
 msgstr "KiCad"
 
-#: resources/linux/appdata/kicad.appdata.xml:13
-#: resources/linux/launchers/kicad.desktop:11
+#: resources/linux/appdata/kicad.appdata.xml.in:13
+#: resources/linux/launchers/kicad.desktop.in:11
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/appdata/kicad.appdata.xml:37
+#: resources/linux/appdata/kicad.appdata.xml.in:37
 msgid ""
 "KiCad is a Cross Platform and Open Source Electronics Design Automation "
 "Suite. The programs handle Schematic Capture, and PCB Layout with Gerber "
@@ -35022,67 +35035,92 @@ msgstr ""
 "électronique. Les programmes gèrent la capture schématique et l'édition du "
 "PCB avec la sortie Gerber."
 
-#: resources/linux/appdata/kicad.appdata.xml:49
+#: resources/linux/appdata/kicad.appdata.xml.in:49
 msgid "Eeschema Schematic Editor"
 msgstr "Eeschema Editeur de Schématique"
 
-#: resources/linux/appdata/kicad.appdata.xml:54
+#: resources/linux/appdata/kicad.appdata.xml.in:54
 msgid "PcbNew PCB Layout"
 msgstr "PcbNew Editeur de PCB"
 
-#: resources/linux/appdata/kicad.appdata.xml:59
+#: resources/linux/appdata/kicad.appdata.xml.in:59
 msgid "PcbNew 3D Viewer"
 msgstr "Visualisateur 3D de PcbNew"
 
-#: resources/linux/appdata/kicad.appdata.xml:71
+#: resources/linux/appdata/kicad.appdata.xml.in:71
 msgid "The KiCad Developers"
 msgstr "Développeurs KiCad"
 
-#: resources/linux/launchers/bitmap2component.desktop:11
+#: resources/linux/launchers/bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/eeschema.desktop:10
+#: resources/linux/launchers/eeschema.desktop.in:10
 msgid "Eeschema (Standalone)"
 msgstr "Eeschema (Seul)"
 
-#: resources/linux/launchers/eeschema.desktop:11
+#: resources/linux/launchers/eeschema.desktop.in:11
 msgid "Electronic schematic capture"
 msgstr "Capture schématique électronique"
 
-#: resources/linux/launchers/eeschema.desktop:12
+#: resources/linux/launchers/eeschema.desktop.in:12
 msgid "KiCad electronic schematic design (standalone)"
 msgstr "Editeur de schématique électronique KiCad (autonome)"
 
-#: resources/linux/launchers/gerbview.desktop:11
+#: resources/linux/launchers/gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/gerbview.desktop:12
+#: resources/linux/launchers/gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/kicad.desktop:12
+#: resources/linux/launchers/kicad.desktop.in:12
 msgid "Electronic Design Automation suite"
 msgstr "Suite de Conception Electronique Assistée par Ordinateur"
 
-#: resources/linux/launchers/pcbcalculator.desktop:11
+#: resources/linux/launchers/pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/pcbnew.desktop:10
+#: resources/linux/launchers/pcbnew.desktop.in:10
 msgid "Pcbnew (Standalone)"
 msgstr "Pcbnew (Seul)"
 
-#: resources/linux/launchers/pcbnew.desktop:11
+#: resources/linux/launchers/pcbnew.desktop.in:11
 msgid "PCB layout"
 msgstr "Éditeur de Circuit Imprimé"
 
-#: resources/linux/launchers/pcbnew.desktop:12
+#: resources/linux/launchers/pcbnew.desktop.in:12
 msgid "KiCad printed circuit board layout (standalone)"
 msgstr "Editeur de circuits imprimés KiCad (autonome)"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:5
+#, fuzzy
+msgid "Gerber File"
+msgstr "Fichiers Gerber"
+
+#: resources/linux/mime/kicad-gerbers.xml.in:10
+#, fuzzy
+msgid "Excellon drill file"
+msgstr "Créer Fichier(s) de perçage Excellon"
+
+#: resources/linux/mime/kicad-kicad.xml.in:5
+#, fuzzy
+msgid "KiCad Project"
+msgstr "Fichier projet KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:11
+#, fuzzy
+msgid "KiCad Schematic"
+msgstr "Editeur de Schématique KiCad"
+
+#: resources/linux/mime/kicad-kicad.xml.in:17
+#, fuzzy
+msgid "KiCad Printed Circuit Board"
+msgstr "Fichiers circuits imprimés KiCad"
 
 #, c-format
 #~ msgid "Change %s footprint from \"%s\" to \"%s\"."
@@ -35776,10 +35814,6 @@ msgstr "Editeur de circuits imprimés KiCad (autonome)"
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
-
-#, fuzzy, c-format
-#~ msgid "Error code: %d"
-#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
