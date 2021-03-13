@@ -312,6 +312,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawLeader );
 
     placeMenu->AppendSeparator();
+    placeMenu->Add( PCB_ACTIONS::placeCharacteristics );
+    placeMenu->Add( PCB_ACTIONS::placeStackup );
     placeMenu->Add( PCB_ACTIONS::placeTarget );
 
     placeMenu->AppendSeparator();

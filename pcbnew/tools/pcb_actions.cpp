@@ -117,6 +117,14 @@ TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         _( "Draw Arc" ), _( "Draw an arc" ),
         BITMAPS::add_arc, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::placeCharacteristics( "pcbnew.InteractiveDrawing.placeCharacteristics",
+        AS_GLOBAL, 0, " ", _( "Add Board Characteristics" ), _( "Add Board Characteristics" ),
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::placeStackup( "pcbnew.InteractiveDrawing.placeStackup", AS_GLOBAL, 0,
+        " ", _( "Add Stackup Table" ), _( "Add Stackup Table" ),
+        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'T', LEGACY_HK_NAME( "Add Text" ),

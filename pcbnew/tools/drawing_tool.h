@@ -84,6 +84,28 @@ public:
     MODE GetDrawingMode() const;
 
     /**
+     * Function DrawBoardCharacteristics()
+     */
+    std::vector<BOARD_ITEM*> DrawBoardCharacteristics( wxPoint origin, PCB_LAYER_ID aLayer,
+                                                       bool aDrawNow, wxPoint* tablesize );
+
+    /**
+     * Function DrawSpecificationStackup()
+     */
+    std::vector<BOARD_ITEM*> DrawSpecificationStackup( wxPoint origin, PCB_LAYER_ID aLayer,
+                                                       bool aDrawNow, wxPoint* tablesize );
+
+    /**
+     * Function PlaceCharacteristics()
+     */
+    int PlaceCharacteristics( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function PlaceStackup()
+     */
+    int PlaceStackup( const TOOL_EVENT& aEvent );
+
+    /**
      * Start interactively drawing a line.
      *
      * After invoking the function it expects the user to click at least two times to determine
@@ -153,6 +175,21 @@ public:
      * Place a drawing imported from a DXF or SVG file in footprint editor.
      */
     int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
+
+    /**
+     * Interactively place a set of @ref BOARD_ITEM.
+     * As a list of BOARD_ITEMs can be resource intesive to move around,
+     * we can use a reduced set of BOARD_ITEMs for preview purpose only.
+     * 
+     * @param aEvent 
+     * @param aItems BOARD_ITEMs to add to the board.
+     * @param aPreview BOARD_ITEMs only used during placement / preview.
+     * @param aLayers   Set of allowed destination when asking the user.
+     *                  If set to NULL, the user is not asked and all BOARD_ITEMs remain on their layers. 
+     */
+    int InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::vector<BOARD_ITEM*> aItems,
+                                     std::vector<BOARD_ITEM*> aPreview, LSET* aLayers );
+
 
     /**
      * Place the footprint anchor (only in footprint editor).
