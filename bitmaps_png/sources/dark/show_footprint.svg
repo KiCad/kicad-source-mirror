@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="show_footprint.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/footprint_browser.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="23.729469"
      inkscape:cx="16.576995"
      inkscape:cy="16.166898"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="g2825"
      inkscape:document-rotation="0"
@@ -140,20 +140,16 @@
     <path
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sccccs"
-       style="fill:#c22341;fill-opacity:1;stroke-width:1.00093"
+       style="fill:#f2647e;fill-opacity:1;stroke-width:1.00093"
        id="path2817"
        d="M 7.162202,23.370209 C 6.5124046,24.078317 5.4928555,23.954675 4.8015019,23.26329 l -1.7168621,-1.653884 2.2532079,-2.253298 1.7169509,1.653973 c 0.657845,0.790765 0.7644375,1.644134 0.1074034,2.360128 z"
        class="cls-4" />
-    <g
-       transform="matrix(3.7830372,0,0,3.7830374,-13.47019,2.2657407)"
-       id="g2823">
-      <path
-         inkscape:connector-curvature="0"
-         style="opacity:1;fill:none;stroke:#c22340;stroke-width:0.635;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         id="path2819"
-         d="M 4.3134957,2.271524 A 1.4570598,1.4568993 0 1 1 2.2538348,2.272498 1.4563738,1.4562132 0 0 1 4.3134957,2.271524 Z"
-         class="cls-4" />
-    </g>
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#f2647e;stroke-width:2.40223;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2819"
+       d="m 2.8479247,10.859001 a 5.5121114,5.5115045 0 1 1 -7.7917738,0.0037 5.5095163,5.508909 0 0 1 7.7917738,-0.0037 z"
+       class="cls-4" />
     <g
        id="g851"
        transform="matrix(2.3621654,0,0,2.3621656,-8.8058418,6.9577514)"
@@ -166,7 +162,7 @@
          inkscape:connector-curvature="0" />
     </g>
     <rect
-       style="fill:#c22341;fill-opacity:1;stroke:none;stroke-width:1.00093;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#f2647e;fill-opacity:1;stroke:none;stroke-width:1.00093;stroke-linecap:round;stroke-linejoin:round"
        id="rect2815"
        transform="rotate(-45.000001)"
        height="3.0027859"

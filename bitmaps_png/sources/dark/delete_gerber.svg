@@ -1,111 +1,463 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="delete_gerber.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2216" inkscape:window-height="1493" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="6.0812055" inkscape:cy="15.650565" inkscape:window-x="1220" inkscape:window-y="253" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs881">
-      <style id="style879">.cls-1{fill:#8f8f8f;}.cls-2{fill:#e8e8e8;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5{fill:#f2647e;}.cls-6{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath861">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect863" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath865">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect867" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath869">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect871" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath873">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect875" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath877">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect879" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath881">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect883" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath885">
-         <rect class="cls-3" x="3.0948" y="3.096" width="18.9041" height="18.9081" rx="3.151" id="rect887" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath889">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect891" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath893">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect896" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath898">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect900" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath902">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect904" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath906">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect908" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath910">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect912" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath914">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect916" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath918">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect920" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath922">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect924" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath926">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect928" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath930">
-         <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect932" />
-      </clipPath>
-   </defs>
-   <title id="title883">delete_gerber</title>
-   <path class="cls-1" d="M 3.1476,-0.0024 H 15.75 a 3.151,3.151 0 0 1 3.151,3.151 v 12.606 a 3.151,3.151 0 0 1 -3.151,3.151 H 3.1477 a 3.151,3.151 0 0 1 -3.151,-3.151 V 3.1485 a 3.1509,3.1509 0 0 1 3.1509,-3.1509 z" id="path885" />
-   <path class="cls-2" d="M 4.1959,1.0458 H 16.798 a 3.151,3.151 0 0 1 3.151,3.151 v 12.6061 a 3.151,3.151 0 0 1 -3.151,3.151 H 4.1958 A 3.1509,3.1509 0 0 1 1.0449,16.803 V 4.1968 a 3.151,3.151 0 0 1 3.151,-3.151 z" id="path887" />
-   <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect889" clip-path="url(#clipPath930)" />
-   <path class="cls-1" d="M 7.1611,8.9996 H 4 L 0.0988,5.818 V 5.3146 c 0,0 0.0018,-0.3012 0.0133,-0.4008 C 0.1242,4.809 0.1949,4.4998 0.1949,4.4998 L 4.4149,8 h 2.7468 z" id="path891" sodipodi:nodetypes="ccccscccc" clip-path="url(#clipPath926)" />
-   <rect class="cls-1" x="7" y="7" width="4" height="3" id="rect893" clip-path="url(#clipPath922)" />
-   <rect class="cls-1" x="7" y="11" width="4" height="3" id="rect895" clip-path="url(#clipPath918)" />
-   <rect class="cls-1" x="7" y="15" width="4" height="3" id="rect897" clip-path="url(#clipPath914)" />
-   <rect class="cls-1" x="16.235901" y="17.3452" width="3.2258" height="1.9354" id="rect899" clip-path="url(#clipPath910)" />
-   <rect class="cls-1" x="16.235901" y="12.5107" width="3.2258" height="1.9354" id="rect901" clip-path="url(#clipPath906)" />
-   <rect class="cls-1" x="16" y="7" width="4" height="3" id="rect903" clip-path="url(#clipPath902)" />
-   <rect class="cls-1" x="16" y="3" width="4" height="3" id="rect905" clip-path="url(#clipPath898)" />
-   <path class="cls-1" d="M 7.1611,5 H 3.5957264 L 1.2808,2.7842 c 0,0 0.3,-0.22 0.4078,-0.2818 C 1.8495249,2.4146424 2.0173899,2.3402587 2.1905,2.28 L 4.0100264,4 H 7.1611 Z" id="path907" sodipodi:nodetypes="cccccccc" clip-path="url(#clipPath893)" />
-   <rect class="cls-1" x="7" y="3" width="4" height="3" id="rect909" ry="0" clip-path="url(#clipPath889)" />
-   <polygon class="cls-1" points="15.965,19.833 14.876,18.744 14.876,12.59 15.876,12.59 15.876,18.33 16.379,18.833 17.29,18.833 17.29,19.833 " id="polygon911" transform="translate(-1,-1)" clip-path="url(#clipPath885)" />
-   <rect class="cls-1" x="13" y="2.0494444" width="0.8760004" height="7.4505558" id="rect913" clip-path="url(#clipPath881)" />
-   <rect class="cls-1" x="19.3652" y="13.0259" width="1.6344" height="1" id="rect915" clip-path="url(#clipPath877)" />
-   <path id="polygon917" style="fill:#8f8f8f" d="M 2.923,21.006 C 2.7356667,20.96033 2.5483333,20.91467 2.361,20.869 V 18.832 L 5.683,16 H 8 v 1 H 6.097 l -2.736,2.246 v 1.76 z" sodipodi:nodetypes="cccccccccc" clip-path="url(#clipPath873)" />
-   <rect class="cls-1" x="3.5" y="12" width="4.5" height="1" id="rect919" clip-path="url(#clipPath869)" />
-   <path class="cls-1" d="M 15,10.4419 A 1.5000001,1.5000001 0 1 1 13.500133,8.9414988 1.5000001,1.5000001 0 0 1 15,10.4419 Z" id="path923" style="stroke-width:1" clip-path="url(#clipPath865)" />
-   <path class="cls-1" d="M 6,12.5 A 1.5000001,1.5000001 0 1 1 4.5005348,10.999599 1.5000001,1.5000001 0 0 1 6,12.5 Z" id="path927" style="stroke-width:1" clip-path="url(#clipPath861)" />
-   <circle class="cls-5" cx="17" cy="16.9939" r="7" id="circle929" />
-   <line class="cls-6" x1="19.468901" y1="14.5251" x2="14.5191" y2="19.474899" id="line931" />
-   <line class="cls-6" x1="19.468901" y1="19.474899" x2="14.5191" y2="14.5251" id="line933" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="delete_gerber.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="6.0812055"
+     inkscape:cy="15.650565"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs881">
+    <style
+       id="style879">.cls-1{fill:#8f8f8f;}.cls-2{fill:#e8e8e8;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5{fill:#f2647e;}.cls-6{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath861">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect863" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath865">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect867" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath869">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect871" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath873">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect875" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath877">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect879" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath881">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect883" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath885">
+      <rect
+         class="cls-3"
+         x="3.0948"
+         y="3.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect887" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath889">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect891" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath893">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect896" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath898">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect900" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath902">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect904" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath906">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect908" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath910">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect912" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath914">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect916" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath918">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect920" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath922">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect924" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath926">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect928" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath930">
+      <rect
+         class="cls-3"
+         x="2.0948"
+         y="2.096"
+         width="18.9041"
+         height="18.9081"
+         rx="3.151"
+         id="rect932" />
+    </clipPath>
+  </defs>
+  <title
+     id="title883">delete_gerber</title>
+  <path
+     class="cls-1"
+     d="M 3.1476,-0.0024 H 15.75 a 3.151,3.151 0 0 1 3.151,3.151 v 12.606 a 3.151,3.151 0 0 1 -3.151,3.151 H 3.1477 a 3.151,3.151 0 0 1 -3.151,-3.151 V 3.1485 a 3.1509,3.1509 0 0 1 3.1509,-3.1509 z"
+     id="path885"
+     style="fill:#d0d0d0;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="M 4.1959,1.0458 H 16.798 a 3.151,3.151 0 0 1 3.151,3.151 v 12.6061 a 3.151,3.151 0 0 1 -3.151,3.151 H 4.1958 A 3.1509,3.1509 0 0 1 1.0449,16.803 V 4.1968 a 3.151,3.151 0 0 1 3.151,-3.151 z"
+     id="path887" />
+  <rect
+     class="cls-3"
+     x="2.0948"
+     y="2.096"
+     width="18.9041"
+     height="18.9081"
+     rx="3.151"
+     id="rect889"
+     clip-path="url(#clipPath930)" />
+  <path
+     class="cls-1"
+     d="M 7.1611,8.9996 H 4 L 0.0988,5.818 V 5.3146 c 0,0 0.0018,-0.3012 0.0133,-0.4008 C 0.1242,4.809 0.1949,4.4998 0.1949,4.4998 L 4.4149,8 h 2.7468 z"
+     id="path891"
+     sodipodi:nodetypes="ccccscccc"
+     clip-path="url(#clipPath926)" />
+  <rect
+     class="cls-1"
+     x="7"
+     y="7"
+     width="4"
+     height="3"
+     id="rect893"
+     clip-path="url(#clipPath922)" />
+  <rect
+     class="cls-1"
+     x="7"
+     y="11"
+     width="4"
+     height="3"
+     id="rect895"
+     clip-path="url(#clipPath918)" />
+  <rect
+     class="cls-1"
+     x="7"
+     y="15"
+     width="4"
+     height="3"
+     id="rect897"
+     clip-path="url(#clipPath914)" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="17.3452"
+     width="3.2258"
+     height="1.9354"
+     id="rect899"
+     clip-path="url(#clipPath910)" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="12.5107"
+     width="3.2258"
+     height="1.9354"
+     id="rect901"
+     clip-path="url(#clipPath906)" />
+  <rect
+     class="cls-1"
+     x="16"
+     y="7"
+     width="4"
+     height="3"
+     id="rect903"
+     clip-path="url(#clipPath902)" />
+  <rect
+     class="cls-1"
+     x="16"
+     y="3"
+     width="4"
+     height="3"
+     id="rect905"
+     clip-path="url(#clipPath898)" />
+  <path
+     class="cls-1"
+     d="M 7.1611,5 H 3.5957264 L 1.2808,2.7842 c 0,0 0.3,-0.22 0.4078,-0.2818 C 1.8495249,2.4146424 2.0173899,2.3402587 2.1905,2.28 L 4.0100264,4 H 7.1611 Z"
+     id="path907"
+     sodipodi:nodetypes="cccccccc"
+     clip-path="url(#clipPath893)" />
+  <rect
+     class="cls-1"
+     x="7"
+     y="3"
+     width="4"
+     height="3"
+     id="rect909"
+     ry="0"
+     clip-path="url(#clipPath889)" />
+  <polygon
+     class="cls-1"
+     points="15.965,19.833 14.876,18.744 14.876,12.59 15.876,12.59 15.876,18.33 16.379,18.833 17.29,18.833 17.29,19.833 "
+     id="polygon911"
+     transform="translate(-1,-1)"
+     clip-path="url(#clipPath885)" />
+  <rect
+     class="cls-1"
+     x="13"
+     y="2.0494444"
+     width="0.8760004"
+     height="7.4505558"
+     id="rect913"
+     clip-path="url(#clipPath881)" />
+  <rect
+     class="cls-1"
+     x="19.3652"
+     y="13.0259"
+     width="1.6344"
+     height="1"
+     id="rect915"
+     clip-path="url(#clipPath877)" />
+  <path
+     id="polygon917"
+     style="fill:#8f8f8f"
+     d="M 2.923,21.006 C 2.7356667,20.96033 2.5483333,20.91467 2.361,20.869 V 18.832 L 5.683,16 H 8 v 1 H 6.097 l -2.736,2.246 v 1.76 z"
+     sodipodi:nodetypes="cccccccccc"
+     clip-path="url(#clipPath873)" />
+  <rect
+     class="cls-1"
+     x="3.5"
+     y="12"
+     width="4.5"
+     height="1"
+     id="rect919"
+     clip-path="url(#clipPath869)" />
+  <path
+     class="cls-1"
+     d="M 15,10.4419 A 1.5000001,1.5000001 0 1 1 13.500133,8.9414988 1.5000001,1.5000001 0 0 1 15,10.4419 Z"
+     id="path923"
+     style="stroke-width:1"
+     clip-path="url(#clipPath865)" />
+  <path
+     class="cls-1"
+     d="M 6,12.5 A 1.5000001,1.5000001 0 1 1 4.5005348,10.999599 1.5000001,1.5000001 0 0 1 6,12.5 Z"
+     id="path927"
+     style="stroke-width:1"
+     clip-path="url(#clipPath861)" />
+  <circle
+     class="cls-5"
+     cx="17"
+     cy="16.9939"
+     r="7"
+     id="circle929" />
+  <line
+     class="cls-6"
+     x1="19.468901"
+     y1="14.5251"
+     x2="14.5191"
+     y2="19.474899"
+     id="line931"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <line
+     class="cls-6"
+     x1="19.468901"
+     y1="19.474899"
+     x2="14.5191"
+     y2="14.5251"
+     id="line933"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

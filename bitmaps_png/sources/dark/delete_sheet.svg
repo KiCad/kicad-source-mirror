@@ -1,60 +1,245 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="delete_sheet.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs941">
-      <style id="style939">.cls-1,.cls-5{fill:#8f8f8f;}.cls-2{fill:#f2647e;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5{opacity:0.6;}.cls-6{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
-   </defs>
-   <title id="title943">delete_sheet</title>
-   <path class="cls-1" d="m 3.1492,-0.0024 h 12.6023 a 3.151,3.151 0 0 1 3.151,3.151 v 12.606 a 3.151,3.151 0 0 1 -3.151,3.151 H 3.1493 a 3.151,3.151 0 0 1 -3.151,-3.151 V 3.1485 a 3.1509,3.1509 0 0 1 3.1509,-3.1509 z" id="path945" />
-   <rect class="cls-2" x="1.0466001" y="1.0458" width="18.9041" height="18.9081" rx="3.151" id="rect947" />
-   <rect class="cls-3" x="2.0948" y="2.096" width="18.9041" height="18.9081" rx="3.151" id="rect949" />
-   <path class="cls-1" d="M 9.1611,9.4194 H 5.7 L 2.0988,5.818 V 5.3146 c 0,0 0.0018,-0.3012 0.0133,-0.4008 0.0121,-0.1048 0.0828,-0.414 0.0828,-0.414 l 3.92,3.92 h 3.0468 z" id="path951" />
-   <rect class="cls-1" x="8.7138996" y="7.9181004" width="3.2258" height="1.9354" id="rect953" />
-   <rect class="cls-1" x="8.7138996" y="12.1127" width="3.2258" height="1.9354" id="rect955" />
-   <rect class="cls-1" x="8.7138996" y="16.307199" width="3.2258" height="1.9355" id="rect957" />
-   <rect class="cls-1" x="16.235901" y="17.3452" width="3.2258" height="1.9354" id="rect959" />
-   <rect class="cls-1" x="16.235901" y="12.5107" width="3.2258" height="1.9354" id="rect961" />
-   <rect class="cls-1" x="16.235901" y="7.6761999" width="3.2258" height="1.9354" id="rect963" />
-   <rect class="cls-1" x="16.235901" y="3.6374998" width="3.2258" height="1.9354" id="rect965" />
-   <path class="cls-1" d="M 9.1611,5.2036 H 5.7 L 3.2808,2.7842 c 0,0 0.3,-0.22 0.4078,-0.2818 A 3.3455,3.3455 0 0 1 4.1905,2.28 l 1.9238,1.9236 h 3.0468 z" id="path967" />
-   <rect class="cls-1" x="8.7138996" y="3.7234998" width="3.2258" height="1.9355" id="rect969" />
-   <polygon class="cls-1" points="15.965,19.833 14.876,18.744 14.876,12.59 15.876,12.59 15.876,18.33 16.379,18.833 17.29,18.833 17.29,19.833 " id="polygon971" transform="translate(-1,-1)" />
-   <rect class="cls-1" x="13.876" y="2.0948999" width="1" height="7.4632001" id="rect973" />
-   <rect class="cls-1" x="19.3652" y="13.0259" width="1.6344" height="1" id="rect975" />
-   <polygon class="cls-1" points="5.923,22.006 5.361,21.869 5.361,19.832 7.44,17.752 9.757,17.752 9.757,18.752 7.854,18.752 6.361,20.246 6.361,22.006 " id="polygon977" transform="translate(-1,-1)" />
-   <rect class="cls-1" x="5.6855001" y="12.563" width="3.0390999" height="1" id="rect979" />
-   <path class="cls-4" d="M 15.9456,10.5744 A 1.5753,1.5753 0 1 1 14.37,8.9987 a 1.5754,1.5754 0 0 1 1.5756,1.5757 z" id="path981" />
-   <path class="cls-1" d="m 15.492,10.5744 a 1.1217,1.1217 0 1 1 -1.1216,-1.122 1.1217,1.1217 0 0 1 1.1216,1.122 z" id="path983" />
-   <circle class="cls-4" cx="4.6697001" cy="13.0627" r="1.5755" id="circle985" />
-   <path class="cls-1" d="M 5.7913,13.0627 A 1.1217,1.1217 0 1 1 4.67,11.9407 1.1217,1.1217 0 0 1 5.7913,13.0627 Z" id="path987" />
-   <rect class="cls-5" x="2.0971" y="2.0962999" width="18.9041" height="18.9081" rx="3.151" id="rect989" />
-   <circle class="cls-2" cx="17.001699" cy="16.9939" r="7" id="circle991" />
-   <line class="cls-6" x1="19.4706" y1="14.5251" x2="14.5208" y2="19.474899" id="line993" />
-   <line class="cls-6" x1="19.4706" y1="19.474899" x2="14.5208" y2="14.5251" id="line995" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="delete_sheet.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs941">
+    <style
+       id="style939">.cls-1,.cls-5{fill:#8f8f8f;}.cls-2{fill:#f2647e;}.cls-3{fill:#F4EFF3;}.cls-4{fill:#42B8EB;}.cls-5{opacity:0.6;}.cls-6{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title943">delete_sheet</title>
+  <path
+     class="cls-1"
+     d="m 3.1492,-0.0024 h 12.6023 a 3.151,3.151 0 0 1 3.151,3.151 v 12.606 a 3.151,3.151 0 0 1 -3.151,3.151 H 3.1493 a 3.151,3.151 0 0 1 -3.151,-3.151 V 3.1485 a 3.1509,3.1509 0 0 1 3.1509,-3.1509 z"
+     id="path945" />
+  <rect
+     class="cls-2"
+     x="1.0466001"
+     y="1.0458"
+     width="18.9041"
+     height="18.9081"
+     rx="3.151"
+     id="rect947" />
+  <rect
+     class="cls-3"
+     x="2.0948"
+     y="2.096"
+     width="18.9041"
+     height="18.9081"
+     rx="3.151"
+     id="rect949" />
+  <path
+     class="cls-1"
+     d="M 9.1611,9.4194 H 5.7 L 2.0988,5.818 V 5.3146 c 0,0 0.0018,-0.3012 0.0133,-0.4008 0.0121,-0.1048 0.0828,-0.414 0.0828,-0.414 l 3.92,3.92 h 3.0468 z"
+     id="path951" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="7.9181004"
+     width="3.2258"
+     height="1.9354"
+     id="rect953" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="12.1127"
+     width="3.2258"
+     height="1.9354"
+     id="rect955" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="16.307199"
+     width="3.2258"
+     height="1.9355"
+     id="rect957" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="17.3452"
+     width="3.2258"
+     height="1.9354"
+     id="rect959" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="12.5107"
+     width="3.2258"
+     height="1.9354"
+     id="rect961" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="7.6761999"
+     width="3.2258"
+     height="1.9354"
+     id="rect963" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="3.6374998"
+     width="3.2258"
+     height="1.9354"
+     id="rect965" />
+  <path
+     class="cls-1"
+     d="M 9.1611,5.2036 H 5.7 L 3.2808,2.7842 c 0,0 0.3,-0.22 0.4078,-0.2818 A 3.3455,3.3455 0 0 1 4.1905,2.28 l 1.9238,1.9236 h 3.0468 z"
+     id="path967" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="3.7234998"
+     width="3.2258"
+     height="1.9355"
+     id="rect969" />
+  <polygon
+     class="cls-1"
+     points="15.965,19.833 14.876,18.744 14.876,12.59 15.876,12.59 15.876,18.33 16.379,18.833 17.29,18.833 17.29,19.833 "
+     id="polygon971"
+     transform="translate(-1,-1)" />
+  <rect
+     class="cls-1"
+     x="13.876"
+     y="2.0948999"
+     width="1"
+     height="7.4632001"
+     id="rect973" />
+  <rect
+     class="cls-1"
+     x="19.3652"
+     y="13.0259"
+     width="1.6344"
+     height="1"
+     id="rect975" />
+  <polygon
+     class="cls-1"
+     points="5.923,22.006 5.361,21.869 5.361,19.832 7.44,17.752 9.757,17.752 9.757,18.752 7.854,18.752 6.361,20.246 6.361,22.006 "
+     id="polygon977"
+     transform="translate(-1,-1)" />
+  <rect
+     class="cls-1"
+     x="5.6855001"
+     y="12.563"
+     width="3.0390999"
+     height="1"
+     id="rect979" />
+  <path
+     class="cls-4"
+     d="M 15.9456,10.5744 A 1.5753,1.5753 0 1 1 14.37,8.9987 a 1.5754,1.5754 0 0 1 1.5756,1.5757 z"
+     id="path981" />
+  <path
+     class="cls-1"
+     d="m 15.492,10.5744 a 1.1217,1.1217 0 1 1 -1.1216,-1.122 1.1217,1.1217 0 0 1 1.1216,1.122 z"
+     id="path983" />
+  <circle
+     class="cls-4"
+     cx="4.6697001"
+     cy="13.0627"
+     r="1.5755"
+     id="circle985" />
+  <path
+     class="cls-1"
+     d="M 5.7913,13.0627 A 1.1217,1.1217 0 1 1 4.67,11.9407 1.1217,1.1217 0 0 1 5.7913,13.0627 Z"
+     id="path987" />
+  <rect
+     class="cls-5"
+     x="2.0971"
+     y="2.0962999"
+     width="18.9041"
+     height="18.9081"
+     rx="3.151"
+     id="rect989" />
+  <circle
+     class="cls-2"
+     cx="17.001699"
+     cy="16.9939"
+     r="7"
+     id="circle991" />
+  <line
+     class="cls-6"
+     x1="19.4706"
+     y1="14.5251"
+     x2="14.5208"
+     y2="19.474899"
+     id="line993"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <line
+     class="cls-6"
+     x1="19.4706"
+     y1="19.474899"
+     x2="14.5208"
+     y2="14.5251"
+     id="line995"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>
