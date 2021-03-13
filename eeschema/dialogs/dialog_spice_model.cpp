@@ -237,7 +237,7 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     // Passive
     if( page == m_passive )
     {
-        if( !m_passive->Validate() && !m_disabled->GetValue() )
+        if( !m_disabled->GetValue() && !m_passive->Validate() )
             return false;
 
         switch( m_pasType->GetSelection() )
