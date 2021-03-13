@@ -1343,6 +1343,7 @@ void SCH_EDITOR_CONTROL::updatePastedInstances( const SCH_SHEET_PATH& aPastePath
             KIID_PATH clipPath = aClipPath;
             clipPath.push_back( sheet->m_Uuid );
 
+            sheet->AddInstance( pastePath.Path() );
             updatePastedInstances( pastePath, clipPath, sheet, aForceKeepAnnotations );
         }
     }
@@ -1530,6 +1531,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_SHEET_PATH pastePath = pasteRoot;
             pastePath.push_back( sheet );
 
+            sheet->AddInstance( pastePath.Path() );
             updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
         }
 
