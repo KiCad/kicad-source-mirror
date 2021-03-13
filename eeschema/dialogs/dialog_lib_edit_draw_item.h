@@ -43,11 +43,10 @@ public:
     DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* parent, LIB_ITEM* aItem );
 
     bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
-    int GetWidth();
     bool GetApplyToAllConversions();
     bool GetApplyToAllUnits();
-    int GetFillStyle();
 
 private:
     SYMBOL_EDIT_FRAME* m_frame;

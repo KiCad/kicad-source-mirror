@@ -28,6 +28,7 @@
 #include <lib_item.h>
 #include <dialog_lib_edit_draw_item.h>
 #include <symbol_edit_frame.h>
+#include <confirm.h>
 
 
 DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent,
@@ -62,6 +63,9 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent
 
 bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
 {
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
     LIB_PART* symbol = m_item->GetParent();
 
     m_lineWidth.SetValue( m_item->GetWidth() );
@@ -87,9 +91,40 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
 }
 
 
-int DIALOG_LIB_EDIT_DRAW_ITEM::GetWidth()
+bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataFromWindow()
 {
-    return m_lineWidth.GetValue();
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    // Min. 1 um and max. 1 m are more than enough.
+    if( !m_lineWidth.Validate( 0, 1000.0, EDA_UNITS::MILLIMETRES ) )
+        return false;
+
+    if( m_lineWidth.GetValue() == 0
+        && ( (FILL_TYPE) m_fillCtrl->GetSelection() ) != FILL_TYPE::FILLED_SHAPE )
+    {
+        DisplayError( this, _( "Line width may not be 0 for shapes other than filled with body "
+            "outline color." ) );
+        m_widthCtrl->SetFocus();
+        return false;
+    }
+
+    if( m_item->IsFillable() )
+        m_item->SetFillMode( (FILL_TYPE) std::max( m_fillCtrl->GetSelection(), 0 ) );
+
+    m_item->SetWidth( m_lineWidth.GetValue() );
+
+    if( GetApplyToAllConversions() )
+        m_item->SetConvert( 0 );
+    else
+        m_item->SetConvert( m_frame->GetConvert() );
+
+    if( GetApplyToAllUnits() )
+        m_item->SetUnit( 0 );
+    else
+        m_item->SetUnit( m_frame->GetUnit() );
+
+    return true;
 }
 
 
@@ -102,11 +137,5 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::GetApplyToAllConversions()
 bool DIALOG_LIB_EDIT_DRAW_ITEM::GetApplyToAllUnits()
 {
     return m_checkApplyToAllUnits->IsChecked();
-}
-
-
-int DIALOG_LIB_EDIT_DRAW_ITEM::GetFillStyle( void )
-{
-    return std::max( m_fillCtrl->GetSelection(), 0 );
 }
 

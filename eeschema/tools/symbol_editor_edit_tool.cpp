@@ -472,33 +472,18 @@ void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     if( aItem == NULL )
         return;
 
-    DIALOG_LIB_EDIT_DRAW_ITEM dialog( m_frame, aItem );
+    DIALOG_LIB_EDIT_DRAW_ITEM dlg( m_frame, aItem );
 
-    if( dialog.ShowModal() != wxID_OK )
+    if( dlg.ShowModal() != wxID_OK )
         return;
-
-    if( aItem->IsFillable() )
-        aItem->SetFillMode( (FILL_TYPE) dialog.GetFillStyle() );
-
-    aItem->SetWidth( dialog.GetWidth() );
-
-    if( dialog.GetApplyToAllConversions() )
-        aItem->SetConvert( 0 );
-    else
-        aItem->SetConvert( m_frame->GetConvert() );
-
-    if( dialog.GetApplyToAllUnits() )
-        aItem->SetUnit( 0 );
-    else
-        aItem->SetUnit( m_frame->GetUnit() );
 
     updateItem( aItem, true );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify( );
+    m_frame->OnModify();
 
     SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-    drawingTools->SetDrawSpecificConvert( !dialog.GetApplyToAllConversions() );
-    drawingTools->SetDrawSpecificUnit( !dialog.GetApplyToAllUnits() );
+    drawingTools->SetDrawSpecificConvert( !dlg.GetApplyToAllConversions() );
+    drawingTools->SetDrawSpecificUnit( !dlg.GetApplyToAllUnits() );
 
     MSG_PANEL_ITEMS items;
     aItem->GetMsgPanelInfo( m_frame, items );
