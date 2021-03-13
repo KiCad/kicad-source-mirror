@@ -887,6 +887,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
             dcode->m_Shape = APT_MACRO;
             dcode->SetMacro( pam );
+            dcode->m_Defined = true;
         }
 
         break;

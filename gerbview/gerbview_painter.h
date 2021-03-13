@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -135,6 +135,10 @@ public:
 
     /// If set to anything but an empty string, will highlight items with matching attribute
     wxString m_attributeHighlightString;
+
+    /// If set to anything but >0 (in fact 10 the min dcode value),
+    /// will highlight items with matching dcode
+    int m_dcodeHighlightValue;
 
 protected:
     /// Flag determining if spots should be drawn with fill

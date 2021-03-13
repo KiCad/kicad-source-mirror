@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,13 +120,15 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 
     if( gerber_image )
     {
-        int tool = m_DCodeSelector->GetSelectedDCodeId();
+        int d_code = m_DCodeSelector->GetSelectedDCodeId();
 
-        if( tool != gerber_image->m_Selected_Tool )
-        {
-            gerber_image->m_Selected_Tool = tool;
-            GetCanvas()->Refresh();
-        }
+        auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>(
+                            GetCanvas()->GetView()->GetPainter() )->GetSettings();
+        gerber_image->m_Selected_Tool = d_code;
+        settings->m_dcodeHighlightValue = d_code;
+
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+        GetCanvas()->Refresh();
     }
 }
 
@@ -137,6 +139,14 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 
     // Rebuild the DCode list in toolbar (but not the Layer Box) after change
     syncLayerBox( false );
+
+    // Reinit highlighted dcode
+    auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>
+                        ( GetCanvas()->GetView()->GetPainter() )->GetSettings();
+    int dcodeSelected = m_DCodeSelector->GetSelectedDCodeId();
+    settings->m_dcodeHighlightValue = dcodeSelected;
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    GetCanvas()->Refresh();
 }
 
 

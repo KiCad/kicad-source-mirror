@@ -37,6 +37,7 @@
 #include "layer_widget.h"
 #include "gbr_layer_box_selector.h"
 #include "gerbview_layer_widget.h"
+#include "dcode_selection_box.h"
 
 /*
  * GERBER_LAYER_WIDGET
@@ -273,7 +274,14 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     if( layer != myframe->GetActiveLayer() )
     {
         if( ! OnLayerSelected() )
+        {
+            auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>
+                                ( myframe->GetCanvas()->GetView()->GetPainter() )->GetSettings();
+            int dcodeSelected = myframe->m_DCodeSelector->GetSelectedDCodeId();
+            settings->m_dcodeHighlightValue = dcodeSelected;
+            myframe->GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
             myframe->GetCanvas()->Refresh();
+        }
     }
 
     return true;

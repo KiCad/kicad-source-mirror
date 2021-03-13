@@ -105,7 +105,8 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0, "",
-        _( "Clear Highlight" ), "" );
+        _( "Clear Highlight" ), "",
+        BITMAPS::cancel );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0, "",
@@ -121,6 +122,11 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAtt
         AS_GLOBAL, 0, "",
         _( "Highlight Attribute" ), "",
         BITMAPS::flag );
+
+TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( "gerbview.Control.highlightDCode",
+        AS_GLOBAL, 0, "",
+        _( "Highlight DCode" ), "",
+        BITMAPS::show_dcodenumber );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL,

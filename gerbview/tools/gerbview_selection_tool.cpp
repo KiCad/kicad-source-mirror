@@ -89,6 +89,14 @@ private:
                                                            apertDescr->m_AperFunction ) );
                 addSeparator = true;
             }
+
+            if( apertDescr )
+            {
+                auto menuEntry = Add( GERBVIEW_ACTIONS::highlightDCode );
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight DCode D%d" ),
+                                                           apertDescr->m_Num_Dcode ) );
+                addSeparator = true;
+            }
         }
 
         if( addSeparator )

@@ -90,6 +90,7 @@ public:
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION highlightComponent;
     static TOOL_ACTION highlightAttribute;
+    static TOOL_ACTION highlightDCode;
 
     ///< @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }

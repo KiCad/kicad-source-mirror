@@ -166,18 +166,24 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
         settings->m_netHighlightString = "";
         settings->m_componentHighlightString = "";
         settings->m_attributeHighlightString = "";
+        settings->m_dcodeHighlightValue = -1;
+
+        GERBER_FILE_IMAGE* gerber = m_frame->GetGbrImage( m_frame->GetActiveLayer() );
+
+        if( gerber )
+            gerber->m_Selected_Tool = settings->m_dcodeHighlightValue;
     }
     else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightNet ) )
     {
-        auto string = item->GetNetAttributes().m_Netname;
-        settings->m_netHighlightString = string;
-        m_frame->m_SelNetnameBox->SetStringSelection( UnescapeString( string ) );
+        wxString net_name = item->GetNetAttributes().m_Netname;
+        settings->m_netHighlightString = net_name;
+        m_frame->m_SelNetnameBox->SetStringSelection( UnescapeString( net_name ) );
     }
     else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightComponent ) )
     {
-        auto string = item->GetNetAttributes().m_Cmpref;
-        settings->m_componentHighlightString = string;
-        m_frame->m_SelComponentBox->SetStringSelection( string );
+        wxString net_attr = item->GetNetAttributes().m_Cmpref;
+        settings->m_componentHighlightString = net_attr;
+        m_frame->m_SelComponentBox->SetStringSelection( net_attr );
     }
     else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightAttribute ) )
     {
@@ -185,9 +191,29 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
 
         if( apertDescr )
         {
-            auto string = apertDescr->m_AperFunction;
-            settings->m_attributeHighlightString = string;
-            m_frame->m_SelAperAttributesBox->SetStringSelection( string );
+            wxString ap_name = apertDescr->m_AperFunction;
+            settings->m_attributeHighlightString = ap_name;
+            m_frame->m_SelAperAttributesBox->SetStringSelection( ap_name );
+        }
+    }
+    else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightDCode ) )
+    {
+        D_CODE* apertDescr = item->GetDcodeDescr();
+
+        if( apertDescr )
+        {
+            int dcodeSelected = -1;
+            GERBER_FILE_IMAGE* gerber = m_frame->GetGbrImage( m_frame->GetActiveLayer() );
+
+            if( gerber )
+                dcodeSelected = apertDescr->m_Num_Dcode;
+
+            if( dcodeSelected > 0 )
+            {
+                settings->m_dcodeHighlightValue = dcodeSelected;
+                gerber->m_Selected_Tool = dcodeSelected;
+                m_frame->syncLayerBox( false );
+            }
         }
     }
 
@@ -370,6 +396,7 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightNet.MakeEvent() );
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightComponent.MakeEvent() );
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightAttribute.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightDCode.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::LayerNext,          GERBVIEW_ACTIONS::layerNext.MakeEvent() );
     Go( &GERBVIEW_CONTROL::LayerPrev,          GERBVIEW_ACTIONS::layerPrev.MakeEvent() );

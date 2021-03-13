@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -46,6 +46,7 @@ GERBVIEW_RENDER_SETTINGS::GERBVIEW_RENDER_SETTINGS()
     m_componentHighlightString = "";
     m_netHighlightString       = "";
     m_attributeHighlightString = "";
+    m_dcodeHighlightValue      = -1;
 
     update();
 }
@@ -137,6 +138,10 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
 
     if( !m_attributeHighlightString.IsEmpty() && gbrItem && gbrItem->GetDcodeDescr() &&
         m_attributeHighlightString == gbrItem->GetDcodeDescr()->m_AperFunction )
+        return m_layerColorsHi[aLayer];
+
+    if( m_dcodeHighlightValue> 0 && gbrItem && gbrItem->GetDcodeDescr() &&
+        m_dcodeHighlightValue == gbrItem->GetDcodeDescr()->m_Num_Dcode )
         return m_layerColorsHi[aLayer];
 
     // Return grayish color for non-highlighted layers in the high contrast mode
