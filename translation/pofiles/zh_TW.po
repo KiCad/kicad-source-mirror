@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-12 18:32+0000\n"
+"PO-Revision-Date: 2021-03-14 21:51+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -26037,7 +26037,7 @@ msgstr "在不限制佈線角度的情況下，拖拽佈線中最近的連線點
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
-msgstr "內層"
+msgstr "Internal Layers"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:321
 msgid ""
