@@ -394,7 +394,8 @@ private:
 
         ///< Save stored modifications using a plugin. aBuffer decides whether the changes
         ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
-        bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SCH_PLUGIN* aPlugin, bool aBuffer );
+        bool SaveBuffer( PART_BUFFER::PTR aPartBuf, const wxString& aFileName,
+                         SCH_PLUGIN* aPlugin, bool aBuffer );
 
         ///< Return a part buffer with LIB_PART holding a particular alias
         PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;

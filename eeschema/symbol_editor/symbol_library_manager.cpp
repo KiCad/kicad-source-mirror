@@ -46,7 +46,8 @@ SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
 
 
 void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
-                                   std::function<void( int, int, const wxString& )> aProgressCallback )
+                                   std::function<void( int, int,
+                                                       const wxString& )> aProgressCallback )
 {
     m_logger.Activate();
     {
@@ -147,7 +148,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         for( const auto& partBuf : partBuffers )
         {
-            if( !libBuf.SaveBuffer( partBuf, &*pi, true ) )
+            if( !libBuf.SaveBuffer( partBuf, aFileName, &*pi, true ) )
             {
                 // Something went wrong, but try to save other libraries
                 res = false;
@@ -225,7 +226,8 @@ bool SYMBOL_LIBRARY_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::IsPartModified( const wxString& aAlias,
+                                             const wxString& aLibrary ) const
 {
     auto libIt = m_libs.find( aLibrary );
 
@@ -257,7 +259,8 @@ bool SYMBOL_LIBRARY_MANAGER::ClearLibraryModified( const wxString& aLibrary ) co
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const
+bool SYMBOL_LIBRARY_MANAGER::ClearPartModified( const wxString& aAlias,
+                                                const wxString& aLibrary ) const
 {
     auto libI = m_libs.find( aLibrary );
 
@@ -712,7 +715,8 @@ std::set<LIB_PART*> SYMBOL_LIBRARY_MANAGER::getOriginalParts( const wxString& aL
 }
 
 
-SYMBOL_LIBRARY_MANAGER::LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer( const wxString& aLibrary )
+SYMBOL_LIBRARY_MANAGER::LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer(
+        const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
 
@@ -845,8 +849,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCRE
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::UpdateBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                                       LIB_PART* aCopy )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::UpdateBuffer(
+        SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf, LIB_PART* aCopy )
 {
     wxCHECK( aCopy && aPartBuf, false );
 
@@ -861,7 +865,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::UpdateBuffer( SYMBOL_LIBRARY_MANAGER::P
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::DeleteBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::DeleteBuffer(
+        SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
 {
     auto partBufIt = std::find( m_parts.begin(), m_parts.end(), aPartBuf );
     wxCHECK( partBufIt != m_parts.end(), false );
@@ -883,8 +888,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::DeleteBuffer( SYMBOL_LIBRARY_MANAGER::P
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                                     SYMBOL_LIB_TABLE* aLibTable )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
+        SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf, SYMBOL_LIB_TABLE* aLibTable )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
@@ -971,13 +976,15 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 }
 
 
-bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf,
-                                                     SCH_PLUGIN* aPlugin, bool aBuffer )
+bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer(
+        SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf, const wxString& aFileName,
+        SCH_PLUGIN* aPlugin, bool aBuffer )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     LIB_PART* originalPart = aPartBuf->GetOriginal();
     wxCHECK( part && originalPart, false );
+    wxCHECK( !aFileName.IsEmpty(), false );
 
     wxString errorMsg = _( "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\"" );
 
@@ -988,7 +995,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
     // Delete the original symbol if the symbol name has been changed.
     if( part->GetName() != originalPart->GetName() )
     {
-        aPlugin->DeleteSymbol( m_libName, originalPart->GetName(), &properties );
+        if( aPlugin->LoadSymbol( aFileName, originalPart->GetName() ) )
+            aPlugin->DeleteSymbol( aFileName, originalPart->GetName(), &properties );
     }
 
     if( part->IsAlias() )
@@ -1002,7 +1010,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 
         try
         {
-            cachedParent = aPlugin->LoadSymbol( m_libName, bufferedParent->GetName() );
+            cachedParent = aPlugin->LoadSymbol( aFileName, bufferedParent->GetName() );
         }
         catch( const IO_ERROR& )
         {
@@ -1016,7 +1024,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 
             try
             {
-                aPlugin->SaveSymbol( m_libName, cachedParent, aBuffer ? &properties : nullptr );
+                aPlugin->SaveSymbol( aFileName, cachedParent, aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -1026,7 +1034,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 
             try
             {
-                aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+                aPlugin->SaveSymbol( aFileName, newCachedPart, aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -1046,7 +1054,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 
             try
             {
-                aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+                aPlugin->SaveSymbol( aFileName, newCachedPart, aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -1070,7 +1078,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
         {
             try
             {
-                aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ),
+                aPlugin->SaveSymbol( aFileName, new LIB_PART( *part ),
                                      aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
@@ -1088,7 +1096,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
             // Save the modified root symbol.
             try
             {
-                aPlugin->SaveSymbol( m_libName, parentSymbol, aBuffer ? &properties : nullptr );
+                aPlugin->SaveSymbol( aFileName, parentSymbol, aBuffer ? &properties : nullptr );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -1107,7 +1115,7 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::SaveBuffer( SYMBOL_LIBRARY_MANAGER::PAR
 
                 try
                 {
-                    aPlugin->SaveSymbol( m_libName, new LIB_PART( *derivedSymbol ),
+                    aPlugin->SaveSymbol( aFileName, new LIB_PART( *derivedSymbol ),
                                          aBuffer ? &properties : nullptr );
                 }
                 catch( const IO_ERROR& ioe )
@@ -1192,7 +1200,8 @@ size_t SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString
 }
 
 
-int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols( SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
+int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols(
+        SYMBOL_LIBRARY_MANAGER::PART_BUFFER::PTR aPartBuf )
 {
     wxCHECK( aPartBuf && aPartBuf->GetPart()->IsRoot(), 0 );
 
