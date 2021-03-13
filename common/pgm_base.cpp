@@ -583,7 +583,7 @@ void PGM_BASE::SaveCommonSettings()
 
 COMMON_SETTINGS* PGM_BASE::GetCommonSettings() const
 {
-    return GetSettingsManager().GetCommonSettings();
+    return m_settings_manager ? GetSettingsManager().GetCommonSettings() : nullptr;
 }
 
 
