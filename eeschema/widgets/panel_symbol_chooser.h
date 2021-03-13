@@ -57,6 +57,7 @@ public:
     PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                           const SYMBOL_LIBRARY_FILTER* aFilter,
                           std::vector<PICKED_SYMBOL>& aHistoryList,
+                          std::vector<PICKED_SYMBOL>& aAlreadyPlaced,
                           bool aAllowFieldEdits, bool aShowFootprints,
                           std::function<void()> aCloseHandler );
 

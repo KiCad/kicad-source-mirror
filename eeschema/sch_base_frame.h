@@ -154,7 +154,8 @@ public:
      * @return the selected symbol
      */
     PICKED_SYMBOL PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER* aFilter,
-                                         std::vector<PICKED_SYMBOL>& aHistoryList,
+                                         std::vector<PICKED_SYMBOL>&  aHistoryList,
+                                         std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                          bool aShowFootprints, const LIB_ID* aHighlight = nullptr,
                                          bool aAllowFields = true );
 

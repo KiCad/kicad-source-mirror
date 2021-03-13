@@ -51,7 +51,8 @@ wxString PANEL_SYMBOL_CHOOSER::g_powerSearchString;
 
 PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                                             const SYMBOL_LIBRARY_FILTER* aFilter,
-                                            std::vector<PICKED_SYMBOL>& aHistoryList,
+                                            std::vector<PICKED_SYMBOL>&  aHistoryList,
+                                            std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                             bool aAllowFieldEdits, bool aShowFootprints,
                                             std::function<void()> aCloseHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
@@ -119,35 +120,48 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     std::vector<LIB_SYMBOL>     history_list_storage;
     std::vector<LIB_TREE_ITEM*> history_list;
+    std::vector<LIB_SYMBOL>     already_placed_storage;
+    std::vector<LIB_TREE_ITEM*> already_placed;
 
-    history_list_storage.reserve( aHistoryList.size() );
-
-    for( const PICKED_SYMBOL& i : aHistoryList )
+    // Lambda to encapsulate the common logic
+    auto processList = [&]( const std::vector<PICKED_SYMBOL>& inputList,
+                            std::vector<LIB_SYMBOL>&          storageList,
+                            std::vector<LIB_TREE_ITEM*>&      resultList )
     {
-        LIB_SYMBOL* symbol = m_frame->GetLibSymbol( i.LibId );
+        storageList.reserve( inputList.size() );
 
-        // This can be null, for example when a symbol has been deleted from a library
-        if( symbol )
+        for( const PICKED_SYMBOL& i : inputList )
         {
-            history_list_storage.emplace_back( *symbol );
+            LIB_SYMBOL* symbol = m_frame->GetLibSymbol( i.LibId );
 
-            for( const std::pair<int, wxString>& fieldDef : i.Fields )
+            if( symbol )
             {
-                LIB_FIELD* field = history_list_storage.back().GetFieldById( fieldDef.first );
+                storageList.emplace_back( *symbol );
 
-                if( field )
-                    field->SetText( fieldDef.second );
+                for( const std::pair<int, wxString>& fieldDef : i.Fields )
+                {
+                    LIB_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
+
+                    if( field )
+                        field->SetText( fieldDef.second );
+                }
+
+                resultList.push_back( &storageList.back() );
             }
-
-            history_list.push_back( &history_list_storage.back() );
         }
-    }
+    };
+
+    processList( aHistoryList, history_list_storage, history_list );
+    processList( aAlreadyPlaced, already_placed_storage, already_placed );
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
                            history_list, false, true );
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
+
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Already Placed" ) + wxT( " --" ), wxEmptyString,
+                           already_placed, false, true );
 
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 

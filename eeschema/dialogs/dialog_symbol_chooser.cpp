@@ -40,13 +40,14 @@ std::mutex DIALOG_SYMBOL_CHOOSER::g_Mutex;
 
 DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB_ID* aPreselect,
                                               const SYMBOL_LIBRARY_FILTER* aFilter,
-                                              std::vector<PICKED_SYMBOL>& aHistoryList,
+                                              std::vector<PICKED_SYMBOL>&  aHistoryList,
+                                              std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                               bool aAllowFieldEdits, bool aShowFootprints ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Choose Symbol" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-    m_chooserPanel = new PANEL_SYMBOL_CHOOSER( aParent, this, aFilter, aHistoryList,
+    m_chooserPanel = new PANEL_SYMBOL_CHOOSER( aParent, this, aFilter, aHistoryList, aAlreadyPlaced,
                                                aAllowFieldEdits, aShowFootprints,
                                                [this]()
                                                {

@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <kiplatform/ui.h>
+#include <project_sch.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/ee_selection_tool.h>
@@ -49,7 +50,7 @@
 #include <sch_bitmap.h>
 #include <schematic.h>
 #include <sch_commit.h>
-#include <symbol_library_common.h>
+#include <symbol_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
@@ -303,10 +304,43 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
+                SCH_SHEET_LIST    sheets = m_frame->Schematic().GetSheets();
+                SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
+                SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
+
+                std::vector<LIB_SYMBOL*> part_list;
+
+                for( SCH_SHEET_PATH& sheet : sheets )
+                {
+                    for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+                    {
+                        if( item->Type() != SCH_SYMBOL_T )
+                            continue;
+
+                        SCH_SYMBOL* s = static_cast<SCH_SYMBOL*>( item );
+                        LIB_SYMBOL* libSymbol = SchGetLibSymbol( s->GetLibId(), libs, cache );
+
+                        if( libSymbol )
+                            part_list.push_back( libSymbol );
+                    }
+                }
+
+                // Remove redundant parts
+                sort( part_list.begin(), part_list.end() );
+                part_list.erase( unique( part_list.begin(), part_list.end() ), part_list.end() );
+
+                std::vector<PICKED_SYMBOL> alreadyPlaced;
+                for( LIB_SYMBOL* libSymbol : part_list )
+                {
+                    PICKED_SYMBOL pickedSymbol;
+                    pickedSymbol.LibId = libSymbol->GetLibId();
+                    alreadyPlaced.push_back( pickedSymbol );
+                }
+
                 // Pick the symbol to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
-                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary( &filter, *historyList,
-                                                                    footprintPreviews );
+                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary(
+                        &filter, *historyList, alreadyPlaced, footprintPreviews );
 
                 LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ? m_frame->GetLibSymbol( sel.LibId )
                                                             : nullptr;

@@ -670,6 +670,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
 {
     // Use library viewer to choose a symbol
     std::vector<PICKED_SYMBOL> dummyHistory;
+    std::vector<PICKED_SYMBOL> dummyAlreadyPlaced;
     LIB_ID                     preselected;
     wxString                   current = getLibIdValue( m_grid, aRow, COL_NEW_LIBID );
 
@@ -679,8 +680,8 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
     if( !current.IsEmpty() )
         preselected.Parse( current, true );
 
-    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibrary( nullptr, dummyHistory, false,
-                                                            &preselected, false );
+    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibrary(
+            nullptr, dummyHistory, dummyAlreadyPlaced, false, &preselected, false );
 
     if( sel.LibId.empty() )     // command aborted
         return false;

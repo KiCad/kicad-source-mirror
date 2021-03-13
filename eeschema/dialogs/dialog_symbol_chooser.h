@@ -24,6 +24,7 @@
 #define DIALOG_SYMBOL_CHOOSER_H
 
 #include "dialog_shim.h"
+#include <symbol_library_common.h>
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
 #include <widgets/html_window.h>
@@ -50,7 +51,8 @@ public:
     DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB_ID* aPreselect,
                            const SYMBOL_LIBRARY_FILTER* aFilter,
                            std::vector<PICKED_SYMBOL>& aHistoryList,
-                           bool aAllowFieldEdits, bool aShowFootprints );
+                           std::vector<PICKED_SYMBOL>& aAlreadyPlaced, bool aAllowFieldEdits,
+                           bool aShowFootprints );
 
     ~DIALOG_SYMBOL_CHOOSER();
 

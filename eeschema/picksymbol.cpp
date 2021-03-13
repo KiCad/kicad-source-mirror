@@ -24,6 +24,7 @@
  */
 
 #include <pgm_base.h>
+#include <symbol_library.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <core/kicad_algo.h>
@@ -46,7 +47,8 @@
 #include <dialog_symbol_chooser.h>
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER* aFilter,
-                                                     std::vector<PICKED_SYMBOL>& aHistoryList,
+                                                     std::vector<PICKED_SYMBOL>&  aHistoryList,
+                                                     std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                                      bool aShowFootprints, const LIB_ID* aHighlight,
                                                      bool aAllowFields )
 {
@@ -56,8 +58,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
 
-    DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAllowFields,
-                               aShowFootprints );
+    DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAlreadyPlaced,
+                               aAllowFields, aShowFootprints );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();
