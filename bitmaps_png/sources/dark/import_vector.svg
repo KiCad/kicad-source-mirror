@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_vector.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="19.49846"
-     inkscape:cx="10.527313"
+     inkscape:cx="-0.8325585"
      inkscape:cy="10.421182"
      inkscape:window-x="0"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -167,11 +167,11 @@
      x2="17.103798"
      y2="13.4118"
      id="line25331"
-     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
   <polyline
      class="cls-4"
      points="20.859 18.879 18.104 21.631 15.349 18.879"
      id="polyline25333"
      transform="translate(-1.0000003,-1)"
-     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
 </svg>

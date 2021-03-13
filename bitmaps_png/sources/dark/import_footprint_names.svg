@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_footprint_names.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1041"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="21.709691"
-     inkscape:cx="5.8300311"
+     inkscape:cx="-4.3727857"
      inkscape:cy="17.569879"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -111,26 +111,25 @@
      x2="16.653799"
      y2="16.959"
      id="line157837" />
-  <g
-     id="g843">
-    <circle
-       class="cls-3"
-       cx="17"
-       cy="17"
-       id="ellipse157839"
-       style="stroke-width:0.999996"
-       r="7" />
-    <line
-       class="cls-4"
-       x1="17"
-       y1="20.368799"
-       x2="17"
-       y2="13.3688"
-       id="line157841" />
-    <polyline
-       class="cls-4"
-       points="20.649 18.836 17.894 21.588 15.139 18.836"
-       id="polyline157843"
-       transform="translate(-0.894,-1)" />
-  </g>
+  <circle
+     class="cls-3"
+     cx="17"
+     cy="17"
+     id="ellipse157839"
+     style="stroke-width:0.999996"
+     r="7" />
+  <line
+     class="cls-4"
+     x1="17"
+     y1="20.368799"
+     x2="17"
+     y2="13.3688"
+     id="line157841"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <polyline
+     class="cls-4"
+     points="20.649 18.836 17.894 21.588 15.139 18.836"
+     id="polyline157843"
+     transform="translate(-0.894,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

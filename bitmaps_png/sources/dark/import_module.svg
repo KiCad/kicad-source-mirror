@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_module.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="21.763015"
-     inkscape:cx="10.926435"
+     inkscape:cx="0.74861727"
      inkscape:cy="14.90053"
      inkscape:window-x="0"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -133,23 +133,22 @@
      height="6.9999995"
      id="rect883"
      style="fill:#42B8EB;stroke-width:1" />
-  <g
-     id="g2628">
-    <path
-       class="cls-3"
-       d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
-       id="path1077" />
-    <line
-       class="cls-4"
-       x1="17.1038"
-       y1="20.4118"
-       x2="17.1038"
-       y2="13.4118"
-       id="line1079" />
-    <polyline
-       class="cls-4"
-       points="20.859 18.879 18.104 21.631 15.349 18.879"
-       id="polyline1081"
-       transform="translate(-1,-1)" />
-  </g>
+  <path
+     class="cls-3"
+     d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
+     id="path1077" />
+  <line
+     class="cls-4"
+     x1="17.1038"
+     y1="20.4118"
+     x2="17.1038"
+     y2="13.4118"
+     id="line1079"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <polyline
+     class="cls-4"
+     points="20.859 18.879 18.104 21.631 15.349 18.879"
+     id="polyline1081"
+     transform="translate(-1,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

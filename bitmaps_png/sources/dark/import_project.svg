@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_project.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
   <g
      id="g869">
     <path
@@ -51,25 +51,24 @@
        id="path3408"
        sodipodi:nodetypes="cc" />
   </g>
-  <g
-     id="g1472">
-    <path
-       class="cls-6"
-       d="m 24.0108,16.9961 a 7.0065,7.0065 0 1 1 -7.0066,-7 7.0032,7.0032 0 0 1 7.0066,7 z"
-       id="path25479" />
-    <line
-       class="cls-7"
-       x1="17.108101"
-       y1="20.4079"
-       x2="17.108101"
-       y2="13.4079"
-       id="line25481" />
-    <polyline
-       class="cls-7"
-       points="20.863 18.875 18.108 21.627 15.353 18.875"
-       id="polyline25483"
-       transform="translate(-1,-1)" />
-  </g>
+  <path
+     class="cls-6"
+     d="m 24.0108,16.9961 a 7.0065,7.0065 0 1 1 -7.0066,-7 7.0032,7.0032 0 0 1 7.0066,7 z"
+     id="path25479" />
+  <line
+     class="cls-7"
+     x1="17.108101"
+     y1="20.4079"
+     x2="17.108101"
+     y2="13.4079"
+     id="line25481"
+     style="stroke:#ffffff;stroke-opacity:1" />
+  <polyline
+     class="cls-7"
+     points="20.863 18.875 18.108 21.627 15.353 18.875"
+     id="polyline25483"
+     transform="translate(-1,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -79,16 +78,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="12.332452"
-     inkscape:cx="10.543354"
+     inkscape:cx="-7.4173889"
      inkscape:cy="11.982793"
      inkscape:window-x="0"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
