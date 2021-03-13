@@ -34,9 +34,15 @@
 IMPLEMENT_ABSTRACT_CLASS( PROJECT_TREE, wxTreeCtrl )
 
 
+#ifdef __WXMSW__
+#define PLATFORM_STYLE wxTR_LINES_AT_ROOT
+#else
+#define PLATFORM_STYLE wxTR_NO_LINES
+#endif
+
 PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
         wxTreeCtrl( parent, ID_PROJECT_TREE, wxDefaultPosition, wxDefaultSize,
-                    wxTR_HAS_BUTTONS | wxTR_MULTIPLE, wxDefaultValidator,
+                    PLATFORM_STYLE | wxTR_HAS_BUTTONS | wxTR_MULTIPLE, wxDefaultValidator,
                     wxT( "EDATreeCtrl" ) )
 {
     m_projectTreePane = parent;
