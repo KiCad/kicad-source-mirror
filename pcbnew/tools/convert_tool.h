@@ -70,7 +70,7 @@ private:
      * @param aItem is an item that has a start and end point.
      * @return a segment from start to end, or NULLOPT if invalid.
      */
-    static OPT<SEG> getStartEndPoints( EDA_ITEM* aItem );
+    static OPT<SEG> getStartEndPoints( EDA_ITEM* aItem, int* aWidth );
 
     /**
      * Try to make polygons from segments in the selected items.

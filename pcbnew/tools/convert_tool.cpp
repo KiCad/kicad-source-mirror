@@ -187,6 +187,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 
             graphic->SetShape( S_POLYGON );
             graphic->SetFilled( false );
+            graphic->SetWidth( poly.Outline( 0 ).Width() );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
@@ -241,7 +242,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
     for( EDA_ITEM* item : aItems )
     {
-        if( OPT<SEG> seg = getStartEndPoints( item ) )
+        if( OPT<SEG> seg = getStartEndPoints( item, nullptr ) )
         {
             toCheck.push_back( item );
             connections[seg->A].emplace_back( item );
@@ -257,10 +258,11 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         if( used.count( candidate ) )
             continue;
 
-        OPT<SEG> seg = getStartEndPoints( candidate );
+        int      width = -1;
+        OPT<SEG> seg = getStartEndPoints( candidate, &width );
         wxASSERT( seg );
 
-        SHAPE_LINE_CHAIN outline;
+        SHAPE_LINE_CHAIN     outline;
         std::deque<VECTOR2I> points;
 
         // aDirection == true for walking "right" and appending to the end of points
@@ -273,7 +275,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
                     used.insert( aItem );
 
-                    OPT<SEG> nextSeg = getStartEndPoints( aItem );
+                    OPT<SEG> nextSeg = getStartEndPoints( aItem, &width );
                     wxASSERT( nextSeg );
 
                     // The reference point, i.e. last added point in the direction we're headed
@@ -318,6 +320,9 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
 
         outline.SetClosed( true );
 
+        if( width >= 0 )
+            outline.SetWidth( width );
+
         poly.AddOutline( outline );
     }
 
@@ -348,6 +353,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
         outline.Append( end );
         outline.Append( VECTOR2I( start.x, end.y ) );
         outline.SetClosed( true );
+
+        outline.SetWidth( graphic->GetWidth() );
 
         poly.AddOutline( outline );
     }
@@ -601,7 +608,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     // Offset the midpoint along the normal a little bit so that it's more obviously an arc
     const double offsetRatio = 0.1;
 
-    if( OPT<SEG> seg = getStartEndPoints( source ) )
+    if( OPT<SEG> seg = getStartEndPoints( source, nullptr ) )
     {
         start = seg->A;
         end   = seg->B;
@@ -610,7 +617,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         mid = seg->Center() + normal;
     }
     else
+    {
         return -1;
+    }
 
     PCB_BASE_EDIT_FRAME*  frame  = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD_ITEM_CONTAINER* parent = frame->GetModel();
@@ -665,7 +674,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 }
 
 
-OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
+OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem, int* aWidth )
 {
     switch( aItem->Type() )
     {
@@ -673,6 +682,10 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
     case PCB_FP_SHAPE_T:
     {
         PCB_SHAPE* line = static_cast<PCB_SHAPE*>( aItem );
+
+        if( aWidth )
+            *aWidth = line->GetWidth();
+
         return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
                                             VECTOR2I( line->GetEnd() ) } );
     }
@@ -680,6 +693,10 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
     case PCB_TRACE_T:
     {
         TRACK* line = static_cast<TRACK*>( aItem );
+
+        if( aWidth )
+            *aWidth = line->GetWidth();
+
         return boost::make_optional<SEG>( { VECTOR2I( line->GetStart() ),
                                             VECTOR2I( line->GetEnd() ) } );
     }
@@ -687,6 +704,10 @@ OPT<SEG> CONVERT_TOOL::getStartEndPoints( EDA_ITEM* aItem )
     case PCB_ARC_T:
     {
         ARC* arc = static_cast<ARC*>( aItem );
+
+        if( aWidth )
+            *aWidth = arc->GetWidth();
+
         return boost::make_optional<SEG>( { VECTOR2I( arc->GetStart() ),
                                             VECTOR2I( arc->GetEnd() ) } );
     }
