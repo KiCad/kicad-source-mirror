@@ -345,7 +345,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DrawBoundingBoxes,
                                                 &m_DrawBoundingBoxes, false ) );
 
-#ifdef __WXGTK__
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
     bool defaultDarkMode = true;
 #else
     bool defaultDarkMode = false;

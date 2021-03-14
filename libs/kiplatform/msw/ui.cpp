@@ -53,7 +53,14 @@ bool KIPLATFORM::UI::IsDarkTheme()
 
     return ( val == 0 );
 #else
-    return false;
+    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+
+    // Weighted W3C formula
+    double brightness = ( bg.Red() / 255.0 ) * 0.299 +
+        ( bg.Green() / 255.0 ) * 0.587 +
+        ( bg.Blue() / 255.0 ) * 0.117;
+
+    return brightness < 0.5;
 #endif
 }
 
