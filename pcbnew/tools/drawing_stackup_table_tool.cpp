@@ -38,6 +38,8 @@
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <kicad_string.h>
+#include <wx/utils.h>
+
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -494,7 +496,6 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
     return objects;
 }
 
-#include <wx/utils.h>
 
 int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::vector<BOARD_ITEM*> aItems,
         std::vector<BOARD_ITEM*> aPreview, LSET* aLayers )
