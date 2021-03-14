@@ -284,6 +284,7 @@ set( PLOTTERS_CONTROL_SRCS
 
 set( PLUGINS_ALTIUM_SRCS
     plugins/altium/altium_parser.cpp
+    plugins/altium/altium_parser_utils.cpp
     )
 
 set( PLUGINS_CADSTAR_SRCS

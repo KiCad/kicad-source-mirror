@@ -2051,6 +2051,12 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 {
     ASCH_PARAMETER elem( aProperties );
 
+    // TODO: fill in replacements from variant, sheet and project
+    std::map<wxString, wxString> stringReplacement = {
+        { "Comment", "${VALUE}" },
+        { "Value", "${Altium_Value}" },
+    };
+
     if( elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // This is some sheet parameter
@@ -2088,7 +2094,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         const wxPoint position = elem.location + m_sheetOffset;
 
         SCH_FIELD* field = nullptr;
-        if( elem.name == "Value" )
+        if( elem.name == "Comment" )
         {
             field = component->GetField( VALUE_FIELD );
             field->SetPosition( position );
@@ -2096,14 +2102,12 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         else
         {
             int fieldIdx = component->GetFieldCount();
-            field = component->AddField( { position, fieldIdx, component, elem.name } );
+            wxString fieldName = elem.name == "Value" ? "Altium_Value" : elem.name;
+            field = component->AddField( { position, fieldIdx, component, fieldName } );
         }
 
-        // TODO: improve text replacement (https://gitlab.com/kicad/code/kicad/-/issues/6256)
-        if( elem.text == "=Value" && field->GetId() != VALUE_FIELD )
-            field->SetText( "${VALUE}" );
-        else
-            field->SetText( elem.text );
+        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, stringReplacement );
+        field->SetText( kicadText );
 
         field->SetVisible( !elem.isHidden );
         field->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );

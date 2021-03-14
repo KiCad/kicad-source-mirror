@@ -46,6 +46,7 @@ set( common_srcs
     libeval/test_numeric_evaluator.cpp
 
     plugins/altium/test_altium_parser.cpp
+    plugins/altium/test_altium_parser_utils.cpp
 
     view/test_zoom_controller.cpp
 )

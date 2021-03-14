@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,15 @@
 #ifndef ALTIUM_PARSER_UTILS_H
 #define ALTIUM_PARSER_UTILS_H
 
+#include <map>
+
 #include <kicad_string.h>
 #include <lib_id.h>
 
 
-LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference )
-{
-    ReplaceIllegalFileNameChars( aLibName, '_' );
-    ReplaceIllegalFileNameChars( aLibReference, '_' );
+LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference );
 
-    wxString key = !aLibName.empty() ? ( aLibName + ":" + aLibReference ) : aLibReference;
-
-    LIB_ID libId;
-    libId.Parse( key, true );
-
-    return libId;
-}
-
+wxString AltiumSpecialStringsToKiCadVariables( const wxString&                     aString,
+                                               const std::map<wxString, wxString>& aOverride );
 
 #endif //ALTIUM_PARSER_UTILS_H
