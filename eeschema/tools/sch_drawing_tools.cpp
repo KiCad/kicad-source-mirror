@@ -220,9 +220,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                 component->SetParent( m_frame->GetCurrentSheet().LastScreen() );
                 component->SetFlags( IS_NEW | IS_MOVED );
 
-                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
-
                 m_frame->SaveCopyForRepeatItem( component );
 
                 m_view->ClearPreview();
@@ -237,6 +234,10 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                 SCH_COMPONENT* next_comp = nullptr;
 
                 m_view->ClearPreview();
+
+                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
+                    component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), component, false );
 
                 EE_SELECTION new_sel;
@@ -272,9 +273,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                         next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
                         next_comp->SetUnitSelection( new_unit );
-
-                        if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
                         m_frame->SaveCopyForRepeatItem( next_comp );
                         m_view->AddToPreview( next_comp->Clone() );

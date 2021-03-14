@@ -852,13 +852,8 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( item.m_unit > 0
-                && m_unitCount > 1
-                && aUnit > 0
-                && aUnit != item.m_unit )
-        {
+        if( item.m_unit > 0 && aUnit > 0 && aUnit != item.m_unit )
             continue;
-        }
 
         if( item.m_convert > 0 && aConvert > 0 && aConvert != item.m_convert )
             continue;
@@ -866,7 +861,10 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        bbox.Merge( item.GetBoundingBox() );
+        if( item.Type() == LIB_PIN_T )
+            bbox.Merge( static_cast<const LIB_PIN&>( item ).GetBoundingBox( false, true ) );
+        else
+            bbox.Merge( item.GetBoundingBox() );
     }
 
     return bbox;

@@ -168,8 +168,11 @@ public:
 
             if( m_align_to_grid )
             {
-                pos.x = round_n( pos.x, Mils2iu( 50 ), field_side.x >= 0 );
-                pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y >= 0 );
+                if( abs( field_side.x ) > 0 )
+                    pos.x = round_n( pos.x, Mils2iu( 50 ), field_side.x >= 0 );
+
+                if( abs( field_side.y ) > 0 )
+                    pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y >= 0 );
             }
 
             field->SetPosition( pos );
@@ -188,18 +191,20 @@ protected:
 
         for( SCH_FIELD* field : m_fields )
         {
-            int field_width;
-            int field_height;
-
             if( m_symbol->GetTransform().y1 )
                 field->SetTextAngle( TEXT_ANGLE_VERT );
             else
                 field->SetTextAngle( TEXT_ANGLE_HORIZ );
 
-            field_width = field->GetBoundingBox().GetWidth();
-            field_height = field->GetBoundingBox().GetHeight();
+            EDA_RECT bbox = field->GetBoundingBox();
+            int      field_width = bbox.GetWidth();
+            int      field_height = bbox.GetHeight();
 
             max_field_width = std::max( max_field_width, field_width );
+
+            // Remove interline spacing from field_height for last line.
+            if( field == m_fields[ m_fields.size() - 1 ] )
+                field_height *= 0.62;
 
             if( !aDynamic )
                 total_height += WIRE_V_SPACING;
