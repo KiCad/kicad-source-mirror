@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -612,21 +612,12 @@ public:
     /**
      * Detects arcs in a chain and converts them from segments to true arcs by adding an arc
      * and the associated references.  The original segment points are not changed.
-     * @return reference to self
-     */
-    SHAPE_LINE_CHAIN& DetectArcs();
-
-    /**
-     * Convert an arc to only a point chain by removing the arc and references.
      *
-     * @param aArcIndex is an index of the arc to convert to points.
+     * @param aArcs List of possible arcs that might be in this chain
+     * @param aMargin Maximum acceptable deviation from the found points to the arc (defaults
+     * to ARC_HIGH_DEF)
      */
-    void convertArc( ssize_t aArcIndex );
-
-    /**
-     * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation.
-     */
-    ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
+    void DetectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin = PCB_IU_PER_MM * 0.005 );
 
     /**
      * Find the segment nearest the given point.
@@ -754,6 +745,21 @@ public:
     virtual const SEG GetSegment( int aIndex ) const override { return CSegment(aIndex); }
     virtual size_t GetPointCount() const override { return PointCount(); }
     virtual size_t GetSegmentCount() const override { return SegmentCount(); }
+
+protected:
+    friend class SHAPE_POLY_SET;
+
+    /**
+     * Convert an arc to only a point chain by removing the arc and references
+     *
+     * @param aArcIndex index of the arc to convert to points
+     */
+    void convertArc( ssize_t aArcIndex );
+
+    /**
+     * Create a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
+     */
+    ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
 
 private:
 

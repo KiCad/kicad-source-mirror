@@ -30,6 +30,14 @@
 #include <trigo.h>
 
 
+std::ostream& operator<<( std::ostream& aStream, const SHAPE_ARC& aArc )
+{
+    aStream << "Arc( P0=" << aArc.GetP0() << " P1=" << aArc.GetP1() << " Mid=" << aArc.GetArcMid()
+            << " Width=" << aArc.GetWidth() << " )";
+    return aStream;
+}
+
+
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                       double aCenterAngle, int aWidth ) :
         SHAPE( SH_ARC ), m_width( aWidth )

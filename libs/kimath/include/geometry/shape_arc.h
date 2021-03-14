@@ -196,6 +196,12 @@ public:
     const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = DefaultAccuracyForPCB(),
                                               double* aEffectiveAccuracy = nullptr ) const;
 
+    bool operator==( SHAPE_ARC const& aArc ) const
+    {
+        return ( aArc.m_start == m_start ) && ( aArc.m_end == m_end ) && ( aArc.m_mid == m_mid )
+               && ( aArc.m_width == m_width );
+    }
+
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
     {
@@ -213,5 +219,8 @@ private:
     int      m_width;
     BOX2I    m_bbox;
 };
+
+// Required for Boost Test BOOST_CHECK_EQUAL:
+std::ostream& operator<<( std::ostream& aStream, const SHAPE_ARC& aArc );
 
 #endif

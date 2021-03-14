@@ -5,6 +5,7 @@
  * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +32,12 @@
 
 #include <clipper.hpp>
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
+#include <geometry/circle.h>    // for CIRCLE
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
+#include <trigo.h>  // for RAD2DECIDEG, GetArcAngle
 
 class SHAPE;
 
@@ -76,19 +79,6 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation )
         ReversePath( c_path );
 
     return c_path;
-}
-
-
-void SHAPE_LINE_CHAIN::ConvertToArcs( const std::vector<SHAPE_ARC>& aArcs )
-{
-    int i = 0;
-    int j = 0;
-    int direction = 1;
-
-    for( SHAPE_ARC& arc :aArcs )
-    {
-
-    }
 }
 
 
@@ -236,17 +226,103 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
 }
 
 
-SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::DetectArcs()
+void SHAPE_LINE_CHAIN::DetectArcs( const std::vector<SHAPE_ARC>& aArcs, int aMargin )
 {
-    for( int ii = 0; ii < PointCount(); ++ii )
-    {
-        if( ssize_t ind = ArcIndex( ii ) >= 0 )
+    // Remove all arcs
+    m_arcs.clear();
+    std::fill( m_shapes.begin(), m_shapes.end(), ssize_t( SHAPE_IS_PT ) );
+
+    auto emplaceArc =
+        [&]( point_iter aStart, point_iter aEnd, SHAPE_ARC aReplacementArc )
         {
-            const SHAPE_ARC& arc = Arc( ind );
+            size_t startIndex = aStart - m_points.begin();
+            size_t endIndex = aEnd - m_points.begin();
+
+            for( int ii = startIndex; ii <= endIndex; ++ii )
+                m_shapes[ii] = m_arcs.size();
+
+            m_arcs.push_back( aReplacementArc );
+        };
+
+
+    for( point_iter it = m_points.begin(); it != m_points.end(); ++it )
+    {
+        for( const SHAPE_ARC& arc : aArcs )
+        {
+            SHAPE_ARC givenArcThin( arc );
+            givenArcThin.SetWidth( 0 );
+
+            // Need at least this point and the next one to be on the arc
+            point_iter it2 = it;
+            ++it2;
+
+            if( it2 == m_points.end() )
+                return;
+
+            if( givenArcThin.Collide( *it, aMargin ) && givenArcThin.Collide( *it2 , aMargin ) )
+            {
+                VECTOR2I arcStart = *it;
+                VECTOR2I arcEnd = *it2;
+
+                int        numPts = 2;
+                point_iter it3 = it2;
+                VECTOR2I   arcApproxMid = arcEnd; // Determine arc mid point from found points
+                                                  // (it might not be exactly in the middle)
+
+                while( (++it2 != m_points.end()) && givenArcThin.Collide( *it2, aMargin) )
+                {
+                    if( ++numPts % 2 )
+                        arcApproxMid = *it3++;
+
+                    arcEnd = *it2;
+                }
+
+                --it2;
+
+                if( arcStart == givenArcThin.GetP0() && arcEnd == givenArcThin.GetP1() )
+                {
+                    // Simplest case: found arc is equal to given arc
+                    emplaceArc( it, it2, givenArcThin );
+                }
+                else if( arcStart == givenArcThin.GetP1() && arcEnd == givenArcThin.GetP0() )
+                {
+                    // Found arc was just reversed
+                    emplaceArc( it, it2, givenArcThin.Reversed() );
+                }
+                else
+                {
+                    // Some of the points are part of the original arc, but we will need to alter
+                    // the start and end points.
+                    VECTOR2I arcCenter = givenArcThin.GetCenter();
+                    int      arcRadius = KiROUND( givenArcThin.GetRadius() );
+                    CIRCLE   tempCircle( arcCenter, arcRadius );
+
+                    if( arcEnd == arcApproxMid )
+                    {
+                        // Only 2 points found of the given arc
+                        // Need to derive the approximate location of the mid point using the
+                        // given arc's centre
+                        VECTOR2I startLine = arcStart - arcCenter;
+                        VECTOR2I endLine = arcEnd - arcCenter;
+                        double   angle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+                        RotatePoint( arcApproxMid, arcCenter, angle * 10.0 / 2.0 );
+                    }
+
+                    // Project all the points so that they sit on the known arc, but don't
+                    // alter the actual points in m_points
+                    arcStart = tempCircle.NearestPoint( arcStart );
+                    arcEnd = tempCircle.NearestPoint( arcEnd );
+                    arcApproxMid = tempCircle.NearestPoint( arcApproxMid );
+
+                    SHAPE_ARC tempArc( arcStart, arcApproxMid, arcEnd, 0 );
+                    emplaceArc( it, it2, tempArc );
+                }
+
+                it = --it2;
+                break;
+            }
         }
     }
-
-    return *this;
 }
 
 
