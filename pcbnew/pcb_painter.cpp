@@ -35,6 +35,7 @@
 #include <pcb_marker.h>
 #include <dimension.h>
 #include <pcb_target.h>
+#include <advanced_config.h>
 #include <core/arraydim.h>
 
 #include <layers_id_colors_and_visibility.h>
@@ -410,6 +411,18 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     if( !item )
         return false;
+
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+    {
+        // Show bounding boxes of painted objects for debugging.
+        EDA_RECT box = item->GetBoundingBox();
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
+                               COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+        m_gal->SetLineWidth( Mils2iu( 3 ) );
+        m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
+    }
 
     // the "cast" applied in here clarifies which overloaded draw() is called
     switch( item->Type() )

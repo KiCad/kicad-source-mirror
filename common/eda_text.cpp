@@ -272,13 +272,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     rect.SetOrigin( pos );
 
-    // The bbox vertical size returned by GetInterline( aThickness )
-    // includes letters like j and y and ] + interval between lines.
-    // The interval below the last line is not usefull, and we can use its half value
-    // as vertical margin above the text
-    // the full interval is roughly GetTextHeight() * 0.4 - aThickness/2
-    rect.Move( wxPoint( 0, thickness/4 - KiROUND( GetTextHeight() * 0.22 ) ) );
-
     if( hasOverBar )
     {   // A overbar adds an extra size to the text
         // Height from the base line text of chars like [ or {
@@ -328,8 +321,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
             rect.SetX( rect.GetX() - rect.GetWidth() );
         break;
     }
-
-    dy = GetTextHeight() + thickness;
 
     switch( GetVertJustify() )
     {
