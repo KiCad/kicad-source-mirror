@@ -441,7 +441,7 @@ BOOST_AUTO_TEST_CASE( BasicTTRGeom )
                 {
                     //Swap input segments.
                     seg1 = c.m_geom.m_segment_2;
-                    seg2 = c.m_geom.m_segment_1; 
+                    seg2 = c.m_geom.m_segment_1;
 
                     //The result should swap start and end points and invert the angles:
                     props.m_end_point    = c.m_properties.m_start_point;
@@ -450,7 +450,7 @@ BOOST_AUTO_TEST_CASE( BasicTTRGeom )
                     props.m_end_angle    = c.m_properties.m_start_angle;
                     props.m_center_angle = -c.m_properties.m_center_angle;
                 }
-                
+
                 //Test all combinations of start and end points for the segments
                 if( ( testCase % 4 ) == 1 || ( testCase % 4 ) == 3 )
                 {
@@ -459,7 +459,7 @@ BOOST_AUTO_TEST_CASE( BasicTTRGeom )
                     seg1.A = seg1.B;
                     seg1.B = temp;
                 }
-                
+
                 if( ( testCase % 4 ) == 2 || ( testCase % 4 ) == 3 )
                 {
                     //Swap start and end points for seg2
@@ -478,6 +478,94 @@ BOOST_AUTO_TEST_CASE( BasicTTRGeom )
     }
 }
 
+
+struct ARC_PT_COLLIDE_CASE
+{
+    std::string         m_ctx_name;
+    ARC_CENTRE_PT_ANGLE m_geom;
+    int                 m_arc_clearance;
+    VECTOR2I            m_point;
+    bool                m_exp_result;
+    int                 m_exp_distance;
+};
+
+
+static const std::vector<ARC_PT_COLLIDE_CASE> arc_pt_collide_cases = {
+    { " 270deg, 0 cl, 0   deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { 100, 0 }, true, 0 },
+    { " 270deg, 0 cl, 90  deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { 0, 100 }, true, 0 },
+    { " 270deg, 0 cl, 180 deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { -100, 0 }, true, 0 },
+    { " 270deg, 0 cl, 270 deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { 0, -100 }, true, 0 },
+    { " 270deg, 0 cl, 45  deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { 71, 71 }, true, 0 },
+    { " 270deg, 0 cl, -45 deg    ", { { 0, 0 }, { 100, 0 },  270.0 }, 0, { 71, -71 }, false, -1 },
+    { "-270deg, 0 cl, 0   deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { 100, 0 }, true, 0 },
+    { "-270deg, 0 cl, 90  deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { 0, 100 }, true, 0 },
+    { "-270deg, 0 cl, 180 deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { -100, 0 }, true, 0 },
+    { "-270deg, 0 cl, 270 deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { 0, -100 }, true, 0 },
+    { "-270deg, 0 cl, 45  deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { 71, 71 }, false, -1 },
+    { "-270deg, 0 cl, -45 deg    ", { { 0, 0 }, { 100, 0 }, -270.0 }, 0, { 71, -71 }, true, 0 },
+    { " 270deg, 5 cl, 0   deg, 5 pos X", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 105, 0 }, true, 5 },
+    { " 270deg, 5 cl, 0  deg, 5 pos Y", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 100, -5 }, true, 5 },
+    { " 270deg, 5 cl, 90  deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 0, 105 }, true, 5 },
+    { " 270deg, 5 cl, 180 deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { -105, 0 }, true, 5 },
+    { " 270deg, 5 cl, 270 deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 0, -105 }, true, 5 },
+    { " 270deg, 5 cl, 0   deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 105, 0 }, true, 5 },
+    { " 270deg, 5 cl, 90  deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 0, 105 }, true, 5 },
+    { " 270deg, 5 cl, 180 deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { -105, 0 }, true, 5 },
+    { " 270deg, 5 cl, 270 deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 0, -105 }, true, 5 },
+    { " 270deg, 5 cl, 45  deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 75, 74 }, true, 5 },
+    { " 270deg, 5 cl, -45 deg, 5 pos", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 75, -74 }, false, -1 },
+    { " 270deg, 5 cl, 45  deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 67, 68 }, true, 5 },
+    { " 270deg, 5 cl, -45 deg, 5 neg", { { 0, 0 }, { 100, 0 },  270.0 }, 5, { 67, -68 }, false, -1 },
+    { " 270deg, 4 cl, 0   deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 105, 0 }, false, -1 },
+    { " 270deg, 4 cl, 90  deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, 105 }, false, -1 },
+    { " 270deg, 4 cl, 180 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { -105, 0 }, false, -1 },
+    { " 270deg, 4 cl, 270 deg pos", { { 0, 0 }, { 100, 0 },  270.0 }, 4, { 0, -105 }, false, -1 },
+    { "  90deg, 0 cl,   0 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 71, -71 }, true, 0 },
+    { "  90deg, 0 cl,  45 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 100, 0 }, true, 0 },
+    { "  90deg, 0 cl,  90 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 71, 71 }, true, 0 },
+    { "  90deg, 0 cl, 135 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 0, -100 }, false, -1 },
+    { "  90deg, 0 cl, -45 deg    ", { { 0, 0 }, { 71, -71 },  90.0 }, 0, { 0,  100 }, false, -1 },
+    { " -90deg, 0 cl,   0 deg    ", { { 0, 0 }, { 71,  71 }, -90.0 }, 0, { 71, -71 }, true, 0 },
+    { " -90deg, 0 cl,  45 deg    ", { { 0, 0 }, { 71,  71 }, -90.0 }, 0, { 100, 0 }, true, 0 },
+    { " -90deg, 0 cl,  90 deg    ", { { 0, 0 }, { 71,  71 }, -90.0 }, 0, { 71, 71 }, true, 0 },
+    { " -90deg, 0 cl, 135 deg    ", { { 0, 0 }, { 71,  71 }, -90.0 }, 0, { 0, -100 }, false, -1 },
+    { " -90deg, 0 cl, -45 deg    ", { { 0, 0 }, { 71,  71 }, -90.0 }, 0, { 0,  100 }, false, -1 },
+};
+
+
+BOOST_AUTO_TEST_CASE( CollidePt )
+{
+    for( const auto& c : arc_pt_collide_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
+                           c.m_geom.m_center_angle );
+
+            // Test a zero width arc (distance should equal the clearance)
+            BOOST_TEST_CONTEXT( "Test Clearance" )
+            {
+                int dist = -1;
+                BOOST_CHECK_EQUAL( arc.Collide( c.m_point, c.m_arc_clearance, &dist ),
+                                   c.m_exp_result );
+                BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+            }
+
+            // Test by changing the width of the arc (distance should equal zero)
+            BOOST_TEST_CONTEXT( "Test Width" )
+            {
+                int dist = -1;
+                arc.SetWidth( c.m_arc_clearance * 2 );
+                BOOST_CHECK_EQUAL( arc.Collide( c.m_point, 0, &dist ), c.m_exp_result );
+
+                if( c.m_exp_result )
+                    BOOST_CHECK_EQUAL( dist, 0 );
+                else
+                    BOOST_CHECK_EQUAL( dist, -1 );
+            }
+        }
+    }
+}
 
 
 struct ARC_TO_POLYLINE_CASE

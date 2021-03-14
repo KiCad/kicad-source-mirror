@@ -316,22 +316,39 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     int minDist = aClearance + m_width / 2;
     auto bbox = BBox( minDist );
 
+    // Fast check using bounding box:
     if( !bbox.Contains( aP ) )
         return false;
 
-    ecoord min_dist_sq = SEG::Square( minDist );
-    ecoord r_sq = SEG::Square( GetRadius() );
+    VECTOR2I center = GetCenter();
+    VECTOR2I vec = aP - center;
 
-    ecoord dist_sq = ( aP - GetCenter() ).SquaredEuclideanNorm();
-    ecoord dist_to_edge_sq = abs( dist_sq - r_sq );
+    int dist = abs( vec.EuclideanNorm() - GetRadius() );
 
-    if( dist_to_edge_sq == 0 || dist_to_edge_sq < min_dist_sq )
+    // If not a 360 degree arc, need to use arc angles to decide if point collides
+    if( m_start != m_end )
+    {
+        bool   ccw = GetCentralAngle() > 0.0;
+        double rotatedVecAngle = NormalizeAngleDegreesPos( NormalizeAngleDegreesPos( RAD2DEG( vec.Angle() ) )
+                                           - GetStartAngle() );
+        double rotatedEndAngle = NormalizeAngleDegreesPos( GetEndAngle() - GetStartAngle() );
+
+        if( ( ccw && rotatedVecAngle > rotatedEndAngle )
+            || ( !ccw && rotatedVecAngle < rotatedEndAngle ) )
+        {
+            int distStartpt = ( aP - m_start ).EuclideanNorm();
+            int distEndpt = ( aP - m_end ).EuclideanNorm();
+            dist = std::min( distStartpt, distEndpt );
+        }
+    }
+
+    if( dist <= minDist )
     {
         if( aLocation )
             *aLocation = ( aP + GetCenter() ) / 2;
 
         if( aActual )
-            *aActual = std::max( 0, (int) sqrt( dist_to_edge_sq ) - m_width / 2 );
+            *aActual = std::max( 0, dist - m_width / 2 );
 
         return true;
     }
