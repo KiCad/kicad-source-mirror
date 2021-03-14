@@ -44,9 +44,9 @@ class BOARD_ITEM;
 enum class HOLE_ATTRIBUTE
 {
     HOLE_UNKNOWN,       // uninitialized type
-    HOLE_VIA,           // a via hole
-    HOLE_PAD,           // a plated pad hole
-    HOLE_MECHANICAL     // a mechanical (not plated) pad hole
+    HOLE_VIA,           // a via hole (always plated)
+    HOLE_PAD,           // a plated or not plated pad hole
+    HOLE_MECHANICAL     // a mechanical pad (provided, not used)
 };
 
 
@@ -154,6 +154,12 @@ public:
         SUPPRESS_LEADING,       // Suppress leading zeros
         SUPPRESS_TRAILING,      // Suppress trainling zeros
         KEEP_ZEROS              // keep zeros
+    };
+
+    enum TYPE_FILE {            // type of holes in file: PTH, NPTH, mixed
+        PTH_FILE,               // PTH only, this is the default also for blind/buried holes
+        NPTH_FILE,              // NPTH only
+        MIXED_FILE              // PHT+NPTH (mixed)
     };
 
 protected:
@@ -374,11 +380,12 @@ protected:
      * There is no X1 version, as the Gerber drill files uses only X2 format
      * There is a compatible NC drill version.
      * @param aLayerPair is the layer pair (Drill from rom first layer to second layer)
-     * @param aIsNpth is true when generating NPTH drill file
+     * @param aHoleType is type of drill file (PTH, NPTH, mixed)
      * @param aCompatNCdrill is true when generating NC (Excellon) compatible drill file
      */
     const wxString BuildFileFunctionAttributeString( DRILL_LAYER_PAIR aLayerPair,
-                                                     bool aIsNpth, bool aCompatNCdrill = false ) const;
+                                                     TYPE_FILE aHoleType,
+                                                     bool aCompatNCdrill = false ) const;
 };
 
 #endif      // #define GENDRILL_FILE_WRITER_BASE_H

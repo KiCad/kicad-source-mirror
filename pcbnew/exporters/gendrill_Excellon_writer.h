@@ -114,7 +114,8 @@ public:
      * @param aGenMap = true to generate a drill map file
      * @param aReporter = a REPORTER to return activity or any message (can be NULL)
      */
-    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory, bool aGenDrill, bool aGenMap,
+    void CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
+                                    bool aGenDrill, bool aGenMap,
                                     REPORTER * aReporter = NULL );
 
 
@@ -123,9 +124,12 @@ private:
      * Function CreateDrillFile
      * Creates an Excellon drill file
      * @param aFile = an opened file to write to will be closed by CreateDrillFile
+     * @param aLayerPair = the layer pair for the current holes
+     * @param aHolesType = the holes type (PTH, NPTH, mixed)
      * @return hole count
      */
-    int  createDrillFile( FILE * aFile, DRILL_LAYER_PAIR aLayerPair, bool aGenerateNPTH_list );
+    int  createDrillFile( FILE * aFile, DRILL_LAYER_PAIR aLayerPair,
+                          TYPE_FILE aHolesType );
 
 
     /** Print the DRILL file header. The full header is somethink like:
@@ -137,8 +141,10 @@ private:
      * ; #@! TF.GenerationSoftware,Kicad,Pcbnew,2017.04
      * FMAT,2
      * INCH,TZ
+     * @param aLayerPair = the layer pair for the current holes
+     * @param aHolesType = the holes type in file (PTH, NPTH, mixed)
      */
-    void writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, bool aGenerateNPTH_list);
+    void writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHolesType );
 
     void writeEXCELLONEndOfFile();
 
@@ -152,7 +158,7 @@ private:
      * write a comment string giving the hole attribute like
      * "; #@! TO.P,viatype\n"
      * @param aAttribute is the hole attribute
-     * @param aToolAttr = true if the comment is for a tool,
+     * @param aToolAttr = true if the comment is for a tool (like T1C0.5),
      *  false for a hole in coord list
      */
     void writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolAttr );

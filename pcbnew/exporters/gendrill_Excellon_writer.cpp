@@ -126,7 +126,19 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                     }
                 }
 
-                createDrillFile( file, pair, doing_npth );
+                TYPE_FILE file_type = TYPE_FILE::PTH_FILE;
+
+                // Only external layer pair can have non plated hole
+                // internal layers have only plated via holes
+                if( pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
+                {
+                    if( m_merge_PTH_NPTH )
+                        file_type = TYPE_FILE::MIXED_FILE;
+                    else if( doing_npth )
+                        file_type = TYPE_FILE::NPTH_FILE;
+                }
+
+                createDrillFile( file, pair, file_type );
             }
         }
     }
@@ -154,16 +166,16 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolA
 
         case HOLE_ATTRIBUTE::HOLE_PAD:
             if( aToolAttr )
-                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill\n" );
+                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,Plated,PTH\n" );
             else
-                fprintf( m_file, "; pad hole\n" );
+                fprintf( m_file, "; plated pad hole\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_MECHANICAL:
             if( aToolAttr )
-                fprintf( m_file, "; #@! TA.AperFunction,MechanicalDrill\n" );
+                fprintf( m_file, "; #@! TA.AperFunction,ComponentDrill,NonPlated,NPTH\n" );
             else
-                fprintf( m_file, "; mechanical\n" );
+                fprintf( m_file, "; not plated pad hole\n" );
             break;
 
         case HOLE_ATTRIBUTE::HOLE_UNKNOWN:
@@ -178,7 +190,7 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute, bool aToolA
 
 
 int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
-                                      bool aGenerateNPTH_list )
+                                      TYPE_FILE aHolesType )
 {
     m_file = aFile;
 
@@ -189,7 +201,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 
     LOCALE_IO dummy;    // Use the standard notation for double numbers
 
-    writeEXCELLONHeader( aLayerPair, aGenerateNPTH_list );
+    writeEXCELLONHeader( aLayerPair, aHolesType );
 
     holes_count = 0;
 
@@ -491,7 +503,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
 
 
 void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair,
-                                           bool aGenerateNPTH_list)
+                                           TYPE_FILE aHolesType )
 {
     fputs( "M48\n", m_file );    // The beginning of a header
 
@@ -545,14 +557,11 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair,
         msg << GetBuildVersion() << "\n";
         fputs( TO_UTF8( msg ), m_file );
 
-        if( !m_merge_PTH_NPTH )
-        {
-            // Add the standard X2 FileFunction for drill files
-            // TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH]
-            msg = BuildFileFunctionAttributeString( aLayerPair, aGenerateNPTH_list, true )
-                  + "\n";
-            fputs( TO_UTF8( msg ), m_file );
-        }
+        // Add the standard X2 FileFunction for drill files
+        // TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH]
+        msg = BuildFileFunctionAttributeString( aLayerPair, aHolesType , true )
+              + "\n";
+        fputs( TO_UTF8( msg ), m_file );
 
         fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }

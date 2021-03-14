@@ -355,7 +355,8 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
 
 
 const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
-                        DRILL_LAYER_PAIR aLayerPair, bool aIsNpth, bool aCompatNCdrill ) const
+                        DRILL_LAYER_PAIR aLayerPair, TYPE_FILE aHoleType,
+                        bool aCompatNCdrill ) const
 {
 // Build a wxString containing the .FileFunction attribute for drill files.
 // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
@@ -368,8 +369,10 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
 
     text << "TF.FileFunction,";
 
-    if( aIsNpth )
+    if( aHoleType == NPTH_FILE )
         text << "NonPlated,";
+    else if( aHoleType == MIXED_FILE )  // only for Excellon format
+        text << "MixedPlating,";
     else
         text << "Plated,";
 
@@ -385,21 +388,24 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     else
         layer2 += 1;
 
-    text << layer1 << ",";
-    text << layer2 << ",";
+    text << layer1 << "," << layer2;
 
     // Now add PTH or NPTH or Blind or Buried attribute
     int toplayer = 1;
     int bottomlayer = m_pcb->GetCopperLayerCount();
 
-    if( aIsNpth )
-        text << "NPTH";
+    if( aHoleType == NPTH_FILE )
+        text << ",NPTH";
+    else if( aHoleType == MIXED_FILE )      // only for Excellon format
+    {
+        // write nothing
+    }
     else if( layer1 == toplayer && layer2 == bottomlayer )
-        text << "PTH";
+        text << ",PTH";
     else if( layer1 == toplayer || layer2 == bottomlayer )
-        text << "Blind";
+        text << ",Blind";
     else
-        text << "Buried";
+        text << ",Buried";
 
     // In NC drill file, these previous parameters should be enough:
     if( aCompatNCdrill )

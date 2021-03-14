@@ -150,7 +150,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     // Add the standard X2 FileFunction for drill files
     // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
-    wxString text = BuildFileFunctionAttributeString( aLayerPair, aIsNpth );
+    wxString text = BuildFileFunctionAttributeString( aLayerPair,
+                                                      aIsNpth
+                                                            ? TYPE_FILE::NPTH_FILE
+                                                            : TYPE_FILE::PTH_FILE );
     plotter.AddLineToHeader( text );
 
     // Add file polarity (positive)
