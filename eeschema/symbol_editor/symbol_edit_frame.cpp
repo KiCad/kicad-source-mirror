@@ -353,15 +353,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return !GetTargetLibId().GetLibNickname().empty();
         };
 
-    auto canEditLib =
-        [this] ( const SELECTION& sel )
-        {
-            const wxString libName = GetTargetLibId().GetLibNickname();
-
-            return !libName.empty() && m_libMgr->LibraryExists( libName )
-                    && !m_libMgr->IsLibraryReadOnly( libName );
-        };
-
     auto canEditProperties =
         [this] ( const SELECTION& sel )
         {
@@ -379,8 +370,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( EE_ACTIONS::saveLibraryAs,  ENABLE( libSelectedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveSymbolAs,   ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::newSymbol,      ENABLE( !libSelectedCondition || canEditLib ) );
-    mgr->SetConditions( EE_ACTIONS::importSymbol,   ENABLE( !libSelectedCondition || canEditLib ) );
+    mgr->SetConditions( EE_ACTIONS::newSymbol,      ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::importSymbol,   ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
     mgr->SetConditions( ACTIONS::undo,              ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,              ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
@@ -1228,10 +1219,9 @@ bool SYMBOL_EDIT_FRAME::IsContentModified()
         return true;
 
     // Test if any library has been modified
-    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+    for( const wxString& libName : m_libMgr->GetLibraryNames() )
     {
-        if( m_libMgr->IsLibraryModified( libNickname )
-          && !m_libMgr->IsLibraryReadOnly( libNickname ) )
+        if( m_libMgr->IsLibraryModified( libName ) && !m_libMgr->IsLibraryReadOnly( libName ) )
             return true;
     }
 

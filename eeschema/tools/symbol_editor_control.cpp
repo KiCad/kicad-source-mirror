@@ -65,12 +65,6 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     LIB_ID sel = editFrame->GetTreeLIBID();
                     return !sel.GetLibNickname().empty();
                 };
-        auto canEditLibrary =
-                [ editFrame ]( const SELECTION& aSel )
-                {
-                    LIB_ID sel = editFrame->GetTreeLIBID();
-                    return !editFrame->GetLibManager().IsLibraryReadOnly( sel.GetLibNickname() );
-                };
         auto pinnedLibSelectedCondition =
                 [ editFrame ]( const SELECTION& aSel )
                 {
@@ -100,7 +94,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libInferredCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          libInferredCondition );
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition || libInferredCondition );
@@ -109,14 +103,14 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition || libInferredCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
-        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libInferredCondition && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition && canEditLibrary );
-        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition && canEditLibrary );
+        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        libInferredCondition );
+        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
 
         ctxMenu.AddSeparator();
-        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition && canEditLibrary);
+        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition );
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }
 
@@ -155,6 +149,17 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        LIB_ID          sel = editFrame->GetTreeLIBID();
+        const wxString& libName = sel.GetLibNickname();
+        wxString        msg;
+
+        if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+        {
+            msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
 
         if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
             editFrame->CreateNewPart();
@@ -214,7 +219,20 @@ int SYMBOL_EDITOR_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
             editFrame->CopyPartToClipboard();
 
         if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::deleteSymbol ) )
+        {
+            LIB_ID          sel = editFrame->GetTreeLIBID();
+            const wxString& libName = sel.GetLibNickname();
+            wxString        msg;
+
+            if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+            {
+                msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+                m_frame->ShowInfoBarError( msg );
+                return 0;
+            }
+
             editFrame->DeletePartFromLibrary();
+        }
     }
 
     return 0;
@@ -226,6 +244,18 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        LIB_ID          sel = editFrame->GetTreeLIBID();
+        const wxString& libName = sel.GetLibNickname();
+        wxString        msg;
+
+        if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+        {
+            msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
+
         editFrame->DuplicatePart( aEvent.IsAction( &EE_ACTIONS::pasteSymbol ) );
     }
 
