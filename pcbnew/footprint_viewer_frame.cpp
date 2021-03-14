@@ -630,6 +630,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
     if( getCurNickname() == name )
         return;
 
+    bool filterFocus = m_libFilter->HasFocus();
+
     setCurNickname( name );
 
     ReCreateFootprintList();
@@ -639,7 +641,11 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
     // to navigate inside the list.
     // the gal canvas must not steal the focus to allow navigation
     GetCanvas()->SetStealsFocus( false );
-    m_libList->SetFocus();
+
+    if( filterFocus )
+        m_libFilter->SetFocus();
+    else
+        m_libList->SetFocus();
 }
 
 
@@ -652,6 +658,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
 
     if( ii < 0 )
         return;
+
+    bool filterFocus = m_fpFilter->HasFocus();
 
     wxString name = m_fpList->GetString( ii );
 
@@ -694,7 +702,11 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
     // to navigate inside the list.
     // the gal canvas must not steal the focus to allow navigation
     GetCanvas()->SetStealsFocus( false );
-    m_fpList->SetFocus();
+
+    if( filterFocus )
+        m_fpFilter->SetFocus();
+    else
+        m_fpList->SetFocus();
 }
 
 
