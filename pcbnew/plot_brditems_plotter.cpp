@@ -395,6 +395,10 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, COLOR4D a
     bool allow_bold = true;
 
     GBR_METADATA gbr_metadata;
+
+    if( IsCopperLayer( aTextMod->GetLayer() ) )
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
     const FOOTPRINT* parent = static_cast<const FOOTPRINT*> ( aTextMod->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
@@ -549,14 +553,14 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
 
-    if( isOnCopperLayer )
+    if( aShape->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
+    {
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
+    }
+    else if( isOnCopperLayer )  // only for items not on Edge_Cuts.
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
         gbr_metadata.SetCopper( true );
-    }
-    else if( aShape->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
-    {
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
 
     int     radius;             // Circle/arc radius.
