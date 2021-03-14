@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-05 16:46+0000\n"
+"PO-Revision-Date: 2021-03-14 21:51+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -12313,9 +12313,8 @@ msgid "Load Without Cache File"
 msgstr "Načíst bez uložení"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "Přerušování\n"
+msgstr "Přerušit"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
@@ -15589,7 +15588,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "DeMorgan Standard"
-msgstr "DeMorgan Standard"
+msgstr "DeMorgan standard"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Switch to standard DeMorgan representation"
@@ -19321,7 +19320,7 @@ msgstr "Třída desky"
 #: resources/linux/launchers/pcbcalculator.desktop.in:9
 #: resources/linux/launchers/pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
-msgstr "PCB Calculator"
+msgstr "Kalkulátor DPS"
 
 #: pcb_calculator/eserie.cpp:323 pcb_calculator/eserie.cpp:342
 #: pcb_calculator/eserie.cpp:368
@@ -27563,7 +27562,7 @@ msgstr "Přepsat text"
 
 #: pcbnew/dimension.cpp:317
 msgid "Suffix"
-msgstr "Suffix"
+msgstr "Sufix"
 
 #: pcbnew/dimension.cpp:438
 #, c-format
@@ -29416,14 +29415,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Nelze aktualizovat %s (pouzdro \"%s\" nenalezeno)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Změnit pouzdro \"%s\" (z \"%s\") na \"%s\""
+msgstr "Změnit pouzdro '%s' z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Změnit pouzdro \"%s\" (z \"%s\") na \"%s\""
+msgstr "Změněno pouzdro '%s' z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, fuzzy, c-format
@@ -29466,24 +29465,24 @@ msgid "Updated %s properties."
 msgstr "Aktualizovat %s vlastnosti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Výstupy pro &výrobu"
+msgstr "Přidat %s 'vyloučit z BOM' atribut výrobní."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Výstupy pro &výrobu"
+msgstr "Smazat %s 'vyloučit z BOM' atribut výrobní."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Výstupy pro &výrobu"
+msgstr "Přidáno %s 'vyloučit z BOM' atribut výrobní."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Výstupy pro &výrobu"
+msgstr "Smazáno %s 'vyloučit z BOM' atribut výrobní."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:449
 #, c-format
@@ -29541,9 +29540,9 @@ msgid "Via connected to unknown net (%s)."
 msgstr "Prokov připojený k neznámé síti (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Znovu připojte zónu mědi od %s do %s."
+msgstr "Znovu připojte zónu mědi '%s' od %s do %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
@@ -29551,9 +29550,9 @@ msgid "Reconnect copper zone from %s to %s."
 msgstr "Znovu připojte zónu mědi od %s do %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Znovu připojte zónu mědi od %s do %s."
+msgstr "Znovu připojte zónu mědi '%s' od %s do %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
 #, fuzzy, c-format
@@ -29566,9 +29565,9 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Zóna mědi (síť \"%s\") nemá připojeny žádné vývody."
+msgstr "Zóna mědi na vrstvě %s na (%s,%s) nemá připojené žádné plošky."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
