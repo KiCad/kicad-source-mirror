@@ -674,7 +674,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( GetColorSettings() );
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
 
     RecreateToolbars();
 
@@ -732,7 +732,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
+void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh )
 {
     bool hcChanged   = m_displayOptions.m_ContrastModeDisplay != aOptions.m_ContrastModeDisplay;
     m_displayOptions = aOptions;
@@ -760,5 +760,6 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
                 } );
     }
 
-    canvas->Refresh();
+    if( aRefresh )
+        canvas->Refresh();
 }

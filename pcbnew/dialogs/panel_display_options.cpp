@@ -117,9 +117,23 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         crossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
         crossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
         crossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
+
+        // Mark items with clearance display for repaint
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                {
+                    if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( aItem ) )
+                    {
+                        return( item->Type() == PCB_TRACE_T ||
+                                item->Type() == PCB_ARC_T ||
+                                item->Type() == PCB_VIA_T ||
+                                item->Type() == PCB_PAD_T );
+                    }
+
+                    return false;
+                } );
     }
 
-    view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     return true;

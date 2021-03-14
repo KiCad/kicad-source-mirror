@@ -175,7 +175,13 @@ public:
      * (for instance solid or sketch mode).
      */
     const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_displayOptions; }
-    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
+
+    /**
+     * Updates the current display options from the given options struct
+     * @param aOptions is the options struct to apply
+     * @param aRefresh will refresh the view after updating
+     */
+    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh = true );
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );

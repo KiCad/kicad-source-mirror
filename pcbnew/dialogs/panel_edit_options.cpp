@@ -28,6 +28,7 @@
 #include <pcb_painter.h>
 #include <pcb_view.h>
 #include <pcbnew_settings.h>
+#include <ratsnest/ratsnest_view_item.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
 
@@ -140,9 +141,14 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
-    m_frame->SetDisplayOptions( displ_opts );
+    m_frame->SetDisplayOptions( displ_opts, false );
     settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
-    view->RecacheAllItems();
+
+    view->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                                       []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                                       {
+                                           return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem );
+                                       } );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     m_frame->GetCanvas()->Refresh();
