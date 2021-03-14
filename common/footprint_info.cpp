@@ -174,6 +174,9 @@ void FOOTPRINT_ASYNC_LOADER::SetList( FOOTPRINT_LIST* aList )
 void FOOTPRINT_ASYNC_LOADER::Start( FP_LIB_TABLE* aTable, wxString const* aNickname,
                                     unsigned aNThreads )
 {
+    // Disable KIID generation: not needed for library parts; sometimes very slow
+    KIID::CreateNilUuids( true );
+
     // Capture the FP_LIB_TABLE into m_last_table. Formatting it as a string instead of storing the
     // raw data avoids having to pull in the FP-specific parts.
     STRING_FORMATTER sof;
@@ -204,4 +207,6 @@ void FOOTPRINT_ASYNC_LOADER::Abort()
         m_list->stopWorkers();
         m_list = nullptr;
     }
+
+    KIID::CreateNilUuids( false );
 }

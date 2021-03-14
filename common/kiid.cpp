@@ -47,6 +47,9 @@ static boost::uuids::nil_generator    nilGenerator;
 // Global nil reference
 KIID niluuid( 0 );
 
+// When true, always create nil uuids for performance, when valid ones aren't needed
+static bool createNilUuids = false;
+
 
 // For static initialization
 KIID& NilUuid()
@@ -65,7 +68,10 @@ KIID::KIID()
     {
 #endif
 
-        m_uuid = randomGenerator();
+        if( createNilUuids )
+            m_uuid = nilGenerator();
+        else
+            m_uuid = randomGenerator();
 
 #if BOOST_VERSION >= 106700
     }
@@ -229,6 +235,12 @@ void KIID::ConvertTimestampToUuid()
 
     m_cached_timestamp = 0;
     m_uuid             = randomGenerator();
+}
+
+
+void KIID::CreateNilUuids( bool aNil )
+{
+    createNilUuids = aNil;
 }
 
 

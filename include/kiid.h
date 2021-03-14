@@ -61,6 +61,8 @@ public:
 
     static bool SniffTest( const wxString& aCandidate );
 
+    static void CreateNilUuids( bool aNil = true );
+
     /**
      * Change an existing time stamp based UUID into a true UUID.
      *

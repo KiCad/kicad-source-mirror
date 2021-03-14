@@ -65,6 +65,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
                                        aNicknames.size(), aParent );
     }
 
+    // Disable KIID generation: not needed for library parts; sometimes very slow
+    KIID::CreateNilUuids( true );
+
     unsigned int ii = 0;
 
     for( const auto& nickname : aNicknames )
@@ -79,6 +82,8 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         AddLibrary( nickname );
         ii++;
     }
+
+    KIID::CreateNilUuids( false );
 
     m_tree.AssignIntrinsicRanks();
 
