@@ -131,7 +131,9 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
     opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
     opts.m_ZoneDisplayMode     = localSettings.m_ZoneDisplayMode;
-    SetDisplayOptions( opts );
+
+    // No refresh here: callers of LoadProjectSettings refresh later
+    SetDisplayOptions( opts, false );
 
     BOARD_DESIGN_SETTINGS& bds   = GetDesignSettings();
     bds.m_UseConnectedTrackWidth = localSettings.m_AutoTrackWidth;

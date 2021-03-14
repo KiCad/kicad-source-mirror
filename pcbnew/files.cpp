@@ -396,9 +396,9 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         if( !Clear_Pcb( false ) )
             return false;
 
-        onBoardLoaded();
-
         LoadProjectSettings();
+
+        onBoardLoaded();
 
         OnModify();
         return true;
