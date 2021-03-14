@@ -25,7 +25,6 @@
 #include "drawing_tool.h"
 #include "pcb_actions.h"
 #include <pcb_edit_frame.h>
-#include <confirm.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -38,8 +37,6 @@
 #include <board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
-#include <pcbnew_id.h>
-#include <dialogs/dialog_track_via_size.h>
 #include <kicad_string.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
@@ -497,6 +494,8 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
     return objects;
 }
 
+#include <wx/utils.h>
+
 int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::vector<BOARD_ITEM*> aItems,
         std::vector<BOARD_ITEM*> aPreview, LSET* aLayers )
 {
@@ -585,18 +584,20 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::ve
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-
             if( aLayers != NULL )
             {
                 PCB_LAYER_ID targetLayer = frame()->SelectOneLayer(
-                        PCB_LAYER_ID::PCB_LAYER_ID_COUNT, *aLayers, wxPoint( pos.x, pos.y ) );
+                                            PCB_LAYER_ID::PCB_LAYER_ID_COUNT,
+                                            *aLayers, wxGetMousePosition() );
 
                 view()->ClearPreview();
 
-                if( targetLayer == PCB_LAYER_ID::PCB_LAYER_ID_COUNT )
+                if( targetLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
                 {
+                    // The user did not pick any layer.
+                    m_frame->PopTool( tool );
                     cancelled = true;
-                    break; // The user did not pick any layer.
+                    break;
                 }
 
                 for( auto item : aItems )
