@@ -497,8 +497,10 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawBoardCharacteristics(
 }
 
 
-int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::vector<BOARD_ITEM*> aItems,
-        std::vector<BOARD_ITEM*> aPreview, LSET* aLayers )
+int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
+                                               std::vector<BOARD_ITEM*>& aItems,
+                                               std::vector<BOARD_ITEM*>& aPreview,
+                                               LSET* aLayers )
 {
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return -1;
@@ -662,10 +664,10 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
         layer = Cmts_User;
     }
 
-    std::vector<BOARD_ITEM*> table     = DrawBoardCharacteristics(
+    std::vector<BOARD_ITEM*> table = DrawBoardCharacteristics(
             wxPoint( 0, 0 ), m_frame->GetActiveLayer(), false, &tableSize );
-    std::vector<BOARD_ITEM*>* preview = new std::vector<BOARD_ITEM*>;
-    std::vector<BOARD_ITEM*>* items   = new std::vector<BOARD_ITEM*>;
+    std::vector<BOARD_ITEM*> preview;
+    std::vector<BOARD_ITEM*> items;
 
     PCB_SHAPE* line1 = new PCB_SHAPE;
     PCB_SHAPE* line2 = new PCB_SHAPE;
@@ -697,10 +699,10 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     line3->SetLayer( m_frame->GetActiveLayer() );
     line4->SetLayer( m_frame->GetActiveLayer() );
 
-    preview->push_back( line1 );
-    preview->push_back( line2 );
-    preview->push_back( line3 );
-    preview->push_back( line4 );
+    preview.push_back( line1 );
+    preview.push_back( line2 );
+    preview.push_back( line3 );
+    preview.push_back( line4 );
 
     PCB_GROUP* group = new PCB_GROUP( m_board );
     group->SetName("group-boardCharacteristics");
@@ -708,9 +710,9 @@ int DRAWING_TOOL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     for( auto item : table )
         group->AddItem( static_cast<BOARD_ITEM*>( item ) );
 
-    items->push_back( static_cast<BOARD_ITEM*>( group ) );
+    items.push_back( static_cast<BOARD_ITEM*>( group ) );
 
-    if( InteractivePlaceWithPreview( aEvent, *items, *preview, &layerSet ) == -1 )
+    if( InteractivePlaceWithPreview( aEvent, items, preview, &layerSet ) == -1 )
         m_frame->SetActiveLayer( savedLayer );
     else
         m_frame->SetActiveLayer( table.front()->GetLayer() );
@@ -737,8 +739,8 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
 
     std::vector<BOARD_ITEM*> table     = DrawSpecificationStackup(
             wxPoint( 0, 0 ), m_frame->GetActiveLayer(), false, &tableSize );
-    std::vector<BOARD_ITEM*>* preview = new std::vector<BOARD_ITEM*>;
-    std::vector<BOARD_ITEM*>* items   = new std::vector<BOARD_ITEM*>;
+    std::vector<BOARD_ITEM*> preview;
+    std::vector<BOARD_ITEM*> items;
 
     PCB_SHAPE* line1 = new PCB_SHAPE;
     PCB_SHAPE* line2 = new PCB_SHAPE;
@@ -770,10 +772,10 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
     line3->SetLayer( m_frame->GetActiveLayer() );
     line4->SetLayer( m_frame->GetActiveLayer() );
 
-    preview->push_back( line1 );
-    preview->push_back( line2 );
-    preview->push_back( line3 );
-    preview->push_back( line4 );
+    preview.push_back( line1 );
+    preview.push_back( line2 );
+    preview.push_back( line3 );
+    preview.push_back( line4 );
 
     PCB_GROUP* group = new PCB_GROUP( m_board );
     group->SetName("group-boardStackUp");
@@ -781,9 +783,9 @@ int DRAWING_TOOL::PlaceStackup( const TOOL_EVENT& aEvent )
     for( auto item : table )
         group->AddItem( item );
 
-    items->push_back( static_cast<BOARD_ITEM*>( group ) );
+    items.push_back( static_cast<BOARD_ITEM*>( group ) );
 
-    if( InteractivePlaceWithPreview( aEvent, *items, *preview, &layerSet ) == -1 )
+    if( InteractivePlaceWithPreview( aEvent, items, preview, &layerSet ) == -1 )
         m_frame->SetActiveLayer( savedLayer );
     else
         m_frame->SetActiveLayer( table.front()->GetLayer() );

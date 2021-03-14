@@ -180,15 +180,16 @@ public:
      * Interactively place a set of @ref BOARD_ITEM.
      * As a list of BOARD_ITEMs can be resource intesive to move around,
      * we can use a reduced set of BOARD_ITEMs for preview purpose only.
-     * 
-     * @param aEvent 
+     *
+     * @param aEvent
      * @param aItems BOARD_ITEMs to add to the board.
      * @param aPreview BOARD_ITEMs only used during placement / preview.
      * @param aLayers   Set of allowed destination when asking the user.
-     *                  If set to NULL, the user is not asked and all BOARD_ITEMs remain on their layers. 
+     *                  If set to NULL, the user is not asked and all BOARD_ITEMs remain on their layers.
      */
-    int InteractivePlaceWithPreview( const TOOL_EVENT& aEvent, std::vector<BOARD_ITEM*> aItems,
-                                     std::vector<BOARD_ITEM*> aPreview, LSET* aLayers );
+    int InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
+                                     std::vector<BOARD_ITEM*>& aItems,
+                                     std::vector<BOARD_ITEM*>& aPreview, LSET* aLayers );
 
 
     /**
