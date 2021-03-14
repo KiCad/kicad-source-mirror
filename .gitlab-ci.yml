@@ -37,5 +37,4 @@ test_formatting:
 include:
   - local: '/.gitlab/templates.yml'
   - local: '/.gitlab/Fedora-Linux-CI.yml'
-  - local: '/.gitlab/Windows-CI.yml'
   - local: '/.gitlab/coverity.yml'
