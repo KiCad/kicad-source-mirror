@@ -1521,6 +1521,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
             include = aFilterOptions.includeVias;
             break;
 
+        case PCB_FP_ZONE_T:
         case PCB_ZONE_T:
             include = aFilterOptions.includeZones;
             break;
@@ -1537,6 +1538,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
                 include = aFilterOptions.includeItemsOnTechLayers;
             break;
 
+        case PCB_FP_TEXT_T:
         case PCB_TEXT_T:
             include = aFilterOptions.includePcbTexts;
             break;
