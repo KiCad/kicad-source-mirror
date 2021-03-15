@@ -378,7 +378,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            // Exit on a remove operation; there is no further processing for removed items.
+            evt->SetPassEvent();
+            // Exit on a delete; there will no longer be anything to drag.
             break;
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) )
@@ -428,7 +429,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             break; // Finish
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         controls->SetAutoPan( m_moveInProgress );
 

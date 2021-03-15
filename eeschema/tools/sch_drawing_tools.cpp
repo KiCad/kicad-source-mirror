@@ -311,6 +311,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( component->Clone() );
         }
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            if( component )
+                cleanup();
+        }
         else
         {
             evt->SetPassEvent();
@@ -497,6 +502,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
+        }
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            if( image )
+                cleanup();
         }
         else
         {
@@ -1126,6 +1136,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint) cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
+        }
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            if( item )
+                cleanup();
         }
         else
         {

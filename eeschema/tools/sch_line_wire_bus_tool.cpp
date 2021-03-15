@@ -134,7 +134,7 @@ private:
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
         }
 
-        for( const auto& member : connection->Members() )
+        for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
             wxString name = member->FullLocalName();
@@ -145,7 +145,7 @@ private:
                 submenu->SetTool( m_tool );
                 AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
 
-                for( const auto& sub_member : member->Members() )
+                for( const std::shared_ptr<SCH_CONNECTION>& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
                     name = sub_member->FullLocalName();
@@ -562,7 +562,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         if( evt->IsCancelInteractive() )
         {
             if( segment || m_busUnfold.in_progress )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( aTool );
@@ -750,6 +752,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 wxString net = *evt->Parameter<wxString*>();
                 segment = doUnfoldBus( net, contextMenuPos );
             }
+        }
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
+        {
+            if( segment || m_busUnfold.in_progress )
+                cleanup();
         }
         else
         {
