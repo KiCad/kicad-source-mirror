@@ -156,8 +156,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                 [&] ()
                 {
                     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_view->ClearPreview();
-                    delete component;
+                    m_frame->RollbackSchematicFromUndo();
                     component = nullptr;
                 };
 
@@ -222,9 +221,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
 
                 m_frame->SaveCopyForRepeatItem( component );
 
-                m_view->ClearPreview();
-                m_view->AddToPreview( component->Clone() );
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), component, false );
                 m_selectionTool->AddItemToSel( component );
+                m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
                 // Update cursor now that we have a component
                 setCursor();
@@ -233,17 +232,13 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
             {
                 SCH_COMPONENT* next_comp = nullptr;
 
-                m_view->ClearPreview();
-
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), component, false );
+                m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true,
+                                      &m_selectionTool->GetSelection() );
 
-                EE_SELECTION new_sel;
-                new_sel.Add( component );
-
-                m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
+                m_view->Update( component );
                 m_frame->OnModify();
 
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
@@ -275,7 +270,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                         next_comp->SetUnitSelection( new_unit );
 
                         m_frame->SaveCopyForRepeatItem( next_comp );
-                        m_view->AddToPreview( next_comp->Clone() );
+
+                        m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), next_comp, false );
                         m_selectionTool->AddItemToSel( next_comp );
                     }
                 }
@@ -308,8 +304,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
         else if( component && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             component->SetPosition( (wxPoint)cursorPos );
-            m_view->ClearPreview();
-            m_view->AddToPreview( component->Clone() );
+            m_view->Update( component );
         }
         else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
