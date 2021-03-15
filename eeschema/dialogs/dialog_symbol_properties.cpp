@@ -1048,6 +1048,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
     if( m_width != new_size )
     {
         AdjustGridColumns( new_size );
+        Layout();
     }
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
