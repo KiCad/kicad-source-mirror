@@ -4,17 +4,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-08 21:44+0000\n"
+"PO-Revision-Date: 2021-03-17 14:18+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
@@ -6152,11 +6152,11 @@ msgstr "Изабери"
 
 #: common/tool/actions.cpp:544
 msgid "Measure Tool"
-msgstr ""
+msgstr "Алат за мјерење"
 
 #: common/tool/actions.cpp:544
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "Интерактивно измјерите растојање између тачака"
 
 #: common/tool/actions.cpp:553
 #, fuzzy
@@ -6182,9 +6182,8 @@ msgid "Symbol Editor"
 msgstr "Симбол"
 
 #: common/tool/actions.cpp:563
-#, fuzzy
 msgid "Create, delete and edit symbols"
-msgstr "Креирање зона"
+msgstr "Креирај, избриши и уреди симболе"
 
 #: common/tool/actions.cpp:568 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1016
@@ -6413,7 +6412,7 @@ msgstr "Опције мреже"
 
 #: common/widgets/gal_options_panel.cpp:106
 msgid "Dots"
-msgstr "Тачке"
+msgstr "Тачкице"
 
 #: common/widgets/gal_options_panel.cpp:107
 msgid "Lines"
@@ -6421,17 +6420,15 @@ msgstr "Линије"
 
 #: common/widgets/gal_options_panel.cpp:108
 msgid "Small crosses"
-msgstr ""
+msgstr "Мали крстићи"
 
 #: common/widgets/gal_options_panel.cpp:112
-#, fuzzy
 msgid "Grid Style"
-msgstr "Стил"
+msgstr "Стил мрежице"
 
 #: common/widgets/gal_options_panel.cpp:124
-#, fuzzy
 msgid "Grid thickness:"
-msgstr "Дебљина:"
+msgstr "Дебљина мрежице:"
 
 #: common/widgets/gal_options_panel.cpp:135
 #: common/widgets/gal_options_panel.cpp:151
@@ -6594,9 +6591,8 @@ msgid ""
 msgstr ""
 
 #: common/widgets/widget_hotkey_list.cpp:424
-#, fuzzy
 msgid "Confirm change"
-msgstr "Промјена облика курсора"
+msgstr "Потврди промјену"
 
 #: common/widgets/widget_hotkey_list.cpp:444
 msgid "Command"
