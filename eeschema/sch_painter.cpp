@@ -322,7 +322,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     else if( aItem->IsSelected() )
     {
         if( aDrawingShadows )
-            color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS ).WithAlpha( 0.8 );
+            color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
 
     if( m_schSettings.m_ShowDisabled
@@ -478,10 +478,6 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         if( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR )
         {
             COLOR4D fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
-
-            // These actions place the item over others, so allow a modest transparency here
-            if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
-                fillColor = fillColor.WithAlpha( 0.75 );
 
             m_gal->SetIsFill( aItem->GetFillMode() == FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
             m_gal->SetFillColor( fillColor );
