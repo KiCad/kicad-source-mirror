@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-08 21:44+0000\n"
+"PO-Revision-Date: 2021-03-17 14:18+0000\n"
 "Last-Translator: fresh <fresh190@protonmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -3023,7 +3023,7 @@ msgstr "Δεξιά"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Χρήση εικονιδίων σχεδιασμένων για φωτεινό φόντο παραθύρων"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3032,12 +3032,14 @@ msgstr "Σκοτεινό"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Χρήση εικονιδίων σχεδιασμένων για σκούρο φόντο παραθύρων"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Αυτόματη επιλογή φωτεινών ή σκούρων εικονιδίων βάσει του χρωματικού θέματος "
+"του συστήματος"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -12445,9 +12447,8 @@ msgid "Load Without Cache File"
 msgstr "Φόρτωση Χωρίς Αποθήκευση"
 
 #: eeschema/files-io.cpp:511
-#, fuzzy
 msgid "Abort"
-msgstr "Γίνεται ακύρωση\n"
+msgstr "Ματαίωση"
 
 #: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
 msgid ""
