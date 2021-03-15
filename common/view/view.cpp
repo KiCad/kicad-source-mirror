@@ -401,12 +401,12 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
 
 
 // stupid C++... python lambda would do this in one line
-template <class Container>
-struct queryVisitor
+template <class CONTAINER>
+struct QUERY_VISITOR
 {
-    typedef typename Container::value_type item_type;
+    typedef typename CONTAINER::value_type item_type;
 
-    queryVisitor( Container& aCont, int aLayer ) :
+    QUERY_VISITOR( CONTAINER& aCont, int aLayer ) :
         m_cont( aCont ), m_layer( aLayer )
     {
     }
@@ -419,7 +419,7 @@ struct queryVisitor
         return true;
     }
 
-    Container&  m_cont;
+    CONTAINER&  m_cont;
     int         m_layer;
 };
 
@@ -439,7 +439,7 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) con
         if( ( *i )->displayOnly || !( *i )->visible )
             continue;
 
-        queryVisitor<std::vector<LAYER_ITEM_PAIR> > visitor( aResult, ( *i )->id );
+        QUERY_VISITOR<std::vector<LAYER_ITEM_PAIR> > visitor( aResult, ( *i )->id );
         ( *i )->items->Query( aRect, visitor );
     }
 
@@ -721,10 +721,12 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 }
 
 
-struct VIEW::updateItemsColor
+struct VIEW::UPDATE_COLOR_VISITOR
 {
-    updateItemsColor( int aLayer, PAINTER* aPainter, GAL* aGal ) :
-        layer( aLayer ), painter( aPainter ), gal( aGal )
+    UPDATE_COLOR_VISITOR( int aLayer, PAINTER* aPainter, GAL* aGal ) :
+        layer( aLayer ),
+        painter( aPainter ),
+        gal( aGal )
     {
     }
 
@@ -760,7 +762,7 @@ void VIEW::UpdateLayerColor( int aLayer )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        updateItemsColor visitor( aLayer, m_painter, m_gal );
+        UPDATE_COLOR_VISITOR visitor( aLayer, m_painter, m_gal );
         m_layers[aLayer].items->Query( r, visitor );
         MarkTargetDirty( m_layers[aLayer].target );
     }
@@ -798,10 +800,12 @@ void VIEW::UpdateAllLayersColor()
 }
 
 
-struct VIEW::changeItemsDepth
+struct VIEW::UPDATE_DEPTH_VISITOR
 {
-    changeItemsDepth( int aLayer, int aDepth, GAL* aGal ) :
-        layer( aLayer ), depth( aDepth ), gal( aGal )
+    UPDATE_DEPTH_VISITOR( int aLayer, int aDepth, GAL* aGal ) :
+        layer( aLayer ),
+        depth( aDepth ),
+        gal( aGal )
     {
     }
 
@@ -928,10 +932,11 @@ void VIEW::UpdateAllLayersOrder()
 }
 
 
-struct VIEW::drawItem
+struct VIEW::DRAW_ITEM_VISITOR
 {
-    drawItem( VIEW* aView, int aLayer, bool aUseDrawPriority, bool aReverseDrawOrder ) :
-        view( aView ), layer( aLayer ),
+    DRAW_ITEM_VISITOR( VIEW* aView, int aLayer, bool aUseDrawPriority, bool aReverseDrawOrder ) :
+        view( aView ),
+        layer( aLayer ),
         useDrawPriority( aUseDrawPriority ),
         reverseDrawOrder( aReverseDrawOrder )
     {
@@ -985,7 +990,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
     {
         if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
-            drawItem drawFunc( this, l->id, m_useDrawPriority, m_reverseDrawOrder );
+            DRAW_ITEM_VISITOR drawFunc( this, l->id, m_useDrawPriority, m_reverseDrawOrder );
 
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );
@@ -1048,10 +1053,12 @@ void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 }
 
 
-struct VIEW::recacheItem
+struct VIEW::RECACHE_ITEM_VISITOR
 {
-    recacheItem( VIEW* aView, GAL* aGal, int aLayer ) :
-        view( aView ), gal( aGal ), layer( aLayer )
+    RECACHE_ITEM_VISITOR( VIEW* aView, GAL* aGal, int aLayer ) :
+        view( aView ),
+        gal( aGal ),
+        layer( aLayer )
     {
     }
 
@@ -1152,9 +1159,9 @@ const VECTOR2I& VIEW::GetScreenPixelSize() const
 }
 
 
-struct VIEW::clearLayerCache
+struct VIEW::CLEAR_LAYER_CACHE_VISITOR
 {
-    clearLayerCache( VIEW* aView ) :
+    CLEAR_LAYER_CACHE_VISITOR( VIEW* aView ) :
         view( aView )
     {
     }
@@ -1175,7 +1182,7 @@ void VIEW::clearGroupCache()
     BOX2I r;
 
     r.SetMaximum();
-    clearLayerCache visitor( this );
+    CLEAR_LAYER_CACHE_VISITOR visitor( this );
 
     for( VIEW_LAYER& layer : m_layers )
         layer.items->Query( r, visitor );
@@ -1379,7 +1386,7 @@ void VIEW::RecacheAllItems()
     {
         if( IsCached( l.id ) )
         {
-            recacheItem visitor( this, m_gal, l.id );
+            RECACHE_ITEM_VISITOR visitor( this, m_gal, l.id );
             l.items->Query( r, visitor );
         }
     }

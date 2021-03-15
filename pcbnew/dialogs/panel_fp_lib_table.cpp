@@ -64,8 +64,8 @@
 // clang-format off
 
 /**
-* Container that describes file type info for the add a library options
-*/
+ * Container that describes file type info for the add a library options
+ */
 struct SUPPORTED_FILE_TYPE
 {
     wxString m_Description;            ///< Description shown in the file picker dialog

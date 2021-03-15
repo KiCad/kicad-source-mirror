@@ -793,13 +793,11 @@ protected:
     bool areRequiredLayersEnabled( int aLayerId ) const;
 
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
-    struct clearLayerCache;
-    struct recacheItem;
-    struct drawItem;
-    struct unlinkItem;
-    struct updateItemsColor;
-    struct changeItemsDepth;
-    struct extentsVisitor;
+    struct CLEAR_LAYER_CACHE_VISITOR;
+    struct RECACHE_ITEM_VISITOR;
+    struct DRAW_ITEM_VISITOR;
+    struct UPDATE_COLOR_VISITOR;
+    struct UPDATE_DEPTH_VISITOR;
 
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
     std::vector<EDA_ITEM *>            m_ownedItems;
