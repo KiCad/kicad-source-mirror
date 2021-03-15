@@ -47,7 +47,8 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
     m_modal( false ),
     m_modal_loop( nullptr ),
     m_modal_resultant_parent( nullptr ),
-    m_modal_ret_val( false )
+    m_modal_ret_val( false ),
+    m_socketServer( nullptr )
 {
 }
 
@@ -59,10 +60,10 @@ KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& a
     m_modal( false ),
     m_modal_loop( nullptr ),
     m_modal_resultant_parent( nullptr ),
-    m_modal_ret_val( false )
+    m_modal_ret_val( false ),
+    m_socketServer( nullptr )
 {
 }
-
 
 KIWAY_PLAYER::~KIWAY_PLAYER() throw() {}
 

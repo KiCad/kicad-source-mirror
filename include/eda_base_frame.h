@@ -106,6 +106,8 @@ public:
                     const wxPoint& aPos, const wxSize& aSize, long aStyle,
                     const wxString& aFrameName, KIWAY* aKiway );
 
+    EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway );
+
     ~EDA_BASE_FRAME();
 
     /**
@@ -649,6 +651,11 @@ private:
      * call #SaveSettings() anywhere, except in this one function found only in this class.
      */
     void windowClosing( wxCloseEvent& event );
+
+    /**
+     * Collect common initialization functions used in all CTORs
+     */
+    void commonInit( FRAME_T aFrameType );
 
     wxWindow* findQuasiModalDialog();
 

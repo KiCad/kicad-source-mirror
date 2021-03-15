@@ -191,14 +191,6 @@ public:
      */
     virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
-    /**
-     * Execute a remote command sent via socket (to port KICAD_PCB_PORT_SERVICE_NUMBER,
-     * currently 4242).
-     *
-     * Subclasses should override to implement actual command handlers.
-     */
-    virtual void ExecuteRemoteCommand( const char* cmdline ){}
-
     void EraseMsgBox();
 
     void ReCreateMenuBar() override { }
@@ -345,11 +337,6 @@ public:
      * Display current grid size in the status bar.
      */
     virtual void DisplayGridMsg();
-
-    /* interprocess communication */
-    void CreateServer( int service, bool local = true );
-    void OnSockRequest( wxSocketEvent& evt );
-    void OnSockRequestServer( wxSocketEvent& evt );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

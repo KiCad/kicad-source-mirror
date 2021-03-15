@@ -32,7 +32,6 @@
 #include <kiway_holder.h>
 #include <eda_base_frame.h>
 
-
 class KIWAY;
 class PROJECT;
 struct KIFACE;
@@ -42,6 +41,9 @@ class KIWAY_EXPRESS;
 
 #define WX_EVENT_LOOP      wxGUIEventLoop
 class WX_EVENT_LOOP;
+
+class wxSocketServer;
+class wxSocketBase;
 
 
 /**
@@ -179,6 +181,20 @@ public:
 
     void DismissModal( bool aRetVal, const wxString& aResult = wxEmptyString );
 
+    /* interprocess communication */
+    void CreateServer( int service, bool local = true );
+    void OnSockRequest( wxSocketEvent& evt );
+    void OnSockRequestServer( wxSocketEvent& evt );
+
+    /**
+     * Execute a remote command sent via socket (to port KICAD_PCB_PORT_SERVICE_NUMBER,
+     * currently 4242).
+     *
+     * Subclasses should override to implement actual command handlers.
+     */
+    virtual void ExecuteRemoteCommand( const char* cmdline ){}
+
+
 protected:
 
     /// event handler, routes to derivative specific virtual KiwayMailIn()
@@ -197,6 +213,9 @@ protected:
     wxWindow*       m_modal_resultant_parent; // the window caller in modal mode
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
+
+    wxSocketServer*             m_socketServer;
+    std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

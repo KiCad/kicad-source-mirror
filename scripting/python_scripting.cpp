@@ -54,17 +54,6 @@
 
 extern "C" PyObject* PyInit__pcbnew( void );
 
-#define EXTRA_PYTHON_MODULES 10     // this is the number of python
-                                    // modules that we want to add into the list
-
-
-/* python inittab that links module names to module init functions
- * we will rebuild it to include the original python modules plus
- * our own ones
- */
-
-struct _inittab*    SwigImportInittab;
-static int          SwigNumModules = 0;
 
 /// True if the wxPython scripting layer was successfully loaded.
 static bool wxPythonLoaded = false;
@@ -74,70 +63,6 @@ bool IsWxPythonLoaded()
 {
     return wxPythonLoaded;
 }
-
-
-/**
- * Add a name + initfuction to our SwigImportInittab
- */
-
-static void swigAddModule( const char* name, PyObject* (* initfunc)() )
-{
-    SwigImportInittab[SwigNumModules].name      = (char*) name;
-    SwigImportInittab[SwigNumModules].initfunc  = initfunc;
-    SwigNumModules++;
-    SwigImportInittab[SwigNumModules].name      = (char*) 0;
-    SwigImportInittab[SwigNumModules].initfunc  = 0;
-}
-
-
-/**
- * Add the builtin python modules
- */
-static void swigAddBuiltin()
-{
-    int i = 0;
-
-    /* discover the length of the pyimport inittab */
-    while( PyImport_Inittab[i].name )
-        i++;
-
-    /* allocate memory for the python module table */
-    SwigImportInittab = (struct _inittab*) malloc(
-        sizeof( struct _inittab ) * ( i + EXTRA_PYTHON_MODULES ) );
-
-    /* copy all pre-existing python modules into our newly created table */
-    i = 0;
-
-    while( PyImport_Inittab[i].name )
-    {
-        swigAddModule( PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc );
-        i++;
-    }
-}
-
-
-/**
- * Add the internal modules to the python scripting so they will be available to the scripts.
- */
-static void swigAddModules()
-{
-    swigAddModule( "_pcbnew", PyInit__pcbnew );
-
-    // finally it seems better to include all in just one module
-    // but in case we needed to include any other modules,
-    // it must be done like this:
-    // swigAddModule( "_kicad", init_kicad );
-}
-
-
-/**
- * Switch the python module table to the Pcbnew built one.
- */
-static void swigSwitchPythonBuiltin()
-{
-    PyImport_Inittab = SwigImportInittab;
-}
-
 
 PyThreadState* g_PythonMainTState;
 
@@ -245,9 +170,7 @@ bool InitPythonScripting( const char* aStockScriptingPath, const char* aUserScri
     int  retv;
     char cmd[1024];
 
-    swigAddBuiltin();           // add builtin functions
-    swigAddModules();           // add our own modules
-    swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
+    PyImport_AppendInittab( "_pcbnew", PyInit__pcbnew );
 
 #ifdef _MSC_VER
     // Under vcpkg/msvc, we need to explicitly set the python home
@@ -266,17 +189,15 @@ bool InitPythonScripting( const char* aStockScriptingPath, const char* aUserScri
         Py_SetPythonHome( pyHome.GetFullPath().c_str() );
     }
 #endif
+//
+//    Py_Initialize();
+    pybind11::initialize_interpreter();
 
-    Py_Initialize();
-    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
+//    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
 
 #if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
     PyEval_InitThreads();
 #endif      // if PY_VERSION_HEX < 0x03070000
-
-#if defined( DEBUG )
-    RedirectStdio();
-#endif
 
     wxPythonLoaded = true;
 
@@ -374,7 +295,7 @@ static void RunPythonMethodWithReturnedString( const char* aMethodName, wxString
 void FinishPythonScripting()
 {
     PyEval_RestoreThread( g_PythonMainTState );
-    Py_Finalize();
+    pybind11::finalize_interpreter();
 }
 
 
@@ -424,25 +345,6 @@ void UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
 
     if( retv != 0 )
         wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-}
-
-void RedirectStdio()
-{
-    // This is a helpful little tidbit to help debugging and such.  It
-    // redirects Python's stdout and stderr to a window that will popup
-    // only on demand when something is printed, like a traceback.
-    const char* python_redirect =
-        "import sys\n"
-        "import wx\n"
-        "output = wx.PyOnDemandOutputWindow()\n"
-        "sys.stderr = output\n";
-
-    PyLOCK lock;
-
-    int retv = PyRun_SimpleString( python_redirect );
-
-    if( retv != 0 )
-        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, python_redirect );
 }
 
 

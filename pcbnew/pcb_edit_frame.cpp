@@ -1299,6 +1299,10 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
     {
         frame = Kiway().Player( FRAME_PYTHON, true, this );
 
+        // If we received an error in the CTOR due to Python-ness, don't crash
+        if( !frame )
+            return;
+
         if( !frame->IsVisible() )
             frame->Show( true );
 

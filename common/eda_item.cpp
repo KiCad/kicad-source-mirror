@@ -23,7 +23,6 @@
  */
 
 #include <algorithm>
-#include <pybind11/pybind11.h>
 
 #include <bitmaps.h>
 #include <eda_item.h>

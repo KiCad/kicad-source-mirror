@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,9 @@
 
 ///< Eeschema listens on this port for commands from Pcbnew
 #define KICAD_SCH_PORT_SERVICE_NUMBER   4243
+
+///< Scripting window listens for commands for other apps
+#define KICAD_PY_PORT_SERVICE_NUMBER    4244
 
 
 #define MSG_TO_PCB                      KICAD_PCB_PORT_SERVICE_NUMBER

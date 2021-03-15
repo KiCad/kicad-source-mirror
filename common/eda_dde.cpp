@@ -27,7 +27,7 @@
 #include <thread>
 
 #include <eda_dde.h>
-#include <eda_draw_frame.h>
+#include <kiway_player.h>
 #include <id.h>
 
 #include <wx/wx.h>
@@ -45,7 +45,7 @@ static char client_ipc_buffer[IPC_BUF_SIZE];
 
 /* Function to initialize a server socket
  */
-void EDA_DRAW_FRAME::CreateServer( int service, bool local )
+void KIWAY_PLAYER::CreateServer( int service, bool local )
 {
     wxIPV4address addr;
 
@@ -67,7 +67,7 @@ void EDA_DRAW_FRAME::CreateServer( int service, bool local )
 
 /* Function called on every client request.
  */
-void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
+void KIWAY_PLAYER::OnSockRequest( wxSocketEvent& evt )
 {
     size_t        len;
     wxSocketBase* sock = evt.GetSocket();
@@ -99,7 +99,7 @@ void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
 
 /* Function called when a connection is requested by a client.
  */
-void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
+void KIWAY_PLAYER::OnSockRequestServer( wxSocketEvent& evt )
 {
     wxSocketBase*   socket;
     wxSocketServer* server = (wxSocketServer*) evt.GetSocket();

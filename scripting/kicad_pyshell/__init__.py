@@ -15,17 +15,16 @@ import wx
 import sys
 import os
 
-from wx.py import crust, editor, version, dispatcher
-from wx.py.editor import EditorNotebook
+from wx.py import crust, version, dispatcher
+
+from .kicad_pyeditor import KiCadEditorNotebookFrame, KiCadEditorNotebook
 
 import pcbnew
 
-INTRO = "KiCad - Python Shell"
-
-
-class KiCadPyShell(editor.EditorNotebookFrame):
-
-    """The KiCad Pythonshell based on wxPyShell"""
+class KiCadPyShell(KiCadEditorNotebookFrame):
+   
+    def __init__(self, parent):
+        KiCadEditorNotebookFrame.__init__(self, parent)
 
     def _setup_startup(self):
         """Initialise the startup script."""
@@ -58,7 +57,7 @@ class KiCadPyShell(editor.EditorNotebookFrame):
 
         Called automatically by base class during init.
         """
-        self.notebook = EditorNotebook(parent=self)
+        self.notebook = KiCadEditorNotebook(parent=self.parent)
         intro = 'Py %s' % version.VERSION
         import imp
         import builtins
@@ -81,11 +80,6 @@ class KiCadPyShell(editor.EditorNotebookFrame):
         self.autoSaveHistory = False
         self.LoadSettings()
 
-        # in case of wxPhoenix we may need to create a wxApp first and store it
-        # to prevent removal by garbage collector
-        if 'phoenix' in wx.PlatformInfo:
-            self.theApp = wx.GetApp() or wx.App()
-
         self.crust = crust.Crust(parent=self.notebook,
                                  intro=intro, locals=namespace,
                                  rootLabel="locals()",
@@ -94,9 +88,9 @@ class KiCadPyShell(editor.EditorNotebookFrame):
 
         self.shell = self.crust.shell
         # Override the filling so that status messages go to the status bar.
-        self.crust.filling.tree.setStatusText = self.SetStatusText
+        self.crust.filling.tree.setStatusText = self.parent.SetStatusText
         # Override the shell so that status messages go to the status bar.
-        self.shell.setStatusText = self.SetStatusText
+        self.shell.setStatusText = self.parent.SetStatusText
         # Fix a problem with the sash shrinking to nothing.
         self.crust.filling.SetSashPosition(200)
         self.notebook.AddPage(page=self.crust, text='*Shell*', select=True)
@@ -115,7 +109,7 @@ class KiCadPyShell(editor.EditorNotebookFrame):
                "wxPython Version: %s\n" % wx.VERSION_STRING + \
                ("\t(%s)\n" % ", ".join(wx.PlatformInfo[1:]))
 
-        dialog = wx.MessageDialog(self, text, title,
+        dialog = wx.MessageDialog(self.parent, text, title,
                                   wx.OK | wx.ICON_INFORMATION)
         dialog.ShowModal()
         dialog.Destroy()
@@ -127,7 +121,7 @@ class KiCadPyShell(editor.EditorNotebookFrame):
     def LoadSettings(self):
         """Load settings for the shell."""
         if self.config is not None:
-            editor.EditorNotebookFrame.LoadSettings(self, self.config)
+            KiCadEditorNotebookFrame.LoadSettings(self.parent, self.config)
             self.autoSaveSettings = \
                 self.config.ReadBool('Options/AutoSaveSettings', False)
             self.execStartupScript = \
@@ -150,7 +144,7 @@ class KiCadPyShell(editor.EditorNotebookFrame):
             self.config.WriteBool('Options/AutoSaveSettings',
                                   self.autoSaveSettings)
             if self.autoSaveSettings or force:
-                editor.EditorNotebookFrame.SaveSettings(self, self.config)
+                KiCadEditorNotebookFrame.SaveSettings(self, self.config)
 
                 self.config.WriteBool('Options/AutoSaveHistory',
                                       self.autoSaveHistory)
@@ -209,7 +203,7 @@ class KiCadPyShell(editor.EditorNotebookFrame):
                     d.Destroy()
 
 
-def makePcbnewShellWindow(parent=None):
+def makePcbnewShellWindow(parentid):
     """
     Create a new Shell Window and return its handle.
 
@@ -219,6 +213,6 @@ def makePcbnewShellWindow(parent=None):
     Returns:
     The handle to the new window.
     """
-    pyshell = KiCadPyShell(parent, id=-1, title=INTRO)
-    pyshell.Show()
-    return pyshell
+    
+    parent = wx.FindWindowById( parentid )
+    return KiCadPyShell(parent)

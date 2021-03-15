@@ -102,28 +102,24 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_SYS_COLOUR_CHANGED( EDA_BASE_FRAME::onSystemColorChange )
 END_EVENT_TABLE()
 
-EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
-                                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                                long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
-        wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
-        TOOLS_HOLDER(),
-        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
-        m_ident( aFrameType ),
-        m_maximizeByDefault( false ),
-        m_infoBar( nullptr ),
-        m_settingsManager( nullptr ),
-        m_fileHistory( nullptr ),
-        m_hasAutoSave( false ),
-        m_autoSaveState( false ),
-        m_autoSaveInterval(-1 ),
-        m_undoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
-        m_userUnits( EDA_UNITS::MILLIMETRES ),
-        m_isClosing( false ),
-        m_isNonUserClose( false )
+
+void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
 {
-    m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
-    m_mruPath       = PATHS::GetDefaultUserProjectsPath();
-    m_frameSize     = defaultSize( aFrameType );
+    m_ident             = aFrameType;
+    m_maximizeByDefault = false;
+    m_infoBar           = nullptr;
+    m_settingsManager   = nullptr;
+    m_fileHistory       = nullptr;
+    m_hasAutoSave       = false;
+    m_autoSaveState     = false;
+    m_autoSaveInterval  = -1;
+    m_undoRedoCountMax  = DEFAULT_MAX_UNDO_ITEMS;
+    m_userUnits         = EDA_UNITS::MILLIMETRES;
+    m_isClosing         = false;
+    m_isNonUserClose    = false;
+    m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
+    m_mruPath           = PATHS::GetDefaultUserProjectsPath();
+    m_frameSize         = defaultSize( aFrameType );
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
@@ -143,6 +139,25 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
 
     initExitKey();
+
+}
+
+EDA_BASE_FRAME::EDA_BASE_FRAME( FRAME_T aFrameType, KIWAY* aKiway ) :
+        wxFrame(),
+        TOOLS_HOLDER(),
+        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME )
+{
+    commonInit( aFrameType );
+}
+
+EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
+                                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
+        wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
+        TOOLS_HOLDER(),
+        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME )
+{
+    commonInit( aFrameType );
 }
 
 

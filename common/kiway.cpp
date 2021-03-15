@@ -264,9 +264,9 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         }
         else
         {
-            KIFACE_GETTER_FUNC* getter = (KIFACE_GETTER_FUNC*) addr;
+            KIFACE_GETTER_FUNC* ki_getter = (KIFACE_GETTER_FUNC*) addr;
 
-            KIFACE* kiface = getter( &m_kiface_version[aFaceId], KIFACE_VERSION, m_program );
+            KIFACE* kiface = ki_getter( &m_kiface_version[aFaceId], KIFACE_VERSION, m_program );
 
             // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
             wxASSERT_MSG( kiface,

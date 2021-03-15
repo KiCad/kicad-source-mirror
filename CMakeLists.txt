@@ -761,6 +761,8 @@ include( ${SWIG_USE_FILE} )
 # pybind11 is header-only, so include the subdir
 add_subdirectory(thirdparty/pybind11)
 
+include_directories( SYSTEM ${PYBIND11_INCLUDE_DIR} )
+
 set( PythonInterp_FIND_VERSION 3.6 )
 set( PythonLibs_FIND_VERSION 3.6 )
 

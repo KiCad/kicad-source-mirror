@@ -38,6 +38,7 @@
 #include <wx/filename.h>
 #include <wx/gdicmn.h>
 
+#include <pybind11/embed.h>
 
 class wxSingleInstanceChecker;
 class wxApp;
@@ -329,6 +330,7 @@ protected:
 
     /// Flag to indicate if the environment variable overwrite warning dialog should be shown.
     bool            m_show_env_var_dialog;
+
 };
 
 

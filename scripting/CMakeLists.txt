@@ -7,8 +7,6 @@ add_library( scripting STATIC
     ${KIPYTHON_SRCS}
 )
 
-add_subdirectory( pybind11 )
-    
 target_link_libraries( scripting
     ${wxWidgets_LIBRARIES}      # wxLogDebug, wxASSERT
     ${Boost_LIBRARIES}          # Because of the OPT types
@@ -32,6 +30,7 @@ target_include_directories( scripting PRIVATE
 # Setup the KIFACE
 add_library( scripting_kiface MODULE
     kicad_scripting_main.cpp
+    kipython_frame.cpp
     ${KIPYTHON_SRCS}
     )
 
@@ -39,7 +38,7 @@ set_source_files_properties( kicad_scripting_main.cpp PROPERTIES
     # The KIFACE is in kicad_scripting_main.cpp, export it:
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
-    
+
 target_include_directories( scripting_kiface PRIVATE
     ${PROJECT_SOURCE_DIR}/bitmaps_png/include
     ${PROJECT_SOURCE_DIR}/include

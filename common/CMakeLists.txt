@@ -19,7 +19,6 @@ include_directories(
     ${INC_AFTER}
     )
 
-
 if( NOT APPLE )     # windows and linux use openssl under curl
     find_package( OpenSSL REQUIRED )
     include_directories( SYSTEM ${OPENSSL_INCLUDE_DIR} )
@@ -484,6 +483,7 @@ target_link_libraries( common
     kimath
     kiplatform
     gal
+    pybind11::embed
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}        # empty on Apple
