@@ -390,9 +390,13 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
                              VECTOR2I& botLeft, VECTOR2I& botRight,
                              int aGridSize = 0 )
 {
-    // A macro to keep a coordinate on the grid:
-    #define MOVE_TO_GRID(z) { z.x = ( (z.x +1 ) / aGridSize ) * aGridSize;\
-                              z.y = ( (z.y +1 ) / aGridSize ) * aGridSize; }
+    auto alignToGrid =
+            [&]( const VECTOR2I& aPoint ) -> VECTOR2I
+            {
+                return VECTOR2I( KiROUND( aPoint.x / aGridSize ) * aGridSize,
+                                 KiROUND( aPoint.y / aGridSize ) * aGridSize );
+            };
+
     switch( aEditedPointIndex )
     {
     case RECT_TOPLEFT:
@@ -401,10 +405,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
 
         if( aGridSize > 1 )     // Keep point on specified grid size
-        {
-            topLeft.x = ( topLeft.x / aGridSize ) * aGridSize;
-            topLeft.y = ( topLeft.y / aGridSize ) * aGridSize;
-        }
+            topLeft = alignToGrid( topLeft );
 
         // push edited point edges to adjacent corners
         topRight.y = topLeft.y;
@@ -418,10 +419,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         topRight.y = std::min( topRight.y, botLeft.y - minHeight );
 
         if( aGridSize > 1 )     // Keep point on specified grid size
-        {
-            topRight.x = ( ( topRight.x+1 ) / aGridSize ) * aGridSize;
-            topRight.y = ( topRight.y / aGridSize ) * aGridSize;
-        }
+            topRight = alignToGrid( topRight );
 
         // push edited point edges to adjacent corners
         topLeft.y = topRight.y;
@@ -435,10 +433,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
 
         if( aGridSize > 1 )     // Keep point on specified grid size
-        {
-            botLeft.x = ( botLeft.x / aGridSize ) * aGridSize;
-            botLeft.y = ( ( botLeft.y+1 ) / aGridSize ) * aGridSize;
-        }
+            botLeft = alignToGrid( botLeft );
 
         // push edited point edges to adjacent corners
         botRight.y = botLeft.y;
@@ -452,10 +447,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
 
         if( aGridSize > 1 )     // Keep point on specified grid size
-        {
-            botRight.x = ( ( botRight.x+1 ) / aGridSize ) * aGridSize;
-            botRight.y = ( ( botRight.y+1 ) / aGridSize ) * aGridSize;
-        }
+            botRight = alignToGrid( botRight );
 
         // push edited point edges to adjacent corners
         botLeft.y = botRight.y;
