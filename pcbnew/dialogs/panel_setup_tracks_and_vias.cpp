@@ -149,6 +149,8 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataFromWindow()
         return false;
     }
 
+    // Test ONLY for malformed data.  Design rules and constraints are the business of DRC.
+
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
     {
         msg = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
@@ -226,123 +228,32 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
     }
 
     wxString msg;
-    int minViaAnnulus = m_ConstraintsPanel->m_viaMinAnnulus.GetValue();
-    int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
-    int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
-    int minTrackWidth = m_ConstraintsPanel->m_trackMinWidth.GetValue();
-    int minClearance = m_ConstraintsPanel->m_minClearance.GetValue();
-
-    // Test tracks
-    for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
-    {
-        wxString tvalue = m_trackWidthsGrid->GetCellValue( row, TR_WIDTH_COL );
-
-        if( tvalue.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
-        {
-            msg.Printf( _( "Track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true ) );
-            m_Parent->SetError( msg, this, m_trackWidthsGrid, row, TR_WIDTH_COL );
-            return false;
-        }
-    }
 
     // Test vias
     for( int row = 0; row < m_viaSizesGrid->GetNumberRows();  ++row )
     {
         wxString viaDia = m_viaSizesGrid->GetCellValue( row, VIA_SIZE_COL );
-
-        if( viaDia.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDia ) < minViaDia )
-        {
-            msg.Printf( _( "Via diameter less than minimum via diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDia, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
-            return false;
-        }
-
         wxString viaDrill = m_viaSizesGrid->GetCellValue( row, VIA_DRILL_COL );
 
-        if( viaDrill.IsEmpty() )
+        if( !viaDia.IsEmpty() && viaDrill.IsEmpty() )
         {
             msg = _( "No via hole size defined." );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
 
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minThroughHole )
-        {
-            msg.Printf( _( "Via hole diameter less than minimum through hole diameter (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
-            return false;
-        }
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill )
-                >= ValueFromString( m_Frame->GetUserUnits(), viaDia ) )
-        {
-            msg = _( "Via hole diameter larger than via diameter." );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
-            return false;
-        }
-
-        if( ( ValueFromString( m_Frame->GetUserUnits(), viaDia )
-                - ValueFromString( m_Frame->GetUserUnits(), viaDrill ) ) / 2 < minViaAnnulus )
-        {
-            msg.Printf( _( "Diameter and hole leave via annulus less than minimum (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true ) );
-            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
-            return false;
-        }
     }
 
     // Test diff pairs
     for( int row = 0; row < m_diffPairsGrid->GetNumberRows();  ++row )
     {
-        wxString tvalue = m_diffPairsGrid->GetCellValue( row, 0 );
+        wxString dpWidth = m_diffPairsGrid->GetCellValue( row, 0 );
+        wxString dpGap = m_diffPairsGrid->GetCellValue( row, 1 );
 
-        if( tvalue.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), tvalue ) < minTrackWidth )
-        {
-            msg.Printf( _( "Differential pair track width less than minimum track width (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minTrackWidth, true ) );
-            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 0 );
-            return false;
-        }
-
-        wxString gap = m_diffPairsGrid->GetCellValue( row, 1 );
-
-        if( gap.IsEmpty() )
+        if( !dpWidth.IsEmpty() && dpGap.IsEmpty() )
         {
             msg = _( "No differential pair gap defined." );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
-            return false;
-        }
-
-        if( ValueFromString( m_Frame->GetUserUnits(), gap ) < minClearance )
-        {
-            msg.Printf( _( "Differential pair gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true ) );
-            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
-            return false;
-        }
-
-        wxString viaGap = m_diffPairsGrid->GetCellValue( row, 2 );
-
-        if( viaGap.IsEmpty() )
-            continue;
-
-        if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < minClearance )
-        {
-            msg.Printf( _( "Differential pair via gap less than minimum clearance (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true ) );
-            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 2 );
             return false;
         }
     }

@@ -55,8 +55,6 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( BOARD* aBoard );
-
-    bool Validate() override;
 };
 
 #endif //PANEL_SETUP_TEXT_AND_GRAPHICS_H

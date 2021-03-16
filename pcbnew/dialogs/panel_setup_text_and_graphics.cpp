@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,32 +162,11 @@ int PANEL_SETUP_TEXT_AND_GRAPHICS::getGridValue( int aRow, int aCol )
 }
 
 
-bool PANEL_SETUP_TEXT_AND_GRAPHICS::Validate()
+bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
     if( !m_grid->CommitPendingChanges() )
         return false;
 
-    // Test text parameters.
-    for( int row : { ROW_SILK, ROW_COPPER, ROW_FAB, ROW_OTHERS } )
-    {
-        int textSize = std::min( getGridValue( row, COL_TEXT_WIDTH ),
-                                 getGridValue( row, COL_TEXT_HEIGHT ) );
-
-        if( getGridValue( row, COL_TEXT_THICKNESS ) > textSize / 4 )
-        {
-            wxString msg = _( "Text will not be readable with a thickness greater than "
-                              "1/4 its width or height." );
-            m_Parent->SetError( msg, this, m_grid, row, COL_TEXT_THICKNESS );
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
-bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
-{
     for( int i = 0; i < ROW_COUNT; ++i )
     {
         m_BrdSettings->m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );
@@ -195,8 +174,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        m_BrdSettings->m_TextSize[ i ] =
-                wxSize( getGridValue( i, COL_TEXT_WIDTH ), getGridValue( i, COL_TEXT_HEIGHT ) );
+        m_BrdSettings->m_TextSize[ i ] = wxSize( getGridValue( i, COL_TEXT_WIDTH ),
+                                                 getGridValue( i, COL_TEXT_HEIGHT ) );
         m_BrdSettings->m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
         m_BrdSettings->m_TextItalic[ i ] =
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_ITALIC ) );

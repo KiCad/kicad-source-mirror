@@ -45,7 +45,7 @@ private:
     std::vector<bool> m_macHack;
 
 public:
-    PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aUseReset = false,
+    PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
                   const wxString& aAuxiliaryAction = wxEmptyString );
     ~PAGED_DIALOG() override;
 
@@ -61,9 +61,6 @@ public:
     void SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl, int aRow = -1,
                    int aCol = -1 );
 
-    void AddAuxiliaryAction( const wxString& aTitle, const wxString& aTooltip,
-                             std::function<void( wxCommandEvent& )> aHandler );
-
 protected:
     void finishInitialization();
 
@@ -76,7 +73,6 @@ protected:
     void OnResetButton( wxCommandEvent& aEvent );
     void OnUpdateUI( wxUpdateUIEvent& event );
     void OnPageChange( wxBookCtrlEvent& event );
-    void OnValidate( wxCommandEvent& aEvent );
 
     wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;
