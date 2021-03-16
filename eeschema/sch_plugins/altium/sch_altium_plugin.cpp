@@ -220,6 +220,9 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
+    SCH_SCREENS allSheets( m_rootSheet );
+    allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
+
     return m_rootSheet;
 }
 

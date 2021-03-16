@@ -479,6 +479,9 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
+    SCH_SCREENS allSheets( m_rootSheet );
+    allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
+
     return m_rootSheet;
 }
 
