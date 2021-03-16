@@ -167,6 +167,10 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
             }
 
             size_t m = n + 1;
+
+            if( m >= strlen )
+                break;
+
             wxUniChar str_m = str[m];
 
             while( wxIsalnum( str_m ) || str_m == wxT( '_' ) || str_m == wxT( ':' ) )
@@ -243,7 +247,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
 
         case wxT( '\\' ):
             // backslash can be used to suppress special meaning of % and $
-            if( n != strlen - 1 && (str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' )) )
+            if( n < strlen - 1 && (str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' )) )
             {
                 str_n = str[++n];
                 strResult += str_n;
