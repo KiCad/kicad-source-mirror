@@ -900,12 +900,30 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         GetBoard()->SynchronizeNetsAndNetClasses();
         SaveProjectSettings();
 
-        UpdateUserInterface();
-        ReCreateAuxiliaryToolbar();
-
         Kiway().CommonSettingsChanged( false, true );
+
+        const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
+
+        if( opts.m_ShowTrackClearanceMode || opts.m_DisplayPadIsol )
+        {
+            // Update clearance outlines
+            GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+                    [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+                    {
+                        TRACK* track = dynamic_cast<TRACK*>( aItem );
+                        PAD*   pad = dynamic_cast<PAD*>( aItem );
+
+                        // TRACK is the base class of VIA and ARC so we don't need to
+                        // check them independently
+
+                        return track || pad;
+                    } );
+        }
+
         GetCanvas()->Refresh();
 
+        UpdateUserInterface();
+        ReCreateAuxiliaryToolbar();
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
         //this event causes the routing tool to reload its design rules information
