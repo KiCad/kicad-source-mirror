@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#pragma once
+
 #include <wx/string.h>
 #include <pcbnew_scripting_helpers.h>
 
@@ -38,7 +40,7 @@ public:
                                       double aXRef, double aYRef )
     {
         return ExportVRML(aFullFileName, aMMtoWRMLunit,
-                                      aExport3DFiles, aUseRelativePaths, 
+                                      aExport3DFiles, aUseRelativePaths,
                                       aUsePlainPCB, a3D_Subdir, aXRef, aYRef);
     }
 };
