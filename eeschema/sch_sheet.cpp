@@ -391,82 +391,79 @@ bool SCH_SHEET::HasUndefinedPins() const
 }
 
 
-int SCH_SHEET::GetMinWidth() const
+int bumpToNextGrid( const int aVal, const int aDirection )
 {
-    int width = Mils2iu( MIN_SHEET_WIDTH );
+    constexpr int gridSize = Mils2iu( 50 );
 
-    for( size_t i = 0; i < m_pins.size();  i++ )
-    {
-        int edge = m_pins[i]->GetEdge();
-        EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
-
-        wxASSERT( edge != SHEET_UNDEFINED_SIDE );
-
-        if( edge == SHEET_TOP_SIDE || edge == SHEET_BOTTOM_SIDE )
-        {
-            if( width < pinRect.GetRight() - m_pos.x )
-                width = pinRect.GetRight() - m_pos.x;
-        }
-        else
-        {
-            if( width < pinRect.GetWidth() )
-                width = pinRect.GetWidth();
-
-            for( size_t j = 0; j < m_pins.size(); j++ )
-            {
-                // Check for pin directly across from the current pin.
-                if( (i == j) || (m_pins[i]->GetPosition().y != m_pins[j]->GetPosition().y) )
-                    continue;
-
-                if( width < pinRect.GetWidth() + m_pins[j]->GetBoundingBox().GetWidth() )
-                {
-                    width = pinRect.GetWidth() + m_pins[j]->GetBoundingBox().GetWidth();
-                    break;
-                }
-            }
-        }
-    }
-
-    return width;
+    return ( KiROUND( aVal / gridSize ) * gridSize ) + ( aDirection * gridSize );
 }
 
 
-int SCH_SHEET::GetMinHeight() const
+int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
 {
-    int height = Mils2iu( MIN_SHEET_HEIGHT );
+    int pinsLeft = m_pos.x + m_size.x;
+    int pinsRight = m_pos.x;
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
         int edge = m_pins[i]->GetEdge();
-        EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 
-        // Make sure pin is on top or bottom side of sheet.
-        if( edge == SHEET_RIGHT_SIDE || edge == SHEET_LEFT_SIDE )
+        if( edge == SHEET_TOP_SIDE || edge == SHEET_BOTTOM_SIDE )
         {
-            if( height < pinRect.GetBottom() - m_pos.y )
-                height = pinRect.GetBottom() - m_pos.y;
-        }
-        else
-        {
-            if( height < pinRect.GetHeight() )
-                height = pinRect.GetHeight();
+            EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 
-            for( size_t j = 0; j < m_pins.size(); j++ )
-            {
-                // Check for pin directly above or below the current pin.
-                if( (i == j) || (m_pins[i]->GetPosition().x != m_pins[j]->GetPosition().x) )
-                    continue;
-
-                if( height < pinRect.GetHeight() + m_pins[j]->GetBoundingBox().GetHeight() )
-                {
-                    height = pinRect.GetHeight() + m_pins[j]->GetBoundingBox().GetHeight();
-                    break;
-                }
-            }
+            pinsLeft = std::min( pinsLeft, pinRect.GetLeft() );
+            pinsRight = std::max( pinsRight, pinRect.GetRight() );
         }
     }
 
-    return height;
+    pinsLeft = bumpToNextGrid( pinsLeft, -1 );
+    pinsRight = bumpToNextGrid( pinsRight, 1 );
+
+    int pinMinWidth;
+
+    if( pinsLeft >= pinsRight )
+        pinMinWidth = 0;
+    else if( aFromLeft )
+        pinMinWidth = pinsRight - m_pos.x;
+    else
+        pinMinWidth = m_pos.x + m_size.x - pinsLeft;
+
+    return std::max( pinMinWidth, Mils2iu( MIN_SHEET_WIDTH ) );
+}
+
+
+int SCH_SHEET::GetMinHeight( bool aFromTop ) const
+{
+    int pinsTop = m_pos.y + m_size.y;
+    int pinsBottom = m_pos.y;
+
+    for( size_t i = 0; i < m_pins.size();  i++ )
+    {
+        int edge = m_pins[i]->GetEdge();
+
+        if( edge == SHEET_RIGHT_SIDE || edge == SHEET_LEFT_SIDE )
+        {
+            EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
+
+            pinsTop = std::min( pinsTop, pinRect.GetTop() );
+            pinsBottom = std::max( pinsBottom, pinRect.GetBottom() );
+        }
+    }
+
+    pinsTop = bumpToNextGrid( pinsTop, -1 );
+    pinsBottom = bumpToNextGrid( pinsBottom, 1 );
+
+    int pinMinHeight;
+
+    if( pinsTop >= pinsBottom )
+        pinMinHeight = 0;
+    else if( aFromTop )
+        pinMinHeight = pinsBottom - m_pos.y;
+    else
+        pinMinHeight = m_pos.y + m_size.y - pinsTop;
+
+    return std::max( pinMinHeight, Mils2iu( MIN_SHEET_HEIGHT ) );
 }
 
 

@@ -563,7 +563,11 @@ void EE_POINT_EDITOR::updateParentItem() const
         // connected items (sheet pins), keep corners coordinates on this grid.
         // Otherwise, some sheet pins can be moved off grid
         int grid_size = Mils2iu( 50 );
-        pinEditedCorner( getEditedPointIndex(), sheet->GetMinWidth(), sheet->GetMinHeight(),
+        int edited = getEditedPointIndex();
+
+        pinEditedCorner( getEditedPointIndex(),
+                         sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
+                         sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
                          topLeft, topRight, botLeft, botRight, grid_size );
 
         // Pin positions are relative to origin.  Attempt to leave them where they

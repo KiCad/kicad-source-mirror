@@ -422,7 +422,7 @@ public:
      *
      * @return The minimum width the sheet can be resized.
      */
-    int GetMinWidth() const;
+    int GetMinWidth( bool aFromLeft ) const;
 
     /**
      * Return the minimum height that the sheet can be resized based on the sheet pin positions.
@@ -434,7 +434,7 @@ public:
      *
      * @return The minimum height the sheet can be resized.
      */
-    int GetMinHeight() const;
+    int GetMinHeight( bool aFromTop ) const;
 
     int GetPenWidth() const override;
 
