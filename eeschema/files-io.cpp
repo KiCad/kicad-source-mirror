@@ -663,8 +663,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( !AskToSaveChanges() )
         return;
 
-    // Set the project location if none is set
-    bool setProject = Prj().GetProjectFullName().IsEmpty();
+    // Set the project location if none is set or if we are running in standalone mode
+    bool     setProject = Prj().GetProjectFullName().IsEmpty() || Kiface().IsSingle();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     std::list<std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>> loaders;
