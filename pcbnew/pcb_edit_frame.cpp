@@ -904,7 +904,7 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
 
         const PCB_DISPLAY_OPTIONS& opts = GetDisplayOptions();
 
-        if( opts.m_ShowTrackClearanceMode || opts.m_DisplayPadIsol )
+        if( opts.m_ShowTrackClearanceMode || opts.m_DisplayPadClearance )
         {
             // Update clearance outlines
             GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
@@ -916,7 +916,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                         // TRACK is the base class of VIA and ARC so we don't need to
                         // check them independently
 
-                        return track || pad;
+                        return ( track && opts.m_ShowTrackClearanceMode )
+                                || ( pad && opts.m_DisplayPadClearance );
                     } );
         }
 
@@ -1015,7 +1016,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
-                    if( GetDisplayOptions().m_DisplayPadIsol )
+                    if( GetDisplayOptions().m_DisplayPadClearance )
                     {
                         // Round-corner rects are expensive to draw, but are mostly found on
                         // SMD pads which only need redrawing on an active-to-not-active

@@ -95,7 +95,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     // Initialize some display options
     auto displ_opts = GetDisplayOptions();
-    displ_opts.m_DisplayPadIsol = false;      // Pad clearance has no meaning here
+    displ_opts.m_DisplayPadClearance = false;      // Pad clearance has no meaning here
 
     // Track and via clearance has no meaning here.
     displ_opts.m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;

@@ -36,12 +36,12 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_DisplayPadFill          = FILLED;
     m_DisplayViaFill          = FILLED;
     m_DisplayPadNum           = true;
-    m_DisplayPadIsol          = true;
+    m_DisplayPadClearance     = true;
 
     m_DisplayGraphicsFill     = FILLED;
     m_DisplayTextFill         = FILLED;
     m_DisplayPcbTrackFill     = FILLED;   // false = sketch , true = filled
-    m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+    m_ShowTrackClearanceMode  = SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING;
 
     m_ZoneDisplayMode         = ZONE_DISPLAY_MODE::SHOW_FILLED;
     m_DisplayNetNamesMode     = 3;      /* 0 do not show netnames,

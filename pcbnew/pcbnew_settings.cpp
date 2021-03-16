@@ -143,7 +143,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
-            &m_Display.m_DisplayPadIsol, true ) );
+            &m_Display.m_DisplayPadClearance, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
             &m_Display.m_DisplayPadFill, true ) );
@@ -165,7 +165,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
             reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
-            PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
+            PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.track_fill",
             &m_Display.m_DisplayPcbTrackFill, true ) );

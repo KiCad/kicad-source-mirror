@@ -182,24 +182,24 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
             m_clearanceDisplayFlags = CL_NONE;
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING:
             m_clearanceDisplayFlags = CL_NEW | CL_TRACKS;
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING:
             m_clearanceDisplayFlags = CL_NEW | CL_TRACKS | CL_VIAS;
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+        case PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING:
             m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_TRACKS | CL_VIAS;
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
             m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_EXISTING | CL_TRACKS | CL_VIAS;
             break;
     }
 
-    if( aOptions.m_DisplayPadIsol )
+    if( aOptions.m_DisplayPadClearance )
         m_clearanceDisplayFlags |= CL_PADS;
 
     m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;

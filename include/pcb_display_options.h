@@ -46,27 +46,17 @@ public:
      * This parameter controls how to show tracks and vias clearance area.
      */
     enum TRACE_CLEARANCE_DISPLAY_MODE_T {
-        DO_NOT_SHOW_CLEARANCE = 0,                // Do not show clearance areas
-        SHOW_CLEARANCE_NEW_TRACKS,                /* Show clearance areas only for new track
-                                                   * during track creation. */
-        SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,  /* Show clearance areas only for new track
-                                                   * during track creation, and shows a via
-                                                   * clearance area at end of current new
-                                                   * segment (guide to place a new via
-                                                   */
-        SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS,
-                                                    /* Show clearance for new, moving and
-                                                     * dragging tracks and vias
-                                                     */
-        SHOW_CLEARANCE_ALWAYS                      /* Show Always clearance areas
-                                                    * for track and vias
-                                                    */
+        DO_NOT_SHOW_CLEARANCE = 0,
+        SHOW_TRACK_CLEARANCE_WHILE_ROUTING,
+        SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING,
+        SHOW_WHILE_ROUTING_OR_DRAGGING,
+        SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
     };
 
     bool m_DisplayPadFill;
     bool m_DisplayViaFill;
     bool m_DisplayPadNum;           // show pads numbers
-    bool m_DisplayPadIsol;
+    bool m_DisplayPadClearance;
     bool m_DisplayGraphicsFill;     // How to display fp drawings ( sketch/ filled )
     bool m_DisplayTextFill;         // How to display fp texts ( sketch/ filled )
     bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.

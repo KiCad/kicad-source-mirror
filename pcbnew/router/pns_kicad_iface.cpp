@@ -1363,18 +1363,18 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
             pitem->ShowTrackClearance( false );
             pitem->ShowViaClearance( false );
             break;
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
+        case PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING:
             pitem->ShowTrackClearance( true );
             pitem->ShowViaClearance( true );
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING:
             pitem->ShowTrackClearance( !aEdit );
             pitem->ShowViaClearance( !aEdit );
             break;
 
-        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
+        case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING:
             pitem->ShowTrackClearance( !aEdit );
             pitem->ShowViaClearance( false );
             break;
