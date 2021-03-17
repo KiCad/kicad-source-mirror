@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-17 18:15+0000\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8154,7 +8154,7 @@ msgstr "テキスト プロパティ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "ラベルには空でないテキストが必要です。"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -32049,22 +32049,18 @@ msgid "Create arc from line segment"
 msgstr "線セグメントから円弧を作成"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "基本のピン名"
+msgstr "レイヤー名"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "線幅(mm)"
+msgstr "線幅 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:265
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "線幅(mm)"
+msgstr "線幅 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
-#, fuzzy
 msgid "Loss Tangent"
 msgstr "損失正接"
 
@@ -32077,9 +32073,8 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "導体レイヤー数:"
+msgstr "導体レイヤー数: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
 #, fuzzy
@@ -32092,19 +32087,16 @@ msgid "Min track/spacing: "
 msgstr "最小グリッド間隔:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "銅箔仕上げ:"
+msgstr "銅箔仕上げ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "端面スルーホール パッド"
+msgstr "端面スルーホール パッド: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "基板厚:"
+msgstr "基板厚: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 #, fuzzy
@@ -32112,14 +32104,12 @@ msgid "Min hole diameter: "
 msgstr "クリアランス穴の直径:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "インピーダンス コントロール"
+msgstr "インピーダンス コントロール: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:466
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "基板端メッキ"
+msgstr "基板端メッキ: "
 
 #: pcbnew/tools/drawing_tool.cpp:73
 msgid "Select Via Size"
@@ -32414,7 +32404,7 @@ msgstr "スタブを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "図形レイヤーに基板スタックアップの表を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:141
 msgid "Add Aligned Dimension"
