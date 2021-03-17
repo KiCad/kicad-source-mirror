@@ -141,9 +141,11 @@ public:
      * aNumPhases = n creates n virtual progress bar zones: a 0 to 100 percent width
      * of a virtual zone fills 0 to 1/n progress bar full size of the nth virtual zone index
      * @param aCanAbort is true if the abort button should be shown
+     * @param aReserveSpaceForMessage will ensure that the dialog is laid out for status messages,
+     * preventing layout issues on Windows when reporting a message after the initial layout
      */
     WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases,
-                          bool aCanAbort = true );
+                          bool aCanAbort = true, bool aReserveSpaceForMessage = true );
     ~WX_PROGRESS_REPORTER();
 
     /** change the title displayed on the window caption
