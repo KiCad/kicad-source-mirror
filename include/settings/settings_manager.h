@@ -85,7 +85,10 @@ public:
     template<typename AppSettings>
     AppSettings* GetAppSettings( bool aLoadNow = true )
     {
-        AppSettings* ret = nullptr;
+        static AppSettings* ret = nullptr;
+
+        if( ret )
+            return ret;
 
         auto it = std::find_if( m_settings.begin(), m_settings.end(),
                                 []( const std::unique_ptr<JSON_SETTINGS>& aSettings )
