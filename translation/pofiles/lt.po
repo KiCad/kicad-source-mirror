@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-12 18:32+0000\n"
-"Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2264,7 +2264,7 @@ msgstr "Pasirinkite „Nustatymų kelias“"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr "Kaip norėtumėte sukonfigūruoti KiCad?"
+msgstr "Kaip norėtumėte sukonfigūruoti „KiCad“?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
@@ -2288,8 +2288,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Jei pažymėta, simbolių ir korpusų lentelės bus importuotos iš senos į šią "
-"versiją"
+"Kai pažymėta, ankstesnės versijos simbolių ir pėdsakų bibliotekos lentelės "
+"bus importuotos į šią versiją"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -3028,7 +3028,7 @@ msgstr "Šviesi"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr "Naudoti piktogramas, skirtas šviesiems langų fonams"
+msgstr "Naudokite piktogramas, skirtas šviesiems langų fonams"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3198,6 +3198,7 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Kiekvienam vertikalaus slinkimo nustatymui galima priskirti tik vieną veiksmą"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3268,7 +3269,7 @@ msgstr "Nubrėžkite stačiakampį"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Vilkite pasirinktus objektus; kitaip nubrėžkite pasirinkimo stačiakampį"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 #, fuzzy
@@ -3328,7 +3329,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Kiekvienam stulpeliui galima priskirti tik vieną veiksmą"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 #, fuzzy
@@ -6258,6 +6259,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Programinės įrangos grafika (kompiuteriams, kurie neatitinka „KiCad“ "
+"aparatinės įrangos pagreičio reikalavimų)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -7414,6 +7417,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Ieškota:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 #, fuzzy
@@ -8206,6 +8214,8 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Dabartinius simbolių laukus pakeiskite laukais iš naujos bibliotekos.\n"
+"Įspėjimas: todėl laukai „Vertė“ ir „Pėdsakai“ bus pakeisti."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -8235,7 +8245,7 @@ msgstr "Teksto savybės"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Etiketėje reikalingas ne tuščias tekstas."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
@@ -8401,7 +8411,7 @@ msgstr "Rodyti komentarų dialogo langą"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
-msgstr ""
+msgstr "Schema nėra visiškai anotuota. EMTT rezultatai bus neišsamūs."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
@@ -8424,7 +8434,7 @@ msgstr "Klaidos, įspėjimai ir išskyrimai"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d simboliui(-iams) reikia anotacijos.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
