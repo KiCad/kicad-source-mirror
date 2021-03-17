@@ -128,6 +128,7 @@ public:
         int    ref_units;
         double ref_x;
         double ref_y;
+        int    origin_mode;
     };
 
     struct DIALOG_FOOTPRINT_WIZARD_LIST

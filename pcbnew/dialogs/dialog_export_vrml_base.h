@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,15 +20,15 @@
 #include <wx/filepicker.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/choice.h>
-#include <wx/panel.h>
 #include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXPORT_3DFILE_BASE
@@ -38,16 +38,11 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		enum
-		{
-			ID_USE_ABS_PATH = 1000
-		};
-
 		wxStaticText* m_staticText1;
 		wxFilePickerCtrl* m_filePicker;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_SubdirNameCtrl;
-		wxPanel* m_panel1;
+		wxRadioBox* m_rbCoordOrigin;
 		wxStaticText* m_staticText6;
 		wxStaticText* m_staticText61;
 		wxChoice* m_VRML_RefUnitChoice;
@@ -60,9 +55,13 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbUseRelativePaths;
 		wxCheckBox* m_cbPlainPCB;
 		wxStaticLine* m_staticline1;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUseRelativePath( wxUpdateUIEvent& event ) { event.Skip(); }
+
 
 	public:
 

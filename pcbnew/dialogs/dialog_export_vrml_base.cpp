@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,19 +38,21 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 
 	bSizer1->Add( bUpperSizer, 0, wxALL|wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerOptions;
+	bSizerOptions = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	wxString m_rbCoordOriginChoices[] = { _("User defined origin"), _("Board center origin") };
+	int m_rbCoordOriginNChoices = sizeof( m_rbCoordOriginChoices ) / sizeof( wxString );
+	m_rbCoordOrigin = new wxRadioBox( this, wxID_ANY, _("Coordinate origin options:"), wxDefaultPosition, wxDefaultSize, m_rbCoordOriginNChoices, m_rbCoordOriginChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCoordOrigin->SetSelection( 0 );
+	bSizerOptions->Add( m_rbCoordOrigin, 1, wxALL|wxEXPAND, 5 );
 
-	m_panel1 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerVrmlUnits;
+	bSizerVrmlUnits = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText6 = new wxStaticText( m_panel1, wxID_ANY, _("Grid reference point:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("User defined origin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
-	bSizer9->Add( m_staticText6, 0, wxALL, 5 );
+	bSizerVrmlUnits->Add( m_staticText6, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerOptions;
 	fgSizerOptions = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -58,21 +60,21 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	fgSizerOptions->SetFlexibleDirection( wxBOTH );
 	fgSizerOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText61 = new wxStaticText( m_panel1, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText61 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText61->Wrap( -1 );
 	fgSizerOptions->Add( m_staticText61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_VRML_RefUnitChoiceChoices[] = { _("mm"), _("inch") };
 	int m_VRML_RefUnitChoiceNChoices = sizeof( m_VRML_RefUnitChoiceChoices ) / sizeof( wxString );
-	m_VRML_RefUnitChoice = new wxChoice( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_VRML_RefUnitChoiceNChoices, m_VRML_RefUnitChoiceChoices, 0 );
+	m_VRML_RefUnitChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_VRML_RefUnitChoiceNChoices, m_VRML_RefUnitChoiceChoices, 0 );
 	m_VRML_RefUnitChoice->SetSelection( 0 );
 	fgSizerOptions->Add( m_VRML_RefUnitChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_staticText4 = new wxStaticText( m_panel1, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	fgSizerOptions->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_VRML_Xref = new wxTextCtrl( m_panel1, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_VRML_Xref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !m_VRML_Xref->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -83,11 +85,11 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	#endif
 	fgSizerOptions->Add( m_VRML_Xref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticText5 = new wxStaticText( m_panel1, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	fgSizerOptions->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_VRML_Yref = new wxTextCtrl( m_panel1, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_VRML_Yref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !m_VRML_Yref->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -99,25 +101,19 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	fgSizerOptions->Add( m_VRML_Yref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer9->Add( fgSizerOptions, 1, wxEXPAND, 5 );
+	bSizerVrmlUnits->Add( fgSizerOptions, 1, wxEXPAND, 5 );
 
 
-	m_panel1->SetSizer( bSizer9 );
-	m_panel1->Layout();
-	bSizer9->Fit( m_panel1 );
-	bSizer5->Add( m_panel1, 1, wxEXPAND | wxALL, 5 );
-
-
-	bSizer12->Add( bSizer5, 1, wxEXPAND, 5 );
+	bSizerOptions->Add( bSizerVrmlUnits, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_rbSelectUnitsChoices[] = { _("mm"), _("meter"), _("0.1 Inch"), _("Inch") };
 	int m_rbSelectUnitsNChoices = sizeof( m_rbSelectUnitsChoices ) / sizeof( wxString );
-	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Output Units"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Vrml Units for Output Files"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSelectUnits->SetSelection( 0 );
-	bSizer12->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
+	bSizerOptions->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer1->Add( bSizer12, 0, wxEXPAND, 5 );
+	bSizer1->Add( bSizerOptions, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -126,10 +122,11 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	m_cbCopyFiles = new wxCheckBox( this, wxID_ANY, _("Copy 3D model files to 3D model path"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbCopyFiles->SetValue(true);
+	m_cbCopyFiles->SetToolTip( _("If checked: copy footprints 3D models in a folder\nIf not checked: merge footprints 3D models in the vrml board file\n") );
+
 	bSizer4->Add( m_cbCopyFiles, 0, wxALL, 5 );
 
-	m_cbUseRelativePaths = new wxCheckBox( this, ID_USE_ABS_PATH, _("Use relative paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUseRelativePaths = new wxCheckBox( this, wxID_ANY, _("Use relative paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbUseRelativePaths->SetToolTip( _("Use paths for model files in board VRML file relative to the vrml file") );
 
 	bSizer4->Add( m_cbUseRelativePaths, 0, wxALL, 5 );
@@ -149,21 +146,27 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 
-	bSizer1->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	bSizer1->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
 	bSizer1->Fit( this );
+
+	// Connect Events
+	m_cbUseRelativePaths->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE_BASE::OnUpdateUseRelativePath ), NULL, this );
 }
 
 DIALOG_EXPORT_3DFILE_BASE::~DIALOG_EXPORT_3DFILE_BASE()
 {
+	// Disconnect Events
+	m_cbUseRelativePaths->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE_BASE::OnUpdateUseRelativePath ), NULL, this );
+
 }

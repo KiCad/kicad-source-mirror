@@ -312,6 +312,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<double>( "export_vrml.ref_y",
             &m_ExportVrml.ref_y, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "export_vrml.origin_mode",
+            &m_ExportVrml.origin_mode, 0 ) );
+
     m_params.emplace_back( new PARAM<int>( "zones.hatching_style",
             &m_Zones.hatching_style, 0 ) );
 
@@ -647,6 +650,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(    aCfg, "VrmlRefUnits",         "export_vrml.ref_units" );
     ret &= fromLegacy<double>( aCfg, "VrmlRefX",             "export_vrml.ref_x" );
     ret &= fromLegacy<double>( aCfg, "VrmlRefY",             "export_vrml.ref_y" );
+    ret &= fromLegacy<int>   ( aCfg, "VrmlOriginMode",       "export_vrml.origin_mode" );
 
     ret &= fromLegacy<int>(    aCfg, "Zone_Ouline_Hatch_Opt", "zones.hatching_style" );
     ret &= fromLegacyString(   aCfg, "Zone_Filter_Opt",       "zones.net_filter" );

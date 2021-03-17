@@ -101,7 +101,7 @@ struct VRML_COLOR
 };
 
 
-extern VRML_COLOR colors[VRML_COLOR_LAST];
+extern VRML_COLOR vrml_colors_list[VRML_COLOR_LAST];
 
 
 // Handle the board ans its board items to convert them to a VRML representation:
@@ -113,6 +113,8 @@ private:
 
     int         m_iMaxSeg;                  // max. sides to a small circle
     double      m_arcMinLen, m_arcMaxLen;   // min and max lengths of an arc chord
+    int         m_precision;                // precision factor when exportin fp shapes
+                                            // to separate files
 
 public:
     IFSG_TRANSFORM m_OutputPCB;
@@ -130,6 +132,28 @@ public:
 
     bool m_plainPCB;
 
+    /* true to use VRML inline{} syntax for footprint 3D models, like:
+     * Inline { url "F:/tmp/pic_programmer/shapes3D/DIP-18_W7.62mm_Socket.wrl"  }
+     * false to merge VRML 3D modeles in the .wrl board file
+     */
+    bool m_UseInlineModelsInBrdfile;
+
+    // 3D subdirectory to copy footprint vrml 3D models when not merged in board file
+    wxString m_Subdir3DFpModels;
+
+    // true to use relative paths in VRML inline{} for footprint 3D models
+    // used only if m_UseInlineModelsInBrdfile = true
+    bool m_UseRelPathIn3DModelFilename;
+
+    // true to reuse component definitions
+    bool m_ReuseDef;
+
+    // scaling from 0.1 inch to desired VRML unit
+    double m_WorldScale = 1.0;
+
+    // scaling from mm to desired VRML world scale
+    double m_BoardToVrmlScale;
+
     double m_minLineWidth;    // minimum width of a VRML line segment
 
     double  m_tx;             // global translation along X
@@ -145,7 +169,7 @@ public:
 
     VRML_COLOR& GetColor( VRML_COLOR_INDEX aIndex )
     {
-        return colors[aIndex];
+        return vrml_colors_list[aIndex];
     }
 
     void SetOffset( double aXoff, double aYoff );
@@ -172,7 +196,7 @@ public:
     // Build and exports the board outlines (board body)
     void ExportVrmlBoard( BOARD* aPcb );
 
-    void ExportVrmlZones( BOARD* aPcb, COMMIT* aCommit );
+    void ExportVrmlZones( BOARD* aPcb );
 
     void ExportVrmlTracks( BOARD* pcb );
 
@@ -181,6 +205,10 @@ public:
     void ExportVrmlDrawsegment( PCB_SHAPE* drawseg );
 
     void ExportVrmlPcbtext( PCB_TEXT* text );
+
+    void ExportVrmlFpText( FP_TEXT* item );
+
+    void ExportFp3DModelsAsLinkedFile( BOARD* aPcb, const wxString& aFullFileName );
 
     void ExportRoundPadstack( BOARD* pcb,
                                 double x, double y, double r,
@@ -215,11 +243,24 @@ public:
     void ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
                               double aOrientation, wxPoint aPos );
 
+    void writeLayers( BOARD* aPcb, const char* aFileName, OSTREAM* aOutputFile );
+
     // select the VRML layer object to draw on
     // return true if a layer has been selected.
     bool GetLayer3D( LAYER_NUM layer, VRML_LAYER** vlayer );
 
     // Build the Z position of 3D layers
     void ComputeLayer3D_Zpos(BOARD* pcb );
+
+private:
+    void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
+                             VRML_LAYER* aLayer, bool aPlane, bool aTop,
+                             double aTop_z, double aBottom_z );
+
+    void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
+                               VRML_LAYER* layer, double top_z, double bottom_z );
+
+    void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
+                               VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
 };
