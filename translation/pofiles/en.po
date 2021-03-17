@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-12 10:32-0800\n"
+"POT-Creation-Date: 2021-03-17 11:16-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6026,6 +6026,11 @@ msgstr "Junction Properties"
 
 msgid "Read Only"
 msgstr "Read Only"
+
+msgid ""
+"Line width may not be 0 for shapes other than filled with body outline color."
+msgstr ""
+"Line width may not be 0 for shapes other than filled with body outline color."
 
 msgid "Do not fill"
 msgstr "Do not fill"
@@ -12141,6 +12146,9 @@ msgstr "Highlight Component"
 msgid "Highlight Attribute"
 msgstr "Highlight Attribute"
 
+msgid "Highlight DCode"
+msgstr "Highlight DCode"
+
 msgid "Next Layer"
 msgstr "Next Layer"
 
@@ -12223,6 +12231,10 @@ msgstr "Highlight Items of Net “%s”"
 #, c-format
 msgid "Highlight Aperture Type \"%s\""
 msgstr "Highlight Aperture Type “%s”"
+
+#, c-format
+msgid "Highlight DCode D%d"
+msgstr "Highlight DCode D%d"
 
 msgid "Layers"
 msgstr "Layers"
@@ -19571,13 +19583,6 @@ msgstr "DRC rules:"
 msgid "Check rule syntax"
 msgstr "Check rule syntax"
 
-msgid ""
-"Text will not be readable with a thickness greater than 1/4 its width or "
-"height."
-msgstr ""
-"Text will not be readable with a thickness greater than 1/4 its width or "
-"height."
-
 msgid "Default properties for new dimension objects:"
 msgstr "Default properties for new dimension objects:"
 
@@ -19608,42 +19613,11 @@ msgstr ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 
-#, c-format
-msgid "Track width less than minimum track width (%s)."
-msgstr "Track width less than minimum track width (%s)."
-
-#, c-format
-msgid "Via diameter less than minimum via diameter (%s)."
-msgstr "Via diameter less than minimum via diameter (%s)."
-
 msgid "No via hole size defined."
 msgstr "No via hole size defined."
 
-#, c-format
-msgid "Via hole diameter less than minimum through hole diameter (%s)."
-msgstr "Via hole diameter less than minimum through hole diameter (%s)."
-
-msgid "Via hole diameter larger than via diameter."
-msgstr "Via hole diameter larger than via diameter."
-
-#, c-format
-msgid "Diameter and hole leave via annulus less than minimum (%s)."
-msgstr "Diameter and hole leave via annulus less than minimum (%s)."
-
-#, c-format
-msgid "Differential pair track width less than minimum track width (%s)."
-msgstr "Differential pair track width less than minimum track width (%s)."
-
 msgid "No differential pair gap defined."
 msgstr "No differential pair gap defined."
-
-#, c-format
-msgid "Differential pair gap less than minimum clearance (%s)."
-msgstr "Differential pair gap less than minimum clearance (%s)."
-
-#, c-format
-msgid "Differential pair via gap less than minimum clearance (%s)."
-msgstr "Differential pair via gap less than minimum clearance (%s)."
 
 msgid "Pre-defined track and via dimensions:"
 msgstr "Pre-defined track and via dimensions:"
@@ -23120,6 +23094,51 @@ msgstr "Convert polygons to lines"
 msgid "Create arc from line segment"
 msgstr "Create arc from line segment"
 
+msgid "Layer Name"
+msgstr "Layer Name"
+
+msgid "Thickness (mm)"
+msgstr "Thickness (mm)"
+
+msgid "Thickness (mils)"
+msgstr "Thickness (mils)"
+
+msgid "Loss Tangent"
+msgstr "Loss Tangent"
+
+msgid "Insert board stackup table"
+msgstr "Insert board stackup table"
+
+msgid "BOARD CHARACTERISTICS"
+msgstr "BOARD CHARACTERISTICS"
+
+msgid "Copper Layer Count: "
+msgstr "Copper Layer Count: "
+
+msgid "Board overall dimensions: "
+msgstr "Board overall dimensions: "
+
+msgid "Min track/spacing: "
+msgstr "Min track/spacing: "
+
+msgid "Copper Finish: "
+msgstr "Copper Finish: "
+
+msgid "Castellated pads: "
+msgstr "Castellated pads: "
+
+msgid "Board Thickness: "
+msgstr "Board Thickness: "
+
+msgid "Min hole diameter: "
+msgstr "Min hole diameter: "
+
+msgid "Impedance Control: "
+msgstr "Impedance Control: "
+
+msgid "Plated Board Edge: "
+msgstr "Plated Board Edge: "
+
 msgid "Select Via Size"
 msgstr "Select Via Size"
 
@@ -23329,6 +23348,18 @@ msgstr "Draw Circle"
 
 msgid "Draw Arc"
 msgstr "Draw Arc"
+
+msgid "Add Board Characteristics"
+msgstr "Add Board Characteristics"
+
+msgid "Add a board characteristics table on a graphic layer"
+msgstr "Add a board characteristics table on a graphic layer"
+
+msgid "Add Stackup Table"
+msgstr "Add Stackup Table"
+
+msgid "Add a board stackup table on a graphic layer"
+msgstr "Add a board stackup table on a graphic layer"
 
 msgid "Add Aligned Dimension"
 msgstr "Add Aligned Dimension"
@@ -25069,6 +25100,44 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "Text will not be readable with a thickness greater than 1/4 its width or "
+#~ "height."
+#~ msgstr ""
+#~ "Text will not be readable with a thickness greater than 1/4 its width or "
+#~ "height."
+
+#, c-format
+#~ msgid "Track width less than minimum track width (%s)."
+#~ msgstr "Track width less than minimum track width (%s)."
+
+#, c-format
+#~ msgid "Via diameter less than minimum via diameter (%s)."
+#~ msgstr "Via diameter less than minimum via diameter (%s)."
+
+#, c-format
+#~ msgid "Via hole diameter less than minimum through hole diameter (%s)."
+#~ msgstr "Via hole diameter less than minimum through hole diameter (%s)."
+
+#~ msgid "Via hole diameter larger than via diameter."
+#~ msgstr "Via hole diameter larger than via diameter."
+
+#, c-format
+#~ msgid "Diameter and hole leave via annulus less than minimum (%s)."
+#~ msgstr "Diameter and hole leave via annulus less than minimum (%s)."
+
+#, c-format
+#~ msgid "Differential pair track width less than minimum track width (%s)."
+#~ msgstr "Differential pair track width less than minimum track width (%s)."
+
+#, c-format
+#~ msgid "Differential pair gap less than minimum clearance (%s)."
+#~ msgstr "Differential pair gap less than minimum clearance (%s)."
+
+#, c-format
+#~ msgid "Differential pair via gap less than minimum clearance (%s)."
+#~ msgstr "Differential pair via gap less than minimum clearance (%s)."
 
 #~ msgid ""
 #~ "<table>\n"
