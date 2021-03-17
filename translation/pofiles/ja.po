@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-12 10:32-0800\n"
-"PO-Revision-Date: 2021-03-17 14:18+0000\n"
+"PO-Revision-Date: 2021-03-17 18:15+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -2987,13 +2987,12 @@ msgid "Icon theme:"
 msgstr "アイコン テーマ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
 msgstr "ライト"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "明るいウィンドウ背景用にデザインされたアイコンを使用"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3002,12 +3001,12 @@ msgstr "ダーク"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "暗いウィンドウ背景用にデザインされたアイコンを使用"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "システムのカラー テーマに基づいて、ライトまたはダークのアイコンを自動的に選択"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -8348,9 +8347,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC はユーザーによってキャンセルされました。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "完了。<br><br>"
+msgstr "ERC完了。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -12307,9 +12305,9 @@ msgid "Do not show this dialog again."
 msgstr "このダイアログを再度表示しない。"
 
 #: eeschema/files-io.cpp:497
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "シンボル ライブラリー ファイル '%s' を保存できませんでした。"
+msgstr "プロジェクトのシンボル ライブラリーのキャッシュファイル %s が見つかりません。"
 
 #: eeschema/files-io.cpp:499
 msgid ""
@@ -25903,7 +25901,6 @@ msgid "Raise a DRC error if a pad overlaps this area"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out copper fill"
 msgstr "銅箔塗りつぶし禁止"
 
