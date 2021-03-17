@@ -16,7 +16,7 @@ build_win64:
     - cd build/windows
     - cmake `
       -G "Ninja" `
-      -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake `
+      -DCMAKE_TOOLCHAIN_FILE=C:\build\vcpkg\scripts\buildsystems\vcpkg.cmake `
       -DCMAKE_BUILD_TYPE=Debug `
       -DKICAD_SCRIPTING=OFF `
       -DKICAD_SCRIPTING_MODULES=OFF `
