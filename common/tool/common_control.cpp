@@ -249,7 +249,7 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 
     KICAD_CURL_EASY kcurl;
     wxString url_string;
-    url_string.Printf( m_bugReportUrl, kcurl.Escape( message.ToStdString() ) );
+    url_string.Printf( m_bugReportUrl, kcurl.Escape( std::string( message.utf8_str() ) ) );
 
     wxLaunchDefaultBrowser( url_string );
 
