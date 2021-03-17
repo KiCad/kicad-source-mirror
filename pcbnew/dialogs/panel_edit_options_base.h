@@ -61,11 +61,12 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxChoice* m_magneticGraphicsChoice;
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
-		wxCheckBox* m_Show_Page_Limits;
 		wxStaticText* m_staticText5;
 		wxRadioButton* m_rbTrackDragMove;
 		wxRadioButton* m_rbTrackDrag45;
 		wxRadioButton* m_rbTrackDragFree;
+		wxCheckBox* m_Show_Page_Limits;
+		wxCheckBox* m_Auto_Refill_Zones;
 
 	public:
 

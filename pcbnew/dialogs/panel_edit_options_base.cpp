@@ -323,16 +323,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	pcbOptionsSizer->Add( sbSizer3, 0, wxEXPAND|wxTOP, 5 );
 
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Annotations") ), wxVERTICAL );
-
-	m_Show_Page_Limits = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Show_Page_Limits->SetValue(true);
-	sbSizer4->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
-
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Track Editing") ), wxVERTICAL );
 
@@ -365,6 +355,24 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 
 	pcbOptionsSizer->Add( sbSizer41, 0, wxEXPAND|wxTOP, 5 );
+
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("Miscellaneous") ), wxVERTICAL );
+
+	m_Show_Page_Limits = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Show_Page_Limits->SetValue(true);
+	m_Show_Page_Limits->SetToolTip( _("Draw gray line that outlines the sheet size.") );
+
+	sbSizer4->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_Auto_Refill_Zones = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Refill zones after Zone Properties dialog"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Auto_Refill_Zones->SetValue(true);
+	m_Auto_Refill_Zones->SetToolTip( _("If checked, zones will be re-filled after editing the properties of the zone using the Zone Properties dialog") );
+
+	sbSizer4->Add( m_Auto_Refill_Zones, 0, wxALL, 5 );
+
+
+	pcbOptionsSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP, 5 );
 
 
 	pcbPage->SetSizer( pcbOptionsSizer );

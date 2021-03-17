@@ -1738,17 +1738,20 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                         m_commit->Modify( zone );
                         zone->RemoveCutout( outlineIdx, holeIdx );
 
-                        std::vector<ZONE*> toFill;
-                        toFill.emplace_back( zone );
-
-                        // Fill the modified zone
-                        ZONE_FILLER  filler( board(), m_commit.get() );
-                        filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
-
-                        if( !filler.Fill( toFill ) )
+                        // Re-fill the zone if it was filled before the edit
+                        if( zone->IsFilled() || frame()->Settings().m_AutoRefillZones )
                         {
-                            m_commit->Revert();
-                            return 1;
+                            std::vector<ZONE*> toFill;
+                            toFill.emplace_back( zone );
+
+                            ZONE_FILLER filler( board(), m_commit.get() );
+                            filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
+
+                            if( !filler.Fill( toFill ) )
+                            {
+                                m_commit->Revert();
+                                return 1;
+                            }
                         }
 
                         // Update the display

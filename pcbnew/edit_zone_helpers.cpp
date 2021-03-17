@@ -27,6 +27,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <board_commit.h>
 #include <zone.h>
 #include <zones.h>
@@ -105,38 +106,42 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
 
-    // refill zones with the new properties applied
-    std::vector<ZONE*> zones_to_refill;
-
-    for( unsigned i = 0; i < pickedList.GetCount(); ++i )
+    if( Settings().m_AutoRefillZones )
     {
-        ZONE* zone = dyn_cast<ZONE*>( pickedList.GetPickedItem( i ) );
+        // refill zones with the new properties applied
+        std::vector<ZONE*> zones_to_refill;
 
-        if( zone == nullptr )
+        for( unsigned i = 0; i < pickedList.GetCount(); ++i )
         {
-            wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
-            continue;
+            ZONE* zone = dyn_cast<ZONE*>( pickedList.GetPickedItem( i ) );
+
+            if( zone == nullptr )
+            {
+                wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
+                continue;
+            }
+
+            // aZone won't be filled if the layer set was modified, but it needs to be updated
+            if( zone->IsFilled() || zone == aZone )
+                zones_to_refill.push_back( zone );
         }
 
-        // aZone won't be filled if the layer set was modified, but it needs to be updated
-        if( zone->IsFilled() || zone == aZone )
-            zones_to_refill.push_back( zone );
-    }
+        commit.Stage( pickedList );
 
-    commit.Stage( pickedList );
+        std::lock_guard<KISPINLOCK> lock( GetBoard()->GetConnectivity()->GetLock() );
 
-    std::lock_guard<KISPINLOCK> lock( GetBoard()->GetConnectivity()->GetLock() );
-
-    if( zones_to_refill.size() )
-    {
-        ZONE_FILLER filler( GetBoard(), &commit );
-        wxString title = wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
-        filler.InstallNewProgressReporter( this, title, 4 );
-
-        if( !filler.Fill( zones_to_refill ) )
+        if( zones_to_refill.size() )
         {
-            // User has already OK'ed dialog so we're going to go ahead and commit even if the
-            // fill was cancelled.
+            ZONE_FILLER filler( GetBoard(), &commit );
+            wxString    title =
+                    wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
+            filler.InstallNewProgressReporter( this, title, 4 );
+
+            if( !filler.Fill( zones_to_refill ) )
+            {
+                // User has already OK'ed dialog so we're going to go ahead and commit even if the
+                // fill was cancelled.
+            }
         }
     }
 

@@ -71,6 +71,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_PolarCoords( false ),
           m_RotationAngle( 900 ),
           m_ShowPageLimits( true ),
+          m_AutoRefillZones( true ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerAutoZoom( false ),
           m_FootprintViewerZoom( 1.0 )
@@ -126,6 +127,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.auto_fill_zones",
+            &m_AutoRefillZones, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
             &m_Display.m_DisplayGraphicsFill, true ) );

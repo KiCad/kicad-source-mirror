@@ -75,14 +75,15 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_flipLeftRight->SetValue( general_opts.m_FlipLeftRight );
         m_autoLockPads->SetValue( !general_opts.m_AddUnlockedPads );
 
-        m_Show_Page_Limits->SetValue( m_frame->ShowPageLimits() );
-
         switch( general_opts.m_TrackDragAction )
         {
         case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
         case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
         case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
         }
+
+        m_Show_Page_Limits->SetValue( m_frame->ShowPageLimits() );
+        m_Auto_Refill_Zones->SetValue( general_opts.m_AutoRefillZones );
     }
     else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
@@ -119,6 +120,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         m_frame->Settings().m_FlipLeftRight = m_flipLeftRight->GetValue();
         m_frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
         m_frame->Settings().m_AddUnlockedPads = !m_autoLockPads->GetValue();
+        m_frame->Settings().m_AutoRefillZones = m_Auto_Refill_Zones->GetValue();
 
         if( m_rbTrackDragMove->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;

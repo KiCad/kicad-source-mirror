@@ -30,6 +30,7 @@
 #include <fp_shape.h>
 #include <board_commit.h>
 #include <pcb_painter.h>
+#include <pcbnew_settings.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <zone_filler.h>
@@ -137,6 +138,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     BOARD_COMMIT commit( &m_tool );
     BOARD* board = m_tool.getModel<BOARD>();
     std::vector<ZONE*> newZones;
+    bool               wereZonesFilled = aZone.IsFilled() || aCutout.IsFilled();
 
     // Clear the selection before removing the old zone
     auto toolMgr = m_tool.GetManager();
@@ -168,14 +170,18 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
 
     commit.Remove( &aZone );
 
-    ZONE_FILLER filler( board, &commit );
-
-    std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
-
-    if( !filler.Fill( newZones ) )
+    // Refill zone depending on settings or if one of the zones was filled
+    if( wereZonesFilled || m_tool.frame()->Settings().m_AutoRefillZones )
     {
-        commit.Revert();
-        return;
+        ZONE_FILLER filler( board, &commit );
+
+        std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
+
+        if( !filler.Fill( newZones ) )
+        {
+            commit.Revert();
+            return;
+        }
     }
 
     commit.Push( _( "Add a zone cutout" ) );
@@ -214,7 +220,13 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 
             std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
 
-            if( !m_params.m_keepout )
+            // Only refill based on settings or if the zone we are copying was filled
+            bool refill = m_tool.frame()->Settings().m_AutoRefillZones;
+
+            if( m_params.m_mode == ZONE_MODE::SIMILAR && aZone->IsFilled() )
+                refill = true;
+
+            if( !m_params.m_keepout && refill )
             {
                 ZONE_FILLER        filler( board, &commit );
                 std::vector<ZONE*> toFill = { aZone.get() };

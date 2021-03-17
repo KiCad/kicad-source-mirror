@@ -290,6 +290,9 @@ public:
 
     bool m_ShowPageLimits;
 
+    ///<@todo Implement real auto zone filling (not just after zone properties are edited)
+    bool m_AutoRefillZones; // Fill zones after editing the zone using the Zone Properties dialog
+
     wxString m_FootprintTextShownColumns;
 
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
