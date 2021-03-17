@@ -21,13 +21,15 @@
 
 #include <wx/tokenzr.h>
 #include <wx/window.h>
-#include <widgets/app_progress_dialog.h>
+#include <widgets/progress_reporter.h>
 
 #include <eda_pattern_match.h>
 #include <symbol_lib_table.h>
 #include <lib_symbol.h>
+#include <locale_io.h>
 #include <generate_alias_info.h>
 #include <symbol_tree_model_adapter.h>
+#include <symbol_async_loader.h>
 
 
 bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
@@ -56,31 +58,54 @@ SYMBOL_TREE_MODEL_ADAPTER::~SYMBOL_TREE_MODEL_ADAPTER()
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNicknames,
                                               wxWindow* aParent )
 {
-    APP_PROGRESS_DIALOG* prg = nullptr;
-    wxLongLong        nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
+    std::unique_ptr<WX_PROGRESS_REPORTER> prg = nullptr;
 
     if( m_show_progress )
     {
-        prg = new APP_PROGRESS_DIALOG( _( "Loading Symbol Libraries" ), wxEmptyString,
-                                       aNicknames.size(), aParent );
+        prg = std::make_unique<WX_PROGRESS_REPORTER>( aParent, _( "Loading Symbol Libraries" ),
+                                                      aNicknames.size(), true );
     }
 
     // Disable KIID generation: not needed for library parts; sometimes very slow
     KIID::CreateNilUuids( true );
 
-    unsigned int ii = 0;
+    std::unordered_map<wxString, std::vector<LIB_PART*>> loadedSymbols;
 
-    for( const auto& nickname : aNicknames )
+    SYMBOL_ASYNC_LOADER loader( aNicknames, this, loadedSymbols, prg.get() );
+
+    LOCALE_IO toggle;
+
+    loader.Start();
+
+    while( !loader.Done() )
     {
-        if( prg && wxGetUTCTimeMillis() > nextUpdate )
+        if( prg )
+            prg->KeepRefreshing();
+
+        wxMilliSleep( PROGRESS_INTERVAL_MILLIS );
+    }
+
+    if( prg && prg->IsCancelled() )
+    {
+        loader.Abort();
+    }
+    else
+    {
+        loader.Join();
+    }
+
+    if( !loader.GetErrors().IsEmpty() )
+    {
+        wxLogError( loader.GetErrors() );
+    }
+
+    if( loadedSymbols.size() > 0 )
+    {
+        for( const std::pair<wxString, std::vector<LIB_PART*>>& pair : loadedSymbols )
         {
-            prg->Update( ii, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
-
-            nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
+            std::vector<LIB_TREE_ITEM*> treeItems( pair.second.begin(), pair.second.end() );
+            DoAddLibrary( pair.first, m_libs->GetDescription( pair.first ), treeItems, false );
         }
-
-        AddLibrary( nickname );
-        ii++;
     }
 
     KIID::CreateNilUuids( false );
@@ -95,7 +120,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         // manager. A side effect is the call of ShowModal() of a dialog following
         // the use of SYMBOL_TREE_MODEL_ADAPTER creating a APP_PROGRESS_DIALOG
         // has a broken behavior (incorrect modal behavior).
-        delete prg;
+        prg.reset();
         m_show_progress = false;
     }
 }

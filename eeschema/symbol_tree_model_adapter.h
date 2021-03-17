@@ -63,6 +63,7 @@ protected:
     SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
 private:
+    friend class SYMBOL_ASYNC_LOADER;
     /**
      * Flag to only show the symbol library table load progress dialog the first time.
      */
