@@ -237,7 +237,17 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
     case 1:
         if( m_frame->GetCurPart() && m_frame->GetCurPart()->GetLibId() == node->m_LibId )
+        {
             node->m_Desc = m_frame->GetCurPart()->GetDescription();
+        }
+        else if( node->m_Type == LIB_TREE_NODE::LIB )
+        {
+            SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
+            SYMBOL_LIB_TABLE_ROW*   lib = libMgr.GetLibrary( node->m_LibId.GetLibNickname() );
+
+            if( lib )
+                node->m_Desc = lib->GetDescr();
+        }
 
         aVariant = node->m_Desc;
 

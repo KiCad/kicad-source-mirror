@@ -173,8 +173,8 @@ public:
     void OnToggleSearchTree( wxCommandEvent& event );
 
     bool IsSearchTreeShown();
-    void FreezeSearchTree();
-    void ThawSearchTree();
+    void FreezeLibraryTree();
+    void ThawLibraryTree();
 
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
 
@@ -300,6 +300,11 @@ public:
      * Does NOT synchronize it with libraries in disk.
      */
     void RegenerateLibraryTree();
+
+    /**
+     * Redisplay the library tree.  Used after changing modified states, descriptions, etc.
+     */
+    void RefreshLibraryTree();
 
     /**
      * Allow the symbol editor to install its preferences panel into the preferences dialog.

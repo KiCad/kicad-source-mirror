@@ -569,14 +569,14 @@ bool SYMBOL_EDIT_FRAME::IsSearchTreeShown()
 }
 
 
-void SYMBOL_EDIT_FRAME::FreezeSearchTree()
+void SYMBOL_EDIT_FRAME::FreezeLibraryTree()
 {
     m_treePane->Freeze();
     m_libMgr->GetAdapter()->Freeze();
 }
 
 
-void SYMBOL_EDIT_FRAME::ThawSearchTree()
+void SYMBOL_EDIT_FRAME::ThawLibraryTree()
 {
     m_libMgr->GetAdapter()->Thaw();
     m_treePane->Thaw();
@@ -952,6 +952,12 @@ void SYMBOL_EDIT_FRAME::RegenerateLibraryTree()
 
     if( target.IsValid() )
         m_treePane->GetLibTree()->CenterLibId( target );
+}
+
+
+void SYMBOL_EDIT_FRAME::RefreshLibraryTree()
+{
+    m_treePane->GetLibTree()->RefreshLibTree();
 }
 
 

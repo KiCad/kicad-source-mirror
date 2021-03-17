@@ -982,7 +982,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         currentLib = symbolEditor->GetCurLib();
 
         // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
-        symbolEditor->FreezeSearchTree();
+        symbolEditor->FreezeLibraryTree();
 
         if( symbolEditor->HasLibModifications() )
         {
@@ -992,10 +992,10 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
             switch( UnsavedChangesDialog( aParent, msg ) )
             {
-            case wxID_YES:    symbolEditor->SaveAll();        break;
-            case wxID_NO:     symbolEditor->RevertAll();      break;
+            case wxID_YES:    symbolEditor->SaveAll();         break;
+            case wxID_NO:     symbolEditor->RevertAll();       break;
             default:
-            case wxID_CANCEL: symbolEditor->ThawSearchTree(); return;
+            case wxID_CANCEL: symbolEditor->ThawLibraryTree(); return;
             }
         }
     }
@@ -1009,7 +1009,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     if( dlg.ShowModal() == wxID_CANCEL )
     {
         if( symbolEditor )
-            symbolEditor->ThawSearchTree();
+            symbolEditor->ThawLibraryTree();
 
         return;
     }
@@ -1053,7 +1053,8 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         }
 
         symbolEditor->SyncLibraries( true );
-        symbolEditor->ThawSearchTree();
+        symbolEditor->ThawLibraryTree();
+        symbolEditor->RefreshLibraryTree();
     }
 
     if( symbolViewer )

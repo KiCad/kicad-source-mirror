@@ -192,7 +192,16 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
     case 1:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
+        {
             node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetDescription();
+        }
+        else if( node->m_Type == LIB_TREE_NODE::LIB )
+        {
+            const FP_LIB_TABLE_ROW* lib = GFootprintTable.FindRow( node->m_LibId.GetLibNickname() );
+
+            if( lib )
+                node->m_Desc = lib->GetDescr();
+        }
 
         aVariant = node->m_Desc;
         break;

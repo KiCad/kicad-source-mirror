@@ -300,6 +300,9 @@ public:
      */
     void RegenerateLibraryTree();
 
+    /**
+     * Redisplay the library tree.  Used after changing modified states, descriptions, etc.
+     */
     void RefreshLibraryTree();
 
     ///< Reload displayed items and sets view.
