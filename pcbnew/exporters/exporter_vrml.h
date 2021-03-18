@@ -37,9 +37,10 @@ enum VRML_COLOR_INDEX
     VRML_COLOR_NONE = -1,
     VRML_COLOR_PCB = 0,
     VRML_COLOR_COPPER,
+    VRML_COLOR_SOLDMASK,
+    VRML_COLOR_PASTE,
     VRML_COLOR_SILK,
-    VRML_COLOR_TIN,
-    VRML_COLOR_LAST
+    VRML_COLOR_LAST         // Sentinel
 };
 
 
@@ -123,12 +124,15 @@ public:
     VRML_LAYER  m_bot_copper;
     VRML_LAYER  m_top_silk;
     VRML_LAYER  m_bot_silk;
-    VRML_LAYER  m_top_tin;
-    VRML_LAYER  m_bot_tin;
+    VRML_LAYER  m_top_soldermask;
+    VRML_LAYER  m_bot_soldermask;
+    VRML_LAYER  m_top_paste;
+    VRML_LAYER  m_bot_paste;
     VRML_LAYER  m_plated_holes;
 
     std::list< SGNODE* > m_components;
     S3D_CACHE* m_Cache3Dmodels;
+    BOARD*     m_Pcb;
 
 
     bool m_plainPCB;
@@ -192,16 +196,16 @@ public:
     bool SetScale( double aWorldScale );
 
     // Build and export the solder mask layer
-    void ExportVrmlSolderMask( BOARD* aPcb );
+    void ExportVrmlSolderMask();
 
     // Build and exports the board outlines (board body)
-    void ExportVrmlBoard( BOARD* aPcb );
+    void ExportVrmlBoard();
 
-    void ExportVrmlZones( BOARD* aPcb );
+    void ExportVrmlZones();
 
-    void ExportVrmlTracks( BOARD* pcb );
+    void ExportVrmlTracks();
 
-    void ExportVrmlVia( BOARD* aPcb, const VIA* aVia );
+    void ExportVrmlVia( const VIA* aVia );
 
     void ExportVrmlDrawsegment( PCB_SHAPE* drawseg );
 
@@ -209,12 +213,11 @@ public:
 
     void ExportVrmlFpText( FP_TEXT* item );
 
-    void ExportFp3DModelsAsLinkedFile( BOARD* aPcb, const wxString& aFullFileName );
+    void ExportFp3DModelsAsLinkedFile( const wxString& aFullFileName );
 
-    void ExportRoundPadstack( BOARD* pcb,
-                                double x, double y, double r,
-                                LAYER_NUM bottom_layer, LAYER_NUM top_layer,
-                                double hole );
+    void ExportRoundPadstack( double x, double y, double r,
+                              LAYER_NUM bottom_layer, LAYER_NUM top_layer,
+                              double hole );
 
     // Basic graphic shapes:
     void ExportVrmlLine( LAYER_NUM layer,
@@ -223,19 +226,18 @@ public:
 
     void ExportVrmlFpShape( FP_SHAPE* aOutline, FOOTPRINT* aFootprint );
 
-    void ExportVrmlPad( BOARD* aPcb, PAD* aPad );
+    void ExportVrmlPad( PAD* aPad );
 
-    void ExportVrmlFootprint( BOARD* aPcb, FOOTPRINT* aFootprint,
-                                   std::ostream* aOutputFile );
+    void ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream* aOutputFile );
 
-    void ExportVrmlPadshape( VRML_LAYER* aTinLayer, PAD* aPad );
+    void ExportVrmlPadshape( VRML_LAYER* aTinLayer, PCB_LAYER_ID aPcbLayer, PAD* aPad );
 
-    void ExportVrmlDrawings( BOARD* pcb );
+    void ExportVrmlDrawings();
 
     void ExportVrmlArc( LAYER_NUM layer,
-                          double centerx, double centery,
-                          double arc_startx, double arc_starty,
-                          double width, double arc_angle );
+                        double centerx, double centery,
+                        double arc_startx, double arc_starty,
+                        double width, double arc_angle );
 
     void ExportVrmlCircle( LAYER_NUM layer,
                            double startx, double starty,
@@ -244,14 +246,17 @@ public:
     void ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
                               double aOrientation, wxPoint aPos );
 
-    void writeLayers( BOARD* aPcb, const char* aFileName, OSTREAM* aOutputFile );
+    void ExportVrmlPolyPolygon( VRML_LAYER* aVlayer, SHAPE_POLY_SET& aOutlines,
+                                double aOrientation, wxPoint aPos );
+
+    void writeLayers( const char* aFileName, OSTREAM* aOutputFile );
 
     // select the VRML layer object to draw on
     // return true if a layer has been selected.
     bool GetLayer3D( LAYER_NUM layer, VRML_LAYER** vlayer );
 
     // Build the Z position of 3D layers
-    void ComputeLayer3D_Zpos(BOARD* pcb );
+    void ComputeLayer3D_Zpos();
 
 private:
     void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
