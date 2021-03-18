@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
 "PO-Revision-Date: 2021-03-19 16:01+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -18720,7 +18720,6 @@ msgid "Attenuation more than %f dB"
 msgstr "Demping meer dan %f dB"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -18732,7 +18731,7 @@ msgid ""
 "* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
-"### Overbrugde tee-verzwakker:\n"
+"### Overbrugde Tee Demping:\n"
 "__Zin__ gewenste ingangsimpedantie in & # x2126; <br>\n"
 "__Zout__ gewenste uitgangsimpedantie <br>\n"
 "__Z <sub> 0 </sub> = Zin = Zout__ <br> <br>\n"
@@ -19331,16 +19330,14 @@ msgid "nanoseconds"
 msgstr "nanoseconden"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1322
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Waarschuwing:\n"
-"Via paddiameter> = doorlaatgatdiameter.\n"
-"Sommige parameters kunnen niet worden berekend voor een via\n"
-"binnen een koperen zone."
+"Diameter van het gat >= Vrije gegeven diameter van gat.\n"
+"Sommige parameters konden niet uitgerekend worden binnen de koper zone."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
