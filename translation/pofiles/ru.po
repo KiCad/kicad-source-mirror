@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8890,10 +8890,9 @@ msgid "Read Only"
 msgstr "Только чтение"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
-#, fuzzy
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
-msgstr "Ширина линии не может быть нулевой для незаполненных фигур."
+msgstr "Ширина линии не может быть нулевой для фигур без заливки."
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -17233,9 +17232,8 @@ msgid "Highlight Attribute"
 msgstr "Подсветить атрибут"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "Подсветить цепь"
+msgstr "Подсветить D-код"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
@@ -17347,9 +17345,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "Подсветить тип апертуры \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Подсветить %s"
+msgstr "Подсветить D-код D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -32126,77 +32124,64 @@ msgid "Create arc from line segment"
 msgstr "Создать дугу из сегмента линии"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "Основное имя"
+msgstr "Имя слоя"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "Толщина"
+msgstr "Толщина (мм)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:265
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "Толщина"
+msgstr "Толщина (милы)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
-#, fuzzy
 msgid "Loss Tangent"
 msgstr "Танг.угла диэл.потерь"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:332
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "Вставка таблицы слоёв"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "ХАРАКТЕРИСТИКИ ПЛАТЫ"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Количество слоёв меди:"
+msgstr "Количество слоёв меди: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Чертить размерную линию"
+msgstr "Габариты платы: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Мин. шаг сетки:"
+msgstr "Мин. дорожка/зазор: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Покрытие меди:"
+msgstr "Покрытие меди: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Периферийное полу-отверстие"
+msgstr "Периферийные полу-отверстия: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Толщина платы:"
+msgstr "Толщина платы: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Диаметр перех.отв. с зазором:"
+msgstr "Мин. сверло: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Контроль импеданса"
+msgstr "Контроль импеданса: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:466
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Метал. торцы"
+msgstr "Метал. торцы: "
 
 #: pcbnew/tools/drawing_tool.cpp:73
 msgid "Select Via Size"
@@ -32477,22 +32462,20 @@ msgid "Draw Arc"
 msgstr "Чертить дугу"
 
 #: pcbnew/tools/pcb_actions.cpp:122
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Сведения о плате"
+msgstr "Добавить характеристики платы"
 
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Добавить таблицу характеристик платы на графический слой"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Вид структуры"
+msgstr "Добавить таблицу слоёв"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "Добавить таблицу слоёв платы на графический слой"
 
 #: pcbnew/tools/pcb_actions.cpp:141
 msgid "Add Aligned Dimension"
