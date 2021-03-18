@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,11 +33,13 @@
 #include <wx/valnum.h>
 
 class NETLIST_EXPORTER_PSPICE_SIM;
+class SPICE_SIMULATOR_SETTINGS;
+
 
 class DIALOG_SIM_SETTINGS : public DIALOG_SIM_SETTINGS_BASE
 {
 public:
-    DIALOG_SIM_SETTINGS( wxWindow* aParent );
+    DIALOG_SIM_SETTINGS( wxWindow* aParent, std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
     {
@@ -67,7 +71,7 @@ public:
 
     // The default dialog Validate() calls the validators of all widgets.
     // This is not what we want; We want only validators of the selected page
-    // of the notbooks. So disable the wxDialog::Validate(), and let our
+    // of the notebooks. So disable the wxDialog::Validate(), and let our
     // TransferDataFromWindow doing the job.
     virtual bool Validate() override
     {
@@ -84,7 +88,7 @@ private:
         LINEAR
     };
 
-    ///!> Generates events to update UI state
+    ///< Generate events to update UI state.
     void refreshUIControls()
     {
         wxQueueEvent( m_dcEnable2, new wxCommandEvent( wxEVT_CHECKBOX ) );
@@ -93,19 +97,20 @@ private:
     }
 
     /**
-     * @brief Reads values from one DC sweep source to form a part of sim command
+     * Read values from one DC sweep source to form a part of simulation command.
+     *
      * @return string of four SPICE values if values are correct, empty string upon error.
      */
     wxString evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart, wxTextCtrl* aDcStop,
                                  wxTextCtrl* aDcIncr );
 
     /**
-     * @brief Updates DC sweep source with components from schematic
+     * Update DC sweep source with components from schematic.
      */
     void updateDCSources( wxChar aType, wxChoice* aSource );
 
     /**
-     * @brief Updates units on labels depending on selected source
+     * Update units on labels depending on selected source.
      */
     void updateDCUnits( wxChar aType, wxChoice* aSource, wxStaticText* aStartValUnit,
                         wxStaticText* aEndValUnit, wxStaticText* aStepUnit );
@@ -120,9 +125,10 @@ private:
     }
 
     /**
-     * @brief Parses a Spice directive.
+     * Parse a Spice directive.
+     *
      * @param aCommand is the directive to be parsed (e.g. ".tran 10n 1000n").
-     * @return bool if the directive was parsed correctly.
+     * @return true if the directive was parsed correctly.
      */
     bool parseCommand( const wxString& aCommand );
 
@@ -155,14 +161,14 @@ private:
     {
         switch( aOption )
         {
-            case DECADE:
-                return wxString( "dec" );
+        case DECADE:
+            return wxString( "dec" );
 
-            case OCTAVE:
-                return wxString( "oct" );
+        case OCTAVE:
+            return wxString( "oct" );
 
-            case LINEAR:
-                return wxString( "lin" );
+        case LINEAR:
+            return wxString( "lin" );
         }
 
         wxASSERT_MSG( false, "Unhandled scale type" );
@@ -176,7 +182,7 @@ private:
     wxString m_simCommand;
     int m_netlistOpts;
     NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
-
+    std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
     SPICE_VALIDATOR m_spiceValidator;
     SPICE_VALIDATOR m_spiceEmptyValidator;
     wxIntegerValidator<int> m_posIntValidator;

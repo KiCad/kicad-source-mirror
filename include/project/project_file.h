@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -22,6 +23,7 @@
 #define KICAD_PROJECT_FILE_H
 
 #include <common.h> // needed for wxstring hash template
+#include <kiid.h>
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
@@ -54,7 +56,7 @@ enum LAST_PATH_TYPE : unsigned int
 };
 
 /**
- * PROJECT_FILE is the backing store for a PROJECT, in JSON format.
+ * The backing store for a PROJECT, in JSON format.
  *
  * There is either zero or one PROJECT_FILE for every PROJECT
  * (you can have a dummy PROJECT that has no file)
@@ -63,7 +65,7 @@ class PROJECT_FILE : public JSON_SETTINGS
 {
 public:
     /**
-     * Constructs the project file for a project
+     * Construct the project file for a project
      * @param aFullPath is the full disk path to the project
      */
     PROJECT_FILE( const wxString& aFullPath );
@@ -168,11 +170,12 @@ public:
 
     /**
      * Net settings for this project (owned here)
-     * NOTE: If we go multi-board in the future, we have to decide whether to use a global
-     * NET_SETTINGS or have one per board.  Right now I think global makes more sense (one set of
-     * schematics, one netlist partitioned into multiple boards)
+     *
+     * @note If we go multi-board in the future, we have to decide whether to use a global
+     *       NET_SETTINGS or have one per board.  Right now I think global makes more sense
+     *       (one set of schematics, one netlist partitioned into multiple boards)
      */
-     std::shared_ptr<NET_SETTINGS> m_NetSettings;
+    std::shared_ptr<NET_SETTINGS> m_NetSettings;
 
     /// List of stored layer presets
     std::vector<LAYER_PRESET> m_LayerPresets;

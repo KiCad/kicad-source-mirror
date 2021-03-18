@@ -34,14 +34,47 @@
 
 class wxDynamicLibrary;
 
-class NGSPICE : public SPICE_SIMULATOR {
+/**
+ * Spice model compatibility modes.
+ *
+ * @note The ngspice model modes are mutually exclusive.
+ */
+enum class NGSPICE_MODEL_MODE {
+    USER_CONFIG,
+    NGSPICE,
+    PSPICE,
+    LTSPICE,
+    LT_PSPICE,
+    HSPICE
+};
 
+
+/**
+ * Container for Ngspice simulator settings.
+ */
+class NGSPICE_SIMULATOR_SETTINGS : public SPICE_SIMULATOR_SETTINGS
+{
+public:
+    NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+
+    bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const override;
+
+    NGSPICE_MODEL_MODE GetModelMode() const { return m_modelMode; }
+    void SetModelMode( NGSPICE_MODEL_MODE aMode ) { m_modelMode = aMode; }
+
+private:
+    NGSPICE_MODEL_MODE m_modelMode;
+};
+
+
+class NGSPICE : public SPICE_SIMULATOR
+{
 public:
     NGSPICE();
     virtual ~NGSPICE();
 
     ///< @copydoc SPICE_SIMULATOR::Init()
-    void Init() override;
+    void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) override;
 
     ///< @copydoc SPICE_SIMULATOR::LoadNetlist()
     bool LoadNetlist( const std::string& aNetlist ) override;
@@ -79,6 +112,8 @@ public:
     ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
+    std::vector<std::string> GetSettingCommands() const override;
+
     ///< @copydoc SPICE_SIMULATOR::GetNetlist()
     virtual const std::string GetNetlist() const override;
 
@@ -89,15 +124,15 @@ private:
     void init_dll();
 
     // ngspice library functions
-    typedef void (*ngSpice_Init)( SendChar*, SendStat*, ControlledExit*,
-                                    SendData*, SendInitData*, BGThreadRunning*, void* );
-    typedef int (*ngSpice_Circ)( char** circarray );
-    typedef int (*ngSpice_Command)( char* command );
-    typedef pvector_info (*ngGet_Vec_Info)( char* vecname );
+    typedef void ( *ngSpice_Init )( SendChar*, SendStat*, ControlledExit*, SendData*, SendInitData*,
+                                    BGThreadRunning*, void* );
+    typedef int ( *ngSpice_Circ )( char** circarray );
+    typedef int ( *ngSpice_Command )( char* command );
+    typedef pvector_info ( *ngGet_Vec_Info )( char* vecname );
     typedef char* ( *ngSpice_CurPlot )( void );
-    typedef char** (*ngSpice_AllPlots)( void );
-    typedef char** (*ngSpice_AllVecs)( char* plotname );
-    typedef bool (*ngSpice_Running)( void );
+    typedef char** ( *ngSpice_AllPlots )( void );
+    typedef char** ( *ngSpice_AllVecs )( char* plotname );
+    typedef bool ( *ngSpice_Running )( void );
 
     ///< Handle to DLL functions
     ngSpice_Init m_ngSpice_Init;
@@ -133,7 +168,7 @@ private:
     ///< Error flag indicating that ngspice needs to be reloaded
     bool m_error;
 
-    ///< NGspice should be initialized only once
+    ///< Ngspice should be initialized only once
     static bool m_initialized;
 
     ///< current netlist

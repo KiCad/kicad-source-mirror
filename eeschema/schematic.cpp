@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,6 +26,7 @@
 #include <project/net_settings.h>
 #include <schematic.h>
 #include <sch_screen.h>
+#include <sim/ngspice.h>
 
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
@@ -92,6 +93,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_SchematicSettings = new SCHEMATIC_SETTINGS( &project, "schematic" );
 
         project.m_SchematicSettings->LoadFromFile();
+        project.m_SchematicSettings->m_NgspiceSimulatorSettings->LoadFromFile();
         project.m_ErcSettings->LoadFromFile();
     }
 }

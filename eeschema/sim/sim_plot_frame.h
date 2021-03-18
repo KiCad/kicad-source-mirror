@@ -50,6 +50,7 @@ class SCH_EDIT_FRAME;
 class SCH_COMPONENT;
 
 class SPICE_SIMULATOR;
+class SPICE_SIMULATOR_SETTINGS;
 class NETLIST_EXPORTER_PSPICE_SIM;
 
 #include "sim_plot_panel.h"
@@ -59,7 +60,7 @@ class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
 
-///> Trace descriptor class
+///< Trace descriptor class
 class TRACE_DESC
 {
 public:
@@ -110,11 +111,12 @@ private:
 };
 
 
-/** Implementing SIM_PLOT_FRAME_BASE */
+/**
+ * Implementing SIM_PLOT_FRAME_BASE
+ */
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 {
 public:
-    /** Constructor */
     SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SIM_PLOT_FRAME();
 
@@ -147,7 +149,6 @@ public:
 
     /**
      * Add a tuner for a component.
-     *
      */
     void AddTuner( SCH_COMPONENT* aComponent );
 
@@ -184,6 +185,8 @@ public:
 
     // Simulator doesn't host a tool framework
     wxWindow* GetToolCanvas() const override { return nullptr; }
+
+    std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& GetSimulatorSettings();
 
 private:
     /**
@@ -238,7 +241,8 @@ private:
 
     /**
      * Filter out tuners for components that do not exist anymore.
-     * Decisions are based on the current NETLIST_EXPORTER_BASE data.
+     *
+     * Decisions are based on the current #NETLIST_EXPORTER_BASE data.
      */
     void updateTuners();
 

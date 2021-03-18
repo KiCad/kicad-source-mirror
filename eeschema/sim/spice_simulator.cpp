@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +27,19 @@
 
 #include <confirm.h>
 
+#include <schematic_settings.h>
+
+
+const int ngspiceSettingsSchemaVersion = 0;
+
+
+SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
+                                                    const std::string& aPath ) :
+    NESTED_SETTINGS( "simulator", ngspiceSettingsSchemaVersion, aParent, aPath )
+{
+}
+
+
 std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::string& )
 {
     try
@@ -39,11 +53,12 @@ std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::str
     }
     catch( std::exception& e )
     {
-        DisplayError( NULL, e.what() );
+        DisplayError( nullptr, e.what() );
     }
 
-    return NULL;
+    return nullptr;
 }
+
 
 wxString SPICE_SIMULATOR::TypeToName( SIM_TYPE aType, bool aShortName )
 {

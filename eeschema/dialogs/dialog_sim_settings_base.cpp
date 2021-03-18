@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,8 +17,6 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
 	m_simPages = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_simPages->SetMinSize( wxSize( 650,-1 ) );
-
 	m_pgAC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -199,7 +197,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgDC->SetSizer( bSizer82 );
 	m_pgDC->Layout();
 	bSizer82->Fit( m_pgDC );
-	m_simPages->AddPage( m_pgDC, _("DC Transfer"), true );
+	m_simPages->AddPage( m_pgDC, _("DC Transfer"), false );
 	m_pgDistortion = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_simPages->AddPage( m_pgDistortion, _("Distortion"), false );
 	m_pgNoise = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -417,6 +415,51 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgCustom->Layout();
 	bSizer2->Fit( m_pgCustom );
 	m_simPages->AddPage( m_pgCustom, _("Custom"), false );
+	m_pgNgspice = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_pgNgspice, wxID_ANY, _("Model Mode") ), wxVERTICAL );
+
+	m_rbNgspiceDefaultModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("User configuration"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbNgspiceDefaultModelMode->SetToolTip( _("Use the settings in the Ngspice configuration file or any settings defined in the schematic") );
+
+	sbSizer4->Add( m_rbNgspiceDefaultModelMode, 0, wxLEFT|wxRIGHT, 5 );
+
+	m_rbNgspiceSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Spice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNgspiceSpiceModelMode->SetToolTip( _("Enable default spice model simulation") );
+
+	sbSizer4->Add( m_rbNgspiceSpiceModelMode, 0, wxALL, 5 );
+
+	m_rbNgspicePSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("PSpice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNgspicePSpiceModelMode->SetToolTip( _("Enable PSpice model simulation") );
+
+	sbSizer4->Add( m_rbNgspicePSpiceModelMode, 0, wxALL, 5 );
+
+	m_rbNgspiceLTSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("LTSpice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNgspiceLTSpiceModelMode->SetToolTip( _("Enable LTSpice model simulation") );
+
+	sbSizer4->Add( m_rbNgspiceLTSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_rbNgspicePLTSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("PSpice and LTSpice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNgspicePLTSpiceModelMode->SetToolTip( _("Enable PSpice and LTSpice model simulation") );
+
+	sbSizer4->Add( m_rbNgspicePLTSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_rbNgspiceHSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("HSpice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbNgspiceHSpiceModelMode->SetToolTip( _("Enable HSpice model simulation") );
+
+	sbSizer4->Add( m_rbNgspiceHSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizer21->Add( sbSizer4, 0, wxALL, 5 );
+
+
+	m_pgNgspice->SetSizer( bSizer21 );
+	m_pgNgspice->Layout();
+	bSizer21->Fit( m_pgNgspice );
+	m_simPages->AddPage( m_pgNgspice, _("Ngspice"), true );
 
 	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
 

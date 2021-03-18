@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -27,6 +27,8 @@
 #ifndef SPICE_SIMULATOR_H
 #define SPICE_SIMULATOR_H
 
+#include <settings/nested_settings.h>
+
 #include "sim_types.h"
 
 #include <string>
@@ -37,23 +39,48 @@
 #include <wx/string.h>
 
 class SPICE_REPORTER;
-class SPICE_SIMULATOR;
 
 typedef std::complex<double> COMPLEX;
+
+
+/**
+ * Storage for simulator specific settings.
+ */
+class SPICE_SIMULATOR_SETTINGS : public NESTED_SETTINGS
+{
+public:
+    SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+
+    virtual ~SPICE_SIMULATOR_SETTINGS() {}
+
+    virtual bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const = 0;
+
+    bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
+};
+
 
 class SPICE_SIMULATOR
 {
 public:
-    SPICE_SIMULATOR() : m_reporter( NULL ) {}
+    SPICE_SIMULATOR() :
+        m_reporter( nullptr ),
+        m_settings( nullptr )
+    {}
+
     virtual ~SPICE_SIMULATOR() {}
 
     ///< Create a simulator instance of particular type (currently only ngspice is handled)
     static std::shared_ptr<SPICE_SIMULATOR> CreateInstance( const std::string& aName );
 
-    ///< Initialize the simulator
-    virtual void Init() = 0;
-
     /*
+     * Initialize the simulator using the optional \a aSettings.
+     *
+     * @param aSettings [in] are the simulator specific settings.  Can be null if no settings need
+     *                  to be initialized.
+     */
+    virtual void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) = 0;
+
+    /**
      * Load a netlist for the simulation.
      *
      * @return True in case of success, false otherwise.
@@ -91,7 +118,7 @@ public:
     ///< Return X axis name for a given simulation type
     virtual std::string GetXAxis( SIM_TYPE aType ) const = 0;
 
-    ///< Set a SPICE_REPORTER object to receive the simulation log.
+    ///< Set a #SPICE_REPORTER object to receive the simulation log.
     virtual void SetReporter( SPICE_REPORTER* aReporter )
     {
         m_reporter = aReporter;
@@ -99,7 +126,7 @@ public:
 
     /**
      * Return a list with all vectors generated in current simulation.
-     * @param none
+     *
      * @return List of vector names. ?May not match to the net name elements.
      */
     virtual std::vector<std::string> AllPlots() const = 0;
@@ -165,6 +192,20 @@ public:
     virtual const std::string GetNetlist() const = 0;
 
     /**
+     * @return a list of simulator setting command strings.
+     */
+    virtual std::vector<std::string> GetSettingCommands() const = 0;
+
+    /**
+     * Return the simulator configuration settings.
+     *
+     * @return the simulator specific settings.
+     */
+    std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& Settings() { return m_settings; }
+
+    const std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& Settings() const { return m_settings; }
+
+    /**
      * Return a string with simulation name based on enum.
      *
      * @param aType is the enum describing simulation type
@@ -177,6 +218,9 @@ public:
 protected:
     ///< Reporter object to receive simulation log.
     SPICE_REPORTER* m_reporter;
+
+    ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
+    std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
 };
 
 #endif /* SPICE_SIMULATOR_H */

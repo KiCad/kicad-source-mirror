@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2021 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 
 #include "dialog_sim_settings.h"
 #include <sim/netlist_exporter_pspice_sim.h>
+#include <sim/ngspice.h>
+
 #include <confirm.h>
 
 #include <wx/tokenzr.h>
@@ -54,9 +56,11 @@ static wxString getStringSelection( const wxRadioBox* aCtrl )
 }
 
 
-DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent ) :
+DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
+                                          std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_SETTINGS_BASE( aParent ),
         m_exporter( nullptr ),
+        m_settings( aSettings ),
         m_spiceEmptyValidator( true )
 {
     m_posIntValidator.SetMin( 1 );
@@ -90,6 +94,9 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent ) :
     m_simPages->RemovePage( m_simPages->FindPage( m_pgPoleZero ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );
+
+    if( dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) == nullptr )
+        m_simPages->RemovePage( m_simPages->FindPage( m_pgNgspice ) );
 
     m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
@@ -154,6 +161,26 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
+
+    // The simulator dependent settings always get transferred.
+    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
+            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
+
+    if( ngspiceSettings )
+    {
+        if( m_rbNgspiceDefaultModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::USER_CONFIG );
+        else if( m_rbNgspiceSpiceModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::NGSPICE );
+        else if( m_rbNgspicePSpiceModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::PSPICE );
+        else if( m_rbNgspiceLTSpiceModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LTSPICE );
+        else if( m_rbNgspicePLTSpiceModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );
+        else if( m_rbNgspiceHSpiceModelMode->GetValue() )
+            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::HSPICE );
+    }
 
     wxWindow* page = m_simPages->GetCurrentPage();
 
@@ -279,9 +306,47 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
 bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 {
-    /// @todo one day it could interpret the sim command and fill out appropriate fields..
+    /// @todo one day it could interpret the sim command and fill out appropriate fields.
     if( empty( m_customTxt ) )
         loadDirectives();
+
+    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
+            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
+
+    if( ngspiceSettings )
+    {
+        switch( ngspiceSettings->GetModelMode() )
+        {
+        case NGSPICE_MODEL_MODE::USER_CONFIG:
+            m_rbNgspiceDefaultModelMode->SetValue( true );
+            break;
+
+        case NGSPICE_MODEL_MODE::NGSPICE:
+            m_rbNgspiceSpiceModelMode->SetValue( true );
+            break;
+
+        case NGSPICE_MODEL_MODE::PSPICE:
+            m_rbNgspicePSpiceModelMode->SetValue( true );
+            break;
+
+        case NGSPICE_MODEL_MODE::LTSPICE:
+            m_rbNgspiceLTSpiceModelMode->SetValue( true );
+            break;
+
+        case NGSPICE_MODEL_MODE::LT_PSPICE:
+            m_rbNgspicePLTSpiceModelMode->SetValue( true );
+            break;
+
+        case NGSPICE_MODEL_MODE::HSPICE:
+            m_rbNgspiceHSpiceModelMode->SetValue( true );
+            break;
+
+        default:
+            wxFAIL_MSG( wxString::Format( "Unkown NGSPICE_MODEL_MODE %d.",
+                                          ngspiceSettings->GetModelMode() ) );
+            break;
+        }
+    }
 
     if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
         return parseCommand( m_customTxt->GetValue() );
@@ -319,6 +384,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
 
     return DIALOG_SIM_SETTINGS_BASE::ShowModal();
 }
+
 
 void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 {
@@ -396,7 +462,6 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
             m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
         }
-
         else if( tkn == ".dc" )
         {
             SPICE_DC_PARAMS src1, src2;
@@ -436,7 +501,6 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
 
             refreshUIControls();
         }
-
         else if( tkn == ".tran" )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
@@ -451,14 +515,11 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             if( !tkn.IsEmpty() )
                 m_transInitial->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
         }
-
         else if( tkn == ".op" )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
         }
-
-        // Custom directives
-        else if( !empty( m_customTxt ) )
+        else if( !empty( m_customTxt ) )        // Custom directives
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
         }
