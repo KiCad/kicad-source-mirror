@@ -372,9 +372,11 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
 {
-    bool                          breakLines = false;
-    std::unordered_set<int>       exitAngles;
-    std::vector<const SCH_LINE*>  midPointLines;
+    enum { WIRES, BUSES } layers;
+
+    bool                          breakLines[ sizeof( layers ) ] = { false };
+    std::unordered_set<int>       exitAngles[ sizeof( layers ) ];
+    std::vector<const SCH_LINE*>  midPointLines[ sizeof( layers ) ];
 
     // A pin at 90º still shouldn't match a line at 90º so just give pins unique numbers
     int                           uniqueAngle = 10000;
@@ -387,7 +389,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
         switch( item->Type() )
         {
         case SCH_JUNCTION_T:
-            if( aNew && item->HitTest( aPosition ) )
+            if( aNew && item->HitTest( aPosition, -1 ) )
                 return false;
 
             break;
@@ -395,28 +397,38 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
         case SCH_LINE_T:
         {
             const SCH_LINE* line = static_cast<const SCH_LINE*>( item );
+            int             layer;
+
+            if( line->GetLayer() == LAYER_WIRE )
+                layer = WIRES;
+            else if( line->GetLayer() == LAYER_BUS )
+                layer = BUSES;
+            else
+                break;
 
             if( line->IsConnected( aPosition ) )
             {
-                breakLines = true;
-                exitAngles.insert( line->GetAngleFrom( aPosition ) );
+                breakLines[ layer ] = true;
+                exitAngles[ layer ].insert( line->GetAngleFrom( aPosition ) );
             }
-            else if( item->HitTest( aPosition ) )
+            else if( item->HitTest( aPosition, -1 ) )
             {
                 // Defer any line midpoints until we know whether or not we're breaking them
-                midPointLines.push_back( line );
+                midPointLines[ layer ].push_back( line );
             }
         }
             break;
 
         case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_BUS_BUS_ENTRY_T:
         case SCH_COMPONENT_T:
         case SCH_SHEET_T:
+        case SCH_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
             if( item->IsConnected( aPosition ) )
             {
-                breakLines = true;
-                exitAngles.insert( uniqueAngle++ );
+                breakLines[ WIRES ] = true;
+                exitAngles[ WIRES ].insert( uniqueAngle++ );
             }
 
             break;
@@ -426,16 +438,19 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
         }
     }
 
-    if( breakLines )
+    for( int layer : { WIRES, BUSES } )
     {
-        for( const SCH_LINE* line : midPointLines )
+        if( breakLines[ layer ] )
         {
-            exitAngles.insert( line->GetAngleFrom( aPosition ) );
-            exitAngles.insert( line->GetReverseAngleFrom( aPosition ) );
+            for( const SCH_LINE* line : midPointLines[ layer ] )
+            {
+                exitAngles[ layer ].insert( line->GetAngleFrom( aPosition ) );
+                exitAngles[ layer ].insert( line->GetReverseAngleFrom( aPosition ) );
+            }
         }
     }
 
-    return exitAngles.size() >= 3;
+    return exitAngles[ WIRES ].size() >= 3 || exitAngles[ BUSES ].size() >= 3;
 }
 
 

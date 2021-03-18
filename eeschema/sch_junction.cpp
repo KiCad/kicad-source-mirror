@@ -188,7 +188,10 @@ int SCH_JUNCTION::GetDiameter() const
 
 bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return getEffectiveShape().Collide( SEG( aPosition, aPosition ), aAccuracy );
+    if( aAccuracy >= 0 )
+        return getEffectiveShape().Collide( SEG( aPosition, aPosition ), aAccuracy );
+    else
+        return aPosition == m_pos;
 }
 
 
