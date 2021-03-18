@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -9024,10 +9024,9 @@ msgid "Read Only"
 msgstr "只读"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
-#, fuzzy
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
-msgstr "对于不填充的形状，线宽不能为0。"
+msgstr "除用主体轮廓颜色填充的形状，线宽不能为0。"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -17232,9 +17231,8 @@ msgid "Highlight Attribute"
 msgstr "高亮属性"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "高亮网络"
+msgstr "高亮 DCode"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
@@ -17346,9 +17344,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "高亮光圈类型 \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "高亮 %s"
+msgstr "高亮 DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -31781,77 +31779,64 @@ msgid "Create arc from line segment"
 msgstr "从线段创建圆弧"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "基名称"
+msgstr "层名称"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "线宽"
+msgstr "厚度 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:265
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "线宽"
+msgstr "厚度 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Loss Tg（损耗切线）"
+msgstr "Loss Tangent（损耗切线）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:332
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "插入板堆叠表"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "板特征"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "铜层数量："
+msgstr "铜层数量： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "绘制标注"
+msgstr "板子整体尺寸： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "最小网格间距："
+msgstr "最小布线/间距： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "铜表面处理（镀铜）："
+msgstr "铜表面处理（镀铜）： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "邮票孔"
+msgstr "城堡形焊盘： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "板厚度："
+msgstr "板厚度： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "间隙孔直径："
+msgstr "孔最小直径： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "阻抗控制"
+msgstr "阻抗控制 "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:466
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "电镀板边"
+msgstr "电镀板边： "
 
 #: pcbnew/tools/drawing_tool.cpp:73
 msgid "Select Via Size"
@@ -32131,22 +32116,20 @@ msgid "Draw Arc"
 msgstr "绘制圆弧"
 
 #: pcbnew/tools/pcb_actions.cpp:122
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "电路板统计"
+msgstr "添加板特性"
 
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "在图形层上添加板特性表"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "添加短线"
+msgstr "添加堆叠表"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "在图形层上添加板堆叠表"
 
 #: pcbnew/tools/pcb_actions.cpp:141
 msgid "Add Aligned Dimension"
