@@ -372,11 +372,11 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
 {
-    enum { WIRES, BUSES } layers;
+    enum { WIRES = 0, BUSES } layers;
 
-    bool                          breakLines[ sizeof( layers ) ] = { false };
-    std::unordered_set<int>       exitAngles[ sizeof( layers ) ];
-    std::vector<const SCH_LINE*>  midPointLines[ sizeof( layers ) ];
+    bool                          breakLines[ 2 ] = { false };
+    std::unordered_set<int>       exitAngles[ 2 ];
+    std::vector<const SCH_LINE*>  midPointLines[ 2 ];
 
     // A pin at 90º still shouldn't match a line at 90º so just give pins unique numbers
     int                           uniqueAngle = 10000;
@@ -399,7 +399,9 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
             const SCH_LINE* line = static_cast<const SCH_LINE*>( item );
             int             layer;
 
-            if( line->GetLayer() == LAYER_WIRE )
+            if( line->GetStartPoint() == line->GetEndPoint() )
+                break;
+            else if( line->GetLayer() == LAYER_WIRE )
                 layer = WIRES;
             else if( line->GetLayer() == LAYER_BUS )
                 layer = BUSES;
@@ -411,7 +413,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
                 breakLines[ layer ] = true;
                 exitAngles[ layer ].insert( line->GetAngleFrom( aPosition ) );
             }
-            else if( item->HitTest( aPosition, -1 ) )
+            else if( line->HitTest( aPosition, -1 ) )
             {
                 // Defer any line midpoints until we know whether or not we're breaking them
                 midPointLines[ layer ].push_back( line );
@@ -422,9 +424,6 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_COMPONENT_T:
         case SCH_SHEET_T:
-        case SCH_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
             if( item->IsConnected( aPosition ) )
             {
                 breakLines[ WIRES ] = true;
