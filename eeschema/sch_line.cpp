@@ -411,26 +411,29 @@ void SCH_LINE::RotateEnd( wxPoint aPosition )
 }
 
 
-bool SCH_LINE::IsSameQuadrant( const SCH_LINE* aLine, const wxPoint& aPosition ) const
+int SCH_LINE::GetAngleFrom( const wxPoint& aPoint ) const
 {
-    wxPoint first;
-    wxPoint second;
+    wxPoint vec;
 
-    if( m_start == aPosition )
-        first = m_end - aPosition;
-    else if( m_end == aPosition )
-        first = m_start - aPosition;
+    if( aPoint == m_start )
+        vec = m_end - aPoint;
     else
-        return false;
+        vec = m_start - aPoint;
 
-    if( aLine->m_start == aPosition )
-        second = aLine->m_end - aPosition;
-    else if( aLine->m_end == aPosition )
-        second = aLine->m_start - aPosition;
+    return KiROUND( ArcTangente( vec.y, vec.x ) );
+}
+
+
+int SCH_LINE::GetReverseAngleFrom( const wxPoint& aPoint ) const
+{
+    wxPoint vec;
+
+    if( aPoint == m_end )
+        vec = m_start - aPoint;
     else
-        return false;
+        vec = m_end - aPoint;
 
-    return ( sign( first.x ) == sign( second.x ) && sign( first.y ) == sign( second.y ) );
+    return KiROUND( ArcTangente( vec.y, vec.x ) );
 }
 
 

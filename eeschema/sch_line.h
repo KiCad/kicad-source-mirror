@@ -89,6 +89,9 @@ public:
         return aPoint == m_start || aPoint == m_end;
     }
 
+    int GetAngleFrom( const wxPoint& aPoint ) const;
+    int GetReverseAngleFrom( const wxPoint& aPoint ) const;
+
     bool IsNull() const { return m_start == m_end; }
 
     wxPoint GetStartPoint() const { return m_start; }
@@ -192,16 +195,6 @@ public:
      * @return New line that combines the two or NULL on non-overlapping segments.
      */
     SCH_LINE* MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions );
-
-    /**
-     * Check if two lines are in the same quadrant as each other, using a reference point as
-     * the origin
-     *
-     * @param aLine - Line to compare
-     * @param aPosition - Point to reference against lines
-     * @return true if lines are mostly in different quadrants of aPosition, false otherwise
-     */
-    bool IsSameQuadrant( const SCH_LINE* aLine, const wxPoint& aPosition ) const;
 
     bool IsParallel( const SCH_LINE* aLine ) const;
 

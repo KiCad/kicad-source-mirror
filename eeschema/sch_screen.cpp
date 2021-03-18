@@ -372,14 +372,12 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
 {
-    enum { WIRES, BUSES } layers;
+    bool                          breakLines = false;
+    std::unordered_set<int>       exitAngles;
+    std::vector<const SCH_LINE*>  midPointLines;
 
-    bool    has_nonparallel[ sizeof( layers ) ] = { false };
-    int     end_count[ sizeof( layers ) ] = { 0 };
-    int     entry_count = 0;
-    int     pin_count = 0;
-
-    std::vector<SCH_LINE*> lines[ sizeof( layers ) ];
+    // A pin at 90º still shouldn't match a line at 90º so just give pins unique numbers
+    int                           uniqueAngle = 10000;
 
     for( const SCH_ITEM* item : Items().Overlapping( aPosition ) )
     {
@@ -395,26 +393,31 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
             break;
 
         case SCH_LINE_T:
-            if( item->HitTest( aPosition, 0 ) )
+        {
+            const SCH_LINE* line = static_cast<const SCH_LINE*>( item );
+
+            if( line->IsConnected( aPosition ) )
             {
-                if( item->GetLayer() == LAYER_WIRE )
-                    lines[WIRES].push_back( (SCH_LINE*) item );
-                else if( item->GetLayer() == LAYER_BUS )
-                    lines[BUSES].push_back( (SCH_LINE*) item );
+                breakLines = true;
+                exitAngles.insert( line->GetAngleFrom( aPosition ) );
             }
+            else if( item->HitTest( aPosition ) )
+            {
+                // Defer any line midpoints until we know whether or not we're breaking them
+                midPointLines.push_back( line );
+            }
+        }
             break;
 
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
-            if( item->IsConnected( aPosition ) )
-                entry_count++;
-
-            break;
-
         case SCH_COMPONENT_T:
         case SCH_SHEET_T:
             if( item->IsConnected( aPosition ) )
-                pin_count++;
+            {
+                breakLines = true;
+                exitAngles.insert( uniqueAngle++ );
+            }
 
             break;
 
@@ -423,60 +426,16 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
         }
     }
 
-    for( int i : { WIRES, BUSES } )
+    if( breakLines )
     {
-        bool removed_overlapping = false;
-
-        for( auto line = lines[i].begin(); line < lines[i].end(); ++line )
+        for( const SCH_LINE* line : midPointLines )
         {
-            /// A line with a midpoint should be counted as two endpoints for this calculation
-            /// because the junction will split the line into two if there is another item
-            /// present at the point.
-            if( !(*line)->IsEndPoint( aPosition ) )
-                end_count[i] += 2;
-            else
-                end_count[i]++;
-
-            for( auto second_line = lines[i].end() - 1; second_line > line; --second_line )
-            {
-                if( !(*line)->IsParallel( *second_line ) )
-                    has_nonparallel[i] = true;
-                else if( !removed_overlapping
-                         && (*line)->IsSameQuadrant( *second_line, aPosition ) )
-                {
-                    removed_overlapping = true;
-                }
-            }
+            exitAngles.insert( line->GetAngleFrom( aPosition ) );
+            exitAngles.insert( line->GetReverseAngleFrom( aPosition ) );
         }
-
-        ///Overlapping lines that point in the same direction should not be counted
-        /// as extra end_points.
-        if( removed_overlapping )
-            end_count[i]--;
     }
 
-    // If there are three or more endpoints
-    if( pin_count && pin_count + end_count[WIRES] > 2 )
-        return true;
-
-    // If wire segments overlap an entry
-    if( entry_count && entry_count + end_count[WIRES] > 2 )
-        return true;
-
-    // If there is at least one segment that ends on a non-parallel line or
-    // junction of two other lines
-    if( has_nonparallel[WIRES] && end_count[WIRES] > 2 )
-        return true;
-
-    // Check for bus - bus junction requirements
-    if( has_nonparallel[BUSES] && end_count[BUSES] > 2 )
-        return true;
-
-    // Check for bus - bus entry requirements
-    if( !aNew && entry_count && end_count[BUSES] )
-        return true;
-
-    return false;
+    return exitAngles.size() >= 3;
 }
 
 
@@ -495,16 +454,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const
         SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
         if( sheetPin && sheetPin->IsConnected( aPosition ) )
-        {
             return true;
-        }
 
         SCH_TEXT* label = GetLabel( aPosition );
 
         if( label && label->IsConnected( aPosition ) )
-        {
             return true;
-        }
     }
         break;
 
@@ -532,16 +487,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const
         SCH_TEXT* label = GetLabel( aPosition, 1 );
 
         if( label && label->IsConnected( aPosition ) )
-        {
             return true;
-        }
 
         SCH_SHEET_PIN* sheetPin = GetSheetPin( aPosition );
 
         if( sheetPin && sheetPin->IsConnected( aPosition ) )
-        {
             return true;
-        }
     }
         break;
 
