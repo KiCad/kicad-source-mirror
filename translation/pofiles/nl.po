@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-18 16:38+0000\n"
-"Last-Translator: pimjansen98 <pimjansen1998@gmail.com>\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -19005,7 +19005,7 @@ msgstr "dB"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
 msgid "Zin:"
-msgstr ""
+msgstr "Zin:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
 #, fuzzy
@@ -19193,7 +19193,7 @@ msgstr "Ruw:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:826
 msgid "Insulator mu:"
-msgstr ""
+msgstr "Isolator mu:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 #, fuzzy
@@ -19294,7 +19294,7 @@ msgstr "Ohm-meter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1267
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Substraat relatieve permittiviteit:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
 msgid "Relative dielectric constant (epsilon r)"
@@ -19372,7 +19372,7 @@ msgstr "Stroomuitval:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1754
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1381
 msgid "Thermal resistance:"
@@ -19662,7 +19662,7 @@ msgstr "PCB-rekenmachine"
 #: pcb_calculator/eserie.cpp:323 pcb_calculator/eserie.cpp:342
 #: pcb_calculator/eserie.cpp:368
 msgid "Exact"
-msgstr ""
+msgstr "Exact"
 
 #: pcb_calculator/eserie.cpp:351 pcb_calculator/eserie.cpp:374
 msgid "Not worth using"
@@ -19945,7 +19945,7 @@ msgstr "Ruwheid van de geleider"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "substrate"
-msgstr ""
+msgstr "substraat"
 
 #: pcb_calculator/transline_ident.cpp:163
 #, fuzzy
@@ -20093,12 +20093,12 @@ msgstr "Buitendiameter (isolator)"
 #: pcb_calculator/transline_ident.cpp:322
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "Effectief %s (zelfs):"
 
 #: pcb_calculator/transline_ident.cpp:323
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "Effectief %s (oneven):"
 
 #: pcb_calculator/transline_ident.cpp:324
 #, fuzzy
@@ -20492,7 +20492,7 @@ msgstr "Koperlagen:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Selecteer het aantal koperlagen in de stapel"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:50
@@ -23157,7 +23157,7 @@ msgstr "Tolerantie:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Strak (0,001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 #, fuzzy
@@ -23166,7 +23166,7 @@ msgstr "Standaard (1,2,3)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Los (0,1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -23224,7 +23224,7 @@ msgstr "Afdrukmodus"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Exporteer als zwarte elementen op een witte achtergrond"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -23439,12 +23439,18 @@ msgid ""
 "the footprint's pads are unlocked and can be moved with respect to the "
 "footprint."
 msgstr ""
+"Footprint kan vrij worden verplaatst en georiënteerd op het canvas. Ten "
+"minste een deel van de blokken van de footprint zijn ontgrendeld en kunnen "
+"worden verplaatst ten opzichte van de footprint."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:340
 msgid ""
 "Footprint can be freely moved and oriented on the canvas, but all of its "
 "pads are locked with respect to their position within in the footprint."
 msgstr ""
+"Voetafdruk kan vrij worden verplaatst en georiënteerd op het canvas, maar "
+"alle blokken zijn vergrendeld met betrekking tot hun positie binnen de "
+"voetafdruk."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:343
 #, fuzzy
@@ -24822,7 +24828,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1254
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Waarschuwing: negatieve waarden voor lokale klaring hebben geen effect."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
 #, fuzzy
@@ -24838,6 +24844,8 @@ msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Waarschuwing: Negatieve soldeermaskerafstand groter dan pad. Er wordt geen "
+"soldeermasker gegenereerd."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1295
 #, fuzzy
@@ -24912,7 +24920,7 @@ msgstr "De BGA-eigenschap kan alleen worden ingesteld voor SMD-pads"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Fout: hoekmaat geen nummer."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1390
 #, fuzzy
@@ -24921,11 +24929,11 @@ msgstr "Onjuiste (negatieve) waarde voor de hoekafmeting"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1392
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Waarschuwing: de afmeting van de hoek maakt het blok rond."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Fout: aangepaste padvorm moet worden omgezet in één polygoon."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1409
 #, fuzzy
@@ -24987,6 +24995,8 @@ msgstr "Pad nummer:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
+"Sta niet toe dat de positie van de pad ten opzichte van de bovenliggende "
+"footprint wordt gewijzigd"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 msgid "Pad shape:"
@@ -26268,7 +26278,7 @@ msgstr "Houd pads uit de buurt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Geeft een DRC-foutmelding als een pad dit gebied overlapt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
 #, fuzzy
@@ -26277,7 +26287,7 @@ msgstr "Houd koperen uit de buurt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Zones vullen geen koper in dit gebied"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:65
 msgid "Keep out footprints"
@@ -26285,7 +26295,7 @@ msgstr "Houd voetafdrukken buiten de deur"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:66
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "Verhoog een DRC-fout als een footprint-binnenplaats dit gebied overlapt"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Constrain outline to H, V and 45 deg"
@@ -26716,6 +26726,8 @@ msgstr "L & imiteer grafische lijnen naar H, V en 45 graden"
 msgid ""
 "When drawing graphic lines force to horizontal, vertical, or 45 degrees."
 msgstr ""
+"Bij het tekenen van grafische lijnen dwingen ze naar horizontaal, verticaal "
+"of 45 graden."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "&Rotation angle:"
@@ -27022,7 +27034,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Opmerking: het vullen van zones kan traag zijn als <%s."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
@@ -27773,6 +27785,8 @@ msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Minimale afstand tussen openingen in het soldeermasker. Padopeningen "
+"dichterbij dan deze afstand worden uitgezet als een enkele opening."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:88
 msgid ""
