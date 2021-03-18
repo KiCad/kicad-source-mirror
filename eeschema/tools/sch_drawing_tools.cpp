@@ -112,29 +112,24 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
 
     getViewControls()->ShowCursor( true );
 
-    // If a component was passed in get it ready for placement.
-    if( component )
-    {
-        component->SetFlags( IS_NEW | IS_MOVED );
-
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-        m_selectionTool->AddItemToSel( component );
-    }
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
 
-    // Prime the pump
-    if( component )
-    {
-        getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
-    }
-    else if( !aEvent.IsReactivate() )
-    {
-        m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
-    }
+    auto addSymbol =
+            [&]( SCH_COMPONENT* aSymbol )
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+                aSymbol->SetParent( m_frame->GetScreen() );
+                aSymbol->SetFlags( IS_NEW | IS_MOVED );
+
+                m_frame->SaveCopyForRepeatItem( aSymbol );
+
+                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
+                m_selectionTool->AddItemToSel( aSymbol );
+                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+            };
 
     auto setCursor =
             [&]()
@@ -142,6 +137,25 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING
                                                                   : KICURSOR::COMPONENT );
             };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_frame->RollbackSchematicFromUndo();
+                component = nullptr;
+            };
+
+    // Prime the pump
+    if( component )
+    {
+        addSymbol( component );
+        getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
+    }
+    else if( !aEvent.IsReactivate() )
+    {
+        m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
+    }
 
     // Set initial cursor
     setCursor();
@@ -151,14 +165,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
     {
         setCursor();
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
-
-        auto cleanup =
-                [&] ()
-                {
-                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                    m_frame->RollbackSchematicFromUndo();
-                    component = nullptr;
-                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -216,14 +222,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
 
                 component = new SCH_COMPONENT( *part, &m_frame->GetCurrentSheet(), sel,
                                                (wxPoint) cursorPos );
-                component->SetParent( m_frame->GetCurrentSheet().LastScreen() );
-                component->SetFlags( IS_NEW | IS_MOVED );
-
-                m_frame->SaveCopyForRepeatItem( component );
-
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), component, false );
-                m_selectionTool->AddItemToSel( component );
-                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+                addSymbol( component );
 
                 // Update cursor now that we have a component
                 setCursor();
@@ -259,20 +258,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                     // We are either stepping to the next unit or next component
                     if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
                     {
-                        // Deselect the last placed symbol: obviously we do not want to
-                        // apply some changes (like rotation, mirror...) to previously placed
-                        // symbols.
-                        m_selectionTool->ClearSelection();
-
                         next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
-                        next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
                         next_comp->SetUnitSelection( new_unit );
 
-                        m_frame->SaveCopyForRepeatItem( next_comp );
-
-                        m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), next_comp, false );
-                        m_selectionTool->AddItemToSel( next_comp );
+                        addSymbol( next_comp );
                     }
                 }
 
