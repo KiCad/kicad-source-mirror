@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,13 +101,11 @@ struct VRML_COLOR
 };
 
 
-extern VRML_COLOR vrml_colors_list[VRML_COLOR_LAST];
-
-
 // Handle the board ans its board items to convert them to a VRML representation:
 class MODEL_VRML
 {
 private:
+    VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];
     double      m_layer_z[PCB_LAYER_ID_COUNT];
     SHAPE_POLY_SET  m_pcbOutlines;          // stores the board main outlines
 
@@ -115,11 +113,12 @@ private:
     double      m_arcMinLen, m_arcMaxLen;   // min and max lengths of an arc chord
     int         m_precision;                // precision factor when exportin fp shapes
                                             // to separate files
+    SGNODE*     m_sgmaterial[VRML_COLOR_LAST];
 
 public:
     IFSG_TRANSFORM m_OutputPCB;
     VRML_LAYER  m_holes;
-    VRML_LAYER  m_board;
+    VRML_LAYER  m_3D_board;
     VRML_LAYER  m_top_copper;
     VRML_LAYER  m_bot_copper;
     VRML_LAYER  m_top_silk;
@@ -129,6 +128,8 @@ public:
     VRML_LAYER  m_plated_holes;
 
     std::list< SGNODE* > m_components;
+    S3D_CACHE* m_Cache3Dmodels;
+
 
     bool m_plainPCB;
 
@@ -263,4 +264,5 @@ private:
     void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
                                VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
+    SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx );
 };

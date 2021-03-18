@@ -54,20 +54,15 @@
 #include <exporter_vrml.h>
 
 
-static wxString PROJ_DIR;           // project directory
-
-
-static S3D_CACHE* cache;
-VRML_COLOR vrml_colors_list[VRML_COLOR_LAST];
-static SGNODE* sgmaterial[VRML_COLOR_LAST] = { NULL };
-
-
 MODEL_VRML::MODEL_VRML() :
         m_OutputPCB( (SGNODE*) NULL )
 {
     m_ReuseDef = true;
     m_precision = 6;
     m_WorldScale = 1.0;
+
+    for( int ii = 0; ii < VRML_COLOR_LAST; ++ii )
+        m_sgmaterial[ii] = nullptr;
 
     for( unsigned i = 0; i < arrayDim( m_layer_z );  ++i )
         m_layer_z[i] = 0;
@@ -103,10 +98,10 @@ MODEL_VRML::~MODEL_VRML()
     // destroy any unassociated material appearances
     for( int j = 0; j < VRML_COLOR_LAST; ++j )
     {
-        if( sgmaterial[j] && NULL == S3D::GetSGNodeParent( sgmaterial[j] ) )
-            S3D::DestroyNode( sgmaterial[j] );
+        if( m_sgmaterial[j] && NULL == S3D::GetSGNodeParent( m_sgmaterial[j] ) )
+            S3D::DestroyNode( m_sgmaterial[j] );
 
-        sgmaterial[j] = NULL;
+        m_sgmaterial[j] = NULL;
     }
 
     if( !m_components.empty() )
@@ -144,7 +139,7 @@ void MODEL_VRML::SetOffset( double aXoff, double aYoff )
     m_ty = -aYoff;
 
     m_holes.SetVertexOffsets( aXoff, aYoff );
-    m_board.SetVertexOffsets( aXoff, aYoff );
+    m_3D_board.SetVertexOffsets( aXoff, aYoff );
     m_top_copper.SetVertexOffsets( aXoff, aYoff );
     m_bot_copper.SetVertexOffsets( aXoff, aYoff );
     m_top_silk.SetVertexOffsets( aXoff, aYoff );
@@ -287,18 +282,18 @@ void MODEL_VRML::writeLayers( BOARD* aPcb, const char* aFileName,
                               OSTREAM* aOutputFile )
 {
     // VRML_LAYER board;
-    m_board.Tesselate( &m_holes );
+    m_3D_board.Tesselate( &m_holes );
     double brdz = m_brd_thickness / 2.0
                   - ( Millimeter2iu( ART_OFFSET / 2.0 ) ) * m_BoardToVrmlScale;
 
     if( m_UseInlineModelsInBrdfile )
     {
         write_triangle_bag( *aOutputFile, GetColor( VRML_COLOR_PCB ),
-                            &m_board, false, false, brdz, -brdz );
+                            &m_3D_board, false, false, brdz, -brdz );
     }
     else
     {
-        create_vrml_shell( m_OutputPCB, VRML_COLOR_PCB, &m_board, brdz, -brdz );
+        create_vrml_shell( m_OutputPCB, VRML_COLOR_PCB, &m_3D_board, brdz, -brdz );
     }
 
     if( m_plainPCB )
@@ -746,16 +741,16 @@ void MODEL_VRML::ExportVrmlBoard( BOARD* aPcb )
     {
         const SHAPE_LINE_CHAIN& outline = m_pcbOutlines.COutline( cnt );
 
-        seg = m_board.NewContour();
+        seg = m_3D_board.NewContour();
 
         for( int j = 0; j < outline.PointCount(); j++ )
         {
-            m_board.AddVertex( seg, (double)outline.CPoint(j).x * m_BoardToVrmlScale,
+            m_3D_board.AddVertex( seg, (double)outline.CPoint(j).x * m_BoardToVrmlScale,
                                     -((double)outline.CPoint(j).y * m_BoardToVrmlScale ) );
 
         }
 
-        m_board.EnsureWinding( seg, false );
+        m_3D_board.EnsureWinding( seg, false );
 
         // Generate board holes from outlines:
         for( int ii = 0; ii < m_pcbOutlines.HoleCount( cnt ); ii++ )
@@ -1059,19 +1054,27 @@ void MODEL_VRML::ExportVrmlPadshape( VRML_LAYER* aTinLayer, PAD* aPad )
     {
         SHAPE_POLY_SET polySet;
         const int corner_radius = aPad->GetRoundRectCornerRadius();
+        bool   doChamfer = aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT;
+        double chamferRatio = doChamfer ? aPad->GetChamferRectRatio() : 0.0;
+
         TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), aPad->GetSize(), 0.0,
-                                              corner_radius, 0.0, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+                                              corner_radius, chamferRatio,
+                                              doChamfer ? aPad->GetChamferPositions() : 0,
+                                              ARC_HIGH_DEF, ERROR_INSIDE );
         std::vector< wxRealPoint > cornerList;
         // TransformRoundChamferedRectToPolygon creates only one convex polygon
-        SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );
+        SHAPE_LINE_CHAIN& poly = polySet.Outline( 0 );
 
         cornerList.reserve( poly.PointCount() );
+
         for( int ii = 0; ii < poly.PointCount(); ++ii )
             cornerList.emplace_back(
-                    poly.CPoint( ii ).x * m_BoardToVrmlScale, -poly.CPoint( ii ).y * m_BoardToVrmlScale );
+                                    poly.CPoint( ii ).x * m_BoardToVrmlScale,
+                                    -poly.CPoint( ii ).y * m_BoardToVrmlScale );
 
         // Close polygon
         cornerList.push_back( cornerList[0] );
+
         if( !aTinLayer->AddPolygon( cornerList, pad_x, -pad_y, aPad->GetOrientation() ) )
             throw( std::runtime_error( aTinLayer->GetError() ) );
 
@@ -1319,7 +1322,7 @@ void MODEL_VRML::ExportVrmlFootprint( BOARD* aPcb, FOOTPRINT* aFootprint,
 
     while( sM != eM )
     {
-        SGNODE* mod3d = (SGNODE*) cache->Load( sM->m_Filename );
+        SGNODE* mod3d = (SGNODE*) m_Cache3Dmodels->Load( sM->m_Filename );
 
         if( NULL == mod3d )
         {
@@ -1379,7 +1382,7 @@ void MODEL_VRML::ExportVrmlFootprint( BOARD* aPcb, FOOTPRINT* aFootprint,
 
         if( m_UseInlineModelsInBrdfile )
         {
-            wxFileName srcFile = cache->GetResolver()->ResolvePath( sM->m_Filename );
+            wxFileName srcFile = m_Cache3Dmodels->GetResolver()->ResolvePath( sM->m_Filename );
             wxFileName dstFile;
             dstFile.SetPath( m_Subdir3DFpModels );
             dstFile.SetName( srcFile.GetName() );
@@ -1482,17 +1485,15 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
                                       double aXRef, double aYRef )
 {
     BOARD*          pcb = GetBoard();
-    bool            ok  = true;
+    bool            success  = true;
 
-
-    cache = Prj().Get3DCacheManager();
-    PROJ_DIR = Prj().GetProjectPath();
     MODEL_VRML model3d;
     model_vrml = &model3d;
     model3d.SetScale( aMMtoWRMLunit );
     model3d.m_UseInlineModelsInBrdfile = aExport3DFiles;
     model3d.m_Subdir3DFpModels = a3D_Subdir;
     model3d.m_UseRelPathIn3DModelFilename = aUseRelativePaths;
+    model3d.m_Cache3Dmodels = Prj().Get3DCacheManager();
 
     if( model3d.m_UseInlineModelsInBrdfile )
     {
@@ -1553,10 +1554,10 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         msg << _( "IDF Export Failed:\n" ) << FROM_UTF8( e.what() );
         wxMessageBox( msg );
 
-        ok = false;
+        success = false;
     }
 
-    return ok;
+    return success;
 }
 
 void MODEL_VRML::ExportFp3DModelsAsLinkedFile( BOARD* aPcb, const wxString& aFullFileName )
@@ -1608,15 +1609,15 @@ void MODEL_VRML::ExportFp3DModelsAsLinkedFile( BOARD* aPcb, const wxString& aFul
     CLOSE_STREAM( output_file );
 }
 
-static SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx )
+SGNODE* MODEL_VRML::getSGColor( VRML_COLOR_INDEX colorIdx )
 {
     if( colorIdx == -1 )
         colorIdx = VRML_COLOR_PCB;
     else if( colorIdx == VRML_COLOR_LAST )
         return NULL;
 
-    if( sgmaterial[colorIdx] )
-        return sgmaterial[colorIdx];
+    if( m_sgmaterial[colorIdx] )
+        return m_sgmaterial[colorIdx];
 
     IFSG_APPEARANCE vcolor( (SGNODE*) NULL );
     VRML_COLOR* cp = &vrml_colors_list[colorIdx];
@@ -1629,9 +1630,9 @@ static SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx )
     vcolor.SetAmbient( cp->ambient, cp->ambient, cp->ambient );
     vcolor.SetTransparency( cp->transp );
 
-    sgmaterial[colorIdx] = vcolor.GetRawPtr();
+    m_sgmaterial[colorIdx] = vcolor.GetRawPtr();
 
-    return sgmaterial[colorIdx];
+    return m_sgmaterial[colorIdx];
 }
 
 
