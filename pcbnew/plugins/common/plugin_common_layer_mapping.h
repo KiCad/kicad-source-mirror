@@ -23,6 +23,7 @@
 #define PLUGIN_COMMON_LAYER_MAPPING_H
 
 #include <functional>
+#include <map>
 
 #include <io_mgr.h>
 #include <layers_id_colors_and_visibility.h> // PCB_LAYER_ID
@@ -73,6 +74,8 @@ public:
     {
         m_layer_mapping_handler = aLayerMappingHandler;
     }
+
+    virtual ~LAYER_REMAPPABLE_PLUGIN() = default;
 protected:
     LAYER_MAPPING_HANDLER m_layer_mapping_handler; ///< Callback to get layer mapping
 };

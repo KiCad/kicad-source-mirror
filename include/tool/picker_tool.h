@@ -57,6 +57,8 @@ public:
         reset();
     }
 
+    virtual ~PICKER_TOOL_BASE() = default;
+
     inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
 
     inline void SetSnapping( bool aSnap ) { m_snap = aSnap; }
