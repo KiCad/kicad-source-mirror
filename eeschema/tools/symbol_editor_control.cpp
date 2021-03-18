@@ -332,12 +332,12 @@ int SYMBOL_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ShowSymbolTree( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
         wxCommandEvent dummy;
-        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->OnToggleSearchTree( dummy );
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->OnToggleSymbolTree( dummy );
     }
 
     return 0;
@@ -438,12 +438,12 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
         PAGE_INFO pageTemp = pageSave;
 
-        wxSize componentSize = part->GetUnitBoundingBox( editFrame->GetUnit(),
-                                                         editFrame->GetConvert() ).GetSize();
+        wxSize symbolSize = part->GetUnitBoundingBox( editFrame->GetUnit(),
+                                                      editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box
-        pageTemp.SetWidthMils(  int( componentSize.x * 1.2 ) );
-        pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
+        pageTemp.SetWidthMils(  int( symbolSize.x * 1.2 ) );
+        pageTemp.SetHeightMils( int( symbolSize.y * 1.2 ) );
 
         editFrame->GetScreen()->SetPageSettings( pageTemp );
         editFrame->SVGPlotSymbol( fullFileName );
@@ -508,7 +508,7 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         SCH_COMPONENT* symbol = new SCH_COMPONENT( *part, libId, &schframe->GetCurrentSheet(),
                                                    unit, convert );
 
-        symbol->SetParent( schframe->GetCurrentSheet().LastScreen() );
+        symbol->SetParent( schframe->GetScreen() );
 
         if( schframe->eeconfig()->m_AutoplaceFields.enable )
             symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
@@ -551,6 +551,6 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowSymbolTree,        EE_ACTIONS::showSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 }

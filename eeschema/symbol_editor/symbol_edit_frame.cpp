@@ -407,11 +407,11 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto showCompTreeCond =
         [this] ( const SELECTION& )
         {
-            return IsSearchTreeShown();
+            return IsSymbolTreeShown();
         };
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
-    mgr->SetConditions( EE_ACTIONS::showComponentTree,   CHECK( showCompTreeCond ) );
+    mgr->SetConditions( EE_ACTIONS::showSymbolTree, CHECK( showCompTreeCond ) );
 
     auto demorganCond =
         [this] ( const SELECTION& )
@@ -555,15 +555,15 @@ void SYMBOL_EDIT_FRAME::RebuildSymbolUnitsList()
 }
 
 
-void SYMBOL_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
+void SYMBOL_EDIT_FRAME::OnToggleSymbolTree( wxCommandEvent& event )
 {
     auto& treePane = m_auimgr.GetPane( m_treePane );
-    treePane.Show( !IsSearchTreeShown() );
+    treePane.Show( !IsSymbolTreeShown() );
     m_auimgr.Update();
 }
 
 
-bool SYMBOL_EDIT_FRAME::IsSearchTreeShown()
+bool SYMBOL_EDIT_FRAME::IsSymbolTreeShown()
 {
     return m_auimgr.GetPane( m_treePane ).IsShown();
 }
@@ -1300,10 +1300,10 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_COMPONENT* aSymbol )
     ReCreateMenuBar();
     ReCreateHToolbar();
 
-    if( IsSearchTreeShown() )
+    if( IsSymbolTreeShown() )
     {
         wxCommandEvent evt;
-        OnToggleSearchTree( evt );
+        OnToggleSymbolTree( evt );
     }
 
     updateTitle();

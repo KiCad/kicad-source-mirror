@@ -170,9 +170,9 @@ public:
 
     void OnSelectUnit( wxCommandEvent& event );
 
-    void OnToggleSearchTree( wxCommandEvent& event );
+    void OnToggleSymbolTree( wxCommandEvent& event );
 
-    bool IsSearchTreeShown();
+    bool IsSymbolTreeShown();
     void FreezeLibraryTree();
     void ThawLibraryTree();
 

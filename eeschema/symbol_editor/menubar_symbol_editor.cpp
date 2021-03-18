@@ -130,7 +130,7 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->Add( ACTIONS::toggleCursorStyle,    ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::showComponentTree, ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::showSymbolTree,    ACTION_MENU::CHECK );
 
 
     //-- Place menu -----------------------------------------------

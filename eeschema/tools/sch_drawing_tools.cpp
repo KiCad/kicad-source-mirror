@@ -85,9 +85,9 @@ bool SCH_DRAWING_TOOLS::Init()
 }
 
 
-int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
-    SCH_COMPONENT*              component = aEvent.Parameter<SCH_COMPONENT*>();
+    SCH_COMPONENT*              symbol = aEvent.Parameter<SCH_COMPONENT*>();
     SCHLIB_FILTER               filter;
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
@@ -107,7 +107,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxFAIL_MSG( "PlaceCompontent(): unexpected request" );
+        wxFAIL_MSG( "PlaceSymbol(): unexpected request" );
     }
 
     getViewControls()->ShowCursor( true );
@@ -134,8 +134,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
     auto setCursor =
             [&]()
             {
-                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING
-                                                                  : KICURSOR::COMPONENT );
+                m_frame->GetCanvas()->SetCurrentCursor( symbol ? KICURSOR::MOVING
+                                                               : KICURSOR::COMPONENT );
             };
 
     auto cleanup =
@@ -143,13 +143,13 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_frame->RollbackSchematicFromUndo();
-                component = nullptr;
+                symbol = nullptr;
             };
 
     // Prime the pump
-    if( component )
+    if( symbol )
     {
-        addSymbol( component );
+        addSymbol( symbol );
         getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
     }
     else if( !aEvent.IsReactivate() )
@@ -168,7 +168,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            if( component )
+            if( symbol )
             {
                 cleanup();
             }
@@ -180,14 +180,14 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
-            if( component && evt->IsMoveTool() )
+            if( symbol && evt->IsMoveTool() )
             {
                 // we're already moving our own item; ignore the move tool
                 evt->SetPassEvent( false );
                 continue;
             }
 
-            if( component )
+            if( symbol )
                 cleanup();
 
             if( evt->IsMoveTool() )
@@ -203,7 +203,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            if( !component )
+            if( !symbol )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -220,33 +220,33 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                 if( !part )
                     continue;
 
-                component = new SCH_COMPONENT( *part, &m_frame->GetCurrentSheet(), sel,
-                                               (wxPoint) cursorPos );
-                addSymbol( component );
+                wxPoint pos( cursorPos );
+                symbol = new SCH_COMPONENT( *part, &m_frame->GetCurrentSheet(), sel, pos );
+                addSymbol( symbol );
 
-                // Update cursor now that we have a component
+                // Update cursor now that we have a symbol
                 setCursor();
             }
             else
             {
-                SCH_COMPONENT* next_comp = nullptr;
+                SCH_COMPONENT* nextSymbol = nullptr;
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+                    symbol->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
                 m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true,
                                       &m_selectionTool->GetSelection() );
 
-                m_view->Update( component );
+                m_view->Update( symbol );
                 m_frame->OnModify();
 
                 if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                         || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
                 {
-                    int new_unit = component->GetUnit();
+                    int new_unit = symbol->GetUnit();
 
                     if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
-                            && component->GetUnit() < component->GetUnitCount() )
+                        && symbol->GetUnit() < symbol->GetUnitCount() )
                     {
                         new_unit++;
                     }
@@ -255,24 +255,24 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
                         new_unit = 1;
                     }
 
-                    // We are either stepping to the next unit or next component
+                    // We are either stepping to the next unit or next symbol
                     if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
                     {
-                        next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
-                        next_comp->SetUnit( new_unit );
-                        next_comp->SetUnitSelection( new_unit );
+                        nextSymbol = static_cast<SCH_COMPONENT*>( symbol->Duplicate() );
+                        nextSymbol->SetUnit( new_unit );
+                        nextSymbol->SetUnitSelection( new_unit );
 
-                        addSymbol( next_comp );
+                        addSymbol( nextSymbol );
                     }
                 }
 
-                component = next_comp;
+                symbol = nextSymbol;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...
-            if( !component )
+            if( !symbol )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
@@ -284,21 +284,21 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
             {
                 int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
-                if( component )
+                if( symbol )
                 {
-                    m_frame->SelectUnit( component, unit );
+                    m_frame->SelectUnit( symbol, unit );
                     m_toolMgr->RunAction( ACTIONS::refreshPreview );
                 }
             }
         }
-        else if( component && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( symbol && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            component->SetPosition( (wxPoint)cursorPos );
-            m_view->Update( component );
+            symbol->SetPosition( (wxPoint)cursorPos );
+            m_view->Update( symbol );
         }
         else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( component )
+            if( symbol )
                 cleanup();
         }
         else
@@ -307,8 +307,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
-        getViewControls()->SetAutoPan( component != nullptr );
-        getViewControls()->CaptureCursor( component != nullptr );
+        getViewControls()->SetAutoPan( symbol != nullptr );
+        getViewControls()->CaptureCursor( symbol != nullptr );
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -1317,8 +1317,8 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
 
 void SCH_DRAWING_TOOLS::setTransitions()
 {
-    Go( &SCH_DRAWING_TOOLS::PlaceComponent,      EE_ACTIONS::placeSymbol.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::PlaceComponent,      EE_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placeSymbol.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placePower.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeNoConnect.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeBusWireEntry.MakeEvent() );

@@ -94,14 +94,14 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool* aAppendUndo
 }
 
 
-void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
-                                         ANNOTATE_ORDER_T  aSortOption,
-                                         ANNOTATE_OPTION_T aAlgoOption,
-                                         int               aStartNumber,
-                                         bool              aResetAnnotation,
-                                         bool              aRepairTimestamps,
-                                         bool              aLockUnits,
-                                         REPORTER&         aReporter )
+void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
+                                      ANNOTATE_ORDER_T  aSortOption,
+                                      ANNOTATE_OPTION_T aAlgoOption,
+                                      int               aStartNumber,
+                                      bool              aResetAnnotation,
+                                      bool              aRepairTimestamps,
+                                      bool              aLockUnits,
+                                      REPORTER&         aReporter )
 {
     SCH_REFERENCE_LIST references;
     SCH_SCREENS        screens( Schematic().Root() );

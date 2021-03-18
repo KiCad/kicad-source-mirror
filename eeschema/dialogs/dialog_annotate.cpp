@@ -182,9 +182,9 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
-                                  (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
-                                  GetResetItems() , true, GetLockUnits(), reporter );
+    m_Parent->AnnotateSymbols( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
+                               (ANNOTATE_OPTION_T) GetAnnotateAlgo(), GetStartNumber(),
+                               GetResetItems(), true, GetLockUnits(), reporter );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
 

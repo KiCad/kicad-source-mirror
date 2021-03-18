@@ -50,7 +50,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int PlaceComponent( const TOOL_EVENT& aEvent );
+    int PlaceSymbol( const TOOL_EVENT& aEvent );
     int SingleClickPlace( const TOOL_EVENT& aEvent );
     int TwoClickPlace( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
