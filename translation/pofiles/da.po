@@ -1,4 +1,4 @@
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 # nickoe <oe.nick@gmail.com>, 2021.
@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-01-21 16:56+0000\n"
-"Last-Translator: nickoe <oe.nick@gmail.com>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
-"source/da/>\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
+"master-source/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -141,15 +141,15 @@ msgstr "Opret lag"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:457
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:86
 msgid "No footprint loaded."
-msgstr "Intet aftryk indlæst."
+msgstr "Intet fodaftryk indlæst."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:473
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Omrids af aftryk mangler eller er forkert. Kør Aftryk Undersøger for en fuld "
-"analyse."
+"Omrids af fodaftryk mangler eller er forkert. Kør Fodaftryk Undersøger for "
+"en fuld analyse."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:482
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -1228,7 +1228,7 @@ msgstr "Opret symbolbibliotek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:849
 msgid "Create Footprint Library"
-msgstr "Opret Footprint Library"
+msgstr "Opret Fodaftryks Bibliotek"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:891
 msgid "Error allocating memory for potrace bitmap"
@@ -1668,7 +1668,7 @@ msgstr "Symboler af"
 
 #: common/dialog_about/AboutDialog_main.cpp:657
 msgid "Footprints by"
-msgstr "Fodaftryk af"
+msgstr "Footprints af"
 
 #: common/dialog_about/AboutDialog_main.cpp:670
 msgid "Icons by"
