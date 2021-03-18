@@ -2032,6 +2032,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_TEXT_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
+            case PCB_ARC_T:
             case PCB_VIA_T:
             case PCB_ZONE_T:
             case PCB_TARGET_T:
@@ -2046,8 +2047,17 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
                 break;
 
+            case PCB_PAD_T:
+            case PCB_FP_TEXT_T:
+            case PCB_FP_SHAPE_T:
+            case PCB_FP_ZONE_T:
+            case PCB_MARKER_T:
+                // Silently drop these items (such as footprint texts) from duplication
+                break;
+
             default:
-                // Silently drop other items (such as footprint texts) from duplication
+                wxASSERT_MSG( false,
+                              wxString::Format( "Unknown item type %d", orig_item->Type() ) );
                 break;
             }
         }
