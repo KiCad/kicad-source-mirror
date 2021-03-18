@@ -44,19 +44,17 @@ public:
      * false to include them in the vrml board file
      * @param aUseRelativePaths = true to use fp 3D relative paths,
      * false to use absolute paths
-     * @param aUsePlainPCB = true to create a body board shape only,
-     * false to create a full board shape with tracks, vias ...
      * @param a3D_Subdir is the folder to copy 3D fp models
      * @param aXRef = X position of board (in mm)
      * @param aYRef = Y position of board (in mm)
      */
     bool ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
                                       bool aExport3DFiles, bool aUseRelativePaths,
-                                      bool aUsePlainPCB, const wxString& a3D_Subdir,
+                                      const wxString& a3D_Subdir,
                                       double aXRef, double aYRef )
     {
         return ExportVRML( aFullFileName, aMMtoWRMLunit,
                            aExport3DFiles, aUseRelativePaths,
-                           aUsePlainPCB, a3D_Subdir, aXRef, aYRef);
+                           a3D_Subdir, aXRef, aYRef);
     }
 };

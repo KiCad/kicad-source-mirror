@@ -300,9 +300,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "export_vrml.use_relative_paths",
             &m_ExportVrml.use_relative_paths, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "export_vrml.use_plain_pcb",
-            &m_ExportVrml.use_plain_pcb, false ) );
-
     m_params.emplace_back( new PARAM<int>( "export_vrml.ref_units",
             &m_ExportVrml.ref_units, 0 ) );
 
@@ -646,7 +643,6 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(    aCfg, "VrmlExportUnit",       "export_vrml.units" );
     ret &= fromLegacy<bool>(   aCfg, "VrmlExportCopyFiles",  "export_vrml.copy_3d_models" );
     ret &= fromLegacy<bool>(   aCfg, "VrmlUseRelativePaths", "export_vrml.use_relative_paths" );
-    ret &= fromLegacy<bool>(   aCfg, "VrmlUsePlainPCB",      "export_vrml.use_plain_pcb" );
     ret &= fromLegacy<int>(    aCfg, "VrmlRefUnits",         "export_vrml.ref_units" );
     ret &= fromLegacy<double>( aCfg, "VrmlRefX",             "export_vrml.ref_x" );
     ret &= fromLegacy<double>( aCfg, "VrmlRefY",             "export_vrml.ref_y" );

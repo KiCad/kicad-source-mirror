@@ -49,7 +49,6 @@ private:
     int             m_unitsOpt;             // Remember last units option
     bool            m_copy3DFilesOpt;       // Remember last copy model files option
     bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
-    bool            m_usePlainPCBOpt;       // Remember last Plain Board option
     int             m_RefUnits;             // Remember last units for Reference Point
     double          m_XRef;                 // Remember last X Reference Point
     double          m_YRef;                 // Remember last Y Reference Point
@@ -67,7 +66,6 @@ public:
         m_unitsOpt            = cfg->m_ExportVrml.units;
         m_copy3DFilesOpt      = cfg->m_ExportVrml.copy_3d_models;
         m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
-        m_usePlainPCBOpt      = cfg->m_ExportVrml.use_plain_pcb;
         m_RefUnits            = cfg->m_ExportVrml.ref_units;
         m_XRef                = cfg->m_ExportVrml.ref_x;
         m_YRef                = cfg->m_ExportVrml.ref_y;
@@ -78,7 +76,6 @@ public:
         m_rbSelectUnits->SetSelection( m_unitsOpt );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
         m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
-        m_cbPlainPCB->SetValue( m_usePlainPCBOpt );
         m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
         wxString tmpStr;
         tmpStr << m_XRef;
@@ -102,7 +99,6 @@ public:
         cfg->m_ExportVrml.units              = m_unitsOpt;
         cfg->m_ExportVrml.copy_3d_models     = m_copy3DFilesOpt;
         cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
-        cfg->m_ExportVrml.use_plain_pcb      = m_usePlainPCBOpt;
         cfg->m_ExportVrml.ref_units          = m_VRML_RefUnitChoice->GetSelection();
         cfg->m_ExportVrml.origin_mode        = m_rbCoordOrigin->GetSelection();
 
@@ -162,11 +158,6 @@ public:
     bool GetUseRelativePathsOption()
     {
         return m_useRelativePathsOpt = m_cbUseRelativePaths->GetValue();
-    }
-
-    bool GetUsePlainPCBOption()
-    {
-        return m_usePlainPCBOpt = m_cbPlainPCB->GetValue();
     }
 
     void OnUpdateUseRelativePath( wxUpdateUIEvent& event ) override
@@ -246,7 +237,6 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     double scale = scaleList[dlg.GetUnits()];     // final scale export
     bool export3DFiles = dlg.GetCopyFilesOption();
     bool useRelativePaths = dlg.GetUseRelativePathsOption();
-    bool usePlainPCB = dlg.GetUsePlainPCBOption();
 
     path = dlg.FilePicker()->GetPath();
     SetLastPath( LAST_PATH_VRML, path );
@@ -269,7 +259,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     }
 
     if( !ExportVRML_File( path, scale, export3DFiles, useRelativePaths,
-                          usePlainPCB, modelPath.GetPath(), aXRef, aYRef ) )
+                          modelPath.GetPath(), aXRef, aYRef ) )
     {
         wxString msg = wxString::Format( _( "Unable to create file \"%s\"" ), path );
         DisplayErrorMessage( this, msg );

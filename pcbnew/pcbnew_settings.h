@@ -124,7 +124,6 @@ public:
         int    units;
         bool   copy_3d_models;
         bool   use_relative_paths;
-        bool   use_plain_pcb;
         int    ref_units;
         double ref_x;
         double ref_y;

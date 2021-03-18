@@ -627,9 +627,6 @@ public:
      * @param aExport3DFiles true to copy 3D shapes in the subir a3D_Subdir
      * @param aUseRelativePaths set to true to use relative paths instead of absolute paths
      *                          in the board VRML file URLs.
-     * @param aUsePlainPCB set to true to export a board with no copper or silkscreen;
-     *                          this is useful for generating a VRML file which can be
-     *                          converted to a STEP model.
      * @param a3D_Subdir sub directory where 3D shapes files are copied.  This is only used
      *                   when aExport3DFiles == true.
      * @param aXRef X value of PCB (0,0) reference point.
@@ -637,7 +634,7 @@ public:
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
-                          bool aExport3DFiles, bool aUseRelativePaths, bool aUsePlainPCB,
+                          bool aExport3DFiles, bool aUseRelativePaths,
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 
     /**

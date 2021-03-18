@@ -53,7 +53,6 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbSelectUnits;
 		wxCheckBox* m_cbCopyFiles;
 		wxCheckBox* m_cbUseRelativePaths;
-		wxCheckBox* m_cbPlainPCB;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

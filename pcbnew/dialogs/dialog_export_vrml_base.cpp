@@ -131,9 +131,6 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 
 	bSizer4->Add( m_cbUseRelativePaths, 0, wxALL, 5 );
 
-	m_cbPlainPCB = new wxCheckBox( this, wxID_ANY, _("Plain PCB (no copper or silk)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_cbPlainPCB, 0, wxALL, 5 );
-
 
 	bLowerSizer->Add( bSizer4, 2, wxEXPAND, 5 );
 

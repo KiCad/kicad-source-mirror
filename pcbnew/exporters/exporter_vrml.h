@@ -103,7 +103,7 @@ struct VRML_COLOR
 
 
 // Handle the board ans its board items to convert them to a VRML representation:
-class MODEL_VRML
+class EXPORTER_PCB_VRML
 {
 private:
     VRML_COLOR  vrml_colors_list[VRML_COLOR_LAST];
@@ -133,9 +133,6 @@ public:
     std::list< SGNODE* > m_components;
     S3D_CACHE* m_Cache3Dmodels;
     BOARD*     m_Pcb;
-
-
-    bool m_plainPCB;
 
     /* true to use VRML inline{} syntax for footprint 3D models, like:
      * Inline { url "F:/tmp/pic_programmer/shapes3D/DIP-18_W7.62mm_Socket.wrl"  }
@@ -169,8 +166,8 @@ public:
     LAYER_NUM m_text_layer;
     int m_text_width;
 
-    MODEL_VRML();
-    ~MODEL_VRML();
+    EXPORTER_PCB_VRML();
+    ~EXPORTER_PCB_VRML();
 
     VRML_COLOR& GetColor( VRML_COLOR_INDEX aIndex )
     {
@@ -226,11 +223,9 @@ public:
 
     void ExportVrmlFpShape( FP_SHAPE* aOutline, FOOTPRINT* aFootprint );
 
-    void ExportVrmlPad( PAD* aPad );
+    void ExportVrmlPadHole( PAD* aPad );
 
     void ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream* aOutputFile );
-
-    void ExportVrmlPadshape( VRML_LAYER* aTinLayer, PCB_LAYER_ID aPcbLayer, PAD* aPad );
 
     void ExportVrmlDrawings();
 

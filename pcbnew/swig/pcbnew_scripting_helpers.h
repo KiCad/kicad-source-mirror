@@ -87,7 +87,7 @@ bool ExportSpecctraDSN( wxString& aFullFilename );
  */
 bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit,
                  bool aExport3DFiles, bool aUseRelativePaths,
-                 bool aUsePlainPCB, const wxString& a3D_Subdir,
+                 const wxString& a3D_Subdir,
                  double aXRef, double aYRef );
 
 /**
