@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-19 16:00+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8959,10 +8959,9 @@ msgid "Read Only"
 msgstr "Schreibgeschützt"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
-#, fuzzy
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
-msgstr "Die Linienbreite darf für ungefüllte Formen nicht 0 sein."
+msgstr "Die Linienbreite darf nur für mit Umrissfarbe gefüllten Formen 0 sein."
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -17442,9 +17441,8 @@ msgid "Highlight Attribute"
 msgstr "Attribute hervorheben"
 
 #: gerbview/tools/gerbview_actions.cpp:128
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "Netz hervorheben"
+msgstr "DCode hervorheben"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Next Layer"
@@ -17556,9 +17554,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "Öffnungstype \"%s\" hervorheben"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Hervorhebung %s"
+msgstr "DCode D%d hervorheben"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -32514,77 +32512,64 @@ msgid "Create arc from line segment"
 msgstr "Bogen aus Liniensegment erstellen"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "Basisname"
+msgstr "Lagenname"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "Stärke"
+msgstr "Dicke (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:265
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "Stärke"
+msgstr "Dicke (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Verlusttangens"
+msgstr "Verlustwinkel"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:332
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "Platinen-Lagenaufbau-Tabelle einfügen"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:371
 msgid "BOARD CHARACTERISTICS"
-msgstr ""
+msgstr "PLATINEN-EIGENSCHAFTEN"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Kupferlagenanzahl:"
+msgstr "Kupferlagenanzahl: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Bemaßung zeichnen"
+msgstr "Abmessungen der Platine: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Minimaler Rasterabstand:"
+msgstr "Min Leiterbahn/abstand: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Kupferoberfläche:"
+msgstr "Kupferoberfläche: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Castellated Pad (Halbloch)"
+msgstr "Castellated Pads: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Platinen Stärke:"
+msgstr "Platinen-Dicke: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Antipad-Durchmesser:"
+msgstr "Min Lochdurchmesser: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Impedanzkontrolle"
+msgstr "Impedanzkontrolle: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:466
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Metallisierte Platinenkante"
+msgstr "Metallisierte Platinenkante: "
 
 #: pcbnew/tools/drawing_tool.cpp:73
 msgid "Select Via Size"
@@ -32866,22 +32851,22 @@ msgid "Draw Arc"
 msgstr "Kreisbogen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:122
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Platinenstatistik"
+msgstr "Platineneigenschaften hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:123
 msgid "Add a board characteristics table on a graphic layer"
 msgstr ""
+"Auf einer Grafiklage eine Tabelle mit Platineneigenschaften-Eigenschaften "
+"hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:128
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Stich hinzufügen"
+msgstr "Lagenaufbau-Tabelle hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
-msgstr ""
+msgstr "Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:141
 msgid "Add Aligned Dimension"
