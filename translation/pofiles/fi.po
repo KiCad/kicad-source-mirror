@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
 "PO-Revision-Date: 2021-03-19 16:01+0000\n"
-"Last-Translator: Ola Rinta-Koski <weblate@rinta-koski.net>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -168,11 +168,10 @@ msgstr ""
 "täydellistä analyysiä varten."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:482
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Taulun piirteet ovat epämuodostuneet. Suorita DRC täydellistä analyysiä "
-"varten."
+"Piirilevyn ääriviiva puuttuu tai on epämuodostunut. Suorita DRC täydellistä "
+"analyysiä varten."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -765,9 +764,8 @@ msgid "3D Display Options"
 msgstr "3D-näyttövaihtoehdot"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:96
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D-katselin"
+msgstr "3D-näkymä"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -2233,18 +2231,17 @@ msgid "Image Editor"
 msgstr "Kuvaeditori"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Valittu kohde on lukittu."
+msgstr "Valinta sisältää %d lukittua osaa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
 msgstr "Nämä kohteet ohitetaan, ellet ohita lukkoja."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Älä näytä enää uudestaan"
+msgstr "Älä näytä enää."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
@@ -2282,9 +2279,8 @@ msgid "Import settings from a previous version at:"
 msgstr "Tuo asetukset aiemmasta versiosta"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Viritä differentiaaliparin vinous"
+msgstr "Käytä eri polkua"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
@@ -3388,9 +3384,8 @@ msgstr ""
 "vasemmalta oikealle"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Palauta oletukset"
+msgstr "Palauta hiiren oletukset"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 msgid "Reset to Trackpad Defaults"
@@ -3434,9 +3429,8 @@ msgid "Netclass name already in use."
 msgstr "Netclass-nimi on jo käytössä."
 
 #: common/dialogs/panel_setup_netclasses.cpp:472
-#, fuzzy
 msgid "Minimum copper clearance"
-msgstr "Pienin välys:"
+msgstr "Pienin etäisyys kupariin"
 
 #: common/dialogs/panel_setup_netclasses.cpp:473
 msgid "Minimum track width"
