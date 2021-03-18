@@ -361,7 +361,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_Show_Page_Limits = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Show_Page_Limits->SetValue(true);
-	m_Show_Page_Limits->SetToolTip( _("Draw gray line that outlines the sheet size.") );
+	m_Show_Page_Limits->SetToolTip( _("Draw an outline to show the sheet size.") );
 
 	sbSizer4->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
