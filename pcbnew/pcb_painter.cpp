@@ -235,19 +235,22 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         const PAD* pad = dynamic_cast<const PAD*>( item );
         const VIA* via = dynamic_cast<const VIA*>( item );
         int        holeLayer = aLayer;
-        int        annularRingLayer;
+        int        annularRingLayer = UNDEFINED_LAYER;
 
-        if( pad )
+        if( pad && pad->GetAttribute() == PAD_ATTRIB_PTH )
             annularRingLayer = LAYER_PADS_TH;
         else if( via && via->GetViaType() == VIATYPE::MICROVIA )
             annularRingLayer = LAYER_VIA_MICROVIA;
         else if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
             annularRingLayer = LAYER_VIA_BBLIND;
-        else
+        else if( via && via->GetViaType() == VIATYPE::THROUGH )
             annularRingLayer = LAYER_VIA_THROUGH;
 
-        if( m_layerColors[ holeLayer ] == m_layerColors[ annularRingLayer ] )
+        if( annularRingLayer != UNDEFINED_LAYER
+                && m_layerColors[ holeLayer ] == m_layerColors[ annularRingLayer ] )
+        {
             aLayer = LAYER_PCB_BACKGROUND;
+        }
     }
 
     // Zones should pull from the copper layer
