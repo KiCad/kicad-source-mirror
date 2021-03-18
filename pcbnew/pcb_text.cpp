@@ -150,63 +150,16 @@ void PCB_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 
 void PCB_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    double angle = GetTextAngle();
-    bool   vertical = KiROUND( angle ) % 1800 == 900;
-
-    if( KiROUND( angle ) != 0 )
-    {
-        Rotate( aCentre, -angle );
-
-        if( vertical )
-            aFlipLeftRight = !aFlipLeftRight;
-    }
-
-    // Flip the bounding box
-    EDA_RECT box = GetTextBox();
-    int      left = box.GetLeft();
-    int      right = box.GetRight();
-    int      top = box.GetTop();
-    int      bottom = box.GetBottom();
-    wxPoint  pos = GetTextPos();
-
     if( aFlipLeftRight )
     {
-        MIRROR( left, aCentre.x );
-        MIRROR( right, aCentre.x );
-        std::swap( left, right );
-
-        MIRROR( pos.x, aCentre.x );
+        SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
+        SetTextAngle( -GetTextAngle() );
     }
     else
     {
-        MIRROR( top, aCentre.y );
-        MIRROR( bottom, aCentre.y );
-        std::swap( top, bottom );
-
-        MIRROR( pos.y, aCentre.y );
+        SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
+        SetTextAngle( 1800 - GetTextAngle() );
     }
-
-    // Now put the text back in its bounding box
-    switch( GetHorizJustify() )
-    {
-    case GR_TEXT_HJUSTIFY_LEFT:   SetTextX( IsMirrored() ? left : right ); break;
-    case GR_TEXT_HJUSTIFY_CENTER: SetTextX( pos.x );                       break;
-    case GR_TEXT_HJUSTIFY_RIGHT:  SetTextX( IsMirrored() ? right : left ); break;
-    }
-
-    if( !aFlipLeftRight )
-    {
-        switch( GetVertJustify() )
-        {
-        case GR_TEXT_VJUSTIFY_TOP:    SetTextY( bottom );               break;
-        case GR_TEXT_VJUSTIFY_CENTER: SetTextY( pos.y );                break;
-        case GR_TEXT_VJUSTIFY_BOTTOM: SetTextY( top );                  break;
-        }
-    }
-
-    // And restore orientation
-    if( KiROUND( angle ) != 0 )
-        Rotate( aCentre, angle );
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
     SetMirrored( !IsMirrored() );
