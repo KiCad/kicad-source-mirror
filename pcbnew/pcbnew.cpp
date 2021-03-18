@@ -60,6 +60,10 @@
 #include <wildcards_and_files_ext.h>
 
 
+/* init functions defined by swig */
+
+extern "C" PyObject* PyInit__pcbnew( void );
+
 namespace PCB {
 
 static struct IFACE : public KIFACE_I
@@ -158,6 +162,9 @@ static struct IFACE : public KIFACE_I
         // Return a pointer to the global instance of the global footprint table.
         case KIFACE_GLOBAL_FOOTPRINT_TABLE:
             return (void*) &GFootprintTable;
+
+        case KIFACE_SCRIPTING_LEGACY:
+            return reinterpret_cast<void*>( PyInit__pcbnew );
 
         default:
             return nullptr;

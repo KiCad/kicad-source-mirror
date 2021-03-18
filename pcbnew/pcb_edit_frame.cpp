@@ -550,7 +550,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto pythonConsoleCond =
         [] ( const SELECTION& )
         {
-            if( IsWxPythonLoaded() )
+            if( SCRIPTING::IsWxAvailable() )
             {
                 wxWindow* console = PCB_EDIT_FRAME::findPythonConsole();
                 return console && console->IsShown();
@@ -1288,35 +1288,6 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
     // Stackup and/or color theme may have changed
     m_appearancePanel->OnBoardChanged();
-}
-
-
-void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
-{
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PYTHON, false );
-
-    if( !frame )
-    {
-        frame = Kiway().Player( FRAME_PYTHON, true, this );
-
-        // If we received an error in the CTOR due to Python-ness, don't crash
-        if( !frame )
-            return;
-
-        if( !frame->IsVisible() )
-            frame->Show( true );
-
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( frame->IsIconized() )
-            frame->Iconize( false );
-
-        frame->Raise();
-
-        return;
-    }
-
-    frame->Show( !frame->IsVisible() );
-
 }
 
 

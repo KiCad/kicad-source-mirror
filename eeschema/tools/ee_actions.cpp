@@ -643,6 +643,11 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),
         BITMAPS::lines90 );
 
+// Python Console
+TOOL_ACTION EE_ACTIONS::showPythonConsole( "eeschema.EditorControl.showPythonConsole",
+        AS_GLOBAL, 0, "",
+        _( "Scripting Console" ), _( "Show the Python scripting console" ),
+        BITMAPS::py_script );
 
 // SCH_NAVIGATE_TOOL
 //

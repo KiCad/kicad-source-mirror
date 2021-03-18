@@ -40,6 +40,8 @@
 #include <kicad_string.h>
 #include <macros.h>
 
+#include <kiface_ids.h>
+#include <kiway.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -50,26 +52,82 @@
 
 #include <config.h>
 
-/* init functions defined by swig */
-
-extern "C" PyObject* PyInit__pcbnew( void );
+using initfunc = PyObject* (*)(void);
 
 
-/// True if the wxPython scripting layer was successfully loaded.
-static bool wxPythonLoaded = false;
-
-
-bool IsWxPythonLoaded()
+SCRIPTING::SCRIPTING( KIWAY* aKiway )
 {
-    return wxPythonLoaded;
+    int  retv;
+    char cmd[1024];
+
+    scriptingSetup();
+
+    KIFACE* pcbnew_kiface = nullptr;
+
+    pcbnew_kiface = aKiway->KiFACE( KIWAY::FACE_PCB );
+    initfunc pcbnew_init = reinterpret_cast<initfunc>( pcbnew_kiface->IfaceOrAddress( KIFACE_SCRIPTING_LEGACY ) );
+    PyImport_AppendInittab( "_pcbnew", pcbnew_init );
+
+#ifdef _MSC_VER
+    // Under vcpkg/msvc, we need to explicitly set the python home
+    // or else it'll start consuming system python registry keys and the like instead
+    // We are going to follow the "unix" layout for the msvc/vcpkg distributions so exes in /root/bin
+    // And the python lib in /root/lib/python3(/Lib,/DLLs)
+    wxFileName pyHome;
+
+    pyHome.Assign( Pgm().GetExecutablePath() );
+
+    pyHome.Normalize();
+
+    // MUST be called before Py_Initialize so it will to create valid default lib paths
+    if( !wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        Py_SetPythonHome( pyHome.GetFullPath().c_str() );
+    }
+#endif
+//
+//    Py_Initialize();
+    pybind11::initialize_interpreter();
+
+//    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
+
+#if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
+    PyEval_InitThreads();
+#endif      // if PY_VERSION_HEX < 0x03070000
+
+    // Save the current Python thread state and release the
+    // Global Interpreter Lock.
+    m_python_thread_state = PyEval_SaveThread();
+
+    // Load pcbnew inside Python and load all the user plugins and package-based plugins
+    {
+        PyLOCK lock;
+
+        // Load os so that we can modify the environment variables through python
+        snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
+                  "sys.path.append(\".\")\n"
+                  "import pcbnew\n"
+                  "pcbnew.LoadPlugins(\"%s\", \"%s\")",
+                  TO_UTF8( PyScriptingPath() ), TO_UTF8( PyScriptingPath( true) ) );
+        retv = PyRun_SimpleString( cmd );
+
+        if( retv != 0 )
+            wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
+    }
 }
 
-PyThreadState* g_PythonMainTState;
+SCRIPTING::~SCRIPTING()
+{
+    PyEval_RestoreThread( m_python_thread_state );
+    pybind11::finalize_interpreter();
+}
 
+bool SCRIPTING::IsWxAvailable()
+{
+    return true;
+}
 
-
-
-bool ScriptingSetup()
+bool SCRIPTING::scriptingSetup()
 {
 #if defined( __WINDOWS__ )
     // If our python.exe (in kicad/bin) exists, force our kicad python environment
@@ -151,76 +209,6 @@ bool ScriptingSetup()
     if( !path.DirExists() && !path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         wxLogError( "Warning: could not create user scripting path %s", path.GetPath() );
 
-    if( !InitPythonScripting( TO_UTF8( PyScriptingPath() ), TO_UTF8( PyScriptingPath( true ) ) ) )
-    {
-        wxLogError( "InitPythonScripting() failed." );
-        return false;
-    }
-
-    return true;
-}
-
-/**
- * Initialize the python environment and publish the Pcbnew interface inside it.
- *
- * This initializes all the wxPython interface and returns the python thread control structure
- */
-bool InitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath )
-{
-    int  retv;
-    char cmd[1024];
-
-    PyImport_AppendInittab( "_pcbnew", PyInit__pcbnew );
-
-#ifdef _MSC_VER
-    // Under vcpkg/msvc, we need to explicitly set the python home
-    // or else it'll start consuming system python registry keys and the like instead
-    // We are going to follow the "unix" layout for the msvc/vcpkg distributions so exes in /root/bin
-    // And the python lib in /root/lib/python3(/Lib,/DLLs)
-    wxFileName pyHome;
-
-    pyHome.Assign( Pgm().GetExecutablePath() );
-
-    pyHome.Normalize();
-
-    // MUST be called before Py_Initialize so it will to create valid default lib paths
-    if( !wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
-    {
-        Py_SetPythonHome( pyHome.GetFullPath().c_str() );
-    }
-#endif
-//
-//    Py_Initialize();
-    pybind11::initialize_interpreter();
-
-//    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
-
-#if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
-    PyEval_InitThreads();
-#endif      // if PY_VERSION_HEX < 0x03070000
-
-    wxPythonLoaded = true;
-
-    // Save the current Python thread state and release the
-    // Global Interpreter Lock.
-    g_PythonMainTState = PyEval_SaveThread();
-
-    // Load pcbnew inside Python and load all the user plugins and package-based plugins
-    {
-        PyLOCK lock;
-
-        // Load os so that we can modify the environment variables through python
-        snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
-                  "sys.path.append(\".\")\n"
-                  "import pcbnew\n"
-                  "pcbnew.LoadPlugins(\"%s\", \"%s\")",
-                  aStockScriptingPath, aUserScriptingPath );
-        retv = PyRun_SimpleString( cmd );
-
-        if( retv != 0 )
-            wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-    }
-
     return true;
 }
 
@@ -289,13 +277,6 @@ static void RunPythonMethodWithReturnedString( const char* aMethodName, wxString
 
     if( PyErr_Occurred() )
         wxLogMessage( PyErrStringWithTraceback() );
-}
-
-
-void FinishPythonScripting()
-{
-    PyEval_RestoreThread( g_PythonMainTState );
-    pybind11::finalize_interpreter();
 }
 
 

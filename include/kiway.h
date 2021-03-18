@@ -383,6 +383,7 @@ public:
      * @param aTop is the top most wxFrame in the entire program.
      */
     void SetTop( wxFrame* aTop );
+    wxFrame* GetTop() { return m_top; }
 
     void OnKiCadExit();
 

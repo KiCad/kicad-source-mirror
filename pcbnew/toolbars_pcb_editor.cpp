@@ -294,7 +294,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
     // Access to the scripting console
-    if( IsWxPythonLoaded() )
+    if( SCRIPTING::IsWxAvailable() )
     {
         m_mainToolBar->AddScaledSeparator( this );
         m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );

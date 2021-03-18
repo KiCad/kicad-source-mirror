@@ -135,6 +135,7 @@ public:
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleHiddenFields( const TOOL_EVENT& aEvent );
     int ToggleForceHV( const TOOL_EVENT& aEvent );
+    int TogglePythonConsole( const TOOL_EVENT& aEvent );
 
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 

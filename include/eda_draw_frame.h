@@ -90,6 +90,11 @@ public:
      */
     void ReleaseFile();
 
+    /**
+     * Toggles the scripting console visibility
+     */
+    void ScriptingConsoleEnableDisable();
+
     wxFindReplaceData& GetFindReplaceData() { return *m_findReplaceData; }
     wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
 

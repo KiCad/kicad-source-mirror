@@ -53,18 +53,6 @@ static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
 static SETTINGS_MANAGER* s_SettingsManager = nullptr;
 
-/// A valid app is needed for preventing some asserts when opening the settings manager
-static wxApp* s_WxApp = nullptr;
-
-
-wxApp* GetApp()
-{
-    if( !s_WxApp )
-        s_WxApp = new wxApp();
-
-    return s_WxApp;
-}
-
 
 BOARD* GetBoard()
 {
@@ -98,7 +86,7 @@ SETTINGS_MANAGER* GetSettingsManager()
     if( !s_SettingsManager )
     {
         // Ensure wx system settings stuff is available
-        GetApp();
+        static_cast<void>( wxTheApp );
         s_SettingsManager = new SETTINGS_MANAGER( true );
     }
 

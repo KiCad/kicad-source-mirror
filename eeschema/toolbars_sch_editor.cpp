@@ -29,6 +29,7 @@
 #include <kiface_i.h>
 #include <bitmaps.h>
 #include <eeschema_id.h>
+#include <python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
@@ -110,6 +111,13 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
+
+    // Access to the scripting console
+    if( SCRIPTING::IsWxAvailable() )
+    {
+        m_mainToolBar->AddScaledSeparator( this );
+        m_mainToolBar->Add( EE_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
+    }
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();

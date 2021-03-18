@@ -364,11 +364,6 @@ set( PCBNEW_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     )
 
-set( PCBNEW_SCRIPTING_DIALOGS
-    dialogs/dialog_scripting.cpp
-    dialogs/dialog_scripting_base.cpp
-    )
-
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     ${CMAKE_SOURCE_DIR}/common/swig/wx_python_helpers.cpp
     swig/pcbnew_action_plugins.cpp
@@ -382,7 +377,7 @@ if( COMPILER_SUPPORTS_WARNINGS )
     # Only compile our source files with the warnings, since the SWIG generated
     # files contain a lot of warnings, we just ignore it.
     set_source_files_properties(
-        ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
+        ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
         PROPERTIES COMPILE_FLAGS ${WARN_FLAGS_CXX}
     )
 endif()
@@ -400,7 +395,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 endif()
 
 set( PCBNEW_SCRIPTING_SRCS
-    ${PCBNEW_SCRIPTING_DIALOGS}
     pcbnew_wrap.cxx
     ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
     )

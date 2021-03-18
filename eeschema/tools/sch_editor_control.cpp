@@ -36,6 +36,7 @@
 #include <invoke_sch_dialog.h>
 #include <kicad_string.h>
 #include <kiway.h>
+#include <kiway_player.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -1959,6 +1960,14 @@ int SCH_EDITOR_CONTROL::ToggleForceHV( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
+{
+
+    m_frame->ScriptingConsoleEnableDisable();
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     Go( &SCH_EDITOR_CONTROL::New,                   ACTIONS::doNew.MakeEvent() );
@@ -2032,4 +2041,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleForceHV,         EE_ACTIONS::toggleForceHV.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,     EE_ACTIONS::showPythonConsole.MakeEvent() );
 }

@@ -606,11 +606,6 @@ public:
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
     /**
-     * Enable or disable the scripting console.
-     */
-    void ScriptingConsoleEnableDisable();
-
-    /**
      * Send a message to the schematic editor so that it may move its cursor
      * to a symbol with the same reference as the \a objectToSync.
      *

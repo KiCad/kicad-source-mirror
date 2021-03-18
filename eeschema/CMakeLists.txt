@@ -404,6 +404,7 @@ target_link_libraries( eeschema_kiface
     common
     sexpr
     markdown_lib
+    scripting
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

@@ -114,7 +114,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     InitSettings( new KIPYTHON_SETTINGS );
     Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );
 
-    ScriptingSetup();
     return start_common( aCtlBits );
 }
 

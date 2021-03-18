@@ -45,6 +45,28 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
+class KIWAY;
+
+class SCRIPTING
+{
+public:
+    SCRIPTING( KIWAY* aKiway );
+    ~SCRIPTING();
+
+    /// We do not allow secondary creation of the scripting system
+    SCRIPTING( SCRIPTING const& )       = delete;
+    void operator= ( SCRIPTING const& ) = delete;
+
+    static bool IsWxAvailable();
+
+private:
+
+    bool scriptingSetup();
+
+    PyThreadState* m_python_thread_state;
+
+    KIWAY* aKiway;
+};
 
 /**
  * Set an environment variable in the current Python interpreter.
@@ -56,7 +78,6 @@ void        UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
 
 void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
-bool ScriptingSetup();
 bool InitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath );
 bool IsWxPythonLoaded();
 

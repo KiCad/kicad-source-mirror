@@ -88,6 +88,7 @@ add_dependencies( qa_eeschema eeschema )
 target_link_libraries( qa_eeschema
     common
     pcbcommon
+    scripting
     kimath
     qa_utils
     markdown_lib

@@ -204,6 +204,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
 bool PGM_BASE::InitPgm( bool aHeadless )
 {
+    printf("InitPgm()\n");
     wxFileName pgm_name( App().argv[0] );
 
     wxInitAllImageHandlers();

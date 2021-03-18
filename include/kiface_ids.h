@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,8 @@ enum KIFACE_ADDR_ID : int
      KIFACE_LOAD_PCB,
      KIFACE_LOAD_SCHEMATIC,
      KIFACE_NETLIST_SCHEMATIC,
-     KIFACE_SCRIPTING_WINDOW
+     KIFACE_SCRIPTING_LEGACY,
+     KIFACE_SCRIPTING
 };
 
 #endif // KIFACE_IDS
