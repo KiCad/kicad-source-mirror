@@ -154,6 +154,13 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
         const wxString& libName = sel.GetLibNickname();
         wxString        msg;
 
+        if( libName.IsEmpty() )
+        {
+            msg.Printf( _( "No symbol library selected." ), libName );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
+
         if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
         {
             msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
