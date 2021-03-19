@@ -24,16 +24,16 @@ void screenSpaceLine( KIGFX::GAL* gal, const VECTOR2D& p0, const VECTOR2D& p1, d
 #if 0
     //shader->Deactivate();
 
-    currentManager->Reserve( 6 );
-    currentManager->Shader( SHADER_NONE );
-    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+    m_currentManager->Reserve( 6 );
+    m_currentManager->Shader( SHADER_NONE );
+    m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
 
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pa.x, pa.y, layerDepth );
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pb.x, pb.y, layerDepth );
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pc.x, pc.y, layerDepth );
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pa.x, pa.y, layerDepth );
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pc.x, pc.y, layerDepth );
-    currentManager->Shader( SHADER_NONE ); currentManager->Vertex( pd.x, pd.y, layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pa.x, pa.y, m_layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pb.x, pb.y, m_layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pc.x, pc.y, m_layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pa.x, pa.y, m_layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pc.x, pc.y, m_layerDepth );
+    m_currentManager->Shader( SHADER_NONE ); m_currentManager->Vertex( pd.x, pd.y, m_layerDepth );
     shader->Use();
 #endif
 

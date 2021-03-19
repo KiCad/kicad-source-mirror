@@ -59,7 +59,7 @@ void BASIC_GAL::doDrawPolyline( const std::vector<wxPoint>& aLocalPointList )
 {
     if( m_DC )
     {
-        if( isFillEnabled )
+        if( m_isFillEnabled )
         {
             GRPoly( m_isClipped ? &m_clipBox : NULL, m_DC, aLocalPointList.size(),
                     &aLocalPointList[0], 0, GetLineWidth(), m_Color, m_Color );
@@ -130,7 +130,7 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
 
     if( m_DC )
     {
-        if( isFillEnabled )
+        if( m_isFillEnabled )
         {
             GRLine( m_isClipped ? &m_clipBox : NULL, m_DC, startVector.x, startVector.y,
                     endVector.x, endVector.y, GetLineWidth(), m_Color );

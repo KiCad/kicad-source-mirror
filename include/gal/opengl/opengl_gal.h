@@ -259,12 +259,12 @@ public:
 
     void SetMouseListener( wxEvtHandler* aMouseListener )
     {
-        mouseListener = aMouseListener;
+        m_mouseListener = aMouseListener;
     }
 
     void SetPaintListener( wxEvtHandler* aPaintListener )
     {
-        paintListener = aPaintListener;
+        m_paintListener = aPaintListener;
     }
 
     void EnableDepthTest( bool aEnabled = false ) override;
@@ -291,48 +291,53 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    static wxGLContext*     glMainContext;      ///< Parent OpenGL context
-    wxGLContext*            glPrivContext;      ///< Canvas-specific OpenGL context
-    static int              instanceCounter;    ///< GL GAL instance counter
-    wxEvtHandler*           mouseListener;
-    wxEvtHandler*           paintListener;
+    static wxGLContext*     m_glMainContext;    ///< Parent OpenGL context
+    wxGLContext*            m_glPrivContext;    ///< Canvas-specific OpenGL context
+    static int              m_instanceCounter;  ///< GL GAL instance counter
+    wxEvtHandler*           m_mouseListener;
+    wxEvtHandler*           m_paintListener;
 
-    static GLuint fontTexture;                  ///< Bitmap font texture handle (shared)
+    static GLuint           g_fontTexture;      ///< Bitmap font texture handle (shared)
 
     // Vertex buffer objects related fields
     typedef std::unordered_map< unsigned int, std::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
-    GROUPS_MAP              groups;             ///< Stores information about VBO objects (groups)
-    unsigned int            groupCounter;       ///< Counter used for generating keys for groups
-    VERTEX_MANAGER*         currentManager;     ///< Currently used VERTEX_MANAGER (for storing
+
+    GROUPS_MAP              m_groups;           ///< Stores information about VBO objects (groups)
+    unsigned int            m_groupCounter;     ///< Counter used for generating keys for groups
+    VERTEX_MANAGER*         m_currentManager;   ///< Currently used VERTEX_MANAGER (for storing
                                                 ///< VERTEX_ITEMs).
-    VERTEX_MANAGER*         cachedManager;      ///< Container for storing cached VERTEX_ITEMs
-    VERTEX_MANAGER*         nonCachedManager;   ///< Container for storing non-cached VERTEX_ITEMs
-    VERTEX_MANAGER*         overlayManager;     ///< Container for storing overlaid VERTEX_ITEMs
+    VERTEX_MANAGER*         m_cachedManager;    ///< Container for storing cached VERTEX_ITEMs
+    VERTEX_MANAGER*         m_nonCachedManager; ///< Container for storing non-cached VERTEX_ITEMs
+    VERTEX_MANAGER*         m_overlayManager;   ///< Container for storing overlaid VERTEX_ITEMs
 
     // Framebuffer & compositing
-    OPENGL_COMPOSITOR*      compositor;         ///< Handles multiple rendering targets
-    unsigned int            mainBuffer;         ///< Main rendering target
-    unsigned int            overlayBuffer;      ///< Auxiliary rendering target (for menus etc.)
-    RENDER_TARGET           currentTarget;      ///< Current rendering target
+    OPENGL_COMPOSITOR*      m_compositor;       ///< Handles multiple rendering targets
+    unsigned int            m_mainBuffer;       ///< Main rendering target
+    unsigned int            m_overlayBuffer;    ///< Auxiliary rendering target (for menus etc.)
+    RENDER_TARGET           m_currentTarget;    ///< Current rendering target
 
     // Shader
-    SHADER*                 shader;             ///< There is only one shader used for different
+    SHADER*                 m_shader;           ///< There is only one shader used for different
                                                 ///< objects.
 
     // Internal flags
-    bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
-    static bool             isBitmapFontLoaded;         ///< Is the bitmap font texture loaded?
-    bool                    isBitmapFontInitialized;    ///< Is the shader set to use bitmap fonts?
-    bool                    isInitialized;       ///< Basic initialization flag, has to be done
-                                                 ///< when the window is visible
-    bool                    isGrouping;          ///< Was a group started?
-    bool                    m_isContextLocked;   ///< Used for assertion checking
-    int                     lockClientCookie;
+    bool                    m_isFramebufferInitialized; ///< Are the framebuffers initialized?
+    static bool             m_isBitmapFontLoaded;       ///< Is the bitmap font texture loaded?
+    bool                    m_isBitmapFontInitialized;  ///< Is the shader set to use bitmap fonts?
+    bool                    m_isInitialized;            ///< Basic initialization flag, has to be
+                                                        ///< done when the window is visible
+    bool                    m_isGrouping;               ///< Was a group started?
+    bool                    m_isContextLocked;          ///< Used for assertion checking
+    int                     m_lockClientCookie;
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;
 
-    std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
+    std::unique_ptr<GL_BITMAP_CACHE>            m_bitmapCache;
+
+    // Polygon tesselation
+    GLUtesselator*                              m_tesselator;
+    std::deque< boost::shared_array<GLdouble> > m_tessIntersects;
 
     void lockContext( int aClientCookie ) override;
 
@@ -353,12 +358,6 @@ private:
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
-    // Polygon tesselation
-    /// The tessellator
-    GLUtesselator*          tesselator;
-    /// Storage for intersecting points
-    std::deque< boost::shared_array<GLdouble> > tessIntersects;
-
     /**
      * @brief Draw a quad for the line.
      *
@@ -370,7 +369,7 @@ private:
     /**
      * Draw a semicircle.
      *
-     * Depending on settings (isStrokeEnabled & isFilledEnabled) it runs the proper function
+     * Depending on settings (m_isStrokeEnabled & isFilledEnabled) it runs the proper function
      * (drawStrokedSemiCircle or drawFilledSemiCircle).
      *
      * @param aCenterPoint is the center point.

@@ -218,13 +218,13 @@ public:
 
 
 protected:
-    // Geometric transforms according to the currentWorld2Screen transform matrix:
+    // Geometric transforms according to the m_currentWorld2Screen transform matrix:
     const double xform( double x );             // scale
     const VECTOR2D xform( double x, double y ); // rotation, scale and offset
     const VECTOR2D xform( const VECTOR2D& aP ); // rotation, scale and offset
 
     /**
-     * Transform according to the rotation from currentWorld2Screen transform matrix.
+     * Transform according to the rotation from m_currentWorld2Screen transform matrix.
      *
      * @param aAngle is the angle in radians to transform.
      * @return the modified angle.
@@ -232,7 +232,7 @@ protected:
     const double angle_xform( const double aAngle );
 
     /**
-     * Transform according to the rotation from currentWorld2Screen transform matrix
+     * Transform according to the rotation from m_currentWorld2Screen transform matrix
      * for the start angle and the end angle of an arc.
      *
      * @param aStartAngle is the arc starting point in radians to transform
@@ -312,38 +312,38 @@ protected:
     /// Type definition for an graphics group element
     typedef struct
     {
-        GRAPHICS_COMMAND command;                   ///< Command to execute
+        GRAPHICS_COMMAND m_Command;                 ///< Command to execute
         union {
-            double dblArg[MAX_CAIRO_ARGUMENTS];     ///< Arguments for Cairo commands
-            bool boolArg;                           ///< A bool argument
-            int intArg;                             ///< An int argument
-        } argument;
-        cairo_path_t* cairoPath;                    ///< Pointer to a Cairo path
+            double DblArg[MAX_CAIRO_ARGUMENTS];     ///< Arguments for Cairo commands
+            bool   BoolArg;                         ///< A bool argument
+            int    IntArg;                          ///< An int argument
+        }                m_Argument;
+        cairo_path_t*    m_CairoPath;               ///< Pointer to a Cairo path
     } GROUP_ELEMENT;
 
-    // Variables for the grouping function
-    bool                        isGrouping;         ///< Is grouping enabled ?
-    bool                        isElementAdded;     ///< Was an graphic element added ?
     typedef std::deque<GROUP_ELEMENT> GROUP;        ///< A graphic group type definition
-    std::map<int, GROUP>        groups;             ///< List of graphic groups
-    unsigned int                groupCounter;       ///< Counter used for generating keys for groups
-    GROUP*                      currentGroup;       ///< Currently used group
 
-    double linePixelWidth;
-    double lineWidthInPixels;
-    bool lineWidthIsOdd;
+    // Variables for the grouping function
+    bool                  m_isGrouping;             ///< Is grouping enabled ?
+    bool                  m_isElementAdded;         ///< Was an graphic element added ?
+    std::map<int, GROUP>  m_groups;                 ///< List of graphic groups
+    unsigned int          m_groupCounter;           ///< Counter used for generating group keys
+    GROUP*                m_currentGroup;           ///< Currently used group
 
-    cairo_matrix_t      cairoWorldScreenMatrix; ///< Cairo world to screen transformation matrix
-    cairo_matrix_t      currentXform;
-    cairo_matrix_t      currentWorld2Screen;
-    cairo_t*            currentContext;         ///< Currently used Cairo context for drawing
-    cairo_t*            context;                ///< Cairo image
-    cairo_surface_t*    surface;                ///< Cairo surface
+    double                m_lineWidthInPixels;
+    bool                  m_lineWidthIsOdd;
+
+    cairo_matrix_t        m_cairoWorldScreenMatrix; ///< Cairo world to screen transform matrix
+    cairo_matrix_t        m_currentXform;
+    cairo_matrix_t        m_currentWorld2Screen;
+    cairo_t*              m_currentContext;         ///< Currently used Cairo context for drawing
+    cairo_t*              m_context;                ///< Cairo image
+    cairo_surface_t*      m_surface;                ///< Cairo surface
 
     /// List of surfaces that were created by painting images, to be cleaned up later
-    std::vector<cairo_surface_t*> imageSurfaces;
+    std::vector<cairo_surface_t*> m_imageSurfaces;
 
-    std::vector<cairo_matrix_t> xformStack;
+    std::vector<cairo_matrix_t>   m_xformStack;
     /// Format used to store pixels
     static constexpr cairo_format_t GAL_FORMAT = CAIRO_FORMAT_ARGB32;
 };
@@ -399,12 +399,12 @@ public:
 
     void SetMouseListener( wxEvtHandler* aMouseListener )
     {
-        mouseListener = aMouseListener;
+        m_mouseListener = aMouseListener;
     }
 
     void SetPaintListener( wxEvtHandler* aPaintListener )
     {
-        paintListener = aPaintListener;
+        m_paintListener = aPaintListener;
     }
 
     /// @copydoc GAL::BeginDrawing()
@@ -448,25 +448,25 @@ public:
 
 protected:
     // Compositor related variables
-    std::shared_ptr<CAIRO_COMPOSITOR> compositor;   ///< Object for layers compositing
-    unsigned int            mainBuffer;             ///< Handle to the main buffer
-    unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
-    RENDER_TARGET           currentTarget;          ///< Current rendering target
-    bool                    validCompositor;        ///< Compositor initialization flag
+    std::shared_ptr<CAIRO_COMPOSITOR> m_compositor;  ///< Object for layers compositing
+    unsigned int        m_mainBuffer;          ///< Handle to the main buffer
+    unsigned int        m_overlayBuffer;       ///< Handle to the overlay buffer
+    RENDER_TARGET       m_currentTarget;       ///< Current rendering target
+    bool                m_validCompositor;     ///< Compositor initialization flag
 
     // Variables related to wxWidgets
-    wxWindow*               parentWindow;           ///< Parent window
-    wxEvtHandler*           mouseListener;          ///< Mouse listener
-    wxEvtHandler*           paintListener;          ///< Paint listener
-    unsigned int            bufferSize;             ///< Size of buffers cairoOutput, bitmapBuffers
-    unsigned char*          wxOutput;               ///< wxImage compatible buffer
+    wxWindow*           m_parentWindow;        ///< Parent window
+    wxEvtHandler*       m_mouseListener;       ///< Mouse listener
+    wxEvtHandler*       m_paintListener;       ///< Paint listener
+    unsigned int        m_bufferSize;          ///< Size of buffers cairoOutput, bitmapBuffers
+    unsigned char*      m_wxOutput;            ///< wxImage compatible buffer
 
     // Variables related to Cairo <-> wxWidgets
-    unsigned char*      bitmapBuffer;           ///< Storage of the Cairo image
-    int                 stride;                 ///< Stride value for Cairo
-    int                 wxBufferWidth;
-    bool                isInitialized;          ///< Are Cairo image & surface ready to use
-    COLOR4D             backgroundColor;        ///< Background color
+    unsigned char*      m_bitmapBuffer;        ///< Storage of the Cairo image
+    int                 m_stride;              ///< Stride value for Cairo
+    int                 m_wxBufferWidth;
+    bool                m_isInitialized;       ///< Are Cairo image & surface ready to use
+    COLOR4D             m_backgroundColor;     ///< Background color
 };
 
 } // namespace KIGFX

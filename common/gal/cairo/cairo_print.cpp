@@ -136,10 +136,10 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS&             aDisplayOptio
         CAIRO_GAL_BASE( aDisplayOptions )
 {
     m_printCtx = std::move( aContext );
-    context = currentContext = m_printCtx->GetContext();
-    surface = m_printCtx->GetSurface();
-    cairo_reference( context );
-    cairo_surface_reference( surface );
+    m_context = m_currentContext = m_printCtx->GetContext();
+    m_surface = m_printCtx->GetSurface();
+    cairo_reference( m_context );
+    cairo_surface_reference( m_surface );
     m_clearColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
     m_hasNativeLandscapeRotation = false;
     resetContext();
@@ -150,10 +150,10 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS&             aDisplayOptio
 
 void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 {
-    worldScale = screenDPI * worldUnitLength * zoomFactor;
-    const auto paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */
-                             / worldUnitLength;                                   /* 1 inch in IU */
-    const auto paperSizeIUTransposed = VECTOR2D( paperSizeIU.y, paperSizeIU.x );
+    m_worldScale = m_screenDPI * m_worldUnitLength * m_zoomFactor;
+    const VECTOR2D paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */
+                                 / m_worldUnitLength;                                 /* 1" in IU */
+    const VECTOR2D paperSizeIUTransposed( paperSizeIU.y, paperSizeIU.x );
 
     MATRIX3x3D scale, translation, flip, rotate, lookat;
 
@@ -165,27 +165,27 @@ void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 
     if( m_hasNativeLandscapeRotation )
     {
-        translation.SetTranslation( 0.5 / zoomFactor * paperSizeIUTransposed );
+        translation.SetTranslation( 0.5 / m_zoomFactor * paperSizeIUTransposed );
     }
     else
     {
         if( isLandscape() )
         {
-            translation.SetTranslation( 0.5 / zoomFactor * paperSizeIU );
+            translation.SetTranslation( 0.5 / m_zoomFactor * paperSizeIU );
             rotate.SetRotation( 90.0 * M_PI / 180.0 );
         }
         else
         {
-            translation.SetTranslation( 0.5 / zoomFactor * paperSizeIUTransposed );
+            translation.SetTranslation( 0.5 / m_zoomFactor * paperSizeIUTransposed );
         }
     }
 
-    scale.SetScale( VECTOR2D( worldScale, worldScale ) );
-    flip.SetScale( VECTOR2D( globalFlipX ? -1.0 : 1.0, globalFlipY ? -1.0 : 1.0 ) );
-    lookat.SetTranslation( -lookAtPoint );
+    scale.SetScale( VECTOR2D( m_worldScale, m_worldScale ) );
+    flip.SetScale( VECTOR2D( m_globalFlipX ? -1.0 : 1.0, m_globalFlipY ? -1.0 : 1.0 ) );
+    lookat.SetTranslation( -m_lookAtPoint );
 
-    worldScreenMatrix = scale * translation * flip * rotate * lookat;
-    screenWorldMatrix = worldScreenMatrix.Inverse();
+    m_worldScreenMatrix = scale * translation * flip * rotate * lookat;
+    m_screenWorldMatrix = m_worldScreenMatrix.Inverse();
 }
 
 
@@ -199,8 +199,8 @@ void CAIRO_PRINT_GAL::SetNativePaperSize( const VECTOR2D& aSize, bool aHasNative
 void CAIRO_PRINT_GAL::SetSheetSize( const VECTOR2D& aSize )
 {
     // Convert aSize (inches) to pixels
-    SetScreenSize( VECTOR2I( std::ceil( aSize.x * screenDPI ) * 2,
-                             std::ceil( aSize.y * screenDPI ) * 2 ) );
+    SetScreenSize( VECTOR2I( std::ceil( aSize.x * m_screenDPI ) * 2,
+                             std::ceil( aSize.y * m_screenDPI ) * 2 ) );
 }
 
 
