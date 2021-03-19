@@ -30,9 +30,7 @@
 
 #include "ngspice.h"
 #include "spice_reporter.h"
-
-#include <schematic_settings.h>
-#include <settings/parameters.h>
+#include "spice_settings.h"
 
 #include <common.h>
 #include <locale_io.h>
@@ -57,29 +55,6 @@ using namespace std;
  * @ingroup trace_env_vars
  */
 static const wxChar* const traceNgspice = wxT( "KICAD_NGSPICE" );
-
-
-NGSPICE_SIMULATOR_SETTINGS::NGSPICE_SIMULATOR_SETTINGS(
-        JSON_SETTINGS* aParent, const std::string& aPath ) :
-    SPICE_SIMULATOR_SETTINGS( aParent, aPath ),
-    m_modelMode( NGSPICE_MODEL_MODE::USER_CONFIG )
-{
-    m_params.emplace_back( new PARAM_ENUM<NGSPICE_MODEL_MODE>( "model_mode", &m_modelMode,
-                                                               NGSPICE_MODEL_MODE::USER_CONFIG,
-                                                               NGSPICE_MODEL_MODE::USER_CONFIG,
-                                                               NGSPICE_MODEL_MODE::HSPICE ) );
-}
-
-
-bool NGSPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const
-{
-    const NGSPICE_SIMULATOR_SETTINGS* settings =
-            dynamic_cast<const NGSPICE_SIMULATOR_SETTINGS*>( &aRhs );
-
-    wxCHECK( settings, false );
-
-    return m_modelMode == settings->m_modelMode;
-}
 
 
 NGSPICE::NGSPICE() :

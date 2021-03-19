@@ -248,6 +248,9 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_pspice.cpp
     netlist_exporters/netlist_generator.cpp
 
+    # Simulator settings must get built even when the simulator build option is disabled.
+    sim/spice_settings.cpp
+
     tools/backannotate.cpp
     tools/assign_footprints.cpp
     tools/ee_actions.cpp

@@ -27,9 +27,8 @@
 #ifndef SPICE_SIMULATOR_H
 #define SPICE_SIMULATOR_H
 
-#include <settings/nested_settings.h>
-
 #include "sim_types.h"
+#include "spice_settings.h"
 
 #include <string>
 #include <vector>
@@ -41,22 +40,6 @@
 class SPICE_REPORTER;
 
 typedef std::complex<double> COMPLEX;
-
-
-/**
- * Storage for simulator specific settings.
- */
-class SPICE_SIMULATOR_SETTINGS : public NESTED_SETTINGS
-{
-public:
-    SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
-
-    virtual ~SPICE_SIMULATOR_SETTINGS() {}
-
-    virtual bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const = 0;
-
-    bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
-};
 
 
 class SPICE_SIMULATOR

@@ -28,7 +28,7 @@
 #include <kiface_i.h>
 #include <schematic_settings.h>
 #include <settings/parameters.h>
-#include <sim/ngspice.h>
+#include <sim/spice_settings.h>
 
 
 const int schSettingsSchemaVersion = 0;

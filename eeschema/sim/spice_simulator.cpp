@@ -27,19 +27,6 @@
 
 #include <confirm.h>
 
-#include <schematic_settings.h>
-
-
-const int ngspiceSettingsSchemaVersion = 0;
-
-
-SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
-                                                    const std::string& aPath ) :
-    NESTED_SETTINGS( "simulator", ngspiceSettingsSchemaVersion, aParent, aPath )
-{
-}
-
-
 std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::string& )
 {
     try

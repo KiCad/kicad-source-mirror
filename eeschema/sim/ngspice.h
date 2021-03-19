@@ -34,39 +34,6 @@
 
 class wxDynamicLibrary;
 
-/**
- * Spice model compatibility modes.
- *
- * @note The ngspice model modes are mutually exclusive.
- */
-enum class NGSPICE_MODEL_MODE {
-    USER_CONFIG,
-    NGSPICE,
-    PSPICE,
-    LTSPICE,
-    LT_PSPICE,
-    HSPICE
-};
-
-
-/**
- * Container for Ngspice simulator settings.
- */
-class NGSPICE_SIMULATOR_SETTINGS : public SPICE_SIMULATOR_SETTINGS
-{
-public:
-    NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
-
-    bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const override;
-
-    NGSPICE_MODEL_MODE GetModelMode() const { return m_modelMode; }
-    void SetModelMode( NGSPICE_MODEL_MODE aMode ) { m_modelMode = aMode; }
-
-private:
-    NGSPICE_MODEL_MODE m_modelMode;
-};
-
-
 class NGSPICE : public SPICE_SIMULATOR
 {
 public:
