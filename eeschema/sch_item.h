@@ -328,9 +328,9 @@ public:
     virtual void MirrorVertically( int aCenter ) = 0;
 
     /**
-     * Rotate the item around \a aPosition 90 degrees in the clockwise direction.
+     * Rotate the item around \a aCenter 90 degrees in the clockwise direction.
      */
-    virtual void Rotate( wxPoint aPosition ) = 0;
+    virtual void Rotate( wxPoint aCenter ) = 0;
 
     /**
      * Add the schematic item end points to \a aItemList if the item has end points.

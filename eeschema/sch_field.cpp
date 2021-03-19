@@ -435,11 +435,11 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 }
 
 
-void SCH_FIELD::Rotate( wxPoint aPosition )
+void SCH_FIELD::Rotate( wxPoint aCenter )
 {
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
+    wxPoint pt = GetPosition();
+    RotatePoint( &pt, aCenter, 900 );
+    SetPosition( pt );
 }
 
 
