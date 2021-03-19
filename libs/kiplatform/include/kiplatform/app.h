@@ -29,6 +29,13 @@ namespace KIPLATFORM
     namespace APP
     {
         /**
+         * Perform platform-specific initialization tasks.
+         *
+         * @return true if init successful, false if unsuccessful
+         */
+        bool PlatformInit();
+
+        /**
          * Registers the application for restart with the OS with the given command line string to pass as args
          *
          * @param aCommandLine is string the OS will invoke the application with

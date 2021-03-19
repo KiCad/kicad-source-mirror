@@ -23,6 +23,13 @@
 #include <wx/string.h>
 
 
+bool KIPLATFORM::APP::PlatformInit()
+{
+    // No special OSX init tasks
+    return true;
+}
+
+
 bool KIPLATFORM::APP::RegisterApplicationRestart( const wxString& aCommandLine )
 {
     // Not implemented on this platform

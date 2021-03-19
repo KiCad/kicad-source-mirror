@@ -47,10 +47,8 @@
 #include <confirm.h>
 #include <settings/settings_manager.h>
 
-#if defined(_WIN32)
-#include <config.h>
-#include <VersionHelpers.h>
-#endif
+#include <kiplatform/app.h>
+
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
@@ -131,52 +129,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(HtmlModule, wxModule);
  */
 struct APP_SINGLE_TOP : public wxApp
 {
-#if defined (__LINUX__)
-    APP_SINGLE_TOP(): wxApp()
-    {
-        // Disable proxy menu in Unity window manager. Only usual menubar works with wxWidgets (at least <= 3.1)
-        // When the proxy menu menubar is enable, some important things for us do not work: menuitems UI events and shortcuts.
-        wxString wm;
-
-        if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
-        {
-            wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
-        }
-
-        // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is required until wxWidgets
-        // supports the Wayland compositors
-        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
-
-        // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause excessive redraw requests
-        wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
-
-        // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth scrolling
-        // Needed to ensure that we are not getting multiple mouse scroll events
-        wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
-    }
-#endif
-
     bool OnInit() override
     {
-#if defined( _MSC_VER ) && defined( DEBUG )
-        // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump for half a hour
-        // _CRTDBG_ALLOC_MEM_DF is the usual default for MSVC
-        _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF );
-#endif
-
-#if defined( _WIN32 ) && defined( PYTHON_VERSION_MAJOR )                                           \
-        && ( ( PYTHON_VERSION_MAJOR == 3 && PYTHON_VERSION_MINOR >= 8 )                            \
-             || PYTHON_VERSION_MAJOR > 3 )
-
-        // Python 3.8 switched to Windows 8+ API, we do not support Windows 7 and will not attempt to hack around it
-        // Gracefully inform the user and refuse to start (because python will crash us if we continue)
-        if( !IsWindows8OrGreater() )
-        {
-            wxMessageBox( _( "Windows 7 and older is no longer supported by KiCad and its dependencies." ),
-                          _( "Unsupported Operating System" ), wxOK | wxICON_ERROR );
+        // Init the platform-specific parts
+        if( !KIPLATFORM::APP::PlatformInit() )
             return false;
-        }
-#endif
 
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only
         // in a shared library (.so or .dll file)
