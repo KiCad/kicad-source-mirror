@@ -28,7 +28,9 @@
 APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage,
                                           int aMaximum, wxWindow* aParent,
                                           bool aIndeterminateTaskBarStatus, int aStyle )
-        : wxProgressDialog( aTitle, aMessage, aMaximum, aParent, aStyle )
+        : wxProgressDialog( aTitle,
+                            aMessage == wxEmptyString ? wxT( " " ) : aMessage,
+                            aMaximum, aParent, aStyle )
 #if wxCHECK_VERSION( 3, 1, 0 )
           ,
           m_appProgressIndicator( aParent, aMaximum ),
