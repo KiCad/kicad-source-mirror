@@ -60,6 +60,11 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
     m_ReuseDef = true;
     m_precision = 6;
     m_WorldScale = 1.0;
+    m_Cache3Dmodels = nullptr;
+    m_Pcb = nullptr;
+    m_UseInlineModelsInBrdfile = false;
+    m_UseRelPathIn3DModelFilename = false;
+    m_BoardToVrmlScale = MM_PER_IU;
 
     for( int ii = 0; ii < VRML_COLOR_LAST; ++ii )
         m_sgmaterial[ii] = nullptr;
