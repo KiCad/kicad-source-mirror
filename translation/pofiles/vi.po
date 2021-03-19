@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-02-23 18:40+0000\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1349,7 +1349,7 @@ msgstr "Biểu trưng cho khối tiêu đề (tệp .kicad_wks)"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
 msgid "Output Format"
-msgstr ""
+msgstr "Định dạng đầu ra"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
 msgid "Image Options"
@@ -2176,7 +2176,7 @@ msgstr "Đặt lại điểm gốc của Lưới"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr ""
+msgstr "Đặt lại danh sách các kích thước lưới thành giá trị mặc định"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -3088,21 +3088,22 @@ msgstr "Phải"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Sử dụng các biểu tượng được thiết kế cho ánh sáng nền cửa sổ"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
 msgid "Dark"
-msgstr ""
+msgstr "Tông màu tối"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
+#, fuzzy
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Sử dụng các biểu tượng được thiết kế cho tông màu nền tối cửa sổ"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr ""
+msgstr "Tự động chọn các biểu tượng sáng hoặc tối dựa trên chủ đề màu hệ thống"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3245,7 +3246,7 @@ msgstr "Nhập tệp tin cài đặt phím nóng:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Hành động | Phím nóng mặc định | Mô tả"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
@@ -3255,7 +3256,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr ""
+msgstr "Chỉ có thể chỉ định một hành động cho mỗi cài đặt trên thanh cuộn dọc"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -3385,7 +3386,7 @@ msgstr "Pan trái / phải bằng bàn di chuột ngang hoặc di chuyển con l
 
 #: common/dialogs/panel_mouse_settings_base.cpp:158
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Chỉ có thể chỉ định một hành động cho mỗi cột"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
@@ -6087,7 +6088,7 @@ msgstr "Thư viện Pin"
 
 #: common/tool/actions.cpp:406
 msgid "Keep the library at the top of the list"
-msgstr ""
+msgstr "Giữ thư viện ở đầu danh sách"
 
 #: common/tool/actions.cpp:409
 #, fuzzy
@@ -6096,7 +6097,7 @@ msgstr "Thư viện unpin"
 
 #: common/tool/actions.cpp:410
 msgid "No longer keep the library at the top of the list"
-msgstr ""
+msgstr "Không còn giữ thư viện ở đầu danh sách"
 
 #: common/tool/actions.cpp:415
 #, fuzzy
@@ -6496,6 +6497,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Đồ họa phần mềm (dành cho máy tính không hỗ trợ yêu cầu tăng tốc phần cứng "
+"của KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:101
 msgid "Grid Options"
@@ -7682,6 +7685,11 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Đã tìm kiếm:\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
@@ -7755,7 +7763,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr ""
+msgstr "Đặt lại danh sách các tập lệnh trình tạo BOM về cài đặt mặc định"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Material"
@@ -8383,11 +8391,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:424
 msgid "No footprint specified"
-msgstr ""
+msgstr "Không có footprint nào được chỉ định"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:437
 msgid "Invalid footprint specified"
-msgstr ""
+msgstr "Footprint được chỉ định không hợp lệ"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:460
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:736
@@ -8398,63 +8406,73 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Đã xảy ra lỗi khi tải symbol %s từ thư viện %s.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:522
 msgid "No symbol selected"
-msgstr ""
+msgstr "Không có symbol nào được chọn"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:545
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid."
-msgstr ""
+msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:641
 #, c-format
 msgid "Available Candidates for %s "
-msgstr ""
+msgstr "Ứng viên có sẵn cho %s "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:645
-#, c-format
+#, c-format, fuzzy
 msgid "Candidates count %d "
-msgstr ""
+msgstr "Số lượng ứng cử viên %d "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:655
-#, c-format
+#, c-format, fuzzy
 msgid "%u link(s) mapped, %u not found"
-msgstr ""
+msgstr "%u liên kết được ánh xạ, %u không tìm thấy"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:660
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "Tất cả %u liên kết đã được giải quyết"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:690
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:86
 msgid "Symbols"
-msgstr ""
+msgstr "Ký hiệu(Biểu tượng)"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:38
+#, fuzzy
 msgid "Current Library Reference"
-msgstr ""
+msgstr "Tham chiếu Thư viện Hiện thời"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:39
+#, fuzzy
 msgid "New Library Reference"
-msgstr ""
+msgstr "Tham chiếu Thư viện Mới"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:58
 msgid "Map Orphans"
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:59
+#, fuzzy
 msgid ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
+"Nếu một số thành phần là trẻ mồ côi (không tìm thấy biểu tượng được liên "
+"kết),\n"
+"cố gắng tìm một ứng cử viên có cùng tên trong một trong các thư viện ký hiệu "
+"được tải."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:63
 #, fuzzy
@@ -8466,62 +8484,65 @@ msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Thay thế các trường symbol hiện tại bằng các trường từ thư viện mới.\n"
+"Cảnh báo: các trường \"Giá trị\" và \"footprint\" do đó sẽ được thay thế."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
-msgstr ""
+msgstr "Tham khảo Thư viện symbol"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:58
 msgid "Global Label Properties"
-msgstr ""
+msgstr "Thuộc tính Nhãn Toàn cục"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:59
 msgid "Hierarchical Label Properties"
-msgstr ""
+msgstr "Thuộc tính nhãn phân cấp"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:60
 msgid "Label Properties"
-msgstr ""
+msgstr "Thuộc tính nhãn"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:61
+#, fuzzy
 msgid "Hierarchical Sheet Pin Properties"
-msgstr ""
+msgstr "Thuộc tính ghim bảng phân cấp"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:62
 #: pcbnew/dialogs/dialog_text_properties.cpp:86
 #: pcbnew/dialogs/dialog_text_properties_base.h:89
 msgid "Text Properties"
-msgstr ""
+msgstr "Thuộc tính Văn bản"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:327
 msgid "Label requires non-empty text."
-msgstr ""
+msgstr "Nhãn yêu cầu văn bản không trống."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:26
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
 msgid "Label:"
-msgstr ""
+msgstr "Nhãn:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:28
 msgid "Enter the text to be used within the schematic"
-msgstr ""
+msgstr "Nhập văn bản sẽ được sử dụng trong sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:37
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties.cpp:78
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:24
 msgid "Text:"
-msgstr ""
+msgstr "Văn bản:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:81
 msgid "Text Size:"
-msgstr ""
+msgstr "Kích cỡ Văn bản:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:98
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
-msgstr ""
+msgstr "Trợ giúp về cú pháp"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:99
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
@@ -8533,25 +8554,27 @@ msgstr "Hiển thị cửa sổ trình xem 3D"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Note:"
-msgstr ""
+msgstr "Lưu ý:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:110
 msgid ""
 "The margins around the text are controlled by the text offset ratio\n"
 "in Schematic Setup > General > Formatting."
 msgstr ""
+"Các lề xung quanh văn bản được kiểm soát bởi tỷ lệ bù đắp văn bản\n"
+"trong Thiết lập sơ đồ mạch> Chung> Định dạng."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
 #: eeschema/pin_type.cpp:125
 msgid "Up"
-msgstr ""
+msgstr "Lên"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:120
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:187
 #: eeschema/pin_type.cpp:126
 msgid "Down"
-msgstr ""
+msgstr "Xuống"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:122
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
@@ -8567,48 +8590,48 @@ msgstr ""
 #: pcbnew/footprint.cpp:2034 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1472
 msgid "Orientation"
-msgstr ""
+msgstr "Sự định hướng"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:126
 msgid "Bold and italic"
-msgstr ""
+msgstr "In đậm và in nghiêng"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:128
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:115
 #: eeschema/lib_field.cpp:432 eeschema/lib_pin.cpp:1006
 #: eeschema/sch_pin.cpp:183 eeschema/sch_text.cpp:685
 msgid "Style"
-msgstr ""
+msgstr "Kiểu"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:35 eeschema/pin_type.cpp:50
 #: eeschema/sch_text.cpp:488
 msgid "Input"
-msgstr ""
+msgstr "Đầu vào"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
 #: eeschema/sch_text.cpp:489
 msgid "Output"
-msgstr ""
+msgstr "Đầu ra"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
 #: eeschema/sch_text.cpp:490
 msgid "Bidirectional"
-msgstr ""
+msgstr "Hai chiều"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 msgid "Tri-state"
-msgstr ""
+msgstr "Ba trạng thái"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:132
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:54
 #: eeschema/sch_text.cpp:492
 msgid "Passive"
-msgstr ""
+msgstr "Thụ động"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:134
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
@@ -8617,53 +8640,54 @@ msgstr ""
 #: pcbnew/pad.cpp:1462 pcbnew/pcb_shape.cpp:498 pcbnew/pcb_target.cpp:157
 #: pcbnew/pcb_target.cpp:173
 msgid "Shape"
-msgstr ""
+msgstr "Hình dạng"
 
 #: eeschema/dialogs/dialog_edit_label_base.h:72
 msgid "Text Editor"
-msgstr ""
+msgstr "Trình soạn thảo Văn bản"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:54
 msgid "Leave unchanged"
-msgstr ""
+msgstr "Không thay đổi"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:44
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
 msgid "Color:"
-msgstr ""
+msgstr "Màu sắc:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:64
 msgid "Style:"
-msgstr ""
+msgstr "Kiểu:"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:68
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:46
 msgid "Combo!"
-msgstr ""
+msgstr "Kết hợp!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:228
 msgid "Illegal reference designator value!"
-msgstr ""
+msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:236
 msgid "Value may not be empty."
-msgstr ""
+msgstr "Giá trị không được để trống."
 
 #: eeschema/dialogs/dialog_erc.cpp:79
 msgid "Run ERC"
-msgstr ""
+msgstr "Chạy ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:93
 msgid "Show Annotation dialog"
-msgstr ""
+msgstr "Hiển thị hộp thoại gán Chú thích"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Sơ đồ mạch chưa được gán chú thích đầy đủ. Kết quả ERC sẽ không hoàn thành."
 
 #: eeschema/dialogs/dialog_erc.cpp:194
 msgid "Delete exclusions too?"
-msgstr ""
+msgstr "Xóa các loại trừ nữa?"
 
 #: eeschema/dialogs/dialog_erc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:866
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
