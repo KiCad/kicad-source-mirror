@@ -104,22 +104,13 @@ void FP_TEXT::KeepUpright( double aOldOrientation, double aNewOrientation )
     if( !IsKeepUpright() )
         return;
 
-    double currentAngle = GetTextAngle() + aOldOrientation;
     double newAngle = GetTextAngle() + aNewOrientation;
-
-    NORMALIZE_ANGLE_POS( currentAngle );
     NORMALIZE_ANGLE_POS( newAngle );
-
-    bool   isFlipped = currentAngle >= 1800.0;
     bool   needsFlipped = newAngle >= 1800.0;
 
-    if( isFlipped != needsFlipped )
+    if( needsFlipped )
     {
-        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-            SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-            SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT );
-
+        SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( -GetHorizJustify() ) );
         SetTextAngle( GetTextAngle() + 1800.0 );
         SetDrawCoord();
     }
@@ -144,22 +135,19 @@ void FP_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // flipping the footprint is relative to the X axis
     if( aFlipLeftRight )
-        SetTextX( ::MIRRORVAL( GetTextPos().x, aCentre.x ) );
+    {
+        SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
+        SetTextAngle( -GetTextAngle() );
+    }
     else
-        SetTextY( ::MIRRORVAL( GetTextPos().y, aCentre.y ) );
-
-    SetTextAngle( -GetTextAngle() );
+    {
+        SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
+        SetTextAngle( 1800 - GetTextAngle() );
+    }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
     SetMirrored( IsBackLayer( GetLayer() ) );
     SetLocalCoord();
-
-    // adjust justified text for mirroring
-    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-    {
-        SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( -GetHorizJustify() ) );
-        SetDrawCoord();
-    }
 }
 
 bool FP_TEXT::IsParentFlipped() const
