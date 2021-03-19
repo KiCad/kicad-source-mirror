@@ -621,18 +621,6 @@ public:
      */
     bool IsSame( const ZONE &aZoneToCompare );
 
-    /**
-     * Clear the list of filled polygons.
-     */
-    void ClearFilledPolysList()
-    {
-        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        {
-            m_insulatedIslands[pair.first].clear();
-            pair.second.RemoveAllContours();
-        }
-    }
-
     bool HasFilledPolysForLayer( PCB_LAYER_ID aLayer ) const
     {
         return m_FilledPolysList.count( aLayer ) > 0;

@@ -1293,7 +1293,7 @@ void PCB_POINT_EDITOR::updateItem() const
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( item );
-        zone->ClearFilledPolysList();
+        zone->UnFill();
         SHAPE_POLY_SET& outline = *zone->Outline();
 
         for( int i = 0; i < outline.TotalVertices(); ++i )

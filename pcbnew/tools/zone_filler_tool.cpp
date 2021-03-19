@@ -204,8 +204,7 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 
         commit.Modify( zone );
 
-        zone->SetIsFilled( false );
-        zone->ClearFilledPolysList();
+        zone->UnFill();
     }
 
     commit.Push( _( "Unfill Zone" ) );
@@ -223,8 +222,7 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     {
         commit.Modify( zone );
 
-        zone->SetIsFilled( false );
-        zone->ClearFilledPolysList();
+        zone->UnFill();
     }
 
     commit.Push( _( "Unfill All Zones" ) );

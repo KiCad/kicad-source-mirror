@@ -190,6 +190,7 @@ bool ZONE::UnFill()
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
     {
         change |= !pair.second.IsEmpty();
+        m_insulatedIslands[pair.first].clear();
         pair.second.RemoveAllContours();
     }
 
