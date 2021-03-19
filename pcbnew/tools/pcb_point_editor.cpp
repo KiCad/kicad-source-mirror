@@ -1312,6 +1312,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         validatePolygon( outline );
         zone->HatchBorder();
+        // TODO Refill zone when KiCad supports auto re-fill
         break;
     }
 
@@ -1515,13 +1516,7 @@ void PCB_POINT_EDITOR::finishItem()
     if( !item )
         return;
 
-    if( item->Type() == PCB_ZONE_T || item->Type() == PCB_FP_ZONE_T )
-    {
-        ZONE* zone = static_cast<ZONE*>( item );
-
-        if( zone->IsFilled() && m_refill && zone->NeedRefill() )
-            m_toolMgr->RunAction( PCB_ACTIONS::zoneFill, true, zone );
-    }
+    // TODO Refill edited zones when KiCad supports auto re-fill
 }
 
 

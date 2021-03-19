@@ -106,6 +106,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
 
+    // Only auto-refill zones here if in user preferences
     if( Settings().m_AutoRefillZones )
     {
         // refill zones with the new properties applied

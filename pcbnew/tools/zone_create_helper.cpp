@@ -138,7 +138,6 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     BOARD_COMMIT commit( &m_tool );
     BOARD* board = m_tool.getModel<BOARD>();
     std::vector<ZONE*> newZones;
-    bool               wereZonesFilled = aZone.IsFilled() || aCutout.IsFilled();
 
     // Clear the selection before removing the old zone
     auto toolMgr = m_tool.GetManager();
@@ -164,25 +163,14 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
         newZone->SetOutline( newZoneOutline );
         newZone->SetLocalFlags( 1 );
         newZone->HatchBorder();
+        newZone->UnFill();
         newZones.push_back( newZone );
         commit.Add( newZone );
     }
 
     commit.Remove( &aZone );
 
-    // Refill zone depending on settings or if one of the zones was filled
-    if( wereZonesFilled || m_tool.frame()->Settings().m_AutoRefillZones )
-    {
-        ZONE_FILLER filler( board, &commit );
-
-        std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
-
-        if( !filler.Fill( newZones ) )
-        {
-            commit.Revert();
-            return;
-        }
-    }
+    // TODO Refill zones when KiCad supports auto re-fill
 
     commit.Push( _( "Add a zone cutout" ) );
 
@@ -216,27 +204,12 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             BOARD*       board = m_tool.getModel<BOARD>();
 
             aZone->HatchBorder();
+
+            // TODO Refill zones when KiCad supports auto re-fill
+
             commit.Add( aZone.get() );
 
             std::lock_guard<KISPINLOCK> lock( board->GetConnectivity()->GetLock() );
-
-            // Only refill based on settings or if the zone we are copying was filled
-            bool refill = m_tool.frame()->Settings().m_AutoRefillZones;
-
-            if( m_params.m_mode == ZONE_MODE::SIMILAR && aZone->IsFilled() )
-                refill = true;
-
-            if( !m_params.m_keepout && refill )
-            {
-                ZONE_FILLER        filler( board, &commit );
-                std::vector<ZONE*> toFill = { aZone.get() };
-
-                if( !filler.Fill( toFill ) )
-                {
-                    commit.Revert();
-                    break;
-                }
-            }
 
             commit.Push( _( "Add a zone" ) );
             m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
