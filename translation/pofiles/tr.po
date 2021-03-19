@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:278
 msgid "Show 3D Axis"
-msgstr ""
+msgstr "3B Ekseni Göster"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
@@ -1317,7 +1317,7 @@ msgstr "Çalışma sayfası (.kicad_wks dosyası)"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
 msgid "Output Format"
-msgstr ""
+msgstr "Çıktı Biçimi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
 msgid "Image Options"
@@ -1788,35 +1788,35 @@ msgstr ""
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr ""
+msgstr "Matlık:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr ""
+msgstr "Ön izleme (eski/yeni):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr ""
+msgstr "Öntanımlı Değere Sıfırla"
 
 #: common/dialogs/dialog_configure_paths.cpp:250
 #: common/dialogs/dialog_configure_paths.cpp:320
 msgid "Environment variable name cannot be empty."
-msgstr ""
+msgstr "Ortam değişkeni adı boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:258
 #: common/dialogs/dialog_configure_paths.cpp:322
 msgid "Environment variable path cannot be empty."
-msgstr ""
+msgstr "Ortam değişkeni yolu boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:285
 #: common/dialogs/dialog_configure_paths.cpp:327
 msgid "3D search path alias cannot be empty."
-msgstr ""
+msgstr "3B arama yolu takma adı boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:293
 #: common/dialogs/dialog_configure_paths.cpp:329
 msgid "3D search path cannot be empty."
-msgstr ""
+msgstr "3D arama yolu boş olamaz."
 
 #: common/dialogs/dialog_configure_paths.cpp:342
 msgid ""
@@ -1836,16 +1836,16 @@ msgstr ""
 #: common/dialogs/dialog_configure_paths.cpp:359
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr ""
+msgstr "%s adı ayrılmıştır ve burada kullanılamaz"
 
 #: common/dialogs/dialog_configure_paths.cpp:495
 msgid "File Browser..."
-msgstr ""
+msgstr "Dosya Tarayıcısı..."
 
 #: common/dialogs/dialog_configure_paths.cpp:498
 #: common/widgets/grid_text_button_helpers.cpp:384
 msgid "Select Path"
-msgstr ""
+msgstr "Yol Seç"
 
 #: common/dialogs/dialog_configure_paths.cpp:577
 msgid ""
@@ -1855,6 +1855,11 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
+"Her ortam değişkeni için adı ve değeri girin.  Gri girdiler, sistem veya "
+"kullanıcı düzeyinde harici olarak tanımlanan adlardır.  Sistem veya "
+"kullanıcı düzeyinde tanımlanan ortam değişkenleri, bu tabloda "
+"tanımlananlardan önceliklidir.  Bu, bu tablodaki değerlerin yok sayıldığı "
+"anlamına gelir."
 
 #: common/dialogs/dialog_configure_paths.cpp:583
 msgid ""
@@ -1862,14 +1867,17 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
+"Ortam değişkeni adlarının tüm platformlarda geçerli olmasını sağlamak için, "
+"ad alanı yalnızca büyük harfleri, rakamları ve alt çizgi karakterlerini "
+"kabul edecektir."
 
 #: common/dialogs/dialog_configure_paths.cpp:598
 msgid "Environment Variable Help"
-msgstr ""
+msgstr "Ortam Değişkeni Yardımı"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
-msgstr ""
+msgstr "Ortam Değişkenleri"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
@@ -1892,26 +1900,26 @@ msgstr ""
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:611
 #: pcbnew/zone.cpp:1418
 msgid "Name"
-msgstr ""
+msgstr "Ad"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 #: common/dialogs/dialog_configure_paths_base.cpp:93
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr ""
+msgstr "Yol"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
 msgid "3D Search Paths"
-msgstr ""
+msgstr "3B Arama Yolları"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:290
 msgid "Alias"
-msgstr ""
+msgstr "Takma Ad"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr ""
+msgstr "Genel %s Kütüphane Tablosunu Yapılandır"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1926,7 +1934,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
+msgstr "Öntanımlı genel %s kütüphane tablosunu kopyala (tavsiye edilen)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -1934,33 +1942,39 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
+"Genel %s kütüphane tablosunu yapılandırmaktan emin değilseniz bu seçeneği "
+"seçin"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr ""
+msgstr "Özel bir genel %s kütüphane tablosunu kopyala"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
+"Öntanımlı olandan farklı bir %s kütüphane tablosu dosyasını kopyalamak için "
+"bu seçeneği seçin"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr ""
+msgstr "Boş bir genel %s kütüphane tablosu oluştur"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
+"Projeye özel kütüphane tablolarında %s kütüphaneleri tanımlamak için bu "
+"seçeneği seçin"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr ""
+msgstr "Genel %s kütüphane tablosu dosyasını seç:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -10094,9 +10108,8 @@ msgid "Model Mode"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:425
-#, fuzzy
 msgid "User configuration"
-msgstr "Işık Yapılandırması"
+msgstr "Kullanıcı yapılandırması"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:426
 msgid ""
@@ -10117,9 +10130,8 @@ msgid "PSpice"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-#, fuzzy
 msgid "Enable PSpice model simulation"
-msgstr "Canlandırmayı etkinleştir"
+msgstr "PSpice model simülasyonunu etkinleştir"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:440
 msgid "LTSpice"
@@ -10142,9 +10154,8 @@ msgid "HSpice"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-#, fuzzy
 msgid "Enable HSpice model simulation"
-msgstr "Canlandırmayı etkinleştir"
+msgstr "HSpice model simülasyonunu etkinleştir"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:462
 msgid "Ngspice"
@@ -13541,9 +13552,8 @@ msgid "Tune component values"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:199
-#, fuzzy
 msgid "Sim Parameters"
-msgstr "DXF Parametreleri"
+msgstr "Simülasyon Parametreleri"
 
 #: eeschema/sim/sim_plot_frame.cpp:200
 msgid "Simulation parameters and settings"
@@ -13798,12 +13808,15 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr ""
 
 #: eeschema/symbol_async_loader.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
-msgstr "Genel kütüphane tablosu kaydedilirken hata oluştu."
+msgstr ""
+"%s sembol kütüphanesi yüklenirken hata oluştu.\n"
+"\n"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -15494,9 +15507,8 @@ msgid "Bus has no members"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_control.cpp:159
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "Sembol kütüphanelerini yönet"
+msgstr "Sembol kütüphanesi seçilmedi."
 
 #: eeschema/tools/symbol_editor_control.cpp:382
 #: eeschema/tools/symbol_editor_control.cpp:422
@@ -17849,14 +17861,12 @@ msgid "Simple solution:"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
-#, fuzzy
 msgid "3R solution:"
-msgstr "Döndürme"
+msgstr "3R çözümü:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
-#, fuzzy
 msgid "4R solution:"
-msgstr "Döndürme"
+msgstr "4R çözümü:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "E-Series"
@@ -18658,9 +18668,8 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:234
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:383
-#, fuzzy
 msgid "Line width"
-msgstr "Metin genişliği:"
+msgstr "Çizgi genişliği"
 
 #: pcb_calculator/transline_ident.cpp:172
 #: pcb_calculator/transline_ident.cpp:205
@@ -24740,7 +24749,6 @@ msgid "Track & Via Properties"
 msgstr "Yol ve Geçiş Özellikleri"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
 msgstr "Geçiş matkap boyutu geçiş çapından küçük olmalıdır"
 
@@ -30241,9 +30249,8 @@ msgid "Create arc from line segment"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:248
-#, fuzzy
 msgid "Layer Name"
-msgstr "Katman Filtresi"
+msgstr "Katman Adı"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262
 msgid "Thickness (mm)"
@@ -30266,9 +30273,8 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Tüm Bakır Katmanlar"
+msgstr "Bakır Katman Sayısı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
 msgid "Board overall dimensions: "
@@ -30288,14 +30294,12 @@ msgid "Castellated pads: "
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Veri yolu bağlantı kalınlığı"
+msgstr "Kart Kalınlığı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Geçiş kaplanmış delik çapı"
+msgstr "Asgari delik çapı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Impedance Control: "
