@@ -1304,6 +1304,12 @@ void PCB_POINT_EDITOR::updateItem() const
             outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
         }
 
+        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+        {
+            if( !isModified( m_editPoints->Line( i ) ) )
+                m_editPoints->Line( i ).SetConstraint( new EC_PERPLINE( m_editPoints->Line( i ) ) );
+        }
+
         validatePolygon( outline );
         zone->HatchBorder();
         break;
