@@ -20,8 +20,21 @@
 
 #include <kiplatform/app.h>
 
+#include <glib.h>
+
 #include <wx/string.h>
 #include <wx/utils.h>
+
+
+/*
+ * Function to attach to the glib logger to eat the output it gives so we don't
+ * get the message spam on the terminal from wxWidget's abuse of the GTK API.
+ */
+static GLogWriterOutput nullLogWriter( GLogLevelFlags log_level, const GLogField* fields,
+                                       gsize n_fields, gpointer user_data )
+{
+    return G_LOG_WRITER_HANDLED;
+}
 
 
 bool KIPLATFORM::APP::PlatformInit()
@@ -47,8 +60,14 @@ bool KIPLATFORM::APP::PlatformInit()
     // events.
     wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
 
+#if !defined( KICAD_SHOW_GTK_MESSAGES )
+    // Attach a logger that will consume the annoying GTK error messages
+    g_log_set_writer_func( nullLogWriter, NULL, NULL );
+#endif
+
     return true;
 }
+
 
 bool KIPLATFORM::APP::RegisterApplicationRestart( const wxString& aCommandLine )
 {
