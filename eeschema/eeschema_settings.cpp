@@ -604,7 +604,6 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DHLabelEx",          LAYER_HIERLABEL );
     migrateLegacyColor( "Color4DHiddenEx",          LAYER_HIDDEN );
     migrateLegacyColor( "Color4DLLabelEx",          LAYER_LOCLABEL );
-    migrateLegacyColor( "Color4DNetNameEx",         LAYER_NETNAM );
     migrateLegacyColor( "Color4DNoConnectEx",       LAYER_NOCONNECT );
     migrateLegacyColor( "Color4DNoteEx",            LAYER_NOTES );
     migrateLegacyColor( "Color4DPinEx",             LAYER_PIN );

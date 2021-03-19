@@ -83,7 +83,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( wxString aFilename ) :
     CLR( "schematic.label_global",      LAYER_GLOBLABEL              );
     CLR( "schematic.label_hier",        LAYER_HIERLABEL              );
     CLR( "schematic.label_local",       LAYER_LOCLABEL               );
-    CLR( "schematic.net_name",          LAYER_NETNAM                 );
     CLR( "schematic.no_connect",        LAYER_NOCONNECT              );
     CLR( "schematic.note",              LAYER_NOTES                  );
     CLR( "schematic.pin",               LAYER_PIN                    );
