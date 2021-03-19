@@ -372,7 +372,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
 {
-    enum { WIRES = 0, BUSES } layers;
+    enum layers { WIRES = 0, BUSES };
 
     bool                          breakLines[ 2 ] = { false };
     std::unordered_set<int>       exitAngles[ 2 ];

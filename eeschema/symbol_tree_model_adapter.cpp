@@ -101,7 +101,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( loadedSymbols.size() > 0 )
     {
-        for( const std::pair<wxString, std::vector<LIB_PART*>>& pair : loadedSymbols )
+        for( const std::pair<const wxString, std::vector<LIB_PART*>>& pair : loadedSymbols )
         {
             std::vector<LIB_TREE_ITEM*> treeItems( pair.second.begin(), pair.second.end() );
             DoAddLibrary( pair.first, m_libs->GetDescription( pair.first ), treeItems, false );
