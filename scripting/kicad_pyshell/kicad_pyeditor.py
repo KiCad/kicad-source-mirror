@@ -683,7 +683,7 @@ class KiCadPyFrame():
 
         # TODO: track position/size so we can save it even if the
         # frame is maximized or iconized.
-        if not self.iconized and not self.IsMaximized():
+        if not self.iconized and not self.parent.IsMaximized():
             w, h = self.GetSize()
             config.WriteInt('Window/Width', w)
             config.WriteInt('Window/Height', h)
