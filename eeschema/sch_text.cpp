@@ -215,10 +215,10 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TEXT::Rotate( wxPoint aPosition )
+void SCH_TEXT::Rotate( wxPoint aCenter )
 {
     wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
+    RotatePoint( &pt, aCenter, 900 );
     wxPoint offset = pt - GetTextPos();
 
     Rotate90( false );
@@ -979,10 +979,10 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
-void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
+void SCH_GLOBALLABEL::Rotate( wxPoint aCenter )
 {
     wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
+    RotatePoint( &pt, aCenter, 900 );
     wxPoint offset = pt - GetTextPos();
 
     Rotate90( false );

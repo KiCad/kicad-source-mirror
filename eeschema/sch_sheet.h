@@ -181,7 +181,7 @@ public:
 
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
-    void Rotate( wxPoint aPosition ) override;
+    void Rotate( wxPoint aCenter ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
@@ -522,9 +522,9 @@ public:
             field.Move( aMoveVector );
     }
 
-    void MirrorHorizontally( int aYaxis_position ) override;
-    void MirrorVertically( int aXaxis_position ) override;
-    void Rotate( wxPoint aPosition ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
+    void Rotate( wxPoint aCenter ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 

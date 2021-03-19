@@ -717,11 +717,11 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
 }
 
 
-void SCH_SHEET::Rotate( wxPoint aPosition )
+void SCH_SHEET::Rotate( wxPoint aCenter )
 {
     wxPoint prev = m_pos;
 
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 
     if( m_size.x < 0 )
@@ -739,7 +739,7 @@ void SCH_SHEET::Rotate( wxPoint aPosition )
     // Pins must be rotated first as that's how we determine vertical vs horizontal
     // orientation for auto-placement
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Rotate( aPosition );
+        sheetPin->Rotate( aCenter );
 
     if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
     {

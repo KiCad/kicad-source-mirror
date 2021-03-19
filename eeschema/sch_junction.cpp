@@ -135,9 +135,9 @@ void SCH_JUNCTION::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_JUNCTION::Rotate( wxPoint aPosition )
+void SCH_JUNCTION::Rotate( wxPoint aCenter )
 {
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
 }
 
 

@@ -268,9 +268,9 @@ void SCH_BUS_ENTRY_BASE::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aPosition )
+void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aCenter )
 {
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 }
 

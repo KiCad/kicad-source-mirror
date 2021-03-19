@@ -126,7 +126,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( wxPoint aPosition ) override;
+    void Rotate( wxPoint aCenter ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {

@@ -392,22 +392,22 @@ void SCH_LINE::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_LINE::Rotate( wxPoint aPosition )
+void SCH_LINE::Rotate( wxPoint aCenter )
 {
-    RotatePoint( &m_start, aPosition, 900 );
-    RotatePoint( &m_end, aPosition, 900 );
+    RotatePoint( &m_start, aCenter, 900 );
+    RotatePoint( &m_end, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateStart( wxPoint aPosition )
+void SCH_LINE::RotateStart( wxPoint aCenter )
 {
-    RotatePoint( &m_start, aPosition, 900 );
+    RotatePoint( &m_start, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateEnd( wxPoint aPosition )
+void SCH_LINE::RotateEnd( wxPoint aCenter )
 {
-    RotatePoint( &m_end, aPosition, 900 );
+    RotatePoint( &m_end, aCenter, 900 );
 }
 
 

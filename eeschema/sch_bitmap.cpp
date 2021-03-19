@@ -142,9 +142,9 @@ void SCH_BITMAP::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BITMAP::Rotate( wxPoint aPosition )
+void SCH_BITMAP::Rotate( wxPoint aCenter )
 {
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
     m_image->Rotate( false );
 }
 

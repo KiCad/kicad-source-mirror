@@ -278,7 +278,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( wxPoint aPosition ) override;
+    void Rotate( wxPoint aCenter ) override;
 
     virtual void Rotate90( bool aClockwise );
     virtual void MirrorSpinStyle( bool aLeftRight );
@@ -402,7 +402,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
-    void Rotate( wxPoint aPosition ) override;
+    void Rotate( wxPoint aCenter ) override;
     void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 

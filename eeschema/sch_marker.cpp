@@ -173,7 +173,7 @@ BITMAPS SCH_MARKER::GetMenuImage() const
 }
 
 
-void SCH_MARKER::Rotate( wxPoint aPosition )
+void SCH_MARKER::Rotate( wxPoint aCenter )
 {
     // Marker geometry isn't user-editable
 }

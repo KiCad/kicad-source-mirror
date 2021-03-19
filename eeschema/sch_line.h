@@ -177,9 +177,9 @@ public:
 
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
-    void Rotate( wxPoint aPosition ) override;
-    void RotateStart( wxPoint aPosition );
-    void RotateEnd( wxPoint aPosition );
+    void Rotate( wxPoint aCenter ) override;
+    void RotateStart( wxPoint aCenter );
+    void RotateEnd( wxPoint aCenter );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.

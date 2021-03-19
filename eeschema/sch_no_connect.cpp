@@ -127,9 +127,9 @@ void SCH_NO_CONNECT::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_NO_CONNECT::Rotate( wxPoint aPosition )
+void SCH_NO_CONNECT::Rotate( wxPoint aCenter )
 {
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
 }
 
 

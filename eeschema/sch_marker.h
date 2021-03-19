@@ -78,7 +78,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( wxPoint aPosition ) override;
+    void Rotate( wxPoint aCenter ) override;
 
     /**
      * Compare DRC marker main and auxiliary text against search string.

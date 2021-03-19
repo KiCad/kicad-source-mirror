@@ -1483,11 +1483,11 @@ void SCH_COMPONENT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_COMPONENT::Rotate( wxPoint aPosition )
+void SCH_COMPONENT::Rotate( wxPoint aCenter )
 {
     wxPoint prev = m_pos;
 
-    RotatePoint( &m_pos, aPosition, 900 );
+    RotatePoint( &m_pos, aCenter, 900 );
 
     SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 

@@ -243,10 +243,10 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
+void SCH_SHEET_PIN::Rotate( wxPoint aCenter )
 {
     wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
+    RotatePoint( &pt, aCenter, 900 );
     ConstrainOnEdge( pt );
 }
 
