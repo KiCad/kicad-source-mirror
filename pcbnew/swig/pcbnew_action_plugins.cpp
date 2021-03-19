@@ -197,6 +197,7 @@ void PCB_EDIT_FRAME::OnActionPluginMenu( wxCommandEvent& aEvent )
         RunActionPlugin( actionPlugin );
 }
 
+
 void PCB_EDIT_FRAME::OnActionPluginButton( wxCommandEvent& aEvent )
 {
 	ACTION_PLUGIN* actionPlugin = ACTION_PLUGINS::GetActionByButton( aEvent.GetId() );

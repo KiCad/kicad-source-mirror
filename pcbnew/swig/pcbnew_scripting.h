@@ -28,11 +28,6 @@
 
 
 /**
- * Initialize the Python engine inside pcbnew.
- */
-bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath );
-
-/**
  * Collect the list of python scripts which could not be loaded.
  *
  * @param aNames is a wxString which will contain the filenames (separated by '\n')

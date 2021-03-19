@@ -33,14 +33,4 @@
 #define TEXTS_MAX_WIDTH Mils2iu( 10000 )    ///< Maximum text width in internal units (10 inches)
 
 
-/**
- * Helper function PythonPluginsReloadBase
- * Reload Python plugins if they are newer than
- * the already loaded, and load new plugins if any
- * It calls the LoadPlugins(bundlepath) Python method
- * see kicadplugins.i
- */
-void PythonPluginsReloadBase();
-
-
 #endif // PCBNEW_H

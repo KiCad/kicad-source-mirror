@@ -47,6 +47,7 @@ class wxWindow;
 
 class COMMON_SETTINGS;
 class SETTINGS_MANAGER;
+class SCRIPTING;
 
 /**
  * A small class to handle the list of existing translations.
@@ -304,6 +305,8 @@ protected:
     bool setExecutablePath();
 
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
+
+    std::unique_ptr<SCRIPTING> m_python_scripting;
 
     /// prevents multiple instances of a program from being run at the same time.
     wxSingleInstanceChecker* m_pgm_checker;

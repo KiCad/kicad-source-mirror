@@ -315,6 +315,10 @@ public:
     /// Duplicate zone onto another layer
     static TOOL_ACTION zoneDuplicate;
 
+    /// Scripting Actions
+    static TOOL_ACTION pluginsReload;
+    static TOOL_ACTION pluginsShowFolder;
+
     // Global edit tool
     static TOOL_ACTION boardSetup;
     static TOOL_ACTION editTracksAndVias;

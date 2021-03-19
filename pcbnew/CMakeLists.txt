@@ -370,6 +370,7 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     swig/pcbnew_footprint_wizards.cpp
     swig/pcbnew_scripting_helpers.cpp
     swig/pcbnew_scripting.cpp
+    swig/pcb_scripting_tool.cpp
     )
 
 

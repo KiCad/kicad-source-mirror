@@ -41,7 +41,6 @@
 #include <macros.h>
 
 #include <kiface_ids.h>
-#include <kiway.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -52,21 +51,14 @@
 
 #include <config.h>
 
-using initfunc = PyObject* (*)(void);
 
 
-SCRIPTING::SCRIPTING( KIWAY* aKiway )
+SCRIPTING::SCRIPTING()
 {
     int  retv;
     char cmd[1024];
 
     scriptingSetup();
-
-    KIFACE* pcbnew_kiface = nullptr;
-
-    pcbnew_kiface = aKiway->KiFACE( KIWAY::FACE_PCB );
-    initfunc pcbnew_init = reinterpret_cast<initfunc>( pcbnew_kiface->IfaceOrAddress( KIFACE_SCRIPTING_LEGACY ) );
-    PyImport_AppendInittab( "_pcbnew", pcbnew_init );
 
 #ifdef _MSC_VER
     // Under vcpkg/msvc, we need to explicitly set the python home
@@ -85,35 +77,12 @@ SCRIPTING::SCRIPTING( KIWAY* aKiway )
         Py_SetPythonHome( pyHome.GetFullPath().c_str() );
     }
 #endif
-//
-//    Py_Initialize();
+
     pybind11::initialize_interpreter();
-
-//    PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
-
-#if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
-    PyEval_InitThreads();
-#endif      // if PY_VERSION_HEX < 0x03070000
 
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
     m_python_thread_state = PyEval_SaveThread();
-
-    // Load pcbnew inside Python and load all the user plugins and package-based plugins
-    {
-        PyLOCK lock;
-
-        // Load os so that we can modify the environment variables through python
-        snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
-                  "sys.path.append(\".\")\n"
-                  "import pcbnew\n"
-                  "pcbnew.LoadPlugins(\"%s\", \"%s\")",
-                  TO_UTF8( PyScriptingPath() ), TO_UTF8( PyScriptingPath( true) ) );
-        retv = PyRun_SimpleString( cmd );
-
-        if( retv != 0 )
-            wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-    }
 }
 
 SCRIPTING::~SCRIPTING()
@@ -316,6 +285,7 @@ void UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue )
 
     snprintf( cmd, sizeof( cmd ),
               "# coding=utf-8\n"      // The values could potentially be UTF8
+              "import os\n"
               "os.environ[\"%s\"]=\"%s\"\n",
               TO_UTF8( escapedVar ),
               TO_UTF8( escapedVal ) );
@@ -444,7 +414,7 @@ wxString PyErrStringWithTraceback()
 /**
  * Find the Python scripting path.
  */
-wxString PyScriptingPath( bool aUserPath )
+wxString SCRIPTING::PyScriptingPath( bool aUserPath )
 {
     wxString path;
 
@@ -471,7 +441,7 @@ wxString PyScriptingPath( bool aUserPath )
 }
 
 
-wxString PyPluginsPath( bool aUserPath )
+wxString SCRIPTING::PyPluginsPath( bool aUserPath )
 {
     // Note we are using unix path separator, because window separator sometimes
     // creates issues when passing a command string to a python method by PyRun_SimpleString

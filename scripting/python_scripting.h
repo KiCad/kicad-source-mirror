@@ -45,12 +45,10 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
-class KIWAY;
-
 class SCRIPTING
 {
 public:
-    SCRIPTING( KIWAY* aKiway );
+    SCRIPTING();
     ~SCRIPTING();
 
     /// We do not allow secondary creation of the scripting system
@@ -59,13 +57,14 @@ public:
 
     static bool IsWxAvailable();
 
+    static wxString PyScriptingPath( bool aUserPath = false );
+    static wxString PyPluginsPath( bool aUserPath = false );
+
 private:
 
     bool scriptingSetup();
 
     PyThreadState* m_python_thread_state;
-
-    KIWAY* aKiway;
 };
 
 /**
@@ -92,8 +91,5 @@ public:
 wxString        PyStringToWx( PyObject* str );
 wxArrayString   PyArrayStringToWx( PyObject* arr );
 wxString        PyErrStringWithTraceback();
-
-wxString        PyScriptingPath( bool aUserPath = false );
-wxString        PyPluginsPath( bool aUserPath = false );
 
 #endif    // __PYTHON_SCRIPTING_H

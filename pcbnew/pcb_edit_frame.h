@@ -94,12 +94,6 @@ public:
     bool IsContentModified() const override;
 
     /**
-     * Reload the Python plugins if they are newer than the already loaded, and load new
-     * plugins if any.
-     */
-    void PythonPluginsReload();
-
-    /**
      * Open the plugins folder in the default system file browser.
      */
     void PythonPluginsShowFolder();

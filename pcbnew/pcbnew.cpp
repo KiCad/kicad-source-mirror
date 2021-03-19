@@ -216,26 +216,6 @@ PGM_BASE* PgmOrNull()
 }
 #endif
 
-
-void PythonPluginsReloadBase()
-{
-    // Reload plugin list: reload Python plugins if they are newer than the already loaded,
-    // and load new plugins
-    char cmd[1024];
-
-    snprintf( cmd, sizeof( cmd ), "pcbnew.LoadPlugins(\"%s\", \"%s\")", TO_UTF8( PyScriptingPath() ),
-              TO_UTF8( PyScriptingPath( true ) ) );
-
-    PyLOCK lock;
-
-    // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
-    int retv = PyRun_SimpleString( cmd );
-
-    if( retv != 0 )
-        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-}
-
-
 /// The global footprint library table.  This is not dynamically allocated because
 /// in a multiple project environment we must keep its address constant (since it is
 /// the fallback table for multiple projects).

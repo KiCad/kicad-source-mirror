@@ -413,21 +413,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 
-    submenuActionPlugins->Add( _( "Refresh Plugins" ),
-                               _( "Reload all python plugins and refresh plugin menus" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
-                               BITMAPS::reload );
-#ifdef __APPLE__
-    submenuActionPlugins->Add( _( "Reveal Plugin Folder in Finder" ),
-                               _( "Reveals the plugins folder in a Finder window" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               BITMAPS::directory_open );
-#else
-    submenuActionPlugins->Add( _( "Open Plugin Directory" ),
-                               _( "Opens the directory in the default system file manager" ),
-                               ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               BITMAPS::directory_open );
-#endif
+    submenuActionPlugins->Add( PCB_ACTIONS::pluginsReload );
+    submenuActionPlugins->Add( PCB_ACTIONS::pluginsShowFolder );
+
     // Populate the Action Plugin sub-menu: Must be done before Add
     // Since the object is cloned by Add
     submenuActionPlugins->AppendSeparator();

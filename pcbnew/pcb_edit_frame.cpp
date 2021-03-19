@@ -84,6 +84,7 @@
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
 #include <autorouter/autoplace_tool.h>
+#include <swig/pcb_scripting_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
 #include <netlist_reader/board_netlist_updater.h>
@@ -146,9 +147,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
-
-    EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, PCB_EDIT_FRAME::OnActionPluginRefresh )
-    EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER, PCB_EDIT_FRAME::OnActionPluginShowFolder )
 
     // Tracks and vias sizes general options
     EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE, ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
@@ -496,6 +494,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new GROUP_TOOL );
+    m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -1495,43 +1494,6 @@ void PCB_EDIT_FRAME::RunEeschema()
 
         frame->Raise();
     }
-}
-
-
-void PCB_EDIT_FRAME::PythonPluginsReload()
-{
-    // Reload Python plugins if they are newer than the already loaded, and load new plugins
-    // Remove all action plugins so that we don't keep references to old versions
-    ACTION_PLUGINS::UnloadAll();
-
-    // Reload plugin list: reload Python plugins if they are newer than the already loaded,
-    // and load new plugins
-    PythonPluginsReloadBase();
-
-    // Action plugins can be modified, therefore the plugins menu must be updated:
-    ReCreateMenuBar();
-    // Recreate top toolbar to add action plugin buttons
-    ReCreateHToolbar();
-}
-
-
-void PCB_EDIT_FRAME::PythonPluginsShowFolder()
-{
-#ifdef __WXMAC__
-    wxString msg;
-
-    // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", PyPluginsPath( true ) );
-
-    system( msg.c_str() );
-#else
-    wxString pypath( PyPluginsPath( true ) );
-
-    // Quote in case there are spaces in the path.
-    AddDelimiterString( pypath );
-
-    wxLaunchDefaultApplication( pypath );
-#endif
 }
 
 

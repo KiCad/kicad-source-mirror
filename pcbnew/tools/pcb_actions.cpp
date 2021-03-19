@@ -539,6 +539,22 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.PadTool.defaultPadPropert
         BITMAPS::options_pad );
 
 
+// SCRIPTING TOOL
+//
+TOOL_ACTION PCB_ACTIONS::pluginsReload( "pcbnew.ScriptingTool.pluginsReload",
+        AS_GLOBAL, 0, "",
+        _( "Refresh Plugins" ), _( "Reload all python plugins and refresh plugin menus" ),
+        BITMAPS::reload );
+
+TOOL_ACTION PCB_ACTIONS::pluginsShowFolder( "pcbnew.ScriptingTool.pluginsShowFolder",
+        AS_GLOBAL, 0, "",
+#ifdef __WXMAC__
+        _( "Reveal Plugin Folder in Finder" ), _( "Reveals the plugins folder in a Finder window" ),
+#else
+        _( "Open Plugin Directory" ), _( "Opens the directory in the default system file manager" ),
+#endif
+        BITMAPS::directory_open );
+
 // BOARD_EDITOR_CONTROL
 //
 TOOL_ACTION PCB_ACTIONS::boardSetup( "pcbnew.EditorControl.boardSetup",

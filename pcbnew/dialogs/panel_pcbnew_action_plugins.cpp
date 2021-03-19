@@ -18,19 +18,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <kiface_i.h>
-#include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
-#include <panel_pcbnew_action_plugins.h>
-#include <dialog_footprint_wizard_list.h>
-#include <widgets/paged_dialog.h>
-#include <widgets/grid_icon_text_helpers.h>
-#include <bitmaps.h>
 #include <action_plugin.h>
+#include <bitmaps.h>
+#include <dialog_footprint_wizard_list.h>
 #include <grid_tricks.h>
-#include <widgets/wx_grid.h>
-
+#include <kiface_i.h>
+#include <panel_pcbnew_action_plugins.h>
+#include <pcb_edit_frame.h>
 #include <pcbnew_scripting.h>
+#include <pcbnew_settings.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <widgets/grid_icon_text_helpers.h>
+#include <widgets/paged_dialog.h>
+#include <widgets/wx_grid.h>
 
 #define GRID_CELL_MARGIN 4
 
@@ -138,7 +139,7 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 {
-    m_frame->PythonPluginsReload();
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
     TransferDataToWindow();
 }
 
@@ -231,7 +232,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnOpenDirectoryButtonClick( wxCommandEvent& event )
 {
-    m_frame->PythonPluginsShowFolder();
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::pluginsShowFolder );
 }
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnShowErrorsButtonClick( wxCommandEvent& event )

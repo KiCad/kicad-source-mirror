@@ -49,35 +49,6 @@
 
 #include <config.h>
 
-/**
- * Initialize the python environment and publish the Pcbnew interface inside it.
- *
- * This initializes all the wxPython interface and returns the python thread control structure
- */
-bool pcbnewInitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath )
-{
-    int  retv;
-    char cmd[1024];
-
-    // Load pcbnew inside Python and load all the user plugins and package-based plugins
-    {
-        PyLOCK lock;
-
-        // Load os so that we can modify the environment variables through python
-        snprintf( cmd, sizeof( cmd ), "import sys, os, traceback\n"
-                  "sys.path.append(\".\")\n"
-                  "import pcbnew\n"
-                  "pcbnew.LoadPlugins(\"%s\", \"%s\")",
-                  aStockScriptingPath, aUserScriptingPath );
-        retv = PyRun_SimpleString( cmd );
-
-        if( retv != 0 )
-            wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
-    }
-
-    return true;
-}
-
 
 /**
  * Run a python method from the pcbnew module.

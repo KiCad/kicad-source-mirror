@@ -483,6 +483,7 @@ target_link_libraries( common
     kimath
     kiplatform
     gal
+    scripting
     pybind11::embed
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
