@@ -55,7 +55,10 @@ bool ASSET_ARCHIVE::Load()
     while( ( entry = tarStream.GetNextEntry() ) )
     {
         if( entry->IsDir() )
+        {
+            delete entry;
             continue;
+        }
 
         size_t length = entry->GetSize();
 
@@ -71,6 +74,8 @@ bool ASSET_ARCHIVE::Load()
         m_fileInfoCache[entry->GetName()] = fi;
 
         offset += length;
+
+        delete entry;
     }
 
     m_cache.resize( offset );
