@@ -84,7 +84,7 @@
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
 #include <autorouter/autoplace_tool.h>
-#include <swig/pcb_scripting_tool.h>
+#include <python/scripting/pcb_scripting_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
 #include <netlist_reader/board_netlist_updater.h>

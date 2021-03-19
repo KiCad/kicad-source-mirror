@@ -31,7 +31,7 @@
 #include "tools/placement_tool.h"
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
-#include <swig/pcb_scripting_tool.h>
+#include <python/scripting/pcb_scripting_tool.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board.h>

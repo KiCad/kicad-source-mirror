@@ -25,7 +25,7 @@
 #include <kiface_i.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_scripting.h>
+#include <python/scripting/pcbnew_scripting.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

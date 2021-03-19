@@ -21,7 +21,7 @@ add_dependencies( pnsrouter pcbcommon )
 file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/swig )
 
 # Infrequently needed headers go at end of search paths, append to INC_AFTER
-set( INC_AFTER ${INC_AFTER} swig )
+set( INC_AFTER ${INC_AFTER} python/scripting )
 set( INC_AFTER ${INC_AFTER} ${CMAKE_SOURCE_DIR}/common/swig )
 
 include_directories( BEFORE ${INC_BEFORE} )
@@ -366,11 +366,11 @@ set( PCBNEW_COMMON_SRCS
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     ${CMAKE_SOURCE_DIR}/common/swig/wx_python_helpers.cpp
-    swig/pcbnew_action_plugins.cpp
-    swig/pcbnew_footprint_wizards.cpp
-    swig/pcbnew_scripting_helpers.cpp
-    swig/pcbnew_scripting.cpp
-    swig/pcb_scripting_tool.cpp
+    python/scripting/pcbnew_action_plugins.cpp
+    python/scripting/pcbnew_footprint_wizards.cpp
+    python/scripting/pcbnew_scripting_helpers.cpp
+    python/scripting/pcbnew_scripting.cpp
+    python/scripting/pcb_scripting_tool.cpp
     )
 
 
@@ -442,30 +442,30 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     DEPENDS plotcontroller.h
     DEPENDS exporters/gendrill_Excellon_writer.h
     DEPENDS exporters/export_vrml.h
-    DEPENDS swig/pcbnew.i
-    DEPENDS swig/board.i
-    DEPENDS swig/board_connected_item.i
-    DEPENDS swig/board_design_settings.i
-    DEPENDS swig/board_item.i
-    DEPENDS swig/board_item_container.i
-    DEPENDS swig/connectivity.i
-    DEPENDS swig/dimension.i
-    DEPENDS swig/pcb_shape.i
-    DEPENDS swig/fp_shape.i
-    DEPENDS swig/marker_pcb.i
-    DEPENDS swig/pcb_target.i
-    DEPENDS swig/pcb_plot_params.i
-    DEPENDS swig/footprint.i
-    DEPENDS swig/netinfo.i
-    DEPENDS swig/pad.i
-    DEPENDS swig/pcb_text.i
-    DEPENDS swig/plugins.i
-    DEPENDS swig/fp_text.i
-    DEPENDS swig/track.i
-    DEPENDS swig/units.i
-    DEPENDS swig/typeinfo.i
-    DEPENDS swig/zone.i
-    DEPENDS swig/zone_settings.i
+    DEPENDS python/swig/pcbnew.i
+    DEPENDS python/swig/board.i
+    DEPENDS python/swig/board_connected_item.i
+    DEPENDS python/swig/board_design_settings.i
+    DEPENDS python/swig/board_item.i
+    DEPENDS python/swig/board_item_container.i
+    DEPENDS python/swig/connectivity.i
+    DEPENDS python/swig/dimension.i
+    DEPENDS python/swig/pcb_shape.i
+    DEPENDS python/swig/fp_shape.i
+    DEPENDS python/swig/marker_pcb.i
+    DEPENDS python/swig/pcb_target.i
+    DEPENDS python/swig/pcb_plot_params.i
+    DEPENDS python/swig/footprint.i
+    DEPENDS python/swig/netinfo.i
+    DEPENDS python/swig/pad.i
+    DEPENDS python/swig/pcb_text.i
+    DEPENDS python/swig/plugins.i
+    DEPENDS python/swig/fp_text.i
+    DEPENDS python/swig/track.i
+    DEPENDS python/swig/units.i
+    DEPENDS python/swig/typeinfo.i
+    DEPENDS python/swig/zone.i
+    DEPENDS python/swig/zone_settings.i
 
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/wx.i

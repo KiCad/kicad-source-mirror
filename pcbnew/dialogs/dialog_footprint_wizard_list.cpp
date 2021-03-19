@@ -36,7 +36,7 @@
 #include <dialog_footprint_wizard_list.h>
 #include <footprint_wizard_frame.h>
 
-#include <swig/pcbnew_scripting.h>
+#include <python/scripting/pcbnew_scripting.h>
 
 enum FPGeneratorRowNames
 {
