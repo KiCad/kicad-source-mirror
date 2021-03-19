@@ -1,13 +1,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2021.
+# radix <neutrino@gmx.co.uk>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-17 11:16-0700\n"
-"PO-Revision-Date: 2021-03-11 21:06+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sl/>\n"
+"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"Last-Translator: radix <neutrino@gmx.co.uk>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +50,7 @@ msgstr "Izberite 3D model"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr "Scale"
+msgstr "Merilo"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -114,7 +115,7 @@ msgstr "Sukanje"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
-msgstr "Offset"
+msgstr "Odmik"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
@@ -164,6 +165,7 @@ msgstr ""
 "analizo."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
+#, fuzzy
 msgid "Create tracks and vias"
 msgstr "Ustvarite skladbe in vias"
 
@@ -407,7 +409,7 @@ msgstr "Ponovno naloži ploščo"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr "Kopiranje QR slike v zapiskih"
+msgstr "Kopiraj 3D sliko v odložišče"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Set display options, and some layers visibility"
@@ -419,7 +421,7 @@ msgstr "Prikažite trenutni pogled z uporabo Raytracinga"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 msgid "3D Model Visibility"
-msgstr "Vidnost 3D modela"
+msgstr "Vidnost 3D modelov"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Show 3D through hole models"
@@ -494,6 +496,8 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:97
 msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr ""
+"Uporabi različne barve za površinsko prevlečen in neprevlečen baker. "
+"(Počasno)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:105
 msgid "Camera Options"
@@ -501,7 +505,7 @@ msgstr "Možnosti kamere"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:110
 msgid "Rotation Increment:"
-msgstr "Prirast vrtenja:"
+msgstr "Korak vrtenja:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
 #: common/base_units.cpp:515 pcb_calculator/widgets/unit_selector.cpp:130
@@ -532,7 +536,7 @@ msgstr "Pokaži omejevalna polja modela"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:168
 msgid "Show copper thickness"
-msgstr "Pokažite debelino bakra"
+msgstr "Pokažit debelino bakra"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:175
 msgid "Other Options"
@@ -630,9 +634,8 @@ msgid "Recursion Level"
 msgstr "Rekurzivna raven"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:285
-#, fuzzy
 msgid "Shadows:"
-msgstr "Sence"
+msgstr "Sence:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:290
 msgid ""
@@ -648,9 +651,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Naključni smerni faktor oddanih žarkov"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:303
-#, fuzzy
 msgid "Reflections:"
-msgstr "Razmišljanja"
+msgstr "Odsevi:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:308
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -689,19 +691,17 @@ msgid "Ambient camera light:"
 msgstr "Ambientna svetloba kamere"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:386
-#, fuzzy
 msgid "Top light:"
-msgstr "Top Light"
+msgstr "Zgornja luč:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:396
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Spodnja luč"
+msgstr "Spodnja luč:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:421
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
 msgid "Elevation (degrees)"
-msgstr "Nadmorska višina (stopinje)"
+msgstr "Elevacija (stopinje)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:425
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:442
@@ -709,44 +709,36 @@ msgid "Azimuth (degrees)"
 msgstr "Azimut (stopinje)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:446
-#, fuzzy
 msgid "1:"
-msgstr "1: 1"
+msgstr "1:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:462
-#, fuzzy
 msgid "5:"
-msgstr "5"
+msgstr "5:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:475
-#, fuzzy
 msgid "2:"
-msgstr "R2:"
+msgstr "2:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:491
-#, fuzzy
 msgid "6:"
-msgstr "6"
+msgstr "6:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:504
-#, fuzzy
 msgid "3:"
-msgstr "3: 2"
+msgstr "3:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
-#, fuzzy
 msgid "7:"
-msgstr "7"
+msgstr "7:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:533
-#, fuzzy
 msgid "4:"
-msgstr "4"
+msgstr "4:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:549
-#, fuzzy
 msgid "8:"
-msgstr "8"
+msgstr "8:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:571
 msgid "Reset to defaults"
@@ -1255,11 +1247,11 @@ msgstr "Izvirna slika"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr "Slika sivine"
+msgstr "Sivinska slika"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr "Črna && bela slika"
+msgstr "Črno-bela slika"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
@@ -2328,7 +2320,7 @@ msgstr "A0 841x1189mm"
 
 #: common/dialogs/dialog_page_settings.cpp:57
 msgid "A 8.5x11in"
-msgstr "8,5x11in"
+msgstr "A 8,5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:58
 msgid "B 11x17in"
@@ -2758,7 +2750,7 @@ msgstr "Natisni reference referenc."
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "1:1"
-msgstr "1: 1"
+msgstr "1:1"
 
 #: common/dialogs/dialog_print_generic_base.cpp:64
 msgid "Fit to page"
@@ -3428,7 +3420,7 @@ msgstr "Pikčasto"
 #: eeschema/dialogs/dialog_edit_line_style.cpp:49
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:312
 msgid "Dash-Dot"
-msgstr "Dash-Dot"
+msgstr "Črta - pika"
 
 #: common/dialogs/panel_setup_netclasses.cpp:402
 msgid "Netclass must have a name."
@@ -4104,7 +4096,7 @@ msgstr "Shematski označevalec"
 
 #: common/eda_item.cpp:267 eeschema/sch_junction.h:91
 msgid "Junction"
-msgstr "Junction"
+msgstr "Spoj"
 
 #: common/eda_item.cpp:268
 msgid "No-Connect Flag"
@@ -4639,7 +4631,7 @@ msgstr "Izbriše izbrane elemente"
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
 msgid "Select All"
-msgstr "Select All"
+msgstr "Izberi vse"
 
 #: common/grid_tricks.cpp:245
 msgid "Select all cells"
@@ -10455,7 +10447,7 @@ msgstr "Ohms"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:256
 msgid "Decade"
-msgstr "Decade"
+msgstr "Dekada"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:256
@@ -11743,7 +11735,7 @@ msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
@@ -15732,7 +15724,7 @@ msgstr "Dodajte zastavico brez povezave"
 
 #: eeschema/tools/ee_actions.cpp:294
 msgid "Add Junction"
-msgstr "Add Junction"
+msgstr "Dodaj spoj"
 
 #: eeschema/tools/ee_actions.cpp:294
 msgid "Add a junction"
@@ -17319,7 +17311,7 @@ msgstr "Pokaži vir ..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
-msgstr "Show source file for the current layer"
+msgstr "Pokaži izvorno datoteko za trenutno plast"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 #, fuzzy
@@ -17789,11 +17781,9 @@ msgid "Load File to Edit"
 msgstr "Naloži datoteko za urejanje"
 
 #: kicad/kicad_manager_frame.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "Project: %s"
-msgstr ""
-"\n"
-"Projekt: "
+msgstr "Projekt: %s"
 
 #: kicad/kicad_manager_frame.cpp:693
 msgid "Restoring session"
@@ -19027,9 +19017,8 @@ msgid "Zout:"
 msgstr "Zout"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:374
-#, fuzzy
 msgid "R3:"
-msgstr "3: 2"
+msgstr "R3:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "RF Attenuators"
@@ -19103,9 +19092,8 @@ msgstr "<= 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:655
-#, fuzzy
 msgid "Tolerance"
-msgstr "Odstopanje:"
+msgstr "Toleranca"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:635
 msgid "1st Band"
@@ -19677,7 +19665,7 @@ msgstr "PCB kalkulator"
 #: pcb_calculator/eserie.cpp:323 pcb_calculator/eserie.cpp:342
 #: pcb_calculator/eserie.cpp:368
 msgid "Exact"
-msgstr ""
+msgstr "Točno"
 
 #: pcb_calculator/eserie.cpp:351 pcb_calculator/eserie.cpp:374
 msgid "Not worth using"
@@ -22292,9 +22280,8 @@ msgstr "Besedilo za tiskanje po vrednosti dimenzije"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:124
 #: pcbnew/dialogs/dialog_plot_base.cpp:389
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:125
-#, fuzzy
 msgid "Precision:"
-msgstr "Natančnost"
+msgstr "Natančnost:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
@@ -30190,7 +30177,7 @@ msgstr "NPTH, mehanski"
 
 #: pcbnew/pad.cpp:1440
 msgid "Trapezoid"
-msgstr "Trapezoid"
+msgstr "Trapez"
 
 #: pcbnew/pad.cpp:1452
 msgid "Castellated pad"
@@ -32412,9 +32399,8 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Število bakrenih plasti:"
+msgstr "Število bakrenih plasti: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
 #, fuzzy
