@@ -442,6 +442,10 @@ int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
 {
 #ifdef KICAD_SPICE
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
+
+    if( !simFrame )
+        return -1;
+
     simFrame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized

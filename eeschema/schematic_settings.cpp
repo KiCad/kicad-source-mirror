@@ -217,6 +217,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
 SCHEMATIC_SETTINGS::~SCHEMATIC_SETTINGS()
 {
+    ReleaseNestedSettings( m_NgspiceSimulatorSettings.get() );
+    m_NgspiceSimulatorSettings.reset();
+
     if( m_parent )
     {
         m_parent->ReleaseNestedSettings( this );
