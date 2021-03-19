@@ -193,15 +193,15 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         {
             if( item->Type() == SCH_COMPONENT_T )
             {
-                SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+                SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-                for( SCH_FIELD& field : component->GetFields() )
+                for( SCH_FIELD& field : symbol->GetFields() )
                 {
                     if( unresolved( field.GetShownText() ) )
                     {
-                        wxPoint pos = field.GetPosition() - component->GetPosition();
-                        pos = component->GetTransform().TransformCoordinate( pos );
-                        pos += component->GetPosition();
+                        wxPoint pos = field.GetPosition() - symbol->GetPosition();
+                        pos = symbol->GetTransform().TransformCoordinate( pos );
+                        pos += symbol->GetPosition();
 
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );

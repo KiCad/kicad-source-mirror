@@ -279,17 +279,16 @@ public:
     void UpdateAllScreenReferences();
 
     /**
-     * Adds #SCH_REFERENCE object to \a aReferences for each component in the sheet.
+     * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the sheet.
      *
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols : false to only get normal components.
-     * @param aForceIncludeOrphanComponents : true to include components having no symbol found
-     * in lib.
-     * ( orphan components)
-     * The normal option is false, and set to true only to build the full list of components.
+     * @param aIncludePowerSymbols : false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols : true to include symbols having no symbol found in lib.
+     *                                     The normal option is false, and set to true only to
+     *                                     build the full list of symbols.
      */
     void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                     bool aForceIncludeOrphanComponents = false ) const;
+                     bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
@@ -298,10 +297,10 @@ public:
      * The map key for each element will be the reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols : false to only get normal components.
+     * @param aIncludePowerSymbols : false to only get normal symbols.
      */
-    void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                 bool aIncludePowerSymbols = true ) const;
+    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                              bool aIncludePowerSymbols = true ) const;
 
     /**
      * Test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
@@ -344,8 +343,8 @@ typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
  *
  * #SCH_SHEET objects are not unique, there can be many sheets with the same filename and
  * that share the same #SCH_SCREEN reference.   Each The schematic file (#SCH_SCREEN) may
- * be shared between these sheets and component references are specific to a sheet path.
- * When a sheet is entered, component references and sheet page number are updated.
+ * be shared between these sheets and symbol references are specific to a sheet path.
+ * When a sheet is entered, symbol references and sheet page number are updated.
  */
 class SCH_SHEET_LIST : public SCH_SHEET_PATHS
 {
@@ -393,18 +392,16 @@ public:
     void AnnotatePowerSymbols();
 
     /**
-     * Add a #SCH_REFERENCE object to \a aReferences for each component in the list
-     * of sheets.
+     * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets.
      *
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols Set to false to only get normal components.
-     * @param aForceIncludeOrphanComponents : true to include components having no symbol found
-     * in lib.
-     * ( orphan components)
-     * The normal option is false, and set to true only to build the full list of components.
+     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aForceIncludeOrphanSymbols : true to include symbols having no symbol found in lib.
+     *                                     The normal option is false, and set to true only to
+     *                                     build the full list of symbols.
      */
     void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                     bool aForceIncludeOrphanComponents = false ) const;
+                     bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
@@ -412,7 +409,7 @@ public:
      * reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols Set to false to only get normal components.
+     * @param aIncludePowerSymbols Set to false to only get normal symbols.
      */
     void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                               bool aIncludePowerSymbols = true ) const;
@@ -477,20 +474,6 @@ public:
     void UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances );
 
     std::vector<KIID_PATH> GetPaths() const;
-
-    /**
-     * Update all of the symbol sheet paths to the sheet paths defined in \a aOldSheetPaths.
-     *
-     * @note The list of old sheet paths must be the exact same size and order as the existing
-     *       sheet paths.  This should not be an issue if no new sheets where added between the
-     *       creation of this sheet list and \a aOldSheetPaths.  This should only be called
-     *       when updating legacy schematics to the new schematic file format.  Once this
-     *       happens, the schematic cannot be save to the legacy file format because the
-     *       time stamp part of UUIDs are no longer guaranteed to be unique.
-     *
-     * @param aOldSheetPaths is the #SHEET_PATH_LIST to update from.
-     */
-    void ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOldSheetPaths );
 
     /**
      * Check all of the sheet instance for empty page numbers.

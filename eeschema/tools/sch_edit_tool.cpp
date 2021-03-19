@@ -88,27 +88,27 @@ private:
     {
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->GetSelection();
-        SCH_COMPONENT*     component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+        SCH_COMPONENT*     symbol = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
 
         Clear();
 
-        if( !component )
+        if( !symbol )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no symbol selected" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
 
-        int  unit = component->GetUnit();
+        int  unit = symbol->GetUnit();
 
-        if( !component->GetPartRef() || component->GetPartRef()->GetUnitCount() < 2 )
+        if( !symbol->GetPartRef() || symbol->GetPartRef()->GetUnitCount() < 2 )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "symbol is not multi-unit" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
 
-        for( int ii = 0; ii < component->GetPartRef()->GetUnitCount(); ii++ )
+        for( int ii = 0; ii < symbol->GetPartRef()->GetUnitCount(); ii++ )
         {
             wxString num_unit;
             num_unit.Printf( _( "Unit %s" ), LIB_PART::SubReference( ii + 1, false ) );
@@ -432,15 +432,15 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
         case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( head );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( head );
 
             if( clockwise )
-                component->SetOrientation( CMP_ROTATE_CLOCKWISE );
+                symbol->SetOrientation( CMP_ROTATE_CLOCKWISE );
             else
-                component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+                symbol->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                component->AutoAutoplaceFields( m_frame->GetScreen() );
+                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
 
             break;
         }
@@ -625,15 +625,15 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         {
         case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
             if( vertical )
-                component->SetOrientation( CMP_MIRROR_X );
+                symbol->SetOrientation( CMP_MIRROR_X );
             else
-                component->SetOrientation( CMP_MIRROR_Y );
+                symbol->SetOrientation( CMP_MIRROR_Y );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                component->AutoAutoplaceFields( m_frame->GetScreen() );
+                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
 
             break;
         }
@@ -869,10 +869,10 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
-            component->ClearAnnotation( NULL );
-            component->SetParent( m_frame->GetScreen() );
-            m_frame->AddToScreen( component, m_frame->GetScreen() );
+            SCH_COMPONENT* symbol = (SCH_COMPONENT*) newItem;
+            symbol->ClearAnnotation( NULL );
+            symbol->SetParent( m_frame->GetScreen() );
+            m_frame->AddToScreen( symbol, m_frame->GetScreen() );
             break;
         }
 
@@ -884,7 +884,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( copiedSheets )
     {
         // We clear annotation of new sheet paths.
-        // Annotation of new components added in current sheet is already cleared.
+        // Annotation of new symbols added in current sheet is already cleared.
         SCH_SCREENS screensList( &m_frame->Schematic().Root() );
         screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
         m_frame->SetSheetNumberAndCount();
@@ -910,7 +910,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     SCH_ITEM* newItem = sourceItem->Duplicate();
     bool      performDrag = false;
 
-    // If cloning a component then put into 'move' mode.
+    // If cloning a symbol then put into 'move' mode.
     if( newItem->Type() == SCH_COMPONENT_T )
     {
         wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( true );
@@ -955,7 +955,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_frame->AddToScreen( newItem, m_frame->GetScreen() );
     m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, false );
 
-    // Components need to be handled by the move tool.  The move tool will handle schematic
+    // Symbols need to be handled by the move tool.  The move tool will handle schematic
     // cleanup routines
     if( performDrag )
         m_toolMgr->RunAction( EE_ACTIONS::move, true );
@@ -1173,7 +1173,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
-    // Save old component in undo list if not already in edit, or moving.
+    // Save old symbol in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         saveCopyInUndoList( aField, UNDO_REDO::CHANGED );
 
@@ -1223,14 +1223,14 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
     if( item->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+        SCH_COMPONENT* symbol = (SCH_COMPONENT*) item;
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-            editFieldText( component->GetField( REFERENCE_FIELD ) );
+            editFieldText( symbol->GetField( REFERENCE_FIELD ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-            editFieldText( component->GetField( VALUE_FIELD ) );
+            editFieldText( symbol->GetField( VALUE_FIELD ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-            editFieldText( component->GetField( FOOTPRINT_FIELD ) );
+            editFieldText( symbol->GetField( FOOTPRINT_FIELD ) );
     }
     else if( item->Type() == SCH_FIELD_T )
     {
@@ -1299,26 +1299,26 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
+    SCH_COMPONENT* symbol = (SCH_COMPONENT*) selection.Front();
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
-            && component->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+            && symbol->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
     {
         return 0;
     }
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
-            && component->GetConvert() != LIB_ITEM::LIB_CONVERT::DEMORGAN )
+            && symbol->GetConvert() != LIB_ITEM::LIB_CONVERT::DEMORGAN )
     {
         return 0;
     }
 
-    if( !component->IsNew() )
-        saveCopyInUndoList( component, UNDO_REDO::CHANGED );
+    if( !symbol->IsNew() )
+        saveCopyInUndoList( symbol, UNDO_REDO::CHANGED );
 
-    m_frame->ConvertPart( component );
+    m_frame->ConvertPart( symbol );
 
-    if( component->IsNew() )
+    if( symbol->IsNew() )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( selection.IsHover() )
@@ -1374,8 +1374,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
     case SCH_COMPONENT_T:
     {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-        DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, component );
+        SCH_COMPONENT*           symbol = (SCH_COMPONENT*) item;
+        DIALOG_SYMBOL_PROPERTIES symbolPropsDialog( m_frame, symbol );
 
         // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
         // frame. Therefore this dialog as a modal frame parent, MUST be run under
@@ -1386,7 +1386,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( retval == SYMBOL_PROPS_EDIT_OK )
         {
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                component->AutoAutoplaceFields( m_frame->GetScreen() );
+                symbol->AutoAutoplaceFields( m_frame->GetScreen() );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
@@ -1395,7 +1395,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
 
-            editor->LoadSymbolFromSchematic( component );
+            editor->LoadSymbolFromSchematic( symbol );
 
             editor->Show( true );
             editor->Raise();
@@ -1404,20 +1404,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             auto editor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, true );
 
-            editor->LoadSymbolAndSelectLib( component->GetLibId(), component->GetUnit(),
-                                            component->GetConvert() );
+            editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
 
             editor->Show( true );
             editor->Raise();
         }
         else if( retval == SYMBOL_PROPS_WANT_UPDATE_SYMBOL )
         {
-            DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
+            DIALOG_CHANGE_SYMBOLS dlg( m_frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
             dlg.ShowQuasiModal();
         }
         else if( retval == SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL )
         {
-            DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
+            DIALOG_CHANGE_SYMBOLS dlg( m_frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
             dlg.ShowQuasiModal();
         }
     }
@@ -1446,8 +1445,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             // We clear annotation of new sheet paths here:
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
             // Clear annotation of g_CurrentSheet itself, because its sheetpath is not a new
-            // path, but components managed by its sheet path must have their annotation
-            // cleared, because they are new:
+            // path, but symbols managed by its sheet path must have their annotation cleared
+            // because they are new:
             sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet() );
         }
 

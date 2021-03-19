@@ -243,7 +243,7 @@ bool SYMBOL_EDIT_FRAME::saveCurrentPart()
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadSymbolAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
     if( GetCurPart() && GetCurPart()->GetLibId() == aLibId
             && GetUnit() == aUnit && GetConvert() == aConvert )

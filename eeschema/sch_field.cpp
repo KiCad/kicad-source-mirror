@@ -667,13 +667,12 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
     // the position relative to the parent component.
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
-        wxPoint        relativePos = aPosition - parentComponent->GetPosition();
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        wxPoint        relPos = aPosition - parentSymbol->GetPosition();
 
-        relativePos = parentComponent->GetTransform().
-                            InverseTransform().TransformCoordinate( relativePos );
+        relPos = parentSymbol->GetTransform().InverseTransform().TransformCoordinate( relPos );
 
-        SetTextPos( relativePos + parentComponent->GetPosition() );
+        SetTextPos( relPos + parentSymbol->GetPosition() );
         return;
     }
 
@@ -685,12 +684,12 @@ wxPoint SCH_FIELD::GetPosition() const
 {
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
-        wxPoint        relativePos = GetTextPos() - parentComponent->GetPosition();
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
+        wxPoint        relativePos = GetTextPos() - parentSymbol->GetPosition();
 
-        relativePos = parentComponent->GetTransform().TransformCoordinate( relativePos );
+        relativePos = parentSymbol->GetTransform().TransformCoordinate( relativePos );
 
-        return relativePos + parentComponent->GetPosition();
+        return relativePos + parentSymbol->GetPosition();
     }
 
     return GetTextPos();

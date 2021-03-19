@@ -276,7 +276,7 @@ public:
      * @param aConvert the DeMorgan variant to show
      * @return true if the symbol defined by \a aLibId was loaded.
      */
-    bool LoadSymbolAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
+    bool LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConvert );
 
     /**
      * Print a page.

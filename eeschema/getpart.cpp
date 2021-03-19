@@ -59,7 +59,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParen
     if( aPreselectedLibId.IsValid() )
     {
         viewer->SetSelectedLibrary( aPreselectedLibId.GetLibNickname() );
-        viewer->SetSelectedComponent( aPreselectedLibId.GetLibItemName() );
+        viewer->SetSelectedSymbol( aPreselectedLibId.GetLibItemName());
     }
 
     viewer->SetUnitAndConvert( aUnit, aConvert );
@@ -95,7 +95,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
     SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
 
-    // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
+    // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probaby can't handle more anyway.
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
 
@@ -162,7 +162,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     PICKED_SYMBOL sel;
     LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 
-    if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
+    if( dlg.IsExternalBrowserSelected() )   // User requested symbol browser.
     {
         sel = PickSymbolFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
         id = sel.LibId;
@@ -195,55 +195,55 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
 }
 
 
-void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
+void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aSymbol, int aUnit )
 {
-    LIB_PART* part = GetLibPart( aComponent->GetLibId() );
+    LIB_PART* part = GetLibPart( aSymbol->GetLibId() );
 
     if( !part )
         return;
 
     int unitCount = part->GetUnitCount();
 
-    if( unitCount <= 1 || aComponent->GetUnit() == aUnit )
+    if( unitCount <= 1 || aSymbol->GetUnit() == aUnit )
         return;
 
     if( aUnit > unitCount )
         aUnit = unitCount;
 
-    STATUS_FLAGS savedFlags = aComponent->GetFlags();
+    STATUS_FLAGS savedFlags = aSymbol->GetFlags();
 
-    if( !aComponent->GetEditFlags() )    // No command in progress: save in undo list
-        SaveCopyInUndoList( GetScreen(), aComponent, UNDO_REDO::CHANGED, false );
+    if( !aSymbol->GetEditFlags() )    // No command in progress: save in undo list
+        SaveCopyInUndoList( GetScreen(), aSymbol, UNDO_REDO::CHANGED, false );
 
     /* Update the unit number. */
-    aComponent->SetUnitSelection( &GetCurrentSheet(), aUnit );
-    aComponent->SetUnit( aUnit );
-    aComponent->ClearFlags();
-    aComponent->SetFlags( savedFlags ); // Restore m_Flag modified by SetUnit()
+    aSymbol->SetUnitSelection( &GetCurrentSheet(), aUnit );
+    aSymbol->SetUnit( aUnit );
+    aSymbol->ClearFlags();
+    aSymbol->SetFlags( savedFlags ); // Restore m_Flag modified by SetUnit()
 
-    if( !aComponent->GetEditFlags() )   // No command in progress: update schematic
+    if( !aSymbol->GetEditFlags() )   // No command in progress: update schematic
     {
         if( eeconfig()->m_AutoplaceFields.enable )
-            aComponent->AutoAutoplaceFields( GetScreen() );
+            aSymbol->AutoAutoplaceFields( GetScreen() );
 
         TestDanglingEnds();
 
-        UpdateItem( aComponent );
+        UpdateItem( aSymbol );
         OnModify();
     }
 }
 
 
-void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
+void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aSymbol )
 {
-    if( !aComponent || !aComponent->GetPartRef() )
+    if( !aSymbol || !aSymbol->GetPartRef() )
         return;
 
     wxString msg;
 
-    if( !aComponent->GetPartRef()->HasConversion() )
+    if( !aSymbol->GetPartRef()->HasConversion() )
     {
-        LIB_ID id = aComponent->GetPartRef()->GetLibId();
+        LIB_ID id = aSymbol->GetPartRef()->GetLibId();
 
         msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
                     id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
@@ -251,27 +251,26 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
         return;
     }
 
-    STATUS_FLAGS savedFlags = aComponent->GetFlags();
+    STATUS_FLAGS savedFlags = aSymbol->GetFlags();
 
-    aComponent->SetConvert( aComponent->GetConvert() + 1 );
+    aSymbol->SetConvert( aSymbol->GetConvert() + 1 );
 
     // ensure m_convert = 1 or 2
     // 1 = shape 1 = not converted
     // 2 = shape 2 = first converted shape
-    // > 2 is not used but could be used for more shapes
-    // like multiple shapes for a programmable component
+    // > 2 is not currently supported
     // When m_convert = val max, return to the first shape
-    if( aComponent->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
-        aComponent->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+    if( aSymbol->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
+        aSymbol->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
     TestDanglingEnds();
-    aComponent->ClearFlags();
-    aComponent->SetFlags( savedFlags );   // Restore m_flags (modified by SetConvert())
+    aSymbol->ClearFlags();
+    aSymbol->SetFlags( savedFlags );   // Restore m_flags (modified by SetConvert())
 
     // If selected make sure all the now-included pins are selected
-    if( aComponent->IsSelected() )
-        m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aComponent );
+    if( aSymbol->IsSelected() )
+        m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aSymbol );
 
-    UpdateItem( aComponent );
+    UpdateItem( aSymbol );
     OnModify();
 }

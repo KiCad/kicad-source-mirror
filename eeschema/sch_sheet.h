@@ -76,7 +76,7 @@ enum  SHEET_FIELD_TYPE {
  * Define a sheet pin (label) used in sheets to create hierarchical schematics.
  *
  * A SCH_SHEET_PIN is used to create a hierarchical sheet in the same way a
- * pin is used in a component.  It connects the objects in the sheet object
+ * pin is used in a symbol.  It connects the objects in the sheet object
  * to the objects in the schematic page to the objects in the page that is
  * represented by the sheet.  In a sheet object, a SCH_SHEET_PIN must be
  * connected to a wire, bus, or label.  In the schematic page represented by
@@ -261,7 +261,7 @@ public:
      * and false for items moved with no reference to anchor.
      *
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, components)
+     * items which can be large (hierarchical sheets, symbols)
      *
      * @return false for a hierarchical sheet
      */
@@ -457,9 +457,7 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     /**
-     * Count our own components, without the power components.
-     *
-     *  @return the component count.
+     * Count our own symbols, without the power symbols.
      */
     int SymbolCount() const;
 

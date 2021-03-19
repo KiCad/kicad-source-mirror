@@ -38,13 +38,14 @@ class LIB_FIELD;
 
 /**
  * SCH_FIELD
- * instances are attached to a component and provide a place for the component's value,
- * reference designator, footprint, and user definable name-value pairs of arbitrary purpose.
+ * instances are attached to a symbol or sheet and provide a place for the component's value,
+ * reference designator, footprint, , a sheet's name, filename, and user definable name-value
+ * pairs of arbitrary purpose.
  *
- * <ul> <li>Field 0 is reserved for the component reference.</li>
- * <li>Field 1 is reserved for the component value.</li>
- * <li>Field 2 is reserved for the component footprint.</li>
- * <li>Field 3 is reserved for the component data sheet file.</li>
+ * <ul> <li>Field 0 is reserved for the symbol reference.</li>
+ * <li>Field 1 is reserved for the symbol value.</li>
+ * <li>Field 2 is reserved for the symbol footprint.</li>
+ * <li>Field 3 is reserved for the symbol data sheet file.</li>
  * <li>Field 4 and higher are user defineable.</li></ul>
  */
 
@@ -163,7 +164,7 @@ public:
      * @copydoc SCH_ITEM::MirrorVertically()
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
-     * when the parent component is mirrored.  This function is only needed by the
+     * when the parent symbol is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
     void MirrorVertically( int aCenter ) override
@@ -174,7 +175,7 @@ public:
      * @copydoc SCH_ITEM::MirrorHorizontally()
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
-     * when the parent component is mirrored.  This function is only needed by the
+     * when the parent symbol is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
     void MirrorHorizontally( int aCenter ) override

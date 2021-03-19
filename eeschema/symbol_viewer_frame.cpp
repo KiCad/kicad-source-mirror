@@ -401,7 +401,7 @@ bool SYMBOL_VIEWER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
             else
             {
                 SetSelectedLibrary( libid.GetLibNickname() );
-                SetSelectedComponent( libid.GetLibItemName() );
+                SetSelectedSymbol( libid.GetLibItemName());
             }
         }
     }
@@ -635,7 +635,7 @@ void SYMBOL_VIEWER_FRAME::ClickOnCmpList( wxCommandEvent& event )
 
     m_selection_changed = true;
 
-    SetSelectedComponent( m_symbolList->GetString( ii ) );
+    SetSelectedSymbol( m_symbolList->GetString( ii ));
 
     // The m_symbolList has now the focus, in order to be able to use arrow keys
     // to navigate inside the list.
@@ -645,16 +645,16 @@ void SYMBOL_VIEWER_FRAME::ClickOnCmpList( wxCommandEvent& event )
 }
 
 
-void SYMBOL_VIEWER_FRAME::SetSelectedComponent( const wxString& aComponentName )
+void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
 {
-    if( m_entryName != aComponentName )
+    if( m_entryName != aSymbolName )
     {
-        m_entryName = aComponentName;
+        m_entryName = aSymbolName;
 
         // Ensure the corresponding line in m_symbolList is selected
-        // (which is not necessarily the case if SetSelectedComponent is called
+        // (which is not necessarily the case if SetSelectedSymbol is called
         // by another caller than ClickOnCmpList.
-        m_symbolList->SetStringSelection( aComponentName, true );
+        m_symbolList->SetStringSelection( aSymbolName, true );
         DisplayLibInfos();
 
         if( m_selection_changed )
@@ -847,7 +847,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
         return;
 
     SetSelectedLibrary( id.GetLibNickname() );
-    SetSelectedComponent( id.GetLibItemName() );
+    SetSelectedSymbol( id.GetLibItemName() );
     SetUnitAndConvert( unit, 1 );
 }
 

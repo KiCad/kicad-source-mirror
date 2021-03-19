@@ -748,9 +748,9 @@ public:
      */
     void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
 
-    void ConvertPart( SCH_COMPONENT* aComponent );
+    void ConvertPart( SCH_COMPONENT* aSymbol );
 
-    void SelectUnit( SCH_COMPONENT* aComponent, int aUnit );
+    void SelectUnit( SCH_COMPONENT* aSymbol, int aUnit );
 
     /* Undo - redo */
 

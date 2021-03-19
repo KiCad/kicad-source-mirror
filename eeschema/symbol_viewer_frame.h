@@ -118,17 +118,13 @@ public:
 
     /**
      * Set the selected library in the library window.
-     *
-     * @param aLibName name of the library to be selected.
      */
     void SetSelectedLibrary( const wxString& aLibName );
 
     /**
      * Set the selected component.
-     *
-     * @param aComponentName : the name of the component to be selected.
      */
-    void SetSelectedComponent( const wxString& aComponentName );
+    void SetSelectedSymbol( const wxString& aSymbolName );
 
     // Accessors:
     /**

@@ -135,7 +135,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( bool              aAnnotateSchematic,
         if( aAnnotateSchematic )
             sheets.GetMultiUnitSymbols( lockedComponents );
         else
-            GetCurrentSheet().GetMultiUnitComponents( lockedComponents );
+            GetCurrentSheet().GetMultiUnitSymbols( lockedComponents );
     }
 
     // Store previous annotations for building info messages
