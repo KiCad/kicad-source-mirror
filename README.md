@@ -1,11 +1,14 @@
 # KiCad README
 
-For specific documentation like [Compiling](Documentation/development/compiling.md), GUI translation, old
-changelogs see the [Documentation](Documentation) subfolder.
+For specific documentation about [building KiCad](https://dev-docs.kicad.org/en/build/), policies
+and guidelines, and source code documentation see the
+[Developer Documentation](https://dev-docs.kicad.org) website.
 
 You may also take a look into the [Wiki](https://gitlab.com/kicad/code/kicad/-/wikis/home),
-the [Developers](https://kicad.org/contribute/developers/) section on our [Website](https://kicad.org/) and
-our [Forum](https://forum.kicad.info/).
+the [contribution guide](https://dev-docs.kicad.org/en/contribute/).
+
+For general information about KiCad and information about contributing to the documentation and
+libraries, see our [Website](https://kicad.org/) and our [Forum](https://forum.kicad.info/).
 
 ## Build state
 
@@ -36,7 +39,7 @@ our [Forum](https://forum.kicad.info/).
 * [common](common)            - Sourcecode of the common library
 * [cvpcb](cvpcb)             - Sourcecode of the CvPCB tool
 * [demos](demos)             - Some demo examples
-* [Documentation](Documentation)     - Developer documentation. Old changelogs etcetera.
+* [Documentation](Documentation)     - Developer documentation (deprecated; moved to [https://dev-docs.kicad.org](https://dev-docs.kicad.org))
 * [eeschema](eeschema)          - Sourcecode of the schematic editor
 * [gerbview](gerbview)          - Sourcecode of the gerber viewer
 * [helpers](helpers)           - Helper tools and utilities for development
@@ -48,11 +51,12 @@ our [Forum](https://forum.kicad.info/).
 * [pcbnew](pcbnew)           - Sourcecode of the printed circuit board editor
 * [plugins](plugins)           - Sourcecode for the 3d viewer plugins
 * [qa](qa)                - Unit testing framework for KiCad
-* [resources](resources)         - Resources for freedesktop mime-types for linux
+* [resources](resources)         - Packaging resources for various operating systems
 * [scripting](scripting)         - SWIG Python scripting definitions and build scripts
 * [scripts](scripts)           - Example scripts for distribution with KiCad
 * [template](template)          - Project template
 * [thirdparty](thirdparty)           - Sourcecode of external libraries used in kicad but not written by Kicad team
 * [tools](tools)             - Other miscellaneous helpers for testing
+* [translation](translation) - Translation data files (managed through [Weblate](https://hosted.weblate.org/projects/kicad/master-source/) for most languages)
 * [utils](utils)             - Small utils for kicad, e.g. IDF, STEP and OGL tools and converters
 
