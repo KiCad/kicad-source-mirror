@@ -21,6 +21,7 @@
 #ifndef _SETTINGS_MANAGER_H
 #define _SETTINGS_MANAGER_H
 
+#include <typeinfo>
 #include <common.h> // for wxString hash
 #include <settings/color_settings.h>
 
@@ -85,7 +86,11 @@ public:
     template<typename AppSettings>
     AppSettings* GetAppSettings( bool aLoadNow = true )
     {
-        static AppSettings* ret = nullptr;
+        AppSettings* ret      = nullptr;
+        size_t       typeHash = typeid( AppSettings ).hash_code();
+
+         if( m_app_settings_cache.count( typeHash ) )
+            ret = dynamic_cast<AppSettings*>( m_app_settings_cache.at( typeHash ) );
 
         if( ret )
             return ret;
@@ -112,6 +117,8 @@ public:
             }
 
         }
+
+        m_app_settings_cache[typeHash] = ret;
 
         return ret;
     }
@@ -394,6 +401,9 @@ private:
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
 
     std::unordered_map<wxString, COLOR_SETTINGS*> m_color_settings;
+
+    /// Cache for app settings
+    std::unordered_map<size_t, JSON_SETTINGS*> m_app_settings_cache;
 
     // Convenience shortcut
     COMMON_SETTINGS* m_common_settings;

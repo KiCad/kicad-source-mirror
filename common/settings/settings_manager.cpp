@@ -164,7 +164,14 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
         if( aSave )
             ( *it )->SaveToFile( GetPathForSettingsFile( it->get() ) );
 
+        size_t typeHash = typeid( *it->get() ).hash_code();
+
+        if( m_app_settings_cache.count( typeHash ) )
+            m_app_settings_cache.erase( typeHash );
+
         m_settings.erase( it );
+
+
     }
 }
 
