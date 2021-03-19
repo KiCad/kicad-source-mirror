@@ -1343,17 +1343,14 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
     bool show = Schematic().Settings().m_IntersheetRefsShow;
 
     /* Refresh all global labels */
-    for( EDA_ITEM* item : GetScreen()->Items() )
+    for( EDA_ITEM* item : GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
     {
-        if( item->Type() == SCH_GLOBAL_LABEL_T )
-        {
-            SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
+        SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
 
-            global->GetIntersheetRefs()->SetVisible( show );
+        global->GetIntersheetRefs()->SetVisible( show );
 
-            if( show )
-                GetCanvas()->GetView()->Update( global );
-        }
+        if( show )
+            GetCanvas()->GetView()->Update( global );
     }
 }
 
@@ -1367,20 +1364,13 @@ void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( SCH_ITEM* item : screen->Items() )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
-                SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
+            SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
+            SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
 
-                intersheetRef->SetVisible( aShow );
-
-                if( aShow )
-                    AddToScreen( intersheetRef, screen );
-                else
-                    RemoveFromScreen( intersheetRef, screen );
-            }
+            intersheetRef->SetVisible( aShow );
+            UpdateItem( intersheetRef, true );
         }
     }
 }
