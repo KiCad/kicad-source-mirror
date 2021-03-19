@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 11:16-0700\n"
+"POT-Creation-Date: 2021-03-19 09:09-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3177,9 +3177,6 @@ msgstr "Symbol body fills"
 
 msgid "Notes"
 msgstr "Notes"
-
-msgid "Net names"
-msgstr "Net names"
 
 msgid "Pins"
 msgstr "Pins"
@@ -7165,6 +7162,52 @@ msgstr "Load directives from schematic"
 msgid "Custom"
 msgstr "Custom"
 
+msgid "Model Mode"
+msgstr "Model Mode"
+
+msgid "User configuration"
+msgstr "User configuration"
+
+msgid ""
+"Use the settings in the Ngspice configuration file or any settings defined "
+"in the schematic"
+msgstr ""
+"Use the settings in the Ngspice configuration file or any settings defined "
+"in the schematic"
+
+msgid "Spice"
+msgstr "Spice"
+
+msgid "Enable default spice model simulation"
+msgstr "Enable default spice model simulation"
+
+msgid "PSpice"
+msgstr "PSpice"
+
+msgid "Enable PSpice model simulation"
+msgstr "Enable PSpice model simulation"
+
+msgid "LTSpice"
+msgstr "LTSpice"
+
+msgid "Enable LTSpice model simulation"
+msgstr "Enable LTSpice model simulation"
+
+msgid "PSpice and LTSpice"
+msgstr "PSpice and LTSpice"
+
+msgid "Enable PSpice and LTSpice model simulation"
+msgstr "Enable PSpice and LTSpice model simulation"
+
+msgid "HSpice"
+msgstr "HSpice"
+
+msgid "Enable HSpice model simulation"
+msgstr "Enable HSpice model simulation"
+
+msgid "Ngspice"
+msgstr "Ngspice"
+
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
 msgstr "Adjust passive symbol values (e.g. M → Meg; 100 nF → 100n)"
 
@@ -7674,6 +7717,9 @@ msgstr ""
 
 msgid "Update symbols values that have been replaced in the PCB editor."
 msgstr "Update symbols values that have been replaced in the PCB editor."
+
+msgid "Net names"
+msgstr "Net names"
 
 msgid "Update Schematic from PCB"
 msgstr "Update Schematic from PCB"
@@ -10273,6 +10319,20 @@ msgstr "Please, fill required fields"
 msgid "\"%s\" is not a valid Spice value"
 msgstr "“%s” is not a valid Spice value"
 
+#, c-format
+msgid ""
+"Error loading symbol library %s.\n"
+"\n"
+"%s\n"
+msgstr ""
+"Error loading symbol library %s.\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid "Loading library \"%s\""
+msgstr "Loading library “%s”"
+
 msgid "Library Editor"
 msgstr "Library Editor"
 
@@ -10624,10 +10684,6 @@ msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
-
-#, c-format
-msgid "Loading library \"%s\""
-msgstr "Loading library “%s”"
 
 #, c-format
 msgid ""
@@ -11593,6 +11649,9 @@ msgstr "No bus selected"
 
 msgid "Bus has no members"
 msgstr "Bus has no members"
+
+msgid "No symbol library selected."
+msgstr "No symbol library selected."
 
 msgid "No symbol to export"
 msgstr "No symbol to export"
@@ -16331,17 +16390,24 @@ msgstr "meter"
 msgid "0.1 Inch"
 msgstr "0.1 Inch"
 
+msgid "Vrml Units for Output Files"
+msgstr "Vrml Units for Output Files"
+
 msgid "Copy 3D model files to 3D model path"
 msgstr "Copy 3D model files to 3D model path"
+
+msgid ""
+"If checked: copy footprints 3D models in a folder\n"
+"If not checked: merge footprints 3D models in the vrml board file\n"
+msgstr ""
+"If checked: copy footprints 3D models in a folder\n"
+"If not checked: merge footprints 3D models in the vrml board file\n"
 
 msgid "Use relative paths to model files in board VRML file"
 msgstr "Use relative paths to model files in board VRML file"
 
 msgid "Use paths for model files in board VRML file relative to the vrml file"
 msgstr "Use paths for model files in board VRML file relative to the vrml file"
-
-msgid "Plain PCB (no copper or silk)"
-msgstr "Plain PCB (no copper or silk)"
 
 msgid "VRML Export Options"
 msgstr "VRML Export Options"
@@ -22848,6 +22914,9 @@ msgstr "Method “%s” not found, or not callable"
 msgid "Unknown Method"
 msgstr "Unknown Method"
 
+msgid "Apply action script"
+msgstr "Apply action script"
+
 msgid "Exception on python footprint wizard code"
 msgstr "Exception on python footprint wizard code"
 
@@ -25100,6 +25169,9 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Plain PCB (no copper or silk)"
+#~ msgstr "Plain PCB (no copper or silk)"
 
 #~ msgid ""
 #~ "Text will not be readable with a thickness greater than 1/4 its width or "
