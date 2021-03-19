@@ -147,6 +147,9 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
     KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
 
+    // editor can be null if Player() fails:
+    wxCHECK_MSG( editor != nullptr, 0, "Cannot open/create the editor frame" );
+
     // Needed on Windows, other platforms do not use it, but it creates no issue
     if( editor->IsIconized() )
         editor->Iconize( false );
