@@ -41,8 +41,8 @@ public:
 
     /// @copydoc VIEW::Add()
     virtual void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 ) override;
-    /// @copydoc VIEW::Remove()
 
+    /// @copydoc VIEW::Remove()
     virtual void Remove( VIEW_ITEM* aItem ) override;
 
     /// @copydoc VIEW::Update()
