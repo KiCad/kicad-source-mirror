@@ -52,7 +52,7 @@ bool KIPLATFORM::APP::PlatformInit()
     }
 #endif
 
-    return true
+    return true;
 }
 
 

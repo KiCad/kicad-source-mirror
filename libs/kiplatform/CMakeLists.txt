@@ -57,6 +57,9 @@ elseif( UNIX )
     endif()
 endif()
 
+include_directories(
+    ${INC_AFTER}
+    )
 
 add_library( kiplatform STATIC
     ${PLATFORM_SRCS}
