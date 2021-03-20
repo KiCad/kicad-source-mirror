@@ -245,7 +245,8 @@ void DRC_ENGINE::loadImplicitRules()
                     if( nc->GetClearance() )
                     {
                         DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
-                        constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
+                        constraint.Value().SetMin( std::max( bds.m_MinClearance,
+                                                             nc->GetClearance() ) );
                         netclassRule->AddConstraint( constraint );
                     }
 
@@ -261,7 +262,8 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->GetDiffPairWidth() || nc->GetDiffPairGap() )
                 {
                     netclassRule = new DRC_RULE;
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                                                             ncName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( "A.NetClass == '%s' && A.isDiffPair()",
@@ -280,10 +282,30 @@ void DRC_ENGINE::loadImplicitRules()
                     if( nc->GetDiffPairGap() )
                     {
                         DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
-                        constraint.Value().SetMin( std::max( bds.m_MinClearance, nc->GetClearance() ) );
+                        constraint.Value().SetMin( bds.m_MinClearance );
                         constraint.Value().SetOpt( nc->GetDiffPairGap() );
                         netclassRule->AddConstraint( constraint );
                     }
+                }
+
+                if( nc->GetDiffPairGap() )
+                {
+                    netclassRule = new DRC_RULE;
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                                                             ncName );
+                    netclassRule->m_Implicit = true;
+
+                    expr = wxString::Format( "A.NetClass == '%s' && A.isDiffPair() "
+                                             "&& B.NetClass == '%s' && B.isDiffPair()",
+                                             ncName,
+                                             ncName );
+                    netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassItemSpecificRules.push_back( netclassRule );
+
+                    DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
+                    constraint.Value().SetMin( std::max( bds.m_MinClearance,
+                                                         nc->GetDiffPairGap() ) );
+                    netclassRule->AddConstraint( constraint );
                 }
 
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )
