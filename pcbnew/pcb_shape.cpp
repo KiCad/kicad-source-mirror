@@ -1089,18 +1089,9 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
     switch( m_shape )
     {
     case S_ARC:
-    {
-        SHAPE_ARC        arc( GetCenter(), GetArcStart(), (double) GetAngle() / 10.0 );
-        SHAPE_LINE_CHAIN l = arc.ConvertToPolyline();
-
-        for( int i = 0; i < l.SegmentCount(); i++ )
-        {
-            effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ).A,
-                                                             l.Segment( i ).B, m_width ) );
-        }
-
+        effectiveShapes.emplace_back( new SHAPE_ARC( GetCenter(), GetArcStart(),
+                                                     GetAngle() / 10.0, m_width ) );
         break;
-    }
 
     case S_SEGMENT:
         effectiveShapes.emplace_back( new SHAPE_SEGMENT( GetStart(), GetEnd(), m_width ) );
