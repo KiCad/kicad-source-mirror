@@ -422,7 +422,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // Any open KIFACE's must be closed if they are not part of the new project.
     // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
     // User is prompted here to close those KIWAY_PLAYERs:
-    CloseProject( true );
+    if( !CloseProject( true ) )
+        return;
 
     m_active_project = true;
 
