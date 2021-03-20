@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10630,68 +10630,64 @@ msgid "Custom"
 msgstr "Пользовательская"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:423
-#, fuzzy
 msgid "Model Mode"
-msgstr "Модель"
+msgstr "Тип моделей"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:425
-#, fuzzy
 msgid "User configuration"
-msgstr "Параметры освещения"
+msgstr "Пользовательский"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:426
 msgid ""
 "Use the settings in the Ngspice configuration file or any settings defined "
 "in the schematic"
 msgstr ""
+"Использовать параметры из конфигурационного файла Ngspice и параметры "
+"определённые в схеме"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:430
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:431
-#, fuzzy
 msgid "Enable default spice model simulation"
-msgstr "Не симулировать символ"
+msgstr "Использовать spice-симуляцию (по умолчанию)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:435
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-#, fuzzy
 msgid "Enable PSpice model simulation"
-msgstr "Spice значение в симуляции"
+msgstr "Использовать PSpice-симуляцию"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:440
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:441
-#, fuzzy
 msgid "Enable LTSpice model simulation"
-msgstr "Spice значение в симуляции"
+msgstr "Использовать LTSpice-симуляцию"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:445
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice и LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Enable PSpice and LTSpice model simulation"
-msgstr ""
+msgstr "Использовать PSpice и LTSpice-симуляции"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-#, fuzzy
 msgid "Enable HSpice model simulation"
-msgstr "Spice значение в симуляции"
+msgstr "Использовать HSpice-симуляцию"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:462
 msgid "Ngspice"
-msgstr ""
+msgstr "Ngspice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:469
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
@@ -14767,7 +14763,7 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" это неверное Spice значение"
 
 #: eeschema/symbol_async_loader.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -14775,7 +14771,7 @@ msgid ""
 msgstr ""
 "Ошибка при загрузке библиотеки символов %s.\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -16545,9 +16541,8 @@ msgid "Bus has no members"
 msgstr "Шина не имеет сигналов"
 
 #: eeschema/tools/symbol_editor_control.cpp:159
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "Символ не выбран"
+msgstr "Библиотека символов не выбрана."
 
 #: eeschema/tools/symbol_editor_control.cpp:382
 #: eeschema/tools/symbol_editor_control.cpp:422
@@ -23148,7 +23143,7 @@ msgstr "0,1 дюйм"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "Vrml Units for Output Files"
-msgstr ""
+msgstr "Ед.изм. для vrml-файлов"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -23159,6 +23154,8 @@ msgid ""
 "If checked: copy footprints 3D models in a folder\n"
 "If not checked: merge footprints 3D models in the vrml board file\n"
 msgstr ""
+"Если отмечено: копировать 3D-модели посад.мест в каталог\n"
+"Если НЕ отмечено: интегрировать 3D-модели посад.мест в vrml-файл платы\n"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -31874,7 +31871,7 @@ msgstr "Неизвестный метод"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:361
 msgid "Apply action script"
-msgstr ""
+msgstr "Выполнить плагин действий"
 
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
