@@ -148,6 +148,10 @@ cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
     ON "KICAD_USE_EGL"
     OFF )
 
+option( KICAD_DRC_PROTO
+    "Build the DRC prototype QA tool"
+    OFF )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
