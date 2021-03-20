@@ -182,10 +182,10 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::HSPICE );
     }
 
+    wxString previousSimCommand = m_simCommand;
     wxWindow* page = m_simPages->GetCurrentPage();
 
-    // AC analysis
-    if( page == m_pgAC )
+    if( page == m_pgAC )                // AC analysis
     {
         if( !m_pgAC->Validate() )
             return false;
@@ -196,10 +196,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                              SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
                              SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
     }
-
-
-    // DC transfer analysis
-    else if( page == m_pgDC )
+    else if( page == m_pgDC )           // DC transfer analysis
     {
         wxString simCmd = wxString( ".dc " );
 
@@ -228,10 +225,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         m_simCommand = simCmd;
     }
-
-
-    // Noise analysis
-    else if( page == m_pgNoise )
+    else if( page == m_pgNoise )        // Noise analysis
     {
         const NETLIST_EXPORTER_PSPICE::NET_INDEX_MAP& netMap = m_exporter->GetNetIndexMap();
 
@@ -259,17 +253,11 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                              SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
                              SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
     }
-
-
-    // DC operating point analysis
-    else if( page == m_pgOP )
+    else if( page == m_pgOP )           // DC operating point analysis
     {
         m_simCommand = wxString( ".op" );
     }
-
-
-    // Transient analysis
-    else if( page == m_pgTransient )
+    else if( page == m_pgTransient )    // Transient analysis
     {
         if( !m_pgTransient->Validate() )
             return false;
@@ -284,21 +272,39 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                              SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
                              initial );
     }
-
-
-    // Custom directives
-    else if( page == m_pgCustom )
+    else if( page == m_pgCustom )       // Custom directives
     {
         m_simCommand = m_customTxt->GetValue();
     }
-
     else
     {
+        wxString extendedMsg;
+
+        if( m_simCommand.IsEmpty() )
+        {
+            KIDIALOG dlg( this, _( "No valid simulation is configured." ), _( "Warning" ),
+                          wxOK | wxCANCEL | wxICON_EXCLAMATION | wxCENTER );
+
+            dlg.SetExtendedMessage( _( "A valid simulation can be configured by selecting a "
+                                       "simulation tab, setting the simulation parameters and "
+                                       "clicking the OK button with the tab selected." ) );
+            dlg.SetOKCancelLabels(
+                    wxMessageDialog::ButtonLabel( _( "Exit Without Valid Simulation" ) ),
+                    wxMessageDialog::ButtonLabel( _( "Configure Valid Simulation" ) ) );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( dlg.ShowModal() == wxID_OK )
+                return true;
+        }
+
         return false;
     }
 
-    m_simCommand.Trim();
-    updateNetlistOpts();
+    if( previousSimCommand != m_simCommand )
+    {
+        m_simCommand.Trim();
+        updateNetlistOpts();
+    }
 
     return true;
 }
@@ -342,7 +348,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
             break;
 
         default:
-            wxFAIL_MSG( wxString::Format( "Unkown NGSPICE_MODEL_MODE %d.",
+            wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
                                           ngspiceSettings->GetModelMode() ) );
             break;
         }
