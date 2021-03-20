@@ -23,7 +23,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <common.h> // Unordered map of wxString
+#include <core/wx_stl_compat.h>
 
 /**
  * An asset archive represents a file containing data assets that are loaded from disk and then

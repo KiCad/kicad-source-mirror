@@ -396,6 +396,7 @@ set( COMMON_SRCS
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
     wxdataviewctrl_helpers.cpp
+    wx_stl_compat.cpp
     wx_filename.cpp
     xnode.cpp
     )

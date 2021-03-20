@@ -37,7 +37,6 @@
 #include "footprint.h"
 #include "pcb_text.h"
 #include "track.h"
-#include "zone.h"
 #include "convert_to_biu.h"
 #include <core/arraydim.h>
 #include <filename_resolver.h>
@@ -46,10 +45,9 @@
 #include "vrml_layer.h"
 #include "pcb_edit_frame.h"
 
-#include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
-#include <zone_filler.h>
+#include <macros.h>
 
 #include <exporter_vrml.h>
 

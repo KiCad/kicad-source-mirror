@@ -26,6 +26,7 @@
 #include <confirm.h>
 #include <dialog_drc.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>

@@ -20,7 +20,7 @@
 
 #include <thread>
 
-#include <common.h>
+#include <core/wx_stl_compat.h>
 #include <symbol_async_loader.h>
 #include <symbol_lib_table.h>
 #include <widgets/progress_reporter.h>

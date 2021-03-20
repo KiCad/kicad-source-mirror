@@ -38,6 +38,7 @@
 #include <core/arraydim.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <locale_io.h>
+#include <macros.h>
 #include <hash_eda.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>

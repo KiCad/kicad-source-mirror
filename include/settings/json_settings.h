@@ -21,6 +21,8 @@
 #ifndef _JSON_SETTINGS_H
 #define _JSON_SETTINGS_H
 
+#include <core/wx_stl_compat.h>
+
 #include <nlohmann/json.hpp>
 #include <utility>
 #include <wx/string.h>

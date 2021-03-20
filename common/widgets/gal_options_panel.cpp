@@ -32,7 +32,6 @@
 
 #include <widgets/gal_options_panel.h>
 #include <eda_draw_frame.h>
-#include <common.h>
 
 #include <config_map.h>
 

@@ -32,6 +32,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <track.h>
+#include <macros.h>
 #include <pcb_marker.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>

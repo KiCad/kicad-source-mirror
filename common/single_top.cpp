@@ -44,6 +44,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <kiway_player.h>
+#include <macros.h>
 #include <confirm.h>
 #include <settings/settings_manager.h>
 

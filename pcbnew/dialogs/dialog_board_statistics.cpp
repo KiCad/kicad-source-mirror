@@ -25,7 +25,7 @@
 
 #include "dialog_board_statistics.h"
 #include "base_units.h"
-#include "common.h"
+#include <macros.h>
 #include <wildcards_and_files_ext.h>
 
 #define COL_LABEL 0

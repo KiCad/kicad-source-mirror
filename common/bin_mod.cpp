@@ -23,11 +23,8 @@
  */
 
 #include <bin_mod.h>
-#include <common.h>
-#include <filehistory.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
-#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
 

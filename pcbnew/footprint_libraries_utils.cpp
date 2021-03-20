@@ -26,6 +26,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <kicad_string.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>

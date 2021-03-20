@@ -30,6 +30,7 @@
 #include <board.h>
 #include <dialog_helpers.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <pcbnew_id.h>
@@ -38,7 +39,6 @@
 #include <router/pns_routing_settings.h>
 #include <router/router_tool.h>
 #include <settings/color_settings.h>
-#include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <tool/common_tools.h>

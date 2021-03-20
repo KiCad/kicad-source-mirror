@@ -22,6 +22,8 @@
 #ifndef INSPECTABLE_H
 #define INSPECTABLE_H
 
+#include <core/wx_stl_compat.h>
+
 #include "property_mgr.h"
 #include "property.h"
 

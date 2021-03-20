@@ -36,6 +36,7 @@
 #include <gal/color4d.h>
 #include <trace_helpers.h>
 #include <kicad_string.h>
+#include <macros.h>
 
 #include <paths.h>
 #include <pgm_base.h>

@@ -38,6 +38,7 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
+#include <macros.h>
 #include <wx/file.h>
 #include <wx/log.h>
 #include <wx/snglinst.h>
@@ -45,7 +46,6 @@
 #include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <settings/settings_manager.h>
-#include <board.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
@@ -54,7 +54,6 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
-#include <paths.h>
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
 #include <wildcards_and_files_ext.h>

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <common.h>     // for ProcessExecute
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>

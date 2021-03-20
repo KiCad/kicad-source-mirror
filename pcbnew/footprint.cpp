@@ -33,6 +33,7 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <fp_shape.h>
+#include <macros.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>

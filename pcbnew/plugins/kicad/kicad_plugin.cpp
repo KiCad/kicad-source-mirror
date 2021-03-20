@@ -22,30 +22,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wildcards_and_files_ext.h>
 #include <advanced_config.h>
 #include <base_units.h>
-#include <trace_helpers.h>
 #include <board.h>
-#include <footprint.h>
-#include <pcb_text.h>
+#include <boost/ptr_container/ptr_map.hpp>
+#include <confirm.h>
+#include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
+#include <core/arraydim.h>
 #include <dimension.h>
-#include <track.h>
-#include <zone.h>
+#include <footprint.h>
+#include <fp_shape.h>
+#include <kiface_i.h>
+#include <locale_io.h>
+#include <macros.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
-#include <fp_shape.h>
-#include <confirm.h>
-#include <core/arraydim.h>
-#include <locale_io.h>
-#include <zones.h>
+#include <pcb_text.h>
+#include <pcbnew_settings.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
-#include <pcbnew_settings.h>
-#include <boost/ptr_container/ptr_map.hpp>
-#include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
-#include <kiface_i.h>
+#include <trace_helpers.h>
+#include <track.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/dir.h>
 #include <wx_filename.h>
+#include <zone.h>
+#include <zones.h>
 
 using namespace PCB_KEYS_T;
 

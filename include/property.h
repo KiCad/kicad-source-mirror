@@ -24,6 +24,8 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include <core/wx_stl_compat.h>
+
 #include <wx/any.h>
 #include <wx/string.h>
 #include <wx/bitmap.h>

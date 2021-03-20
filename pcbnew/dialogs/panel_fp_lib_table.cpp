@@ -32,6 +32,7 @@
 
 
 #include <set>
+#include <wx/dir.h>
 #include <wx/regex.h>
 #include <wx/grid.h>
 
@@ -60,6 +61,7 @@
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
 #include <settings/settings_manager.h>
 #include <paths.h>
+#include <macros.h>
 
 // clang-format off
 

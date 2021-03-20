@@ -34,6 +34,7 @@
 #include <dialogs/html_messagebox.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
+#include <macros.h>
 #include <confirm.h>
 #include <widgets/unit_binder.h>
 

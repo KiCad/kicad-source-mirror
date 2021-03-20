@@ -61,6 +61,7 @@ Load() TODO's
 #include <geometry/geometry_utils.h>
 #include <kicad_string.h>
 #include <locale_io.h>
+#include <macros.h>
 #include <properties.h>
 #include <trigo.h>
 #include <math/util.h>      // for KiROUND

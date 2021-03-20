@@ -34,6 +34,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <locale_io.h>
+#include <macros.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
@@ -44,7 +45,6 @@
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <memory.h>
 
 
 static inline long parseInt( const wxString& aValue, double aScalar )

@@ -6,6 +6,8 @@
 **
 *****************************************************************************/
 
+#include <wx/bitmap.h>
+
 #include <i18n_utility.h>
 #include <kiface_i.h>
 #include <bitmaps/bitmap_types.h>

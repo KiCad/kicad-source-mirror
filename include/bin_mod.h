@@ -24,17 +24,9 @@
 #ifndef BIN_MOD_H_
 #define BIN_MOD_H_
 
-/// @todo Should this be a check for the wxWidgets version rather that `#if 0`.
-#if 0
- #include <wx/filehistory.h>    // wx 3.0:
-#else
- #include <wx/docview.h>
-#endif
-
 #include <wx/string.h>
 
 #include <search_stack.h>
-#include <memory>
 
 class APP_SETTINGS_BASE;
 

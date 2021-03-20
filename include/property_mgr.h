@@ -24,6 +24,8 @@
 #ifndef PROPERTY_MGR_H
 #define PROPERTY_MGR_H
 
+#include <core/wx_stl_compat.h> // Needed for stl hash extensions
+
 #include <wx/string.h>
 
 #include <map>
@@ -32,9 +34,6 @@
 #include <vector>
 #include <memory>
 #include <eda_units.h>
-
-
-#include <common.h> // Needed for stl hash extensions
 
 class PROPERTY_BASE;
 class TYPE_CAST_BASE;

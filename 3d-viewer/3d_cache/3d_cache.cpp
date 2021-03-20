@@ -24,14 +24,11 @@
 
 #define GLM_FORCE_RADIANS
 
-#include <fstream>
-#include <iostream>
-#include <iterator>
 #include <mutex>
-#include <sstream>
 #include <utility>
 
 #include <wx/datetime.h>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
@@ -43,9 +40,6 @@
 #else
 #include <boost/uuid/sha1.hpp>
 #endif
-
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
 
 #include "3d_cache.h"
 #include "3d_info.h"

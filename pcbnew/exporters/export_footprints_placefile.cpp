@@ -27,6 +27,7 @@
  */
 
 #include <kicad_string.h>
+#include <macros.h>
 #include <locale_io.h>
 #include <build_version.h>
 #include <export_footprints_placefile.h>

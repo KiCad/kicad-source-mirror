@@ -29,7 +29,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 
-#include <common.h>
 #include <base_units.h>
 #include <trigo.h>
 

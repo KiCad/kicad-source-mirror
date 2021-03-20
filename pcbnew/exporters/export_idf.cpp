@@ -28,13 +28,12 @@
 
 #include <list>
 #include <locale_io.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew.h>
 #include <board.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <idf_parser.h>
-#include <3d_cache/3d_info.h>
 #include <build_version.h>
 #include "project.h"
 #include "kiway.h"

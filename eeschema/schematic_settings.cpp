@@ -26,6 +26,7 @@
 #include <eda_text.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <schematic_settings.h>
 #include <settings/parameters.h>
 #include <sim/spice_settings.h>

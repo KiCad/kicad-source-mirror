@@ -25,7 +25,7 @@
 #include <preview_items/draw_context.h>
 #include <preview_items/preview_utils.h>
 #include <view/view.h>
-#include <common.h>
+
 
 using namespace KIGFX::PREVIEW;
 

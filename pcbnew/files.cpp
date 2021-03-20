@@ -33,6 +33,7 @@
 #include <widgets/msgpanel.h>
 #include <fp_lib_table.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <trace_helpers.h>
 #include <lockfile.cpp>
 #include <netlist_reader/pcb_netlist.h>
@@ -47,7 +48,6 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/infobar.h>
 #include <wx/wupdlock.h>
-#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <project/project_file.h>

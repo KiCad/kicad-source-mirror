@@ -27,15 +27,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <trigo.h>
 #include <algorithm>
-#include <wx/zstream.h>
+
+#include <wx/filename.h>
 #include <wx/mstream.h>
-#include <render_settings.h>
+#include <wx/zstream.h>
+
 #include <advanced_config.h>
+#include <macros.h>
+#include <render_settings.h>
+#include <trigo.h>
 
 #include "plotters_pslike.h"
-
 
 
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )

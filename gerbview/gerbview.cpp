@@ -31,6 +31,7 @@
 #include <gerbview_settings.h>
 #include <gestfich.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <nlohmann/json.hpp>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

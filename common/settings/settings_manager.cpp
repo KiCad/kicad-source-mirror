@@ -20,6 +20,7 @@
 
 #include <regex>
 #include <wx/debug.h>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/utils.h>
@@ -36,12 +37,10 @@
 #include <project/project_archiver.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
-#include <settings/app_settings.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
-
 
 
 /// Project settings path will be <projectname> + this

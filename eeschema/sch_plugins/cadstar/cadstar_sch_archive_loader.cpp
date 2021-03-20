@@ -31,6 +31,7 @@
 #include <lib_arc.h>
 #include <lib_polyline.h>
 #include <lib_text.h>
+#include <macros.h>
 #include <kicad_string.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h> //COMPONENT_ORIENTATION_T

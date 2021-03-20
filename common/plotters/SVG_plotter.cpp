@@ -94,8 +94,8 @@
 #include <base64.h>
 #include <eda_base_frame.h>
 #include <eda_rect.h>
-#include <common.h>
 #include <kicad_string.h>
+#include <macros.h>
 #include <trigo.h>
 
 #include <cstdint>

@@ -28,7 +28,6 @@
 
 #include <wx/grid.h>
 
-#include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

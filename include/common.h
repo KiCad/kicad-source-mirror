@@ -32,22 +32,12 @@
 #ifndef INCLUDE__COMMON_H_
 #define INCLUDE__COMMON_H_
 
-#include <vector>
 #include <functional>
-
-#include <wx/confbase.h>
-#include <wx/fileconf.h>
-#include <wx/dir.h>
-#include <wx/string.h>
-#include <wx/gdicmn.h>
-#include <wx/process.h>
-
-#include <atomic>
-#include <limits>
 #include <memory>
-#include <type_traits>
-#include <typeinfo>
-#include <macros.h>
+
+#include <wx/fileconf.h>
+#include <wx/string.h>
+#include <wx/process.h>
 
 class PROJECT;
 class SEARCH_STACK;
@@ -124,51 +114,6 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
  */
 const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 
-// Some wxWidgets versions (for instance before 3.1.0) do not include
-// this function, so add it if missing
-#if !wxCHECK_VERSION( 3, 1, 0 )
-#define USE_KICAD_WXSTRING_HASH     // for common.cpp
-///< Template specialization to enable wxStrings for certain containers (e.g. unordered_map)
-namespace std
-{
-    template<> struct hash<wxString>
-    {
-        size_t operator()( const wxString& s ) const;
-    };
-}
-#endif
-
-/// Required to use wxPoint as key type in maps
-#define USE_KICAD_WXPOINT_LESS_AND_HASH // for common.cpp
-namespace std
-{
-    template <> struct hash<wxPoint>
-    {
-        size_t operator() ( const wxPoint& k ) const;
-    };
-}
-
-namespace std
-{
-    template<> struct less<wxPoint>
-    {
-        bool operator()( const wxPoint& aA, const wxPoint& aB ) const;
-    };
-}
-
-/**
- * Helper function to print the given wxSize to a stream.
- *
- * Used for debugging functions like EDA_ITEM::Show and also in unit testing fixtures.
- */
-std::ostream& operator<<( std::ostream& out, const wxSize& size );
-
-/**
- * Helper function to print the given wxPoint to a stream.
- *
- * Used for debugging functions like EDA_ITEM::Show and also in unit testing fixtures.
- */
-std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 
 long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
 

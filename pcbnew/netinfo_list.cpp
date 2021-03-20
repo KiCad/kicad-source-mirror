@@ -23,6 +23,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <macros.h>
 #include <pad.h>
 #include <track.h>
 #include <zone.h>

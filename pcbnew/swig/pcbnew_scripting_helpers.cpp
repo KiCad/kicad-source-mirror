@@ -39,6 +39,7 @@
 #include <fp_lib_table.h>
 #include <io_mgr.h>
 #include <kicad_string.h>
+#include <macros.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
 #include <settings/settings_manager.h>

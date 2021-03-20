@@ -29,6 +29,7 @@
 #include <map>
 
 #include <lib_symbol.h>
+#include <macros.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_text.h>

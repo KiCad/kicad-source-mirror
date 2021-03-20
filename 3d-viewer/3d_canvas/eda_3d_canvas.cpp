@@ -37,6 +37,7 @@
 #include <gl_context_mgr.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
+#include <macros.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

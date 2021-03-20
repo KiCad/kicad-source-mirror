@@ -31,6 +31,7 @@
 #include <dialog_exchange_footprints.h>
 #include <kicad_string.h>
 #include <kiway.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <project.h>

@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <common.h> // AsLegacyTimestampString, AsString
 #include <kiid.h>
 
 #include <boost/uuid/uuid_generators.hpp>

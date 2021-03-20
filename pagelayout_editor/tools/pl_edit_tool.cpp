@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_item.h>
+#include <macros.h>
 #include <view/view.h>
 #include <math/util.h>      // for KiROUND
 

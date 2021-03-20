@@ -26,6 +26,8 @@
  * @file kicad/files-io.cpp
  */
 
+#include <wx/dir.h>
+
 #include <confirm.h>
 #include <dialogs/panel_kicad_launcher.h>
 #include <kiway.h>

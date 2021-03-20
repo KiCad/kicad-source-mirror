@@ -36,6 +36,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
+#include <macros.h>
 #include <origin_transforms.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

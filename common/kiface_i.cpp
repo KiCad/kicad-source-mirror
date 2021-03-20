@@ -23,14 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <macros.h>             // FROM_UTF8()
-#include <wx/stdpaths.h>
-
 #include <kiface_i.h>
-#include <pgm_base.h>
+#include <kiway.h>
+#include <search_stack.h>
 #include <systemdirsappend.h>
-
-#include <common.h>
 
 /// Initialize aDst SEARCH_STACK with KIFACE (DSO) specific settings.
 /// A non-member function so it an be moved easily, plus it's nobody's business.

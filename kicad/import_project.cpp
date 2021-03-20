@@ -36,6 +36,7 @@
 #include <common.h>
 #include <confirm.h>
 #include <kiway.h>
+#include <macros.h>
 #include <richio.h>
 #include <wildcards_and_files_ext.h>
 #include <kiway_player.h>

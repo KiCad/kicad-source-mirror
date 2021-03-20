@@ -31,8 +31,7 @@
 #include <kiface_i.h>
 #include <eda_base_frame.h>
 #include <kicad_string.h>
-#include <gestfich.h>
-#include <eda_doc.h>
+#include <macros.h>
 #include <richio.h>
 #include <config_params.h>
 #include <wildcards_and_files_ext.h>

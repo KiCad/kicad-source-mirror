@@ -44,12 +44,12 @@
 #include <footprint_editor_settings.h>
 #include <footprint_info_impl.h>
 #include <footprint_tree_pane.h>
-#include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
 #include <plugins/kicad/kicad_plugin.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway.h>
+#include <macros.h>
 #include <panel_hotkeys_editor.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>

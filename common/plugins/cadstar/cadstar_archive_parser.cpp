@@ -22,9 +22,11 @@
  * @file cadstar_archive_parser.cpp
  * @brief Helper functions and common defines between schematic and PCB Archive files
  */
+#include <wx/filename.h>
 
 #include <plugins/cadstar/cadstar_archive_parser.h>
 #include <eda_text.h>
+#include <macros.h>
 #include <trigo.h>
 
 // Ratio derived from CADSTAR default font. See doxygen comment in cadstar_archive_parser.h

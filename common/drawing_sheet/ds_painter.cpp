@@ -23,6 +23,7 @@
  */
 
 
+#include <common.h>
 #include <pgm_base.h>
 #include <base_screen.h>
 #include <eda_draw_frame.h>

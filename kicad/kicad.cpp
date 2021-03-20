@@ -37,6 +37,7 @@
 #include <filehistory.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
+#include <macros.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>

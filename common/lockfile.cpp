@@ -22,13 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
 #include <build_version.h>
 #include <lockfile.h>
 
 #include <wx/filename.h>
 #include <wx/snglinst.h>
 
-#include <common.h>
 
 std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName )
 {

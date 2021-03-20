@@ -30,12 +30,10 @@
 #include <import_gfx/dialog_import_gfx.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
-#include <tools/drawing_tool.h>
 #include <router/router_tool.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
@@ -58,6 +56,7 @@
 #include <pcbnew_id.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <kicad_string.h>
+#include <macros.h>
 #include <widgets/infobar.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;

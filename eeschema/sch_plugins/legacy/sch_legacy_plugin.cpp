@@ -27,6 +27,7 @@
 
 #include <wx/mstream.h>
 #include <wx/filename.h>
+#include <wx/textfile.h>
 #include <wx/tokenzr.h>
 
 #include <pgm_base.h>

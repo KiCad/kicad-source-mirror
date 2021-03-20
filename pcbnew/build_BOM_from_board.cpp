@@ -26,6 +26,7 @@
 
 
 #include <confirm.h>
+#include <macros.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <project.h>

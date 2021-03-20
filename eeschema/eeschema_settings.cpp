@@ -27,6 +27,7 @@
 #include <eeschema_settings.h>
 #include <layers_id_colors_and_visibility.h>
 #include <symbol_editor_settings.h>
+#include <macros.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>

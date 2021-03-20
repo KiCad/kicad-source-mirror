@@ -24,6 +24,7 @@
  */
 
 #include "connection_graph.h"
+#include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <kicad_string.h>
 #include <lib_pin.h>

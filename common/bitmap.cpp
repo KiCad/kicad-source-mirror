@@ -44,7 +44,6 @@
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
 #include <paths.h>
-#include <settings/common_settings.h>
 
 
 static std::unique_ptr<BITMAP_STORE> s_BitmapStore;

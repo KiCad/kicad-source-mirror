@@ -27,11 +27,10 @@
 
 #include <../common/dialogs/dialog_configure_paths_base.h>
 
+#include <wx/string.h>
 #include <wx/valtext.h>
-#include <pgm_base.h>
 
 
-class EDA_DRAW_FRAME;
 class FILENAME_RESOLVER;
 class HTML_MESSAGE_BOX;
 

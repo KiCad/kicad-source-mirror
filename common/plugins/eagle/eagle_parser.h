@@ -29,8 +29,8 @@
 #ifndef _EAGLE_PARSER_H_
 #define _EAGLE_PARSER_H_
 
-#include <cerrno>
 #include <map>
+#include <memory>
 #include <unordered_map>
 
 #include <wx/xml/xml.h>
@@ -38,10 +38,8 @@
 #include <wx/filename.h>
 
 #include <layers_id_colors_and_visibility.h>
-#include <convert_to_biu.h>
 #include <trigo.h>
-#include <kicad_string.h>
-#include <common.h> // needed for wxString hash template
+#include <core/wx_stl_compat.h>
 
 class FOOTPRINT;
 struct EINSTANCE;

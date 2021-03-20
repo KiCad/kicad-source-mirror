@@ -26,6 +26,7 @@
  */
 
 #include <core/kicad_algo.h>
+#include <macros.h>
 #include <connectivity/connectivity_items.h>
 
 int CN_ITEM::AnchorCount() const
