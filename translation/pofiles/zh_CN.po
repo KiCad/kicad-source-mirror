@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-03-20 06:47+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3116,7 +3116,7 @@ msgstr "导入快捷键文件："
 
 #: common/dialogs/panel_hotkeys_editor.cpp:239
 msgid "| Action | Default Hotkey | Description"
-msgstr "| 操作 | 默认热键 | 描述"
+msgstr "| 操作 | 默认快捷键 | 描述"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
@@ -3126,7 +3126,7 @@ msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
-msgstr "只能分配一个动作给每个垂直滚动设置"
+msgstr "每个垂直滚动设置只能分配一个操作"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -7248,9 +7248,9 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"已搜索:\n"
-"\t%s\n"
-"\t%s"
+"搜索到：\n"
+"%s\n"
+"%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:344
 msgid "Generating BOM requires a fully annotated schematic."
@@ -8312,7 +8312,7 @@ msgid ""
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
 "用新库中的字段替换当前符号字段。\n"
-"警告：“值” 和“封装”字段将因此被替换。"
+"警告：因此将替换 “值” 和 “封装” 字段。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:57
 msgid "Symbol Library References"
@@ -8530,7 +8530,7 @@ msgstr "错误，警告和排除"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d 个符号需要注解。<br><br>"
+msgstr "%d 个符号需要批注。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
