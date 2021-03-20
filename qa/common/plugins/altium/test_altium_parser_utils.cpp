@@ -44,9 +44,9 @@ BOOST_FIXTURE_TEST_SUITE( AltiumParserUtils, ALTIUM_PARSER_UTILS_FIXTURE )
 
 struct SPECIAL_STRINGS_TO_KICAD
 {
-    wxString                     input;
-    wxString                     exp_result;
-    std::map<wxString, wxString> override;
+    wxString              input;
+    wxString              exp_result;
+    altium_override_map_t override;
 };
 
 /**
@@ -65,7 +65,6 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "A\tB", "A\tB", {} },
     { "This is a long text with spaces", "This is a long text with spaces", {} },
     // Text format (underscore,...), TODO: add
-    // TODO: variable replacement is in fact case insensitive
     // Escaping, TODO: add
     { "+", "+", {} },
     { "'", "'", {} },
@@ -86,6 +85,16 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "=A+B", "${A}${B}", {} },
     { "=A+B", "C${B}", { { "A", "C" } } },
     { "=A+B", "CD", { { "A", "C" }, { "B", "D" } } },
+    // Case insensitive special strings
+    { "=A", "C", { { "a", "C" } } },
+    { "=a", "C", { { "A", "C" } } },
+    { "=AB", "C", { { "Ab", "C" } } },
+    { "=AB", "C", { { "aB", "C" } } },
+    { "=AB", "C", { { "ab", "C" } } },
+    { "=AB", "C", { { "AB", "C" } } },
+    { "=aB", "C", { { "Ab", "C" } } },
+    { "=Ab", "C", { { "aB", "C" } } },
+    { "=ab", "C", { { "AB", "C" } } },
     // Special strings with text
     { "='A'", "A", {} },
     { "='This is a long text with spaces'", "This is a long text with spaces", {} },

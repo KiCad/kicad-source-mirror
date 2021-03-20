@@ -42,8 +42,8 @@ LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference )
 }
 
 // https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
-wxString AltiumSpecialStringsToKiCadVariables( const wxString&                     aString,
-                                               const std::map<wxString, wxString>& aOverride )
+wxString AltiumSpecialStringsToKiCadVariables( const wxString&              aString,
+                                               const altium_override_map_t& aOverride )
 {
     if( aString.IsEmpty() || aString.at( 0 ) != '=' )
     {

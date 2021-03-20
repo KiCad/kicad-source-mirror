@@ -2052,7 +2052,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
     ASCH_PARAMETER elem( aProperties );
 
     // TODO: fill in replacements from variant, sheet and project
-    std::map<wxString, wxString> stringReplacement = {
+    altium_override_map_t stringReplacement = {
         { "Comment", "${VALUE}" },
         { "Value", "${Altium_Value}" },
     };
@@ -2102,7 +2102,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         else
         {
             int fieldIdx = component->GetFieldCount();
-            wxString fieldName = elem.name == "Value" ? "Altium_Value" : elem.name;
+            wxString fieldName = elem.name.IsSameAs( "Value", false ) ? "Altium_Value" : elem.name;
             field = component->AddField( { position, fieldIdx, component, fieldName } );
         }
 
