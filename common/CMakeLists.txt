@@ -259,7 +259,6 @@ set( COMMON_DRAWING_SHEET_SRCS
 set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/arc_assistant.cpp
     preview_items/arc_geom_manager.cpp
-    preview_items/bright_box.cpp
     preview_items/centreline_rect_item.cpp
     preview_items/draw_context.cpp
     preview_items/polygon_geom_manager.cpp

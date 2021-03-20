@@ -55,7 +55,6 @@ using namespace std::placeholders;
 #include <id.h>
 #include "tool_event_utils.h"
 #include "pcb_selection_tool.h"
-#include "pcb_bright_box.h"
 #include "pcb_actions.h"
 
 

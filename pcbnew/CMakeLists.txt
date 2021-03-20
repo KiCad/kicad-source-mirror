@@ -338,7 +338,6 @@ set( PCBNEW_CLASS_SRCS
     tools/group_tool.cpp
     tools/footprint_editor_control.cpp
     tools/pad_tool.cpp
-    tools/pcb_bright_box.cpp
     tools/pcb_control.cpp
     tools/pcb_picker_tool.cpp
     tools/pcb_selection.cpp
