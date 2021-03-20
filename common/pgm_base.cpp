@@ -281,19 +281,10 @@ bool PGM_BASE::InitPgm()
         return false;
 
     wxFileName baseSharePath;
-#if defined( __WXMSW__ )
-    // Make the paths relative to the executable dir as KiCad might be installed anywhere
-    // It follows the Windows installer paths scheme, where binaries are installed in
-    // PATH/bin and extra files in PATH/share/kicad
-    baseSharePath.AssignDir( m_bin_dir + "\\.." );
-    baseSharePath.Normalize();
+#ifdef __WXMAC__
+    baseSharePath.AssignDir( PATHS::GetOSXKicadMachineDataDir() );
 #else
-    baseSharePath.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
-#endif
-
-#if !defined( __WXMAC__ )
-    baseSharePath.AppendDir( "share" );
-    baseSharePath.AppendDir( "kicad" );
+    baseSharePath.AssignDir( PATHS::GetStockDataPath( false ) );
 #endif
 
     // KICAD6_FOOTPRINT_DIR

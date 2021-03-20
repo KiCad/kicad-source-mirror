@@ -55,8 +55,6 @@ Linux install tree
   ${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
   ${prefix}/share/kicad/resources          - Resource files (images, etc).
 
-  KiCad searches for the libraries, templates, 3D models, etc. bin/../share.
-
   Warning:
   Do not change the KiCad tree, or the location of binary files.  Otherwise
   KiCad may not be able to find some or all of its required files.

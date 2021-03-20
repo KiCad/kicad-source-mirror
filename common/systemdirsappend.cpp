@@ -67,6 +67,12 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Use as second ranked place.
     maybe.AddPaths( wxT( DEFAULT_INSTALL_PATH ) );
 
+#ifdef __WXGTK__
+    // On Linux, the stock data install path is defined by KICAD_DATA.
+    // Useful when multiple versions of KiCad are installed in parallel.
+    maybe.AddPaths( PATHS::GetStockDataPath( false ) );
+#endif
+
     // Add the directory for the user-dependent, program specific data files.
     // According to wxWidgets documentation:
     // Unix: ~/.appname
