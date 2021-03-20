@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
 "PO-Revision-Date: 2021-03-20 06:47+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -10747,68 +10747,62 @@ msgid "Custom"
 msgstr "自定义"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:423
-#, fuzzy
 msgid "Model Mode"
-msgstr "模型"
+msgstr "模型模式"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:425
-#, fuzzy
 msgid "User configuration"
-msgstr "灯光配置"
+msgstr "用户配置"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:426
 msgid ""
 "Use the settings in the Ngspice configuration file or any settings defined "
 "in the schematic"
-msgstr ""
+msgstr "使用 Ngspice 配置文件中的设置或原理图中定义的任意设置"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:430
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:431
-#, fuzzy
 msgid "Enable default spice model simulation"
-msgstr "禁用符号仿真"
+msgstr "启用默认的 spice 模型仿真"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:435
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-#, fuzzy
 msgid "Enable PSpice model simulation"
-msgstr "仿真中的 SPICE 值"
+msgstr "启用 PSpice 模型仿真"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:440
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:441
-#, fuzzy
 msgid "Enable LTSpice model simulation"
-msgstr "仿真中的 SPICE 值"
+msgstr "启用 LTSpice 模型仿真"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:445
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice 和 LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Enable PSpice and LTSpice model simulation"
-msgstr ""
+msgstr "启用 PSpice 和 LTSpice 模型仿真"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-#, fuzzy
 msgid "Enable HSpice model simulation"
-msgstr "仿真中的 SPICE 值"
+msgstr "启用 HSpice 模型仿真"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:462
 msgid "Ngspice"
-msgstr ""
+msgstr "Ngspice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:469
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
@@ -14800,15 +14794,15 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" 不是有效的 Spice 值"
 
 #: eeschema/symbol_async_loader.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
 msgstr ""
-"加载符号库 %s 出现错误。\n"
+"加载符号库 %s 时出现错误。\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -16548,9 +16542,8 @@ msgid "Bus has no members"
 msgstr "总线没有成员"
 
 #: eeschema/tools/symbol_editor_control.cpp:159
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "没有选择符号"
+msgstr "未选中符号库。"
 
 #: eeschema/tools/symbol_editor_control.cpp:382
 #: eeschema/tools/symbol_editor_control.cpp:422
@@ -23067,7 +23060,7 @@ msgstr "0.1 英寸"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "Vrml Units for Output Files"
-msgstr ""
+msgstr "输出文件的 Vrml 单元"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -23078,6 +23071,8 @@ msgid ""
 "If checked: copy footprints 3D models in a folder\n"
 "If not checked: merge footprints 3D models in the vrml board file\n"
 msgstr ""
+"如果选中：将封装 3D 模型复制到文件夹中\n"
+"如果未选中：合并 VRML 板文件中 3D 模型\n"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -31536,7 +31531,7 @@ msgstr "未知方法"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:361
 msgid "Apply action script"
-msgstr ""
+msgstr "应用动作脚本"
 
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
