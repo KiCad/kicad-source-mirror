@@ -605,6 +605,8 @@ void EXPORTER_PCB_VRML::ExportVrmlBoard()
     }
 }
 
+// Max error allowed to approximate a circle by segments, in mm
+static const double err_approx_max = 0.005;
 
 void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
 {
@@ -632,7 +634,22 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         double x    = via->GetStart().x * m_BoardToVrmlScale;
         double y    = via->GetStart().y * m_BoardToVrmlScale;
 
-        m_holes.AddCircle( x, -y, hole_radius, true );
+        // Set the optimal number of segments to approximate a circle.
+        // SetArcParams needs a count max, and the minimal and maximal length
+        // of segments
+        int nsides = GetArcToSegmentCount( via->GetDrillValue(),
+                                           Millimeter2iu( err_approx_max ), 360.0 );
+        double minSegLength = M_PI * 2.0 * hole_radius / nsides;
+        double maxSegLength = minSegLength*2.0;
+
+        m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+
+        m_holes.AddCircle( x, -y, hole_radius, true, true );
+        m_plated_holes.AddCircle( x, -y, hole_radius, true, false );
+
+        m_holes.ResetArcParams();
+        m_plated_holes.ResetArcParams();
     }
 }
 
@@ -648,6 +665,14 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
+        int nsides = GetArcToSegmentCount( hole_drill,
+                                           Millimeter2iu( err_approx_max ), 360.0 );
+        double minSegLength = M_PI * hole_drill / nsides;
+        double maxSegLength = minSegLength*2.0;
+
+        m_holes.SetArcParams( nsides*2, minSegLength, maxSegLength );
+        m_plated_holes.SetArcParams( nsides, minSegLength, maxSegLength );
+
         bool pth = false;
 
         if( ( aPad->GetAttribute() != PAD_ATTRIB_NPTH ) )
@@ -688,6 +713,9 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
             }
 
         }
+
+        m_holes.ResetArcParams();
+        m_plated_holes.ResetArcParams();
     }
 }
 

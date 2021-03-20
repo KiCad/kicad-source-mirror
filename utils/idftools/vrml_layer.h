@@ -180,6 +180,12 @@ public:
     bool SetArcParams( int aMaxSeg, double aMinLength, double aMaxLength );
 
     /**
+     * Resets the parameters used in calculating the number of vertices in an arc
+     * to default values
+     */
+    void ResetArcParams();
+
+    /**
      * Function Clear
      * erases all data except for arc parameters.
      */

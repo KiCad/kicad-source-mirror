@@ -169,10 +169,7 @@ static void CALLBACK vrml_tess_combine( GLdouble coords[3], VERTEX_3D* vertex_da
 
 VRML_LAYER::VRML_LAYER()
 {
-    // arc parameters suitable to mm measurements
-    maxArcSeg = 48;
-    minSegLength = 0.1;
-    maxSegLength = 0.5;
+    ResetArcParams();
     offsetX = 0.0;
     offsetY = 0.0;
 
@@ -216,6 +213,15 @@ VRML_LAYER::~VRML_LAYER()
         gluDeleteTess( tess );
         tess = NULL;
     }
+}
+
+
+void VRML_LAYER::ResetArcParams()
+{
+    // arc parameters suitable to mm measurements
+    maxArcSeg = 48;
+    minSegLength = 0.1;
+    maxSegLength = 0.5;
 }
 
 
