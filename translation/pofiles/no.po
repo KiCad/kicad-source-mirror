@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-01-10 14:06+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -23420,10 +23420,13 @@ msgid "Copy 3D model files to 3D model path"
 msgstr "Kopier 3D-modellfiler til 3D-modellbane"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
+#, fuzzy
 msgid ""
 "If checked: copy footprints 3D models in a folder\n"
 "If not checked: merge footprints 3D models in the vrml board file\n"
 msgstr ""
+"Hvis dette er avhuket: kopier fotavtrykk 3D-modeller i en mappe\n"
+"Hvis ikke er avhuket: flett fotavbrykks3D-modeller i vrml-kortfilen\n"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
