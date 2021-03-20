@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-20 07:41+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1162,7 +1162,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "Inch (英寸)"
+msgstr "Inch"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 msgid "DPI"
@@ -1417,7 +1417,7 @@ msgstr "mils^3"
 
 #: common/base_units.cpp:501
 msgid "in"
-msgstr "英寸"
+msgstr "in"
 
 #: common/base_units.cpp:503
 msgid "sq. in"
@@ -3836,7 +3836,7 @@ msgstr "文档文件 \"%s\" 的 MIME 类型未知"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:50
 msgid "Inches"
-msgstr "英寸"
+msgstr "Inches"
 
 #: common/eda_draw_frame.cpp:254
 msgid "Edit User Grid..."
@@ -5371,7 +5371,7 @@ msgstr "KiCad 经典版"
 #: common/single_top.cpp:175 kicad/kicad.cpp:305
 msgid ""
 "Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr "KiCad 及其依赖不再支持 Windows 7 及更早版本。"
+msgstr "KiCad 及其依赖库不再支持 Windows 7 及更早版本。"
 
 #: common/single_top.cpp:176 kicad/kicad.cpp:306
 msgid "Unsupported Operating System"
@@ -5905,7 +5905,7 @@ msgstr "创建，删除和编辑符号"
 #: common/tool/actions.cpp:568 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:1028
 msgid "Footprint Library Browser"
-msgstr "封装库浏览"
+msgstr "浏览封装库"
 
 #: common/tool/actions.cpp:568
 msgid "Browse footprint libraries"
@@ -21320,7 +21320,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr "英寸(inch)"
+msgstr "inch"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -22424,7 +22424,7 @@ msgstr "电路板压层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:84
 msgid "Board Editor Layers"
-msgstr "电路板板编辑器图层"
+msgstr "电路板编辑器图层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 msgid "Physical Stackup"
@@ -30027,7 +30027,7 @@ msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
 msgstr ""
-"无法在主电路板板上找到封装。\n"
+"无法在主电路板上找到封装。\n"
 "无法保存。"
 
 #: pcbnew/footprint_libraries_utils.cpp:953
@@ -34088,7 +34088,7 @@ msgstr "BOM..."
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Create bill of materials from board"
-msgstr "从电路板板创建 BOM"
+msgstr "从电路板创建 BOM"
 
 #: pcbnew/tools/pcb_actions.cpp:607
 msgid "Switch Track Width to Next"
