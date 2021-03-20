@@ -276,6 +276,8 @@ public:
             std::unique_lock<std::mutex> cacheLock( m_CachesMutex );
             m_InsideAreaCache.clear();
             m_InsideCourtyardCache.clear();
+            m_InsideFCourtyardCache.clear();
+            m_InsideBCourtyardCache.clear();
         }
 
         m_CopperZoneRTrees.clear();
@@ -1149,6 +1151,8 @@ public:
 
     std::mutex                                            m_CachesMutex;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideFCourtyardCache;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideBCourtyardCache;
     std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, bool > m_InsideAreaCache;
 
     std::map< ZONE*, std::unique_ptr<DRC_RTREE> >         m_CopperZoneRTrees;

@@ -5,6 +5,8 @@
     (rule <rule_name> <rule_clause> ...)
 
 
+<br><br>
+
 ### Rule Clauses
 
     (constraint <constraint_type> ...)
@@ -13,6 +15,8 @@
 
     (layer "<layer_name>")
 
+
+<br><br>
 
 ### Constraint Types
 
@@ -32,6 +36,8 @@
  * via_count
 
 
+<br><br>
+
 ### Item Types
 
  * buried_via
@@ -44,6 +50,7 @@
  * via
  * zone
 
+<br>
 
 ### Examples
 
@@ -67,7 +74,7 @@
     (rule HV_unshielded
        (constraint clearance (min 2mm))
        (condition "A.NetClass == 'HV' && !A.insideArea('Shield*')"))
-
+<br><br>
 
 ### Notes
 
@@ -78,32 +85,45 @@ precedence over earlier rules; once a matching rule is found
 no further rules will be checked.
 
 Use Ctrl+/ to comment or uncomment line(s).
-
-
+<br><br><br>
 
 ### Expression functions
 
 All function parameters support simple wildcards (`*` and `?`).
+<br><br>
 
     A.insideCourtyard('<footprint_refdes>')
-True if any part of `A` lies within the given footprint's courtyard.
+True if any part of `A` lies within the given footprint's principal courtyard.
+<br><br>
+
+    A.insideFrontCourtyard('<footprint_refdes>')
+True if any part of `A` lies within the given footprint's front courtyard.
+<br><br>
+
+    A.insideBackCourtyard('<footprint_refdes>')
+True if any part of `A` lies within the given footprint's back courtyard.
+<br><br>
 
     A.insideArea('<zone_name>')
 True if any part of `A` lies within the given zone's outline.
+<br><br>
 
     A.isPlated()
 True if `A` has a hole which is plated.
+<br><br>
 
     A.isDiffPair()
 True if `A` has a net that is part of a differential pair.
+<br><br>
 
     A.inDiffPair('<net_name>')
 True if `A` has net that is part of the specified differential pair.
 `<net_name>` is the base name of the differential pair.  For example, `inDiffPair('CLK')`
-matches items in the `CLK_P` and `CLK_N` nets.
+matches items in the `CLK_P` and `CLK_N` nets.<br>
 
     A.memberOf('<group_name>')
 True if `A` is a member of the given group. Includes nested membership.
+<br><br>
 
     A.existsOnLayer('<layer_name>')
 True if `A` exists on the given layer.  The layer name can be
@@ -113,7 +133,7 @@ the canonical name (ie: `F.Cu`).
 NB: this returns true if `A` is on the given layer, independently
 of whether or not the rule is being evaluated for that layer.
 For the latter use a `(layer "layer_name")` clause in the rule.
-
+<br><br><br>
 
 ### More Examples
 
