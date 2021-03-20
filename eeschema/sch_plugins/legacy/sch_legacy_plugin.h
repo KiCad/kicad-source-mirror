@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -59,6 +59,9 @@ class BUS_ALIAS;
  * this.  This parser is not that forgiving and sticks to the legacy file format document.
  *
  * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing calls allowed.
+ *
+ * @warning All save code has been removed from the plugin.  Legacy schematics and symbol
+ *          librarys are now read only.
  */
 class SCH_LEGACY_PLUGIN : public SCH_PLUGIN
 {
@@ -104,9 +107,6 @@ public:
     void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
                       int version = EESCHEMA_VERSION );
 
-    void Save( const wxString& aFileName, SCH_SHEET* aScreen, SCHEMATIC* aSchematic,
-               const PROPERTIES* aProperties = nullptr ) override;
-
     void Format( SCH_SHEET* aSheet );
 
     void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
@@ -119,16 +119,8 @@ public:
                              const PROPERTIES* aProperties = nullptr ) override;
     LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                            const PROPERTIES* aProperties = nullptr ) override;
-    void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
-                     const PROPERTIES* aProperties = nullptr ) override;
-    void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                       const PROPERTIES* aProperties = nullptr ) override;
-    void CreateSymbolLib( const wxString& aLibraryPath,
-                          const PROPERTIES* aProperties = nullptr ) override;
     bool DeleteSymbolLib( const wxString& aLibraryPath,
                           const PROPERTIES* aProperties = nullptr ) override;
-    void SaveLibrary( const wxString& aLibraryPath,
-                      const PROPERTIES* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
@@ -136,7 +128,6 @@ public:
     const wxString& GetError() const override { return m_error; }
 
     static LIB_PART* ParsePart( LINE_READER& aReader, int majorVersion = 0, int minorVersion = 0 );
-    static void FormatPart( LIB_PART* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
@@ -153,19 +144,7 @@ private:
     SCH_COMPONENT* loadComponent( LINE_READER& aReader );
     std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
-    void saveComponent( SCH_COMPONENT* aComponent );
-    void saveField( SCH_FIELD* aField );
-    void saveBitmap( SCH_BITMAP* aBitmap );
-    void saveSheet( SCH_SHEET* aSheet );
-    void saveJunction( SCH_JUNCTION* aJunction );
-    void saveNoConnect( SCH_NO_CONNECT* aNoConnect );
-    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
-    void saveLine( SCH_LINE* aLine );
-    void saveText( SCH_TEXT* aText );
-    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
-
     void cacheLib( const wxString& aLibraryFileName );
-    bool writeDocFile( const PROPERTIES* aProperties );
     bool isBuffering( const PROPERTIES* aProperties );
 
 protected:
