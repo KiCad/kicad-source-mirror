@@ -1766,7 +1766,6 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
         return combinedArea;
     }
-
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
@@ -1779,6 +1778,41 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
         text->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
                                                         ARC_LOW_DEF, ERROR_OUTSIDE );
+    }
+    else if( aItem->Type() == PCB_SHAPE_T )
+    {
+        // Approximate "linear" shapes with just their width squared, as we don't want to consider
+        // a linear shape as being much bigger than another for purposes of selection filtering
+        // just because it happens to be really long.
+
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+
+        switch( shape->GetShape() )
+        {
+        case S_SEGMENT:
+        case S_ARC:
+        case S_CURVE:
+            return shape->GetWidth() * shape->GetWidth();
+
+        case S_RECT:
+        case S_CIRCLE:
+        case S_POLYGON:
+        {
+            if( !shape->IsFilled() )
+                return shape->GetWidth() * shape->GetWidth();
+
+            KI_FALLTHROUGH;
+        }
+
+        default:
+            aItem->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
+                                                         ARC_LOW_DEF, ERROR_OUTSIDE );
+        }
+    }
+    else if( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_ARC_T )
+    {
+        double width = static_cast<const TRACK*>( aItem )->GetWidth();
+        return width * width;
     }
     else
     {

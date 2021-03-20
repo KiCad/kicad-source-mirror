@@ -190,6 +190,9 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const 
 
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
+    if( aSeg.A == aSeg.B )
+        return Collide( aSeg.A, aClearance, aActual, aLocation );
+
     int minDist = aClearance + m_width / 2;
     VECTOR2I center = GetCenter();
     ecoord dist_sq;

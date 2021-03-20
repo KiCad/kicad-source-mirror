@@ -2411,7 +2411,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     // If the user clicked on a small item within a much larger one then it's pretty clear
     // they're trying to select the smaller one.
 
-    constexpr double sizeRatio = 1.3;
+    constexpr double sizeRatio = 1.5;
 
     std::vector<std::pair<BOARD_ITEM*, double>> itemsByArea;
 
@@ -2485,6 +2485,28 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     {
         for( BOARD_ITEM* item : rejected )
             aCollector.Transfer( item );
+    }
+
+    // Finally, what we are left with is a set of items of similar coverage area.  We now reject
+    // any that are not on the active layer, to reduce the number of disambiguation menus shown.
+    // If the user wants to force-disambiguate, they can either switch layers or use the modifier
+    // key to force the menu.
+    if( aCollector.GetCount() > 1 )
+    {
+        bool haveItemOnActive = false;
+        rejected.clear();
+
+        for( int i = 0; i < aCollector.GetCount(); ++i )
+        {
+            if( !aCollector[i]->IsOnLayer( activeLayer ) )
+                rejected.insert( aCollector[i] );
+            else
+                haveItemOnActive = true;
+        }
+
+        if( haveItemOnActive )
+            for( BOARD_ITEM* item : rejected )
+                aCollector.Transfer( item );
     }
 }
 
