@@ -108,7 +108,7 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 
 	wxString m_rbSelectUnitsChoices[] = { _("mm"), _("meter"), _("0.1 Inch"), _("Inch") };
 	int m_rbSelectUnitsNChoices = sizeof( m_rbSelectUnitsChoices ) / sizeof( wxString );
-	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Vrml Units for Output Files"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("VRML Units for Output Files"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSelectUnits->SetSelection( 0 );
 	bSizerOptions->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
 
@@ -122,12 +122,12 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
 	m_cbCopyFiles = new wxCheckBox( this, wxID_ANY, _("Copy 3D model files to 3D model path"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbCopyFiles->SetToolTip( _("If checked: copy footprints 3D models in a folder\nIf not checked: merge footprints 3D models in the vrml board file\n") );
+	m_cbCopyFiles->SetToolTip( _("If checked: copy 3D models to the destination folder\nIf not checked: Embed 3D models in the VRML board file") );
 
 	bSizer4->Add( m_cbCopyFiles, 0, wxALL, 5 );
 
 	m_cbUseRelativePaths = new wxCheckBox( this, wxID_ANY, _("Use relative paths to model files in board VRML file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbUseRelativePaths->SetToolTip( _("Use paths for model files in board VRML file relative to the vrml file") );
+	m_cbUseRelativePaths->SetToolTip( _("Use paths for model files in board VRML file relative to the VRML file") );
 
 	bSizer4->Add( m_cbUseRelativePaths, 0, wxALL, 5 );
 

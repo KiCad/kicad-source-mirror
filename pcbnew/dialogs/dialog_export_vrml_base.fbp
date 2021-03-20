@@ -893,7 +893,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Vrml Units for Output Files</property>
+                                <property name="label">VRML Units for Output Files</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -1000,7 +1000,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">If checked: copy footprints 3D models in a folder&#x0A;If not checked: merge footprints 3D models in the vrml board file&#x0A;</property>
+                                        <property name="tooltip">If checked: copy 3D models to the destination folder&#x0A;If not checked: Embed 3D models in the VRML board file</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1064,7 +1064,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Use paths for model files in board VRML file relative to the vrml file</property>
+                                        <property name="tooltip">Use paths for model files in board VRML file relative to the VRML file</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
