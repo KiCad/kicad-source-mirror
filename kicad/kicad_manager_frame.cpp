@@ -50,6 +50,8 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
 #include <wx/ffile.h>
+#include <atomic>
+
 
 #include <../pcbnew/plugins/kicad/kicad_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
 
