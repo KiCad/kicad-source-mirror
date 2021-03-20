@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-20 07:18+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -3983,7 +3983,7 @@ msgstr "原理圖示記"
 
 #: common/eda_item.cpp:267 eeschema/sch_junction.h:91
 msgid "Junction"
-msgstr "連線點"
+msgstr "結點"
 
 #: common/eda_item.cpp:268
 msgid "No-Connect Flag"
@@ -4878,7 +4878,7 @@ msgstr "匯流排結點"
 
 #: common/layer_id.cpp:108
 msgid "Junctions"
-msgstr "連線點"
+msgstr "結點"
 
 #: common/layer_id.cpp:109
 msgid "Labels"
@@ -7243,7 +7243,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"已搜尋:\n"
+"搜尋到:\n"
 "\t%s\n"
 "\t%s"
 
@@ -8215,7 +8215,7 @@ msgstr "錯誤，警告和排除"
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d 個符號需要註解。<br><br>"
+msgstr "%d 個符號需要批註。<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -11565,7 +11565,7 @@ msgstr "連線"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 msgid "Junction dot size:"
-msgstr "連線點大小："
+msgstr "結點大小："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:132
 msgid "Smallest"
@@ -15399,11 +15399,11 @@ msgstr "新增無連線標誌"
 
 #: eeschema/tools/ee_actions.cpp:294
 msgid "Add Junction"
-msgstr "新增連線點"
+msgstr "新增結點"
 
 #: eeschema/tools/ee_actions.cpp:294
 msgid "Add a junction"
-msgstr "新增連線點"
+msgstr "新增結點"
 
 #: eeschema/tools/ee_actions.cpp:300
 msgid "Add Wire to Bus Entry"
@@ -15903,7 +15903,7 @@ msgstr "導航到頁面"
 
 #: eeschema/tools/ee_actions.cpp:669
 msgid "Add Junctions to Selection where needed"
-msgstr "根據需要將連線點新增到選擇"
+msgstr "根據需要將結點新增到選擇"
 
 #: eeschema/tools/ee_actions.cpp:677
 msgid "Add Wire"
@@ -16132,7 +16132,7 @@ msgstr "沒有找到新的層次標籤。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:653
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr "連線點位置不包含可連線的電線和/或引腳。"
+msgstr "結點位置不包含可連線的電線和/或引腳。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1042
 msgid "Click over a sheet."
@@ -17111,7 +17111,7 @@ msgstr "高亮光圈型別 \"%s\""
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, fuzzy, c-format
 msgid "Highlight DCode D%d"
-msgstr "高亮 %s"
+msgstr "高亮 DCode D %s"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -33061,7 +33061,7 @@ msgstr "選擇/擴充套件連線"
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
-msgstr "選擇連線或將現有選擇擴充套件到連線點、焊盤或整個連線"
+msgstr "選擇連線或將現有選擇擴充套件到結點、焊盤或整個連線"
 
 #: pcbnew/tools/pcb_actions.cpp:1202
 msgid "Select All Tracks in Net"
