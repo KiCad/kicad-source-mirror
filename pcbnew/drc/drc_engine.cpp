@@ -295,9 +295,7 @@ void DRC_ENGINE::loadImplicitRules()
                                                              ncName );
                     netclassRule->m_Implicit = true;
 
-                    expr = wxString::Format( "A.NetClass == '%s' && A.isDiffPair() "
-                                             "&& B.NetClass == '%s' && B.isDiffPair()",
-                                             ncName,
+                    expr = wxString::Format( "A.NetClass == '%s' && A.isCoupledDiffPair()",
                                              ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
                     netclassItemSpecificRules.push_back( netclassRule );

@@ -728,6 +728,30 @@ static void isDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void isCoupledDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    PCB_EXPR_CONTEXT*     context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    BOARD_CONNECTED_ITEM* a = dynamic_cast<BOARD_CONNECTED_ITEM*>( context->GetItem( 0 ) );
+    BOARD_CONNECTED_ITEM* b = dynamic_cast<BOARD_CONNECTED_ITEM*>( context->GetItem( 1 ) );
+    LIBEVAL::VALUE*       result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( a && b )
+    {
+        NETINFO_ITEM* netinfo = a->GetNet();
+        wxString      coupledNet, dummy;
+
+        if( netinfo && DRC_ENGINE::MatchDpSuffix( netinfo->GetNetname(), coupledNet, dummy ) != 0 )
+        {
+            if( b->GetNetname() == coupledNet )
+                result->Set( 1.0 );
+        }
+    }
+}
+
+
 static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE*   arg    = aCtx->Pop();
@@ -783,6 +807,7 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "memberOf('x')", memberOf );
     RegisterFunc( "fromTo('x','y')", exprFromTo );
     RegisterFunc( "isDiffPair()", isDiffPair );
+    RegisterFunc( "isCoupledDiffPair()", isCoupledDiffPair );
     RegisterFunc( "inDiffPair('x')", inDiffPair );
 }
 

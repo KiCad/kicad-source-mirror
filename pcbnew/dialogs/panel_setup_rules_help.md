@@ -119,7 +119,12 @@ True if `A` has a net that is part of a differential pair.
     A.inDiffPair('<net_name>')
 True if `A` has net that is part of the specified differential pair.
 `<net_name>` is the base name of the differential pair.  For example, `inDiffPair('CLK')`
-matches items in the `CLK_P` and `CLK_N` nets.<br>
+matches items in the `CLK_P` and `CLK_N` nets.
+<br><br>
+
+    A.isCoupledDiffPair()
+True if `A` and `B` are members of the same diff pair.
+<br><br>
 
     A.memberOf('<group_name>')
 True if `A` is a member of the given group. Includes nested membership.
