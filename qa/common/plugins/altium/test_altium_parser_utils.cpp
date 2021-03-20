@@ -65,8 +65,17 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "A\tB", "A\tB", {} },
     { "This is a long text with spaces", "This is a long text with spaces", {} },
     // Text format (underscore,...), TODO: add
+    // TODO: variable replacement is in fact case insensitive
     // Escaping, TODO: add
+    { "+", "+", {} },
+    { "'", "'", {} },
+    { "'A'", "'A'", {} },
+    { "A+B", "A+B", {} },
     { "A=B", "A=B", {} },
+    { "$", "$", {} },
+    { "{", "{", {} },
+    { "}", "}", {} },
+    { "${A}", "${A}", {} }, // TODO: correct substitution
     // Simple special strings
     { "=A", "${A}", {} },
     { "=A", "C", { { "A", "C" } } },
@@ -77,6 +86,22 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "=A+B", "${A}${B}", {} },
     { "=A+B", "C${B}", { { "A", "C" } } },
     { "=A+B", "CD", { { "A", "C" }, { "B", "D" } } },
+    // Special strings with text
+    { "='A'", "A", {} },
+    { "='This is a long text with spaces'", "This is a long text with spaces", {} },
+    { "='='", "=", {} },
+    { "='+'", "+", {} },
+    { "='$'", "$", {} },
+    { "='{'", "{", {} },
+    { "='}'", "}", {} },
+    { "='${A}'", "${A}", {} }, // TODO: correct substitution
+    { "='A'+'B'", "AB", {} },
+    { "='A'+' '", "A ", {} },
+    { "=' '+'B'", " B", {} },
+    { "='A'+B", "A${B}", {} },
+    { "=A+'B'", "${A}B", {} },
+    { "=A+' '+B", "${A} ${B}", {} },
+    { "='A'+B+'C'+D", "A${B}C${D}", {} },
     // Some special cases we do not know yet how to handle correctly. But we should not crash ;)
     { "=+", "", {} },
     { "=++", "", {} },
@@ -90,6 +115,10 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "= ", "", {} },
     { "= A", "${ A}", {} },
     { "=A ", "${A}", {} },
+    { "='A'B", "A", {} },
+    { "=A'B'", "B", {} },
+    { "=A'B", "B", {} },
+    { "=A+ 'B'", "${A}B", {} },
 };
 
 

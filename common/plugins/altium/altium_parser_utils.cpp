@@ -54,26 +54,43 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
 
     size_t start = 1;
     size_t delemiter = 0;
+    size_t escaping_start = 0;
     do
     {
         delemiter = aString.find( "+", start );
+        escaping_start = aString.find( "'", start );
 
-        wxString specialString = aString.substr( start, delemiter - start ).Trim( true );
-
-        if( !specialString.IsEmpty() )
+        if( escaping_start < delemiter )
         {
-            auto variableOverride = aOverride.find( specialString );
-            if( variableOverride == aOverride.end() )
+            size_t text_start = escaping_start + 1;
+            size_t escaping_end = aString.find( "'", text_start );
+            if( escaping_end == wxString::npos )
             {
-                result += wxString::Format( wxT( "${%s}" ), specialString );
+                escaping_end = aString.size();
             }
-            else
-            {
-                result += variableOverride->second;
-            }
-        }
 
-        start = delemiter + 1;
+            result += aString.substr( text_start, escaping_end - text_start );
+
+            start = escaping_end + 1;
+        }
+        else
+        {
+            wxString specialString = aString.substr( start, delemiter - start ).Trim( true );
+
+            if( !specialString.IsEmpty() )
+            {
+                auto variableOverride = aOverride.find( specialString );
+                if( variableOverride == aOverride.end() )
+                {
+                    result += wxString::Format( wxT( "${%s}" ), specialString );
+                }
+                else
+                {
+                    result += variableOverride->second;
+                }
+            }
+            start = delemiter + 1;
+        }
     } while( delemiter != wxString::npos );
 
     return result;
