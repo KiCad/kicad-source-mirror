@@ -198,6 +198,8 @@ public:
     // Build and exports the board outlines (board body)
     void ExportVrmlBoard();
 
+    // Export zones except zones on solder mask layers because these layers are
+    // negative layers and must be handled in ExportVrmlSolderMask.
     void ExportVrmlZones();
 
     void ExportVrmlTracks();
@@ -239,10 +241,12 @@ public:
                            double endx, double endy, double width );
 
     void ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
-                              double aOrientation, wxPoint aPos );
+                            double aOrientation, wxPoint aPos );
 
-    void ExportVrmlPolyPolygon( VRML_LAYER* aVlayer, SHAPE_POLY_SET& aOutlines,
-                                double aOrientation, wxPoint aPos );
+    // Exoprt a set of polygons without holes.
+    // Polygons in SHAPE_POLY_SET must be without hole, i.e. holes must be linked
+    // previously to their main outline.
+    void ExportVrmlPolygonSet( VRML_LAYER* aVlayer, const SHAPE_POLY_SET& aOutlines );
 
     void writeLayers( const char* aFileName, OSTREAM* aOutputFile );
 

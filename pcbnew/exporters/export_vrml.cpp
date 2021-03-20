@@ -79,15 +79,15 @@ EXPORTER_PCB_VRML::EXPORTER_PCB_VRML() :
 
     // pcb green
     vrml_colors_list[VRML_COLOR_PCB] = VRML_COLOR(
-            0.12f, 0.28f, 0.14f, 0.01f, 0.03f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
+            0.12f, 0.20f, 0.19f, 0.01f, 0.03f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
     // copper color
     vrml_colors_list[VRML_COLOR_COPPER] = VRML_COLOR(
             0.72f, 0.45f, 0.2f, 0.01f, 0.05f, 0.01f, 0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
     // silkscreen white
     vrml_colors_list[VRML_COLOR_SILK] = VRML_COLOR(
-            0.9f, 0.9f, 0.9f, 0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 0.0f, 0.9f, 0.0f, 0.02f );
-    // solder paste silver
-    vrml_colors_list[VRML_COLOR_PASTE] = VRML_COLOR( 0.75f, 0.75f, 0.76f, 0.75f, 0.75f, 0.76f, 0.0f,
+            0.7f, 0.7f, 0.9f, 0.1f, 0.1f, 0.1f, 0.0f, 0.0f, 0.0f, 0.9f, 0.0f, 0.02f );
+    // solder paste silver (gray)
+    vrml_colors_list[VRML_COLOR_PASTE] = VRML_COLOR( 0.4f, 0.4f, 0.4f, 0.2f, 0.2f, 0.2f, 0.0f,
             0.0f, 0.0f, 0.8f, 0.0f, 0.8f );
     // solder mask green with transparency
     vrml_colors_list[VRML_COLOR_SOLDMASK] = VRML_COLOR(
@@ -182,7 +182,7 @@ void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
     SHAPE_POLY_SET holes, outlines = m_pcbOutlines;
     // holes is the solder mask opening.
     // the actual shape is the negative shape of mask opening.
-    PCB_LAYER_ID layer = F_Mask;
+    PCB_LAYER_ID pcb_layer = F_Mask;
     VRML_LAYER* vrmllayer = &m_top_soldermask;
 
     for( int lcnt = 0; lcnt < 2; lcnt++ )
@@ -190,13 +190,13 @@ void EXPORTER_PCB_VRML::ExportVrmlSolderMask()
         holes.RemoveAllContours();
         outlines.RemoveAllContours();
         outlines = m_pcbOutlines;
-        m_Pcb->ConvertBrdLayerToPolygonalContours( layer, holes );
+        m_Pcb->ConvertBrdLayerToPolygonalContours( pcb_layer, holes );
 
-        outlines.BooleanSubtract( holes, SHAPE_POLY_SET::PM_FAST );
-        outlines.Fracture( SHAPE_POLY_SET::PM_FAST );
-        ExportVrmlPolyPolygon( vrmllayer, outlines, 0.0, wxPoint( 0, 0 ) );
+        outlines.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        outlines.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        ExportVrmlPolygonSet( vrmllayer, outlines );
 
-        layer = B_Mask;
+        pcb_layer = B_Mask;
         vrmllayer = &m_bot_soldermask;
     }
 }
@@ -591,7 +591,7 @@ void EXPORTER_PCB_VRML::ExportVrmlArc( LAYER_NUM layer,
 
 
 void EXPORTER_PCB_VRML::ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
-                                      double aOrientation, wxPoint aPos )
+                                           double aOrientation, wxPoint aPos )
 {
     if( aOutline->IsPolyShapeValid() )
     {
@@ -626,12 +626,10 @@ void EXPORTER_PCB_VRML::ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
 }
 
 
-void EXPORTER_PCB_VRML::ExportVrmlPolyPolygon( VRML_LAYER* aVlayer, SHAPE_POLY_SET& aOutlines,
-                                        double aOrientation, wxPoint aPos )
+void EXPORTER_PCB_VRML::ExportVrmlPolygonSet( VRML_LAYER* aVlayer, const SHAPE_POLY_SET& aOutlines )
 {
-    aOutlines.Rotate( -aOrientation, VECTOR2I( 0, 0 ) );
-    aOutlines.Move( aPos );
-
+    // Polygons in SHAPE_POLY_SET must be without hole, i.e. holes must be linked
+    // previously to their main outline.
     for( int icnt = 0; icnt < aOutlines.OutlineCount(); icnt++ )
     {
         const SHAPE_LINE_CHAIN& outline = aOutlines.COutline( icnt );
@@ -653,16 +651,17 @@ void EXPORTER_PCB_VRML::ExportVrmlPolyPolygon( VRML_LAYER* aVlayer, SHAPE_POLY_S
 void EXPORTER_PCB_VRML::ExportVrmlDrawsegment( PCB_SHAPE* drawseg )
 {
     LAYER_NUM layer = drawseg->GetLayer();
+
+    // Items on the edge layer are handled elsewhere; just return
+    if( layer == Edge_Cuts )
+        return;
+
     double  w   = drawseg->GetWidth() * m_BoardToVrmlScale;
     double  x   = drawseg->GetStart().x * m_BoardToVrmlScale;
     double  y   = drawseg->GetStart().y * m_BoardToVrmlScale;
     double  xf  = drawseg->GetEnd().x * m_BoardToVrmlScale;
     double  yf  = drawseg->GetEnd().y * m_BoardToVrmlScale;
-    double  r   = sqrt( pow( x - xf, 2 ) + pow( y - yf, 2 ) );
-
-    // Items on the edge layer are handled elsewhere; just return
-    if( layer == Edge_Cuts )
-        return;
+    double  r   = hypot( x - xf, y - yf );
 
     switch( drawseg->GetShape() )
     {
@@ -676,6 +675,18 @@ void EXPORTER_PCB_VRML::ExportVrmlDrawsegment( PCB_SHAPE* drawseg )
         break;
 
     case S_CIRCLE:
+        if( drawseg->IsFilled() )
+        {
+            VRML_LAYER* vlayer;
+
+            if( !GetLayer3D( layer, &vlayer ) )
+                break;
+
+            vlayer->AddCircle( drawseg->GetCenter().x * m_BoardToVrmlScale,
+                               -drawseg->GetCenter().y * m_BoardToVrmlScale,
+                               r + (w/2) );
+            break;
+        }
         // Break circles into two 180 arcs to prevent the vrml hole from obscuring objects
         // within the hole area of the circle.
         ExportVrmlArc( layer, x, y, x, y-r, w, 180.0 );
@@ -715,6 +726,12 @@ void EXPORTER_PCB_VRML::ExportVrmlDrawsegment( PCB_SHAPE* drawseg )
     }
 
     case S_RECT:
+        if( drawseg->IsFilled() )
+        {
+            ExportVrmlPolygon( layer, drawseg,
+                               0.0, wxPoint( 0, 0 ) );
+            break;
+        }
         ExportVrmlLine( layer, x, y, xf, y, w );
         ExportVrmlLine( layer, xf, y, xf, yf, w );
         ExportVrmlLine( layer, xf, yf, x, yf, w );
@@ -973,10 +990,14 @@ void EXPORTER_PCB_VRML::ExportVrmlTracks()
 
 void EXPORTER_PCB_VRML::ExportVrmlZones()
 {
+    // Note: zone on solder mask layers are not exported here, because they are negative shapes
     for( ZONE* zone : m_Pcb->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
+            if( layer == F_Mask || layer == B_Mask )
+                continue;
+
             VRML_LAYER* vl;
 
             if( !GetLayer3D( layer, &vl ) )
@@ -1055,8 +1076,9 @@ void EXPORTER_PCB_VRML::ExportVrmlFpShape( FP_SHAPE* aOutline, FOOTPRINT* aFootp
         break;
 
     case S_POLYGON:
-        ExportVrmlPolygon( layer, aOutline, aFootprint->GetOrientationRadians(),
-                             aFootprint->GetPosition() );
+        ExportVrmlPolygon( layer, aOutline,
+                           aFootprint->GetOrientationRadians(),
+                           aFootprint->GetPosition() );
         break;
 
     case S_CURVE:
