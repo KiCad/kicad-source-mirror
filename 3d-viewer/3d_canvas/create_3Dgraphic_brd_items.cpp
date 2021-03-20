@@ -406,6 +406,37 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                 poly = *(SHAPE_POLY_SET*) shape;
                 break;
 
+            case SH_ARC:
+            {
+                SHAPE_ARC* arc = (SHAPE_ARC*) shape;
+                SHAPE_LINE_CHAIN l = arc->ConvertToPolyline();
+
+                for( int i = 0; i < l.SegmentCount(); i++ )
+                {
+                    SHAPE_SEGMENT seg( l.Segment( i ).A, l.Segment( i ).B, arc->GetWidth() );
+                    const SFVEC2F start3DU(  seg.GetSeg().A.x * m_biuTo3Dunits,
+                                             -seg.GetSeg().A.y * m_biuTo3Dunits );
+                    const SFVEC2F end3DU( seg.GetSeg().B.x * m_biuTo3Dunits,
+                                          -seg.GetSeg().B.y * m_biuTo3Dunits );
+                    const int width = arc->GetWidth() + aClearanceValue.x * 2;
+
+                     // Cannot add segments that have the same start and end point
+                    if( Is_segment_a_circle( start3DU, end3DU ) )
+                    {
+                        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
+                                                                 ( width / 2) * m_biuTo3Dunits,
+                                                                 *aPad ) );
+                    }
+                    else
+                    {
+                        aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
+                                                                  width * m_biuTo3Dunits,
+                                                                  *aPad ) );
+                    }
+                }
+            }
+                break;
+
             default:
                 wxFAIL_MSG( "BOARD_ADAPTER::createPadWithClearance no implementation for "
                             + SHAPE_TYPE_asString( shape->Type() ) );
