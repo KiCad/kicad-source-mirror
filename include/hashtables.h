@@ -84,7 +84,7 @@ struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
     {
         std::size_t hash = 2166136261u;
 
-        for( const auto& c : aString )
+        for( const wxUniChar c : aString )
         {
             unsigned ch = static_cast<unsigned>( c );
             hash ^= ch;
