@@ -386,8 +386,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         newCirc->m_centre.x = m_hCentre.GetValue();
         newCirc->m_centre.y = m_vCentre.GetValue();
-        newCirc->m_angle =
-                DoubleValueFromString( EDA_UNITS::DEGREES, m_entryCircAngle->GetValue() );
+        newCirc->m_angle = DoubleValueFromString( EDA_UNITS::DEGREES,
+                                                  m_entryCircAngle->GetValue() );
 
         ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 
