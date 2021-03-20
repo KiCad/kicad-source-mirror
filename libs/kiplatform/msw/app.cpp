@@ -23,6 +23,7 @@
 #include <wx/log.h>
 #include <wx/string.h>
 #include <wx/window.h>
+#include <wx/msgdlg.h>
 
 #include <windows.h>
 #include <strsafe.h>
