@@ -70,7 +70,7 @@ public:
     /**
      * Gets the stock (install) data path, which is the base path for things like scripting, etc
      */
-    static wxString GetStockDataPath();
+    static wxString GetStockDataPath( bool aRespectRunFromBuildDir = true );
 
     /**
      * Gets the stock (install) scripting path

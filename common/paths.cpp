@@ -137,11 +137,11 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
-wxString PATHS::GetStockDataPath()
+wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 {
     wxString path;
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( aRespectRunFromBuildDir && wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
         path = Pgm().GetExecutablePath() + wxT( ".." );
@@ -165,15 +165,7 @@ wxString PATHS::GetStockScriptingPath()
 {
     wxString path;
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
-    {
-        // Allow debugging from build dir by placing a "scripting" folder in the build root
-        path = Pgm().GetExecutablePath() + wxT( "../scripting" );
-    }
-    else
-    {
-        path = GetStockDataPath() + wxT( "/scripting" );
-    }
+    path = GetStockDataPath() + wxT( "/scripting" );
 
     return path;
 }
@@ -183,18 +175,12 @@ wxString PATHS::GetStockPluginsPath()
 {
     wxFileName fn;
 
-#if defined( __WXMAC__ )
-    fn.Assign( PATHS::GetOSXKicadDataDir() );
-    fn.AppendDir( wxT( "plugins" ) );
-#elif defined( __WXMSW__ )
-    fn.Assign( Pgm().GetExecutablePath() + wxT( "/plugins/" ) );
+#if defined( __WXMSW__ )
+    fn.AssignDir( Pgm().GetExecutablePath() );
 #else
-    // KICAD_DATA is the absolute path
-    // corresponding to the install path used for constructing KICAD_USER_PLUGIN
-    wxString tfname = wxString::FromUTF8Unchecked( KICAD_DATA );
-    fn.Assign( tfname, "" );
-    fn.AppendDir( wxT( "plugins" ) );
+    fn.AssignDir( PATHS::GetStockDataPath( false ) );
 #endif
+    fn.AppendDir( wxT( "plugins" ) );
 
     return fn.GetPathWithSep();
 }
