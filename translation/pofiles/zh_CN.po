@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-20 07:16+0000\n"
+"PO-Revision-Date: 2021-03-20 07:41+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -339,7 +339,7 @@ msgstr "电路板颜色..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:186
 msgid "Get colors from physical stackup"
-msgstr "从物理堆叠中获取颜色"
+msgstr "从物理压层中获取颜色"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:197
 msgid "3D Grid"
@@ -21582,7 +21582,7 @@ msgstr "电介质层列表"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:245
 msgid "Select dielectric layer to remove from board stack up."
-msgstr "选择要从电路板堆叠中移除的介电层。"
+msgstr "选择要从电路板压层中移除的介电层。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:246
 msgid "Dielectric Layers"
@@ -22428,7 +22428,7 @@ msgstr "电路板板编辑器图层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:86
 msgid "Physical Stackup"
-msgstr "物理堆叠"
+msgstr "物理压层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:89
 msgid "Board Finish"
@@ -31412,7 +31412,7 @@ msgstr "焊盘 \"%s\"（封装 %s）有 %f 度的孔旋转。KiCad 仅支持 90 
 msgid ""
 "Pad '%s' of Footprint %s uses a complex pad stack (kind %d), which is not "
 "supported yet"
-msgstr "焊盘 \"%s\"（封装 %s）使用复杂的焊盘堆叠（类型为 %d），尚不支持"
+msgstr "焊盘 \"%s\"（封装 %s）使用复杂的焊盘压层（类型为 %d），尚不支持"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1973
 #, c-format
@@ -31432,7 +31432,7 @@ msgstr "非铜焊盘 '%s' 有一个洞。这不应该发生"
 msgid ""
 "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not "
 "happen"
-msgstr "非铜焊盘 \"%s\" 使用复杂的焊盘堆叠（类型为 %d）。这不应该发生"
+msgstr "非铜焊盘 \"%s\" 使用复杂的焊盘压层（类型为 %d）。这不应该发生"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2260
 #, c-format
@@ -31926,7 +31926,7 @@ msgstr "ID 字符串 \"%s\" 的格式无效在自定义填充行 %zu 中"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:968
 #, c-format
 msgid "Could not insert graphical item %d into padstack \"%s\""
-msgstr "无法将图形项目 %d 插入焊盘堆叠 \"%s\""
+msgstr "无法将图形项目 %d 插入焊盘压层 \"%s\""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:974
 #, c-format
@@ -33521,7 +33521,7 @@ msgstr "在图形层上添加板特性表"
 
 #: pcbnew/tools/pcb_actions.cpp:128
 msgid "Add Stackup Table"
-msgstr "添加堆叠表"
+msgstr "添加压层表"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 msgid "Add a board stackup table on a graphic layer"
