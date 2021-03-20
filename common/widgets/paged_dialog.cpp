@@ -67,7 +67,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     if( aShowReset )
     {
         m_resetButton = new wxButton( this, wxID_ANY, _( "Reset to Defaults" ) );
-        m_buttonsSizer->Add( m_resetButton, 0, wxRIGHT|wxLEFT, 5 );
+        m_buttonsSizer->Add( m_resetButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
     }
 
     if( !aAuxiliaryAction.IsEmpty() )
