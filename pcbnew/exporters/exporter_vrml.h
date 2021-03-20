@@ -23,9 +23,6 @@
 
 #pragma once
 
-// minimum width (mm) of a VRML line
-#define MIN_VRML_LINEWIDTH 0.05  // previously 0.12
-
 // offset for art layers, mm (silk, paste, etc)
 #define  ART_OFFSET 0.025
 // offset for plating
@@ -110,8 +107,6 @@ private:
     double      m_layer_z[PCB_LAYER_ID_COUNT];
     SHAPE_POLY_SET  m_pcbOutlines;          // stores the board main outlines
 
-    int         m_iMaxSeg;                  // max. sides to a small circle
-    double      m_arcMinLen, m_arcMaxLen;   // min and max lengths of an arc chord
     int         m_precision;                // precision factor when exportin fp shapes
                                             // to separate files
     SGNODE*     m_sgmaterial[VRML_COLOR_LAST];
@@ -156,15 +151,10 @@ public:
     // scaling from mm to desired VRML world scale
     double m_BoardToVrmlScale;
 
-    double m_minLineWidth;    // minimum width of a VRML line segment
-
     double  m_tx;             // global translation along X
     double  m_ty;             // global translation along Y
 
     double m_brd_thickness; // depth of the PCB
-
-    LAYER_NUM m_text_layer;
-    int m_text_width;
 
     EXPORTER_PCB_VRML();
     ~EXPORTER_PCB_VRML();
@@ -192,56 +182,25 @@ public:
     // set the scaling of the VRML world
     bool SetScale( double aWorldScale );
 
-    // Build and export the solder mask layer
+    // Build and export the solder mask layer, that is a negative layer
     void ExportVrmlSolderMask();
+
+    // Build and export the 4 layers F_Cu, B_Cu, F_SilkS, B_SilkS
+    void ExportStandardLayers();
+
+    void ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream* aOutputFile );
 
     // Build and exports the board outlines (board body)
     void ExportVrmlBoard();
 
-    // Export zones except zones on solder mask layers because these layers are
-    // negative layers and must be handled in ExportVrmlSolderMask.
-    void ExportVrmlZones();
-
-    void ExportVrmlTracks();
-
     void ExportVrmlVia( const VIA* aVia );
 
-    void ExportVrmlDrawsegment( PCB_SHAPE* drawseg );
-
-    void ExportVrmlPcbtext( PCB_TEXT* text );
-
-    void ExportVrmlFpText( FP_TEXT* item );
+    // Export all via holes
+    void ExportVrmlViaHoles();
 
     void ExportFp3DModelsAsLinkedFile( const wxString& aFullFileName );
 
-    void ExportRoundPadstack( double x, double y, double r,
-                              LAYER_NUM bottom_layer, LAYER_NUM top_layer,
-                              double hole );
-
-    // Basic graphic shapes:
-    void ExportVrmlLine( LAYER_NUM layer,
-                         double startx, double starty,
-                         double endx, double endy, double width );
-
-    void ExportVrmlFpShape( FP_SHAPE* aOutline, FOOTPRINT* aFootprint );
-
     void ExportVrmlPadHole( PAD* aPad );
-
-    void ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream* aOutputFile );
-
-    void ExportVrmlDrawings();
-
-    void ExportVrmlArc( LAYER_NUM layer,
-                        double centerx, double centery,
-                        double arc_startx, double arc_starty,
-                        double width, double arc_angle );
-
-    void ExportVrmlCircle( LAYER_NUM layer,
-                           double startx, double starty,
-                           double endx, double endy, double width );
-
-    void ExportVrmlPolygon( LAYER_NUM layer, PCB_SHAPE *aOutline,
-                            double aOrientation, wxPoint aPos );
 
     // Exoprt a set of polygons without holes.
     // Polygons in SHAPE_POLY_SET must be without hole, i.e. holes must be linked
