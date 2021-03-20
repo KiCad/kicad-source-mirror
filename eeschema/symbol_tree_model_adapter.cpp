@@ -71,7 +71,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     std::unordered_map<wxString, std::vector<LIB_PART*>> loadedSymbols;
 
-    SYMBOL_ASYNC_LOADER loader( aNicknames, this, loadedSymbols, prg.get() );
+    SYMBOL_ASYNC_LOADER loader( aNicknames, m_libs,
+                                GetFilter() == LIB_TREE_MODEL_ADAPTER::CMP_FILTER_POWER,
+                                &loadedSymbols, prg.get() );
 
     LOCALE_IO toggle;
 

@@ -39,6 +39,7 @@
 
 class LIB_PART;
 class PART_LIB;
+class PROGRESS_REPORTER;
 class SCH_PLUGIN;
 class SYMBOL_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
@@ -107,6 +108,13 @@ public:
      */
     void Sync( const wxString& aForceRefresh,
                std::function<void( int, int, const wxString& )> aProgressCallback );
+
+    /**
+     * Preloads all symbol libraries in the symbol library table using SYMBOL_ASYNC_LOADER.
+     * Call before the first call to Sync() to get better performance.
+     * @param aReporter is used to report progress of the load
+     */
+    void Preload( PROGRESS_REPORTER& aReporter );
 
     int GetHash() const;
 
@@ -291,6 +299,8 @@ public:
      * @return true if \aSymbolName in \a aLibraryName has derived symbols.
      */
     bool HasDerivedSymbols( const wxString& aSymbolName, const wxString& aLibraryName );
+
+    size_t GetLibraryCount() const;
 
 private:
     ///< Extract library name basing on the file name.

@@ -24,12 +24,14 @@
 #include <atomic>
 #include <future>
 #include <mutex>
+#include <unordered_map>
 #include <vector>
 
-#include <symbol_tree_model_adapter.h>
+#include <wx/string.h>
 
 class LIB_PART;
 class PROGRESS_REPORTER;
+class SYMBOL_LIB_TABLE;
 
 
 class SYMBOL_ASYNC_LOADER
@@ -38,13 +40,14 @@ public:
     /**
      * Constructs a loader for symbol libraries
      * @param aNicknames is a list of library nicknames to load
-     * @param aAdapter is a pointer to the parent symbol tree model adapter
+     * @param aTable is a pointer to the symbol library table to load libraries for
+     * @param aOnlyPowerSymbols, if true, will only return power symbols in the output map
      * @param aOutput will be filled with the loaded parts
      * @param aReporter will be used to repord progress, of not null
      */
     SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,
-                         SYMBOL_TREE_MODEL_ADAPTER* aAdapter,
-                         std::unordered_map<wxString, std::vector<LIB_PART*>>& aOutput,
+                         SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols = false,
+                         std::unordered_map<wxString, std::vector<LIB_PART*>>* aOutput = nullptr,
                          PROGRESS_REPORTER* aReporter = nullptr );
 
     ~SYMBOL_ASYNC_LOADER();
@@ -80,14 +83,14 @@ private:
     ///<  list of libraries to load
     std::vector<wxString> m_nicknames;
 
-    ///< Handle to the adapter that owns this loader
-    SYMBOL_TREE_MODEL_ADAPTER* m_adapter;
+    ///< Handle to the symbol library table being loaded into
+    SYMBOL_LIB_TABLE* m_table;
 
     ///< True if we are loading only power symbols
     bool m_onlyPowerSymbols;
 
     ///< Handle to map that will be filled with the loaded parts per library
-    std::unordered_map<wxString, std::vector<LIB_PART*>>& m_output;
+    std::unordered_map<wxString, std::vector<LIB_PART*>>* m_output;
 
     ///< Progress reporter (may be null)
     PROGRESS_REPORTER* m_reporter;

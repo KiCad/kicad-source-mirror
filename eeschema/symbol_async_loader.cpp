@@ -22,21 +22,21 @@
 
 #include <symbol_async_loader.h>
 #include <symbol_lib_table.h>
-#include <symbol_tree_model_adapter.h>
 #include <widgets/progress_reporter.h>
 
 
 SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNicknames,
-        SYMBOL_TREE_MODEL_ADAPTER* aAdapter,
-        std::unordered_map<wxString, std::vector<LIB_PART*>>& aOutput,
+        SYMBOL_LIB_TABLE* aTable, bool aOnlyPowerSymbols,
+        std::unordered_map<wxString, std::vector<LIB_PART*>>* aOutput,
         PROGRESS_REPORTER* aReporter ) :
         m_nicknames( aNicknames ),
-        m_adapter( aAdapter ),
+        m_table( aTable ),
+        m_onlyPowerSymbols( aOnlyPowerSymbols ),
         m_output( aOutput ),
         m_reporter( aReporter )
 {
-    m_onlyPowerSymbols = ( m_adapter->GetFilter() == LIB_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
-    m_threadCount      = std::max<size_t>( 1, std::thread::hardware_concurrency() - 1 );
+    wxASSERT( m_table );
+    m_threadCount = std::max<size_t>( 1, std::thread::hardware_concurrency() - 1 );
 
     m_canceled.store( false );
     m_nextLibrary.store( 0 );
@@ -69,10 +69,10 @@ bool SYMBOL_ASYNC_LOADER::Join()
 
         const std::vector<LOADED_PAIR>& ret = m_returns[ii].get();
 
-        if( !ret.empty() )
+        if( m_output && !ret.empty() )
         {
             for( const LOADED_PAIR& pair : ret )
-                m_output[pair.first] = pair.second;
+                m_output->insert( pair );
         }
     }
 
@@ -110,7 +110,7 @@ std::vector<SYMBOL_ASYNC_LOADER::LOADED_PAIR> SYMBOL_ASYNC_LOADER::worker()
 
         try
         {
-            m_adapter->m_libs->LoadSymbolLib( pair.second, nickname, onlyPower );
+            m_table->LoadSymbolLib( pair.second, nickname, onlyPower );
             ret.emplace_back( std::move( pair ) );
         }
         catch( const IO_ERROR& ioe )

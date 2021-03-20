@@ -33,7 +33,10 @@
 #include <sch_io_mgr.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <symbol_lib_table.h>
+#include <symbol_async_loader.h>
+#include <widgets/progress_reporter.h>
 #include <list>
+#include <locale_io.h>
 
 
 SYMBOL_LIBRARY_MANAGER::SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
@@ -55,6 +58,40 @@ void SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
         m_syncHash = symTable()->GetModifyHash();
     }
     m_logger.Deactivate();
+}
+
+
+void SYMBOL_LIBRARY_MANAGER::Preload( PROGRESS_REPORTER& aReporter )
+{
+    const int progressIntervalMillis = 60;
+
+    SYMBOL_ASYNC_LOADER loader( symTable()->GetLogicalLibs(), symTable(), false, nullptr,
+                                &aReporter );
+
+    LOCALE_IO toggle;
+
+    loader.Start();
+
+    while( !loader.Done() )
+    {
+        aReporter.KeepRefreshing();
+
+        wxMilliSleep( progressIntervalMillis );
+    }
+
+    if( aReporter.IsCancelled() )
+    {
+        loader.Abort();
+    }
+    else
+    {
+        loader.Join();
+    }
+
+    if( !loader.GetErrors().IsEmpty() )
+    {
+        wxLogError( loader.GetErrors() );
+    }
 }
 
 
@@ -635,6 +672,12 @@ bool SYMBOL_LIBRARY_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
 
     return libBuf.HasDerivedSymbols( aSymbolName );
+}
+
+
+size_t SYMBOL_LIBRARY_MANAGER::GetLibraryCount() const
+{
+    return symTable()->GetLogicalLibs().size();
 }
 
 

@@ -67,6 +67,7 @@
 #include <widgets/app_progress_dialog.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
+#include <widgets/progress_reporter.h>
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
@@ -140,7 +141,13 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
 
     m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
-    SyncLibraries( true );
+
+    // Preload libraries before using SyncLibraries the first time, as the preload is threaded
+    WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
+                                   m_libMgr->GetLibraryCount(), true );
+    m_libMgr->Preload( reporter );
+
+    SyncLibraries( false );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
     ReCreateMenuBar();
