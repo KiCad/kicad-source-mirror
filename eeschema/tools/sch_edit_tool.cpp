@@ -1177,7 +1177,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         saveCopyInUndoList( aField, UNDO_REDO::CHANGED );
 
-    wxString title = wxString::Format( _( "Edit %s Field" ), aField->GetName() );
+    wxString title = wxString::Format( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
 
     DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
 

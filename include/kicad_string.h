@@ -67,6 +67,11 @@ wxString UnescapeString( const wxString& aSource );
 wxString PrettyPrintForMenu( const wxString& aString );
 
 /**
+ * Capitalize the first letter in each word.
+ */
+wxString TitleCaps( const wxString& aString );
+
+/**
  * Copy bytes from @a aSource delimited string segment to @a aDest buffer.
  *
  * The extracted string will be null terminated even if truncation is necessary

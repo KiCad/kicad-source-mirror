@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/symbol_editor_pin_tool.h>
@@ -30,7 +29,7 @@
 #include <tools/symbol_editor_move_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
-#include <confirm.h>
+#include <kicad_string.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
@@ -42,7 +41,6 @@
 #include <lib_text.h>
 #include "symbol_editor_edit_tool.h"
 #include <math/util.h>      // for KiROUND
-
 
 SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
         EE_TOOL_BASE( "eeschema.SymbolEditTool" ),
@@ -521,7 +519,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     if( aField->GetId() == VALUE_FIELD )
         caption = _( "Edit Symbol Name" );
     else
-        caption.Printf( _( "Edit %s Field" ), aField->GetName() );
+        caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( m_frame, caption, aField );
 

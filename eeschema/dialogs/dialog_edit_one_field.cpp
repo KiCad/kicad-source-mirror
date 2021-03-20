@@ -93,7 +93,10 @@ void DIALOG_EDIT_ONE_FIELD::init()
     bool use_validator = m_fieldId == REFERENCE_FIELD
                          || m_fieldId == VALUE_FIELD
                          || m_fieldId == FOOTPRINT_FIELD
-                         || m_fieldId == DATASHEET_FIELD;
+                         || m_fieldId == DATASHEET_FIELD
+                         || m_fieldId == SHEETNAME_V
+                         || m_fieldId == SHEETFILENAME_V;
+
     if( use_validator )
     {
         m_StyledTextCtrl->Show( false );

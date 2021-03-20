@@ -166,3 +166,12 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 
     return true;
 }
+
+
+void DIALOG_LIB_EDIT_TEXT::OnTextEnter( wxCommandEvent& event )
+{
+    if( IsQuasiModal() )
+        EndQuasiModal( wxID_OK );
+    else
+        EndModal( wxID_OK );
+}

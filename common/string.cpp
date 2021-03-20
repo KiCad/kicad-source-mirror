@@ -212,6 +212,25 @@ wxString UnescapeString( const wxString& aSource )
 }
 
 
+wxString TitleCaps( const wxString& aString )
+{
+    wxArrayString words;
+    wxString      result;
+
+    wxStringSplit( aString, words, ' ' );
+
+    for( const wxString& word : words )
+    {
+        if( !result.IsEmpty() )
+            result += wxT( " " );
+
+        result += word.Capitalize();
+    }
+
+    return result;
+}
+
+
 int ReadDelimitedText( wxString* aDest, const char* aSource )
 {
     std::string utf8;               // utf8 but without escapes and quotes.
