@@ -1088,8 +1088,11 @@ void UOP::Exec( CONTEXT* ctx )
     {
     case TR_UOP_PUSH_VAR:
     {
-        auto value = ctx->AllocValue();
-        value->Set( m_ref->GetValue( ctx ) );
+        VALUE* value = ctx->AllocValue();
+
+        if( m_ref )
+            value->Set( m_ref->GetValue( ctx ) );
+
         ctx->Push( value );
     }
         break;
