@@ -347,17 +347,13 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
         wxChar ch = buf[brk_point];
 
         if( !( (ch >= '0' && ch <= '9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
-        {
             break;
-        }
 
         ++brk_point;
     }
 
     // Extract the numeric part
-    buf.Left( brk_point );
-
-    buf.ToDouble( &dtmp );
+    buf.Left( brk_point ).ToDouble( &dtmp );
 
     // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
