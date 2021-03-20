@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14108,8 +14108,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~上線</samp><br> &nbsp;<br><samp>~CLK</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~上線</samp><br> &nbsp;<br><samp>~CLK</samp><br> "
+"&nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>上線</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
@@ -14134,8 +14134,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス指定子:フィールド名}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの <i>フィー"
-"ルドの値</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの "
+"<i>フィールドの値</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14150,8 +14150,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>バスの定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>生成されるネット</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14201,10 +14201,11 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
-"samp> </td>\n"
+"        <td> "
+"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>"
+"\n"
 "    </tr>\n"
 "</table>\n"
 
@@ -14735,15 +14736,15 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" は有効な Spice 定数ではありません"
 
 #: eeschema/symbol_async_loader.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
 msgstr ""
-"シンボル ライブラリー %s のロード エラー。\n"
+"シンボル ライブラリー %s をロード中にエラー。\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -16523,9 +16524,8 @@ msgid "Bus has no members"
 msgstr "バスはメンバーを持っていません"
 
 #: eeschema/tools/symbol_editor_control.cpp:159
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "保存するシンボルが選択されていません"
+msgstr "シンボル ライブラリーが選択されていません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:382
 #: eeschema/tools/symbol_editor_control.cpp:422
@@ -17412,9 +17412,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "アパーチャ タイプ \"%s\" をハイライト表示"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "%s をハイライト"
+msgstr "Dコード D%d をハイライト"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -29462,9 +29462,9 @@ msgid "Add %s (footprint \"%s\")."
 msgstr "%s を追加 (フットプリント \"%s\")"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint \"%s\")."
-msgstr "%s を追加 (フットプリント \"%s\")"
+msgstr "%s (フットプリント \"%s\")を追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:205
 #, c-format
@@ -29478,14 +29478,14 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "%s をアップデートできません。(フットプリント \"%s\" が見つかりません)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "フットプリント %s を '%s' から '%s' に変更"
+msgstr "フットプリント %s を '%s' から '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "フットプリント %s を '%s' から '%s' に変更"
+msgstr "フットプリント %s を '%s' から '%s' に変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:266
 #, c-format
@@ -29628,9 +29628,9 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "導体ゾーン '%s' はパッドへの接続がありません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "導体ゾーン (ネット %s) はパッドへの接続がありません。"
+msgstr "レイヤー %s 上の( %s, %s) の導体ゾーンにパッドが接続されていません。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -32169,14 +32169,12 @@ msgid "Copper Layer Count: "
 msgstr "導体レイヤー数: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "寸法線を描画"
+msgstr "基板全体の寸法: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "最小グリッド間隔:"
+msgstr "最小配線幅/間隔: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
 msgid "Copper Finish: "
@@ -32193,7 +32191,7 @@ msgstr "基板厚: "
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
 #, fuzzy
 msgid "Min hole diameter: "
-msgstr "クリアランス穴の直径:"
+msgstr "最小穴径: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
 msgid "Impedance Control: "
