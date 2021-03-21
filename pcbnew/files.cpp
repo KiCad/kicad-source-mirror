@@ -641,8 +641,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // standalone and opening a board that has been moved from its project folder.
         // For converted projects, we don't want to set the read-only flag because we want a project
         // to be saved for the new file in case things like netclasses got migrated.
-        if( !pro.Exists() && !converted )
-            Prj().SetReadOnly();
+        Prj().SetReadOnly( !pro.Exists() && !converted );
     }
 
     // Clear the cache footprint list which may be project specific
@@ -724,6 +723,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {
+            Prj().SetReadOnly( false );
+
             Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
 
             // Before we had a copper edge clearance setting, the edge line widths could be used
