@@ -404,6 +404,7 @@ set( SWIG_FLAGS
     -I${CMAKE_CURRENT_SOURCE_DIR}
     -I${CMAKE_SOURCE_DIR}/include
     -I${CMAKE_SOURCE_DIR}/scripting
+    -I${CMAKE_SOURCE_DIR}/pcbnew/python/scripting
     -I${CMAKE_SOURCE_DIR}/common/swig
     -I${CMAKE_SOURCE_DIR}/libs/kimath/include
     )
@@ -479,7 +480,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i
 
     COMMAND ${SWIG_EXECUTABLE}
-        ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx swig/pcbnew.i
+        ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx ${CMAKE_SOURCE_DIR}/pcbnew/python/swig/pcbnew.i
 
     COMMAND ${PYTHON_EXECUTABLE}
         ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py

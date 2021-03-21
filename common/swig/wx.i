@@ -270,55 +270,27 @@ public:
 // wxString typemaps
 
 %typemap(in) wxString {
-    wxString* sptr = newWxStringFromPy($input);
-    if (sptr == NULL) SWIG_fail;
-    $1 = *sptr;
-    delete sptr;
+    $1 = Py2wxString($input);
 }
 
 
 %typemap(out) wxString
 {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
-%#else
-    $result = PyString_FromStringAndSize($1.c_str(), $1.Len());
-%#endif
+    $result = PyUnicode_FromString($1.utf8_str());
 }
 
 
 %typemap(varout) wxString
 {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
-%#else
-    $result = PyString_FromStringAndSize($1.c_str(), $1.Len());
-%#endif
-}
-
-
-%typemap(in) wxString& (bool temp=false)
-{
-    $1 = newWxStringFromPy($input);
-    if ($1 == NULL) SWIG_fail;
-    temp = true;
+    $result = PyUnicode_FromString($1.utf8_str());
 }
 
 
 %typemap(out) wxString&
 {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
-%#else
-    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
-%#endif
+    $result = PyUnicode_FromString($1->utf8_str());
 }
 
-%typemap(freearg) wxString&
-{
-    if (temp$argnum)
-        delete $1;
-}
 
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxString& {
     $1 = PyString_Check($input) || PyUnicode_Check($input);
@@ -341,11 +313,10 @@ public:
     for (int i=0; i<last; i++)
     {
         PyObject* pyStr = PySequence_GetItem($input, i);
-        wxString* wxS = newWxStringFromPy(pyStr);
+        wxString wxS = Py2wxString(pyStr);
         if (PyErr_Occurred())
             SWIG_fail;
-        $1->Add(*wxS);
-        delete wxS;
+        $1->Add(wxS);
         Py_DECREF(pyStr);
     }
 }
