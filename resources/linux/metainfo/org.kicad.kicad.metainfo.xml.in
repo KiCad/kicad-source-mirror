@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
+<!-- Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors. -->
+<component type="desktop">
+    <id>org.kicad.kicad</id>
+    <name>KiCad</name>
+
+    <launchable type="desktop-id">org.kicad.kicad.desktop</launchable>
+
+    <project_license>GPL-3.0-or-later</project_license>
+    <metadata_license>CC-BY-SA-4.0</metadata_license>
+
+    <summary>An EDA suite for schematic and circuit board design</summary>
+
+    <provides>
+        <binary>kicad</binary>
+        <binary>eeschema</binary>
+        <binary>pcbnew</binary>
+        <binary>gerbview</binary>
+        <binary>pl_editor</binary>
+        <binary>bitmap2component</binary>
+        <binary>pcb_calculator</binary>
+        <mediatype>application/x-gerber</mediatype>
+        <mediatype>application/x-excellon</mediatype>
+        <mediatype>application/x-kicad-project</mediatype>
+        <mediatype>application/x-kicad-schematic</mediatype>
+        <mediatype>application/x-kicad-pcb</mediatype>
+    </provides>
+
+    <translation type="gettext">kicad</translation>
+
+    <keywords>
+        <keyword>KiCad</keyword>
+        <keyword>EDA</keyword>
+        <keyword>PCB</keyword>
+        <keyword>Schema</keyword>
+        <keyword>PcbNew</keyword>
+        <keyword>Eeschema</keyword>
+        <keyword>Gerber</keyword>
+    </keywords>
+
+    <categories>
+        <category>Electronics</category>
+        <category>Engineering</category>
+        <category>Science</category>
+        <category>Electricity</category>
+    </categories>
+
+    <description>
+        <p>
+        KiCad is a free and open-source electronics design automation (EDA) suite. It features schematic capture, integrated circuit simulation, printed circuit board (PCB) layout, 3D rendering, and plotting/data export to numerous formats. KiCad also includes a high-quality component library featuring thousands of symbols, footprints, and 3D models. KiCad has minimal system requirements and runs on Linux, Windows, and macOS.
+        </p>
+    </description>
+
+    <screenshots>
+        <screenshot type="default">
+            <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/kicad_6.png</image>
+        </screenshot>
+
+        <screenshot>
+            <caption>KiCad Schematic Editor</caption>
+            <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/eeschema_6.png</image>
+        </screenshot>
+
+        <screenshot>
+            <caption>KiCad PCB Layout Editor</caption>
+            <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/pcbnew_6.png</image>
+        </screenshot>
+
+        <screenshot>
+            <caption>KiCad 3D Viewer</caption>
+            <image width="1280" height="791">https://kicad.org/img/screenshots/appstream/3dviewer_6.png</image>
+        </screenshot>
+    </screenshots>
+
+    <url type="homepage">https://kicad.org/</url>
+    <url type="bugtracker">https://kicad.org/help/report-an-issue/</url>
+    <url type="help">https://docs.kicad.org/</url>
+    <url type="donation">https://go.kicad.org/donate</url>
+    <url type="translate">https://hosted.weblate.org/projects/kicad/</url>
+
+    <update_contact>kicad-developers@lists.launchpad.net</update_contact>
+    <developer_name>The KiCad Developers</developer_name>
+
+    <!-- This is actually a valid tag, but the utilities don't think so -->
+    <content_rating type="oars-1.1" />
+
+    <releases>
+        <release version="@KICAD_VERSION_FULL@" date="@KICAD_CONFIG_TIMESTAMP@" />
+    </releases>
+</component>

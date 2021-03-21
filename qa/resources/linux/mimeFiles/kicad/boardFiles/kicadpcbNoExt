@@ -1,0 +1,10 @@
+(kicad_pcb (version 20210228) (generator pcbnew)
+
+  (general
+    (thickness 1.6)
+  )
+
+  (paper "A4")
+  (title_block
+    (title "SERIAL PIC PROGRAMMER")
+  )

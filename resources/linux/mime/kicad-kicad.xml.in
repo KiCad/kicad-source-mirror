@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-	<mime-type type="application/x-kicad-project">
-		<sub-class-of type="text/plain"/>
-		<comment>KiCad Project</comment>
-		<glob pattern="*.pro"/>
-		<glob pattern="*.kicad_pro"/>
-	</mime-type>
-	<mime-type type="application/x-kicad-schematic">
-		<sub-class-of type="text/plain"/>
-		<comment>KiCad Schematic</comment>
-		<glob pattern="*.sch"/>
-		<glob pattern="*.kicad_sch"/>
-	</mime-type>
-	<mime-type type="application/x-kicad-pcb">
-		<sub-class-of type="text/plain"/>
-		<comment>KiCad Printed Circuit Board</comment>
-		<glob pattern="*.kicad_pcb"/>
-	</mime-type>
+    <mime-type type="application/x-kicad-project">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Project</comment>
+        <glob pattern="*.pro"/>
+        <glob pattern="*.kicad_pro"/>
+    </mime-type>
+    <mime-type type="application/x-kicad-schematic">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Schematic</comment>
+        <glob pattern="*.sch"/>
+        <glob pattern="*.kicad_sch"/>
+        <magic priority="100">
+            <!--The new schematic file (.kicad_sch) header-->
+            <match type="string" offset="0" value="(kicad_sch"/>
+            <!--The old schematic file (.sch) header-->
+            <match type="string" offset="0" value="EESchema Schematic File"/>
+        </magic>
+    </mime-type>
+    <mime-type type="application/x-kicad-pcb">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Printed Circuit Board</comment>
+        <glob pattern="*.kicad_pcb"/>
+        <magic priority="100">
+            <!--The new board file (.kicad_pcb) header-->
+            <match type="string" offset="0" value="(kicad_pcb"/>
+            <!--The old board file (.brd) header-->
+            <match type="string" offset="0" value="PCBNEW-BOARD"/>
+        </magic>
+    </mime-type>
 </mime-info>

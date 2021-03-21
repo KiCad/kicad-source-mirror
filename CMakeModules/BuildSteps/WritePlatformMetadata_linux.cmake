@@ -22,7 +22,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-# This file will configure the linux appdata.xml file to include the version
+# This file will configure the linux metainfo.xml file to include the version
 # and build date.
 
 # It requires the following variables to be defined before its call:
@@ -38,12 +38,12 @@ include( ${CMAKE_MODULE_PATH}/KiCadFullVersion.cmake )
 # Create the date of the configure
 string( TIMESTAMP KICAD_CONFIG_TIMESTAMP "%Y-%m-%d" )
 
-# Configure the KiCad appdata file
-configure_file( ${SRC_PATH}/resources/linux/appdata/kicad.appdata.xml.in
-                ${BUILD_PATH}/resources/linux/appdata/kicad.appdata.xml.in
+# Configure the KiCad metainfo file
+configure_file( ${SRC_PATH}/resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in
+                ${BUILD_PATH}/resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in
                 @ONLY )
 
 # Ensure the file was configured successfully
-if( NOT EXISTS ${BUILD_PATH}/resources/linux/appdata/kicad.appdata.xml.in )
-    message( FATAL_ERROR "Configuration failed to write file kicad.appdata.xml.in" )
+if( NOT EXISTS ${BUILD_PATH}/resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in )
+    message( FATAL_ERROR "Configuration failed to write file org.kicad.kicad.metainfo.xml.in" )
 endif()

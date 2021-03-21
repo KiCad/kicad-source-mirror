@@ -40,3 +40,4 @@ include:
   - local: '/.gitlab/Ubuntu-20.04-CI.yml'
   - local: '/.gitlab/Windows-CI.yml'
   - local: '/.gitlab/coverity.yml'
+  - local: '/.gitlab/linux-metadata-validate.yml'

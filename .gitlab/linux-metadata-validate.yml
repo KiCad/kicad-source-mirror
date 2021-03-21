@@ -1,0 +1,43 @@
+##########################################################################
+# Run a validation of the metadata files for Linux
+##########################################################################
+validate_linux_metadata:
+  stage: test
+  needs: []
+  interruptible: false
+  # This is the only CI image with the utilities needed for this test
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:33
+  only:
+    refs:
+      - master
+      - branches
+      - merge_requests
+      - pushes
+    changes:
+      # Only run if the resources, its tests, or the translations are updated
+      - resources/linux/**/*
+      - qa/resources/linux/**/*
+      - translation/**/*
+  except:
+    - schedules
+  # Only build the metadata files in this CI job
+  script:
+    - mkdir -p build/linux
+    - cd build/linux
+    - cmake
+      -DCMAKE_BUILD_TYPE=Debug
+      -DKICAD_STDLIB_LIGHT_DEBUG=ON
+      -DKICAD_SCRIPTING=ON
+      -DKICAD_SCRIPTING_MODULES=ON
+      -DKICAD_SCRIPTING_PYTHON3=ON
+      -DKICAD_SCRIPTING_WXPYTHON=ON
+      -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON
+      -DKICAD_SCRIPTING_ACTION_MENU=ON
+      -DKICAD_USE_OCE=OFF
+      -DKICAD_USE_OCC=ON
+      -DKICAD_SPICE=ON
+      -DKICAD_BUILD_I18N=ON
+      ../../
+    - make metadata
+    - cd ../../
+    - ./qa/resources/linux/verifyMetadataFiles.sh ./ ./build/linux

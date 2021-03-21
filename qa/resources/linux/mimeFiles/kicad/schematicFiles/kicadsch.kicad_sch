@@ -1,0 +1,10 @@
+(kicad_sch (version 20210126) (generator eeschema)
+
+  (paper "A4")
+
+  (title_block
+    (title "JDM - COM84 PIC Programmer with 13V DC/DC converter")
+    (date "Sun 22 Mar 2015")
+    (rev "3")
+    (company "KiCad")
+  )

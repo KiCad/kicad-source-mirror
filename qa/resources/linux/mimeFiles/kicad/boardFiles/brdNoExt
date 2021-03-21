@@ -1,0 +1,19 @@
+PCBNEW-BOARD Version 2 date Sun 22 Dec 2013 07:55:02 PM CST
+
+# Created by Pcbnew(2013-june-11)-stable
+
+$GENERAL
+encoding utf-8
+Units mm
+LayerCount 2
+EnabledLayers 1FFF8001
+Links 102
+NoConn 0
+Di 68.381879 43.454319 158.927801 139.715241
+Ndraw 169
+Ntrack 481
+Nzone 0
+BoardThickness 1.6002
+Nmodule 45
+Nnets 46
+$EndGENERAL

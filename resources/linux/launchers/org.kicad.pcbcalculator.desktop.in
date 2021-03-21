@@ -5,6 +5,6 @@ Icon=pcbcalculator
 Type=Application
 Categories=Science;Electronics;
 Exec=pcb_calculator
-Name=PCB Calculator
+Name=KiCad PCB Calculator
 GenericName=PCB Calculator
 Comment=Calculator for various electronics-related computations
