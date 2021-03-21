@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-21 06:36-0700\n"
-"PO-Revision-Date: 2021-03-21 13:35+0000\n"
+"PO-Revision-Date: 2021-03-23 00:14+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10388,23 +10388,23 @@ msgstr "Źródło 1 oraz Źródło 2 muszą być różne"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "Nie skonfigurowano żadnej prawidłowej symulacji."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"Prawidłową symulację można skonfigurować, wybierając kartę symulacji, "
+"ustawiając parametry symulacji i klikając przycisk OK przy wybranej karcie."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:292
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "Wyjście z symulacji"
+msgstr "Wyjście bez prawidłowej symulacji"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:293
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "Zamknij symulację"
+msgstr "Skonfiguruj prawidłową symulację"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:597
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
@@ -27899,9 +27899,9 @@ msgid "netclass '%s'"
 msgstr "klasa sieci '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "klasa sieci '%s'"
+msgstr "klasa sieci '%s' (para różnicowa)"
 
 #: pcbnew/drc/drc_engine.cpp:415
 msgid "keepout area"
