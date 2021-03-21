@@ -25,9 +25,6 @@
 
 #include <vector>
 
-#include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
-
 #include "pns_line.h"
 #include "pns_via.h"
 #include "pns_link_holder.h"

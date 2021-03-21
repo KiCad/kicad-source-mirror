@@ -22,15 +22,6 @@
 #include "pns_logger.h"
 #include "pns_item.h"
 #include "pns_via.h"
-#include "pns_line.h"
-#include "pns_segment.h"
-#include "pns_solid.h"
-
-#include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
-#include <geometry/shape_rect.h>
-#include <geometry/shape_circle.h>
-#include <geometry/shape_simple.h>
 
 namespace PNS {
 

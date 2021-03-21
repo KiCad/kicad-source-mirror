@@ -35,9 +35,8 @@
 #include <geometry/shape_circle.h>
 
 #include <gal/color4d.h>
-#include <gal/graphics_abstraction_layer.h>
 
-#include <layers_id_colors_and_visibility.h>
+#include <eda_item.h>
 
 namespace PNS {
 

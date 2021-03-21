@@ -32,10 +32,6 @@
 #include <geometry/convex_hull.h>
 #include <confirm.h>
 
-#include <view/view.h>
-#include <view/view_item.h>
-#include <view/view_group.h>
-
 #include <pcb_painter.h>
 
 #include <geometry/shape.h>
@@ -49,8 +45,6 @@
 #include <memory>
 
 #include <advanced_config.h>
-
-#include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
 
@@ -1007,10 +1001,9 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
         KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
                                                  aZone->GetSelectMenuText( units ) ),
                       KIDIALOG::KD_WARNING );
-        dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the track "
-                                                   "layout tool.\n"
-                                                   "Please verify it is not a "
-                                                   "self-intersecting polygon." ) ) );
+        dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the router.\n"
+                                                   "Please verify it is not a self-intersecting "
+                                                   "polygon." ) ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
         dlg.ShowModal();
 

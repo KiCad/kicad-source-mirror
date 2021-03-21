@@ -23,18 +23,12 @@
 #define __PNS_ROUTER_H
 
 #include <list>
-
 #include <memory>
 #include <core/optional.h>
-
-#include <layers_id_colors_and_visibility.h>
-#include <geometry/shape_line_chain.h>
 #include <math/box2.h>
 
 #include "pns_routing_settings.h"
 #include "pns_sizes_settings.h"
-#include "pns_item.h"
-#include "pns_itemset.h"
 #include "pns_node.h"
 
 namespace KIGFX

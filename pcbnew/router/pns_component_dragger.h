@@ -24,10 +24,6 @@
 #include <math/vector2d.h>
 
 #include "pns_drag_algo.h"
-#include "pns_itemset.h"
-#include "pns_line.h"
-#include "pns_node.h"
-#include "pns_via.h"
 
 namespace PNS
 {

@@ -24,7 +24,6 @@
 #include <math/vector2d.h>
 
 #include <geometry/direction45.h>
-#include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
 namespace PNS {

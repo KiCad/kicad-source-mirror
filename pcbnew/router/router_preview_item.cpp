@@ -21,11 +21,9 @@
 
 #include <deque>
 #include <gal/color4d.h>
-#include <view/view.h>
 
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
-#include "track.h"
 #include <pcb_painter.h>
 
 #include "router_preview_item.h"

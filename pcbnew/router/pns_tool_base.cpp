@@ -23,24 +23,15 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <id.h>
-#include <view/view.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 
 #include <tools/pcb_grid_helper.h>
-#include <tools/pcb_actions.h>
-#include <tool/tool_manager.h>
 
-#include "pns_arc.h"
 #include "pns_kicad_iface.h"
 #include "pns_tool_base.h"
-#include "pns_segment.h"
+#include "pns_arc.h"
 #include "pns_solid.h"
-#include "pns_via.h"
-#include "pns_router.h"
-#include "pns_meander_placer.h" // fixme: move settings to separate header
-#include "pns_topology.h"
 
 
 using namespace KIGFX;

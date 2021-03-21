@@ -19,21 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <core/optional.h>
-
 #include "class_draw_panel_gal.h"
-#include "board.h"
-
-#include <pcb_edit_frame.h>
-#include <pcbnew_id.h>
-#include <view/view_controls.h>
-#include <pcb_painter.h>
-#include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
-#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include "pns_segment.h"
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
 #include "pns_tune_status_popup.h"

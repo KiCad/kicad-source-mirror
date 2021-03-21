@@ -24,7 +24,6 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape_arc.h>
-#include <geometry/shape_segment.h>
 #include <geometry/shape_line_chain.h>
 
 #include "pns_line.h"

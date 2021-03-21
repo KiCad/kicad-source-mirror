@@ -26,12 +26,8 @@
 #include <vector>
 #include <list>
 #include <unordered_set>
-#include <unordered_map>
-
-#include <core/optional.h>
 #include <core/minoptmax.h>
 
-#include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_index.h>
 

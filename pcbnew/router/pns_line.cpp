@@ -28,7 +28,6 @@
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_utils.h"
-#include "pns_router.h"
 
 #include <geometry/shape_rect.h>
 

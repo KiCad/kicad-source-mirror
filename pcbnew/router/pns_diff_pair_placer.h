@@ -25,9 +25,6 @@
 
 #include <math/vector2d.h>
 
-#include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
-
 #include "pns_sizes_settings.h"
 #include "pns_node.h"
 #include "pns_via.h"

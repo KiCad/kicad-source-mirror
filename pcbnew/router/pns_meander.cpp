@@ -23,7 +23,6 @@
 
 #include "pns_node.h"
 #include "pns_itemset.h"
-#include "pns_topology.h"
 #include "pns_meander.h"
 #include "pns_meander_placer_base.h"
 #include "pns_router.h"

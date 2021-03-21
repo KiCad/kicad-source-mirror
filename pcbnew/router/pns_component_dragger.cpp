@@ -22,7 +22,6 @@
 
 #include "pns_line.h"
 #include "pns_solid.h"
-#include "pns_via.h"
 #include "pns_router.h"
 
 #include "pns_component_dragger.h"
