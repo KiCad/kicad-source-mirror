@@ -46,7 +46,7 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 
-static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
+static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcceleration )
 {
 #ifdef __WXMAC__
     // On Apple pointer devices, wheel events occur frequently and with
@@ -57,7 +57,10 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
     // GTK3 is similar, but the scale constant is smaller
     return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::GTK3_SCALE );
 #else
-    return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>();
+    if( aAcceleration )
+        return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>();
+    else
+        return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::MSW_SCALE );
 #endif
 }
 
@@ -164,8 +167,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
 
     if( cfg->m_Input.zoom_speed_auto )
     {
-        // TODO(JE) this ignores the acceleration option
-        m_zoomController = GetZoomControllerForPlatform();
+        m_zoomController = GetZoomControllerForPlatform( cfg->m_Input.zoom_acceleration );
     }
     else
     {

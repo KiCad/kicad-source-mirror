@@ -152,6 +152,9 @@ public:
     ///< A suitable (magic) scale factor for Mac systems.
     static constexpr double MAC_SCALE = 0.01;
 
+    /// A suitable (magic) scale factor for Windows systems.
+    static constexpr double MSW_SCALE = 0.005;
+
     ///< Multiplier for manual scale ssetting.
     static constexpr double MANUAL_SCALE_FACTOR = 0.001;
 

@@ -113,14 +113,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.horizontal_pan",
             &m_Input.horizontal_pan, false ) );
 
-#if defined(__WXMAC__) || defined(__WXGTK3__)
-    bool default_zoom_acceleration = false;
-#else
-    bool default_zoom_acceleration = true;
-#endif
-
     m_params.emplace_back( new PARAM<bool>( "input.zoom_acceleration",
-            &m_Input.zoom_acceleration, default_zoom_acceleration ) );
+            &m_Input.zoom_acceleration, false ) );
 
 #ifdef __WXMAC__
     int default_zoom_speed = 5;
