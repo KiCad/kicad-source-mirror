@@ -1886,9 +1886,20 @@ void SCH_COMPONENT::ClearBrightenedPins()
 
 bool SCH_COMPONENT::IsPointClickableAnchor( const wxPoint& aPos ) const
 {
-    for( auto& pin : m_pins )
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        int pin_unit = pin->GetLibPin()->GetUnit();
+        int pin_convert = pin->GetLibPin()->GetConvert();
+
+        if( pin_unit > 0 && pin_unit != GetUnit() )
+            continue;
+
+        if( pin_convert > 0 && pin_convert != GetConvert() )
+            continue;
+
         if( pin->IsPointClickableAnchor( aPos ) )
             return true;
+    }
 
     return false;
 }
