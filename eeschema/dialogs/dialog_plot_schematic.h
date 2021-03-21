@@ -1,13 +1,10 @@
-/** @file dialog_plot_schematic.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +24,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file dialog_plot_schematic.h
+ */
+
+#ifndef __DIALOG_PLOT_SCHEMATIC__
+#define __DIALOG_PLOT_SCHEMATIC__
+
 #include <plotter.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
@@ -34,7 +38,8 @@
 #include <reporter.h>
 #include <widgets/unit_binder.h>
 
-enum PageFormatReq {
+enum PageFormatReq
+{
     PAGE_SIZE_AUTO,
     PAGE_SIZE_A4,
     PAGE_SIZE_A
@@ -52,23 +57,14 @@ class PDF_PLOTTER;
 
 class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 {
-private:
-    SCH_EDIT_FRAME* m_parent;
-    bool            m_configChanged; // true if a project config param has changed
-    PLOT_FORMAT     m_plotFormat;
-    static int      m_pageSizeSelect;       // Static to keep last option for some format
-    static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
-    double          m_HPGLPenSize;          // for HPGL format only: pen size
-
-    UNIT_BINDER     m_defaultLineWidth;
-    UNIT_BINDER     m_penWidth;
-
 public:
     // / Constructors
     DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent );
 
-    bool PrjConfigChanged() { return m_configChanged; } // return true if the prj config was modified
-                                                        // and therefore should be saved
+    /**
+     * Return true if the project configutation was modified.
+     */
+    bool PrjConfigChanged() { return m_configChanged; }
 
 private:
     void OnPageSizeSelected( wxCommandEvent& event ) override;
@@ -76,7 +72,7 @@ private:
     void OnPlotAll( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void    initDlg();
+    void initDlg();
 
     // common
     void getPlotOptions( RENDER_SETTINGS* aSettings );
@@ -139,40 +135,64 @@ private:
         switch( aOriginAndUnits )
         {
         case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-        default:                                           m_plotOriginOpt->SetSelection( 0 ); break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:   m_plotOriginOpt->SetSelection( 1 ); break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:    m_plotOriginOpt->SetSelection( 2 ); break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT: m_plotOriginOpt->SetSelection( 3 ); break;
+        default:
+            m_plotOriginOpt->SetSelection( 0 );
+            break;
+
+        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
+            m_plotOriginOpt->SetSelection( 1 );
+            break;
+
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
+            m_plotOriginOpt->SetSelection( 2 );
+            break;
+
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
+            m_plotOriginOpt->SetSelection( 3 );
+            break;
         }
     }
 
-    void    createHPGLFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
-    void    SetHPGLPenWidth();
-    bool    Plot_1_Page_HPGL( const wxString& aFileName, SCH_SCREEN* aScreen,
-                              const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef,
-                              HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
+    void createHPGLFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
+    void SetHPGLPenWidth();
+    bool Plot_1_Page_HPGL( const wxString& aFileName, SCH_SCREEN* aScreen,
+                           const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
+                           wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef,
+                           HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
 
     // PS
-    void    createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
-    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
-                            RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
-                            wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
+    void createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    bool plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
+                         RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
+                         wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // SVG
-    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
-    bool    plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
-                             RENDER_SETTINGS* aRenderSettings, bool aPlotBlackAndWhite,
-                             bool aPlotFrameRef );
+    void createSVGFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    bool plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
+                          RENDER_SETTINGS* aRenderSettings, bool aPlotBlackAndWhite,
+                          bool aPlotFrameRef );
 
     /**
-     * Create a file name with an absolute path name
-     * @param aPlotFileName the name for the file to plot without a path
-     * @param aExtension the extension for the file to plot
-     * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
-     * @return the created file name
-     * @throw IO_ERROR on file I/O errors
+     * Create a file name with an absolute path name.
+     *
+     * @param aPlotFileName the name for the file to plot without a path.
+     * @param aExtension the extension for the file to plot.
+     * @param aReporter a point to a REPORTER object use to show messages (can be NULL).
+     * @return the created file name.
+     * @throw IO_ERROR on file I/O errors.
      */
     wxFileName createPlotFileName( const wxString& aPlotFileName, const wxString& aExtension,
                                    REPORTER* aReporter = NULL );
+
+    SCH_EDIT_FRAME* m_parent;
+    bool            m_configChanged;        // true if a project config param has changed
+    PLOT_FORMAT     m_plotFormat;
+    static int      m_pageSizeSelect;       // Static to keep last option for some format
+    static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
+    double          m_HPGLPenSize;          // for HPGL format only: pen size
+
+    UNIT_BINDER     m_defaultLineWidth;
+    UNIT_BINDER     m_penWidth;
 };
+
+#endif    // __DIALOG_PLOT_SCHEMATIC__

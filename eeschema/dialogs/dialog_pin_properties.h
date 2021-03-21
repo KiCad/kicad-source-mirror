@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHOR.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,9 +51,26 @@ enum COL_ORDER
 class ALT_PIN_DATA_MODEL;
 
 
-/** Implementing DIALOG_LIB_EDIT_PIN_BASE */
 class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
+public:
+    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin );
+    ~DIALOG_PIN_PROPERTIES() override;
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
+    void OnPaintShowPanel( wxPaintEvent& event ) override;
+    void OnPropertiesChange( wxCommandEvent& event ) override;
+    void OnAddAlternate( wxCommandEvent& event ) override;
+    void OnDeleteAlternate( wxCommandEvent& event ) override;
+    void OnSize( wxSizeEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+protected:
+    void adjustGridColumns( int aWidth );
+
+private:
     SYMBOL_EDIT_FRAME*  m_frame;
     LIB_PIN*            m_pin;
     LIB_PIN*            m_dummyPin;       // a working copy used to show changes
@@ -74,24 +91,6 @@ class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
     int                 m_originalColWidths[ COL_COUNT ];
     int                 m_width;
     bool                m_initialized;
-
-public:
-    /** Constructor */
-    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin );
-    ~DIALOG_PIN_PROPERTIES() override;
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnPaintShowPanel( wxPaintEvent& event ) override;
-    void OnPropertiesChange( wxCommandEvent& event ) override;
-    void OnAddAlternate( wxCommandEvent& event ) override;
-    void OnDeleteAlternate( wxCommandEvent& event ) override;
-    void OnSize( wxSizeEvent& event ) override;
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
-
-protected:
-    void adjustGridColumns( int aWidth );
 };
 
 #endif // __dialog_lib_edit_pin__

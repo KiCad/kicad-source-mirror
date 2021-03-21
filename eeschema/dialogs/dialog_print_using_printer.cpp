@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,9 +64,6 @@ private:
  */
 class SCH_PRINTOUT : public wxPrintout
 {
-private:
-    SCH_EDIT_FRAME* m_parent;
-
 public:
     SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
@@ -80,6 +77,9 @@ public:
     bool OnBeginDocument( int startPage, int endPage ) override;
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
     void PrintPage( SCH_SCREEN* aScreen );
+
+private:
+    SCH_EDIT_FRAME* m_parent;
 };
 
 
@@ -254,8 +254,6 @@ void DIALOG_PRINT_USING_PRINTER::SavePrintOptions()
 }
 
 
-/* Open a dialog box for printer setup (printer options, page size ...)
- */
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 {
     wxPageSetupDialog pageSetupDialog( this, &m_parent->GetPageSetupData() );
@@ -265,8 +263,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 }
 
 
-/* Open and display a previewer frame for printing
- */
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
     SavePrintOptions();
@@ -486,7 +482,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( cfg->m_Printing.use_theme && theme )
         renderSettings.LoadColors( theme );
 
-    // The drawing-sheet-item print code is shared between PCBNew and EESchema, so it's easier
+    // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
     // if they just use the PCB layer.
     renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
                                   renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );

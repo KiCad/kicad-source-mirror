@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,13 +39,10 @@ class SCINTILLA_TRICKS;
 
 
 /**
- * DIALOG_EDIT_ONE_FIELD
- * is a base class to edit schematic and component library fields.
- * <p>
- * This class is setup in expectation of its children
- * possibly using Kiway player so ShowQuasiModal is required when calling
- * any subclasses.
- *</p>
+ * A base class to edit schematic and component library fields.
+ *
+ * This class is setup in expectation of its children possibly using Kiway player so
+ * #DIALOG_SHIM::ShowQuasiModal is required when calling any subclasses.
  */
 class DIALOG_EDIT_ONE_FIELD : public DIALOG_LIB_EDIT_TEXT_BASE
 {
@@ -68,8 +65,7 @@ protected:
     void updateText( EDA_TEXT* aText );
 
     /**
-     * Function OnTextValueSelectButtonClick
-     * Handles the select button next to the text value field. The current assumption
+     * Handle the select button next to the text value field. The current assumption
      * is that this event will only be enabled for footprint type fields. In the future
      * this function may need to be moved to the subclasses to access m_field and check for
      * the field type if more select actions are desired.
@@ -81,7 +77,6 @@ protected:
     /**
      * Used to select the variant part of some text fields (for instance, the question mark
      * or number in a reference).
-     * @param event
      */
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
@@ -108,11 +103,9 @@ protected:
 
 
 /**
- * DIALOG_LIB_EDIT_ONE_FIELD
- * is a the class to handle editing a single component field in the library editor.
- * <p>
+ * Handle editing a single component field in the library editor.
+ *
  * @note Use ShowQuasiModal when calling this class!
- * </p>
  */
 class DIALOG_LIB_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
 {
@@ -136,11 +129,9 @@ public:
 
 
 /**
- * DIALOG_SCH_EDIT_ONE_FIELD
- * is a the class to handle editing a single component field in the schematic editor.
- * <p>
+ * Handle editing a single component field in the schematic editor.
+ *
  * @note Use ShowQuasiModal when calling this class!
- * </p>
  */
 class DIALOG_SCH_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
 {

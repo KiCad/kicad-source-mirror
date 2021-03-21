@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,6 +28,13 @@ class SYMBOL_EDIT_FRAME;
 
 class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 {
+public:
+    PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
+
+private:
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
     SYMBOL_EDIT_FRAME* m_frame;
 
     UNIT_BINDER        m_lineWidth;
@@ -39,13 +46,6 @@ class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
 
     UNIT_BINDER        m_hPitch;
     UNIT_BINDER        m_vPitch;
-
-public:
-    PANEL_SYM_EDITING_OPTIONS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
-
-private:
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
 };
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,31 +28,11 @@
 #include <backannotate.h>
 #include <dialog_update_from_pcb_base.h>
 
-// Forward declarations
 class SCH_EDIT_FRAME;
 class SCH_EDITOR_CONTROL;
 
 class DIALOG_UPDATE_FROM_PCB : public DIALOG_UPDATE_FROM_PCB_BASE
 {
-    /**
-     * Struct containing the dialog last saved state
-     */
-    struct DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-    {
-        // Flags to remember last checkboxes state
-        bool MatchByReference;
-        bool UpdateReferences;
-        bool UpdateFootprints;
-        bool UpdateValues;
-        bool UpdateNetNames;
-    };
-
-    static DIALOG_UPDATE_FROM_PCB_SAVED_STATE s_savedDialogState;
-
-private:
-    SCH_EDIT_FRAME*     m_frame;
-    SCH_EDITOR_CONTROL* m_editorControl;
-
 public:
     DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent );
     ~DIALOG_UPDATE_FROM_PCB();
@@ -63,6 +43,24 @@ private:
     bool TransferDataToWindow() override;
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
+
+    /**
+     * Container for the dialog last saved state.
+     */
+    struct DIALOG_UPDATE_FROM_PCB_SAVED_STATE
+    {
+        // Flags to remember last checkboxes state.
+        bool MatchByReference;
+        bool UpdateReferences;
+        bool UpdateFootprints;
+        bool UpdateValues;
+        bool UpdateNetNames;
+    };
+
+    static DIALOG_UPDATE_FROM_PCB_SAVED_STATE s_savedDialogState;
+
+    SCH_EDIT_FRAME*     m_frame;
+    SCH_EDITOR_CONTROL* m_editorControl;
 };
 
 #endif

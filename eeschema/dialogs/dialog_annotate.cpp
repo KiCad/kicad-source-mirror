@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 jean-pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,7 @@
 
 
 /**
- * DIALOG_ANNOTATE: a dialog to set/clear reference designators,
- * of a schematic hierarchy, with different options
+ * A dialog to set/clear reference designators of a schematic with different options.
  */
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
@@ -47,9 +46,7 @@ public:
     ~DIALOG_ANNOTATE();
 
 private:
-    SCH_EDIT_FRAME* m_Parent;
-
-    /// Initialises member variables
+    /// Initialize member variables.
     void InitValues();
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnClearAnnotationClick( wxCommandEvent& event ) override;
@@ -63,14 +60,12 @@ private:
     bool GetLockUnits();
 
     /**
-     * Function GetSortOrder
      * @return 0 if annotation by X position,
      *         1 if annotation by Y position,
      */
     int GetSortOrder();
 
     /**
-     * Function GetAnnotateAlgo
      * @return 0 if annotation using first free Id value
      *         1 for first free Id value inside sheet num * 100 to sheet num * 100 + 99
      *         2 for first free Id value inside sheet num * 1000 to sheet num * 1000 + 999
@@ -78,6 +73,8 @@ private:
     int GetAnnotateAlgo();
 
     int GetStartNumber();
+
+    SCH_EDIT_FRAME* m_Parent;
 };
 
 

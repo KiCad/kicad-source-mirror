@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,13 +44,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    SCH_EDIT_FRAME*                m_parent;
-    int                            m_showColWidth;
-    int                            m_groupByColWidth;
-
-    SCH_REFERENCE_LIST             m_symbolsList;
-    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
-
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
                    bool defaultSortBy );
     void LoadFieldNames();
@@ -69,6 +62,13 @@ private:
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
+
+    SCH_EDIT_FRAME*                m_parent;
+    int                            m_showColWidth;
+    int                            m_groupByColWidth;
+
+    SCH_REFERENCE_LIST             m_symbolsList;
+    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 };
 
 #endif /* DIALOG_FIELDS_EDITOR_GLOBAL_H */

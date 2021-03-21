@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,36 +37,7 @@ class WX_GRID;
 
 class DIALOG_LIB_SYMBOL_PROPERTIES: public DIALOG_LIB_SYMBOL_PROPERTIES_BASE
 {
-    static int m_lastOpenedPage;    // To remember the last notebook selection
-
-    enum LAST_LAYOUT {
-        NONE,
-        ALIAS,
-        PARENT
-    };
-
-    static LAST_LAYOUT m_lastLayout;
-
 public:
-    SYMBOL_EDIT_FRAME* m_Parent;
-    LIB_PART*          m_libEntry;
-
-    FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
-
-    UNIT_BINDER        m_pinNameOffset;
-
-    wxControl*         m_delayedFocusCtrl;
-    WX_GRID*           m_delayedFocusGrid;
-    int                m_delayedFocusRow;
-    int                m_delayedFocusColumn;
-    int                m_delayedFocusPage;
-    wxString           m_delayedErrorMessage;
-
-    wxString           m_shownColumns;
-    int                m_width;
-
-public:
-    /// Constructors
     DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PART* aLibEntry );
     ~DIALOG_LIB_SYMBOL_PROPERTIES();
 
@@ -97,6 +68,35 @@ private:
 
     void adjustGridColumns( int aWidth );
     void syncControlStates( bool aIsAlias );
+
+public:
+    SYMBOL_EDIT_FRAME* m_Parent;
+    LIB_PART*          m_libEntry;
+
+    FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
+
+    UNIT_BINDER        m_pinNameOffset;
+
+    wxControl*         m_delayedFocusCtrl;
+    WX_GRID*           m_delayedFocusGrid;
+    int                m_delayedFocusRow;
+    int                m_delayedFocusColumn;
+    int                m_delayedFocusPage;
+    wxString           m_delayedErrorMessage;
+
+    wxString           m_shownColumns;
+    int                m_width;
+
+private:
+    static int m_lastOpenedPage;    // To remember the last notebook selection
+
+    enum LAST_LAYOUT {
+        NONE,
+        ALIAS,
+        PARENT
+    };
+
+    static LAST_LAYOUT m_lastLayout;
 };
 
 #endif // DIALOG_LIB_SYMBOL_PROPERTIES_H

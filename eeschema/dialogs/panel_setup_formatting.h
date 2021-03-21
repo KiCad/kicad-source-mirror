@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,13 +30,6 @@ class GAL_OPTIONS_PANEL;
 
 class PANEL_SETUP_FORMATTING : public PANEL_SETUP_FORMATTING_BASE
 {
-    SCH_EDIT_FRAME*    m_frame;
-
-    UNIT_BINDER        m_textSize;
-    UNIT_BINDER        m_lineWidth;
-
-    UNIT_BINDER        m_pinSymbolSize;
-
 public:
     PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame  );
 
@@ -47,6 +40,14 @@ public:
 
 protected:
     void onCheckBoxIref( wxCommandEvent& event ) override;
+
+private:
+    SCH_EDIT_FRAME*    m_frame;
+
+    UNIT_BINDER        m_textSize;
+    UNIT_BINDER        m_lineWidth;
+
+    UNIT_BINDER        m_pinSymbolSize;
 };
 
 

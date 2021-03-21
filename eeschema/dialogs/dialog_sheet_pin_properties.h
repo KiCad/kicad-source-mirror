@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,13 +36,6 @@ class HTML_MESSAGE_BOX;
 
 class DIALOG_SHEET_PIN_PROPERTIES : public DIALOG_SHEET_PIN_PROPERTIES_BASE
 {
-    SCH_EDIT_FRAME*   m_frame;
-    SCH_SHEET_PIN*    m_sheetPin;
-
-    UNIT_BINDER       m_textSize;
-
-    HTML_MESSAGE_BOX* m_helpWindow;
-
 public:
     DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin );
     ~DIALOG_SHEET_PIN_PROPERTIES();
@@ -54,6 +47,13 @@ private:
 	void onOKButton( wxCommandEvent& event ) override;
     void OnSyntaxHelp( wxHyperlinkEvent& event ) override;
     void onComboBox( wxCommandEvent& event ) override;
+
+    SCH_EDIT_FRAME*   m_frame;
+    SCH_SHEET_PIN*    m_sheetPin;
+
+    UNIT_BINDER       m_textSize;
+
+    HTML_MESSAGE_BOX* m_helpWindow;
 };
 
 #endif // DIALOG_SHEET_PIN_PROPERTIES_H

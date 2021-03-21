@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,40 +28,32 @@ class SCH_EDIT_FRAME;
 
 class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES : public PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 {
-protected:
-    SCH_EDIT_FRAME*     m_frame;
-    TEMPLATE_FIELDNAMES m_fields;
-    bool                m_global;   // Editing global (vs. project) fieldname templates
-
-    int                 m_checkboxColWidth;
-
-    /**
-     * Function OnAddButtonClick
-     * Process the wxWidgets @a event produced when the user presses the Add buton for the
-     * template fieldnames control
-     *
-     * @param event The wxWidgets produced event information
-     *
-     * Adds a new template fieldname (with default values) to the template fieldnames data
-     */
-    void OnAddButtonClick( wxCommandEvent& event ) override;
-
-    /**
-     * Function OnDeleteButtonClick
-     * Process the wxWidgets @a event produced when the user presses the Delete button for the
-     * template fieldnames control
-     *
-     * @param event The wxWidgets produced event information
-     *
-     * Deletes the selected template fieldname from the template fieldnames data
-     */
-    void OnDeleteButtonClick( wxCommandEvent& event ) override;
-
 public:
     PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow, bool aGlobal );
     ~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES() override;
 
     void ImportSettingsFrom( TEMPLATES* templateMgr );
+
+protected:
+    /**
+     * Adds a new template fieldname (with default values) to the template fieldnames data.
+     *
+     * Process the wxWidgets @a event produced when the user presses the Add buton for the
+     * template fieldnames control.
+     *
+     * @param event The wxWidgets produced event information
+     */
+    void OnAddButtonClick( wxCommandEvent& event ) override;
+
+    /**
+     * Deletes the selected template fieldname from the template fieldnames data.
+     *
+     * Process the wxWidgets @a event produced when the user presses the Delete button for the
+     * template fieldnames control.
+     *
+     * @param event The wxWidgets produced event information
+     */
+    void OnDeleteButtonClick( wxCommandEvent& event ) override;
 
 private:
     void AdjustGridColumns( int aWidth );
@@ -73,6 +65,13 @@ private:
 
     bool TransferDataToGrid();
     bool TransferDataFromGrid();
+
+protected:
+    SCH_EDIT_FRAME*     m_frame;
+    TEMPLATE_FIELDNAMES m_fields;
+    bool                m_global;   // Editing global (vs. project) fieldname templates
+
+    int                 m_checkboxColWidth;
 };
 
 

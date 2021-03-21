@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -48,13 +49,16 @@ public:
     void OnRemoveSignal( wxCommandEvent& aEvent );
 
 protected:
-
     void OnInitDialog( wxInitDialogEvent& aEvent );
-
     void OnSelectBus( wxListEvent& event );
-
     void OnSelectSignal( wxListEvent& event );
 
+private:
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnCancelClick( wxCommandEvent& aEvent );
+    wxString getAliasDisplayText( std::shared_ptr< BUS_ALIAS > aAlias );
+
+protected:
     SCH_EDIT_FRAME* m_parent;
 
     wxListView* m_bus_list_view;
@@ -71,16 +75,8 @@ protected:
     wxButton* m_btn_remove_signal;
 
 private:
-    virtual void OnOkClick( wxCommandEvent& aEvent );
-
-    virtual void OnCancelClick( wxCommandEvent& aEvent );
-
-    wxString getAliasDisplayText( std::shared_ptr< BUS_ALIAS > aAlias );
-
     std::vector< std::shared_ptr< BUS_ALIAS > > m_aliases;
-
     std::unordered_set<SCH_SCREEN*> m_screens;
-
     std::shared_ptr< BUS_ALIAS > m_active_alias;
 
     DECLARE_EVENT_TABLE()

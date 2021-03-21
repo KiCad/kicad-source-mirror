@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,14 +37,6 @@ class SCHEMATIC;
 
 class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
 {
-    DECLARE_EVENT_TABLE()
-
-private:
-    SCH_EDIT_FRAME*   m_parent;
-    SCHEMATIC*        m_schematic;
-    wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-    bool              m_initialized;
-
 public:
     PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* aParent );
 
@@ -56,9 +48,14 @@ private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, PIN_ERROR aState );
+
+    DECLARE_EVENT_TABLE()
+
+    SCH_EDIT_FRAME*   m_parent;
+    SCHEMATIC*        m_schematic;
+    wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+    bool              m_initialized;
 };
 
 
-#endif
-
-// _PANEL_SETUP_PINMAP_H_
+#endif    // _PANEL_SETUP_PINMAP_H_

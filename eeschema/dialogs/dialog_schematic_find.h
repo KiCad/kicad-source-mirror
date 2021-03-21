@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2010-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,17 @@ class SCH_EDITOR_CONTROL;
 
 class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 {
+public:
+    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
+                     const wxPoint& aPosition = wxDefaultPosition,
+                     const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
+
+    void SetFindEntries( const wxArrayString& aEntries );
+    wxArrayString GetFindEntries() const;
+
+    void SetReplaceEntries( const wxArrayString& aEntries );
+    wxArrayString GetReplaceEntries() const { return m_comboReplace->GetStrings(); }
+
 protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent ) override;
@@ -70,17 +81,6 @@ protected:
     bool                m_findDirty;
 
     DECLARE_NO_COPY_CLASS( DIALOG_SCH_FIND )
-
-public:
-    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
-                     const wxPoint& aPosition = wxDefaultPosition,
-                     const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
-
-    void SetFindEntries( const wxArrayString& aEntries );
-    wxArrayString GetFindEntries() const;
-
-    void SetReplaceEntries( const wxArrayString& aEntries );
-    wxArrayString GetReplaceEntries() const { return m_comboReplace->GetStrings(); }
 };
 
 

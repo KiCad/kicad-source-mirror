@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,12 +39,12 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
+    void resetDefaults( wxCommandEvent& event ) override;
+
     SCH_EDIT_FRAME*           m_frame;
     std::deque<SCH_JUNCTION*> m_junctions;
 
     UNIT_BINDER               m_diameter;
-
-    void resetDefaults( wxCommandEvent& event ) override;
 };
 
 #endif // __dialog_junction_props__

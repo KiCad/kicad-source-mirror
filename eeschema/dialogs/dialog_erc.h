@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,21 +33,9 @@
 #include <widgets/progress_reporter.h>
 #include <erc_settings.h>
 
-// DIALOG_ERC class declaration
 
 class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER
 {
-private:
-    SCH_EDIT_FRAME*    m_parent;
-
-    RC_ITEMS_PROVIDER* m_markerProvider;
-    RC_TREE_MODEL*     m_markerTreeModel;
-
-    bool               m_running;
-    bool               m_ercRun;
-
-    int                m_severities;
-
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
     ~DIALOG_ERC();
@@ -85,6 +73,17 @@ private:
 
     void syncCheckboxes();
     void updateDisplayedCounts();
+
+private:
+    SCH_EDIT_FRAME*    m_parent;
+
+    RC_ITEMS_PROVIDER* m_markerProvider;
+    RC_TREE_MODEL*     m_markerTreeModel;
+
+    bool               m_running;
+    bool               m_ercRun;
+
+    int                m_severities;
 };
 
 

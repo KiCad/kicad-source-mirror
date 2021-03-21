@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,16 +29,15 @@ class GAL_OPTIONS_PANEL;
 
 class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE
 {
-    SCH_EDIT_FRAME*    m_frame;
-
-    GAL_OPTIONS_PANEL* m_galOptsPanel;
-
 public:
     PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    SCH_EDIT_FRAME*    m_frame;
+    GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
 

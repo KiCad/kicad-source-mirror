@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,13 +94,13 @@ public:
      * @param aTitle    Dialog title.
      * @param aAdapter  SYMBOL_TREE_MODEL_ADAPTER::PTR. See CMP_TREE_MODEL_ADAPTER
      *                  for documentation.
-     * @param aDeMorganConvert  preferred deMorgan conversion
+     * @param aDeMorganConvert  preferred deMorgan conversion.
      *                          (TODO: should happen in dialog)
      * @param aAllowFieldEdits  if false, all functions that allow the user to edit fields
      *                          (currently just footprint selection) will not be available.
      * @param aShowFootprints   if false, all footprint preview and selection features are
      *                          disabled. This forces aAllowFieldEdits false too.
-     * @param aAllowBrowser     show a Select with Browser button
+     * @param aAllowBrowser     show a Select with Browser button.
      */
     DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                           wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
@@ -126,8 +126,9 @@ public:
      * To be called after this dialog returns from ShowModal()
      *
      * In the case of multi-unit symbols, this preferences asks to iterate through
-     * all units of the symbol, one per click
-     * @return The value of the dialog preference checkbox
+     * all units of the symbol, one per click.
+     *
+     * @return The value of the dialog preference checkbox.
      */
     bool GetUseAllUnits() const { return m_useUnits->GetValue(); }
 
@@ -135,32 +136,30 @@ public:
      * To be called after this dialog returns from ShowModal()
      *
      * Keeps a new copy of the symbol on the mouse cursor, allowing the user to rapidly
-     * place multiple copies of the same symbol on their schematic
+     * place multiple copies of the same symbol on their schematic.
      *
-     * @return The value of the keep symbol preference checkbox
+     * @return The value of the keep symbol preference checkbox.
      */
     bool GetKeepSymbol() const { return m_keepSymbol->GetValue(); }
 
     /**
      * Get a list of fields edited by the user.
-     * @return vector of pairs; each.first = field ID, each.second = new value
+     *
+     * @return vector of pairs; each.first = field ID, each.second = new value.
      */
     std::vector<std::pair<int, wxString>> GetFields() const
     {
         return m_field_edits;
     }
 
-    /** Function IsExternalBrowserSelected
-     *
-     * @return true, iff the user pressed the thumbnail view of the component to
-     *               launch the component browser.
+    /**
+     * @return true if the user pressed the thumbnail view of the component to
+     *         launch the component browser.
      */
     bool IsExternalBrowserSelected() const
     {
         return m_external_browser_requested;
     }
-
-    static std::mutex g_Mutex;
 
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
@@ -196,10 +195,14 @@ protected:
     /**
      * Populate the footprint selector for a given alias.
      *
-     * @param aLibId the #LIB_ID of the selection or invalid to clear
+     * @param aLibId the #LIB_ID of the selection or invalid to clear.
      */
     void PopulateFootprintSelector( LIB_ID const& aLibId );
 
+public:
+    static std::mutex g_Mutex;
+
+protected:
     wxTimer*                  m_dbl_click_timer;
     SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
     wxButton*                 m_browser_button;

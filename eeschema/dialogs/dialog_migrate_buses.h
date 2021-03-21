@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -51,10 +52,6 @@ public:
 
 private:
 
-    SCH_EDIT_FRAME* m_frame;
-
-    unsigned m_selected_index;
-
     void loadGraphData();
 
     void updateUi();
@@ -64,6 +61,11 @@ private:
     void onItemSelected( wxListEvent& aEvent );
 
     void onAcceptClicked( wxCommandEvent& aEvent );
+
+
+    SCH_EDIT_FRAME* m_frame;
+
+    unsigned m_selected_index;
 
     std::vector<BUS_MIGRATION_STATUS> m_items;
 };

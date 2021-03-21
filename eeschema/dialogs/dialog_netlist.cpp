@@ -68,7 +68,26 @@ enum panel_netlist_index {
 /* wxPanels for creating the NoteBook pages for each netlist format: */
 class NETLIST_PAGE_DIALOG : public wxPanel
 {
+
 public:
+    /**
+     * Create a setup page for one netlist format.
+     *
+     * Used in Netlist format dialog box creation.
+     *
+     * @param parent is the wxNotebook parent.
+     * @param title is the title of the notebook page.
+     * @param id_NetType is the netlist ID type.
+     */
+    NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
+                         NETLIST_TYPE_ID id_NetType );
+    ~NETLIST_PAGE_DIALOG() { };
+
+    /**
+     * @return the name of the netlist format for this page.
+     */
+    const wxString GetPageNetFmtName() { return m_pageNetFmtName; }
+
     NETLIST_TYPE_ID   m_IdNetType;
     // opt to reformat passive component values (e.g. 1M -> 1Meg):
     wxCheckBox*       m_AdjustPassiveValues;
@@ -81,43 +100,19 @@ public:
 
 private:
     wxString          m_pageNetFmtName;
-
-public:
-    /** Constructor to create a setup page for one netlist format.
-     * Used in Netlist format Dialog box creation
-     * @param parent = wxNotebook * parent
-     * @param title = title (name) of the notebook page
-     * @param id_NetType = netlist type id
-     */
-    NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
-                         NETLIST_TYPE_ID id_NetType );
-    ~NETLIST_PAGE_DIALOG() { };
-
-    /**
-     * function GetPageNetFmtName
-     * @return the name of the netlist format for this page
-     * This is also the page label.
-     */
-    const wxString GetPageNetFmtName() { return m_pageNetFmtName; }
 };
 
 
 /* Dialog frame for creating netlists */
 class NETLIST_DIALOG : public NETLIST_DIALOG_BASE
 {
-    friend class NETLIST_PAGE_DIALOG;
-
 public:
-    SCH_EDIT_FRAME*      m_Parent;
-    wxString             m_DefaultNetFmtName;
-    NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
-
-public:
-    // Constructor and destructor
     NETLIST_DIALOG( SCH_EDIT_FRAME* parent );
     ~NETLIST_DIALOG() { };
 
 private:
+    friend class NETLIST_PAGE_DIALOG;
+
     void InstallCustomPages();
     NETLIST_PAGE_DIALOG* AddOneCustomPage( const wxString & aTitle,
                                            const wxString & aCommandString,
@@ -130,54 +125,52 @@ private:
     void OnNetlistTypeSelection( wxNotebookEvent& event ) override;
 
     /**
-     * Function OnAddGenerator
-     * Add a new panel for a new netlist plugin
+     * Add a new panel for a new netlist plugin.
      */
     void OnAddGenerator( wxCommandEvent& event ) override;
 
     /**
-     * Function OnDelGenerator
-     * Remove a panel relative to a netlist plugin
+     * Remove a panel relative to a netlist plugin.
      */
     void OnDelGenerator( wxCommandEvent& event ) override;
 
     /**
-     * Run the external spice simulator command
+     * Run the external spice simulator command.
      */
     void OnRunExternSpiceCommand( wxCommandEvent& event );
 
     /**
-     * Enable (if the command line is not empty or disable the button to run spice command
+     * Enable (if the command line is not empty or disable the button to run spice command.
      */
     void OnRunSpiceButtUI( wxUpdateUIEvent& event );
 
     /**
-     * Function WriteCurrentNetlistSetup
-     * Write the current netlist options setup in the configuration
+     * Write the current netlist options setup in the configuration.
      */
     void WriteCurrentNetlistSetup();
 
     /**
-     * Function FilenamePrms
-     * returns the filename extension and the wildcard string for this curr
-     * or a void name if there is no default name
-     * @param aType = the netlist type ( NET_TYPE_PCBNEW ... )
-     * @param aExt = a reference to a wxString to return the default  file ext.
-     * @param aWildCard =  reference to a wxString to return the default wildcard.
-     * @return true for known netlist type, false for custom formats
+     * Return the filename extension and the wildcard string for this page or a void name
+     * if there is no default name.
+     *
+     * @param aType is the netlist type ( NET_TYPE_PCBNEW ... ).
+     * @param aExt [in] is a holder for the netlist file extension.
+     * @param aWildCard [in] is a holder for netlist file dialog wildcard.
+     * @return true for known netlist type, false for custom formats.
      */
-    bool FilenamePrms( NETLIST_TYPE_ID aType,
-                       wxString * aExt, wxString * aWildCard );
+    bool FilenamePrms( NETLIST_TYPE_ID aType,  wxString* aExt, wxString* aWildCard );
 
     DECLARE_EVENT_TABLE()
+
+public:
+    SCH_EDIT_FRAME*      m_Parent;
+    wxString             m_DefaultNetFmtName;
+    NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 };
 
 
 class NETLIST_DIALOG_ADD_GENERATOR : public NETLIST_DIALOG_ADD_GENERATOR_BASE
 {
-private:
-   NETLIST_DIALOG* m_Parent;
-
 public:
     NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* parent );
 
@@ -186,7 +179,6 @@ public:
 
 private:
     /**
-     * Function OnOKClick
      * Validate info relative to a new netlist plugin
      */
     void OnOKClick( wxCommandEvent& event ) override;
@@ -195,6 +187,8 @@ private:
      * Browse plugin files, and set m_CommandStringCtrl field
      */
     void OnBrowseGenerators( wxCommandEvent& event ) override;
+
+   NETLIST_DIALOG* m_Parent;
 };
 
 
@@ -725,7 +719,7 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 
     int ret = dlg.ShowModal();
 
-    // Update the default netlist and store it in prj config if it was explicitely changed.
+    // Update the default netlist and store it in prj config if it was explicitly changed.
     settings.m_NetFormatName = dlg.m_DefaultNetFmtName; // can have temporary changed
 
     if( curr_default_netformat != dlg.m_DefaultNetFmtName )

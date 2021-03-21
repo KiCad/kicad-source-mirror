@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -31,8 +31,6 @@ class SYMBOL_EDIT_FRAME;
 
 class PANEL_SYM_COLOR_SETTINGS : public PANEL_SYM_COLOR_SETTINGS_BASE
 {
-    SYMBOL_EDIT_FRAME* m_frame;
-
 public:
     PANEL_SYM_COLOR_SETTINGS( SYMBOL_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
@@ -43,6 +41,8 @@ private:
     bool TransferDataToWindow() override;
 
     bool TransferDataFromWindow() override;
+
+    SYMBOL_EDIT_FRAME* m_frame;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,6 @@ class SCH_EDIT_FRAME;
 
 class DIALOG_SCH_IMPORT_SETTINGS : public DIALOG_SCH_IMPORT_SETTINGS_BASE
 {
-protected:
-    SCH_EDIT_FRAME*  m_frame;
-    static wxString  m_filePath;
-
 public:
     DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_EDIT_FRAME* aFrame );
 
@@ -47,6 +43,10 @@ public:
     bool TransferDataFromWindow() override;
 
     wxString GetFilePath() { return m_filePath; }
+
+protected:
+    SCH_EDIT_FRAME*  m_frame;
+    static wxString  m_filePath;
 };
 
 #endif //KICAD_DIALOG_SCH_IMPORT_SETTINGS_H

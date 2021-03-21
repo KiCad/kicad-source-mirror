@@ -62,66 +62,54 @@ public:
 private:
     // HELPER ROUTINES UNCHANGED FROM wxWidgets IMPLEMENTATION
 
-    wxArrayString GetTextLines( wxGrid& grid,
-                                wxDC& dc,
-                                const wxGridCellAttr& attr,
-                                const wxRect& rect,
-                                int row, int col);
+    wxArrayString GetTextLines( wxGrid& grid, wxDC& dc, const wxGridCellAttr& attr,
+                                const wxRect& rect, int row, int col );
 
     // Helper methods of GetTextLines()
 
     // Break a single logical line of text into several physical lines, all of
     // which are added to the lines array. The lines are broken at maxWidth and
     // the dc is used for measuring text extent only.
-    void BreakLine(wxDC& dc,
-                   const wxString& logicalLine,
-                   wxCoord maxWidth,
-                   wxArrayString& lines);
+    void BreakLine( wxDC& dc, const wxString& logicalLine, wxCoord maxWidth, wxArrayString& lines );
 
     // Break a word, which is supposed to be wider than maxWidth, into several
     // lines, which are added to lines array and the last, incomplete, of which
     // is returned in line output parameter.
     //
     // Returns the width of the last line.
-    wxCoord BreakWord(wxDC& dc,
-                      const wxString& word,
-                      wxCoord maxWidth,
-                      wxArrayString& lines,
-                      wxString& line);
+    wxCoord BreakWord( wxDC& dc, const wxString& word, wxCoord maxWidth, wxArrayString& lines,
+                       wxString& line );
 };
 
 
 // PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
-wxArrayString
-GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines(wxGrid& grid,
-                                               wxDC& dc,
-                                               const wxGridCellAttr& attr,
-                                               const wxRect& rect,
-                                               int row, int col)
+wxArrayString GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines( wxGrid& grid, wxDC& dc,
+                                                              const wxGridCellAttr& attr,
+                                                              const wxRect& rect, int row, int col )
 {
     dc.SetFont( attr.GetFont() );
     const wxCoord maxWidth = rect.GetWidth();
 
     // Transform logical lines into physical ones, wrapping the longer ones.
-    const wxArrayString
-            logicalLines = wxSplit(grid.GetCellValue(row, col), '\n', '\0');
+    const wxArrayString logicalLines = wxSplit( grid.GetCellValue( row, col ), '\n', '\0' );
 
     // Trying to do anything if the column is hidden anyhow doesn't make sense
     // and we run into problems in BreakLine() in this case.
-    if ( maxWidth <= 0 )
+    if( maxWidth <= 0 )
         return logicalLines;
 
     wxArrayString physicalLines;
-    for ( const wxString& line : logicalLines )
+
+    for( const wxString& line : logicalLines )
     {
-        if ( dc.GetTextExtent(line).x > maxWidth )
+        if( dc.GetTextExtent( line ).x > maxWidth )
         {
             // Line does not fit, break it up.
-            BreakLine(dc, line, maxWidth, physicalLines);
+            BreakLine( dc, line, maxWidth, physicalLines );
         }
         else // The entire line fits as is
         {
-            physicalLines.push_back(line);
+            physicalLines.push_back( line );
         }
     }
 
@@ -130,22 +118,21 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines(wxGrid& grid,
 
 
 // PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
-void
-GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakLine(wxDC& dc,
-                                            const wxString& logicalLine,
-                                            wxCoord maxWidth,
-                                            wxArrayString& lines)
+void GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakLine( wxDC& dc, const wxString& logicalLine,
+                                                  wxCoord maxWidth, wxArrayString& lines )
 {
-    wxCoord lineWidth = 0;
+    wxCoord  lineWidth = 0;
     wxString line;
 
     // For each word
-    wxStringTokenizer wordTokenizer(logicalLine, wxS(" \t"), wxTOKEN_RET_DELIMS);
-    while ( wordTokenizer.HasMoreTokens() )
+    wxStringTokenizer wordTokenizer( logicalLine, wxS( " \t" ), wxTOKEN_RET_DELIMS );
+
+    while( wordTokenizer.HasMoreTokens() )
     {
         const wxString word = wordTokenizer.GetNextToken();
-        const wxCoord wordWidth = dc.GetTextExtent(word).x;
-        if ( lineWidth + wordWidth < maxWidth )
+        const wxCoord  wordWidth = dc.GetTextExtent( word ).x;
+
+        if( lineWidth + wordWidth < maxWidth )
         {
             // Word fits, just add it to this line.
             line += word;
@@ -155,55 +142,53 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakLine(wxDC& dc,
         {
             // Word does not fit, check whether the word is itself wider that
             // available width
-            if ( wordWidth < maxWidth )
+            if( wordWidth < maxWidth )
             {
                 // Word can fit in a new line, put it at the beginning
                 // of the new line.
-                lines.push_back(line);
+                lines.push_back( line );
                 line = word;
                 lineWidth = wordWidth;
             }
             else // Word cannot fit in available width at all.
             {
-                if ( !line.empty() )
+                if( !line.empty() )
                 {
-                    lines.push_back(line);
+                    lines.push_back( line );
                     line.clear();
                     lineWidth = 0;
                 }
 
                 // Break it up in several lines.
-                lineWidth = BreakWord(dc, word, maxWidth, lines, line);
+                lineWidth = BreakWord( dc, word, maxWidth, lines, line );
             }
         }
     }
 
-    if ( !line.empty() )
-        lines.push_back(line);
+    if( !line.empty() )
+        lines.push_back( line );
 }
 
 
 // PRIVATE METHOD UNCHANGED FROM wxWidgets IMPLEMENTATION
-wxCoord
-GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
-                                            const wxString& word,
-                                            wxCoord maxWidth,
-                                            wxArrayString& lines,
-                                            wxString& line)
+wxCoord GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord( wxDC& dc, const wxString& word,
+                                                     wxCoord maxWidth, wxArrayString& lines,
+                                                     wxString& line )
 {
     wxArrayInt widths;
-    dc.GetPartialTextExtents(word, widths);
+    dc.GetPartialTextExtents( word, widths );
 
     // TODO: Use binary search to find the first element > maxWidth.
     const unsigned count = widths.size();
-    unsigned n;
-    for ( n = 0; n < count; n++ )
+    unsigned       n;
+
+    for( n = 0; n < count; n++ )
     {
-        if ( widths[n] > maxWidth )
+        if( widths[n] > maxWidth )
             break;
     }
 
-    if ( n == 0 )
+    if( n == 0 )
     {
         // This is a degenerate case: the first character of the word is
         // already wider than the available space, so we just can't show it
@@ -211,7 +196,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
         n = 1;
     }
 
-    lines.push_back( word.substr(0, n) );
+    lines.push_back( word.substr( 0, n ) );
 
     // Check if the remainder of the string fits in one line.
     //
@@ -219,10 +204,10 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
     // extent of the remainder may be different when it's rendered in a
     // separate line instead of as part of the same one, so we have to
     // recompute it.
-    const wxString rest = word.substr(n);
-    const wxCoord restWidth = dc.GetTextExtent(rest).x;
+    const wxString rest = word.substr( n );
+    const wxCoord  restWidth = dc.GetTextExtent( rest ).x;
 
-    if ( restWidth <= maxWidth )
+    if( restWidth <= maxWidth )
     {
         line = rest;
         return restWidth;
@@ -232,7 +217,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
     //
     // TODO: Perhaps avoid recursion? The code is simpler like this but using a
     // loop in this function would probably be more efficient.
-    return BreakWord(dc, rest, maxWidth, lines, line);
+    return BreakWord( dc, rest, maxWidth, lines, line );
 }
 
 
@@ -255,17 +240,12 @@ int GRIDCELL_AUTOWRAP_STRINGRENDERER::GetHeight( wxDC& aDC, wxGrid* aGrid, int a
 }
 
 
-// a helper class to handle components to edit
+/**
+ * A helper to handle symbols to edit.
+ */
 class CMP_CANDIDATE
 {
 public:
-    SCH_COMPONENT* m_Component; // the schematic component
-    int         m_Row;          // the row index in m_grid
-    SCH_SCREEN* m_Screen;       // the screen where m_Component lives
-    wxString    m_Reference;    // the schematic reference, only to display it in list
-    wxString    m_InitialLibId; // the Lib Id of the component before any change
-    bool        m_IsOrphan;     // true if a component has no corresponding symbol found in libs
-
     CMP_CANDIDATE( SCH_COMPONENT* aComponent )
     {
         m_Component = aComponent;
@@ -275,17 +255,24 @@ public:
         m_Screen = nullptr;
     }
 
-    // Returns a string like mylib:symbol_name from the LIB_ID of the component
+    // Return a string like mylib:symbol_name from the #LIB_ID of the component.
     wxString GetStringLibId()
     {
         return m_Component->GetLibId().GetUniStringLibId();
     }
 
-    // Returns a string containing the reference of the component
+    // Return a string containing the reference of the component.
     wxString GetSchematicReference()
     {
         return m_Reference;
     }
+
+    SCH_COMPONENT* m_Component; // the schematic component
+    int         m_Row;          // the row index in m_grid
+    SCH_SCREEN* m_Screen;       // the screen where m_Component lives
+    wxString    m_Reference;    // the schematic reference, only to display it in list
+    wxString    m_InitialLibId; // the Lib Id of the component before any change
+    bool        m_IsOrphan;     // true if a component has no corresponding symbol found in libs
 };
 
 
@@ -293,8 +280,8 @@ public:
  * Dialog to globally edit the #LIB_ID of groups if components having the same initial LIB_ID.
  *
  * This is useful when you want to:
- *  * to move a symbol from a symbol library to another symbol library
- *    to change the nickname of a library
+ *  * move a symbol from a symbol library to another symbol library.
+ *  * change the nickname of a library.
  *  * globally replace the symbol used by a group of components by another symbol.
  */
 class DIALOG_EDIT_COMPONENTS_LIBID : public DIALOG_EDIT_COMPONENTS_LIBID_BASE
@@ -308,33 +295,29 @@ public:
     bool IsSchematicModified() { return m_isModified; }
 
 private:
-    bool             m_isModified;          // set to true if the schematic is modified
-    std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
-
-    std::vector<CMP_CANDIDATE> m_components;
-
-    GRIDCELL_AUTOWRAP_STRINGRENDERER* m_autoWrapRenderer;
-
     void initDlg();
 
     /**
      * Add a new row (new entry) in m_grid.
-     * @param aMarkRow = true to use bold/italic font in column COL_CURR_LIBID
-     * @param aReferences is the value of cell( aRowId, COL_REFS)
-     * @param aStrLibId is the value of cell( aRowId, COL_CURR_LIBID)
+     *
+     * @param aMarkRow set to true to use bold/italic font in column COL_CURR_LIBID.
+     * @param aReferences is the value of cell( aRowId, COL_REFS).
+     * @param aStrLibId is the value of cell( aRowId, COL_CURR_LIBID).
      */
     void AddRowToGrid( bool aMarkRow, const wxString& aReferences, const wxString& aStrLibId );
 
     /// returns true if all new lib id are valid
     bool validateLibIds();
 
-    /** run the lib browser and set the selected LIB_ID for row aRow
-     * @param aRow is the row to edit
-     * @return false if the command was aborted
+    /**
+     * Run the lib browser and set the selected #LIB_ID for \a aRow.
+     *
+     * @param aRow is the row to edit.
+     * @return false if the command was aborted.
      */
     bool setLibIdByBrowser( int aRow );
 
-    // Events handlers
+    // Event handlers
 
     // called on a right click or a left double click:
 	void onCellBrowseLib( wxGridEvent& event ) override;
@@ -358,6 +341,13 @@ private:
     void AdjustGridColumns( int aWidth );
 
     void OnSizeGrid( wxSizeEvent& event ) override;
+
+    bool             m_isModified;          // set to true if the schematic is modified
+    std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
+
+    std::vector<CMP_CANDIDATE> m_components;
+
+    GRIDCELL_AUTOWRAP_STRINGRENDERER* m_autoWrapRenderer;
 };
 
 
@@ -406,10 +396,11 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     // the list is larger and looks like it contains all components
     const SCH_SHEET_LIST& sheets = GetParent()->Schematic().GetSheets();
     SCH_REFERENCE_LIST references;
+
     // build the full list of components including component having no symbol in loaded libs
     // (orphan components)
-    sheets.GetSymbols( references, /* include power symbols */true,
-                       /* include orphan components */true );
+    sheets.GetSymbols( references, /* include power symbols */ true,
+                       /* include orphan components */ true );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
@@ -587,8 +578,9 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
         LIB_ID curr_libid;
         curr_libid.Parse( orphanLibid, true );
         wxString symbName = curr_libid.GetLibItemName();
+
         // number of full LIB_ID candidates (because we search for a symbol name
-        // inside all avaiable libraries, perhaps the same symbol name can be found
+        // inside all available libraries, perhaps the same symbol name can be found
         // in more than one library, giving ambiguity
         int libIdCandidateCount = 0;
         candidateSymbNames.Clear();
@@ -781,6 +773,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
     aWidth -= colWidth;
 
     colWidth = 0;
+
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         wxString cellValue = m_grid->GetCellValue( row, COL_CURR_LIBID );
@@ -792,6 +785,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
     aWidth -= colWidth;
 
     colWidth = 0;
+
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         wxString cellValue = m_grid->GetCellValue( row, COL_NEW_LIBID );

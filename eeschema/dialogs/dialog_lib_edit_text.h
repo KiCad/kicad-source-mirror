@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2001 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,6 @@ class LIB_TEXT;
 
 class DIALOG_LIB_EDIT_TEXT : public DIALOG_LIB_EDIT_TEXT_BASE
 {
-private:
-    SYMBOL_EDIT_FRAME* m_parent;
-    LIB_TEXT*          m_graphicText;
-
-    UNIT_BINDER        m_posX;
-    UNIT_BINDER        m_posY;
-    UNIT_BINDER        m_textSize;
-
 public:
     DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
     ~DIALOG_LIB_EDIT_TEXT() override {};
@@ -52,6 +44,13 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    SYMBOL_EDIT_FRAME* m_parent;
+    LIB_TEXT*          m_graphicText;
+
+    UNIT_BINDER        m_posX;
+    UNIT_BINDER        m_posY;
+    UNIT_BINDER        m_textSize;
 };
 
 
