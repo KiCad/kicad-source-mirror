@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,23 +30,10 @@
 
 
 /**
- * NETLIST_EXPORTER_CADSTAR
- * generates a netlist compatible with CADSTAR
+ * Generate a netlist compatible with CADSTAR.
  */
 class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER_BASE
 {
-    /**
-     * Function writeListOfNetsCADSTAR
-     * writes a net list (ranked by Netcode), and pins connected to it.
-     * <p>
-     * Format:
-     *   - ADD_TER RR2 6 \"$42\"
-     *   - B U1 100
-     *   - 6 CA
-     * </p>
-     */
-    bool writeListOfNets( FILE* f );
-
 public:
     NETLIST_EXPORTER_CADSTAR( SCHEMATIC* aSchematic ) :
             NETLIST_EXPORTER_BASE( aSchematic )
@@ -54,10 +41,20 @@ public:
     }
 
     /**
-     * Function WriteList
-     * writes to specified output file
+     * Write to specified output file.
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
+
+private:
+    /**
+     * Write a net list (ranked by Netcode), and pins connected to it.
+     *
+     * Format:
+     *   - ADD_TER RR2 6 \"$42\"
+     *   - B U1 100
+     *   - 6 CA
+     */
+    bool writeListOfNets( FILE* f );
 };
 
 #endif

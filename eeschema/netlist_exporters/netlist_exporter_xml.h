@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,12 +61,6 @@ enum GNL_T
  */
 class NETLIST_EXPORTER_XML : public NETLIST_EXPORTER_BASE
 {
-private:
-    std::set<wxString>  m_libraries;         // Set of library nicknames.
-
-protected:
-    bool                m_resolveTextVars;   // Export textVar references resolved
-
 public:
     NETLIST_EXPORTER_XML( SCHEMATIC* aSchematic ) :
             NETLIST_EXPORTER_BASE( aSchematic ),
@@ -100,42 +94,47 @@ protected:
      * Build the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
-     * @param aCtl - a bitset or-ed together from GNL_ENUM values
-     * @return XNODE* - the root nodes
+     * @param aCtl a bitset or-ed together from GNL_ENUM values
+     * @return the root nodes
      */
     XNODE* makeRoot( unsigned aCtl = GNL_ALL );
 
     /**
-     * @return XNODE* - returns a sub-tree holding all the schematic components.
+     * @return a sub-tree holding all the schematic components.
      */
     XNODE* makeSymbols( unsigned aCtl );
 
     /**
-     * Fills out a project "design" header into an XML node.
-     * @return XNODE* - the design header
+     * Fill out a project "design" header into an XML node.
+     * @return the design header
      */
     XNODE* makeDesignHeader();
 
     /**
      * Fill out an XML node with the unique library parts and returns it.
-     * @return XNODE* - the library parts nodes
+     * @return the library parts nodes
      */
     XNODE* makeLibParts();
 
     /**
      * Fill out an XML node with a list of nets and returns it.
-     * @return XNODE* - the list of nets nodes
+     * @return the list of nets nodes
      */
     XNODE* makeListOfNets( unsigned aCtl );
 
     /**
      * Fill out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
-     * @return XNODE* - the library nodes
+     * @return the library nodes
      */
     XNODE* makeLibraries();
 
     void addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheet );
+
+    bool                m_resolveTextVars;   // Export textVar references resolved
+
+private:
+    std::set<wxString>  m_libraries;         // Set of library nicknames.
 };
 
 #endif
