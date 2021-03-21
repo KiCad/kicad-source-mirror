@@ -5,8 +5,9 @@ set( ALTIUM2PCBNEW_SRCS
     altium_circuit_maker_plugin.cpp
     altium_circuit_studio_plugin.cpp
     altium_designer_plugin.cpp
-    altium_pcb.cpp
     altium_parser_pcb.cpp
+    altium_pcb.cpp
+    altium_rule_transformer.cpp
     )
 
 add_library( altium2pcbnew STATIC ${ALTIUM2PCBNEW_SRCS} )
