@@ -63,3 +63,8 @@ void KIPLATFORM::APP::SetShutdownBlockReason( wxWindow* aWindow, const wxString&
 void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
 {
 }
+
+
+void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
+{
+}

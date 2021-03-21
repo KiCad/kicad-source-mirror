@@ -32,6 +32,7 @@
 #include <config.h>
 #include <core/arraydim.h>
 #include <id.h>
+#include <kiplatform/app.h>
 #include <settings/settings_manager.h>
 #include <logging.h>
 
@@ -198,6 +199,19 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     if( doLoad  )
     {
         wxString dname = dso_search_path( aFaceId );
+
+        // Insert DLL search path for kicad_3dsg from build dir
+        if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        {
+            wxFileName myPath = wxStandardPaths::Get().GetExecutablePath();
+
+            if( !myPath.GetPath().EndsWith( wxT( "pcbnew" ) ) )
+            {
+                myPath.RemoveLastDir();
+                myPath.AppendDir( wxT( "pcbnew" ) );
+                KIPLATFORM::APP::AddDynamicLibrarySearchPath( myPath.GetPath() );
+            }
+        }
 
         wxDynamicLibrary dso;
 

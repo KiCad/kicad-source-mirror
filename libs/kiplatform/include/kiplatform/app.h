@@ -82,6 +82,15 @@ namespace KIPLATFORM
          * Call as needed in an application to ensure timers are dispatched
          */
         void ForceTimerMessagesToBeCreatedIfNecessary();
+
+        /**
+         * Inserts a search path for loading dynamic libraries.  The exact place this new path ends
+         * up in the dynamic library search order is platform-dependent, but generally this can be
+         * used to make sure dynamic libraries are found in non-standard runtime situations.
+         *
+         * @param aPath is the full path to insert
+         */
+        void AddDynamicLibrarySearchPath( const wxString& aPath );
     }
 }
 

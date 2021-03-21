@@ -111,3 +111,9 @@ void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
     MSG msg;
     PeekMessage( &msg, nullptr, WM_TIMER, WM_TIMER, PM_NOREMOVE );
 }
+
+
+void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
+{
+    SetDllDirectoryA( aPath.c_str() );
+}
