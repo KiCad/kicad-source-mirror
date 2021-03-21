@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-17 14:18+0000\n"
+"PO-Revision-Date: 2021-03-21 13:36+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2176,14 +2176,12 @@ msgid "User Defined Grid"
 msgstr ""
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
-#, fuzzy
 msgid "Size X:"
-msgstr "X:"
+msgstr "Величина X:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:102
-#, fuzzy
 msgid "Size Y:"
-msgstr "Y:"
+msgstr "Величина Y:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:123
 msgid "Fast Switching"
@@ -2249,9 +2247,8 @@ msgid "Grey"
 msgstr "Сива"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#, fuzzy
 msgid "Image Scale:"
-msgstr "Скалирање"
+msgstr "Скала слике:"
 
 #: common/dialogs/dialog_image_editor_base.h:53
 #, fuzzy
@@ -2277,20 +2274,18 @@ msgid "Override Locks"
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
-#, fuzzy
 msgid "Locked Items"
-msgstr "Закључано: Да"
+msgstr "Закључане ствари"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
-#, fuzzy
 msgid "Quit KiCad"
-msgstr "&О KiCad-у"
+msgstr "Изађи из KiCad-а"
 
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #: common/dialogs/dialog_migrate_settings_base.cpp:21
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "Добродошли у KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
@@ -2303,11 +2298,11 @@ msgstr "Изабери"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
-msgstr ""
+msgstr "Како бисте жељели да конфигуришете KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr ""
+msgstr "Унеси поставке из претходне верзије код:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 #, fuzzy
@@ -2316,7 +2311,7 @@ msgstr "Релативна"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr ""
+msgstr "Изабрана путања не садржи ваљане KiCad поставке!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
@@ -2329,9 +2324,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Врати на почетна подешавања"
+msgstr "Почни са стандардним поставкама"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
 #, fuzzy
@@ -2340,7 +2334,7 @@ msgstr "Конфигурација путева"
 
 #: common/dialogs/dialog_page_settings.cpp:51
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:52
 msgid "A4 210x297mm"
@@ -2619,9 +2613,8 @@ msgid "<<<"
 msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:188
-#, fuzzy
 msgid "Revision:"
-msgstr "Ревизија"
+msgstr "Ревизија:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
 #: eeschema/dialogs/dialog_netlist.cpp:392
@@ -2629,54 +2622,44 @@ msgid "Title:"
 msgstr "Наслов:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:212
-#, fuzzy
 msgid "Company:"
-msgstr "Компанија"
+msgstr "Предузеће:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:224
-#, fuzzy
 msgid "Comment1:"
-msgstr "Коментар1"
+msgstr "Коментар1:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:236
-#, fuzzy
 msgid "Comment2:"
-msgstr "Коментар2"
+msgstr "Коментар2:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:248
-#, fuzzy
 msgid "Comment3:"
-msgstr "Коментар3"
+msgstr "Коментар3:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:260
-#, fuzzy
 msgid "Comment4:"
-msgstr "Коментар4"
+msgstr "Коментар4:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:272
-#, fuzzy
 msgid "Comment5:"
-msgstr "Коментар1"
+msgstr "Коментар5:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:284
-#, fuzzy
 msgid "Comment6:"
-msgstr "Коментар1"
+msgstr "Коментар6:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:296
-#, fuzzy
 msgid "Comment7:"
-msgstr "Коментар1"
+msgstr "Коментар7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:308
-#, fuzzy
 msgid "Comment8:"
-msgstr "Коментар1"
+msgstr "Коментар8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:320
-#, fuzzy
 msgid "Comment9:"
-msgstr "Коментар1"
+msgstr "Коментар9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:338
 msgid "Page layout description file"
@@ -2976,11 +2959,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:65
 msgid "Days"
-msgstr ""
+msgstr "Дани"
 
 #: common/dialogs/panel_common_settings_base.cpp:73
 msgid "Accelerated graphics:"
-msgstr ""
+msgstr "Убрзана графика:"
 
 #: common/dialogs/panel_common_settings_base.cpp:77
 #: common/dialogs/panel_common_settings_base.cpp:87
@@ -3067,9 +3050,8 @@ msgid "Icon theme:"
 msgstr "Боја:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
-#, fuzzy
 msgid "Light"
-msgstr "Десно"
+msgstr "Свијетло"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
@@ -3171,9 +3153,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:293
-#, fuzzy
 msgid "MB"
-msgstr "B"
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
 #, fuzzy
@@ -3225,7 +3206,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:164
 #: pcbnew/dialogs/panel_edit_options_base.cpp:211
 msgid "Cmd"
-msgstr ""
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
@@ -3360,13 +3341,13 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:175
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:179
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:124
 #: pcbnew/dialogs/panel_edit_options_base.cpp:140
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:183
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:100
@@ -3374,16 +3355,15 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:110
 #: pcbnew/dialogs/panel_edit_options_base.cpp:191
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:108
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:180
 #: pcbnew/dialogs/panel_edit_options_base.cpp:130
 #: pcbnew/dialogs/panel_edit_options_base.cpp:221
-#, fuzzy
 msgid "Alt"
-msgstr "Код"
+msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 #, fuzzy
@@ -3667,20 +3647,17 @@ msgstr "Додај поље"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:522
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:542
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:562
-#, fuzzy
 msgid "Error:"
-msgstr "Грешка: "
+msgstr "Грешка:"
 
 #: common/dialogs/wx_html_report_panel.cpp:188
 #: common/dialogs/wx_html_report_panel.cpp:211
-#, fuzzy
 msgid "Warning:"
-msgstr "Упозорење: "
+msgstr "Упозорење:"
 
 #: common/dialogs/wx_html_report_panel.cpp:213
-#, fuzzy
 msgid "Info:"
-msgstr "Информација: "
+msgstr "Информација:"
 
 #: common/dialogs/wx_html_report_panel.cpp:329
 #: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:615
@@ -3832,14 +3809,13 @@ msgstr "Позиција:"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
-#, fuzzy
 msgid "Comment"
-msgstr "Коментар1"
+msgstr "Коментар"
 
 #: common/drawing_sheet/ds_draw_item.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Text '%s'"
-msgstr "Текст фајлови"
+msgstr "Текст '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_rectangle.cpp:279
 #, c-format
@@ -3847,9 +3823,9 @@ msgid "Rectangle, width %s height %s"
 msgstr ""
 
 #: common/drawing_sheet/ds_draw_item.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Line, length %s"
-msgstr "Дужина линије"
+msgstr "Линија, дужина %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 #, fuzzy
@@ -3992,9 +3968,9 @@ msgid "Zoom Auto"
 msgstr ""
 
 #: common/eda_draw_frame.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom %.2f"
-msgstr "Увећај +"
+msgstr "Увећај %.2f"
 
 #: common/eda_draw_frame.cpp:480 pagelayout_editor/pl_editor_frame.cpp:713
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
@@ -4039,7 +4015,7 @@ msgstr ""
 
 #: common/eda_draw_frame.cpp:1041
 msgid "&No Thanks"
-msgstr ""
+msgstr "&Не хвала"
 
 #: common/eda_item.cpp:244
 #, fuzzy
@@ -15857,9 +15833,8 @@ msgid "Edit text and graphics properties globally across schematic"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:493
-#, fuzzy
 msgid "Symbol Properties..."
-msgstr "Симбол"
+msgstr "Особине симбола..."
 
 #: eeschema/tools/ee_actions.cpp:493
 #, fuzzy
@@ -16131,14 +16106,12 @@ msgid "Add Junctions to Selection where needed"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:677
-#, fuzzy
 msgid "Add Wire"
 msgstr "Додај жицу"
 
 #: eeschema/tools/ee_actions.cpp:677
-#, fuzzy
 msgid "Add a wire"
-msgstr "Додај жицу"
+msgstr "Додај једну жицу"
 
 #: eeschema/tools/ee_actions.cpp:684
 #, fuzzy
@@ -16170,9 +16143,8 @@ msgid "Complete drawing at current segment"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:708
-#, fuzzy
 msgid "Finish Wire"
-msgstr "Готово"
+msgstr "Заврши жицу"
 
 #: eeschema/tools/ee_actions.cpp:708
 msgid "Complete wire with current segment"
@@ -16384,13 +16356,13 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:1118 pcbnew/tools/pcb_control.cpp:487
 msgid "Item locked."
-msgstr ""
+msgstr "Закључана ставка."
 
 #: eeschema/tools/sch_edit_tool.cpp:1180
 #: eeschema/tools/symbol_editor_edit_tool.cpp:524
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s Field"
-msgstr "Попуњавање зона"
+msgstr "Уреди %s поље"
 
 #: eeschema/tools/sch_edit_tool.cpp:1734
 msgid "There are no unreferenced pins in this sheet to remove."
@@ -16511,9 +16483,8 @@ msgid " X "
 msgstr " X "
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
-#, fuzzy
 msgid "Current data will be lost?"
-msgstr "Струја"
+msgstr "Тренутни подаци ће бити избрисани?"
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, fuzzy, c-format
@@ -22935,7 +22906,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #, fuzzy
@@ -22991,7 +22962,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:25
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr ""
+msgstr "STEP фајлови (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:37
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
@@ -23046,19 +23017,19 @@ msgstr "Тијело"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid "Tolerance:"
-msgstr ""
+msgstr "Толеранција:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Уско (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Standard (0.01 mm)"
-msgstr ""
+msgstr "Стандардно (0.01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Опуштено (0.1 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid ""
@@ -23071,9 +23042,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:199
 #: pcbnew/exporters/gen_footprints_placefile.cpp:190
-#, fuzzy
 msgid "Use a relative path?"
-msgstr "Релативна"
+msgstr "Користити релативну путању?"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:209
 #: pcbnew/exporters/gen_footprints_placefile.cpp:199
@@ -23103,7 +23073,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:512
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:279
 msgid "Technical layers:"
-msgstr ""
+msgstr "Технички слојеви:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:82
 msgid "Print Mode"
@@ -23118,9 +23088,8 @@ msgid "Page with frame and title block"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
-#, fuzzy
 msgid "Current page size"
-msgstr "Струја"
+msgstr "Тренутна величина странице"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
@@ -23177,7 +23146,7 @@ msgstr "Сачувај као .csv фајл"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 #, fuzzy
@@ -23258,14 +23227,13 @@ msgid "Filter Selected Items"
 msgstr "Избриши"
 
 #: pcbnew/dialogs/dialog_find.cpp:220
-#, fuzzy
 msgid "Searching..."
-msgstr "Учитава се..."
+msgstr "Претражује се..."
 
 #: pcbnew/dialogs/dialog_find.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" not found"
-msgstr "Маркер није пронађен"
+msgstr "\"%s\" није пронађен"
 
 #: pcbnew/dialogs/dialog_find.cpp:344
 #, fuzzy
@@ -23277,9 +23245,9 @@ msgid "No hits"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" found"
-msgstr "Попуњавање зона"
+msgstr "\"%s\" пронађен"
 
 #: pcbnew/dialogs/dialog_find.cpp:356
 #, c-format
@@ -23366,7 +23334,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:136
 msgid "Side:"
-msgstr ""
+msgstr "Страна:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:195
 msgid "Lock pads"
@@ -23677,13 +23645,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
-#, fuzzy
 msgid "Gerber X2"
-msgstr "Gerber"
+msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -23814,9 +23781,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter_base.cpp:51
-#, fuzzy
 msgid "Graphics"
-msgstr "&Графика..."
+msgstr "Графика"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
 #: pcbnew/widgets/panel_selection_filter_base.cpp:31
@@ -23830,7 +23796,7 @@ msgstr "Попуњавање зона"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
-msgstr ""
+msgstr "Маркери"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 #, fuzzy
@@ -23849,7 +23815,7 @@ msgstr "Линије"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
 msgid "Unlocked graphics"
-msgstr ""
+msgstr "Закључана графика"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
 msgid "Locked footprints"
@@ -23901,7 +23867,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 msgid "Copper Layers"
-msgstr ""
+msgstr "Бакарни слојеви"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:213
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:137
@@ -24128,14 +24094,12 @@ msgid "Error List"
 msgstr "Листа грешака"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:29
-#, fuzzy
 msgid "Start Point"
-msgstr "Почетна тачка X:"
+msgstr "Почетна тачка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:55
-#, fuzzy
 msgid "End Point"
-msgstr "Крај линије"
+msgstr "Завршна тачка"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
@@ -24143,9 +24107,8 @@ msgid "Bezier Control Pt"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:145
-#, fuzzy
 msgid "Arc angle:"
-msgstr "Лук"
+msgstr "Угао лука:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284
@@ -24236,13 +24199,12 @@ msgid "Imported Layers"
 msgstr "Остали слојеви"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:36
-#, fuzzy
 msgid "KiCad Layers"
-msgstr "2 слоја"
+msgstr "KiCad слојеви"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
@@ -24257,9 +24219,8 @@ msgid "Remove selected layers from matched layers list."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:71
-#, fuzzy
 msgid "<<"
-msgstr "<<<"
+msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 #, fuzzy
@@ -24326,15 +24287,13 @@ msgstr "Удаљеност:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:209
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:24
-#, fuzzy
 msgid "Move X:"
-msgstr "X:"
+msgstr "Помјери X:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:210
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:38
-#, fuzzy
 msgid "Move Y:"
-msgstr "Y:"
+msgstr "Помјери Y:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:287
 msgid ""
@@ -24451,7 +24410,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr ""
+msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 msgid "Wildcard Substr"
@@ -24623,9 +24582,8 @@ msgid "Select a corner to add the new corner after."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:429
-#, fuzzy
 msgid "Select a corner to delete."
-msgstr "Изабери"
+msgstr "Изабери ћошак за брисање."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:480
 #, fuzzy, c-format
@@ -24635,48 +24593,42 @@ msgstr "Попуњавање зона"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:483
 #: pcbnew/dialogs/dialog_text_properties.cpp:289
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "задња страна (у огледалу)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:484
 #: pcbnew/dialogs/dialog_text_properties.cpp:289
 msgid "front side"
-msgstr ""
+msgstr "предња страна"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:693
-#, fuzzy
 msgid "width"
-msgstr "Дужина"
+msgstr "ширина"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:699
 #: pcbnew/dialogs/dialog_pad_properties.cpp:705
-#, fuzzy
 msgid "from"
-msgstr "од "
+msgstr "од"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
-#, fuzzy
 msgid "to"
-msgstr "до "
+msgstr "до"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:711
-#, fuzzy
 msgid "center"
-msgstr "центар "
+msgstr "центар"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
-#, fuzzy
 msgid "start"
-msgstr "почетак "
+msgstr "почетак"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:713
-#, fuzzy
 msgid "angle"
-msgstr "Угао"
+msgstr "угао"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:718
 msgid "ring"
-msgstr ""
+msgstr "прстен"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:720
 msgid "circle"
@@ -24829,9 +24781,8 @@ msgid "No shape selected"
 msgstr "Ниједан облик није изабран"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2133
-#, fuzzy
 msgid "Ring/Circle"
-msgstr "Круг"
+msgstr "прстен/круг"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2137
 #, fuzzy
@@ -24931,9 +24882,8 @@ msgid "Trapezoid axis:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:159
-#, fuzzy
 msgid "Corner size:"
-msgstr "Величина текста:"
+msgstr "Величина ћошка:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:161
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:290
@@ -25030,9 +24980,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:412
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:462
-#, fuzzy
 msgid ":"
-msgstr "X:"
+msgstr ":"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:459
 #, fuzzy
@@ -25233,22 +25182,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
 msgid "Start point"
-msgstr ""
+msgstr "Почетна тачка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1166
-#, fuzzy
 msgid "Control point 1"
-msgstr "Почетна тачка X:"
+msgstr "Контролна тачка 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1192
-#, fuzzy
 msgid "Control point 2"
-msgstr "Почетна тачка X:"
+msgstr "Контролна тачка 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
-#, fuzzy
 msgid "End point"
-msgstr "Крај линије"
+msgstr "Завршна тачка"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1328
 msgid "Move vector"
@@ -25260,7 +25206,7 @@ msgstr "Фактор скалирања:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1399
 msgid "Duplicate:"
-msgstr ""
+msgstr "Удуплај:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1567
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
@@ -25489,18 +25435,16 @@ msgid "Coordinate format:"
 msgstr "Формат координата:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
-#, fuzzy
 msgid "4.5, unit mm"
-msgstr "јединица"
+msgstr "4.5, јединица mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
-#, fuzzy
 msgid "4.6, unit mm"
-msgstr "јединица"
+msgstr "4.6, јединица mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Use extended X2 format (recommended)"
-msgstr ""
+msgstr "Користи проширени X2 формат (препоручено)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid ""
@@ -25614,9 +25558,8 @@ msgid "SVG Options"
 msgstr "Опције мреже"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
-#, fuzzy
 msgid "Millimeter"
-msgstr "милиметри"
+msgstr "Милиметар"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid ""
@@ -25956,9 +25899,8 @@ msgstr "Помак X:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:84
-#, fuzzy
 msgid "Offset Y:"
-msgstr "Помак"
+msgstr "Помак Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:172
 msgid "Reset to the current X offset from the reference position."
@@ -27874,9 +27816,8 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Поставке..."
 
 #: pcbnew/drc/drc_item.cpp:42
-#, fuzzy
 msgid "Electrical"
-msgstr "Електрични тип"
+msgstr "Електрично"
 
 #: pcbnew/drc/drc_item.cpp:43
 msgid "Design For Manufacturing"
@@ -28049,30 +27990,29 @@ msgid "Differential uncoupled length too long"
 msgstr ""
 
 #: pcbnew/drc/drc_rule.h:134
-#, fuzzy, c-format
+#, c-format
 msgid "rule %s"
-msgstr "угао %s"
+msgstr "правило %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "ГРЕШКА у изразу."
 
 #: pcbnew/drc/drc_rule_condition.cpp:97 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:443
-#, c-format
+#, c-format, fuzzy
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "ГРЕШКА: <a href='%d:%d'>"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "ГРЕШКА: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:107 pcbnew/drc/drc_rule_parser.cpp:190
 #: pcbnew/drc/drc_rule_parser.cpp:345
-#, fuzzy
 msgid "Missing '('."
-msgstr "'EELAYER END' недостаје"
+msgstr "Недостаје '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:113
 msgid "Missing version statement."
@@ -28138,11 +28078,11 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:356
 msgid "Missing min value."
-msgstr ""
+msgstr "Недостаје минимална вриједност."
 
 #: pcbnew/drc/drc_rule_parser.cpp:377
 msgid "Missing max value."
-msgstr ""
+msgstr "Недостаје максимална вриједност."
 
 #: pcbnew/drc/drc_rule_parser.cpp:398
 #, fuzzy
@@ -28151,12 +28091,12 @@ msgstr "Недостаје.\n"
 
 #: pcbnew/drc/drc_rule_parser.cpp:477
 msgid "Missing layer name or type."
-msgstr ""
+msgstr "Недостаје име или тип слоја."
 
 #: pcbnew/drc/drc_rule_parser.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'."
-msgstr "Недефинисани слојеви:"
+msgstr "Непрепознат слој '%s'."
 
 #: pcbnew/drc/drc_test_provider_annulus.cpp:86
 #, fuzzy
@@ -28272,9 +28212,9 @@ msgid "maximum gap: %s; "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "actual: %s)"
-msgstr "Стварна величина"
+msgstr "тренутно: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:79
 msgid "Checking keepouts & disallow constraints..."
