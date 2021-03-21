@@ -55,12 +55,25 @@ static void setSearchPaths( SEARCH_STACK* aDst, KIWAY::FACE_T aId )
 
             fn.RemoveLastDir();
             fn.RemoveLastDir();     // "../../"  up twice, removing library/doc/
+
+            fn.AppendDir( wxT( "symbols" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.AppendDir( wxT( "doc" ) );
+            aDst->AddPaths( fn.GetPath() );
+
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();     // "../../"  up twice, removing symbols/doc/
         }
 
         // Add PCB library file path to search path list.
         if( aId == KIWAY::FACE_PCB || aId == KIWAY::FACE_CVPCB )
         {
             fn.AppendDir( wxT( "modules" ) );
+            aDst->AddPaths( fn.GetPath() );
+            fn.RemoveLastDir();
+
+            fn.AppendDir( wxT( "footprints" ) );
             aDst->AddPaths( fn.GetPath() );
             fn.RemoveLastDir();
 

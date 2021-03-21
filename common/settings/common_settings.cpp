@@ -501,7 +501,7 @@ void COMMON_SETTINGS::InitializeEnvironment()
     wxFileName basePath( PATHS::GetStockEDALibraryPath(), wxEmptyString );
 
     wxFileName path( basePath );
-    path.AppendDir( wxT( "modules" ) );
+    path.AppendDir( wxT( "footprints" ) );
     addVar( wxT( "KICAD6_FOOTPRINT_DIR" ), path.GetFullPath() );
 
     path = basePath;
@@ -552,6 +552,6 @@ void COMMON_SETTINGS::InitializeEnvironment()
     addVar( wxT( "KICAD6_3RD_PARTY" ), PATHS::GetDefault3rdPartyPath() );
 
     path = basePath;
-    path.AppendDir( wxT( "library" ) );
+    path.AppendDir( wxT( "symbols" ) );
     addVar( wxT( "KICAD6_SYMBOL_DIR" ), path.GetFullPath() );
 }
