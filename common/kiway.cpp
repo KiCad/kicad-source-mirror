@@ -135,7 +135,6 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 
     fn.SetName( name );
 
-#ifdef DEBUG
     // To speed up development, it's sometimes nice to run kicad from inside
     // the build path.  In that case, each program will be in a subdirectory.
     // To find the DSOs, we need to go up one directory and then enter a subdirectory.
@@ -161,7 +160,6 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
         fn.AppendDir( dirName );
 #endif
     }
-#endif
 
     // Here a "suffix" == an extension with a preceding '.',
     // so skip the preceding '.' to get an extension
