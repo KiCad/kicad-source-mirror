@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-19 09:09-0700\n"
+"POT-Creation-Date: 2021-03-21 06:36-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3480,14 +3480,6 @@ msgstr "KiCad Default"
 
 msgid "KiCad Classic"
 msgstr "KiCad Classic"
-
-msgid ""
-"Windows 7 and older is no longer supported by KiCad and its dependencies."
-msgstr ""
-"Windows 7 and older is no longer supported by KiCad and its dependencies."
-
-msgid "Unsupported Operating System"
-msgstr "Unsupported Operating System"
 
 #, c-format
 msgid "Field%d"
@@ -7020,6 +7012,22 @@ msgstr "You need to select DC source"
 
 msgid "Source 1 and Source 2 must be different"
 msgstr "Source 1 and Source 2 must be different"
+
+msgid "No valid simulation is configured."
+msgstr "No valid simulation is configured."
+
+msgid ""
+"A valid simulation can be configured by selecting a simulation tab, setting "
+"the simulation parameters and clicking the OK button with the tab selected."
+msgstr ""
+"A valid simulation can be configured by selecting a simulation tab, setting "
+"the simulation parameters and clicking the OK button with the tab selected."
+
+msgid "Exit Without Valid Simulation"
+msgstr "Exit Without Valid Simulation"
+
+msgid "Configure Valid Simulation"
+msgstr "Configure Valid Simulation"
 
 msgid "Volts"
 msgstr "Volts"
@@ -12867,6 +12875,14 @@ msgstr "%s closed [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s opened [pid=%ld]\n"
+
+msgid ""
+"Windows 7 and older is no longer supported by KiCad and its dependencies."
+msgstr ""
+"Windows 7 and older is no longer supported by KiCad and its dependencies."
+
+msgid "Unsupported Operating System"
+msgstr "Unsupported Operating System"
 
 #, c-format
 msgid "Error code: %d"
@@ -19731,6 +19747,10 @@ msgstr "board setup micro-via constraints"
 #, c-format
 msgid "netclass '%s'"
 msgstr "netclass '%s'"
+
+#, c-format
+msgid "netclass '%s' (diff pair)"
+msgstr "netclass '%s' (diff pair)"
 
 msgid "keepout area"
 msgstr "keepout area"
