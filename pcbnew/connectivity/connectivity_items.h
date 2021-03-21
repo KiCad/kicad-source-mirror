@@ -451,10 +451,11 @@ private:
 class CN_CLUSTER
 {
 private:
-    bool                  m_conflicting;
-    int                   m_originNet;
-    CN_ITEM*              m_originPad;
-    std::vector<CN_ITEM*> m_items;
+    bool                         m_conflicting;
+    int                          m_originNet;
+    CN_ITEM*                     m_originPad;
+    std::vector<CN_ITEM*>        m_items;
+    std::unordered_map<int, int> m_netRanks;
 
 public:
     CN_CLUSTER();

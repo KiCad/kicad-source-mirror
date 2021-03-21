@@ -481,17 +481,19 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 {
     for( const auto& cluster : m_connClusters )
     {
-        if( cluster->IsConflicting() )
+        if( cluster->IsOrphaned() )
         {
-            wxLogTrace( "CN", "Conflicting nets in cluster %p\n", cluster.get() );
-        }
-        else if( cluster->IsOrphaned() )
-        {
-            wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]\n", cluster.get(),
+            wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]", cluster.get(),
                     (const char*) cluster->OriginNetName().c_str() );
         }
         else if( cluster->HasValidNet() )
         {
+            if( cluster->IsConflicting() )
+            {
+                wxLogTrace( "CN", "Conflicting nets in cluster %p; chose %d (%s)", cluster.get(),
+                            cluster->OriginNet(), cluster->OriginNetName() );
+            }
+
             // normal cluster: just propagate from the pads
             int n_changed = 0;
 
@@ -515,15 +517,15 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 
             if( n_changed )
             {
-                wxLogTrace( "CN", "Cluster %p : net : %d %s\n", cluster.get(),
+                wxLogTrace( "CN", "Cluster %p : net : %d %s", cluster.get(),
                         cluster->OriginNet(), (const char*) cluster->OriginNetName().c_str() );
             }
             else
-                wxLogTrace( "CN", "Cluster %p : nothing to propagate\n", cluster.get() );
+                wxLogTrace( "CN", "Cluster %p : nothing to propagate", cluster.get() );
         }
         else
         {
-            wxLogTrace( "CN", "Cluster %p : connected to unused net\n", cluster.get() );
+            wxLogTrace( "CN", "Cluster %p : connected to unused net", cluster.get() );
         }
     }
 }
