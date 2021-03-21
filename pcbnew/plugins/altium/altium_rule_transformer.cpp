@@ -25,6 +25,7 @@
 #include "altium_rule_transformer.h"
 
 #include <iostream>
+#include <wx/wxcrt.h>   // for wxIsspace
 
 const ALTIUM_RULE_TOKEN& ALTIUM_RULE_TOKENIZER::Next()
 {
