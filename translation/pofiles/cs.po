@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-19 09:09-0700\n"
-"PO-Revision-Date: 2021-03-14 21:51+0000\n"
+"PO-Revision-Date: 2021-03-21 13:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2874,9 +2874,8 @@ msgid "Executable files ("
 msgstr "Spustitelné soubory ("
 
 #: common/dialogs/panel_common_settings.cpp:310
-#, fuzzy
 msgid "Select Preferred PDF Viewer"
-msgstr "Vybrat preferovaný prohlížeč PDF"
+msgstr "Vybrat preferovaný PDF prohlížeč"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -2999,9 +2998,8 @@ msgid "Show icons in menus"
 msgstr "Zobrazit ikony v menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Barevné téma:"
+msgstr "Motiv ikon:"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 #, fuzzy
@@ -3010,7 +3008,7 @@ msgstr "Vpravo"
 
 #: common/dialogs/panel_common_settings_base.cpp:191
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Použít ikony pro světlé téma okna"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 #: gerbview/gerber_draw_item.cpp:704
@@ -3019,12 +3017,13 @@ msgstr "Tmavý"
 
 #: common/dialogs/panel_common_settings_base.cpp:196
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Použít ikony pro tmavé pozadí okna"
 
 #: common/dialogs/panel_common_settings_base.cpp:202
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
+"Automaticky zvolit světlé nebo tmavé ikony podle barevného tématu systému"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3348,14 +3347,12 @@ msgstr ""
 "Při posouvání zleva doprava na touchpadu posouvejte plátno doleva a doprava"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Obnovit výchozí"
+msgstr "Obnovit výchozí nastavení myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Obnovit výchozí"
+msgstr "Reset na výchozí pro touchpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:83
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4646,10 +4643,10 @@ msgid "Failed to load kiface library \"%s\"."
 msgstr "Nepodařilo se načíst knihovnu kiface \"%s\"."
 
 #: common/kiway.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not read instance name and version symbol from kiface library \"%s\"."
-msgstr "Nelze přečíst jméno instance a symbol verze z knihovny kiface \"%s\"."
+msgstr "Nelze číst jméno instance a verze symbolů v knihovně kiface \"%s\"."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -6914,7 +6911,6 @@ msgid "Lib: %s"
 msgstr "Knih.: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
@@ -8347,9 +8343,8 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC zrušeno uživatelem.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
-msgstr "Hotovo.<br><br>"
+msgstr "ERC dokončeno.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -8834,7 +8829,7 @@ msgstr "Pouze pro čtení"
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:106
 msgid ""
 "Line width may not be 0 for shapes other than filled with body outline color."
-msgstr ""
+msgstr "Šířka čáry nemůže být 0 s výjimkou tvarů vyplněných barvou obrysu."
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -10573,68 +10568,64 @@ msgid "Custom"
 msgstr "Vlastní"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:423
-#, fuzzy
 msgid "Model Mode"
-msgstr "Přesunout všechny moduly"
+msgstr "Mód modelu"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:425
-#, fuzzy
 msgid "User configuration"
-msgstr "Konfigura&ce"
+msgstr "Uživatelská konfigurace"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:426
 msgid ""
 "Use the settings in the Ngspice configuration file or any settings defined "
 "in the schematic"
 msgstr ""
+"Použít nastavení konfigurační souboru ngspice nebo parametry definované ve "
+"schématu"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:430
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:431
-#, fuzzy
 msgid "Enable default spice model simulation"
-msgstr "Zakázat symbol pro simulaci"
+msgstr "Aktivovat simulaci výchozí SPICE modelu"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:435
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-#, fuzzy
 msgid "Enable PSpice model simulation"
-msgstr "Spice hodnota v simulaci"
+msgstr "Povolit simulaci modelu PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:440
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:441
-#, fuzzy
 msgid "Enable LTSpice model simulation"
-msgstr "Spice hodnota v simulaci"
+msgstr "Aktivovat model LTSpice pro simulaci"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:445
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice a LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Enable PSpice and LTSpice model simulation"
-msgstr ""
+msgstr "Povolit simulaci modelů PSpice a LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-#, fuzzy
 msgid "Enable HSpice model simulation"
-msgstr "Spice hodnota v simulaci"
+msgstr "Aktivovat model HSpice pro simulaci"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:462
 msgid "Ngspice"
-msgstr ""
+msgstr "Ngspice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:469
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
@@ -12379,6 +12370,10 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"To může za určitých podmínek poškodit schéma. Pokud schéma nemá po otevření "
+"žádné chybějící symboly, uložte jej okamžitě před zadáním změn, aby se "
+"zabránilo ztrátě dat. Pokud symboly chybí, je nutné je ručně obnovit nebo "
+"obnovit ze souboru knihovny mezipaměti a znovu načtení schématu."
 
 #: eeschema/files-io.cpp:510
 #, fuzzy
@@ -13767,6 +13762,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"Knihovna symbolů '%s' nenalezena a není dostupná žádná knihovna mezipaměti. "
+"Nelze propojit symbol knihovny."
 
 #: eeschema/sch_screen.cpp:607
 #, c-format
@@ -13920,6 +13917,7 @@ msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
 
 #: eeschema/sch_text_help_md.h:2
+#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14054,6 +14052,138 @@ msgid ""
 "    </tr>\n"
 "</table>\n"
 msgstr ""
+"<tabulka>\n"
+" <tr>\n"
+" <th> Označení </th>\n"
+" <th> </th>\n"
+" <th> Výsledek </th>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td><br></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> &nbsp;<br><samp>~overbar</samp><br> &nbsp;<br><samp>~CLK</samp><br> "
+"&nbsp;<br><samp>~~</samp> </td>\n"
+" <td></td>\n"
+" <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td><br></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td><br></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+" <td></td>\n"
+" <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp>${R3:VALUE}</samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> 150K</samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> <br> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> <br> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <th> Definice sběrnice </th>\n"
+" <th> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp;"
+" & nbsp; & nbsp; & nbsp; & nbsp; </th>\n"
+" <th> Výsledné sítě </th>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp>prefix[m..n]</samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> předpona k prefixu </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp>D[0..7]</samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> <br> </td>\n"
+" </tr>\n"
+" <tr>\n"
+"\t\t<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\t\t<td></td>\n"
+"\t\t<td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp> {SCL SDA} </samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> SCL, SDA </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> <br> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp> předpona {net1 net2 ...} </samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp> USB1 {D + D-} </samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> USB1.D +, USB1.D- </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> <br> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp> MEM {D [1..2] LATCH} </samp> </td>\n"
+" <td> </td>\n"
+" <td> & nbsp; <br> <samp> MEM.D1, MEM.D2, MEM.LATCH </samp> </td>\n"
+" </tr>\n"
+" <tr>\n"
+" <td> & nbsp; <br> <samp> MEM {D _ {[1..2]} ~ LATCH} </samp> </td>\n"
+" <td> </td>\n"
+" <td> <samp> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & "
+"nbsp; & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; <sub> & nbsp; </sub> & nbsp; & "
+"nbsp; & nbsp; & nbsp; & nbsp; <u> & nbsp; & nbsp; & nbsp; & nbsp; & nbsp; </"
+"u> </samp> <br> <samp> MEM.D <sub> 1 </sub>, MEM.D <sub> 2 </sub>, MEM.LATCH "
+"</samp> </td>\n"
+" </tr>\n"
+"</tabulka>\n"
 
 #: eeschema/sch_validators.cpp:106
 #, c-format
@@ -14219,6 +14349,8 @@ msgid ""
 "The project library table \"%s\" does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
+"Tabulka knihoven projektu \"%s\" neexistuje nebo ji nelze přečíst. To může "
+"mít za následek nefunkční odkazy na symboly schématu. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:310
 msgid ""
@@ -14226,6 +14358,9 @@ msgid ""
 "loaded schematic project library table.  This may result in broken symbol "
 "library links for the schematic.  Do you wish to continue?"
 msgstr ""
+"V načteném schématu jsou názvy knihoven, které v tabulce knihovny načtených "
+"projektů schématu chybí. To může mít za následek nefunkční odkazy na "
+"knihovnu symbolů schématu. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:371
 msgid ""
@@ -14233,6 +14368,9 @@ msgid ""
 "current library table.  This conflict cannot be resolved and may result in "
 "broken symbol library links for the schematic.  Do you wish to continue?"
 msgstr ""
+"V aktuální tabulce knihoven existuje duplicitní název knihovny, který "
+"odkazuje na jinou knihovnu. Tento konflikt nelze vyřešit a může mít za "
+"následek nefunkční odkazy na knihovnu symbolů pro schéma. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:564
 #, c-format
@@ -14245,6 +14383,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"Název souboru \"%s\" může způsobit problémy s existujícím názvem souboru\n"
+"již definován ve schématu na systémech, které podporují případ\n"
+"necitlivé názvy souborů. Pokud to zkopírujete, způsobí to problémy\n"
+"projekt do operačního systému, který podporuje jména souborů nerozlišující "
+"velká a malá\n"
+"písmena.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:573
 msgid "Do not show this message again."
@@ -14265,7 +14411,7 @@ msgstr "Spustit simulaci kliknutím na tlačítko Spustit simulaci"
 #: eeschema/sim/sim_panel_base.cpp:94
 msgid ""
 "This simulation provide no plots. Please refer to console window for results"
-msgstr ""
+msgstr "Tato simulace neposkytuje grafy. Výsledky najdete v okně konzoly"
 
 #: eeschema/sim/sim_plot_frame.cpp:191
 msgid "Run/Stop Simulation"
@@ -14562,15 +14708,15 @@ msgid "\"%s\" is not a valid Spice value"
 msgstr "\"%s\" není platná hodnota Spice"
 
 #: eeschema/symbol_async_loader.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
 "%s\n"
 msgstr ""
-"Chyba při načítání knihovny symbolu%s.\n"
+"Chyba při načítání knihovny symbolu %s.\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:126
 #, c-format
@@ -16028,14 +16174,12 @@ msgid "Finish Wire or Bus"
 msgstr "Dokončit spoj nebo sběrnici"
 
 #: eeschema/tools/ee_actions.cpp:703
-#, fuzzy
 msgid "Complete drawing at current segment"
-msgstr "Text (nebo hodnota) aktuálně zvoleného pole"
+msgstr "Ukončete výkres v aktuálním segmentu"
 
 #: eeschema/tools/ee_actions.cpp:708
-#, fuzzy
 msgid "Finish Wire"
-msgstr "Hotovo"
+msgstr "Dokončit spoj"
 
 #: eeschema/tools/ee_actions.cpp:708
 #, fuzzy
@@ -16077,9 +16221,8 @@ msgid "Drag"
 msgstr "Táhnout"
 
 #: eeschema/tools/ee_actions.cpp:732
-#, fuzzy
 msgid "Drags the selected item(s)"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Přetáhněte vybranou položku(y)"
 
 #: eeschema/tools/ee_actions.cpp:736
 #, fuzzy
@@ -16340,9 +16483,8 @@ msgid "Bus has no members"
 msgstr "Sběrnice nemá žádné členy"
 
 #: eeschema/tools/symbol_editor_control.cpp:159
-#, fuzzy
 msgid "No symbol library selected."
-msgstr "Není vybrán žádný symbol"
+msgstr "Není vybrána žádná knihovna symbolů."
 
 #: eeschema/tools/symbol_editor_control.cpp:382
 #: eeschema/tools/symbol_editor_control.cpp:422
@@ -16419,9 +16561,8 @@ msgstr "Automatické přiřazení vrstev"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:350
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:403
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:155
-#, fuzzy
 msgid "Hole data"
-msgstr "Počet děr"
+msgstr "Data vrtání"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:444
 msgid ""
@@ -16758,7 +16899,7 @@ msgstr "Info: přeskočit soubor \"%s\" (neznámý typ)\n"
 #: gerbview/files.cpp:507
 #, c-format
 msgid "Info: skip file \"%s\" (gerber job file)\n"
-msgstr "Info: přeskočit soubor \"%s\" (soubor gerber job)\n"
+msgstr "Info: přeskočit soubor \"%s\" ( gerber job soubor)\n"
 
 #: gerbview/files.cpp:548
 #, c-format
@@ -17240,9 +17381,9 @@ msgid "Highlight Aperture Type \"%s\""
 msgstr "Typ stránky \"%s\" není platný"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Zvýraznění %s"
+msgstr "Zvýraznit D-kód D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:81
 #: gerbview/widgets/layer_widget.cpp:523
@@ -22769,7 +22910,7 @@ msgstr "Výstupní jednotky"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
-msgstr "Export IDFv3"
+msgstr "Exportovat IDFv3"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:206
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -31519,7 +31660,7 @@ msgstr "Šířka %s, mezera %s"
 #: pcbnew/router/router_tool.cpp:365
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Šířka %s, mezera %s, mezera prokovu %s"
+msgstr "Šířka %s, mezera %s, prokov mezera %s"
 
 #: pcbnew/router/router_tool.cpp:501
 #, c-format
@@ -32054,24 +32195,20 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:387
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Počet vrstev mědi:"
+msgstr "Počet vrstev mědi: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:396
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Nakreslit rozměr"
+msgstr "Celkové rozměry desky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:406
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Minimální rozteč mřížky:"
+msgstr "Min spoj/vzdálenost: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:416
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Měď:"
+msgstr "Povrchová úprava mědi: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:424
 #, fuzzy
@@ -32079,24 +32216,20 @@ msgid "Castellated pads: "
 msgstr "Vypočítat"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Tloušťka mřížky:"
+msgstr "Tloušťka desky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:448
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Průměr izolační mezery díry:"
+msgstr "Minimální průměr díry: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:458
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Kontrola impedance"
+msgstr "Kontrola impedance: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:466
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Tisk okrajů desky"
+msgstr "Pokovená hrana desky: "
 
 #: pcbnew/tools/drawing_tool.cpp:73
 msgid "Select Via Size"
