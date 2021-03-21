@@ -151,9 +151,9 @@ static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPost
 
 static const TOOL_ACTION ACT_SwitchRounding( "pcbnew.InteractiveRouter.SwitchRounding",
         AS_CONTEXT,
-        MD_CTRL + '/', LEGACY_HK_NAME( "Switch Corner Rounding" ),
-        _( "Switch Corner Rounding" ),
-        _( "Switches the corner type of the currently routed track." ),
+        MD_CTRL + '/', "",
+        _( "Track Corner Mode" ),
+        _( "Switches between sharp and rounded corners when routing tracks." ),
         BITMAPS::switch_corner_rounding_shape );
 
 #undef _
