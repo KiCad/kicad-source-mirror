@@ -34,13 +34,13 @@ SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNickname
         m_table( aTable ),
         m_onlyPowerSymbols( aOnlyPowerSymbols ),
         m_output( aOutput ),
-        m_reporter( aReporter )
+        m_reporter( aReporter ),
+        m_nextLibrary( 0 ),
+        m_canceled( false )
 {
     wxASSERT( m_table );
     m_threadCount = std::max<size_t>( 1, std::thread::hardware_concurrency() - 1 );
 
-    m_canceled.store( false );
-    m_nextLibrary.store( 0 );
     m_returns.resize( m_threadCount );
 }
 
