@@ -488,7 +488,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 EE_SELECTION saved_selection = m_selection;
 
-                for( auto item : m_selection )
+                for( const auto& item : m_selection )
                     RemoveItemFromSel( item, true );
 
                 SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr,
@@ -498,7 +498,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     m_selection.SetIsHover( false );
 
-                    for( auto item : saved_selection )
+                    for( const auto& item : saved_selection )
                         AddItemToSel( item,  true);
                 }
                 else
