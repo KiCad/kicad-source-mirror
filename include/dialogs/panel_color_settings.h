@@ -64,6 +64,10 @@ protected:
 
     void updateSwatches();
 
+    /**
+     * Builds the theme listbox and sets the selection to the current theme
+     * @param aCurrent is the filename of the current color theme (no extension)
+     */
     void createThemeList( const wxString& aCurrent );
 
     void createSwatch( int aLayer, const wxString& aName );
