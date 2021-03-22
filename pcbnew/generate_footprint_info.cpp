@@ -94,15 +94,41 @@ public:
             // It is currently common practice to store a documentation link in the description.
             int idx = desc.find( wxT( "http:" ) );
 
+            if( idx < 0 )
+                idx = desc.find( wxT( "https:" ) );
+
             if( idx >= 0 )
             {
-                doc = desc.substr( (unsigned) idx );
+                // And, sadly, it appears to have also become customary to bury the url inside
+                // parentheses.
+                if( idx >= 1 && desc.at( idx - 1 ) == '(' )
+                {
+                    int nesting = 0;
 
-                desc = desc.substr( 0, (unsigned) idx );
-                desc = desc.Trim( true );
+                    while( idx < (int) desc.size() )
+                    {
+                        char c = desc.at( idx++ );
 
-                if( !desc.IsEmpty() && desc.Last() == ',' )
-                    desc.RemoveLast( 1 );
+                        if( c == '(' )
+                            nesting++;
+                        else if( c == ')' && --nesting < 0 )
+                            break;
+
+                        doc += c;
+                    }
+
+                    desc.Replace( doc, _( "doc url" ) );
+                }
+                else
+                {
+                    doc = desc.substr( (unsigned) idx );
+
+                    desc = desc.substr( 0, (unsigned) idx );
+                    desc = desc.Trim( true );
+
+                    if( !desc.IsEmpty() && desc.Last() == ',' )
+                        desc.RemoveLast( 1 );
+                }
             }
 
             m_html.Replace( "__NAME__", EscapeHTML( name ) );
