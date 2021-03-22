@@ -95,8 +95,8 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
     m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );
 
-    if( dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) == nullptr )
-        m_simPages->RemovePage( m_simPages->FindPage( m_pgNgspice ) );
+    if( !dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) )
+        m_compatibilityMode->Show( false );
 
     m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
@@ -168,18 +168,15 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
     if( ngspiceSettings )
     {
-        if( m_rbNgspiceDefaultModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::USER_CONFIG );
-        else if( m_rbNgspiceSpiceModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::NGSPICE );
-        else if( m_rbNgspicePSpiceModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::PSPICE );
-        else if( m_rbNgspiceLTSpiceModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LTSPICE );
-        else if( m_rbNgspicePLTSpiceModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );
-        else if( m_rbNgspiceHSpiceModelMode->GetValue() )
-            ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::HSPICE );
+        switch( m_compatibilityModeChoice->GetSelection() )
+        {
+        case 0: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::USER_CONFIG ); break;
+        case 1: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::NGSPICE );     break;
+        case 2: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::PSPICE );      break;
+        case 3: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LTSPICE );     break;
+        case 4: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );   break;
+        case 5: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::HSPICE );      break;
+        }
     }
 
     wxString previousSimCommand = m_simCommand;
@@ -323,30 +320,12 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
     {
         switch( ngspiceSettings->GetModelMode() )
         {
-        case NGSPICE_MODEL_MODE::USER_CONFIG:
-            m_rbNgspiceDefaultModelMode->SetValue( true );
-            break;
-
-        case NGSPICE_MODEL_MODE::NGSPICE:
-            m_rbNgspiceSpiceModelMode->SetValue( true );
-            break;
-
-        case NGSPICE_MODEL_MODE::PSPICE:
-            m_rbNgspicePSpiceModelMode->SetValue( true );
-            break;
-
-        case NGSPICE_MODEL_MODE::LTSPICE:
-            m_rbNgspiceLTSpiceModelMode->SetValue( true );
-            break;
-
-        case NGSPICE_MODEL_MODE::LT_PSPICE:
-            m_rbNgspicePLTSpiceModelMode->SetValue( true );
-            break;
-
-        case NGSPICE_MODEL_MODE::HSPICE:
-            m_rbNgspiceHSpiceModelMode->SetValue( true );
-            break;
-
+        case NGSPICE_MODEL_MODE::USER_CONFIG: m_compatibilityModeChoice->SetSelection( 0 ); break;
+        case NGSPICE_MODEL_MODE::NGSPICE:     m_compatibilityModeChoice->SetSelection( 1 ); break;
+        case NGSPICE_MODEL_MODE::PSPICE:      m_compatibilityModeChoice->SetSelection( 2 ); break;
+        case NGSPICE_MODEL_MODE::LTSPICE:     m_compatibilityModeChoice->SetSelection( 3 ); break;
+        case NGSPICE_MODEL_MODE::LT_PSPICE:   m_compatibilityModeChoice->SetSelection( 4 ); break;
+        case NGSPICE_MODEL_MODE::HSPICE:      m_compatibilityModeChoice->SetSelection( 5 ); break;
         default:
             wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
                                           ngspiceSettings->GetModelMode() ) );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -415,51 +415,6 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgCustom->Layout();
 	bSizer2->Fit( m_pgCustom );
 	m_simPages->AddPage( m_pgCustom, _("Custom"), false );
-	m_pgNgspice = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_pgNgspice, wxID_ANY, _("Model Mode") ), wxVERTICAL );
-
-	m_rbNgspiceDefaultModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("User configuration"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbNgspiceDefaultModelMode->SetToolTip( _("Use the settings in the Ngspice configuration file or any settings defined in the schematic") );
-
-	sbSizer4->Add( m_rbNgspiceDefaultModelMode, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_rbNgspiceSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Spice"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbNgspiceSpiceModelMode->SetToolTip( _("Enable default spice model simulation") );
-
-	sbSizer4->Add( m_rbNgspiceSpiceModelMode, 0, wxALL, 5 );
-
-	m_rbNgspicePSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("PSpice"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbNgspicePSpiceModelMode->SetToolTip( _("Enable PSpice model simulation") );
-
-	sbSizer4->Add( m_rbNgspicePSpiceModelMode, 0, wxALL, 5 );
-
-	m_rbNgspiceLTSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("LTSpice"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbNgspiceLTSpiceModelMode->SetToolTip( _("Enable LTSpice model simulation") );
-
-	sbSizer4->Add( m_rbNgspiceLTSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_rbNgspicePLTSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("PSpice and LTSpice"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbNgspicePLTSpiceModelMode->SetToolTip( _("Enable PSpice and LTSpice model simulation") );
-
-	sbSizer4->Add( m_rbNgspicePLTSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_rbNgspiceHSpiceModelMode = new wxRadioButton( sbSizer4->GetStaticBox(), wxID_ANY, _("HSpice"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbNgspiceHSpiceModelMode->SetToolTip( _("Enable HSpice model simulation") );
-
-	sbSizer4->Add( m_rbNgspiceHSpiceModelMode, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-
-	bSizer21->Add( sbSizer4, 0, wxALL, 5 );
-
-
-	m_pgNgspice->SetSizer( bSizer21 );
-	m_pgNgspice->Layout();
-	bSizer21->Fit( m_pgNgspice );
-	m_simPages->AddPage( m_pgNgspice, _("Ngspice"), true );
 
 	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
 
@@ -467,14 +422,33 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
 
 	m_fixPassiveVals = new wxCheckBox( this, wxID_ANY, _("Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer88->Add( m_fixPassiveVals, 0, wxALL, 5 );
+	bSizer88->Add( m_fixPassiveVals, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_fixIncludePaths = new wxCheckBox( this, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixIncludePaths->SetValue(true);
-	bSizer88->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer88->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
+	m_compatibilityMode = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticText* compatibilityLabel;
+	compatibilityLabel = new wxStaticText( this, wxID_ANY, _("Compatibility mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	compatibilityLabel->Wrap( -1 );
+	m_compatibilityMode->Add( compatibilityLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
+
+	wxString m_compatibilityModeChoiceChoices[] = { _("User configuration"), _("Spice"), _("PSpice"), _("LTSpice"), _("PSpice and LTSpice"), _("HSpice") };
+	int m_compatibilityModeChoiceNChoices = sizeof( m_compatibilityModeChoiceChoices ) / sizeof( wxString );
+	m_compatibilityModeChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compatibilityModeChoiceNChoices, m_compatibilityModeChoiceChoices, 0 );
+	m_compatibilityModeChoice->SetSelection( 0 );
+	m_compatibilityMode->Add( m_compatibilityModeChoice, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer1->Add( bSizer88, 0, wxEXPAND|wxALL, 5 );
+	bSizer88->Add( m_compatibilityMode, 1, wxEXPAND|wxBOTTOM, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer88->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer1->Add( bSizer88, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

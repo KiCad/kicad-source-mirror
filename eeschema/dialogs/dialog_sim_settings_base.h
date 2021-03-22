@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,9 +30,8 @@
 #include <wx/button.h>
 #include <wx/gbsizer.h>
 #include <wx/combobox.h>
-#include <wx/radiobut.h>
-#include <wx/statbox.h>
 #include <wx/notebook.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -116,15 +115,11 @@ class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;
 		wxButton* m_loadDirectives;
-		wxPanel* m_pgNgspice;
-		wxRadioButton* m_rbNgspiceDefaultModelMode;
-		wxRadioButton* m_rbNgspiceSpiceModelMode;
-		wxRadioButton* m_rbNgspicePSpiceModelMode;
-		wxRadioButton* m_rbNgspiceLTSpiceModelMode;
-		wxRadioButton* m_rbNgspicePLTSpiceModelMode;
-		wxRadioButton* m_rbNgspiceHSpiceModelMode;
 		wxCheckBox* m_fixPassiveVals;
 		wxCheckBox* m_fixIncludePaths;
+		wxBoxSizer* m_compatibilityMode;
+		wxChoice* m_compatibilityModeChoice;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
