@@ -932,7 +932,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     editFrame->PopTool( tool );
-    return 0;
+
+    return restore_state ? -1 : 0;
 }
 
 
@@ -2086,13 +2087,16 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
         TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
-        Move( evt );
+        bool       move_cancelled = Move( evt ) == -1;
 
         // After moving the new items, we need to refresh the group and view flags
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        if( !is_hover )
+        if( !is_hover && !move_cancelled )
+        {
+            // Do not select new items if they've been deleted again by cancelling Move()
             m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &new_items );
+        }
     }
 
     return 0;
