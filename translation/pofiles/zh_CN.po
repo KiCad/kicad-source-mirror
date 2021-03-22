@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-21 06:36-0700\n"
-"PO-Revision-Date: 2021-03-22 16:51+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-03-22 17:14+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1020,7 +1020,7 @@ msgstr "显示 3D 轴线"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
-msgstr "切换区域显示"
+msgstr "切换覆铜显示"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle adhesive display"
@@ -3935,7 +3935,7 @@ msgstr "封装文本"
 
 #: common/eda_item.cpp:252 common/eda_item.cpp:261
 msgid "Zone"
-msgstr "区域"
+msgstr "覆铜"
 
 #: common/eda_item.cpp:253 pcbnew/track.cpp:649
 msgid "Track"
@@ -20647,7 +20647,7 @@ msgid ""
 msgstr ""
 "警告：\n"
 "过孔焊盘直径 >= 间隙过孔直径。\n"
-"无法计算一些参数，因铜区域内有一个过孔。"
+"无法计算一些参数，因覆铜区内有一个过孔。"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1345
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1624
@@ -21946,7 +21946,7 @@ msgstr "供应商和参考"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:102
 msgid "Checking zone fills..."
-msgstr "检查填充区域..."
+msgstr "检查覆铜填充..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
@@ -22938,11 +22938,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:105
 msgid "Zone name:"
-msgstr "区域名称："
+msgstr "覆铜名称："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:107
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "此区域的唯一名称，用于在 DRC 中对其进行标识"
+msgstr "此覆铜的唯一名称，用于在 DRC 中对其进行标识"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:128
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
@@ -22951,7 +22951,7 @@ msgstr "限制轮廓线在水平，垂直和 45 度"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:131
 msgid "Zone priority level:"
-msgstr "区域优先级："
+msgstr "覆铜优先级："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:133
 msgid ""
@@ -23023,7 +23023,7 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"默认焊盘与区域连接类型。\n"
+"默认焊盘与覆铜连接类型。\n"
 "该设置可被本地焊盘设置覆盖"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1407
@@ -23147,7 +23147,7 @@ msgstr "导出该覆铜设置 (除层和网络选择) 到所有其它覆铜区�
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:144
 msgid "Copper Zone Properties"
-msgstr "铜区属性"
+msgstr "覆铜区属性"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:129
 msgid "Numerals (0,1,2,...,9,10)"
@@ -24039,12 +24039,12 @@ msgstr "连接到覆铜区"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:320
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:416
 msgid "Pad connection to zones:"
-msgstr "焊盘连接到覆铜区："
+msgstr "焊盘连接到覆铜："
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 msgid "Use zone setting"
-msgstr "使用区域设置"
+msgstr "使用覆铜设置"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
@@ -26423,7 +26423,7 @@ msgstr "防散热间距："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:761
 msgid "Custom pad shape in zone:"
-msgstr "自定义焊盘形状："
+msgstr "覆铜中的自定义焊盘形状："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:765
 msgid "Use pad shape"
@@ -26661,7 +26661,7 @@ msgstr "负片绘制"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr "在绘制之前检查填充区域"
+msgstr "在绘制之前检查覆铜填充"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid ""
@@ -28050,11 +28050,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr "注：< %s 时区域填充可能会变慢。"
+msgstr "注：< %s 时覆铜填充可能会变慢。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:91
 msgid "Zone fill strategy"
-msgstr "区域填充策略"
+msgstr "覆铜填充策略"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:104
 msgid "Mimic legacy behavior"
@@ -28064,9 +28064,7 @@ msgstr "模仿旧行为"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly agressive higher-priority zone knockouts."
-msgstr ""
-"以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平"
-"滑的轮廓。"
+msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级覆铜挖空为代价，生成稍微平滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:109
 msgid "Smoothed polygons (best performance)"
@@ -28080,7 +28078,7 @@ msgstr "更好的性能、精确的导出保真度，以及在较高优先级覆
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:127
 msgid "Allow fillets outside zone outline"
-msgstr "允许圆角超出区域轮廓"
+msgstr "允许圆角超出覆铜轮廓"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:166
 msgid "Minimum clearance:"
@@ -28979,7 +28977,7 @@ msgstr "添加禁布区 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:690
 msgid "Tessellating copper zones..."
-msgstr "细分覆铜..."
+msgstr "细分覆铜区..."
 
 #: pcbnew/drc/drc_engine.cpp:789 pcbnew/drc/drc_engine.cpp:799
 #, c-format
@@ -29121,7 +29119,7 @@ msgstr "覆铜区交叉"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Copper zone net has no pads"
-msgstr "铜区没有焊盘连接"
+msgstr "覆铜区没有焊盘连接"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Via is not connected or connected on only one layer"
@@ -29357,7 +29355,7 @@ msgstr "(%s 最大环形宽度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:74
 msgid "Checking pad, via and zone connections..."
-msgstr "正在检查焊盘、过孔和区域连接..."
+msgstr "正在检查焊盘、过孔和覆铜连接..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:148
 msgid "Checking net connections..."
@@ -29385,7 +29383,7 @@ msgstr "正在检查焊盘..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:219
 msgid "Checking copper zone clearances..."
-msgstr "正在检查铜区间隙..."
+msgstr "正在检查覆铜区间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:226
 msgid "Checking zones..."
@@ -29614,7 +29612,7 @@ msgstr "(%s 最大直径 %s; 实际 %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:85 pcbnew/edit_zone_helpers.cpp:143
 msgid "Modify zone properties"
-msgstr "修改区域属性"
+msgstr "修改覆铜属性"
 
 #: pcbnew/edit_zone_helpers.cpp:133
 #, c-format
@@ -30007,7 +30005,7 @@ msgstr "封装图像文件名称"
 
 #: pcbnew/footprint_editor_utils.cpp:208
 msgid "Edit Zone"
-msgstr "编辑区域"
+msgstr "编辑覆铜"
 
 #: pcbnew/footprint_editor_utils.cpp:281
 #, c-format
@@ -30868,32 +30866,32 @@ msgstr "过孔连接到未知网络 (%s)。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:701
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "将铜区 '%s' 从 %s 重新连接到 %s。"
+msgstr "将覆铜区 '%s' 从 %s 重新连接到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "将铜区 %s 重新连接到 %s。"
+msgstr "将覆铜区 %s 重新连接到 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:729
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "将铜区 '%s' 从 %s 重新连接到了 %s。"
+msgstr "将覆铜区 '%s' 从 %s 重新连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "将铜区从 %s 重新连接到了 %s。"
+msgstr "将覆铜区从 %s 重新连接到了 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:749
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "铜区 '%s' 没有与之连接的焊盘。"
+msgstr "覆铜区 '%s' 没有与之连接的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "坐标 (%s, %s) 层 %s 上的铜区域没有与之相连的焊盘。"
+msgstr "坐标 (%s, %s) 层 %s 上的覆铜区没有与之相连的焊盘。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:825
 #, c-format
@@ -31478,8 +31476,7 @@ msgstr "ShapeBasedRegion 只有 %d 个点从 %ld 个顶点中提取。至少需�
 #, c-format
 msgid ""
 "Zone on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
-msgstr ""
-"Altium 层 %d 上的 Zone 没有任何 KiCad 等效项。改为将其放在 Eco1_User 上"
+msgstr "Altium 层 %d 上的覆铜没有任何 KiCad 等效项。改为将其放在 Eco1_User 上"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1486
 #, c-format
@@ -31774,9 +31771,8 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留敷铜 - 不相交\"和\"保留敷铜 - 隔"
-"离\"。KiCad 不区分这两个设置。不相交敷铜的设置已作为 KiCad 区域的最小敷铜面积"
-"应用。"
+"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留覆铜 - 不相交\"和\"保留覆铜 - 隔离\"。KiCad 不区分这两个设置。"
+"不相交覆铜的设置已作为 KiCad 覆铜的最小覆铜面积应用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1694
 #, c-format
@@ -31805,9 +31801,7 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr ""
-"CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未"
-"创建铜区。"
+msgstr "CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未创建覆铜区。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1856
 msgid ""
@@ -31816,9 +31810,8 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则"
-"它们已导入为 KiCad 区域；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 "
-"KiCad 布线。"
+"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则它们已导入为 KiCad "
+"覆铜；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 KiCad 布线。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1964
 #, c-format
@@ -32196,7 +32189,7 @@ msgstr "未知过孔类型 %d"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1941
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "未知铜区角平滑类型 %d"
+msgstr "未知覆铜角平滑类型 %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2194
 msgid "this file does not contain a PCB"
@@ -32347,7 +32340,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4610
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2573
 msgid "Legacy Zone Warning"
-msgstr "旧区警告"
+msgstr "旧覆铜警告"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:543
 #, c-format
@@ -32560,7 +32553,7 @@ msgid ""
 "This zone cannot be handled by the track layout tool.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"布线工具无法处理此禁止布线区。\n"
+"布线工具无法处理此覆铜。\n"
 "请确保它不是自相交的多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1609 pcbnew/router/router_tool.cpp:424
@@ -33064,7 +33057,7 @@ msgstr "解锁"
 
 #: pcbnew/tools/board_editor_control.cpp:1293
 msgid "Duplicate zone"
-msgstr "复制区域"
+msgstr "复制覆铜"
 
 #: pcbnew/tools/board_inspection_tool.cpp:67
 msgid "Net Tools"
@@ -33078,14 +33071,14 @@ msgstr "[网络类 %s]"
 #: pcbnew/tools/board_inspection_tool.cpp:144
 #, c-format
 msgid "Zone connection type: %s."
-msgstr "区域连接类型：%s。"
+msgstr "覆铜连接类型：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:147
 #: pcbnew/tools/board_inspection_tool.cpp:181
 #: pcbnew/tools/board_inspection_tool.cpp:199 pcbnew/zone.cpp:334
 #: pcbnew/zone.cpp:349 pcbnew/zone.cpp:497 pcbnew/zone.cpp:775
 msgid "zone"
-msgstr "区域"
+msgstr "覆铜"
 
 #: pcbnew/tools/board_inspection_tool.cpp:149
 #, c-format
@@ -33100,7 +33093,7 @@ msgstr "焊盘不是金属化孔焊盘；连接将是：%s。"
 #: pcbnew/tools/board_inspection_tool.cpp:176
 #, c-format
 msgid "Zone thermal relief: %s."
-msgstr "区域防散热 (花焊盘)：%s。"
+msgstr "覆铜防散热 (花焊盘)：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:183
 #, c-format
@@ -33110,7 +33103,7 @@ msgstr "被 %s 覆盖；防散热：%s。"
 #: pcbnew/tools/board_inspection_tool.cpp:192
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "区域间隙：%s。"
+msgstr "覆铜间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:201
 #, c-format
@@ -33272,7 +33265,7 @@ msgstr "将形状转换为多边形"
 
 #: pcbnew/tools/convert_tool.cpp:228
 msgid "Convert shapes to zone"
-msgstr "将形状转换为区域"
+msgstr "将形状转换为覆铜"
 
 #: pcbnew/tools/convert_tool.cpp:581
 msgid "Convert polygons to lines"
@@ -33553,11 +33546,11 @@ msgstr "根据所选内容创建图形多边形"
 
 #: pcbnew/tools/pcb_actions.cpp:65
 msgid "Convert to Zone"
-msgstr "转换为区域"
+msgstr "转换为覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:65
 msgid "Creates a copper zone from the selection"
-msgstr "从所选内容创建铜区"
+msgstr "从所选内容创建覆铜区"
 
 #: pcbnew/tools/pcb_actions.cpp:70
 msgid "Convert to Rule Area"
@@ -33669,11 +33662,11 @@ msgstr "添加引线标注"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add Filled Zone"
-msgstr "添加覆铜区域"
+msgstr "添加填充覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add a filled zone"
-msgstr "添加填充区域"
+msgstr "添加填充覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:173
 msgid "Add Vias"
@@ -33693,11 +33686,11 @@ msgstr "添加规则区域（禁布区）"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a Zone Cutout"
-msgstr "添加挖空区域"
+msgstr "添加挖空覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a cutout area of an existing zone"
-msgstr "添加挖空区域"
+msgstr "添加挖空覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Add a Similar Zone"
@@ -33705,7 +33698,7 @@ msgstr "添加相似覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Add a zone with the same settings as an existing zone"
-msgstr "添加与现有区域具有相同设置的区域"
+msgstr "添加与现有覆铜具有相同设置的覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:197
 msgid "Place Imported Graphics"
@@ -34240,7 +34233,7 @@ msgstr "合并覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid "Duplicate Zone onto Layer..."
-msgstr "重复覆铜区域到层..."
+msgstr "重复覆铜到层..."
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid "Duplicate zone outline onto a different layer"
@@ -34488,7 +34481,7 @@ msgstr "线框覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Show only zone boundaries"
-msgstr "仅显示区域边界"
+msgstr "仅显示覆铜边界"
 
 #: pcbnew/tools/pcb_actions.cpp:835
 msgid "Sketch Zones"
@@ -34500,7 +34493,7 @@ msgstr "在轮廓模式下显示覆铜的实心区域"
 
 #: pcbnew/tools/pcb_actions.cpp:841
 msgid "Toggle Zone Display"
-msgstr "切换区域显示"
+msgstr "切换覆铜显示"
 
 #: pcbnew/tools/pcb_actions.cpp:842
 msgid "Cycle between showing filled zones, wireframed zones and sketched zones"
@@ -34839,7 +34832,7 @@ msgstr "取消填充"
 
 #: pcbnew/tools/pcb_actions.cpp:1243
 msgid "Unfill zone(s)"
-msgstr "取消填充区域"
+msgstr "取消填充覆铜"
 
 #: pcbnew/tools/pcb_actions.cpp:1249
 msgid "Unfill All"
@@ -34977,7 +34970,7 @@ msgstr "拖动拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2075
 msgid "Add a zone corner"
-msgstr "添加覆铜区域拐角"
+msgstr "添加覆铜拐角"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2113
 msgid "Split segment"
@@ -34985,7 +34978,7 @@ msgstr "分割线段"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2184
 msgid "Remove a zone/polygon corner"
-msgstr "删除区域或多边形的拐角"
+msgstr "删除覆铜或多边形的拐角"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:67
 msgid "Select"
@@ -35037,7 +35030,7 @@ msgstr "单击位号项..."
 
 #: pcbnew/tools/zone_create_helper.cpp:181
 msgid "Add a zone cutout"
-msgstr "添加挖空区域"
+msgstr "添加挖空覆铜"
 
 #: pcbnew/tools/zone_create_helper.cpp:229
 msgid "Add a zone"
@@ -35054,7 +35047,7 @@ msgstr "检查覆铜"
 #: pcbnew/tools/zone_filler_tool.cpp:77 pcbnew/tools/zone_filler_tool.cpp:135
 #: pcbnew/tools/zone_filler_tool.cpp:179
 msgid "Fill Zone(s)"
-msgstr "填充区域"
+msgstr "填充覆铜"
 
 #: pcbnew/tools/zone_filler_tool.cpp:110
 msgid "Show DRC rules"
@@ -35062,7 +35055,7 @@ msgstr "显示 DRC 规则"
 
 #: pcbnew/tools/zone_filler_tool.cpp:122
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr "区域填充可能不准确。DRC 规则包含错误。"
+msgstr "覆铜填充可能不准确。DRC 规则包含错误。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:129
 msgid "Fill All Zones"
@@ -35070,7 +35063,7 @@ msgstr "填充所有覆铜"
 
 #: pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Unfill Zone"
-msgstr "取消填充区域"
+msgstr "取消填充覆铜"
 
 #: pcbnew/tools/zone_filler_tool.cpp:230
 msgid "Unfill All Zones"
@@ -35708,11 +35701,11 @@ msgstr "规则区域"
 
 #: pcbnew/zone.cpp:551
 msgid "Copper Zone"
-msgstr "铜区"
+msgstr "覆铜区"
 
 #: pcbnew/zone.cpp:553
 msgid "Non-copper Zone"
-msgstr "非铜区"
+msgstr "非覆铜区"
 
 #: pcbnew/zone.cpp:558
 msgid "Cutout"
@@ -35775,7 +35768,7 @@ msgstr "%s 上的规则区域挖空"
 #: pcbnew/zone.cpp:874
 #, c-format
 msgid "Zone Cutout on %s"
-msgstr "%s 上的区域挖空"
+msgstr "%s 上的覆铜挖空"
 
 #: pcbnew/zone.cpp:879
 #, c-format
@@ -35785,7 +35778,7 @@ msgstr "%s上的规则区域"
 #: pcbnew/zone.cpp:881
 #, c-format
 msgid "Zone %s on %s"
-msgstr "%s 上的区域%s"
+msgstr "%s 上的覆铜%s"
 
 #: pcbnew/zone.cpp:1405
 msgid "Inherited"
@@ -35809,7 +35802,7 @@ msgstr "防散热导线宽度"
 
 #: pcbnew/zone_filler.cpp:103
 msgid "Building zone fills..."
-msgstr "构造填充区域..."
+msgstr "构造覆铜填充..."
 
 #: pcbnew/zone_filler.cpp:308
 msgid "Removing isolated copper islands..."
@@ -35817,7 +35810,7 @@ msgstr "正在移除孤立的铜岛..."
 
 #: pcbnew/zone_filler.cpp:421
 msgid "Zone fills are out-of-date. Refill?"
-msgstr "覆铜区域已失效，重新覆铜？"
+msgstr "覆铜填充已失效，重新填充？"
 
 #: pcbnew/zone_filler.cpp:423
 msgid "Refill"
