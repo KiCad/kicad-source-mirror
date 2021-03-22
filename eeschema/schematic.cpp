@@ -26,7 +26,7 @@
 #include <project/net_settings.h>
 #include <schematic.h>
 #include <sch_screen.h>
-#include <sim/ngspice.h>
+#include <sim/spice_settings.h>
 
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
