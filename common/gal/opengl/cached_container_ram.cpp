@@ -41,12 +41,23 @@
 
 using namespace KIGFX;
 
+
+/**
+ * Flag to enable debug output of the GAL OpenGL cached container.
+ *
+ * Use "KICAD_GAL_CACHED_CONTAINER" to enable GAL OpenGL cached container tracing.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* const traceGalCachedContainer = wxT( "KICAD_GAL_CACHED_CONTAINER" );
+
+
 CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
         CACHED_CONTAINER( aSize ),
         m_verticesBuffer( 0 )
 {
     glGenBuffers( 1, &m_verticesBuffer );
-    checkGlError( "generating vertices buffer" );
+    checkGlError( "generating vertices buffer", __FILE__, __LINE__ );
 
     m_vertices = static_cast<VERTEX*>( malloc( aSize * VERTEX_SIZE ) );
 
@@ -71,17 +82,17 @@ void CACHED_CONTAINER_RAM::Unmap()
 
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
-    checkGlError( "binding vertices buffer" );
+    checkGlError( "binding vertices buffer", __FILE__, __LINE__ );
     glBufferData( GL_ARRAY_BUFFER, m_maxIndex * VERTEX_SIZE, m_vertices, GL_STREAM_DRAW );
-    checkGlError( "transferring vertices" );
+    checkGlError( "transferring vertices", __FILE__, __LINE__ );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    checkGlError( "unbinding vertices buffer" );
+    checkGlError( "unbinding vertices buffer", __FILE__, __LINE__ );
 }
 
 
 bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
 {
-    wxLogTrace( "GAL_CACHED_CONTAINER",
+    wxLogTrace( traceGalCachedContainer,
                 wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ), m_currentSize,
                 aNewSize );
 
@@ -107,7 +118,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER", "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( traceGalCachedContainer, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 

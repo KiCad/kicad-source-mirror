@@ -124,21 +124,21 @@ void OPENGL_COMPOSITOR::Initialize()
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
     glGenFramebuffersEXT( 1, &m_mainFbo );
-    checkGlError( "generating framebuffer" );
+    checkGlError( "generating framebuffer", __FILE__, __LINE__ );
     bindFb( m_mainFbo );
 
     // Allocate memory for the depth buffer
     // Attach the depth buffer to the framebuffer
     glGenRenderbuffersEXT( 1, &m_depthBuffer );
-    checkGlError( "generating renderbuffer" );
+    checkGlError( "generating renderbuffer", __FILE__, __LINE__ );
     glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
-    checkGlError( "binding renderbuffer" );
+    checkGlError( "binding renderbuffer", __FILE__, __LINE__ );
 
     glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8, dims.x, dims.y );
-    checkGlError( "creating renderbuffer storage" );
+    checkGlError( "creating renderbuffer storage", __FILE__, __LINE__ );
     glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_STENCIL_ATTACHMENT,
                                   GL_RENDERBUFFER_EXT, m_depthBuffer );
-    checkGlError( "attaching renderbuffer" );
+    checkGlError( "attaching renderbuffer", __FILE__, __LINE__ );
 
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
     bindFb( DIRECT_RENDERING );
@@ -199,15 +199,15 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
     // Generate the texture for the pixel storage
     glActiveTexture( GL_TEXTURE0 );
     glGenTextures( 1, &textureTarget );
-    checkGlError( "generating framebuffer texture target" );
+    checkGlError( "generating framebuffer texture target", __FILE__, __LINE__ );
     glBindTexture( GL_TEXTURE_2D, textureTarget );
-    checkGlError( "binding framebuffer texture target" );
+    checkGlError( "binding framebuffer texture target", __FILE__, __LINE__ );
 
     // Set texture parameters
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, aDimensions.x, aDimensions.y, 0, GL_RGBA,
                   GL_UNSIGNED_BYTE, NULL );
-    checkGlError( "creating framebuffer texture" );
+    checkGlError( "creating framebuffer texture", __FILE__, __LINE__ );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
@@ -300,7 +300,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
     {
         m_curBuffer = aBufferHandle - 1;
         glDrawBuffer( m_buffers[m_curBuffer].attachmentPoint );
-        checkGlError( "setting draw buffer" );
+        checkGlError( "setting draw buffer", __FILE__, __LINE__ );
 
         glViewport( 0, 0, m_buffers[m_curBuffer].dimensions.x,
                     m_buffers[m_curBuffer].dimensions.y );
@@ -400,7 +400,7 @@ void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
     if( m_curFbo != aFb )
     {
         glBindFramebufferEXT( GL_FRAMEBUFFER, aFb );
-        checkGlError( "switching framebuffer" );
+        checkGlError( "switching framebuffer", __FILE__, __LINE__ );
         m_curFbo = aFb;
     }
 }

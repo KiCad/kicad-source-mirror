@@ -40,6 +40,16 @@
 
 using namespace KIGFX;
 
+/**
+ * Flag to enable debug output of the GAL OpenGL GPU cached container.
+ *
+ * Use "KICAD_GAL_CACHED_CONTAINER_GPU" to enable GAL OpenGL GPU cached container tracing.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* const traceGalCachedContainerGpu = wxT( "KICAD_GAL_CACHED_CONTAINER_GPU" );
+
+
 CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
         CACHED_CONTAINER( aSize ),
         m_isMapped( false ),
@@ -61,7 +71,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    checkGlError( "allocating video memory for cached container" );
+    checkGlError( "allocating video memory for cached container", __FILE__, __LINE__ );
 }
 
 
@@ -86,7 +96,7 @@ void CACHED_CONTAINER_GPU::Map()
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );
 
-    if( checkGlError( "mapping vertices buffer" ) == GL_NO_ERROR )
+    if( checkGlError( "mapping vertices buffer", __FILE__, __LINE__ ) == GL_NO_ERROR )
         m_isMapped = true;
 }
 
@@ -100,10 +110,10 @@ void CACHED_CONTAINER_GPU::Unmap()
     try
     {
         glUnmapBuffer( GL_ARRAY_BUFFER );
-        checkGlError( "unmapping vertices buffer" );
+        checkGlError( "unmapping vertices buffer", __FILE__, __LINE__ );
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
         m_vertices = nullptr;
-        checkGlError( "unbinding vertices buffer" );
+        checkGlError( "unbinding vertices buffer", __FILE__, __LINE__ );
     }
     catch( const std::runtime_error& err )
     {
@@ -121,7 +131,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 
     wxCHECK( IsMapped(), false );
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
+    wxLogTrace( traceGalCachedContainerGpu,
                 wxT( "Resizing & defragmenting container from %d to %d" ), m_currentSize,
                 aNewSize );
 
@@ -150,7 +160,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
-    checkGlError( "creating buffer during defragmentation" );
+    checkGlError( "creating buffer during defragmentation", __FILE__, __LINE__ );
 
     ITEMS::iterator it, it_end;
     int             newOffset = 0;
@@ -196,12 +206,12 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     // Switch to the new vertex buffer
     m_glBufferHandle = newBuffer;
     Map();
-    checkGlError( "switching buffers during defragmentation" );
+    checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU", "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 
@@ -220,7 +230,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 {
     wxCHECK( IsMapped(), false );
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU",
+    wxLogTrace( traceGalCachedContainerGpu,
                 wxT( "Resizing & defragmenting container (memcpy) from %d to %d" ), m_currentSize,
                 aNewSize );
 
@@ -248,7 +258,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
-    checkGlError( "creating buffer during defragmentation" );
+    checkGlError( "creating buffer during defragmentation", __FILE__, __LINE__ );
 
     defragment( newBufferMem );
 
@@ -261,12 +271,12 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     // Switch to the new vertex buffer
     m_glBufferHandle = newBuffer;
     Map();
-    checkGlError( "switching buffers during defragmentation" );
+    checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
 #ifdef __WXDEBUG__
     totalTime.Stop();
 
-    wxLogTrace( "GAL_CACHED_CONTAINER_GPU", "Defragmented container storing %d vertices / %.1f ms",
+    wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 

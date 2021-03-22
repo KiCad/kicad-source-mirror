@@ -31,6 +31,7 @@
 #include <macros.h>
 #include <settings/app_settings.h>
 #include <cursors.h>
+#include <trace_helpers.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -258,7 +259,8 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
 #ifdef PROFILE
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", "EDA_DRAW_PANEL_GAL::DoRePaint(): %.1f ms", totalRealTime.msecs() );
+    wxLogTrace( traceGalProfile, "EDA_DRAW_PANEL_GAL::DoRePaint(): %.1f ms",
+                totalRealTime.msecs() );
 #endif /* PROFILE */
 
     m_lastRefresh = wxGetLocalTimeMillis();

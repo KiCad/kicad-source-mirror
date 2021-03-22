@@ -33,6 +33,7 @@
 
 #include <typeinfo>
 #include <confirm.h>
+#include <trace_helpers.h>
 
 #ifdef __WXDEBUG__
 #include <profile.h>
@@ -111,7 +112,7 @@ void GPU_CACHED_MANAGER::BeginDrawing()
     if( !m_buffersInitialized )
     {
         glGenBuffers( 1, &m_indicesBuffer );
-        checkGlError( "generating vertices buffer" );
+        checkGlError( "generating vertices buffer", __FILE__, __LINE__ );
         m_buffersInitialized = true;
     }
 
@@ -198,7 +199,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, 0 );
 
 #ifdef __WXDEBUG__
-    wxLogTrace( "GAL_PROFILE", wxT( "Cached manager size: %d" ), m_indicesSize );
+    wxLogTrace( traceGalProfile, wxT( "Cached manager size: %d" ), m_indicesSize );
 #endif /* __WXDEBUG__ */
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
@@ -219,7 +220,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "GPU_CACHED_MANAGER::EndDrawing(): %.1f ms" ),
+    wxLogTrace( traceGalProfile, wxT( "GPU_CACHED_MANAGER::EndDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
@@ -299,7 +300,7 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     glDrawArrays( GL_TRIANGLES, 0, m_container->GetSize() );
 
 #ifdef __WXDEBUG__
-    wxLogTrace( "GAL_PROFILE", wxT( "Noncached manager size: %d" ), m_container->GetSize() );
+    wxLogTrace( traceGalProfile, wxT( "Noncached manager size: %d" ), m_container->GetSize() );
 #endif /* __WXDEBUG__ */
 
     // Deactivate vertex array
@@ -316,7 +317,7 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "GPU_NONCACHED_MANAGER::EndDrawing(): %.1f ms" ),
+    wxLogTrace( traceGalProfile, wxT( "GPU_NONCACHED_MANAGER::EndDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }

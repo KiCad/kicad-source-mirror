@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2018-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,9 +178,15 @@ extern const wxChar* const traceSchSheetPaths;
  * Flag to enable debug output of environment variable operations.
  *
  * Use "KICAD_ENV_VARS" to enable.
- *
  */
 extern const wxChar* const traceEnvVars;
+
+/**
+ * Flag to enable debug output of GAL performance profiling.
+ *
+ * Use "KICAD_GAL_PROFILE" to enable.
+ */
+extern const wxChar* const traceGalProfile;
 
 ///@}
 

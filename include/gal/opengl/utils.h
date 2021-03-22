@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2017 CERN
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,16 +29,21 @@
 #include <string>
 
 /**
- * @brief Checks if one of recent OpenGL operations has failed. If so, it displays appropriate
- * message, starting with aInfo string to give more details.
+ * Check if a recent OpenGL operation has failed. If so, display the appropriate message
+ * starting with \a aInfo string to give more details.
+ *
  * @param aInfo is the beginning of the error message.
+ * @param aFile is the file where the error occurred defined by the C __FILE__ variable.
+ * @param aLine is the line in \a aFile where the error occurred defined by the C __LINE__
+ *              variable.
  * @param aThrow an exception is thrown when true, otherwise only an error message is displayed.
  * @return GL_NO_ERROR in case of no errors or one of GL_ constants returned by glGetError().
  */
-int checkGlError( const std::string& aInfo, bool aThrow = true );
+int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool aThrow = true );
 
 /**
- * @brief Enables/disables OpenGL driver messages output.
+ * Enable or disable OpenGL driver messages output.
+ *
  * @param aEnable decides whether the message should be shown.
  */
 void enableGlDebug( bool aEnable );

@@ -28,6 +28,7 @@
 
 #include <eda_item.h>
 #include <layers_id_colors_and_visibility.h>
+#include <trace_helpers.h>
 
 #include <view/view.h>
 #include <view/view_group.h>
@@ -1148,7 +1149,7 @@ void VIEW::Redraw()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", "VIEW::Redraw(): %.1f ms", totalRealTime.msecs() );
+    wxLogTrace( traceGalProfile, "VIEW::Redraw(): %.1f ms", totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 

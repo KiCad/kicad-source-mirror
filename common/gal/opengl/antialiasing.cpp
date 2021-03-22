@@ -145,17 +145,17 @@ bool ANTIALIASING_SUPERSAMPLING::Init()
         x4_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT,
                                           BUILTIN_SHADERS::ssaa_x4_fragment_shader );
         x4_shader->Link();
-        checkGlError( "linking supersampling x4 shader" );
+        checkGlError( "linking supersampling x4 shader", __FILE__, __LINE__ );
 
         GLint source_parameter = x4_shader->AddParameter( "source" );
-        checkGlError( "getting pass 1 colorTex" );
+        checkGlError( "getting pass 1 colorTex", __FILE__, __LINE__ );
 
         x4_shader->Use();
-        checkGlError( "using pass 1 shader" );
+        checkGlError( "using pass 1 shader", __FILE__, __LINE__ );
         x4_shader->SetParameter( source_parameter, 0 );
-        checkGlError( "setting colorTex uniform" );
+        checkGlError( "setting colorTex uniform", __FILE__, __LINE__ );
         x4_shader->Deactivate();
-        checkGlError( "deactivating pass 2 shader" );
+        checkGlError( "deactivating pass 2 shader", __FILE__, __LINE__ );
 
         areShadersCreated = true;
     }
@@ -210,7 +210,7 @@ void ANTIALIASING_SUPERSAMPLING::Present()
     if( mode == SUPERSAMPLING_MODE::X4 )
     {
         x4_shader->Use();
-        checkGlError( "activating supersampling x4 shader" );
+        checkGlError( "activating supersampling x4 shader", __FILE__, __LINE__ );
     }
 
     draw_fullscreen_primitive();
@@ -218,7 +218,7 @@ void ANTIALIASING_SUPERSAMPLING::Present()
     if( mode == SUPERSAMPLING_MODE::X4 )
     {
         x4_shader->Deactivate();
-        checkGlError( "deactivating supersampling x4 shader" );
+        checkGlError( "deactivating supersampling x4 shader", __FILE__, __LINE__ );
     }
 }
 
@@ -276,7 +276,7 @@ void ANTIALIASING_SMAA::loadShaders()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RG8, AREATEX_WIDTH, AREATEX_HEIGHT, 0, GL_RG,
                   GL_UNSIGNED_BYTE, areaTexBytes );
-    checkGlError( "loading smaa area tex" );
+    checkGlError( "loading smaa area tex", __FILE__, __LINE__ );
 
     glGenTextures( 1, &smaaSearchTex );
     glBindTexture( GL_TEXTURE_2D, smaaSearchTex );
@@ -286,7 +286,7 @@ void ANTIALIASING_SMAA::loadShaders()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_R8, SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 0, GL_RED,
                   GL_UNSIGNED_BYTE, searchTexBytes );
-    checkGlError( "loading smaa search tex" );
+    checkGlError( "loading smaa search tex", __FILE__, __LINE__ );
 
     std::string quality_string;
 
@@ -332,19 +332,19 @@ uniform vec4 SMAA_RT_METRICS;
                                           quality_string, smaa_source,
                                           BUILTIN_SHADERS::smaa_pass_1_fragment_shader );
     pass_1_shader->Link();
-    checkGlError( "linking pass 1 shader" );
+    checkGlError( "linking pass 1 shader", __FILE__, __LINE__ );
 
     GLint smaaColorTexParameter = pass_1_shader->AddParameter( "colorTex" );
-    checkGlError( "pass1: getting colorTex uniform" );
+    checkGlError( "pass1: getting colorTex uniform", __FILE__, __LINE__ );
     pass_1_metrics = pass_1_shader->AddParameter( "SMAA_RT_METRICS" );
-    checkGlError( "pass1: getting metrics uniform" );
+    checkGlError( "pass1: getting metrics uniform", __FILE__, __LINE__ );
 
     pass_1_shader->Use();
-    checkGlError( "pass1: using shader" );
+    checkGlError( "pass1: using shader", __FILE__, __LINE__ );
     pass_1_shader->SetParameter( smaaColorTexParameter, 0 );
-    checkGlError( "pass1: setting colorTex uniform" );
+    checkGlError( "pass1: setting colorTex uniform", __FILE__, __LINE__ );
     pass_1_shader->Deactivate();
-    checkGlError( "pass1: deactivating shader" );
+    checkGlError( "pass1: deactivating shader", __FILE__, __LINE__ );
 
     //
     // set up pass 2 shader
@@ -356,27 +356,27 @@ uniform vec4 SMAA_RT_METRICS;
                                           quality_string, smaa_source,
                                           BUILTIN_SHADERS::smaa_pass_2_fragment_shader );
     pass_2_shader->Link();
-    checkGlError( "linking pass 2 shader" );
+    checkGlError( "linking pass 2 shader", __FILE__, __LINE__ );
 
     GLint smaaEdgesTexParameter = pass_2_shader->AddParameter( "edgesTex" );
-    checkGlError( "pass2: getting colorTex uniform" );
+    checkGlError( "pass2: getting colorTex uniform", __FILE__, __LINE__ );
     GLint smaaAreaTexParameter = pass_2_shader->AddParameter( "areaTex" );
-    checkGlError( "pass2: getting areaTex uniform" );
+    checkGlError( "pass2: getting areaTex uniform", __FILE__, __LINE__ );
     GLint smaaSearchTexParameter = pass_2_shader->AddParameter( "searchTex" );
-    checkGlError( "pass2: getting searchTex uniform" );
+    checkGlError( "pass2: getting searchTex uniform", __FILE__, __LINE__ );
     pass_2_metrics = pass_2_shader->AddParameter( "SMAA_RT_METRICS" );
-    checkGlError( "pass2: getting metrics uniform" );
+    checkGlError( "pass2: getting metrics uniform", __FILE__, __LINE__ );
 
     pass_2_shader->Use();
-    checkGlError( "pass2: using shader" );
+    checkGlError( "pass2: using shader", __FILE__, __LINE__ );
     pass_2_shader->SetParameter( smaaEdgesTexParameter, 0 );
-    checkGlError( "pass2: setting colorTex uniform" );
+    checkGlError( "pass2: setting colorTex uniform", __FILE__, __LINE__ );
     pass_2_shader->SetParameter( smaaAreaTexParameter, 1 );
-    checkGlError( "pass2: setting areaTex uniform" );
+    checkGlError( "pass2: setting areaTex uniform", __FILE__, __LINE__ );
     pass_2_shader->SetParameter( smaaSearchTexParameter, 3 );
-    checkGlError( "pass2: setting searchTex uniform" );
+    checkGlError( "pass2: setting searchTex uniform", __FILE__, __LINE__ );
     pass_2_shader->Deactivate();
-    checkGlError( "pass2: deactivating shader" );
+    checkGlError( "pass2: deactivating shader", __FILE__, __LINE__ );
 
     //
     // set up pass 3 shader
@@ -390,20 +390,20 @@ uniform vec4 SMAA_RT_METRICS;
     pass_3_shader->Link();
 
     GLint smaaP3ColorTexParameter = pass_3_shader->AddParameter( "colorTex" );
-    checkGlError( "pass3: getting colorTex uniform" );
+    checkGlError( "pass3: getting colorTex uniform", __FILE__, __LINE__ );
     GLint smaaBlendTexParameter = pass_3_shader->AddParameter( "blendTex" );
-    checkGlError( "pass3: getting blendTex uniform" );
+    checkGlError( "pass3: getting blendTex uniform", __FILE__, __LINE__ );
     pass_3_metrics = pass_3_shader->AddParameter( "SMAA_RT_METRICS" );
-    checkGlError( "pass3: getting metrics uniform" );
+    checkGlError( "pass3: getting metrics uniform", __FILE__, __LINE__ );
 
     pass_3_shader->Use();
-    checkGlError( "pass3: using shader" );
+    checkGlError( "pass3: using shader", __FILE__, __LINE__ );
     pass_3_shader->SetParameter( smaaP3ColorTexParameter, 0 );
-    checkGlError( "pass3: setting colorTex uniform" );
+    checkGlError( "pass3: setting colorTex uniform", __FILE__, __LINE__ );
     pass_3_shader->SetParameter( smaaBlendTexParameter, 1 );
-    checkGlError( "pass3: setting blendTex uniform" );
+    checkGlError( "pass3: setting blendTex uniform", __FILE__, __LINE__ );
     pass_3_shader->Deactivate();
-    checkGlError( "pass3: deactivating shader" );
+    checkGlError( "pass3: deactivating shader", __FILE__, __LINE__ );
 
     shadersLoaded = true;
 }
@@ -414,28 +414,28 @@ void ANTIALIASING_SMAA::updateUniforms()
     auto dims = compositor->GetScreenSize();
 
     pass_1_shader->Use();
-    checkGlError( "pass1: using shader" );
+    checkGlError( "pass1: using shader", __FILE__, __LINE__ );
     pass_1_shader->SetParameter( pass_1_metrics, 1.f / float( dims.x ), 1.f / float( dims.y ),
                                  float( dims.x ), float( dims.y ) );
-    checkGlError( "pass1: setting metrics uniform" );
+    checkGlError( "pass1: setting metrics uniform", __FILE__, __LINE__ );
     pass_1_shader->Deactivate();
-    checkGlError( "pass1: deactivating shader" );
+    checkGlError( "pass1: deactivating shader", __FILE__, __LINE__ );
 
     pass_2_shader->Use();
-    checkGlError( "pass2: using shader" );
+    checkGlError( "pass2: using shader", __FILE__, __LINE__ );
     pass_2_shader->SetParameter( pass_2_metrics, 1.f / float( dims.x ), 1.f / float( dims.y ),
                                  float( dims.x ), float( dims.y ) );
-    checkGlError( "pass2: setting metrics uniform" );
+    checkGlError( "pass2: setting metrics uniform", __FILE__, __LINE__ );
     pass_2_shader->Deactivate();
-    checkGlError( "pass2: deactivating shader" );
+    checkGlError( "pass2: deactivating shader", __FILE__, __LINE__ );
 
     pass_3_shader->Use();
-    checkGlError( "pass3: using shader" );
+    checkGlError( "pass3: using shader", __FILE__, __LINE__ );
     pass_3_shader->SetParameter( pass_3_metrics, 1.f / float( dims.x ), 1.f / float( dims.y ),
                                  float( dims.x ), float( dims.y ) );
-    checkGlError( "pass3: setting metrics uniform" );
+    checkGlError( "pass3: setting metrics uniform", __FILE__, __LINE__ );
     pass_3_shader->Deactivate();
-    checkGlError( "pass3: deactivating shader" );
+    checkGlError( "pass3: deactivating shader", __FILE__, __LINE__ );
 }
 
 
@@ -536,9 +536,9 @@ void ANTIALIASING_SMAA::Present()
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, sourceTexture );
-    checkGlError( "binding colorTex" );
+    checkGlError( "binding colorTex", __FILE__, __LINE__ );
     pass_1_shader->Use();
-    checkGlError( "using smaa pass 1 shader" );
+    checkGlError( "using smaa pass 1 shader", __FILE__, __LINE__ );
     draw_fullscreen_triangle();
     pass_1_shader->Deactivate();
 

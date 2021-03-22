@@ -43,6 +43,7 @@
 #include <bitmap_base.h>
 #include <bezier_curves.h>
 #include <math/util.h> // for KiROUND
+#include <trace_helpers.h>
 
 #include <wx/frame.h>
 
@@ -504,7 +505,7 @@ void OPENGL_GAL::beginDrawing()
                           GL_UNSIGNED_BYTE, font_image.pixels );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-            checkGlError( "loading bitmap font" );
+            checkGlError( "loading bitmap font", __FILE__, __LINE__ );
 
             glActiveTexture( GL_TEXTURE0 );
 
@@ -528,13 +529,14 @@ void OPENGL_GAL::beginDrawing()
         m_shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
         m_shader->SetParameter( ufm_fontTextureWidth, (int) font_image.width );
         m_shader->Deactivate();
-        checkGlError( "setting bitmap font sampler as shader parameter" );
+        checkGlError( "setting bitmap font sampler as shader parameter", __FILE__, __LINE__ );
 
         m_isBitmapFontInitialized = true;
     }
 
     m_shader->Use();
-    m_shader->SetParameter( ufm_worldPixelSize, (float) ( getWorldPixelSize() / GetScaleFactor() ) );
+    m_shader->SetParameter( ufm_worldPixelSize,
+                            (float) ( getWorldPixelSize() / GetScaleFactor() ) );
     m_shader->SetParameter( ufm_screenPixelSize, getScreenPixelSize() );
     double pixelSizeMultiplier = m_compositor->GetAntialiasSupersamplingFactor();
     m_shader->SetParameter( ufm_pixelSizeMultiplier, (float) pixelSizeMultiplier );
@@ -549,7 +551,7 @@ void OPENGL_GAL::beginDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ),
+    wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ),
                 totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
@@ -590,7 +592,8 @@ void OPENGL_GAL::endDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::endDrawing(): %.1f ms" ), totalRealTime.msecs() );
+    wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::endDrawing(): %.1f ms" ),
+                totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 
@@ -750,15 +753,15 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
          */
         m_currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, m_lineWidth );
         m_currentManager->Vertex( aCenterPoint.x, // v0
-                                aCenterPoint.y, m_layerDepth );
+                                  aCenterPoint.y, m_layerDepth );
 
         m_currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, m_lineWidth );
         m_currentManager->Vertex( aCenterPoint.x, // v1
-                                aCenterPoint.y, m_layerDepth );
+                                  aCenterPoint.y, m_layerDepth );
 
         m_currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, m_lineWidth );
         m_currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, // v2
-                                m_layerDepth );
+                                  m_layerDepth );
     }
 }
 
@@ -788,9 +791,11 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         {
             m_currentManager->Reserve( 3 );
             m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
-            m_currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, m_layerDepth );
+            m_currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius,
+                                      m_layerDepth );
             alpha += alphaIncrement;
-            m_currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, m_layerDepth );
+            m_currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius,
+                                      m_layerDepth );
         }
 
         // The last missing triangle
@@ -1256,7 +1261,9 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
     switch( GetHorizontalJustify() )
     {
-    case GR_TEXT_HJUSTIFY_CENTER: Translate( VECTOR2D( -textSize.x / 2.0, 0 ) ); break;
+    case GR_TEXT_HJUSTIFY_CENTER:
+        Translate( VECTOR2D( -textSize.x / 2.0, 0 ) );
+        break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
         //if( !IsTextMirrored() )
@@ -1281,7 +1288,8 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         overbarHeight = 0;
         break;
 
-    case GR_TEXT_VJUSTIFY_BOTTOM: break;
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        break;
     }
 
     int i = 0;
@@ -1688,7 +1696,6 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
         break;
     }
 
-
     if( aTarget != TARGET_OVERLAY )
         m_compositor->ClearBuffer( m_clearColor );
     else if( m_overlayBuffer )
@@ -1778,7 +1785,8 @@ void OPENGL_GAL::drawSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, d
 
     if( m_isStrokeEnabled )
     {
-        m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
+        m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
+                                 m_strokeColor.a );
         drawStrokedSemiCircle( aCenterPoint, aRadius, aAngle );
     }
 }

@@ -32,7 +32,17 @@
 #include <wx/log.h> // wxLogDebug
 
 
-int checkGlError( const std::string& aInfo, bool aThrow )
+/**
+ * Flag to enable debug output of the GAL OpenGL error checking.
+ *
+ * Use "KICAD_GAL_OPENGL_ERROR" to enable GAL OpenGL error tracing.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* const traceGalOpenGlError = wxT( "KICAD_GAL_OPENGL_ERROR" );
+
+
+int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool aThrow )
 {
     int      result = glGetError();
     wxString errorMsg;
@@ -128,9 +138,20 @@ int checkGlError( const std::string& aInfo, bool aThrow )
     if( result != GL_NO_ERROR )
     {
         if( aThrow )
+        {
+            wxLogTrace( traceGalOpenGlError, wxT( "Throwing exection for glGetError() '%s' "
+                                                  "in file '%s' on line %d." ), errorMsg,
+                        aFile, aLine );
             throw std::runtime_error( (const char*) errorMsg.char_str() );
+        }
         else
-            DisplayErrorMessage( nullptr, "OpenGL error occurred", errorMsg );
+        {
+            wxString msg;
+
+            msg.Printf( wxT( "glGetError() '%s' in file '%s' on line %d." ),
+                        errorMsg, aFile, aLine );
+            DisplayErrorMessage( nullptr, "OpenGL Error", errorMsg );
+        }
     }
 
     return result;
