@@ -119,10 +119,10 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
                     {
                         switch( ii )
                         {
-                        case 0: m_start = coord; break;
-                        case 1: m_bezierctrl1 = coord; break;
-                        case 2: m_bezierctrl2 = coord; break;
-                        case 3:  m_end = coord; break;
+                        case 1: m_start = coord; break;
+                        case 2: m_bezierctrl1 = coord; break;
+                        case 3: m_bezierctrl2 = coord; break;
+                        case 4:  m_end = coord; break;
                         default:
                             break;
                         }
