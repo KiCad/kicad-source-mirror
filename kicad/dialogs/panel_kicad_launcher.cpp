@@ -77,7 +77,10 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             help->SetFont( helpFont );
 
             btn->Bind( wxEVT_BUTTON, handler );
-            label->Bind( wxEVT_LEFT_UP, handler );
+
+            // The bug fix below makes this handler active for the entire window width.  Without
+            // any visual feedback that's a bit odd.  Disabling for now.
+            // label->Bind( wxEVT_LEFT_UP, handler );
 
             int row = m_toolsSizer->GetRows();
 
