@@ -22,15 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eda_dde.cpp
- */
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+#include <queue>
 
 #include <eda_dde.h>
 #include <eda_draw_frame.h>
 #include <id.h>
 
 #include <wx/wx.h>
+
+using namespace std::chrono_literals;
 
 static const wxString HOSTNAME( wxT( "localhost" ) );
 
@@ -121,6 +124,177 @@ void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
 /* Routines related to the CLIENT */
 /**********************************/
 
+/**
+ * Spins up a thread to send messages via a socket.  No message queuing, if a message is in flight
+ * when another is posted with Send(), the second is just dropped.
+ * This is a workaround for "non-blocking" sockets not always being non-blocking, especially on
+ * Windows.  It is kept fairly simple and not exposed to the outside world because it should be
+ * replaced in a future KiCad version with a real message queue of some sort, and unified with the
+ * Kiway messaging system.
+ */
+class ASYNC_SOCKET_HOLDER
+{
+public:
+    ASYNC_SOCKET_HOLDER() :
+            m_messageReady( false ),
+            m_shutdown( false )
+    {
+        // Do a dummy Connect so that wx will set up the socket stuff on the main thread, which is
+        // required even if you later make socket connections on another thread.
+        wxSocketClient* client = new wxSocketClient;
+        wxIPV4address   addr;
+
+        addr.Hostname( HOSTNAME );
+        addr.Service( KICAD_PCB_PORT_SERVICE_NUMBER );
+
+        client->Connect( addr, false );
+
+        client->Close();
+        client->Destroy();
+
+        std::thread( &ASYNC_SOCKET_HOLDER::worker, this ).detach();
+    }
+
+    ~ASYNC_SOCKET_HOLDER()
+    {
+        m_shutdown     = true;
+        m_messageReady = true;
+        m_cv.notify_one();
+    }
+
+    /**
+     * Attempts to send a message if the thread is available
+     * @param aService is the port number (i.e. service) to send to
+     * @param aMessage is the message to send
+     * @return true if the message was queued
+    */
+    bool Send( int aService, const std::string& aMessage )
+    {
+        if( m_messageReady )
+            return false;
+
+        std::lock_guard<std::mutex> lock( m_mutex );
+
+        m_message      = std::make_pair( aService, aMessage );
+        m_messageReady = true;
+        m_cv.notify_one();
+
+        return true;
+    }
+
+private:
+    /**
+     * Actual task that sends data to the socket server
+     */
+    void worker()
+    {
+        while( !m_shutdown )
+        {
+            std::unique_lock<std::mutex> lock( m_mutex );
+            m_cv.wait( lock, [&]() { return m_messageReady; } );
+
+            if( m_shutdown )
+                return;
+
+            wxSocketClient* sock_client;
+            bool            success = false;
+            wxIPV4address   addr;
+
+            // Create a connexion
+            addr.Hostname( HOSTNAME );
+            addr.Service( m_message.first );
+
+            // Mini-tutorial for Connect() :-)
+            // (JP CHARRAS Note: see wxWidgets: sockets/client.cpp sample)
+            // ---------------------------
+            //
+            // There are two ways to use Connect(): blocking and non-blocking,
+            // depending on the value passed as the 'wait' (2nd) parameter.
+            //
+            // Connect(addr, true) will wait until the connection completes,
+            // returning true on success and false on failure. This call blocks
+            // the GUI (this might be changed in future releases to honor the
+            // wxSOCKET_BLOCK flag).
+            //
+            // Connect(addr, false) will issue a nonblocking connection request
+            // and return immediately. If the return value is true, then the
+            // connection has been already successfully established. If it is
+            // false, you must wait for the request to complete, either with
+            // WaitOnConnect() or by watching wxSOCKET_CONNECTION / LOST
+            // events (please read the documentation).
+            //
+            // WaitOnConnect() itself never blocks the GUI (this might change
+            // in the future to honor the wxSOCKET_BLOCK flag). This call will
+            // return false on timeout, or true if the connection request
+            // completes, which in turn might mean:
+            //
+            //   a) That the connection was successfully established
+            //   b) That the connection request failed (for example, because
+            //      it was refused by the peer.
+            //
+            // Use IsConnected() to distinguish between these two.
+            //
+            // So, in a brief, you should do one of the following things:
+            //
+            // For blocking Connect:
+            //
+            //   bool success = client->Connect(addr, true);
+            //
+            // For nonblocking Connect:
+            //
+            //   client->Connect(addr, false);
+            //
+            //   bool waitmore = true;
+            //   while (! client->WaitOnConnect(seconds, millis) && waitmore )
+            //   {
+            //     // possibly give some feedback to the user,
+            //     // update waitmore if needed.
+            //   }
+            //   bool success = client->IsConnected();
+            //
+            // And that's all :-)
+
+            sock_client = new wxSocketClient( wxSOCKET_BLOCK );
+            sock_client->SetTimeout( 2 ); // Time out in Seconds
+            sock_client->Connect( addr, true );
+
+            if( sock_client->Ok() && sock_client->IsConnected() )
+            {
+                success = true;
+                sock_client->SetFlags( wxSOCKET_NOWAIT /*wxSOCKET_WAITALL*/ );
+                sock_client->Write( m_message.second.c_str(), m_message.second.length() );
+            }
+
+            sock_client->Close();
+            sock_client->Destroy();
+
+            m_messageReady = false;
+        }
+    }
+
+    std::pair<int, std::string> m_message;
+
+    bool m_messageReady;
+
+    mutable std::mutex m_mutex;
+
+    std::condition_variable m_cv;
+
+    bool m_shutdown;
+};
+
+
+ASYNC_SOCKET_HOLDER* GetSocketHolder()
+{
+    static std::unique_ptr<ASYNC_SOCKET_HOLDER> holder;
+
+    if( !holder )
+        holder = std::make_unique<ASYNC_SOCKET_HOLDER>();
+
+    return holder.get();
+}
+
+
 /* Used by a client to sent (by a socket connection) a data to a server.
  *  - Open a Socket Client connection
  *  - Send the buffer cmdline
@@ -128,79 +302,7 @@ void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
  *
  *  service is the service number for the TC/IP connection
  */
-bool SendCommand( int service, const char* cmdline )
+bool SendCommand( int aService, const std::string& aMessage )
 {
-    wxSocketClient* sock_client;
-    bool            success = false;
-    wxIPV4address   addr;
-
-    // Create a connexion
-    addr.Hostname( HOSTNAME );
-    addr.Service( service );
-
-    // Mini-tutorial for Connect() :-)
-    // (JP CHARRAS Note: see wxWidgets: sockets/client.cpp sample)
-    // ---------------------------
-    //
-    // There are two ways to use Connect(): blocking and non-blocking,
-    // depending on the value passed as the 'wait' (2nd) parameter.
-    //
-    // Connect(addr, true) will wait until the connection completes,
-    // returning true on success and false on failure. This call blocks
-    // the GUI (this might be changed in future releases to honor the
-    // wxSOCKET_BLOCK flag).
-    //
-    // Connect(addr, false) will issue a nonblocking connection request
-    // and return immediately. If the return value is true, then the
-    // connection has been already successfully established. If it is
-    // false, you must wait for the request to complete, either with
-    // WaitOnConnect() or by watching wxSOCKET_CONNECTION / LOST
-    // events (please read the documentation).
-    //
-    // WaitOnConnect() itself never blocks the GUI (this might change
-    // in the future to honor the wxSOCKET_BLOCK flag). This call will
-    // return false on timeout, or true if the connection request
-    // completes, which in turn might mean:
-    //
-    //   a) That the connection was successfully established
-    //   b) That the connection request failed (for example, because
-    //      it was refused by the peer.
-    //
-    // Use IsConnected() to distinguish between these two.
-    //
-    // So, in a brief, you should do one of the following things:
-    //
-    // For blocking Connect:
-    //
-    //   bool success = client->Connect(addr, true);
-    //
-    // For nonblocking Connect:
-    //
-    //   client->Connect(addr, false);
-    //
-    //   bool waitmore = true;
-    //   while (! client->WaitOnConnect(seconds, millis) && waitmore )
-    //   {
-    //     // possibly give some feedback to the user,
-    //     // update waitmore if needed.
-    //   }
-    //   bool success = client->IsConnected();
-    //
-    // And that's all :-)
-
-    sock_client = new wxSocketClient();
-    sock_client->SetTimeout( 2 ); // Time out in Seconds
-    sock_client->Connect( addr, false );
-    sock_client->WaitOnConnect( 0, 100 );
-
-    if( sock_client->Ok() && sock_client->IsConnected() )
-    {
-        success = true;
-        sock_client->SetFlags( wxSOCKET_NOWAIT /*wxSOCKET_WAITALL*/ );
-        sock_client->Write( cmdline, strlen( cmdline ) );
-    }
-
-    sock_client->Close();
-    sock_client->Destroy();
-    return success;
+    return GetSocketHolder()->Send( aService, aMessage );
 }

@@ -449,7 +449,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_PCB, packet.c_str() );
+            SendCommand( MSG_TO_PCB, packet );
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -470,7 +470,7 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_PCB, packet.c_str() );
+            SendCommand( MSG_TO_PCB, packet );
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -521,7 +521,7 @@ void SCH_EDIT_FRAME::SetCrossProbeConnection( const SCH_CONNECTION* aConnection 
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_PCB, packet.c_str() );
+            SendCommand( MSG_TO_PCB, packet );
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -538,7 +538,7 @@ void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
     std::string packet = "$CLEAR\n";
 
     if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_PCB, packet.c_str() );
+        SendCommand( MSG_TO_PCB, packet );
     else
     {
         // Typically ExpressMail is going to be s-expression packets, but since

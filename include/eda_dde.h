@@ -30,6 +30,7 @@
 #ifndef EDA_DDE_H_
 #define EDA_DDE_H_
 
+#include <string>
 #include <wx/socket.h>
 
 
@@ -45,6 +46,6 @@
 #define MSG_TO_PCB                      KICAD_PCB_PORT_SERVICE_NUMBER
 #define MSG_TO_SCH                      KICAD_SCH_PORT_SERVICE_NUMBER
 
-bool SendCommand( int port, const char* cmdline );
+bool SendCommand( int aPort, const std::string& aMessage );
 
 #endif    // EDA_DDE_H_

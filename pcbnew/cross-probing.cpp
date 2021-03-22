@@ -469,7 +469,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_SCH, packet.c_str() );
+            SendCommand( MSG_TO_SCH, packet );
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since
@@ -488,7 +488,7 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
     if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
-            SendCommand( MSG_TO_SCH, packet.c_str() );
+            SendCommand( MSG_TO_SCH, packet );
         else
         {
             // Typically ExpressMail is going to be s-expression packets, but since

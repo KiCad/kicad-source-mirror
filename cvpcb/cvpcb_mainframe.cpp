@@ -814,7 +814,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
     std::string packet = "$CLEAR: \"HIGHLIGHTED\"";
 
     if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_SCH, packet.c_str() );
+        SendCommand( MSG_TO_SCH, packet );
     else
         Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
 
@@ -835,7 +835,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
     packet = StrPrintf( "$PART: \"%s\"", TO_UTF8( component->GetReference() ) );
 
     if( Kiface().IsSingle() )
-        SendCommand( MSG_TO_SCH, packet.c_str() );
+        SendCommand( MSG_TO_SCH, packet );
     else
         Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
 }
