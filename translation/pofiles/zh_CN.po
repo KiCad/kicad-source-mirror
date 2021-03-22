@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-21 06:36-0700\n"
 "PO-Revision-Date: 2021-03-22 16:51+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1162,7 +1162,7 @@ msgstr "mm"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
-msgstr "Inch"
+msgstr "英寸"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154
 msgid "DPI"
@@ -3838,7 +3838,7 @@ msgstr "文档文件 \"%s\" 的 MIME 类型未知"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:50
 msgid "Inches"
-msgstr "Inches"
+msgstr "英寸"
 
 #: common/eda_draw_frame.cpp:254
 msgid "Edit User Grid..."
@@ -11889,23 +11889,21 @@ msgstr "源 1 和源 2 必须不同"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "未配置有效仿真。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
-msgstr ""
+msgstr "配置有效仿真步骤为，选择一个仿真选项卡，设置仿真参数，并单击选中选项卡的 OK 按钮。"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:292
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "退出仿真"
+msgstr "在无有效仿真的情况下退出"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:293
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "关闭仿真"
+msgstr "配置有效仿真"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:597
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
@@ -21426,7 +21424,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr "inch"
+msgstr "英寸"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -28966,9 +28964,9 @@ msgid "netclass '%s'"
 msgstr "网络类 '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:265 pcbnew/drc/drc_engine.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "网络类 '%s'"
+msgstr "网络类 '%s' (差动线对)"
 
 #: pcbnew/drc/drc_engine.cpp:415
 msgid "keepout area"
