@@ -76,10 +76,10 @@ private:
 private:
     ///< Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
-    bool                  m_isDragOperation;
+    bool                  m_isDrag;
 
     ///< Items (such as wires) which were added to the selection for a drag
-    EDA_ITEMS             m_dragAdditions;
+    std::vector<KIID>     m_dragAdditions;
 
     ///< Used for chaining commands
     VECTOR2I              m_moveOffset;

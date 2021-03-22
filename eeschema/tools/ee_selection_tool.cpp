@@ -24,6 +24,7 @@
 
 #include <bitmaps.h>
 #include <core/typeinfo.h>
+#include <core/kicad_algo.h>
 #include <ee_actions.h>
 #include <ee_collectors.h>
 #include <ee_selection_tool.h>
@@ -50,7 +51,6 @@
 #include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-
 
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
 {
@@ -1480,6 +1480,20 @@ void EE_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
         if( !aQuietMode )
             m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
+}
+
+
+void EE_SELECTION_TOOL::RemoveItemsFromSel( std::vector<KIID>* aList, bool aQuietMode )
+{
+    EDA_ITEMS removeItems;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( alg::contains( *aList, item->m_Uuid ) )
+            removeItems.push_back( item );
+    }
+
+    RemoveItemsFromSel( &removeItems, aQuietMode );
 }
 
 

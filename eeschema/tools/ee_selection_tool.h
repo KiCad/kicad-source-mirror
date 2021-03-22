@@ -114,6 +114,12 @@ public:
     int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
     void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
+    /**
+     * A safer version of RemoveItemsFromSel( EDA_ITEMS ) which doesn't require the items to
+     * still exist.
+     */
+    void RemoveItemsFromSel( std::vector<KIID>* aList, bool aQuietMode = false );
+
     void BrightenItem( EDA_ITEM* aItem );
     void UnbrightenItem( EDA_ITEM* aItem );
 

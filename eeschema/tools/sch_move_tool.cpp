@@ -47,7 +47,7 @@
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_moveInProgress( false ),
-        m_isDragOperation( false ),
+        m_isDrag( false ),
         m_moveOffset( 0, 0 )
 {
 }
@@ -93,35 +93,39 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
+    bool                  wasDragging = m_moveInProgress && m_isDrag;
 
     m_anchorPos.reset();
 
     if( aEvent.IsAction( &EE_ACTIONS::move ) )
-        m_isDragOperation = false;
+        m_isDrag = false;
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
-        m_isDragOperation = true;
+        m_isDrag = true;
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
-        m_isDragOperation = !cfg->m_Input.drag_is_move;
+        m_isDrag = !cfg->m_Input.drag_is_move;
     else
         return 0;
 
     if( m_moveInProgress )
     {
-        auto sel = m_selectionTool->GetSelection().Front();
-
-        if( sel && !sel->IsNew() )
+        if( m_isDrag != wasDragging )
         {
-            // User must have switched from move to drag or vice-versa.  Reset the selected
-            // items so we can start again with the current m_isDragOperation.
-            m_frame->RollbackSchematicFromUndo();
-            m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-            m_anchorPos = m_cursor - m_moveOffset;
-            m_moveInProgress = false;
-            controls->SetAutoPan( false );
+            auto sel = m_selectionTool->GetSelection().Front();
 
-            // And give it a kick so it doesn't have to wait for the first mouse movement to
-            // refresh.
-            m_toolMgr->RunAction( EE_ACTIONS::restartMove );
+            if( sel && !sel->IsNew() )
+            {
+                // Reset the selected items so we can start again with the current m_isDrag
+                // state.
+                m_frame->RollbackSchematicFromUndo();
+                m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+                m_anchorPos = m_cursor - m_moveOffset;
+                m_moveInProgress = false;
+                controls->SetAutoPan( false );
+
+                // And give it a kick so it doesn't have to wait for the first mouse movement
+                // to refresh.
+                m_toolMgr->RunAction( EE_ACTIONS::restartMove );
+            }
         }
 
         return 0;
@@ -196,8 +200,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         it->SetFlags( STARTPOINT | ENDPOINT );
                 }
 
-                if( m_isDragOperation )
+                if( m_isDrag )
                 {
+                    EDA_ITEMS connectedDragItems;
+
                     // Add connections to the selection for a drag.
                     //
                     for( EDA_ITEM* edaItem : selection )
@@ -211,10 +217,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             connections = item->GetConnectionPoints();
 
                         for( wxPoint point : connections )
-                            getConnectedDragItems( item, point, m_dragAdditions );
+                            getConnectedDragItems( item, point, connectedDragItems );
                     }
 
-                    m_selectionTool->AddItemsToSel( &m_dragAdditions, QUIET_MODE );
+                    for( EDA_ITEM* item : connectedDragItems )
+                    {
+                        m_dragAdditions.push_back( item->m_Uuid );
+                        m_selectionTool->AddItemToSel( item, QUIET_MODE );
+                    }
                 }
                 else
                 {
@@ -246,7 +256,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     if( item->IsNew() )
                     {
-                        if( item->HasFlag( TEMP_SELECTED ) && m_isDragOperation )
+                        if( item->HasFlag( TEMP_SELECTED ) && m_isDrag )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::NEWITEM, appendUndo );
