@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_HTML_REPORTER::DIALOG_HTML_REPORTER( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_HTML_REPORTER::DIALOG_HTML_REPORTER( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -39,11 +39,13 @@ DIALOG_HTML_REPORTER::DIALOG_HTML_REPORTER( wxWindow* parent, wxWindowID id, con
 
 	// Connect Events
 	m_Reporter->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_HTML_REPORTER::OnErrorLinkClicked ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_HTML_REPORTER::OnOK ), NULL, this );
 }
 
 DIALOG_HTML_REPORTER::~DIALOG_HTML_REPORTER()
 {
 	// Disconnect Events
 	m_Reporter->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_HTML_REPORTER::OnErrorLinkClicked ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_HTML_REPORTER::OnOK ), NULL, this );
 
 }

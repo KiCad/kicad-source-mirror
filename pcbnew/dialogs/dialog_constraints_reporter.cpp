@@ -36,6 +36,7 @@ DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParen
 
 void DIALOG_CONSTRAINTS_REPORTER::FinishInitialization()
 {
+    m_sdbSizerOK->SetDefault();
     finishDialogSettings();
 }
 

@@ -36,6 +36,10 @@ class DIALOG_CONSTRAINTS_REPORTER_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 
 		DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Constraints Resolution Report"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );

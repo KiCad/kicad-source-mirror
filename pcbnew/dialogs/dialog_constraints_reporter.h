@@ -37,6 +37,11 @@ public:
 
     void FinishInitialization();
 
+    void OnOK( wxCommandEvent& event ) override
+    {
+        Close();
+    }
+
     void OnErrorLinkClicked( wxHtmlLinkEvent& event );
 
     void DeleteAllPages();

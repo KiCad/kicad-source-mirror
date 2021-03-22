@@ -35,8 +35,14 @@ DIALOG_CONSTRAINTS_REPORTER_BASE::DIALOG_CONSTRAINTS_REPORTER_BASE( wxWindow* pa
 	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONSTRAINTS_REPORTER_BASE::OnOK ), NULL, this );
 }
 
 DIALOG_CONSTRAINTS_REPORTER_BASE::~DIALOG_CONSTRAINTS_REPORTER_BASE()
 {
+	// Disconnect Events
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONSTRAINTS_REPORTER_BASE::OnOK ), NULL, this );
+
 }

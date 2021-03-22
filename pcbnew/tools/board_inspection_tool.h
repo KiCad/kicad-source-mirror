@@ -41,9 +41,17 @@ public:
     DIALOG_INSPECTION_REPORTER( PCB_EDIT_FRAME* aFrame ) :
             DIALOG_HTML_REPORTER( aFrame ),
             m_frame( aFrame )
-    { }
+    {
+        m_sdbSizerOK->SetDefault();
+        SetInitialFocus( m_sdbSizerOK );
+    }
 
     void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
+
+    void OnOK( wxCommandEvent& event ) override
+    {
+        Close();
+    }
 
 protected:
     PCB_EDIT_FRAME* m_frame;

@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class WX_HTML_REPORT_BOX;
 
+#include "dialog_shim.h"
 #include <wx/html/htmlwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -28,7 +29,7 @@ class WX_HTML_REPORT_BOX;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_HTML_REPORTER
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_HTML_REPORTER : public wxDialog
+class DIALOG_HTML_REPORTER : public DIALOG_SHIM
 {
 	private:
 
@@ -38,6 +39,7 @@ class DIALOG_HTML_REPORTER : public wxDialog
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnErrorLinkClicked( wxHtmlLinkEvent& event ) { event.Skip(); }
+		virtual void OnOK( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
