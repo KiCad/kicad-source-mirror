@@ -1485,6 +1485,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             int uniquifier = std::max( 0, wxAtoi( number ) ) + 1;
 
+            // Ensure we have latest hierarchy, as we may have added a sheet in the previous
+            // iteration
+            hierarchy = m_frame->Schematic().GetSheets();
+
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
@@ -1531,7 +1535,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_SHEET_PATH pastePath = pasteRoot;
             pastePath.push_back( sheet );
 
+            int      page = 1;
+            wxString pageNum = wxString::Format( "%d", page );
+
+            while( hierarchy.PageNumberExists( pageNum ) )
+                pageNum = wxString::Format( "%d", ++page );
+
             sheet->AddInstance( pastePath.Path() );
+            sheet->SetPageNumber( pastePath, pageNum );
             updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
         }
 

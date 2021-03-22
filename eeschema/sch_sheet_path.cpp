@@ -482,8 +482,8 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 
 void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
 {
-    std::sort( begin(), end(), 
-        []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool 
+    std::sort( begin(), end(),
+        []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
         {
             wxString pageA = a.GetPageNumber();
             wxString pageB = b.GetPageNumber();
@@ -508,6 +508,18 @@ bool SCH_SHEET_LIST::NameExists( const wxString& aSheetName ) const
     for( const SCH_SHEET_PATH& sheet : *this )
     {
         if( sheet.Last()->GetName() == aSheetName )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET_LIST::PageNumberExists( const wxString& aPageNumber ) const
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        if( sheet.Last()->GetPageNumber( sheet ) == aPageNumber )
             return true;
     }
 

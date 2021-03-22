@@ -861,6 +861,17 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             nameField.SetText( candidateName );
 
             sheet->SetParent( m_frame->GetCurrentSheet().Last() );
+
+            SCH_SHEET_PATH sheetpath = m_frame->GetCurrentSheet();
+            sheetpath.push_back( sheet );
+            int page = 1;
+            wxString pageNum = wxString::Format( "%d", page );
+
+            while( hierarchy.PageNumberExists( pageNum ) )
+                pageNum = wxString::Format( "%d", ++page );
+
+            sheet->AddInstance( sheetpath.Path() );
+            sheet->SetPageNumber( sheetpath, pageNum );
             m_frame->AddToScreen( sheet, m_frame->GetScreen() );
 
             copiedSheets = true;

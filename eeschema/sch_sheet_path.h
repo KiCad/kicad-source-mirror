@@ -457,6 +457,8 @@ public:
 
     bool NameExists( const wxString& aSheetName ) const;
 
+    bool PageNumberExists( const wxString& aPageNumber ) const;
+
     /**
      * Update all of the symbol instance information using \a aSymbolInstances.
      * WARNING: Do not call this on anything other than the full hierarchy.
