@@ -454,15 +454,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     if( GetBitmapStore()->ThemeChanged() )
     {
-        ClearScaledBitmapCache();
-
-        wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
-
-        for( size_t i = 0; i < panes.GetCount(); ++i )
-        {
-            if( ACTION_TOOLBAR* toolbar = dynamic_cast<ACTION_TOOLBAR*>( panes[i].window ) )
-                toolbar->RefreshBitmaps();
-        }
+        ThemeChanged();
     }
 
     if( GetMenuBar() )
@@ -470,6 +462,20 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
         // For icons in menus, icon scaling & hotkeys
         ReCreateMenuBar();
         GetMenuBar()->Refresh();
+    }
+}
+
+
+void EDA_BASE_FRAME::ThemeChanged()
+{
+    ClearScaledBitmapCache();
+
+    wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
+
+    for( size_t i = 0; i < panes.GetCount(); ++i )
+    {
+        if( ACTION_TOOLBAR* toolbar = dynamic_cast<ACTION_TOOLBAR*>( panes[i].window ) )
+            toolbar->RefreshBitmaps();
     }
 }
 

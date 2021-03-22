@@ -824,6 +824,11 @@ public:
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
+    /**
+     * Called when light/dark theme is changed.
+     */
+    void ThemeChanged() override;
+
     void ProjectChanged() override;
 
     wxString GetCurrentFileName() const override;

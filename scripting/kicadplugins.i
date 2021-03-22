@@ -658,6 +658,7 @@ class ActionPlugin(KiCadPlugin, object):
     def __init__( self ):
         KiCadPlugin.__init__( self )
         self.icon_file_name = ""
+        self.dark_icon_file_name = ""
         self.show_toolbar_button = False
         self.defaults()
 
@@ -678,8 +679,11 @@ class ActionPlugin(KiCadPlugin, object):
     def GetShowToolbarButton( self ):
         return self.show_toolbar_button
 
-    def GetIconFileName( self ):
-        return self.icon_file_name
+    def GetIconFileName( self, dark ):
+        if dark and self.dark_icon_file_name:
+            return self.dark_icon_file_name
+        else:
+            return self.icon_file_name
 
     def Run(self):
         return

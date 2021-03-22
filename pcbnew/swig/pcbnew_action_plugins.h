@@ -52,7 +52,7 @@ public:
     wxString    GetName() override;
     wxString    GetDescription() override;
     bool        GetShowToolbarButton() override;
-    wxString    GetIconFileName() override;
+    wxString    GetIconFileName( bool dark ) override;
     wxString    GetPluginPath() override;
     void        Run() override;
     void*       GetObject() override;

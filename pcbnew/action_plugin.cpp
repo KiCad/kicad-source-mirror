@@ -28,6 +28,8 @@
  */
 
 #include "action_plugin.h"
+#include "bitmaps.h"
+#include "bitmap_store.h"
 
 
 ACTION_PLUGIN::~ACTION_PLUGIN()
@@ -156,16 +158,17 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
     }
 
     // Load icon if supplied
-    if( !aAction->GetIconFileName().IsEmpty() )
+    wxString icon_file_name = aAction->GetIconFileName( GetBitmapStore()->IsDarkTheme() );
+    if( !icon_file_name.IsEmpty() )
     {
         {
             wxLogNull eat_errors;
-            aAction->iconBitmap.LoadFile( aAction->GetIconFileName() , wxBITMAP_TYPE_PNG );
+            aAction->iconBitmap.LoadFile( icon_file_name, wxBITMAP_TYPE_PNG );
         }
 
         if ( !aAction->iconBitmap.IsOk() )
         {
-            wxLogVerbose( "Failed to load icon " + aAction->GetIconFileName() + " for action plugin " );
+            wxLogVerbose( "Failed to load icon " + icon_file_name + " for action plugin " );
         }
     }
 

@@ -481,6 +481,11 @@ public:
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     /**
+     * Process light/dark theme change.
+     */
+    virtual void ThemeChanged();
+
+    /**
      * Notification event that the project has changed.
      */
     virtual void ProjectChanged() {}

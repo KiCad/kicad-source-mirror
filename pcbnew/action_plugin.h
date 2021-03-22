@@ -83,9 +83,10 @@ public:
 
     /**
      * Function GetIconFileName
+     * @param dark true if requesting dark theme icon
      * @return a path to icon for the action plugin button
      */
-    virtual wxString GetIconFileName() = 0;
+    virtual wxString GetIconFileName( bool dark ) = 0;
 
     /**
      * Function GetPluginPath
