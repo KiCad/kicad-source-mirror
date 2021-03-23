@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 06:36-0700\n"
+"POT-Creation-Date: 2021-03-22 17:14-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7170,57 +7170,32 @@ msgstr "Load directives from schematic"
 msgid "Custom"
 msgstr "Custom"
 
-msgid "Model Mode"
-msgstr "Model Mode"
-
-msgid "User configuration"
-msgstr "User configuration"
-
-msgid ""
-"Use the settings in the Ngspice configuration file or any settings defined "
-"in the schematic"
-msgstr ""
-"Use the settings in the Ngspice configuration file or any settings defined "
-"in the schematic"
-
-msgid "Spice"
-msgstr "Spice"
-
-msgid "Enable default spice model simulation"
-msgstr "Enable default spice model simulation"
-
-msgid "PSpice"
-msgstr "PSpice"
-
-msgid "Enable PSpice model simulation"
-msgstr "Enable PSpice model simulation"
-
-msgid "LTSpice"
-msgstr "LTSpice"
-
-msgid "Enable LTSpice model simulation"
-msgstr "Enable LTSpice model simulation"
-
-msgid "PSpice and LTSpice"
-msgstr "PSpice and LTSpice"
-
-msgid "Enable PSpice and LTSpice model simulation"
-msgstr "Enable PSpice and LTSpice model simulation"
-
-msgid "HSpice"
-msgstr "HSpice"
-
-msgid "Enable HSpice model simulation"
-msgstr "Enable HSpice model simulation"
-
-msgid "Ngspice"
-msgstr "Ngspice"
-
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
 msgstr "Adjust passive symbol values (e.g. M → Meg; 100 nF → 100n)"
 
 msgid "Add full path for .include library directives"
 msgstr "Add full path for .include library directives"
+
+msgid "Compatibility mode:"
+msgstr "Compatibility mode:"
+
+msgid "User configuration"
+msgstr "User configuration"
+
+msgid "Spice"
+msgstr "Spice"
+
+msgid "PSpice"
+msgstr "PSpice"
+
+msgid "LTSpice"
+msgstr "LTSpice"
+
+msgid "PSpice and LTSpice"
+msgstr "PSpice and LTSpice"
+
+msgid "HSpice"
+msgstr "HSpice"
 
 msgid "Simulation settings"
 msgstr "Simulation settings"
@@ -19033,6 +19008,19 @@ msgid ""
 msgstr ""
 "Drags the nearest joint in the track without restricting the track angle."
 
+msgid "Draw an outline to show the sheet size."
+msgstr "Draw an outline to show the sheet size."
+
+msgid "Refill zones after Zone Properties dialog"
+msgstr "Refill zones after Zone Properties dialog"
+
+msgid ""
+"If checked, zones will be re-filled after editing the properties of the zone "
+"using the Zone Properties dialog"
+msgstr ""
+"If checked, zones will be re-filled after editing the properties of the zone "
+"using the Zone Properties dialog"
+
 msgid "Internal Layers"
 msgstr "Internal Layers"
 
@@ -20783,6 +20771,9 @@ msgstr ""
 "Error loading footprint %s from library %s.\n"
 "\n"
 "%s"
+
+msgid "doc url"
+msgstr "doc url"
 
 msgid "Centimeter"
 msgstr "Centimeter"
@@ -22627,10 +22618,10 @@ msgid "%s is malformed."
 msgstr "%s is malformed."
 
 msgid ""
-"This zone cannot be handled by the track layout tool.\n"
+"This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"This zone cannot be handled by the track layout tool.\n"
+"This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 
 msgid "Interactive Router"
@@ -22744,11 +22735,11 @@ msgstr "Switch Track Posture"
 msgid "Switches posture of the currently routed track."
 msgstr "Switches posture of the currently routed track."
 
-msgid "Switch Corner Rounding"
-msgstr "Switch Corner Rounding"
+msgid "Track Corner Mode"
+msgstr "Track Corner Mode"
 
-msgid "Switches the corner type of the currently routed track."
-msgstr "Switches the corner type of the currently routed track."
+msgid "Switches between sharp and rounded corners when routing tracks."
+msgstr "Switches between sharp and rounded corners when routing tracks."
 
 msgid "Select Track/Via Width"
 msgstr "Select Track/Via Width"
@@ -23315,9 +23306,6 @@ msgstr "Some of the track segments could not be filleted."
 
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
-
-msgid "Fill Zone"
-msgstr "Fill Zone"
 
 msgid "Move exact"
 msgstr "Move exact"
@@ -24535,6 +24523,9 @@ msgstr "Zone fills may be inaccurate.  DRC rules contain errors."
 msgid "Fill All Zones"
 msgstr "Fill All Zones"
 
+msgid "Fill Zone"
+msgstr "Fill Zone"
+
 msgid "Unfill Zone"
 msgstr "Unfill Zone"
 
@@ -25189,6 +25180,47 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Model Mode"
+#~ msgstr "Model Mode"
+
+#~ msgid ""
+#~ "Use the settings in the Ngspice configuration file or any settings "
+#~ "defined in the schematic"
+#~ msgstr ""
+#~ "Use the settings in the Ngspice configuration file or any settings "
+#~ "defined in the schematic"
+
+#~ msgid "Enable default spice model simulation"
+#~ msgstr "Enable default spice model simulation"
+
+#~ msgid "Enable PSpice model simulation"
+#~ msgstr "Enable PSpice model simulation"
+
+#~ msgid "Enable LTSpice model simulation"
+#~ msgstr "Enable LTSpice model simulation"
+
+#~ msgid "Enable PSpice and LTSpice model simulation"
+#~ msgstr "Enable PSpice and LTSpice model simulation"
+
+#~ msgid "Enable HSpice model simulation"
+#~ msgstr "Enable HSpice model simulation"
+
+#~ msgid "Ngspice"
+#~ msgstr "Ngspice"
+
+#~ msgid ""
+#~ "This zone cannot be handled by the track layout tool.\n"
+#~ "Please verify it is not a self-intersecting polygon."
+#~ msgstr ""
+#~ "This zone cannot be handled by the track layout tool.\n"
+#~ "Please verify it is not a self-intersecting polygon."
+
+#~ msgid "Switch Corner Rounding"
+#~ msgstr "Switch Corner Rounding"
+
+#~ msgid "Switches the corner type of the currently routed track."
+#~ msgstr "Switches the corner type of the currently routed track."
 
 #~ msgid "Plain PCB (no copper or silk)"
 #~ msgstr "Plain PCB (no copper or silk)"

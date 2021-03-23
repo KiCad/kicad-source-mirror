@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 06:36-0700\n"
+"POT-Creation-Date: 2021-03-22 17:14-0700\n"
 "PO-Revision-Date: 2021-03-11 21:06+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
@@ -123,7 +123,7 @@ msgstr "Opacitet"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
-#: eeschema/dialogs/dialog_print_using_printer.cpp:275
+#: eeschema/dialogs/dialog_print_using_printer.cpp:271
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
 msgstr "Förhandsgranskning"
@@ -1475,24 +1475,24 @@ msgstr "cu. i"
 msgid "%"
 msgstr "%"
 
-#: common/common.cpp:224
+#: common/common.cpp:228
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 "Expansion av miljövariabler misslyckades: saknas '%c' vid position %u i '%s'."
 
-#: common/common.cpp:310
+#: common/common.cpp:314
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
 msgstr "Kan inte göra sökvägen \"%s\" absolut med avseende på \"%s\"."
 
-#: common/common.cpp:329
+#: common/common.cpp:333
 #, c-format
 msgid "Output directory \"%s\" created.\n"
 msgstr "Utmatningskatalogen %s skapades\n"
 
-#: common/common.cpp:338
+#: common/common.cpp:342
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "Det går inte att skapa utdatakatalogen \"%s\".\n"
@@ -1511,7 +1511,7 @@ msgstr "Fråga"
 
 #: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:40
-#: eeschema/dialogs/dialog_sim_settings.cpp:285
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:155
 #: eeschema/files-io.cpp:506 eeschema/sheet.cpp:571
 #: eeschema/symbol_editor/symbol_editor.cpp:542
@@ -1768,7 +1768,7 @@ msgstr "Rapportera problem med KiCad"
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialogs/dialog_HTML_reporter_base.h:46
+#: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
 msgstr "Rapportera"
 
@@ -1940,8 +1940,8 @@ msgstr "Miljövariabler"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/dialog_net_inspector.cpp:71
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:444
-#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:611
-#: pcbnew/zone.cpp:1418
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:612
+#: pcbnew/zone.cpp:1419
 msgid "Name"
 msgstr "Namn"
 
@@ -2133,7 +2133,7 @@ msgstr "Rutnäts Origo"
 #: pcbnew/dialogs/panel_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:252
-#: pcbnew/dialogs/panel_edit_options_base.cpp:373
+#: pcbnew/dialogs/panel_edit_options_base.cpp:381
 msgid "a page"
 msgstr "en sida"
 
@@ -2581,7 +2581,7 @@ msgid "Revision:"
 msgstr "Revision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
-#: eeschema/dialogs/dialog_netlist.cpp:392
+#: eeschema/dialogs/dialog_netlist.cpp:386
 msgid "Title:"
 msgstr "Titel:"
 
@@ -2648,10 +2648,10 @@ msgid "Print Preview"
 msgstr "Förhandsgranskning"
 
 #: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:206
-#: eeschema/dialogs/dialog_annotate.cpp:104 eeschema/dialogs/dialog_bom.cpp:132
+#: eeschema/dialogs/dialog_annotate.cpp:101 eeschema/dialogs/dialog_bom.cpp:132
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
-#: eeschema/dialogs/dialog_netlist.cpp:276
+#: eeschema/dialogs/dialog_netlist.cpp:270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:64
 #: eeschema/dialogs/dialog_print_using_printer.cpp:145
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2699,7 +2699,7 @@ msgid "Nothing to print"
 msgstr "Ingenting att skrivas ut"
 
 #: common/dialogs/dialog_print_generic.cpp:231
-#: eeschema/dialogs/dialog_print_using_printer.cpp:312
+#: eeschema/dialogs/dialog_print_using_printer.cpp:308
 msgid "Previous print job not yet complete."
 msgstr "Tidigare utskriftsjobb ännu inte slutfört."
 
@@ -2799,36 +2799,36 @@ msgstr "Visa förinställd omkopplare"
 msgid "Reveal Themes in Finder"
 msgstr "Avslöja teman i Finder"
 
-#: common/dialogs/panel_color_settings.cpp:130
+#: common/dialogs/panel_color_settings.cpp:129
 msgid "New theme name:"
 msgstr "Nytt tema namn:"
 
-#: common/dialogs/panel_color_settings.cpp:130
+#: common/dialogs/panel_color_settings.cpp:129
 msgid "Add Color Theme"
 msgstr "Lägg till Färg Tema"
 
-#: common/dialogs/panel_color_settings.cpp:142
+#: common/dialogs/panel_color_settings.cpp:141
 msgid "Theme already exists!"
 msgstr "Tema finns redan!"
 
-#: common/dialogs/panel_color_settings.cpp:203
-#: common/dialogs/panel_color_settings.cpp:225
+#: common/dialogs/panel_color_settings.cpp:202
+#: common/dialogs/panel_color_settings.cpp:224
 msgid "New Theme..."
 msgstr "Nytt tema ..."
 
-#: common/dialogs/panel_color_settings.cpp:213
+#: common/dialogs/panel_color_settings.cpp:212
 msgid "(read-only)"
 msgstr "(skrivskyddad)"
 
-#: common/dialogs/panel_color_settings.cpp:282
+#: common/dialogs/panel_color_settings.cpp:281
 msgid "Copy color"
 msgstr "Kopiera färg"
 
-#: common/dialogs/panel_color_settings.cpp:285
+#: common/dialogs/panel_color_settings.cpp:284
 msgid "Paste color"
 msgstr "Klistra in färg"
 
-#: common/dialogs/panel_color_settings.cpp:288
+#: common/dialogs/panel_color_settings.cpp:287
 msgid "Revert to saved color"
 msgstr "Återställ till sparad färg"
 
@@ -3310,7 +3310,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1446
-#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1406
+#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1407
 msgid "None"
 msgstr "Inget"
 
@@ -3403,8 +3403,8 @@ msgstr "Återställ till _standardvärden"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:615
-#: pcbnew/zone.cpp:1408
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:616
+#: pcbnew/zone.cpp:1409
 msgid "Solid"
 msgstr "Solid"
 
@@ -3503,7 +3503,7 @@ msgstr "Standard nettoklassen krävs."
 msgid "Net Class"
 msgstr "Nettoklass"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1420
+#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1421
 msgid "Clearance"
 msgstr "Undanröjning"
 
@@ -3609,7 +3609,7 @@ msgstr "Tilldela valda nät"
 #: pcbnew/board_connected_item.cpp:164
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:33
 #: pcbnew/dialogs/dialog_net_inspector.cpp:70 pcbnew/pad.cpp:868
-#: pcbnew/track.cpp:740 pcbnew/zone.cpp:586
+#: pcbnew/track.cpp:740 pcbnew/zone.cpp:587
 msgid "Net"
 msgstr "Netto"
 
@@ -3705,12 +3705,12 @@ msgstr "Information"
 msgid "Save..."
 msgstr "Spara..."
 
-#: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:431
+#: common/draw_panel_gal.cpp:250 common/draw_panel_gal.cpp:433
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
 "Det gick inte att använda OpenGL, och återgå till programvaruåtergivning"
 
-#: common/draw_panel_gal.cpp:255 common/draw_panel_gal.cpp:438
+#: common/draw_panel_gal.cpp:256 common/draw_panel_gal.cpp:440
 msgid "Could not use OpenGL"
 msgstr "Kunde inte använda OpenGL"
 
@@ -4588,7 +4588,7 @@ msgid "Cannot copy file \"%s\"."
 msgstr "Det går inte att kopiera filen \"%s\"."
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:152
-#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1818
+#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1808
 msgid "Cut"
 msgstr "Klipp ut"
 
@@ -4615,7 +4615,7 @@ msgstr "Klistra in urklippsceller i matris vid aktuell cell"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:190
 #: kicad/project_tree_pane.cpp:781 pcbnew/plugins/kicad/pcb_parser.cpp:678
-#: pcbnew/tools/edit_tool.cpp:1820
+#: pcbnew/tools/edit_tool.cpp:1810
 msgid "Delete"
 msgstr "Radera"
 
@@ -5365,7 +5365,7 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "KiCad-språkfilen för detta språk är inte installerad."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2307
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:241
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:244
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
@@ -6207,7 +6207,7 @@ msgstr "Signalnamn får inte innehålla CR- eller LF-tecken"
 msgid "Signal names cannot contain spaces"
 msgstr "Signalnamn får inte innehålla blanksteg"
 
-#: common/view/view.cpp:542
+#: common/view/view.cpp:543
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Spegling för Y-axeln stöds inte än"
 
@@ -7308,11 +7308,11 @@ msgstr "%s hittades inte"
 msgid "Selected net:"
 msgstr "Vald nät:"
 
-#: eeschema/dialogs/dialog_annotate.cpp:98
+#: eeschema/dialogs/dialog_annotate.cpp:95
 msgid "Annotation Messages:"
 msgstr "Annotationsmeddelanden:"
 
-#: eeschema/dialogs/dialog_annotate.cpp:103
+#: eeschema/dialogs/dialog_annotate.cpp:100
 msgid "Annotate"
 msgstr "Annotera"
 
@@ -7422,7 +7422,7 @@ msgstr "Lägg till generator"
 msgid "Nickname \"%s\" already in use."
 msgstr "Smeknamn \"%s\" används redan."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:687
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:681
 msgid "Generator files:"
 msgstr "Generatorfiler:"
 
@@ -8110,7 +8110,7 @@ msgid "Invalid footprint specified"
 msgstr "Ogiltigt fotavtryck specificerat"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:460
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:736
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:728
 #: eeschema/generate_alias_info.cpp:81
 #, c-format
 msgid ""
@@ -8126,32 +8126,32 @@ msgstr ""
 msgid "No symbol selected"
 msgstr "Ingen symbol vald"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:545
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:536
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid."
 msgstr "Symbolbibliotekets identifierare \"%s\" är inte giltig."
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:641
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:633
 #, c-format
 msgid "Available Candidates for %s "
 msgstr "Tillgängliga kandidater för %s "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:645
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:637
 #, c-format
 msgid "Candidates count %d "
 msgstr "Kandidater räknar %d "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:655
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:647
 #, c-format
 msgid "%u link(s) mapped, %u not found"
 msgstr "%u länk(ar) mappad, %u hittades inte"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:660
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:652
 #, c-format
 msgid "All %u link(s) resolved"
 msgstr "Alla %u länk (ar) har lösts"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:690
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:682
 msgid "Invalid symbol library identifier"
 msgstr "Ogiltig symbolbiblioteksidentifierare"
 
@@ -9558,29 +9558,29 @@ msgstr "Acceptera namn"
 msgid "Migrate Buses"
 msgstr "Migrera bussar"
 
-#: eeschema/dialogs/dialog_netlist.cpp:275
+#: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_netlist_base.h:67
 msgid "Export Netlist"
 msgstr "Exportera Netlist"
 
-#: eeschema/dialogs/dialog_netlist.cpp:307
+#: eeschema/dialogs/dialog_netlist.cpp:301
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
 msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values"
 msgstr "Omformatera passiva symbolvärden"
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:325
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Omformatera passiva symbolvärden, t.ex. 1M -> 1Meg"
 
-#: eeschema/dialogs/dialog_netlist.cpp:336
+#: eeschema/dialogs/dialog_netlist.cpp:330
 msgid "External simulator command:"
 msgstr "Externt simulatorkommando:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:337
+#: eeschema/dialogs/dialog_netlist.cpp:331
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -9590,42 +9590,42 @@ msgstr ""
 "Vanligtvis <sökväg till kryddbinär>% I\n"
 "% Jag kommer att ersättas med det faktiska namnet på kryddornetlistan"
 
-#: eeschema/dialogs/dialog_netlist.cpp:351
+#: eeschema/dialogs/dialog_netlist.cpp:345
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Skapa Netlist och kör Simulator Command"
 
-#: eeschema/dialogs/dialog_netlist.cpp:402
+#: eeschema/dialogs/dialog_netlist.cpp:396
 msgid "Netlist command:"
 msgstr "Netlist-kommando:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:448
+#: eeschema/dialogs/dialog_netlist.cpp:442
 msgid "Save Netlist File"
 msgstr "Spara Netlist-fil"
 
-#: eeschema/dialogs/dialog_netlist.cpp:487
+#: eeschema/dialogs/dialog_netlist.cpp:481
 #, c-format
 msgid "%s Export"
 msgstr "%s Exportera"
 
-#: eeschema/dialogs/dialog_netlist.cpp:516
+#: eeschema/dialogs/dialog_netlist.cpp:510
 #: eeschema/netlist_exporters/netlist_generator.cpp:55
 #, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
 
-#: eeschema/dialogs/dialog_netlist.cpp:636
+#: eeschema/dialogs/dialog_netlist.cpp:630
 msgid "This plugin already exists."
 msgstr "Det här pluginet finns redan."
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:658
 msgid "Error. You must provide a command String"
 msgstr "Fel. Du måste ange ett kommando String"
 
-#: eeschema/dialogs/dialog_netlist.cpp:670
+#: eeschema/dialogs/dialog_netlist.cpp:664
 msgid "Error. You must provide a Title"
 msgstr "Fel. Du måste ange en titel"
 
-#: eeschema/dialogs/dialog_netlist.cpp:714
+#: eeschema/dialogs/dialog_netlist.cpp:708
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Glöm inte att välja en titel för denna netlist-kontrollsida"
 
@@ -9992,15 +9992,15 @@ msgstr "Pennans bredd:"
 msgid "Plot Schematic Options"
 msgstr "Diagram Schematiska alternativ"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:327
+#: eeschema/dialogs/dialog_print_using_printer.cpp:323
 msgid "Print Schematic"
 msgstr "Skriv ut schematisk"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:334
+#: eeschema/dialogs/dialog_print_using_printer.cpp:330
 msgid "An error occurred attempting to print the schematic."
 msgstr "Ett fel inträffade vid försök att skriva ut schemat."
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:358
+#: eeschema/dialogs/dialog_print_using_printer.cpp:354
 #, c-format
 msgid "Print page %d"
 msgstr "Skriv ut sida %d"
@@ -10410,31 +10410,31 @@ msgstr "Lägg till signal efter namn:"
 msgid "You need to select DC source"
 msgstr "Du måste välja DC-källa (svep 1)"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:221
+#: eeschema/dialogs/dialog_sim_settings.cpp:218
 msgid "Source 1 and Source 2 must be different"
 msgstr "Källa 1 och källa 2 måste vara olika"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:285
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:288
+#: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:292
+#: eeschema/dialogs/dialog_sim_settings.cpp:289
 #, fuzzy
 msgid "Exit Without Valid Simulation"
 msgstr "Avsluta utan att spara"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:293
+#: eeschema/dialogs/dialog_sim_settings.cpp:290
 #, fuzzy
 msgid "Configure Valid Simulation"
 msgstr "Stäng simulering"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:597
+#: eeschema/dialogs/dialog_sim_settings.cpp:576
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:144
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
@@ -10444,12 +10444,12 @@ msgstr "Stäng simulering"
 msgid "Volts"
 msgstr "Volt"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:598
+#: eeschema/dialogs/dialog_sim_settings.cpp:577
 #, fuzzy
 msgid "Amperes"
 msgstr "hoppare"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:599
+#: eeschema/dialogs/dialog_sim_settings.cpp:578
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:310
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:321
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:359
@@ -10544,7 +10544,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:78
 #: pcbnew/fp_text.cpp:290 pcbnew/pcb_marker.cpp:93 pcbnew/pcb_shape.cpp:494
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:252 pcbnew/track.cpp:649
-#: pcbnew/track.cpp:707 pcbnew/zone.cpp:560
+#: pcbnew/track.cpp:707 pcbnew/zone.cpp:561
 msgid "Type"
 msgstr "Typ"
 
@@ -10687,79 +10687,44 @@ msgstr "Ladda riktlinjer från schematisk"
 msgid "Custom"
 msgstr "Skräddarsydd"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:423
-#, fuzzy
-msgid "Model Mode"
-msgstr "Flytta alla moduler"
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:424
+msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
+msgstr "Justera passiva symbolvärden (t.ex. M -> Meg; 100 nF -> 100n)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:425
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:427
+msgid "Add full path for .include library directives"
+msgstr "Lägg till hela sökvägen för. Inkludera biblioteksdirektiv"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:434
+msgid "Compatibility mode:"
+msgstr ""
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 #, fuzzy
 msgid "User configuration"
 msgstr "Ljus konfiguration"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:426
-msgid ""
-"Use the settings in the Ngspice configuration file or any settings defined "
-"in the schematic"
-msgstr ""
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:430
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "Spice"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:431
-#, fuzzy
-msgid "Enable default spice model simulation"
-msgstr "Inaktivera symbol för simulering"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:435
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "PSpice"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-#, fuzzy
-msgid "Enable PSpice model simulation"
-msgstr "Kryddvärde i simulering"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:440
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "LTSpice"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:441
-#, fuzzy
-msgid "Enable LTSpice model simulation"
-msgstr "Kryddvärde i simulering"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:445
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "PSpice and LTSpice"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:446
-msgid "Enable PSpice and LTSpice model simulation"
-msgstr ""
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:450
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "HSpice"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-#, fuzzy
-msgid "Enable HSpice model simulation"
-msgstr "Kryddvärde i simulering"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:462
-msgid "Ngspice"
-msgstr ""
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:469
-msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Justera passiva symbolvärden (t.ex. M -> Meg; 100 nF -> 100n)"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:472
-msgid "Add full path for .include library directives"
-msgstr "Lägg till hela sökvägen för. Inkludera biblioteksdirektiv"
-
-#: eeschema/dialogs/dialog_sim_settings_base.h:143
+#: eeschema/dialogs/dialog_sim_settings_base.h:138
 msgid "Simulation settings"
 msgstr "Simuleringsinställningar"
 
@@ -11785,7 +11750,6 @@ msgstr "URL"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
-#: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Annotations"
 msgstr "Anteckningar"
 
@@ -12265,7 +12229,8 @@ msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
 msgid "Conflicts"
 msgstr "Konflikter"
 
-#: eeschema/erc_item.cpp:43 pcbnew/drc/drc_item.cpp:46
+#: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:360
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Miscellaneous"
 msgstr "Diverse"
 
@@ -12390,7 +12355,7 @@ msgstr ""
 "Fel vid sparar schematisk fil \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:133 pcbnew/files.cpp:1000
+#: eeschema/files-io.cpp:133 pcbnew/files.cpp:1001
 #, c-format
 msgid "Failed to create temporary file \"%s\""
 msgstr "Det gick inte att skapa temporär fil \"%s\""
@@ -12404,14 +12369,14 @@ msgstr ""
 "Fel vid sparar schematisk fil \"%s\".\n"
 "Det gick inte att byta namn på tillfällig fil %s"
 
-#: eeschema/files-io.cpp:154 pcbnew/files.cpp:1019
+#: eeschema/files-io.cpp:154 pcbnew/files.cpp:1020
 #, c-format
 msgid "Failed to rename temporary file \"%s\""
 msgstr "Det gick inte att byta namn på temporär fil \"%s\""
 
 #: eeschema/files-io.cpp:186 pagelayout_editor/files.cpp:160
 #: pagelayout_editor/files.cpp:174 pagelayout_editor/files.cpp:207
-#: pcbnew/files.cpp:1050
+#: pcbnew/files.cpp:1051
 #, c-format
 msgid "File \"%s\" saved."
 msgstr "Filen %s sparades."
@@ -12452,7 +12417,7 @@ msgstr ""
 "Fel vid inläsning av schematisk fil \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:1007
+#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:1004
 #, c-format
 msgid "Failed to load \"%s\""
 msgstr "Det gick inte att ladda \"%s\""
@@ -12513,7 +12478,7 @@ msgstr ""
 msgid "Abort"
 msgstr ""
 
-#: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
+#: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:772
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -12578,7 +12543,7 @@ msgstr "Vill du skriva över filen?"
 msgid "Abort Project Save"
 msgstr "Avbryt projekt Spara"
 
-#: eeschema/files-io.cpp:1004
+#: eeschema/files-io.cpp:1001
 #, c-format
 msgid ""
 "Error loading schematic \"%s\".\n"
@@ -12587,7 +12552,7 @@ msgstr ""
 "Fel vid inläsning av schematisk \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:1030
+#: eeschema/files-io.cpp:1027
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Den aktuella schemat har modifierats. Spara ändringar?"
 
@@ -12597,7 +12562,7 @@ msgstr "Alias för"
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:83
 #: pcbnew/footprint.cpp:831 pcbnew/tools/pcb_control.cpp:1093
-#: pcbnew/zone.cpp:617
+#: pcbnew/zone.cpp:618
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -13269,7 +13234,7 @@ msgstr ""
 "Ange pythonsymbolen som implementerar SCH_PLUGIN :: Symbol * () -"
 "funktionerna."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1574
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1577
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power-symbolen skapar en global etikett med namnet '%s'"
@@ -13458,7 +13423,7 @@ msgstr ""
 msgid "Unable to read file \"%s\""
 msgstr "Kunde inte läsa fil: \"%s\""
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1157
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1160
 #, c-format
 msgid ""
 "Error parsing Eagle file.  Could not find \"%s\" instance but it is "
@@ -13467,19 +13432,19 @@ msgstr ""
 "Fel vid analys av Eagle-filen. Det gick inte att hitta \"%s\" -instans men "
 "det hänvisas till i schemat."
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1187
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1190
 #, c-format
 msgid "Could not find %s in the imported library"
 msgstr "Kunde inte hitta %s i det importerade biblioteket"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2305
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2343
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2386
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2423
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2465
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2497
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2537
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2569
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2308
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2346
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2389
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2426
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2468
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2500
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2540
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2572
 msgid "Bus Entry needed"
 msgstr "Bussresa behövs"
 
@@ -13807,81 +13772,83 @@ msgstr ""
 "förskjutning: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1474
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1883
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2562
 #, c-format
 msgid "Library file \"%s\" not found."
 msgstr "Biblioteksfilen \"%s\" hittades inte."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2034
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4166
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotek %s innehåller inte en symbol som heter %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2208
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4351
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr ""
 "symbolbiblioteket \"%s\" finns redan, kan inte skapa ett nytt bibliotek"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2236
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3152
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4379
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, c-format
 msgid "library \"%s\" cannot be deleted"
 msgstr "biblioteket \"%s\" kan inte raderas"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:158
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:200
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:246
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:290
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:332
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:345
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:394
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:407
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:426
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1009
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2348
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:160
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:202
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:248
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:292
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:334
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:347
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:396
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:409
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:428
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1031
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3027
 msgid "unexpected end of line"
 msgstr "oväntade slutet av raden"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:356
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:358
 msgid "expected unquoted string"
 msgstr "förväntad ociterad sträng"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:789
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:811
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
 msgstr "\"%s\" verkar inte vara en Eeschema-fil"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:816
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:838
 msgid "Missing 'EELAYER END'"
 msgstr "EELAYER END saknas"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:864
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1132
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1140
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1897
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:886
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1154
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1162
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2576
 msgid "unexpected end of file"
 msgstr "oväntat slutet på filen"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1099
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1121
 msgid "Unexpected end of file"
 msgstr "Oväntat slut på filen"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1424
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1446
 msgid "expected 'Italics' or '~'"
 msgstr "förväntade 'kursiv' eller '~'"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1688
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1710
 msgid "component field text attributes must be 3 characters wide"
 msgstr "komponentfältets textattribut måste vara 3 tecken breda"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1982
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2661
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr "användaren har inte behörighet att läsa biblioteksdokumentfilen \"%s\""
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1990
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2669
 msgid "symbol document library file is empty"
 msgstr "symboldokumentets biblioteksfil är tom"
 
@@ -15896,7 +15863,7 @@ msgstr "Rotera medsols"
 msgid "Rotates selected item(s) clockwise"
 msgstr "Roterar valda objekt medurs"
 
-#: eeschema/tools/ee_actions.cpp:373 pcbnew/tools/edit_tool.cpp:1339
+#: eeschema/tools/ee_actions.cpp:373 pcbnew/tools/edit_tool.cpp:1340
 msgid "Rotate"
 msgstr "Rotera"
 
@@ -16382,7 +16349,7 @@ msgid "Complete connected lines with current segment"
 msgstr "Komplett anslutna linjer med nuvarande segment"
 
 #: eeschema/tools/ee_actions.cpp:727 pagelayout_editor/tools/pl_actions.cpp:68
-#: pcbnew/dialogs/panel_edit_options_base.cpp:348
+#: pcbnew/dialogs/panel_edit_options_base.cpp:338
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "Move"
 msgstr "Flytta"
@@ -16524,13 +16491,13 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "Symbolen hittades inte."
 
-#: eeschema/tools/ee_selection_tool.cpp:1587
+#: eeschema/tools/ee_selection_tool.cpp:1601
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
 #: pcbnew/tools/pcb_selection_tool.cpp:1793
 msgid "Select &All\tA"
 msgstr "Välj & Alla\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1590
+#: eeschema/tools/ee_selection_tool.cpp:1604
 #: pcbnew/tools/pcb_selection_tool.cpp:1796
 msgid "&Expand Selection\tE"
 msgstr "& Expandera val E"
@@ -16856,7 +16823,7 @@ msgstr "Välj lager: %s"
 #: pcbnew/tools/board_inspection_tool.cpp:374
 #: pcbnew/tools/board_inspection_tool.cpp:395
 #: pcbnew/tools/board_inspection_tool.cpp:425 pcbnew/track.cpp:653
-#: pcbnew/track.cpp:711 pcbnew/track.cpp:1102 pcbnew/zone.cpp:608
+#: pcbnew/track.cpp:711 pcbnew/track.cpp:1102 pcbnew/zone.cpp:609
 msgid "Layer"
 msgstr "Lager"
 
@@ -16913,7 +16880,7 @@ msgid "Page Size"
 msgstr "Sidstorlek"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
-#: pcbnew/dialogs/panel_edit_options_base.cpp:329
+#: pcbnew/dialogs/panel_edit_options_base.cpp:362
 msgid "Show page limits"
 msgstr "Visa sidgränser"
 
@@ -17119,7 +17086,7 @@ msgid "Polarity"
 msgstr "Polaritet"
 
 #: gerbview/gerber_draw_item.cpp:711 pcbnew/fp_text.cpp:300
-#: pcbnew/pcb_text.cpp:120 pcbnew/tools/edit_tool.cpp:1505
+#: pcbnew/pcb_text.cpp:120 pcbnew/tools/edit_tool.cpp:1506
 #: pcbnew/tools/pcb_actions.cpp:318
 msgid "Mirror"
 msgstr "Spegla"
@@ -17728,41 +17695,41 @@ msgstr "Projektmallens titel"
 msgid "Project Template Selector"
 msgstr "Projektmallväljare"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:98
+#: kicad/dialogs/panel_kicad_launcher.cpp:101
 #, fuzzy
 msgid "Edit the project schematic"
 msgstr "Hela schematiska"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:102
+#: kicad/dialogs/panel_kicad_launcher.cpp:105
 #, fuzzy
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr ""
 "Redigera de globala listorna och bibliotekslistorna för projektsymboler"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:106
+#: kicad/dialogs/panel_kicad_launcher.cpp:109
 msgid "Edit the project PCB design"
 msgstr ""
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:110
+#: kicad/dialogs/panel_kicad_launcher.cpp:113
 #, fuzzy
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Redigera de globala listorna och bibliotekslistorna för projektavtryck"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:114
+#: kicad/dialogs/panel_kicad_launcher.cpp:117
 #, fuzzy
 msgid "Preview Gerber files"
 msgstr "Visa Gerber Files"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:118
+#: kicad/dialogs/panel_kicad_launcher.cpp:121
 #, fuzzy
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr "Konvertera bitmappsbilder till schematiska eller PCB-komponenter"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:122
+#: kicad/dialogs/panel_kicad_launcher.cpp:125
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:126
+#: kicad/dialogs/panel_kicad_launcher.cpp:129
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
@@ -20379,7 +20346,7 @@ msgid "NetName"
 msgstr "NetName"
 
 #: pcbnew/board_connected_item.cpp:168 pcbnew/pad.cpp:870 pcbnew/track.cpp:742
-#: pcbnew/zone.cpp:588
+#: pcbnew/zone.cpp:589
 msgid "NetClass"
 msgstr "NetClass"
 
@@ -21437,7 +21404,7 @@ msgid "Pre-defined Sizes"
 msgstr "Fördefinierade storlekar:"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
-#: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
+#: pcbnew/dialogs/dialog_constraints_reporter.cpp:53
 #: pcbnew/pcb_edit_frame.cpp:1673
 #, fuzzy
 msgid "Custom Rules"
@@ -21452,7 +21419,7 @@ msgstr ""
 "Fel vid import av inställningar från styrelsen:\n"
 "Associerad projektfil %s kunde inte laddas"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:211 pcbnew/files.cpp:707
+#: pcbnew/dialogs/dialog_board_setup.cpp:211 pcbnew/files.cpp:706
 #, c-format
 msgid ""
 "Error loading board file:\n"
@@ -21738,7 +21705,7 @@ msgstr "Radera spår som har både start- och slutposition inne i en pad"
 msgid "Cleanup Tracks and Vias"
 msgstr "Rengöringsspår och Vias"
 
-#: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
+#: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
 msgstr "Rapporter om begränsningar"
 
@@ -21847,7 +21814,7 @@ msgstr "Konturvisning:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:144
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88 pcbnew/zone.cpp:616
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88 pcbnew/zone.cpp:617
 msgid "Hatched"
 msgstr "Kläckt"
 
@@ -21901,11 +21868,11 @@ msgstr ""
 "Standard padanslutningstyp till zon.\n"
 "Denna inställning kan åsidosättas av lokala padinställningar"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1407
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1408
 msgid "Thermal reliefs"
 msgstr "Termiska reliefer"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1409
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1410
 msgid "Reliefs for PTH"
 msgstr "Avlastningar för PTH"
 
@@ -26839,43 +26806,58 @@ msgstr "Visa alltid valt ratsnest"
 msgid "Show ratsnest with curved lines"
 msgstr "Visa ratsnest med böjda linjer"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:337
+#: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Track Editing"
 msgstr "Spårredigering"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:339
+#: pcbnew/dialogs/panel_edit_options_base.cpp:329
 msgid "Mouse drag track behavior:"
 msgstr "Musens dragspårbeteende:"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:341
+#: pcbnew/dialogs/panel_edit_options_base.cpp:331
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr "Välj den åtgärd som ska utföras när du drar ett spårsegment med musen"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:349
+#: pcbnew/dialogs/panel_edit_options_base.cpp:339
 msgid "Moves the track segment without moving connected tracks"
 msgstr "Flyttar spårsegmentet utan att flytta anslutna spår"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:353
+#: pcbnew/dialogs/panel_edit_options_base.cpp:343
 #: pcbnew/tools/pcb_actions.cpp:1351
 msgid "Drag (45 degree mode)"
 msgstr "Dra (45 graders läge)"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:354
+#: pcbnew/dialogs/panel_edit_options_base.cpp:344
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "Drar spårsegmentet samtidigt som anslutna spår hålls i 45 grader."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:358
+#: pcbnew/dialogs/panel_edit_options_base.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:1358
 msgid "Drag (free angle)"
 msgstr "Dra (fri vinkel)"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:359
+#: pcbnew/dialogs/panel_edit_options_base.cpp:349
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr "Dra den närmaste fogen i spåret utan att begränsa spårvinkeln."
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:364
+msgid "Draw an outline to show the sheet size."
+msgstr ""
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:368
+#, fuzzy
+msgid "Refill zones after Zone Properties dialog"
+msgstr "Visar dialogrutan för objektegenskaper"
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:370
+msgid ""
+"If checked, zones will be re-filled after editing the properties of the zone "
+"using the Zone Properties dialog"
+msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -28643,11 +28625,11 @@ msgstr "(%s min diameter %s; faktisk %s)"
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; faktisk %s)"
 
-#: pcbnew/edit_zone_helpers.cpp:85 pcbnew/edit_zone_helpers.cpp:143
+#: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:149
 msgid "Modify zone properties"
 msgstr "Ändra zonegenskaper"
 
-#: pcbnew/edit_zone_helpers.cpp:133
+#: pcbnew/edit_zone_helpers.cpp:138
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Påfyllning %d Zoner"
@@ -28868,7 +28850,7 @@ msgstr "Nuvarande kretskort har modifierats. Spara ändringar?"
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" finns inte. Vill du skapa det?"
 
-#: pcbnew/files.cpp:811
+#: pcbnew/files.cpp:812
 #, fuzzy, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
@@ -28879,7 +28861,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:841
+#: pcbnew/files.cpp:842
 #, fuzzy, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr ""
@@ -28888,12 +28870,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:931 pcbnew/files.cpp:1077
+#: pcbnew/files.cpp:932 pcbnew/files.cpp:1078
 #, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "Inga åtkomsträttigheter att skriva till filen \"%s\""
 
-#: pcbnew/files.cpp:995 pcbnew/files.cpp:1096
+#: pcbnew/files.cpp:996 pcbnew/files.cpp:1097
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -28902,7 +28884,7 @@ msgstr ""
 "Fel vid sparar kortfil \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:1013
+#: pcbnew/files.cpp:1014
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -28911,7 +28893,7 @@ msgstr ""
 "Fel vid sparar kortfil \"%s\".\n"
 "Det gick inte att byta namn på tillfällig fil \"%s\""
 
-#: pcbnew/files.cpp:1133
+#: pcbnew/files.cpp:1134
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -29366,6 +29348,10 @@ msgstr ""
 "Fel vid inläsning av fotavtryck %s från biblioteket %s.\n"
 "\n"
 "%s"
+
+#: pcbnew/generate_footprint_info.cpp:120
+msgid "doc url"
+msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -30189,13 +30175,13 @@ msgid "Hole X / Y"
 msgstr "Borra X / Y"
 
 #: pcbnew/pad.cpp:941 pcbnew/track.cpp:681 pcbnew/track.cpp:724
-#: pcbnew/zone.cpp:628
+#: pcbnew/zone.cpp:629
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min. Avstånd: %s"
 
 #: pcbnew/pad.cpp:943 pcbnew/track.cpp:683 pcbnew/track.cpp:690
-#: pcbnew/track.cpp:726 pcbnew/track.cpp:732 pcbnew/zone.cpp:630
+#: pcbnew/track.cpp:726 pcbnew/track.cpp:732 pcbnew/zone.cpp:631
 #, c-format
 msgid "(from %s)"
 msgstr "(från %s)"
@@ -31586,68 +31572,68 @@ msgstr "Okänt PCad-lager %u"
 msgid "KiCad only supports 32 signal layers"
 msgstr "KiCad stöder endast 32 signallager"
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
 msgstr "Nytt spår"
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
 msgstr "Börjar lägga ett nytt spår."
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
 msgstr "Slutför bana"
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
 msgstr "Slutar lägga nuvarande slingrande."
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Length Tuning Settings..."
 msgstr "Inställningar för längdinställning ..."
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr ""
 "Ställer in längdinställningsparametrar för för närvarande dirigerat objekt."
 
-#: pcbnew/router/length_tuner_tool.cpp:74
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase Spacing"
 msgstr "Öka avståndet"
 
-#: pcbnew/router/length_tuner_tool.cpp:74
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase meander spacing by one step."
 msgstr "Öka meanderavståndet med ett steg."
 
-#: pcbnew/router/length_tuner_tool.cpp:80
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease Spacing"
 msgstr "Minska avståndet"
 
-#: pcbnew/router/length_tuner_tool.cpp:80
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease meander spacing by one step."
 msgstr "Minska meanderavståndet med ett steg."
 
-#: pcbnew/router/length_tuner_tool.cpp:86
+#: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase Amplitude"
 msgstr "Öka amplituden"
 
-#: pcbnew/router/length_tuner_tool.cpp:86
+#: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase meander amplitude by one step."
 msgstr "Öka meanderamplituden med ett steg."
 
-#: pcbnew/router/length_tuner_tool.cpp:92
+#: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease Amplitude"
 msgstr "Minska amplituden"
 
-#: pcbnew/router/length_tuner_tool.cpp:92
+#: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease meander amplitude by one step."
 msgstr "Minska slingrande amplitud med ett steg."
 
-#: pcbnew/router/length_tuner_tool.cpp:114
+#: pcbnew/router/length_tuner_tool.cpp:103
 msgid "Length Tuner"
 msgstr "Längdmottagare"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:450
+#: pcbnew/router/pns_diff_pair_placer.cpp:444
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -31656,7 +31642,7 @@ msgstr ""
 "namnen på de nät som tillhör ett differentiellt par slutar med antingen _N / "
 "_P eller +/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:471
+#: pcbnew/router/pns_diff_pair_placer.cpp:465
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
@@ -31664,17 +31650,17 @@ msgstr ""
 "Kan inte hitta en lämplig utgångspunkt. Om du börjar från ett befintligt "
 "differentialpar, se till att du är i slutet."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:524
+#: pcbnew/router/pns_diff_pair_placer.cpp:518
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "Det går inte att hitta en lämplig startpunkt för kopplat nät \"%s\"."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:76
+#: pcbnew/router/pns_dp_meander_placer.cpp:75
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
 msgstr "Välj ett spår vars längd du vill ställa in."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:90
+#: pcbnew/router/pns_dp_meander_placer.cpp:89
 msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -31684,41 +31670,42 @@ msgstr ""
 "Se till att namnen på de nät som tillhör ett differentiellt par slutar med "
 "antingen _N / _P eller +/-."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:394
+#: pcbnew/router/pns_dp_meander_placer.cpp:393
 #: pcbnew/router/pns_meander_placer.cpp:269
 msgid "Too long: "
 msgstr "För länge: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:397
+#: pcbnew/router/pns_dp_meander_placer.cpp:396
 #: pcbnew/router/pns_meander_placer.cpp:272
 msgid "Too short: "
 msgstr "För kort: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:400
+#: pcbnew/router/pns_dp_meander_placer.cpp:399
 #: pcbnew/router/pns_meander_placer.cpp:275
 msgid "Tuned: "
 msgstr "Stämd: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:403
+#: pcbnew/router/pns_dp_meander_placer.cpp:402
 #: pcbnew/router/pns_meander_placer.cpp:278
 #: pcbnew/router/pns_meander_skew_placer.cpp:168
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1007
+#: pcbnew/router/pns_kicad_iface.cpp:1001
 #, c-format
 msgid "%s is malformed."
 msgstr "%s är felaktig."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1010
+#: pcbnew/router/pns_kicad_iface.cpp:1004
+#, fuzzy
 msgid ""
-"This zone cannot be handled by the track layout tool.\n"
+"This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "Denna zon kan inte hanteras av spårlayoutverktyget.\n"
 "Kontrollera att det inte är en självkorsande polygon."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1609 pcbnew/router/router_tool.cpp:424
+#: pcbnew/router/pns_kicad_iface.cpp:1602 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
 msgstr "Interaktiv router"
 
@@ -31870,12 +31857,13 @@ msgid "Switches posture of the currently routed track."
 msgstr "Byt ställning för det nuvarande dirigerade spåret."
 
 #: pcbnew/router/router_tool.cpp:155
-msgid "Switch Corner Rounding"
-msgstr "Byt hörnrundning"
+#, fuzzy
+msgid "Track Corner Mode"
+msgstr "Spårutrymme"
 
 #: pcbnew/router/router_tool.cpp:156
-msgid "Switches the corner type of the currently routed track."
-msgstr "Växlar hörntyp för det nuvarande dirigerade spåret."
+msgid "Switches between sharp and rounded corners when routing tracks."
+msgstr ""
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
@@ -32258,8 +32246,8 @@ msgstr "Zonanslutningstyp: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:147
 #: pcbnew/tools/board_inspection_tool.cpp:181
-#: pcbnew/tools/board_inspection_tool.cpp:199 pcbnew/zone.cpp:334
-#: pcbnew/zone.cpp:349 pcbnew/zone.cpp:497 pcbnew/zone.cpp:775
+#: pcbnew/tools/board_inspection_tool.cpp:199 pcbnew/zone.cpp:335
+#: pcbnew/zone.cpp:350 pcbnew/zone.cpp:498 pcbnew/zone.cpp:776
 msgid "zone"
 msgstr "zon"
 
@@ -32617,24 +32605,24 @@ msgstr "Kapa bana"
 msgid "Select reference point for move..."
 msgstr "Välj referenspunkt för flytt ..."
 
-#: pcbnew/tools/edit_tool.cpp:995
+#: pcbnew/tools/edit_tool.cpp:996
 msgid "Edit track width/via size"
 msgstr "Redigera spårbredd / via storlek"
 
-#: pcbnew/tools/edit_tool.cpp:1030
+#: pcbnew/tools/edit_tool.cpp:1031
 msgid "At least two straight track segments must be selected."
 msgstr "Minst två segment med rak spår måste väljas."
 
-#: pcbnew/tools/edit_tool.cpp:1034
+#: pcbnew/tools/edit_tool.cpp:1035
 msgid "Enter fillet radius:"
 msgstr "Ange filéradie:"
 
-#: pcbnew/tools/edit_tool.cpp:1034 pcbnew/tools/edit_tool.cpp:1197
+#: pcbnew/tools/edit_tool.cpp:1035 pcbnew/tools/edit_tool.cpp:1198
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Fillet Tracks"
 msgstr "Filéspår"
 
-#: pcbnew/tools/edit_tool.cpp:1044
+#: pcbnew/tools/edit_tool.cpp:1045
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -32642,40 +32630,36 @@ msgstr ""
 "En radie på noll angavs.\n"
 "Filetoperationen utfördes inte."
 
-#: pcbnew/tools/edit_tool.cpp:1204
+#: pcbnew/tools/edit_tool.cpp:1205
 msgid "Unable to fillet the selected track segments."
 msgstr "Det går inte att filetera de valda spårsegmenten."
 
-#: pcbnew/tools/edit_tool.cpp:1206
+#: pcbnew/tools/edit_tool.cpp:1207
 msgid "Some of the track segments could not be filleted."
 msgstr "Vissa av spårsegmenten kunde inte fyllas i."
 
-#: pcbnew/tools/edit_tool.cpp:1606 pcbnew/tools/pcb_actions.cpp:313
+#: pcbnew/tools/edit_tool.cpp:1607 pcbnew/tools/pcb_actions.cpp:313
 msgid "Change Side / Flip"
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:1746 pcbnew/tools/zone_filler_tool.cpp:174
-msgid "Fill Zone"
-msgstr "Fyll zon"
-
-#: pcbnew/tools/edit_tool.cpp:1932
+#: pcbnew/tools/edit_tool.cpp:1922
 msgid "Move exact"
 msgstr "Flytta exakt"
 
-#: pcbnew/tools/edit_tool.cpp:2094
+#: pcbnew/tools/edit_tool.cpp:2084
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Duplicerade %d objekt"
 
-#: pcbnew/tools/edit_tool.cpp:2323
+#: pcbnew/tools/edit_tool.cpp:2316
 msgid "Select reference point for the copy..."
 msgstr "Välj referenspunkt för kopian ..."
 
-#: pcbnew/tools/edit_tool.cpp:2324 pcbnew/tools/edit_tool.cpp:2338
+#: pcbnew/tools/edit_tool.cpp:2317 pcbnew/tools/edit_tool.cpp:2331
 msgid "Selection copied"
 msgstr "Urvalet kopierades"
 
-#: pcbnew/tools/edit_tool.cpp:2325
+#: pcbnew/tools/edit_tool.cpp:2318
 msgid "Copy cancelled"
 msgstr "Kopian avbröts"
 
@@ -34201,15 +34185,15 @@ msgstr "Självskärande polygoner är inte tillåtna."
 msgid "Drag a corner"
 msgstr "Dra ett hörn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2075
+#: pcbnew/tools/pcb_point_editor.cpp:2070
 msgid "Add a zone corner"
 msgstr "Lägg till ett zonhörn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2113
+#: pcbnew/tools/pcb_point_editor.cpp:2108
 msgid "Split segment"
 msgstr "Delat segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2184
+#: pcbnew/tools/pcb_point_editor.cpp:2179
 msgid "Remove a zone/polygon corner"
 msgstr "Ta bort en zon / polygonhörn"
 
@@ -34261,15 +34245,15 @@ msgstr "Position Relativ"
 msgid "Click on reference item..."
 msgstr "Klicka på referensobjektet ..."
 
-#: pcbnew/tools/zone_create_helper.cpp:181
+#: pcbnew/tools/zone_create_helper.cpp:175
 msgid "Add a zone cutout"
 msgstr "Lägg till en zonutklippning"
 
-#: pcbnew/tools/zone_create_helper.cpp:229
+#: pcbnew/tools/zone_create_helper.cpp:214
 msgid "Add a zone"
 msgstr "Lägg till en zon"
 
-#: pcbnew/tools/zone_create_helper.cpp:260
+#: pcbnew/tools/zone_create_helper.cpp:245
 msgid "Add a graphical polygon"
 msgstr "Lägg till en grafisk polygon"
 
@@ -34294,11 +34278,15 @@ msgstr "Zonpåfyllningar kan vara felaktiga. DRC-regler innehåller fel."
 msgid "Fill All Zones"
 msgstr "Fyll i alla zoner"
 
-#: pcbnew/tools/zone_filler_tool.cpp:211
+#: pcbnew/tools/zone_filler_tool.cpp:174
+msgid "Fill Zone"
+msgstr "Fyll zon"
+
+#: pcbnew/tools/zone_filler_tool.cpp:210
 msgid "Unfill Zone"
 msgstr "Unfill Zone"
 
-#: pcbnew/tools/zone_filler_tool.cpp:230
+#: pcbnew/tools/zone_filler_tool.cpp:228
 msgid "Unfill All Zones"
 msgstr "Avsluta alla zoner"
 
@@ -34931,108 +34919,108 @@ msgstr "Dimensioner"
 msgid "Other items"
 msgstr "Andra saker"
 
-#: pcbnew/zone.cpp:549
+#: pcbnew/zone.cpp:550
 msgid "Rule Area"
 msgstr "Regelområde"
 
-#: pcbnew/zone.cpp:551
+#: pcbnew/zone.cpp:552
 msgid "Copper Zone"
 msgstr "Kopparzon"
 
-#: pcbnew/zone.cpp:553
+#: pcbnew/zone.cpp:554
 msgid "Non-copper Zone"
 msgstr "Icke-kopparzon"
 
-#: pcbnew/zone.cpp:558
+#: pcbnew/zone.cpp:559
 msgid "Cutout"
 msgstr "Klipp ut"
 
-#: pcbnew/zone.cpp:567
+#: pcbnew/zone.cpp:568
 msgid "No vias"
 msgstr "Inga vias"
 
-#: pcbnew/zone.cpp:570
+#: pcbnew/zone.cpp:571
 msgid "No tracks"
 msgstr "Inga spår"
 
-#: pcbnew/zone.cpp:573
+#: pcbnew/zone.cpp:574
 msgid "No pads"
 msgstr "Inga dynor"
 
-#: pcbnew/zone.cpp:576
+#: pcbnew/zone.cpp:577
 msgid "No copper zones"
 msgstr "Inga kopparzoner"
 
-#: pcbnew/zone.cpp:579
+#: pcbnew/zone.cpp:580
 msgid "No footprints"
 msgstr "Inga fotavtryck"
 
-#: pcbnew/zone.cpp:582
+#: pcbnew/zone.cpp:583
 msgid "Restrictions"
 msgstr "Begränsningar"
 
-#: pcbnew/zone.cpp:591 pcbnew/zone.cpp:1414
+#: pcbnew/zone.cpp:592 pcbnew/zone.cpp:1415
 msgid "Priority"
 msgstr "Prioritet"
 
-#: pcbnew/zone.cpp:606 pcbnew/zone.cpp:866
+#: pcbnew/zone.cpp:607 pcbnew/zone.cpp:867
 #, c-format
 msgid "%s and %d more"
 msgstr "%s och %d till"
 
-#: pcbnew/zone.cpp:620
+#: pcbnew/zone.cpp:621
 msgid "Fill Mode"
 msgstr "Ifyllnadsläge"
 
-#: pcbnew/zone.cpp:623
+#: pcbnew/zone.cpp:624
 msgid "Filled Area"
 msgstr "Fyllt område"
 
-#: pcbnew/zone.cpp:635
+#: pcbnew/zone.cpp:636
 msgid "HatchBorder Lines"
 msgstr "HatchBorder Lines"
 
-#: pcbnew/zone.cpp:659
+#: pcbnew/zone.cpp:660
 msgid "Corner Count"
 msgstr "Hörnräkning"
 
-#: pcbnew/zone.cpp:872
+#: pcbnew/zone.cpp:873
 #, c-format
 msgid "Rule Area Cutout on %s"
 msgstr "Rule Area Cutout on %s"
 
-#: pcbnew/zone.cpp:874
+#: pcbnew/zone.cpp:875
 #, c-format
 msgid "Zone Cutout on %s"
 msgstr "Zone Cutout på %s"
 
-#: pcbnew/zone.cpp:879
+#: pcbnew/zone.cpp:880
 #, c-format
 msgid "Rule Area on %s"
 msgstr "Regelområde den %s"
 
-#: pcbnew/zone.cpp:881
+#: pcbnew/zone.cpp:882
 #, c-format
 msgid "Zone %s on %s"
 msgstr "Zon %s på %s"
 
-#: pcbnew/zone.cpp:1405
+#: pcbnew/zone.cpp:1406
 msgid "Inherited"
 msgstr "Ärvt"
 
-#: pcbnew/zone.cpp:1423
+#: pcbnew/zone.cpp:1424
 msgid "Min Width"
 msgstr "Min bredd"
 
-#: pcbnew/zone.cpp:1426
+#: pcbnew/zone.cpp:1427
 msgid "Pad Connections"
 msgstr "Pad-anslutningar"
 
-#: pcbnew/zone.cpp:1428
+#: pcbnew/zone.cpp:1429
 msgid "Thermal Clearance"
 msgstr "Värmeutrymme"
 
-#: pcbnew/zone.cpp:1431
+#: pcbnew/zone.cpp:1432
 msgid "Thermal Spoke Width"
 msgstr "Termisk ekers bredd"
 
@@ -35177,6 +35165,32 @@ msgstr "Redigera schemat"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-kretskortfiler"
+
+#, fuzzy
+#~ msgid "Model Mode"
+#~ msgstr "Flytta alla moduler"
+
+#, fuzzy
+#~ msgid "Enable default spice model simulation"
+#~ msgstr "Inaktivera symbol för simulering"
+
+#, fuzzy
+#~ msgid "Enable PSpice model simulation"
+#~ msgstr "Kryddvärde i simulering"
+
+#, fuzzy
+#~ msgid "Enable LTSpice model simulation"
+#~ msgstr "Kryddvärde i simulering"
+
+#, fuzzy
+#~ msgid "Enable HSpice model simulation"
+#~ msgstr "Kryddvärde i simulering"
+
+#~ msgid "Switch Corner Rounding"
+#~ msgstr "Byt hörnrundning"
+
+#~ msgid "Switches the corner type of the currently routed track."
+#~ msgstr "Växlar hörntyp för det nuvarande dirigerade spåret."
 
 #~ msgid "Plain PCB (no copper or silk)"
 #~ msgstr "Vanligt kretskort (inget koppar eller siden)"

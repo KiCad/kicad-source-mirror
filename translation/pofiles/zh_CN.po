@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 06:36-0700\n"
+"POT-Creation-Date: 2021-03-22 17:14-0700\n"
 "PO-Revision-Date: 2021-03-22 17:14+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -125,7 +125,7 @@ msgstr "不透明度"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
-#: eeschema/dialogs/dialog_print_using_printer.cpp:275
+#: eeschema/dialogs/dialog_print_using_printer.cpp:271
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
 msgstr "预览"
@@ -1444,23 +1444,23 @@ msgstr "in^3"
 msgid "%"
 msgstr "%"
 
-#: common/common.cpp:224
+#: common/common.cpp:228
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr "环境变量扩展失败：缺少 \"%c\" , 位置 \"%u\" （在 \"%s\" 内）。"
 
-#: common/common.cpp:310
+#: common/common.cpp:314
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
 msgstr "无法获取文件 \"%s\" 在 \"%s\" 中的绝对路径。"
 
-#: common/common.cpp:329
+#: common/common.cpp:333
 #, c-format
 msgid "Output directory \"%s\" created.\n"
 msgstr "输出目录 \"%s\" 已创建。\n"
 
-#: common/common.cpp:338
+#: common/common.cpp:342
 #, c-format
 msgid "Cannot create output directory \"%s\".\n"
 msgstr "无法创建输出目录 \"%s\"。\n"
@@ -1479,7 +1479,7 @@ msgstr "问题"
 
 #: common/confirm.cpp:129 common/confirm.cpp:257
 #: common/dialogs/panel_setup_severities.cpp:40
-#: eeschema/dialogs/dialog_sim_settings.cpp:285
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:155
 #: eeschema/files-io.cpp:506 eeschema/sheet.cpp:571
 #: eeschema/symbol_editor/symbol_editor.cpp:542
@@ -1734,7 +1734,7 @@ msgstr "报告 KiCad 的问题"
 msgid "&OK"
 msgstr "确定 (&O)"
 
-#: common/dialogs/dialog_HTML_reporter_base.h:46
+#: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
 msgstr "报告"
 
@@ -1906,8 +1906,8 @@ msgstr "环境变量"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/dialog_net_inspector.cpp:71
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:444
-#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:611
-#: pcbnew/zone.cpp:1418
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38 pcbnew/zone.cpp:612
+#: pcbnew/zone.cpp:1419
 msgid "Name"
 msgstr "名称"
 
@@ -2091,7 +2091,7 @@ msgstr "网格原点"
 #: pcbnew/dialogs/panel_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:252
-#: pcbnew/dialogs/panel_edit_options_base.cpp:373
+#: pcbnew/dialogs/panel_edit_options_base.cpp:381
 msgid "a page"
 msgstr "图框"
 
@@ -2532,7 +2532,7 @@ msgid "Revision:"
 msgstr "修订："
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
-#: eeschema/dialogs/dialog_netlist.cpp:392
+#: eeschema/dialogs/dialog_netlist.cpp:386
 msgid "Title:"
 msgstr "标题："
 
@@ -2599,10 +2599,10 @@ msgid "Print Preview"
 msgstr "打印预览"
 
 #: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:206
-#: eeschema/dialogs/dialog_annotate.cpp:104 eeschema/dialogs/dialog_bom.cpp:132
+#: eeschema/dialogs/dialog_annotate.cpp:101 eeschema/dialogs/dialog_bom.cpp:132
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
-#: eeschema/dialogs/dialog_netlist.cpp:276
+#: eeschema/dialogs/dialog_netlist.cpp:270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:64
 #: eeschema/dialogs/dialog_print_using_printer.cpp:145
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
@@ -2650,7 +2650,7 @@ msgid "Nothing to print"
 msgstr "没有要打印的内容"
 
 #: common/dialogs/dialog_print_generic.cpp:231
-#: eeschema/dialogs/dialog_print_using_printer.cpp:312
+#: eeschema/dialogs/dialog_print_using_printer.cpp:308
 msgid "Previous print job not yet complete."
 msgstr "上一个打印作业尚未完成。"
 
@@ -2750,36 +2750,36 @@ msgstr "视图预设切换器"
 msgid "Reveal Themes in Finder"
 msgstr "在访达中显示主题文件"
 
-#: common/dialogs/panel_color_settings.cpp:130
+#: common/dialogs/panel_color_settings.cpp:129
 msgid "New theme name:"
 msgstr "新主题名称："
 
-#: common/dialogs/panel_color_settings.cpp:130
+#: common/dialogs/panel_color_settings.cpp:129
 msgid "Add Color Theme"
 msgstr "添加颜色主题"
 
-#: common/dialogs/panel_color_settings.cpp:142
+#: common/dialogs/panel_color_settings.cpp:141
 msgid "Theme already exists!"
 msgstr "主题已存在！"
 
-#: common/dialogs/panel_color_settings.cpp:203
-#: common/dialogs/panel_color_settings.cpp:225
+#: common/dialogs/panel_color_settings.cpp:202
+#: common/dialogs/panel_color_settings.cpp:224
 msgid "New Theme..."
 msgstr "新主题..."
 
-#: common/dialogs/panel_color_settings.cpp:213
+#: common/dialogs/panel_color_settings.cpp:212
 msgid "(read-only)"
 msgstr "(只读)"
 
-#: common/dialogs/panel_color_settings.cpp:282
+#: common/dialogs/panel_color_settings.cpp:281
 msgid "Copy color"
 msgstr "复制颜色"
 
-#: common/dialogs/panel_color_settings.cpp:285
+#: common/dialogs/panel_color_settings.cpp:284
 msgid "Paste color"
 msgstr "粘贴颜色"
 
-#: common/dialogs/panel_color_settings.cpp:288
+#: common/dialogs/panel_color_settings.cpp:287
 msgid "Revert to saved color"
 msgstr "恢复为已保存的颜色"
 
@@ -3231,7 +3231,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1446
-#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1406
+#: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1407
 msgid "None"
 msgstr "无"
 
@@ -3312,8 +3312,8 @@ msgstr "重置为触控板默认值"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:233
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:615
-#: pcbnew/zone.cpp:1408
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:730 pcbnew/zone.cpp:616
+#: pcbnew/zone.cpp:1409
 msgid "Solid"
 msgstr "实心"
 
@@ -3400,7 +3400,7 @@ msgstr "默认的网络类是必需的。"
 msgid "Net Class"
 msgstr "网络类"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1420
+#: common/dialogs/panel_setup_netclasses_base.cpp:43 pcbnew/zone.cpp:1421
 msgid "Clearance"
 msgstr "间隙"
 
@@ -3504,7 +3504,7 @@ msgstr "关联到选择的网络"
 #: pcbnew/board_connected_item.cpp:164
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:33
 #: pcbnew/dialogs/dialog_net_inspector.cpp:70 pcbnew/pad.cpp:868
-#: pcbnew/track.cpp:740 pcbnew/zone.cpp:586
+#: pcbnew/track.cpp:740 pcbnew/zone.cpp:587
 msgid "Net"
 msgstr "网络"
 
@@ -3600,11 +3600,11 @@ msgstr "信息"
 msgid "Save..."
 msgstr "保存..."
 
-#: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:431
+#: common/draw_panel_gal.cpp:250 common/draw_panel_gal.cpp:433
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "无法使用 OpenGL，回退到软件渲染"
 
-#: common/draw_panel_gal.cpp:255 common/draw_panel_gal.cpp:438
+#: common/draw_panel_gal.cpp:256 common/draw_panel_gal.cpp:440
 msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
@@ -4468,7 +4468,7 @@ msgid "Cannot copy file \"%s\"."
 msgstr "无法复制文件 \"%s\"。"
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:152
-#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1818
+#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1808
 msgid "Cut"
 msgstr "剪切"
 
@@ -4495,7 +4495,7 @@ msgstr "将剪贴板内容粘贴到当前单元格位置"
 
 #: common/grid_tricks.cpp:244 common/tool/actions.cpp:190
 #: kicad/project_tree_pane.cpp:781 pcbnew/plugins/kicad/pcb_parser.cpp:678
-#: pcbnew/tools/edit_tool.cpp:1820
+#: pcbnew/tools/edit_tool.cpp:1810
 msgid "Delete"
 msgstr "删除"
 
@@ -5234,7 +5234,7 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "未安装此语言的 KiCad 语言文件。"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2307
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:241
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:244
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
@@ -6073,7 +6073,7 @@ msgstr "信号名称不能包含 CR 或 LF 字符"
 msgid "Signal names cannot contain spaces"
 msgstr "信号名称不能包含空格"
 
-#: common/view/view.cpp:542
+#: common/view/view.cpp:543
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Y 轴的镜像尚不支持"
 
@@ -7145,11 +7145,11 @@ msgstr "未找到 %s"
 msgid "Selected net:"
 msgstr "选择网络："
 
-#: eeschema/dialogs/dialog_annotate.cpp:98
+#: eeschema/dialogs/dialog_annotate.cpp:95
 msgid "Annotation Messages:"
 msgstr "标注信息："
 
-#: eeschema/dialogs/dialog_annotate.cpp:103
+#: eeschema/dialogs/dialog_annotate.cpp:100
 msgid "Annotate"
 msgstr "批注"
 
@@ -7262,7 +7262,7 @@ msgstr "添加生成器"
 msgid "Nickname \"%s\" already in use."
 msgstr "别名 \"%s\" 已经被占用了。"
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:687
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:681
 msgid "Generator files:"
 msgstr "生成钻孔文件："
 
@@ -9619,7 +9619,7 @@ msgid "Invalid footprint specified"
 msgstr "指定的封装无效"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:460
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:736
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:728
 #: eeschema/generate_alias_info.cpp:81
 #, c-format
 msgid ""
@@ -9635,32 +9635,32 @@ msgstr ""
 msgid "No symbol selected"
 msgstr "没有选择符号"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:545
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:536
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid."
 msgstr "符号库标识符 \"%s\" 无效."
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:641
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:633
 #, c-format
 msgid "Available Candidates for %s "
 msgstr "\"%s\" 的可用候选 "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:645
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:637
 #, c-format
 msgid "Candidates count %d "
 msgstr "候选计数：%d "
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:655
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:647
 #, c-format
 msgid "%u link(s) mapped, %u not found"
 msgstr "已映射 %u 链接，未找到 %u"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:660
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:652
 #, c-format
 msgid "All %u link(s) resolved"
 msgstr "所有 %u 链接已解决"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:690
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:682
 msgid "Invalid symbol library identifier"
 msgstr "无效的符号库标识符"
 
@@ -11044,28 +11044,28 @@ msgstr "接受名称"
 msgid "Migrate Buses"
 msgstr "迁移总线"
 
-#: eeschema/dialogs/dialog_netlist.cpp:275
+#: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_netlist_base.h:67
 msgid "Export Netlist"
 msgstr "导出网表"
 
-#: eeschema/dialogs/dialog_netlist.cpp:307
+#: eeschema/dialogs/dialog_netlist.cpp:301
 msgid "Simulator requires a fully annotated schematic."
 msgstr "仿真器需要一张完整批注的原理图。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:330
+#: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values"
 msgstr "重新格式化无源符号值"
 
-#: eeschema/dialogs/dialog_netlist.cpp:331
+#: eeschema/dialogs/dialog_netlist.cpp:325
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "重新格式化无源符号值 e.g. 1M -> 1Meg"
 
-#: eeschema/dialogs/dialog_netlist.cpp:336
+#: eeschema/dialogs/dialog_netlist.cpp:330
 msgid "External simulator command:"
 msgstr "外部仿真器命令："
 
-#: eeschema/dialogs/dialog_netlist.cpp:337
+#: eeschema/dialogs/dialog_netlist.cpp:331
 msgid ""
 "Enter the command line to run spice\n"
 "Usually <path to spice binary> %I\n"
@@ -11075,41 +11075,41 @@ msgstr ""
 "通常 <SPICE 二进制路径> %I。\n"
 "%I 将被实际的 SPICE 网表名称替换"
 
-#: eeschema/dialogs/dialog_netlist.cpp:351
+#: eeschema/dialogs/dialog_netlist.cpp:345
 msgid "Create Netlist and Run Simulator Command"
 msgstr "创建网表并运行仿真器命令"
 
-#: eeschema/dialogs/dialog_netlist.cpp:402
+#: eeschema/dialogs/dialog_netlist.cpp:396
 msgid "Netlist command:"
 msgstr "网表命令："
 
-#: eeschema/dialogs/dialog_netlist.cpp:448
+#: eeschema/dialogs/dialog_netlist.cpp:442
 msgid "Save Netlist File"
 msgstr "保存网表文件"
 
-#: eeschema/dialogs/dialog_netlist.cpp:487
+#: eeschema/dialogs/dialog_netlist.cpp:481
 #, c-format
 msgid "%s Export"
 msgstr "导出 %s"
 
-#: eeschema/dialogs/dialog_netlist.cpp:516
+#: eeschema/dialogs/dialog_netlist.cpp:510
 #: eeschema/netlist_exporters/netlist_generator.cpp:55
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "导出网表需要一张完整批注的原理图。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:636
+#: eeschema/dialogs/dialog_netlist.cpp:630
 msgid "This plugin already exists."
 msgstr "此插件已存在。"
 
-#: eeschema/dialogs/dialog_netlist.cpp:664
+#: eeschema/dialogs/dialog_netlist.cpp:658
 msgid "Error. You must provide a command String"
 msgstr "错误。你必须提供一个命令字符串"
 
-#: eeschema/dialogs/dialog_netlist.cpp:670
+#: eeschema/dialogs/dialog_netlist.cpp:664
 msgid "Error. You must provide a Title"
 msgstr "错误。你必须提供一个标题"
 
-#: eeschema/dialogs/dialog_netlist.cpp:714
+#: eeschema/dialogs/dialog_netlist.cpp:708
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "不要忘记为这个网表控制页选择一个标题"
 
@@ -11469,15 +11469,15 @@ msgstr "画笔宽度："
 msgid "Plot Schematic Options"
 msgstr "绘制原理图选项"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:327
+#: eeschema/dialogs/dialog_print_using_printer.cpp:323
 msgid "Print Schematic"
 msgstr "打印原理图"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:334
+#: eeschema/dialogs/dialog_print_using_printer.cpp:330
 msgid "An error occurred attempting to print the schematic."
 msgstr "打印原理图时出现错误。"
 
-#: eeschema/dialogs/dialog_print_using_printer.cpp:358
+#: eeschema/dialogs/dialog_print_using_printer.cpp:354
 #, c-format
 msgid "Print page %d"
 msgstr "打印图框 %d"
@@ -11883,29 +11883,31 @@ msgstr "按名称添加信号："
 msgid "You need to select DC source"
 msgstr "你需要选择 DC 源"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:221
+#: eeschema/dialogs/dialog_sim_settings.cpp:218
 msgid "Source 1 and Source 2 must be different"
 msgstr "源 1 和源 2 必须不同"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:285
+#: eeschema/dialogs/dialog_sim_settings.cpp:282
 msgid "No valid simulation is configured."
 msgstr "未配置有效仿真。"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:288
+#: eeschema/dialogs/dialog_sim_settings.cpp:285
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
-msgstr "配置有效仿真步骤为，选择一个仿真选项卡，设置仿真参数，并单击选中选项卡的 OK 按钮。"
+msgstr ""
+"配置有效仿真步骤为，选择一个仿真选项卡，设置仿真参数，并单击选中选项卡的 OK "
+"按钮。"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:292
+#: eeschema/dialogs/dialog_sim_settings.cpp:289
 msgid "Exit Without Valid Simulation"
 msgstr "在无有效仿真的情况下退出"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:293
+#: eeschema/dialogs/dialog_sim_settings.cpp:290
 msgid "Configure Valid Simulation"
 msgstr "配置有效仿真"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:597
+#: eeschema/dialogs/dialog_sim_settings.cpp:576
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:137
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:144
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:155
@@ -11915,11 +11917,11 @@ msgstr "配置有效仿真"
 msgid "Volts"
 msgstr "V"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:598
+#: eeschema/dialogs/dialog_sim_settings.cpp:577
 msgid "Amperes"
 msgstr "安培"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:599
+#: eeschema/dialogs/dialog_sim_settings.cpp:578
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:310
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:321
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:359
@@ -12012,7 +12014,7 @@ msgstr "温度"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:78
 #: pcbnew/fp_text.cpp:290 pcbnew/pcb_marker.cpp:93 pcbnew/pcb_shape.cpp:494
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:252 pcbnew/track.cpp:649
-#: pcbnew/track.cpp:707 pcbnew/zone.cpp:560
+#: pcbnew/track.cpp:707 pcbnew/zone.cpp:561
 msgid "Type"
 msgstr "类型"
 
@@ -12152,73 +12154,43 @@ msgstr "从原理图加载命令"
 msgid "Custom"
 msgstr "自定义"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:423
-msgid "Model Mode"
-msgstr "模型模式"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:425
-msgid "User configuration"
-msgstr "用户配置"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:426
-msgid ""
-"Use the settings in the Ngspice configuration file or any settings defined "
-"in the schematic"
-msgstr "使用 Ngspice 配置文件中的设置或原理图中定义的任何设置"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:430
-msgid "Spice"
-msgstr "Spice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:431
-msgid "Enable default spice model simulation"
-msgstr "启用默认的 spice 模型仿真"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:435
-msgid "PSpice"
-msgstr "PSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:436
-msgid "Enable PSpice model simulation"
-msgstr "启用 PSpice 模型仿真"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:440
-msgid "LTSpice"
-msgstr "LTSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:441
-msgid "Enable LTSpice model simulation"
-msgstr "启用 LTSpice 模型仿真"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:445
-msgid "PSpice and LTSpice"
-msgstr "PSpice 和 LTSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:446
-msgid "Enable PSpice and LTSpice model simulation"
-msgstr "启用 PSpice 和 LTSpice 模型仿真"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-msgid "HSpice"
-msgstr "HSpice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:451
-msgid "Enable HSpice model simulation"
-msgstr "启用 HSpice 模型仿真"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:462
-msgid "Ngspice"
-msgstr "Ngspice"
-
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:469
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:424
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
 msgstr "调整无源符号值 (e.g. M -> Meg; 100 nF -> 100n)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:472
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:427
 msgid "Add full path for .include library directives"
 msgstr "为 .include 库指令添加完整路径"
 
-#: eeschema/dialogs/dialog_sim_settings_base.h:143
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:434
+msgid "Compatibility mode:"
+msgstr ""
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "User configuration"
+msgstr "用户配置"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "Spice"
+msgstr "Spice"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "PSpice"
+msgstr "PSpice"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "LTSpice"
+msgstr "LTSpice"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "PSpice and LTSpice"
+msgstr "PSpice 和 LTSpice"
+
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:438
+msgid "HSpice"
+msgstr "HSpice"
+
+#: eeschema/dialogs/dialog_sim_settings_base.h:138
 msgid "Simulation settings"
 msgstr "仿真设置"
 
@@ -13221,7 +13193,6 @@ msgstr "URL"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:25
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
-#: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Annotations"
 msgstr "标注"
 
@@ -13688,7 +13659,8 @@ msgstr "当前配置中未启用库 '%s'。"
 msgid "Conflicts"
 msgstr "冲突"
 
-#: eeschema/erc_item.cpp:43 pcbnew/drc/drc_item.cpp:46
+#: eeschema/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:360
+#: pcbnew/drc/drc_item.cpp:46
 msgid "Miscellaneous"
 msgstr "其他"
 
@@ -13809,7 +13781,7 @@ msgstr ""
 "保存原理图文件 \"%s\" 发生错误。\n"
 "%s"
 
-#: eeschema/files-io.cpp:133 pcbnew/files.cpp:1000
+#: eeschema/files-io.cpp:133 pcbnew/files.cpp:1001
 #, c-format
 msgid "Failed to create temporary file \"%s\""
 msgstr "无法创建临时文件 \"%s\""
@@ -13823,14 +13795,14 @@ msgstr ""
 "保存原理图文件 \"%s\" 时出错。\n"
 "重命名临时文件 %s 失败"
 
-#: eeschema/files-io.cpp:154 pcbnew/files.cpp:1019
+#: eeschema/files-io.cpp:154 pcbnew/files.cpp:1020
 #, c-format
 msgid "Failed to rename temporary file \"%s\""
 msgstr "重命名临时文件 \"%s\" 失败"
 
 #: eeschema/files-io.cpp:186 pagelayout_editor/files.cpp:160
 #: pagelayout_editor/files.cpp:174 pagelayout_editor/files.cpp:207
-#: pcbnew/files.cpp:1050
+#: pcbnew/files.cpp:1051
 #, c-format
 msgid "File \"%s\" saved."
 msgstr "文件 \"%s\" 已保存。"
@@ -13871,7 +13843,7 @@ msgstr ""
 "加载原理图文件 \"%s\" 时出错。\n"
 "%s"
 
-#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:1007
+#: eeschema/files-io.cpp:409 eeschema/files-io.cpp:1004
 #, c-format
 msgid "Failed to load \"%s\""
 msgstr "无法加载 \"%s\""
@@ -13933,7 +13905,7 @@ msgstr "加载时不使用缓存文件"
 msgid "Abort"
 msgstr "终止"
 
-#: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:771
+#: eeschema/files-io.cpp:526 eeschema/files-io.cpp:543 pcbnew/files.cpp:772
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13990,7 +13962,7 @@ msgstr "覆盖文件"
 msgid "Abort Project Save"
 msgstr "中止工程保存"
 
-#: eeschema/files-io.cpp:1004
+#: eeschema/files-io.cpp:1001
 #, c-format
 msgid ""
 "Error loading schematic \"%s\".\n"
@@ -13999,7 +13971,7 @@ msgstr ""
 "加载原理图 \"%s\" 出错。\n"
 "%s"
 
-#: eeschema/files-io.cpp:1030
+#: eeschema/files-io.cpp:1027
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "当前原理图已被修改。是否保存更改？"
 
@@ -14009,7 +13981,7 @@ msgstr "别名的"
 
 #: eeschema/generate_alias_info.cpp:122 eeschema/sim/spice_simulator.cpp:83
 #: pcbnew/footprint.cpp:831 pcbnew/tools/pcb_control.cpp:1093
-#: pcbnew/zone.cpp:617
+#: pcbnew/zone.cpp:618
 msgid "Unknown"
 msgstr "未知"
 
@@ -14660,7 +14632,7 @@ msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1574
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1577
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
@@ -14825,26 +14797,26 @@ msgstr "CADSTAR 原理图可能已损坏：块 %s 引用子图框，但没有定
 msgid "Unable to read file \"%s\""
 msgstr "无法读取文件 \"%s\""
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1157
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1160
 #, c-format
 msgid ""
 "Error parsing Eagle file.  Could not find \"%s\" instance but it is "
 "referenced in the schematic."
 msgstr "解析 Eagle 文件时出错。  找不到 \"%s\" 实例, 但在原理图中引用了它。"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1187
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1190
 #, c-format
 msgid "Could not find %s in the imported library"
 msgstr "在导入的库中找不到 %s"
 
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2305
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2343
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2386
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2423
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2465
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2497
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2537
-#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2569
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2308
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2346
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2389
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2426
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2468
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2500
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2540
+#: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:2572
 msgid "Bus Entry needed"
 msgstr "需要总线入口"
 
@@ -15172,80 +15144,82 @@ msgstr ""
 "偏移：%d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1474
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1883
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2562
 #, c-format
 msgid "Library file \"%s\" not found."
 msgstr "未找到库文件 \"%s\"。"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2034
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4166
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "库 %s 不包含名为 %s 的符号"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2208
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4351
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
 msgstr "符号库 \"%s\" 已经存在, 无法创建新的库"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2236
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3152
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4379
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3339
 #, c-format
 msgid "library \"%s\" cannot be deleted"
 msgstr "不能删除库 \"%s\""
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:158
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:200
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:246
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:290
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:332
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:345
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:394
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:407
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:426
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1009
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2348
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:160
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:202
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:248
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:292
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:334
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:347
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:396
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:409
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:428
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1031
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:3027
 msgid "unexpected end of line"
 msgstr "行意外结束"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:356
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:358
 msgid "expected unquoted string"
 msgstr "需要不带括号的字符"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:789
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:811
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
 msgstr "\"%s\" 似乎不是一个 Eeschema 文件"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:816
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:838
 msgid "Missing 'EELAYER END'"
 msgstr "缺少 'EELAYER END'"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:864
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1132
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1140
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1897
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:886
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1154
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1162
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2576
 msgid "unexpected end of file"
 msgstr "文件意外结束"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1099
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1121
 msgid "Unexpected end of file"
 msgstr "文件意外结束"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1424
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1446
 msgid "expected 'Italics' or '~'"
 msgstr "需要“斜体”或 \"~\" 符号"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1688
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1710
 msgid "component field text attributes must be 3 characters wide"
 msgstr "元件字段文本的属性必须是3个字符宽度"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1982
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2661
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr "用户没有权限读取库文档 \"%s\""
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1990
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2669
 msgid "symbol document library file is empty"
 msgstr "符号文档库文件为空"
 
@@ -17203,7 +17177,7 @@ msgstr "顺时针旋转"
 msgid "Rotates selected item(s) clockwise"
 msgstr "将选中的项目顺时针旋转"
 
-#: eeschema/tools/ee_actions.cpp:373 pcbnew/tools/edit_tool.cpp:1339
+#: eeschema/tools/ee_actions.cpp:373 pcbnew/tools/edit_tool.cpp:1340
 msgid "Rotate"
 msgstr "旋转"
 
@@ -17678,7 +17652,7 @@ msgid "Complete connected lines with current segment"
 msgstr "完成与当前段的连接线"
 
 #: eeschema/tools/ee_actions.cpp:727 pagelayout_editor/tools/pl_actions.cpp:68
-#: pcbnew/dialogs/panel_edit_options_base.cpp:348
+#: pcbnew/dialogs/panel_edit_options_base.cpp:338
 #: pcbnew/tools/pcb_actions.cpp:264
 msgid "Move"
 msgstr "移动"
@@ -17809,13 +17783,13 @@ msgstr ""
 msgid "No symbol issues found."
 msgstr "没有找到符号问题。"
 
-#: eeschema/tools/ee_selection_tool.cpp:1587
+#: eeschema/tools/ee_selection_tool.cpp:1601
 #: pagelayout_editor/tools/pl_selection_tool.cpp:633
 #: pcbnew/tools/pcb_selection_tool.cpp:1793
 msgid "Select &All\tA"
 msgstr "全选 (&A)\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1590
+#: eeschema/tools/ee_selection_tool.cpp:1604
 #: pcbnew/tools/pcb_selection_tool.cpp:1796
 msgid "&Expand Selection\tE"
 msgstr "展开选定内容 (&E)\tE"
@@ -18136,7 +18110,7 @@ msgstr "选择层： %s"
 #: pcbnew/tools/board_inspection_tool.cpp:374
 #: pcbnew/tools/board_inspection_tool.cpp:395
 #: pcbnew/tools/board_inspection_tool.cpp:425 pcbnew/track.cpp:653
-#: pcbnew/track.cpp:711 pcbnew/track.cpp:1102 pcbnew/zone.cpp:608
+#: pcbnew/track.cpp:711 pcbnew/track.cpp:1102 pcbnew/zone.cpp:609
 msgid "Layer"
 msgstr "层"
 
@@ -18193,7 +18167,7 @@ msgid "Page Size"
 msgstr "图框尺寸"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
-#: pcbnew/dialogs/panel_edit_options_base.cpp:329
+#: pcbnew/dialogs/panel_edit_options_base.cpp:362
 msgid "Show page limits"
 msgstr "显示图框限制"
 
@@ -18397,7 +18371,7 @@ msgid "Polarity"
 msgstr "极性"
 
 #: gerbview/gerber_draw_item.cpp:711 pcbnew/fp_text.cpp:300
-#: pcbnew/pcb_text.cpp:120 pcbnew/tools/edit_tool.cpp:1505
+#: pcbnew/pcb_text.cpp:120 pcbnew/tools/edit_tool.cpp:1506
 #: pcbnew/tools/pcb_actions.cpp:318
 msgid "Mirror"
 msgstr "镜像"
@@ -18995,35 +18969,35 @@ msgstr "工程模板标题"
 msgid "Project Template Selector"
 msgstr "选择工程模板"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:98
+#: kicad/dialogs/panel_kicad_launcher.cpp:101
 msgid "Edit the project schematic"
 msgstr "编辑工程原理图"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:102
+#: kicad/dialogs/panel_kicad_launcher.cpp:105
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr "编辑全局和/或工程原理符号库"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:106
+#: kicad/dialogs/panel_kicad_launcher.cpp:109
 msgid "Edit the project PCB design"
 msgstr "编辑 PCB 设计工程"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:110
+#: kicad/dialogs/panel_kicad_launcher.cpp:113
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "编辑全局和/或工程 PCB 封装库"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:114
+#: kicad/dialogs/panel_kicad_launcher.cpp:117
 msgid "Preview Gerber files"
 msgstr "预览 Gerber 文件"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:118
+#: kicad/dialogs/panel_kicad_launcher.cpp:121
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr "将位图图像转换为原理符号或 PCB 封装"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:122
+#: kicad/dialogs/panel_kicad_launcher.cpp:125
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr "显示计算电阻、电容等的工具。"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:126
+#: kicad/dialogs/panel_kicad_launcher.cpp:129
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
@@ -21520,7 +21494,7 @@ msgid "NetName"
 msgstr "网络名称"
 
 #: pcbnew/board_connected_item.cpp:168 pcbnew/pad.cpp:870 pcbnew/track.cpp:742
-#: pcbnew/zone.cpp:588
+#: pcbnew/zone.cpp:589
 msgid "NetClass"
 msgstr "网络类"
 
@@ -22565,7 +22539,7 @@ msgid "Pre-defined Sizes"
 msgstr "预定义尺寸"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:100
-#: pcbnew/dialogs/dialog_constraints_reporter.cpp:52
+#: pcbnew/dialogs/dialog_constraints_reporter.cpp:53
 #: pcbnew/pcb_edit_frame.cpp:1673
 msgid "Custom Rules"
 msgstr "自定义规则"
@@ -22579,7 +22553,7 @@ msgstr ""
 "从电路板导入设置错误：\n"
 "无法加载关联项目文件 %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:211 pcbnew/files.cpp:707
+#: pcbnew/dialogs/dialog_board_setup.cpp:211 pcbnew/files.cpp:706
 #, c-format
 msgid ""
 "Error loading board file:\n"
@@ -22864,7 +22838,7 @@ msgstr "删除在焊盘内同时具有起始位置和结束位置的布线"
 msgid "Cleanup Tracks and Vias"
 msgstr "清除布线和过孔"
 
-#: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
+#: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
 msgstr "约束解析报告"
 
@@ -22973,7 +22947,7 @@ msgstr "轮廓显示："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:144
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
-#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88 pcbnew/zone.cpp:616
+#: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88 pcbnew/zone.cpp:617
 msgid "Hatched"
 msgstr "阴影线"
 
@@ -23026,11 +23000,11 @@ msgstr ""
 "默认焊盘与覆铜连接类型。\n"
 "该设置可被本地焊盘设置覆盖"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1407
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1408
 msgid "Thermal reliefs"
 msgstr "防散热 (花焊盘)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1409
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:233 pcbnew/zone.cpp:1410
 msgid "Reliefs for PTH"
 msgstr "金属化孔 (PTH) 防散热"
 
@@ -27842,43 +27816,58 @@ msgstr "始终显示选定的飞线"
 msgid "Show ratsnest with curved lines"
 msgstr "用曲线显示飞线"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:337
+#: pcbnew/dialogs/panel_edit_options_base.cpp:327
 msgid "Track Editing"
 msgstr "布线编辑"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:339
+#: pcbnew/dialogs/panel_edit_options_base.cpp:329
 msgid "Mouse drag track behavior:"
 msgstr "鼠标拖动轨迹行为："
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:341
+#: pcbnew/dialogs/panel_edit_options_base.cpp:331
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr "用鼠标拖动布线时选择要执行的操作"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:349
+#: pcbnew/dialogs/panel_edit_options_base.cpp:339
 msgid "Moves the track segment without moving connected tracks"
 msgstr "移动布线段而不移动连接的布线"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:353
+#: pcbnew/dialogs/panel_edit_options_base.cpp:343
 #: pcbnew/tools/pcb_actions.cpp:1351
 msgid "Drag (45 degree mode)"
 msgstr "拖动 (45 度模式)"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:354
+#: pcbnew/dialogs/panel_edit_options_base.cpp:344
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "在保持连接布线 45 度的情况下拖动布线段。"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:358
+#: pcbnew/dialogs/panel_edit_options_base.cpp:348
 #: pcbnew/tools/pcb_actions.cpp:1358
 msgid "Drag (free angle)"
 msgstr "拖动(自由角度)"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:359
+#: pcbnew/dialogs/panel_edit_options_base.cpp:349
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr "在不限制布线角度的情况下，拖拽布线中最近的连接点。"
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:364
+msgid "Draw an outline to show the sheet size."
+msgstr ""
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:368
+#, fuzzy
+msgid "Refill zones after Zone Properties dialog"
+msgstr "显示项属性对话框"
+
+#: pcbnew/dialogs/panel_edit_options_base.cpp:370
+msgid ""
+"If checked, zones will be re-filled after editing the properties of the zone "
+"using the Zone Properties dialog"
+msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -28064,7 +28053,9 @@ msgstr "模仿旧行为"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly agressive higher-priority zone knockouts."
-msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级覆铜挖空为代价，生成稍微平滑的轮廓。"
+msgstr ""
+"以牺牲性能、一些导出保真度问题和过于激进的高优先级覆铜挖空为代价，生成稍微平"
+"滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:109
 msgid "Smoothed polygons (best performance)"
@@ -29610,11 +29601,11 @@ msgstr "(%s 最小直径 %s; 实际 %s)"
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 最大直径 %s; 实际 %s)"
 
-#: pcbnew/edit_zone_helpers.cpp:85 pcbnew/edit_zone_helpers.cpp:143
+#: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:149
 msgid "Modify zone properties"
 msgstr "修改覆铜属性"
 
-#: pcbnew/edit_zone_helpers.cpp:133
+#: pcbnew/edit_zone_helpers.cpp:138
 #, c-format
 msgid "Refill %d Zones"
 msgstr "重新填充 %d 覆铜"
@@ -29806,8 +29797,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此电路板上的覆铜被重新填充，将应用铜边缘间隙设置 （见电路板配置 > 设计规则 >限制）。\n"
-"这可能导致来自先前 KiCad 版本的不同填充，这些版本会将电路板边缘的线路厚度用于 Edge Cuts 层。"
+"如果此电路板上的覆铜被重新填充，将应用铜边缘间隙设置 （见电路板配置 > 设计规"
+"则 >限制）。\n"
+"这可能导致来自先前 KiCad 版本的不同填充，这些版本会将电路板边缘的线路厚度用"
+"于 Edge Cuts 层。"
 
 #: pcbnew/files.cpp:545
 msgid "Edge Clearance Warning"
@@ -29827,24 +29820,24 @@ msgstr "当前 PCB 已被修改。是否保存更改？"
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" 不存在，你想创建它吗？"
 
-#: pcbnew/files.cpp:811
+#: pcbnew/files.cpp:812
 #, c-format
 msgid ""
 "Error occurred when saving footprint '%s' to the project specific footprint "
 "library: %s"
 msgstr "将封装 '%s' 保存到工程专用封装库时出错：%s"
 
-#: pcbnew/files.cpp:841
+#: pcbnew/files.cpp:842
 #, c-format
 msgid "Error occurred saving the project specific footprint library table: %s"
 msgstr "保存到工程专用封装库表时出错：%s"
 
-#: pcbnew/files.cpp:931 pcbnew/files.cpp:1077
+#: pcbnew/files.cpp:932 pcbnew/files.cpp:1078
 #, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "没有权限写入文件 \"%s\""
 
-#: pcbnew/files.cpp:995 pcbnew/files.cpp:1096
+#: pcbnew/files.cpp:996 pcbnew/files.cpp:1097
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -29853,7 +29846,7 @@ msgstr ""
 "保存电路板文件 \"%s\" 错误。\n"
 "%s"
 
-#: pcbnew/files.cpp:1013
+#: pcbnew/files.cpp:1014
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -29862,7 +29855,7 @@ msgstr ""
 "保存电路板文件 \"%s\" 时出错。\n"
 "重命名临时文件 \"%s\" 失败"
 
-#: pcbnew/files.cpp:1133
+#: pcbnew/files.cpp:1134
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -30311,6 +30304,10 @@ msgstr ""
 "加载封装 %s 出错，来自于库%s。\n"
 "\n"
 "%s"
+
+#: pcbnew/generate_footprint_info.cpp:120
+msgid "doc url"
+msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -31114,13 +31111,13 @@ msgid "Hole X / Y"
 msgstr "孔 X / Y"
 
 #: pcbnew/pad.cpp:941 pcbnew/track.cpp:681 pcbnew/track.cpp:724
-#: pcbnew/zone.cpp:628
+#: pcbnew/zone.cpp:629
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "最小间距：%s"
 
 #: pcbnew/pad.cpp:943 pcbnew/track.cpp:683 pcbnew/track.cpp:690
-#: pcbnew/track.cpp:726 pcbnew/track.cpp:732 pcbnew/zone.cpp:630
+#: pcbnew/track.cpp:726 pcbnew/track.cpp:732 pcbnew/zone.cpp:631
 #, c-format
 msgid "(from %s)"
 msgstr "(从 %s)"
@@ -31771,8 +31768,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留覆铜 - 不相交\"和\"保留覆铜 - 隔离\"。KiCad 不区分这两个设置。"
-"不相交覆铜的设置已作为 KiCad 覆铜的最小覆铜面积应用。"
+"CADSTAR 模板 '%s' 具有不同的设置，用于\"保留覆铜 - 不相交\"和\"保留覆铜 - 隔"
+"离\"。KiCad 不区分这两个设置。不相交覆铜的设置已作为 KiCad 覆铜的最小覆铜面积"
+"应用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1694
 #, c-format
@@ -31801,7 +31799,9 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr "CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未创建覆铜区。"
+msgstr ""
+"CADSTAR 层 '%s' 被定义为电源层。然而，不存在具有该名称的网络。已加载层，但未"
+"创建覆铜区。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1856
 msgid ""
@@ -31810,8 +31810,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则它们已导入为 KiCad "
-"覆铜；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 KiCad 布线。"
+"CADSTAR 设计包含没有直接 KiCad 等价物的铜元素。如果填充的是实体或图案填充，则"
+"它们已导入为 KiCad 覆铜；如果形状是未填充的轮廓(开放或闭合)，则它们将导入为 "
+"KiCad 布线。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1964
 #, c-format
@@ -32428,91 +32429,91 @@ msgstr "未知的 PCad 层 %u"
 msgid "KiCad only supports 32 signal layers"
 msgstr "KiCad 仅支持 32 个信号层"
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
 msgstr "新建布线"
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
 msgstr "开始新的布线。"
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
 msgstr "结束布线"
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
 msgstr "当前转折处停止布线。"
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Length Tuning Settings..."
 msgstr "长度优化设置..."
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr "设置当前布线项长度调整参数。"
 
-#: pcbnew/router/length_tuner_tool.cpp:74
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase Spacing"
 msgstr "增大间距"
 
 # 此处需要考证step的真正位置以便匹配其翻译
-#: pcbnew/router/length_tuner_tool.cpp:74
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase meander spacing by one step."
 msgstr "将弯曲间距增加一级。"
 
-#: pcbnew/router/length_tuner_tool.cpp:80
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease Spacing"
 msgstr "减小间距"
 
-#: pcbnew/router/length_tuner_tool.cpp:80
+#: pcbnew/router/length_tuner_tool.cpp:69
 msgid "Decrease meander spacing by one step."
 msgstr "将弯曲间距降低一级。"
 
-#: pcbnew/router/length_tuner_tool.cpp:86
+#: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase Amplitude"
 msgstr "增大幅度"
 
-#: pcbnew/router/length_tuner_tool.cpp:86
+#: pcbnew/router/length_tuner_tool.cpp:75
 msgid "Increase meander amplitude by one step."
 msgstr "将弯曲幅度增加一级。"
 
-#: pcbnew/router/length_tuner_tool.cpp:92
+#: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease Amplitude"
 msgstr "减小幅度"
 
-#: pcbnew/router/length_tuner_tool.cpp:92
+#: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Decrease meander amplitude by one step."
 msgstr "将弯曲幅度降低一级。"
 
-#: pcbnew/router/length_tuner_tool.cpp:114
+#: pcbnew/router/length_tuner_tool.cpp:103
 msgid "Length Tuner"
 msgstr "长度调整"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:450
+#: pcbnew/router/pns_diff_pair_placer.cpp:444
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
 msgstr ""
 "无法找到互补差分对网络。请确保属于差分对网络的名称以 _N/_P 或 +/- 结束。"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:471
+#: pcbnew/router/pns_diff_pair_placer.cpp:465
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
 msgstr "找不到合适的起点。 如果从现有差分对开始，请确保你在终点。"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:524
+#: pcbnew/router/pns_diff_pair_placer.cpp:518
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
 msgstr "找不到耦合网络 \"%s\" 的合适起点。"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:76
+#: pcbnew/router/pns_dp_meander_placer.cpp:75
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
 msgstr "请选择要调整长度的布线。"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:90
+#: pcbnew/router/pns_dp_meander_placer.cpp:89
 msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -32521,42 +32522,43 @@ msgstr ""
 "无法找到互补差分对网络进行长度调整。请确保属于差分对的名称以 _N/_P 或 +/- 结"
 "束。"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:394
+#: pcbnew/router/pns_dp_meander_placer.cpp:393
 #: pcbnew/router/pns_meander_placer.cpp:269
 msgid "Too long: "
 msgstr "太长： "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:397
+#: pcbnew/router/pns_dp_meander_placer.cpp:396
 #: pcbnew/router/pns_meander_placer.cpp:272
 msgid "Too short: "
 msgstr "太短： "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:400
+#: pcbnew/router/pns_dp_meander_placer.cpp:399
 #: pcbnew/router/pns_meander_placer.cpp:275
 msgid "Tuned: "
 msgstr "调整： "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:403
+#: pcbnew/router/pns_dp_meander_placer.cpp:402
 #: pcbnew/router/pns_meander_placer.cpp:278
 #: pcbnew/router/pns_meander_skew_placer.cpp:168
 msgid "?"
 msgstr "？"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1007
+#: pcbnew/router/pns_kicad_iface.cpp:1001
 #, c-format
 msgid "%s is malformed."
 msgstr "%s 格式不正确。"
 
 # 此zone经核查源码确认为禁止布线区
-#: pcbnew/router/pns_kicad_iface.cpp:1010
+#: pcbnew/router/pns_kicad_iface.cpp:1004
+#, fuzzy
 msgid ""
-"This zone cannot be handled by the track layout tool.\n"
+"This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "布线工具无法处理此覆铜。\n"
 "请确保它不是自相交的多边形。"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1609 pcbnew/router/router_tool.cpp:424
+#: pcbnew/router/pns_kicad_iface.cpp:1602 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
 msgstr "交互布线"
 
@@ -32695,12 +32697,13 @@ msgid "Switches posture of the currently routed track."
 msgstr "切换当前交互式布线的形态。"
 
 #: pcbnew/router/router_tool.cpp:155
-msgid "Switch Corner Rounding"
-msgstr "改变拐角类型"
+#, fuzzy
+msgid "Track Corner Mode"
+msgstr "布线显示模式"
 
 #: pcbnew/router/router_tool.cpp:156
-msgid "Switches the corner type of the currently routed track."
-msgstr "切换当前布线的拐角类型。"
+msgid "Switches between sharp and rounded corners when routing tracks."
+msgstr ""
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
@@ -33075,8 +33078,8 @@ msgstr "覆铜连接类型：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:147
 #: pcbnew/tools/board_inspection_tool.cpp:181
-#: pcbnew/tools/board_inspection_tool.cpp:199 pcbnew/zone.cpp:334
-#: pcbnew/zone.cpp:349 pcbnew/zone.cpp:497 pcbnew/zone.cpp:775
+#: pcbnew/tools/board_inspection_tool.cpp:199 pcbnew/zone.cpp:335
+#: pcbnew/zone.cpp:350 pcbnew/zone.cpp:498 pcbnew/zone.cpp:776
 msgid "zone"
 msgstr "覆铜"
 
@@ -33415,24 +33418,24 @@ msgstr "拖拉圆弧线路"
 msgid "Select reference point for move..."
 msgstr "选择要移动的参考点..."
 
-#: pcbnew/tools/edit_tool.cpp:995
+#: pcbnew/tools/edit_tool.cpp:996
 msgid "Edit track width/via size"
 msgstr "编辑布线宽度/过孔尺寸"
 
-#: pcbnew/tools/edit_tool.cpp:1030
+#: pcbnew/tools/edit_tool.cpp:1031
 msgid "At least two straight track segments must be selected."
 msgstr "必须至少选择两个直线布线段。"
 
-#: pcbnew/tools/edit_tool.cpp:1034
+#: pcbnew/tools/edit_tool.cpp:1035
 msgid "Enter fillet radius:"
 msgstr "输入圆角半径："
 
-#: pcbnew/tools/edit_tool.cpp:1034 pcbnew/tools/edit_tool.cpp:1197
+#: pcbnew/tools/edit_tool.cpp:1035 pcbnew/tools/edit_tool.cpp:1198
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Fillet Tracks"
 msgstr "弧形布线"
 
-#: pcbnew/tools/edit_tool.cpp:1044
+#: pcbnew/tools/edit_tool.cpp:1045
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -33440,40 +33443,36 @@ msgstr ""
 "输入的半径为零。\n"
 "未执行圆角操作。"
 
-#: pcbnew/tools/edit_tool.cpp:1204
+#: pcbnew/tools/edit_tool.cpp:1205
 msgid "Unable to fillet the selected track segments."
 msgstr "无法对选定的布线段进行圆角处理。"
 
-#: pcbnew/tools/edit_tool.cpp:1206
+#: pcbnew/tools/edit_tool.cpp:1207
 msgid "Some of the track segments could not be filleted."
 msgstr "某些布线段无法圆角。"
 
-#: pcbnew/tools/edit_tool.cpp:1606 pcbnew/tools/pcb_actions.cpp:313
+#: pcbnew/tools/edit_tool.cpp:1607 pcbnew/tools/pcb_actions.cpp:313
 msgid "Change Side / Flip"
 msgstr "更改侧面/翻转"
 
-#: pcbnew/tools/edit_tool.cpp:1746 pcbnew/tools/zone_filler_tool.cpp:174
-msgid "Fill Zone"
-msgstr "填充覆铜"
-
-#: pcbnew/tools/edit_tool.cpp:1932
+#: pcbnew/tools/edit_tool.cpp:1922
 msgid "Move exact"
 msgstr "精确移动"
 
-#: pcbnew/tools/edit_tool.cpp:2094
+#: pcbnew/tools/edit_tool.cpp:2084
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "复制 %d 项"
 
-#: pcbnew/tools/edit_tool.cpp:2323
+#: pcbnew/tools/edit_tool.cpp:2316
 msgid "Select reference point for the copy..."
 msgstr "为副本选择参考点..."
 
-#: pcbnew/tools/edit_tool.cpp:2324 pcbnew/tools/edit_tool.cpp:2338
+#: pcbnew/tools/edit_tool.cpp:2317 pcbnew/tools/edit_tool.cpp:2331
 msgid "Selection copied"
 msgstr "选择已复制"
 
-#: pcbnew/tools/edit_tool.cpp:2325
+#: pcbnew/tools/edit_tool.cpp:2318
 msgid "Copy cancelled"
 msgstr "复制已取消"
 
@@ -34968,15 +34967,15 @@ msgstr "不允许自相交多边形。"
 msgid "Drag a corner"
 msgstr "拖动拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2075
+#: pcbnew/tools/pcb_point_editor.cpp:2070
 msgid "Add a zone corner"
 msgstr "添加覆铜拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2113
+#: pcbnew/tools/pcb_point_editor.cpp:2108
 msgid "Split segment"
 msgstr "分割线段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2184
+#: pcbnew/tools/pcb_point_editor.cpp:2179
 msgid "Remove a zone/polygon corner"
 msgstr "删除覆铜或多边形的拐角"
 
@@ -35028,15 +35027,15 @@ msgstr "相対位置"
 msgid "Click on reference item..."
 msgstr "单击位号项..."
 
-#: pcbnew/tools/zone_create_helper.cpp:181
+#: pcbnew/tools/zone_create_helper.cpp:175
 msgid "Add a zone cutout"
 msgstr "添加挖空覆铜"
 
-#: pcbnew/tools/zone_create_helper.cpp:229
+#: pcbnew/tools/zone_create_helper.cpp:214
 msgid "Add a zone"
 msgstr "添加覆铜"
 
-#: pcbnew/tools/zone_create_helper.cpp:260
+#: pcbnew/tools/zone_create_helper.cpp:245
 msgid "Add a graphical polygon"
 msgstr "添加多边形图形"
 
@@ -35061,11 +35060,15 @@ msgstr "覆铜填充可能不准确。DRC 规则包含错误。"
 msgid "Fill All Zones"
 msgstr "填充所有覆铜"
 
-#: pcbnew/tools/zone_filler_tool.cpp:211
+#: pcbnew/tools/zone_filler_tool.cpp:174
+msgid "Fill Zone"
+msgstr "填充覆铜"
+
+#: pcbnew/tools/zone_filler_tool.cpp:210
 msgid "Unfill Zone"
 msgstr "取消填充覆铜"
 
-#: pcbnew/tools/zone_filler_tool.cpp:230
+#: pcbnew/tools/zone_filler_tool.cpp:228
 msgid "Unfill All Zones"
 msgstr "取消填充所有覆铜"
 
@@ -35695,108 +35698,108 @@ msgstr "尺寸"
 msgid "Other items"
 msgstr "其他项目"
 
-#: pcbnew/zone.cpp:549
+#: pcbnew/zone.cpp:550
 msgid "Rule Area"
 msgstr "规则区域"
 
-#: pcbnew/zone.cpp:551
+#: pcbnew/zone.cpp:552
 msgid "Copper Zone"
 msgstr "覆铜区"
 
-#: pcbnew/zone.cpp:553
+#: pcbnew/zone.cpp:554
 msgid "Non-copper Zone"
 msgstr "非覆铜区"
 
-#: pcbnew/zone.cpp:558
+#: pcbnew/zone.cpp:559
 msgid "Cutout"
 msgstr "挖空"
 
-#: pcbnew/zone.cpp:567
+#: pcbnew/zone.cpp:568
 msgid "No vias"
 msgstr "无过孔"
 
-#: pcbnew/zone.cpp:570
+#: pcbnew/zone.cpp:571
 msgid "No tracks"
 msgstr "无布线"
 
-#: pcbnew/zone.cpp:573
+#: pcbnew/zone.cpp:574
 msgid "No pads"
 msgstr "无焊盘"
 
-#: pcbnew/zone.cpp:576
+#: pcbnew/zone.cpp:577
 msgid "No copper zones"
 msgstr "无覆铜区"
 
-#: pcbnew/zone.cpp:579
+#: pcbnew/zone.cpp:580
 msgid "No footprints"
 msgstr "没有封装"
 
-#: pcbnew/zone.cpp:582
+#: pcbnew/zone.cpp:583
 msgid "Restrictions"
 msgstr "限制"
 
-#: pcbnew/zone.cpp:591 pcbnew/zone.cpp:1414
+#: pcbnew/zone.cpp:592 pcbnew/zone.cpp:1415
 msgid "Priority"
 msgstr "优先"
 
-#: pcbnew/zone.cpp:606 pcbnew/zone.cpp:866
+#: pcbnew/zone.cpp:607 pcbnew/zone.cpp:867
 #, c-format
 msgid "%s and %d more"
 msgstr "%s 和 %d 更多"
 
-#: pcbnew/zone.cpp:620
+#: pcbnew/zone.cpp:621
 msgid "Fill Mode"
 msgstr "填充模式"
 
-#: pcbnew/zone.cpp:623
+#: pcbnew/zone.cpp:624
 msgid "Filled Area"
 msgstr "填充区域"
 
-#: pcbnew/zone.cpp:635
+#: pcbnew/zone.cpp:636
 msgid "HatchBorder Lines"
 msgstr "图案填充边框线"
 
-#: pcbnew/zone.cpp:659
+#: pcbnew/zone.cpp:660
 msgid "Corner Count"
 msgstr "拐角数"
 
-#: pcbnew/zone.cpp:872
+#: pcbnew/zone.cpp:873
 #, c-format
 msgid "Rule Area Cutout on %s"
 msgstr "%s 上的规则区域挖空"
 
-#: pcbnew/zone.cpp:874
+#: pcbnew/zone.cpp:875
 #, c-format
 msgid "Zone Cutout on %s"
 msgstr "%s 上的覆铜挖空"
 
-#: pcbnew/zone.cpp:879
+#: pcbnew/zone.cpp:880
 #, c-format
 msgid "Rule Area on %s"
 msgstr "%s上的规则区域"
 
-#: pcbnew/zone.cpp:881
+#: pcbnew/zone.cpp:882
 #, c-format
 msgid "Zone %s on %s"
 msgstr "%s 上的覆铜%s"
 
-#: pcbnew/zone.cpp:1405
+#: pcbnew/zone.cpp:1406
 msgid "Inherited"
 msgstr "继承"
 
-#: pcbnew/zone.cpp:1423
+#: pcbnew/zone.cpp:1424
 msgid "Min Width"
 msgstr "最小宽度"
 
-#: pcbnew/zone.cpp:1426
+#: pcbnew/zone.cpp:1427
 msgid "Pad Connections"
 msgstr "焊盘连接"
 
-#: pcbnew/zone.cpp:1428
+#: pcbnew/zone.cpp:1429
 msgid "Thermal Clearance"
 msgstr "花焊盘到覆铜区间隙"
 
-#: pcbnew/zone.cpp:1431
+#: pcbnew/zone.cpp:1432
 msgid "Thermal Spoke Width"
 msgstr "防散热导线宽度"
 
@@ -35926,6 +35929,38 @@ msgstr "KiCad 原理图"
 #: resources/linux/mime/kicad-kicad.xml.in:17
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
+
+#~ msgid "Model Mode"
+#~ msgstr "模型模式"
+
+#~ msgid ""
+#~ "Use the settings in the Ngspice configuration file or any settings "
+#~ "defined in the schematic"
+#~ msgstr "使用 Ngspice 配置文件中的设置或原理图中定义的任何设置"
+
+#~ msgid "Enable default spice model simulation"
+#~ msgstr "启用默认的 spice 模型仿真"
+
+#~ msgid "Enable PSpice model simulation"
+#~ msgstr "启用 PSpice 模型仿真"
+
+#~ msgid "Enable LTSpice model simulation"
+#~ msgstr "启用 LTSpice 模型仿真"
+
+#~ msgid "Enable PSpice and LTSpice model simulation"
+#~ msgstr "启用 PSpice 和 LTSpice 模型仿真"
+
+#~ msgid "Enable HSpice model simulation"
+#~ msgstr "启用 HSpice 模型仿真"
+
+#~ msgid "Ngspice"
+#~ msgstr "Ngspice"
+
+#~ msgid "Switch Corner Rounding"
+#~ msgstr "改变拐角类型"
+
+#~ msgid "Switches the corner type of the currently routed track."
+#~ msgstr "切换当前布线的拐角类型。"
 
 #~ msgid "Plain PCB (no copper or silk)"
 #~ msgstr "简洁 PCB (没有铜箔或丝印)"
@@ -41110,9 +41145,6 @@ msgstr "KiCad 印刷电路板"
 
 #~ msgid "Remove Filled Areas in All Zones"
 #~ msgstr "删除所有填充区域"
-
-#~ msgid "Track Display Mode"
-#~ msgstr "布线显示模式"
 
 #~ msgid "Increment Layer Transparency (Modern Toolset only)"
 #~ msgstr "增加层透明度(仅适用于现代工具箱)"
