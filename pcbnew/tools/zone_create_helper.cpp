@@ -136,7 +136,6 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createZoneFromExisting( const ZONE& aS
 void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
 {
     BOARD_COMMIT commit( &m_tool );
-    BOARD* board = m_tool.getModel<BOARD>();
     std::vector<ZONE*> newZones;
 
     // Clear the selection before removing the old zone

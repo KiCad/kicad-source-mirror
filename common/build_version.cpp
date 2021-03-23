@@ -108,7 +108,11 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << eol;
 
     aMsg << "Platform: " << wxGetOsDescription() << ", "
+#if wxCHECK_VERSION( 3, 1, 5 )
+         << platform.GetBitnessName() << ", "
+#else
          << platform.GetArchName() << ", "
+#endif
          << platform.GetEndiannessName() << ", "
          << platform.GetPortIdName();
 

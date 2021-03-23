@@ -99,7 +99,12 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     wxPlatformInfo platformInfo;
 
-    libVersion << "Platform: " << wxGetOsDescription() << ", " << platformInfo.GetArchName();
+    libVersion << "Platform: " << wxGetOsDescription() << ", "
+#if wxCHECK_VERSION( 3, 1, 5 )
+    << platformInfo.GetBitnessName();
+#else
+    << platformInfo.GetArchName();
+#endif
 
     aInfo.SetLibVersion( libVersion );
 

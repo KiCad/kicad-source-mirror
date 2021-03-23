@@ -213,10 +213,10 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideCourtyardCache.end() )
                     return i->second;
 
-                bool result = insideFootprintCourtyard( item, itemBBox, shape, context, footprint );
+                bool res = insideFootprintCourtyard( item, itemBBox, shape, context, footprint );
 
-                board->m_InsideCourtyardCache[ key ] = result;
-                return result;
+                board->m_InsideCourtyardCache[ key ] = res;
+                return res;
             };
 
     if( arg->AsString() == "A" )
@@ -290,11 +290,11 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideFCourtyardCache.end() )
                     return i->second;
 
-                bool result = insideFootprintCourtyard( item, itemBBox, shape, context, footprint,
+                bool res = insideFootprintCourtyard( item, itemBBox, shape, context, footprint,
                                                         F_Cu );
 
-                board->m_InsideFCourtyardCache[ key ] = result;
-                return result;
+                board->m_InsideFCourtyardCache[ key ] = res;
+                return res;
             };
 
     if( arg->AsString() == "A" )
@@ -368,11 +368,11 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( i != board->m_InsideBCourtyardCache.end() )
                     return i->second;
 
-                bool result = insideFootprintCourtyard( item, itemBBox, shape, context, footprint,
+                bool res = insideFootprintCourtyard( item, itemBBox, shape, context, footprint,
                                                         B_Cu );
 
-                board->m_InsideBCourtyardCache[ key ] = result;
-                return result;
+                board->m_InsideBCourtyardCache[ key ] = res;
+                return res;
             };
 
     if( arg->AsString() == "A" )
