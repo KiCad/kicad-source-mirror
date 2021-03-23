@@ -108,7 +108,8 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << eol;
 
     aMsg << "Platform: " << wxGetOsDescription() << ", "
-#if wxCHECK_VERSION( 3, 1, 5 )
+// TODO (ISM): Remove OSX conditional once our wx fork is running released 3.1.5
+#if wxCHECK_VERSION( 3, 1, 5 ) && !defined( __WXOSX__  )
          << platform.GetBitnessName() << ", "
 #else
          << platform.GetArchName() << ", "
