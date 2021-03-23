@@ -28,6 +28,13 @@
 #include <shellapi.h>
 #include <shlwapi.h>
 
+
+void KIPLATFORM::ENV::Init()
+{
+    // No tasks for this platform
+}
+
+
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 {
     // The filename field must be a double-null terminated string

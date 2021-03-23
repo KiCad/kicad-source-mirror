@@ -22,6 +22,32 @@
 #include <gio/gio.h>
 #include <kiplatform/environment.h>
 #include <wx/filename.h>
+#include <wx/utils.h>
+
+
+void KIPLATFORM::ENV::Init()
+{
+    // Disable proxy menu in Unity window manager. Only usual menubar works with
+    // wxWidgets (at least <= 3.1).  When the proxy menu menubar is enable, some
+    // important things for us do not work: menuitems UI events and shortcuts.
+    wxString wm;
+
+    if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
+        wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
+
+    // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is
+    // required until wxWidgets supports the Wayland compositors
+    wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+
+    // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause
+    // excessive redraw requests.
+    wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
+
+    // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
+    // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
+    // events.
+    wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
+}
 
 
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )

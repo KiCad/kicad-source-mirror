@@ -49,6 +49,7 @@
 #include <settings/settings_manager.h>
 
 #include <kiplatform/app.h>
+#include <kiplatform/environment.h>
 
 
 // Only a single KIWAY is supported in this single_top top level component,
@@ -130,10 +131,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(HtmlModule, wxModule);
  */
 struct APP_SINGLE_TOP : public wxApp
 {
+    APP_SINGLE_TOP() : wxApp()
+    {
+        // Init the environment each platform wants
+        KIPLATFORM::ENV::Init();
+    }
+
+
     bool OnInit() override
     {
-        // Init the platform-specific parts
-        if( !KIPLATFORM::APP::PlatformInit() )
+        // Perform platform-specific init tasks
+        if( !KIPLATFORM::APP::Init() )
             return false;
 
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only

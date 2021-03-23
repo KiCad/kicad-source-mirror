@@ -25,6 +25,12 @@ namespace KIPLATFORM
     namespace ENV
     {
         /**
+         * Perform environment initialization tasks. These tasks are called during the wxApp
+         * constructor and therefore won't have access to the underlying OS application.
+         */
+        void Init();
+
+        /**
          * Move the specified file/directory to the trash bin/recycle bin.
          *
          * @param aPath is the absolute path of the file/directory to move to the trash

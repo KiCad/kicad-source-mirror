@@ -25,6 +25,13 @@
 #include <wx/filefn.h>
 #include <wx/stdpaths.h>
 
+
+void KIPLATFORM::ENV::Init()
+{
+    // No tasks for this platform
+}
+
+
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 {
     bool     isDirectory = wxDirExists( aPath );

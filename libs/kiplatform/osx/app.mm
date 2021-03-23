@@ -23,7 +23,7 @@
 #include <wx/string.h>
 
 
-bool KIPLATFORM::APP::PlatformInit()
+bool KIPLATFORM::APP::Init()
 {
     // No special OSX init tasks
     return true;

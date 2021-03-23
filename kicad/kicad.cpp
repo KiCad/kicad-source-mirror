@@ -50,6 +50,7 @@
 #include "kicad_settings.h"
 
 #include <kiplatform/app.h>
+#include <kiplatform/environment.h>
 
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
@@ -256,10 +257,17 @@ KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
  */
 struct APP_KICAD : public wxApp
 {
+    APP_KICAD() : wxApp()
+    {
+        // Init the environment each platform wants
+        KIPLATFORM::ENV::Init();
+    }
+
+
     bool OnInit()           override
     {
-        // Init the platform-specific parts
-        if( !KIPLATFORM::APP::PlatformInit() )
+        // Perform platform-specific init tasks
+        if( !KIPLATFORM::APP::Init() )
             return false;
 
         if( !program.OnPgmInit() )

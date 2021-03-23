@@ -29,11 +29,12 @@ namespace KIPLATFORM
     namespace APP
     {
         /**
-         * Perform platform-specific initialization tasks.
+         * Perform application-specific initialization tasks. These tasks should be called
+         * after the wxApp is constructed (e.g. inside the OnInit method).
          *
          * @return true if init successful, false if unsuccessful
          */
-        bool PlatformInit();
+        bool Init();
 
         /**
          * Registers the application for restart with the OS with the given command line string to pass as args

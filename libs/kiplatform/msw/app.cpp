@@ -31,7 +31,7 @@
 #include <VersionHelpers.h>
 
 
-bool KIPLATFORM::APP::PlatformInit()
+bool KIPLATFORM::APP::Init()
 {
 #if defined( _MSC_VER ) && defined( DEBUG )
     // wxWidgets turns on leak dumping in debug but its "flawed" and will falsely dump
