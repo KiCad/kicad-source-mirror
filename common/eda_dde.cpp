@@ -25,15 +25,12 @@
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-#include <queue>
 
 #include <eda_dde.h>
 #include <eda_draw_frame.h>
 #include <id.h>
 
 #include <wx/wx.h>
-
-using namespace std::chrono_literals;
 
 static const wxString HOSTNAME( wxT( "localhost" ) );
 
@@ -197,7 +194,6 @@ private:
                 return;
 
             wxSocketClient* sock_client;
-            bool            success = false;
             wxIPV4address   addr;
 
             // Create a connexion
@@ -260,7 +256,6 @@ private:
 
             if( sock_client->Ok() && sock_client->IsConnected() )
             {
-                success = true;
                 sock_client->SetFlags( wxSOCKET_NOWAIT /*wxSOCKET_WAITALL*/ );
                 sock_client->Write( m_message.second.c_str(), m_message.second.length() );
             }
@@ -273,14 +268,10 @@ private:
     }
 
     std::pair<int, std::string> m_message;
-
-    bool m_messageReady;
-
-    mutable std::mutex m_mutex;
-
-    std::condition_variable m_cv;
-
-    bool m_shutdown;
+    bool                        m_messageReady;
+    mutable std::mutex          m_mutex;
+    std::condition_variable     m_cv;
+    bool                        m_shutdown;
 };
 
 
