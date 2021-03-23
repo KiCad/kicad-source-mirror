@@ -28,6 +28,7 @@
 #include <dialog_shim.h>
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
+#include <eda_dde.h>
 #include <filehistory.h>
 #include <id.h>
 #include <kiface_i.h>
@@ -223,6 +224,8 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
     delete m_fileHistory;
 
     ClearUndoRedoList();
+
+    SocketCleanup();
 
     KIPLATFORM::APP::RemoveShutdownBlockReason( this );
 }

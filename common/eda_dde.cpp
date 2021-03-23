@@ -149,14 +149,26 @@ public:
         client->Close();
         client->Destroy();
 
-        std::thread( &ASYNC_SOCKET_HOLDER::worker, this ).detach();
+        m_thread = std::thread( &ASYNC_SOCKET_HOLDER::worker, this );
     }
 
     ~ASYNC_SOCKET_HOLDER()
     {
-        m_shutdown     = true;
-        m_messageReady = true;
+        {
+            std::lock_guard<std::mutex> lock( m_mutex );
+            m_shutdown = true;
+        }
+
         m_cv.notify_one();
+
+        try
+        {
+            if( m_thread.joinable() )
+                m_thread.join();
+        }
+        catch( ... )
+        {
+        }
     }
 
     /**
@@ -185,20 +197,29 @@ private:
      */
     void worker()
     {
+        int         port;
+        std::string message;
+
+        std::unique_lock<std::mutex> lock( m_mutex );
+
         while( !m_shutdown )
         {
-            std::unique_lock<std::mutex> lock( m_mutex );
-            m_cv.wait( lock, [&]() { return m_messageReady; } );
+            m_cv.wait( lock, [&]() { return m_messageReady || m_shutdown; } );
 
             if( m_shutdown )
-                return;
+                break;
+
+            port    = m_message.first;
+            message = m_message.second;
+
+            lock.unlock();
 
             wxSocketClient* sock_client;
             wxIPV4address   addr;
 
             // Create a connexion
             addr.Hostname( HOSTNAME );
-            addr.Service( m_message.first );
+            addr.Service( port );
 
             // Mini-tutorial for Connect() :-)
             // (JP CHARRAS Note: see wxWidgets: sockets/client.cpp sample)
@@ -257,16 +278,19 @@ private:
             if( sock_client->Ok() && sock_client->IsConnected() )
             {
                 sock_client->SetFlags( wxSOCKET_NOWAIT /*wxSOCKET_WAITALL*/ );
-                sock_client->Write( m_message.second.c_str(), m_message.second.length() );
+                sock_client->Write( message.c_str(), message.length() );
             }
 
             sock_client->Close();
             sock_client->Destroy();
 
             m_messageReady = false;
+
+            lock.lock();
         }
     }
 
+    std::thread                 m_thread;
     std::pair<int, std::string> m_message;
     bool                        m_messageReady;
     mutable std::mutex          m_mutex;
@@ -275,16 +299,8 @@ private:
 };
 
 
-ASYNC_SOCKET_HOLDER* GetSocketHolder()
-{
-    static std::unique_ptr<ASYNC_SOCKET_HOLDER> holder;
-
-    if( !holder )
-        holder = std::make_unique<ASYNC_SOCKET_HOLDER>();
-
-    return holder.get();
-}
-
+std::unique_ptr<ASYNC_SOCKET_HOLDER> socketHolder = nullptr;
+std::once_flag socketHolderCreated;
 
 /* Used by a client to sent (by a socket connection) a data to a server.
  *  - Open a Socket Client connection
@@ -295,5 +311,15 @@ ASYNC_SOCKET_HOLDER* GetSocketHolder()
  */
 bool SendCommand( int aService, const std::string& aMessage )
 {
-    return GetSocketHolder()->Send( aService, aMessage );
+    std::call_once( socketHolderCreated,
+                    []() { socketHolder.reset( new ASYNC_SOCKET_HOLDER() ); } );
+
+    return socketHolder->Send( aService, aMessage );
+}
+
+
+void SocketCleanup()
+{
+    if( socketHolder )
+        socketHolder.reset();
 }

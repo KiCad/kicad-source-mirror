@@ -48,4 +48,7 @@
 
 bool SendCommand( int aPort, const std::string& aMessage );
 
+///< Must be called to clean up the socket thread used by SendCommand
+void SocketCleanup();
+
 #endif    // EDA_DDE_H_
