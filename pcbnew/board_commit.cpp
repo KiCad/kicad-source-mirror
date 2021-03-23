@@ -37,14 +37,16 @@
 using namespace std::placeholders;
 
 
-BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
+BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool ) :
+        m_resolveNetConflicts( false )
 {
     m_toolMgr = aTool->GetManager();
     m_isFootprintEditor = aTool->IsFootprintEditor();
 }
 
 
-BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame )
+BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
+        m_resolveNetConflicts( false )
 {
     m_toolMgr = aFrame->GetToolManager();
     m_isFootprintEditor = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
@@ -349,6 +351,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( !m_isFootprintEditor )
     {
         size_t num_changes = m_changes.size();
+
+        if( m_resolveNetConflicts )
+            connectivity->PropagateNets( this, PROPAGATE_MODE::RESOLVE_CONFLICTS );
 
         connectivity->RecalculateRatsnest( this );
         connectivity->ClearDynamicRatsnest();

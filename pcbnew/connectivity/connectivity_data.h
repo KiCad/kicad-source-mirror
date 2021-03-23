@@ -82,6 +82,15 @@ struct RN_DYNAMIC_LINE
     VECTOR2I a, b;
 };
 
+/**
+ * Controls how nets are propagated through clusters
+ */
+enum class PROPAGATE_MODE
+{
+    SKIP_CONFLICTS,     /// Clusters with conflicting drivers are not updated (default)
+    RESOLVE_CONFLICTS   /// Clusters with conflicting drivers are updated to the most popular net
+};
+
 // a wrapper class encompassing the connectivity computation algorithm and the
 class CONNECTIVITY_DATA
 {
@@ -155,10 +164,12 @@ public:
     RN_NET* GetRatsnestForNet( int aNet );
 
     /**
-     * Function PropagateNets()
      * Propagates the net codes from the source pads to the tracks/vias.
+     * @param aCommit is used to save the undo state of items modified by this call
+     * @param aMode controls how conflicts between pads are resolved
      */
-    void PropagateNets();
+    void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
+                        PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
 
     bool CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
 
@@ -202,10 +213,10 @@ public:
      * @param aItem is the reference item to find other connected items.
      * @param aAnchor is the position to find connected items on.
      * @param aTypes allows one to filter by item types.
-     * @return 
+     * @return
      */
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
-                                                                        const VECTOR2I& aAnchor, 
+                                                                        const VECTOR2I& aAnchor,
                                                                         const KICAD_T aTypes[] ) const;
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;

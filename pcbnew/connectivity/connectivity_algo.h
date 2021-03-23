@@ -168,7 +168,8 @@ private:
 
     void    searchConnections();
 
-    void    propagateConnections( BOARD_COMMIT* aCommit = nullptr );
+    void    propagateConnections( BOARD_COMMIT* aCommit = nullptr,
+                                  PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
 
     template <class Container, class BItem>
     void add( Container& c, BItem brditem )
@@ -239,8 +240,10 @@ public:
     /**
      * Propagates nets from pads to other items in clusters
      * @param aCommit is used to store undo information for items modified by the call
+     * @param aMode controls how clusters with conflicting nets are resolved
      */
-    void PropagateNets( BOARD_COMMIT* aCommit = nullptr );
+    void PropagateNets( BOARD_COMMIT* aCommit = nullptr,
+                        PROPAGATE_MODE aMode = PROPAGATE_MODE::SKIP_CONFLICTS );
 
     void FindIsolatedCopperIslands( ZONE* aZone, PCB_LAYER_ID aLayer, std::vector<int>& aIslands );
 

@@ -339,10 +339,11 @@ void CONNECTIVITY_DATA::HideDynamicRatsnest()
 }
 
 
-void CONNECTIVITY_DATA::PropagateNets()
+void CONNECTIVITY_DATA::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
 {
-    m_connAlgo->PropagateNets();
+    m_connAlgo->PropagateNets( aCommit, aMode );
 }
+
 
 bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, int aLayer,
                                             std::vector<KICAD_T> aTypes ) const

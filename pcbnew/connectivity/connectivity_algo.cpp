@@ -477,11 +477,19 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
 }
 
 
-void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
+void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
 {
+    bool skipConflicts = ( aMode == PROPAGATE_MODE::SKIP_CONFLICTS );
+
+    wxLogTrace( "CN", "propagateConnections: propagate skip conflicts? %d", skipConflicts );
+
     for( const auto& cluster : m_connClusters )
     {
-        if( cluster->IsOrphaned() )
+        if( skipConflicts && cluster->IsConflicting() )
+        {
+            wxLogTrace( "CN", "Conflicting nets in cluster %p; skipping update", cluster.get() );
+        }
+        else if( cluster->IsOrphaned() )
         {
             wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]", cluster.get(),
                     (const char*) cluster->OriginNetName().c_str() );
@@ -531,10 +539,10 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 }
 
 
-void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
+void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit, PROPAGATE_MODE aMode )
 {
     m_connClusters = SearchClusters( CSM_PROPAGATE );
-    propagateConnections( aCommit );
+    propagateConnections( aCommit, aMode );
 }
 
 

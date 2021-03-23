@@ -1095,6 +1095,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
 
         m_board->GetNetInfo().RemoveUnusedNets();
+        m_commit.SetResolveNetConflicts();
         m_commit.Push( _( "Update netlist" ) );
 
         m_board->SynchronizeNetsAndNetClasses();
