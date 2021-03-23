@@ -272,8 +272,9 @@ private:
             // And that's all :-)
 
             sock_client = new wxSocketClient( wxSOCKET_BLOCK );
-            sock_client->SetTimeout( 2 ); // Time out in Seconds
-            sock_client->Connect( addr, true );
+            sock_client->SetTimeout( 1 ); // Time out in Seconds
+            sock_client->Connect( addr, false );
+            sock_client->WaitOnConnect( 0, 250 );
 
             if( sock_client->Ok() && sock_client->IsConnected() )
             {
