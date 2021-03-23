@@ -83,7 +83,7 @@ void ARRAY_CREATOR::Invoke()
         // The first item in list is the original item. We do not modify it
         for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
         {
-            BOARD_ITEM* this_item;
+            BOARD_ITEM* this_item = nullptr;
 
             if( ptN == 0 )
             {
@@ -93,31 +93,32 @@ void ARRAY_CREATOR::Invoke()
             }
             else
             {
-                // Need to create a new item
-                BOARD_ITEM* new_item = nullptr;
-
                 if( m_isFootprintEditor )
                 {
                     // Don't bother incrementing pads: the footprint won't update until commit,
                     // so we can only do this once
-                    new_item = fp->DuplicateItem( item );
+                    this_item = fp->DuplicateItem( item );
                 }
                 else
                 {
                     switch( item->Type() )
                     {
                     case PCB_FOOTPRINT_T:
-                    case PCB_TEXT_T:
                     case PCB_SHAPE_T:
+                    case PCB_TEXT_T:
                     case PCB_TRACE_T:
                     case PCB_VIA_T:
-                    case PCB_ZONE_T:
-                    case PCB_TARGET_T:
                     case PCB_DIM_ALIGNED_T:
                     case PCB_DIM_CENTER_T:
                     case PCB_DIM_ORTHOGONAL_T:
                     case PCB_DIM_LEADER_T:
-                        new_item = item->Duplicate();
+                    case PCB_TARGET_T:
+                    case PCB_ZONE_T:
+                        this_item = item->Duplicate();
+                        break;
+
+                    case PCB_GROUP_T:
+                        this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate();
                         break;
 
                     default:
@@ -130,22 +131,29 @@ void ARRAY_CREATOR::Invoke()
                     // @TODO: renumber footprints if asked. This needs UI to enable.
                     // something like this, but needs a "block offset" to prevent
                     // multiple selections overlapping.
-                    // if( new_item->Type() == PCB_FOOTPRINT_T )
+                    // if( this_item->Type() == PCB_FOOTPRINT_T )
                     //     static_cast<FOOTPRINT&>( *new_item ).IncrementReference( ptN );
 
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.
                 }
 
-                this_item = new_item;
-
-                if( new_item )
+                if( this_item )
                 {
                     // Because aItem is/can be created from a selected item, and inherits from
                     // it this state, reset the selected stated of aItem:
                     this_item->ClearSelected();
 
-                    if( this_item->Type() == PCB_FOOTPRINT_T )
+                    if( this_item->Type() == PCB_GROUP_T )
+                    {
+                        static_cast<PCB_GROUP*>( this_item )->RunOnDescendants(
+                                [&]( BOARD_ITEM* aItem )
+                                {
+                                    aItem->ClearSelected();
+                                    commit.Add( aItem );
+                                });
+                    }
+                    else if( this_item->Type() == PCB_FOOTPRINT_T )
                     {
                         static_cast<FOOTPRINT*>( this_item )->RunOnChildren(
                                 [&]( BOARD_ITEM* aItem )
@@ -154,7 +162,7 @@ void ARRAY_CREATOR::Invoke()
                                 });
                     }
 
-                    commit.Add( new_item );
+                    commit.Add( this_item );
                 }
             }
 
