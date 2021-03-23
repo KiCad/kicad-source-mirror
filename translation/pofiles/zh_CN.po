@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 17:14-0700\n"
 "PO-Revision-Date: 2021-03-26 20:05+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12080,7 +12080,7 @@ msgstr "为 .include 库指令添加完整路径"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:434
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "兼容模式："
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:438
 msgid "User configuration"
@@ -27772,18 +27772,17 @@ msgstr "在不限制布线角度的情况下，拖拽布线中最近的连接点
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:364
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "画一个轮廓来显示图框尺寸。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
-#, fuzzy
 msgid "Refill zones after Zone Properties dialog"
-msgstr "显示项属性对话框"
+msgstr "在区域属性会话框后重新填充区域"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
-msgstr ""
+msgstr "如果选中，区域将在使用区域属性对话框编辑区域的属性后被重新填充"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:131
 msgid "Internal Layers"
@@ -30223,7 +30222,7 @@ msgstr ""
 
 #: pcbnew/generate_footprint_info.cpp:120
 msgid "doc url"
-msgstr ""
+msgstr "doc 文件 url"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
@@ -32466,13 +32465,12 @@ msgstr "%s 格式不正确。"
 
 # 此zone经核查源码确认为禁止布线区
 #: pcbnew/router/pns_kicad_iface.cpp:1004
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"布线工具无法处理此覆铜。\n"
-"请确保它不是自相交的多边形。"
+"布线工具无法处理此区域。\n"
+"请验证它不是自交叉的多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1602 pcbnew/router/router_tool.cpp:424
 msgid "Interactive Router"
@@ -32613,13 +32611,12 @@ msgid "Switches posture of the currently routed track."
 msgstr "切换当前交互式布线的形态。"
 
 #: pcbnew/router/router_tool.cpp:155
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "布线显示模式"
+msgstr "导线拐角模式"
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switches between sharp and rounded corners when routing tracks."
-msgstr ""
+msgstr "布线时在尖角和圆角之间切换。"
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select Track/Via Width"
