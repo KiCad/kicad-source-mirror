@@ -199,6 +199,10 @@ public:
         // means we have a hit)
         std::unordered_set<BOARD_ITEM*> collidingCompounds;
 
+        // keep track of results of client filter so we don't ask more than once for compound
+        // shapes
+        std::map<BOARD_ITEM*, bool> filterResults;
+
         EDA_RECT box = aRefItem->GetBoundingBox();
         box.Inflate( aClearance );
 
@@ -218,16 +222,29 @@ public:
                     if( collidingCompounds.find( aItem->parent ) != collidingCompounds.end() )
                         return true;
 
-                    if( !aFilter || aFilter( aItem->parent ) )
-                    {
-                        if( refShape->Collide( aItem->shape, aClearance ) )
-                        {
-                            collidingCompounds.insert( aItem->parent );
-                            count++;
+                    bool filtered;
+                    auto it = filterResults.find( aItem->parent );
 
-                            if( aVisitor )
-                                return aVisitor( aItem->parent );
-                        }
+                    if( it == filterResults.end() )
+                    {
+                        filtered = aFilter && !aFilter( aItem->parent );
+                        filterResults[ aItem->parent ] = filtered;
+                    }
+                    else
+                    {
+                        filtered = it->second;
+                    }
+
+                    if( filtered )
+                        return true;
+
+                    if( refShape->Collide( aItem->shape, aClearance ) )
+                    {
+                        collidingCompounds.insert( aItem->parent );
+                        count++;
+
+                        if( aVisitor )
+                            return aVisitor( aItem->parent );
                     }
 
                     return true;
