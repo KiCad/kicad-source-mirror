@@ -43,6 +43,7 @@
 #include <wx/log.h>
 #include <wx/snglinst.h>
 #include <gestfich.h>
+#include <paths.h>
 #include <pcbnew.h>
 #include <pcbnew_settings.h>
 #include <settings/settings_manager.h>
