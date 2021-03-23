@@ -397,14 +397,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
         # Allow linking for Boost for the UUID against bcrypt
         set( EXTRA_LIBS "bcrypt" )
-
-    elseif( NOT APPLE )
-        # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
-        # temporarily disabled due to breaking ASAN-enabled builds - Tom
-        # set( CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined" )
-        # set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" )
-
-        set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
     endif()
 
     if( APPLE )
